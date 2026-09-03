@@ -103,10 +103,17 @@ and a `fireEvent.doubleClick` did not open edit mode).
 not implement; asserted in `e2e/slider.spec.ts`. `DatePicker.markerTooltip` — needs a real
 hover plus positioning.
 
-**Blocked on a named phase (2).** `DatePicker.dayFocused` — DatePicker calls `.focus()`
-nowhere, and focus management is on the do-not-touch list. `InternationalPhoneInput
-.countrySelectOptionSelected` — kept, not deleted; its replacement route is R6-nested and
-deleting the child's `optionSelected` removed the sink it fed.
+**Blocked on a named phase (1).** `InternationalPhoneInput.countrySelectOptionSelected` —
+kept, not deleted; its replacement route is R6-nested and deleting the child's
+`optionSelected` removed the sink it fed.
+
+`DatePicker.dayFocused` was in this set and is now resolved: ADR 003's focus slice gave the
+panel a focus trap and the grid a roving tabindex, so a focused day exists and
+`data-highlighted` is reachable. `.dropdownItemSelected` resolved with it — its recorded
+cause ("marks its selection through the same focus path") was wrong. The month menu's
+selection is `option.value === value`, never focus-gated; it needed the menu opened, which a
+fixture already did. Both keys are deleted and both now generate a passing case in
+`state-replacement.contract`.
 
 Fifteen keys were wrongly waived at some point on this branch, every one with a specific,
 plausible, invented reason. Every reason above states what was actually attempted.
@@ -115,7 +122,8 @@ plausible, invented reason. Every reason above states what was actually attempte
 
 - **Four planned deletions were held back.** `CascadingDropdown.content` is not dead — `menu`
   took that name and it has five source references; the pre-migration dead list was stale.
-  `DatePicker.dayFocused` and `.dropdownItemSelected` are blocked on the a11y phase.
+  `DatePicker.dayFocused` and `.dropdownItemSelected` were blocked on the a11y phase and
+  were deleted there; two of the four are resolved.
   `InternationalPhoneInput.countrySelectOptionSelected` is blocked on Task 4's nesting.
 - **`ResizablePanel.handle` was never renamed to `resizeHandle`.** Its precedent
   (react-resizable-panels `PanelResizeHandle`) is still RECALLED, and no name changes on

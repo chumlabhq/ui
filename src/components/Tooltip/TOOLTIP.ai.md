@@ -80,7 +80,7 @@ export default function Example() {
 | `shadow` | string | `"lg"` | Shadow preset or custom CSS shadow value. Presets: 'none', 'sm', 'md', 'lg', 'xl', '2xl'. |
 | `zIndex` | number | `9999` | Z-index for the tooltip. |
 | `portal` | boolean | `true` | Whether to render the tooltip in a portal. |
-| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the tooltip portal. |
+| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the tooltip portal. Read only when `portal` is true; with `portal={false}` it chooses nothing. |
 | `asChild` | boolean | `false` | When true, the trigger renders as the child element instead of wrapping it. |
 | `triggerDisplay` | string | `"inline-flex"` | CSS display property for the trigger wrapper. |
 | `className` | string | — | CSS class for the trigger wrapper element. |

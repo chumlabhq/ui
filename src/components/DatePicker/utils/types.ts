@@ -81,7 +81,6 @@ export interface DatePickerClasses {
   /** Calendar day cell */
   item?: string;
   /** Keyboard focused day */
-  dayFocused?: string;
   /** Week number column */
   weekNumber?: string;
   /** Preset buttons container */
@@ -105,7 +104,6 @@ export interface DatePickerClasses {
   /** Dropdown item */
   subItem?: string;
   /** Selected dropdown item */
-  dropdownItemSelected?: string;
 }
 
 /**

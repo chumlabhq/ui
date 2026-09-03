@@ -378,9 +378,6 @@
         "item": {
           "type": "string"
         },
-        "dayFocused": {
-          "type": "string"
-        },
         "weekNumber": {
           "type": "string"
         },
@@ -412,9 +409,6 @@
           "type": "string"
         },
         "subItem": {
-          "type": "string"
-        },
-        "dropdownItemSelected": {
           "type": "string"
         }
       }

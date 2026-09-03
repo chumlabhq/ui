@@ -10,6 +10,7 @@ import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOp
 import { isBrowser } from "../../utils/isBrowser";
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
+import { useInertPropWarning } from "../../utils/useInertPropWarning";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -332,6 +333,24 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     // ADR: floating content resolves its layer from the nearest overlay, so a
     // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
+
+    // `loadChildrenForOption` runs only for an option whose `hasChildren` is
+    // set, so a loader over options that never set it is silently inert. No
+    // union can express a constraint on the consumer's own data.
+    const loaderIsInert = useMemo(() => {
+      if (!onLoadChildren) return false;
+      const anyLazy = (list: CascadingOption[]): boolean =>
+        list.some((o) => o.hasChildren || (o.children ? anyLazy(o.children) : false));
+      return !anyLazy(options);
+    }, [onLoadChildren, options]);
+
+    useInertPropWarning(
+      "CascadingDropdown",
+      loaderIsInert,
+      "`onLoadChildren` is set, but no option has `hasChildren: true`. Children " +
+        "are loaded only for options that declare they have some, so the loader " +
+        "will never fire.",
+    );
 
     const shimmerCount = Math.min(Math.max(0, rawShimmerCount), 50);
     const prefersReducedMotion = useReducedMotion();

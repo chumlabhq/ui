@@ -295,6 +295,7 @@
     "dist",
     "llms.txt",
     "llms-full.txt",
+    "ACCESSIBILITY.md",
     "README.md",
     "LICENSE",
     "NOTICE"

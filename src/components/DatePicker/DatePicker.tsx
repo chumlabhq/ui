@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { LAYERS, useLayer } from "../../utils/layers";
+import { cycleTabWithin } from "../../utils/focusUtils";
 import type {
   DatePickerProps,
   DatePickerClasses,
@@ -65,7 +66,6 @@ interface DropdownProps {
   buttonClassName?: string;
   menuClassName?: string;
   itemClassName?: string;
-  itemSelectedClassName?: string;
   selectedIcon?: React.ReactNode;
   ariaLabel: string;
 }
@@ -77,15 +77,74 @@ const CustomDropdown = memo(function CustomDropdown({
   buttonClassName,
   menuClassName,
   itemClassName,
-  itemSelectedClassName,
   selectedIcon,
   ariaLabel,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const selectedOptionRef = useRef<HTMLButtonElement>(null);
 
-  const selectedOption = options.find((opt) => opt.value === value);
+  const selectedIndex = options.findIndex((opt) => opt.value === value);
+  const selectedOption = options[selectedIndex];
+
+  // The menu declared `role="listbox"` with options that were plain tabbable
+  // buttons: no arrow keys, no roving tabindex, nothing a listbox promises. The
+  // role is right for a month/year picker, so the behaviour is implemented
+  // rather than the role dropped — with 12 months and a long year list, Tab
+  // through every option is not a substitute.
+  const [activeIndex, setActiveIndex] = useState(selectedIndex);
+
+  const toggleMenu = () => {
+    if (!isOpen) setActiveIndex(selectedIndex < 0 ? 0 : selectedIndex);
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const list = listRef.current;
+    const option = list?.querySelector<HTMLElement>('[role="option"][tabindex="0"]');
+    option?.focus();
+  }, [isOpen, activeIndex]);
+
+  const handleListKeyDown = (e: React.KeyboardEvent) => {
+    const last = options.length - 1;
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setActiveIndex((i) => (i >= last ? 0 : i + 1));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setActiveIndex((i) => (i <= 0 ? last : i - 1));
+        break;
+      case "Home":
+        e.preventDefault();
+        setActiveIndex(0);
+        break;
+      case "End":
+        e.preventDefault();
+        setActiveIndex(last);
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (options[activeIndex]) {
+          onChange(options[activeIndex].value);
+          setIsOpen(false);
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        setIsOpen(false);
+        break;
+      case "Tab":
+        // The listbox is inside the picker's focus trap; closing on Tab keeps
+        // the trap's cycle over the panel rather than over the menu.
+        setIsOpen(false);
+        break;
+    }
+  };
 
   useEffect(() => {
     if (!isBrowser) return;
@@ -117,7 +176,7 @@ const CustomDropdown = memo(function CustomDropdown({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      setIsOpen(!isOpen);
+      toggleMenu();
     } else if (e.key === "Escape") {
       setIsOpen(false);
     }
@@ -128,7 +187,7 @@ const CustomDropdown = memo(function CustomDropdown({
       <button
         type="button"
         className={buttonClassName}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleMenu}
         onKeyDown={handleKeyDown}
         aria-label={ariaLabel}
         aria-expanded={isOpen}
@@ -142,8 +201,14 @@ const CustomDropdown = memo(function CustomDropdown({
         )}
       </button>
       {isOpen && (
-        <div className={menuClassName} role="listbox">
-          {options.map((option) => {
+        <div
+          ref={listRef}
+          className={menuClassName}
+          role="listbox"
+          aria-label={ariaLabel}
+          onKeyDown={handleListKeyDown}
+        >
+          {options.map((option, index) => {
             const isSelected = option.value === value;
             return (
               <button
@@ -152,10 +217,9 @@ const CustomDropdown = memo(function CustomDropdown({
                 type="button"
                 role="option"
                 aria-selected={isSelected}
-                className={cn(
-                  itemClassName,
-                  isSelected && itemSelectedClassName,
-                )}
+                tabIndex={index === activeIndex ? 0 : -1}
+                data-selected={isSelected || undefined}
+                className={itemClassName}
                 onClick={() => {
                   onChange(option.value);
                   setIsOpen(false);
@@ -281,7 +345,6 @@ interface DayCellProps {
   datePickerId: string;
   classes: {
     day: string;
-    dayFocused: string;
     markerIndicator: string;
     markerTooltip: string;
   };
@@ -324,10 +387,7 @@ const DayCell = memo(function DayCell({
     return <div className={cls.day} aria-hidden="true" />;
   }
 
-  const classNames = cn(
-    cls.day,
-    isFocused && cls.dayFocused,
-  );
+  const classNames = cn(cls.day);
 
   return (
     <>
@@ -590,7 +650,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       listHeader: classesProp?.listHeader ?? baseClasses.listHeader,
       weekday: classesProp?.weekday ?? baseClasses.weekday,
       item: classesProp?.item ?? baseClasses.item,
-      dayFocused: classesProp?.dayFocused ?? baseClasses.dayFocused,
       weekNumber: classesProp?.weekNumber ?? baseClasses.weekNumber,
       presetGroup: classesProp?.presetGroup ?? baseClasses.presetGroup,
       presetTrigger: classesProp?.presetTrigger ?? baseClasses.presetTrigger,
@@ -602,7 +661,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       yearSelect: classesProp?.yearSelect ?? baseClasses.yearSelect,
       subContent: classesProp?.subContent ?? baseClasses.subContent,
       subItem: classesProp?.subItem ?? baseClasses.subItem,
-      dropdownItemSelected: classesProp?.dropdownItemSelected ?? baseClasses.dropdownItemSelected,
     }), [classesProp, baseClasses]);
 
     // ─── Reduced motion ────────────────────────────────────────────────
@@ -803,6 +861,80 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       };
     }, [isOpen, handleClose]);
 
+    // ─── Focus management ──────────────────────────────────────────────
+    // The panel declares `role="dialog" aria-modal="true"`, which tells
+    // assistive tech the rest of the page is inert. Until this landed nothing
+    // made that true: there was no trap, and the directory called `.focus()`
+    // nowhere. The trap is Modal's, shared through `cycleTabWithin`.
+    const previousActiveElement = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+      if (!isOpen) return;
+
+      const active = document.activeElement;
+      previousActiveElement.current = active instanceof HTMLElement ? active : null;
+      // Captured now rather than read in the cleanup: the ref may point at a
+      // different node by then, and this is the trigger that was open.
+      const trigger = triggerRef.current;
+
+      // The grid is positioned before it is visible, so focus waits for the
+      // same frame the panel becomes measurable in.
+      const timer = setTimeout(() => {
+        const panel = calendarRef.current;
+        if (!panel) return;
+        const rovingCell = panel.querySelector<HTMLElement>(
+          '[role="gridcell"][tabindex="0"]:not([disabled])',
+        );
+        (rovingCell ?? panel).focus();
+      }, 10);
+
+      return () => {
+        clearTimeout(timer);
+        // Returning focus is what makes Escape and outside-click recoverable
+        // for a keyboard user; without it focus falls back to <body>.
+        //
+        // The trigger, not `previousActiveElement`, is the destination: this is
+        // a popup owned by a trigger, and a pointer user can open it without
+        // ever focusing anything, in which case the recorded element is <body>.
+        (trigger ?? previousActiveElement.current)?.focus?.();
+      };
+    }, [isOpen]);
+
+    // Roving tabindex moves the attribute; this moves the actual focus with it.
+    // Without it every arrow key recomputed from the one cell that still had
+    // DOM focus, so navigation advanced exactly one day and then stopped.
+    useEffect(() => {
+      if (!isOpen || !focusedDate) return;
+      const panel = calendarRef.current;
+      if (!panel) return;
+      const cell = panel.querySelector<HTMLElement>(
+        '[role="gridcell"][tabindex="0"]:not([disabled])',
+      );
+      if (!cell || cell === document.activeElement) return;
+      // Paging by month unmounts the cell that had focus, which drops the
+      // browser back to <body>; that is our own re-render, not the user
+      // leaving, so the roving cell reclaims it. Any other element outside the
+      // panel means focus genuinely left, and is left alone.
+      const active = document.activeElement;
+      if (panel.contains(active) || active === null || active === document.body) {
+        cell.focus();
+      }
+    }, [isOpen, focusedDate]);
+
+    const handlePanelKeyDown = useCallback(
+      (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          handleClose();
+          return;
+        }
+        if (event.key === "Tab" && calendarRef.current) {
+          cycleTabWithin(calendarRef.current, event);
+        }
+      },
+      [handleClose],
+    );
+
     // ─── Display value ─────────────────────────────────────────────────
     const displayValue = (() => {
       if (mode === "single" && singleValue) {
@@ -896,7 +1028,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const dayCellClasses = useMemo(
       () => ({
         day: mergedClasses.item,
-        dayFocused: mergedClasses.dayFocused,
         markerIndicator: mergedClasses.markerIndicator,
         markerTooltip: mergedClasses.markerTooltip,
       }),
@@ -988,6 +1119,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               id={calendarId}
               role="dialog"
               aria-modal="true"
+              tabIndex={-1}
+              onKeyDown={handlePanelKeyDown}
               aria-label={`${mode === "single" ? "Date" : mode === "range" ? "Date range" : "Multiple dates"} picker`}
               className={mergedClasses.content}
               style={{
@@ -1055,9 +1188,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                             buttonClassName={mergedClasses.monthSelect}
                             menuClassName={mergedClasses.subContent}
                             itemClassName={mergedClasses.subItem}
-                            itemSelectedClassName={
-                              mergedClasses.dropdownItemSelected
-                            }
                             selectedIcon={monthDropdownSelectedIcon}
                             ariaLabel="Select month"
                           />
@@ -1068,9 +1198,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                             buttonClassName={mergedClasses.yearSelect}
                             menuClassName={mergedClasses.subContent}
                             itemClassName={mergedClasses.subItem}
-                            itemSelectedClassName={
-                              mergedClasses.dropdownItemSelected
-                            }
                             selectedIcon={yearDropdownSelectedIcon}
                             ariaLabel="Select year"
                           />

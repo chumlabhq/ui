@@ -16,7 +16,6 @@
       "yearDropdown": "dead \u2014 grepped: no source reference outside the merge map. The live key is yearSelect.",
       "navButtonDisabled": "dead \u2014 grepped: no source reference outside the merge map.",
       "dayHover": "dead \u2014 grepped: no source reference outside the merge map. A :hover utility on `day` is the replacement.",
-      "dayFocused": "BLOCKED on the a11y phase, not unreachable \u2014 needs a focused day, and DatePicker calls .focus() nowhere (AUDIT-GAP 3.1). Reaching it means changing focus management, which is on the do-not-touch list. Attempted with an ArrowRight keydown on the grid; no focus state was set. Tracked as `blocked` in 002-state-attributes.json, where the contract fails if it starts passing.",
       "markerTooltip": "BROWSER TIER \u2014 needs a real hover over a marked day plus positioning. The marker itself is now rendered (the with-markers fixture was opening on the wrong month, which is what made markerIndicator look unreachable); only the hover is missing. jsdom resolves no hover."
     },
     "Slider": {
@@ -116,7 +115,7 @@
       ]
     },
     "button-name": {
-      "reason": "56 of these are the role=combobox trigger with no accessible name, across six components \u2014 the combobox pattern, out of scope (AUDIT-GAP 3.3/3.4). The other 3 are Switch's role=switch button in the fixtures that pass no label, the same case as `label` above. Two fixtures added in ADR 002 Task 2 (DatePicker with-active-preset, keyboard-focus) open the picker, so the same trigger reports there too. Added rather than left red: a sweep held red by known findings cannot catch new ones.",
+      "reason": "56 of these are the role=combobox trigger with no accessible name, across six components \u2014 the combobox pattern, out of scope (AUDIT-GAP 3.3/3.4). The other 3 are Switch's role=switch button in the fixtures that pass no label, the same case as `label` above. Two fixtures added in ADR 002 Task 2 (DatePicker with-active-preset, keyboard-focus) open the picker, so the same trigger reports there too. Added rather than left red: a sweep held red by known findings cannot catch new ones. Four more were added by the prop-union slice (SearchableDropdown and MultiSelectSearchableDropdown async-initial/async-searched): they open the same unnamed combobox trigger under new fixture names, so it is the identical finding, not a new one.",
       "fixtures": [
         "DatePicker/bounded",
         "DatePicker/closed",
@@ -159,6 +158,8 @@
         "MultiSelectDropdown/open-empty",
         "MultiSelectDropdown/open-keyboard-focus",
         "MultiSelectDropdown/open-with-selection",
+        "MultiSelectSearchableDropdown/async-initial",
+        "MultiSelectSearchableDropdown/async-searched",
         "MultiSelectSearchableDropdown/chips-overflow",
         "MultiSelectSearchableDropdown/closed",
         "MultiSelectSearchableDropdown/disabled",
@@ -169,6 +170,8 @@
         "MultiSelectSearchableDropdown/open-keyboard-focus",
         "MultiSelectSearchableDropdown/open-search",
         "MultiSelectSearchableDropdown/open-with-selection",
+        "SearchableDropdown/async-initial",
+        "SearchableDropdown/async-searched",
         "SearchableDropdown/closed",
         "SearchableDropdown/disabled",
         "SearchableDropdown/loading",

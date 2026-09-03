@@ -215,11 +215,11 @@ override silently drops the rest.
 | Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
 | Calendar popover | `content` | Outer container of calendar |
 | Month/year navigation | `header`, `row`, `navButton` | Calendar header area |
-| Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem`, `dropdownItemSelected` | Month/year selectors |
+| Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem` | Month/year selectors — the selected option carries `data-selected` |
 | Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
 | Day cells | `item` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
-| Keyboard focus | `dayFocused` | Focused day ring |
+| Keyboard focus | — | The focused day carries `data-highlighted` |
 | Marked days | `markerIndicator`, `markerTooltip` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
 | Presets | `presetGroup`, `presetTrigger` | Preset buttons panel |
@@ -371,9 +371,9 @@ import { fr } from "date-fns/locale";
 
 ## Accessibility
 
-- **Keyboard:** Arrow keys navigate days, Home/End jump to start/end of week, PageUp/PageDown change months, Enter/Space selects a day, Escape closes calendar
+- **Keyboard:** Arrow keys navigate days, Home/End jump to the bounds of the week (honouring `weekStartsOn`), PageUp/PageDown change months, Shift+PageUp/PageDown change years, Enter/Space selects a day, Escape closes the calendar. Disabled days are stepped over rather than focused. The month and year menus are listboxes: arrows, Home/End, Enter to choose, Escape to close.
 - **ARIA:** Trigger has `aria-expanded` + `aria-haspopup`, calendar grid uses `role="grid"`, day cells use `role="gridcell"` with `aria-selected`/`aria-disabled`/`aria-current="date"`
-- **Focus management:** Focus moves into calendar on open and returns to trigger on close
+- **Focus management:** Focus moves to the selected day (or today) on open, follows the roving tabindex as you navigate, and returns to the trigger on close. The panel is `role="dialog" aria-modal="true"` and traps Tab in both directions.
 - **Reduced motion:** `reduceMotion="auto"` respects OS `prefers-reduced-motion` setting
 
 ---

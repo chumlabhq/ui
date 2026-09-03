@@ -25,7 +25,7 @@ import { useControllableState } from "../../utils/useControllableState";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
 import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
-import { getFocusableElements } from "../../utils/focusUtils";
+import { cycleTabWithin } from "../../utils/focusUtils";
 import {
   DEFAULT_MODAL_CLASSES,
   UNSTYLED_MODAL_CLASSES,
@@ -191,23 +191,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
         if (event.key === "Tab" && trapFocus) {
           const content = contentRef.current;
           if (!content) return;
-
-          const focusable = getFocusableElements(content);
-          if (focusable.length === 0) {
-            event.preventDefault();
-            return;
-          }
-
-          const first = focusable[0];
-          const last = focusable[focusable.length - 1];
-
-          if (event.shiftKey && document.activeElement === first) {
-            event.preventDefault();
-            last.focus();
-          } else if (!event.shiftKey && document.activeElement === last) {
-            event.preventDefault();
-            first.focus();
-          }
+          cycleTabWithin(content, event);
         }
       },
       [isOpen, closeOnEscape, trapFocus, handleClose, modalId],

@@ -72,7 +72,6 @@ const getClasses = (dark: boolean) => ({
     // days have an interactive feedback in the range strip.
     dayRangeMiddle: `bg-cl-accent/[0.18] hover:bg-cl-accent/25 dark:bg-cl-accent/25 dark:hover:bg-cl-accent/30 text-cl-text rounded-none`,
     dayHover: "",
-    dayFocused: "ring-2 ring-cl-accent",
     dayMarked: "",
     weekNumber: `text-xs flex items-center justify-center text-cl-text-disabled`,
     presets: `flex flex-wrap gap-2 pb-4 mb-4 border-b border-cl-border`,
@@ -88,7 +87,6 @@ const getClasses = (dark: boolean) => ({
     yearDropdown: "",
  dropdownMenu: `absolute z-[60] mt-1 max-h-60 overflow-auto rounded-cl-md shadow-lg py-1 min-w-[140px] bg-cl-bg-elevated border border-cl-border`,
     dropdownItem: `flex items-center justify-between w-full px-3 py-2 text-sm text-left cursor-pointer text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/6`,
-    dropdownItemSelected: `font-medium bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/10 dark:text-cl-accent`,
   },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,

@@ -17,6 +17,7 @@ import { Dropdown } from "../../components/Dropdown";
 import { MultiSelectDropdown } from "../../components/MultiSelectDropdown";
 import { SearchableDropdown } from "../../components/SearchableDropdown";
 import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown";
+import { Tooltip } from "../../components/Tooltip";
 
 const OPTIONS = [{ value: "a", label: "A" }];
 const load = async () => OPTIONS;
@@ -37,6 +38,12 @@ export const valid = (
       onLoadInitialOptions={load}
       loadInitialOnOpen
     />
+    <Tooltip content="x" portalContainer={null}>
+      <span />
+    </Tooltip>
+    <Tooltip content="x" portal={false}>
+      <span />
+    </Tooltip>
   </>
 );
 
@@ -60,5 +67,9 @@ export const invalid = (
     <MultiSelectDropdown onLoadOptions={load} />
     {/* @ts-expect-error a trigger with no loader */}
     <MultiSelectDropdown loadOnOpen />
+    {/* @ts-expect-error portalContainer chooses nothing when portal is off */}
+    <Tooltip content="x" portal={false} portalContainer={document.body}>
+      <span />
+    </Tooltip>
   </>
 );

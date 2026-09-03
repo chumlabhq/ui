@@ -19,7 +19,7 @@ export interface TooltipClasses {
  * <Tooltip content="Help text" side="top"><button>Hover</button></Tooltip>
  * ```
  */
-export interface TooltipProps {
+export interface TooltipBaseProps {
   children: ReactNode;
   /** Tooltip content (string or ReactNode). Not `title` or `text`. */
   content?: ReactNode;
@@ -48,8 +48,6 @@ export interface TooltipProps {
   truncateWidth?: number | string;
   shadow?: TooltipShadow;
   zIndex?: number;
-  portal?: boolean;
-  portalContainer?: HTMLElement | null;
   asChild?: boolean;
   triggerDisplay?: CSSProperties["display"];
   className?: string;
@@ -59,3 +57,14 @@ export interface TooltipProps {
   arrowStyle?: CSSProperties;
   baseArrowStyle?: CSSProperties;
 }
+
+/**
+ * `portalContainer` is read only on the portalled branch (`portal && portalTarget`),
+ * so passing it with `portal={false}` typechecked and chose nothing.
+ */
+export type TooltipPortalTarget =
+  | { portal?: true; portalContainer?: HTMLElement | null }
+  | { portal: false; portalContainer?: never };
+
+export type TooltipProps = TooltipBaseProps & TooltipPortalTarget;
+

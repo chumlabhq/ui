@@ -136,7 +136,7 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null \u2014 Custom container element for the tooltip portal."
+      "description": "HTMLElement | null \u2014 Custom container element for the tooltip portal. Read only when `portal` is true; with `portal={false}` it chooses nothing."
     },
     "asChild": {
       "type": "boolean",

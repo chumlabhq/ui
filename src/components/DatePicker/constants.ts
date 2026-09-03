@@ -20,7 +20,6 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   listHeader: "grid grid-cols-7 mb-2",
   weekday: "text-xs font-semibold text-cl-text-tertiary dark:text-cl-text-tertiary text-center py-2 uppercase tracking-wide",
   item: "relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 dark:focus:ring-offset-cl-bg",
-  dayFocused: "ring-2 ring-cl-accent",
   weekNumber: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary flex items-center justify-center",
   presetGroup: "flex flex-wrap gap-2 pb-4 mb-4 border-b border-cl-border dark:border-cl-border",
   presetTrigger: "px-3 py-1.5 text-xs font-semibold rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated text-cl-text dark:text-cl-text-secondary hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 transition-all",
@@ -32,7 +31,6 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   yearSelect: "flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border-none cursor-pointer text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated rounded-cl-md transition-colors",
   subContent: "absolute z-[60] mt-1 max-h-60 overflow-auto rounded-cl-md bg-white dark:bg-cl-bg-elevated shadow-lg border border-cl-border dark:border-cl-border py-1 min-w-[120px] sm:min-w-[140px]",
   subItem: "flex items-center justify-between w-full px-3 py-2 text-sm text-left text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated cursor-pointer",
-  dropdownItemSelected: "bg-cl-accent/15 dark:bg-cl-accent/30 text-cl-accent dark:text-cl-accent font-medium",
 };
 
 export const UNSTYLED_DATEPICKER_CLASSES: Required<DatePickerClasses> =

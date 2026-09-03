@@ -76,10 +76,17 @@ own CSS.
 | Dark mode                       | Built-in `dark:` variants | Theme provider     | BYO                 |
 | Responsive (320px+)             | Yes, mobile-first         | Partial            | BYO                 |
 | SSR safe                        | Yes                       | Yes                | Yes                 |
-| Accessibility                   | WCAG 2.1 AA               | Partial            | Strong              |
+| Accessibility                   | [WCAG 2.2 AA, per criterion](ACCESSIBILITY.md) | Partial            | Strong              |
 | Tree-shakeable                  | Yes                       | Large bundle       | Yes                 |
 
 **The sweet spot:** production-ready defaults with full escape hatches. Ship fast, then customize any element when your design system demands it.
+
+**On accessibility:** the target is WCAG 2.2 Level AA, and
+[`ACCESSIBILITY.md`](ACCESSIBILITY.md) records every Level A and AA criterion with a status,
+a justification and the test that holds it. A criterion is only marked as supported when a
+test fails if the behaviour regresses, so the document names several criteria the package
+does not yet claim — including three it is known to fail. Read it rather than this table if
+conformance matters to you.
 
 ---
 

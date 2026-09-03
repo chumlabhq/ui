@@ -2431,11 +2431,11 @@ override silently drops the rest.
 | Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
 | Calendar popover | `content` | Outer container of calendar |
 | Month/year navigation | `header`, `row`, `navButton` | Calendar header area |
-| Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem`, `dropdownItemSelected` | Month/year selectors |
+| Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem` | Month/year selectors — the selected option carries `data-selected` |
 | Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
 | Day cells | `item` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
-| Keyboard focus | `dayFocused` | Focused day ring |
+| Keyboard focus | — | The focused day carries `data-highlighted` |
 | Marked days | `markerIndicator`, `markerTooltip` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
 | Presets | `presetGroup`, `presetTrigger` | Preset buttons panel |
@@ -6627,7 +6627,7 @@ export default function Example() {
 | `shadow` | string | `"lg"` | Shadow preset or custom CSS shadow value. Presets: 'none', 'sm', 'md', 'lg', 'xl', '2xl'. |
 | `zIndex` | number | `9999` | Z-index for the tooltip. |
 | `portal` | boolean | `true` | Whether to render the tooltip in a portal. |
-| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the tooltip portal. |
+| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the tooltip portal. Read only when `portal` is true; with `portal={false}` it chooses nothing. |
 | `asChild` | boolean | `false` | When true, the trigger renders as the child element instead of wrapping it. |
 | `triggerDisplay` | string | `"inline-flex"` | CSS display property for the trigger wrapper. |
 | `className` | string | — | CSS class for the trigger wrapper element. |

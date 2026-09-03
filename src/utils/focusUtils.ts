@@ -26,3 +26,37 @@ export function getFocusableElements(container: HTMLElement): HTMLElement[] {
     return isVisible(el);
   });
 }
+
+/**
+ * Keeps Tab inside `container`, wrapping at both ends.
+ *
+ * Extracted from Modal so the two `aria-modal` surfaces share one
+ * implementation. The event is typed structurally so the same function serves a
+ * React synthetic handler and a native `document` listener.
+ *
+ * With no focusable descendant the Tab is swallowed rather than allowed to
+ * escape: a dialog that claims `aria-modal` must not hand focus back to content
+ * it has told assistive tech is inert.
+ */
+export function cycleTabWithin(
+  container: HTMLElement,
+  event: { shiftKey: boolean; preventDefault: () => void },
+): void {
+  const focusable = getFocusableElements(container);
+  if (focusable.length === 0) {
+    event.preventDefault();
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const active = document.activeElement;
+
+  if (event.shiftKey && active === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && active === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}

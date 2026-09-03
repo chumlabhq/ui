@@ -132,10 +132,7 @@
       "values": null,
       "fromKeys": [
         "dayFocused"
-      ],
-      "tier": "blocked",
-      "tierReason": "Needs a focused day, and DatePicker calls .focus() nowhere (AUDIT-GAP 3.1). Reaching it means changing focus management, which is on the do-not-touch list until the a11y phase. NOT unreachable \u2014 blocked on a named phase.",
-      "blockedOn": "a11y phase (DatePicker focus management)"
+      ]
     },
     {
       "component": "DatePicker",
@@ -195,10 +192,7 @@
       "values": null,
       "fromKeys": [
         "dropdownItemSelected"
-      ],
-      "tier": "blocked",
-      "tierReason": "The month/year menu marks its selection through the same focus path. Blocked with the row above and resolves with it.",
-      "blockedOn": "a11y phase (DatePicker focus management)"
+      ]
     },
     {
       "component": "DatePicker",

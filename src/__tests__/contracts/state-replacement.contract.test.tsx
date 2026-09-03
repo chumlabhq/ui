@@ -260,10 +260,10 @@ describe("state replacement contract", () => {
    * without one.
    */
   const NOT_DELETABLE: Record<string, string> = {
-    "DatePicker.dayFocused":
-      "blocked on the a11y phase — DatePicker calls .focus() nowhere, and focus management is on the do-not-touch list",
-    "DatePicker.dropdownItemSelected":
-      "blocked on the a11y phase, same cause",
+    // The two DatePicker rows left here when the a11y phase gave the panel a
+    // focus trap and the grid its roving tabindex: a focused day now exists, so
+    // `data-highlighted` is reachable, and the month menu's selected option
+    // carries `data-selected`. Both are deleted and both generate a case below.
     "InternationalPhoneInput.countrySelectOptionSelected":
       "target is R6-nested (countrySelect.item); the route needs the nested classes object, which is Task 4",
   };

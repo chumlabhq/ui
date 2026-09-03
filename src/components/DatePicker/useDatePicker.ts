@@ -17,9 +17,11 @@ import {
   setYearOfDate,
   isBefore,
   isAfter,
+  isDateDisabled,
   sortDates,
   addMonths,
 } from "./utils";
+import { startOfWeek, endOfWeek } from "date-fns";
 import { useControllableState } from "../../utils/useControllableState";
 
 export function useDatePicker(props: UseDatePickerProps) {
@@ -159,6 +161,31 @@ export function useDatePicker(props: UseDatePickerProps) {
       setDisplayMonth(startOfMonth(multipleValue[0]));
     }
   }, [disabled, mode, singleValue, rangeValue, multipleValue, setIsOpen]);
+
+  /**
+   * The grid's roving tabindex needs a starting cell, and every way the panel
+   * can open has to produce one — `handleOpen`, `defaultOpen`, and a controlled
+   * `open` flipped by the consumer. Seeding inside `handleOpen` covered only
+   * the first, which left the other two with no tabbable day at all.
+   *
+   * Derived rather than written into state on open: an effect that seeds state
+   * costs a second render before the grid has a tabbable cell, and the roving
+   * focus effect downstream would run against the render that had none.
+   *
+   * APG's date picker opens on the selected day, or on today when there is no
+   * selection.
+   */
+  const seededFocusDate = useMemo(() => {
+    if (!isOpen) return null;
+    return startOfDay(
+      (mode === "single" ? singleValue : undefined) ??
+        (mode === "range" ? rangeValue?.start : undefined) ??
+        (mode === "multiple" ? multipleValue?.[0] : undefined) ??
+        new Date(),
+    );
+  }, [isOpen, mode, singleValue, rangeValue, multipleValue]);
+
+  const effectiveFocusedDate = focusedDate ?? seededFocusDate;
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -354,9 +381,9 @@ export function useDatePicker(props: UseDatePickerProps) {
           if (!isOpen) {
             event.preventDefault();
             handleOpen();
-          } else if (focusedDate) {
+          } else if (effectiveFocusedDate) {
             event.preventDefault();
-            handleDateSelect(focusedDate, false);
+            handleDateSelect(effectiveFocusedDate, false);
           }
           break;
         case "ArrowDown":
@@ -372,35 +399,81 @@ export function useDatePicker(props: UseDatePickerProps) {
           break;
       }
     },
-    [disabled, isOpen, focusedDate, handleOpen, handleClose, handleDateSelect],
+    [disabled, isOpen, effectiveFocusedDate, handleOpen, handleClose, handleDateSelect],
+  );
+
+  const isDisabledDate = useCallback(
+    (date: Date) => isDateDisabled(date, disabledDates, minDate, maxDate),
+    [disabledDates, minDate, maxDate],
+  );
+
+  const addDays = (date: Date, days: number): Date => {
+    const next = new Date(date);
+    next.setDate(date.getDate() + days);
+    return next;
+  };
+
+  /**
+   * The nearest focusable day at or after `target`, travelling in `direction`.
+   *
+   * A disabled day renders as a disabled `<button>`, which cannot take focus.
+   * Landing the roving tabindex on one would move `tabIndex={0}` to a cell the
+   * browser refuses to focus, leaving DOM focus on the previous cell and every
+   * subsequent arrow key computing from a stale date — the grid would appear to
+   * freeze. Stepping over them keeps state and focus on the same element.
+   */
+  const nextFocusable = useCallback(
+    (target: Date, direction: 1 | -1): Date | null => {
+      for (let offset = 0; offset <= 366; offset++) {
+        const candidate = addDays(target, direction * offset);
+        if (minDate && isBefore(candidate, minDate)) return null;
+        if (maxDate && isAfter(candidate, maxDate)) return null;
+        if (!isDisabledDate(candidate)) return candidate;
+      }
+      return null;
+    },
+    [minDate, maxDate, isDisabledDate],
   );
 
   const handleCalendarKeyDown = useCallback(
     (event: React.KeyboardEvent, date: Date) => {
       if (disabled) return;
 
-      let newDate: Date | null = null;
+      let target: Date | null = null;
+      let direction: 1 | -1 = 1;
 
       switch (event.key) {
         case "ArrowLeft":
-          event.preventDefault();
-          newDate = new Date(date);
-          newDate.setDate(date.getDate() - 1);
+          target = addDays(date, -1);
+          direction = -1;
           break;
         case "ArrowRight":
-          event.preventDefault();
-          newDate = new Date(date);
-          newDate.setDate(date.getDate() + 1);
+          target = addDays(date, 1);
           break;
         case "ArrowUp":
-          event.preventDefault();
-          newDate = new Date(date);
-          newDate.setDate(date.getDate() - 7);
+          target = addDays(date, -7);
+          direction = -1;
           break;
         case "ArrowDown":
-          event.preventDefault();
-          newDate = new Date(date);
-          newDate.setDate(date.getDate() + 7);
+          target = addDays(date, 7);
+          break;
+        case "Home":
+          // Week bounds, per the WAI-ARIA grid pattern — not month bounds.
+          // Same helpers the grid itself is generated with, so a custom
+          // `weekStartsOn` moves both together.
+          target = startOfDay(startOfWeek(date, { weekStartsOn }));
+          direction = 1;
+          break;
+        case "End":
+          target = startOfDay(endOfWeek(date, { weekStartsOn }));
+          direction = -1;
+          break;
+        case "PageUp":
+          target = addMonths(date, event.shiftKey ? -12 : -1);
+          direction = -1;
+          break;
+        case "PageDown":
+          target = addMonths(date, event.shiftKey ? 12 : 1);
           break;
         case "Enter":
         case " ":
@@ -411,25 +484,33 @@ export function useDatePicker(props: UseDatePickerProps) {
           event.preventDefault();
           handleClose();
           return;
+        default:
+          return;
       }
 
-      if (newDate) {
-        if (minDate && isBefore(newDate, minDate)) return;
-        if (maxDate && isAfter(newDate, maxDate)) return;
+      event.preventDefault();
+      const newDate = nextFocusable(target, direction);
+      if (!newDate) return;
 
-        setFocusedDate(newDate);
-        if (
-          !calendarMonths.some(
-            (m) =>
-              newDate!.getMonth() === m.month.getMonth() &&
-              newDate!.getFullYear() === m.month.getFullYear(),
-          )
-        ) {
-          setDisplayMonth(startOfMonth(newDate));
-        }
+      setFocusedDate(newDate);
+      if (
+        !calendarMonths.some(
+          (m) =>
+            newDate.getMonth() === m.month.getMonth() &&
+            newDate.getFullYear() === m.month.getFullYear(),
+        )
+      ) {
+        setDisplayMonth(startOfMonth(newDate));
       }
     },
-    [disabled, calendarMonths, minDate, maxDate, handleDateSelect, handleClose],
+    [
+      disabled,
+      calendarMonths,
+      weekStartsOn,
+      nextFocusable,
+      handleDateSelect,
+      handleClose,
+    ],
   );
 
   return {
@@ -444,7 +525,7 @@ export function useDatePicker(props: UseDatePickerProps) {
     calendarMonths,
     selectedDates,
     hoverDate,
-    focusedDate,
+    focusedDate: effectiveFocusedDate,
     rangeSelectionState,
     handleOpen,
     handleClose,
