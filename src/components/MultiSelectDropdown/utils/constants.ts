@@ -32,7 +32,9 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
     description: "text-xs mb-1 text-cl-text-tertiary dark:text-cl-text-tertiary",
     loading: "px-3 py-2 bg-cl-bg-hover dark:bg-cl-bg-elevated animate-pulse",
     loadingItem:
-      "px-3 py-2 bg-cl-bg-hover dark:bg-cl-bg-elevated animate-pulse",
+      "px-3 py-2 bg-cl-bg-hover dark:bg-cl-bg-elevated animate-pulse flex items-center gap-2",
+    loadingIcon: "w-4 h-4 bg-gray-200 rounded animate-pulse",
+    loadingBar: "flex-1 h-4 bg-gray-200 rounded animate-pulse",
     count:
       "inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-hover dark:bg-cl-text/10 text-cl-text-secondary dark:text-cl-text-secondary",
   };

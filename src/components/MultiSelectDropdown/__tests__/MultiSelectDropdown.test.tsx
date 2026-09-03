@@ -353,11 +353,15 @@ describe("MultiSelectDropdown", () => {
       });
     });
 
-    it("renders pulse animation elements inside each item", () => {
-      const { container } = render(<MultiSelectDropdownShimmer count={1} />);
-      const pulseElements = container.querySelectorAll(".animate-pulse");
-      // Each item has 2 pulse divs (checkbox placeholder + text placeholder)
-      expect(pulseElements).toHaveLength(2);
+    it("renders two skeleton shapes inside each item, styled from the parent", () => {
+      // ADR 002: the shapes' styling moved to MultiSelectDropdown's
+      // `loadingIcon` / `loadingBar` keys, so the shimmer no longer hardcodes
+      // it — the classes arrive as props from the parent's bag.
+      const { container } = render(
+        <MultiSelectDropdownShimmer count={1} iconClassName="probe-icon" barClassName="probe-bar" />,
+      );
+      expect(container.querySelectorAll(".probe-icon")).toHaveLength(1);
+      expect(container.querySelectorAll(".probe-bar")).toHaveLength(1);
     });
 
     it("marks all items as aria-hidden", () => {

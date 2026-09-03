@@ -92,6 +92,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     const mergedClasses: Required<CountryFlagClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
+        loading: classesProp?.loading ?? baseClasses.loading,
         image: classesProp?.image ?? baseClasses.image,
         fallback: classesProp?.fallback ?? baseClasses.fallback,
       }),
@@ -134,7 +135,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
           size={size}
           aspectRatio={aspectRatio}
           reduceMotion={reduceMotion}
-          className={cn(groupContext?.itemClassName, className)}
+          className={cn(mergedClasses.loading, groupContext?.itemClassName, className)}
           style={style}
         />
       );

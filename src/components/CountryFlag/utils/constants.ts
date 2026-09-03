@@ -24,6 +24,7 @@ export const DEFAULT_COUNTRYFLAG_CLASSES: Required<CountryFlagClasses> = {
   // the border is barely-visible in dark mode and clearly defined in
   // light mode where the contrast issue actually exists.
   root: "inline-flex items-center justify-center shrink-0 overflow-hidden border border-cl-border",
+  loading: "inline-flex shrink-0 overflow-hidden bg-gray-200 animate-pulse",
   image: "w-full h-full object-cover",
   fallback: "",
 };

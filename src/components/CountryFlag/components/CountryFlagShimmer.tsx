@@ -4,6 +4,7 @@ import type {
   CountryFlagGroupShimmerProps,
 } from "../utils/types";
 import { cn } from "../../../utils/scopedCn";
+import { motionSafe } from "../../../utils/classLayers";
 import { getPixelSize } from "../utils/helpers";
 import { DEFAULT_ASPECT_RATIO } from "../utils/constants";
 import { useReducedMotion } from "../../../utils/useReducedMotion";
@@ -31,9 +32,7 @@ export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmer
       <span
         ref={ref}
         className={cn(
-          "inline-flex shrink-0 overflow-hidden bg-gray-200",
-          shouldAnimate && "animate-pulse",
-          className,
+          motionSafe(className ?? "", !shouldAnimate),
         )}
         style={{ width, height, ...style }}
         role="status"

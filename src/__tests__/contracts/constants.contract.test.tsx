@@ -51,11 +51,11 @@ const BASELINE: Record<string, number> = {
   "Accordion/components/AccordionShimmer.tsx": 10,
   "Avatar/components/AvatarBadge.tsx": 2,
   "Avatar/components/AvatarGroupCount.tsx": 2,
-  "Avatar/components/AvatarShimmer.tsx": 3,
+  "Avatar/components/AvatarShimmer.tsx": 1,
   "CascadingDropdown/CascadingDropdown.tsx": 9,
   "Checkbox/Checkbox.tsx": 1,
   "CountryFlag/components/CountryFlagGroup.tsx": 1,
-  "CountryFlag/components/CountryFlagShimmer.tsx": 3,
+  "CountryFlag/components/CountryFlagShimmer.tsx": 1,
   "DatePicker/DatePicker.tsx": 22,
   "Drawer/Drawer.tsx": 8,
   "Input/Input.tsx": 1,
@@ -64,7 +64,7 @@ const BASELINE: Record<string, number> = {
   "Modal/Modal.tsx": 5,
   "MultiSelectDropdown/MultiSelectDropdown.tsx": 3,
   "MultiSelectDropdown/components/MultiSelectDropdownOption.tsx": 1,
-  "MultiSelectDropdown/components/MultiSelectDropdownShimmer.tsx": 3,
+  "MultiSelectDropdown/components/MultiSelectDropdownShimmer.tsx": 0,
   "MultiSelectDropdown/components/SelectedChip.tsx": 2,
   "MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx": 6,
   "OtpInput/OtpInput.tsx": 2,
@@ -253,4 +253,4 @@ describe("constants contract", () => {
  * They are the ADR 001 defect the hard gate exists to catch, and the number to
  * drive down first.
  */
-const STRUCTURAL_BASELINE = 137;
+const STRUCTURAL_BASELINE = 132;

@@ -4,6 +4,7 @@ import { DEFAULT_SIZE, DEFAULT_SHAPE, DEFAULT_SPACING } from "../utils/constants
 import { getNumericSize, getBorderRadius } from "../utils/helpers";
 import { Slot } from "../../../utils/Slot";
 import { cn } from "../../../utils/scopedCn";
+import { motionSafe } from "../../../utils/classLayers";
 import { useReducedMotion } from "../../../utils/useReducedMotion";
 
 export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
@@ -29,9 +30,7 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
       <Comp
         ref={ref}
         className={cn(
-          "shrink-0 bg-gray-200",
-          shouldAnimate && "animate-pulse",
-          className,
+          motionSafe(className ?? "", !shouldAnimate),
         )}
         style={{
           width: numericSize,

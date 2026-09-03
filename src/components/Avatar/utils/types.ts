@@ -45,6 +45,8 @@ export interface AvatarClasses {
   fallback?: string;
   /** Status indicator dot. */
   status?: string;
+  /** R2 `loading`: the skeleton Avatar renders while the image loads. */
+  loading?: string;
 }
 
 /** CSS class overrides for AvatarGroup sub-elements. */

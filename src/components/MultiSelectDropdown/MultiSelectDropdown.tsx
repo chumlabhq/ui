@@ -288,6 +288,8 @@ const MultiSelectDropdown = forwardRef<
         description: classesProp?.description ?? baseClasses.description,
         loading: classesProp?.loading ?? baseClasses.loading,
         loadingItem: classesProp?.loadingItem ?? baseClasses.loadingItem,
+        loadingIcon: classesProp?.loadingIcon ?? baseClasses.loadingIcon,
+        loadingBar: classesProp?.loadingBar ?? baseClasses.loadingBar,
         count: classesProp?.count ?? baseClasses.count,
       }),
       [classesProp, baseClasses],
@@ -633,6 +635,8 @@ const MultiSelectDropdown = forwardRef<
                 count={shimmerCount}
                 className={mergedClasses.loading || undefined}
                 itemClassName={mergedClasses.loadingItem || undefined}
+                iconClassName={mergedClasses.loadingIcon || undefined}
+                barClassName={mergedClasses.loadingBar || undefined}
               />
             ) : displayOptions.length === 0 ? (
               <div

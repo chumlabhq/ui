@@ -35,14 +35,6 @@
   },
   "$comment2": "waived: keys no fixture renders. RE-AUDITED 2026-09-02 by attempting each state with a fixture rather than by re-reading the reason. 15 keys have now been wrongly waived across three components \u2014 CascadingDropdown's six search keys (a fixture passed `showSearch`, which is not a prop), DatePicker's dayMarked/markerIndicator/presetActive (the fixture opened on the wrong month), and Table's six pin keys (canShowPinButton requires an onPinColumn handler no fixture passed). Every one had a specific, plausible, invented reason: markerIndicator's said 'marker rendering needs layout measurement jsdom does not provide'. A specific false reason is worse than a vague one because it stops the next reader checking. Every surviving reason below states what was ATTEMPTED.",
   "decorativeLeaks": {
-    "DatePicker": [
-      "gap-2"
-    ],
-    "MultiSelectDropdown": [
-      "gap-2",
-      "rounded",
-      "animate-pulse"
-    ],
     "Stepper": [
       "sm:px-2"
     ],
@@ -63,8 +55,11 @@
       "transition-colors",
       "text-cl-text",
       "text-cl-text-tertiary",
-      "rounded",
-      "py-2"
+      "py-2",
+      "rounded"
+    ],
+    "DatePicker": [
+      "gap-2"
     ]
   },
   "$comment3": "motionLeaks: animation utilities that survive prefers-reduced-motion because they are written as literals at a JSX site (constants.contract's ratcheting baseline owns those) or because they come from a nested component the parent does not yet pass `unstyled` to (GATE-HONESTY \u00a74, deferred). Neither is fixable inside the reduced-motion work without touching code that is out of scope, so they are named here rather than hidden. reduced-motion.contract fails if an entry stops leaking. | 2026-09-02: `transition-all` added to Table. It was ALWAYS there \u2014 Table.tsx:1287, a literal at the JSX call site on the column pin button \u2014 but no fixture rendered that button, so neither unstyled.contract nor reduced-motion.contract could see it. It surfaced the moment the pinned-column fixture made the control render. Not a new leak; a newly visible one. Fixing it means moving the literal into DEFAULT_TABLE_CLASSES, which is ADR 002 Task 3 work (Table holds 42 of the 125 literals on the constants ratchet).",
@@ -72,17 +67,11 @@
     "Button": [
       "animate-spin"
     ],
-    "CountryFlag": [
-      "animate-pulse"
-    ],
     "Input": [
       "animate-spin"
     ],
     "TextArea": [
       "animate-spin"
-    ],
-    "MultiSelectDropdown": [
-      "animate-pulse"
     ],
     "Table": [
       "transition-transform",

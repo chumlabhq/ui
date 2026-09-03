@@ -725,9 +725,12 @@ describe("AvatarShimmer", () => {
       );
     });
 
-    it("applies animate class by default", () => {
-      render(<AvatarShimmer />);
-
+    it("takes its animation from the parent's `loading` key, and keeps it by default", () => {
+      // ADR 002: AvatarShimmer is a sub-component, not a documented component in
+      // its own right — no export subpath, no schema, no index entry — so it is
+      // styled through Avatar's `classes.loading` rather than a second route of
+      // its own. Rendered by Avatar, the animation arrives in className.
+      render(<Avatar loading />);
       expect(screen.getByRole("status")).toHaveClass("animate-pulse");
     });
 

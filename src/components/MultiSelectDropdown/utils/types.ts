@@ -24,6 +24,14 @@ export interface MultiSelectDropdownClasses {
   loading?: string;
   /** One row of the skeleton. It shared `loading` with the container above it. */
   loadingItem?: string;
+  /**
+   * The two skeleton shapes inside a `loadingItem`. Their styling was a
+   * call-site literal in MultiSelectDropdownShimmer, which has no `classes`
+   * prop — routed through this bag rather than giving the sub-component a
+   * second way in. NOVEL: no peer library ships a skeleton anatomy.
+   */
+  loadingIcon?: string;
+  loadingBar?: string;
   count?: string;
 }
 

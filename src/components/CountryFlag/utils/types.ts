@@ -14,6 +14,13 @@ export interface CountryFlagTooltipConfig {
 
 export interface CountryFlagClasses {
   root?: string;
+  /**
+   * ADR 002 R2 `loading`: the skeleton CountryFlag renders while the flag
+   * loads. Its styling was a call-site literal in CountryFlagShimmer, which has
+   * no `classes` prop of its own — the shimmer is a sub-component, so it is
+   * styled through the parent's bag rather than gaining a second route in.
+   */
+  loading?: string;
   image?: string;
   fallback?: string;
 }

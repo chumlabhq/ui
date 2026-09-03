@@ -6,6 +6,7 @@ const PNG_1PX =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
 
 const fixtures: Fixtures<typeof Avatar> = [
+  { name: "loading", props: { loading: true } },
   { name: "initials", props: { name: "Ada Lovelace" } },
   { name: "image", props: { src: "https://example.test/a.png", alt: "Ada" } },
   {
