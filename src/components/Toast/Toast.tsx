@@ -65,6 +65,8 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const baseClasses = isUnstyled ? UNSTYLED_TOAST_CLASSES : DEFAULT_TOAST_CLASSES;
   const mergedClasses: Required<ToastClasses> = useMemo(() => ({
     root: classesProp?.root ?? providerClasses?.root ?? baseClasses.root,
+    body: classesProp?.body ?? providerClasses?.body ?? baseClasses.body,
+    track: classesProp?.track ?? providerClasses?.track ?? baseClasses.track,
     title: classesProp?.title ?? providerClasses?.title ?? baseClasses.title,
     description: classesProp?.description ?? providerClasses?.description ?? baseClasses.description,
     indicator: classesProp?.indicator ?? providerClasses?.indicator ?? baseClasses.indicator,
@@ -139,8 +141,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
       aria-live={toastRole === "alert" ? "assertive" : "polite"}
       aria-atomic="true"
       className={cn(
-        !isUnstyled && "relative overflow-hidden rounded-cl-md border shadow-lg",
-        !isUnstyled && (defaultContainerStyles[type] ?? defaultContainerStyles.default),
+                !isUnstyled && (defaultContainerStyles[type] ?? defaultContainerStyles.default),
         mergedClasses.root,
         className,
       )}
@@ -150,9 +151,9 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
       data-toast-id={id}
       data-toast-type={type}
     >
-      <div className={cn(!isUnstyled && "flex items-start gap-3 p-4", mergedClasses.root)}>
+      <div className={mergedClasses.body || undefined}>
         {(icon || defaultIcon) && (
-          <span className={cn(!isUnstyled && "text-white", mergedClasses.icon)}>
+          <span className={cn(mergedClasses.icon)}>
             {icon ?? defaultIcon}
           </span>
         )}
@@ -162,13 +163,13 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
         ) : (
           <div className="flex-1 min-w-0">
             {message && (
-              <p className={cn(!isUnstyled && "font-medium text-sm", mergedClasses.title)}>
+              <p className={cn(mergedClasses.title)}>
                 {message}
               </p>
             )}
             {description && (
               <p
-                className={cn(!isUnstyled && "text-sm mt-1 opacity-80", mergedClasses.description)}
+                className={cn(mergedClasses.description)}
               >
                 {description}
               </p>
@@ -182,8 +183,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
             type="button"
             onClick={handleClose}
             className={cn(
-              !isUnstyled && "cursor-pointer shrink-0 p-1 rounded hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80",
-              mergedClasses.closeTrigger,
+                            mergedClasses.closeTrigger,
             )}
             aria-label={closeAriaLabel}
           >
@@ -193,11 +193,10 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
       </div>
 
       {showProgress && hasFiniteDuration && (
-        <div className={cn(!isUnstyled && "absolute bottom-0 left-0 right-0 h-1 bg-white/20")}>
+        <div className={mergedClasses.track || undefined}>
           <div
             className={cn(
-              !isUnstyled && "h-full bg-white/40",
-              mergedClasses.indicator,
+                            mergedClasses.indicator,
             )}
             style={progressAnimationStyle}
           />

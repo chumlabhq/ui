@@ -292,6 +292,7 @@ function TableInner<TData>(
   const mobileCardClassName = classesProp?.mobileCard ?? base.mobileCard;
   const groupHeaderClassName = classesProp?.groupLabel ?? base.groupLabel;
   const resizeHandleClassName = classesProp?.resizeHandle ?? base.resizeHandle;
+  const resizeIndicatorClassName = classesProp?.resizeIndicator ?? base.resizeIndicator;
   const filterIconClassName = classesProp?.filterButton ?? base.filterButton;
   const filterDropdownClassName = classesProp?.filterContent ?? base.filterContent;
   const loadingMoreClassName = classesProp?.loadingFooter ?? base.loadingFooter;
@@ -1320,11 +1321,9 @@ function TableInner<TData>(
               aria-orientation="vertical"
             >
               <div
-                className={`w-0.5 h-3/5 rounded-full transition-colors ${
-                  header.column.getIsResizing()
-                    ? "bg-cl-accent"
-                    : "bg-transparent group-hover/resize:bg-gray-400 dark:group-hover/resize:bg-gray-500"
-                }`}
+                className={resizeIndicatorClassName}
+                // ADR 002 R4: the state the resizing ternary expressed.
+                data-resizing={header.column.getIsResizing() || undefined}
               />
             </div>
           )}

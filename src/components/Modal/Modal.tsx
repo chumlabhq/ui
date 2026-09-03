@@ -317,7 +317,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
         <div
           id={modalId}
           className={unstyled ? mergedClasses.root : [
-            "fixed inset-0",
             shouldAnimate && "transition-opacity",
             isOpen ? "opacity-100" : "opacity-0",
             mergedClasses.root,
@@ -338,7 +337,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           {showOverlay && (
             <div
               className={unstyled ? mergedClasses.overlay : [
-                "fixed inset-0",
                 shouldAnimate && "transition-opacity",
                 mergedClasses.overlay,
               ]
@@ -356,15 +354,11 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           )}
 
           <div
-            className={unstyled ? mergedClasses.positioner : [
-              "fixed inset-0 overflow-y-auto",
-              centered && "flex items-center justify-center",
-              mergedClasses.positioner,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            className={mergedClasses.positioner || undefined}
             onClick={handleOverlayClick}
             data-modal-container
+            // ADR 002 R4: the state the `centered` literal expressed.
+            data-centered={centered || undefined}
           >
             <div
               ref={mergedContentRef}
@@ -382,10 +376,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 // Tailwind's cascade order and the panel ends up sized to
                 // its own content — covering only the area its content
                 // happens to occupy instead of the whole viewport.
-                fullScreen ? "!fixed !inset-0 outline-none max-w-none m-0 rounded-none" : "relative outline-none",
-                "bg-white dark:bg-cl-bg-elevated",
-                shouldAnimate && "transition-all transform",
-                shouldAnimate && (isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"),
                 mergedClasses.content,
                 className,
               ]
@@ -394,6 +384,10 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
               style={contentStyles}
               onClick={handleContentClick}
               data-modal-content
+              // ADR 002 R4: the states the fullScreen ternary and the isOpen
+              // animation literals expressed.
+              data-fullscreen={fullScreen || undefined}
+              data-open={isOpen || undefined}
             >
               {showHeader && (hasTitle || hasDescription || showCloseButton) && (
                 <div className={mergedClasses.header || undefined} data-modal-header>

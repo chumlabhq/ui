@@ -52,6 +52,8 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   mobileCard: "",
   groupLabel: "",
   resizeHandle: "",
+  resizeIndicator:
+    "w-0.5 h-3/5 rounded-full transition-colors bg-transparent group-hover/resize:bg-gray-400 dark:group-hover/resize:bg-gray-500 data-[resizing]:bg-cl-accent",
   loadingFooter: "",
 };
 

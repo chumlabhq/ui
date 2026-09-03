@@ -53,7 +53,7 @@ const BASELINE: Record<string, number> = {
   "Avatar/components/AvatarGroupCount.tsx": 2,
   "Avatar/components/AvatarShimmer.tsx": 3,
   "CascadingDropdown/CascadingDropdown.tsx": 9,
-  "Checkbox/Checkbox.tsx": 3,
+  "Checkbox/Checkbox.tsx": 1,
   "CountryFlag/components/CountryFlagGroup.tsx": 1,
   "CountryFlag/components/CountryFlagShimmer.tsx": 3,
   "DatePicker/DatePicker.tsx": 22,
@@ -61,7 +61,7 @@ const BASELINE: Record<string, number> = {
   "Input/Input.tsx": 1,
   "InternationalPhoneInput/InternationalPhoneInput.tsx": 1,
   "Loader/CircularLoader.tsx": 0,
-  "Modal/Modal.tsx": 15,
+  "Modal/Modal.tsx": 5,
   "MultiSelectDropdown/MultiSelectDropdown.tsx": 3,
   "MultiSelectDropdown/components/MultiSelectDropdownOption.tsx": 1,
   "MultiSelectDropdown/components/MultiSelectDropdownShimmer.tsx": 3,
@@ -69,16 +69,16 @@ const BASELINE: Record<string, number> = {
   "MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx": 6,
   "OtpInput/OtpInput.tsx": 2,
   "Pagination/Pagination.tsx": 1,
-  "RadioButton/RadioButton.tsx": 8,
+  "RadioButton/RadioButton.tsx": 6,
   "ResizablePanel/ResizablePanel.tsx": 7,
   "SearchableDropdown/components/SearchableDropdownOption.tsx": 1,
   "Stepper/Stepper.tsx": 9,
   "Switch/Switch.tsx": 1,
-  "Table/Table.tsx": 75,
+  "Table/Table.tsx": 72,
   "Table/icons.tsx": 2,
   "TextArea/TextArea.tsx": 1,
   "TimePicker/TimePicker.tsx": 5,
-  "Toast/Toast.tsx": 11,
+  "Toast/Toast.tsx": 3,
   "Toast/components/ToastProvider.tsx": 3,
 };
 
@@ -253,4 +253,4 @@ describe("constants contract", () => {
  * They are the ADR 001 defect the hard gate exists to catch, and the number to
  * drive down first.
  */
-const STRUCTURAL_BASELINE = 149;
+const STRUCTURAL_BASELINE = 137;

@@ -170,6 +170,14 @@ Already in use, or attribute values; no rename waits on them.
 | `data-dragging` | `data-dragging` on the thumb | Ark Slider |
 | `data-placeholder` | `data-placeholder` on an unset trigger | Radix Select |
 
+## Added in Task 3c/4 — R4 attributes
+
+| Attribute | Marker | Reason |
+| --- | --- | --- |
+| `data-centered` | **NOVEL** | Radix and Ark both leave dialog placement to the consumer's CSS; there is no peer attribute to borrow. Names the state Modal's `centered` prop puts the positioner in. |
+| `data-fullscreen` | **NOVEL** | Neither Radix Dialog nor Ark Dialog has a full-screen mode. The prop is ours, so the attribute is too. |
+| `data-resizing` | **RECALLED, not blocking** | Ark Splitter and react-resizable-panels expose a resizing state on the handle. Already emitted on Table's resize handle; this extends it to the header cell. Nothing rests on the citation — if it fails the attribute is NOVEL and the name is unchanged. |
+
 ## NOVEL
 
 Amendment F added 22 promotion names — `searchControl`, `itemControl`, `itemRow`,

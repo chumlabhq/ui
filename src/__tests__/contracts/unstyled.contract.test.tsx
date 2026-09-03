@@ -165,3 +165,70 @@ describe("unstyled contract", () => {
     });
   });
 });
+
+/**
+ * ADR 001's founding defect, in the one place the rest of this suite cannot look.
+ *
+ * Every other assertion here compares a rendered `unstyled` tree against the
+ * constants. A structural utility written at a JSX call site behind an
+ * `unstyled` check never reaches the constants at all, so it is invisible to
+ * that comparison — and it is stripped in unstyled mode, which is exactly
+ * backwards: structural utilities are the half that must survive.
+ *
+ * Twenty of these outlived phase 2, which fixed the constants and never looked
+ * at call sites. This reads source, because that is where the guard lives.
+ */
+describe("no structural utility hides behind an unstyled guard", () => {
+  const sources = import.meta.glob("../../components/**/*.tsx", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  }) as Record<string, string>;
+
+  const closeBrace = (text: string, open: number): number => {
+    let depth = 0;
+    for (let i = open; i < text.length; i += 1) {
+      const ch = text[i];
+      if (ch === '"' || ch === "'" || ch === "`") {
+        const quote = ch;
+        i += 1;
+        while (i < text.length && text[i] !== quote) i += text[i] === "\\" ? 2 : 1;
+      } else if (ch === "{") depth += 1;
+      else if (ch === "}") {
+        depth -= 1;
+        if (depth === 0) return i;
+      }
+    }
+    return text.length;
+  };
+
+  const offenders: string[] = [];
+  for (const [path, source] of Object.entries(sources)) {
+    if (/__tests__|\/ui\//.test(path)) continue;
+    const file = path.replace("../../components/", "");
+    for (const m of source.matchAll(/className=\{/g)) {
+      const start = (m.index ?? 0) + m[0].length - 1;
+      const expression = source
+        .slice(start, closeBrace(source, start) + 1)
+        .replace(/\/\*[\s\S]*?\*\//g, " ")
+        .replace(/\/\/[^\n]*/g, " ");
+      if (!/\bunstyled\b|\bisUnstyled\b/.test(expression)) continue;
+      for (const lit of expression.matchAll(/"([^"]*)"|'([^']*)'/g)) {
+        const value = (lit[1] ?? lit[2]).trim();
+        if (!value) continue;
+        const structural = value.split(/\s+/).filter((t) => t && isStructural(t));
+        if (structural.length) {
+          offenders.push(`${file}: "${value}" — structural [${structural.join(" ")}]`);
+        }
+      }
+    }
+  }
+
+  it("finds none", () => {
+    expect(
+      offenders,
+      "these are stripped when `unstyled` is on, and structural utilities must survive it:\n" +
+        offenders.join("\n"),
+    ).toEqual([]);
+  });
+});

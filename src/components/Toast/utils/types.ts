@@ -12,6 +12,14 @@ export type ToastPosition =
 
 export interface ToastClasses {
   root?: string;
+  /**
+   * ADR 002 R2: the padded row inside `root`. It had no key and was reached by
+   * applying `root` to two different elements, so any override on `root` styled
+   * both the container and this.
+   */
+  body?: string;
+  /** R2 `track`: the auto-dismiss progress groove that `indicator` fills. */
+  track?: string;
   title?: string;
   description?: string;
   indicator?: string;

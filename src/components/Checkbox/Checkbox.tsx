@@ -191,7 +191,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       >
         <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span
-            className={cn(mergedClasses.control, stateClassName, shapeClass, !unstyled && error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
+            className={cn(mergedClasses.control, stateClassName, shapeClass) || undefined}
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}

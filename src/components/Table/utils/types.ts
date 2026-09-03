@@ -98,6 +98,13 @@ export interface TableClasses {
   groupLabel?: string;
   /** Column resize handle. */
   resizeHandle?: string;
+  /**
+   * ADR 002 R10: the bar inside `resizeHandle`. It had no key and carried
+   * decorative colour as a call-site literal, so `unstyled` could not strip it
+   * and no consumer could reach it. Head noun `indicator` (VERIFIED, Radix
+   * Checkbox.Indicator); the state it showed is now `data-resizing`.
+   */
+  resizeIndicator?: string;
   /** Loading more indicator for infinite scroll. */
   loadingFooter?: string;
 }

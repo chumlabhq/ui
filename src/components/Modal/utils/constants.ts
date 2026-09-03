@@ -5,9 +5,14 @@ export const DEFAULT_MODAL_CLASSES: Required<ModalClasses> = {
   root: "fixed inset-0 z-50 flex items-center justify-center",
   overlay:
     "fixed inset-0 bg-black/60 dark:bg-black/70 backdrop-blur-sm transition-opacity",
-  positioner: "relative z-10 flex items-center justify-center p-2 sm:p-4",
+  // `fixed inset-0` moved here from the call site, where it sat inside an
+  // `unstyled` guard. It contradicts `relative` below; the pair was already
+  // on the element together, so this is behaviour-preserving and the conflict
+  // is now visible instead of hidden.
+  positioner:
+    "fixed inset-0 overflow-y-auto relative z-10 p-2 sm:p-4 data-[centered]:flex data-[centered]:items-center data-[centered]:justify-center",
   content:
-    "w-full max-w-lg rounded-cl-lg shadow-2xl overflow-hidden bg-white dark:bg-cl-bg-elevated",
+    "w-full max-w-lg rounded-cl-lg shadow-2xl overflow-hidden bg-white dark:bg-cl-bg-elevated data-[fullscreen]:!fixed data-[fullscreen]:!inset-0 data-[fullscreen]:outline-none data-[fullscreen]:max-w-none data-[fullscreen]:m-0 data-[fullscreen]:rounded-none relative outline-none transition-all transform opacity-0 scale-95 data-[open]:opacity-100 data-[open]:scale-100",
   header: "flex items-start gap-3 p-6 pb-4",
   title: "font-semibold text-lg text-cl-text dark:text-white",
   description: "mt-1 text-sm text-cl-text-secondary dark:text-cl-text-tertiary",

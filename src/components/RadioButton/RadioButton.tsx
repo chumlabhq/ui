@@ -308,7 +308,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         {...rest}
       >
         <span
-          className={cn(mergedClasses.control, stateClassName, !unstyled && ctx.error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
+          className={cn(mergedClasses.control, stateClassName) || undefined}
           style={{ ...sizeStyle, position: "relative" }}
           data-checked={isChecked || undefined}
           data-state={isChecked ? "checked" : "unchecked"}
