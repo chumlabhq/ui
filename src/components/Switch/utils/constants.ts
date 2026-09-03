@@ -20,7 +20,7 @@ export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   label: "text-sm font-medium text-cl-text dark:text-cl-text cursor-pointer",
   description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
   control:
-    "relative inline-flex items-center h-[var(--switch-tracker-height,1.25rem)] w-[var(--switch-tracker-width,2.25rem)] rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--switch-focus-ring,var(--cl-accent))] cursor-pointer",
+    "relative inline-flex items-center h-[var(--switch-tracker-height,1.25rem)] w-[var(--switch-tracker-width,2.25rem)] rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--switch-focus-ring,var(--cl-accent))] cursor-pointer data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   thumb:
     "inline-flex items-center justify-center transform h-[var(--switch-thumb-size,1rem)] w-[var(--switch-thumb-size,1rem)] rounded-full bg-[var(--switch-thumb-bg,white)] shadow-md transition-transform duration-200 motion-reduce:transition-none",
   message: "text-sm text-cl-error mt-2 text-cl-success",

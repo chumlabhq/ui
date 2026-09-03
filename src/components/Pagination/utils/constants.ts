@@ -6,7 +6,7 @@ export const DEFAULT_ROW_OPTIONS = [5, 10, 25, 50, 100] as const;
 export const DEFAULT_VISIBLE_PAGE_COUNT = 3;
 
 export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
-  root: "flex flex-wrap items-center gap-2",
+  root: "flex flex-wrap items-center gap-2 data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
   row: "flex items-center gap-2",
   list: "flex flex-wrap items-center gap-2",
   item:

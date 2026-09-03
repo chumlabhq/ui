@@ -3,7 +3,7 @@ import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
   root: "",
-  control: "flex items-center gap-2",
+  control: "flex items-center gap-2 data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   group: "flex items-center gap-2",
   input:
     "w-10 h-10 sm:w-12 sm:h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white dark:bg-cl-bg-elevated border-cl-border-input dark:border-cl-border text-cl-text dark:text-cl-text focus-visible:border-cl-border-input-focus dark:focus-visible:border-cl-border-input-focus focus-visible:ring-2 focus-visible:ring-cl-accent/20 dark:focus-visible:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed",

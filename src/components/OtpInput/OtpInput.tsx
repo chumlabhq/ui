@@ -358,7 +358,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           <div className={mergedClasses.description || undefined}>{description}</div>
         )}
         <div
-          className={cn(mergedClasses.control, loading && "opacity-50 pointer-events-none") || undefined}
+          className={cn(mergedClasses.control) || undefined}
           onPaste={handlePaste}
           role="group"
           aria-label={groupAriaLabel}

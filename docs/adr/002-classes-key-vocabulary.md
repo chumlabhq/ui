@@ -247,6 +247,24 @@ At the time of writing, of 101 literals on unkeyed elements: **57 purely structu
 mixed, 11 purely decorative**. The 44 that carry any decorative token are the ones that
 need a key; the other 57 do not.
 
+A conditional literal splits the same way, and for the same reason.
+
+**A conditional that switches decoration is consumer-facing state.** Selected, disabled,
+active, pinned — a consumer has a legitimate reason to restyle each, so the element needs a
+key and the state becomes a `data-` variant on it. Where the state has no attribute, the
+attribute goes through R4's precedent scheme; a literal is not a licence to invent one
+silently.
+
+**A conditional that switches layout is internal implementation.** Table's pinned-region
+switches are the clear case: `hasPinnedColumns ? "grid" : "flex"` describes how the component
+arranges itself, not a state anyone styles. Nobody writes CSS for "the pinned region is
+currently scrolled". Minting a key for one would grow the public API to satisfy a number,
+which is the opposite of what R7's deletion policy is for. These stay, held by the ratchet.
+
+At the time of writing the 67 remaining conditionals split **40 decoration / 27 layout**, and
+35 of the 40 are already on a keyed element — so most of the work is converting a literal to
+a variant, not minting API. The 27 are a deliberate endpoint, not a backlog.
+
 A conditional literal is a third case again. It expresses state, which R4 already owns, so
 it becomes a `data-` variant on a key that exists rather than a new key. Where its state
 has no attribute, the attribute goes through R4's precedent scheme — a literal is not a
@@ -255,6 +273,13 @@ licence to invent one silently.
 `STRUCTURAL_BASELINE` in `constants.contract` is tracked separately from the overall
 baseline for this reason: the two ratchets measure different things, and only one of them
 is a bug count.
+
+## Closeout
+
+ADR 002 is closed. `docs/adr/002-closeout.md` carries the final
+reconciliation — key count, literal split, surviving conditionals with the reason
+each stays, the precedent ledger by marker, every standing waiver, and a plain
+statement of what this ADR did not achieve.
 
 ## Consequences
 

@@ -38,9 +38,6 @@
     "Stepper": [
       "sm:px-2"
     ],
-    "Switch": [
-      "opacity-50"
-    ],
     "Table": [
       "border",
       "rounded-cl-md",

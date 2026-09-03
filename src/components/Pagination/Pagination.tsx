@@ -594,7 +594,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         aria-disabled={disabled || undefined}
         data-disabled={disabled || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
-        className={cn(mergedClasses.root, className, disabled && "opacity-50 pointer-events-none")}
+        className={cn(mergedClasses.root, className)}
         {...rest}
       >
         {sectionOrder.map((section) => (

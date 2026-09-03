@@ -583,7 +583,7 @@ const InternationalPhoneInput = forwardRef<
         )}
 
         <div
-          className={cn(mergedClasses.control, loading && "opacity-50 pointer-events-none") || undefined}
+          className={cn(mergedClasses.control) || undefined}
           data-slot="wrapper"
           role="group"
           aria-labelledby={label ? labelId : undefined}

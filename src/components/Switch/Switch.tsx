@@ -185,10 +185,10 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             onClick={handleToggle}
             className={cn(
               mergedClasses.control,
-              loading && "opacity-50 pointer-events-none",
             ) || undefined}
             style={transitionStyle}
             data-disabled={disabled || undefined}
+            data-loading={loading || undefined}
             data-checked={isChecked || undefined}
             data-state={isChecked ? "checked" : "unchecked"}
             {...buttonProps}

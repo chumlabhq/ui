@@ -339,7 +339,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   label:
     "text-[13px] font-medium mb-1.5 block text-cl-text dark:text-cl-text-secondary",
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary dark:text-cl-text-tertiary",
-  control: "flex gap-2 items-stretch",
+  control: "flex gap-2 items-stretch data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   input:
     "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
   message:
