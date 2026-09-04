@@ -123,7 +123,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
 | `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
 | `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `tooltip` | object | — | React.ReactNode — Tooltip content shown on hover. |
 | `tooltipProps` | object | — | Configuration for tooltip positioning and appearance. |
 | `href` | string | — | Link destination (required when as='a'). |
@@ -302,7 +302,11 @@ const [saving, setSaving] = useState(false);
 - **Loading:** Sets `aria-busy="true"`. Button becomes non-interactive.
 - **Icon-only:** Must have `aria-label`. Dev warning logged if missing when `as="span"`.
 - **ButtonGroup:** `role="group"` with `aria-orientation` for screen reader context.
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Troubleshooting

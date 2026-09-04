@@ -37,7 +37,10 @@ export function useMultiSelectDropdown({
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
   const [loadedOptions, setLoadedOptions] = useState<MultiSelectOption[]>([]);
-  const hasLoadedRef = useRef(false);
+  // State, not a ref: `shouldLoad` is computed during render and a ref cannot
+  // be read there. Dropdown already tracked this as state.
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const isLoadingRef = useRef(false);
   const mountedRef = useRef(true);
   const shouldRestoreFocusRef = useRef(false);
 
@@ -48,9 +51,16 @@ export function useMultiSelectDropdown({
     };
   }, []);
 
-  useEffect(() => {
-    hasLoadedRef.current = false;
-  }, [onLoadOptions, loadOnOpen]);
+  // Reset when the loader config changes, adjusted during render rather than
+  // from an effect. Same shape as SearchableDropdown's `prevLoadConfig`.
+  const [prevLoadConfig, setPrevLoadConfig] = useState({ onLoadOptions, loadOnOpen });
+  if (
+    prevLoadConfig.onLoadOptions !== onLoadOptions ||
+    prevLoadConfig.loadOnOpen !== loadOnOpen
+  ) {
+    setPrevLoadConfig({ onLoadOptions, loadOnOpen });
+    if (hasLoaded) setHasLoaded(false);
+  }
 
   const displayOptions = useMemo(() => {
     if (onLoadOptions && loadedOptions.length > 0) {
@@ -64,26 +74,52 @@ export function useMultiSelectDropdown({
     [displayOptions, value],
   );
 
-  const loadOptions = useCallback(() => {
-    if (!loadOnOpen || !onLoadOptions || hasLoadedRef.current || isLoadingOptions) {
-      return;
-    }
+  /**
+   * Whether the menu should be fetching right now.
+   *
+   * Derived from `isOpen` rather than called from the open handlers, so
+   * `defaultOpen` and a controlled `open` fetch too. Matches Dropdown and the
+   * two searchable dropdowns; all four resolve this the same way now.
+   */
+  const shouldLoad = isOpen && loadOnOpen && !!onLoadOptions && !hasLoaded;
 
-    setIsLoadingOptions(true);
+  // Adjusted during render rather than from the effect, which would be a
+  // cascading render.
+  const [prevShouldLoad, setPrevShouldLoad] = useState(false);
+  if (prevShouldLoad !== shouldLoad) {
+    setPrevShouldLoad(shouldLoad);
+    if (shouldLoad) setIsLoadingOptions(true);
+  }
+
+  useEffect(() => {
+    if (!shouldLoad || !onLoadOptions) return;
+
+    let cancelled = false;
+    isLoadingRef.current = true;
     onLoadOptions()
       .then((results) => {
-        if (!mountedRef.current) return;
+        if (cancelled) return;
         setLoadedOptions(results);
-        hasLoadedRef.current = true;
+        setHasLoaded(true);
       })
-      .catch((err) => {
-        if (!mountedRef.current) return;
+      .catch((err: unknown) => {
+        if (cancelled) return;
         onLoadError?.(err);
       })
       .finally(() => {
-        if (mountedRef.current) setIsLoadingOptions(false);
+        isLoadingRef.current = false;
+        // Unconditional. A successful load sets `hasLoaded`, which flips
+        // `shouldLoad` and re-runs this effect — cancelling the very fetch
+        // whose completion it is. Guarding this on `cancelled` left the
+        // spinner up forever on the happy path. A newer fetch turns it back
+        // on during render, so clearing it here cannot mask one.
+        setIsLoadingOptions(false);
       });
-  }, [loadOnOpen, onLoadOptions, isLoadingOptions, onLoadError]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [shouldLoad, onLoadOptions, onLoadError]);
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
@@ -93,10 +129,9 @@ export function useMultiSelectDropdown({
         return false;
       }
       setFocusedIndex(-1);
-      loadOptions();
       return true;
     });
-  }, [disabled, setIsOpen, loadOptions]);
+  }, [disabled, setIsOpen]);
 
   const handleClose = useCallback(() => {
     shouldRestoreFocusRef.current = true;
@@ -158,7 +193,6 @@ export function useMultiSelectDropdown({
           event.preventDefault();
           if (!isOpen) {
             setIsOpen(true);
-            loadOptions();
             const first = getFirstEnabledIndex(displayOptions);
             if (first !== -1) setFocusedIndex(first);
           } else {
@@ -213,7 +247,7 @@ export function useMultiSelectDropdown({
           break;
       }
     },
-    [disabled, isOpen, focusedIndex, displayOptions, handleToggle, handleClose, handleOptionToggle, loadOptions, setIsOpen],
+    [disabled, isOpen, focusedIndex, displayOptions, handleToggle, handleClose, handleOptionToggle, setIsOpen],
   );
 
   return {

@@ -124,7 +124,7 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
 | `onError` | object | — | () => void — Fires when the avatar image fails to load. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
@@ -308,7 +308,11 @@ For grouped avatars, match `ringColor` to your background:
 - **Status indicator:** Has `aria-label` describing the status (e.g., "Status: online")
 - **AvatarBadge:** Supports `aria-live` for screen reader announcements when count changes
 - **AvatarGroupCount:** Supports `aria-live` for dynamic surplus count updates
-- **Reduced motion:** `reduceMotion="auto"` respects OS `prefers-reduced-motion`, disables image fade-in and shimmer pulse
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 
 ---
 

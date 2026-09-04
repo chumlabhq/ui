@@ -93,7 +93,7 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
 | `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
 | `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |
@@ -212,7 +212,11 @@ const tabs = [
 - `focus-visible:ring-2` for keyboard focus
 - Count badge has `aria-label="{count} items"`
 - `aria-hidden="true"` on decorative indicator
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Troubleshooting

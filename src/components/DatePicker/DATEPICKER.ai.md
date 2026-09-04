@@ -157,7 +157,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `forceDropdownPosition` | boolean | `false` | Locks the calendar to the specified dropdownPosition without auto-flipping. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and calendar popup. |
 | `keepMounted` | boolean | `false` | Keep the calendar DOM mounted when closed. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 
 ## Styling Guide
 
@@ -377,7 +377,11 @@ import { fr } from "date-fns/locale";
   control is a real `<button>` beside the trigger, not a `role="button"` span inside it.
 - **ARIA:** Trigger has `aria-expanded` + `aria-haspopup`, calendar grid uses `role="grid"`, day cells use `role="gridcell"` with `aria-selected`/`aria-disabled`/`aria-current="date"`
 - **Focus management:** Focus moves to the selected day (or today) on open, follows the roving tabindex as you navigate, and returns to the trigger on close. The panel is `role="dialog" aria-modal="true"` and traps Tab in both directions.
-- **Reduced motion:** `reduceMotion="auto"` respects OS `prefers-reduced-motion` setting
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 
 ---
 

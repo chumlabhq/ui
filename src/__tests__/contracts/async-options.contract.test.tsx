@@ -193,6 +193,17 @@ describe("load-on-open branch", () => {
         ).toEqual(OPTION_LABELS);
       });
 
+      it("fetches for a menu that starts open", async () => {
+        // `defaultOpen` reaches the open state without either open handler
+        // running. The fetch is keyed on `isOpen` for exactly this reason; when
+        // it lived in the handlers this rendered an empty menu forever.
+        await drive(Component as never, name, "async-load-default-open");
+        expect(
+          renderedOptions(),
+          "a menu that starts open never fetched its options",
+        ).toEqual(OPTION_LABELS);
+      });
+
       it("distinguishes an empty result from a load still running", async () => {
         await drive(Component as never, name, "async-load-empty");
         expect(menuIsMounted()).toBe(true);
@@ -266,6 +277,38 @@ describe("cascading async branches", () => {
       renderedMenuItems().includes("Apple"),
       "onLoadChildren resolved but the submenu did not render its children",
     ).toBe(true);
+  });
+
+  it("opens a lazy parent's submenu on click rather than selecting it", async () => {
+    // The click handler tested `option.children` alone, so a `hasChildren`
+    // parent was a leaf to it: clicking committed `{ root: value }` and closed
+    // the menu. Both halves are asserted — the submenu opens, and no value is
+    // committed — because either one alone would pass on a different bug.
+    const committed: unknown[] = [];
+    const fixture = fixturesFor("CascadingDropdown").find(
+      (f) => f.name === "async-children-clicked",
+    );
+    if (!fixture) throw new Error("CascadingDropdown has no `async-children-clicked` fixture");
+    // Merged then cast once: spreading a `Record<string, never>` and adding a
+    // prop alongside it does not typecheck, and the fixture's props are opaque
+    // here by design.
+    const props = {
+      ...(fixture.props as Record<string, unknown>),
+      onValueChange: (value: unknown) => {
+        committed.push(value);
+      },
+    } as unknown as React.ComponentProps<typeof CascadingDropdown>;
+    const { container } = render(<CascadingDropdown {...props} />);
+    if (fixture.act) await fixture.act(container);
+
+    expect(
+      renderedMenuItems().includes("Apple"),
+      "clicking a lazy parent did not open its submenu",
+    ).toBe(true);
+    expect(
+      committed,
+      "clicking a lazy parent committed a value, as though it were a leaf",
+    ).toEqual([]);
   });
 
   it("fetches nothing before a lazy parent is hovered", async () => {

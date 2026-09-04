@@ -119,7 +119,7 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `overlayOpacity` | number | `0.32` | Overlay background opacity (0-1). |
 | `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
 | `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
-| `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
 | `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
 | `zIndex` | number | — | CSS z-index for the modal layer. |
@@ -306,7 +306,11 @@ const emailRef = useRef<HTMLInputElement>(null);
 - Close button has `aria-label="Close modal"`
 - Nested modals: Escape only closes the topmost (open modals are tracked in a stack)
 - Supports `prefers-reduced-motion` via `reduceMotion="auto"`
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Troubleshooting

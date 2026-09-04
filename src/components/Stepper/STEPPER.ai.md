@@ -115,7 +115,7 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
 | `tooltipDefaults` | object | — | Default tooltip configuration applied to all step tooltips. |
 | `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `className` | string | — | CSS class for the root element. |
@@ -265,7 +265,11 @@ const steps = [
 - `focus-visible:ring-2` for keyboard focus indicators
 - `motion-reduce:transition-none` respects reduced motion
 - Loop navigation via `loop` prop
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Troubleshooting

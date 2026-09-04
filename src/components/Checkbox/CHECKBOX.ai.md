@@ -95,7 +95,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `indeterminateIcon` | object | — | React.ReactNode — Custom icon for the indeterminate state. |
 | `classes` | object | — | CSS class overrides for checkbox sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `disabled` | boolean | `false` | Disables the checkbox. |
 | `name` | string | — | Form field name. |
 | `value` | string | — | Form field value. |
@@ -261,7 +261,11 @@ const someChecked = items.some(Boolean);
 - `aria-describedby` links error/success messages and description
 - Error and success messages use `role="alert"` for live announcements
 - Supports `prefers-reduced-motion` via `reduceMotion` prop
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Troubleshooting

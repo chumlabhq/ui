@@ -185,7 +185,7 @@ These props have dependencies — using them wrong causes silent bugs:
 | `variant` | `"default"` \| `"bordered"` \| `"separated"` \| `"flush"` | `"default"` | Visual style variant. |
 | `animationEasing` | string | `"ease-in-out"` | CSS easing function for expand/collapse animation. |
 | `animationDuration` | number | — | Duration in milliseconds for expand/collapse animation. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
 | `expandOnPrint` | boolean | `false` | Expands all items when printing. |
@@ -642,7 +642,7 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
 | `onError` | object | — | () => void — Fires when the avatar image fails to load. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
@@ -1257,7 +1257,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
 | `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
 | `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `tooltip` | object | — | React.ReactNode — Tooltip content shown on hover. |
 | `tooltipProps` | object | — | Configuration for tooltip positioning and appearance. |
 | `href` | string | — | Link destination (required when as='a'). |
@@ -1905,7 +1905,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `indeterminateIcon` | object | — | React.ReactNode — Custom icon for the indeterminate state. |
 | `classes` | object | — | CSS class overrides for checkbox sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `disabled` | boolean | `false` | Disables the checkbox. |
 | `name` | string | — | Form field name. |
 | `value` | string | — | Form field value. |
@@ -2160,7 +2160,7 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 | `basePath` | string | — | Where to load the flag SVG from. Omit to use the flags packaged with the library (no network request). Set it to fetch `${basePath}/${code}.svg` from a CDN or self-hosted directory instead. |
 | `classes` | object | — | CSS class overrides for flag sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
 | `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
@@ -2373,7 +2373,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `forceDropdownPosition` | boolean | `false` | Locks the calendar to the specified dropdownPosition without auto-flipping. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and calendar popup. |
 | `keepMounted` | boolean | `false` | Keep the calendar DOM mounted when closed. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 
 ### Styling Guide
 
@@ -2665,7 +2665,7 @@ export default function Example() {
 | `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
 | `classes` | object | — | CSS class overrides for drawer sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `trapFocus` | boolean | `true` | Traps keyboard focus within the drawer. |
 | `restoreFocus` | boolean | `true` | Restores focus to the previously focused element when the drawer closes. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the drawer. |
@@ -3521,7 +3521,7 @@ export default function Example() {
 | `thickness` | number | `2` | Stroke width of track and arc. |
 | `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
 | `trackColor` | string | — | Background track color. Default: currentColor at 20% opacity. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -3534,7 +3534,7 @@ export default function Example() {
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `trackColor` | string | — | Background track color. |
 | `borderRadius` | number | `9999` | Border radius in pixels. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -3546,7 +3546,7 @@ export default function Example() {
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
 | `speed` | number | `1.4` | Full animation cycle duration in seconds. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -3557,7 +3557,7 @@ export default function Example() {
 | `size` | number | `40` | Diameter of the circle in pixels. |
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `rings` | number | `2` | Number of ripple rings. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -3682,7 +3682,7 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `overlayOpacity` | number | `0.32` | Overlay background opacity (0-1). |
 | `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
 | `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
-| `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
 | `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
 | `zIndex` | number | — | CSS z-index for the modal layer. |
@@ -4539,7 +4539,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for pagination sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the rows-per-page dropdown. |
@@ -4764,7 +4764,7 @@ export default function Example() {
 | `orientation` | `"horizontal"` \| `"vertical"` | `"vertical"` | Layout orientation. |
 | `classes` | object | — | CSS class overrides for group sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `children` **(required)** | object | — | React.ReactNode - RadioButton children. |
 | `className` | string | — | Additional class names applied to the group root. |
 
@@ -4848,7 +4848,7 @@ export default function Example() {
 | `resizeDirection` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"right"` | Direction from which the panel can be resized. |
 | `step` | number | `10` | Step increment for resize value changes. |
 | `disabled` | boolean | `false` | Whether the resize handle is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `handleContent` | object | — | React.ReactNode — Custom content rendered inside the resize handle. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
@@ -5348,7 +5348,7 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
 | `tooltipDefaults` | object | — | Default tooltip configuration applied to all step tooltips. |
 | `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `className` | string | — | CSS class for the root element. |
@@ -5586,7 +5586,7 @@ override silently drops the rest.
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `style` | object | — | Inline styles applied to the root element. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 
 ### Styling Guide
 
@@ -5937,7 +5937,7 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
 | `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
 | `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |
@@ -6332,7 +6332,7 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
 | `classes` | object | — | CSS class overrides for all sub-elements. |
 | `unstyled` | boolean | `false` | Omits built-in layout helpers so layout comes entirely from classes. |
-| `reduceMotion` | boolean \| `"auto"` | `false` | Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `onCancel` | object | — | () => void — Called when the clock cancel button is pressed. |
 | `onConfirm` | object | — | () => void — Called when the clock confirm button is pressed. |
 | `cancelText` | string | `"Cancel"` | Text for the clock cancel button. |

@@ -45,7 +45,7 @@ export default function Example() {
 | `thickness` | number | `2` | Stroke width of track and arc. |
 | `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
 | `trackColor` | string | — | Background track color. Default: currentColor at 20% opacity. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -58,7 +58,7 @@ export default function Example() {
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `trackColor` | string | — | Background track color. |
 | `borderRadius` | number | `9999` | Border radius in pixels. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -70,7 +70,7 @@ export default function Example() {
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
 | `speed` | number | `1.4` | Full animation cycle duration in seconds. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -81,7 +81,7 @@ export default function Example() {
 | `size` | number | `40` | Diameter of the circle in pixels. |
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `rings` | number | `2` | Number of ripple rings. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
@@ -96,7 +96,11 @@ Each variant has its own class slots. Circular: `root`, `control`, `track`, `ran
 - All variants use `role="status"` + `aria-live="polite"` + `aria-label="Loading"`
 - Screen readers announce the loading state
 - Animations respect `prefers-reduced-motion`
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Demo Reference

@@ -85,19 +85,26 @@ const SEARCH_DEBOUNCE = 20;
 
 
 /**
- * Opens a submenu by hover alone.
+ * Opens a submenu by hover alone, with no click.
  *
- * A lazy parent (`hasChildren: true`, no `children` array) must not be clicked:
- * `handleMenuItemClick` branches on `option.children` only, so it treats the
- * parent as a leaf and commits `{ root: value }` instead of opening the
- * submenu — even after `onLoadChildren` has resolved. `handleMenuItemHover` is
- * the handler that checks `hasChildren`, and hover is the interaction that
- * actually reaches this mode.
+ * Paired with `clickSubmenu` below: both gestures must open a lazy parent, and
+ * they did not — click read `option.children` only, so a `hasChildren` parent
+ * was a leaf to it. Keeping each interaction on its own fixture is what makes
+ * a future divergence show up as a failure rather than as one path quietly
+ * carrying the other.
  */
 const hoverSubmenu = async (c: HTMLElement) => {
   await tick();
   const parent = c.ownerDocument.querySelector("[role='menuitem']");
   if (parent) fireEvent.mouseEnter(parent);
+  await tick();
+};
+
+/** Opens a submenu by clicking the parent, with no hover first. */
+const clickSubmenu = async (c: HTMLElement) => {
+  await tick();
+  const parent = c.ownerDocument.querySelector("[role='menuitem']");
+  if (parent) fireEvent.click(parent);
   await tick();
 };
 
@@ -251,6 +258,17 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     },
     act: hoverSubmenu,
     note: "onLoadError is the only route to the rejected path.",
+  },
+  {
+    name: "async-children-clicked",
+    props: {
+      options: LAZY,
+      defaultOpen: true,
+      keepMounted: true,
+      onLoadChildren: resolvesTo([{ value: "a", label: "Apple" }]),
+    },
+    act: clickSubmenu,
+    note: "Click with no hover. handleMenuItemClick used to read this parent as a leaf and commit a value instead of opening the submenu.",
   },
 ];
 export default fixtures;

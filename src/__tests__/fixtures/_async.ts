@@ -23,12 +23,11 @@ export const rejectsWith = <T,>(reason: string) => (): Promise<T[]> =>
 /**
  * Opens the menu by clicking the trigger, then flushes.
  *
- * `defaultOpen` is not a substitute. `useDropdown` calls `loadOptions()` from
- * `handleOpen`/`handleToggle` only — there is no effect keyed on `isOpen` — so
- * a dropdown that starts open never fetches, and a fixture relying on
- * `defaultOpen` would assert against a permanently empty menu. The two
- * searchable dropdowns load from an effect and do not have this problem, which
- * is the inconsistency the composition phase inherits.
+ * The user-driven route into the async branch. `async-load-default-open`
+ * covers the other one: all four dropdowns now fetch from an effect keyed on
+ * `isOpen`, so a menu that starts open loads too. Both are fixtures because the
+ * handler-driven version passed the click path while leaving `defaultOpen`
+ * permanently empty.
  */
 export const openMenu = async (container: HTMLElement) => {
   const trigger =

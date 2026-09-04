@@ -97,7 +97,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for pagination sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the rows-per-page dropdown. |
@@ -273,7 +273,11 @@ const [rows, setRows] = useState(10);
 - `role="status"` with `aria-live="polite"` for state announcements
 - Instance-scoped IDs via `useId()` prevent collisions
 - Extends native `HTMLAttributes` — accepts `id`, `className`, `style`, `data-*`, `aria-*`
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Troubleshooting

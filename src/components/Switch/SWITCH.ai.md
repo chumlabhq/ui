@@ -82,8 +82,11 @@ override silently drops the rest.
 - `aria-disabled`, `aria-required` set when applicable
 - `aria-describedby` links error/success messages and description
 - Keyboard: Space/Enter toggles, Tab focuses
-- Reduced motion: disables inline transition animations
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## All Props
@@ -119,7 +122,7 @@ override silently drops the rest.
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `style` | object | — | Inline styles applied to the root element. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 
 ## Styling Guide
 

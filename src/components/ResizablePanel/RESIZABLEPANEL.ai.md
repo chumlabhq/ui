@@ -53,7 +53,7 @@ export default function Example() {
 | `resizeDirection` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"right"` | Direction from which the panel can be resized. |
 | `step` | number | `10` | Step increment for resize value changes. |
 | `disabled` | boolean | `false` | Whether the resize handle is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `handleContent` | object | — | React.ReactNode — Custom content rendered inside the resize handle. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
@@ -65,7 +65,11 @@ export default function Example() {
 - `aria-orientation` for resize direction
 - Keyboard: Arrow keys to resize in steps, Home/End for min/max, Escape to cancel
 - `tabIndex={0}` on handle (removed when disabled)
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Demo Reference

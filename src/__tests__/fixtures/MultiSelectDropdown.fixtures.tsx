@@ -7,6 +7,7 @@ import {
   openMenu,
   openMenuAndSettle,
   resolvesTo,
+  settleAsync,
 } from "./_async";
 
 
@@ -61,6 +62,16 @@ const fixtures: Fixtures<typeof MultiSelectDropdown> = [
     props: { onLoadOptions: resolvesTo([]), loadOnOpen: true },
     act: openMenuAndSettle,
     note: "Resolving to nothing is a different state from still loading.",
+  },
+  {
+    name: "async-load-default-open",
+    props: {
+      onLoadOptions: resolvesTo(OPTIONS),
+      loadOnOpen: true,
+      defaultOpen: true,
+    },
+    act: settleAsync,
+    note: "Starts open without either open handler running. This asserted against a permanently empty menu until the fetch moved to an effect keyed on isOpen.",
   },
 ];
 export default fixtures;

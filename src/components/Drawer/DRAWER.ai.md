@@ -84,7 +84,7 @@ export default function Example() {
 | `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
 | `classes` | object | — | CSS class overrides for drawer sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `trapFocus` | boolean | `true` | Traps keyboard focus within the drawer. |
 | `restoreFocus` | boolean | `true` | Restores focus to the previously focused element when the drawer closes. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the drawer. |
@@ -107,7 +107,11 @@ export default function Example() {
 - Focus restored to trigger on close
 - Escape key closes drawer
 - Scroll locked when open
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Demo Reference

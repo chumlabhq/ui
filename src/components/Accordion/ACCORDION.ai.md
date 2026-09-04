@@ -102,7 +102,7 @@ These props have dependencies — using them wrong causes silent bugs:
 | `variant` | `"default"` \| `"bordered"` \| `"separated"` \| `"flush"` | `"default"` | Visual style variant. |
 | `animationEasing` | string | `"ease-in-out"` | CSS easing function for expand/collapse animation. |
 | `animationDuration` | number | — | Duration in milliseconds for expand/collapse animation. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
 | `expandOnPrint` | boolean | `false` | Expands all items when printing. |
@@ -402,7 +402,11 @@ and `prefers-reduced-motion` each switch it off.
 - **Keyboard:** ArrowDown/Up navigates items, Home/End jump to first/last, Enter/Space toggles, disabled items are skipped, loop wraps focus
 - **ARIA:** Triggers have `aria-expanded` + `aria-controls`, content has `role="region"` + `aria-labelledby`, headings provide semantic structure
 - **Screen readers:** Set `announceExpanded` for live announcements like "Item expanded. 2 of 5 items expanded."
-- **Reduced motion:** `reduceMotion="auto"` respects OS `prefers-reduced-motion` setting
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 
 ---
 

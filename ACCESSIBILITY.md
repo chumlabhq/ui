@@ -112,7 +112,7 @@ the row says which half is ours.
 | 2.1.2 No Keyboard Trap | A | Supports | The three surfaces that hold focus — Modal, Drawer, DatePicker — share `cycleTabWithin`, cycle Tab both ways and release on Escape. The helper drives the order from its own focusable list rather than intervening at the boundaries, which is what makes it hold in WebKit. | `overlay-focus.contract` (jsdom, all three); `e2e/drawer.spec.ts` trap (all five). **Modal and DatePicker are jsdom-only** — an e2e trap spec for each would close that |
 | 2.1.4 Character Key Shortcuts | A | Not applicable | The package binds no single-character shortcuts. Typeahead in the select components is scoped to a focused listbox, which the criterion exempts. | — |
 | 2.2.1 Timing Adjustable | A | Does not support | Toast auto-dismisses on a timer. `duration` is adjustable and `Infinity` disables it, but nothing gates pause-on-hover or pause-on-focus, and the default is a timed dismissal. This is a real exposure, not merely an ungated one. | — |
-| 2.2.2 Pause, Stop, Hide | A | Partially supports | Shimmer and transition motion is dropped from the shipped defaults under `prefers-reduced-motion`. The gate asserts the class tokens are removed, not the resulting computed animation, so it proves the branch is taken rather than that nothing moves. Toast's auto-dismiss timer is not covered — see 2.2.1. | `reduced-motion.contract` (jsdom — asserts the class tokens are dropped, not the resulting animation) |
+| 2.2.2 Pause, Stop, Hide | A | Partially supports | Shimmer and transition motion is dropped from the shipped defaults under `prefers-reduced-motion`. The gate asserts the class tokens are removed, not the resulting computed animation, so it proves the branch is taken rather than that nothing moves. Sixteen components also accept a `reduceMotion` prop that overrides the query in both directions — see [The `reduceMotion` prop](#the-reducemotion-prop-audited-against-222) below, which is where `reduceMotion={false}` is accounted for. Toast's auto-dismiss timer is not covered — see 2.2.1. | `reduced-motion.contract` (jsdom — asserts the class tokens are dropped, not the resulting animation; covers the media query and both explicit values of the prop) |
 | 2.3.1 Three Flashes or Below Threshold | A | Not applicable | No component flashes. The only motion is opacity/transform transitions and a shimmer pulse, none of it a luminance flash. | — |
 | 2.4.1 Bypass Blocks | A | Not applicable | Page-level. A component library ships no repeated page blocks and no skip-link target. | — |
 | 2.4.2 Page Titled | A | Not applicable | Page-level. | — |
@@ -215,6 +215,51 @@ and both now have a keyboard route rather than a larger target.
 | `TimePicker` clock face | Pointer drag of the hand | `handlePointerDown` sets the value at the tap position before any movement, so a single tap works | Passes, ungated for this property |
 | `Table` column resize | `onMouseDown`/`onTouchStart` from TanStack's resize handler | `role="separator"`, `tabIndex=0`, arrow keys with `Shift` for a coarse step, Home/End | Passes, gated |
 | `Table` row reorder | HTML5 `dragstart`/`drop` | A real `<button>` handle, ArrowUp/ArrowDown to move the row | Passes, gated |
+
+## The `reduceMotion` prop, audited against 2.2.2
+
+Sixteen components accept `reduceMotion?: boolean | "auto"`. It exists because a consumer
+sometimes knows more than the OS setting does — a kiosk, a print preview, a page that is
+already moving. The rule is the same on every component that has it:
+
+| Value | Behaviour |
+| --- | --- |
+| `"auto"` (default) | Follows the operating system's `prefers-reduced-motion` setting. |
+| `true` | Always reduces motion, whatever the OS reports. |
+| `false` | Always animates, **including for a user who has asked their OS for less motion.** |
+
+`false` is the row that matters for conformance, and it is stated plainly rather than
+buried: passing it defeats the user's stated preference. Two things make that a considered
+position rather than a hole.
+
+The default is `"auto"`, so the preference is honoured unless a consumer writes `false`
+explicitly. Nothing about installing this package overrides anyone's setting; only a
+deliberate line of code does.
+
+And the alternative is a worse lie. A prop named `reduceMotion` whose `false` did not
+actually mean "do not reduce" would be a name that is not true of its behaviour — the exact
+defect ADR 005 gates against for tokens, one layer up. If the escape hatch should not exist,
+the honest fix is to remove the prop, not to keep it and quietly ignore half its range.
+
+Consumers building for a general audience should leave it at `"auto"` and let the OS decide.
+`reduceMotion={true}` is always safe.
+
+**The prop applies to the classes as well as the behaviour.** Until this slice, eight of the
+sixteen resolved the prop for their JS-driven motion but calmed their `transition-*` and
+`animate-*` utilities from the media query alone, so `reduceMotion={true}` left the
+decorative motion running. Both paths now read the same resolved value.
+
+| Gate | Covers |
+| --- | --- |
+| `reduced-motion.contract` "stops animating when the user asks it to" | the media query, every fixture, all 30 components |
+| `reduced-motion.contract` "stops animating on the prop alone" | `reduceMotion={true}` with the query reporting no preference |
+| `reduced-motion.contract` "keeps the prop's answer when it disagrees" | `reduceMotion={false}` against a query asking for less |
+
+The third is the one that pins the policy: if the precedence is ever reversed, that
+assertion fails rather than the behaviour changing quietly. Five of the sixteen —
+CountryFlag, Drawer, ResizablePanel, Stepper, Switch — have base fixtures with no motion in
+them, so their assertions are vacuous; the suite names them in a list that may shrink but
+must not grow.
 
 ## Known failures
 

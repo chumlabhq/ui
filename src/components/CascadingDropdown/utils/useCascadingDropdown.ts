@@ -245,24 +245,46 @@ export const useCascadingDropdown = ({
     [onLoadChildren, loadedChildren, loadingChildren, onLoadError]
   );
 
+  /**
+   * Whether an option opens a submenu instead of committing a value.
+   *
+   * Three ways to be a parent: declared children, children already fetched, or
+   * `hasChildren` with a loader that has not run yet. Hover and click each
+   * decided this for themselves and disagreed — click tested `option.children`
+   * alone, so a lazy parent was a leaf to it and clicking one committed
+   * `{ root: value }` and closed the menu, before and after its children
+   * arrived. One predicate, so they cannot drift apart again.
+   */
+  const isParentOption = useCallback(
+    (option: CascadingOption) =>
+      (option.children?.length ?? 0) > 0 ||
+      (loadedChildren[option.value]?.length ?? 0) > 0 ||
+      !!(option.hasChildren && onLoadChildren),
+    [loadedChildren, onLoadChildren]
+  );
+
+  /** Opens a parent's submenu, fetching its children if they are not in yet. */
+  const openSubmenuFor = useCallback(
+    (option: CascadingOption) => {
+      setActiveSubmenu(option.value);
+      setSubmenuFocusedIndex(-1);
+      setSubmenuSearchQuery("");
+      setAsyncSubmenuResults(null);
+
+      if (option.hasChildren && onLoadChildren && !loadedChildren[option.value]) {
+        loadChildrenForOption(option);
+      }
+    },
+    [loadedChildren, onLoadChildren, loadChildrenForOption]
+  );
+
   const handleMenuItemHover = useCallback(
     (option: CascadingOption, index: number) => {
       setFocusedIndex(index);
       clearSubmenuTimeout();
 
-      const hasStaticChildren = option.children && option.children.length > 0;
-      const hasLoadedChildren = loadedChildren[option.value]?.length > 0;
-      const canLoadChildren = option.hasChildren && onLoadChildren && !loadedChildren[option.value];
-
-      if (hasStaticChildren || hasLoadedChildren || canLoadChildren) {
-        setActiveSubmenu(option.value);
-        setSubmenuFocusedIndex(-1);
-        setSubmenuSearchQuery("");
-        setAsyncSubmenuResults(null);
-
-        if (canLoadChildren) {
-          loadChildrenForOption(option);
-        }
+      if (isParentOption(option)) {
+        openSubmenuFor(option);
       } else if (!isHoveringSubmenuRef.current) {
         submenuTimeoutRef.current = setTimeout(() => {
           if (!isHoveringSubmenuRef.current) {
@@ -272,22 +294,35 @@ export const useCascadingDropdown = ({
         }, 150);
       }
     },
-    [clearSubmenuTimeout, loadedChildren, onLoadChildren, loadChildrenForOption]
+    [clearSubmenuTimeout, isParentOption, openSubmenuFor]
   );
 
   const handleMenuItemClick = useCallback(
     (option: CascadingOption) => {
       if (option.disabled) return;
 
-      if (!option.children || option.children.length === 0) {
-        const newValue = { ...internalValue, root: option.value };
-        updateValue(newValue, [option]);
-        if (closeOnSelect) {
-          handleClose();
-        }
+      // A parent is a way into its submenu, never a value. Pointer users reach
+      // it by hover; click has to agree, or the same gesture means "open" on
+      // one option and "choose" on another that looks identical.
+      if (isParentOption(option)) {
+        openSubmenuFor(option);
+        return;
+      }
+
+      const newValue = { ...internalValue, root: option.value };
+      updateValue(newValue, [option]);
+      if (closeOnSelect) {
+        handleClose();
       }
     },
-    [internalValue, updateValue, closeOnSelect, handleClose]
+    [
+      internalValue,
+      updateValue,
+      closeOnSelect,
+      handleClose,
+      isParentOption,
+      openSubmenuFor,
+    ]
   );
 
   const handleSubmenuItemClick = useCallback(

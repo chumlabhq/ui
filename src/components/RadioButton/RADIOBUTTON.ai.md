@@ -66,7 +66,7 @@ export default function Example() {
 | `orientation` | `"horizontal"` \| `"vertical"` | `"vertical"` | Layout orientation. |
 | `classes` | object | — | CSS class overrides for group sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `children` **(required)** | object | — | React.ReactNode - RadioButton children. |
 | `className` | string | — | Additional class names applied to the group root. |
 
@@ -108,7 +108,11 @@ export default function Example() {
 - Labels associated via `htmlFor` / `id`
 - `aria-invalid`, `aria-describedby` for errors
 - Focus ring via `focus-visible:ring-2`
-
+- **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
+  `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
+  animates — **including for a user who has asked their OS for less motion**, so
+  pass it only when you know more than the OS setting does. The value governs the
+  decorative classes as well as the animation timings.
 ---
 
 ## Demo Reference

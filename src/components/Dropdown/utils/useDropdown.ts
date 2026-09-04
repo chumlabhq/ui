@@ -113,42 +113,67 @@ export const useDropdown = ({
     [displayOptions, currentValue],
   );
 
-  const loadOptions = useCallback(() => {
-    if (!loadOnOpen || !onLoadOptions || hasLoadedRef.current || isLoadingRef.current) {
-      return;
+  /**
+   * Whether the menu should be fetching right now.
+   *
+   * Derived from `isOpen` rather than called from `handleOpen`/`handleToggle`.
+   * `defaultOpen` and a controlled `open` both reach the open state without
+   * either handler running, so the handler-driven version left those consumers
+   * with a menu that never populated and never retried. This is the shape the
+   * two searchable dropdowns already used; the four now agree.
+   */
+  const shouldLoad = isOpen && loadOnOpen && !!onLoadOptions && !hasLoaded;
+
+  // Loading state is adjusted during render, not from the effect below.
+  // Setting it inside the effect is a cascading render — the effect would
+  // schedule a second pass before the first had painted — and the searchable
+  // dropdowns derive it exactly this way.
+  const [prevShouldLoad, setPrevShouldLoad] = useState(false);
+  if (prevShouldLoad !== shouldLoad) {
+    setPrevShouldLoad(shouldLoad);
+    if (shouldLoad) {
+      setIsLoadingOptions(true);
+      setStatusMessage(typeof loadingText === "string" ? loadingText : "Loading...");
     }
+  }
 
+  useEffect(() => {
+    if (!shouldLoad || !onLoadOptions) return;
+
+    let cancelled = false;
     isLoadingRef.current = true;
-    setIsLoadingOptions(true);
-    setStatusMessage(typeof loadingText === "string" ? loadingText : "Loading...");
-
     onLoadOptions()
       .then((results) => {
-        if (mountedRef.current) {
-          setLoadedOptions(results);
-          setFocusedIndex(-1);
-          hasLoadedRef.current = true;
-          setHasLoaded(true);
-          setStatusMessage(
-            results.length === 0
-              ? "No options available"
-              : `${results.length} option${results.length === 1 ? "" : "s"} available`,
-          );
-        }
+        if (cancelled) return;
+        setLoadedOptions(results);
+        setFocusedIndex(-1);
+        hasLoadedRef.current = true;
+        setHasLoaded(true);
+        setStatusMessage(
+          results.length === 0
+            ? "No options available"
+            : `${results.length} option${results.length === 1 ? "" : "s"} available`,
+        );
       })
-      .catch((error) => {
-        if (mountedRef.current) {
-          onLoadError?.(error);
-          setStatusMessage("Failed to load options");
-        }
+      .catch((error: unknown) => {
+        if (cancelled) return;
+        onLoadError?.(error);
+        setStatusMessage("Failed to load options");
       })
       .finally(() => {
         isLoadingRef.current = false;
-        if (mountedRef.current) {
-          setIsLoadingOptions(false);
-        }
+        // Unconditional. A successful load sets `hasLoaded`, which flips
+        // `shouldLoad` and re-runs this effect — cancelling the very fetch
+        // whose completion it is. Guarding this on `cancelled` left the
+        // spinner up forever on the happy path. A newer fetch turns it back
+        // on during render, so clearing it here cannot mask one.
+        setIsLoadingOptions(false);
       });
-  }, [loadOnOpen, onLoadOptions, onLoadError, loadingText]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [shouldLoad, onLoadOptions, onLoadError]);
 
   const getInitialFocusIndex = useCallback(() => {
     if (currentValue) {
@@ -164,7 +189,6 @@ export const useDropdown = ({
     if (disabled) return;
     setIsOpen(true);
     setFocusedIndex(getInitialFocusIndex());
-    loadOptions();
 
     if (!loadOnOpen || !onLoadOptions) {
       const count = displayOptions.length;
@@ -174,7 +198,7 @@ export const useDropdown = ({
           : `${count} option${count === 1 ? "" : "s"} available`,
       );
     }
-  }, [disabled, setIsOpen, loadOptions, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
+  }, [disabled, setIsOpen, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -191,7 +215,6 @@ export const useDropdown = ({
         return false;
       }
       setFocusedIndex(getInitialFocusIndex());
-      loadOptions();
       if (!loadOnOpen || !onLoadOptions) {
         const count = displayOptions.length;
         setStatusMessage(
@@ -202,7 +225,7 @@ export const useDropdown = ({
       }
       return true;
     });
-  }, [disabled, setIsOpen, loadOptions, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
+  }, [disabled, setIsOpen, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
 
   const handleOptionSelect = useCallback(
     (option: DropdownOption) => {
