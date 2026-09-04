@@ -23,15 +23,42 @@
  * so they can only shrink, and A is held at zero so the no-ops cannot return.
  */
 import { describe, expect, it } from "vitest";
+import ts from "typescript";
 import { readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-
-const STRING =
-  /"([^"\\]*(?:\\.[^"\\]*)*)"|'([^'\\]*(?:\\.[^'\\]*)*)'|`([^`\\]*(?:\\.[^`\\]*)*)`/gs;
 
 /** A colour that is a raw palette value rather than a `cl-` design token. */
 const RAW_PALETTE =
   /(#[0-9a-fA-F]{3,8})|\b(white|black|transparent|current)\b|\b(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/;
+
+/**
+ * String literals via the compiler, not a regex.
+ *
+ * The regex version desynchronised on an apostrophe inside a comment —
+ * `// Tooltip's default` opened a single-quoted match that ran to the next
+ * apostrophe and swallowed the literals between. It hid a real
+ * `border-cl-border dark:border-cl-border` no-op in Breadcrumb from this
+ * contract, which then reported group A empty while it was not.
+ */
+function literals(file: string): string[] {
+  const text = readFileSync(file, "utf8");
+  const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const out: string[] = [];
+  const visit = (node: ts.Node): void => {
+    if (
+      ts.isStringLiteral(node) ||
+      ts.isNoSubstitutionTemplateLiteral(node) ||
+      ts.isTemplateHead(node) ||
+      ts.isTemplateMiddle(node) ||
+      ts.isTemplateTail(node)
+    ) {
+      if (node.text.trim()) out.push(node.text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return out;
+}
 
 function sourceFiles(dir: string): string[] {
   const out: string[] = [];
@@ -54,10 +81,8 @@ export function classifyDarkVariants(root = resolve(process.cwd(), "src/componen
   const groups: Record<"A" | "B" | "C", Found[]> = { A: [], B: [], C: [] };
 
   for (const file of sourceFiles(root)) {
-    const text = readFileSync(file, "utf8");
-    for (const match of text.matchAll(STRING)) {
-      const raw = match[1] ?? match[2] ?? match[3];
-      if (!raw || !raw.includes("dark:")) continue;
+    for (const raw of literals(file)) {
+      if (!raw.includes("dark:")) continue;
       const classes = raw.split(/\s+/).filter(Boolean);
       const bag = new Set(classes);
       for (const token of classes) {
@@ -74,7 +99,7 @@ export function classifyDarkVariants(root = resolve(process.cwd(), "src/componen
 }
 
 /** Ratchet. These may fall; they may not rise. */
-const CEILING = { B: 168, C: 44 };
+const CEILING = { B: 167, C: 44 };
 
 describe("dark variant contract", () => {
   const groups = classifyDarkVariants();

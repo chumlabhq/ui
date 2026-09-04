@@ -95,13 +95,26 @@ const snapshot = async (props) =>
     freeze.textContent = "*,*::before,*::after{animation:none!important;transition:none!important}";
     document.head.appendChild(freeze);
 
+    // Both switches, together. The `--cl-*` tokens are declared under
+    // `:root[data-theme="dark"|"light"]` while Tailwind's `dark:` variant is
+    // `&:where(.dark, .dark *)` — two independent mechanisms. Flipping only the
+    // class changes which utilities apply while leaving every token at its dark
+    // value, which is a hybrid no user ever sees.
     const html = document.documentElement;
-    const original = html.className;
+    const originalClass = html.className;
+    const originalTheme = html.getAttribute("data-theme");
+
     html.classList.add("dark");
+    html.setAttribute("data-theme", "dark");
     const dark = read();
+
     html.classList.remove("dark");
+    html.setAttribute("data-theme", "light");
     const light = read();
-    html.className = original;
+
+    html.className = originalClass;
+    if (originalTheme === null) html.removeAttribute("data-theme");
+    else html.setAttribute("data-theme", originalTheme);
     freeze.remove();
     return { dark, light };
   }, props);

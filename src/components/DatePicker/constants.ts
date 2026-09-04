@@ -19,7 +19,7 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   list: "",
   listHeader: "grid grid-cols-7 mb-2",
   weekday: "text-xs font-semibold text-cl-text-tertiary text-center py-2 uppercase tracking-wide",
-  item: "relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 dark:focus:ring-offset-cl-bg",
+  item: "relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 focus:ring-offset-cl-bg",
   weekNumber: "text-xs text-cl-text-tertiary flex items-center justify-center",
   presetGroup: "flex flex-wrap gap-2 pb-4 mb-4 border-b border-cl-border",
   presetTrigger: "px-3 py-1.5 text-xs font-semibold rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated text-cl-text dark:text-cl-text-secondary hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 transition-all",

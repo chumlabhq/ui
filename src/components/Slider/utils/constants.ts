@@ -9,7 +9,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   track: "rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated",
   range: "rounded-full bg-cl-accent dark:bg-cl-accent/30",
   thumb:
-    "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab",
+    "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab",
   valueText:
     "absolute px-2 py-1 text-xs font-medium text-white bg-cl-bg dark:bg-cl-bg-elevated rounded-cl-md shadow-sm whitespace-nowrap pointer-events-none",
   marker: "rounded-full bg-white dark:bg-cl-bg-hover border-2 border-cl-border-input dark:border-cl-border text-xs text-cl-text-tertiary",

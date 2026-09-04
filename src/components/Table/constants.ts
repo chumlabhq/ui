@@ -8,7 +8,7 @@ export {
 
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   root:
-    "w-full border rounded-cl-md overflow-hidden bg-white dark:bg-cl-bg border-cl-border dark:border-white/[0.06]",
+    "w-full border rounded-cl-md overflow-hidden bg-cl-bg border-cl-border dark:border-white/[0.06]",
   list: "w-full border-collapse",
   header: "",
   headerRow: "",
@@ -25,7 +25,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   // context. var(--cl-border-input-focus) is theme-aware (deeper blue
   // in light, softer blue in dark), so one declaration covers both.
   pinnedRegion:
-    "shrink-0 sticky left-0 z-30 bg-white dark:bg-cl-bg [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
+    "shrink-0 sticky left-0 z-30 bg-cl-bg [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
   pinnedList: "border-collapse",
   scrollRegion: "min-w-0 flex-1 overflow-x-auto",
   empty:

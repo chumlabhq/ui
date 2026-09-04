@@ -6,7 +6,7 @@ export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "w-full",
   item: "border-b border-cl-border last:border-b-0",
   trigger:
-    "flex w-full items-center justify-between text-left font-medium transition-colors text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg disabled:cursor-not-allowed disabled:opacity-50",
+    "flex w-full items-center justify-between text-left font-medium transition-colors text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg disabled:cursor-not-allowed disabled:opacity-50",
   itemText: "flex-1 text-left",
   body: "text-cl-text-secondary",
   content: "overflow-hidden transition-[max-height,opacity,visibility]",
