@@ -100,6 +100,7 @@
   --cl-bg-elevated: #0a0d12;
   --cl-bg-hover: #0a0d12;
   --cl-bg-panel: #0a0d12;
+  --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
   --cl-bg-input: #050608;
 
   /* Text */
@@ -217,6 +218,7 @@
   --cl-bg-elevated: #f8f9fb;
   --cl-bg-hover: rgba(15, 18, 24, 0.04);
   --cl-bg-panel: #ffffff;
+  --cl-bg-item-hover: rgba(15, 18, 24, 0.04);
   --cl-bg-input: #ffffff;
 
   --cl-text: #0f1218;
@@ -317,6 +319,7 @@
   --color-cl-bg: var(--cl-bg);
   --color-cl-bg-elevated: var(--cl-bg-elevated);
   --color-cl-bg-panel: var(--cl-bg-panel);
+  --color-cl-bg-item-hover: var(--cl-bg-item-hover);
   --color-cl-bg-hover: var(--cl-bg-hover);
   --color-cl-bg-input: var(--cl-bg-input);
 

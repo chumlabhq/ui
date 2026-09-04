@@ -9,7 +9,7 @@ export const DEFAULT_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
   separator: "text-cl-text-tertiary dark:text-cl-text-secondary",
   itemIcon: "shrink-0",
   ellipsis: "",
-  ellipsisTrigger: "flex items-center justify-center w-10 h-10 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg",
+  ellipsisTrigger: "flex items-center justify-center w-10 h-10 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-bg-item-hover text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg",
   // `flex flex-col` so the menu items stack vertically even when each item
   // is wrapped in a Tooltip (Tooltip's default `triggerDisplay: "inline-flex"`
   // would otherwise lay them out in a row).

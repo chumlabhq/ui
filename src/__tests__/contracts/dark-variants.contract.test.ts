@@ -98,8 +98,16 @@ export function classifyDarkVariants(root = resolve(process.cwd(), "src/componen
   return groups;
 }
 
-/** Ratchet. These may fall; they may not rise. */
-const CEILING = { B: 67, C: 22 };
+/**
+ * The declared endpoint, not a backlog.
+ *
+ * ADR 006 closes the phase at 78 variants and classifies every one: 33
+ * deliberately retained, 29 blocked on a token decision, 16 orphaned from a
+ * palette that predates the token system. These numbers hold the line — a new
+ * `dark:` variant fails here, and the remainder falls only when one of those
+ * decisions is taken.
+ */
+const CEILING = { B: 60, C: 18 };
 
 describe("dark variant contract", () => {
   const groups = classifyDarkVariants();
@@ -125,7 +133,7 @@ describe("dark variant contract", () => {
       // every assertion below would pass while proving nothing.
       // Guards the walker: a broken path reports zero of everything and every
       // assertion below passes while proving nothing. The floor tracks the
-      // shrinking inventory — 89 after ADR 004's group C moves.
+      // declared endpoint — 78 at ADR 006.
       expect(groups.A.length + groups.B.length + groups.C.length).toBeGreaterThan(50);
     });
   });

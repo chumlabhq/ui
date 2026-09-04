@@ -40,7 +40,7 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
       "flex-1 bg-transparent outline-none flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary",
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
     count:
-      "inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-hover dark:bg-cl-text/10 text-cl-text-secondary",
+      "inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-item-hover text-cl-text-secondary",
   };
 
 export const UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelectSearchableDropdownClasses> =

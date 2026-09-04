@@ -97,6 +97,7 @@ const ROLE_ONLY = [
   "--cl-bg",
   "--cl-bg-input",
   "--cl-bg-panel",
+  "--cl-bg-item-hover",
   "--cl-border",
   "--cl-border-input",
   "--cl-text",

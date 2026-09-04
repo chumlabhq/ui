@@ -16,7 +16,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated border-cl-border",
   headerCellText: "flex items-center",
   body: "",
-  item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
+  item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-item-hover",
   cell: "px-4 py-3 text-sm whitespace-nowrap text-cl-text",
   // Right separator uses an inset box-shadow (not border-r-2) so the
   // parent's `overflow: hidden` + `rounded-cl-md` reliably clips it at
