@@ -242,6 +242,7 @@ function DropdownPortal({
   return createPortal(
     <div
       ref={dropdownRef}
+      id={dropdownId}
       role="menu"
       className={dropdownClassName || undefined}
       style={dropdownStyle}

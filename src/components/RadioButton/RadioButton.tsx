@@ -194,7 +194,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           )}
 
           {success && successMessage && !error && (
-            <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
+            <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
           )}
         </div>
       </RadioGroupContext.Provider>

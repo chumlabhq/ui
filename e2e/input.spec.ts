@@ -309,11 +309,15 @@ test.describe("Input Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/input");
-    await page.waitForLoadState("domcontentloaded");
+    // Driven from the fixture rather than the demo page. On a mobile viewport
+    // the first visible `input` on `/input` is the site's own "Search
+    // documentation" field — page chrome, not the component — so the test was
+    // tapping the wrong thing, which is the defect E2E-INVENTORY recorded when
+    // the suite was auditing the marketing home page.
+    await gotoFixture(page, "Input", "labelled");
 
-    const input = page.locator("input").first();
-    await input.waitFor({ state: "attached", timeout: 5000 });
+    const input = page.locator('[data-fixture] input:visible').first();
+    await input.waitFor({ state: "visible", timeout: 5000 });
 
     // For mobile projects, test actual tap/click behavior
     if (isMobileProject) {

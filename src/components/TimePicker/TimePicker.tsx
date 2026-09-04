@@ -757,7 +757,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
                 className={mergedClasses.clearTrigger}
                 onClick={handleClear}
                 aria-label="Clear time"
-                tabIndex={-1}
+                // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
+                // with a pointer — and for a single select there is no other way
+                // back to an empty value.
               >
                 <ClearIconDefault className={mergedClasses.clearTrigger ? "" : "w-4 h-4"} />
               </button>
@@ -790,7 +792,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           </div>
         )}
         {success && successMessage && !error && (
-          <div id={successId} data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
+          <div id={successId} role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

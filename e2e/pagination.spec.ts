@@ -669,7 +669,10 @@ test.describe("Pagination (fixtures)", () => {
     ).toBe(true);
   });
 
-  test("lets Tab out of the last control", async ({ page }) => {
+  test("lets Tab out of the last control", async ({ page, browserName }) => {
+    // Same engine limitation as its sibling above: WebKit does not move focus
+    // between buttons with Tab, so it cannot move focus out of them either.
+    skipWithoutTabTraversal(test, browserName);
     await gotoFixture(page, "Pagination", "default");
 
     // The pagination is the last focusable thing on the fixture page, so Tab

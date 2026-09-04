@@ -481,14 +481,31 @@ function TableInner<TData>(
       ? ({
           id: "__dragHandle",
           header: () => null,
-          cell: () => (
-            <span
+          // SC 2.5.7: reordering was a drag and nothing else, on a `<span>` that
+          // could not take focus. A button that moves the row with the arrow
+          // keys is the alternative the criterion asks for — a route that is not
+          // a drag, rather than a larger drag target.
+          cell: ({ row }) => (
+            <button
+              type="button"
               className={`cursor-grab select-none ${dragHandleClassName}`}
               data-drag-handle
-              aria-label="Drag to reorder"
+              aria-label={`Reorder row ${row.index + 1}. Use the arrow keys to move it.`}
+              onKeyDown={(e) => {
+                const to =
+                  e.key === "ArrowUp"
+                    ? row.index - 1
+                    : e.key === "ArrowDown"
+                      ? row.index + 1
+                      : null;
+                if (to === null) return;
+                e.preventDefault();
+                if (to < 0 || to >= data.length) return;
+                onRowReorder?.(row.index, to);
+              }}
             >
               <DragHandleIconComponent className="w-4 h-4" />
-            </span>
+            </button>
           ),
           size: 40,
           enableSorting: false,
@@ -642,6 +659,10 @@ function TableInner<TData>(
 
     return cols;
   }, [
+    // The drag handle's keyboard reorder closes over both; without them the
+    // memoised column would keep calling the first `onRowReorder` it saw.
+    data.length,
+    onRowReorder,
     columns,
     selectionMode,
     expandable,
@@ -1141,6 +1162,50 @@ function TableInner<TData>(
   const UnpinnedIconComponent = CustomPinIcon || PinIcon;
   const PinnedIconComponent = CustomPinnedIcon || CustomPinIcon || PinIcon;
 
+  /**
+   * Keyboard resizing for a column, so the function is not drag-only.
+   *
+   * SC 2.5.7 Dragging Movements asks for a single-pointer alternative that is
+   * not a drag; a keyboard route satisfies it and serves more people than a
+   * click target would. The step and the Shift multiplier match
+   * ResizablePanel's separator, which is the other resize surface in the
+   * package, so the two behave the same way.
+   */
+  const handleResizeKeyDown = useCallback(
+    (event: React.KeyboardEvent, columnId: string) => {
+      const step = event.shiftKey ? COLUMN_RESIZE_STEP * 5 : COLUMN_RESIZE_STEP;
+      const current =
+        columnSizing[columnId] ??
+        table.getColumn(columnId)?.getSize() ??
+        COLUMN_MIN_WIDTH;
+
+      let next: number | undefined;
+      switch (event.key) {
+        case "ArrowLeft":
+          next = current - step;
+          break;
+        case "ArrowRight":
+          next = current + step;
+          break;
+        case "Home":
+          next = COLUMN_MIN_WIDTH;
+          break;
+        case "End":
+          next = COLUMN_MAX_WIDTH;
+          break;
+        default:
+          return;
+      }
+
+      event.preventDefault();
+      const clamped = Math.max(COLUMN_MIN_WIDTH, Math.min(COLUMN_MAX_WIDTH, next));
+      const updated = { ...columnSizing, [columnId]: clamped };
+      setInternalColumnSizing(updated);
+      onColumnSizingChange?.(updated);
+    },
+    [columnSizing, onColumnSizingChange, table],
+  );
+
   const renderHeaderCell = useCallback(
     (header: Header<TData, unknown>, index: number) => {
       if (header.isPlaceholder) {
@@ -1324,10 +1389,19 @@ function TableInner<TData>(
             <div
               onMouseDown={header.getResizeHandler()}
               onTouchStart={header.getResizeHandler()}
+              onKeyDown={(e) => handleResizeKeyDown(e, header.column.id)}
               className={`absolute right-0 top-0 h-full w-4 cursor-col-resize select-none touch-none z-10 flex items-center justify-center group/resize ${resizeHandleClassName}`}
               data-resize-handle
               role="separator"
               aria-orientation="vertical"
+              // SC 2.5.7: resizing was reachable only by dragging the handle.
+              // The remedy is a route that is not a drag, not a bigger target.
+              tabIndex={0}
+              aria-label={`Resize ${typeof header.column.columnDef.header === "string" ? header.column.columnDef.header : header.column.id} column`}
+              aria-valuenow={Math.round(header.getSize())}
+              aria-valuemin={COLUMN_MIN_WIDTH}
+              aria-valuemax={COLUMN_MAX_WIDTH}
+              aria-valuetext={`${Math.round(header.getSize())} pixels`}
             >
               <div
                 className={resizeIndicatorClassName}
@@ -1340,6 +1414,7 @@ function TableInner<TData>(
       );
     },
     [
+      handleResizeKeyDown,
       headerCellClassName,
       headerCellContentClassName,
       pinnedColumnIds,
@@ -2324,6 +2399,11 @@ import { Fragment as __Fragment } from "react";
 
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
+/** Bounds and step for keyboard column resizing (SC 2.5.7). */
+const COLUMN_MIN_WIDTH = 40;
+const COLUMN_MAX_WIDTH = 800;
+const COLUMN_RESIZE_STEP = 8;
+
 const Table = forwardRef(TableInner) as <TData>(
   props: TableProps<TData> & { ref?: React.Ref<HTMLDivElement> },
 ) => React.ReactElement | null;

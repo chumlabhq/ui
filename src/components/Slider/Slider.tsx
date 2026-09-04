@@ -757,7 +757,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         )}
 
         {success && successMessage && !error && (
-          <div id={`${sliderId}-success`} data-valid className={mc.message || undefined}>
+          <div id={`${sliderId}-success`} role="status" data-valid className={mc.message || undefined}>
             {successMessage}
           </div>
         )}

@@ -450,6 +450,11 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       searchDebounceMs,
     });
 
+    const activeItemId =
+      isOpen && focusedIndex >= 0
+        ? `${dropdownId}-option-${focusedIndex}`
+        : undefined;
+
     const SearchIconComponent = SearchIconProp || SearchIconDefault;
 
     // Restore focus to trigger when dropdown closes
@@ -567,6 +572,49 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     }, [isOpen, updateMenuPosition]);
 
     const portalTarget = isBrowser ? (portalContainer ?? document.body) : null;
+
+    const menuSearchRef = useRef<HTMLInputElement>(null);
+
+    /**
+     * Moves the focus the roving tabindex was only pretending to move.
+     *
+     * Menu items carried `tabIndex={isFocused ? 0 : -1}` and `data-highlighted`,
+     * and nothing ever called `.focus()` on them — the same defect the DatePicker
+     * grid had. Focus stayed on the trigger, which is a `<button>` and so cannot
+     * legally carry `aria-activedescendant` either, and the arrow-key highlight
+     * was announced to nobody. axe cannot see it: every attribute is present and
+     * correct in the DOM.
+     *
+     * Two shapes, each the right one for its case. With a filter field the field
+     * keeps the focus and points at the active item, which is what the
+     * searchable dropdowns do. Without one, focus moves onto the menu item
+     * itself, which is the APG menu-button pattern.
+     */
+    useEffect(() => {
+      if (!isOpen) return;
+      const menu = menuRef.current;
+      if (!menu) return;
+
+      if (showMenuSearch) {
+        if (!menu.contains(document.activeElement)) {
+          menuSearchRef.current?.focus({ preventScroll: true });
+        }
+        return;
+      }
+
+      const active = document.activeElement;
+      // Paging or filtering can unmount the item that had focus, dropping the
+      // browser back to <body>; that is our own re-render, not the user leaving.
+      const ours =
+        active === triggerRef.current ||
+        active === null ||
+        active === document.body ||
+        menu.contains(active);
+      if (!ours) return;
+
+      const item = menu.querySelector<HTMLElement>('[role^="menuitem"][tabindex="0"]');
+      if (item && item !== active) item.focus({ preventScroll: true });
+    }, [isOpen, focusedIndex, showMenuSearch]);
 
     const combinedKeyDown = useCallback(
       (event: KeyboardEvent) => {
@@ -688,7 +736,9 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
           {clearable && hasValue && (
             <button
               type="button"
-              tabIndex={-1}
+              // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
+              // with a pointer — and for a single select there is no other way
+              // back to an empty value.
               aria-label="Clear selection"
               className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {
@@ -706,6 +756,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               ref={menuRef}
               id={menuId}
               role="menu"
+              onKeyDown={combinedKeyDown}
               aria-label={typeof label === "string" ? label : ariaLabel || "Options"}
               aria-live={showMenuSearch ? "polite" : undefined}
               aria-busy={isMenuSearching || undefined}
@@ -731,6 +782,9 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                     className={mergedClasses.searchInput || undefined}
                     aria-label={menuSearchAriaLabel}
                     aria-autocomplete="list"
+                    aria-controls={menuId}
+                    aria-activedescendant={activeItemId}
+                    ref={menuSearchRef}
                   />
                 </div>
               )}
@@ -846,7 +900,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
+          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

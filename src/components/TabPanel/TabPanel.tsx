@@ -98,10 +98,22 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       });
     }
 
+    /**
+     * The tab stop for the whole tablist, per the roving tabindex.
+     *
+     * It falls back to the first enabled tab when the selected one is disabled:
+     * a disabled tab cannot take focus, so pointing the only tab stop at it
+     * left the entire tablist unreachable from the keyboard. `defaultValue`
+     * naming a disabled tab is enough to produce that, which the
+     * `second-active` fixture does.
+     */
+    const preferredTabbableId =
+      activationMode === "manual" && manualFocusId ? manualFocusId : resolvedValue;
+    const preferredTab = tabs.find((t) => t.id === preferredTabbableId);
     const tabbableTabId =
-      activationMode === "manual" && manualFocusId
-        ? manualFocusId
-        : resolvedValue;
+      preferredTab && !preferredTab.disabled
+        ? preferredTabbableId
+        : (tabs.find((t) => !t.disabled)?.id ?? preferredTabbableId);
 
     useEffect(() => {
       tabRefs.current = tabRefs.current.slice(0, tabs.length);

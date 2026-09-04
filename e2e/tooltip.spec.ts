@@ -10,7 +10,10 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
   test.describe("Basic Functionality", () => {
     test("should render tooltip triggers on the page", async ({ page }) => {
-      const buttons = page.locator("button");
+      // `:visible` for the same reason button.spec needs it: the first
+      // element of this kind in the document is site chrome, and on a mobile
+      // viewport it has no box at all.
+      const buttons = page.locator("button:visible");
       await expect(buttons.first()).toBeVisible();
 
       const count = await buttons.count();
@@ -111,7 +114,20 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const tooltipBox = await tooltip.boundingBox();
 
       if (triggerBox && tooltipBox) {
-        expect(tooltipBox.x + tooltipBox.width).toBeLessThan(triggerBox.x + triggerBox.width / 2);
+        // Left placement only when there is room for it. On a 390px viewport
+        // the trigger sits at x=37 and the tooltip is 82px wide, so the left
+        // side would put it at x=-45; flipping is the correct behaviour and the
+        // real requirement is that it stays on screen. Asserting the side
+        // unconditionally was asserting a wide viewport.
+        const viewport = page.viewportSize()!;
+        if (triggerBox.x >= tooltipBox.width) {
+          expect(tooltipBox.x + tooltipBox.width).toBeLessThan(
+            triggerBox.x + triggerBox.width / 2,
+          );
+        } else {
+          expect(tooltipBox.x).toBeGreaterThanOrEqual(0);
+          expect(tooltipBox.x + tooltipBox.width).toBeLessThanOrEqual(viewport.width);
+        }
       }
     });
   });
@@ -244,7 +260,8 @@ test.describe("Tooltip - Mobile Interactions", () => {
 
 
   test("should render tooltip triggers correctly on mobile", async ({ page }) => {
-    const buttons = page.locator("button");
+    // See above: first-in-document is the page chrome, not a tooltip trigger.
+    const buttons = page.locator("button:visible");
     const count = await buttons.count();
     expect(count).toBeGreaterThan(0);
 

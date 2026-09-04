@@ -647,7 +647,9 @@ const InternationalPhoneInput = forwardRef<
           {clearable && phoneInput && !disabled && !readOnly && (
             <button
               type="button"
-              tabIndex={-1}
+              // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
+              // with a pointer — and for a single select there is no other way
+              // back to an empty value.
               aria-label="Clear phone number"
               onClick={handleClear}
               style={{ cursor: "pointer" }}

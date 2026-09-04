@@ -653,7 +653,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           {clearable && selectedOption && (
             <button
               type="button"
-              tabIndex={-1}
+              // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
+              // with a pointer — and for a single select there is no other way
+              // back to an empty value.
               aria-label="Clear selection"
               className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {
@@ -748,7 +750,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
+          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

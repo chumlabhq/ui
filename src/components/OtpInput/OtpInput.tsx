@@ -370,7 +370,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>{errorMessage}</div>
         )}
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
+          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

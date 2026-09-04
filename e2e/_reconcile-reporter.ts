@@ -101,6 +101,18 @@ export default class ReconcileReporter implements Reporter {
 
     let failed = false;
 
+    // A run that collected nothing is not a clean run. Playwright exits 1 on
+    // "No tests found", but a filter that silently matches fewer tests than
+    // intended exits 0 — and a gate that reports success on an empty set is
+    // exactly the way a suite stops being a gate.
+    if (this.collected === 0) {
+      failed = true;
+      lines.push(
+        "  COLLECTED NOTHING. A filter that matches no test is not a pass;",
+        "  check the --project, --grep or file arguments.",
+      );
+    }
+
     // The outcome is restated here because this is the last line of the run.
     // `list` puts `N failed` above its failure list and `N passed` at the
     // bottom, so the tail of a failing run reads like a passing one.

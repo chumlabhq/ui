@@ -1823,7 +1823,7 @@ describe("Table – additional coverage", () => {
           ariaLabel="t"
         />,
       );
-      const handles = screen.getAllByLabelText("Drag to reorder");
+      const handles = screen.getAllByRole("button", { name: /Reorder row/ });
       expect(handles.length).toBe(data.length);
     });
 
@@ -1837,7 +1837,7 @@ describe("Table – additional coverage", () => {
           ariaLabel="t"
         />,
       );
-      expect(screen.getAllByLabelText("Drag to reorder").length).toBe(data.length);
+      expect(screen.getAllByRole("button", { name: /Reorder row/ }).length).toBe(data.length);
     });
   });
 
