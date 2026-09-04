@@ -1,8 +1,18 @@
 # ADR 004 (proposal) — the token decisions `dark:` group B is waiting on
 
-**Status:** Proposal. Nothing here is minted. Tokens are public API, and this
-program has already shipped one vocabulary carelessly enough to need ADR 002 to
-unpick it.
+**Status:** Decided and applied for three of the four. Nothing was minted.
+Tokens are public API, and this program has already shipped one vocabulary
+carelessly enough to need ADR 002 to unpick it.
+
+**Decision (2026-09-07):** fix the token bugs, mint nothing. §1, §2 and §3 were
+revalued; §4 was left alone. 85 of the 152 call sites collapsed; 67 remain.
+`contrast.contract` stayed green on its own terms — it was not re-baselined, and
+a planted bad value confirmed it still fails when a revaluation breaks a ratio.
+
+**What it cost, measured rather than assumed.** The change moves pixels by
+design, so it was proven confined rather than absent: of 6,414 elements captured
+across 305 fixtures in both themes, 57 moved. Six carried one of the classes this
+change removed. **51 did not** — see "Blast radius" below.
 **Date:** 2026-09-07
 **Related:** ADR 001 (`unstyled`), ADR 002 (`classes` key vocabulary)
 
@@ -164,3 +174,69 @@ The one thing it does assert: **119 of 152 want a cross of two existing tokens.*
 Whatever is decided, that number should fall by fixing token values, not by
 adding tokens that hold a light value from one role and a dark value from
 another.
+
+
+## Applied: what changed
+
+| Token | Theme | From | To | Sites collapsed |
+| --- | --- | --- | --- | --- |
+| `--cl-bg-hover` | dark | `rgba(237, 239, 244, 0.04)` | `#0a0d12` | 37 |
+| `--cl-bg-elevated` | light | `#f8f9fb` | `#ffffff` | 26 |
+| `--cl-border-input` | dark | `rgba(237, 239, 244, 0.12)` | `rgba(237, 239, 244, 0.08)` | 21 |
+
+One further site (`bg-white` + `dark:bg-cl-bg-hover`) needed two of the three at
+once, which is why the column sums to 84 and the total is 85.
+
+`--cl-text` was **not** touched, per §4. Its 18 sites remain.
+
+## Blast radius
+
+51 elements changed without having overridden the token — every one of them the
+same thing, and all in light: `--cl-bg-elevated` moving `#f8f9fb` → `#ffffff`.
+49 are `Table` (47 `<th>`, the search input, one more) and 2 are
+`CountryFlagGroup`'s overflow chip.
+
+**This is the finding, and it is not cosmetic.** `--cl-bg` in light is already
+`#ffffff`, so after the revaluation `--cl-bg-elevated` is *identical to the base
+surface in light*. The token no longer elevates anything there. A `Table`
+header, which used the token to sit a shade above the page, is now the same
+colour as the page.
+
+The revaluation introduced three token collisions of that kind:
+
+| Theme | Value | Now shared by |
+| --- | --- | --- |
+| light | `#ffffff` | `bg`, `bg-elevated`, `bg-input`, `on-accent` |
+| dark | `#0a0d12` | `bg-elevated`, `bg-hover`, `code-bg` |
+| dark | `rgba(237, 239, 244, 0.08)` | `border`, `border-input` |
+
+Two of the three are the intended consequence — `bg-hover` matching
+`bg-elevated` in dark, and `border-input` matching `border` in dark, are exactly
+what the 59 overriding call sites were asking for, and they raise the fair
+question of whether those tokens still earn separate names. The light one is
+different: nothing asked for `bg-elevated` to equal `bg`, and 51 elements got it
+anyway.
+
+**Recommendation, not applied:** reconsider §2. The 26 sites wanted a *panel* on
+pure white; `Table`'s header wanted a *surface* a shade above the page. Those are
+two roles, and collapsing them onto one value serves the first by breaking the
+second. Either §2 mints `--cl-bg-panel` after all, or `Table` and
+`CountryFlagGroup` move off `--cl-bg-elevated` onto something that still
+elevates. Left for a decision rather than taken here.
+
+## How the confinement was proven
+
+`scripts/analyse-token-blast-radius.mjs` compares two `capture-theme-styles.mjs`
+snapshots and splits every changed element by whether its *pre-change* class list
+carried one of the removed overrides. Elements that carried one asked for the
+change; elements that did not are the blast radius.
+
+Self-checked by planting a change nobody asked for — one
+`text-cl-text-secondary` swapped to `text-cl-text-tertiary` in `Accordion` — and
+confirming it is reported: collateral rose from 51 to 67, with the Accordion
+element named and its old class list shown.
+
+Two limits worth stating. The capture reads the resting state, so the
+`hover:`-scoped half of the `--cl-bg-hover` revaluation is not exercised by it —
+which is why only 6 of the 85 collapses show as moved elements. And the analysis
+compares the shipped fixtures, not every possible consumer usage.

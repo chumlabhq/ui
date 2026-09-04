@@ -6,7 +6,7 @@
  *   A. literal no-ops — `text-cl-text dark:text-cl-text`, the same token on
  *      both sides, so the variant re-applies a declaration that is already
  *      there. 149 of them.
- *   B. token swaps — a different token under `.dark`. 168.
+ *   B. token swaps — a different token under `.dark`. 167.
  *   C. raw palette — `dark:bg-gray-700` and friends, which bypass the design
  *      tokens entirely. 44.
  *
@@ -99,7 +99,7 @@ export function classifyDarkVariants(root = resolve(process.cwd(), "src/componen
 }
 
 /** Ratchet. These may fall; they may not rise. */
-const CEILING = { B: 167, C: 44 };
+const CEILING = { B: 67, C: 44 };
 
 describe("dark variant contract", () => {
   const groups = classifyDarkVariants();

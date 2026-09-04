@@ -7,7 +7,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
   control: "relative",
   trigger:
-    "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-cl-md transition-colors cursor-text border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated hover:border-cl-border-input dark:hover:border-cl-border focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-transparent",
+    "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-cl-md transition-colors cursor-text border-cl-border-input bg-cl-bg-elevated hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-transparent",
   input:
     "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text",
   icon:
@@ -15,26 +15,26 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clearTrigger:
     "shrink-0 cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary dark:hover:text-cl-text",
   content:
-    "border rounded-cl-md shadow-lg overflow-hidden bg-white dark:bg-cl-bg-elevated border-cl-border",
+    "border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-elevated border-cl-border",
   list: "max-h-60 overflow-y-auto",
   item:
-    "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-cl-bg-hover",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
   empty:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   message: "text-sm mt-1 text-cl-error text-cl-success",
   description: "text-xs mb-1 text-cl-text-tertiary",
   clockContent:
-    "p-3 sm:p-4 border rounded-cl-lg shadow-lg bg-white dark:bg-cl-bg-elevated border-cl-border",
+    "p-3 sm:p-4 border rounded-cl-lg shadow-lg bg-cl-bg-elevated border-cl-border",
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
   clockHours:
-    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
+    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
   clockMinutes:
-    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
+    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
   clockSeparator:
     "text-2xl font-semibold text-cl-text-tertiary",
   clockFace:
-    "relative w-44 h-44 sm:w-52 sm:h-52 mx-auto rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated",
+    "relative w-44 h-44 sm:w-52 sm:h-52 mx-auto rounded-full bg-cl-bg-hover",
   clockHand: "absolute inset-0",
   clockHandLine: "stroke-cl-accent",
   clockHandDot:

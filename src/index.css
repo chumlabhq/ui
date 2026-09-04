@@ -98,7 +98,7 @@
   /* Surfaces */
   --cl-bg: #050608;
   --cl-bg-elevated: #0a0d12;
-  --cl-bg-hover: rgba(237, 239, 244, 0.04);
+  --cl-bg-hover: #0a0d12;
   --cl-bg-input: #050608;
 
   /* Text */
@@ -116,7 +116,7 @@
   /* Borders */
   --cl-border: rgba(237, 239, 244, 0.08);
   --cl-border-strong: rgba(237, 239, 244, 0.15);
-  --cl-border-input: rgba(237, 239, 244, 0.12);
+  --cl-border-input: rgba(237, 239, 244, 0.08);
   --cl-border-input-hover: rgba(237, 239, 244, 0.25);
   --cl-border-input-focus: #5b9bff;
 
@@ -213,7 +213,7 @@
      on-accent flips white so the primary button stays high-contrast. */
 
   --cl-bg: #ffffff;
-  --cl-bg-elevated: #f8f9fb;
+  --cl-bg-elevated: #ffffff;
   --cl-bg-hover: rgba(15, 18, 24, 0.04);
   --cl-bg-input: #ffffff;
 

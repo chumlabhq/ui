@@ -79,11 +79,16 @@ const snapshot = async (props) =>
   page.evaluate((properties) => {
     const root = document.querySelector("[data-fixture]");
     if (!root) return null;
+    // The class list travels with the reading. A token revaluation moves
+    // pixels by design, and the only question that matters afterwards is
+    // whether each moved element asked for it — which is a question about the
+    // classes it carries, so the answer has to be recorded alongside.
     const read = () =>
-      [...root.querySelectorAll("*")].map((el) => {
-        const cs = getComputedStyle(el);
-        return properties.map((p) => cs[p]).join("|");
-      });
+      [...root.querySelectorAll("*")].map((el) => ({
+        style: properties.map((p) => getComputedStyle(el)[p]).join("|"),
+        cls: typeof el.className === "string" ? el.className : String(el.getAttribute("class") ?? ""),
+        tag: el.tagName.toLowerCase(),
+      }));
 
     // Animation is frozen for the read, identically in both captures. Shimmer
     // runs `animate-pulse` forever, so its opacity is whatever frame the
@@ -158,8 +163,10 @@ for (const key of keys) {
       continue;
     }
     for (let i = 0; i < a[theme].length; i++) {
-      if (a[theme][i] !== b[theme][i]) {
-        differences.push(`${key} [${theme}] element ${i}: ${a[theme][i]} -> ${b[theme][i]}`);
+      const before = typeof a[theme][i] === "string" ? a[theme][i] : a[theme][i].style;
+      const after = typeof b[theme][i] === "string" ? b[theme][i] : b[theme][i].style;
+      if (before !== after) {
+        differences.push(`${key} [${theme}] element ${i}: ${before} -> ${after}`);
       }
     }
   }
