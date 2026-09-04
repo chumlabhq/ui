@@ -338,8 +338,9 @@
     "prepack": "npm run build:lib && npm run build:llms",
     "build:tokens": "node scripts/build-tokens.mjs",
     "build:styles": "node scripts/build-styles.mjs",
-    "test:e2e:all": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
-    "test:e2e:a11y": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=a11y-full"
+    "test:e2e:all": "node scripts/run-e2e-matrix.mjs",
+    "test:e2e:a11y": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=a11y-full",
+    "test:e2e:matrix": "node scripts/run-e2e-matrix.mjs --report"
   },
   "peerDependencies": {
     "@tanstack/react-table": "^8.21.3",

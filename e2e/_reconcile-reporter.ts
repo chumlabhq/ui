@@ -1,3 +1,4 @@
+import { writeFileSync } from "node:fs";
 import type {
   FullConfig,
   FullResult,
@@ -155,6 +156,31 @@ export default class ReconcileReporter implements Reporter {
       "",
     );
     process.stdout.write(lines.join("\n"));
+
+    // Machine-readable twin of the block above, for the matrix runner. It reads
+    // this rather than parsing the printed summary: a gate that scrapes its own
+    // console output breaks the first time someone rewords a line.
+    const jsonPath = process.env.E2E_RECONCILE_JSON;
+    if (jsonPath) {
+      writeFileSync(
+        jsonPath,
+        JSON.stringify(
+          {
+            collected: this.collected,
+            executed,
+            byStatus: Object.fromEntries(this.byStatus),
+            byProject: Object.fromEntries(byProject),
+            unexplainedSkips: this.unexplainedSkips,
+            notPassed: bad,
+            reconciled: !failed,
+            playwrightStatus: result.status,
+          },
+          null,
+          2,
+        ),
+        "utf8",
+      );
+    }
 
     if (failed && result.status === "passed") return { status: "failed" };
   }

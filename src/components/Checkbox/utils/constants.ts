@@ -26,9 +26,9 @@ export const SHAPE_CLASS_MAP: Record<CheckboxShape, string> = {
 export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   root: "data-[loading]:opacity-50 data-[loading]:pointer-events-none data-[disabled]:opacity-50",
   labelGroup: "flex flex-col",
-  label: "text-sm font-medium text-cl-text dark:text-cl-text",
-  description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
-  control: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer data-[error]:border-cl-error dark:data-[error]:border-cl-error has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg",
+  label: "text-sm font-medium text-cl-text",
+  description: "text-xs text-cl-text-tertiary",
+  control: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer data-[error]:border-cl-error has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg",
   itemIndicator: "",
   message: "text-sm text-cl-error text-cl-success",
 };

@@ -17,7 +17,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   headerCellText: "flex items-center",
   body: "",
   item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
-  cell: "px-4 py-3 text-sm whitespace-nowrap text-cl-text dark:text-cl-text",
+  cell: "px-4 py-3 text-sm whitespace-nowrap text-cl-text",
   // Right separator uses an inset box-shadow (not border-r-2) so the
   // parent's `overflow: hidden` + `rounded-cl-md` reliably clips it at
   // the rounded corner. A real border on a sticky element can escape
@@ -29,7 +29,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   pinnedList: "border-collapse",
   scrollRegion: "min-w-0 flex-1 overflow-x-auto",
   empty:
-    "flex items-center justify-center py-12 text-cl-text-tertiary dark:text-cl-text-tertiary",
+    "flex items-center justify-center py-12 text-cl-text-tertiary",
   pinIcon: "text-cl-text-tertiary w-4 h-4",
   pinButton:
     "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",

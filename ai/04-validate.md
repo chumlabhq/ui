@@ -85,6 +85,26 @@ Run each check. Each is independent and must PASS.
 - [ ] No `useLayoutEffect` without SSR shim
 - [ ] Server-side render of test page succeeds
 
+### 6b. Cross-browser e2e (release gate)
+
+- [ ] `npm run test:e2e:all` reports every project green — chromium, firefox,
+      webkit, Mobile Chrome, Mobile Safari and the axe sweep, each run as its
+      own `playwright test` invocation and reconciled on its own.
+- [ ] The aggregate is `npm run test:e2e:matrix`, which reads the recorded
+      verdicts and exits non-zero unless all six are present, fresh and passing.
+
+      The matrix is roughly forty minutes, which exceeds the task limit of at
+      least one environment this repo is developed in, so the runner records
+      each project as it finishes and can be driven one project at a time
+      (`node scripts/run-e2e-matrix.mjs --project webkit`). A recorded verdict
+      is tied to a content fingerprint of `src/` and `e2e/`: change either and
+      it reads STALE and stops counting, so the aggregate can never be assembled
+      out of runs against different trees. A project that collected zero tests
+      fails rather than passing quietly.
+
+      `npm run test:e2e` is chromium only, ~4 minutes, and is the iteration
+      loop, not the gate.
+
 ### 7. Lint
 
 - [ ] `npm run lint` returns zero errors

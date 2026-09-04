@@ -12,41 +12,41 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   // on the menu container would clip those submenu panels. Long menus
   // grow naturally; the SUBMENU (which has no further children) is the
   // one that gets bounded with max-h + scroll below.
-  content: "min-w-full sm:min-w-[200px] rounded-cl-md shadow-lg bg-white dark:bg-cl-bg-elevated border border-cl-border dark:border-cl-border",
+  content: "min-w-full sm:min-w-[200px] rounded-cl-md shadow-lg bg-white dark:bg-cl-bg-elevated border border-cl-border",
   // first:rounded-t / last:rounded-b so the hover/selected/focused bg
   // tucks under the menu's rounded corners on the top and bottom items
   // — without these, hover paints into the corner gap and looks like a
   // square highlight escaping the rounded card.
   item:
-    "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
+    "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
   subContent:
-    "min-w-full sm:min-w-[180px] max-h-[320px] overflow-y-auto rounded-cl-md shadow-lg bg-white dark:bg-cl-bg-elevated border border-cl-border dark:border-cl-border",
+    "min-w-full sm:min-w-[180px] max-h-[320px] overflow-y-auto rounded-cl-md shadow-lg bg-white dark:bg-cl-bg-elevated border border-cl-border",
   subPositioner: "z-[9999]",
   subItem:
-    "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
+    "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
   label:
     "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
   message: "text-sm mt-1 text-cl-error text-cl-success",
-  description: "text-xs mb-1 text-cl-text-tertiary dark:text-cl-text-tertiary",
+  description: "text-xs mb-1 text-cl-text-tertiary",
   icon:
-    "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary dark:text-cl-text-tertiary",
-  itemIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary",
-  itemIndicator: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
+    "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
+  itemIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
+  itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
   itemControl:
     "w-4 h-4 shrink-0 flex items-center justify-center rounded border border-cl-border-input dark:border-cl-border",
   empty:
-    "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
+    "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   clearTrigger:
-    "absolute right-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated cursor-pointer text-cl-text-tertiary dark:text-cl-text-tertiary",
+    "absolute right-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated cursor-pointer text-cl-text-tertiary",
   loading:
-    "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
+    "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   loadingItem:
     "mx-2 my-1.5 h-4 rounded bg-cl-bg-hover dark:bg-cl-bg-elevated animate-pulse",
   searchControl:
-    "flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border-cl-border",
+    "flex items-center gap-2 px-3 py-2 border-b border-cl-border",
   searchInput:
-    "flex-1 bg-transparent text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary focus:outline-none",
-  searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary",
+    "flex-1 bg-transparent text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary focus:outline-none",
+  searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
   subSearchControl: "",
   subSearchInput: "",
   subSearchIcon: "",

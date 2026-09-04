@@ -338,10 +338,10 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   root: "flex flex-col gap-1",
   label:
     "text-[13px] font-medium mb-1.5 block text-cl-text dark:text-cl-text-secondary",
-  description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary dark:text-cl-text-tertiary",
+  description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
   control: "flex gap-2 items-stretch data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   input:
-    "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
+    "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text dark:text-white placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
   message:
     "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
   itemRow: "flex items-center gap-2 min-w-0",
@@ -355,9 +355,9 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
     item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover dark:hover:bg-white/6 data-[focused]:bg-cl-bg-hover dark:data-[focused]:bg-white/10 text-cl-text dark:text-cl-text-secondary",
     list: "max-h-60 overflow-y-auto",
     icon: "w-4 h-4 shrink-0 transition-transform duration-200",
-    itemIndicator: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
-    searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary",
-    empty: "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
+    itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
+    searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
+    empty: "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   },
   triggerRow: "flex items-center gap-2",
   flag: "rounded-cl-sm",
