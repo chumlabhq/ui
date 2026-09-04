@@ -6,7 +6,15 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [["html", { open: "on-failure" }], ["list"]],
+  // `_reconcile-reporter` is last so its one-line verdict is the final thing
+  // printed. The summary of the `list` reporter puts `N failed` above a long
+  // failure list and `N passed` at the very bottom, which is why reading the
+  // tail of a run showed a passing count while 1191 tests were failing.
+  reporter: [
+    ["html", { open: "on-failure" }],
+    ["list"],
+    ["./e2e/_reconcile-reporter.ts"],
+  ],
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5173",
     trace: "on-first-retry",

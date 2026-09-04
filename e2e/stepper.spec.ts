@@ -1,4 +1,5 @@
 import { gotoFixture } from "./_nav";
+import { skipWithoutTouchEvents } from "./_helpers";
 import { test, expect } from "@playwright/test";
 import { injectAxe, checkA11y } from "axe-playwright";
 
@@ -239,6 +240,8 @@ test.describe("Stepper (fixtures)", () => {
   });
 
   test("activates a step from a touch", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Stepper", "clickable");
 

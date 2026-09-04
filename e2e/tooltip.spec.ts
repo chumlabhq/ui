@@ -1,4 +1,5 @@
 import { gotoFixture } from "./_nav";
+import { skipWithoutTabTraversal } from "./_helpers";
 import { test, expect } from "@playwright/test";
 
 test.describe("Tooltip Component - Cross-Browser Tests", () => {
@@ -276,7 +277,9 @@ test.describe("Tooltip (fixtures)", () => {
     }).toPass({ timeout: 5000 });
   });
 
-  test("reaches the trigger by Tab", async ({ page }) => {
+  test("reaches the trigger by Tab", async ({ page, browserName }) => {
+    skipWithoutTabTraversal(test, browserName);
+
     await gotoFixture(page, "Tooltip", "closed");
 
     const trigger = page.getByRole("button", { name: "Trigger" });

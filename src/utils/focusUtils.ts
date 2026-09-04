@@ -30,9 +30,24 @@ export function getFocusableElements(container: HTMLElement): HTMLElement[] {
 /**
  * Keeps Tab inside `container`, wrapping at both ends.
  *
- * Extracted from Modal so the two `aria-modal` surfaces share one
- * implementation. The event is typed structurally so the same function serves a
- * React synthetic handler and a native `document` listener.
+ * Shared by the three `aria-modal` surfaces — Modal, Drawer and DatePicker — so
+ * there is one implementation rather than three.
+ *
+ * It moves focus itself on every Tab rather than only intervening when focus is
+ * already on the first or last element. That looks like more work than needed,
+ * and on Chromium it is; on WebKit it is the difference between a trap and no
+ * trap at all. Safari omits buttons from the sequential tab order unless Full
+ * Keyboard Access is on, so a drawer containing only buttons never reports
+ * `activeElement === last`, the boundary test never fires, and Tab walks out of
+ * the dialog into the page behind it. That is a real failure for a Safari user,
+ * not a headless quirk: `drawer.spec.ts` caught it in webkit and Mobile Safari
+ * the first time those projects were ever executed.
+ *
+ * Driving the order from `getFocusableElements` instead of from the platform
+ * makes the trap behave the same in every browser.
+ *
+ * The event is typed structurally so the same function serves a React synthetic
+ * handler and a native `document` listener.
  *
  * With no focusable descendant the Tab is swallowed rather than allowed to
  * escape: a dialog that claims `aria-modal` must not hand focus back to content
@@ -48,15 +63,23 @@ export function cycleTabWithin(
     return;
   }
 
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
   const active = document.activeElement;
+  const current =
+    active instanceof HTMLElement ? focusable.indexOf(active) : -1;
 
-  if (event.shiftKey && active === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && active === last) {
-    event.preventDefault();
-    first.focus();
+  event.preventDefault();
+
+  // Focus already outside the container — WebKit's Tab order can put it on
+  // <body> — so re-enter at the end the user was heading towards.
+  if (current === -1) {
+    (event.shiftKey ? focusable[focusable.length - 1] : focusable[0]).focus({
+      preventScroll: true,
+    });
+    return;
   }
+
+  const next = event.shiftKey
+    ? (current - 1 + focusable.length) % focusable.length
+    : (current + 1) % focusable.length;
+  focusable[next].focus({ preventScroll: true });
 }

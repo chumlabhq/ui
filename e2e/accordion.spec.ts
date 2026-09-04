@@ -241,12 +241,20 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
         const content = page.locator(`#${contentId}`);
 
         // Check for CSS transitions
+        // Longhands, not the `transition` shorthand. Firefox serialises the
+        // shorthand to "" whenever it cannot round-trip it — here, a
+        // multi-property transition — while reporting the same
+        // `transitionDuration` and `transitionProperty` as Chromium. Asserting
+        // the shorthand was asserting Chromium's serialisation rather than the
+        // presence of a transition, and it was the only remaining firefox
+        // failure once that project was actually being run.
         const hasTransition = await content.evaluate((el) => {
           const styles = window.getComputedStyle(el);
           return (
-            styles.transition !== "none" &&
-            styles.transition !== "" &&
-            styles.transitionDuration !== "0s"
+            styles.transitionDuration !== "0s" &&
+            styles.transitionDuration !== "" &&
+            styles.transitionProperty !== "none" &&
+            styles.transitionProperty !== ""
           );
         });
 

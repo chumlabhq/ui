@@ -1,28 +1,38 @@
 import { gotoFixture } from "./_nav";
 import { test, expect } from "@playwright/test";
 import { injectAxe } from "axe-playwright";
-import { watchClicks } from "./_helpers";
+import { watchClicks, skipWithoutTouchEvents } from "./_helpers";
 
-// Helper to wait for button visibility with scroll support
+/**
+ * Waits for a button that is actually on screen.
+ *
+ * This used to take `button` first-in-document. On a mobile viewport that is
+ * the site chrome's "Support" link — a 0x0 element — so `scrollIntoViewIfNeeded`
+ * never resolved and every test in this file failed in `beforeEach`. It passed
+ * on desktop only because the first button there happens to be visible, which
+ * means the spec was measuring the page chrome rather than the component. That
+ * is the same defect E2E-INVENTORY recorded when the suite was auditing the
+ * marketing home page.
+ *
+ * 48 of the 96 failures in the first complete run of this suite came through
+ * this one helper.
+ */
 async function waitForButtonVisible(page: import("@playwright/test").Page) {
-  const button = page.locator("button").first();
-  // Wait for element to be attached to DOM first
-  await button.waitFor({ state: "attached", timeout: 10000 });
-  // Then scroll into view and wait for visibility
+  const button = page.locator("button:visible").first();
+  await button.waitFor({ state: "visible", timeout: 15000 });
   await button.scrollIntoViewIfNeeded();
-  await button.waitFor({ state: "visible", timeout: 10000 });
 }
 
 test.describe("Button Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/button");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
     await waitForButtonVisible(page);
   });
 
   test.describe("Basic Functionality", () => {
     test("should render button elements on the page", async ({ page }) => {
-      const buttons = page.locator("button");
+      const buttons = page.locator("button:visible");
       await expect(buttons.first()).toBeVisible();
 
       const count = await buttons.count();
@@ -30,7 +40,7 @@ test.describe("Button Component - Cross-Browser Tests", () => {
     });
 
     test("should handle click interactions", async ({ page }) => {
-      const button = page.locator("button").first();
+      const button = page.locator("button:visible").first();
       await expect(button).toBeVisible();
 
       // Click should not throw
@@ -60,7 +70,7 @@ test.describe("Keyboard Navigation", () => {
 
     for (const key of ["Enter", "Space"] as const) {
       test(`should activate button on ${key} key`, async ({ page }) => {
-        const button = page.locator("button").first();
+        const button = page.locator("button:visible").first();
         await expect(button).toBeVisible();
         const clicks = await watchClicks(page);
         await button.focus();
@@ -205,7 +215,7 @@ test.describe("Keyboard Navigation", () => {
 test.describe("Button Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/button");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
     await waitForButtonVisible(page);
     await injectAxe(page);
   });
@@ -242,7 +252,7 @@ test.describe("Button Accessibility Tests", () => {
   });
 
   test("should have proper button roles", async ({ page }) => {
-    const buttons = page.locator("button");
+    const buttons = page.locator("button:visible");
     const spanButtons = page.locator('span[role="button"]');
 
     // All buttons should be accessible
@@ -297,7 +307,7 @@ test.describe("Button Responsive Tests", () => {
 
   test("full-width buttons should span container width", async ({ page }) => {
     await page.goto("/button");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
     await waitForButtonVisible(page);
 
     const fullWidthButton = page.locator('[data-full-width="true"]').first();
@@ -320,12 +330,12 @@ test.describe("Button Responsive Tests", () => {
 test.describe("Button Focus Management", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/button");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
     await waitForButtonVisible(page);
   });
 
   test("should maintain visible focus ring", async ({ page }) => {
-    const button = page.locator("button").first();
+    const button = page.locator("button:visible").first();
     await button.focus();
 
     // Button should be focused
@@ -396,6 +406,8 @@ test.describe("Button (fixtures)", () => {
   });
 
   test("fires from a touch", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Button", "default");
 

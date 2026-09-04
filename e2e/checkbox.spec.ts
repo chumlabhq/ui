@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
 
@@ -13,7 +14,9 @@ import { gotoFixture } from "./_nav";
 const BOX = '[data-fixture] input[type="checkbox"]';
 
 test.describe("Checkbox (fixtures)", () => {
-  test("moves between checkboxes in document order", async ({ page }) => {
+  test("moves between checkboxes in document order", async ({ page, browserName }) => {
+    skipWithoutTabTraversal(test, browserName);
+
     await gotoFixture(page, "Checkbox", "siblings");
 
     const boxes = page.locator(BOX);
@@ -45,7 +48,9 @@ test.describe("Checkbox (fixtures)", () => {
     expect(focusedDisabled, "Tab landed on the disabled checkbox").toBe(false);
   });
 
-  test("keeps focus on the checkbox after a click", async ({ page }) => {
+  test("keeps focus on the checkbox after a click", async ({ page, browserName }) => {
+    skipWithoutTabTraversal(test, browserName);
+
     await gotoFixture(page, "Checkbox", "labelled");
 
     const box = page.locator(BOX);
@@ -74,6 +79,8 @@ test.describe("Checkbox (fixtures)", () => {
   });
 
   test("toggles from a touch", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Checkbox", "labelled");
 

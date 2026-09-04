@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { skipWithoutTouchEvents } from "./_helpers";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
 
@@ -36,6 +37,8 @@ test.describe("OtpInput (fixtures)", () => {
   });
 
   test("accepts a digit from a touch", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "OtpInput", "default");
 

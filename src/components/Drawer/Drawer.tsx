@@ -10,6 +10,7 @@ import {
 import { createPortal } from "react-dom";
 import { LAYERS, OverlayLayerContext } from "../../utils/layers";
 import type { DrawerProps, DrawerClasses } from "./utils/types";
+import { cycleTabWithin } from "../../utils/focusUtils";
 import {
   getDirectionStyles,
   getFocusableElements,
@@ -281,23 +282,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         if (event.key === "Tab" && trapFocus && modal) {
           const panel = panelRef.current;
           if (!panel) return;
-
-          const focusable = getFocusableElements(panel);
-          if (focusable.length === 0) {
-            event.preventDefault();
-            return;
-          }
-
-          const first = focusable[0];
-          const last = focusable[focusable.length - 1];
-
-          if (event.shiftKey && document.activeElement === first) {
-            event.preventDefault();
-            last.focus({ preventScroll: true });
-          } else if (!event.shiftKey && document.activeElement === last) {
-            event.preventDefault();
-            first.focus({ preventScroll: true });
-          }
+          cycleTabWithin(panel, event);
         }
       },
       [handleClose, closeOnEscape, trapFocus, modal, drawerId],
@@ -484,6 +469,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         }
       }
     }, []);
+
 
     const contextValue = useMemo(
       () => ({ onClose: handleClose, titleId }),

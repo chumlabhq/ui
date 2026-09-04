@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
 import { injectAxe } from "axe-playwright";
 import { gotoFixture } from "./_nav";
 
@@ -473,7 +474,7 @@ test.describe("Pagination Advanced Features", () => {
 test.describe("Pagination Edge Cases", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/pagination");
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
   });
 
@@ -521,7 +522,7 @@ test.describe("Pagination Responsive Tests", () => {
     }
 
     await page.goto("/pagination");
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
 
     const navs = page.locator(NAV_SELECTOR);
@@ -598,7 +599,9 @@ test.describe("Pagination - Repeated Interaction", () => {
 test.describe("Pagination (fixtures)", () => {
   const NAV = 'nav[aria-label="Pagination"]';
 
-  test("reaches the page buttons by Tab", async ({ page }) => {
+  test("reaches the page buttons by Tab", async ({ page, browserName }) => {
+    skipWithoutTabTraversal(test, browserName);
+
     await gotoFixture(page, "Pagination", "default");
 
     const first = page.locator(`${NAV} button[aria-label="Page 1"]`);
@@ -629,6 +632,8 @@ test.describe("Pagination (fixtures)", () => {
   });
 
   test("navigates from a touch at a mobile viewport", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Pagination", "default");
 
@@ -667,14 +672,24 @@ test.describe("Pagination (fixtures)", () => {
   test("lets Tab out of the last control", async ({ page }) => {
     await gotoFixture(page, "Pagination", "default");
 
+    // The pagination is the last focusable thing on the fixture page, so Tab
+    // from its final control leaves the document entirely. Chromium reports
+    // that by resetting `document.activeElement` to <body>; Firefox leaves it
+    // pointing at the last focused element, which reads exactly like a keyboard
+    // trap and is not one. A sentinel after the component gives focus somewhere
+    // observable to land, so the assertion means the same thing on every engine.
+    await page.evaluate(() => {
+      const sentinel = document.createElement("button");
+      sentinel.id = "tab-sentinel";
+      sentinel.textContent = "after";
+      document.body.append(sentinel);
+    });
+
     await page.locator(`${NAV} button[aria-label="Next page"]`).focus();
     await page.keyboard.press("Tab");
 
-    const stillInside = await page.evaluate(
-      (sel) => !!document.activeElement?.closest(sel),
-      NAV,
-    );
-    expect(stillInside, "focus never left the pagination").toBe(false);
+    const landed = await page.evaluate(() => document.activeElement?.id ?? "");
+    expect(landed, "focus never left the pagination").toBe("tab-sentinel");
   });
 
   test("keeps up with rapid page navigation", async ({ page }) => {

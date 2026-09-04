@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
-import { watchClicks } from "./_helpers";
+import { watchClicks, skipWithoutTouchEvents } from "./_helpers";
 
 /**
  * Nine of textarea.spec.ts's thirty-five tests (E2E-TRIAGE.md, Appendix B).
@@ -105,6 +105,8 @@ test.describe("TextArea (fixtures)", () => {
 
   test.describe("Mobile", () => {
     test("accepts typing from a touch", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+
       await page.setViewportSize({ width: 375, height: 667 });
       await gotoFixture(page, "TextArea", "labelled");
 

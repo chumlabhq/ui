@@ -71,9 +71,37 @@ test.describe("accessibility (full sweep)", () => {
       components.add(component);
 
       await page.goto(path, { waitUntil: "domcontentloaded" });
-      await page
-        .locator("[data-fixture]")
-        .waitFor({ state: "attached", timeout: 15000 });
+      // Attached is not painted. axe computes colour contrast from rendered
+      // pixels, so auditing a fixture whose open transition is still running
+      // measures a half-faded colour against a background that has not landed —
+      // which is why `Accordion/focusable-slot` reported a serious
+      // color-contrast violation in 2 of 5 sweeps and none of the others. Its
+      // settled contrast is 9.12:1. Waiting for the animations makes the answer
+      // the same every run, which is the only kind of answer a gate can use.
+      // (`visible` is not usable here: several fixtures render a legitimately
+      // zero-size wrapper, and waiting for one times out.)
+      await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 });
+      await page.locator("[data-fixture]").evaluate(
+        (el, cap) =>
+          new Promise<void>((resolve) => {
+            // Capped, and only ever the finite ones: a shimmer runs
+            // `animate-pulse` forever, so awaiting every animation's `finished`
+            // hangs the audit rather than settling it.
+            const finite = el
+              .getAnimations({ subtree: true })
+              .filter((a) => {
+                const timing = a.effect?.getComputedTiming();
+                return timing != null && Number.isFinite(timing.endTime ?? Infinity);
+              })
+              .map((a) => a.finished.catch(() => undefined));
+            const timer = setTimeout(resolve, cap);
+            void Promise.all(finite).then(() => {
+              clearTimeout(timer);
+              resolve();
+            });
+          }),
+        800,
+      );
       await injectAxe(page);
 
       // Scoped to the fixture, so the harness page's own markup is not the

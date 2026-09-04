@@ -1,4 +1,5 @@
 import { gotoFixture } from "./_nav";
+import { skipWithoutTouchEvents } from "./_helpers";
 import { test, expect } from "@playwright/test";
 import { injectAxe } from "axe-playwright";
 
@@ -31,7 +32,7 @@ async function triggerToast(
 test.describe("Toast Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test.describe("Basic Functionality", () => {
@@ -226,11 +227,14 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       await multipleButton.scrollIntoViewIfNeeded();
       await multipleButton.click();
 
-      await page.waitForTimeout(1500);
-
+      // Settled, not sampled. An overflow toast stays in the DOM while its exit
+      // animation runs, so a fixed wait counts whatever the engine happens to
+      // have cleaned up by then — Chromium had finished at 1500ms and Firefox
+      // still held one, which is a difference in animation scheduling rather
+      // than in the limit. Retrying until the count settles asserts the limit
+      // itself and means the same thing on every engine.
       const toasts = page.locator(TOAST_SELECTOR);
-      const count = await toasts.count();
-      expect(count).toBeLessThanOrEqual(5);
+      await expect(toasts).toHaveCount(5, { timeout: 5000 });
     });
   });
 });
@@ -238,7 +242,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
 test.describe("Toast Keyboard Navigation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test("should focus close button via Tab", async ({ page }) => {
@@ -302,7 +306,7 @@ test.describe("Toast Keyboard Navigation", () => {
 test.describe("Toast Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
     await injectAxe(page);
   });
 
@@ -361,7 +365,7 @@ test.describe("Toast Accessibility Tests", () => {
 test.describe("Toast Position Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   for (const position of [
@@ -410,7 +414,7 @@ test.describe("Toast Responsive Tests", () => {
     }
 
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
 
     await triggerToast(page, "success");
 
@@ -430,7 +434,7 @@ test.describe("Toast Responsive Tests", () => {
 test.describe("Toast Custom Content Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test("should render toast with action buttons", async ({ page }) => {
@@ -488,7 +492,7 @@ test.describe("Toast - Bulk Dismissal", () => {
 
   test("should smoothly dismiss multiple toasts", async ({ page }) => {
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
 
     for (let i = 0; i < 3; i++) {
       await triggerToast(page, "success");
@@ -513,7 +517,7 @@ test.describe("Toast - Bulk Dismissal", () => {
 test.describe("Toast Focus Management", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/toast");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test("should maintain focus on close button when focused", async ({
@@ -560,6 +564,8 @@ test.describe("Toast Focus Management", () => {
  */
 test.describe("Toast (fixtures)", () => {
   test("dismisses from a touch on the close button", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Toast", "dismissable");
 

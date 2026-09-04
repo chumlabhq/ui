@@ -20,7 +20,15 @@ test.describe("Drawer", () => {
     test("restores focus to the trigger on close", async ({ page }) => {
       await gotoFixture(page, "Drawer", "with-trigger");
       const trigger = page.locator("[data-harness-trigger]");
-      await trigger.click();
+
+      // Opened from the keyboard, not a click. WebKit does not focus a button
+      // on click unless Full Keyboard Access is on, so on that engine a click
+      // leaves `document.activeElement` on <body> and there is no prior focus
+      // for the drawer to restore — the assertion would be about the platform
+      // rather than the component. Verified: focus, Enter, Escape returns focus
+      // to the trigger in webkit. This is also the path SC 2.4.3 is about.
+      await trigger.focus();
+      await page.keyboard.press("Enter");
       await expect(page.locator(DIALOG)).toBeVisible();
 
       await page.keyboard.press("Escape");
@@ -51,6 +59,14 @@ test.describe("Drawer", () => {
       const box = (await dialog.boundingBox())!;
       const x = box.x + box.width / 2;
       const start = box.y + 12;
+      // Kept inside the viewport. The drag used to end at `box.y + box.height`,
+      // which on a 1280x720 desktop viewport is below the bottom edge; Chromium
+      // still reports pointer events there and Firefox does not deliver them at
+      // all — not even on `window` — so the sheet never saw the end of the drag
+      // and never dismissed. The travel below is still well past the dismissal
+      // threshold, so the assertion is unchanged in substance.
+      const viewport = page.viewportSize()!;
+      const finish = Math.min(start + box.height, viewport.height - 2);
 
       await page.mouse.move(x, start);
       await page.mouse.down();
@@ -58,7 +74,7 @@ test.describe("Drawer", () => {
       // between pointer events, and headless chromium delivers exactly the
       // moves that are asked for (E2E-INVENTORY.md, resizablepanel).
       for (let i = 1; i <= 8; i++) {
-        await page.mouse.move(x, start + (box.height * i) / 8);
+        await page.mouse.move(x, start + ((finish - start) * i) / 8);
       }
       await page.mouse.up();
 
