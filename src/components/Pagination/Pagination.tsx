@@ -23,41 +23,7 @@ import { isBrowser } from "../../utils/isBrowser";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 
 import { motionSafeClasses } from "../../utils/classLayers";
-interface DropdownCoords {
-  top: number;
-  left: number;
-  minWidth: number;
-}
-
-function computeDropdownCoords(
-  buttonEl: HTMLButtonElement,
-  dropdownEl: HTMLDivElement,
-  direction: "up" | "down",
-  gap: number,
-): DropdownCoords {
-  const rect = buttonEl.getBoundingClientRect();
-  const dropdownRect = dropdownEl.getBoundingClientRect();
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const MARGIN = 8;
-
-  let top =
-    direction === "up"
-      ? rect.top - dropdownRect.height - gap
-      : rect.bottom + gap;
-  let left = rect.left;
-
-  // Keep the dropdown inside the viewport when the page-size selector sits
-  // near a viewport edge (common for right-aligned pagination on narrow widths).
-  left = Math.max(MARGIN, Math.min(left, vw - dropdownRect.width - MARGIN));
-  top = Math.max(MARGIN, Math.min(top, vh - dropdownRect.height - MARGIN));
-
-  return {
-    top,
-    left,
-    minWidth: rect.width,
-  };
-}
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 
 function renderIcon(
   icon: React.ComponentType<IconProps> | React.ReactNode | undefined,
@@ -124,29 +90,12 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
 }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [coords, setCoords] = useState<DropdownCoords | null>(null);
-
-  const updatePosition = useCallback(() => {
-    if (!triggerRef.current || !dropdownRef.current) return;
-    setCoords(
-      computeDropdownCoords(
-        triggerRef.current,
-        dropdownRef.current,
-        direction,
-        gap,
-      ),
-    );
-  }, [triggerRef, direction, gap]);
-
-  useEffect(() => {
-    requestAnimationFrame(updatePosition);
-  }, [updatePosition]);
-
-  useEffect(() => {
-    if (!isBrowser) return;
-    window.addEventListener("resize", updatePosition);
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [updatePosition]);
+  // The portal only mounts while the menu is open, so the hook is always
+  // measuring; `direction` is this component's name for the preferred side.
+  const coords = useAnchoredPosition(triggerRef, dropdownRef, true, {
+    side: direction === "up" ? "top" : "bottom",
+    gap,
+  });
 
   useEffect(() => {
     dropdownRef.current?.focus();
@@ -164,7 +113,7 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
     position: "fixed",
     zIndex,
     ...(coords
-      ? { top: coords.top, left: coords.left, minWidth: coords.minWidth }
+      ? { top: coords.top, left: coords.left, minWidth: coords.width }
       : { visibility: "hidden" as const, top: 0, left: 0 }),
   };
 

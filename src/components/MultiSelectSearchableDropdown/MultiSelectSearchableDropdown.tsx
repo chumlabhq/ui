@@ -5,6 +5,7 @@ import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } fr
 import { isBrowser } from "../../utils/isBrowser";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 import { mergeRefs } from "../../utils/mergeRefs";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types";
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
@@ -19,40 +20,6 @@ import {
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
 } from "./utils/constants";
 
-interface DropdownCoords {
-  top: number;
-  left: number;
-  width: number;
-  position: "top" | "bottom";
-}
-
-function computeDropdownCoords(
-  triggerEl: HTMLElement,
-  dropdownEl: HTMLElement,
-  preferredPosition: "top" | "bottom",
-  gap: number,
-  forcePosition = false,
-): DropdownCoords {
-  const rect = triggerEl.getBoundingClientRect();
-  const dropdownHeight = dropdownEl.getBoundingClientRect().height;
-  const viewportHeight = isBrowser ? (window.visualViewport?.height ?? window.innerHeight) : 768;
-  const viewportWidth = isBrowser ? (window.visualViewport?.width ?? window.innerWidth) : 1024;
-  let position = preferredPosition;
-  if (!forcePosition) {
-    if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
-      if (rect.top - gap - dropdownHeight > 0) position = "top";
-    } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
-      if (rect.bottom + gap + dropdownHeight <= viewportHeight) position = "bottom";
-    }
-  }
-  const top = position === "top" ? rect.top - dropdownHeight - gap : rect.bottom + gap;
-  let left = rect.left;
-  const dropdownWidth = rect.width;
-  if (left + dropdownWidth > viewportWidth) {
-    left = Math.max(0, viewportWidth - dropdownWidth);
-  }
-  return { top, left, width: rect.width, position };
-}
 
 interface DropdownContentProps {
   triggerElement: HTMLElement | null;
@@ -90,93 +57,12 @@ function DropdownContent({
   children,
 }: DropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState<DropdownCoords | null>(null);
   const isPositionStable = useStablePositionAfterOpen(isOpen);
-  const rafIdRef = useRef<number | null>(null);
-
-  const updatePosition = useCallback(() => {
-    if (!triggerElement || !dropdownRef.current) return;
-    setCoords(computeDropdownCoords(triggerElement, dropdownRef.current, preferredPosition, gap, forcePosition));
-  }, [triggerElement, preferredPosition, gap, forcePosition]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-    rafIdRef.current = requestAnimationFrame(updatePosition);
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    const handleResize = () => {
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-    };
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    const handleScroll = () => {
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    };
-    window.addEventListener("scroll", handleScroll, true);
-    return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-    };
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser || !triggerElement) return;
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(() => {
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    });
-    observer.observe(triggerElement);
-    return () => {
-      observer.disconnect();
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-    };
-  }, [isOpen, triggerElement, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    if (typeof ResizeObserver === "undefined") return;
-    const el = dropdownRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver(() => {
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    });
-    observer.observe(el);
-    return () => {
-      observer.disconnect();
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-    };
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    const vv = window.visualViewport;
-    if (!vv?.addEventListener) return;
-    const handleViewportChange = () => {
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    };
-    vv.addEventListener("resize", handleViewportChange);
-    vv.addEventListener("scroll", handleViewportChange);
-    return () => {
-      vv.removeEventListener?.("resize", handleViewportChange);
-      vv.removeEventListener?.("scroll", handleViewportChange);
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-    };
-  }, [isOpen, updatePosition]);
+  const coords = useAnchoredPosition(triggerElement, dropdownRef, isOpen, {
+    side: preferredPosition,
+    gap,
+    forceSide: forcePosition,
+  });
 
   if (!isBrowser) return null;
   if (!isOpen && !keepMounted) return null;
@@ -202,7 +88,7 @@ function DropdownContent({
       className={classes.content || undefined}
       style={dropdownStyle}
       data-state={isOpen ? "open" : "closed"}
-      data-position={coords?.position ?? preferredPosition}
+      data-position={coords?.side ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
       {children}

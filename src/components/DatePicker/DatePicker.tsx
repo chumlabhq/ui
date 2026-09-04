@@ -50,6 +50,7 @@ import {
   getDefaultPresets,
 } from "./utils";
 import { cn } from "../../utils/scopedCn";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
@@ -686,7 +687,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const calendarRef = useRef<HTMLDivElement>(null);
-    const [calendarPos, setCalendarPos] = useState<{ top: number; left: number } | null>(null);
 
     // ─── Hook ──────────────────────────────────────────────────────────
     const {
@@ -750,75 +750,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       : undefined;
 
     // ─── Calendar positioning ───────────────────────────────────────────
-    useEffect(() => {
-      if (!isOpen || !triggerRef.current) return;
-
-      const updatePos = () => {
-        if (!triggerRef.current) return;
-        const rect = triggerRef.current.getBoundingClientRect();
-        const calendarHeight = calendarRef.current?.offsetHeight ?? 0;
-        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
-
-        let position = dropdownPosition;
-        if (!forceDropdownPosition) {
-          if (position === "bottom" && rect.bottom + dropdownGap + calendarHeight > viewportHeight) {
-            if (rect.top - dropdownGap - calendarHeight > 0) {
-              position = "top";
-            }
-          } else if (position === "top" && rect.top - dropdownGap - calendarHeight < 0) {
-            if (rect.bottom + dropdownGap + calendarHeight <= viewportHeight) {
-              position = "bottom";
-            }
-          }
-        }
-
-        const calendarWidth = calendarRef.current?.offsetWidth ?? 0;
-        const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
-        const MARGIN = 8;
-
-        let top =
-          position === "top"
-            ? rect.top - calendarHeight - dropdownGap
-            : rect.bottom + dropdownGap;
-        let left = rect.left;
-
-        // Clamp the calendar inside the viewport so it never bleeds past
-        // an edge when the trigger sits near a boundary (right-aligned
-        // form, last cell of a wide table, narrow mobile width, etc.).
-        left = Math.max(
-          MARGIN,
-          Math.min(left, viewportWidth - calendarWidth - MARGIN),
-        );
-
-        // Only pull the calendar back into view when its trigger is actually
-        // on screen. Clamping an off-screen trigger would detach the calendar
-        // and float it over unrelated content — an open picker further down
-        // the page would otherwise appear pinned near the top of the viewport.
-        const triggerInView = rect.bottom > 0 && rect.top < viewportHeight;
-        if (triggerInView) {
-          top = Math.max(
-            MARGIN,
-            Math.min(top, viewportHeight - calendarHeight - MARGIN),
-          );
-        }
-
-        setCalendarPos({ top, left });
-      };
-
-      updatePos();
-
-      if (!lockScroll) {
-        window.addEventListener("scroll", updatePos, true);
-      }
-      window.addEventListener("resize", updatePos);
-
-      return () => {
-        if (!lockScroll) {
-          window.removeEventListener("scroll", updatePos, true);
-        }
-        window.removeEventListener("resize", updatePos);
-      };
-    }, [isOpen, lockScroll, dropdownGap, dropdownPosition, forceDropdownPosition]);
+    // `clampOnlyWhenTriggerVisible` is DatePicker's own rule, now shared:
+    // clamping against a trigger scrolled out of view detaches the calendar and
+    // parks it at the viewport edge over unrelated content.
+    const calendarPos = useAnchoredPosition(triggerRef, calendarRef, isOpen, {
+      side: dropdownPosition,
+      gap: dropdownGap,
+      forceSide: forceDropdownPosition,
+      clampOnlyWhenTriggerVisible: true,
+    });
 
     // ─── Scroll lock ─────────────────────────────────────────────────────
     useEffect(() => {

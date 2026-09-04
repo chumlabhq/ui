@@ -18,11 +18,9 @@ import type {
 import { useDropdown } from "./utils/useDropdown";
 import { ChevronDownIcon, CheckIcon, SearchIcon } from "./utils/icons";
 import {
-  computeDropdownCoords,
   scrollOptionIntoView,
   isBrowser,
 } from "./utils/helpers";
-import type { DropdownCoords } from "./utils/helpers";
 import SearchableDropdownShimmer from "./components/SearchableDropdownShimmer";
 import { SearchableDropdownOption as SearchableDropdownOptionComponent } from "./components/SearchableDropdownOption";
 import { cn } from "../../utils/scopedCn";
@@ -32,6 +30,7 @@ import {
 } from "./utils/constants";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 import { mergeRefs } from "../../utils/mergeRefs";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 
 import { motionSafeClasses } from "../../utils/classLayers";
@@ -111,125 +110,12 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
   children,
 }: SearchableDropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState<DropdownCoords | null>(null);
   const isPositionStable = useStablePositionAfterOpen(isOpen);
-  const rafIdRef = useRef<number | null>(null);
-
-  const updatePosition = useCallback(() => {
-    if (!triggerElement || !dropdownRef.current) return;
-    setCoords(
-      computeDropdownCoords(
-        triggerElement,
-        dropdownRef.current,
-        preferredPosition,
-        gap,
-        forcePosition,
-      ),
-    );
-  }, [triggerElement, preferredPosition, gap, forcePosition]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    if (rafIdRef.current !== null) {
-      cancelAnimationFrame(rafIdRef.current);
-    }
-    rafIdRef.current = requestAnimationFrame(updatePosition);
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    const handleResize = () => {
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-    };
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    const handleScroll = () => {
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    };
-    window.addEventListener("scroll", handleScroll, true);
-    return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-    };
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser || !triggerElement) return;
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(() => {
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    });
-    observer.observe(triggerElement);
-    return () => {
-      observer.disconnect();
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-    };
-  }, [isOpen, triggerElement, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    if (typeof ResizeObserver === "undefined") return;
-    const el = dropdownRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver(() => {
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    });
-    observer.observe(el);
-    return () => {
-      observer.disconnect();
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-    };
-  }, [isOpen, updatePosition]);
-
-  useEffect(() => {
-    if (!isOpen || !isBrowser) return;
-    const vv = window.visualViewport;
-    if (!vv || typeof vv.addEventListener !== "function") return;
-    const handleViewportChange = () => {
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-      rafIdRef.current = requestAnimationFrame(updatePosition);
-    };
-    vv.addEventListener("resize", handleViewportChange);
-    vv.addEventListener("scroll", handleViewportChange);
-    return () => {
-      if (typeof vv.removeEventListener === "function") {
-        vv.removeEventListener("resize", handleViewportChange);
-        vv.removeEventListener("scroll", handleViewportChange);
-      }
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-    };
-  }, [isOpen, updatePosition]);
+  const coords = useAnchoredPosition(triggerElement, dropdownRef, isOpen, {
+    side: preferredPosition,
+    gap,
+    forceSide: forcePosition,
+  });
 
   useEffect(() => {
     if (!isOpen || focusedIndex < 0) return;
@@ -270,7 +156,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
       className={classes.content || undefined}
       style={dropdownStyle}
       data-state={isOpen ? "open" : "closed"}
-      data-position={coords?.position ?? preferredPosition}
+      data-position={coords?.side ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
       {showSearch && (

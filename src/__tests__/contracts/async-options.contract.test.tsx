@@ -33,7 +33,7 @@ const OPTION_LABELS = ["Apple", "Banana", "Cherry"];
  * Labels the open menu is showing, read from the portalled listbox.
  *
  * Queried off the DOM rather than by role: the listbox holds `visibility:
- * hidden` until `computeDropdownCoords` reports a stable position, which it
+ * hidden` until `useAnchoredPosition` reports a stable position, which it
  * never does under jsdom's absent layout, so every option is outside the
  * accessibility tree here. That is a jsdom artifact, not the state under test --
  * the e2e tier is where the menu's visibility is asserted.

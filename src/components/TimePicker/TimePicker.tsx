@@ -20,6 +20,7 @@ import { useTimePicker } from "./useTimePicker";
 import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons";
 import { ClockFace } from "./ClockFace";
 import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep } from "./utils";
@@ -27,50 +28,6 @@ import { isBrowser } from "../../utils/isBrowser";
 
 import { cn } from "../../utils/scopedCn";
 import { motionSafeClasses } from "../../utils/classLayers";
-interface DropdownCoords {
-  top: number;
-  left: number;
-  width: number;
-  position: "top" | "bottom";
-}
-
-function computeDropdownCoords(
-  triggerEl: HTMLElement,
-  dropdownEl: HTMLElement,
-  preferredPosition: "top" | "bottom",
-  gap: number,
-  forcePosition = false,
-): DropdownCoords {
-  const rect = triggerEl.getBoundingClientRect();
-  const dropdownHeight = dropdownEl.getBoundingClientRect().height;
-  const viewportHeight = isBrowser ? (window.visualViewport?.height ?? window.innerHeight) : 768;
-  const viewportWidth = isBrowser ? (window.visualViewport?.width ?? window.innerWidth) : 1024;
-
-  let position = preferredPosition;
-  if (!forcePosition) {
-    if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
-      if (rect.top - gap - dropdownHeight > 0) {
-        position = "top";
-      }
-    } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
-      if (rect.bottom + gap + dropdownHeight <= viewportHeight) {
-        position = "bottom";
-      }
-    }
-  }
-
-  const top = position === "top"
-    ? rect.top - dropdownHeight - gap
-    : rect.bottom + gap;
-
-  let left = rect.left;
-  const dropdownWidth = rect.width;
-  if (left + dropdownWidth > viewportWidth) {
-    left = Math.max(0, viewportWidth - dropdownWidth);
-  }
-
-  return { top, left, width: rect.width, position };
-}
 
 const TimeOption = memo(function TimeOption({
   time,
@@ -542,41 +499,13 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 
     // ─── Portal dropdown positioning (matches Dropdown/DatePicker pattern) ──
     const triggerElRef = useRef<HTMLDivElement>(null);
-    const [dropdownCoords, setDropdownCoords] = useState<DropdownCoords | null>(null);
     const isPositionStable = useStablePositionAfterOpen(isOpen);
-    const rafIdRef = useRef<number | null>(null);
-
-    const updateDropdownPosition = useCallback(() => {
-      if (!triggerElRef.current || !dropdownContentRef.current) return;
-      setDropdownCoords(
-        computeDropdownCoords(triggerElRef.current, dropdownContentRef.current, dropdownPosition, dropdownGap, forceDropdownPosition),
-      );
-    }, [dropdownPosition, dropdownGap, forceDropdownPosition]);
-
-    // Update position on open (double-RAF to ensure portal is painted)
-    useEffect(() => {
-      if (!isOpen || !isBrowser) return;
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(() => {
-        rafIdRef.current = requestAnimationFrame(updateDropdownPosition);
-      });
-    }, [isOpen, updateDropdownPosition]);
-
-    // Reposition on scroll/resize
-    useEffect(() => {
-      if (!isOpen || !isBrowser) return;
-      const handleReposition = () => {
-        if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = requestAnimationFrame(updateDropdownPosition);
-      };
-      window.addEventListener("scroll", handleReposition, true);
-      window.addEventListener("resize", handleReposition);
-      return () => {
-        window.removeEventListener("scroll", handleReposition, true);
-        window.removeEventListener("resize", handleReposition);
-        if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      };
-    }, [isOpen, updateDropdownPosition]);
+    const dropdownCoords = useAnchoredPosition(
+      triggerElRef,
+      dropdownContentRef,
+      isOpen,
+      { side: dropdownPosition, gap: dropdownGap, forceSide: forceDropdownPosition },
+    );
 
     const portalDropdownStyle: CSSProperties = {
       position: "fixed",
@@ -608,7 +537,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           aria-label={typeof label === "string" ? label : "Time options"}
           className={mergedClasses.content}
           style={portalDropdownStyle}
-          data-position={dropdownCoords?.position ?? dropdownPosition}
+          data-position={dropdownCoords?.side ?? dropdownPosition}
         >
           <div className={mergedClasses.list}>
             {displayOptions.length === 0 ? (

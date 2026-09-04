@@ -305,7 +305,7 @@ const [values, setValues] = useState<string[]>([]);
 | `MultiSelectDropdown.tsx` | Main component, content positioning, ref forwarding |
 | `utils/types.ts` | Props, classes, trigger render props, hook types |
 | `utils/constants.ts` | DEFAULT + UNSTYLED class maps |
-| `utils/helpers.ts` | `computeDropdownCoords`, `scrollOptionIntoView` |
+| `utils/helpers.ts` | `scrollOptionIntoView` |
 | `utils/useMultiSelectDropdown.ts` | Core hook: selection, keyboard, async loading |
 | `utils/icons.tsx` | ChevronDown, Check, X icons |
 | `components/MultiSelectDropdownOption.tsx` | Option row with checkbox |

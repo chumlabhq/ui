@@ -342,7 +342,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 | `SearchableDropdown.tsx` | Main component, content positioning, search, ref forwarding |
 | `utils/types.ts` | Props, classes, trigger render props |
 | `utils/constants.ts` | DEFAULT + UNSTYLED class maps |
-| `utils/helpers.ts` | `computeDropdownCoords`, `scrollOptionIntoView` |
+| `utils/helpers.ts` | `scrollOptionIntoView` |
 | `utils/useDropdown.ts` | Core hook: selection, keyboard, async search |
 | `utils/icons.tsx` | ChevronDown, Check, Search icons |
 | `components/SearchableDropdownOption.tsx` | Option row component |

@@ -24,54 +24,10 @@ import BreadcrumbItemContent from "./components/BreadcrumbItemContent";
 import Tooltip from "../Tooltip/Tooltip";
 import { cn } from "../../utils/scopedCn";
 import { isBrowser } from "../../utils/isBrowser";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
-interface DropdownCoords {
-  top: number;
-  left: number;
-}
-
-function computeDropdownCoords(
-  buttonEl: HTMLButtonElement,
-  dropdownEl: HTMLDivElement,
-  position: "top" | "bottom" | "left" | "right",
-  gap: number,
-): DropdownCoords {
-  const rect = buttonEl.getBoundingClientRect();
-  const dropdownRect = dropdownEl.getBoundingClientRect();
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const MARGIN = 8;
-
-  let top: number;
-  let left: number;
-  switch (position) {
-    case "top":
-      top = rect.top - dropdownRect.height - gap;
-      left = rect.left;
-      break;
-    case "bottom":
-      top = rect.bottom + gap;
-      left = rect.left;
-      break;
-    case "left":
-      top = rect.top;
-      left = rect.left - dropdownRect.width - gap;
-      break;
-    case "right":
-      top = rect.top;
-      left = rect.right + gap;
-      break;
-  }
-
-  // Clamp to viewport so the dropdown never bleeds past an edge when the
-  // trigger sits near a boundary (e.g. last breadcrumb on a narrow window).
-  left = Math.max(MARGIN, Math.min(left, vw - dropdownRect.width - MARGIN));
-  top = Math.max(MARGIN, Math.min(top, vh - dropdownRect.height - MARGIN));
-
-  return { top, left };
-}
 
 // ─── Dropdown Item ─────────────────────────────────────────────────────────
 
@@ -191,35 +147,8 @@ function DropdownPortal({
   portalContainer?: HTMLElement | null;
 }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState<DropdownCoords | null>(null);
-
-  const updatePosition = useCallback(() => {
-    if (!buttonRef.current || !dropdownRef.current) return;
-    setCoords(
-      computeDropdownCoords(buttonRef.current, dropdownRef.current, position, gap),
-    );
-  }, [buttonRef, position, gap]);
-
-  useEffect(() => {
-    requestAnimationFrame(updatePosition);
-  }, [updatePosition]);
-
-  // Reposition on resize and any ancestor scroll (capture phase)
-  useEffect(() => {
-    if (!isBrowser) return;
-    let rafId: number;
-    const handleReposition = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(updatePosition);
-    };
-    window.addEventListener("resize", handleReposition);
-    window.addEventListener("scroll", handleReposition, true);
-    return () => {
-      window.removeEventListener("resize", handleReposition);
-      window.removeEventListener("scroll", handleReposition, true);
-      cancelAnimationFrame(rafId);
-    };
-  }, [updatePosition]);
+  // The portal mounts only while the menu is open, so it is always measuring.
+  const coords = useAnchoredPosition(buttonRef, dropdownRef, true, { side: position, gap });
 
   // Auto-focus first enabled item
   useEffect(() => {
