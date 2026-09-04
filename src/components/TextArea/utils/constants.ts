@@ -9,7 +9,7 @@ export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
     "text-[13px] font-medium mb-1.5 block text-cl-text dark:text-cl-text-secondary",
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
   input:
-    "flex-1 min-w-0 w-full bg-transparent outline-none text-sm resize-y text-cl-text dark:text-white placeholder:text-cl-text-tertiary",
+    "flex-1 min-w-0 w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary",
   message:
     "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
   count:

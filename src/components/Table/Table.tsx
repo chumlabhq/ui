@@ -2297,7 +2297,7 @@ function TableInner<TData>(
           <div
             ref={filterDropdownRef}
             data-table-filter-content
-            className={`fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-white dark:bg-gray-900 border-gray-200 dark:border-white/[0.08]"}`}
+            className={`fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-cl-bg-panel border-gray-200 dark:border-white/[0.08]"}`}
             style={{
               top: filterDropdownState.top,
               left: filterDropdownState.left,

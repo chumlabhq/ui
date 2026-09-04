@@ -316,3 +316,68 @@ asked-for. Confirmed by planting one — `hover:bg-cl-bg-hover` swapped to
 so was detected, but landed in the asked-for bucket. The collateral path is
 exercised separately in the resting capture, where a planted `Accordion` change
 moved collateral from 51 to 67.
+
+
+## Group C — the 44 raw-palette variants
+
+Classified the same way group B was: grouped by value pair first, existing token
+preferred over a new one, and nothing minted outside ADR 005's scheme.
+
+**44 sites, 21 distinct pairs. None matched an existing token exactly**, so each
+was measured against the nearest one instead of being collapsed on sight.
+
+**22 moved onto a token that already covers the role.** Each is a small measured
+shift, not a neutral collapse, so the proof is that the change is confined —
+not that nothing moved.
+
+| n | Was | Now | Shift |
+| --- | --- | --- | --- |
+| 13 | `text-cl-text` + `dark:text-white` | `text-cl-text` | dark `#ffffff` -> `#edeff4` |
+| 3 | `border-cl-border` + `dark:border-white/[0.06]` | `border-cl-border` | dark alpha `0.06` -> `0.08` |
+| 2 | `hover:text-cl-text` + `dark:hover:text-white` | `hover:text-cl-text` | dark `#ffffff` -> `#edeff4` |
+| 2 | `border-cl-border` + `dark:border-white/[0.04]` | `border-cl-border` | dark alpha `0.04` -> `0.08` |
+| 1 | `bg-cl-bg-elevated` + `dark:bg-[#111118]` | `bg-cl-bg-elevated` | dark `#111118` -> `#0a0d12` |
+| 1 | `bg-white` + `dark:bg-gray-900` | `bg-cl-bg-panel` | dark `#111827` -> `#0a0d12` |
+
+Ten components had hard-coded pure white where `--cl-text` already meant
+"primary text", which is the same shape as group B's token bugs — except that
+here the token's value is right and the call sites were wrong.
+
+**Proof, both captures.** Resting: 6,414 elements, 231 changed carrying an
+override, 91 changed carrying none. All 91 of those set no colour class of their
+own — they are descendants inheriting `color` from a parent that did carry the
+override, which is why every `currentColor`-derived property moved with it. The
+classifier is element-local and cannot see ancestry, so inherited change lands
+in its "carried none" bucket; that is a limit of the tool, not a second finding.
+Hover: 526 readings, 114 changed, **0 carrying none**.
+
+### The 22 that remain
+
+No existing token is close, and minting fourteen tokens for fifteen one-off call
+sites is the carelessness ADR 005 exists to prevent. They need a decision, not a
+sweep:
+
+| n | Pair | Component |
+| --- | --- | --- |
+| 3 | `bg-gray-200` / `dark:bg-gray-700` | Accordion, Avatar |
+| 3 | `text-gray-600` / `dark:text-gray-300` | Avatar |
+| 2 | `border-gray-300` / `dark:border-gray-600` | Avatar, Table |
+| 2 | `hover:bg-cl-bg-hover` / `dark:hover:bg-white/6` | InternationalPhoneInput |
+| 2 | `hover:bg-black/5` / `dark:hover:bg-white/10` | TimePicker |
+| 1 | `bg-gray-100` / `dark:bg-gray-600` | Accordion |
+| 1 | `bg-black/60` / `dark:bg-black/70` | Modal |
+| 8 | one-offs: `bg-gray-50`, `bg-inherit`, `text-inherit`, `placeholder-gray-400`, `border-gray-200`, `hover:bg-cl-bg-hover`, `group-hover/resize:bg-gray-400`, `data-[focused]:bg-cl-bg-hover` | Table, IPI |
+
+Two observations for whoever takes them:
+
+- **Nine sites are on Tailwind's grey palette on both sides** (Avatar, Accordion).
+  Nothing in the `--cl-*` set is within 100 units of them. They predate the token
+  system rather than diverging from it, and moving them is a visual decision.
+- **Six are translucent ink washes in dark** — `white/6`, `white/10`,
+  `white/[0.06]`. `--cl-bg-hover` was exactly that until this ADR revalued its
+  dark value to the solid `#0a0d12`, which is why they no longer match anything.
+  If a translucent hover wash is still wanted as a role, it needs its own token
+  under ADR 005 rather than six hand-picked alphas.
+- **`Modal`'s `bg-black/60` / `dark:bg-black/70`** is a scrim, and no token names
+  that role. One site, so it is a candidate for `--cl-overlay` rather than a
+  reason to mint one now.

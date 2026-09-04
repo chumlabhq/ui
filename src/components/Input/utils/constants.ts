@@ -9,7 +9,7 @@ export const DEFAULT_INPUT_CLASSES: Required<InputClasses> = {
     "text-[13px] font-medium mb-1.5 block text-cl-text dark:text-cl-text-secondary",
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
   input:
-    "flex-1 min-w-0 w-full bg-transparent outline-none text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary",
+    "flex-1 min-w-0 w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary",
   prefix: "text-sm select-none text-cl-text-tertiary",
   suffix: "text-sm select-none text-cl-text-tertiary",
   message:

@@ -8,15 +8,15 @@ export {
 
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   root:
-    "w-full border rounded-cl-md overflow-hidden bg-cl-bg border-cl-border dark:border-white/[0.06]",
+    "w-full border rounded-cl-md overflow-hidden bg-cl-bg border-cl-border",
   list: "w-full border-collapse",
   header: "",
   headerRow: "",
   headerCell:
-    "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated dark:bg-[#111118] border-cl-border dark:border-white/[0.06]",
+    "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated border-cl-border",
   headerCellText: "flex items-center",
   body: "",
-  item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
+  item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
   cell: "px-4 py-3 text-sm whitespace-nowrap text-cl-text",
   // Right separator uses an inset box-shadow (not border-r-2) so the
   // parent's `overflow: hidden` + `rounded-cl-md` reliably clips it at
@@ -34,8 +34,8 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   pinButton:
     "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover",
   loading:
-    "w-full border rounded-cl-md overflow-hidden border-cl-border dark:border-white/[0.06]",
-  loadingRow: "border-b border-cl-border dark:border-white/[0.04]",
+    "w-full border rounded-cl-md overflow-hidden border-cl-border",
+  loadingRow: "border-b border-cl-border",
   loadingItem: "px-4 py-2 h-14",
   loadingBar:
     "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.06] dark:from-fg/[0.10] via-fg/[0.06] dark:via-fg/[0.10] to-fg/[0.06] dark:to-fg/[0.10]",

@@ -341,7 +341,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
   control: "flex gap-2 items-stretch data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   input:
-    "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text dark:text-white placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
+    "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
   message:
     "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
   itemRow: "flex items-center gap-2 min-w-0",
@@ -351,7 +351,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
     trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[110px] sm:min-w-[130px] border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 hover:bg-cl-bg-hover dark:hover:bg-white/6 text-cl-text dark:text-cl-text-secondary",
     content: "w-72 border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border-cl-border dark:border-cl-text/10",
     searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border-cl-text/10",
-    searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary",
+    searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary",
     item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover dark:hover:bg-white/6 data-[focused]:bg-cl-bg-hover dark:data-[focused]:bg-white/10 text-cl-text dark:text-cl-text-secondary",
     list: "max-h-60 overflow-y-auto",
     icon: "w-4 h-4 shrink-0 transition-transform duration-200",

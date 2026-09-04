@@ -5,7 +5,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   root: "relative",
   control: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text dark:text-white hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent",
   value: "flex-1 text-left truncate",
   // No overflow-y-auto on the menu itself — submenus pop out to the side
   // as `position: absolute` children of menu items, and `overflow: auto`
@@ -45,7 +45,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   searchControl:
     "flex items-center gap-2 px-3 py-2 border-b border-cl-border",
   searchInput:
-    "flex-1 bg-transparent text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary focus:outline-none",
+    "flex-1 bg-transparent text-sm text-cl-text placeholder:text-cl-text-tertiary focus:outline-none",
   searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
   subSearchControl: "",
   subSearchInput: "",

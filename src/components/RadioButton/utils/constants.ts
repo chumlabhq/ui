@@ -30,7 +30,7 @@ export const UNSTYLED_RADIO_CLASSES: Required<RadioButtonClasses> =
 
 export const DEFAULT_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {
   root: "",
-  label: "text-sm font-medium mb-2 block text-cl-text dark:text-white",
+  label: "text-sm font-medium mb-2 block text-cl-text",
   description: "text-xs text-cl-text-tertiary mb-3",
   message: "text-xs text-cl-error mt-2 text-cl-success",
 };

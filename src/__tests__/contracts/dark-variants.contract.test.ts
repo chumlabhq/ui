@@ -99,7 +99,7 @@ export function classifyDarkVariants(root = resolve(process.cwd(), "src/componen
 }
 
 /** Ratchet. These may fall; they may not rise. */
-const CEILING = { B: 67, C: 44 };
+const CEILING = { B: 67, C: 22 };
 
 describe("dark variant contract", () => {
   const groups = classifyDarkVariants();
@@ -123,7 +123,10 @@ describe("dark variant contract", () => {
     it("is looking at real source", () => {
       // Guards the walker: a broken path would report zero of everything and
       // every assertion below would pass while proving nothing.
-      expect(groups.A.length + groups.B.length + groups.C.length).toBeGreaterThan(100);
+      // Guards the walker: a broken path reports zero of everything and every
+      // assertion below passes while proving nothing. The floor tracks the
+      // shrinking inventory — 89 after ADR 004's group C moves.
+      expect(groups.A.length + groups.B.length + groups.C.length).toBeGreaterThan(50);
     });
   });
 

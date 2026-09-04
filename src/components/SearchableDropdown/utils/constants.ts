@@ -6,7 +6,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     root: "",
     control: "relative",
     trigger:
-      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text dark:text-white hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent",
+      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent",
     value: "flex-1 truncate",
     content:
       "rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border",
@@ -27,7 +27,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     searchControl:
       "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-hover dark:bg-cl-bg",
     searchInput:
-      "flex-1 bg-transparent focus:outline-none text-cl-text dark:text-white placeholder:text-cl-text-tertiary",
+      "flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary",
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
     loading: "",
     loadingItem:

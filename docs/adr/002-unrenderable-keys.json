@@ -40,7 +40,6 @@
     "Table": [
       "border",
       "rounded-cl-md",
-      "bg-white",
       "border-cl-border",
       "py-3",
       "text-sm",
