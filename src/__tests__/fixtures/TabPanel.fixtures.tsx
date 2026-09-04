@@ -1,5 +1,6 @@
 import { TabPanel } from "../../components/TabPanel";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 import { TABS } from "./_data";
 
 const fixtures: Fixtures<typeof TabPanel> = [
@@ -20,4 +21,4 @@ const fixtures: Fixtures<typeof TabPanel> = [
     note: "The only fixture that renders `countInactive`. TABS gives its count to the tab that is active by default, so the inactive badge never appeared — which is how its contrast went unaudited.",
   },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

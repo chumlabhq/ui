@@ -1,6 +1,7 @@
 import { RadioGroup } from "../../components/RadioButton";
 import { RadioButton } from "../../components/RadioButton";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 /**
  * RadioGroup takes RadioButton children, not an `options` array — passing
@@ -25,4 +26,4 @@ const fixtures: Fixtures<typeof RadioGroup> = [
   { name: "loading", props: { loading: true }, children: radios },
   { name: "horizontal", props: { orientation: "horizontal" }, children: radios },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -33,7 +33,11 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
       ? UNSTYLED_LINEAR_LOADER_CLASSES
       : DEFAULT_LINEAR_LOADER_CLASSES;
 
-    const baseClasses = motionSafeClasses(baseClassesRaw, useReducedMotion());
+    const baseClasses = motionSafeClasses(
+      baseClassesRaw,
+      // The prop overrides the query, per useReducedMotion's contract.
+      useReducedMotion(reduceMotion),
+    );
     const mergedClasses: Required<LinearLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

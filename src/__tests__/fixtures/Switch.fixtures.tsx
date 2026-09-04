@@ -1,5 +1,6 @@
 import { Switch } from "../../components/Switch";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof Switch> = [
   { name: "default", props: {} },
@@ -12,4 +13,4 @@ const fixtures: Fixtures<typeof Switch> = [
   { name: "success", props: { label: "Notify", success: true, successMessage: "Saved" } },
   { name: "loading", props: { loading: true } },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -62,7 +62,7 @@ export interface CascadingDropdownClasses {
  * <CascadingDropdown options={tree} value={val} onValueChange={setVal} />
  * ```
  */
-export interface CascadingDropdownProps {
+interface CascadingDropdownBaseProps {
   /** Tree of cascading options with optional `children` arrays. */
   options: CascadingOption[];
   /** `CascadingValue` object `{ parentValue: childValue }`. Not a flat string. Not `selected`. */
@@ -126,10 +126,6 @@ export interface CascadingDropdownProps {
   menuSearchPlaceholder?: string;
   /** Placeholder text for the submenu search input. */
   submenuSearchPlaceholder?: string;
-  /** Async search callback for main menu. Return filtered options. When provided, client-side filtering is disabled for the menu. */
-  onMenuSearch?: (query: string) => Promise<CascadingOption[]>;
-  /** Async search callback for submenu. Receives parent option + query. Return filtered children. When provided, client-side filtering is disabled for the submenu. */
-  onSubmenuSearch?: (query: string, parent: CascadingOption) => Promise<CascadingOption[]>;
   /** Debounce delay in ms for async search callbacks. Defaults to 300. */
   searchDebounceMs?: number;
   /** Custom search icon component. */
@@ -140,6 +136,40 @@ export interface CascadingDropdownProps {
   submenuSearchAriaLabel?: string;
   "aria-label"?: string;
 }
+
+/**
+ * The menu's async search, paired with the control that can fire it.
+ *
+ * `onMenuSearch` is read only when a query is typed, and the query input is
+ * rendered only under `showMenuSearch` — which defaults to false. Supplying the
+ * callback alone is therefore a loader with nothing to trigger it: no search
+ * input ever mounts, `menuSearchQuery` never leaves `""`, and the callback is
+ * dead. That is the same defect the dropdown loader pairs assert, so it is
+ * asserted the same way.
+ */
+export type CascadingMenuSearch =
+  | { onMenuSearch?: never }
+  | {
+      /** Async search for the main menu. Disables client-side filtering there. */
+      onMenuSearch: (query: string) => Promise<CascadingOption[]>;
+      showMenuSearch: true;
+    };
+
+/** The submenu's async search and its control. See `CascadingMenuSearch`. */
+export type CascadingSubmenuSearch =
+  | { onSubmenuSearch?: never }
+  | {
+      /** Async search for a submenu. Receives the parent option and the query. */
+      onSubmenuSearch: (
+        query: string,
+        parent: CascadingOption,
+      ) => Promise<CascadingOption[]>;
+      showSubmenuSearch: true;
+    };
+
+export type CascadingDropdownProps = CascadingDropdownBaseProps &
+  CascadingMenuSearch &
+  CascadingSubmenuSearch;
 
 export interface CascadingDropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;

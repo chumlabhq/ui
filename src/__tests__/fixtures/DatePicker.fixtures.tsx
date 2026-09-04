@@ -2,6 +2,7 @@ import { fireEvent } from "@testing-library/react";
 import { tick } from "./_act";
 import { DatePicker } from "../../components/DatePicker";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const D = new Date(2026, 0, 15);
 
@@ -54,4 +55,4 @@ const fixtures: Fixtures<typeof DatePicker> = [
   { name: "disabled", props: { disabled: true } },
   { name: "loading", props: { loading: true } },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

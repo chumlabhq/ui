@@ -76,7 +76,9 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
   // ─── Merged classes system ──────────────────────────────────────────
-  const prefersReducedMotionForClasses = useReducedMotion();
+  // The prop, not the bare query: it was calming this component's JS-driven
+  // motion while leaving every motion utility in the class strings.
+  const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
   const baseClassesRaw = unstyled ? UNSTYLED_BUTTON_CLASSES : DEFAULT_BUTTON_CLASSES;
   // Motion is decorative under ADR 001, so `unstyled` has already removed it;

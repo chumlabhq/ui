@@ -1,5 +1,6 @@
 import { Button } from "../../components/Button";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof Button> = [
   { name: "default", props: {}, children: "Save" },
@@ -12,4 +13,4 @@ const fixtures: Fixtures<typeof Button> = [
   },
   { name: "full-width", props: { fullWidth: true }, children: "Save" },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

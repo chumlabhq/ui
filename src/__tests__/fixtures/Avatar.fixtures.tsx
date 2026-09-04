@@ -1,5 +1,6 @@
 import { Avatar, AvatarGroup } from "../../components/Avatar";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 /** A 1x1 transparent PNG, so `load` actually fires in a browser. */
 const PNG_1PX =
@@ -33,4 +34,4 @@ const fixtures: Fixtures<typeof Avatar> = [
     note: "A data URI, not a URL: the fixture page has no network and CSP blocks one, so a real decode needs the bytes inline.",
   },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

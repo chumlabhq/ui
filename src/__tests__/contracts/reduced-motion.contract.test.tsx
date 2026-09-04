@@ -127,7 +127,15 @@ describe("reduced motion contract", () => {
   describe.each(candidates)("$name", (component) => {
     // `render` fixtures own their markup; these suites drive the component
     // themselves from fixture props, so there is nothing for them to apply.
-    const fixtures = fixturesFor(component.name).filter((f) => !f.render);
+    //
+    // The `reduce-motion-*` fixtures are excluded too, and the reason is the
+    // point of the suite below: they set the `reduceMotion` prop, and
+    // `reduce-motion-refused` sets it to `false` deliberately. This suite
+    // asserts what the media query alone does, so a fixture that overrides the
+    // query would fail it for doing exactly what it was written to do.
+    const fixtures = fixturesFor(component.name).filter(
+      (f) => !f.render && !f.name.startsWith("reduce-motion-"),
+    );
     // Whether this component claims to animate at all, read from its own
     // defaults. A component with no motion in its constants is not required to
     // produce any — but one that declares motion must actually emit it, or the
@@ -193,5 +201,137 @@ describe("reduced motion contract", () => {
       ).toEqual([]);
       },
     );
+  });
+});
+
+/**
+ * The `reduceMotion` prop, asserted independently of the media query.
+ *
+ * The suite above drives `prefers-reduced-motion` and nothing else, so it tests
+ * what `"auto"` — the default — defers to. It never sets the prop, and the prop
+ * is the half a consumer controls: 16 components accept
+ * `reduceMotion?: boolean | "auto"` and not one fixture supplied a value other
+ * than the default.
+ *
+ * Precedence is unambiguous in `useReducedMotion`:
+ *
+ *     return reduceMotion === "auto" ? prefersReducedMotion : reduceMotion;
+ *
+ * An explicit boolean overrides the query outright; `"auto"` defers to it. The
+ * hook's own documentation says so — "Pass `true`/`false` to override the query,
+ * `\"auto\"` (the default) to follow it" — so the intended precedence is not in
+ * doubt.
+ *
+ * What was in doubt was whether the *decorative classes* followed the same rule,
+ * because the source did both. Four components resolved prop-vs-query once and
+ * used the result everywhere; eight called `useReducedMotion()` with no argument
+ * for `motionSafeClasses` and honoured the prop only for behavioural motion. On
+ * those eight, `reduceMotion={true}` calmed JS-driven animation while leaving
+ * every `transition-*` and `animate-*` utility in place.
+ *
+ * There is one precedence, and it is the documented one: the prop overrides the
+ * query on both paths. Both directions are asserted below, because each fails a
+ * different way — `{true}` ignored is a capability that does not work, `{false}`
+ * ignored is a capability that works when it should not.
+ *
+ * The consequence is worth naming: `reduceMotion={false}` animates for a user
+ * who has asked their operating system for less motion. That is an author
+ * override of a stated accessibility preference. It is what the hook documents
+ * and what four components already did, so it is asserted rather than quietly
+ * changed — but it is a policy decision, not a technical one, and it is the
+ * place to revisit if the answer should be "the prop may lower motion and may
+ * not raise it".
+ */
+describe("the reduceMotion prop", () => {
+  // Linked to the fixtures rather than to a list: a component whose motion
+  // fixtures are removed drops out of this suite loudly, via the lookup below.
+  const withMotionProp = candidates.filter((c) =>
+    fixturesFor(c.name).some((f) => f.name === "reduce-motion-forced"),
+  );
+
+  it("covers every component that accepts the prop", () => {
+    expect(withMotionProp.length).toBe(16);
+  });
+
+  /**
+   * Components whose motion fixture emits nothing to calm, so the assertions
+   * below cannot fail for them.
+   *
+   * Named rather than skipped. The fixtures are derived from each component's
+   * simplest state, and for five that state has no animation in it — Drawer's
+   * closed panel, Switch's resting track. That makes their pair of assertions
+   * vacuous, which is worth seeing: it is the difference between "honours the
+   * prop" and "was never asked to".
+   */
+  it("names the components whose motion fixture proves nothing", async () => {
+    const vacuous: string[] = [];
+    for (const component of withMotionProp) {
+      const refused = fixturesFor(component.name).filter(
+        (f) => !f.render && f.name === "reduce-motion-refused",
+      );
+      const moving = await tokensUnder(component, refused, false);
+      if (moving.size === 0) vacuous.push(component.name);
+    }
+    // A ratchet, not a target: this list may shrink as fixtures reach richer
+    // states, and must not grow without someone noticing.
+    expect(vacuous.sort()).toEqual([
+      "CountryFlag",
+      "Drawer",
+      "ResizablePanel",
+      "Stepper",
+      "Switch",
+    ]);
+  });
+
+  describe("self-check", () => {
+    it("would catch a component that ignored the prop", () => {
+      // The shape of the bug: a component that reads only the media query.
+      const ignoresProp = (_prop: boolean | "auto", query: boolean) => query;
+      const honoursProp = (prop: boolean | "auto", query: boolean) =>
+        prop === "auto" ? query : prop;
+
+      // With the query saying "no preference", only the honouring one stops.
+      expect(ignoresProp(true, false)).toBe(false);
+      expect(honoursProp(true, false)).toBe(true);
+      // And on disagreement the honouring one keeps motion where the other cuts it.
+      expect(ignoresProp(false, true)).toBe(true);
+      expect(honoursProp(false, true)).toBe(false);
+    });
+  });
+
+  describe.each(withMotionProp)("$name", (component) => {
+    const fixtures = fixturesFor(component.name).filter((f) => !f.render);
+    const forced = fixtures.filter((f) => f.name === "reduce-motion-forced");
+    const refused = fixtures.filter((f) => f.name === "reduce-motion-refused");
+    const waived = new Set(MOTION_LEAKS[component.name] ?? []);
+    const surviving = (tokens: Set<string>) =>
+      [...tokens].filter((t) => !waived.has(t));
+
+    it("stops animating on the prop alone, with the query saying otherwise", async () => {
+      // The query is explicitly "no preference" here, so anything that stops
+      // can only have stopped because of the prop.
+      const still = surviving(await tokensUnder(component, forced, false));
+      expect(
+        still,
+        `${component.name} kept animating under reduceMotion={true} while the media query said no preference: ${still.join(" ")}`,
+      ).toEqual([]);
+    });
+
+    it("stops animating on the prop and the query together", async () => {
+      const still = surviving(await tokensUnder(component, forced, true));
+      expect(still).toEqual([]);
+    });
+
+    it("keeps the prop's answer when it disagrees with the query", async () => {
+      // `reduceMotion={false}` against a media query asking for reduced motion.
+      // The prop overrides, per `useReducedMotion`, so the render must be the
+      // same as it is with no preference set — the query must not reach in.
+      const underDisagreement = await tokensUnder(component, refused, true);
+      const underAgreement = await tokensUnder(component, refused, false);
+      expect(
+        [...underDisagreement].sort(),
+        `${component.name} let the media query overrule an explicit reduceMotion={false}`,
+      ).toEqual([...underAgreement].sort());
+    });
   });
 });

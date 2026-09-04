@@ -1,5 +1,6 @@
 import { Checkbox } from "../../components/Checkbox";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof Checkbox> = [
   { name: "default", props: {} },
@@ -23,4 +24,4 @@ const fixtures: Fixtures<typeof Checkbox> = [
     ),
   },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

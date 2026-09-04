@@ -623,7 +623,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const resolvedShowClearButton = showClearButton ?? clearable ?? true;
 
     // ─── Merged classes ────────────────────────────────────────────────
-    const prefersReducedMotionForClasses = useReducedMotion();
+    // The prop, not the bare query: it was calming this component's JS-driven
+    // motion while leaving every motion utility in the class strings.
+    const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
     const baseClassesRaw = unstyled
       ? UNSTYLED_DATEPICKER_CLASSES

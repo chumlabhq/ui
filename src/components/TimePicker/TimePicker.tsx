@@ -212,7 +212,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
     // ── Class merging (matches library pattern: classes ?? base) ────────
-    const prefersReducedMotionForClasses = useReducedMotion();
+    // The prop, not the bare query: it was calming this component's JS-driven
+    // motion while leaving every motion utility in the class strings.
+    const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
     const baseClassesRaw = unstyled
       ? UNSTYLED_TIMEPICKER_CLASSES

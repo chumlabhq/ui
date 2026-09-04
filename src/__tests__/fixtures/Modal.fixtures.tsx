@@ -1,5 +1,6 @@
 import { Modal } from "../../components/Modal";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof Modal> = [
   { name: "open", props: { open: true, title: "Title", description: "Description" }, children: "Body" },
@@ -8,4 +9,4 @@ const fixtures: Fixtures<typeof Modal> = [
   { name: "full-screen", props: { open: true, fullScreen: true, title: "Title" }, children: "Body" },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true, title: "Title" }, children: "Body" },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

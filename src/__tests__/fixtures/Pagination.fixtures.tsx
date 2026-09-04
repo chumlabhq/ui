@@ -1,6 +1,7 @@
 import { Pagination } from "../../components/Pagination";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 /**
  * `defaultValue`, not `value`: these fixtures are clicked in e2e, and a
@@ -28,4 +29,4 @@ const fixtures: Fixtures<typeof Pagination> = [
   { name: "with-page-info", props: { defaultValue: 1, totalPages: 5, renderPageInfo: () => "1 of 5" }, note: "pageInfo has no boolean flag; it exists only via renderPageInfo." },
   { name: "disabled", props: { defaultValue: 1, totalPages: 5, disabled: true } },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

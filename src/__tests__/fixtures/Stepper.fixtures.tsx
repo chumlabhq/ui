@@ -1,5 +1,6 @@
 import { Stepper } from "../../components/Stepper";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 import { STEPS } from "./_data";
 
 const fixtures: Fixtures<typeof Stepper> = [
@@ -15,4 +16,4 @@ const fixtures: Fixtures<typeof Stepper> = [
   { name: "with-tooltips", props: { steps: STEPS.map((s) => ({ ...s, tooltip: "Tip" })), value: 1, showTooltips: true } },
   { name: "last-complete", props: { steps: STEPS, value: 2 } },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

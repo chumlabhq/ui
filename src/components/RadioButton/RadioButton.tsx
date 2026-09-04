@@ -234,7 +234,12 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
 
     // ─── Merged classes ─────────────────────────────────────────────────
     const baseClassesRaw = unstyled ? UNSTYLED_RADIO_CLASSES : DEFAULT_RADIO_CLASSES;
-    const baseClasses = motionSafeClasses(baseClassesRaw, useReducedMotion());
+    const baseClasses = motionSafeClasses(
+      baseClassesRaw,
+      // The group already resolved prop-vs-query into `ctx.reduceMotion`; the
+      // classes read that rather than the query on its own.
+      ctx.reduceMotion === true,
+    );
     const mergedClasses: Required<RadioButtonClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

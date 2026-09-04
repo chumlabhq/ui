@@ -3,6 +3,7 @@ import DrawerCloseButton from "../../components/Drawer/components/DrawerCloseBut
 import DrawerHeader from "../../components/Drawer/components/DrawerHeader";
 import { IndexPicker, Toggle } from "./_harness";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof Drawer> = [
   {
@@ -84,4 +85,4 @@ const fixtures: Fixtures<typeof Drawer> = [
   { name: "open-left", props: { open: true, direction: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader title="Drawer" />Body</> },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

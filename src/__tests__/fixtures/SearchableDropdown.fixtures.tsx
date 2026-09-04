@@ -2,6 +2,8 @@ import { SearchableDropdown } from "../../components/SearchableDropdown";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
 import { OPTIONS } from "./_data";
+import { neverResolves, resolvesTo, settleAsync } from "./_async";
+
 
 const fixtures: Fixtures<typeof SearchableDropdown> = [
   { name: "closed", props: { options: OPTIONS } },
@@ -43,6 +45,44 @@ const fixtures: Fixtures<typeof SearchableDropdown> = [
     name: "async-searched",
     props: { onSearch: async () => OPTIONS, defaultOpen: true, showSearch: true },
     note: "Async with no initialOptions: the menu is empty until a query resolves.",
+  },
+  // The initial-load branch: `loadInitialOnOpen` + `onLoadInitialOptions`, which
+  // sits on the async half of the option-source union and is separate from the
+  // `onSearch` states above. Unlike Dropdown this one loads from an effect keyed
+  // on `isOpen`, so `defaultOpen` is enough to reach it.
+  {
+    name: "async-initial-load-pending",
+    props: {
+      onSearch: resolvesTo(OPTIONS),
+      onLoadInitialOptions: neverResolves(),
+      loadInitialOnOpen: true,
+      defaultOpen: true,
+      showSearch: true,
+    },
+    note: "Opened with the prefetch in flight — the menu is mounted and empty.",
+  },
+  {
+    name: "async-initial-load-resolved",
+    props: {
+      onSearch: resolvesTo(OPTIONS),
+      onLoadInitialOptions: resolvesTo(OPTIONS),
+      loadInitialOnOpen: true,
+      defaultOpen: true,
+      showSearch: true,
+    },
+    act: settleAsync,
+  },
+  {
+    name: "async-initial-load-empty",
+    props: {
+      onSearch: resolvesTo(OPTIONS),
+      onLoadInitialOptions: resolvesTo([]),
+      loadInitialOnOpen: true,
+      defaultOpen: true,
+      showSearch: true,
+    },
+    act: settleAsync,
+    note: "Prefetch returned nothing: the empty state, not the loading state.",
   },
 ];
 export default fixtures;

@@ -3,6 +3,7 @@ import AccordionItem from "../../components/Accordion/components/AccordionItem";
 import AccordionTrigger from "../../components/Accordion/components/AccordionTrigger";
 import AccordionContent from "../../components/Accordion/components/AccordionContent";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 /** The parts under `item` only exist when real items are nested inside. */
 const items = (
@@ -52,4 +53,4 @@ const fixtures: Fixtures<typeof Accordion> = [
   { name: "headings", props: { type: "single", headingLevel: 3, defaultValue: "one" }, children: items },
   { name: "disabled", props: { type: "single", disabled: true }, children: items },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

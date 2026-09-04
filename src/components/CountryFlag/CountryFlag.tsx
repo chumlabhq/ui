@@ -82,7 +82,9 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     const src = usePackaged ? packagedSrc : `${basePath}/${normalizedCode}.svg`;
 
     // ─── Merged classes ─────────────────────────────────────────────────
-    const prefersReducedMotionForClasses = useReducedMotion();
+    // The prop, not the bare query: it was calming this component's JS-driven
+    // motion while leaving every motion utility in the class strings.
+    const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
     const baseClassesRaw = unstyled ? UNSTYLED_COUNTRYFLAG_CLASSES : DEFAULT_COUNTRYFLAG_CLASSES;
     // Motion is decorative under ADR 001, so `unstyled` has already removed it;

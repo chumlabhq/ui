@@ -1,8 +1,9 @@
 import { ResizablePanel } from "../../components/ResizablePanel";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof ResizablePanel> = [
   { name: "default", props: {}, children: <div>Panel</div> },
   { name: "disabled", props: { disabled: true }, children: <div>Panel</div> },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -1,5 +1,6 @@
 import { CountryFlag } from "../../components/CountryFlag";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof CountryFlag> = [
   {
@@ -14,4 +15,4 @@ const fixtures: Fixtures<typeof CountryFlag> = [
     note: "showFallback needs an invalid code AND a fallback node — it renders null otherwise.",
   },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];

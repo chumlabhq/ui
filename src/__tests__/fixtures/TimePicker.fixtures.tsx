@@ -1,6 +1,7 @@
 import { TimePicker } from "../../components/TimePicker";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
+import { motionOverrides } from "./_motion";
 
 const fixtures: Fixtures<typeof TimePicker> = [
   { name: "closed", props: {} },
@@ -25,4 +26,4 @@ const fixtures: Fixtures<typeof TimePicker> = [
   { name: "success", props: { label: "Time", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { disabled: true } },
 ];
-export default fixtures;
+export default [...fixtures, ...motionOverrides(fixtures[0])];
