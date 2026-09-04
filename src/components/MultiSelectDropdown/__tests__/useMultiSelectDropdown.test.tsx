@@ -107,10 +107,18 @@ describe("useMultiSelectDropdown", () => {
       expect(result.current.isOpen).toBe(false);
     });
 
-    it("resets focusedIndex to -1 on open", () => {
+    it("opens with no active option", () => {
+      // The reset moved into `useMenuNavigation`, which clears the index when
+      // the surface closes rather than when it opens. Reached the way a user
+      // reaches it — open, highlight, close, reopen — the observable result is
+      // the same; only setting an index on a closed menu by hand can tell the
+      // two apart, and nothing does that.
       const { result } = renderDefault();
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(2));
       act(() => result.current.handleToggle());
+      act(() => result.current.handleToggle());
+      expect(result.current.isOpen).toBe(true);
       expect(result.current.focusedIndex).toBe(-1);
     });
 
@@ -382,12 +390,15 @@ describe("useMultiSelectDropdown", () => {
       expect(result.current.focusedIndex).toBe(3); // date (last enabled)
     });
 
-    it("does nothing when dropdown is closed", () => {
+    it("opens the dropdown on the last enabled option when closed", () => {
+      // Changed with the menu primitive, deliberately. ARIA's combobox pattern
+      // opens on ArrowUp and lands on the last option, which is what Dropdown
+      // has always done; this component silently ignored the key because its
+      // ArrowUp branch was guarded on `isOpen` with no else.
       const { result } = renderDefault();
-      act(() => result.current.setFocusedIndex(2));
       act(() => result.current.handleKeyDown(makeKeyEvent("ArrowUp")));
-      // focusedIndex unchanged and dropdown still closed
-      expect(result.current.isOpen).toBe(false);
+      expect(result.current.isOpen).toBe(true);
+      expect(result.current.focusedIndex).toBe(3);
     });
 
     it("calls preventDefault", () => {

@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation";
 import type {
   MultiSelectOption,
   UseMultiSelectDropdownProps,
@@ -6,9 +7,6 @@ import type {
 } from "./types";
 import { useControllableState } from "../../../utils/useControllableState";
 
-function getFirstEnabledIndex(opts: MultiSelectOption[]): number {
-  return opts.findIndex((o) => !o.disabled);
-}
 
 export function useMultiSelectDropdown({
   options = [],
@@ -34,7 +32,6 @@ export function useMultiSelectDropdown({
     onChange: onOpenChange,
   });
 
-  const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
   const [loadedOptions, setLoadedOptions] = useState<MultiSelectOption[]>([]);
   // State, not a ref: `shouldLoad` is computed during render and a ref cannot
@@ -121,22 +118,17 @@ export function useMultiSelectDropdown({
     };
   }, [shouldLoad, onLoadOptions, onLoadError]);
 
+  // The active index is not reset here: `useMenuNavigation` clears it whenever
+  // the surface closes, so doing it again from the toggle would be a second
+  // owner of the same state.
   const handleToggle = useCallback(() => {
     if (disabled) return;
-    setIsOpen((prev: boolean) => {
-      if (prev) {
-        setFocusedIndex(-1);
-        return false;
-      }
-      setFocusedIndex(-1);
-      return true;
-    });
+    setIsOpen((prev: boolean) => !prev);
   }, [disabled, setIsOpen]);
 
   const handleClose = useCallback(() => {
     shouldRestoreFocusRef.current = true;
     setIsOpen(false);
-    setFocusedIndex(-1);
   }, [setIsOpen]);
 
   const handleOptionToggle = useCallback(
@@ -169,85 +161,37 @@ export function useMultiSelectDropdown({
     [value, displayOptions, onValueChange, setValue],
   );
 
+  /**
+   * The shared keyboard model. This component's list is exactly the shape the
+   * primitive describes — wrap at the ends, skip disabled, Enter and Space
+   * commit, Home and End to the enabled extremes — so there is nothing left
+   * here but the two things that are its own: refusing keys while disabled, and
+   * what "commit" means for a multi-select.
+   */
+  const {
+    activeIndex: focusedIndex,
+    setActiveIndex: setFocusedIndex,
+    onKeyDown: onMenuKeyDown,
+  } = useMenuNavigation<MultiSelectOption>({
+    items: displayOptions,
+    isOpen,
+    isDisabled: (option) => !!option.disabled,
+    onSelect: handleOptionToggle,
+    onOpen: handleToggle,
+    onClose: (reason) => {
+      // Tab is already closing the surface through blur; calling handleClose
+      // would additionally set the restore-focus flag and pull focus back to
+      // the trigger the user is tabbing away from.
+      if (reason === "escape") handleClose();
+    },
+  });
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (disabled) return;
-
-      switch (event.key) {
-        case "Enter":
-        case " ":
-          event.preventDefault();
-          if (isOpen && focusedIndex >= 0 && displayOptions[focusedIndex]) {
-            handleOptionToggle(displayOptions[focusedIndex]);
-          } else if (!isOpen) {
-            handleToggle();
-          }
-          break;
-        case "Escape":
-          if (isOpen) {
-            event.preventDefault();
-            handleClose();
-          }
-          break;
-        case "ArrowDown":
-          event.preventDefault();
-          if (!isOpen) {
-            setIsOpen(true);
-            const first = getFirstEnabledIndex(displayOptions);
-            if (first !== -1) setFocusedIndex(first);
-          } else {
-            setFocusedIndex((prev) => {
-              const nextIndex = prev < displayOptions.length - 1 ? prev + 1 : 0;
-              for (let i = nextIndex; i < displayOptions.length; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = 0; i < nextIndex; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          if (isOpen) {
-            setFocusedIndex((prev) => {
-              const nextIndex = prev > 0 ? prev - 1 : displayOptions.length - 1;
-              for (let i = nextIndex; i >= 0; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = displayOptions.length - 1; i > nextIndex; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-          break;
-        case "Home":
-          event.preventDefault();
-          if (isOpen) {
-            const firstEnabledIndex = displayOptions.findIndex(
-              (option) => !option.disabled,
-            );
-            if (firstEnabledIndex !== -1) {
-              setFocusedIndex(firstEnabledIndex);
-            }
-          }
-          break;
-        case "End":
-          event.preventDefault();
-          if (isOpen) {
-            for (let i = displayOptions.length - 1; i >= 0; i--) {
-              if (!displayOptions[i].disabled) {
-                setFocusedIndex(i);
-                break;
-              }
-            }
-          }
-          break;
-      }
+      onMenuKeyDown(event);
     },
-    [disabled, isOpen, focusedIndex, displayOptions, handleToggle, handleClose, handleOptionToggle, setIsOpen],
+    [disabled, onMenuKeyDown],
   );
 
   return {
