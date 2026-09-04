@@ -11,8 +11,8 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   thumb:
     "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab",
   valueText:
-    "absolute px-2 py-1 text-xs font-medium text-white bg-cl-bg-elevated rounded-cl-md shadow-sm whitespace-nowrap pointer-events-none",
-  marker: "rounded-full bg-cl-bg-elevated border-2 border-cl-border-input text-xs text-cl-text-tertiary",
+    "absolute px-2 py-1 text-xs font-medium text-white bg-cl-bg-panel rounded-cl-md shadow-sm whitespace-nowrap pointer-events-none",
+  marker: "rounded-full bg-cl-bg-panel border-2 border-cl-border-input text-xs text-cl-text-tertiary",
   message: "text-sm text-cl-error mt-1 text-cl-success",
 };
 

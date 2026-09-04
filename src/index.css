@@ -99,6 +99,7 @@
   --cl-bg: #050608;
   --cl-bg-elevated: #0a0d12;
   --cl-bg-hover: #0a0d12;
+  --cl-bg-panel: #0a0d12;
   --cl-bg-input: #050608;
 
   /* Text */
@@ -213,8 +214,9 @@
      on-accent flips white so the primary button stays high-contrast. */
 
   --cl-bg: #ffffff;
-  --cl-bg-elevated: #ffffff;
+  --cl-bg-elevated: #f8f9fb;
   --cl-bg-hover: rgba(15, 18, 24, 0.04);
+  --cl-bg-panel: #ffffff;
   --cl-bg-input: #ffffff;
 
   --cl-text: #0f1218;
@@ -314,6 +316,7 @@
 
   --color-cl-bg: var(--cl-bg);
   --color-cl-bg-elevated: var(--cl-bg-elevated);
+  --color-cl-bg-panel: var(--cl-bg-panel);
   --color-cl-bg-hover: var(--cl-bg-hover);
   --color-cl-bg-input: var(--cl-bg-input);
 

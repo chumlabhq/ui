@@ -16,8 +16,8 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
   ellipsis: "px-2 select-none text-cl-text-tertiary",
   rowsPerPage: {
     root: "flex items-center gap-2",
-    trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md border transition-colors cursor-pointer border-cl-border bg-cl-bg-elevated hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
-    content: "rounded-cl-md shadow-lg py-1 border min-w-[64px] bg-cl-bg-elevated border-cl-border",
+    trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md border transition-colors cursor-pointer border-cl-border bg-cl-bg-panel hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    content: "rounded-cl-md shadow-lg py-1 border min-w-[64px] bg-cl-bg-panel border-cl-border",
     positioner: "relative",
     item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 data-[selected]:bg-cl-accent/15 dark:data-[selected]:bg-cl-accent/60 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:data-[highlighted]:bg-cl-text/10 text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     icon: "w-4 h-4 transition-transform text-cl-text-tertiary",

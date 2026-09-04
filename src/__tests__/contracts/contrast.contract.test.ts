@@ -107,6 +107,9 @@ const SURFACES = [
   "--cl-bg-elevated",
   "--cl-bg-hover",
   "--cl-bg-input",
+  // Minted by ADR 004 for the panel role. A surface token that text sits on
+  // belongs in this list the moment it exists, or the gate covers four of five.
+  "--cl-bg-panel",
 ];
 
 const AA_TEXT = 4.5;

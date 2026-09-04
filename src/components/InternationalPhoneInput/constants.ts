@@ -349,7 +349,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   itemText: "text-sm wrap-break-word min-w-0",
   countrySelect: {
     trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[110px] sm:min-w-[130px] border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 hover:bg-cl-bg-hover dark:hover:bg-white/6 text-cl-text dark:text-cl-text-secondary",
-    content: "w-72 border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-elevated border-cl-border dark:border-cl-text/10",
+    content: "w-72 border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border-cl-border dark:border-cl-text/10",
     searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border-cl-text/10",
     searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary",
     item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover dark:hover:bg-white/6 data-[focused]:bg-cl-bg-hover dark:data-[focused]:bg-white/10 text-cl-text dark:text-cl-text-secondary",

@@ -5,7 +5,14 @@ Tokens are public API, and this program has already shipped one vocabulary
 carelessly enough to need ADR 002 to unpick it.
 
 **Decision (2026-09-07):** fix the token bugs, mint nothing. §1, §2 and §3 were
-revalued; §4 was left alone. 85 of the 152 call sites collapsed; 67 remain.
+revalued; §4 was left alone.
+
+**Amended (2026-09-08):** §2 was wrong and is reverted. Revaluing
+`--cl-bg-elevated`'s light value to `#ffffff` made it equal `--cl-bg`, so a
+token named *elevated* no longer sat above anything — and 51 elements that never
+asked for it, `Table`'s header among them, lost their tint. The light value is
+back at `#f8f9fb` and the panel role has its own token, `--cl-bg-panel`. All 27
+of the affected sites are a clean fit; the collapse total is unchanged at 85. 85 of the 152 call sites collapsed; 67 remain.
 `contrast.contract` stayed green on its own terms — it was not re-baselined, and
 a planted bad value confirmed it still fails when a revaluation breaks a ratio.
 
@@ -240,3 +247,72 @@ Two limits worth stating. The capture reads the resting state, so the
 `hover:`-scoped half of the `--cl-bg-hover` revaluation is not exercised by it —
 which is why only 6 of the 85 collapses show as moved elements. And the analysis
 compares the shipped fixtures, not every possible consumer usage.
+
+
+## Amendment: `--cl-bg-panel`
+
+`--cl-bg-elevated: #f8f9fb` (light) / `#0a0d12` (dark) — restored.
+`--cl-bg-panel: #ffffff` (light) / `#0a0d12` (dark) — new.
+
+Two roles that a single value cannot serve. `Table`'s header wants a surface a
+shade above the page; a dropdown, calendar or menu panel wants pure white with a
+border. Collapsing them served the second by breaking the first, and broke the
+name while doing it.
+
+**There is no precedent scheme for design tokens, and this was minted without
+one.** ADR 002's precedent ledger governs `classes` key names — the anatomy
+parts — not CSS custom properties, and nothing else in the repo governs
+`--cl-*`. Saying so is the point: the name was chosen against the only evidence
+available, which is the existing family's own shape.
+
+- **Internal convention:** the surface family is `--cl-bg`, `--cl-bg-elevated`,
+  `--cl-bg-hover`, `--cl-bg-input`. `--cl-bg-<role>` is the established form and
+  `panel` names the role rather than the appearance, which is what the other
+  four do.
+- **Peer precedent: not verified.** Radix Themes is recalled to ship
+  `--color-panel-*` and shadcn/ui a `--popover` surface, but this was written
+  without network access and ADR 002 exists because a name was once justified by
+  exactly that kind of recall. Treat the peer claim as unverified; the internal
+  convention is the whole of the argument.
+- **Not a duplicate.** No existing token holds `#ffffff` / `#0a0d12`.
+  `--cl-bg-elevated` differs in light, `--cl-bg` differs in dark.
+
+`--cl-bg-panel` was added to `contrast.contract`'s surface list at the same time
+— a surface token that text sits on belongs in the gate the moment it exists, or
+the gate covers four of five. It clears AA for all three text tokens in both
+themes (27 assertions became 33).
+
+## Amendment: what the hover measurement found
+
+`capture-theme-styles.mjs` reads the resting state, so 28 of the 37
+`--cl-bg-hover` collapses were unexercised by it.
+`scripts/capture-hover-styles.mjs` forces `:hover` through CDP — not
+`locator.hover()`, which fails on anything scrolled out of view or covered, and
+would have silently shrunk the measured set — and reads 263 elements across 152
+fixtures in both themes, with no probe unreachable.
+
+**Every one of the 148 elements using `hover:bg-cl-bg-hover` in the baseline also
+carried a `dark:hover:` override. Not one used the token's dark value as it
+stood.** That is the strongest evidence in this document that the value was
+wrong rather than the call sites.
+
+14 hovered readings changed, and none of them for the reason one would guess:
+
+| n | What | Why |
+| --- | --- | --- |
+| 12 | `DatePicker` hovered border in dark: `rgba(237,239,244,0.08)` -> transparent | The trigger is focused while the picker is open. `focus:border-transparent` and `hover:border-cl-border-input` are the same specificity, and Tailwind emits `dark:` after `focus:` — so the removed `dark:hover:border-cl-border` had been masking the focus rule in dark only. Removing it makes dark agree with light. |
+| 2 | `Accordion` `flush` hovered background in dark: `#0a0d12` -> transparent | `flush` sets `hover:bg-transparent`. `dark:hover:bg-cl-bg-elevated` was a different utility group to tailwind-merge, so it survived the merge and gave flush a hover background in dark that it does not have in light. Collapsing it into `hover:bg-cl-bg-hover` puts both in one group and the variant wins, as it already did in light. |
+
+Both are the same shape: a `dark:` variant sitting later in the cascade than the
+`hover:`/`focus:` rule it shadowed, so dark behaved differently from light for
+no stated reason. Reported rather than folded in, because they are behaviour
+changes even though each makes the two themes agree.
+
+**Limit of the classifier.** It answers "did this element carry one of the
+removed classes", not "is this particular delta attributable to that class". A
+planted change on an element that also carried an override is counted as
+asked-for. Confirmed by planting one — `hover:bg-cl-bg-hover` swapped to
+`hover:bg-cl-accent` in `Breadcrumb` — which moved the count from 14 to 50 and
+so was detected, but landed in the asked-for bucket. The collateral path is
+exercised separately in the resting capture, where a planted `Accordion` change
+moved collateral from 51 to 67.
