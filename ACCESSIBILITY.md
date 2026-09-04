@@ -2,7 +2,7 @@
 
 **Target:** WCAG 2.2 Level AA
 **Scope:** the 30 components published from this package
-**Last reviewed:** 2026-09-04
+**Last reviewed:** 2026-09-05
 **Decision record:** [ADR 003](docs/adr/003-accessibility-conformance-target.md)
 
 ## How to read this document
@@ -42,7 +42,7 @@ the row says which half is ours.
 
 | SC | Level | Status | Justification | Gate |
 | --- | --- | --- | --- | --- |
-| 1.1.1 Non-text Content | A | Partially supports | Decorative icons carry `aria-hidden`; icon-only controls take `aria-label`. Controls that mount with no accessible name warn in development. Not every one of the 30 components has been audited for icon labelling. | `src/components/Input/__tests__/accessibleName.test.tsx`; `e2e/accessibility-full.spec.ts` (axe `button-name`, `image-alt`) |
+| 1.1.1 Non-text Content | A | Partially supports | Decorative icons carry `aria-hidden`; icon-only controls take `aria-label`. Controls that mount with no accessible name warn in development, now including the six combobox triggers. Not every one of the 30 components has been audited for icon labelling. | `src/components/Input/__tests__/accessibleName.test.tsx`; `src/__tests__/contracts/combobox-name.contract.test.tsx`; `e2e/accessibility-full.spec.ts` |
 | 1.2.1 Audio-only / Video-only | A | Not applicable | The package ships no audio or video component. | — |
 | 1.2.2 Captions (Prerecorded) | A | Not applicable | As above. | — |
 | 1.2.3 Audio Description or Media Alternative | A | Not applicable | As above. | — |
@@ -85,7 +85,7 @@ the row says which half is ours.
 | 2.4.11 Focus Not Obscured (Minimum) | AA | Partially supports | The stacking precondition is now proven: floating content resolves its layer from the nearest overlay, so a dropdown opened inside a Drawer or Modal computes a higher layer than its container. Every overlay × floating pair is asserted. What is **not** asserted is the criterion itself — that a focused element is not clipped by a sticky header or scrolled out of view. | `src/__tests__/contracts/layering.contract.test.tsx` |
 | 2.5.1 Pointer Gestures | A | Does not support | Not gated. Drawer supports swipe-to-dismiss with a close control as the single-pointer alternative; Slider and ResizablePanel are covered under 2.5.7. | — |
 | 2.5.2 Pointer Cancellation | A | Does not support | Not gated. Activation is on `click`/`pointerup` throughout, which is the criterion's requirement, but nothing asserts no component acts on `pointerdown`. | — |
-| 2.5.3 Label in Name | A | Does not support | Not gated. Components render their visible label as the accessible name, but no test compares the two strings. | — |
+| 2.5.3 Label in Name | A | Partially supports | The combobox triggers are named by the element already showing the value or placeholder, so their accessible name is exactly the visible text, and that resolution is asserted. Not compared for the other components. | `src/__tests__/contracts/combobox-name.contract.test.tsx` |
 | 2.5.4 Motion Actuation | A | Not applicable | No component responds to device motion. | — |
 | 2.5.7 Dragging Movements | AA | Partially supports | Every drag surface was audited (below). Four of six offer a non-drag alternative, and ResizablePanel's — the one ADR 003 named as the likely failure — is keyboard-operable and gated. The two Table drag surfaces have no alternative. | `src/components/ResizablePanel/__tests__/ResizablePanel.test.tsx`; `e2e/resizablepanel.spec.ts` |
 | 2.5.8 Target Size (Minimum) | AA | Does not support | The 24×24 CSS pixel floor is very probably met: `h-10` (40px) is the default control height, and the smallest height utility on any interactive default is `h-7` (28px). Those are source measurements, not rendered ones, and the previous README claim shows what happens when a size claim is asserted rather than measured. No test measures a rendered target box. | — |
@@ -116,7 +116,7 @@ the row says which half is ours.
 
 | SC | Level | Status | Justification | Gate |
 | --- | --- | --- | --- | --- |
-| 4.1.2 Name, Role, Value | A | Partially supports | Roles, states and properties are exposed on every interactive element, and state is additionally published as data attributes with a recorded vocabulary. The full-fixture axe sweep runs every fixture of every component, not one per component. Two roles that were declared without their behaviour have been implemented — see below. | `e2e/accessibility-full.spec.ts`; `src/__tests__/contracts/state-attributes.contract.test.tsx` |
+| 4.1.2 Name, Role, Value | A | Partially supports | Roles, states and properties are exposed on every interactive element, and state is published as data attributes with a recorded vocabulary. Every `role="combobox"` trigger now resolves to a non-empty accessible name, and `aria-activedescendant` is asserted to sit on an element that can hold the focus — this was 63 of the 66 nodes on the axe baseline and is now fixed rather than waived. The full-fixture axe sweep runs every fixture of every component. | `src/__tests__/contracts/combobox-name.contract.test.tsx`; `e2e/accessibility-full.spec.ts`; `src/__tests__/contracts/state-attributes.contract.test.tsx` |
 | 4.1.3 Status Messages | AA | Does not support | Not gated. Toast, and the error and loading regions, use `role="alert"` and `role="status"`, but no test asserts that a status change is announced without moving focus. | — |
 
 ---
@@ -138,15 +138,21 @@ attribute that no behaviour backs is the failure mode this section exists to pre
   than dropped, because the role is right for the control and tabbing through a year list is
   not a substitute.
 
+- `DatePicker` clear control — was a `<span role="button" tabIndex={0}>` nested inside the
+  trigger `<button>`. Invalid nesting, never focusable, and its `aria-label` was folded into
+  the trigger's own name. It is now a real `<button>` and a sibling of the trigger, reachable
+  by Tab.
+- `useDatePicker.handleKeyDown` closed the panel on Tab from the trigger, which fought the
+  focus order rather than following it. Removed; the panel's trap owns Tab.
+
 **Outstanding.**
 
-- `DatePicker` clear control — a `<span role="button" tabIndex={0}>` nested inside the
-  `<button>` that is the combobox trigger. Interactive content inside a button is invalid,
-  and the inner control is not reliably reachable. The combobox trigger is explicitly out of
-  scope for this slice; recorded here so it is not rediscovered.
-- `useDatePicker.handleKeyDown` still closes the panel on Tab from the trigger. With focus
-  now moving into the panel on open, that path is unreachable in normal use, but it
-  contradicts the trap and should be removed with the combobox trigger work.
+- `CascadingDropdown` uses the menu pattern (`role="menu"`, `menuitem`, `menuitemradio`) and
+  gives its items a roving `tabIndex={isFocused ? 0 : -1}` that nothing ever calls `.focus()`
+  on, while the trigger that keeps the focus carries no `aria-activedescendant`. Its
+  arrow-key highlight is therefore announced to nobody — the same defect as the DatePicker
+  grid, in a different pattern. Not fixed here: it needs the roving-focus treatment the grid
+  got, not the combobox rewiring, and axe does not report it.
 
 ---
 
@@ -186,6 +192,9 @@ These are not "ungated": they are believed to fail.
   requirement at any level; SC 2.5.8's Level AA floor is 24×24 CSS pixels.
 - **The axe sweeps run axe's default rule set**, not a rule set filtered to WCAG 2.2 AA
   tags. They therefore report more than this document tracks, and map onto criteria only
-  approximately.
+  approximately. They also report less than is wrong: `button-name` never applied to
+  `TimePicker`, whose combobox is an `<input>`, so an unnamed combobox there would have gone
+  unreported. It is named, but by its `placeholder` in the unlabelled fixtures, which is a
+  weak name that axe accepts.
 - **Consumer overrides.** Every gate here measures the shipped defaults. `classes`,
   `unstyled` and token overrides can invalidate any row, and 1.4.3 in particular.

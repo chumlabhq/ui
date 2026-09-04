@@ -321,7 +321,10 @@ const [value, setValue] = useState<string | null>(null);
 - Trigger: `role="combobox"` with `aria-expanded`, `aria-haspopup="listbox"`, `aria-controls`
 - Popup: `role="listbox"` with `role="option"` children
 - `aria-activedescendant` tracks focused option for screen readers
-- Label linked via `htmlFor` + `aria-labelledby`; falls back to `aria-label`
+- Named by `label` (via `aria-labelledby`), then `aria-label`. With neither, the name
+  falls back to the element showing the value or placeholder — `combobox` is not a
+  name-from-content role, so without that the trigger has no accessible name at all.
+  A development warning still asks for a real label.
 - Error messages linked via `aria-describedby` with `role="alert"`
 - `aria-live="polite"` status region announces loading state and option count
 - Keyboard: ArrowDown/Up, Home, End, Enter, Space, Escape, Tab, Delete/Backspace (clear)

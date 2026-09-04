@@ -12,6 +12,8 @@ import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDe
 import { cn } from "../../utils/scopedCn";
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
+import { comboboxNameProps } from "../../utils/comboboxName";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
 import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
@@ -435,6 +437,11 @@ const MultiSelectSearchableDropdown = forwardRef<
     const listboxId = `${dropdownId}-listbox`;
     const triggerId = `${dropdownId}-trigger`;
     const labelId = `${dropdownId}-label`;
+    const valueId = `${dropdownId}-value`;
+
+  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
+  // control named only by its own value says nothing about what it selects.
+  useAccessibleNameWarning("MultiSelectSearchableDropdown", { label, "aria-label": ariaLabel });
     const errorId = `${dropdownId}-error`;
 
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -478,6 +485,8 @@ const MultiSelectSearchableDropdown = forwardRef<
       label,
       "aria-label": ariaLabel,
     });
+
+    const chipsShown = showSelectedChips && selectedOptions.length > 0;
 
     const loading = externalLoading || isSearching || isLoadingInitial;
 
@@ -683,11 +692,11 @@ const MultiSelectSearchableDropdown = forwardRef<
               "aria-expanded": isOpen,
               "aria-haspopup": "listbox",
               "aria-controls": listboxId,
-              "aria-activedescendant": activeDescendantId,
+              "aria-activedescendant": showSearch ? undefined : activeDescendantId,
               "aria-invalid": (error || undefined) as boolean | undefined,
               "aria-describedby": error && errorMessage ? errorId : undefined,
               "aria-required": (required || undefined) as boolean | undefined,
-              "aria-labelledby": label ? labelId : undefined,
+              ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel }),
               disabled,
               onClick: handleToggle,
               onKeyDown: handleKeyDownWithPassthrough,
@@ -709,8 +718,8 @@ const MultiSelectSearchableDropdown = forwardRef<
               aria-expanded={isOpen}
               aria-haspopup="listbox"
               aria-controls={listboxId}
-              aria-activedescendant={activeDescendantId}
-              aria-labelledby={label ? labelId : undefined}
+              aria-activedescendant={showSearch ? undefined : activeDescendantId}
+              {...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel })}
               aria-invalid={error || undefined}
               aria-describedby={error && errorMessage ? errorId : undefined}
               aria-required={required || undefined}
@@ -724,7 +733,20 @@ const MultiSelectSearchableDropdown = forwardRef<
               data-error={error || undefined}
               data-open={isOpen || undefined}
             >
-              <span className={mergedClasses.value || undefined}>
+              {/* Each chip carries its own "Remove X" button, and a name computed
+                  from the value element swept those up — the trigger announced
+                  "Apple Remove Apple Banana Remove Banana". Only the chip branch has
+                  that problem, so only it needs a separate name source; pointing at
+                  the visible element everywhere else keeps the text in the DOM once. */}
+              {chipsShown && (
+                <span id={valueId} style={SR_ONLY_STYLE}>
+                  {selectedOptions.map((option) => option.label).join(", ")}
+                </span>
+              )}
+              <span
+                id={chipsShown ? undefined : valueId}
+                className={mergedClasses.value || undefined}
+              >
                 {showSelectedChips && selectedOptions.length > 0 ? (
                   <>
                     {displayedChips.map((option) => (
@@ -799,6 +821,14 @@ const MultiSelectSearchableDropdown = forwardRef<
                   placeholder={searchPlaceholder}
                   aria-label={searchInputAriaLabel}
                   aria-controls={listboxId}
+                  // The active-descendant relationship follows the focus:
+                  // opening the menu moves focus here, so the trigger's
+                  // `aria-activedescendant` described the highlight to an
+                  // element nobody was on. `aria-autocomplete` was missing too.
+                  // The `combobox` role stays on the trigger — see
+                  // SearchableDropdown for why.
+                  aria-autocomplete="list"
+                  aria-activedescendant={activeDescendantId}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}

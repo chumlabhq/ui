@@ -250,7 +250,11 @@ const [values, setValues] = useState<string[]>([]);
 - `role="combobox"` on trigger with `aria-expanded`, `aria-haspopup="listbox"`, `aria-controls`
 - `role="listbox"` with `aria-multiselectable="true"` on option list
 - `role="option"` with `aria-selected` on each option
-- `aria-activedescendant` tracks keyboard focus
+- `aria-activedescendant` tracks keyboard focus, on the trigger, which keeps the focus
+- Named by `label`, then `aria-label`. With neither, the name falls back to the element
+  showing the value or placeholder: `combobox` is not a name-from-content role, so the
+  visible text alone gave the trigger no accessible name. A development warning still
+  asks for a real label.
 - Arrow keys navigate options, Enter/Space toggle selection
 - Escape closes dropdown, Tab moves focus out
 - Chip remove buttons have `aria-label="Remove {label}"`

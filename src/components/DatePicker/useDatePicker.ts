@@ -381,9 +381,6 @@ export function useDatePicker(props: UseDatePickerProps) {
           if (!isOpen) {
             event.preventDefault();
             handleOpen();
-          } else if (effectiveFocusedDate) {
-            event.preventDefault();
-            handleDateSelect(effectiveFocusedDate, false);
           }
           break;
         case "ArrowDown":
@@ -392,14 +389,9 @@ export function useDatePicker(props: UseDatePickerProps) {
             handleOpen();
           }
           break;
-        case "Tab":
-          if (isOpen && !event.shiftKey) {
-            handleClose();
-          }
-          break;
       }
     },
-    [disabled, isOpen, effectiveFocusedDate, handleOpen, handleClose, handleDateSelect],
+    [disabled, isOpen, handleOpen, handleClose],
   );
 
   const isDisabledDate = useCallback(

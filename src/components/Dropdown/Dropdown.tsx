@@ -40,6 +40,8 @@ import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOp
 
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
+import { comboboxNameProps } from "../../utils/comboboxName";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,
@@ -428,6 +430,11 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const listboxId = `${dropdownId}-listbox`;
     const triggerId = `${dropdownId}-trigger`;
     const labelId = `${dropdownId}-label`;
+    const valueId = `${dropdownId}-value`;
+
+  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
+  // control named only by its own value says nothing about what it selects.
+  useAccessibleNameWarning("Dropdown", { label, "aria-label": ariaLabel });
     const errorId = `${dropdownId}-error`;
     const statusId = `${dropdownId}-status`;
 
@@ -573,8 +580,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       "aria-invalid": (error || undefined) as boolean | undefined,
       "aria-describedby": error && errorMessage ? errorId : undefined,
       "aria-required": (required || undefined) as boolean | undefined,
-      "aria-labelledby": label ? labelId : undefined,
-      "aria-label": !label ? ariaLabel : undefined,
+      ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel }),
       disabled,
       onClick: handleToggle,
       onKeyDown: handleKeyDownWithPassthrough,
@@ -628,7 +634,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               type="button"
               className={mergedClasses.trigger || undefined}
             >
-              <span className={mergedClasses.value || undefined}>
+              <span id={valueId} className={mergedClasses.value || undefined}>
                 {selectedOption
                   ? selectedOption.selectedContent ||
                     selectedOption.content ||

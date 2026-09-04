@@ -11,6 +11,8 @@ import {
 import { createPortal } from "react-dom";
 import { LAYERS, useLayer } from "../../utils/layers";
 import { cycleTabWithin } from "../../utils/focusUtils";
+import { comboboxNameProps } from "../../utils/comboboxName";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
 import type {
   DatePickerProps,
   DatePickerClasses,
@@ -670,6 +672,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const generatedId = useId();
     const datePickerId = id || name || generatedId;
     const triggerId = `${datePickerId}-trigger`;
+    const labelId = `${datePickerId}-label`;
+    const valueId = `${datePickerId}-value`;
+
+  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
+  // control named only by its own value says nothing about what it selects.
+  useAccessibleNameWarning("DatePicker", { label });
     const calendarId = `${datePickerId}-calendar`;
     const errorId = `${datePickerId}-error`;
 
@@ -1052,7 +1060,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         data-valid={(!error && success) || undefined}
       >
         {label && (
-          <label htmlFor={triggerId} className={mergedClasses.label}>
+          <label id={labelId} htmlFor={triggerId} className={mergedClasses.label}>
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
@@ -1074,6 +1082,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             aria-expanded={isOpen}
             aria-haspopup="dialog"
             aria-controls={calendarId}
+            {...comboboxNameProps({ valueId, labelId, hasLabel: !!label })}
             aria-invalid={error || undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
@@ -1085,33 +1094,33 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             data-error={error || undefined}
             data-open={isOpen || undefined}
           >
-            <span className={mergedClasses.input}>
+            <span id={valueId} className={mergedClasses.input}>
               {hasValue ? displayValue : placeholder || defaultPlaceholder}
             </span>
             <div className={mergedClasses.triggerActions || undefined}>
-              {resolvedShowClearButton && hasValue && !disabled && (
-                <span
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Clear selection"
-                  className={mergedClasses.clearTrigger}
-                  onClick={handleClearClick}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleClearClick(e);
-                    }
-                  }}
-                >
-                  {clearIcon || <XIcon className="w-4 h-4" />}
-                </span>
-              )}
               {showCalendarIcon &&
                 (calendarIcon || (
                   <CalendarIcon className={mergedClasses.icon} />
                 ))}
             </div>
           </button>
+
+          {/* A sibling of the trigger, not a child of it. This was a
+              `<span role="button" tabIndex={0}>` inside the trigger `<button>`:
+              interactive content nested in a button is invalid, the inner
+              control never took focus, and its `aria-label` was folded into the
+              trigger's own name. A real button here is reachable by Tab and
+              announces itself. */}
+          {resolvedShowClearButton && hasValue && !disabled && (
+            <button
+              type="button"
+              aria-label="Clear selection"
+              className={mergedClasses.clearTrigger}
+              onClick={handleClearClick}
+            >
+              {clearIcon || <XIcon className="w-4 h-4" />}
+            </button>
+          )}
 
           {(isOpen || keepMounted) && portalTarget && createPortal(
             <div

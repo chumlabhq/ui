@@ -36,6 +36,8 @@ import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOp
 
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
+import { comboboxNameProps } from "../../utils/comboboxName";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
 const DefaultClearIcon = () => (
   <svg
     viewBox="0 0 20 20"
@@ -286,6 +288,20 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
             aria-label={searchInputAriaLabel}
             aria-autocomplete="list"
             aria-controls={listboxId}
+            // The active-descendant relationship follows the focus. Opening
+            // the menu moves focus here, so `aria-activedescendant` on the
+            // trigger described the arrow-key highlight to an element nobody
+            // was on: the navigation happened and was announced to nobody.
+            //
+            // The `combobox` role stays on the trigger. Exactly one element may
+            // hold it, the trigger is what owns and announces the value, and a
+            // textbox supports `aria-activedescendant` and `aria-autocomplete`
+            // on its own — so the relationship moves without the role.
+            aria-activedescendant={
+              focusedIndex >= 0
+                ? `${dropdownId}-option-${focusedIndex}`
+                : undefined
+            }
           />
         </div>
       )}
@@ -426,6 +442,11 @@ const SearchableDropdown = forwardRef<
   const listboxId = `${dropdownId}-listbox`;
   const triggerId = `${dropdownId}-trigger`;
   const labelId = `${dropdownId}-label`;
+  const valueId = `${dropdownId}-value`;
+
+  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
+  // control named only by its own value says nothing about what it selects.
+  useAccessibleNameWarning("SearchableDropdown", { label, "aria-label": ariaLabel });
   const errorId = `${dropdownId}-error`;
   const statusId = `${dropdownId}-status`;
 
@@ -618,11 +639,11 @@ const SearchableDropdown = forwardRef<
     "aria-expanded": isOpen,
     "aria-haspopup": "listbox" as const,
     "aria-controls": listboxId,
-    "aria-activedescendant": activeDescendantId,
+    "aria-activedescendant": showSearch ? undefined : activeDescendantId,
     "aria-invalid": (error || undefined) as boolean | undefined,
     "aria-describedby": error && errorMessage ? errorId : undefined,
     "aria-required": (required || undefined) as boolean | undefined,
-    "aria-labelledby": label ? labelId : undefined,
+    ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel }),
     disabled,
     onClick: handleToggle,
     onKeyDown: handleKeyDownWithPassthrough,
@@ -676,7 +697,7 @@ const SearchableDropdown = forwardRef<
             type="button"
             className={mergedClasses.trigger || undefined}
           >
-            <span className={mergedClasses.value || undefined}>
+            <span id={valueId} className={mergedClasses.value || undefined}>
               {selectedOption
                 ? selectedOption.selectedContent ||
                   selectedOption.content ||

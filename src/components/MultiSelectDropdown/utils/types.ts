@@ -126,7 +126,8 @@ export interface MultiSelectDropdownTriggerRenderProps {
   "aria-invalid": boolean | undefined;
   "aria-describedby": string | undefined;
   "aria-required": boolean | undefined;
-  "aria-labelledby": string | undefined;
+  "aria-labelledby"?: string;
+  "aria-label"?: string;
   disabled: boolean;
   onClick: () => void;
   onKeyDown: (event: React.KeyboardEvent) => void;

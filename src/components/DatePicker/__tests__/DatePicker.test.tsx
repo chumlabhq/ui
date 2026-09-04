@@ -1438,16 +1438,30 @@ describe("DatePicker", () => {
     });
   });
 
-  describe("Clear button keyboard interaction", () => {
-    it("clears selection via Enter key on clear button", async () => {
+  describe("Clear control", () => {
+    /**
+     * It was a `<span role="button" tabIndex={0}>` inside the trigger
+     * `<button>` — invalid nesting, never focusable, and its `aria-label` was
+     * folded into the trigger's own accessible name. These tests previously
+     * dispatched a raw keydown at it, which is the only way a hand-rolled
+     * key handler can be exercised and is not how a user reaches a control.
+     */
+    it("is a real button outside the trigger", () => {
+      render(<DatePicker value={new Date(2025, 3, 20)} showClearButton />);
+
+      const clearBtn = screen.getByLabelText("Clear selection");
+      expect(clearBtn.tagName).toBe("BUTTON");
+      expect(clearBtn.closest('[role="combobox"]')).toBeNull();
+    });
+
+    it("clears from the keyboard", async () => {
+      const user = userEvent.setup();
       const onClear = vi.fn();
-      const onValueChange = vi.fn();
-      const date = new Date(2025, 3, 20);
 
       render(
         <DatePicker
-          value={date}
-          onValueChange={onValueChange}
+          value={new Date(2025, 3, 20)}
+          onValueChange={vi.fn()}
           onClear={onClear}
           showClearButton
         />,
@@ -1455,47 +1469,24 @@ describe("DatePicker", () => {
 
       const clearBtn = screen.getByLabelText("Clear selection");
       clearBtn.focus();
+      expect(document.activeElement).toBe(clearBtn);
 
-      // Simulate Enter key on the clear button
-      await act(async () => {
-        clearBtn.dispatchEvent(
-          new KeyboardEvent("keydown", {
-            key: "Enter",
-            bubbles: true,
-          }),
-        );
-      });
-
+      // No hand-rolled Enter handler: a button activates natively.
+      await user.keyboard("{Enter}");
       expect(onClear).toHaveBeenCalled();
     });
 
-    it("clears selection via Space key on clear button", async () => {
-      const onClear = vi.fn();
-      const onValueChange = vi.fn();
-      const date = new Date(2025, 3, 20);
+    it("is reachable by Tab from the trigger", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={new Date(2025, 3, 20)} showClearButton />);
 
-      render(
-        <DatePicker
-          value={date}
-          onValueChange={onValueChange}
-          onClear={onClear}
-          showClearButton
-        />,
+      const trigger = screen.getByRole("combobox");
+      trigger.focus();
+      await user.tab();
+
+      expect(document.activeElement).toBe(
+        screen.getByLabelText("Clear selection"),
       );
-
-      const clearBtn = screen.getByLabelText("Clear selection");
-      clearBtn.focus();
-
-      await act(async () => {
-        clearBtn.dispatchEvent(
-          new KeyboardEvent("keydown", {
-            key: " ",
-            bubbles: true,
-          }),
-        );
-      });
-
-      expect(onClear).toHaveBeenCalled();
     });
   });
 
@@ -1693,90 +1684,24 @@ describe("DatePicker", () => {
 
 // ─── Coverage: uncovered branches ────────────────────────────────────────────
 
-describe("Tab key closes calendar (useDatePicker handleKeyDown)", () => {
-  beforeEach(() => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
-  });
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it("closes calendar when Tab key is pressed while open", async () => {
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime,
-    });
-    render(<DatePicker />);
+describe("Tab from the trigger", () => {
+  /**
+   * The trigger used to close the calendar on Tab. That fought the focus order
+   * rather than following it: the panel is `aria-modal` and traps Tab, and
+   * since focus moves into the panel on open the branch was unreachable in
+   * normal use anyway. Tab from a closed trigger is now an ordinary tab stop.
+   */
+  it("does not close the calendar, because focus is inside the panel", async () => {
+    render(<DatePicker defaultOpen />);
 
     const trigger = screen.getByRole("combobox");
-    await openCalendar(user);
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-
-    // Dispatch a Tab keydown event directly on the trigger (userEvent.tab
-    // moves focus away before the synthetic event fires, so dispatch manually)
     await act(async () => {
       trigger.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "Tab", bubbles: true, shiftKey: false }),
+        new KeyboardEvent("keydown", { key: "Tab", bubbles: true }),
       );
     });
 
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-  });
-
-  it("does not close calendar when Shift+Tab is pressed while open", async () => {
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime,
-    });
-    render(<DatePicker />);
-
-    const trigger = screen.getByRole("combobox");
-    await openCalendar(user);
     expect(trigger).toHaveAttribute("aria-expanded", "true");
-
-    await act(async () => {
-      trigger.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "Tab", bubbles: true, shiftKey: true }),
-      );
-    });
-
-    // Shift+Tab should NOT close (the branch condition requires !event.shiftKey)
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-  });
-
-  it("selects focusedDate via Enter key when calendar is open and date is focused", async () => {
-    const user = userEvent.setup({
-      advanceTimers: vi.advanceTimersByTime,
-    });
-    const onValueChange = vi.fn();
-    render(<DatePicker onValueChange={onValueChange} />);
-
-    const trigger = screen.getByRole("combobox");
-    await openCalendar(user);
-
-    // Focus a specific day cell so focusedDate is set inside useDatePicker
-    const dayCells = screen.getAllByRole("gridcell");
-    const day14 = dayCells.find(
-      (cell) =>
-        cell.textContent?.trim() === "14" &&
-        !cell.getAttribute("data-outside"),
-    );
-    expect(day14).toBeDefined();
-
-    await act(async () => {
-      day14!.focus();
-    });
-
-    // Now press Enter on the trigger while the calendar is open and date is focused
-    // The onFocus handler sets focusedDate; fire Enter on the trigger button
-    await act(async () => {
-      trigger.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
-      );
-    });
-
-    // If focusedDate was set, onValueChange should be called
-    // (it may or may not depending on timing, so just verify no crash)
-    // The focused-date path in handleKeyDown (lines 339-341) is exercised
-    expect(trigger).toBeDefined();
   });
 });
 

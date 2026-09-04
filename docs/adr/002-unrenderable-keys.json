@@ -75,15 +75,7 @@
     ]
   },
   "$comment5": "axeBaseline: accessibility violations recorded against fixture pages, by violation id, with the cause. e2e/accessibility.spec.ts fails on anything not listed, and on a listed entry that stops firing, so the list ratchets down only. Recorded rather than fixed where the fix is a design decision (the --cl-text-tertiary value) or sits in an area this phase does not touch (the combobox pattern).",
-  "axeBaseline": {
-    "button-name": {
-      "count": 1,
-      "cause": "InternationalPhoneInput's country trigger is a role=combobox button with no accessible name. The combobox pattern is explicitly out of scope for this phase (AUDIT-GAP 3.3/3.4).",
-      "components": [
-        "InternationalPhoneInput"
-      ]
-    }
-  },
+  "axeBaseline": {},
   "$comment6": "axeFixtureExpectations: which FIXTURES may carry which axe rule in the full sweep (e2e/accessibility-full.spec.ts, project a11y-full). Per-fixture, not per-rule: a rule waived globally would have hidden Avatar/with-status, which announced nothing. A finding on any fixture not listed here fails; a listed fixture that stops reporting fails too, so the list ratchets down.",
   "axeFixtureExpectations": {
     "label": {
@@ -115,76 +107,14 @@
       ]
     },
     "button-name": {
-      "reason": "56 of these are the role=combobox trigger with no accessible name, across six components \u2014 the combobox pattern, out of scope (AUDIT-GAP 3.3/3.4). The other 3 are Switch's role=switch button in the fixtures that pass no label, the same case as `label` above. Two fixtures added in ADR 002 Task 2 (DatePicker with-active-preset, keyboard-focus) open the picker, so the same trigger reports there too. Added rather than left red: a sweep held red by known findings cannot catch new ones. Four more were added by the prop-union slice (SearchableDropdown and MultiSelectSearchableDropdown async-initial/async-searched): they open the same unnamed combobox trigger under new fixture names, so it is the identical finding, not a new one.",
+      "reason": "3 nodes, all Switch's role=switch button in the fixtures that pass no label \u2014 the same case as `label` above: a bare control is a legitimate thing to render and the consumer supplies the name. Was 66 across seven components. The other 63 were the role=combobox trigger in DatePicker, Dropdown, MultiSelectDropdown, SearchableDropdown, MultiSelectSearchableDropdown and InternationalPhoneInput: `combobox` is not a name-from-content role, so a trigger whose only text was the selected value or the placeholder had no accessible name at all. Retired by the ADR 003 combobox slice, which names the trigger from the element already showing that text. Not waived \u2014 fixed, and the entries are gone rather than green.",
       "fixtures": [
-        "DatePicker/bounded",
-        "DatePicker/closed",
-        "DatePicker/disabled",
-        "DatePicker/keyboard-focus",
-        "DatePicker/loading",
-        "DatePicker/multiple",
-        "DatePicker/open",
-        "DatePicker/open-with-value",
-        "DatePicker/range",
-        "DatePicker/with-active-preset",
-        "DatePicker/with-dropdowns",
-        "DatePicker/with-markers",
-        "DatePicker/with-presets",
-        "DatePicker/with-today-button",
-        "DatePicker/with-week-numbers",
-        "Dropdown/closed",
-        "Dropdown/disabled",
-        "Dropdown/loading",
-        "Dropdown/open",
-        "Dropdown/open-empty",
-        "Dropdown/open-keyboard-focus",
-        "Dropdown/open-with-selection",
-        "InternationalPhoneInput/country-no-results",
-        "InternationalPhoneInput/country-open",
-        "InternationalPhoneInput/default",
-        "InternationalPhoneInput/disabled",
-        "InternationalPhoneInput/error",
-        "InternationalPhoneInput/labelled",
-        "InternationalPhoneInput/loading",
-        "InternationalPhoneInput/readonly",
-        "InternationalPhoneInput/success",
-        "InternationalPhoneInput/with-value",
-        "MultiSelectDropdown/chips-overflow",
-        "MultiSelectDropdown/closed",
-        "MultiSelectDropdown/disabled",
-        "MultiSelectDropdown/loading",
-        "MultiSelectDropdown/multi-value",
-        "MultiSelectDropdown/open",
-        "MultiSelectDropdown/open-empty",
-        "MultiSelectDropdown/open-keyboard-focus",
-        "MultiSelectDropdown/open-with-selection",
-        "MultiSelectSearchableDropdown/async-initial",
-        "MultiSelectSearchableDropdown/async-searched",
-        "MultiSelectSearchableDropdown/chips-overflow",
-        "MultiSelectSearchableDropdown/closed",
-        "MultiSelectSearchableDropdown/disabled",
-        "MultiSelectSearchableDropdown/loading",
-        "MultiSelectSearchableDropdown/multi-value",
-        "MultiSelectSearchableDropdown/open",
-        "MultiSelectSearchableDropdown/open-empty",
-        "MultiSelectSearchableDropdown/open-keyboard-focus",
-        "MultiSelectSearchableDropdown/open-search",
-        "MultiSelectSearchableDropdown/open-with-selection",
-        "SearchableDropdown/async-initial",
-        "SearchableDropdown/async-searched",
-        "SearchableDropdown/closed",
-        "SearchableDropdown/disabled",
-        "SearchableDropdown/loading",
-        "SearchableDropdown/open",
-        "SearchableDropdown/open-empty",
-        "SearchableDropdown/open-keyboard-focus",
-        "SearchableDropdown/open-search",
-        "SearchableDropdown/open-with-selection",
         "Switch/checked",
         "Switch/default",
         "Switch/loading"
       ]
     }
   },
-  "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived \u2014 the constants ratchet is the schedule."
+  "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived \u2014 the constants ratchet is the schedule.",
+  "$axeBaselineHistory": "Emptied by the ADR 003 combobox slice. It held one entry: button-name x1 on InternationalPhoneInput's country trigger, recorded as out of scope for the phase. That trigger is the nested SearchableDropdown's, so naming the SearchableDropdown trigger retired it \u2014 IPI needed no change of its own. The per-fixture list in axeFixtureExpectations went 66 -> 3 in the same slice; the 3 that remain are Switch, a different cause. An empty baseline is the point of a ratchet, not a reason to delete the gate."
 }

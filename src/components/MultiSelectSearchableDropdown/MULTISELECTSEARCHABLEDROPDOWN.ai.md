@@ -250,7 +250,12 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 - `role="combobox"` with full ARIA attributes on trigger
 - `role="listbox"` with `aria-multiselectable="true"` on option list
 - `role="option"` with `aria-selected`, `aria-disabled` on each option
-- `aria-activedescendant` tracks keyboard focus
+- `aria-activedescendant` tracks keyboard focus **on the search input**, which takes the
+  focus when the menu opens. It is not on the trigger, which by then has none.
+- Named by `label`, then `aria-label`. With neither, the name falls back to the element
+  showing the value or placeholder: `combobox` is not a name-from-content role, so the
+  visible text alone gave the trigger no accessible name. A development warning still
+  asks for a real label.
 - Search input accessible with configurable `searchInputAriaLabel`
 - Arrow keys navigate, Enter/Space toggle, Escape closes
 - Chip remove buttons have `aria-label="Remove {label}"`

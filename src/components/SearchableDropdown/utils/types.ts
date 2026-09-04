@@ -110,6 +110,7 @@ export interface SearchableDropdownTriggerRenderProps {
   "aria-describedby"?: string;
   "aria-required"?: boolean;
   "aria-labelledby"?: string;
+  "aria-label"?: string;
   disabled?: boolean;
   onClick: () => void;
   onKeyDown: (event: React.KeyboardEvent) => void;

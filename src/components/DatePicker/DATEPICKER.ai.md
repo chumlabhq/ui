@@ -372,6 +372,9 @@ import { fr } from "date-fns/locale";
 ## Accessibility
 
 - **Keyboard:** Arrow keys navigate days, Home/End jump to the bounds of the week (honouring `weekStartsOn`), PageUp/PageDown change months, Shift+PageUp/PageDown change years, Enter/Space selects a day, Escape closes the calendar. Disabled days are stepped over rather than focused. The month and year menus are listboxes: arrows, Home/End, Enter to choose, Escape to close.
+- **Naming:** the trigger is named by `label`, and falls back to the element showing the
+  selected date or placeholder — `combobox` is not a name-from-content role. The clear
+  control is a real `<button>` beside the trigger, not a `role="button"` span inside it.
 - **ARIA:** Trigger has `aria-expanded` + `aria-haspopup`, calendar grid uses `role="grid"`, day cells use `role="gridcell"` with `aria-selected`/`aria-disabled`/`aria-current="date"`
 - **Focus management:** Focus moves to the selected day (or today) on open, follows the roving tabindex as you navigate, and returns to the trigger on close. The panel is `role="dialog" aria-modal="true"` and traps Tab in both directions.
 - **Reduced motion:** `reduceMotion="auto"` respects OS `prefers-reduced-motion` setting
