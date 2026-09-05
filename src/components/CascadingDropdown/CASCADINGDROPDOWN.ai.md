@@ -69,14 +69,14 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 
 | Prop | Constraint |
 |------|-----------|
-| `selectionMode` | Set on each `CascadingOption.children` parent. `"single"` = radio behavior, `"multi"` = checkbox. Defaults to `"single"`. |
+| `selectionMode` on an option | Set on each `CascadingOption.children` parent. `"single"` = radio behavior, `"multi"` = checkbox. Defaults to `"single"`. |
 | `onLoadChildren` | Only called when `option.hasChildren` is true and `option.children` is undefined. Must return `Promise<CascadingOption[]>`. |
 | `onMenuSearch` | When provided, disables client-side menu filtering. You must return filtered results. |
 | `onSubmenuSearch` | When provided, disables client-side submenu filtering. Receives `(query, parent)`. |
 | `value` / `onValueChange` | Controlled mode. Shape: `{ parentValue: "childValue" }` for single, `{ parentValue: ["a","b"] }` for multi. |
 | `defaultValue` | Uncontrolled mode. Cannot be used with `value`. |
 | `closeOnSelect` | Defaults to `true`. Set `false` to keep menu open after selection (useful for multi-select). |
-| `subSearchControl` | Falls back to `searchControl` if not set. Same for `subSearchInput` and `subSearchIcon`. |
+| `classes.subSearchControl` | Falls back to `searchControl` if not set. Same for `subSearchInput` and `subSearchIcon`. |
 
 ---
 
@@ -342,7 +342,7 @@ const searchCountries = async (query: string) => {
   name="category"
   label="Category"
   required
-  message={!!errors.category}
+  error={!!errors.category}
   errorMessage={errors.category}
   options={options}
   value={value}

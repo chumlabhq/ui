@@ -53,7 +53,7 @@ function MyComponent() {
 | `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
-| `root` | ReactNode that replaces the default message/description layout entirely |
+| `classes.root` | Class string for the toast's outer element. It does not replace the layout. |
 | `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
 
@@ -109,6 +109,29 @@ toast.dismissAll();
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `onRemove` **(required)** | object | — | (id: string) => void — Internal callback to remove the toast from the provider. |
+
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### ToastProvider
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `position` | `ToastPosition \| undefined` | Toast position on screen. Default: `"bottom-right"`. |
+| `maxToasts` | `number \| undefined` | — |
+| `containerClassName` | `string \| undefined` | — |
+| `defaultDuration` | `number \| undefined` | — |
+| `animationDuration` | `number \| undefined` | — |
+| `gap` | `number \| undefined` | — |
+| `zIndex` | `number \| undefined` | — |
+| `dismissOnEscape` | `boolean \| undefined` | — |
+| `containerAriaLabel` | `string \| undefined` | — |
+| `classes` | `ToastClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+
+---
 
 ## Styling Guide
 

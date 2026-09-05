@@ -1,5 +1,5 @@
 // AI Knowledge: See OTPINPUT.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as OtpInput, OtpInputLabel } from "./OtpInput";
+export { default as OtpInput } from "./OtpInput";
 export type {
   OtpInputProps,
   OtpInputLabelProps,

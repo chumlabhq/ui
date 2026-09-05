@@ -142,6 +142,19 @@ const ref = useRef<HTMLElement>(null);
 
 ---
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### ButtonGroup
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | Button elements to group together. |
+| `orientation` | `"horizontal" \| "vertical" \| undefined` | Stack direction. Default: `"horizontal"`. |
+
+---
+
 ## Styling Guide
 
 ### Slot → visual mapping
@@ -209,13 +222,13 @@ Copy-paste these as `className` values:
 <div className="flex gap-2">
   <Button
     className="bg-indigo-600 dark:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-400 shadow-sm focus-visible:ring-indigo-500 dark:focus-visible:ring-offset-gray-900"
-    icon={<PlusIcon className="w-3.5 h-3.5" />}
+    startIcon={<PlusIcon className="w-3.5 h-3.5" />}
   >
     Create payment
   </Button>
   <Button
     className="text-xs px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
-    icon={<FilterIcon className="w-3.5 h-3.5" />}
+    startIcon={<FilterIcon className="w-3.5 h-3.5" />}
   >
     Filter
   </Button>
@@ -263,7 +276,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={iconOnlyClasses}
-  icon={<TrashIcon />}
+  startIcon={<TrashIcon />}
   aria-label="Delete item"
   tooltip="Delete"
   tooltipProps={{ side: "bottom", delayDuration: 300 }}
@@ -285,7 +298,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={primaryClasses}
-  icon={<ArrowRightIcon />}
+  startIcon={<ArrowRightIcon />}
   iconAnimation="slideRight"
 >
   Continue
@@ -340,12 +353,12 @@ const [saving, setSaving] = useState(false);
 // ❌ DON'T: Use color alone for destructive actions
 <Button className="bg-red-500 text-white">Delete</Button>
 // ✅ DO: Include a warning icon or confirmation
-<Button className="bg-red-500 text-white" icon={<TrashIcon />}>Delete</Button>
+<Button className="bg-red-500 text-white" startIcon={<TrashIcon />}>Delete</Button>
 
 // ❌ DON'T: Use icon-only span button without aria-label
-<Button as="span" icon={<CloseIcon />} />
+<Button as="span" startIcon={<CloseIcon />} />
 // ✅ DO: Always provide aria-label for icon-only buttons
-<Button as="span" icon={<CloseIcon />} aria-label="Close" />
+<Button as="span" startIcon={<CloseIcon />} aria-label="Close" />
 ```
 
 ---

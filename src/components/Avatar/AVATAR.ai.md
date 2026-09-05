@@ -129,6 +129,96 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `onError` | object | — | () => void — Fires when the avatar image fails to load. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### AvatarGroup
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | Avatar elements to group. |
+| `max` | `number \| undefined` | Maximum visible avatars before showing a surplus count. |
+| `size` | `AvatarSize \| undefined` | Default size for all avatars in the group. |
+| `shape` | `AvatarShape \| undefined` | Default shape for all avatars in the group. |
+| `bordered` | `string \| boolean \| undefined` | Adds border rings to all avatars. |
+| `spacing` | `number \| undefined` | Overlap spacing in pixels (negative for overlap). |
+| `ringColor` | `string \| undefined` | Border ring color for overlapping avatars. |
+| `showTooltip` | `boolean \| undefined` | Shows a tooltip with the avatar's name on hover. |
+| `total` | `number \| undefined` | Total count for surplus calculation (when not all items are rendered). |
+| `variant` | `GroupVariant \| undefined` | Layout variant: stacked overlap, grid, or inline. Default: `"stack"`. |
+| `reverseOrder` | `boolean \| undefined` | Reverses the visual stacking order. |
+| `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Custom render function for the surplus count indicator. |
+| `onAvatarClick` | `((info: { index: number; name?: string \| undefined; }, event: MouseEvent<Element, MouseEvent>) => void) \| undefined` | Click handler for individual avatars within the group. |
+| `dir` | `Direction \| undefined` | Text direction for RTL-aware layouts. |
+| `classes` | `AvatarGroupClasses \| undefined` | CSS class overrides for group sub-elements. |
+| `asChild` | `boolean \| undefined` | Merges group props onto the child element via Slot. |
+
+### AvatarGroupCount
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number` | Number of additional (hidden) avatars. |
+| `size` | `AvatarSize \| undefined` | Size matching the group's avatar size. |
+| `shape` | `AvatarShape \| undefined` | Shape matching the group's avatar shape. |
+| `max` | `number \| undefined` | Maximum count before showing `max+`. |
+| `showPlus` | `boolean \| undefined` | Whether to show a `+` prefix. Default: `true`. |
+| `format` | `((count: number) => string) \| undefined` | Custom format function for the count display. |
+| `variant` | `CountVariant \| undefined` | Visual style variant. |
+| `tooltip` | `ReactNode \| AvatarTooltipConfig` | Tooltip shown on hover. |
+| `bordered` | `string \| boolean \| undefined` | Adds a border ring. |
+| `textClassName` | `string \| undefined` | CSS class for the count text. |
+| `textStyle` | `CSSProperties \| undefined` | Inline styles for the count text. |
+| `aria-live` | `"polite" \| "assertive" \| "off" \| undefined` | ARIA live region behavior for screen readers. |
+| `asChild` | `boolean \| undefined` | Merges count props onto the child element via Slot. |
+| `children` | `ReactNode` | Custom content replacing the default count display. |
+
+### AvatarBadge
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number \| undefined` | Notification count displayed in the badge. |
+| `max` | `number \| undefined` | Maximum count before showing `max+`. |
+| `showZero` | `boolean \| undefined` | Shows the badge even when count is zero. Default: `false`. |
+| `dot` | `boolean \| undefined` | Renders a small dot instead of a count. |
+| `position` | `CornerPosition \| undefined` | Corner position for the badge. Default: `"top-right"`. |
+| `offset` | `BadgeOffset \| undefined` | Pixel offset from the default corner position. |
+| `color` | `string \| undefined` | Background color of the badge. |
+| `size` | `BadgeSize \| undefined` | Badge size preset. Default: `"sm"`. |
+| `variant` | `BadgeVariant \| undefined` | Visual style variant. Default: `"solid"`. |
+| `overlap` | `BadgeOverlap \| undefined` | Shape of the element the badge overlaps. |
+| `pulse` | `boolean \| undefined` | Adds a pulsing animation to the badge. |
+| `invisible` | `boolean \| undefined` | Hides the badge while preserving its DOM presence. |
+| `aria-live` | `"polite" \| "assertive" \| "off" \| undefined` | ARIA live region behavior for screen readers. |
+| `asChild` | `boolean \| undefined` | Merges badge props onto the child element via Slot. |
+
+### AvatarShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `classes` | `AvatarShimmerClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+| `size` | `AvatarSize \| undefined` | Shimmer size matching the avatar size. |
+| `shape` | `AvatarShape \| undefined` | Shimmer shape matching the avatar shape. |
+| `animate` | `boolean \| undefined` | Enables the shimmer animation. Default: `true`. |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+
+### AvatarGroupShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number \| undefined` | Number of shimmer placeholders to render. Default: `3`. |
+| `size` | `AvatarSize \| undefined` | Shimmer size matching the group's avatar size. |
+| `shape` | `AvatarShape \| undefined` | Shimmer shape matching the group's avatar shape. |
+| `spacing` | `number \| undefined` | Overlap spacing in pixels. |
+| `ringColor` | `string \| undefined` | Border ring color. |
+| `animate` | `boolean \| undefined` | Enables the shimmer animation. Default: `true`. |
+| `showCount` | `boolean \| undefined` | Shows a shimmer placeholder for the surplus count. |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `asChild` | `boolean \| undefined` | Merges shimmer props onto the child element via Slot. |
+
+---
+
 ## Styling Guide
 
 ### How class merging works

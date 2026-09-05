@@ -106,6 +106,47 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 | `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
 | `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### CountryFlagGroup
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `max` | `number \| undefined` | — |
+| `size` | `number \| CountryFlagSize \| undefined` | — |
+| `showCountTooltip` | `boolean \| undefined` | — |
+| `countTooltip` | `Omit<CountryFlagTooltipConfig, "content"> \| undefined` | — |
+| `surplusTooltipContent` | `ReactNode` | — |
+| `renderSurplus` | `((count: number) => ReactNode) \| undefined` | — |
+| `classes` | `CountryFlagGroupClasses \| undefined` | — |
+
+### CountryFlagShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `classes` | `CountryFlagShimmerClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+| `size` | `number \| CountryFlagSize \| undefined` | — |
+| `aspectRatio` | `number \| undefined` | — |
+| `animate` | `boolean \| undefined` | — |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
+
+### CountryFlagGroupShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number \| undefined` | — |
+| `size` | `number \| CountryFlagSize \| undefined` | — |
+| `aspectRatio` | `number \| undefined` | — |
+| `animate` | `boolean \| undefined` | — |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
+| `showCount` | `boolean \| undefined` | — |
+
+---
+
 ## Styling Guide
 
 ### How class merging works

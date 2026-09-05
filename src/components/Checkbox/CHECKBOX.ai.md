@@ -233,7 +233,7 @@ const someChecked = items.some(Boolean);
 <Checkbox
   name="terms"
   required
-  message={!!errors.terms}
+  error={!!errors.terms}
   errorMessage={errors.terms}
   label="I accept the Terms of Service"
   checked={accepted}

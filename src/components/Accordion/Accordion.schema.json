@@ -156,7 +156,7 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode \u2014 AccordionItem children."
+      "description": "React.ReactNode — AccordionItem children."
     },
     "asChild": {
       "type": "boolean",
@@ -290,5 +290,144 @@
   "required": [
     "type",
     "children"
-  ]
+  ],
+  "subComponents": {
+    "AccordionItem": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean | undefined"
+        },
+        "children": {
+          "type": "ReactNode"
+        },
+        "asChild": {
+          "type": "boolean | undefined"
+        },
+        "onExpandedChange": {
+          "type": "((isExpanded: boolean) => void) | undefined",
+          "description": "Fires when the item's expanded state changes."
+        },
+        "aria-describedby": {
+          "type": "string | undefined",
+          "description": "Identifies the element (or elements) that describes the object."
+        }
+      }
+    },
+    "AccordionTrigger": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode"
+        },
+        "expandedIcon": {
+          "type": "ReactNode"
+        },
+        "collapsedIcon": {
+          "type": "ReactNode"
+        },
+        "iconPosition": {
+          "type": "\"left\" | \"right\" | \"none\" | undefined"
+        },
+        "asChild": {
+          "type": "boolean | undefined"
+        },
+        "subtitle": {
+          "type": "ReactNode"
+        },
+        "iconAnimation": {
+          "type": "\"none\" | \"rotate\" | \"switch\" | undefined"
+        },
+        "leftSlot": {
+          "type": "ReactNode"
+        },
+        "rightSlot": {
+          "type": "ReactNode"
+        },
+        "aria-describedby": {
+          "type": "string | undefined",
+          "description": "Identifies the element (or elements) that describes the object."
+        }
+      }
+    },
+    "AccordionContent": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode"
+        },
+        "forceMount": {
+          "type": "boolean | undefined"
+        },
+        "animationDuration": {
+          "type": "number | undefined"
+        },
+        "animationEasing": {
+          "type": "string | undefined"
+        },
+        "asChild": {
+          "type": "boolean | undefined"
+        },
+        "lazyLoad": {
+          "type": "boolean | undefined"
+        },
+        "unmountOnClose": {
+          "type": "boolean | undefined"
+        },
+        "onOpenStart": {
+          "type": "(() => void) | undefined"
+        },
+        "onOpenEnd": {
+          "type": "(() => void) | undefined"
+        },
+        "onCloseStart": {
+          "type": "(() => void) | undefined"
+        },
+        "onCloseEnd": {
+          "type": "(() => void) | undefined"
+        }
+      }
+    },
+    "AccordionShimmer": {
+      "type": "object",
+      "properties": {
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined"
+        },
+        "classes": {
+          "type": "AccordionShimmerClasses | undefined"
+        },
+        "unstyled": {
+          "type": "boolean | undefined"
+        },
+        "count": {
+          "type": "number | undefined"
+        },
+        "size": {
+          "type": "AccordionSize | undefined"
+        },
+        "variant": {
+          "type": "AccordionVariant | undefined"
+        },
+        "animate": {
+          "type": "boolean | undefined"
+        },
+        "className": {
+          "type": "string | undefined"
+        },
+        "style": {
+          "type": "CSSProperties | undefined"
+        },
+        "showContent": {
+          "type": "boolean | undefined"
+        },
+        "asChild": {
+          "type": "boolean | undefined"
+        }
+      }
+    }
+  }
 }

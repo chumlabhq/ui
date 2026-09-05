@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { OtpInput, OtpInputLabel } from "../index";
+import { OtpInput } from "../index";
+// Internal, not exported from the package: imported from the module it lives in.
+import { OtpInputLabel } from "../OtpInput";
 
 import { setReducedMotion } from "../../../test/matchMedia";
 

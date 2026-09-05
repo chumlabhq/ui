@@ -1,6 +1,5 @@
 // AI Knowledge: See TIMEPICKER.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as TimePicker } from "./TimePicker";
-export { ClockFace } from "./ClockFace";
 export type {
   TimePickerProps,
   TimePickerClasses,

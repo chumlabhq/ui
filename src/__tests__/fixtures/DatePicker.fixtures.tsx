@@ -35,6 +35,25 @@ const fixtures: Fixtures<typeof DatePicker> = [
     note: "`value` pins the calendar to the marker's month. Without it the grid opened on today and the marked day was never rendered, so data-marked had no fixture.",
   },
   {
+    name: "marker-tooltip",
+    props: {
+      defaultOpen: true,
+      value: D,
+      showMarkerTooltip: true,
+      markers: [{ date: D, label: "Release", color: "#f00", type: "event" }],
+    },
+    note:
+      "Hovers the marked day. The tooltip is the one surface in this component " +
+      "that anchors to the cell under the pointer rather than to a trigger, and " +
+      "it was a declared exception in the positioner and portal gates with no " +
+      "fixture reaching it at all.",
+    act: async (c) => {
+      const marked = c.ownerDocument.querySelector("[data-marked]");
+      if (marked) fireEvent.mouseEnter(marked);
+      await tick();
+    },
+  },
+  {
     name: "with-active-preset",
     props: { defaultOpen: true, showPresets: true, value: new Date() },
     note: "A preset matching the current value is the only way presetTrigger reaches its active state.",

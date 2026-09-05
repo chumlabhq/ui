@@ -149,6 +149,33 @@ modalRef.current?.focus();
 
 ---
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### ModalHeader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `className` | `string \| undefined` | — |
+
+### ModalBody
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `className` | `string \| undefined` | — |
+
+### ModalFooter
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `className` | `string \| undefined` | — |
+
+---
+
 ## Styling Guide
 
 ### How class merging works

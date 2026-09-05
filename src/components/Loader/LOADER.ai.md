@@ -85,6 +85,60 @@ export default function Example() {
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### CircularLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `size` | `number \| undefined` | Width and height in pixels. Default: 20 |
+| `thickness` | `number \| undefined` | Stroke width of track and arc. Default: 2 |
+| `speed` | `number \| undefined` | Animation duration in seconds (lower = faster). Default: 0.75 |
+| `trackColor` | `string \| undefined` | Background track color. Default: currentColor at 20% opacity |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `CircularLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+### LinearLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `height` | `number \| undefined` | Height of the bar in pixels. Default: 4 |
+| `width` | `string \| number \| undefined` | Width of the bar (CSS value). Default: "100%" |
+| `speed` | `number \| undefined` | Animation duration in seconds. Default: 1.5 |
+| `trackColor` | `string \| undefined` | Background track color |
+| `borderRadius` | `number \| undefined` | Border radius in pixels. Default: 9999 (pill) |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `LinearLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+### DotLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `dotSize` | `number \| undefined` | Diameter of each dot in pixels. Default: 8 |
+| `gap` | `number \| undefined` | Gap between dots in pixels. Default: 4 |
+| `count` | `number \| undefined` | Number of dots. Default: 3 |
+| `speed` | `number \| undefined` | Full animation cycle duration in seconds. Default: 1.4 |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `DotLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+### PulseLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `size` | `number \| undefined` | Diameter of the circle in pixels. Default: 40 |
+| `speed` | `number \| undefined` | Animation duration in seconds. Default: 1.5 |
+| `rings` | `number \| undefined` | Number of ripple rings. Default: 2 |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `PulseLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+---
+
 ## Styling Guide
 
 Each variant has its own class slots. Circular: `root`, `control`, `track`, `range`. Linear: `root`, `range`. Dot: `root`, `range`. Pulse: `root`, `range`.

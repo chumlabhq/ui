@@ -140,6 +140,70 @@ ref.current?.element                 // Root HTMLDivElement
 
 ---
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### AccordionItem
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `value` | `string` | — |
+| `disabled` | `boolean \| undefined` | — |
+| `children` | `ReactNode` | — |
+| `asChild` | `boolean \| undefined` | — |
+| `onExpandedChange` | `((isExpanded: boolean) => void) \| undefined` | Fires when the item's expanded state changes. |
+| `aria-describedby` | `string \| undefined` | Identifies the element (or elements) that describes the object. |
+
+### AccordionTrigger
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `expandedIcon` | `ReactNode` | — |
+| `collapsedIcon` | `ReactNode` | — |
+| `iconPosition` | `"left" \| "right" \| "none" \| undefined` | — |
+| `asChild` | `boolean \| undefined` | — |
+| `subtitle` | `ReactNode` | — |
+| `iconAnimation` | `"none" \| "rotate" \| "switch" \| undefined` | — |
+| `leftSlot` | `ReactNode` | — |
+| `rightSlot` | `ReactNode` | — |
+| `aria-describedby` | `string \| undefined` | Identifies the element (or elements) that describes the object. |
+
+### AccordionContent
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `forceMount` | `boolean \| undefined` | — |
+| `animationDuration` | `number \| undefined` | — |
+| `animationEasing` | `string \| undefined` | — |
+| `asChild` | `boolean \| undefined` | — |
+| `lazyLoad` | `boolean \| undefined` | — |
+| `unmountOnClose` | `boolean \| undefined` | — |
+| `onOpenStart` | `(() => void) \| undefined` | — |
+| `onOpenEnd` | `(() => void) \| undefined` | — |
+| `onCloseStart` | `(() => void) \| undefined` | — |
+| `onCloseEnd` | `(() => void) \| undefined` | — |
+
+### AccordionShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
+| `classes` | `AccordionShimmerClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+| `count` | `number \| undefined` | — |
+| `size` | `AccordionSize \| undefined` | — |
+| `variant` | `AccordionVariant \| undefined` | — |
+| `animate` | `boolean \| undefined` | — |
+| `className` | `string \| undefined` | — |
+| `style` | `CSSProperties \| undefined` | — |
+| `showContent` | `boolean \| undefined` | — |
+| `asChild` | `boolean \| undefined` | — |
+
+---
+
 ## Styling Guide
 
 ### How class merging works

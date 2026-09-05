@@ -21,15 +21,15 @@
     },
     "message": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Primary message content."
+      "description": "React.ReactNode — Primary message content."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Secondary description text."
+      "description": "React.ReactNode — Secondary description text."
     },
     "content": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom content that replaces message and description."
+      "description": "React.ReactNode — Custom content that replaces message and description."
     },
     "duration": {
       "type": "number",
@@ -47,7 +47,7 @@
     },
     "icon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom icon replacing the default type icon."
+      "description": "React.ReactNode — Custom icon replacing the default type icon."
     },
     "showCloseButton": {
       "type": "boolean",
@@ -56,7 +56,7 @@
     },
     "onDismiss": {
       "type": "object",
-      "description": "() => void \u2014 Fires when the toast is dismissed."
+      "description": "() => void — Fires when the toast is dismissed."
     },
     "role": {
       "type": "string",
@@ -111,11 +111,55 @@
     },
     "onRemove": {
       "type": "object",
-      "description": "(id: string) => void \u2014 Internal callback to remove the toast from the provider."
+      "description": "(id: string) => void — Internal callback to remove the toast from the provider."
     }
   },
   "required": [
     "id",
     "onRemove"
-  ]
+  ],
+  "subComponents": {
+    "ToastProvider": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode"
+        },
+        "position": {
+          "type": "ToastPosition | undefined",
+          "description": "Toast position on screen. Default: `\"bottom-right\"`."
+        },
+        "maxToasts": {
+          "type": "number | undefined"
+        },
+        "containerClassName": {
+          "type": "string | undefined"
+        },
+        "defaultDuration": {
+          "type": "number | undefined"
+        },
+        "animationDuration": {
+          "type": "number | undefined"
+        },
+        "gap": {
+          "type": "number | undefined"
+        },
+        "zIndex": {
+          "type": "number | undefined"
+        },
+        "dismissOnEscape": {
+          "type": "boolean | undefined"
+        },
+        "containerAriaLabel": {
+          "type": "string | undefined"
+        },
+        "classes": {
+          "type": "ToastClasses | undefined"
+        },
+        "unstyled": {
+          "type": "boolean | undefined"
+        }
+      }
+    }
+  }
 }

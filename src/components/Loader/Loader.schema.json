@@ -231,5 +231,139 @@
         }
       }
     }
-  ]
+  ],
+  "subComponents": {
+    "CircularLoader": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "number | undefined",
+          "description": "Width and height in pixels. Default: 20"
+        },
+        "thickness": {
+          "type": "number | undefined",
+          "description": "Stroke width of track and arc. Default: 2"
+        },
+        "speed": {
+          "type": "number | undefined",
+          "description": "Animation duration in seconds (lower = faster). Default: 0.75"
+        },
+        "trackColor": {
+          "type": "string | undefined",
+          "description": "Background track color. Default: currentColor at 20% opacity"
+        },
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+        },
+        "classes": {
+          "type": "CircularLoaderClasses | undefined",
+          "description": "CSS class overrides for sub-elements."
+        },
+        "unstyled": {
+          "type": "boolean | undefined",
+          "description": "Removes all default styling."
+        }
+      }
+    },
+    "LinearLoader": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "number | undefined",
+          "description": "Height of the bar in pixels. Default: 4"
+        },
+        "width": {
+          "type": "string | number | undefined",
+          "description": "Width of the bar (CSS value). Default: \"100%\""
+        },
+        "speed": {
+          "type": "number | undefined",
+          "description": "Animation duration in seconds. Default: 1.5"
+        },
+        "trackColor": {
+          "type": "string | undefined",
+          "description": "Background track color"
+        },
+        "borderRadius": {
+          "type": "number | undefined",
+          "description": "Border radius in pixels. Default: 9999 (pill)"
+        },
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+        },
+        "classes": {
+          "type": "LinearLoaderClasses | undefined",
+          "description": "CSS class overrides for sub-elements."
+        },
+        "unstyled": {
+          "type": "boolean | undefined",
+          "description": "Removes all default styling."
+        }
+      }
+    },
+    "DotLoader": {
+      "type": "object",
+      "properties": {
+        "dotSize": {
+          "type": "number | undefined",
+          "description": "Diameter of each dot in pixels. Default: 8"
+        },
+        "gap": {
+          "type": "number | undefined",
+          "description": "Gap between dots in pixels. Default: 4"
+        },
+        "count": {
+          "type": "number | undefined",
+          "description": "Number of dots. Default: 3"
+        },
+        "speed": {
+          "type": "number | undefined",
+          "description": "Full animation cycle duration in seconds. Default: 1.4"
+        },
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+        },
+        "classes": {
+          "type": "DotLoaderClasses | undefined",
+          "description": "CSS class overrides for sub-elements."
+        },
+        "unstyled": {
+          "type": "boolean | undefined",
+          "description": "Removes all default styling."
+        }
+      }
+    },
+    "PulseLoader": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "number | undefined",
+          "description": "Diameter of the circle in pixels. Default: 40"
+        },
+        "speed": {
+          "type": "number | undefined",
+          "description": "Animation duration in seconds. Default: 1.5"
+        },
+        "rings": {
+          "type": "number | undefined",
+          "description": "Number of ripple rings. Default: 2"
+        },
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+        },
+        "classes": {
+          "type": "PulseLoaderClasses | undefined",
+          "description": "CSS class overrides for sub-elements."
+        },
+        "unstyled": {
+          "type": "boolean | undefined",
+          "description": "Removes all default styling."
+        }
+      }
+    }
+  }
 }

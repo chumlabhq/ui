@@ -6,7 +6,7 @@
   "properties": {
     "children": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Button content."
+      "description": "React.ReactNode — Button content."
     },
     "as": {
       "type": "string",
@@ -38,11 +38,11 @@
     },
     "startIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Icon rendered before the button label."
+      "description": "React.ReactNode — Icon rendered before the button label."
     },
     "endIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Icon rendered after the button label."
+      "description": "React.ReactNode — Icon rendered after the button label."
     },
     "loading": {
       "type": "boolean",
@@ -51,7 +51,7 @@
     },
     "loadingText": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Text displayed alongside the loading spinner."
+      "description": "React.ReactNode — Text displayed alongside the loading spinner."
     },
     "loaderPosition": {
       "type": "string",
@@ -69,7 +69,7 @@
     },
     "loader": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom loader element replacing the default spinner."
+      "description": "React.ReactNode — Custom loader element replacing the default spinner."
     },
     "fullWidth": {
       "type": "boolean",
@@ -144,7 +144,7 @@
     },
     "tooltip": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Tooltip content shown on hover."
+      "description": "React.ReactNode — Tooltip content shown on hover."
     },
     "tooltipProps": {
       "type": "object",
@@ -208,5 +208,20 @@
       "description": "Link rel attribute (when as='a')."
     }
   },
-  "required": []
+  "required": [],
+  "subComponents": {
+    "ButtonGroup": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode",
+          "description": "Button elements to group together."
+        },
+        "orientation": {
+          "type": "\"horizontal\" | \"vertical\" | undefined",
+          "description": "Stack direction. Default: `\"horizontal\"`."
+        }
+      }
+    }
+  }
 }

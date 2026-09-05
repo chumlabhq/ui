@@ -143,5 +143,82 @@
   },
   "required": [
     "code"
-  ]
+  ],
+  "subComponents": {
+    "CountryFlagGroup": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode"
+        },
+        "max": {
+          "type": "number | undefined"
+        },
+        "size": {
+          "type": "number | CountryFlagSize | undefined"
+        },
+        "showCountTooltip": {
+          "type": "boolean | undefined"
+        },
+        "countTooltip": {
+          "type": "Omit<CountryFlagTooltipConfig, \"content\"> | undefined"
+        },
+        "surplusTooltipContent": {
+          "type": "ReactNode"
+        },
+        "renderSurplus": {
+          "type": "((count: number) => ReactNode) | undefined"
+        },
+        "classes": {
+          "type": "CountryFlagGroupClasses | undefined"
+        }
+      }
+    },
+    "CountryFlagShimmer": {
+      "type": "object",
+      "properties": {
+        "classes": {
+          "type": "CountryFlagShimmerClasses | undefined"
+        },
+        "unstyled": {
+          "type": "boolean | undefined"
+        },
+        "size": {
+          "type": "number | CountryFlagSize | undefined"
+        },
+        "aspectRatio": {
+          "type": "number | undefined"
+        },
+        "animate": {
+          "type": "boolean | undefined"
+        },
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined"
+        }
+      }
+    },
+    "CountryFlagGroupShimmer": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "number | undefined"
+        },
+        "size": {
+          "type": "number | CountryFlagSize | undefined"
+        },
+        "aspectRatio": {
+          "type": "number | undefined"
+        },
+        "animate": {
+          "type": "boolean | undefined"
+        },
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined"
+        },
+        "showCount": {
+          "type": "boolean | undefined"
+        }
+      }
+    }
+  }
 }

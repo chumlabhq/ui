@@ -238,5 +238,40 @@
   },
   "required": [
     "children"
-  ]
+  ],
+  "subComponents": {
+    "ModalHeader": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode"
+        },
+        "className": {
+          "type": "string | undefined"
+        }
+      }
+    },
+    "ModalBody": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode"
+        },
+        "className": {
+          "type": "string | undefined"
+        }
+      }
+    },
+    "ModalFooter": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "ReactNode"
+        },
+        "className": {
+          "type": "string | undefined"
+        }
+      }
+    }
+  }
 }

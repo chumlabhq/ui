@@ -151,5 +151,24 @@
       "default": false
     }
   },
-  "required": []
+  "required": [],
+  "subComponents": {
+    "InputLabel": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "ReactNode"
+        },
+        "required": {
+          "type": "boolean | undefined"
+        },
+        "htmlFor": {
+          "type": "string | undefined"
+        },
+        "className": {
+          "type": "string | undefined"
+        }
+      }
+    }
+  }
 }

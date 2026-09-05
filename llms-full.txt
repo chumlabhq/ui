@@ -223,6 +223,70 @@ ref.current?.element                 // Root HTMLDivElement
 
 ---
 
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### AccordionItem
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `value` | `string` | — |
+| `disabled` | `boolean \| undefined` | — |
+| `children` | `ReactNode` | — |
+| `asChild` | `boolean \| undefined` | — |
+| `onExpandedChange` | `((isExpanded: boolean) => void) \| undefined` | Fires when the item's expanded state changes. |
+| `aria-describedby` | `string \| undefined` | Identifies the element (or elements) that describes the object. |
+
+#### AccordionTrigger
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `expandedIcon` | `ReactNode` | — |
+| `collapsedIcon` | `ReactNode` | — |
+| `iconPosition` | `"left" \| "right" \| "none" \| undefined` | — |
+| `asChild` | `boolean \| undefined` | — |
+| `subtitle` | `ReactNode` | — |
+| `iconAnimation` | `"none" \| "rotate" \| "switch" \| undefined` | — |
+| `leftSlot` | `ReactNode` | — |
+| `rightSlot` | `ReactNode` | — |
+| `aria-describedby` | `string \| undefined` | Identifies the element (or elements) that describes the object. |
+
+#### AccordionContent
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `forceMount` | `boolean \| undefined` | — |
+| `animationDuration` | `number \| undefined` | — |
+| `animationEasing` | `string \| undefined` | — |
+| `asChild` | `boolean \| undefined` | — |
+| `lazyLoad` | `boolean \| undefined` | — |
+| `unmountOnClose` | `boolean \| undefined` | — |
+| `onOpenStart` | `(() => void) \| undefined` | — |
+| `onOpenEnd` | `(() => void) \| undefined` | — |
+| `onCloseStart` | `(() => void) \| undefined` | — |
+| `onCloseEnd` | `(() => void) \| undefined` | — |
+
+#### AccordionShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
+| `classes` | `AccordionShimmerClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+| `count` | `number \| undefined` | — |
+| `size` | `AccordionSize \| undefined` | — |
+| `variant` | `AccordionVariant \| undefined` | — |
+| `animate` | `boolean \| undefined` | — |
+| `className` | `string \| undefined` | — |
+| `style` | `CSSProperties \| undefined` | — |
+| `showContent` | `boolean \| undefined` | — |
+| `asChild` | `boolean \| undefined` | — |
+
+---
+
 ### Styling Guide
 
 #### How class merging works
@@ -646,6 +710,96 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
 | `onError` | object | — | () => void — Fires when the avatar image fails to load. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
+
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### AvatarGroup
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | Avatar elements to group. |
+| `max` | `number \| undefined` | Maximum visible avatars before showing a surplus count. |
+| `size` | `AvatarSize \| undefined` | Default size for all avatars in the group. |
+| `shape` | `AvatarShape \| undefined` | Default shape for all avatars in the group. |
+| `bordered` | `string \| boolean \| undefined` | Adds border rings to all avatars. |
+| `spacing` | `number \| undefined` | Overlap spacing in pixels (negative for overlap). |
+| `ringColor` | `string \| undefined` | Border ring color for overlapping avatars. |
+| `showTooltip` | `boolean \| undefined` | Shows a tooltip with the avatar's name on hover. |
+| `total` | `number \| undefined` | Total count for surplus calculation (when not all items are rendered). |
+| `variant` | `GroupVariant \| undefined` | Layout variant: stacked overlap, grid, or inline. Default: `"stack"`. |
+| `reverseOrder` | `boolean \| undefined` | Reverses the visual stacking order. |
+| `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Custom render function for the surplus count indicator. |
+| `onAvatarClick` | `((info: { index: number; name?: string \| undefined; }, event: MouseEvent<Element, MouseEvent>) => void) \| undefined` | Click handler for individual avatars within the group. |
+| `dir` | `Direction \| undefined` | Text direction for RTL-aware layouts. |
+| `classes` | `AvatarGroupClasses \| undefined` | CSS class overrides for group sub-elements. |
+| `asChild` | `boolean \| undefined` | Merges group props onto the child element via Slot. |
+
+#### AvatarGroupCount
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number` | Number of additional (hidden) avatars. |
+| `size` | `AvatarSize \| undefined` | Size matching the group's avatar size. |
+| `shape` | `AvatarShape \| undefined` | Shape matching the group's avatar shape. |
+| `max` | `number \| undefined` | Maximum count before showing `max+`. |
+| `showPlus` | `boolean \| undefined` | Whether to show a `+` prefix. Default: `true`. |
+| `format` | `((count: number) => string) \| undefined` | Custom format function for the count display. |
+| `variant` | `CountVariant \| undefined` | Visual style variant. |
+| `tooltip` | `ReactNode \| AvatarTooltipConfig` | Tooltip shown on hover. |
+| `bordered` | `string \| boolean \| undefined` | Adds a border ring. |
+| `textClassName` | `string \| undefined` | CSS class for the count text. |
+| `textStyle` | `CSSProperties \| undefined` | Inline styles for the count text. |
+| `aria-live` | `"polite" \| "assertive" \| "off" \| undefined` | ARIA live region behavior for screen readers. |
+| `asChild` | `boolean \| undefined` | Merges count props onto the child element via Slot. |
+| `children` | `ReactNode` | Custom content replacing the default count display. |
+
+#### AvatarBadge
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number \| undefined` | Notification count displayed in the badge. |
+| `max` | `number \| undefined` | Maximum count before showing `max+`. |
+| `showZero` | `boolean \| undefined` | Shows the badge even when count is zero. Default: `false`. |
+| `dot` | `boolean \| undefined` | Renders a small dot instead of a count. |
+| `position` | `CornerPosition \| undefined` | Corner position for the badge. Default: `"top-right"`. |
+| `offset` | `BadgeOffset \| undefined` | Pixel offset from the default corner position. |
+| `color` | `string \| undefined` | Background color of the badge. |
+| `size` | `BadgeSize \| undefined` | Badge size preset. Default: `"sm"`. |
+| `variant` | `BadgeVariant \| undefined` | Visual style variant. Default: `"solid"`. |
+| `overlap` | `BadgeOverlap \| undefined` | Shape of the element the badge overlaps. |
+| `pulse` | `boolean \| undefined` | Adds a pulsing animation to the badge. |
+| `invisible` | `boolean \| undefined` | Hides the badge while preserving its DOM presence. |
+| `aria-live` | `"polite" \| "assertive" \| "off" \| undefined` | ARIA live region behavior for screen readers. |
+| `asChild` | `boolean \| undefined` | Merges badge props onto the child element via Slot. |
+
+#### AvatarShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `classes` | `AvatarShimmerClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+| `size` | `AvatarSize \| undefined` | Shimmer size matching the avatar size. |
+| `shape` | `AvatarShape \| undefined` | Shimmer shape matching the avatar shape. |
+| `animate` | `boolean \| undefined` | Enables the shimmer animation. Default: `true`. |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+
+#### AvatarGroupShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number \| undefined` | Number of shimmer placeholders to render. Default: `3`. |
+| `size` | `AvatarSize \| undefined` | Shimmer size matching the group's avatar size. |
+| `shape` | `AvatarShape \| undefined` | Shimmer shape matching the group's avatar shape. |
+| `spacing` | `number \| undefined` | Overlap spacing in pixels. |
+| `ringColor` | `string \| undefined` | Border ring color. |
+| `animate` | `boolean \| undefined` | Enables the shimmer animation. Default: `true`. |
+| `showCount` | `boolean \| undefined` | Shows a shimmer placeholder for the surplus count. |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `asChild` | `boolean \| undefined` | Merges shimmer props onto the child element via Slot. |
+
+---
 
 ### Styling Guide
 
@@ -1277,6 +1431,19 @@ const ref = useRef<HTMLElement>(null);
 
 ---
 
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### ButtonGroup
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | Button elements to group together. |
+| `orientation` | `"horizontal" \| "vertical" \| undefined` | Stack direction. Default: `"horizontal"`. |
+
+---
+
 ### Styling Guide
 
 #### Slot → visual mapping
@@ -1344,13 +1511,13 @@ Copy-paste these as `className` values:
 <div className="flex gap-2">
   <Button
     className="bg-indigo-600 dark:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-400 shadow-sm focus-visible:ring-indigo-500 dark:focus-visible:ring-offset-gray-900"
-    icon={<PlusIcon className="w-3.5 h-3.5" />}
+    startIcon={<PlusIcon className="w-3.5 h-3.5" />}
   >
     Create payment
   </Button>
   <Button
     className="text-xs px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
-    icon={<FilterIcon className="w-3.5 h-3.5" />}
+    startIcon={<FilterIcon className="w-3.5 h-3.5" />}
   >
     Filter
   </Button>
@@ -1398,7 +1565,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={iconOnlyClasses}
-  icon={<TrashIcon />}
+  startIcon={<TrashIcon />}
   aria-label="Delete item"
   tooltip="Delete"
   tooltipProps={{ side: "bottom", delayDuration: 300 }}
@@ -1420,7 +1587,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={primaryClasses}
-  icon={<ArrowRightIcon />}
+  startIcon={<ArrowRightIcon />}
   iconAnimation="slideRight"
 >
   Continue
@@ -1445,12 +1612,12 @@ const [saving, setSaving] = useState(false);
 // ❌ DON'T: Use color alone for destructive actions
 <Button className="bg-red-500 text-white">Delete</Button>
 // ✅ DO: Include a warning icon or confirmation
-<Button className="bg-red-500 text-white" icon={<TrashIcon />}>Delete</Button>
+<Button className="bg-red-500 text-white" startIcon={<TrashIcon />}>Delete</Button>
 
 // ❌ DON'T: Use icon-only span button without aria-label
-<Button as="span" icon={<CloseIcon />} />
+<Button as="span" startIcon={<CloseIcon />} />
 // ✅ DO: Always provide aria-label for icon-only buttons
-<Button as="span" icon={<CloseIcon />} aria-label="Close" />
+<Button as="span" startIcon={<CloseIcon />} aria-label="Close" />
 ```
 
 ---
@@ -1532,14 +1699,14 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 
 | Prop | Constraint |
 |------|-----------|
-| `selectionMode` | Set on each `CascadingOption.children` parent. `"single"` = radio behavior, `"multi"` = checkbox. Defaults to `"single"`. |
+| `selectionMode` on an option | Set on each `CascadingOption.children` parent. `"single"` = radio behavior, `"multi"` = checkbox. Defaults to `"single"`. |
 | `onLoadChildren` | Only called when `option.hasChildren` is true and `option.children` is undefined. Must return `Promise<CascadingOption[]>`. |
 | `onMenuSearch` | When provided, disables client-side menu filtering. You must return filtered results. |
 | `onSubmenuSearch` | When provided, disables client-side submenu filtering. Receives `(query, parent)`. |
 | `value` / `onValueChange` | Controlled mode. Shape: `{ parentValue: "childValue" }` for single, `{ parentValue: ["a","b"] }` for multi. |
 | `defaultValue` | Uncontrolled mode. Cannot be used with `value`. |
 | `closeOnSelect` | Defaults to `true`. Set `false` to keep menu open after selection (useful for multi-select). |
-| `subSearchControl` | Falls back to `searchControl` if not set. Same for `subSearchInput` and `subSearchIcon`. |
+| `classes.subSearchControl` | Falls back to `searchControl` if not set. Same for `subSearchInput` and `subSearchIcon`. |
 
 ---
 
@@ -1805,7 +1972,7 @@ const searchCountries = async (query: string) => {
   name="category"
   label="Category"
   required
-  message={!!errors.category}
+  error={!!errors.category}
   errorMessage={errors.category}
   options={options}
   value={value}
@@ -2044,7 +2211,7 @@ const someChecked = items.some(Boolean);
 <Checkbox
   name="terms"
   required
-  message={!!errors.terms}
+  error={!!errors.terms}
   errorMessage={errors.terms}
   label="I accept the Terms of Service"
   checked={accepted}
@@ -2165,6 +2332,47 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 | `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
 | `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### CountryFlagGroup
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `max` | `number \| undefined` | — |
+| `size` | `number \| CountryFlagSize \| undefined` | — |
+| `showCountTooltip` | `boolean \| undefined` | — |
+| `countTooltip` | `Omit<CountryFlagTooltipConfig, "content"> \| undefined` | — |
+| `surplusTooltipContent` | `ReactNode` | — |
+| `renderSurplus` | `((count: number) => ReactNode) \| undefined` | — |
+| `classes` | `CountryFlagGroupClasses \| undefined` | — |
+
+#### CountryFlagShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `classes` | `CountryFlagShimmerClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+| `size` | `number \| CountryFlagSize \| undefined` | — |
+| `aspectRatio` | `number \| undefined` | — |
+| `animate` | `boolean \| undefined` | — |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
+
+#### CountryFlagGroupShimmer
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `count` | `number \| undefined` | — |
+| `size` | `number \| CountryFlagSize \| undefined` | — |
+| `aspectRatio` | `number \| undefined` | — |
+| `animate` | `boolean \| undefined` | — |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
+| `showCount` | `boolean \| undefined` | — |
+
+---
+
 ### Styling Guide
 
 #### How class merging works
@@ -2269,8 +2477,8 @@ These props have dependencies -- using them wrong causes silent bugs:
 | Prop | Constraint |
 |------|-----------|
 | `mode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
-| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presetGroup` prop is provided. |
-| `presetGroup` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
+| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` is provided. |
+| `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
 | `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
 | `clearable` / `showClearButton` | Both control the clear button. `showClearButton` takes precedence if both are set. |
 | `open` + `onOpenChange` | Controlled open state -- both are needed together. |
@@ -2517,13 +2725,13 @@ const [dates, setDates] = useState<Date[] | null>(null);
 #### Custom presets
 
 ```tsx
-const presetGroup = [
+const presets = [
   { label: "Today", getValue: () => new Date() },
   { label: "Yesterday", getValue: () => subDays(new Date(), 1) },
   { label: "Start of Month", getValue: () => startOfMonth(new Date()) },
 ];
 
-<DatePicker presetGroup={presetGroup} showPresets />
+<DatePicker presets={presets} showPresets />
 ```
 
 #### With markers
@@ -2579,7 +2787,7 @@ import { fr } from "date-fns/locale";
   label="Start date"
   description="When should the project begin?"
   required
-  message={!date}
+  error={!date}
   errorMessage="Please select a date"
 />
 ```
@@ -2968,7 +3176,7 @@ const [value, setValue] = useState<string | null>(null);
   label="Country"
   required
   name="country"
-  message={!value}
+  error={!value}
   errorMessage="Please select a country"
   options={countries}
   value={value}
@@ -3088,6 +3296,21 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 | `classes` | object | — | Slot-based class overrides for internal elements. |
 | `unstyled` | boolean | `false` | When true, all default classes are removed so you can style from scratch. |
 
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### InputLabel
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `label` | `ReactNode` | — |
+| `required` | `boolean \| undefined` | — |
+| `htmlFor` | `string \| undefined` | — |
+| `className` | `string \| undefined` | — |
+
+---
+
 ### Styling Guide
 
 #### How class merging works
@@ -3157,9 +3380,9 @@ const [show, setShow] = useState(false);
 ```tsx
 <Input
   label="Email"
-  message={!isValid}
+  error={!isValid}
   errorMessage="Please enter a valid email"
-  message={isValid}
+  success={isValid}
   successMessage="Looks good!"
 />
 ```
@@ -3434,7 +3657,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
   label="Phone"
   value={phone}
   onValueChange={setPhone}
-  message={phone ? !phone.isValid : false}
+  error={phone ? !phone.isValid : false}
   errorMessage="Invalid phone number"
 />
 ```
@@ -3561,6 +3784,60 @@ export default function Example() {
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | — | Removes all default styling. |
+
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### CircularLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `size` | `number \| undefined` | Width and height in pixels. Default: 20 |
+| `thickness` | `number \| undefined` | Stroke width of track and arc. Default: 2 |
+| `speed` | `number \| undefined` | Animation duration in seconds (lower = faster). Default: 0.75 |
+| `trackColor` | `string \| undefined` | Background track color. Default: currentColor at 20% opacity |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `CircularLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+#### LinearLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `height` | `number \| undefined` | Height of the bar in pixels. Default: 4 |
+| `width` | `string \| number \| undefined` | Width of the bar (CSS value). Default: "100%" |
+| `speed` | `number \| undefined` | Animation duration in seconds. Default: 1.5 |
+| `trackColor` | `string \| undefined` | Background track color |
+| `borderRadius` | `number \| undefined` | Border radius in pixels. Default: 9999 (pill) |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `LinearLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+#### DotLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `dotSize` | `number \| undefined` | Diameter of each dot in pixels. Default: 8 |
+| `gap` | `number \| undefined` | Gap between dots in pixels. Default: 4 |
+| `count` | `number \| undefined` | Number of dots. Default: 3 |
+| `speed` | `number \| undefined` | Full animation cycle duration in seconds. Default: 1.4 |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `DotLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+#### PulseLoader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `size` | `number \| undefined` | Diameter of the circle in pixels. Default: 40 |
+| `speed` | `number \| undefined` | Animation duration in seconds. Default: 1.5 |
+| `rings` | `number \| undefined` | Number of ripple rings. Default: 2 |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
+| `classes` | `PulseLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
+| `unstyled` | `boolean \| undefined` | Removes all default styling. |
+
+---
 
 ### Styling Guide
 
@@ -3710,6 +3987,33 @@ modalRef.current?.focus();
   ...
 </Modal>
 ```
+
+---
+
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### ModalHeader
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `className` | `string \| undefined` | — |
+
+#### ModalBody
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `className` | `string \| undefined` | — |
+
+#### ModalFooter
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `className` | `string \| undefined` | — |
 
 ---
 
@@ -5841,7 +6145,7 @@ const [sorting, setSorting] = useState<SortingState>([]);
 #### Row selection
 
 ```tsx
-<Table columns={columns} data={data} selectable onSelectionChange={(rows) => console.log(rows)} />
+<Table columns={columns} data={data} selectionMode="multiple" onSelectionChange={(rows) => console.log(rows)} />
 ```
 
 #### Column pinning
@@ -6156,6 +6460,21 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 | `value` | string | — | Controlled value of the textarea. |
 | `defaultValue` | string | — | Default uncontrolled value. |
 
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### TextAreaLabel
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `label` | `ReactNode` | — |
+| `required` | `boolean \| undefined` | — |
+| `htmlFor` | `string \| undefined` | — |
+| `className` | `string \| undefined` | — |
+
+---
+
 ### Styling Guide
 
 #### How class merging works
@@ -6218,9 +6537,9 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
 ```tsx
 <TextArea
   label="Feedback"
-  message={!isValid}
+  error={!isValid}
   errorMessage="Feedback is required"
-  message={isValid}
+  success={isValid}
   successMessage="Thank you!"
   required
 />
@@ -6499,7 +6818,7 @@ function MyComponent() {
 | `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
-| `root` | ReactNode that replaces the default message/description layout entirely |
+| `classes.root` | Class string for the toast's outer element. It does not replace the layout. |
 | `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
 
@@ -6544,6 +6863,29 @@ toast.dismissAll();
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `onRemove` **(required)** | object | — | (id: string) => void — Internal callback to remove the toast from the provider. |
+
+### Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+#### ToastProvider
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `position` | `ToastPosition \| undefined` | Toast position on screen. Default: `"bottom-right"`. |
+| `maxToasts` | `number \| undefined` | — |
+| `containerClassName` | `string \| undefined` | — |
+| `defaultDuration` | `number \| undefined` | — |
+| `animationDuration` | `number \| undefined` | — |
+| `gap` | `number \| undefined` | — |
+| `zIndex` | `number \| undefined` | — |
+| `dismissOnEscape` | `boolean \| undefined` | — |
+| `containerAriaLabel` | `string \| undefined` | — |
+| `classes` | `ToastClasses \| undefined` | — |
+| `unstyled` | `boolean \| undefined` | — |
+
+---
 
 ### Styling Guide
 

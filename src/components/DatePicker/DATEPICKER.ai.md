@@ -52,8 +52,8 @@ These props have dependencies -- using them wrong causes silent bugs:
 | Prop | Constraint |
 |------|-----------|
 | `mode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
-| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presetGroup` prop is provided. |
-| `presetGroup` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
+| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` is provided. |
+| `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
 | `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
 | `clearable` / `showClearButton` | Both control the clear button. `showClearButton` takes precedence if both are set. |
 | `open` + `onOpenChange` | Controlled open state -- both are needed together. |
@@ -300,13 +300,13 @@ const [dates, setDates] = useState<Date[] | null>(null);
 ### Custom presets
 
 ```tsx
-const presetGroup = [
+const presets = [
   { label: "Today", getValue: () => new Date() },
   { label: "Yesterday", getValue: () => subDays(new Date(), 1) },
   { label: "Start of Month", getValue: () => startOfMonth(new Date()) },
 ];
 
-<DatePicker presetGroup={presetGroup} showPresets />
+<DatePicker presets={presets} showPresets />
 ```
 
 ### With markers
@@ -362,7 +362,7 @@ import { fr } from "date-fns/locale";
   label="Start date"
   description="When should the project begin?"
   required
-  message={!date}
+  error={!date}
   errorMessage="Please select a date"
 />
 ```

@@ -67,5 +67,3 @@ export {
   useExpandedStore,
 } from "./utils/context";
 
-export { Slot } from "../../utils/Slot";
-export type { SlotProps } from "../../utils/Slot";

@@ -232,5 +232,96 @@
         "value"
       ]
     }
-  ]
+  ],
+  "subComponents": {
+    "RadioGroup": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string | undefined",
+          "description": "Currently selected value."
+        },
+        "defaultValue": {
+          "type": "string | undefined",
+          "description": "Initial selected value for uncontrolled usage."
+        },
+        "onValueChange": {
+          "type": "((value: string) => void) | undefined",
+          "description": "Fires when the selected value changes. Not `onChange`."
+        },
+        "onFocus": {
+          "type": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined",
+          "description": "Fires when a radio receives focus."
+        },
+        "onBlur": {
+          "type": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined",
+          "description": "Fires when a radio loses focus."
+        },
+        "label": {
+          "type": "ReactNode",
+          "description": "Text label for the group."
+        },
+        "description": {
+          "type": "ReactNode",
+          "description": "Helper text for the group."
+        },
+        "name": {
+          "type": "string | undefined",
+          "description": "Field name for form submission."
+        },
+        "required": {
+          "type": "boolean | undefined",
+          "description": "Required field indicator."
+        },
+        "disabled": {
+          "type": "boolean | undefined",
+          "description": "Disables all radio buttons in the group."
+        },
+        "error": {
+          "type": "boolean | undefined",
+          "description": "Displays the group in an error state."
+        },
+        "errorMessage": {
+          "type": "ReactNode",
+          "description": "Error message displayed below the group."
+        },
+        "success": {
+          "type": "boolean | undefined",
+          "description": "Displays the group in a success state."
+        },
+        "successMessage": {
+          "type": "ReactNode",
+          "description": "Success message displayed below the group."
+        },
+        "loading": {
+          "type": "boolean | undefined",
+          "description": "Loading state."
+        },
+        "size": {
+          "type": "RadioButtonSize | undefined",
+          "description": "Size of all radio indicators."
+        },
+        "orientation": {
+          "type": "\"horizontal\" | \"vertical\" | undefined",
+          "description": "Layout orientation. Default: \"vertical\"."
+        },
+        "classes": {
+          "type": "RadioGroupClasses | undefined",
+          "description": "CSS class overrides for group sub-elements."
+        },
+        "unstyled": {
+          "type": "boolean | undefined",
+          "description": "Removes all default styling."
+        },
+        "reduceMotion": {
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+        },
+        "children": {
+          "type": "ReactNode",
+          "description": "Radio button children."
+        }
+      }
+    }
+  }
 }

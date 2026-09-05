@@ -272,7 +272,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
   label="Phone"
   value={phone}
   onValueChange={setPhone}
-  message={phone ? !phone.isValid : false}
+  error={phone ? !phone.isValid : false}
   errorMessage="Invalid phone number"
 />
 ```

@@ -291,7 +291,7 @@ const [value, setValue] = useState<string | null>(null);
   label="Country"
   required
   name="country"
-  message={!value}
+  error={!value}
   errorMessage="Please select a country"
   options={countries}
   value={value}

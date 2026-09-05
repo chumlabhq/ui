@@ -152,7 +152,6 @@ export type {
 
 // ─── Dropdown ────────────────────────────────────────────────────────────────
 export { default as Dropdown } from "./components/Dropdown/Dropdown";
-export { default as DropdownShimmer } from "./components/Dropdown/components/DropdownShimmer";
 export type {
   DropdownOption,
   DropdownProps,
@@ -243,7 +242,6 @@ export type {
 // ─── OtpInput ────────────────────────────────────────────────────────────────
 export {
   default as OtpInput,
-  OtpInputLabel,
 } from "./components/OtpInput/OtpInput";
 export { PRESET_OTPINPUT_CLASSES } from "./components/OtpInput/utils/constants";
 export type {
@@ -270,7 +268,6 @@ export type {
 
 // ─── SearchableDropdown ──────────────────────────────────────────────────────
 export { default as SearchableDropdown } from "./components/SearchableDropdown/SearchableDropdown";
-export { default as SearchableDropdownShimmer } from "./components/SearchableDropdown/components/SearchableDropdownShimmer";
 export type {
   SearchableDropdownOption,
   SearchableDropdownProps,
@@ -299,7 +296,6 @@ export type {
 
 // ─── Table ───────────────────────────────────────────────────────────────────
 export { default as Table } from "./components/Table/Table";
-export { default as TableShimmer } from "./components/Table/TableShimmer";
 export {
   DEFAULT_ROW_OPTIONS,
   DEFAULT_VISIBLE_PAGE_COUNT,
@@ -346,7 +342,6 @@ export type {
 
 // ─── TimePicker ──────────────────────────────────────────────────────────────
 export { default as TimePicker } from "./components/TimePicker/TimePicker";
-export { ClockFace } from "./components/TimePicker/ClockFace";
 export { useTimePicker } from "./components/TimePicker/useTimePicker";
 export type {
   TimePickerProps,

@@ -182,6 +182,88 @@ const AccordionDemo = () => {
 
       {/* ─── Basic (Single Mode) ────────────────────────────────────────── */}
       <Section
+        title="Variants"
+        description="Four surface treatments. The behaviour is identical; only the frame changes."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-col gap-8">
+            {(["default", "bordered", "separated", "flush"] as const).map((variant) => (
+              <div key={variant}>
+                <div className="eyebrow mb-2">{variant}</div>
+                <Accordion type="single" collapsible variant={variant} defaultValue={`v-${variant}`}>
+                  <AccordionItem value={`v-${variant}`}>
+                    <AccordionTrigger>Shipping</AccordionTrigger>
+                    <AccordionContent>Dispatched within two working days.</AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value={`v-${variant}-2`}>
+                    <AccordionTrigger>Returns</AccordionTrigger>
+                    <AccordionContent>Thirty days, unworn, receipt not required.</AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            ))}
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      <Section
+        title="Horizontal orientation"
+        description="Horizontal orientation lays the items along the inline axis and swaps the arrow keys that move between them — Left and Right rather than Up and Down."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <Accordion type="single" collapsible orientation="horizontal" defaultValue="h-1">
+            <AccordionItem value="h-1">
+              <AccordionTrigger>Overview</AccordionTrigger>
+              <AccordionContent>The first panel, opened along the inline axis.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="h-2">
+              <AccordionTrigger>Details</AccordionTrigger>
+              <AccordionContent>Arrow Left and Right move between the triggers here.</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </DemoWrapper>
+      </Section>
+
+      <Section
+        title="Focus wrapping"
+        description="`loop` decides what ArrowDown does on the last trigger: wrap to the first, or stop. Tab to a trigger and hold ArrowDown on each to feel the difference."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="grid gap-8 md:grid-cols-2">
+            <div>
+              <div className="eyebrow mb-2">loop</div>
+              <Accordion type="single" collapsible loop>
+                <AccordionItem value="loop-1">
+                  <AccordionTrigger>First</AccordionTrigger>
+                  <AccordionContent>Wraps round to First from Last.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="loop-2">
+                  <AccordionTrigger>Last</AccordionTrigger>
+                  <AccordionContent>ArrowDown here goes back to First.</AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+            <div>
+              <div className="eyebrow mb-2">loop={"{false}"} (default)</div>
+              <Accordion type="single" collapsible loop={false}>
+                <AccordionItem value="noloop-1">
+                  <AccordionTrigger>First</AccordionTrigger>
+                  <AccordionContent>Stops at the ends.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="noloop-2">
+                  <AccordionTrigger>Last</AccordionTrigger>
+                  <AccordionContent>ArrowDown here stays put.</AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      <Section
         title="Basic Usage"
         description="A simple accordion where only one item can be expanded at a time."
         isDarkMode={dark}

@@ -240,7 +240,7 @@ const [sorting, setSorting] = useState<SortingState>([]);
 ### Row selection
 
 ```tsx
-<Table columns={columns} data={data} selectable onSelectionChange={(rows) => console.log(rows)} />
+<Table columns={columns} data={data} selectionMode="multiple" onSelectionChange={(rows) => console.log(rows)} />
 ```
 
 ### Column pinning

@@ -111,6 +111,21 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 | `value` | string | — | Controlled value of the textarea. |
 | `defaultValue` | string | — | Default uncontrolled value. |
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### TextAreaLabel
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `label` | `ReactNode` | — |
+| `required` | `boolean \| undefined` | — |
+| `htmlFor` | `string \| undefined` | — |
+| `className` | `string \| undefined` | — |
+
+---
+
 ## Styling Guide
 
 ### How class merging works
@@ -173,9 +188,9 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
 ```tsx
 <TextArea
   label="Feedback"
-  message={!isValid}
+  error={!isValid}
   errorMessage="Feedback is required"
-  message={isValid}
+  success={isValid}
   successMessage="Thank you!"
   required
 />

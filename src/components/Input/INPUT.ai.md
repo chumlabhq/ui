@@ -99,6 +99,21 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 | `classes` | object | — | Slot-based class overrides for internal elements. |
 | `unstyled` | boolean | `false` | When true, all default classes are removed so you can style from scratch. |
 
+## Sub-component Props
+
+Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
+
+### InputLabel
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `label` | `ReactNode` | — |
+| `required` | `boolean \| undefined` | — |
+| `htmlFor` | `string \| undefined` | — |
+| `className` | `string \| undefined` | — |
+
+---
+
 ## Styling Guide
 
 ### How class merging works
@@ -168,9 +183,9 @@ const [show, setShow] = useState(false);
 ```tsx
 <Input
   label="Email"
-  message={!isValid}
+  error={!isValid}
   errorMessage="Please enter a valid email"
-  message={isValid}
+  success={isValid}
   successMessage="Looks good!"
 />
 ```

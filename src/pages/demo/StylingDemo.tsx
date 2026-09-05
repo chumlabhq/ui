@@ -1,4 +1,7 @@
-import { Section, CodeBlock } from "./components";
+import { Section, CodeBlock, DemoWrapper } from "./components";
+import { Button } from "../../components/Button";
+import { Switch } from "../../components/Switch";
+import { Checkbox } from "../../components/Checkbox";
 
 const StylingDemo = () => {
   return (
@@ -114,6 +117,29 @@ const StylingDemo = () => {
           keyboard navigation, ARIA wiring, and portal rendering. Name the slots
           you want through{" "}
           <code className="font-mono text-[12px] text-accent">classes</code>.
+        </p>
+
+        <DemoWrapper className="mt-6">
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center gap-6">
+              <span className="w-24 text-[12px] text-fg-tertiary">styled</span>
+              <Button>Save</Button>
+              <Switch defaultChecked aria-label="Styled switch" />
+              <Checkbox defaultChecked label="Styled" />
+            </div>
+            <div className="flex items-center gap-6">
+              <span className="w-24 text-[12px] text-fg-tertiary">unstyled</span>
+              <Button unstyled>Save</Button>
+              <Switch unstyled defaultChecked aria-label="Unstyled switch" />
+              <Checkbox unstyled defaultChecked label="Unstyled" />
+            </div>
+          </div>
+        </DemoWrapper>
+        <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
+          The second row is the same three components with everything decorative
+          removed. They still focus, still toggle, still announce themselves —
+          what is gone is only the paint. Tab through both rows to hear that
+          they behave identically.
         </p>
       </Section>
     </div>
