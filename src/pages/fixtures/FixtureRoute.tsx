@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { browserActTools } from "../../__tests__/fixtures/_act.js";
 import type { Fixture } from "../../__tests__/fixtures/types.js";
 import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegistry.js";
 
@@ -15,10 +16,48 @@ import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegi
  * so a new fixture is reachable here with no extra wiring — which is the
  * property that stops this drifting in turn.
  *
+ * It runs the fixture's `act` too, which it did not until the sweep in _act.ts:
+ * 50 fixtures reach their named state by interaction and every one of them
+ * rendered its base state to visual, a11y-full and e2e. `data-fixture-act`
+ * records the outcome and `fixture-act.spec.ts` fails on anything but
+ * "applied", so an act that throws or changes nothing cannot pass as a render.
+ *
  * DEV ONLY. App.tsx imports the subtree inside a ternary on import.meta.env.DEV,
  * so a production build drops the branch and the chunk;
  * scripts/assert-fixture-bundle.mjs asserts it never reaches the package.
  */
+/**
+ * Resolves once the document has stopped mutating.
+ *
+ * The act runs from an effect on the fixture's first commit, and a component
+ * still assembling itself takes the event and drops the state that comes of it:
+ * Table's cell editor opened from a dblclick dispatched half a second later and
+ * not from the identical one dispatched on that first frame, which is how
+ * `Table.input` came to be recorded "ATTEMPTED, still unreachable". Waiting for
+ * quiet rather than for a fixed delay keeps the fast fixtures fast.
+ */
+const quiet = (idleMs = 120, capMs = 1500) =>
+  new Promise<void>((resolve) => {
+    let timer = 0;
+    const done = () => {
+      clearTimeout(timer);
+      clearTimeout(cap);
+      observer.disconnect();
+      resolve();
+    };
+    const observer = new MutationObserver(() => {
+      clearTimeout(timer);
+      timer = window.setTimeout(done, idleMs);
+    });
+    observer.observe(document.documentElement, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+    });
+    timer = window.setTimeout(done, idleMs);
+    const cap = window.setTimeout(done, capMs);
+  });
+
 /** Reachable by a screen reader, invisible on the page. */
 const SR_ONLY = {
   position: "absolute",
@@ -32,6 +71,9 @@ const SR_ONLY = {
 export default function FixtureRoute() {
   const { component: slug = "", fixture: fixtureName = "" } = useParams();
   const component = fromSlug(slug);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [actStatus, setActStatus] = useState("none");
 
   const [state, setState] = useState<{
     resolved: Resolved | null;
@@ -48,9 +90,14 @@ export default function FixtureRoute() {
         loadFixtures(component),
       ]);
       if (cancelled) return;
+      const found = fixtures.find((f) => f.name === fixtureName) ?? null;
+      // Set here rather than in the act's own effect, so a fixture with an act
+      // never reports the terminal "none" on its way to running one — the
+      // browser suites wait on this attribute to know the page is finished.
+      setActStatus(found?.act ? "pending" : "none");
       setState({
         resolved,
-        fixture: fixtures.find((f) => f.name === fixtureName) ?? null,
+        fixture: found,
         available: fixtures.map((f) => f.name),
         ready: true,
       });
@@ -59,6 +106,32 @@ export default function FixtureRoute() {
       cancelled = true;
     };
   }, [component, fixtureName]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const act = state.fixture?.act;
+    if (!container || !act) return;
+    let cancelled = false;
+    void (async () => {
+      // The whole document, not the container: every surface these fixtures
+      // open is portalled to the body, so a container-scoped diff would call
+      // "open the dropdown" a no-op.
+      await quiet();
+      const before = document.documentElement.outerHTML;
+      try {
+        await act(container, browserActTools);
+        await browserActTools.settle();
+      } catch (error) {
+        if (!cancelled) setActStatus(`error: ${(error as Error).message}`);
+        return;
+      }
+      if (cancelled) return;
+      setActStatus(document.documentElement.outerHTML === before ? "no-op" : "applied");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [state.fixture]);
 
   if (!state.ready) return null;
 
@@ -98,7 +171,7 @@ export default function FixtureRoute() {
         : element;
 
   return (
-    <main style={{ padding: 24 }}>
+    <main style={{ padding: 24 }} data-fixture-act={actStatus}>
       {/* Outside the marked element on purpose: a page with no h1 trips axe's
           document-level rules, and a component audit scoped to [data-fixture]
           should not then inherit this heading's level.
@@ -112,6 +185,7 @@ export default function FixtureRoute() {
       </h1>
       <h2 style={SR_ONLY}>Fixture</h2>
       <div
+        ref={containerRef}
         // The identifying attribute the navigation guard asserts on, and the
         // subtree an accessibility audit scopes to.
         data-fixture={`${component}/${fixture.name}`}

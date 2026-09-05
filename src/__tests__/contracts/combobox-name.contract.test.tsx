@@ -18,6 +18,7 @@ import { describe, expect, it, beforeEach, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
 
@@ -73,7 +74,7 @@ const renderFixture = async (
   const { container } = render(
     (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
   );
-  if (fixture.act) await fixture.act(container);
+  await applyAct(fixture, container);
 };
 
 const withFixtures = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);

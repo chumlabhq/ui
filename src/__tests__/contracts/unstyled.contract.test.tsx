@@ -21,6 +21,7 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS, classTokens } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
 
 /**
@@ -72,7 +73,7 @@ describe("unstyled contract", () => {
             </Component>
             )) as React.ReactElement,
           );
-          if (f.act) await f.act(container);
+          await applyAct(f, container);
           for (const t of classTokens(document.body)) target.add(t);
           cleanup();
         }
@@ -107,7 +108,7 @@ describe("unstyled contract", () => {
             </Component>
             )) as React.ReactElement,
           );
-          if (f.act) await f.act(container);
+          await applyAct(f, container);
           for (const t of classTokens(document.body)) target.add(t);
           cleanup();
         }

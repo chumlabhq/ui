@@ -232,19 +232,31 @@ CustomDropdown.displayName = "CustomDropdown";
 
 // ─── Marker Tooltip Hook ─────────────────────────────────────────────────────
 
+/**
+ * The marker tooltip is the other surface that estimates rather than measures,
+ * and it had the mirror of Table's problem. It carries `role="tooltip"`, which
+ * looks correct and does nothing on its own: a tooltip is announced only when
+ * something references it, and no cell did. It was also hover-only, so its
+ * content — the marker's label, description and type — reached a pointer user
+ * and nobody else.
+ *
+ * `describedBy` wires it to the cell that owns it, and the cell shows it on
+ * focus as well as hover, which is what makes it reachable at all.
+ */
 function useMarkerTooltip(
   marker: DateMarker | undefined,
   showTooltip: boolean,
   portalContainer?: HTMLElement | null,
+  tooltipId?: string,
 ) {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
 
   const [placement, setPlacement] = useState<"top" | "bottom">("bottom");
 
-  const handleMouseEnter = useCallback((e: React.MouseEvent) => {
+  const handleMouseEnter = useCallback((e: { currentTarget: EventTarget & HTMLElement }) => {
     if (!marker || !showTooltip) return;
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     const gap = 6;
     // Default to placing the tooltip below the cell. If that would
     // overflow the viewport bottom, anchor to the cell's TOP instead and
@@ -282,6 +294,7 @@ function useMarkerTooltip(
       ? createPortal(
           <div
             role="tooltip"
+            id={tooltipId}
             className="bg-cl-bg-elevated text-cl-text border border-cl-border"
             style={{
               position: "fixed",
@@ -326,7 +339,12 @@ function useMarkerTooltip(
         )
       : null;
 
-  return { tooltipPortal, handleMouseEnter, handleMouseLeave };
+  return {
+    tooltipPortal,
+    handleMouseEnter,
+    handleMouseLeave,
+    describedBy: isVisible ? tooltipId : undefined,
+  };
 }
 
 // ─── DayCell ─────────────────────────────────────────────────────────────────
@@ -368,10 +386,17 @@ const DayCell = memo(function DayCell({
 }: DayCellProps) {
   // Hooks must be called unconditionally — before any early return
   const markerColor = day.marker?.color;
-  const { tooltipPortal, handleMouseEnter: tooltipEnter, handleMouseLeave: tooltipLeave } = useMarkerTooltip(
+  const dayId = `${datePickerId}-day-${day.date.toISOString()}`;
+  const {
+    tooltipPortal,
+    handleMouseEnter: tooltipEnter,
+    handleMouseLeave: tooltipLeave,
+    describedBy,
+  } = useMarkerTooltip(
     day.isMarked ? day.marker : undefined,
     showMarkerTooltip,
     portalContainer,
+    `${dayId}-marker`,
   );
 
   if (day.dayOfMonth === 0 || (day.isOutside && !showOutsideDays)) {
@@ -384,8 +409,9 @@ const DayCell = memo(function DayCell({
     <>
       <button
         type="button"
-        id={`${datePickerId}-day-${day.date.toISOString()}`}
+        id={dayId}
         role="gridcell"
+        aria-describedby={describedBy}
         aria-selected={day.isSelected || undefined}
         aria-disabled={day.isDisabled || undefined}
         aria-current={day.isToday ? "date" : undefined}
@@ -419,7 +445,10 @@ const DayCell = memo(function DayCell({
         onClick={() => !day.isDisabled && onSelect(day.date, day.isOutside)}
         onMouseEnter={(e) => { onHover(day.date); tooltipEnter(e); }}
         onMouseLeave={() => { onHover(null); tooltipLeave(); }}
-        onFocus={() => onFocus(day.date)}
+        // SC 1.4.13: the tooltip was pointer-only, so arrow-keying onto a
+        // marked day announced nothing the marker had to say.
+        onFocus={(e) => { onFocus(day.date); tooltipEnter(e); }}
+        onBlur={tooltipLeave}
         onKeyDown={(e) => onKeyDown(e, day.date)}
       >
         {day.dayOfMonth}

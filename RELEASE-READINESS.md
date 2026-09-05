@@ -383,10 +383,16 @@ failure modes.
 **No Lighthouse, no real-device testing, no performance profiling in a real app.** Mobile
 Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not phones.
 
-**Visual coverage is one fixture per component.** 30 of the 364 fixtures have a recorded
-baseline. Every open surface — the dropdown panels, the calendar, the menus that the whole
-composition phase rewrote — has no visual baseline at all; the subject is the closed
-trigger.
+**Visual coverage is 41 of 364 fixtures.** 30 resting subjects at six widths and eleven
+open surfaces at two, 404 baselines in all. The rest of the fixture set has no baseline.
+
+**Five fixture acts do not reach their named state on the fixture page.** `Slider/dragging`
+and `Slider/thumb-active` need pointer capture, which a dispatched event cannot obtain;
+`Table/pin-hover` needs `:hover`, which no script can dispatch in any browser;
+`Table/editing-cell` and `Table/cell-editing` open the editor and close it in the same frame,
+because the input autofocuses away from `document.body`. All four states are asserted with a
+real pointer in `slider.spec.ts` and `table.spec.ts` instead, and the fixture-page limitation
+is declared in `fixture-act.spec.ts`.
 
 **React 17 and bundlers other than Vite, Next and React Router.** Not tested, and React 17
 is stated as unsupported.
@@ -427,7 +433,7 @@ combination. Deleting those after an rc is the exact break R7 exists to prevent.
    marketing.
 
 The counter-argument is worth stating: 91.79% coverage, 4409 tests, a seven-project browser
-matrix, 360 visual baselines, six consumer apps and a per-criterion accessibility record are
+matrix, 404 visual baselines, six consumer apps and a per-criterion accessibility record are
 not 0.1.0-shaped artefacts, and calling this 0.1.0 undersells it to anyone evaluating it.
 That is true. It is also the correct price for keeping the right to delete a key.
 

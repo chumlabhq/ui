@@ -4,6 +4,7 @@ import {
   useMemo,
   useRef,
   useEffect,
+  useId,
   memo,
   forwardRef,
 } from "react";
@@ -332,6 +333,7 @@ function TableInner<TData>(
   } | null>(null);
   const openFilterColumn = filterDropdownState?.columnId ?? null;
   const filterDropdownRef = useRef<HTMLDivElement>(null);
+  const filterDropdownId = `${useId()}-column-filter`;
 
   // The filter icon button ref for repositioning
   const filterTriggerRef = useRef<HTMLButtonElement | null>(null);
@@ -379,6 +381,10 @@ function TableInner<TData>(
   useEffect(() => {
     if (!filterDropdownState || !filterDropdownRef.current) return;
     const el = filterDropdownRef.current;
+    // The dialog role's half of the bargain: it portals to body, so without
+    // this Tab from the trigger walks into the next column header and the
+    // filter options are unreachable from the keyboard entirely.
+    el.focus({ preventScroll: true });
     const rect = el.getBoundingClientRect();
     const vw = window.innerWidth;
     if (rect.right > vw - 8) {
@@ -1329,6 +1335,11 @@ function TableInner<TData>(
                 // ADR 002 R4: the state the opacity ternary expressed.
                 data-active={getColumnFilterValues(columnId).length > 0 || undefined}
                 aria-label={`Filter ${columnId}`}
+                aria-haspopup="dialog"
+                aria-expanded={openFilterColumn === columnId}
+                aria-controls={
+                  openFilterColumn === columnId ? filterDropdownId : undefined
+                }
                 title="Filter column"
               >
                 {CustomFilterIcon ? (
@@ -2297,7 +2308,33 @@ function TableInner<TData>(
           <div
             ref={filterDropdownRef}
             data-table-filter-content
-            className={`fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-cl-bg-panel border-gray-200 dark:border-white/[0.08]"}`}
+            id={filterDropdownId}
+            // A non-modal dialog, not a menu.
+            //
+            // It had no role at all: a plain portalled div, so it announced
+            // itself as nothing and axe had nothing to fault — which is how the
+            // a11y phase walked past it. `menu` is the nearest role name and the
+            // wrong one. A menu puts screen readers into application mode and
+            // promises arrow-key roving over a single tab stop; these are
+            // ordinary buttons the user reaches with Tab, and claiming `menu`
+            // would take that away rather than describe it. What this actually
+            // is, is a popup holding a group of toggles, which is `dialog`.
+            //
+            // The role brings obligations the popup did not meet, so they are
+            // met below: focus moves in on open (it is portalled to body, so
+            // Tab from the trigger reached the next column header instead),
+            // Escape closes, and focus returns to the trigger.
+            role="dialog"
+            aria-modal={false}
+            aria-label={`Filter ${filterDropdownState.columnId}`}
+            tabIndex={-1}
+            onKeyDown={(e) => {
+              if (e.key !== "Escape") return;
+              e.stopPropagation();
+              setFilterDropdownState(null);
+              filterTriggerRef.current?.focus();
+            }}
+            className={`outline-none fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-cl-bg-panel border-gray-200 dark:border-white/[0.08]"}`}
             style={{
               top: filterDropdownState.top,
               left: filterDropdownState.left,
@@ -2341,6 +2378,10 @@ function TableInner<TData>(
                         key={opt.value}
                         type="button"
                         className={filterItemClassName}
+                        // A toggle in both modes — single-select clears when the
+                        // selected value is clicked again — so the checkmark
+                        // beside it has a state to announce.
+                        aria-pressed={isSelected}
                         data-selected={isSelected || undefined}
                         onClick={() => {
                           if (

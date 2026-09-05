@@ -15,6 +15,7 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
 
@@ -97,7 +98,7 @@ describe("key uniqueness contract", () => {
         const { container } = render(
           (f.wrap ? f.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
         );
-        if (f.act) await f.act(container);
+        await applyAct(f, container);
 
         for (const k of keys) {
           const token = `clu-${k.replace(/\./g, "-")}`;

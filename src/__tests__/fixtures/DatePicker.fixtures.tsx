@@ -1,5 +1,3 @@
-import { fireEvent } from "@testing-library/react";
-import { tick } from "./_act.js";
 import { DatePicker } from "../../components/DatePicker/index.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
@@ -19,10 +17,7 @@ const fixtures: Fixtures<typeof DatePicker> = [
     name: "with-dropdowns",
     props: { defaultOpen: true },
     note: "The month and year dropdowns always render with the calendar; their MENUS need a click. The fixture used to pass `showMonthDropdown`/`showYearDropdown`, neither of which is a prop, and so never opened either menu.",
-    act: (c) => {
-      const btn = c.ownerDocument.querySelector('[aria-label="Select month"]');
-      if (btn) fireEvent.click(btn);
-    },
+    act: (c, ui) => ui.click(c.ownerDocument.querySelector('[aria-label="Select month"]')),
   },
   {
     name: "with-week-numbers",
@@ -47,10 +42,9 @@ const fixtures: Fixtures<typeof DatePicker> = [
       "that anchors to the cell under the pointer rather than to a trigger, and " +
       "it was a declared exception in the positioner and portal gates with no " +
       "fixture reaching it at all.",
-    act: async (c) => {
-      const marked = c.ownerDocument.querySelector("[data-marked]");
-      if (marked) fireEvent.mouseEnter(marked);
-      await tick();
+    act: async (c, ui) => {
+      ui.mouseEnter(c.ownerDocument.querySelector("[data-marked]"));
+      await ui.settle();
     },
   },
   {
@@ -62,10 +56,17 @@ const fixtures: Fixtures<typeof DatePicker> = [
     name: "keyboard-focus",
     props: { defaultOpen: true, value: D },
     note: "Arrow-keys the grid so a day carries data-highlighted. Uses the component's own keyboard handling; touches no focus management.",
-    act: async (c) => {
-      const grid = c.ownerDocument.querySelector('[role="grid"]');
-      if (grid) fireEvent.keyDown(grid, { key: "ArrowRight" });
-      await tick();
+    act: async (c, ui) => {
+      // The day cell, not the grid. `onKeyDown` is on each DayCell, and an
+      // event dispatched at the grid travels upward, away from it — so this
+      // fixture moved no highlight in either tier until the browser tier
+      // reported the act as changing nothing.
+      ui.keyDown(
+        c.ownerDocument.querySelector('[role="grid"] [tabindex="0"]') ??
+          c.ownerDocument.querySelector('[role="gridcell"]'),
+        "ArrowRight",
+      );
+      await ui.settle();
     },
   },
   { name: "bounded", props: { defaultOpen: true, minDate: new Date(2026, 0, 10), maxDate: new Date(2026, 0, 20) } },

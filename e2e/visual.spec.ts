@@ -92,7 +92,6 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
 const OPEN_SUBJECTS: Array<{
   component: string;
   fixture: string;
-  openBy?: string;
   surface?: string;
 }> = [
   { component: "Dropdown", fixture: "open" },
@@ -100,33 +99,30 @@ const OPEN_SUBJECTS: Array<{
   { component: "MultiSelectDropdown", fixture: "open" },
   { component: "MultiSelectSearchableDropdown", fixture: "open" },
   { component: "CascadingDropdown", fixture: "open-submenu" },
-  { component: "DatePicker", fixture: "open" },
+  // `open-with-value`, not `open`. `open` passes no value, so the calendar
+  // renders the CURRENT month with a ring on today — a baseline that fails at
+  // every midnight, and did: this one was recorded on the 5th and reported 410
+  // differing pixels on the 6th, the ring one cell to the right. It is the same
+  // defect the clock face had, found the same way, and the same remedy applies.
+  // The fixture itself stays as it is: "open with nothing selected" is a state
+  // the contract tier needs, and it is the subject that has to move.
+  { component: "DatePicker", fixture: "open-with-value" },
   { component: "TimePicker", fixture: "open" },
-  // TimePicker's clock face is deliberately absent, and it is the one surface
-  // here with no baseline. `open-clock` passes no `defaultValue`, so the dial
-  // renders the CURRENT time and the hand sits at a different angle on every
-  // run — 96 to 295 differing pixels, consistently, at both widths. A baseline
-  // of it would be a test that fails once a minute.
-  //
-  // The remedy is a fixture, not a tolerance: `{ defaultOpen: true, variant:
-  // "clock", defaultValue: "09:30" }` would be stable and is worth adding when
-  // someone is next in that file. Widening `maxDiffPixels` to swallow a moving
-  // clock hand would also swallow every real change to the dial around it.
-  // `openBy`: these three declare an `act` that opens them, and `act` uses
-  // `fireEvent` — a jsdom API. It runs in the contract tier and does nothing on
-  // the fixture PAGE, so in a browser they render closed and the wait below
-  // times out. Clicking the trigger is what a user does anyway, and it is the
-  // same thing menu-focus.spec.ts already does for these components.
-  { component: "Breadcrumb", fixture: "collapsed-open", openBy: "[data-fixture] button" },
-  { component: "Pagination", fixture: "rows-per-page-open", openBy: "[data-fixture] [aria-haspopup='listbox']" },
+  // The clock face was left out on the first pass: `open-clock` passed no
+  // `defaultValue`, so the dial rendered the CURRENT time and the hand sat at a
+  // different angle every run — 96 to 295 differing pixels at both widths. The
+  // fixture now pins 09:30. Widening `maxDiffPixels` instead would also have
+  // swallowed every real change to the dial around the hand.
+  { component: "TimePicker", fixture: "open-clock" },
+  { component: "Breadcrumb", fixture: "collapsed-open" },
+  { component: "Pagination", fixture: "rows-per-page-open" },
   {
     component: "Table",
     fixture: "filter-open",
-    openBy: "[data-fixture] th button[aria-label^='Filter']",
-    // Table's column filter menu is a plain portalled `div` — no `role`, so the
-    // role-based wait every other surface uses cannot see it. That is worth
-    // knowing on its own: it is one of the two positioners `anchored-position`
-    // declares, and it is the only surface here that is not announced as one.
+    // Table's column filter menu was a plain portalled `div` with no `role`,
+    // so the role-based wait every other surface uses could not see it. It has
+    // `role="menu"` now, but the attribute selector is kept: it is the one
+    // surface whose wait should not depend on semantics this branch added.
     surface: "[data-table-filter-content]",
   },
 ];
@@ -330,15 +326,112 @@ test.describe("visual baselines", () => {
   });
 });
 
+/**
+ * No baseline may depend on the wall clock.
+ *
+ * Two subjects did, and both were found by accident. The clock face renders the
+ * CURRENT time, so `open-clock` was left without a baseline after failing by
+ * 96-295 pixels on every run. `DatePicker/open` renders the CURRENT month with
+ * a ring on today, so its baseline failed by 410 pixels the first time a run
+ * crossed midnight — recorded on the 5th, read on the 6th, the ring one cell
+ * along. Both were fixed by pinning the fixture; neither was caught by a gate.
+ *
+ * This is that gate. Every subject renders twice, 26 hours apart on a faked
+ * clock, and the markup has to be identical. It compares HTML rather than
+ * pixels because that is what makes the failure legible: the diff names the
+ * attribute that moved.
+ *
+ * Verified by planting both defects back: unpinning `open-clock` and pointing
+ * the DatePicker subject at `open` again fails exactly those two and nothing
+ * else.
+ */
+test.describe("baseline determinism", () => {
+  const FIXED = new Date("2026-03-11T14:07:00Z");
+  const LATER = new Date(FIXED.getTime() + 26 * 60 * 60 * 1000);
+
+  const renderAt = async (page: import("@playwright/test").Page, at: Date, path: string) => {
+    // `setFixedTime`, not `install`. `install` also takes over the timers, so a
+    // debounce or a mount transition never fires and the difference the test
+    // reports is the frozen animation rather than the date. Only `Date.now()`
+    // needs to move here.
+    await page.clock.setFixedTime(at);
+    await page.goto(path);
+    await page
+      .locator("main[data-fixture-act='applied'], main[data-fixture-act='none']")
+      .waitFor({ state: "attached" });
+    // Settled means "stopped changing", not "waited a while". Portals mount in
+    // a layout effect, several fixtures animate on entry and CountryFlag
+    // resolves its flag asynchronously, so a fixed delay reported a different
+    // handful of subjects on every run — none of which reads the clock at all.
+    await freeze(page);
+    // The fixture and its portals, not the whole document. The dev page loads a
+    // third-party checkout script that stamps a fresh session id into an iframe
+    // on every navigation, and comparing `documentElement` reported all 41
+    // subjects as non-deterministic on the strength of that one URL.
+    const capture = () =>
+      page.evaluate(() => {
+        const main = document.querySelector("main")?.outerHTML ?? "";
+        const portals = [...document.body.children]
+          .filter(
+            (child) =>
+              child.id !== "root" &&
+              !/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(child.tagName) &&
+              !child.className.toString().includes("razorpay"),
+          )
+          .map((child) => child.outerHTML);
+        return (
+          [main, ...portals]
+            .join("\n")
+            // A positioner measures its trigger's box, and that measurement
+            // lands half a subpixel apart between two loads — Breadcrumb's menu
+            // reported left: 102.25px against 101.703px. Where a surface sits is
+            // not what this gate is about, and the surfaces that DO read the
+            // clock say so in their content or their transform, neither of which
+            // is stripped.
+            .replace(/(?:top|left):\s*-?[\d.]+px;?/g, "")
+        );
+      });
+
+    let previous = await capture();
+    for (let attempt = 0; attempt < 10; attempt++) {
+      await page.waitForTimeout(150);
+      const next = await capture();
+      if (next === previous) return next;
+      previous = next;
+    }
+    return previous;
+  };
+
+  for (const { component, fixture } of [...SUBJECTS, ...OPEN_SUBJECTS]) {
+    test(`${component}/${fixture} renders the same on a different day`, async ({ page }) => {
+      const path = fixturePath(component, fixture);
+      const first = await renderAt(page, FIXED, path);
+      const second = await renderAt(page, LATER, path);
+      expect(
+        second,
+        `${component}/${fixture} renders differently 26 hours later, so its baseline ` +
+          `expires. Pin the fixture — a defaultValue or a value — rather than widening ` +
+          `maxDiffPixels, which would swallow real changes to the same surface.`,
+      ).toBe(first);
+    });
+  }
+});
+
 test.describe("open surfaces", () => {
   for (const width of OPEN_WIDTHS) {
     test.describe(`${width}px`, () => {
-      for (const { component, fixture, openBy, surface } of OPEN_SUBJECTS) {
+      for (const { component, fixture, surface } of OPEN_SUBJECTS) {
         test(`${component} ${fixture} renders as recorded`, async ({ page }) => {
           await page.setViewportSize({ width, height: 900 });
           await gotoFixture(page, component, fixture);
           await page.locator("[data-fixture]").waitFor({ state: "attached" });
-          if (openBy) await page.locator(openBy).first().click();
+          // Three of these open from their fixture's `act`, which the fixture
+          // page runs itself. It did not until _act.ts, and they were captured
+          // through an explicit trigger click instead — a workaround that hid
+          // the fact that the act was doing nothing.
+          await page
+            .locator("main[data-fixture-act='applied'], main[data-fixture-act='none']")
+            .waitFor({ state: "attached" });
 
           // The surface itself, not the host. Every one of these is portalled,
           // so `[data-fixture]` is an empty box and the panel is elsewhere in

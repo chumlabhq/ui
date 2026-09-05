@@ -1,5 +1,4 @@
 import { Dropdown } from "../../components/Dropdown/index.js";
-import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types.js";
 import { OPTIONS } from "./_data.js";
 import {
@@ -24,10 +23,7 @@ const fixtures: Fixtures<typeof Dropdown> = [
     name: "open-keyboard-focus",
     props: { options: OPTIONS, defaultOpen: true },
     note: "Highlight state has no prop; arrow-down is the only way in.",
-    act: (c) => {
-      const trigger = c.querySelector("[role='combobox'], button");
-      if (trigger) fireEvent.keyDown(trigger, { key: "ArrowDown" });
-    },
+    act: (c, ui) => ui.keyDown(c.querySelector("[role='combobox'], button"), "ArrowDown"),
   },
   { name: "open-empty", props: { options: [], defaultOpen: true } },
   { name: "loading", props: { options: OPTIONS, loading: true, defaultOpen: true } },

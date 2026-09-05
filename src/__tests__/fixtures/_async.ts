@@ -1,5 +1,4 @@
-import { fireEvent } from "@testing-library/react";
-import { tick } from "./_act.js";
+import type { ActTools } from "./_act.js";
 
 /**
  * Helpers for the dropdown family's async option sources.
@@ -29,22 +28,22 @@ export const rejectsWith = <T,>(reason: string) => (): Promise<T[]> =>
  * handler-driven version passed the click path while leaving `defaultOpen`
  * permanently empty.
  */
-export const openMenu = async (container: HTMLElement) => {
-  const trigger =
+export const openMenu = async (container: HTMLElement, ui: ActTools) => {
+  ui.click(
     container.querySelector<HTMLElement>("[role='combobox']") ??
-    container.querySelector<HTMLElement>("button");
-  if (trigger) fireEvent.click(trigger);
-  await tick();
+      container.querySelector<HTMLElement>("button"),
+  );
+  await ui.settle();
 };
 
 /** Opens the menu and lets a settling promise resolve before the assertion. */
-export const openMenuAndSettle = async (container: HTMLElement) => {
-  await openMenu(container);
-  await tick();
+export const openMenuAndSettle = async (container: HTMLElement, ui: ActTools) => {
+  await openMenu(container, ui);
+  await ui.settle();
 };
 
 /** Flushes a settling prefetch for components that load from an effect. */
-export const settleAsync = async () => {
-  await tick();
-  await tick();
+export const settleAsync = async (_container: HTMLElement, ui: ActTools) => {
+  await ui.settle();
+  await ui.settle();
 };

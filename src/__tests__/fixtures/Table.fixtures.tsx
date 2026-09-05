@@ -1,8 +1,6 @@
-import { fireEvent } from "@testing-library/react";
 import type { Fixture } from "./types.js";
 import type { TableProps } from "../../components/Table/utils/types.js";
 import { ROWS, COLUMNS } from "./_data.js";
-import { tick } from "./_act.js";
 
 type Row = (typeof ROWS)[number];
 
@@ -25,10 +23,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     name: "editing-cell",
     props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID, onCellEdit: () => {} },
     note: "Attempts editInput: edit mode opens on double-click.",
-    act: (c) => {
-      const cell = c.ownerDocument.querySelector("tbody td");
-      if (cell) fireEvent.doubleClick(cell);
-    },
+    act: (c, ui) => ui.dblClick(c.ownerDocument.querySelector("tbody td")),
   },
   { name: "with-search", props: { data: ROWS, columns: COLUMNS, showSearch: true } },
   // `clearTrigger` only renders once the search box holds a value, and
@@ -67,39 +62,29 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     name: "pin-hover",
     props: { data: ROWS, columns: COLUMNS, pinnableColumns: ["name", "role"], pinnedColumns: ["name"] },
     note: "The pin control and its hover variant only paint while a header is hovered.",
-    act: (c) => {
-      c.querySelectorAll("th").forEach((th) => fireEvent.mouseEnter(th));
-    },
+    act: (c, ui) => c.querySelectorAll("th").forEach((th) => ui.mouseEnter(th)),
   },
   {
     name: "filter-open",
     props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
-    act: (c) => {
-      const btn = c.querySelector("[data-table-filter-trigger], th button");
-      if (btn) fireEvent.click(btn);
-    },
+    act: (c, ui) => ui.click(c.querySelector("[data-table-filter-trigger], th button")),
   },
   {
     name: "filter-selected",
     props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
     // `filterClearTrigger` only appears once a value is selected, so the act
     // opens the panel AND picks an option.
-    act: async (c) => {
-      const btn = c.querySelector("[data-table-filter-trigger], th button");
-      if (btn) fireEvent.click(btn);
-      await tick();
-      const option = c.ownerDocument.querySelector("[data-table-filter-content] button");
-      if (option) fireEvent.click(option);
-      await tick();
+    act: async (c, ui) => {
+      ui.click(c.querySelector("[data-table-filter-trigger], th button"));
+      await ui.settle();
+      ui.click(c.ownerDocument.querySelector("[data-table-filter-content] button"));
+      await ui.settle();
     },
   },
   {
     name: "cell-editing",
     props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID },
-    act: (c) => {
-      const cell = c.querySelector("tbody td");
-      if (cell) fireEvent.doubleClick(cell);
-    },
+    act: (c, ui) => ui.dblClick(c.querySelector("tbody td")),
   },
 ];
 export default fixtures;

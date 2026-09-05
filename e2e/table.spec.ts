@@ -33,4 +33,34 @@ test.describe("Table (fixtures)", () => {
       "the pin control reports active but is still transparent",
     ).toBeGreaterThan(0);
   });
+
+  /**
+   * `Table.input` — the cell editor — is recorded in `002-unrenderable-keys.json`
+   * as "ATTEMPTED, still unreachable", with the note to re-attempt it with a
+   * real double-click in the browser tier before Task 3 deletes it. This is that
+   * re-attempt, and the key is NOT dead: a real double-click opens the editor.
+   *
+   * A dispatched `dblclick` does not, and the failure is worth recording. The
+   * editor mounts and unmounts inside the same frame — the input autofocuses
+   * away from `document.body`, and the cell commits the edit it has only just
+   * begun. A real double-click focuses the cell on mousedown first, so the
+   * focus never leaves it. That is why the assertion lives here rather than in
+   * the fixture's own act.
+   */
+  test("opens the cell editor on a real double-click", async ({ page }) => {
+    await gotoFixture(page, "Table", "editing-cell");
+
+    const cell = page.locator('[data-fixture] tbody td').first();
+    await expect(cell).toBeVisible();
+    await expect(page.locator('[data-fixture] tbody input')).toHaveCount(0);
+
+    await cell.dblclick();
+
+    const editor = page.locator('[data-fixture] tbody input');
+    await expect(editor).toBeVisible();
+    await expect(
+      page.locator('[data-fixture] td[data-editing="true"]'),
+      "the editor is open but the cell does not report it",
+    ).toHaveCount(1);
+  });
 });

@@ -22,6 +22,7 @@ import { Dropdown } from "../../components/Dropdown/index.js";
 import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
 import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
@@ -153,7 +154,7 @@ const drive = async (
   const fixture = fixturesFor(component).find((f) => f.name === name);
   if (!fixture) throw new Error(`${component} has no \`${name}\` fixture`);
   const { container } = render(<Component {...(fixture.props as Record<string, never>)} />);
-  if (fixture.act) await fixture.act(container);
+  await applyAct(fixture, container);
   return container;
 };
 
@@ -299,7 +300,7 @@ describe("cascading async branches", () => {
       },
     } as unknown as React.ComponentProps<typeof CascadingDropdown>;
     const { container } = render(<CascadingDropdown {...props} />);
-    if (fixture.act) await fixture.act(container);
+    await applyAct(fixture, container);
 
     expect(
       renderedMenuItems().includes("Apple"),

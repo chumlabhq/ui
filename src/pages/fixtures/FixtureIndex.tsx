@@ -4,7 +4,7 @@ import { componentNames, loadFixtures, toSlug } from "./lazyRegistry.js";
 
 /** Lists every fixture URL. Dev only; see FixtureRoute for why this exists. */
 export default function FixtureIndex() {
-  const [routes, setRoutes] = useState<{ path: string }[]>([]);
+  const [routes, setRoutes] = useState<{ path: string; hasAct: boolean }[]>([]);
 
   useEffect(() => {
     void (async () => {
@@ -12,6 +12,9 @@ export default function FixtureIndex() {
         componentNames().map(async (name) =>
           (await loadFixtures(name)).map((f) => ({
             path: `/__fixtures/${toSlug(name)}/${f.name}`,
+            // fixture-act.spec.ts drives this: a fixture that reaches its state
+            // by interaction is the one whose act has to be seen to apply.
+            hasAct: typeof f.act === "function",
           })),
         ),
       );
@@ -24,7 +27,7 @@ export default function FixtureIndex() {
       <h1>Fixtures ({routes.length})</h1>
       <ul>
         {routes.map((r) => (
-          <li key={r.path}>
+          <li key={r.path} data-has-act={r.hasAct ? "" : undefined}>
             <Link to={r.path}>{r.path}</Link>
           </li>
         ))}

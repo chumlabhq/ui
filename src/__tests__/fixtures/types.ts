@@ -1,4 +1,5 @@
 import type { ComponentProps, ElementType, ReactNode } from "react";
+import type { ActTools } from "./_act.js";
 
 /**
  * A named prop combination that drives a component into one distinct state.
@@ -36,8 +37,14 @@ export interface Fixture<P = Record<string, unknown>> {
   /**
    * Interaction needed to reach the state, run after render. Keys behind
    * hover/focus/selection (`itemHighlighted`, `dayFocused`) have no prop.
+   *
+   * The gestures arrive as `ui` rather than being imported, so an act cannot
+   * reach for a jsdom-only API: it has no `fireEvent` in scope, and the same
+   * body runs in the contract tier and on the fixture page. It used to import
+   * one, and the fixture page never called `act` at all — every browser suite
+   * measured the base state of 50 fixtures named for a state they never left.
    */
-  act?: (container: HTMLElement) => void | Promise<void>;
+  act?: (container: HTMLElement, ui: ActTools) => void | Promise<void>;
   /**
    * Wraps the rendered element. Sub-components that need a parent context —
    * a RadioButton outside its RadioGroup throws — have no other route.

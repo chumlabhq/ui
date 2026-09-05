@@ -26,6 +26,7 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
 
@@ -89,7 +90,7 @@ describe("classes override contract", () => {
             const { container } = render(
               (f.wrap ? f.wrap(element) : element) as React.ReactElement,
             );
-            if (f.act) await f.act(container);
+            await applyAct(f, container);
 
             // The slot's identifying tokens must not survive its own override,
             // whether the component ignored the value outright or merged with it.
@@ -120,7 +121,7 @@ describe("classes override contract", () => {
           const { container } = render(
             (f.wrap ? f.wrap(element) : element) as React.ReactElement,
           );
-          if (f.act) await f.act(container);
+          await applyAct(f, container);
           for (const [key, tokens] of identifying)
             if (elementsWithAll(document.body, tokens).length > 0) leftover.add(key);
           cleanup();

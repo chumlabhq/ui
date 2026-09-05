@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 58 |
 | Library-authored props across the public surface | 1136 |
 | With no demo | 283 (25%) |
-| With no fixture | 718 (63%) |
+| With no fixture | 719 (63%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -101,7 +101,7 @@ listed here with no demo anywhere fails the generator.
 | Dropdown | 50 | 2 | 4 | 30 | 0 | `unstyled` |
 | Input | 26 | 307 | 2 | 11 | 0 | `unstyled` |
 | InputLabel | 4 | 0 | 0 | 4 | 0 | — |
-| InternationalPhoneInput | 48 | 296 | 9 | 33 | 0 | `unstyled`, `portalContainer` |
+| InternationalPhoneInput | 48 | 296 | 9 | 34 | 0 | `unstyled`, `portalContainer` |
 | LinearLoader | 8 | 280 | 3 | 4 | 0 | `reduceMotion`, `unstyled` |
 | Modal | 40 | 2 | 11 | 29 | 0 | — |
 | ModalBody | 2 | 2 | 2 | 2 | 0 | — |

@@ -22,6 +22,7 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 import unrenderable from "../../../docs/adr/002-unrenderable-keys.json";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
@@ -49,7 +50,7 @@ const tokensFrom = async (
   const { container } = render(
     (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
   );
-  if (fixture.act) await fixture.act(container);
+  await applyAct(fixture, container);
   // Portalled content lives outside `container`; read the whole document.
   const html = document.body.innerHTML;
   cleanup();

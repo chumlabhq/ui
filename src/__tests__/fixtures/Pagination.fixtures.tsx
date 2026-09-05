@@ -1,5 +1,4 @@
 import { Pagination } from "../../components/Pagination/index.js";
-import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
 
@@ -21,10 +20,7 @@ const fixtures: Fixtures<typeof Pagination> = [
   {
     name: "rows-per-page-open",
     props: { defaultValue: 1, totalPages: 5, showRowsPerPage: true, rowsPerPage: 10 },
-    act: (c) => {
-      const btn = c.querySelector("[aria-haspopup='listbox']");
-      if (btn) fireEvent.click(btn);
-    },
+    act: (c, ui) => ui.click(c.querySelector("[aria-haspopup='listbox']")),
   },
   { name: "with-page-info", props: { defaultValue: 1, totalPages: 5, renderPageInfo: () => "1 of 5" }, note: "pageInfo has no boolean flag; it exists only via renderPageInfo." },
   { name: "disabled", props: { defaultValue: 1, totalPages: 5, disabled: true } },

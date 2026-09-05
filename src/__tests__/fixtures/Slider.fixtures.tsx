@@ -1,6 +1,4 @@
 import { Slider } from "../../components/Slider/index.js";
-import { fireEvent } from "@testing-library/react";
-import { tick } from "./_act.js";
 import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof Slider> = [
@@ -9,16 +7,13 @@ const fixtures: Fixtures<typeof Slider> = [
     name: "dragging",
     props: { defaultValue: 40 },
     note: "thumbActive was gated on isDragging, which no static prop set reaches — the one state that needs a pointer.",
-    act: async (c) => {
-      const thumb = c.ownerDocument.querySelector('[role="slider"]');
-      if (thumb) {
-        // jsdom implements no pointer capture, and the drag handler calls it on
-        // the target. Without the stub the handler throws before setting state.
-        (thumb as HTMLElement).setPointerCapture = () => {};
-        (thumb as HTMLElement).releasePointerCapture = () => {};
-        fireEvent.pointerDown(thumb, { pointerId: 1, clientX: 40, buttons: 1 });
-      }
-      await tick();
+    act: async (c, ui) => {
+      ui.pointerDown(c.ownerDocument.querySelector('[role="slider"]'), {
+        pointerId: 1,
+        clientX: 40,
+        buttons: 1,
+      });
+      await ui.settle();
     },
   },
   { name: "labelled", props: { label: "Volume", description: "0 to 100" } },
@@ -32,9 +27,10 @@ const fixtures: Fixtures<typeof Slider> = [
   {
     name: "thumb-active",
     props: { defaultValue: 40 },
-    act: (c) => {
+    act: (c, ui) => {
       const thumb = c.querySelector("[role='slider']");
-      if (thumb) { fireEvent.focus(thumb); fireEvent.pointerDown(thumb); }
+      ui.focus(thumb);
+      ui.pointerDown(thumb);
     },
   },
 ];

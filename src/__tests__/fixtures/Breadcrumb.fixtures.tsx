@@ -1,5 +1,4 @@
 import { Breadcrumb } from "../../components/Breadcrumb/index.js";
-import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types.js";
 import { CRUMBS } from "./_data.js";
 
@@ -14,10 +13,7 @@ const fixtures: Fixtures<typeof Breadcrumb> = [
   {
     name: "collapsed-open",
     props: { items: [...CRUMBS, ...CRUMBS], maxVisibleItems: 3 },
-    act: (c) => {
-      const btn = c.querySelector("button");
-      if (btn) fireEvent.click(btn);
-    },
+    act: (c, ui) => ui.click(c.querySelector("button")),
   },
   { name: "with-icons", props: { items: CRUMBS.map((i) => ({ ...i, icon: "•" })) } },
   { name: "with-tooltips", props: { items: CRUMBS.map((i) => ({ ...i, tooltip: "Tip" })), showTooltips: true } },

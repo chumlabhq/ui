@@ -1,7 +1,6 @@
 import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
-import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types.js";
-import { tick } from "./_act.js";
+import type { ActTools } from "./_act.js";
 import { neverResolves, rejectsWith, resolvesTo } from "./_async.js";
 
 const MULTI = [
@@ -40,34 +39,30 @@ const DISABLED_TOP = [
 ];
 
 /** The menu is portalled from a layout effect, so it is absent until effects flush. */
-const settle = () => tick();
+const settle = (_c: HTMLElement, ui: ActTools) => ui.settle();
 
-const openSubmenu = async (c: HTMLElement) => {
-  await tick();
+const openSubmenu = async (c: HTMLElement, ui: ActTools) => {
+  await ui.settle();
   const parent = c.ownerDocument.querySelector("[role='menuitem']");
-  if (parent) {
-    fireEvent.mouseEnter(parent);
-    fireEvent.click(parent);
-  }
-  await tick();
+  ui.mouseEnter(parent);
+  ui.click(parent);
+  await ui.settle();
 };
 
 
 /** Types a query into the menu's search input, then flushes past the debounce. */
-const searchMenu = async (c: HTMLElement) => {
-  await tick();
-  const input = c.ownerDocument.querySelector("input");
-  if (input) fireEvent.change(input, { target: { value: "ap" } });
-  await tick(SEARCH_DEBOUNCE + 10);
+const searchMenu = async (c: HTMLElement, ui: ActTools) => {
+  await ui.settle();
+  ui.change(c.ownerDocument.querySelector("input"), "ap");
+  await ui.settle(SEARCH_DEBOUNCE + 10);
 };
 
 /** Opens a submenu, then searches inside it. */
-const searchSubmenu = async (c: HTMLElement) => {
-  await openSubmenu(c);
+const searchSubmenu = async (c: HTMLElement, ui: ActTools) => {
+  await openSubmenu(c, ui);
   const inputs = c.ownerDocument.querySelectorAll("input");
-  const submenuInput = inputs[inputs.length - 1];
-  if (submenuInput) fireEvent.change(submenuInput, { target: { value: "ap" } });
-  await tick(SEARCH_DEBOUNCE + 10);
+  ui.change(inputs[inputs.length - 1], "ap");
+  await ui.settle(SEARCH_DEBOUNCE + 10);
 };
 
 /**
@@ -93,19 +88,17 @@ const SEARCH_DEBOUNCE = 20;
  * a future divergence show up as a failure rather than as one path quietly
  * carrying the other.
  */
-const hoverSubmenu = async (c: HTMLElement) => {
-  await tick();
-  const parent = c.ownerDocument.querySelector("[role='menuitem']");
-  if (parent) fireEvent.mouseEnter(parent);
-  await tick();
+const hoverSubmenu = async (c: HTMLElement, ui: ActTools) => {
+  await ui.settle();
+  ui.mouseEnter(c.ownerDocument.querySelector("[role='menuitem']"));
+  await ui.settle();
 };
 
 /** Opens a submenu by clicking the parent, with no hover first. */
-const clickSubmenu = async (c: HTMLElement) => {
-  await tick();
-  const parent = c.ownerDocument.querySelector("[role='menuitem']");
-  if (parent) fireEvent.click(parent);
-  await tick();
+const clickSubmenu = async (c: HTMLElement, ui: ActTools) => {
+  await ui.settle();
+  ui.click(c.ownerDocument.querySelector("[role='menuitem']"));
+  await ui.settle();
 };
 
 const fixtures: Fixtures<typeof CascadingDropdown> = [

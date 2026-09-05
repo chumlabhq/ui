@@ -16,6 +16,7 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 import { isMotion } from "../../utils/classLayers.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
@@ -78,7 +79,7 @@ const tokensUnder = async (
       </Component>
       )) as React.ReactElement,
     );
-    if (f.act) await f.act(container);
+    await applyAct(f, container);
     for (const token of motionOnElements(document.body)) seen.add(token);
     cleanup();
   }

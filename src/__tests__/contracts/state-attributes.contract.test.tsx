@@ -22,6 +22,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
+import { applyAct } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import { SELECTOR } from "./partSelectors.js";
 
@@ -73,7 +74,7 @@ const collect = async (componentName: string, part: string, attribute: string) =
     const { container } = render(
       (f.wrap ? f.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
     );
-    if (f.act) await f.act(container);
+    await applyAct(f, container);
     fixtures += 1;
 
     const nodes = Array.from(document.body.querySelectorAll(selector));
