@@ -76,6 +76,77 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
 ];
 
 /**
+ * The surfaces, open.
+ *
+ * 30 of 364 fixtures had a baseline and every one of them was a resting state:
+ * a closed trigger, a bare control. The panels — every dropdown menu, the
+ * calendar, the clock face, the overflow menu, the column filter — had none,
+ * and they are the exact code the composition phase rewrote onto MenuSurface.
+ * A visual gate that photographs the triggers and never the menus is watching
+ * the part that did not change.
+ *
+ * `open-submenu` and `open-clock` rather than `open`: the submenu and the clock
+ * are separate surfaces from the menu that reveals them, and a baseline of the
+ * first level would not move if either broke.
+ */
+const OPEN_SUBJECTS: Array<{
+  component: string;
+  fixture: string;
+  openBy?: string;
+  surface?: string;
+}> = [
+  { component: "Dropdown", fixture: "open" },
+  { component: "SearchableDropdown", fixture: "open" },
+  { component: "MultiSelectDropdown", fixture: "open" },
+  { component: "MultiSelectSearchableDropdown", fixture: "open" },
+  { component: "CascadingDropdown", fixture: "open-submenu" },
+  { component: "DatePicker", fixture: "open" },
+  { component: "TimePicker", fixture: "open" },
+  // TimePicker's clock face is deliberately absent, and it is the one surface
+  // here with no baseline. `open-clock` passes no `defaultValue`, so the dial
+  // renders the CURRENT time and the hand sits at a different angle on every
+  // run — 96 to 295 differing pixels, consistently, at both widths. A baseline
+  // of it would be a test that fails once a minute.
+  //
+  // The remedy is a fixture, not a tolerance: `{ defaultOpen: true, variant:
+  // "clock", defaultValue: "09:30" }` would be stable and is worth adding when
+  // someone is next in that file. Widening `maxDiffPixels` to swallow a moving
+  // clock hand would also swallow every real change to the dial around it.
+  // `openBy`: these three declare an `act` that opens them, and `act` uses
+  // `fireEvent` — a jsdom API. It runs in the contract tier and does nothing on
+  // the fixture PAGE, so in a browser they render closed and the wait below
+  // times out. Clicking the trigger is what a user does anyway, and it is the
+  // same thing menu-focus.spec.ts already does for these components.
+  { component: "Breadcrumb", fixture: "collapsed-open", openBy: "[data-fixture] button" },
+  { component: "Pagination", fixture: "rows-per-page-open", openBy: "[data-fixture] [aria-haspopup='listbox']" },
+  {
+    component: "Table",
+    fixture: "filter-open",
+    openBy: "[data-fixture] th button[aria-label^='Filter']",
+    // Table's column filter menu is a plain portalled `div` — no `role`, so the
+    // role-based wait every other surface uses cannot see it. That is worth
+    // knowing on its own: it is one of the two positioners `anchored-position`
+    // declares, and it is the only surface here that is not announced as one.
+    surface: "[data-table-filter-content]",
+  },
+];
+
+/**
+ * Two widths, not six.
+ *
+ * The six in `WIDTHS` exist to check that the page reflows — a floating surface
+ * does not take part in that. It is portalled out of the document flow,
+ * positioned against its anchor and clamped to the viewport, so the only
+ * question a width can answer about it is whether it has room. 320 is the
+ * tightest clamp the responsive claim covers and 1024 is the first width where
+ * every surface has its natural size; 375 and 768 clamp the same way as 320,
+ * and 1440 and 1920 are the same natural size as 1024.
+ *
+ * Six widths here would be 144 baselines to answer a two-valued question.
+ */
+const OPEN_WIDTHS = [320, 1024];
+
+/**
  * Both switches, together.
  *
  * The `--cl-*` tokens hang off `:root[data-theme]` while Tailwind's `dark:`
@@ -161,11 +232,14 @@ test.describe("visual baselines", () => {
     expect(existsSync(dir), `${dir} is missing — the baselines were never generated`).toBe(true);
 
     const pngs = readdirSync(dir).filter((f) => f.endsWith(".png"));
-    const expected = SUBJECTS.length * WIDTHS.length * 2;
+    const resting = SUBJECTS.length * WIDTHS.length * 2;
+    const open = OPEN_SUBJECTS.length * OPEN_WIDTHS.length * 2;
     expect(
       pngs.length,
-      `expected ${expected} baselines (${SUBJECTS.length} subjects x ${WIDTHS.length} widths x 2 themes)`,
-    ).toBe(expected);
+      `expected ${resting + open} baselines — ${SUBJECTS.length} resting subjects x ` +
+        `${WIDTHS.length} widths x 2 themes, plus ${OPEN_SUBJECTS.length} open surfaces x ` +
+        `${OPEN_WIDTHS.length} widths x 2 themes`,
+    ).toBe(resting + open);
   });
 
   /**
@@ -232,10 +306,13 @@ test.describe("visual baselines", () => {
   });
 
   test("every subject resolves to a real fixture", async ({ page }) => {
+    // 41 navigations, each waiting for a client render. The default 30s was
+    // enough for 30 and is not for 41.
+    test.setTimeout(120_000);
     // A mistyped fixture name renders a diagnostic page, which screenshots
     // perfectly happily and would be baselined as though it were the component.
     const missing: string[] = [];
-    for (const { component, fixture } of SUBJECTS) {
+    for (const { component, fixture } of [...SUBJECTS, ...OPEN_SUBJECTS]) {
       await page.goto(fixturePath(component, fixture));
       // Wait for the route to resolve to one or the other. Counting straight
       // after `goto` reads a page that has not rendered yet and finds nothing
@@ -251,4 +328,37 @@ test.describe("visual baselines", () => {
     }
     expect(missing, "these subjects name a fixture that does not exist").toEqual([]);
   });
+});
+
+test.describe("open surfaces", () => {
+  for (const width of OPEN_WIDTHS) {
+    test.describe(`${width}px`, () => {
+      for (const { component, fixture, openBy, surface } of OPEN_SUBJECTS) {
+        test(`${component} ${fixture} renders as recorded`, async ({ page }) => {
+          await page.setViewportSize({ width, height: 900 });
+          await gotoFixture(page, component, fixture);
+          await page.locator("[data-fixture]").waitFor({ state: "attached" });
+          if (openBy) await page.locator(openBy).first().click();
+
+          // The surface itself, not the host. Every one of these is portalled,
+          // so `[data-fixture]` is an empty box and the panel is elsewhere in
+          // the document — which is why the resting-state capture rule already
+          // falls back to the page when it finds one.
+          await page
+            .locator(surface ?? "[role='listbox'],[role='menu'],[role='dialog'],[role='tooltip']")
+            .first()
+            .waitFor({ state: "visible" });
+          await freeze(page);
+
+          for (const theme of ["light", "dark"] as const) {
+            await setTheme(page, theme);
+            await expect(page).toHaveScreenshot(
+              `open-${component}-${fixture}-${theme}-${width}.png`,
+              { animations: "disabled", maxDiffPixels: 30 },
+            );
+          }
+        });
+      }
+    });
+  }
 });
