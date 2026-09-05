@@ -163,7 +163,17 @@ export function linksResolve(tarball) {
 }
 
 function packIgnoringScripts(into) {
-  const { status, stdout, output } = run("npm", ["pack", "--ignore-scripts", "--pack-destination", into], { cwd: ROOT });
+  // `npm_config_dry_run` is stripped, not inherited. `npm publish --dry-run`
+  // sets it in the environment, `prepublishOnly` runs this gate inside that
+  // environment, and the child `npm pack` then honours it — printing the
+  // tarball name and writing no file, so the gate failed and took the standard
+  // pre-publish check down with it.
+  const { npm_config_dry_run: _dryRun, ...env } = process.env;
+  const { status, stdout, output } = run(
+    "npm",
+    ["pack", "--ignore-scripts", "--pack-destination", into],
+    { cwd: ROOT, env },
+  );
   if (status !== 0) throw new Error(`npm pack failed:\n${output}`);
   const name = stdout.trim().split("\n").filter(Boolean).pop().trim();
   const tarball = join(into, name);

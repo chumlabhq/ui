@@ -1,0 +1,386 @@
+# Release readiness — `@chumlab/ui` 0.1.0
+
+**Run date:** 2026-09-05 · **Verdict: do not publish yet.** Three of the seven Playwright
+projects are red, and two of them fail for the same reason on two independent WebKit
+targets. That is a product defect in Safari, not a flaky test.
+
+This document is written for someone who has not followed the work. It says what the
+package claims and what proves each claim, what is knowingly untrue or unproven, what has
+never been tested at all, and what publishing would commit us to. Every number in it was
+measured on the date above unless the text says otherwise.
+
+---
+
+## 1. What was run
+
+| Gate | Verdict | Evidence |
+| --- | --- | --- |
+| `typecheck` (two configs, two planted failures) | **pass** | Solution build and `tsconfig.node16.json`. Each phase plants its own failure and requires the gate to catch it before believing a clean run. |
+| `lint` | **pass** | 0 errors, 7 warnings — the standing baseline, unchanged. |
+| Unit + contract (`test:run`) | **pass** | 4409 passed, 68 skipped, 86 files. Contracts alone: 1239 passed, 68 skipped, 29 files. |
+| Coverage | **pass** | 91.79% statements, 87.15% branch, 94.42% functions, 93.70% lines. |
+| `test:e2e:all` (7 projects) | **FAIL** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 18 skipped. 2894s. |
+| `verify:consumers` (6 apps) | **pass** | 87s. Every app installed the packed tarball, typechecked and built. |
+| `verify:packaging` (4 plants) | **pass** | publint `--strict`, attw, shipped-link check. All four planted defects caught. |
+| `npm publish --dry-run` | **pass** *(after a fix — see §1.4)* | 1635 files, 2.1 MB packed, 6.9 MB unpacked. |
+| `npm audit` (production tree) | **pass** | 0 vulnerabilities across the 4 production dependencies. |
+| The `/ai` 20-step pipeline | **not re-run** | See §1.5. |
+
+### 1.1 The browser matrix, project by project
+
+```
+  project        verdict  collected  executed  note
+  a11y-full      FAIL     1          1         1 test did not pass
+  visual         pass     183        183       170s
+  chromium       pass     419        419       273s
+  firefox        FAIL     419        419       11 tests did not pass
+  webkit         FAIL     419        419       2 tests did not pass
+  Mobile Chrome  pass     419        419       269s
+  Mobile Safari  FAIL     419        419       2 tests did not pass
+```
+
+**WebKit and Mobile Safari fail the identical two tests.** That is the finding that stops
+this release:
+
+- `menu-focus.spec.ts` — *Dropdown keeps focus on its trigger*. After a mouse click opens
+  the listbox, `document.activeElement` is not the `role="combobox"` trigger. Dropdown is
+  designed to keep focus on the trigger and point at the highlighted option with
+  `aria-activedescendant`; in WebKit the focus is somewhere else, so the pointer is
+  attached to an element the assistive technology is not tracking.
+- `pagination.spec.ts` — *returns to a closed, valid state after repeated open/close*.
+  After three open/close cycles the rows-per-page trigger still reports
+  `aria-expanded="true"`.
+
+Both are consistent with one well-known WebKit behaviour: **Safari does not focus a button
+when you click it.** I have not proven that is the shared cause — the two tests were run,
+not debugged — but the same two tests failing on two independent WebKit projects and on
+neither Chromium project makes engine behaviour far more likely than flake. This is the
+same shape as the defect already recorded in `ACCESSIBILITY.md`: Drawer's focus trap
+passed in Chromium for the life of this branch and let Tab walk out of the dialog in
+WebKit.
+
+**Firefox: 11 non-passing, and almost certainly environmental.** Eight are 30-second
+timeouts on `page.goto`, `waitForLoadState`, or "Target page, context or browser has been
+closed"; one is "the fixture index listed nothing"; one is a wall-clock assertion
+(`expect(elapsed).toBeLessThan(400)` measured 696 ms). These signatures are load and
+dev-server symptoms, not assertion failures about behaviour — but that is a reading, not a
+proof, and it is not waived. A clean run on an unloaded machine is what settles it, which
+is what the `release-gates.yml` matrix job exists for. Separately, a 400 ms wall-clock
+bound in a test suite is a latent flake wherever it runs.
+
+### 1.2 The accessibility sweep failed on a stale record, not new markup
+
+`a11y-full` swept **364 fixtures across 38 components** and found 25 axe violations. 21 are
+recorded with reasons. Four are not:
+
+```
+Checkbox/reduce-motion-forced   label (critical)
+Checkbox/reduce-motion-refused  label (critical)
+Switch/reduce-motion-forced     button-name (critical)
+Switch/reduce-motion-refused    button-name (critical)
+```
+
+Each is a `motionOverrides` clone of that component's `default` fixture — a deliberately
+unlabelled bare control, whose finding is *already* waived under the base fixture's name,
+with a recorded reason ("the library cannot force a consumer to label anything"). The
+clones carry the same finding under names the expectation list has never seen.
+
+So this is not a new accessibility defect. It is a **record that went stale because its
+input set grew**: the list was written against 276 fixtures and there are now 364. The
+sweep is a release-only project, so nothing had run it since 2026-09-02. Per the run
+instruction it is reported, not waived.
+
+### 1.3 The consumer matrix and the tarball
+
+```
+  pass  publint
+  pass  attw (0 problems across 32 entrypoints)
+  pass  vite-react19            react 19.2.8 · typecheck · build · css resolves
+  pass  vite-react18            react 18.3.1 · typecheck · build · css resolves
+  pass  next-app                typecheck · build · css · server render
+  pass  next-pages              typecheck · build · css · server render
+  pass  react-router7           typecheck · build · css · server render
+  pass  vite-no-optional-peers  peers absent · typecheck · build · css resolves
+```
+
+All four packaging plants were caught: `require.types` pointed back at the ESM
+declaration (→ FalseESM), extensions stripped from `dist/index.d.ts` (→
+InternalResolutionError under node16), an exports map with no typed entrypoint (→ caught by
+the entrypoint floor, not by a clean bill of health on nothing), and a README link to a file
+the tarball does not carry.
+
+### 1.4 One defect this run found in the release path itself
+
+`npm publish --dry-run` **failed** at the start of this run, and the cause was the packaging
+gate added in the previous slice. `npm publish --dry-run` sets `npm_config_dry_run=true` in
+the environment; `prepublishOnly` → `build:lib` → `postbuild:lib` runs `assert-packaging.mjs`,
+whose inner `npm pack` inherited that variable, printed a tarball name and wrote no file.
+The gate then failed on the missing file and took the standard pre-publish check down with
+it. Fixed by stripping the variable for the child process; the dry run now exits 0.
+
+Worth noting for its own sake: the gate that exists to catch packaging problems was itself
+a packaging problem, and only running the real command found it.
+
+### 1.5 What could not be regenerated, and why
+
+- **The `/ai` 20-step pipeline (`ai/run.md`).** Steps 01–19 are agent-driven audits — SEO,
+  brand consistency, semantic-text generation, deep security review, demo review. They are
+  prompt documents, not scripts; executing them means an agent forming judgements, and
+  writing fresh "PASS" verdicts for twenty of those without doing the work is precisely the
+  failure mode this branch spent a month removing. **They were not re-run.**
+  `ai/system-state.json` now carries a `pipeline.stepsNotReExecuted` note saying so, and
+  every record I *did* re-measure is prefixed `RE-MEASURED 2026-09-05`. Anything without
+  that prefix predates this run and should be read as unverified.
+  The stale ones matter: the file recorded `coverage.tests: 65.88` (actually 91.79),
+  a DatePicker chunk at 10.25 KB (actually 12.42 KB), and a completed pipeline with
+  `status: PASS` dated 2026-04-28.
+- **`DEMO-COVERAGE.md`.** A one-off AST audit with no generator in `scripts/`. Its headline
+  ("751 of 1135 props have no fixture, including 69 tier-A modes") is from before the slice
+  that added demos and fixtures, and there is no way to re-derive it today without
+  rewriting the audit. Treat every number in that file as stale.
+- **Lighthouse scores** (`ai/07-performance.md`, `ai/15-seo.md`). Need a deployed site and a
+  headless-Chrome runner; neither exists here. The pipeline's own record already marks them
+  deferred for the same reason.
+
+---
+
+## 2. What the package claims, and what proves it
+
+| Claim | Proved by |
+| --- | --- |
+| 30 components, each with a subpath export | `attw` resolves all 32 entrypoints under node10, node16 (CJS and ESM) and bundler |
+| ESM and CJS, with correct types for each | `publint --strict` clean; `attw` reports 0 problems. Both were broken until the previous slice — 272 findings |
+| Installs and builds in real frameworks | `verify:consumers`: 6 apps, 2 React majors, 4 frameworks, production builds |
+| Server-renders under Next and React Router | The same gate greps prerendered HTML for a sentinel and a `<table>`; a build alone is not accepted as proof |
+| `"use client"` where hooks are used | The consumer self-check strips the directive from all 144 chunks and requires `next-app` to fail while `vite-react19` still passes |
+| Optional peers really are optional | `vite-no-optional-peers` installs neither and asserts their absence. Removing `peerDependenciesMeta` makes it fail — verified |
+| `styles.css` works with no Tailwind | `assert-styles-bundle.mjs`: 535 rules, 508 utility selectors confined to the `cl-s` marker, no preflight |
+| `unstyled` drops every decorative class | `unstyled.contract` across all 30, with a ratcheted leak list |
+| Every `classes` key reaches a real element | `fixtures.contract` renders every key in every anatomy; `key-uniqueness.contract` asserts one key per element |
+| Layout holds 320–1920 px in both themes | 360 recorded screenshots, 30 components × 6 widths × 2 themes, plus a guard that fails a baseline which is a picture of nothing |
+| Text contrast meets AA in both themes | `contrast.contract`, every text token against every surface |
+| Ten owned WCAG criteria | Named contract or e2e gate per criterion, listed in `ACCESSIBILITY.md` with the engines it ran in |
+| Bundle size per component | `assert-bundle-size.mjs`, 30 entries, shape derived from source, per-entry ratchet |
+| Docs name no prop the types lack | `doc-truth.contract` |
+| Committed generated files match their source | `build-tokens.mjs --check` (gated by `token-vocabulary.contract`); `build-subcomponent-schemas.mjs --check` |
+| Shipped docs' links resolve in the tarball | `assert-packaging.mjs` |
+
+---
+
+## 3. What is knowingly not true, or not gated
+
+Everything in this section is deliberate and recorded. None of it is a surprise; all of it
+is a thing a consumer could hit.
+
+### 3.1 Five declared bundle breaches
+
+Over their class ceiling, each with a reason and a per-entry ratchet that stops it growing:
+
+| Component | Gzipped | Ceiling | Class |
+| --- | --- | --- | --- |
+| Table | 16.28 KB | 12 KB | surface |
+| DatePicker | 12.42 KB | 12 KB | surface |
+| InternationalPhoneInput | 10.61 KB | 8 KB | composed |
+| TimePicker | 10.33 KB | 10 KB | overlay |
+| Accordion | 9.12 KB | 6 KB | control |
+
+Library total 151.01 KB across 78 chunks, against a recorded ceiling of 151.11 KB.
+
+### 3.2 78 remaining `dark:` variants
+
+ADR 006 closed the retirement at a declared endpoint: 283 of 361 retired, 78 kept and every
+one classified — **33 deliberately retained** (29 of them text-scale steps that both clear
+AA), **29 blocked on a token** that does not exist and should not be minted without an ADR
+005 decision, **16 orphaned** raw-palette pairs that predate the token system. Gated by
+`dark-variants.contract` with ceilings of 60 (group B) and 18 (group C).
+
+The README no longer describes dark mode as "built-in `dark:` variants" — the mechanism is
+design tokens — but 78 utilities still work the old way.
+
+### 3.3 The raw-palette remainder
+
+**18 sites**, not 22 — that figure in the brief is the count *retired* in one slice, not the
+count remaining. Sixteen of the eighteen are the "orphaned" class above: `bg-gray-200`,
+`text-gray-600`, `border-gray-300` and similar in Accordion, Avatar and Table, plus three
+gradient stops on the marketing `--fg` token set rather than `--cl-*` at all. Moving them is
+a visual decision about eleven specific elements.
+
+### 3.4 17 waived `classes` keys
+
+Not 18. `docs/adr/002-unrenderable-keys.json` waives, with a reason each: CascadingDropdown
+7, DatePicker 5, RadioButton 2, Slider 1, Table 1, InternationalPhoneInput 1. Five of
+CascadingDropdown's are recorded dead ("no source reference outside the merge map"); two are
+`ATTEMPTED, still unreachable` — real source references that no prop combination renders.
+A key nobody can render is a key nobody can style.
+
+Alongside them the same file ratchets **21 decorative leaks** and **5 motion leaks** —
+classes that survive `unstyled` because they are JSX-site literals or come from a nested
+component the parent does not pass `unstyled` to.
+
+### 3.5 Two declared positioners, six declared portals
+
+Two places compute an anchored position outside `useAnchoredPosition`: DatePicker's marker
+tooltip (anchors to the cell under the pointer from a mouse event and guesses a 100 px
+height) and Table's column-filter menu (a hardcoded 220 px width estimate rather than a
+measured element). Both guess rather than measure, so both can mis-place near a viewport
+edge.
+
+Six portal `createPortal` sites outside `MenuSurface`. Three are legitimately not anchored
+surfaces at all — Modal (centred), Drawer (viewport edge), Toast (viewport corner). Three
+are genuine remainders: Tooltip (anchored but owns a hover/focus lifecycle `MenuSurface`
+has no notion of), and the same two positioners above.
+
+### 3.6 One RECALLED precedent
+
+ADR 005's token ledger carries one name written from model recall and still unchecked
+against the peer's live documentation. ADR 002's own ledger has none left. `RECALLED` is
+explicitly *not* a justification on its own — it is an admission that a citation was
+claimed and never verified.
+
+### 3.7 Accessibility: 8 partial, 14 not claimed
+
+Of the 55 WCAG 2.2 Level A and AA criteria: **11 Supports, 8 Partially supports, 14 Does
+not support, 22 Not applicable.**
+
+Read the third column carefully, because it does not mean what it means in a VPAT.
+**"Does not support" here means "not gated, therefore not claimed."** Several of the 14 are
+very likely satisfied by the current code — 1.4.4 Resize Text, 1.4.10 Reflow, 1.4.11
+Non-text Contrast are the obvious candidates. The document refuses to say so until a test
+fails when the behaviour regresses. That is ADR 003 D4, and it is the correct policy, but it
+means the headline number understates conformance and cannot be quoted as a failure count.
+
+The 8 "Partially supports" are the honest middle: implemented and gated for some components
+or some part of the criterion, with the row naming which part is unproven.
+
+Anyone who needs a conformance statement should read `ACCESSIBILITY.md` per criterion, not
+this summary. It also records which engines each gate ran in — and, per §1.1, two criteria's
+gates are currently red in WebKit.
+
+### 3.8 The demo-coverage gap
+
+The brief cites 51 tier-A demo gaps. I could not verify that number: `DEMO-COVERAGE.md` is a
+one-off audit with no generator, and it predates the slice that added demos and fixtures.
+Its own figure is 69, which is also stale. **The honest statement is that the current gap is
+unknown**, and that is itself a finding — a coverage document nobody can regenerate stops
+being a measurement the moment the code moves.
+
+---
+
+## 4. What has never been tested
+
+Named plainly, because these are the gaps that no green run says anything about.
+
+**The library has never run in a real consumer's application.** `@chumlab/ui` has never been
+published — `npm view` returns 404 — so there are no downstream users and no field
+evidence. The consumer matrix is six throwaway templates that I wrote, and they render
+**four of the thirty components** (Button, Dropdown, DatePicker, Table; the sixth renders
+two). Every claim about how this behaves inside a real application is an inference from
+those four.
+
+**No assistive technology has ever touched it.** No NVDA, no JAWS, no VoiceOver. axe is a
+static rule engine, not a screen reader; it cannot tell you whether an announcement is
+comprehensible, whether focus order makes narrative sense, or whether a live region fires
+at a useful moment. Every accessibility claim in this package is "the markup is correct",
+never "a person using a screen reader could complete the task".
+
+**No right-to-left testing.** There is one incidental `dir="rtl"` assertion in an Accordion
+unit test. Nothing systematically renders any component in RTL, and several — Drawer's
+`side`, Breadcrumb's separators, Slider's fill, Pagination's arrows — have obvious RTL
+failure modes.
+
+**No Lighthouse, no real-device testing, no performance profiling in a real app.** Mobile
+Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not phones.
+
+**Visual coverage is one fixture per component.** 30 of the 364 fixtures have a recorded
+baseline. Every open surface — the dropdown panels, the calendar, the menus that the whole
+composition phase rewrote — has no visual baseline at all; the subject is the closed
+trigger.
+
+**React 17 and bundlers other than Vite, Next and React Router.** Not tested, and React 17
+is stated as unsupported.
+
+---
+
+## 5. The version decision
+
+`package.json` says `0.1.0`. The package has never been published, so this is a free choice.
+
+**What 0.1.0 commits us to.** Very little, deliberately. `VERSIONING.md`'s pre-1.0 clause
+carries ADR 002 R7 forward verbatim: keys are renamed and deleted freely, with no
+deprecation cycle, and any 0.x minor may contain what would otherwise be a major change.
+A consumer is told to pin an exact version if that matters. The 17 waived keys can be
+deleted, the two `ATTEMPTED, still unreachable` keys can go, and the `classes` vocabulary
+can move under anyone's feet without a major bump.
+
+**What 1.0.0-rc.1 would commit us to.** A release candidate is a promise about *the shape
+of what follows*, not a lighter version of 1.0. Publishing an rc says: this vocabulary is
+the one we intend to freeze; from here we fix bugs and cut 1.0. Under ADR 002 R7 the freeze
+lands the moment 1.0 does — every key present at 1.0 is a stability commitment, and removing
+or renaming one, or repointing it at a different element, is a major version from then on.
+Tagging an rc invites people to build against 397 keys across 38 anatomies while 17 of them
+are still waived as unrenderable and two are recorded as unreachable by any prop
+combination. Deleting those after an rc is the exact break R7 exists to prevent.
+
+**Recommendation: publish 0.1.0.** Three reasons, in order of weight.
+
+1. **The vocabulary is not ready to freeze.** 17 waived keys and two known-unreachable ones
+   are open questions about the public API. R7 says pre-1.0 is when you settle them, and an
+   rc is a signal that you already have.
+2. **The matrix is red.** Whatever the version, §1.1 has to be resolved first — but a `0.1.0`
+   with a documented Safari defect is an ordinary early release, while a `1.0.0-rc.1` with
+   one is a candidate for a thing that is not a candidate.
+3. **Nothing about an rc is easier to withdraw.** npm treats `1.0.0-rc.1` as a published
+   version like any other; unpublishing is restricted and republishing the same version is
+   forbidden. The freedom that 0.x gives is real and the freedom that "rc" gives is
+   marketing.
+
+The counter-argument is worth stating: 91.79% coverage, 4409 tests, a seven-project browser
+matrix, 360 visual baselines, six consumer apps and a per-criterion accessibility record are
+not 0.1.0-shaped artefacts, and calling this 0.1.0 undersells it to anyone evaluating it.
+That is true. It is also the correct price for keeping the right to delete a key.
+
+---
+
+## 6. Residual risk
+
+What I would want said out loud to whoever presses publish.
+
+1. **Safari is broken in two known ways and the blast radius is not measured.** Two tests
+   fail on two WebKit targets. If the cause is "clicking a button does not focus it", then
+   every mouse-opened surface in the library is suspect in Safari, not just Dropdown and
+   Pagination — and Safari is not a niche. **This should be diagnosed and fixed before
+   publishing, not documented as a known issue.**
+2. **A gate went stale without anyone noticing, and it is the accessibility gate.** The axe
+   expectation list was recorded against 276 fixtures and the suite now has 364. It went
+   unnoticed because that project only runs in the release matrix. The same shape of failure
+   — a record that outlives what it measured — has now been found in `ai/system-state.json`,
+   `src/styles/tokens.css`, `DEMO-COVERAGE.md`, and here. Assume there are more.
+3. **The accessibility numbers will be misread.** "14 Does not support" in a document
+   published alongside a package will be quoted as fourteen failures. They are fourteen
+   ungated criteria, most probably fine. The framing is honest and it is also a liability;
+   the README should say this louder than it does.
+4. **Six templates are not a user.** The first real consumer will hit something none of this
+   found — most likely a bundler, a monorepo layout, or a CSS-order interaction. That is
+   normal for a first release and it is the strongest argument for 0.1.0.
+5. **Firefox is unresolved, not clean.** I read those eleven as environmental. I did not
+   prove it. Until the matrix runs green on a quiet machine, Firefox is a question mark.
+6. **`npm publish` is a one-way door.** Version 0.1.0 can never be republished, and the
+   package name is claimed permanently on first publish.
+
+---
+
+## 7. What would make this ready
+
+In order:
+
+1. Diagnose the two WebKit failures. Establish whether they share a cause and how many
+   other surfaces it reaches.
+2. Re-record the axe expectation list against all 364 fixtures — or, better, make
+   `motionOverrides` inherit its base fixture's expectation so the list cannot go stale this
+   way again.
+3. Re-run `test:e2e:all` on an unloaded machine and settle Firefox.
+4. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
+   race against the CPU.
+5. Decide the 17 waived keys — delete them under R7 while it is still free.
+
+Steps 1–3 are blocking. Steps 4–5 are not, but 5 gets much more expensive after 1.0.
