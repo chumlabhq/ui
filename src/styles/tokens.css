@@ -24,7 +24,9 @@
 :root[data-theme="dark"] {
   --cl-bg: #050608;
   --cl-bg-elevated: #0a0d12;
-  --cl-bg-hover: rgba(237, 239, 244, 0.04);
+  --cl-bg-hover: #0a0d12;
+  --cl-bg-panel: #0a0d12;
+  --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
   --cl-bg-input: #050608;
   --cl-text: #edeff4;
   --cl-text-secondary: rgba(237, 239, 244, 0.72);
@@ -32,7 +34,7 @@
   --cl-text-disabled: rgba(237, 239, 244, 0.3);
   --cl-border: rgba(237, 239, 244, 0.08);
   --cl-border-strong: rgba(237, 239, 244, 0.15);
-  --cl-border-input: rgba(237, 239, 244, 0.12);
+  --cl-border-input: rgba(237, 239, 244, 0.08);
   --cl-border-input-hover: rgba(237, 239, 244, 0.25);
   --cl-border-input-focus: #5b9bff;
   --cl-accent: #5b9bff;
@@ -57,6 +59,8 @@
   --cl-bg: #ffffff;
   --cl-bg-elevated: #f8f9fb;
   --cl-bg-hover: rgba(15, 18, 24, 0.04);
+  --cl-bg-panel: #ffffff;
+  --cl-bg-item-hover: rgba(15, 18, 24, 0.04);
   --cl-bg-input: #ffffff;
   --cl-text: #0f1218;
   --cl-text-secondary: rgba(15, 18, 24, 0.8);
@@ -87,6 +91,8 @@
 @theme inline {
   --color-cl-bg: var(--cl-bg);
   --color-cl-bg-elevated: var(--cl-bg-elevated);
+  --color-cl-bg-panel: var(--cl-bg-panel);
+  --color-cl-bg-item-hover: var(--cl-bg-item-hover);
   --color-cl-bg-hover: var(--cl-bg-hover);
   --color-cl-bg-input: var(--cl-bg-input);
   --color-cl-text: var(--cl-text);

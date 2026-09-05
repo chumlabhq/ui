@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { readdirSync, existsSync } from "node:fs";
+import { readdirSync, existsSync, readFileSync, statSync } from "node:fs";
 import { gotoFixture, fixturePath } from "./_nav";
+import { decodePng, inkOf } from "./_png";
 
 /**
  * Visual baselines, from the fixtures.
@@ -28,27 +29,33 @@ import { gotoFixture, fixturePath } from "./_nav";
 const WIDTHS = [320, 375, 768, 1024, 1440, 1920];
 
 /**
- * One fixture per component: the plainest state each one has.
+ * One fixture per component: the plainest state that actually renders it.
  *
  * Every fixture at every width in both themes is 330 x 6 x 2 screenshots, which
  * is a gate nobody runs. The plainest state catches the changes a visual gate
  * is for — spacing, colour, type, border radius — because those are shared
  * across a component's states.
+ *
+ * "Plainest" alone picked five subjects that render almost nothing, and one —
+ * Avatar's `image`, whose src is an unreachable URL — that rendered a single
+ * flat colour: 0 pixels of content, held steady forever. The five were chosen
+ * by measuring the painted pixels of every fixture (see MIN_INK below), not by
+ * reading the fixture names.
  */
 const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "Accordion", fixture: "single-open" },
-  { component: "Avatar", fixture: "image" },
+  { component: "Avatar", fixture: "in-group" },
   { component: "Breadcrumb", fixture: "default" },
-  { component: "Button", fixture: "default" },
+  { component: "Button", fixture: "with-icons" },
   { component: "CascadingDropdown", fixture: "closed" },
-  { component: "Checkbox", fixture: "default" },
+  { component: "Checkbox", fixture: "labelled" },
   { component: "CountryFlag", fixture: "resolved" },
   { component: "DatePicker", fixture: "closed" },
   { component: "Drawer", fixture: "open" },
   { component: "Dropdown", fixture: "closed" },
   { component: "Input", fixture: "labelled" },
   { component: "InternationalPhoneInput", fixture: "default" },
-  { component: "Loader", fixture: "default" },
+  { component: "Loader", fixture: "sized" },
   { component: "Modal", fixture: "open" },
   { component: "MultiSelectDropdown", fixture: "closed" },
   { component: "MultiSelectSearchableDropdown", fixture: "closed" },
@@ -59,7 +66,7 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "SearchableDropdown", fixture: "closed" },
   { component: "Slider", fixture: "default" },
   { component: "Stepper", fixture: "horizontal-numbered" },
-  { component: "Switch", fixture: "default" },
+  { component: "Switch", fixture: "labelled" },
   { component: "TabPanel", fixture: "default" },
   { component: "Table", fixture: "default" },
   { component: "TextArea", fixture: "labelled" },
@@ -159,6 +166,69 @@ test.describe("visual baselines", () => {
       pngs.length,
       `expected ${expected} baselines (${SUBJECTS.length} subjects x ${WIDTHS.length} widths x 2 themes)`,
     ).toBe(expected);
+  });
+
+  /**
+   * Floors, not thresholds. Their job is to separate "renders nothing" from
+   * "renders a small thing", and each is set below the weakest baseline that
+   * legitimately passes rather than at a round number:
+   *
+   *   ink     253  ResizablePanel — a 24px divider is the smallest real render
+   *   colours  47  CountryFlag/resolved
+   *
+   * At 150 the ink floor also fails both subjects this spec replaced —
+   * Avatar/image at 0 and Loader/default at 127 — which is the point: a floor
+   * that would have passed them is a floor that permits the defect it exists
+   * to catch.
+   *
+   * File size decides nothing about blankness, and the first run of this guard
+   * is the proof: a 400-byte floor failed Slider, whose 366-byte baseline
+   * paints 1789 pixels, because a flat track compresses to almost nothing.
+   * Avatar's blank frames ran 204 to 409 bytes, straddling it. The two
+   * populations overlap, so the byte check is only ever a truncated-file
+   * check, and it is set where it can serve that and nothing else.
+   */
+  const MIN_INK = 150;
+  const MIN_COLOURS = 12;
+  const MIN_BYTES = 100;
+
+  test("no baseline is a picture of nothing", () => {
+    /**
+     * A screenshot assertion compares a baseline against a render. It has
+     * nothing to say about whether the baseline was worth recording, so a
+     * component that renders an empty box passes forever at full confidence —
+     * which is what Avatar did for 12 baselines: one colour, zero pixels of
+     * content, and a green run every time.
+     */
+    // Skipped while snapshots are being rewritten, for the same reason as the
+    // count: files are landing on disk underneath the read. In an ordinary run
+    // nothing is written at all, and a run that IS writing has already failed
+    // on the missing snapshots.
+    test.skip(
+      test.info().config.updateSnapshots === "all",
+      "baselines are being rewritten, so reading them proves nothing",
+    );
+
+    const dir = "e2e/visual.spec.ts-snapshots";
+    const blank: string[] = [];
+
+    for (const file of readdirSync(dir).filter((f) => f.endsWith(".png"))) {
+      const path = `${dir}/${file}`;
+      const bytes = statSync(path).size;
+      if (bytes < MIN_BYTES) {
+        blank.push(`${file}: ${bytes} bytes — truncated`);
+        continue;
+      }
+      const { colours, ink } = inkOf(decodePng(readFileSync(path)));
+      if (ink < MIN_INK || colours < MIN_COLOURS) {
+        blank.push(`${file}: ${ink} painted pixels in ${colours} colours`);
+      }
+    }
+
+    expect(
+      blank,
+      "these baselines record an empty frame — pick a fixture that renders the component",
+    ).toEqual([]);
   });
 
   test("every subject resolves to a real fixture", async ({ page }) => {

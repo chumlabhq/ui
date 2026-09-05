@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    // True here and false in the Vite consumers. With it off, `next build`
+    // reports errors in Next's own declarations (URLPattern, PromiseWithResolvers)
+    // that say nothing about @chumlab/ui. The library's .d.ts files are still
+    // fully checked — in the Vite consumers, where they are the only third-party
+    // surface besides React.
+    "skipLibCheck": true,
+    "types": ["node", "vite/client"],
+    "rootDirs": [".", "./.react-router/types"],
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
+  },
+  "include": ["app", "*.ts", ".react-router/types/**/*"]
+}

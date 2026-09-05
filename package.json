@@ -342,7 +342,9 @@
     "test:e2e:visual": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=visual",
     "test:e2e:visual:update": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=visual --update-snapshots",
     "test:e2e:a11y": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=a11y-full",
-    "test:e2e:matrix": "node scripts/run-e2e-matrix.mjs --report"
+    "test:e2e:matrix": "node scripts/run-e2e-matrix.mjs --report",
+    "verify:consumers": "node scripts/verify-consumer-matrix.mjs",
+    "verify:consumers:self-check": "node scripts/verify-consumer-matrix.mjs --self-check"
   },
   "peerDependencies": {
     "@tanstack/react-table": "^8.21.3",
@@ -356,6 +358,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@babel/standalone": "^8.0.4",
     "@eslint/js": "^9.39.1",
     "@iconify/react": "6.0.2",
@@ -383,6 +386,7 @@
     "globals": "^16.5.0",
     "happy-dom": "^20.4.0",
     "jsdom": "^27.0.1",
+    "publint": "^0.3.24",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-markdown": "^10.1.0",
