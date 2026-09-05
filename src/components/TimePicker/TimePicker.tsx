@@ -28,6 +28,7 @@ import { isBrowser } from "../../utils/isBrowser";
 
 import { cn } from "../../utils/scopedCn";
 import { motionSafeClasses } from "../../utils/classLayers";
+import { surfaceStyle } from "../../utils/menu/measuringStyle";
 
 const TimeOption = memo(function TimeOption({
   time,
@@ -511,14 +512,17 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       position: "fixed",
       zIndex: dropdownZIndex,
       margin: 0,
-      ...(dropdownCoords && isPositionStable
-        ? {
-            top: dropdownCoords.top,
-            left: dropdownCoords.left,
-            // Clock variant sizes itself; dropdown variant matches trigger width
-            ...(variant === "dropdown" ? { width: dropdownCoords.width } : {}),
-          }
-        : { visibility: "hidden" as const, top: 0, left: 0 }),
+      ...surfaceStyle(
+        dropdownCoords
+          ? {
+              top: dropdownCoords.top,
+              left: dropdownCoords.left,
+              // Clock variant sizes itself; dropdown variant matches trigger width
+              ...(variant === "dropdown" ? { width: dropdownCoords.width } : {}),
+            }
+          : null,
+        isPositionStable,
+      ),
       ...(!isOpen && keepMounted ? { display: "none" } : {}),
     };
 

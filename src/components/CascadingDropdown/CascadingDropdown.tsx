@@ -12,6 +12,7 @@ import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useInertPropWarning } from "../../utils/useInertPropWarning";
+import { surfaceStyle } from "../../utils/menu/measuringStyle";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -701,9 +702,14 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                 position: "fixed" as const,
                 zIndex: dropdownZIndex,
                 margin: 0,
-                ...(!isOpen ? { display: "none" } : menuCoords && isPositionStable
-                  ? { top: menuCoords.top, left: menuCoords.left, width: menuCoords.width }
-                  : { visibility: "hidden" as const, top: 0, left: 0 }),
+                ...(!isOpen
+                  ? { display: "none" }
+                  : surfaceStyle(
+                      menuCoords
+                        ? { top: menuCoords.top, left: menuCoords.left, width: menuCoords.width }
+                        : null,
+                      isPositionStable,
+                    )),
               }}
             >
               {showMenuSearch && (

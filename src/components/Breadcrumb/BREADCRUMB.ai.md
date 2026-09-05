@@ -100,6 +100,7 @@ This renders correctly with no additional props, classes, or setup. The last ite
 | `dropdownPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"top"` | Position of the overflow dropdown. |
 | `dropdownZIndex` | number | `50` | Z-index of the overflow dropdown. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the dropdown. |
+| `keepMounted` | boolean | `false` | Keeps the collapsed-items menu mounted while closed. |
 | `ellipsisAriaLabel` | string | `"Show collapsed breadcrumb items"` | Accessible label for the ellipsis button. |
 | `onDropdownOpenChange` | object | — | (open: boolean) => void — Called when the dropdown open state changes. |
 

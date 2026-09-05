@@ -7,7 +7,6 @@ import {
   forwardRef,
   useId,
 } from "react";
-import { createPortal } from "react-dom";
 import { useLayer } from "../../utils/layers";
 import type {
   BreadcrumbItem,
@@ -24,10 +23,11 @@ import BreadcrumbItemContent from "./components/BreadcrumbItemContent";
 import Tooltip from "../Tooltip/Tooltip";
 import { cn } from "../../utils/scopedCn";
 import { isBrowser } from "../../utils/isBrowser";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
+import MenuSurface from "../../utils/menu/MenuSurface";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
 
 // ─── Dropdown Item ─────────────────────────────────────────────────────────
 
@@ -125,6 +125,7 @@ function DropdownPortal({
   tooltipOffset,
   defaultTooltipProps,
   portalContainer,
+  keepMounted,
 }: {
   buttonRef: React.RefObject<HTMLButtonElement | null>;
   dropdownId: string;
@@ -145,10 +146,9 @@ function DropdownPortal({
   tooltipOffset: number;
   defaultTooltipProps?: BreadcrumbTooltipProps;
   portalContainer?: HTMLElement | null;
+  keepMounted?: boolean;
 }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  // The portal mounts only while the menu is open, so it is always measuring.
-  const coords = useAnchoredPosition(buttonRef, dropdownRef, true, { side: position, gap });
 
   // Auto-focus first enabled item
   useEffect(() => {
@@ -158,23 +158,20 @@ function DropdownPortal({
     }
   }, [menuItemRefs]);
 
-  const dropdownStyle: React.CSSProperties = {
-    position: "fixed",
-    zIndex,
-    ...(coords
-      ? { top: coords.top, left: coords.left }
-      : { visibility: "hidden" as const, top: 0, left: 0 }),
-  };
-
-  if (!isBrowser) return null;
-
-  return createPortal(
-    <div
+  return (
+    <MenuSurface
       ref={dropdownRef}
+      trigger={buttonRef}
+      isOpen
+      side={position}
+      gap={gap}
+      zIndex={zIndex}
+      portalContainer={portalContainer}
+      keepMounted={keepMounted}
+      matchTriggerWidth={false}
       id={dropdownId}
       role="menu"
       className={dropdownClassName || undefined}
-      style={dropdownStyle}
       data-state="open"
       data-position={position}
       data-breadcrumb-dropdown-id={dropdownId}
@@ -196,8 +193,7 @@ function DropdownPortal({
           defaultTooltipProps={defaultTooltipProps}
         />
       ))}
-    </div>,
-    portalContainer ?? document.body,
+    </MenuSurface>
   );
 }
 
@@ -251,6 +247,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       dropdownPosition = "top",
       dropdownZIndex: dropdownZIndexProp,
       portalContainer,
+      keepMounted = false,
       ellipsisAriaLabel = "Show collapsed breadcrumb items",
       onDropdownOpenChange,
       ...rest
@@ -265,6 +262,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const dropdownId = `breadcrumb-dropdown-${generatedId}`;
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const shouldRestoreFocusRef = useRef(false);
     const ellipsisButtonRef = useRef<HTMLButtonElement>(null);
     const menuItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
     // Tight gap so the dropdown reads as anchored to the ellipsis trigger
@@ -402,52 +400,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       [isDropdownOpen],
     );
 
-    const handleMenuKeyDown = useCallback(
-      (e: React.KeyboardEvent, index: number) => {
-        const enabledItems = menuItemRefs.current.filter((el) => el && !el.disabled);
-        const currentEnabledIndex = enabledItems.indexOf(menuItemRefs.current[index]);
-
-        switch (e.key) {
-          case "ArrowDown": {
-            e.preventDefault();
-            const next = enabledItems[(currentEnabledIndex + 1) % enabledItems.length];
-            next?.focus();
-            break;
-          }
-          case "ArrowUp": {
-            e.preventDefault();
-            const prev = enabledItems[(currentEnabledIndex - 1 + enabledItems.length) % enabledItems.length];
-            prev?.focus();
-            break;
-          }
-          case "Home":
-            e.preventDefault();
-            enabledItems[0]?.focus();
-            break;
-          case "End":
-            e.preventDefault();
-            enabledItems[enabledItems.length - 1]?.focus();
-            break;
-          case "Escape":
-            e.preventDefault();
-            setIsDropdownOpen(false);
-            ellipsisButtonRef.current?.focus();
-            break;
-          case "Tab":
-            setIsDropdownOpen(false);
-            break;
-          case "Enter":
-          case " ": {
-            e.preventDefault();
-            const el = menuItemRefs.current[index];
-            el?.click();
-            break;
-          }
-        }
-      },
-      [],
-    );
-
     const setMenuItemRef = useCallback(
       (index: number, el: HTMLButtonElement | null) => {
         menuItemRefs.current[index] = el;
@@ -479,6 +431,59 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     useEffect(() => {
       menuItemRefs.current = menuItemRefs.current.slice(0, collapsedItems.length);
     }, [collapsedItems.length]);
+
+    /**
+     * The shared keyboard model, driving real DOM focus.
+     *
+     * This menu moves focus rather than pointing with `aria-activedescendant`,
+     * so the index the primitive owns is applied to the item refs here. The
+     * navigation itself — wrap, skip disabled, Home/End, Enter and Space — is
+     * no longer written out per component.
+     */
+    const {
+      activeIndex: activeItemIndex,
+      setActiveIndex: setActiveItemIndex,
+      onKeyDown: onMenuKeyDown,
+    } = useMenuNavigation<BreadcrumbItem>({
+      items: collapsedItems,
+      isOpen: isDropdownOpen,
+      isDisabled: (item) => !!item.disabled,
+      onSelect: handleItemClick,
+      onClose: (reason) => {
+        setIsDropdownOpen(false);
+        // Escape returns to the trigger; Tab is already leaving.
+        if (reason === "escape") shouldRestoreFocusRef.current = true;
+      },
+    });
+
+    useEffect(() => {
+      if (isDropdownOpen && activeItemIndex >= 0) {
+        menuItemRefs.current[activeItemIndex]?.focus();
+      }
+    }, [isDropdownOpen, activeItemIndex]);
+
+    /**
+     * Focus returns to the ellipsis through a flag, not from the Escape handler.
+     *
+     * Calling `.focus()` inline runs before React has removed the menu, so the
+     * browser can move focus again in the same tick.
+     */
+    useEffect(() => {
+      if (!isDropdownOpen && shouldRestoreFocusRef.current) {
+        shouldRestoreFocusRef.current = false;
+        ellipsisButtonRef.current?.focus();
+      }
+    }, [isDropdownOpen]);
+
+    const handleMenuKeyDown = useCallback(
+      (e: React.KeyboardEvent, index: number) => {
+        // The item under the pointer is the one the keys act from.
+        if (activeItemIndex !== index) setActiveItemIndex(index);
+        onMenuKeyDown(e);
+      },
+      [activeItemIndex, setActiveItemIndex, onMenuKeyDown],
+    );
+
 
     // ─── Icons ───────────────────────────────────────────────────────
     const SeparatorComponent = SeparatorIconProp || ChevronRightIcon;
@@ -654,6 +659,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               tooltipOffset={tooltipOffset}
               defaultTooltipProps={defaultTooltipProps}
               portalContainer={portalContainer}
+              keepMounted={keepMounted}
             />
           )}
         </li>
@@ -680,6 +686,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       dropdownId,
       ellipsisAriaLabel,
       portalContainer,
+      keepMounted,
     ]);
 
     // ─── Build rendered items ────────────────────────────────────────

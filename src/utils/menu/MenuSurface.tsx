@@ -1,12 +1,25 @@
-import { forwardRef, useRef, type CSSProperties, type ReactNode, type RefObject } from "react";
+import {
+  forwardRef,
+  useRef,
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { createPortal } from "react-dom";
 import { isBrowser } from "../isBrowser";
 import { mergeRefs } from "../mergeRefs";
 import { useAnchoredPosition } from "../useAnchoredPosition";
+import { surfaceStyle } from "./measuringStyle";
 import { useStablePositionAfterOpen } from "../useStablePositionAfterOpen";
 import type { AnchoredSide } from "../anchoredPosition";
 
-export interface MenuSurfaceProps {
+/**
+ * Extends the div's own props: a surface is a `listbox` or a `menu`, and its
+ * roles, labels, handlers and `data-*` attributes belong to the caller.
+ */
+export interface MenuSurfaceProps
+  extends Omit<ComponentPropsWithoutRef<"div">, "style" | "children"> {
   /** The element the surface is anchored to. */
   trigger: HTMLElement | null | RefObject<HTMLElement | null>;
   isOpen: boolean;
@@ -32,10 +45,11 @@ export interface MenuSurfaceProps {
  * visibility-hidden first frame, `keepMounted` — and the differences between
  * them were not decisions. This is the shape they agreed on.
  *
- * The hidden first frame is the part worth keeping deliberately:
+ * The invisible first frame is the part worth keeping deliberately:
  * `useAnchoredPosition` cannot measure the surface until it is in the DOM, so
- * the first paint would otherwise land at the top-left corner and jump. Hiding
- * rather than not rendering is what lets the measurement happen at all.
+ * the first paint would otherwise land at the top-left corner and jump. Rendering
+ * it invisibly rather than not at all is what lets the measurement happen —
+ * see `MEASURING_STYLE` for why it is opacity rather than visibility.
  */
 const MenuSurface = forwardRef<HTMLDivElement, MenuSurfaceProps>(function MenuSurface(
   {
@@ -62,14 +76,14 @@ const MenuSurface = forwardRef<HTMLDivElement, MenuSurfaceProps>(function MenuSu
   if (!isBrowser) return null;
   if (!isOpen && !keepMounted) return null;
 
-  const positioned: CSSProperties =
-    position && isStable
-      ? {
-          top: position.top,
-          left: position.left,
-          ...(matchTriggerWidth ? { width: position.width } : {}),
-        }
-      : { visibility: "hidden", top: 0, left: 0 };
+  const placed = position
+    ? {
+        top: position.top,
+        left: position.left,
+        ...(matchTriggerWidth ? { width: position.width } : {}),
+      }
+    : null;
+  const positioned = surfaceStyle(placed, isStable);
 
   return createPortal(
     <div

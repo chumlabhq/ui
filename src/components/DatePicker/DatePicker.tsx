@@ -55,6 +55,7 @@ import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOp
 import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { motionSafeClasses } from "../../utils/classLayers";
+import { surfaceStyle } from "../../utils/menu/measuringStyle";
 import {
   DEFAULT_DATEPICKER_CLASSES,
   UNSTYLED_DATEPICKER_CLASSES,
@@ -1079,7 +1080,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 zIndex: dropdownZIndex,
                 width: "max-content",
                 margin: 0,
-                ...(!isOpen ? { display: "none" } : calendarPos && isCalendarPositionStable ? { top: calendarPos.top, left: calendarPos.left } : { visibility: "hidden" as const, top: 0, left: 0 }),
+                ...(!isOpen
+                  ? { display: "none" }
+                  : surfaceStyle(
+                      calendarPos ? { top: calendarPos.top, left: calendarPos.left } : null,
+                      isCalendarPositionStable,
+                    )),
               }}
             >
               {showPresets && (

@@ -291,6 +291,11 @@
       "type": "object",
       "description": "HTMLElement | null \u2014 Portal container for the dropdown."
     },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keeps the collapsed-items menu mounted while closed.",
+      "default": false
+    },
     "ellipsisAriaLabel": {
       "type": "string",
       "description": "Accessible label for the ellipsis button.",

@@ -74,6 +74,8 @@ export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "clas
   dropdownPosition?: DropdownPosition;
   dropdownZIndex?: number;
   portalContainer?: HTMLElement | null;
+  /** Keeps the collapsed-items menu mounted while closed. */
+  keepMounted?: boolean;
   ellipsisAriaLabel?: string;
   onDropdownOpenChange?: (open: boolean) => void;
 }

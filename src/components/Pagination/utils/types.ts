@@ -87,6 +87,8 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   classes?: PaginationClasses;
   unstyled?: boolean;
   portalContainer?: HTMLElement | null;
+  /** Keeps the rows-per-page menu mounted while closed. */
+  keepMounted?: boolean;
   prevAriaLabel?: string;
   nextAriaLabel?: string;
   paginationAriaLabel?: string;

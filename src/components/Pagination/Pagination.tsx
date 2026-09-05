@@ -10,7 +10,6 @@ import {
   memo,
   Fragment,
 } from "react";
-import { createPortal } from "react-dom";
 import { useLayer } from "../../utils/layers";
 import type { PaginationProps, PaginationClasses, IconProps, SectionName } from "./utils/types";
 import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "./utils/constants";
@@ -24,6 +23,8 @@ import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
+import MenuSurface from "../../utils/menu/MenuSurface";
 
 function renderIcon(
   icon: React.ComponentType<IconProps> | React.ReactNode | undefined,
@@ -68,6 +69,7 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
   getOptionId,
   dropdownAriaLabel,
   portalContainer,
+  keepMounted,
 }: {
   triggerRef: React.RefObject<HTMLButtonElement | null>;
   direction: "up" | "down";
@@ -87,6 +89,7 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
   getOptionId: (index: number) => string;
   dropdownAriaLabel: string;
   portalContainer?: HTMLElement | null;
+  keepMounted?: boolean;
 }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -109,31 +112,27 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
     }
   }, [activeOptionIndex]);
 
-  const dropdownStyle: React.CSSProperties = {
-    position: "fixed",
-    zIndex,
-    ...(coords
-      ? { top: coords.top, left: coords.left, minWidth: coords.width }
-      : { visibility: "hidden" as const, top: 0, left: 0 }),
-  };
-
-  if (!isBrowser) return null;
-
-  const portalTarget = portalContainer ?? document.body;
-
-  return createPortal(
-    <div
+  return (
+    <MenuSurface
       ref={dropdownRef}
+      trigger={triggerRef}
+      isOpen
+      side={direction === "up" ? "top" : "bottom"}
+      gap={gap}
+      zIndex={zIndex}
+      portalContainer={portalContainer}
+      keepMounted={keepMounted}
+      matchTriggerWidth={false}
       id={listboxId}
       className={cn(dropdownClassName)}
-      style={dropdownStyle}
+      style={{ minWidth: coords?.width }}
       role="listbox"
       tabIndex={-1}
       aria-label={dropdownAriaLabel}
       aria-activedescendant={activeOptionId}
       onKeyDown={onKeyDown}
       onBlur={onBlur}
-      onMouseDown={(e) => e.preventDefault()}
+      onMouseDown={(event) => event.preventDefault()}
       data-state="open"
       data-direction={direction}
     >
@@ -155,8 +154,7 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
           {option}
         </div>
       ))}
-    </div>,
-    portalTarget,
+    </MenuSurface>
   );
 });
 
@@ -203,6 +201,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       classes: classesProp,
       unstyled = false,
       portalContainer,
+      keepMounted = false,
       prevAriaLabel = "Previous page",
       nextAriaLabel = "Next page",
       paginationAriaLabel: paginationAriaLabelProp,
@@ -304,74 +303,56 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       [],
     );
 
+    /**
+     * Focus goes back to the trigger through a flag rather than from here.
+     *
+     * Calling `.focus()` inline runs before React has removed the surface, so
+     * the browser can move focus again in the same tick — which is the bug the
+     * flag was added for elsewhere in the family.
+     */
+    const shouldRestoreFocusRef = useRef(false);
+    useEffect(() => {
+      if (!isDropdownOpen && shouldRestoreFocusRef.current) {
+        shouldRestoreFocusRef.current = false;
+        triggerRef.current?.focus();
+      }
+    }, [isDropdownOpen]);
+
     const handleRowsChange = useCallback(
       (rows: number) => {
         onRowsPerPageChange?.(rows);
         setIsDropdownOpen(false);
-        triggerRef.current?.focus();
+        shouldRestoreFocusRef.current = true;
       },
       [onRowsPerPageChange],
     );
 
-    const handleDropdownKeyDown = useCallback(
-      (e: React.KeyboardEvent) => {
-        if (!isDropdownOpen) {
-          if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setIsDropdownOpen(true);
-            const selectedIndex = resolvedRowOptions.indexOf(rowsPerPage ?? -1);
-            setActiveOptionIndex(selectedIndex >= 0 ? selectedIndex : 0);
-          }
-          return;
-        }
-
-        switch (e.key) {
-          case "ArrowDown": {
-            e.preventDefault();
-            setActiveOptionIndex((prev) =>
-              prev < resolvedRowOptions.length - 1 ? prev + 1 : 0,
-            );
-            break;
-          }
-          case "ArrowUp": {
-            e.preventDefault();
-            setActiveOptionIndex((prev) =>
-              prev > 0 ? prev - 1 : resolvedRowOptions.length - 1,
-            );
-            break;
-          }
-          case "Home": {
-            e.preventDefault();
-            setActiveOptionIndex(0);
-            break;
-          }
-          case "End": {
-            e.preventDefault();
-            setActiveOptionIndex(resolvedRowOptions.length - 1);
-            break;
-          }
-          case "Enter":
-          case " ": {
-            e.preventDefault();
-            if (activeOptionIndex >= 0 && activeOptionIndex < resolvedRowOptions.length) {
-              handleRowsChange(resolvedRowOptions[activeOptionIndex]);
-            }
-            break;
-          }
-          case "Escape": {
-            e.preventDefault();
-            setIsDropdownOpen(false);
-            triggerRef.current?.focus();
-            break;
-          }
-          case "Tab": {
-            setIsDropdownOpen(false);
-            break;
-          }
-        }
+    /**
+     * The shared keyboard model. Opening seeds the current row count so the
+     * highlight starts where the value is, which is this component's own.
+     */
+    const { onKeyDown: onMenuKeyDown } = useMenuNavigation<number>({
+      items: resolvedRowOptions,
+      isOpen: isDropdownOpen,
+      activeIndex: activeOptionIndex,
+      onActiveIndexChange: setActiveOptionIndex,
+      onSelect: handleRowsChange,
+      // Opens on the row count already in use, not on the first option.
+      seedOnOpen: "none",
+      onOpen: () => {
+        setIsDropdownOpen(true);
+        const selectedIndex = resolvedRowOptions.indexOf(rowsPerPage ?? -1);
+        setActiveOptionIndex(selectedIndex >= 0 ? selectedIndex : 0);
       },
-      [isDropdownOpen, activeOptionIndex, resolvedRowOptions, handleRowsChange, rowsPerPage],
-    );
+      onClose: (reason) => {
+        setIsDropdownOpen(false);
+        // Escape returns the user to the control they opened; Tab is already
+        // taking them somewhere else and must not be pulled back.
+        if (reason === "escape") shouldRestoreFocusRef.current = true;
+      },
+    });
+
+    const handleDropdownKeyDown = onMenuKeyDown;
 
     const visiblePages = useMemo(
       () => getVisiblePages(safeTotalPages, safeCurrentPage, siblingCount),
@@ -455,6 +436,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 getOptionId={getOptionId}
                 dropdownAriaLabel={dropdownAriaLabel}
                 portalContainer={portalContainer}
+                keepMounted={keepMounted}
               />
             )}
           </div>

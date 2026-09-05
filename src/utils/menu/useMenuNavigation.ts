@@ -29,6 +29,15 @@ export interface MenuNavigationOptions<T> {
   activeIndex?: number;
   onActiveIndexChange?: Dispatch<SetStateAction<number>>;
   /**
+   * What ArrowDown or ArrowUp highlights when they open a closed surface.
+   *
+   * `"edge"` — the near end of the list, which is the common case. `"none"`
+   * leaves it to `onOpen`, for a surface that seeds from its current value:
+   * Pagination opens on the row count already in use rather than on the first
+   * option, and ARIA's combobox pattern allows either.
+   */
+  seedOnOpen?: "edge" | "none";
+  /**
    * Whether Space commits the active item.
    *
    * True for a button trigger, where Space has no other meaning. False for a
@@ -80,6 +89,7 @@ export function useMenuNavigation<T>({
   onClose,
   activeIndex: activeIndexProp,
   onActiveIndexChange,
+  seedOnOpen = "edge",
   commitOnSpace = true,
   typeahead,
 }: MenuNavigationOptions<T>): MenuNavigation {
@@ -203,7 +213,7 @@ export function useMenuNavigation<T>({
           event.preventDefault();
           if (!isOpen) {
             onOpen?.();
-            setActiveIndex(firstEnabledIndex);
+            if (seedOnOpen === "edge") setActiveIndex(firstEnabledIndex);
           } else {
             setActiveIndex((prev) => nextEnabled(prev, 1));
           }
@@ -213,7 +223,7 @@ export function useMenuNavigation<T>({
           event.preventDefault();
           if (!isOpen) {
             onOpen?.();
-            setActiveIndex(edgeEnabled("last"));
+            if (seedOnOpen === "edge") setActiveIndex(edgeEnabled("last"));
           } else {
             setActiveIndex((prev) => nextEnabled(prev, -1));
           }
@@ -286,6 +296,7 @@ export function useMenuNavigation<T>({
       onSelect,
       onOpen,
       onClose,
+      seedOnOpen,
       commitOnSpace,
       typeahead,
       jumpToTyped,

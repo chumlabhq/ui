@@ -190,6 +190,11 @@
       "type": "object",
       "description": "HTMLElement | null - Portal target for the rows-per-page dropdown."
     },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keeps the rows-per-page menu mounted while closed.",
+      "default": false
+    },
     "prevAriaLabel": {
       "type": "string",
       "description": "Accessible label for the previous page button.",

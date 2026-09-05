@@ -61,9 +61,28 @@ describe("MenuSurface", () => {
 
   it("hides the first frame rather than painting at the corner", () => {
     // The surface has to be in the DOM before it can be measured, so the choice
-    // is between a hidden frame and a visible jump from the top-left corner.
+    // is between an invisible frame and a visible jump from the top-left corner.
     render(<Harness />);
-    expect(surface()?.style.visibility).toBe("hidden");
+    expect(surface()?.style.opacity).toBe("0");
+  });
+
+  it("keeps the measuring frame focusable", () => {
+    // `visibility: hidden` also hid it from the focus order, so every
+    // `.focus()` in an open effect did nothing — four components lost
+    // focus-on-open to it. jsdom cannot observe focusability, so this asserts
+    // the mechanism; `e2e/menu-focus.spec.ts` asserts the behaviour.
+    render(<Harness />);
+    const el = surface();
+    expect(el?.style.visibility).not.toBe("hidden");
+    expect(el?.style.display).not.toBe("none");
+  });
+
+  it("stops blocking pointers once it knows where it is", () => {
+    // `pointer-events: none` belongs to the corner frame only. Left on through
+    // the stability wait it swallows the first click into the surface, which is
+    // how a menu becomes unclickable in a test and, on a slow frame, in a page.
+    render(<Harness />);
+    expect(surface()?.style.pointerEvents).not.toBe("none");
   });
 
   it("reports the side it resolved to, not the side it was asked for", () => {

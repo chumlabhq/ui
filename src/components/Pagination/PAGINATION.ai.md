@@ -101,6 +101,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `classes` | object | — | CSS class overrides for pagination sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the rows-per-page dropdown. |
+| `keepMounted` | boolean | `false` | Keeps the rows-per-page menu mounted while closed. |
 | `prevAriaLabel` | string | `"Previous page"` | Accessible label for the previous page button. |
 | `nextAriaLabel` | string | `"Next page"` | Accessible label for the next page button. |
 | `paginationAriaLabel` | string | — | Accessible label for the pagination nav element. |

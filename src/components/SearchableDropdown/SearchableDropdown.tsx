@@ -37,6 +37,7 @@ import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { comboboxNameProps } from "../../utils/comboboxName";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
+import { surfaceStyle } from "../../utils/menu/measuringStyle";
 const DefaultClearIcon = () => (
   <svg
     viewBox="0 0 20 20"
@@ -140,9 +141,10 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
     position: "fixed",
     zIndex,
     margin: 0,
-    ...(coords && isPositionStable
-      ? { top: coords.top, left: coords.left, minWidth: coords.width }
-      : { visibility: "hidden" as const, top: 0, left: 0 }),
+    ...surfaceStyle(
+      coords ? { top: coords.top, left: coords.left, minWidth: coords.width } : null,
+      isPositionStable,
+    ),
     ...(!isOpen && keepMounted ? { display: "none" } : {}),
   };
 
