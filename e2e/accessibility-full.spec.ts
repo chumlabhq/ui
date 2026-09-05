@@ -9,16 +9,31 @@ import { resolve } from "node:path";
  * down only. Per-fixture, not per-rule: a rule waived across the board would
  * have hidden Avatar/with-status, which is the finding this sweep exists for.
  */
-const EXPECTED = (
-  JSON.parse(
-    readFileSync(
-      resolve(process.cwd(), "docs/adr/002-unrenderable-keys.json"),
-      "utf8",
-    ),
-  ) as {
-    axeFixtureExpectations: Record<string, { reason: string; fixtures: string[] }>;
-  }
-).axeFixtureExpectations;
+const WAIVERS_PATH = resolve(process.cwd(), "docs/adr/002-unrenderable-keys.json");
+
+interface Waivers {
+  axeFixtureExpectations: Record<string, { reason: string; fixtures: string[] }>;
+  axeExpectationsDerivedFrom: { fixtures: number; recordedOn: string };
+}
+
+const waivers = JSON.parse(readFileSync(WAIVERS_PATH, "utf8")) as Waivers;
+const EXPECTED = waivers.axeFixtureExpectations;
+const DERIVED_FROM = waivers.axeExpectationsDerivedFrom;
+
+/**
+ * Re-derive instead of asserting: `A11Y_RERECORD=1 npm run test:e2e:a11y`.
+ *
+ * Two rules keep this from being a rubber stamp, and they are the difference
+ * between re-deriving and blessing:
+ *
+ * - A finding whose **rule** has no recorded reason is never accepted. The
+ *   reason is the human judgement; only the fixture list is mechanical.
+ * - A finding whose **component** is not already listed under that rule is
+ *   never accepted either. `Checkbox/reduce-motion-forced` is a second fixture
+ *   of a component already waived for `label`; a new component that starts
+ *   reporting `label` is a new defect and has to be looked at.
+ */
+const RERECORD = process.env.A11Y_RERECORD === "1";
 
 /**
  * Every fixture of every component, not one per component.
@@ -158,6 +173,62 @@ test.describe("accessibility (full sweep)", () => {
     expect(audited, "no fixture was audited").toBeGreaterThan(200);
 
     const key = (f: Finding) => `${f.component}/${f.fixture}`;
+
+    if (RERECORD) {
+      let accepted = 0;
+      const refused: string[] = [];
+      for (const finding of findings) {
+        const entry = EXPECTED[finding.id];
+        if (!entry) {
+          refused.push(`${key(finding)}: ${finding.id} — no recorded reason for this rule`);
+          continue;
+        }
+        const components = new Set(entry.fixtures.map((fx) => fx.split("/")[0]));
+        if (!components.has(finding.component)) {
+          refused.push(`${key(finding)}: ${finding.id} — ${finding.component} is not already waived for it`);
+          continue;
+        }
+        if (!entry.fixtures.includes(key(finding))) accepted += 1;
+      }
+      for (const rule of Object.keys(EXPECTED)) {
+        const components = new Set(EXPECTED[rule].fixtures.map((fx) => fx.split("/")[0]));
+        // Derived from this run, not merged into what was there: an entry that
+        // stopped reporting has to disappear, or the list only ever grows.
+        EXPECTED[rule].fixtures = [
+          ...new Set(
+            findings
+              .filter((f) => f.id === rule && components.has(f.component))
+              .map(key),
+          ),
+        ].sort();
+      }
+      waivers.axeExpectationsDerivedFrom = {
+        fixtures: audited,
+        recordedOn: new Date().toISOString().slice(0, 10),
+      };
+      writeFileSync(WAIVERS_PATH, `${JSON.stringify(waivers, null, 2)}\n`, "utf8");
+      console.log(
+        `AXE_RERECORDED ${accepted} newly listed, ${refused.length} refused, ` +
+          `derived from ${audited} fixtures`,
+      );
+      for (const line of refused) console.log(`AXE_REFUSED ${line}`);
+      expect(refused, "these findings cannot be re-derived — they need a decision, not a record").toEqual([]);
+      return;
+    }
+
+    /**
+     * The list was derived against a fixture count. If the count has moved, the
+     * list describes a different suite — which is exactly how four findings on
+     * fixtures added after it was written came to read as unrecorded defects.
+     * Same shape as the dist fingerprint in assert-dist-records.mjs.
+     */
+    expect(
+      audited,
+      `the axe expectation list was derived from ${DERIVED_FROM.fixtures} fixtures ` +
+        `(${DERIVED_FROM.recordedOn}) and this run audited ${audited}. The list ` +
+        "describes a suite that no longer exists — re-derive it with " +
+        "`A11Y_RERECORD=1 npm run test:e2e:a11y` and read what it refuses.",
+    ).toBe(DERIVED_FROM.fixtures);
 
     const unexpected = findings
       .filter((f) => !(EXPECTED[f.id]?.fixtures ?? []).includes(key(f)))

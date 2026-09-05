@@ -22,6 +22,7 @@ import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 const MAX_STATUS_LABELS = 5;
 
 interface MultiSelectDropdownContentProps {
@@ -456,6 +457,7 @@ const MultiSelectDropdown = forwardRef<
               ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel }),
               disabled,
               onClick: handleToggle,
+              onMouseDown: focusTriggerOnMouseDown,
               onKeyDown: handleKeyDownWithPassthrough,
               onFocus,
               onBlur,
@@ -482,6 +484,7 @@ const MultiSelectDropdown = forwardRef<
               aria-required={required || undefined}
               disabled={disabled}
               onClick={handleToggle}
+              onMouseDown={focusTriggerOnMouseDown}
               onKeyDown={handleKeyDownWithPassthrough}
               onFocus={onFocus}
               onBlur={onBlur}

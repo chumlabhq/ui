@@ -72,3 +72,88 @@ test.describe("menu focus on open", () => {
     ).toBe(true);
   });
 });
+
+/**
+ * Every surface, after a mouse open. One row per component, because the defect
+ * this guards was engine-specific and only one component had a test.
+ *
+ * WebKit does not leave focus on a clicked `<button>`. Three components kept
+ * focus on their trigger and pointed at the highlighted option with
+ * `aria-activedescendant`, so in Safari they described that option to `<body>`;
+ * a fourth read `relatedTarget` on blur to decide whether to dismiss, and a
+ * `null` from the unfocusable trigger closed the surface which the same click
+ * then reopened. Chromium focuses the button and masked all four.
+ *
+ * `focus` is where the component intends focus to be, not where it happens to
+ * land — `trigger` and `surface` are both correct answers and the row says
+ * which one this component promises. `<body>` is never a correct answer, and it
+ * is the one thing every row rules out.
+ */
+const SURFACES = [
+  { component: "Dropdown", fixture: "closed", trigger: "[role='combobox']", focus: "trigger", secondClick: "closes" },
+  { component: "MultiSelectDropdown", fixture: "closed", trigger: "[role='combobox']", focus: "trigger", secondClick: "closes" },
+  { component: "CascadingDropdown", fixture: "closed", trigger: "[role='combobox'],button", focus: "trigger", secondClick: "closes" },
+  { component: "SearchableDropdown", fixture: "closed", trigger: "[role='combobox']", focus: "surface", secondClick: "closes" },
+  { component: "MultiSelectSearchableDropdown", fixture: "closed", trigger: "[role='combobox']", focus: "surface", secondClick: "closes" },
+  { component: "DatePicker", fixture: "closed", trigger: "[role='combobox'],button", focus: "surface", secondClick: "closes" },
+  { component: "Pagination", fixture: "rows-per-page", trigger: "[aria-haspopup='listbox']", focus: "surface", secondClick: "closes" },
+  { component: "Breadcrumb", fixture: "collapsed", trigger: "button", focus: "surface", secondClick: "closes" },
+  {
+    component: "TimePicker",
+    fixture: "closed",
+    trigger: "[role='combobox'],button",
+    focus: "trigger",
+    // Deliberate, and the reason this row is here rather than absent: the input
+    // stops the click propagating to the toggling wrapper and only ever opens,
+    // because a click into a field you are typing in must not close the picker.
+    // Identical in every engine.
+    secondClick: "stays-open",
+  },
+] as const;
+
+const SURFACE_SELECTOR = "[role='listbox'],[role='menu'],[role='dialog']";
+
+test.describe("a mouse open leaves focus somewhere real", () => {
+  for (const surface of SURFACES) {
+    test(`${surface.component}`, async ({ page }) => {
+      await gotoFixture(page, surface.component, surface.fixture);
+      const trigger = page.locator(`[data-fixture] ${surface.trigger}`).first();
+
+      await trigger.click();
+      await page.locator(SURFACE_SELECTOR).first().waitFor({ state: "attached" });
+
+      const landed = await page.evaluate((selector) => {
+        const active = document.activeElement as HTMLElement | null;
+        const open = document.querySelector("[role='listbox'],[role='menu'],[role='dialog']");
+        const element = document.querySelector(`[data-fixture] ${selector}`);
+        return {
+          onBody: active === document.body || active === null,
+          onTrigger: active === element,
+          inSurface: !!(open && active && open.contains(active)),
+          tag: active?.tagName ?? "none",
+        };
+      }, surface.trigger);
+
+      expect(
+        landed.onBody,
+        `${surface.component}: focus is on <body> after a mouse open. Anything ` +
+          "the trigger says with aria-activedescendant is being said to nothing.",
+      ).toBe(false);
+
+      const held = surface.focus === "trigger" ? landed.onTrigger : landed.inSurface;
+      expect(
+        held,
+        `${surface.component} promises focus on its ${surface.focus} after opening; ` +
+          `it landed on <${landed.tag.toLowerCase()}>`,
+      ).toBe(true);
+
+      await trigger.click();
+      await page.waitForTimeout(150);
+      expect(
+        await page.locator(SURFACE_SELECTOR).count(),
+        `${surface.component}: a second click on the trigger should leave the ` +
+          `surface ${surface.secondClick === "closes" ? "closed" : "open"}`,
+      ).toBe(surface.secondClick === "closes" ? 0 : 1);
+    });
+  }
+});

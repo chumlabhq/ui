@@ -40,6 +40,7 @@ import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,
@@ -489,6 +490,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel }),
       disabled,
       onClick: handleToggle,
+      onMouseDown: focusTriggerOnMouseDown,
       onKeyDown: handleKeyDownWithPassthrough,
       onFocus,
       onBlur,

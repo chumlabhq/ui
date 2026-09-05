@@ -25,6 +25,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 
 function renderIcon(
   icon: React.ComponentType<IconProps> | React.ReactNode | undefined,
@@ -393,6 +394,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               ref={triggerRef}
               type="button"
               disabled={disabled}
+              onMouseDown={focusTriggerOnMouseDown}
               onClick={() => {
                 const opening = !isDropdownOpen;
                 setIsDropdownOpen(opening);

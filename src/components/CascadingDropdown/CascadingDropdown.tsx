@@ -10,6 +10,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -621,6 +622,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               "aria-label": ariaLabel,
               disabled,
               onClick: handleToggle,
+              onMouseDown: focusTriggerOnMouseDown,
               onKeyDown: combinedKeyDown,
               onFocus: onFocus,
               onBlur: onBlur,
@@ -645,6 +647,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               aria-label={ariaLabel}
               disabled={disabled}
               onClick={handleToggle}
+              onMouseDown={focusTriggerOnMouseDown}
               onKeyDown={combinedKeyDown}
               onBlur={onBlur}
               onFocus={onFocus}

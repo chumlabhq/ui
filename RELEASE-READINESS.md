@@ -1,8 +1,12 @@
 # Release readiness — `@chumlab/ui` 0.1.0
 
-**Run date:** 2026-09-05 · **Verdict: do not publish yet.** Three of the seven Playwright
-projects are red, and two of them fail for the same reason on two independent WebKit
-targets. That is a product defect in Safari, not a flaky test.
+**Run date:** 2026-09-05 · **Blockers cleared the same day; see §1.6.**
+
+The first run of this report found three of the seven Playwright projects red. Two of them
+failed for the same reason on two independent WebKit targets — a real Safari defect, not a
+flaky test. Those are fixed and re-verified. **One project, Firefox, is still unresolved**,
+and its failures read as environmental rather than as a defect. §1.1 describes the run that
+found the problems; §1.6 describes their disposal.
 
 This document is written for someone who has not followed the work. It says what the
 package claims and what proves each claim, what is knowingly untrue or unproven, what has
@@ -19,7 +23,7 @@ measured on the date above unless the text says otherwise.
 | `lint` | **pass** | 0 errors, 7 warnings — the standing baseline, unchanged. |
 | Unit + contract (`test:run`) | **pass** | 4409 passed, 68 skipped, 86 files. Contracts alone: 1239 passed, 68 skipped, 29 files. |
 | Coverage | **pass** | 91.79% statements, 87.15% branch, 94.42% functions, 93.70% lines. |
-| `test:e2e:all` (7 projects) | **FAIL** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 18 skipped. 2894s. |
+| `test:e2e:all` (7 projects) | **FAIL, then 3 of 4 cleared** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 2894s. a11y-full, webkit and Mobile Safari re-run clean (§1.6); Firefox not re-run. |
 | `verify:consumers` (6 apps) | **pass** | 87s. Every app installed the packed tarball, typechecked and built. |
 | `verify:packaging` (4 plants) | **pass** | publint `--strict`, attw, shipped-link check. All four planted defects caught. |
 | `npm publish --dry-run` | **pass** *(after a fix — see §1.4)* | 1635 files, 2.1 MB packed, 6.9 MB unpacked. |
@@ -120,6 +124,57 @@ it. Fixed by stripping the variable for the child process; the dry run now exits
 
 Worth noting for its own sake: the gate that exists to catch packaging problems was itself
 a packaging problem, and only running the real command found it.
+
+### 1.6 Disposal of the three fixed projects
+
+**One cause under both WebKit failures, confirmed by tracing rather than inferred.** The
+sequence in WebKit, with a probe on the Dropdown trigger:
+
+```
+pointerdown  active=BODY      (an explicit .focus() runs here)
+focus        active=BUTTON
+mousedown    active=BUTTON
+blur         active=BODY      <- WebKit's default action, undoing it
+mouseup      active=BODY
+click        active=BODY
+```
+
+Safari does not leave focus on a clicked `<button>`, and focusing it is not enough — the
+default action takes the focus away again. So the remedy is `preventDefault()` on the
+primary-button mousedown plus an explicit focus, in one shared handler
+(`src/utils/menu/focusTriggerOnMouseDown.ts`).
+
+**The blast radius was measured, not assumed, and it is smaller than it looked.** Sweeping
+all nine menu surfaces in both engines:
+
+| Symptom | Components | Why not the others |
+| --- | --- | --- |
+| Focus lands on `<body>` after a mouse open | Dropdown, MultiSelectDropdown, CascadingDropdown | Safari *does* focus an `<input>`, so TimePicker's input trigger was fine; the five that move focus into their surface were fine too |
+| Surface does not close on a second trigger click | Pagination | Its blur dismissal reads `relatedTarget`, and an unfocusable trigger gives `null` — which reads as "focus left everything", so it closed and the click reopened. **Chromium masked it entirely.** |
+
+Three components, not the seven the survey suggested. TimePicker also fails to close on a
+second click — in *both* engines — and that is deliberate: its input calls
+`stopPropagation` and only ever opens, because clicking into a field you are typing in must
+not close the picker. Checked before reporting it as a defect.
+
+**Nine per-component assertions** now cover every surface, in `menu-focus.spec.ts`, each row
+declaring where that component promises focus goes and whether a second click closes.
+Disabling the remedy fails exactly the four affected components and no others — which is the
+self-check, and it also re-derives the blast radius rather than trusting this table.
+
+**The axe list was re-derived, not appended.** `A11Y_RERECORD=1` rebuilds the fixture lists
+from a live sweep, refusing anything it cannot justify: a finding whose *rule* has no
+recorded reason, or whose *component* is not already waived for that rule. The re-derivation
+accepted the four reduce-motion clones and refused nothing. The list now records the fixture
+count it was derived from (364), and the sweep fails when that count moves — the same
+staleness shape as `assert-dist-records.mjs`, and the one that would have caught this.
+
+Re-run after the fixes: **a11y-full 1/1, webkit 428/428, Mobile Safari 428/428** (428 rather
+than 419: the nine new assertions).
+
+**Firefox was deliberately not re-run.** Its eleven were 8 timeouts, a "fixture index listed
+nothing" and a 400 ms wall-clock bound that measured 696 ms. Nothing in this slice would
+change any of them, and settling them means a quiet machine, not a code change.
 
 ### 1.5 What could not be regenerated, and why
 
@@ -345,16 +400,17 @@ That is true. It is also the correct price for keeping the right to delete a key
 
 What I would want said out loud to whoever presses publish.
 
-1. **Safari is broken in two known ways and the blast radius is not measured.** Two tests
-   fail on two WebKit targets. If the cause is "clicking a button does not focus it", then
-   every mouse-opened surface in the library is suspect in Safari, not just Dropdown and
-   Pagination — and Safari is not a niche. **This should be diagnosed and fixed before
-   publishing, not documented as a known issue.**
-2. **A gate went stale without anyone noticing, and it is the accessibility gate.** The axe
-   expectation list was recorded against 276 fixtures and the suite now has 364. It went
-   unnoticed because that project only runs in the release matrix. The same shape of failure
-   — a record that outlives what it measured — has now been found in `ai/system-state.json`,
-   `src/styles/tokens.css`, `DEMO-COVERAGE.md`, and here. Assume there are more.
+1. **The Safari defect is fixed, but it shipped undetected for the life of the branch.**
+   Three components announced the highlighted option to `<body>` for every Safari user, and
+   a fourth never closed. Chromium masked all four. The lesson is not the fix — it is that a
+   single-engine iteration loop cannot see this class of bug, and the release matrix is the
+   only thing that can. If the matrix is ever skipped to save forty minutes, this comes back.
+2. **A gate went stale without anyone noticing, and it was the accessibility gate.** The axe
+   expectation list was recorded against 276 fixtures and the suite had 364. It went
+   unnoticed because that project only runs in the release matrix. It now records the count
+   it was derived from and fails when that moves — but the same shape of failure has been
+   found in `ai/system-state.json`, `src/styles/tokens.css`, `DEMO-COVERAGE.md` and here.
+   Assume there are more.
 3. **The accessibility numbers will be misread.** "14 Does not support" in a document
    published alongside a package will be quoted as fourteen failures. They are fourteen
    ungated criteria, most probably fine. The framing is honest and it is also a liability;
@@ -371,16 +427,18 @@ What I would want said out loud to whoever presses publish.
 
 ## 7. What would make this ready
 
-In order:
+In order. The first two are done; the rest are not.
 
-1. Diagnose the two WebKit failures. Establish whether they share a cause and how many
-   other surfaces it reaches.
-2. Re-record the axe expectation list against all 364 fixtures — or, better, make
-   `motionOverrides` inherit its base fixture's expectation so the list cannot go stale this
-   way again.
-3. Re-run `test:e2e:all` on an unloaded machine and settle Firefox.
+1. ~~Diagnose the two WebKit failures and establish the blast radius.~~ **Done** — §1.6.
+   One cause, three components plus Pagination, fixed and gated per component.
+2. ~~Re-record the axe expectation list against all 364 fixtures.~~ **Done** — re-derived,
+   with a count guard so it cannot go stale the same way.
+3. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** Still blocking: one
+   project has never been seen green, and "probably environmental" is a reading, not a
+   result.
 4. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
-   race against the CPU.
+   race against the CPU. This is one of the eleven Firefox failures and the only one with an
+   obvious fix, so it is worth doing before step 3 rather than after.
 5. Decide the 17 waived keys — delete them under R7 while it is still free.
 
-Steps 1–3 are blocking. Steps 4–5 are not, but 5 gets much more expensive after 1.0.
+Step 3 is the only remaining blocker. Step 5 gets much more expensive after 1.0.

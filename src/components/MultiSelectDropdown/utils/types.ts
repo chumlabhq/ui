@@ -132,6 +132,12 @@ export interface MultiSelectDropdownTriggerRenderProps {
   "aria-label"?: string;
   disabled: boolean;
   onClick: () => void;
+  /**
+   * Attach this to your trigger element. Safari does not focus a `<button>`
+   * when it is clicked, which leaves `aria-activedescendant` pointing at an
+   * option from an element the assistive technology is not tracking.
+   */
+  onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
   onKeyDown: (event: React.KeyboardEvent) => void;
   onFocus?: () => void;
   onBlur?: () => void;
