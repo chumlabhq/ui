@@ -28,8 +28,12 @@ Supports by someone writing the test, not by someone reading the code and being 
 
 ### Where the package stands
 
-Of the 55 Level A and AA criteria: **11 Supports, 8 Partially supports, 14 Does not support,
-22 Not applicable**. The ten a component library genuinely owns — 1.3.1, 2.1.1, 2.1.2,
+Of the 55 Level A and AA criteria: **9 Supports, 10 Partially supports, 14 Does not support,
+22 Not applicable**. 1.3.1 and 1.4.3 moved from Supports to Partially supports on 2026-09-06,
+when the axe sweep's scope was widened to include the surfaces this library portals — see
+"What the sweep's scope was hiding".
+
+The ten a component library genuinely owns — 1.3.1, 2.1.1, 2.1.2,
 2.4.3, 2.4.7, 2.4.11, 2.5.7, 2.5.8, 4.1.2 and 4.1.3 — all carry a gate, and building those
 gates found six classes of defect that no axe run had reported: a `Breadcrumb` menu with no
 `id` for its own `aria-controls`; seven unreachable "Clear selection" buttons; a `TabPanel`
@@ -68,6 +72,13 @@ Gates named below are real files. `--project contracts` and `--project unit` are
 Desktop Chrome only), while `e2e/accessibility.spec.ts` audits one fixture per component in
 all five.
 
+**The full sweep audits the fixture and its portals.** It audited only the fixture subtree
+until 2026-09-06, which excluded every surface this library portals to `document.body` —
+see "What the sweep's scope was hiding" below, and read every row citing
+`accessibility-full` in that light. `e2e/accessibility.spec.ts` still audits the fixture
+subtree alone; of the 38 fixtures it selects, one portals anything (`Modal/open`) and that
+surface reports nothing, so the same hole currently costs it nothing.
+
 ### What a component library can and cannot own
 
 Several criteria are met jointly. This package can ship a labelled, keyboard-operable
@@ -81,20 +92,20 @@ the row says which half is ours.
 
 | SC | Level | Status | Justification | Gate |
 | --- | --- | --- | --- | --- |
-| 1.1.1 Non-text Content | A | Partially supports | Decorative icons carry `aria-hidden`; icon-only controls take `aria-label`. Controls that mount with no accessible name warn in development, now including the six combobox triggers. Not every one of the 30 components has been audited for icon labelling. | `accessibleName.test`, `combobox-name.contract` (jsdom); `e2e/accessibility-full.spec.ts` (chromium) |
+| 1.1.1 Non-text Content | A | Partially supports | Decorative icons carry `aria-hidden`; icon-only controls take `aria-label`. Controls that mount with no accessible name warn in development, now including the six combobox triggers. Not every one of the 30 components has been audited for icon labelling. | `accessibleName.test`, `combobox-name.contract` (jsdom); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals since 2026-09-06) |
 | 1.2.1 Audio-only / Video-only | A | Not applicable | The package ships no audio or video component. | — |
 | 1.2.2 Captions (Prerecorded) | A | Not applicable | As above. | — |
 | 1.2.3 Audio Description or Media Alternative | A | Not applicable | As above. | — |
 | 1.2.4 Captions (Live) | AA | Not applicable | As above. | — |
 | 1.2.5 Audio Description (Prerecorded) | AA | Not applicable | As above. | — |
-| 1.3.1 Info and Relationships | A | Supports | Label, description and error are associated programmatically, state is published as data attributes with a recorded vocabulary, and **every ARIA relationship in every fixture resolves to an element that exists**. That check found `Breadcrumb`'s ellipsis trigger naming a menu with no `id` at all — `aria-controls` pointing at nothing precisely while the menu was open. A dangling `aria-controls` is excused only while the control reports `aria-expanded="false"`. | `aria-relationships.contract` (jsdom, every fixture); `e2e/accessibility.spec.ts` axe (all five) |
+| 1.3.1 Info and Relationships | A | Partially supports | Label, description and error are associated programmatically, state is published as data attributes with a recorded vocabulary, and **every ARIA relationship in every fixture resolves to an element that exists**. That check found `Breadcrumb`'s ellipsis trigger naming a menu with no `id` at all — `aria-controls` pointing at nothing precisely while the menu was open. A dangling `aria-controls` is excused only while the control reports `aria-expanded="false"`. **Downgraded 2026-09-06:** the widened sweep reports 57 ARIA structure findings inside portalled surfaces — 44 `aria-required-children` on listboxes and menus whose options are nested one div deep, and 13 `aria-required-parent` on `DatePicker`'s weekday header row, which sits outside its own grid. Unfixed. | `aria-relationships.contract` (jsdom, every fixture); `e2e/accessibility.spec.ts` axe (all five); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
 | 1.3.2 Meaningful Sequence | A | Does not support | Not gated. DOM order is authored to match reading order, but nothing asserts it. | — |
 | 1.3.3 Sensory Characteristics | A | Does not support | Not gated. | — |
 | 1.3.4 Orientation | AA | Does not support | No component locks orientation, but nothing tests either orientation. | — |
 | 1.3.5 Identify Input Purpose | AA | Does not support | `autoComplete` passes through to the underlying input; the package sets no purpose tokens of its own and nothing gates them. | — |
 | 1.4.1 Use of Color | A | Does not support | Not gated. Error states pair colour with an icon and a message in most components; "most" is not a claim. | — |
 | 1.4.2 Audio Control | A | Not applicable | The package plays no audio. | — |
-| 1.4.3 Contrast (Minimum) | AA | Supports | Every text token is checked against every surface it is used on, in both themes, parsed from `src/index.css` rather than copied into the test. Consumer overrides of the tokens are outside this. | `contrast.contract` (jsdom — token arithmetic, engine-independent by construction) |
+| 1.4.3 Contrast (Minimum) | AA | Partially supports | Every text token is checked against every surface it is used on, in both themes, parsed from `src/index.css` rather than copied into the test. Consumer overrides of the tokens are outside this. **Downgraded 2026-09-06:** the token arithmetic cannot see text painted with a raw palette class, and the widened sweep reports four — `Table`'s filter menu label and option (`text-gray-500`, `text-gray-700`) and `Pagination`'s selected option. Unfixed. | `contrast.contract` (jsdom — token arithmetic, engine-independent by construction); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
 | 1.4.4 Resize Text | AA | Does not support | Not gated. Sizing is in `rem`-based Tailwind utilities throughout, which is the precondition, not the proof. | — |
 | 1.4.5 Images of Text | AA | Not applicable | The published `dist` contains no bitmap assets; all iconography is inline SVG and all text is live text. (The repository's `src/assets/images` holds demo-site artwork, which is not published.) | — |
 | 1.4.10 Reflow | AA | Does not support | Not gated at 320px. The components are authored mobile-first and the README claims 320px support; no test holds that claim. | — |
@@ -108,7 +119,7 @@ the row says which half is ours.
 
 | SC | Level | Status | Justification | Gate |
 | --- | --- | --- | --- | --- |
-| 2.1.1 Keyboard | A | Supports | Every control reporting an interactive role can take focus, every roving group has exactly one tab stop or an active-descendant owner, and every drag has a keyboard route. The gate found seven "Clear selection" buttons shipped at `tabIndex={-1}` — for a single select there is no other way back to an empty value — and a `TabPanel` whose tablist had no tab stop at all when `defaultValue` named a disabled tab. | `keyboard-reachable.contract`, `roving-focus.contract`, `dragging-alternatives.contract` (jsdom, every fixture); component keyboard specs (all five) |
+| 2.1.1 Keyboard | A | Supports | Every control reporting an interactive role can take focus, every roving group has exactly one tab stop or an active-descendant owner, and every drag has a keyboard route. The gate found seven "Clear selection" buttons shipped at `tabIndex={-1}` — for a single select there is no other way back to an empty value — and a `TabPanel` whose tablist had no tab stop at all when `defaultValue` named a disabled tab. **Open, unresolved:** the widened sweep reports `scrollable-region-focusable` on seven option scrollers. Where the scroller holds options it is arguable — arrow keys move the highlight and scroll it — but `TimePicker/loading` scrolls a message with no options and no way to reach it. | `keyboard-reachable.contract`, `roving-focus.contract`, `dragging-alternatives.contract` (jsdom, every fixture); component keyboard specs (all five) |
 | 2.1.2 No Keyboard Trap | A | Supports | The three surfaces that hold focus — Modal, Drawer, DatePicker — share `cycleTabWithin`, cycle Tab both ways and release on Escape. The helper drives the order from its own focusable list rather than intervening at the boundaries, which is what makes it hold in WebKit. | `overlay-focus.contract` (jsdom, all three); `e2e/drawer.spec.ts` trap (all five). **Modal and DatePicker are jsdom-only** — an e2e trap spec for each would close that |
 | 2.1.4 Character Key Shortcuts | A | Not applicable | The package binds no single-character shortcuts. Typeahead in the select components is scoped to a focused listbox, which the criterion exempts. | — |
 | 2.2.1 Timing Adjustable | A | Does not support | Toast auto-dismisses on a timer. `duration` is adjustable and `Infinity` disables it, but nothing gates pause-on-hover or pause-on-focus, and the default is a timed dismissal. This is a real exposure, not merely an ungated one. | — |
@@ -142,7 +153,7 @@ the row says which half is ours.
 | 3.2.3 Consistent Navigation | AA | Not applicable | Page-level. | — |
 | 3.2.4 Consistent Identification | AA | Partially supports | Part naming across components is a closed vocabulary with a recorded precedent for every name outside it, so the same element is identified the same way in every component. That governs the styling API and the data attributes, not the visible labels. | `key-migration.contract` (jsdom); [ADR 002](https://github.com/chumlabhq/ui/blob/main/docs/adr/002-classes-key-vocabulary.md) |
 | 3.2.6 Consistent Help | A | Not applicable | New in 2.2. A page-level obligation about where help mechanisms appear across a set of pages. A component library has no page set. | — |
-| 3.3.1 Error Identification | A | Partially supports | Form components render the error message in a `role="alert"` region, associate it with `aria-describedby`, and mark the control `aria-invalid`. Gated for the components with error fixtures. | `fixtures.contract`, `status-messages.contract` (jsdom); `e2e/accessibility-full.spec.ts` (chromium) |
+| 3.3.1 Error Identification | A | Partially supports | Form components render the error message in a `role="alert"` region, associate it with `aria-describedby`, and mark the control `aria-invalid`. Gated for the components with error fixtures. | `fixtures.contract`, `status-messages.contract` (jsdom); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals since 2026-09-06) |
 | 3.3.2 Labels or Instructions | A | Partially supports | `label`, `description` and `required` are wired to the control; an unnamed control warns in development. | `accessibleName.test` (jsdom) |
 | 3.3.3 Error Suggestion | AA | Not applicable | The package renders the message the consumer supplies and does not perform validation, so it cannot suggest a correction. | — |
 | 3.3.4 Error Prevention (Legal, Financial, Data) | AA | Not applicable | Application-level; the package submits nothing. | — |
@@ -155,7 +166,7 @@ the row says which half is ours.
 
 | SC | Level | Status | Justification | Gate |
 | --- | --- | --- | --- | --- |
-| 4.1.2 Name, Role, Value | A | Supports | Roles, states and properties are exposed and kept true. Every `role="combobox"` resolves to a non-empty accessible name; every roving group moves DOM focus with its tabindex, so the highlight is announced rather than merely marked; every ARIA reference resolves. Three roles declared without their behaviour have been implemented — see below. | `combobox-name.contract`, `roving-focus.contract`, `aria-relationships.contract` (jsdom); `e2e/accessibility.spec.ts` axe (all five); `e2e/accessibility-full.spec.ts` every fixture (chromium). Three `button-name` nodes remain: Switch fixtures that pass no label, which is the consumer's half |
+| 4.1.2 Name, Role, Value | A | Supports | Roles, states and properties are exposed and kept true. Every `role="combobox"` resolves to a non-empty accessible name; every roving group moves DOM focus with its tabindex, so the highlight is announced rather than merely marked; every ARIA reference resolves. Three roles declared without their behaviour have been implemented — see below. | `combobox-name.contract`, `roving-focus.contract`, `aria-relationships.contract` (jsdom); `e2e/accessibility.spec.ts` axe (all five); `e2e/accessibility-full.spec.ts` every fixture, and since 2026-09-06 every fixture's portals (chromium). Three `button-name` nodes remain: Switch fixtures that pass no label, which is the consumer's half |
 | 4.1.3 Status Messages | AA | Supports | A message state renders a live region and does not take the focus — both halves, because a component that focuses its own error satisfies a checker looking for `role="alert"` while pulling a keyboard user out of the field they were filling in. The gate found twelve components rendering a success confirmation as a plain `<div>`, announced to nobody, while their error message was correctly `role="alert"`. It asserts the message text is inside the live region, not merely that the page has one — the looser check passed three of the twelve. | `status-messages.contract` (jsdom, every message fixture of 22 components) |
 
 ---
@@ -260,6 +271,81 @@ assertion fails rather than the behaviour changing quietly. Five of the sixteen 
 CountryFlag, Drawer, ResizablePanel, Stepper, Switch — have base fixtures with no motion in
 them, so their assertions are vacuous; the suite names them in a list that may shrink but
 must not grow.
+
+## What the sweep's scope was hiding
+
+Until 2026-09-06 the full sweep audited `[data-fixture]` — the fixture subtree, and nothing
+else. Every surface this library opens is `createPortal`ed to `document.body`: every menu,
+listbox, calendar, tooltip, modal and drawer. None of them was ever inside the audited
+subtree. The 25 recorded findings are all on inline form controls because those are the only
+elements that stayed in scope, and the count did not move when fifty fixtures started
+reaching their opened state — not because the surfaces were clean.
+
+The audit now covers the fixture plus every body-level element React rendered. That is how a
+portal root is told from the app root and from a third-party injection: `createPortal`
+mounts the surface's own element on `document.body`, so it carries a React fiber key, while
+the app root carries a container key and the injected checkout container carries neither.
+103 of the 364 fixtures portal something.
+
+**The sweep now reports 93 findings and it is red.** 25 are the recorded ones. The other 68
+are new, none is recorded, and recording one takes a reason rather than a list — so
+`A11Y_RERECORD=1` refused all 68 and the gate fails naming them. Nothing here is fixed yet;
+the list is the deliverable.
+
+| Rule | Criterion | Nodes | Where |
+| --- | --- | --- | --- |
+| `aria-required-children` | 1.3.1 | 44 | CascadingDropdown 12, MultiSelectSearchableDropdown 12, SearchableDropdown 11, Dropdown 4, InternationalPhoneInput 2, MultiSelectDropdown 2, TimePicker 1 |
+| `aria-required-parent` | 1.3.1 | 13 | DatePicker, every fixture that renders the calendar |
+| `scrollable-region-focusable` | 2.1.1 | 7 | TimePicker 4, MultiSelectSearchableDropdown 2, InternationalPhoneInput 1 |
+| `color-contrast` | 1.4.3 | 4 | Table 3, Pagination 1 |
+
+**`aria-required-children`** is one defect with two shapes. A `listbox` or `menu` must own
+its `option`/`menuitem` children, and these surfaces nest theirs one `<div>` deep — a search
+box beside a scrolling wrapper, both untyped — so the options are grandchildren and are not
+owned. That is why it lands on populated states like `SearchableDropdown/open` and not only
+on the empty ones. The other shape is the genuinely childless surface: `Dropdown/open-empty`,
+`/loading`, `/async-load-pending` and their equivalents render a status message inside the
+listbox and no options at all.
+
+**`aria-required-parent`** is a single line of markup, reported thirteen times: `DatePicker`
+renders its weekday header as `<div role="row">` whose parent is a plain `div`, while the
+six date rows below it sit inside the `role="grid"`. A row with no grid or rowgroup parent is
+not part of any table structure.
+
+**`scrollable-region-focusable`** is the one to argue about rather than fix on sight. Six of
+the seven are option scrollers, and their content is reachable — arrow keys move the
+highlight through the options and scroll the region with it. `TimePicker/loading` is not:
+it scrolls a message with no options behind it, so there is no other route to the content.
+
+**`color-contrast`** is the raw-palette remainder showing up as a defect rather than as a
+style note. `Table`'s filter menu paints its label `text-gray-500` and its options
+`text-gray-700` — Tailwind's palette, not the `--cl-*` tokens `contrast.contract` checks —
+and `Pagination`'s selected option fails in its highlighted state.
+
+### 15 of the 68 need the act as well as the scope
+
+These report only once the fixture's `act` has landed, so they need both this scope fix and
+the act fix that preceded it. Nothing had ever audited them:
+
+- `Table/filter-open` and `/filter-selected` — all three `color-contrast` nodes
+- `Pagination/rows-per-page-open` — the selected option's contrast
+- `InternationalPhoneInput/country-open` and `/country-no-results` — the country listbox
+  and its scroller
+- `CascadingDropdown/open-submenu`, `/async-submenu-search-resolved`,
+  `/async-children-pending`, `/async-children-empty`, `/async-children-error` — the submenu
+- `Dropdown/async-load-pending`, `/async-load-empty`, `MultiSelectDropdown/async-load-empty`
+  — the listbox in its loading and empty states
+
+### `region` is not in this list, and is not suppressed
+
+A body-level portal sits outside this page's `<main>` by construction, so "all page content
+should be contained by landmarks" fires on every surface when axe is given a whole-document
+context — 36 of them in the survey that found the scope hole. Given an `include` list axe
+reports the rule inapplicable instead: it is a question about the document's landmark
+structure, which the consumer composes, not about the component. Nothing is disabled, so a
+portal that ever does report it would still be reported.
+
+---
 
 ## Known failures
 

@@ -120,9 +120,10 @@ const OPEN_SUBJECTS: Array<{
     component: "Table",
     fixture: "filter-open",
     // Table's column filter menu was a plain portalled `div` with no `role`,
-    // so the role-based wait every other surface uses could not see it. It has
-    // `role="menu"` now, but the attribute selector is kept: it is the one
-    // surface whose wait should not depend on semantics this branch added.
+    // so the role-based wait every other surface uses could not see it. It is
+    // `role="dialog"` now — a non-modal popup of toggles, not a menu — but the
+    // attribute selector is kept: it is the one surface whose wait should not
+    // depend on semantics this branch added.
     surface: "[data-table-filter-content]",
   },
 ];

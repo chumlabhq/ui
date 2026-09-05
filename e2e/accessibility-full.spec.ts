@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe, getViolations } from "axe-playwright";
-import { gotoGuarded } from "./_nav";
+import { gotoFixture, gotoGuarded } from "./_nav";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -54,6 +54,73 @@ const RERECORD = process.env.A11Y_RERECORD === "1";
 /** Impacts that count. `minor` is recorded but does not fail the gate. */
 const FATAL = new Set(["critical", "serious", "moderate"]);
 
+/**
+ * The audit covers the fixture AND whatever the fixture portalled out of it.
+ *
+ * Scoping to `[data-fixture]` alone meant axe had never audited a portalled
+ * surface: every menu, listbox, calendar, tooltip, modal and drawer this
+ * library opens is `createPortal`ed to `document.body`, outside the subtree the
+ * audit was pointed at. The 25 recorded findings were all on inline form
+ * controls because those are the only elements that stayed in scope, and the
+ * sweep's count did not move when fifty fixtures started actually opening their
+ * surfaces — not because the surfaces were clean, but because they were not in
+ * the picture. 68 findings were sitting in them.
+ *
+ * Auditing the whole document instead would drag in the harness page's own
+ * chrome, and with it a class of finding that is about the page rather than the
+ * component.
+ */
+const PORTAL_MARK = "data-axe-portal";
+
+/**
+ * Identified positively, by React, not by excluding what is known to be someone
+ * else's.
+ *
+ * A portal root is a direct child of `document.body` that React rendered:
+ * `createPortal` mounts the surface's own element there, so it carries a
+ * `__reactFiber$…` key, while the app root carries `__reactContainer$…` and the
+ * checkout SDK's injected container carries neither. The library's `cl-s` scope
+ * marker is the obvious candidate and is the wrong one — `Table`'s filter menu
+ * and `Modal`'s root are written with unscoped Tailwind classes and have no
+ * marker anywhere inside them, so a marker test would have missed the two
+ * surfaces this scope fix exists for.
+ *
+ * An exclusion list would need editing every time the harness gains a script
+ * tag, and would fail open when nobody did.
+ *
+ * The mark is an attribute rather than an element handle because axe takes a
+ * serialisable context: `include` is a list of selectors. It carries no ARIA or
+ * style meaning, and is cleared and re-applied per fixture.
+ */
+async function markPortalRoots(page: import("@playwright/test").Page): Promise<number> {
+  return page.evaluate((attribute) => {
+    for (const stale of document.querySelectorAll(`[${attribute}]`)) {
+      stale.removeAttribute(attribute);
+    }
+    let marked = 0;
+    for (const child of document.body.children) {
+      if (child.id === "root") continue;
+      if (!Object.keys(child).some((key) => key.startsWith("__reactFiber$"))) continue;
+      child.setAttribute(attribute, "");
+      marked += 1;
+    }
+    return marked;
+  }, PORTAL_MARK);
+}
+
+/**
+ * `region` does not appear in these results, and it is not being suppressed.
+ *
+ * A body-level portal is outside this page's `<main>` by construction, so
+ * "all page content should be contained by landmarks" fires on every surface
+ * when axe is given a whole-document context — 36 of them, in the survey that
+ * found this scope hole. Given an `include` list it reports the rule
+ * inapplicable instead: the check is about the document's landmark structure,
+ * which is the consumer's to compose, not the component's. Verified both ways
+ * on `Dropdown/open`; nothing is disabled here, so a portal that ever does
+ * report it would still be reported.
+ */
+
 interface Finding {
   component: string;
   fixture: string;
@@ -80,12 +147,38 @@ test.describe("accessibility (full sweep)", () => {
     const findings: Finding[] = [];
     const components = new Set<string>();
     let audited = 0;
+    let portalled = 0;
+    const actFailures: string[] = [];
 
     for (const path of paths) {
       const [, , component, fixture] = path.split("/");
       components.add(component);
 
       await page.goto(path, { waitUntil: "domcontentloaded" });
+      // The fixture's `act` has to have landed, or the audit is of a state the
+      // fixture is named for and has not reached yet. This waited on the
+      // animation settle alone, which took ~830 ms and covered the act by
+      // accident; measured against the acts' own timings, 12 of the 50 were
+      // audited while the act was still pending and the other 38 passed on that
+      // coincidence. Requiring the element as well as the status: a fixture
+      // that has not mounted has no `main` at all, and reading through the
+      // absence reports every slow fixture as ready.
+      const actStatus = await page
+        .waitForFunction(
+          () => {
+            const reported = document
+              .querySelector("main[data-fixture-act]")
+              ?.getAttribute("data-fixture-act");
+            return reported && reported !== "pending" ? reported : null;
+          },
+          undefined,
+          { timeout: 20000 },
+        )
+        .then((handle) => handle.jsonValue() as Promise<string>)
+        .catch(() => "never settled");
+      if (actStatus.startsWith("error") || actStatus === "never settled") {
+        actFailures.push(`${component}/${fixture}: ${actStatus}`);
+      }
       // Attached is not painted. axe computes colour contrast from rendered
       // pixels, so auditing a fixture whose open transition is still running
       // measures a half-faded colour against a background that has not landed —
@@ -119,9 +212,15 @@ test.describe("accessibility (full sweep)", () => {
       );
       await injectAxe(page);
 
-      // Scoped to the fixture, so the harness page's own markup is not the
-      // subject — the mistake tabpanel.spec.ts made by passing `undefined`.
-      const violations = await getViolations(page, "[data-fixture]");
+      // Scoped to the fixture and its portals, so the harness page's own markup
+      // is not the subject — the mistake tabpanel.spec.ts made by passing
+      // `undefined` — while the surfaces the fixture opens still are.
+      const portals = await markPortalRoots(page);
+      portalled += portals > 0 ? 1 : 0;
+      const include = [["[data-fixture]"], ...(portals > 0 ? [[`[${PORTAL_MARK}]`]] : [])];
+      // Conditional because axe throws on an `include` selector that matches
+      // nothing, and most fixtures portal nothing.
+      const violations = await getViolations(page, { include });
       audited += 1;
 
       for (const v of violations) {
@@ -151,6 +250,7 @@ test.describe("accessibility (full sweep)", () => {
           ranAt: new Date().toISOString(),
           seconds,
           fixturesAudited: audited,
+          fixturesWithPortals: portalled,
           componentsCovered: components.size,
           findings,
         },
@@ -161,8 +261,8 @@ test.describe("accessibility (full sweep)", () => {
     );
 
     console.log(
-      `AXE_FULL fixtures=${audited} components=${components.size} ` +
-        `violations=${findings.length} seconds=${seconds}`,
+      `AXE_FULL fixtures=${audited} portalled=${portalled} ` +
+        `components=${components.size} violations=${findings.length} seconds=${seconds}`,
     );
     for (const f of findings) {
       console.log(
@@ -171,6 +271,11 @@ test.describe("accessibility (full sweep)", () => {
     }
 
     expect(audited, "no fixture was audited").toBeGreaterThan(200);
+
+    // Before anything is derived from this run: a fixture whose act threw is
+    // not in the state its name claims, and a record built from it would be a
+    // record of the wrong page.
+    expect(actFailures, "these fixtures never reached their acted state").toEqual([]);
 
     const key = (f: Finding) => `${f.component}/${f.fixture}`;
 
@@ -254,5 +359,41 @@ test.describe("accessibility (full sweep)", () => {
         .map((fx) => `${rule} on ${fx} no longer reports — remove it`),
     );
     expect(stale, "the expectation list is stale").toEqual([]);
+  });
+
+  /**
+   * The self-check for the scope, planted rather than argued.
+   *
+   * A sweep pointed at the wrong subtree reports nothing and looks identical to
+   * a sweep that found nothing, which is how the old scope survived a year of
+   * green runs. This plants a violation axe cannot miss inside a real portal
+   * and requires both halves: the widened scope reports it, and the scope this
+   * replaced does not.
+   */
+  test("the audit reaches inside a portal", async ({ page }) => {
+    await gotoFixture(page, "Dropdown", "open");
+    await page.locator("[role='listbox']").waitFor({ state: "attached" });
+    await injectAxe(page);
+
+    expect(await markPortalRoots(page), "the fixture portalled nothing to plant into").toBe(1);
+    await page.evaluate((attribute) => {
+      const input = document.createElement("input");
+      input.type = "text";
+      document.querySelector(`[${attribute}]`)?.append(input);
+    }, PORTAL_MARK);
+
+    const widened = await getViolations(page, {
+      include: [["[data-fixture]"], [`[${PORTAL_MARK}]`]],
+    });
+    expect(
+      widened.map((v) => v.id),
+      "the planted unlabelled input inside the portal was not reported",
+    ).toContain("label");
+
+    const subtreeOnly = await getViolations(page, "[data-fixture]");
+    expect(
+      subtreeOnly.map((v) => v.id),
+      "the old scope reported it too — this plant proves nothing",
+    ).not.toContain("label");
   });
 });

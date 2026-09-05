@@ -23,7 +23,7 @@ measured on the date above unless the text says otherwise.
 | `lint` | **pass** | 0 errors, 7 warnings — the standing baseline, unchanged. |
 | Unit + contract (`test:run`) | **pass** | 4409 passed, 68 skipped, 86 files. Contracts alone: 1239 passed, 68 skipped, 29 files. |
 | Coverage | **pass** | 91.79% statements, 87.15% branch, 94.42% functions, 93.70% lines. |
-| `test:e2e:all` (7 projects) | **FAIL, then 3 of 4 cleared** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 2894s. a11y-full, webkit and Mobile Safari re-run clean (§1.6); Firefox not re-run. |
+| `test:e2e:all` (7 projects) | **FAIL, then 3 of 4 cleared** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 2894s. a11y-full, webkit and Mobile Safari re-run clean (§1.6); Firefox not re-run. **a11y-full is red again since 2026-09-06** — its scope was wrong, not its result (§1.2). |
 | `verify:consumers` (6 apps) | **pass** | 87s. Every app installed the packed tarball, typechecked and built. |
 | `verify:packaging` (4 plants) | **pass** | publint `--strict`, attw, shipped-link check. All four planted defects caught. |
 | `npm publish --dry-run` | **pass** *(after a fix — see §1.4)* | 1635 files, 2.1 MB packed, 6.9 MB unpacked. |
@@ -72,7 +72,7 @@ proof, and it is not waived. A clean run on an unloaded machine is what settles 
 is what the `release-gates.yml` matrix job exists for. Separately, a 400 ms wall-clock
 bound in a test suite is a latent flake wherever it runs.
 
-### 1.2 The accessibility sweep failed on a stale record, not new markup
+### 1.2 The accessibility sweep: a stale record, and then a scope hole
 
 `a11y-full` swept **364 fixtures across 38 components** and found 25 axe violations. 21 are
 recorded with reasons. Four are not:
@@ -93,6 +93,20 @@ So this is not a new accessibility defect. It is a **record that went stale beca
 input set grew**: the list was written against 276 fixtures and there are now 364. The
 sweep is a release-only project, so nothing had run it since 2026-09-02. Per the run
 instruction it is reported, not waived.
+
+**Corrected 2026-09-06, and the sentence above understates what was wrong.** That sweep
+audited `[data-fixture]` — the fixture subtree — and every surface this library opens is
+portalled to `document.body`, outside it. axe had never audited a menu, listbox, calendar,
+tooltip, modal or drawer. "364 fixtures across 38 components" was true of the pages visited
+and not of the markup audited, and 25 was the count of what remained in scope. Widened to
+the fixture plus its portal roots, and waiting on `data-fixture-act` rather than on an
+animation settle that covered the act by accident, the sweep reports **93 findings: the same
+25, and 68 that had never been in a picture**. 57 are ARIA structure inside menus and
+listboxes, 7 are unreachable scroll regions, 4 are contrast on raw-palette classes; 15 of
+the 68 need the fixture's act as well as the scope. The expectation record was re-derived
+against the corrected scope and refused all 68 — a finding needs a reason, not a list — so
+`a11y-full` is **red** and each finding is named in `ACCESSIBILITY.md`. Two criteria moved
+from Supports to Partially supports as a result.
 
 ### 1.3 The consumer matrix and the tarball
 
@@ -249,7 +263,7 @@ deleting the entry is how it goes back to blocking.
 | `styles.css` works with no Tailwind | `assert-styles-bundle.mjs`: 535 rules, 508 utility selectors confined to the `cl-s` marker, no preflight |
 | `unstyled` drops every decorative class | `unstyled.contract` across all 30, with a ratcheted leak list |
 | Every `classes` key reaches a real element | `fixtures.contract` renders every key in every anatomy; `key-uniqueness.contract` asserts one key per element |
-| Layout holds 320–1920 px in both themes | 360 recorded screenshots, 30 components × 6 widths × 2 themes, plus a guard that fails a baseline which is a picture of nothing |
+| Layout holds 320–1920 px in both themes | 404 recorded screenshots — 30 components × 6 widths × 2 themes, plus 11 open surfaces × 2 widths × 2 themes — and a guard that fails a baseline which is a picture of nothing, and one that fails a baseline whose render is not the same 26 hours later |
 | Text contrast meets AA in both themes | `contrast.contract`, every text token against every surface |
 | Ten owned WCAG criteria | Named contract or e2e gate per criterion, listed in `ACCESSIBILITY.md` with the engines it ran in |
 | Bundle size per component | `assert-bundle-size.mjs`, 30 entries, shape derived from source, per-entry ratchet |
@@ -329,10 +343,12 @@ against the peer's live documentation. ADR 002's own ledger has none left. `RECA
 explicitly *not* a justification on its own — it is an admission that a citation was
 claimed and never verified.
 
-### 3.7 Accessibility: 8 partial, 14 not claimed
+### 3.7 Accessibility: 10 partial, 14 not claimed
 
-Of the 55 WCAG 2.2 Level A and AA criteria: **11 Supports, 8 Partially supports, 14 Does
-not support, 22 Not applicable.**
+Of the 55 WCAG 2.2 Level A and AA criteria: **9 Supports, 10 Partially supports, 14 Does
+not support, 22 Not applicable.** 1.3.1 and 1.4.3 moved from Supports to Partially supports
+on 2026-09-06 when the axe sweep's scope was corrected (§1.2); `a11y-full` is red on the 68
+findings that correction surfaced.
 
 Read the third column carefully, because it does not mean what it means in a VPAT.
 **"Does not support" here means "not gated, therefore not claimed."** Several of the 14 are
@@ -341,7 +357,7 @@ Non-text Contrast are the obvious candidates. The document refuses to say so unt
 fails when the behaviour regresses. That is ADR 003 D4, and it is the correct policy, but it
 means the headline number understates conformance and cannot be quoted as a failure count.
 
-The 8 "Partially supports" are the honest middle: implemented and gated for some components
+The 10 "Partially supports" are the honest middle: implemented and gated for some components
 or some part of the criterion, with the row naming which part is unproven.
 
 Anyone who needs a conformance statement should read `ACCESSIBILITY.md` per criterion, not
@@ -386,11 +402,18 @@ Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not 
 **Visual coverage is 41 of 364 fixtures.** 30 resting subjects at six widths and eleven
 open surfaces at two, 404 baselines in all. The rest of the fixture set has no baseline.
 
+**One of those eleven is not a picture of its own surface.** `CascadingDropdown/open-submenu`
+exists to watch the submenu rather than the menu that reveals it, and the submenu opens
+beyond the right edge of both recorded widths: at 320 it is placed at x=331 and paints
+nothing at all, at 1024 at x=1003 and 21 px of it is in frame. The surface has no viewport
+clamp or flip, so the baseline would not move if the submenu broke. Counted in the eleven,
+and it should not be until that is fixed.
+
 **Five fixture acts do not reach their named state on the fixture page.** `Slider/dragging`
 and `Slider/thumb-active` need pointer capture, which a dispatched event cannot obtain;
 `Table/pin-hover` needs `:hover`, which no script can dispatch in any browser;
 `Table/editing-cell` and `Table/cell-editing` open the editor and close it in the same frame,
-because the input autofocuses away from `document.body`. All four states are asserted with a
+because the input autofocuses away from `document.body`. All five states are asserted with a
 real pointer in `slider.spec.ts` and `table.spec.ts` instead, and the fixture-page limitation
 is declared in `fixture-act.spec.ts`.
 
@@ -453,7 +476,10 @@ What I would want said out loud to whoever presses publish.
    unnoticed because that project only runs in the release matrix. It now records the count
    it was derived from and fails when that moves — but the same shape of failure has been
    found in `ai/system-state.json`, `src/styles/tokens.css`, `DEMO-COVERAGE.md` and here.
-   Assume there are more.
+   Assume there are more. **And the count guard was the smaller half:** the same gate was
+   also pointed at the wrong subtree, so a correct count of fixtures was audited in a scope
+   that excluded every portalled surface (§1.2). A guard on how much a gate ran is not a
+   guard on what it looked at.
 3. **The accessibility numbers will be misread.** "14 Does not support" in a document
    published alongside a package will be quoted as fourteen failures. They are fourteen
    ungated criteria, most probably fine. The framing is honest and it is also a liability;
@@ -474,14 +500,18 @@ In order. The first two are done; the rest are not.
 
 1. ~~Diagnose the two WebKit failures and establish the blast radius.~~ **Done** — §1.6.
    One cause, three components plus Pagination, fixed and gated per component.
-2. ~~Re-record the axe expectation list against all 364 fixtures.~~ **Done** — re-derived,
-   with a count guard so it cannot go stale the same way.
-3. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** Still blocking: one
+2. ~~Re-record the axe expectation list against all 364 fixtures.~~ **Done, and re-derived
+   again on 2026-09-06** against the corrected scope: same 25 entries, same fixtures, plus a
+   count guard so it cannot go stale the same way.
+3. **Triage the 68 axe findings the corrected sweep surfaced (§1.2).** Blocking, and ahead
+   of Firefox: `a11y-full` is red, two criteria have moved to Partially supports, and 57 of
+   the 68 are one ARIA-structure decision each in the menu surfaces and the calendar.
+4. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** Still blocking: one
    project has never been seen green, and "probably environmental" is a reading, not a
    result.
-4. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
+5. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
    race against the CPU. This is one of the eleven Firefox failures and the only one with an
-   obvious fix, so it is worth doing before step 3 rather than after.
-5. Decide the 17 waived keys — delete them under R7 while it is still free.
+   obvious fix, so it is worth doing before step 4 rather than after.
+6. Decide the 17 waived keys — delete them under R7 while it is still free.
 
-Step 3 is the only remaining blocker. Step 5 gets much more expensive after 1.0.
+Steps 3 and 4 are the remaining blockers. Step 6 gets much more expensive after 1.0.
