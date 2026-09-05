@@ -90,6 +90,7 @@ const ModalDemo = () => {
   const c = getClasses(dark);
 
   const [basicOpen, setBasicOpen] = useState(false);
+  const [bareOpen, setBareOpen] = useState(false);
   const [withDescriptionOpen, setWithDescriptionOpen] = useState(false);
   const [withIconOpen, setWithIconOpen] = useState(false);
   const [noHeaderOpen, setNoHeaderOpen] = useState(false);
@@ -1783,6 +1784,39 @@ const ModalDemo = () => {
           </div>
         </div>
       </Section>
+
+      {/* ─── The three things a Modal does besides render ─────────────────── */}
+      <Section
+        title="Turning off what a Modal does for you"
+        description="A Modal dims the page, freezes its scroll and puts focus back where it was when it closes. All three are on by default and each can be turned off — worth knowing, because nothing on screen tells you they are there until they are gone."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setBareOpen(true)}>
+            Open without overlay, scroll lock or focus restore
+          </button>
+          <p className="mt-3 text-sm text-cl-text-secondary">
+            Scroll the page behind it — it moves, which it cannot do for the
+            modal above. Close it and focus returns to the top of the document
+            rather than to this button.
+          </p>
+        </DemoWrapper>
+      </Section>
+
+      <Modal
+        open={bareOpen}
+        onOpenChange={setBareOpen}
+        title="No overlay, no scroll lock, no focus restore"
+        showOverlay={false}
+        lockScroll={false}
+        restoreFocus={false}
+      >
+        <p>
+          The page behind is still scrollable and undimmed. Each of the three is
+          a separate prop, so a modal that should dim but not lock, or lock but
+          not restore, is one prop away.
+        </p>
+      </Modal>
     </div>
   );
 };

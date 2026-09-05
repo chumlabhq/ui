@@ -185,6 +185,24 @@ describe("doc truth contract", () => {
     ).not.toThrow();
   });
 
+  it("keeps DEMO-COVERAGE.md in step with the source", () => {
+    /**
+     * The record this gate exists for. `DEMO-COVERAGE.md` was written by hand,
+     * had no generator, and its headline — "751 of 1135 props have no fixture,
+     * 51 tier-A gaps" — was stale within two slices: the composition phase
+     * added props, six sub-components were un-exported and 25 documented, and
+     * nobody could re-derive the number to notice.
+     *
+     * It is generated now, and this is what stops it drifting again. Same
+     * shape as `build-tokens.mjs --check` and the axe expectation list: shell
+     * out to the generator rather than reimplement it, because a second copy
+     * of the derivation is the drift it is meant to catch.
+     */
+    expect(() =>
+      execFileSync("node", ["scripts/audit-demo-coverage.mjs", "--check"], { stdio: "pipe" }),
+    ).not.toThrow();
+  });
+
   it("documents every sub-component the package exports", () => {
     const rootExports = readFileSync("src/index.ts", "utf8");
     const undocumented: string[] = [];
