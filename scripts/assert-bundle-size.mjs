@@ -66,7 +66,7 @@ const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
  * DOWN only. Individual entries can each stay green while the aggregate drifts,
  * and nothing would have noticed.
  */
-const LIBRARY_TOTAL_KB = 155.76;
+const LIBRARY_TOTAL_KB = 151.11;
 /** Below this much under the record, the record is stale and must be lowered. */
 const RATCHET_SLACK_KB = 0.5;
 

@@ -414,6 +414,34 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       };
     }, [isOpen, handleClose, triggerNode, dropdownId]);
 
+    /**
+     * Escape and Tab close the menu wherever focus is.
+     *
+     * The trigger's own handler only sees keys while the trigger has focus, and
+     * focus can be somewhere else — moved programmatically, or returned to
+     * `<body>` by the browser — with the menu still open. Capture phase, so a
+     * child that stops propagation cannot swallow the dismissal.
+     *
+     * Tab clears the restore flag: it is already taking the user somewhere, and
+     * pulling focus back to the trigger would fight that.
+     */
+    useEffect(() => {
+      if (!isOpen || !isBrowser) return;
+      const handleDocumentKeyDown = (event: KeyboardEvent) => {
+        if (event.key !== "Escape" && event.key !== "Tab") return;
+        handleClose();
+        if (event.key === "Escape") {
+          event.preventDefault();
+        } else if (event.key === "Tab") {
+          shouldRestoreFocusRef.current = false;
+        }
+      };
+      document.addEventListener("keydown", handleDocumentKeyDown, true);
+      return () => {
+        document.removeEventListener("keydown", handleDocumentKeyDown, true);
+      };
+    }, [isOpen, handleClose, shouldRestoreFocusRef]);
+
     const rootClassName = cn(mergedClasses.root, className) || undefined;
     const rootStyle: CSSProperties = {
       ...(fullWidth ? { width: "100%" } : {}),
