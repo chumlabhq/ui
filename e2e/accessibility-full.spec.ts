@@ -206,6 +206,12 @@ test.describe("accessibility (full sweep)", () => {
         fixtures: audited,
         recordedOn: new Date().toISOString().slice(0, 10),
       };
+      // `JSON.stringify(x, null, 2)` is the file's canonical form and it round
+      // trips byte-for-byte, so a re-record produces no diff beyond the fixture
+      // lists. It did once: the file had been written by an older tool that
+      // escaped non-ASCII, and the first re-record normalised 29 `\u2014`
+      // sequences to literal em-dashes across the whole file. That
+      // normalisation is committed; do not escape them again.
       writeFileSync(WAIVERS_PATH, `${JSON.stringify(waivers, null, 2)}\n`, "utf8");
       console.log(
         `AXE_RERECORDED ${accepted} newly listed, ${refused.length} refused, ` +

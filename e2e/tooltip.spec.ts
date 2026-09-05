@@ -153,14 +153,20 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = delaySection.locator("button").filter({ hasText: "Instant" });
       await trigger.scrollIntoViewIfNeeded();
 
-      const startTime = Date.now();
       await trigger.hover();
 
+      // The 500ms bound is the assertion: with `delayDuration={0}` the tooltip
+      // appears on hover, and the 1000ms sibling below could not pass this.
+      //
+      // A second assertion used to follow — `expect(Date.now() - startTime)
+      // .toBeLessThan(400)` — and it was a stopwatch against the dev server,
+      // stricter than the wait it followed, so a loaded machine failed it at
+      // 696ms while the tooltip had in fact appeared. E2E-TRIAGE Appendix A
+      // deleted fourteen of those; this one was inside a test that survived on
+      // its other assertion, so it was missed. Trimmed the same way otpinput's
+      // throughput assertion was.
       const tooltip = page.getByRole("tooltip", { name: "Instant appearance (0ms)" });
       await expect(tooltip).toBeVisible({ timeout: 500 });
-      const elapsed = Date.now() - startTime;
-
-      expect(elapsed).toBeLessThan(400);
     });
 
     test("should show tooltip after configured delay", async ({ page }) => {

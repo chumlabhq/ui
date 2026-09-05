@@ -381,11 +381,24 @@ failure mode that says anything about the component.
 | toast | should load page within acceptable time | `/toast` loads in <10s |
 | toast | should handle rapid toast creation without lag | 5 toasts in <5s |
 
-## Trimmed, not deleted (1)
+## Trimmed, not deleted (2)
 
 **otpinput › should handle rapid input across browsers** — its throughput
 assertion (`endTime - startTime < 3000`) was removed; its real assertion, that
 typing `123456` lands one digit per slot, was kept.
+
+**tooltip › should show tooltip instantly when delay is 0** — a straggler,
+found by the release matrix on 2026-09-05 rather than by this triage. It carried
+`expect(Date.now() - startTime).toBeLessThan(400)` *after* an
+`expect(tooltip).toBeVisible({ timeout: 500 })`, so the stopwatch was stricter
+than the wait that preceded it: under load Firefox measured 696ms on a tooltip
+that had appeared. The triage missed it because it read the whole test rather
+than its assertions — the `toBeVisible` half is a real assertion about
+`delayDuration={0}`, and it kept the test out of the PERFORMANCE bucket while
+the line beside it belonged there. Only the stopwatch was removed.
+
+The lesson for the category: PERFORMANCE is a property of an *assertion*, not of
+a test. A test can be half of each.
 
 ## Kept (1)
 

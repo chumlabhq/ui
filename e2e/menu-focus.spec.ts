@@ -122,6 +122,29 @@ test.describe("a mouse open leaves focus somewhere real", () => {
       await trigger.click();
       await page.locator(SURFACE_SELECTOR).first().waitFor({ state: "attached" });
 
+      // Settled, not sampled. The surface being attached does not mean focus has
+      // moved yet — the components that move it do so in an effect after the
+      // measuring frame, so reading `activeElement` right here catches the tick
+      // before, when focus is still on the trigger. Firefox lost this race once
+      // in 428 tests and passed it 3 times out of 3 in isolation, which is what
+      // a sampled assertion looks like from the outside.
+      await page
+        .waitForFunction(
+          ({ selector, wantsTrigger }) => {
+            const active = document.activeElement;
+            if (!active || active === document.body) return false;
+            const open = document.querySelector("[role='listbox'],[role='menu'],[role='dialog']");
+            const element = document.querySelector(`[data-fixture] ${selector}`);
+            return wantsTrigger ? active === element : !!(open && open.contains(active));
+          },
+          { selector: surface.trigger, wantsTrigger: surface.focus === "trigger" },
+          { timeout: 5000 },
+        )
+        // Swallowed so the assertions below report what focus actually is. A
+        // bare timeout here would say "waitForFunction timed out" and nothing
+        // about where focus went, which is the whole question.
+        .catch(() => {});
+
       const landed = await page.evaluate((selector) => {
         const active = document.activeElement as HTMLElement | null;
         const open = document.querySelector("[role='listbox'],[role='menu'],[role='dialog']");
