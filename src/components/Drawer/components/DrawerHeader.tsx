@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
-import type { DrawerHeaderProps } from "../utils/types";
-import { useDrawerContext } from "../utils/context";
-import { cn } from "../../../utils/scopedCn";
+import type { DrawerHeaderProps } from "../utils/types.js";
+import { useDrawerContext } from "../utils/context.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
   ({ children, className, id: idProp, ...rest }, ref) => {

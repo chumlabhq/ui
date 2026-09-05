@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { InternationalPhoneInput } from "../index";
-import type { PhoneNumberData } from "../utils/types";
+import { InternationalPhoneInput } from "../index.js";
+import type { PhoneNumberData } from "../utils/types.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

@@ -2,16 +2,16 @@ import { forwardRef } from "react";
 import type {
   CountryFlagShimmerProps,
   CountryFlagGroupShimmerProps,
-} from "../utils/types";
-import { cn } from "../../../utils/scopedCn";
-import { motionSafe } from "../../../utils/classLayers";
-import { getPixelSize } from "../utils/helpers";
+} from "../utils/types.js";
+import { cn } from "../../../utils/scopedCn.js";
+import { motionSafe } from "../../../utils/classLayers.js";
+import { getPixelSize } from "../utils/helpers.js";
 import {
   DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES,
   UNSTYLED_COUNTRY_FLAG_SHIMMER_CLASSES,
-} from "../utils/constants";
-import { DEFAULT_ASPECT_RATIO } from "../utils/constants";
-import { useReducedMotion } from "../../../utils/useReducedMotion";
+} from "../utils/constants.js";
+import { DEFAULT_ASPECT_RATIO } from "../utils/constants.js";
+import { useReducedMotion } from "../../../utils/useReducedMotion.js";
 
 export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmerProps>(
   (

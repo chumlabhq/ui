@@ -1,5 +1,5 @@
-import type { AvatarSize, AvatarStatus, AvatarClasses , AvatarShimmerClasses} from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { AvatarSize, AvatarStatus, AvatarClasses , AvatarShimmerClasses} from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_SIZE: AvatarSize = "md";
 export const DEFAULT_SHAPE = "circle" as const;

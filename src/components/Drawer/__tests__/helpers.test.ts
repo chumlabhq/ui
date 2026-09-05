@@ -10,7 +10,7 @@ import {
   popDrawer,
   isTopDrawer,
   usePrefersReducedMotion,
-} from "../utils/helpers";
+} from "../utils/helpers.js";
 
 // ─── getDirectionStyles ──────────────────────────────────────────────────────
 

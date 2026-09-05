@@ -1,7 +1,7 @@
 import { memo } from "react";
-import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types";
-import { cn } from "../../../utils/scopedCn";
-import { CheckIcon } from "../utils/icons";
+import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types.js";
+import { cn } from "../../../utils/scopedCn.js";
+import { CheckIcon } from "../utils/icons.js";
 import type { ReactNode } from "react";
 
 export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption({

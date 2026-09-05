@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import MessageList, { type ChatDisplayMessage } from "./MessageList";
-import PromptInput from "./PromptInput";
-import type { AttachedImage } from "../types";
+import MessageList, { type ChatDisplayMessage } from "./MessageList.js";
+import PromptInput from "./PromptInput.js";
+import type { AttachedImage } from "../types.js";
 
 interface ChatPanelProps {
   messages: ChatDisplayMessage[];

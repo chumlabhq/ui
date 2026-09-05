@@ -1,4 +1,4 @@
-import { Section } from "./components";
+import { Section } from "./components/index.js";
 
 const IntroductionDemo = () => {
   return (

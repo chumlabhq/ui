@@ -1,5 +1,5 @@
-import { AccordionShimmer } from "../../components/Accordion";
-import type { Fixtures } from "./types";
+import { AccordionShimmer } from "../../components/Accordion/index.js";
+import type { Fixtures } from "./types.js";
 
 /**
  * ADR 002: Accordion never renders AccordionShimmer — ACCORDION.ai.md:351 shows

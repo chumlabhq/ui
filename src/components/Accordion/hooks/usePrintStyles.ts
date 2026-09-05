@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { PRINT_STYLES } from "../utils/constants";
-import { isBrowser } from "../../../utils/isBrowser";
+import { PRINT_STYLES } from "../utils/constants.js";
+import { isBrowser } from "../../../utils/isBrowser.js";
 
 let printStyleRefCount = 0;
 let printStyleElement: HTMLStyleElement | null = null;

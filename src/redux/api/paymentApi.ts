@@ -1,4 +1,4 @@
-import { baseApi } from "./baseApi";
+import { baseApi } from "./baseApi.js";
 
 export interface CreateOrderRequest {
   /** Amount in the currency's smallest unit (paise for INR, cents for USD).

@@ -1,9 +1,9 @@
 // AI Knowledge: See DRAWER.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as Drawer } from "./Drawer";
-export { default as DrawerHeader } from "./components/DrawerHeader";
-export { default as DrawerBody } from "./components/DrawerBody";
-export { default as DrawerFooter } from "./components/DrawerFooter";
-export { default as DrawerCloseButton } from "./components/DrawerCloseButton";
+export { default as Drawer } from "./Drawer.js";
+export { default as DrawerHeader } from "./components/DrawerHeader.js";
+export { default as DrawerBody } from "./components/DrawerBody.js";
+export { default as DrawerFooter } from "./components/DrawerFooter.js";
+export { default as DrawerCloseButton } from "./components/DrawerCloseButton.js";
 
 export type {
   DrawerProps,
@@ -13,7 +13,7 @@ export type {
   DrawerBodyProps,
   DrawerFooterProps,
   DrawerCloseButtonProps,
-} from "./utils/types";
+} from "./utils/types.js";
 
 export {
   DEFAULT_DRAWER_CLASSES,
@@ -26,6 +26,6 @@ export {
   DEFAULT_DURATION,
   DEFAULT_SWIPE_THRESHOLD,
   DEFAULT_SNAP_POINT_INDEX,
-} from "./utils/constants";
+} from "./utils/constants.js";
 
-export { DrawerContext, useDrawerContext } from "./utils/context";
+export { DrawerContext, useDrawerContext } from "./utils/context.js";

@@ -1,5 +1,5 @@
 // AI Knowledge: See DATEPICKER.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as DatePicker } from "./DatePicker";
+export { default as DatePicker } from "./DatePicker.js";
 
 export type {
   DatePickerProps,
@@ -13,12 +13,12 @@ export type {
   CalendarDay,
   CalendarMonth,
   DateMarker,
-} from "./utils/types";
+} from "./utils/types.js";
 
 export {
   DEFAULT_DATEPICKER_CLASSES,
   UNSTYLED_DATEPICKER_CLASSES,
-} from "./constants";
+} from "./constants.js";
 
 export {
   formatDate,
@@ -30,4 +30,4 @@ export {
   isDateDisabled,
   getDefaultPresets,
   findMarker,
-} from "./utils";
+} from "./utils.js";

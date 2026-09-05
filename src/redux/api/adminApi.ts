@@ -1,8 +1,8 @@
-import { baseApi } from "./baseApi";
+import { baseApi } from "./baseApi.js";
 import type {
   PlaygroundOnboardingRecord,
   PlaygroundOnboardingStatus,
-} from "../../pages/playground/types";
+} from "../../pages/playground/types.js";
 
 interface OnboardingListResponse {
   success: boolean;

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { TabPanelContextValue } from "./types";
+import type { TabPanelContextValue } from "./types.js";
 
 export const TabPanelContext = createContext<TabPanelContextValue | null>(null);
 

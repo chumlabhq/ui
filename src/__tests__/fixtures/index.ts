@@ -1,4 +1,4 @@
-import type { AnyFixtures } from "./types";
+import type { AnyFixtures } from "./types.js";
 
 /**
  * Every component's fixtures, keyed by the name used in ai/component-index.json.
@@ -27,4 +27,4 @@ export const FIXTURES: Record<string, AnyFixtures> = Object.fromEntries(
 export const fixturesFor = (component: string): AnyFixtures =>
   FIXTURES[component] ?? [];
 
-export type { Fixture, Fixtures, AnyFixtures } from "./types";
+export type { Fixture, Fixtures, AnyFixtures } from "./types.js";

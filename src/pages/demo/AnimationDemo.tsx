@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Section, CodeBlock, DemoWrapper } from "./components";
-import { Dropdown } from "../../components/Dropdown";
+import { Section, CodeBlock, DemoWrapper } from "./components/index.js";
+import { Dropdown } from "../../components/Dropdown/index.js";
 
 const AnimationDemo = () => {
   return (

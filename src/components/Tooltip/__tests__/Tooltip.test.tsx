@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Tooltip } from "../index";
+import { Tooltip } from "../index.js";
 
 describe("Tooltip", () => {
   beforeEach(() => {
@@ -1567,9 +1567,9 @@ describe("Tooltip", () => {
 });
 
 // ── Direct tests for tooltip positioning helpers ────────────────────────────
-import { computeForSide, wouldOverflow, calculatePosition } from "../utils/helpers";
+import { computeForSide, wouldOverflow, calculatePosition } from "../utils/helpers.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

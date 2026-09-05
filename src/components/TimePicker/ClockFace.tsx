@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { isBrowser } from "../../utils/isBrowser";
-import type { TimeValue, ClockSelectionMode, ClockFaceProps } from "./utils/types";
-import { clampMinuteStep, getDefaultTimeValue, pad, timeValueToMinutes, isMinutesInRange } from "./utils";
+import { isBrowser } from "../../utils/isBrowser.js";
+import type { TimeValue, ClockSelectionMode, ClockFaceProps } from "./utils/types.js";
+import { clampMinuteStep, getDefaultTimeValue, pad, timeValueToMinutes, isMinutesInRange } from "./utils.js";
 
 /**
  * Radius of the outer number ring, expressed as a percentage offset

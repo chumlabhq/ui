@@ -1,6 +1,6 @@
-import { Checkbox } from "../../components/Checkbox";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { Checkbox } from "../../components/Checkbox/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof Checkbox> = [
   { name: "default", props: {} },

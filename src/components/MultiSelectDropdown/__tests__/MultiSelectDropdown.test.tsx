@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MultiSelectDropdown, SelectedChip } from "../index";
+import { MultiSelectDropdown, SelectedChip } from "../index.js";
 // internal now: imported from its module rather than the public barrel
-import MultiSelectDropdownShimmer from "../components/MultiSelectDropdownShimmer";
-import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types";
-import { DEFAULT_MULTISELECTDROPDOWN_CLASSES } from "../utils/constants";
+import MultiSelectDropdownShimmer from "../components/MultiSelectDropdownShimmer.js";
+import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types.js";
+import { DEFAULT_MULTISELECTDROPDOWN_CLASSES } from "../utils/constants.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

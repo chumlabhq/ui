@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { parseAssistantText } from "./assistantText";
-import Markdown from "./Markdown";
-import type { PipelineTier } from "../types";
+import { parseAssistantText } from "./assistantText.js";
+import Markdown from "./Markdown.js";
+import type { PipelineTier } from "../types.js";
 
 export interface ChatDisplayMessage {
   id: string;

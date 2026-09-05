@@ -5,8 +5,8 @@ import {
   type HTMLAttributes,
   type Ref,
 } from "react";
-import { mergeRefs } from "./mergeRefs";
-import { mergeProps, getValidChild } from "./slotHelpers";
+import { mergeRefs } from "./mergeRefs.js";
+import { mergeProps, getValidChild } from "./slotHelpers.js";
 
 type AnyProps = Record<string, unknown>;
 

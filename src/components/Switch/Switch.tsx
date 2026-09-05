@@ -1,11 +1,11 @@
 import { useId, useMemo, forwardRef, useCallback } from "react";
-import type { SwitchProps, SwitchClasses, SwitchRenderProps } from "./utils/types";
-import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constants";
-import { useControllableState } from "../../utils/useControllableState";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { cn } from "../../utils/scopedCn";
+import type { SwitchProps, SwitchClasses, SwitchRenderProps } from "./utils/types.js";
+import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constants.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { cn } from "../../utils/scopedCn.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: Switch
  *

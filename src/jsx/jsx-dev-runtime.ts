@@ -3,7 +3,7 @@
  * exists.
  */
 import { jsxDEV as reactJsxDEV } from "react/jsx-dev-runtime";
-import { mark, type Props } from "./mark";
+import { mark, type Props } from "./mark.js";
 
 export { Fragment } from "react/jsx-dev-runtime";
 export type { JSX } from "react/jsx-dev-runtime";

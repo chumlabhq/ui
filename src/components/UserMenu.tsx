@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Avatar } from "./Avatar/Avatar";
-import { useGetMeQuery, useLogoutMutation } from "../redux/api/authApi";
+import { Avatar } from "./Avatar/Avatar.js";
+import { useGetMeQuery, useLogoutMutation } from "../redux/api/authApi.js";
 
 /**
  * Deep-space account chip. Renders nothing when there's no signed-in user.

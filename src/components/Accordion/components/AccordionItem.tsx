@@ -1,8 +1,8 @@
 import { forwardRef, useMemo, useEffect, useRef } from "react";
-import { useAccordionConfig, useAccordionContext, useIsItemExpanded, AccordionItemContext } from "../utils/context";
-import { Slot } from "../../../utils/Slot";
-import type { AccordionItemProps, AccordionItemContextValue } from "../utils/types";
-import { cn } from "../../../utils/scopedCn";
+import { useAccordionConfig, useAccordionContext, useIsItemExpanded, AccordionItemContext } from "../utils/context.js";
+import { Slot } from "../../../utils/Slot.js";
+import type { AccordionItemProps, AccordionItemContextValue } from "../utils/types.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
   ({

@@ -1,4 +1,4 @@
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/cn.js";
 
 interface SectionProps {
   title: React.ReactNode;
@@ -103,7 +103,7 @@ interface CodeBlockProps {
  * CodeFenced primitive (header + copy button). Existing demo imports of
  * `<CodeBlock>` keep working.
  */
-import { CodeFenced } from "./primitives";
+import { CodeFenced } from "./primitives.js";
 export const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => (
   <CodeFenced code={code} />
 );

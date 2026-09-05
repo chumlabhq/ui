@@ -13,9 +13,9 @@ import {
   PlusIcon,
   MinusIcon,
   getDefaultStorageConfig,
-} from "../index";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import { setReducedMotion } from "../../../test/matchMedia";
+} from "../index.js";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.
@@ -26,7 +26,7 @@ import type {
   AccordionMultipleProps,
   AccordionRef,
   AccordionShimmerProps,
-} from "../utils/types";
+} from "../utils/types.js";
 
 type RenderAccordionProps =
   | Omit<AccordionSingleProps, "children">

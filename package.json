@@ -32,166 +32,326 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./accordion": {
-      "types": "./dist/components/Accordion/index.d.ts",
-      "import": "./dist/components/Accordion/index.js",
-      "require": "./dist/components/Accordion/index.cjs"
+      "import": {
+        "types": "./dist/components/Accordion/index.d.ts",
+        "default": "./dist/components/Accordion/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Accordion/index.d.cts",
+        "default": "./dist/components/Accordion/index.cjs"
+      }
     },
     "./avatar": {
-      "types": "./dist/components/Avatar/index.d.ts",
-      "import": "./dist/components/Avatar/index.js",
-      "require": "./dist/components/Avatar/index.cjs"
+      "import": {
+        "types": "./dist/components/Avatar/index.d.ts",
+        "default": "./dist/components/Avatar/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Avatar/index.d.cts",
+        "default": "./dist/components/Avatar/index.cjs"
+      }
     },
     "./breadcrumb": {
-      "types": "./dist/components/Breadcrumb/index.d.ts",
-      "import": "./dist/components/Breadcrumb/index.js",
-      "require": "./dist/components/Breadcrumb/index.cjs"
+      "import": {
+        "types": "./dist/components/Breadcrumb/index.d.ts",
+        "default": "./dist/components/Breadcrumb/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Breadcrumb/index.d.cts",
+        "default": "./dist/components/Breadcrumb/index.cjs"
+      }
     },
     "./button": {
-      "types": "./dist/components/Button/index.d.ts",
-      "import": "./dist/components/Button/index.js",
-      "require": "./dist/components/Button/index.cjs"
+      "import": {
+        "types": "./dist/components/Button/index.d.ts",
+        "default": "./dist/components/Button/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Button/index.d.cts",
+        "default": "./dist/components/Button/index.cjs"
+      }
     },
     "./cascading-dropdown": {
-      "types": "./dist/components/CascadingDropdown/index.d.ts",
-      "import": "./dist/components/CascadingDropdown/index.js",
-      "require": "./dist/components/CascadingDropdown/index.cjs"
+      "import": {
+        "types": "./dist/components/CascadingDropdown/index.d.ts",
+        "default": "./dist/components/CascadingDropdown/index.js"
+      },
+      "require": {
+        "types": "./dist/components/CascadingDropdown/index.d.cts",
+        "default": "./dist/components/CascadingDropdown/index.cjs"
+      }
     },
     "./checkbox": {
-      "types": "./dist/components/Checkbox/index.d.ts",
-      "import": "./dist/components/Checkbox/index.js",
-      "require": "./dist/components/Checkbox/index.cjs"
+      "import": {
+        "types": "./dist/components/Checkbox/index.d.ts",
+        "default": "./dist/components/Checkbox/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Checkbox/index.d.cts",
+        "default": "./dist/components/Checkbox/index.cjs"
+      }
     },
     "./country-flag": {
-      "types": "./dist/components/CountryFlag/index.d.ts",
-      "import": "./dist/components/CountryFlag/index.js",
-      "require": "./dist/components/CountryFlag/index.cjs"
+      "import": {
+        "types": "./dist/components/CountryFlag/index.d.ts",
+        "default": "./dist/components/CountryFlag/index.js"
+      },
+      "require": {
+        "types": "./dist/components/CountryFlag/index.d.cts",
+        "default": "./dist/components/CountryFlag/index.cjs"
+      }
     },
     "./date-picker": {
-      "types": "./dist/components/DatePicker/index.d.ts",
-      "import": "./dist/components/DatePicker/index.js",
-      "require": "./dist/components/DatePicker/index.cjs"
+      "import": {
+        "types": "./dist/components/DatePicker/index.d.ts",
+        "default": "./dist/components/DatePicker/index.js"
+      },
+      "require": {
+        "types": "./dist/components/DatePicker/index.d.cts",
+        "default": "./dist/components/DatePicker/index.cjs"
+      }
     },
     "./drawer": {
-      "types": "./dist/components/Drawer/index.d.ts",
-      "import": "./dist/components/Drawer/index.js",
-      "require": "./dist/components/Drawer/index.cjs"
+      "import": {
+        "types": "./dist/components/Drawer/index.d.ts",
+        "default": "./dist/components/Drawer/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Drawer/index.d.cts",
+        "default": "./dist/components/Drawer/index.cjs"
+      }
     },
     "./dropdown": {
-      "types": "./dist/components/Dropdown/index.d.ts",
-      "import": "./dist/components/Dropdown/index.js",
-      "require": "./dist/components/Dropdown/index.cjs"
+      "import": {
+        "types": "./dist/components/Dropdown/index.d.ts",
+        "default": "./dist/components/Dropdown/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Dropdown/index.d.cts",
+        "default": "./dist/components/Dropdown/index.cjs"
+      }
     },
     "./input": {
-      "types": "./dist/components/Input/index.d.ts",
-      "import": "./dist/components/Input/index.js",
-      "require": "./dist/components/Input/index.cjs"
+      "import": {
+        "types": "./dist/components/Input/index.d.ts",
+        "default": "./dist/components/Input/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Input/index.d.cts",
+        "default": "./dist/components/Input/index.cjs"
+      }
     },
     "./international-phone-input": {
-      "types": "./dist/components/InternationalPhoneInput/index.d.ts",
-      "import": "./dist/components/InternationalPhoneInput/index.js",
-      "require": "./dist/components/InternationalPhoneInput/index.cjs"
+      "import": {
+        "types": "./dist/components/InternationalPhoneInput/index.d.ts",
+        "default": "./dist/components/InternationalPhoneInput/index.js"
+      },
+      "require": {
+        "types": "./dist/components/InternationalPhoneInput/index.d.cts",
+        "default": "./dist/components/InternationalPhoneInput/index.cjs"
+      }
     },
     "./phone-validators": {
-      "types": "./dist/components/InternationalPhoneInput/validators/index.d.ts",
-      "import": "./dist/components/InternationalPhoneInput/validators/index.js",
-      "require": "./dist/components/InternationalPhoneInput/validators/index.cjs"
+      "import": {
+        "types": "./dist/components/InternationalPhoneInput/validators/index.d.ts",
+        "default": "./dist/components/InternationalPhoneInput/validators/index.js"
+      },
+      "require": {
+        "types": "./dist/components/InternationalPhoneInput/validators/index.d.cts",
+        "default": "./dist/components/InternationalPhoneInput/validators/index.cjs"
+      }
     },
     "./loader": {
-      "types": "./dist/components/Loader/index.d.ts",
-      "import": "./dist/components/Loader/index.js",
-      "require": "./dist/components/Loader/index.cjs"
+      "import": {
+        "types": "./dist/components/Loader/index.d.ts",
+        "default": "./dist/components/Loader/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Loader/index.d.cts",
+        "default": "./dist/components/Loader/index.cjs"
+      }
     },
     "./modal": {
-      "types": "./dist/components/Modal/index.d.ts",
-      "import": "./dist/components/Modal/index.js",
-      "require": "./dist/components/Modal/index.cjs"
+      "import": {
+        "types": "./dist/components/Modal/index.d.ts",
+        "default": "./dist/components/Modal/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Modal/index.d.cts",
+        "default": "./dist/components/Modal/index.cjs"
+      }
     },
     "./multi-select-dropdown": {
-      "types": "./dist/components/MultiSelectDropdown/index.d.ts",
-      "import": "./dist/components/MultiSelectDropdown/index.js",
-      "require": "./dist/components/MultiSelectDropdown/index.cjs"
+      "import": {
+        "types": "./dist/components/MultiSelectDropdown/index.d.ts",
+        "default": "./dist/components/MultiSelectDropdown/index.js"
+      },
+      "require": {
+        "types": "./dist/components/MultiSelectDropdown/index.d.cts",
+        "default": "./dist/components/MultiSelectDropdown/index.cjs"
+      }
     },
     "./multi-select-searchable-dropdown": {
-      "types": "./dist/components/MultiSelectSearchableDropdown/index.d.ts",
-      "import": "./dist/components/MultiSelectSearchableDropdown/index.js",
-      "require": "./dist/components/MultiSelectSearchableDropdown/index.cjs"
+      "import": {
+        "types": "./dist/components/MultiSelectSearchableDropdown/index.d.ts",
+        "default": "./dist/components/MultiSelectSearchableDropdown/index.js"
+      },
+      "require": {
+        "types": "./dist/components/MultiSelectSearchableDropdown/index.d.cts",
+        "default": "./dist/components/MultiSelectSearchableDropdown/index.cjs"
+      }
     },
     "./otp-input": {
-      "types": "./dist/components/OtpInput/index.d.ts",
-      "import": "./dist/components/OtpInput/index.js",
-      "require": "./dist/components/OtpInput/index.cjs"
+      "import": {
+        "types": "./dist/components/OtpInput/index.d.ts",
+        "default": "./dist/components/OtpInput/index.js"
+      },
+      "require": {
+        "types": "./dist/components/OtpInput/index.d.cts",
+        "default": "./dist/components/OtpInput/index.cjs"
+      }
     },
     "./pagination": {
-      "types": "./dist/components/Pagination/index.d.ts",
-      "import": "./dist/components/Pagination/index.js",
-      "require": "./dist/components/Pagination/index.cjs"
+      "import": {
+        "types": "./dist/components/Pagination/index.d.ts",
+        "default": "./dist/components/Pagination/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Pagination/index.d.cts",
+        "default": "./dist/components/Pagination/index.cjs"
+      }
     },
     "./radio-button": {
-      "types": "./dist/components/RadioButton/index.d.ts",
-      "import": "./dist/components/RadioButton/index.js",
-      "require": "./dist/components/RadioButton/index.cjs"
+      "import": {
+        "types": "./dist/components/RadioButton/index.d.ts",
+        "default": "./dist/components/RadioButton/index.js"
+      },
+      "require": {
+        "types": "./dist/components/RadioButton/index.d.cts",
+        "default": "./dist/components/RadioButton/index.cjs"
+      }
     },
     "./resizable-panel": {
-      "types": "./dist/components/ResizablePanel/index.d.ts",
-      "import": "./dist/components/ResizablePanel/index.js",
-      "require": "./dist/components/ResizablePanel/index.cjs"
+      "import": {
+        "types": "./dist/components/ResizablePanel/index.d.ts",
+        "default": "./dist/components/ResizablePanel/index.js"
+      },
+      "require": {
+        "types": "./dist/components/ResizablePanel/index.d.cts",
+        "default": "./dist/components/ResizablePanel/index.cjs"
+      }
     },
     "./searchable-dropdown": {
-      "types": "./dist/components/SearchableDropdown/index.d.ts",
-      "import": "./dist/components/SearchableDropdown/index.js",
-      "require": "./dist/components/SearchableDropdown/index.cjs"
+      "import": {
+        "types": "./dist/components/SearchableDropdown/index.d.ts",
+        "default": "./dist/components/SearchableDropdown/index.js"
+      },
+      "require": {
+        "types": "./dist/components/SearchableDropdown/index.d.cts",
+        "default": "./dist/components/SearchableDropdown/index.cjs"
+      }
     },
     "./slider": {
-      "types": "./dist/components/Slider/index.d.ts",
-      "import": "./dist/components/Slider/index.js",
-      "require": "./dist/components/Slider/index.cjs"
+      "import": {
+        "types": "./dist/components/Slider/index.d.ts",
+        "default": "./dist/components/Slider/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Slider/index.d.cts",
+        "default": "./dist/components/Slider/index.cjs"
+      }
     },
     "./stepper": {
-      "types": "./dist/components/Stepper/index.d.ts",
-      "import": "./dist/components/Stepper/index.js",
-      "require": "./dist/components/Stepper/index.cjs"
+      "import": {
+        "types": "./dist/components/Stepper/index.d.ts",
+        "default": "./dist/components/Stepper/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Stepper/index.d.cts",
+        "default": "./dist/components/Stepper/index.cjs"
+      }
     },
     "./switch": {
-      "types": "./dist/components/Switch/index.d.ts",
-      "import": "./dist/components/Switch/index.js",
-      "require": "./dist/components/Switch/index.cjs"
+      "import": {
+        "types": "./dist/components/Switch/index.d.ts",
+        "default": "./dist/components/Switch/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Switch/index.d.cts",
+        "default": "./dist/components/Switch/index.cjs"
+      }
     },
     "./table": {
-      "types": "./dist/components/Table/index.d.ts",
-      "import": "./dist/components/Table/index.js",
-      "require": "./dist/components/Table/index.cjs"
+      "import": {
+        "types": "./dist/components/Table/index.d.ts",
+        "default": "./dist/components/Table/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Table/index.d.cts",
+        "default": "./dist/components/Table/index.cjs"
+      }
     },
     "./tab-panel": {
-      "types": "./dist/components/TabPanel/index.d.ts",
-      "import": "./dist/components/TabPanel/index.js",
-      "require": "./dist/components/TabPanel/index.cjs"
+      "import": {
+        "types": "./dist/components/TabPanel/index.d.ts",
+        "default": "./dist/components/TabPanel/index.js"
+      },
+      "require": {
+        "types": "./dist/components/TabPanel/index.d.cts",
+        "default": "./dist/components/TabPanel/index.cjs"
+      }
     },
     "./textarea": {
-      "types": "./dist/components/TextArea/index.d.ts",
-      "import": "./dist/components/TextArea/index.js",
-      "require": "./dist/components/TextArea/index.cjs"
+      "import": {
+        "types": "./dist/components/TextArea/index.d.ts",
+        "default": "./dist/components/TextArea/index.js"
+      },
+      "require": {
+        "types": "./dist/components/TextArea/index.d.cts",
+        "default": "./dist/components/TextArea/index.cjs"
+      }
     },
     "./time-picker": {
-      "types": "./dist/components/TimePicker/index.d.ts",
-      "import": "./dist/components/TimePicker/index.js",
-      "require": "./dist/components/TimePicker/index.cjs"
+      "import": {
+        "types": "./dist/components/TimePicker/index.d.ts",
+        "default": "./dist/components/TimePicker/index.js"
+      },
+      "require": {
+        "types": "./dist/components/TimePicker/index.d.cts",
+        "default": "./dist/components/TimePicker/index.cjs"
+      }
     },
     "./toast": {
-      "types": "./dist/components/Toast/index.d.ts",
-      "import": "./dist/components/Toast/index.js",
-      "require": "./dist/components/Toast/index.cjs"
+      "import": {
+        "types": "./dist/components/Toast/index.d.ts",
+        "default": "./dist/components/Toast/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Toast/index.d.cts",
+        "default": "./dist/components/Toast/index.cjs"
+      }
     },
     "./tooltip": {
-      "types": "./dist/components/Tooltip/index.d.ts",
-      "import": "./dist/components/Tooltip/index.js",
-      "require": "./dist/components/Tooltip/index.cjs"
+      "import": {
+        "types": "./dist/components/Tooltip/index.d.ts",
+        "default": "./dist/components/Tooltip/index.js"
+      },
+      "require": {
+        "types": "./dist/components/Tooltip/index.d.cts",
+        "default": "./dist/components/Tooltip/index.cjs"
+      }
     }
   },
   "typesVersions": {
@@ -311,6 +471,8 @@
     "typecheck": "node scripts/assert-typecheck.mjs",
     "verify:dist-records": "node scripts/assert-dist-records.mjs",
     "verify:bundle-size": "node scripts/assert-bundle-size.mjs",
+    "verify:packaging": "node scripts/assert-packaging.mjs",
+    "verify:packaging:self-check": "node scripts/assert-packaging.mjs --self-check",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
@@ -329,8 +491,8 @@
     "test:e2e:mobile": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project='Mobile Chrome' --project='Mobile Safari'",
     "test:all": "npm run typecheck && npm run test:run && npm run test:e2e",
     "clean": "rm -rf dist",
-    "build:lib": "npm run clean && npm run build:tokens && vite build --mode lib && tsc --project tsconfig.lib.json && npm run build:styles",
-    "postbuild:lib": "node scripts/assert-phone-bundle.mjs && node scripts/assert-flag-bundle.mjs && node scripts/assert-styles-bundle.mjs && node scripts/assert-fixture-bundle.mjs && node scripts/assert-dist-records.mjs --invalidate",
+    "build:lib": "npm run clean && npm run build:tokens && vite build --mode lib && tsc --project tsconfig.lib.json && node scripts/build-cjs-declarations.mjs && npm run build:styles",
+    "postbuild:lib": "node scripts/assert-phone-bundle.mjs && node scripts/assert-flag-bundle.mjs && node scripts/assert-styles-bundle.mjs && node scripts/assert-fixture-bundle.mjs && node scripts/assert-packaging.mjs && node scripts/assert-dist-records.mjs --invalidate",
     "build:preview": "node scripts/build-preview-vendor.mjs",
     "build:llms": "node ai/build-llms-full.mjs",
     "build:flags": "node scripts/generate-flags.mjs",
@@ -351,6 +513,14 @@
     "date-fns": "^4.1.0",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-table": {
+      "optional": true
+    },
+    "date-fns": {
+      "optional": true
+    }
   },
   "dependencies": {
     "clsx": "^2.1.1",

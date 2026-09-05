@@ -1,5 +1,5 @@
-import { AvatarShimmer } from "../../components/Avatar";
-import type { Fixtures } from "./types";
+import { AvatarShimmer } from "../../components/Avatar/index.js";
+import type { Fixtures } from "./types.js";
 
 /**
  * ADR 002: AvatarShimmer is reachable from the package root and AvatarDemo

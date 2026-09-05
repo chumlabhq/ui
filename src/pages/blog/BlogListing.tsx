@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useMemo, useRef } from "react";
-import { BLOG_POSTS } from "./blogData";
-import { Pagination } from "../../components/Pagination";
-import { useDocumentTitle } from "../../hooks/useDocumentTitle";
-import { useJsonLd, useCanonical } from "../../hooks/useJsonLd";
-import { SiteHeader } from "../../components/SiteHeader";
-import { SiteFooter } from "../../components/SiteFooter";
-import { TypographicCover } from "../../components/TypographicCover";
-import Reveal from "../../components/Reveal/Reveal";
-import { Button } from "../../components/ui";
-import { trackEvent } from "../../lib/analytics";
+import { BLOG_POSTS } from "./blogData.js";
+import { Pagination } from "../../components/Pagination/index.js";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle.js";
+import { useJsonLd, useCanonical } from "../../hooks/useJsonLd.js";
+import { SiteHeader } from "../../components/SiteHeader.js";
+import { SiteFooter } from "../../components/SiteFooter.js";
+import { TypographicCover } from "../../components/TypographicCover.js";
+import Reveal from "../../components/Reveal/Reveal.js";
+import { Button } from "../../components/ui/index.js";
+import { trackEvent } from "../../lib/analytics.js";
 
 const LISTING_TITLE = "Blog. Guides and articles";
 const LISTING_DESCRIPTION =

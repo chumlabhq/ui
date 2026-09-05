@@ -8,15 +8,15 @@ import {
   forwardRef,
 } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
-import type { Tab, TabPanelProps, ResolvedClasses, TabRenderProps } from "./utils/types";
-import { TabPanelContext } from "./utils/context";
-import { DEFAULT_TABPANEL_CLASSES, UNSTYLED_TABPANEL_CLASSES } from "./utils/constants";
-import { useControllableState } from "../../utils/useControllableState";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import TabButton from "./components/TabButton";
-import { Tooltip } from "../Tooltip";
+import type { Tab, TabPanelProps, ResolvedClasses, TabRenderProps } from "./utils/types.js";
+import { TabPanelContext } from "./utils/context.js";
+import { DEFAULT_TABPANEL_CLASSES, UNSTYLED_TABPANEL_CLASSES } from "./utils/constants.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import TabButton from "./components/TabButton.js";
+import { Tooltip } from "../Tooltip/index.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: TabPanel
  *

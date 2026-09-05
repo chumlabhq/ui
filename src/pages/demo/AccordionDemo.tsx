@@ -9,9 +9,9 @@ import {
   MinusIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from "../../components/Accordion";
-import type { AccordionRef } from "../../components/Accordion";
-import { useTheme } from "./ThemeContext";
+} from "../../components/Accordion/index.js";
+import type { AccordionRef } from "../../components/Accordion/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -21,7 +21,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

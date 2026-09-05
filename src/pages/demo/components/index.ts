@@ -1,4 +1,4 @@
-export * from "./Icons";
+export * from "./Icons.js";
 export {
   Section,
   CodeBlock,
@@ -8,7 +8,7 @@ export {
   DocsHero,
   PropRow,
   PropsTable,
-} from "./Section";
+} from "./Section.js";
 export {
   Btn,
   InputField,
@@ -18,9 +18,9 @@ export {
   Chip,
   CodeFenced,
   InlineCode,
-} from "./primitives";
+} from "./primitives.js";
 export {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./DocumentationBlocks";
+} from "./DocumentationBlocks.js";

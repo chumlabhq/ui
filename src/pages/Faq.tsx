@@ -7,19 +7,19 @@ import {
   type KeyboardEvent,
 } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { useJsonLd, useCanonical } from "../hooks/useJsonLd";
+import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
+import { useJsonLd, useCanonical } from "../hooks/useJsonLd.js";
 import {
   FAQ_DATA,
   FAQ_CATEGORIES,
   faqAnchor,
   type FaqCategory,
-} from "./faqData";
-import { SiteHeader } from "../components/SiteHeader";
-import { SiteFooter } from "../components/SiteFooter";
-import { Pagination } from "../components/Pagination";
-import Reveal from "../components/Reveal/Reveal";
-import { trackEvent } from "../lib/analytics";
+} from "./faqData.js";
+import { SiteHeader } from "../components/SiteHeader.js";
+import { SiteFooter } from "../components/SiteFooter.js";
+import { Pagination } from "../components/Pagination/index.js";
+import Reveal from "../components/Reveal/Reveal.js";
+import { trackEvent } from "../lib/analytics.js";
 
 const PAGE_TITLE = "Frequently Asked Questions";
 const PAGE_DESCRIPTION =

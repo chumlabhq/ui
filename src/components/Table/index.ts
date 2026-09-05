@@ -1,5 +1,5 @@
 // AI Knowledge: See TABLE.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as Table } from "./Table";
+export { default as Table } from "./Table.js";
 export type {
   TableProps,
   TableShimmerProps,
@@ -9,9 +9,9 @@ export type {
   ColumnFiltersState,
   ColumnSizingState,
   TableView,
-} from "./utils/types";
-export { DEFAULT_ROW_OPTIONS, DEFAULT_VISIBLE_PAGE_COUNT, DEFAULT_TABLE_CLASSES, UNSTYLED_TABLE_CLASSES } from "./constants";
-export { getColumnId, getSortDirection, isInteractiveElement, exportTableToCSV, copyToClipboard } from "./utils";
+} from "./utils/types.js";
+export { DEFAULT_ROW_OPTIONS, DEFAULT_VISIBLE_PAGE_COUNT, DEFAULT_TABLE_CLASSES, UNSTYLED_TABLE_CLASSES } from "./constants.js";
+export { getColumnId, getSortDirection, isInteractiveElement, exportTableToCSV, copyToClipboard } from "./utils.js";
 export {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -25,4 +25,4 @@ export {
   DragHandleIcon,
   SearchIcon,
   FilterIcon,
-} from "./icons";
+} from "./icons.js";

@@ -1,18 +1,18 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useEffect, useMemo } from "react";
-import { getBlogById } from "./blogData";
-import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { getBlogById } from "./blogData.js";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle.js";
 import {
   useJsonLd,
   useCanonical,
   usePageMeta,
-} from "../../hooks/useJsonLd";
-import type { BlogSection, BlogPost } from "./blogData";
-import { BlogDiagram } from "./BlogIllustrations";
-import { SiteHeader } from "../../components/SiteHeader";
-import { SiteFooter } from "../../components/SiteFooter";
-import Reveal from "../../components/Reveal/Reveal";
-import { Button } from "../../components/ui";
+} from "../../hooks/useJsonLd.js";
+import type { BlogSection, BlogPost } from "./blogData.js";
+import { BlogDiagram } from "./BlogIllustrations.js";
+import { SiteHeader } from "../../components/SiteHeader.js";
+import { SiteFooter } from "../../components/SiteFooter.js";
+import Reveal from "../../components/Reveal/Reveal.js";
+import { Button } from "../../components/ui/index.js";
 
 function toIsoDate(dateStr: string): string {
   const parsed = new Date(dateStr);

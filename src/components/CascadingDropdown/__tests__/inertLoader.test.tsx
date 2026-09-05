@@ -9,10 +9,10 @@
  */
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
-import { CascadingDropdown } from "../index";
-import type { CascadingOption } from "../utils/types";
+import { CascadingDropdown } from "../index.js";
+import type { CascadingOption } from "../utils/types.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);

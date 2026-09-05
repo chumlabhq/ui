@@ -16,12 +16,12 @@
 import { useState } from "react";
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { render, cleanup, fireEvent, act } from "@testing-library/react";
-import { Modal } from "../../components/Modal";
-import { Drawer } from "../../components/Drawer";
-import { DatePicker } from "../../components/DatePicker";
-import { cycleTabWithin } from "../../utils/focusUtils";
+import { Modal } from "../../components/Modal/index.js";
+import { Drawer } from "../../components/Drawer/index.js";
+import { DatePicker } from "../../components/DatePicker/index.js";
+import { cycleTabWithin } from "../../utils/focusUtils.js";
 
-import { setReducedMotion } from "../../test/matchMedia";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);

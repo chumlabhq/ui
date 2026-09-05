@@ -1,11 +1,11 @@
-import { baseApi } from "./baseApi";
+import { baseApi } from "./baseApi.js";
 import type {
   PlaygroundChat,
   PlaygroundChatMessage,
   PlaygroundOnboardingStatus,
   PlaygroundRunDetail,
   PlaygroundSettings,
-} from "../../pages/playground/types";
+} from "../../pages/playground/types.js";
 
 interface MyOnboardingResponse {
   success: boolean;

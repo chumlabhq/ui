@@ -1,6 +1,6 @@
-import { RadioButton } from "../../components/RadioButton";
-import { RadioGroup } from "../../components/RadioButton";
-import type { Fixtures } from "./types";
+import { RadioButton } from "../../components/RadioButton/index.js";
+import { RadioGroup } from "../../components/RadioButton/index.js";
+import type { Fixtures } from "./types.js";
 
 /**
  * The radio itself, not the group. Its nine keys live in DEFAULT_RADIO_CLASSES,

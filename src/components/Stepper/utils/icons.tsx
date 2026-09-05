@@ -1,4 +1,4 @@
-import type { IconProps } from "./types";
+import type { IconProps } from "./types.js";
 
 export const CheckIcon = ({ className = "" }: IconProps) => (
   <svg

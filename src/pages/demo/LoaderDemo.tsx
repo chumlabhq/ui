@@ -3,7 +3,7 @@ import {
   LinearLoader,
   DotLoader,
   PulseLoader,
-} from "../../components/Loader";
+} from "../../components/Loader/index.js";
 import {
   DocsHero,
   Section,
@@ -13,8 +13,8 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
-import { useTheme } from "./ThemeContext";
+} from "./components/index.js";
+import { useTheme } from "./ThemeContext.js";
 
 const getClasses = (_dark: boolean) => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,

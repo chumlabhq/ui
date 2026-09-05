@@ -1,14 +1,14 @@
 import React, { forwardRef, useMemo } from "react";
-import type { AvatarGroupProps } from "../utils/types";
-import { AvatarGroupCount } from "./AvatarGroupCount";
-import { Slot } from "../../../utils/Slot";
+import type { AvatarGroupProps } from "../utils/types.js";
+import { AvatarGroupCount } from "./AvatarGroupCount.js";
+import { Slot } from "../../../utils/Slot.js";
 import {
   DEFAULT_SIZE,
   DEFAULT_SPACING,
   DEFAULT_SHAPE,
-} from "../utils/constants";
-import { AvatarGroupContext } from "../utils/context";
-import { cn } from "../../../utils/scopedCn";
+} from "../utils/constants.js";
+import { AvatarGroupContext } from "../utils/context.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 const variantClassNames = {
   stack: "flex items-center",

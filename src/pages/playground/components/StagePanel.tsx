@@ -1,11 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Tooltip } from "../../../components/Tooltip";
-import PreviewFrame from "./PreviewFrame";
-import GateCluster from "./GateCluster";
+import { Tooltip } from "../../../components/Tooltip/index.js";
+import PreviewFrame from "./PreviewFrame.js";
+import GateCluster from "./GateCluster.js";
 import logoSmall from "../../../assets/images/logo-small.png";
-import type { PreviewTheme } from "../../../lib/preview/runtime";
-import type { PreviewDevice, VerifyError } from "../types";
-import type { GateLamps } from "../lib/gates";
+import type { PreviewTheme } from "../../../lib/preview/runtime.js";
+import type { PreviewDevice, VerifyError } from "../types.js";
+import type { GateLamps } from "../lib/gates.js";
 
 type Tab = "preview" | "code";
 

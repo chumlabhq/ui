@@ -13,12 +13,18 @@
  * it will believe a clean hydration.
  */
 import { execFileSync } from "node:child_process";
-import { writeFileSync, rmSync, existsSync } from "node:fs";
+import { writeFileSync, readFileSync, rmSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PROBE = resolve(root, "src/__typecheck-probe.ts");
+
+/**
+ * The file the node16 phase plants in. Any lib file with a relative import
+ * would do; Button is the smallest one that has several.
+ */
+const NODE16_PROBE = resolve(root, "src/components/Button/Button.tsx");
 
 /** Exit code, not output: a gate is only a gate if a failure is non-zero. */
 const typecheck = () => {
@@ -72,3 +78,54 @@ if (clean.code !== 0) {
   fail("typecheck failed");
 }
 console.log("✓ typecheck clean");
+
+/**
+ * Phase two: the same source under `moduleResolution: node16`.
+ *
+ * Every tsconfig above uses `bundler`, which resolves `./Slot` and `./Slot.js`
+ * alike. A `node16` consumer resolves only the second, and 240 relative
+ * imports in the published declarations were of the first kind — invisible
+ * here until `attw` read the tarball from outside the repo.
+ *
+ * Planted first, for the same reason as the probe above: this config compiles
+ * a subset of `src`, and a subset can be empty.
+ */
+const node16 = () => {
+  try {
+    execFileSync("npx", ["tsc", "-p", "tsconfig.node16.json"], { cwd: root, stdio: "pipe" });
+    return { code: 0, out: "" };
+  } catch (e) {
+    return { code: e.status ?? 1, out: `${e.stdout ?? ""}${e.stderr ?? ""}` };
+  }
+};
+
+const original = readFileSync(NODE16_PROBE, "utf8");
+const extensionless = original.replace('from "../../utils/Slot.js"', 'from "../../utils/Slot"');
+if (extensionless === original) {
+  fail(`${NODE16_PROBE} no longer imports "../../utils/Slot.js" — the node16 probe plants nothing`);
+}
+
+writeFileSync(NODE16_PROBE, extensionless, "utf8");
+const withExtensionless = node16();
+writeFileSync(NODE16_PROBE, original, "utf8");
+
+if (withExtensionless.code === 0) {
+  fail(
+    "the node16 gate passed with an extensionless relative import — it is not " +
+      "checking resolution, which is the one thing it exists for.",
+  );
+}
+if (!withExtensionless.out.includes("TS2835")) {
+  fail(
+    "the node16 gate failed, but not on the planted import:\n" +
+      withExtensionless.out.slice(0, 2000),
+  );
+}
+console.log("✓ node16 gate rejects an extensionless relative import");
+
+const node16Clean = node16();
+if (node16Clean.code !== 0) {
+  console.error(node16Clean.out);
+  fail("typecheck failed under moduleResolution: node16");
+}
+console.log("✓ node16 resolution clean");

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { gatesFromEvents, resolveGateLamps, allGatesPassed } from "./gates";
-import type { PipelineEvent } from "../types";
+import { gatesFromEvents, resolveGateLamps, allGatesPassed } from "./gates.js";
+import type { PipelineEvent } from "../types.js";
 
 const ev = (
   stage: PipelineEvent["stage"],

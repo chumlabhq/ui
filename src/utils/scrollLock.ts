@@ -1,4 +1,4 @@
-import { isBrowser } from "./isBrowser";
+import { isBrowser } from "./isBrowser.js";
 
 let scrollLockCount = 0;
 let savedBodyOverflow = "";

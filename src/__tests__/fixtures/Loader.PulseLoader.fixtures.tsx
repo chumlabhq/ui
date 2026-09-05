@@ -1,5 +1,5 @@
-import { PulseLoader } from "../../components/Loader";
-import type { Fixtures } from "./types";
+import { PulseLoader } from "../../components/Loader/index.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof PulseLoader> = [
   { name: "default", props: {} },

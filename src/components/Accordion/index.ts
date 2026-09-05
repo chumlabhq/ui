@@ -1,10 +1,10 @@
 // AI Knowledge: See ACCORDION.ai.md in this directory for full usage guide, props, styling, and patterns.
 
-export { default as Accordion } from "./Accordion";
-export { default as AccordionItem } from "./components/AccordionItem";
-export { default as AccordionTrigger } from "./components/AccordionTrigger";
-export { default as AccordionContent } from "./components/AccordionContent";
-export { default as AccordionShimmer } from "./components/AccordionShimmer";
+export { default as Accordion } from "./Accordion.js";
+export { default as AccordionItem } from "./components/AccordionItem.js";
+export { default as AccordionTrigger } from "./components/AccordionTrigger.js";
+export { default as AccordionContent } from "./components/AccordionContent.js";
+export { default as AccordionShimmer } from "./components/AccordionShimmer.js";
 
 export type {
   AccordionProps,
@@ -28,14 +28,14 @@ export type {
   AccordionItemContextValue,
   StorageConfig,
   UseAccordionStateOptions,
-} from "./utils/types";
+} from "./utils/types.js";
 
 export {
   ChevronDownIcon,
   ChevronUpIcon,
   PlusIcon,
   MinusIcon,
-} from "./utils/icons";
+} from "./utils/icons.js";
 
 export {
   DEFAULT_ACCORDION_CLASSES,
@@ -53,7 +53,7 @@ export {
   VARIANT_CLASSES,
   UNSTYLED_ACCORDION_CLASSES,
   PRINT_STYLES,
-} from "./utils/constants";
+} from "./utils/constants.js";
 
 export {
   AccordionContext,
@@ -65,5 +65,5 @@ export {
   useAccordionState,
   useIsItemExpanded,
   useExpandedStore,
-} from "./utils/context";
+} from "./utils/context.js";
 

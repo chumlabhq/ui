@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Fixture } from "../../__tests__/fixtures/types";
-import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegistry";
+import type { Fixture } from "../../__tests__/fixtures/types.js";
+import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegistry.js";
 
 /**
  * Renders one fixture per URL, so e2e can drive a component directly.

@@ -16,11 +16,11 @@
  */
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { render, cleanup, fireEvent, screen } from "@testing-library/react";
-import { Table } from "../../components/Table";
-import { Slider } from "../../components/Slider";
-import { ResizablePanel } from "../../components/ResizablePanel";
+import { Table } from "../../components/Table/index.js";
+import { Slider } from "../../components/Slider/index.js";
+import { ResizablePanel } from "../../components/ResizablePanel/index.js";
 
-import { setReducedMotion } from "../../test/matchMedia";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);

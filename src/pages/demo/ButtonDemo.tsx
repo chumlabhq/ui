@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button, ButtonGroup } from "../../components/Button";
-import { useTheme } from "./ThemeContext";
+import { Button, ButtonGroup } from "../../components/Button/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -10,7 +10,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

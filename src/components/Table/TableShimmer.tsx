@@ -1,5 +1,5 @@
 import { memo } from "react";
-import type { TableShimmerProps } from "./utils/types";
+import type { TableShimmerProps } from "./utils/types.js";
 
 const defaultContainerClass =
   "w-full border border-gray-200 rounded-cl-md overflow-hidden";

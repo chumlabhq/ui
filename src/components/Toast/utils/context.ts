@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { ToastContextValue } from "./types";
+import type { ToastContextValue } from "./types.js";
 
 export const ToastContext = createContext<ToastContextValue | null>(null);
 

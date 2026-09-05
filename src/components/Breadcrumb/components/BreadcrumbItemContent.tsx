@@ -1,5 +1,5 @@
-import type { BreadcrumbItem } from "../utils/types";
-import { cn } from "../../../utils/scopedCn";
+import type { BreadcrumbItem } from "../utils/types.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 interface BreadcrumbItemContentProps {
   item: BreadcrumbItem;

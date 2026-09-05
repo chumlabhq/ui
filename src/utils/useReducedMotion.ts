@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { isBrowser } from "./isBrowser";
+import { isBrowser } from "./isBrowser.js";
 
 const QUERY = "(prefers-reduced-motion: reduce)";
 

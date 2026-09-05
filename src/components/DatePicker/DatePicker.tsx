@@ -8,10 +8,10 @@ import {
   useMemo,
   useState,
 } from "react";
-import { LAYERS, useLayer } from "../../utils/layers";
-import { cycleTabWithin } from "../../utils/focusUtils";
-import { comboboxNameProps } from "../../utils/comboboxName";
-import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
+import { LAYERS, useLayer } from "../../utils/layers.js";
+import { cycleTabWithin } from "../../utils/focusUtils.js";
+import { comboboxNameProps } from "../../utils/comboboxName.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import type {
   DatePickerProps,
   DatePickerClasses,
@@ -22,8 +22,8 @@ import type {
   DateValue,
   DateMarker,
   UseDatePickerProps,
-} from "./utils/types";
-import { useDatePicker } from "./useDatePicker";
+} from "./utils/types.js";
+import { useDatePicker } from "./useDatePicker.js";
 import {
   CalendarIcon,
   ChevronLeftIcon,
@@ -35,7 +35,7 @@ import {
   DoubleChevronRightIcon,
   TodayIcon,
   CheckIcon,
-} from "./icons";
+} from "./icons.js";
 import {
   formatDate,
   formatDateRange,
@@ -47,18 +47,18 @@ import {
   getMonth,
   isSameDay,
   getDefaultPresets,
-} from "./utils";
-import { cn } from "../../utils/scopedCn";
-import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
-import { isBrowser } from "../../utils/isBrowser";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { motionSafeClasses } from "../../utils/classLayers";
+} from "./utils.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
+import { isBrowser } from "../../utils/isBrowser.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 import { createPortal } from "react-dom";
-import MenuSurface from "../../utils/menu/MenuSurface";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
 import {
   DEFAULT_DATEPICKER_CLASSES,
   UNSTYLED_DATEPICKER_CLASSES,
-} from "./constants";
+} from "./constants.js";
 
 // ─── Sub-component interfaces ────────────────────────────────────────────────
 

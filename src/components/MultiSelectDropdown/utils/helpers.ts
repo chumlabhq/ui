@@ -1,4 +1,4 @@
-export { isBrowser } from "../../../utils/isBrowser";
+export { isBrowser } from "../../../utils/isBrowser.js";
 
 export function scrollOptionIntoView(element: HTMLElement): void {
   try {

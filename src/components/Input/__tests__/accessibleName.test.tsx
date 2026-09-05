@@ -9,11 +9,11 @@
  */
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
-import { Input } from "../index";
-import { TextArea } from "../../TextArea";
-import { Checkbox } from "../../Checkbox";
+import { Input } from "../index.js";
+import { TextArea } from "../../TextArea/index.js";
+import { Checkbox } from "../../Checkbox/index.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

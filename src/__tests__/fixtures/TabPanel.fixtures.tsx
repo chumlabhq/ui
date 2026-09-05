@@ -1,7 +1,7 @@
-import { TabPanel } from "../../components/TabPanel";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
-import { TABS } from "./_data";
+import { TabPanel } from "../../components/TabPanel/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
+import { TABS } from "./_data.js";
 
 const fixtures: Fixtures<typeof TabPanel> = [
   { name: "default", props: { tabs: TABS }, children: (tab) => `${tab.label} panel` },

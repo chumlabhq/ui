@@ -1,6 +1,6 @@
 // AI Knowledge: See BREADCRUMB.ai.md in this directory for full usage guide, props, styling, and patterns.
 
-export { default as Breadcrumb } from "./Breadcrumb";
+export { default as Breadcrumb } from "./Breadcrumb.js";
 
 export type {
   BreadcrumbItem,
@@ -11,11 +11,11 @@ export type {
   TooltipAlign,
   IconPosition,
   DropdownPosition,
-} from "./utils/types";
+} from "./utils/types.js";
 
 export {
   DEFAULT_BREADCRUMB_CLASSES,
   UNSTYLED_BREADCRUMB_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";
 
-export { ChevronRightIcon, EllipsisIcon } from "./icons";
+export { ChevronRightIcon, EllipsisIcon } from "./icons.js";

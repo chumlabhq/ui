@@ -14,8 +14,8 @@
  */
 
 import type { ReactNode } from "react";
-import Reveal from "./Reveal/Reveal";
-import { Button } from "./ui";
+import Reveal from "./Reveal/Reveal.js";
+import { Button } from "./ui/index.js";
 
 type Row = {
   icon: ReactNode;

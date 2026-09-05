@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, within, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Table } from "../index";
+import { Table } from "../index.js";
 import type { ColumnDef } from "@tanstack/react-table";
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.
@@ -15,7 +15,7 @@ import {
   isInteractiveElement,
   exportTableToCSV,
   copyToClipboard,
-} from "../utils";
+} from "../utils.js";
 
 interface Person {
   id: string;
@@ -1640,7 +1640,7 @@ import {
   SearchIcon,
   PinIcon,
   FilterIcon,
-} from "../icons";
+} from "../icons.js";
 
 describe("Table Icons", () => {
   const icons = [

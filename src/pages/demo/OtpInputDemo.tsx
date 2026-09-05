@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { OtpInput } from "../../components/OtpInput";
-import { useTheme } from "./ThemeContext";
+import { OtpInput } from "../../components/OtpInput/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -10,7 +10,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

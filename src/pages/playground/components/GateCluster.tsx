@@ -1,4 +1,4 @@
-import { GATE_LABELS, GATE_ORDER, allGatesPassed, type GateLamps, type LampState } from "../lib/gates";
+import { GATE_LABELS, GATE_ORDER, allGatesPassed, type GateLamps, type LampState } from "../lib/gates.js";
 
 // Fixed petrol palette — this bar is the preview chrome's status strip and stays
 // petrol-dark in both app themes, so the colors are literal (per spec), not the

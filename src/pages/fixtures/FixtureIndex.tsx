@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { componentNames, loadFixtures, toSlug } from "./lazyRegistry";
+import { componentNames, loadFixtures, toSlug } from "./lazyRegistry.js";
 
 /** Lists every fixture URL. Dev only; see FixtureRoute for why this exists. */
 export default function FixtureIndex() {

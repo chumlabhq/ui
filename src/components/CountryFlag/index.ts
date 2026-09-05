@@ -1,12 +1,12 @@
 // AI Knowledge: See COUNTRYFLAG.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { CountryFlag } from "./CountryFlag";
-export { CountryFlagGroup, CountryFlagGroupCount } from "./components/CountryFlagGroup";
+export { CountryFlag } from "./CountryFlag.js";
+export { CountryFlagGroup, CountryFlagGroupCount } from "./components/CountryFlagGroup.js";
 export {
   CountryFlagShimmer,
   CountryFlagGroupShimmer,
-} from "./components/CountryFlagShimmer";
-export { useCountryFlagGroupContext } from "./utils/context";
-export type { CountryFlagGroupContextValue } from "./utils/context";
+} from "./components/CountryFlagShimmer.js";
+export { useCountryFlagGroupContext } from "./utils/context.js";
+export type { CountryFlagGroupContextValue } from "./utils/context.js";
 export type {
   CountryFlagProps,
   CountryFlagGroupProps,
@@ -17,11 +17,11 @@ export type {
   CountryFlagClasses,
   CountryFlagGroupClasses,
   CountryFlagSize,
-} from "./utils/types";
+} from "./utils/types.js";
 export {
   CHUMLAB_FLAG_CDN,
   DEFAULT_COUNTRYFLAG_CLASSES,
   UNSTYLED_COUNTRYFLAG_CLASSES,
   DEFAULT_COUNTRYFLAG_GROUP_CLASSES,
   UNSTYLED_COUNTRYFLAG_GROUP_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { scrollOptionIntoView } from "../utils/helpers";
+import { scrollOptionIntoView } from "../utils/helpers.js";
 
 describe("scrollOptionIntoView", () => {
   it("calls scrollIntoView with block:nearest", () => {

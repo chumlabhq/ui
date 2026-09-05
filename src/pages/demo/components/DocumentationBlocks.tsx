@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Section } from "./Section";
+import { Section } from "./Section.js";
 
 /**
  * Documentation cards rendered inside every demo (Controlled, Edge cases,

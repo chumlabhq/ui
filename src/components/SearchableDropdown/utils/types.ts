@@ -1,5 +1,5 @@
 import type { ReactNode, CSSProperties } from "react";
-import type { DropdownOption } from "../../Dropdown/utils/types";
+import type { DropdownOption } from "../../Dropdown/utils/types.js";
 
 export type SearchableDropdownOption = DropdownOption;
 

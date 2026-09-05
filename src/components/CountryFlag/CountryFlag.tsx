@@ -1,20 +1,20 @@
 import { forwardRef, useState, useCallback, useMemo } from "react";
 import type { SyntheticEvent } from "react";
-import type { CountryFlagProps, CountryFlagClasses, CountryFlagTooltipConfig } from "./utils/types";
+import type { CountryFlagProps, CountryFlagClasses, CountryFlagTooltipConfig } from "./utils/types.js";
 import {
   DEFAULT_ASPECT_RATIO,
   DEFAULT_COUNTRYFLAG_CLASSES,
   UNSTYLED_COUNTRYFLAG_CLASSES,
-} from "./utils/constants";
-import { getPixelSize, isTooltipConfig } from "./utils/helpers";
-import { usePackagedFlag } from "./utils/packagedFlags";
-import { useCountryFlagGroupContext } from "./utils/context";
-import { CountryFlagShimmer } from "./components/CountryFlagShimmer";
-import { Tooltip } from "../Tooltip";
-import { cn } from "../../utils/scopedCn";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+} from "./utils/constants.js";
+import { getPixelSize, isTooltipConfig } from "./utils/helpers.js";
+import { usePackagedFlag } from "./utils/packagedFlags.js";
+import { useCountryFlagGroupContext } from "./utils/context.js";
+import { CountryFlagShimmer } from "./components/CountryFlagShimmer.js";
+import { Tooltip } from "../Tooltip/index.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: CountryFlag
  *

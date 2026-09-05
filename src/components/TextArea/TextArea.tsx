@@ -7,17 +7,17 @@ import {
   useRef,
   type ChangeEvent,
 } from "react";
-import type { TextAreaProps, TextAreaClasses } from "./utils/types";
-import { DEFAULT_TEXTAREA_CLASSES, UNSTYLED_TEXTAREA_CLASSES } from "./utils/constants";
-import { FieldLabel } from "../../utils/FieldLabel";
-import { FieldWrapper } from "../../utils/FieldWrapper";
-import { cn } from "../../utils/scopedCn";
-import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
-import { mergeRefs } from "../../utils/mergeRefs";
-import { useControllableState } from "../../utils/useControllableState";
+import type { TextAreaProps, TextAreaClasses } from "./utils/types.js";
+import { DEFAULT_TEXTAREA_CLASSES, UNSTYLED_TEXTAREA_CLASSES } from "./utils/constants.js";
+import { FieldLabel } from "../../utils/FieldLabel.js";
+import { FieldWrapper } from "../../utils/FieldWrapper.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
+import { useControllableState } from "../../utils/useControllableState.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 export const TextAreaLabel = FieldLabel;
 
 /**

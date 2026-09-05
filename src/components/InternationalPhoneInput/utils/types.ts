@@ -1,4 +1,4 @@
-import type { SearchableDropdownClasses } from "../../SearchableDropdown/utils/types";
+import type { SearchableDropdownClasses } from "../../SearchableDropdown/utils/types.js";
 import type { ReactNode, InputHTMLAttributes, CSSProperties } from "react";
 
 export interface CountryOption {

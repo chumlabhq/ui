@@ -19,7 +19,7 @@ import {
   EXPORT_ALIAS,
   REQUIRED_PROPS,
   REQUIRED_WRAPPER,
-} from "./registryMaps";
+} from "./registryMaps.js";
 
 export { EXPORT_ALIAS, REQUIRED_PROPS, REQUIRED_WRAPPER };
 import index from "../../../ai/component-index.json";

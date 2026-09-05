@@ -3,8 +3,8 @@ import {
   DatePicker,
   type DateRange,
   type DateMarker,
-} from "../../components/DatePicker";
-import { useTheme } from "./ThemeContext";
+} from "../../components/DatePicker/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -14,7 +14,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 import {
   subDays,
   addDays,

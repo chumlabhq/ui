@@ -1,4 +1,4 @@
-import type { PipelineTier } from "../types";
+import type { PipelineTier } from "../types.js";
 
 export type PipelineStageId =
   | "router"

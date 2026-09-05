@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { ToastProvider, useToast } from "../../components/Toast";
-import type { ToastPosition } from "../../components/Toast/utils/types";
+import { ToastProvider, useToast } from "../../components/Toast/index.js";
+import type { ToastPosition } from "../../components/Toast/utils/types.js";
 import {
   DocsHero,
   Section,
@@ -10,8 +10,8 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
-import { useTheme } from "./ThemeContext";
+} from "./components/index.js";
+import { useTheme } from "./ThemeContext.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

@@ -14,13 +14,13 @@ import {
   AccordionDispatchContext,
   AccordionConfigContext,
   AccordionItemContext,
-} from "../utils/context";
+} from "../utils/context.js";
 import type {
   AccordionContextValue,
   AccordionDispatchValue,
   AccordionConfigValue,
   AccordionItemContextValue,
-} from "../utils/types";
+} from "../utils/types.js";
 import React from "react";
 
 // ─── createExpandedStore ────────────────────────────────────────────────────

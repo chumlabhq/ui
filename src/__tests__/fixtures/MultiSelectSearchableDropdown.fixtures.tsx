@@ -1,8 +1,8 @@
-import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown";
+import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
-import { OPTIONS } from "./_data";
-import { neverResolves, resolvesTo, settleAsync } from "./_async";
+import type { Fixtures } from "./types.js";
+import { OPTIONS } from "./_data.js";
+import { neverResolves, resolvesTo, settleAsync } from "./_async.js";
 
 
 const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [

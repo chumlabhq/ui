@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { AvatarSize, AvatarColors, AvatarStatus, CornerPosition, BadgeSize, BadgeOverlap, BadgeOffset } from "./types";
+import type { AvatarSize, AvatarColors, AvatarStatus, CornerPosition, BadgeSize, BadgeOverlap, BadgeOffset } from "./types.js";
 import {
   SIZE_MAP,
   FONT_SIZE_MAP,
@@ -12,7 +12,7 @@ import {
   DEFAULT_DARK_TEXT_COLORS,
   DEFAULT_STATUS_COLORS,
   SHAPE_RADIUS_MAP,
-} from "./constants";
+} from "./constants.js";
 
 export const getInitials = (name?: string, maxInitials: number = 2): string => {
   if (!name) return "";

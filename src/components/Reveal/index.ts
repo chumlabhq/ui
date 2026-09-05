@@ -1,3 +1,3 @@
-export { default as Reveal } from "./Reveal";
-export { default } from "./Reveal";
-export type { RevealProps } from "./Reveal";
+export { default as Reveal } from "./Reveal.js";
+export { default } from "./Reveal.js";
+export type { RevealProps } from "./Reveal.js";

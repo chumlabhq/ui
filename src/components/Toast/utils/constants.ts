@@ -1,5 +1,5 @@
-import type { ToastType, ToastPosition, ToastClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { ToastType, ToastPosition, ToastClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const getRoleForType = (type: ToastType): "alert" | "status" => {
   switch (type) {

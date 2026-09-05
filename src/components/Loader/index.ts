@@ -1,8 +1,8 @@
 // AI Knowledge: See LOADER.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as CircularLoader } from "./CircularLoader";
-export { default as LinearLoader } from "./LinearLoader";
-export { default as DotLoader } from "./DotLoader";
-export { default as PulseLoader } from "./PulseLoader";
+export { default as CircularLoader } from "./CircularLoader.js";
+export { default as LinearLoader } from "./LinearLoader.js";
+export { default as DotLoader } from "./DotLoader.js";
+export { default as PulseLoader } from "./PulseLoader.js";
 export type {
   CircularLoaderProps,
   CircularLoaderClasses,
@@ -12,7 +12,7 @@ export type {
   DotLoaderClasses,
   PulseLoaderProps,
   PulseLoaderClasses,
-} from "./utils/types";
+} from "./utils/types.js";
 export {
   DEFAULT_CIRCULAR_LOADER_CLASSES,
   UNSTYLED_CIRCULAR_LOADER_CLASSES,
@@ -22,4 +22,4 @@ export {
   UNSTYLED_DOT_LOADER_CLASSES,
   DEFAULT_PULSE_LOADER_CLASSES,
   UNSTYLED_PULSE_LOADER_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";

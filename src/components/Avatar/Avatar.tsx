@@ -4,15 +4,15 @@ import type {
   AvatarTooltipConfig,
   AvatarStatusConfig,
   AvatarClasses,
-} from "./utils/types";
-import { Tooltip } from "../Tooltip";
-import { Slot } from "../../utils/Slot";
+} from "./utils/types.js";
+import { Tooltip } from "../Tooltip/index.js";
+import { Slot } from "../../utils/Slot.js";
 import {
   DEFAULT_SIZE,
   DEFAULT_SHAPE,
   DEFAULT_AVATAR_CLASSES,
   UNSTYLED_AVATAR_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";
 import {
   parseBorder,
   getInitials,
@@ -23,17 +23,17 @@ import {
   generateColors,
   getStatusColor,
   getStatusPosition,
-} from "./utils/helpers";
-import { useAvatarGroupContext } from "./utils/context";
-import { AvatarShimmer } from "./components/AvatarShimmer";
-import { cn } from "../../utils/scopedCn";
-import { injectStyles } from "../../utils/injectStyles";
-import { isTooltipConfig } from "../../utils/isTooltipConfig";
+} from "./utils/helpers.js";
+import { useAvatarGroupContext } from "./utils/context.js";
+import { AvatarShimmer } from "./components/AvatarShimmer.js";
+import { cn } from "../../utils/scopedCn.js";
+import { injectStyles } from "../../utils/injectStyles.js";
+import { isTooltipConfig } from "../../utils/isTooltipConfig.js";
 
 const AVATAR_DARK_CSS = `.dark [style*="--avatar-dark-bg"]{background-color:var(--avatar-dark-bg)!important;color:var(--avatar-dark-text)!important;border-color:var(--avatar-dark-border)!important}`;
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
   return (
     typeof status === "object" &&

@@ -3,8 +3,8 @@ import {
   EXPORT_ALIAS,
   REQUIRED_PROPS,
   REQUIRED_WRAPPER,
-} from "../../__tests__/contracts/registryMaps";
-import type { Fixture } from "../../__tests__/fixtures/types";
+} from "../../__tests__/contracts/registryMaps.js";
+import type { Fixture } from "../../__tests__/fixtures/types.js";
 
 /**
  * Lazy twin of the contract registry, for the fixture route.

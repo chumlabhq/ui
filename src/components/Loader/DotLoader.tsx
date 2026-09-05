@@ -1,13 +1,13 @@
 import { forwardRef, useMemo, type CSSProperties } from "react";
-import type { DotLoaderProps, DotLoaderClasses } from "./utils/types";
+import type { DotLoaderProps, DotLoaderClasses } from "./utils/types.js";
 import {
   DEFAULT_DOT_LOADER_CLASSES,
   UNSTYLED_DOT_LOADER_CLASSES,
-} from "./utils/constants";
-import { cn } from "../../utils/scopedCn";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+} from "./utils/constants.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
   (
     {

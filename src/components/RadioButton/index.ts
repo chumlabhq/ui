@@ -1,13 +1,13 @@
 // AI Knowledge: See RADIOBUTTON.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as RadioGroup } from "./RadioButton";
-export { RadioButton } from "./RadioButton";
+export { default as RadioGroup } from "./RadioButton.js";
+export { RadioButton } from "./RadioButton.js";
 export type {
   RadioButtonProps,
   RadioGroupProps,
   RadioButtonClasses,
   RadioGroupClasses,
   RadioButtonSize,
-} from "./utils/types";
+} from "./utils/types.js";
 export {
   SIZE_MAP,
   ICON_SIZE_MAP,
@@ -15,4 +15,4 @@ export {
   UNSTYLED_RADIO_CLASSES,
   DEFAULT_RADIO_GROUP_CLASSES,
   UNSTYLED_RADIO_GROUP_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { DatePicker } from "../index";
+import { DatePicker } from "../index.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.
@@ -1879,7 +1879,7 @@ import {
   CheckIcon,
   SparklesIcon,
   IconWrapper,
-} from "../icons";
+} from "../icons.js";
 
 describe("DatePicker Icons", () => {
   const icons = [
@@ -1941,7 +1941,7 @@ import {
   getPreviousYear,
   getNextYear,
   isRangeEqual,
-} from "../utils";
+} from "../utils.js";
 
 describe("utils — getPreviousYear / getNextYear (lines 262-266)", () => {
   it("getPreviousYear returns a date one year earlier", () => {

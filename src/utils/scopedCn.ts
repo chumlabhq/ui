@@ -1,5 +1,5 @@
 import { type ClassValue } from "clsx";
-import { cn as merge } from "./cn";
+import { cn as merge } from "./cn.js";
 
 /**
  * The scope marker. Every utility in dist/styles.css ships as

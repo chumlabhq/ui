@@ -1,10 +1,10 @@
-import { structuralOnly } from "../../../utils/classLayers";
+import { structuralOnly } from "../../../utils/classLayers.js";
 import type {
   CircularLoaderClasses,
   LinearLoaderClasses,
   DotLoaderClasses,
   PulseLoaderClasses,
-} from "./types";
+} from "./types.js";
 
 // ─── CircularLoader ─────────────────────────────────────────────────────────
 

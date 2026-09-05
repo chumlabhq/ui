@@ -1,6 +1,6 @@
-import { Avatar, AvatarGroup } from "../../components/Avatar";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { Avatar, AvatarGroup } from "../../components/Avatar/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 /** A 1x1 transparent PNG, so `load` actually fires in a browser. */
 const PNG_1PX =

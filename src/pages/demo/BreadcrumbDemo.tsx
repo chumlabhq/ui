@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import { Breadcrumb } from "../../components/Breadcrumb";
-import type { BreadcrumbItem } from "../../components/Breadcrumb";
-import { useTheme } from "./ThemeContext";
+import { Breadcrumb } from "../../components/Breadcrumb/index.js";
+import type { BreadcrumbItem } from "../../components/Breadcrumb/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -11,7 +11,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

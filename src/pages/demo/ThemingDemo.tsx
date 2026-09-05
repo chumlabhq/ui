@@ -1,4 +1,4 @@
-import { Section, CodeBlock } from "./components";
+import { Section, CodeBlock } from "./components/index.js";
 
 const TOKENS: Array<{ name: string; description: string }> = [
   { name: "--bg-base", description: "Page background. The base canvas." },

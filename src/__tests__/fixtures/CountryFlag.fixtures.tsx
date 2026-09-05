@@ -1,6 +1,6 @@
-import { CountryFlag } from "../../components/CountryFlag";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { CountryFlag } from "../../components/CountryFlag/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof CountryFlag> = [
   {

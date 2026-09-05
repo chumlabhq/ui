@@ -1,6 +1,6 @@
 import type { MouseEvent, ReactNode } from "react";
-import { Button } from "../../../components/Button";
-import { cn } from "../../../utils/cn";
+import { Button } from "../../../components/Button/index.js";
+import { cn } from "../../../utils/cn.js";
 
 type Variant = "primary" | "secondary" | "ghost";
 

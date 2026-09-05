@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
-import { TextArea, TextAreaLabel } from "../../components/TextArea";
-import type { TextAreaClasses } from "../../components/TextArea";
-import { useTheme } from "./ThemeContext";
+import { TextArea, TextAreaLabel } from "../../components/TextArea/index.js";
+import type { TextAreaClasses } from "../../components/TextArea/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -11,7 +11,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

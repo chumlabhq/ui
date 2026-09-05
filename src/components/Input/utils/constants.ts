@@ -1,5 +1,5 @@
-import type { InputClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { InputClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_INPUT_CLASSES: Required<InputClasses> = {
   root: "flex flex-col",

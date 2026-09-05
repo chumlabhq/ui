@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isStructural } from "../../../utils/classLayers";
+import { isStructural } from "../../../utils/classLayers.js";
 import {
   PHONE_FORMATTING_PATTERNS,
   DEFAULT_COUNTRIES,
@@ -8,7 +8,7 @@ import {
   PHONE_LENGTH_RULES,
   DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES,
   UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES,
-} from "../constants";
+} from "../constants.js";
 
 // ─── PHONE_FORMATTING_PATTERNS ────────────────────────────────────────────────
 

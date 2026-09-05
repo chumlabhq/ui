@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Section, CodeBlock } from "./components";
+import { Section, CodeBlock } from "./components/index.js";
 
 const TabButton = ({
   active,

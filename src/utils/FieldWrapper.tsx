@@ -1,7 +1,7 @@
 import { forwardRef, type ReactNode } from "react";
-import { FieldLabel } from "./FieldLabel";
-import { CircularLoader } from "../components/Loader";
-import { cn } from "./cn";
+import { FieldLabel } from "./FieldLabel.js";
+import { CircularLoader } from "../components/Loader/index.js";
+import { cn } from "./cn.js";
 
 export interface FieldWrapperProps {
   fieldId: string;

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
-import { createExpandedStore } from "../utils/context";
-import type { AccordionExpandEvent, AccordionType } from "../utils/types";
+import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect.js";
+import { createExpandedStore } from "../utils/context.js";
+import type { AccordionExpandEvent, AccordionType } from "../utils/types.js";
 
 export interface UseAccordionStateManagerOptions {
   type: AccordionType;

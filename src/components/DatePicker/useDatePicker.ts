@@ -4,7 +4,7 @@ import type {
   CalendarMonth,
   DateRange,
   DateRangeValue,
-} from "./utils/types";
+} from "./utils/types.js";
 import {
   generateCalendarMonth,
   toDateValue,
@@ -20,9 +20,9 @@ import {
   isDateDisabled,
   sortDates,
   addMonths,
-} from "./utils";
+} from "./utils.js";
 import { startOfWeek, endOfWeek } from "date-fns";
-import { useControllableState } from "../../utils/useControllableState";
+import { useControllableState } from "../../utils/useControllableState.js";
 
 export function useDatePicker(props: UseDatePickerProps) {
   const {
@@ -64,13 +64,13 @@ export function useDatePicker(props: UseDatePickerProps) {
   const multipleValue = mode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
 
   const emitSingle = mode === "single"
-    ? (onValueChange as ((date: Date | null, dateValue: import("./utils/types").DateValue | null) => void) | undefined)
+    ? (onValueChange as ((date: Date | null, dateValue: import("./utils/types.js").DateValue | null) => void) | undefined)
     : undefined;
   const emitRange = mode === "range"
     ? (onValueChange as ((range: DateRange | null, rangeValue: DateRangeValue | null) => void) | undefined)
     : undefined;
   const emitMultiple = mode === "multiple"
-    ? (onValueChange as ((dates: Date[] | null, dateValues: import("./utils/types").DateValue[] | null) => void) | undefined)
+    ? (onValueChange as ((dates: Date[] | null, dateValues: import("./utils/types.js").DateValue[] | null) => void) | undefined)
     : undefined;
 
   const getInitialMonth = () => {

@@ -1,4 +1,4 @@
-import { Section, CodeBlock } from "./components";
+import { Section, CodeBlock } from "./components/index.js";
 
 const AiLlmDemo = () => {
   return (

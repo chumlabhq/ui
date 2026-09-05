@@ -24,10 +24,10 @@
  */
 import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
-import { COMPONENTS } from "./registry";
-import { fixturesFor } from "../fixtures";
+import { COMPONENTS } from "./registry.js";
+import { fixturesFor } from "../fixtures/index.js";
 
-import { setReducedMotion } from "../../test/matchMedia";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 // Fixtures render motion-aware components; the stub answers nothing
 // until asked. reduced-motion.contract is where the true branch is tested.

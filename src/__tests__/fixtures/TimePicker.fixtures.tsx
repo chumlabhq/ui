@@ -1,7 +1,7 @@
-import { TimePicker } from "../../components/TimePicker";
+import { TimePicker } from "../../components/TimePicker/index.js";
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof TimePicker> = [
   { name: "closed", props: {} },

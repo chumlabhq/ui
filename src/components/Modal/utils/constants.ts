@@ -1,5 +1,5 @@
-import type { ModalClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { ModalClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_MODAL_CLASSES: Required<ModalClasses> = {
   root: "fixed inset-0 z-50 flex items-center justify-center",

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ResizablePanel } from "../../components/ResizablePanel";
-import { useTheme } from "../../contexts/ThemeContext";
-import { useAppDispatch } from "../../redux/hooks";
-import { useGetMeQuery } from "../../redux/api/authApi";
+import { ResizablePanel } from "../../components/ResizablePanel/index.js";
+import { useTheme } from "../../contexts/ThemeContext.js";
+import { useAppDispatch } from "../../redux/hooks.js";
+import { useGetMeQuery } from "../../redux/api/authApi.js";
 import {
   playgroundApi,
   useGetChatMessagesQuery,
@@ -12,30 +12,30 @@ import {
   useListChatRunsQuery,
   useListMyChatsQuery,
   useUpdatePlaygroundSettingsMutation,
-} from "../../redux/api/playgroundApi";
-import AppShell from "./components/shell/AppShell";
-import Sidebar, { type PlaygroundView } from "./components/shell/Sidebar";
-import ChatPanel from "./components/ChatPanel";
-import ClarifyPicker from "./components/ClarifyPicker";
-import ResponsiveProbe from "./components/ResponsiveProbe";
-import AgentBreakdown from "./components/AgentBreakdown";
-import EmptyState from "./components/EmptyState";
-import StagePanel from "./components/StagePanel";
-import SettingsView from "./views/SettingsView";
-import type { RenderGateStatus, VerifyUIState } from "./components/VerifyIndicator";
-import type { QaUIState } from "./components/QaIndicator";
-import { parseAssistantText } from "./components/assistantText";
-import type { ChatDisplayMessage } from "./components/MessageList";
-import { useGenerationStream } from "./hooks/useGenerationStream";
+} from "../../redux/api/playgroundApi.js";
+import AppShell from "./components/shell/AppShell.js";
+import Sidebar, { type PlaygroundView } from "./components/shell/Sidebar.js";
+import ChatPanel from "./components/ChatPanel.js";
+import ClarifyPicker from "./components/ClarifyPicker.js";
+import ResponsiveProbe from "./components/ResponsiveProbe.js";
+import AgentBreakdown from "./components/AgentBreakdown.js";
+import EmptyState from "./components/EmptyState.js";
+import StagePanel from "./components/StagePanel.js";
+import SettingsView from "./views/SettingsView.js";
+import type { RenderGateStatus, VerifyUIState } from "./components/VerifyIndicator.js";
+import type { QaUIState } from "./components/QaIndicator.js";
+import { parseAssistantText } from "./components/assistantText.js";
+import type { ChatDisplayMessage } from "./components/MessageList.js";
+import { useGenerationStream } from "./hooks/useGenerationStream.js";
 import {
   agentRunFromEvents,
   agentRunFromTimeline,
   initialAgentRun,
-} from "./lib/agents";
-import { resolveGateLamps } from "./lib/gates";
-import { friendlyError } from "./lib/friendlyError";
-import { startAuth } from "./lib/enterPlayground";
-import type { PreviewTheme } from "../../lib/preview/runtime";
+} from "./lib/agents.js";
+import { resolveGateLamps } from "./lib/gates.js";
+import { friendlyError } from "./lib/friendlyError.js";
+import { startAuth } from "./lib/enterPlayground.js";
+import type { PreviewTheme } from "../../lib/preview/runtime.js";
 import type {
   AttachedImage,
   ClarifyEventPayload,
@@ -51,7 +51,7 @@ import type {
   RouterEventPayload,
   VerifyError,
   VerifyEventPayload,
-} from "./types";
+} from "./types.js";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const SCREENSHOT_ONLY_PROMPT = "Rebuild the attached screenshot as Chumlab components.";

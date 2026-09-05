@@ -19,8 +19,8 @@
  */
 import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
-import { COMPONENTS, classTokens } from "./registry";
-import { fixturesFor } from "../fixtures";
+import { COMPONENTS, classTokens } from "./registry.js";
+import { fixturesFor } from "../fixtures/index.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
 
 /**
@@ -32,9 +32,9 @@ import waivers from "../../../docs/adr/002-unrenderable-keys.json";
  */
 const LEAKS = (waivers as { decorativeLeaks: Record<string, string[]> })
   .decorativeLeaks;
-import { isStructural, splitLayers } from "../../utils/classLayers";
+import { isStructural, splitLayers } from "../../utils/classLayers.js";
 
-import { setReducedMotion } from "../../test/matchMedia";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 // Fixtures render motion-aware components; the stub answers nothing
 // until asked. reduced-motion.contract is where the true branch is tested.

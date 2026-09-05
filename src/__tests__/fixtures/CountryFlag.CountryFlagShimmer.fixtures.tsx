@@ -1,5 +1,5 @@
-import { CountryFlagShimmer } from "../../components/CountryFlag";
-import type { Fixtures } from "./types";
+import { CountryFlagShimmer } from "../../components/CountryFlag/index.js";
+import type { Fixtures } from "./types.js";
 
 /**
  * COUNTRYFLAG.ai.md:19 imports CountryFlagShimmer directly, so it renders

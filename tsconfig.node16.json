@@ -1,0 +1,18 @@
+{
+  // The published surface, read the way a `moduleResolution: node16` consumer
+  // reads it. Every other config in this repo uses `bundler`, which resolves
+  // an extensionless relative import happily — which is why 240 broken
+  // specifiers reached the published declarations without anything noticing.
+  //
+  // noEmit: the declarations still come from tsconfig.lib.json. This config
+  // exists only to make the resolution mode an error at author time.
+  "extends": "./tsconfig.lib.json",
+  "compilerOptions": {
+    "module": "node16",
+    "moduleResolution": "node16",
+    "declaration": false,
+    "declarationDir": null,
+    "emitDeclarationOnly": false,
+    "noEmit": true
+  }
+}

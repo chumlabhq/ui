@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { Switch } from "../../components/Switch";
-import { useTheme } from "./ThemeContext";
+import { Switch } from "../../components/Switch/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -10,7 +10,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 const getClasses = (dark: boolean) => ({
   switch: {

@@ -1,7 +1,7 @@
-import { Breadcrumb } from "../../components/Breadcrumb";
+import { Breadcrumb } from "../../components/Breadcrumb/index.js";
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
-import { CRUMBS } from "./_data";
+import type { Fixtures } from "./types.js";
+import { CRUMBS } from "./_data.js";
 
 const fixtures: Fixtures<typeof Breadcrumb> = [
   { name: "default", props: { items: CRUMBS } },

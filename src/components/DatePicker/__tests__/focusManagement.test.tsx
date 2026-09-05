@@ -14,9 +14,9 @@
  */
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { render, cleanup, fireEvent, act } from "@testing-library/react";
-import { DatePicker } from "../index";
+import { DatePicker } from "../index.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);

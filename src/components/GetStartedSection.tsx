@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import Reveal from "./Reveal/Reveal";
-import { Button } from "./ui";
+import Reveal from "./Reveal/Reveal.js";
+import { Button } from "./ui/index.js";
 
 /**
  * Get Started — editorial timeline (left) synchronized with an auto-running

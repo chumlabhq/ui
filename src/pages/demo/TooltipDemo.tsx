@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Tooltip } from "../../components/Tooltip";
-import { Button } from "../../components/Button";
-import { useTheme } from "./ThemeContext";
+import { Tooltip } from "../../components/Tooltip/index.js";
+import { Button } from "../../components/Button/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -11,7 +11,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

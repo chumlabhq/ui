@@ -3,7 +3,7 @@ import {
   computeAnchoredPosition,
   type AnchoredRect,
   type AnchoredViewport,
-} from "../anchoredPosition";
+} from "../anchoredPosition.js";
 
 const VIEWPORT: AnchoredViewport = { width: 1000, height: 800, offsetTop: 0, offsetLeft: 0 };
 

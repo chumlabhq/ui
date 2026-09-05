@@ -1,11 +1,11 @@
 import { useState, useCallback, useEffect } from "react";
-import { CascadingDropdown } from "../../components/CascadingDropdown";
+import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
 import type {
   CascadingOption,
   CascadingValue,
   CascadingDropdownClasses,
-} from "../../components/CascadingDropdown";
-import { useTheme } from "./ThemeContext";
+} from "../../components/CascadingDropdown/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -15,12 +15,12 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 import {
   fetchCountries,
   fetchCountriesByRegion,
   searchCountries,
-} from "./lib/countries";
+} from "./lib/countries.js";
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 

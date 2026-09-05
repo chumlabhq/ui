@@ -1,6 +1,6 @@
 import { useState } from "react";
-import PgButton from "./PgButton";
-import type { ClarifyQuestion } from "../types";
+import PgButton from "./PgButton.js";
+import type { ClarifyQuestion } from "../types.js";
 
 interface ClarifyPickerProps {
   questions: ClarifyQuestion[];

@@ -9,24 +9,24 @@ import {
   useMemo,
 } from "react";
 import type { ReactNode } from "react";
-import { useLayer } from "../../utils/layers";
-import type { TimePickerProps, TimePickerClasses, TimeValue, ClockFaceClasses } from "./utils/types";
+import { useLayer } from "../../utils/layers.js";
+import type { TimePickerProps, TimePickerClasses, TimeValue, ClockFaceClasses } from "./utils/types.js";
 import {
   DEFAULT_TIMEPICKER_CLASSES,
   UNSTYLED_TIMEPICKER_CLASSES,
-} from "./utils/constants";
-import { useTimePicker } from "./useTimePicker";
-import { useControllableState } from "../../utils/useControllableState";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
-import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons";
-import { ClockFace } from "./ClockFace";
-import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep } from "./utils";
-import { isBrowser } from "../../utils/isBrowser";
+} from "./utils/constants.js";
+import { useTimePicker } from "./useTimePicker.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
+import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons.js";
+import { ClockFace } from "./ClockFace.js";
+import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep } from "./utils.js";
+import { isBrowser } from "../../utils/isBrowser.js";
 
-import { cn } from "../../utils/scopedCn";
-import { motionSafeClasses } from "../../utils/classLayers";
-import MenuSurface from "../../utils/menu/MenuSurface";
+import { cn } from "../../utils/scopedCn.js";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
 
 const TimeOption = memo(function TimeOption({
   time,

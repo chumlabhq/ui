@@ -5,8 +5,8 @@ import {
   type DragEvent,
   type KeyboardEvent,
 } from "react";
-import { ACCEPTED_IMAGE_TYPES, fileToAttachedImage } from "../lib/image";
-import type { AttachedImage } from "../types";
+import { ACCEPTED_IMAGE_TYPES, fileToAttachedImage } from "../lib/image.js";
+import type { AttachedImage } from "../types.js";
 
 interface PromptInputProps {
   onSubmit: (prompt: string, image: AttachedImage | null) => void;

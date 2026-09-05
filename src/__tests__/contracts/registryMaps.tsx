@@ -1,22 +1,22 @@
 import type { ReactNode } from "react";
-import { RadioButton as RadioButtonItem, RadioGroup } from "../../components/RadioButton";
-import type { AccordionProps } from "../../components/Accordion/utils/types";
-import type { BreadcrumbProps } from "../../components/Breadcrumb/utils/types";
-import type { CascadingDropdownProps } from "../../components/CascadingDropdown/utils/types";
-import type { CountryFlagProps } from "../../components/CountryFlag/utils/types";
-import type { DropdownProps } from "../../components/Dropdown/utils/types";
-import type { DrawerProps } from "../../components/Drawer/utils/types";
-import type { ModalProps } from "../../components/Modal/utils/types";
-import type { MultiSelectDropdownProps } from "../../components/MultiSelectDropdown/utils/types";
-import type { MultiSelectSearchableDropdownProps } from "../../components/MultiSelectSearchableDropdown/utils/types";
-import type { PaginationProps } from "../../components/Pagination/utils/types";
-import type { RadioGroupProps } from "../../components/RadioButton/utils/types";
-import type { SearchableDropdownProps } from "../../components/SearchableDropdown/utils/types";
-import type { StepperProps } from "../../components/Stepper/utils/types";
-import type { TableProps } from "../../components/Table/utils/types";
-import type { TabPanelProps } from "../../components/TabPanel/utils/types";
-import type { ToastProps } from "../../components/Toast/utils/types";
-import type { TooltipProps } from "../../components/Tooltip/utils/types";
+import { RadioButton as RadioButtonItem, RadioGroup } from "../../components/RadioButton/index.js";
+import type { AccordionProps } from "../../components/Accordion/utils/types.js";
+import type { BreadcrumbProps } from "../../components/Breadcrumb/utils/types.js";
+import type { CascadingDropdownProps } from "../../components/CascadingDropdown/utils/types.js";
+import type { CountryFlagProps } from "../../components/CountryFlag/utils/types.js";
+import type { DropdownProps } from "../../components/Dropdown/utils/types.js";
+import type { DrawerProps } from "../../components/Drawer/utils/types.js";
+import type { ModalProps } from "../../components/Modal/utils/types.js";
+import type { MultiSelectDropdownProps } from "../../components/MultiSelectDropdown/utils/types.js";
+import type { MultiSelectSearchableDropdownProps } from "../../components/MultiSelectSearchableDropdown/utils/types.js";
+import type { PaginationProps } from "../../components/Pagination/utils/types.js";
+import type { RadioGroupProps } from "../../components/RadioButton/utils/types.js";
+import type { SearchableDropdownProps } from "../../components/SearchableDropdown/utils/types.js";
+import type { StepperProps } from "../../components/Stepper/utils/types.js";
+import type { TableProps } from "../../components/Table/utils/types.js";
+import type { TabPanelProps } from "../../components/TabPanel/utils/types.js";
+import type { ToastProps } from "../../components/Toast/utils/types.js";
+import type { TooltipProps } from "../../components/Tooltip/utils/types.js";
 
 
 /**

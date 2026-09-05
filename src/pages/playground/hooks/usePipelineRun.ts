@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { PipelineRunSummary } from "../types";
+import type { PipelineRunSummary } from "../types.js";
 
 // Placeholder until Phase 3 persists runs; freezes the hook surface for consumers.
 export function usePipelineRun() {

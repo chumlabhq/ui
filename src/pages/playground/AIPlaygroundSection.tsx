@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Icon, addIcon } from "@iconify/react";
 import { useSearchParams } from "react-router-dom";
-import { useEnterPlayground } from "./lib/enterPlayground";
-import Reveal from "../../components/Reveal/Reveal";
-import { Button } from "../../components/ui";
-import GateCluster from "./components/GateCluster";
-import type { GateLamps, LampState } from "./lib/gates";
+import { useEnterPlayground } from "./lib/enterPlayground.js";
+import Reveal from "../../components/Reveal/Reveal.js";
+import { Button } from "../../components/ui/index.js";
+import GateCluster from "./components/GateCluster.js";
+import type { GateLamps, LampState } from "./lib/gates.js";
 import logoSmall from "../../assets/images/logo-small.png";
-import { PLAYGROUND_ENABLED } from "../../lib/flags";
+import { PLAYGROUND_ENABLED } from "../../lib/flags.js";
 
 // Register the few icons this section renders so they paint instantly and never
 // hit api.iconify.design on the public landing page. Data lifted verbatim from

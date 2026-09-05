@@ -1,23 +1,23 @@
 import { useRef, useEffect, useId, forwardRef, memo, useCallback, useState, useMemo } from "react";
-import { useLayer } from "../../utils/layers";
+import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
-import { isBrowser } from "../../utils/isBrowser";
-import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
-import { mergeRefs } from "../../utils/mergeRefs";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
-import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types";
-import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
-import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
-import { cn } from "../../utils/scopedCn";
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { comboboxNameProps } from "../../utils/comboboxName";
-import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
-import MenuSurface from "../../utils/menu/MenuSurface";
+import { isBrowser } from "../../utils/isBrowser.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
+import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types.js";
+import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown.js";
+import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDefault } from "./utils/icons.js";
+import { cn } from "../../utils/scopedCn.js";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { comboboxNameProps } from "../../utils/comboboxName.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
 import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";
 
 
 interface DropdownContentProps {

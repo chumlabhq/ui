@@ -7,27 +7,27 @@ import {
   forwardRef,
   useId,
 } from "react";
-import { useLayer } from "../../utils/layers";
+import { useLayer } from "../../utils/layers.js";
 import type {
   BreadcrumbItem,
   BreadcrumbProps,
   BreadcrumbClasses,
   BreadcrumbTooltipProps,
-} from "./utils/types";
+} from "./utils/types.js";
 import {
   DEFAULT_BREADCRUMB_CLASSES,
   UNSTYLED_BREADCRUMB_CLASSES,
-} from "./utils/constants";
-import { ChevronRightIcon, EllipsisIcon as DefaultEllipsisIcon } from "./icons";
-import BreadcrumbItemContent from "./components/BreadcrumbItemContent";
-import Tooltip from "../Tooltip/Tooltip";
-import { cn } from "../../utils/scopedCn";
-import { isBrowser } from "../../utils/isBrowser";
+} from "./utils/constants.js";
+import { ChevronRightIcon, EllipsisIcon as DefaultEllipsisIcon } from "./icons.js";
+import BreadcrumbItemContent from "./components/BreadcrumbItemContent.js";
+import Tooltip from "../Tooltip/Tooltip.js";
+import { cn } from "../../utils/scopedCn.js";
+import { isBrowser } from "../../utils/isBrowser.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import MenuSurface from "../../utils/menu/MenuSurface";
-import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 
 // ─── Dropdown Item ─────────────────────────────────────────────────────────
 

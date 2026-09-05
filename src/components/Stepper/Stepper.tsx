@@ -22,20 +22,20 @@ import type {
   StepperClasses,
   StepRenderProps,
   Step,
-} from "./utils/types";
-import { CheckIcon, ErrorIcon, DotIcon } from "./utils/icons";
-import { Tooltip } from "../Tooltip";
-import { cn } from "../../utils/scopedCn";
-import { useControllableState } from "../../utils/useControllableState";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { isTooltipConfig } from "../../utils/isTooltipConfig";
+} from "./utils/types.js";
+import { CheckIcon, ErrorIcon, DotIcon } from "./utils/icons.js";
+import { Tooltip } from "../Tooltip/index.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { isTooltipConfig } from "../../utils/isTooltipConfig.js";
 import {
   DEFAULT_STEPPER_CLASSES,
   UNSTYLED_STEPPER_CLASSES,
   INDICATOR_SIZE,
   ICON_SIZE,
-} from "./utils/constants";
-import { structuralOnly, motionSafeClasses } from "../../utils/classLayers";
+} from "./utils/constants.js";
+import { structuralOnly, motionSafeClasses } from "../../utils/classLayers.js";
 
 const EMPTY_TOOLTIP_DEFAULTS: StepperTooltipDefaults = {};
 

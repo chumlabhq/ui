@@ -1,5 +1,5 @@
 // AI Knowledge: See TIMEPICKER.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as TimePicker } from "./TimePicker";
+export { default as TimePicker } from "./TimePicker.js";
 export type {
   TimePickerProps,
   TimePickerClasses,
@@ -12,12 +12,12 @@ export type {
   ClockSelectionMode,
   UseTimePickerProps,
   UseTimePickerReturn,
-} from "./utils/types";
+} from "./utils/types.js";
 export {
   DEFAULT_TIMEPICKER_CLASSES,
   UNSTYLED_TIMEPICKER_CLASSES,
-} from "./utils/constants";
-export { useTimePicker } from "./useTimePicker";
+} from "./utils/constants.js";
+export { useTimePicker } from "./useTimePicker.js";
 export {
   generateTimeOptions,
   parseTimeInput,
@@ -28,10 +28,10 @@ export {
   clampMinuteStep,
   timeValueToMinutes,
   isMinutesInRange,
-} from "./utils";
+} from "./utils.js";
 export {
   ChevronDownIcon,
   ClockIcon,
   CheckIcon,
   ClearIcon,
-} from "./icons";
+} from "./icons.js";

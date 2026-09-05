@@ -1,15 +1,15 @@
-import { motionSafeClasses } from "../../../utils/classLayers";
-import { useReducedMotion } from "../../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../../utils/classLayers.js";
+import { useReducedMotion } from "../../../utils/useReducedMotion.js";
 import { forwardRef, useMemo } from "react";
-import type { AccordionShimmerProps } from "../utils/types";
+import type { AccordionShimmerProps } from "../utils/types.js";
 import {
   SIZE_CLASSES,
   VARIANT_CLASSES,
   DEFAULT_ACCORDION_SHIMMER_CLASSES,
   UNSTYLED_ACCORDION_SHIMMER_CLASSES,
-} from "../utils/constants";
-import { Slot } from "../../../utils/Slot";
-import { cn } from "../../../utils/scopedCn";
+} from "../utils/constants.js";
+import { Slot } from "../../../utils/Slot.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 const TITLE_WIDTHS = [75, 68, 82, 70, 78];
 const SUBTITLE_WIDTHS = [55, 62, 48, 58, 52];

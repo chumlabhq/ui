@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import { Input, InputLabel } from "../../components/Input";
-import { useTheme } from "./ThemeContext";
+import { Input, InputLabel } from "../../components/Input/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -10,7 +10,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

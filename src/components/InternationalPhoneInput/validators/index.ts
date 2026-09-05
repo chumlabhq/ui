@@ -7,7 +7,7 @@ import {
   isPossiblePhoneNumber,
   parsePhoneNumberFromString,
 } from "libphonenumber-js/max";
-import type { PhoneNumberData } from "../utils/types";
+import type { PhoneNumberData } from "../utils/types.js";
 
 // Accepted line types under `mobileOnly`. FIXED_LINE_OR_MOBILE is included so
 // regions that cannot disambiguate the two (e.g. US) still pass — only a

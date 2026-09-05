@@ -1,8 +1,8 @@
 import { forwardRef, useMemo } from "react";
-import type { AvatarBadgeProps } from "../utils/types";
-import { Slot } from "../../../utils/Slot";
-import { getBadgePosition, getBadgeSizeClasses } from "../utils/helpers";
-import { cn } from "../../../utils/scopedCn";
+import type { AvatarBadgeProps } from "../utils/types.js";
+import { Slot } from "../../../utils/Slot.js";
+import { getBadgePosition, getBadgeSizeClasses } from "../utils/helpers.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 const variantStyles = {
   solid: {

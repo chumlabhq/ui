@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Button } from "../../components/ui";
+import { Button } from "../../components/ui/index.js";
 import {
   useListPlaygroundOnboardingsQuery,
   useUpdateOnboardingStatusMutation,
-} from "../../redux/api/adminApi";
+} from "../../redux/api/adminApi.js";
 import type {
   PlaygroundOnboardingRecord,
   PlaygroundOnboardingStatus,
-} from "./types";
+} from "./types.js";
 
 const STATUS_CLASSES: Record<PlaygroundOnboardingStatus, string> = {
   waiting: "text-fg-tertiary",

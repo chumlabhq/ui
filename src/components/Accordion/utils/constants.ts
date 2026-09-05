@@ -1,6 +1,6 @@
-import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig , AccordionShimmerClasses} from "./types";
-import { isBrowser } from "../../../utils/isBrowser";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig , AccordionShimmerClasses} from "./types.js";
+import { isBrowser } from "../../../utils/isBrowser.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "w-full",

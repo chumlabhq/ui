@@ -1,11 +1,11 @@
 import { useEffect, useRef, useCallback, memo, forwardRef, useState, useMemo } from "react";
-import type { ToastProps, ToastClasses } from "./utils/types";
-import { CloseIcon } from "./utils/icons";
-import { getDefaultIcon } from "./utils/getDefaultIcon";
-import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants";
-import { cn } from "../../utils/scopedCn";
+import type { ToastProps, ToastClasses } from "./utils/types.js";
+import { CloseIcon } from "./utils/icons.js";
+import { getDefaultIcon } from "./utils/getDefaultIcon.js";
+import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants.js";
+import { cn } from "../../utils/scopedCn.js";
 
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 /**
  * Component: Toast
  *

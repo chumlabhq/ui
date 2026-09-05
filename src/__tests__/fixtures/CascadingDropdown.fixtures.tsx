@@ -1,8 +1,8 @@
-import { CascadingDropdown } from "../../components/CascadingDropdown";
+import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
-import { tick } from "./_act";
-import { neverResolves, rejectsWith, resolvesTo } from "./_async";
+import type { Fixtures } from "./types.js";
+import { tick } from "./_act.js";
+import { neverResolves, rejectsWith, resolvesTo } from "./_async.js";
 
 const MULTI = [
   {

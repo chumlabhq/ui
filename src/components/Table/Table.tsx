@@ -8,8 +8,8 @@ import {
   forwardRef,
 } from "react";
 import { createPortal } from "react-dom";
-import { isBrowser } from "../../utils/isBrowser";
-import { cn } from "../../utils/scopedCn";
+import { isBrowser } from "../../utils/isBrowser.js";
+import { cn } from "../../utils/scopedCn.js";
 import {
   useReactTable,
   getCoreRowModel,
@@ -31,18 +31,18 @@ import {
   type GroupingState,
   type ColumnOrderState,
 } from "@tanstack/react-table";
-import type { TableProps } from "./utils/types";
+import type { TableProps } from "./utils/types.js";
 import {
   getColumnId,
   getSortDirection,
   isInteractiveElement,
   copyToClipboard,
-} from "./utils";
-import TableShimmer from "./TableShimmer";
+} from "./utils.js";
+import TableShimmer from "./TableShimmer.js";
 import {
   DEFAULT_TABLE_CLASSES,
   UNSTYLED_TABLE_CLASSES,
-} from "./constants";
+} from "./constants.js";
 import {
   PinIcon,
   SortAscIcon,
@@ -53,7 +53,7 @@ import {
   DragHandleIcon,
   SearchIcon,
   FilterIcon as DefaultFilterIcon,
-} from "./icons";
+} from "./icons.js";
 
 const EMPTY_DATA: unknown[] = [];
 
@@ -2397,8 +2397,8 @@ function TableInner<TData>(
 
 import { Fragment as __Fragment } from "react";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 /** Bounds and step for keyboard column resizing (SC 2.5.7). */
 const COLUMN_MIN_WIDTH = 40;
 const COLUMN_MAX_WIDTH = 800;

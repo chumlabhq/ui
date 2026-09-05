@@ -2,8 +2,8 @@
 import { describe, expect, it, afterEach, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { useRef } from "react";
-import MenuSurface from "../MenuSurface";
-import { setReducedMotion } from "../../../test/matchMedia";
+import MenuSurface from "../MenuSurface.js";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 afterEach(cleanup);
 beforeEach(() => setReducedMotion(false));

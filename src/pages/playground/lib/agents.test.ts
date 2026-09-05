@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { PipelineEvent } from "../types";
+import type { PipelineEvent } from "../types.js";
 import {
   AGENTS,
   AGENT_ORDER,
@@ -8,7 +8,7 @@ import {
   reduceAgentRun,
   initialAgentRun,
   stageToAgent,
-} from "./agents";
+} from "./agents.js";
 
 const ev = (
   stage: PipelineEvent["stage"],

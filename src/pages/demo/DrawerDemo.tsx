@@ -5,8 +5,8 @@ import {
   DrawerBody,
   DrawerFooter,
   DrawerCloseButton,
-} from "../../components/Drawer";
-import { useTheme } from "./ThemeContext";
+} from "../../components/Drawer/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -16,7 +16,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

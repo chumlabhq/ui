@@ -1,7 +1,7 @@
-import { InternationalPhoneInput } from "../../components/InternationalPhoneInput";
+import { InternationalPhoneInput } from "../../components/InternationalPhoneInput/index.js";
 import { fireEvent } from "@testing-library/react";
-import { tick } from "./_act";
-import type { Fixtures } from "./types";
+import { tick } from "./_act.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof InternationalPhoneInput> = [
   { name: "default", props: {} },

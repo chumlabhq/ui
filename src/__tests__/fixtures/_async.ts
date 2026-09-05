@@ -1,5 +1,5 @@
 import { fireEvent } from "@testing-library/react";
-import { tick } from "./_act";
+import { tick } from "./_act.js";
 
 /**
  * Helpers for the dropdown family's async option sources.

@@ -17,12 +17,12 @@
  * stops being an error, which is what makes the unions a gate rather than a
  * convention. This file is typechecked, never executed.
  */
-import { Dropdown } from "../../components/Dropdown";
-import { MultiSelectDropdown } from "../../components/MultiSelectDropdown";
-import { SearchableDropdown } from "../../components/SearchableDropdown";
-import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown";
-import { CascadingDropdown } from "../../components/CascadingDropdown";
-import { Tooltip } from "../../components/Tooltip";
+import { Dropdown } from "../../components/Dropdown/index.js";
+import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
+import { SearchableDropdown } from "../../components/SearchableDropdown/index.js";
+import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
+import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
+import { Tooltip } from "../../components/Tooltip/index.js";
 
 const OPTIONS = [{ value: "a", label: "A" }];
 const load = async () => OPTIONS;

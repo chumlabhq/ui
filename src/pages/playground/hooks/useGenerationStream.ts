@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import type { PipelineEvent, PlaygroundGateInfo } from "../types";
+import type { PipelineEvent, PlaygroundGateInfo } from "../types.js";
 
 export type GenerationStreamStatus =
   | "idle"

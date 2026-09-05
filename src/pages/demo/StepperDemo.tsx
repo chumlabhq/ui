@@ -1,11 +1,11 @@
 import { useState, useRef } from "react";
-import { Stepper } from "../../components/Stepper";
+import { Stepper } from "../../components/Stepper/index.js";
 import type {
   Step,
   StepStatus,
   StepTooltipConfig,
-} from "../../components/Stepper";
-import { useTheme } from "./ThemeContext";
+} from "../../components/Stepper/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -15,7 +15,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

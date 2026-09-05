@@ -1,8 +1,8 @@
 import { fireEvent } from "@testing-library/react";
-import { tick } from "./_act";
-import { DatePicker } from "../../components/DatePicker";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { tick } from "./_act.js";
+import { DatePicker } from "../../components/DatePicker/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const D = new Date(2026, 0, 15);
 

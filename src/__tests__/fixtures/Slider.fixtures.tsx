@@ -1,7 +1,7 @@
-import { Slider } from "../../components/Slider";
+import { Slider } from "../../components/Slider/index.js";
 import { fireEvent } from "@testing-library/react";
-import { tick } from "./_act";
-import type { Fixtures } from "./types";
+import { tick } from "./_act.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof Slider> = [
   { name: "default", props: {} },

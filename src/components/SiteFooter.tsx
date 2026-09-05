@@ -1,10 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useBuyMeCoffee } from "./useBuyMeCoffee";
-import { useTheme } from "../contexts/ThemeContext";
-import Reveal from "./Reveal/Reveal";
+import { useBuyMeCoffee } from "./useBuyMeCoffee.js";
+import { useTheme } from "../contexts/ThemeContext.js";
+import Reveal from "./Reveal/Reveal.js";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
-import { PLAYGROUND_ENABLED } from "../lib/flags";
+import { PLAYGROUND_ENABLED } from "../lib/flags.js";
 
 /**
  * Deep-space site footer. Four-row layout:

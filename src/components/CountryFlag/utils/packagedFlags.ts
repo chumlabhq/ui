@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FLAG_MODULES } from "../flags";
+import { FLAG_MODULES } from "../flags/index.js";
 
 // A chunk that fails to load resolves to this instead of rejecting, so the
 // browser fires a real error event on the <img> and the existing onError /

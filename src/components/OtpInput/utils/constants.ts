@@ -1,5 +1,5 @@
-import type { OtpInputClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { OtpInputClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
   root: "",

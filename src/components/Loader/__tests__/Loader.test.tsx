@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import CircularLoader from "../CircularLoader";
-import LinearLoader from "../LinearLoader";
-import DotLoader from "../DotLoader";
-import PulseLoader from "../PulseLoader";
+import CircularLoader from "../CircularLoader.js";
+import LinearLoader from "../LinearLoader.js";
+import DotLoader from "../DotLoader.js";
+import PulseLoader from "../PulseLoader.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

@@ -1,5 +1,5 @@
 // AI Knowledge: See SLIDER.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as Slider } from "./Slider";
+export { default as Slider } from "./Slider.js";
 export type {
   SliderProps,
   SliderClasses,
@@ -7,5 +7,5 @@ export type {
   SliderMark,
   SliderThumbRenderProps,
   SliderMarkRenderProps,
-} from "./utils/types";
-export { DEFAULT_SLIDER_CLASSES, UNSTYLED_SLIDER_CLASSES } from "./utils/constants";
+} from "./utils/types.js";
+export { DEFAULT_SLIDER_CLASSES, UNSTYLED_SLIDER_CLASSES } from "./utils/constants.js";

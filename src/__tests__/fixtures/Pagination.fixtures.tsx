@@ -1,7 +1,7 @@
-import { Pagination } from "../../components/Pagination";
+import { Pagination } from "../../components/Pagination/index.js";
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 /**
  * `defaultValue`, not `value`: these fixtures are clicked in e2e, and a

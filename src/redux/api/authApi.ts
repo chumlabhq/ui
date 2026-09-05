@@ -1,4 +1,4 @@
-import { baseApi } from "./baseApi";
+import { baseApi } from "./baseApi.js";
 
 export interface AuthUser {
   _id: string;

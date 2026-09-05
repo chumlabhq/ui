@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { isBrowser } from "./isBrowser";
-import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
+import { isBrowser } from "./isBrowser.js";
+import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect.js";
 import {
   computeAnchoredPosition,
   readViewport,
   type AnchoredPosition,
   type AnchoredPositionOptions,
-} from "./anchoredPosition";
+} from "./anchoredPosition.js";
 
 export type {
   AnchoredPosition,
   AnchoredPositionOptions,
   AnchoredSide,
-} from "./anchoredPosition";
+} from "./anchoredPosition.js";
 
 /**
  * Keeps a floating element positioned against its trigger.

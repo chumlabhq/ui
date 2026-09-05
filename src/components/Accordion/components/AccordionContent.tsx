@@ -1,9 +1,9 @@
 import { forwardRef, useRef, useEffect, useState } from "react";
-import { useAccordionConfig, useAccordionItemContext } from "../utils/context";
-import { Slot } from "../../../utils/Slot";
-import { mergeRefs } from "../../../utils/mergeRefs";
-import type { AccordionContentProps } from "../utils/types";
-import { cn } from "../../../utils/scopedCn";
+import { useAccordionConfig, useAccordionItemContext } from "../utils/context.js";
+import { Slot } from "../../../utils/Slot.js";
+import { mergeRefs } from "../../../utils/mergeRefs.js";
+import type { AccordionContentProps } from "../utils/types.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
   (

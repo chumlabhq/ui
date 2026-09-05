@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { BLOG_POSTS } from "./blog/blogData";
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import AIPlaygroundSection from "./playground/AIPlaygroundSection";
-import { SiteHeader } from "../components/SiteHeader";
-import { SiteFooter } from "../components/SiteFooter";
-import { WhyChumlabSection } from "../components/WhyChumlabSection";
-import { GetStartedSection } from "../components/GetStartedSection";
-import { CatalogSection } from "../components/CatalogSection";
-import { ChumlabComparisonSection } from "../components/ChumlabComparisonSection";
-import Reveal from "../components/Reveal/Reveal";
-import { Button } from "../components/ui";
-import { PLAYGROUND_ENABLED } from "../lib/flags";
+import { BLOG_POSTS } from "./blog/blogData.js";
+import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
+import AIPlaygroundSection from "./playground/AIPlaygroundSection.js";
+import { SiteHeader } from "../components/SiteHeader.js";
+import { SiteFooter } from "../components/SiteFooter.js";
+import { WhyChumlabSection } from "../components/WhyChumlabSection.js";
+import { GetStartedSection } from "../components/GetStartedSection.js";
+import { CatalogSection } from "../components/CatalogSection.js";
+import { ChumlabComparisonSection } from "../components/ChumlabComparisonSection.js";
+import Reveal from "../components/Reveal/Reveal.js";
+import { Button } from "../components/ui/index.js";
+import { PLAYGROUND_ENABLED } from "../lib/flags.js";
 
 // ─── FAQ preview (subset of full FAQ data) ─────────────────────────────────
 

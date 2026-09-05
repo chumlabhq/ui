@@ -5,9 +5,9 @@ import type {
   RadioGroupProps,
   RadioGroupClasses,
   RadioButtonSize,
-} from "./utils/types";
+} from "./utils/types.js";
 import type { FocusEvent } from "react";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import {
   SIZE_MAP,
   ICON_SIZE_MAP,
@@ -15,11 +15,11 @@ import {
   UNSTYLED_RADIO_CLASSES,
   DEFAULT_RADIO_GROUP_CLASSES,
   UNSTYLED_RADIO_GROUP_CLASSES,
-} from "./utils/constants";
-import { useControllableState } from "../../utils/useControllableState";
-import { cn } from "../../utils/scopedCn";
+} from "./utils/constants.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { cn } from "../../utils/scopedCn.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 // ─── Context ──────────────────────────────────────────────────────────────────
 
 interface RadioGroupContextValue {

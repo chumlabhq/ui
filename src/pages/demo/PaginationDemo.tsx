@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Pagination } from "../../components/Pagination";
-import { useTheme } from "./ThemeContext";
+import { Pagination } from "../../components/Pagination/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -11,7 +11,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

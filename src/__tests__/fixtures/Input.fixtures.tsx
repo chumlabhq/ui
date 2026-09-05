@@ -1,5 +1,5 @@
-import { Input } from "../../components/Input";
-import type { Fixtures } from "./types";
+import { Input } from "../../components/Input/index.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof Input> = [
   { name: "default", props: {} },

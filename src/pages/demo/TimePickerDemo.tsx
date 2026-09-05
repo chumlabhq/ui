@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { TimePicker } from "../../components/TimePicker";
-import type { TimePickerClasses } from "../../components/TimePicker";
-import { useTheme } from "./ThemeContext";
+import { TimePicker } from "../../components/TimePicker/index.js";
+import type { TimePickerClasses } from "../../components/TimePicker/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -12,7 +12,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

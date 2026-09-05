@@ -30,9 +30,7 @@ import {
   cpSync,
   existsSync,
   mkdirSync,
-  closeSync,
   mkdtempSync,
-  openSync,
   readFileSync,
   readdirSync,
   rmSync,
@@ -41,6 +39,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { areTheTypesWrong, publint } from "./assert-packaging.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TEMPLATES = join(ROOT, "scripts", "consumers");
@@ -59,6 +58,19 @@ const TARGETS = [
   { name: "next-app", showcase: ".", output: ".next", ssr: true, react: 19 },
   { name: "next-pages", showcase: ".", output: ".next", ssr: true, react: 19 },
   { name: "react-router7", showcase: "app", output: "build", ssr: true, react: 19 },
+  // Neither optional peer installed. `peerDependenciesMeta` marks
+  // @tanstack/react-table and date-fns optional; this is the target that finds
+  // out whether that is true, since a consumer taking the manifest at its word
+  // and installing neither is the case nothing else here covers.
+  {
+    name: "vite-no-optional-peers",
+    showcase: "src",
+    output: "dist",
+    ssr: false,
+    react: 19,
+    app: "MinimalShowcase.tsx",
+    absentPeers: ["@tanstack/react-table", "date-fns"],
+  },
 ];
 
 const args = process.argv.slice(2);
@@ -130,91 +142,13 @@ function repack(tarball, into, suffix, mutate) {
   return planted;
 }
 
-// ── the packaging checks ──────────────────────────────────────────────────
-
-/**
- * `--strict`, because publint's default exit code ignores warnings, and its
- * warnings are the interesting ones: the first run of this gate reported the
- * root `types` condition resolving as ESM for `require` consumers and still
- * exited 0.
- */
-function publint(tarball) {
-  const { status, output } = run("npx", ["publint", "--strict", tarball], { cwd: ROOT });
-  return { ok: status === 0, output };
-}
-
-/**
- * `attw` under every resolution a consumer can pick. Types that resolve for
- * `bundler` and not `node16` are the common shipping failure, and they are
- * invisible to a repo that only ever typechecks itself.
- */
-function areTheTypesWrong(tarball, into) {
-  // Through a file descriptor, not a pipe. attw calls `process.exit` while its
-  // JSON is still draining, and on a pipe that loses everything past 64 KB —
-  // which for this package is 250 of its 282 findings. A file write is
-  // synchronous, so nothing is dropped.
-  const jsonPath = join(into, "attw.json");
-  const handle = openSync(jsonPath, "w");
-  const { status } = run(
-    "npx",
-    [
-      "attw",
-      tarball,
-      // A stylesheet has no type declarations and never will. attw reports both
-      // CSS entrypoints as unresolvable under all four resolutions, which is
-      // 8 findings about the wrong thing sitting on top of the real ones.
-      "--exclude-entrypoints",
-      "./styles.css",
-      "./tokens.css",
-      "--format",
-      "json",
-    ],
-    { cwd: ROOT, stdio: ["ignore", handle, "pipe"] },
-  );
-  closeSync(handle);
-  const raw = readFileSync(jsonPath, "utf8");
-
-  let problems;
-  try {
-    problems = JSON.parse(raw).analysis.problems;
-  } catch {
-    return { ok: false, summary: tail(raw, 30), status };
-  }
-
-  // Grouped, not listed. 250 InternalResolutionErrors are one defect — the
-  // declaration files import without extensions — and printing each one buries
-  // the second defect underneath it.
-  const groups = new Map();
-  for (const problem of problems) {
-    // Only some kinds name a resolution. FalseESM does not — it is a property
-    // of the declaration file, and attw reports it once per entrypoint — so
-    // inventing "every resolution" for it would state something untrue.
-    const key = problem.resolutionOption ? `${problem.kind} under ${problem.resolutionOption}` : problem.kind;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(problem.moduleSpecifier ?? problem.typesFileName ?? "");
-  }
-
-  const summary = [...groups]
-    .map(([key, examples]) => {
-      const distinct = [...new Set(examples)];
-      return (
-        `      ${String(examples.length).padStart(4)}  ${key}\n` +
-        distinct.slice(0, 3).map((e) => `            e.g. ${e}`).join("\n") +
-        (distinct.length > 3 ? `\n            ...and ${distinct.length - 3} more` : "")
-      );
-    })
-    .join("\n");
-
-  return { ok: status === 0 && problems.length === 0, count: problems.length, summary, status };
-}
-
 // ── one consumer ──────────────────────────────────────────────────────────
 
 function scaffold(target, tarball, into) {
   const dir = join(into, target.name);
   cpSync(join(TEMPLATES, target.name), dir, { recursive: true });
   mkdirSync(join(dir, target.showcase), { recursive: true });
-  cpSync(join(TEMPLATES, "_app", "Showcase.tsx"), join(dir, target.showcase, "Showcase.tsx"));
+  cpSync(join(TEMPLATES, "_app", target.app ?? "Showcase.tsx"), join(dir, target.showcase, "Showcase.tsx"));
 
   const manifest = join(dir, "package.json");
   writeFileSync(manifest, readFileSync(manifest, "utf8").replace("__TARBALL__", tarball), "utf8");
@@ -265,7 +199,18 @@ function verifyConsumer(target, tarball, into) {
     });
   }
 
-  const built = steps.at(-1)?.label === "build" && steps.at(-1).ok;
+  // An optional peer npm resolved anyway proves nothing about it being
+  // optional, so its absence is asserted rather than assumed.
+  if (steps[0].ok && target.absentPeers) {
+    const present = target.absentPeers.filter((name) => existsSync(join(dir, "node_modules", name)));
+    steps.splice(1, 0, {
+      label: "peers absent",
+      ok: present.length === 0,
+      output: `${present.join(", ") || "neither"} installed; expected neither of ${target.absentPeers.join(", ")}`,
+    });
+  }
+
+  const built = steps.some((step) => step.label === "build" && step.ok);
   if (built) {
     const output = join(dir, target.output);
 
@@ -360,7 +305,7 @@ function selfCheck(tarball, into) {
   const brokenExports = repack(tarball, into, "exports", (pkg) => {
     const manifest = join(pkg, "package.json");
     const json = JSON.parse(readFileSync(manifest, "utf8"));
-    json.exports["./button"].import = "./dist/components/Button/does-not-exist.js";
+    json.exports["./button"].import.default = "./dist/components/Button/does-not-exist.js";
     writeFileSync(manifest, `${JSON.stringify(json, null, 2)}\n`, "utf8");
   });
   const planted = verifyConsumer(TARGETS[0], brokenExports, join(into, "plant-exports"));
@@ -430,7 +375,11 @@ try {
 
     const packaging = [
       { name: "publint", ok: lint.ok, output: lint.output },
-      { name: `attw (${types.count ?? "?"} problem(s))`, ok: types.ok, detail: types.summary },
+      {
+        name: `attw (${types.count ?? "?"} problem(s) across ${types.entrypoints ?? "?"} entrypoints)`,
+        ok: types.ok,
+        detail: types.summary,
+      },
     ];
 
     const results = [];

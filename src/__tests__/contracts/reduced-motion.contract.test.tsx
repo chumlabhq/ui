@@ -14,10 +14,10 @@
  */
 import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
-import { COMPONENTS } from "./registry";
-import { fixturesFor } from "../fixtures";
-import { isMotion } from "../../utils/classLayers";
-import { setReducedMotion } from "../../test/matchMedia";
+import { COMPONENTS } from "./registry.js";
+import { fixturesFor } from "../fixtures/index.js";
+import { isMotion } from "../../utils/classLayers.js";
+import { setReducedMotion } from "../../test/matchMedia.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
 
 /**

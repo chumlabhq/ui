@@ -1,5 +1,5 @@
-import type { CountryFlagSize, CountryFlagClasses, CountryFlagGroupClasses , CountryFlagShimmerClasses} from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { CountryFlagSize, CountryFlagClasses, CountryFlagGroupClasses , CountryFlagShimmerClasses} from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 // Opt-in CDN for consumers who would rather serve flags over the network than
 // use the packaged SVGs: <CountryFlag basePath={CHUMLAB_FLAG_CDN} />. Not a

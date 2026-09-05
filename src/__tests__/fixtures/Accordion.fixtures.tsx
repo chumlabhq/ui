@@ -1,9 +1,9 @@
-import { Accordion } from "../../components/Accordion";
-import AccordionItem from "../../components/Accordion/components/AccordionItem";
-import AccordionTrigger from "../../components/Accordion/components/AccordionTrigger";
-import AccordionContent from "../../components/Accordion/components/AccordionContent";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { Accordion } from "../../components/Accordion/index.js";
+import AccordionItem from "../../components/Accordion/components/AccordionItem.js";
+import AccordionTrigger from "../../components/Accordion/components/AccordionTrigger.js";
+import AccordionContent from "../../components/Accordion/components/AccordionContent.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 /** The parts under `item` only exist when real items are nested inside. */
 const items = (

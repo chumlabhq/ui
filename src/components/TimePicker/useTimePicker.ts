@@ -1,12 +1,12 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
-import type { UseTimePickerProps, UseTimePickerReturn } from "./utils/types";
-import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
+import type { UseTimePickerProps, UseTimePickerReturn } from "./utils/types.js";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 import {
   generateTimeOptions,
   parseTimeInput,
   formatTimeValue,
   clampMinuteStep,
-} from "./utils";
+} from "./utils.js";
 
 function computeInputValue(
   value: string | null | undefined,

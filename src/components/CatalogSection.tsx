@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { CountryFlag } from "./CountryFlag";
-import { createLibphonenumberValidator } from "./InternationalPhoneInput/validators";
-import Reveal from "./Reveal/Reveal";
-import { Button } from "./ui";
+import { CountryFlag } from "./CountryFlag/index.js";
+import { createLibphonenumberValidator } from "./InternationalPhoneInput/validators/index.js";
+import Reveal from "./Reveal/Reveal.js";
+import { Button } from "./ui/index.js";
 
 // Real per-country validation (any valid line type) for the phone preview.
 const previewPhoneValidator = createLibphonenumberValidator();

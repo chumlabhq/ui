@@ -26,7 +26,7 @@ import {
   addDays,
 } from "date-fns";
 import type { Locale } from "date-fns";
-import type { CalendarDay, CalendarMonth, DateRange, DateValue, DisabledDateOptions, DateMarker } from "./utils/types";
+import type { CalendarDay, CalendarMonth, DateRange, DateValue, DisabledDateOptions, DateMarker } from "./utils/types.js";
 
 export function toDateString(date: Date): string {
   return format(date, "yyyy-MM-dd");

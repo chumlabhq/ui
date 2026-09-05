@@ -8,9 +8,9 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { LAYERS, OverlayLayerContext } from "../../utils/layers";
-import type { DrawerProps, DrawerClasses } from "./utils/types";
-import { cycleTabWithin } from "../../utils/focusUtils";
+import { LAYERS, OverlayLayerContext } from "../../utils/layers.js";
+import type { DrawerProps, DrawerClasses } from "./utils/types.js";
+import { cycleTabWithin } from "../../utils/focusUtils.js";
 import {
   getDirectionStyles,
   getFocusableElements,
@@ -23,8 +23,8 @@ import {
   isTopDrawer,
   acquireScrollLock,
   releaseScrollLock,
-} from "./utils/helpers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+} from "./utils/helpers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import {
   DEFAULT_DRAWER_CLASSES,
   UNSTYLED_DRAWER_CLASSES,
@@ -38,15 +38,15 @@ import {
   DEFAULT_SNAP_POINT_INDEX,
   SWIPE_DEADZONE,
   VELOCITY_THRESHOLD,
-} from "./utils/constants";
-import { DrawerContext } from "./utils/context";
-import { useControllableState } from "../../utils/useControllableState";
-import { cn } from "../../utils/scopedCn";
-import { mergeRefs } from "../../utils/mergeRefs";
+} from "./utils/constants.js";
+import { DrawerContext } from "./utils/context.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { cn } from "../../utils/scopedCn.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
 
-import { isBrowser } from "../../utils/isBrowser";
+import { isBrowser } from "../../utils/isBrowser.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: Drawer
  *

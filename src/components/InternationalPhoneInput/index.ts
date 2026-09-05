@@ -1,5 +1,5 @@
 // AI Knowledge: See INTERNATIONALPHONEINPUT.ai.md in this directory for full usage guide, props, styling, and patterns.
-export { default as InternationalPhoneInput } from "./InternationalPhoneInput";
+export { default as InternationalPhoneInput } from "./InternationalPhoneInput.js";
 export type {
   InternationalPhoneInputProps,
   InternationalPhoneInputClasses,
@@ -11,7 +11,7 @@ export type {
   CountryOptionRenderProps,
   PhoneLengthRule,
   PhoneFormatPattern,
-} from "./utils/types";
+} from "./utils/types.js";
 export {
   DEFAULT_COUNTRIES,
   DEFAULT_PREFERRED_COUNTRIES,
@@ -19,7 +19,7 @@ export {
   UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES,
   PHONE_LENGTH_RULES,
   PHONE_FORMATTING_PATTERNS,
-} from "./constants";
+} from "./constants.js";
 export {
   formatPhoneNumber,
   validatePhoneNumber,
@@ -30,4 +30,4 @@ export {
   parseInternationalNumber,
   formatForCopy,
   computeCursorPosition,
-} from "./utils";
+} from "./utils.js";

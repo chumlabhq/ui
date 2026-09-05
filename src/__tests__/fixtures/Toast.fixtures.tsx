@@ -1,6 +1,6 @@
-import Toast from "../../components/Toast/Toast";
-import { Dismissable } from "./_harness";
-import type { Fixtures } from "./types";
+import Toast from "../../components/Toast/Toast.js";
+import { Dismissable } from "./_harness.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof Toast> = [
   { name: "default", props: { id: "t1", onRemove: () => {}, message: "Saved" } },

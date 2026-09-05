@@ -6,7 +6,7 @@
  * demo files don't need to change.
  */
 
-import { useTheme as useGlobalTheme } from "../../contexts/ThemeContext";
+import { useTheme as useGlobalTheme } from "../../contexts/ThemeContext.js";
 
 export interface ThemeContextType {
   isDarkMode: boolean;

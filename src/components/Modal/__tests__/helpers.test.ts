@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { pushModal, popModal, isTopModal } from "../utils/helpers";
+import { pushModal, popModal, isTopModal } from "../utils/helpers.js";
 
 // ─── pushModal / popModal / isTopModal ───────────────────────────────────────
 // The modal stack is a module-level singleton so we manage state carefully.

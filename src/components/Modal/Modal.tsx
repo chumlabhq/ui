@@ -16,23 +16,23 @@ import type {
   ModalBodyProps,
   ModalFooterProps,
   ModalContextValue,
-} from "./utils/types";
-import { CloseIcon } from "./icons";
-import { ModalContext } from "./ModalContext";
-import { LAYERS, LAYER_STEP, OverlayLayerContext } from "../../utils/layers";
-import { mergeRefs } from "../../utils/mergeRefs";
-import { useControllableState } from "../../utils/useControllableState";
-import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
-import { isBrowser } from "../../utils/isBrowser";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { cycleTabWithin } from "../../utils/focusUtils";
+} from "./utils/types.js";
+import { CloseIcon } from "./icons.js";
+import { ModalContext } from "./ModalContext.js";
+import { LAYERS, LAYER_STEP, OverlayLayerContext } from "../../utils/layers.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock.js";
+import { isBrowser } from "../../utils/isBrowser.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { cycleTabWithin } from "../../utils/focusUtils.js";
 import {
   DEFAULT_MODAL_CLASSES,
   UNSTYLED_MODAL_CLASSES,
-} from "./utils/constants";
-import { pushModal, popModal, isTopModal } from "./utils/helpers";
+} from "./utils/constants.js";
+import { pushModal, popModal, isTopModal } from "./utils/helpers.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 // ADR: one scale. These were 9999 / 10 hardcoded here.
 const BASE_Z_INDEX = LAYERS.overlay;
 const Z_INDEX_INCREMENT = LAYER_STEP;

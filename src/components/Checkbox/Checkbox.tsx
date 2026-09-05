@@ -1,20 +1,20 @@
 import { forwardRef, useId, useEffect, useRef, useMemo, useCallback } from "react";
-import type { CheckboxProps, CheckboxClasses } from "./utils/types";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import type { CheckboxProps, CheckboxClasses } from "./utils/types.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import {
   SIZE_MAP,
   ICON_SIZE_MAP,
   SHAPE_CLASS_MAP,
   DEFAULT_CHECKBOX_CLASSES,
   UNSTYLED_CHECKBOX_CLASSES,
-} from "./utils/constants";
-import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons";
-import { useControllableState } from "../../utils/useControllableState";
-import { cn } from "../../utils/scopedCn";
-import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
-import { mergeRefs } from "../../utils/mergeRefs";
+} from "./utils/constants.js";
+import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: Checkbox
  *

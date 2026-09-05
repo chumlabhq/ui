@@ -1,5 +1,5 @@
-import type { MultiSelectSearchableDropdownClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { MultiSelectSearchableDropdownClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelectSearchableDropdownClasses> =
   {

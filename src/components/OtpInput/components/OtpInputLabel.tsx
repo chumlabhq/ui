@@ -1,4 +1,4 @@
-import type { OtpInputLabelProps } from "../utils/types";
+import type { OtpInputLabelProps } from "../utils/types.js";
 
 const OtpInputLabel = ({
   label,

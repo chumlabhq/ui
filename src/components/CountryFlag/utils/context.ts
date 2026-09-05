@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { CountryFlagSize } from "./types";
+import type { CountryFlagSize } from "./types.js";
 
 export interface CountryFlagGroupContextValue {
   itemClassName?: string;

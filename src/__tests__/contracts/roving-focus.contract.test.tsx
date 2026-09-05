@@ -21,10 +21,10 @@
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
 import { render, cleanup, fireEvent, act } from "@testing-library/react";
-import { DatePicker } from "../../components/DatePicker";
-import { CascadingDropdown } from "../../components/CascadingDropdown";
+import { DatePicker } from "../../components/DatePicker/index.js";
+import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
 
-import { setReducedMotion } from "../../test/matchMedia";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);

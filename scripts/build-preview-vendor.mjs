@@ -87,7 +87,7 @@ for (const specifier of NPM_SPECIFIERS) {
 // @chumlab/ui entries come straight from its exports map so new subpaths are
 // picked up without touching this script. dist files are already ESM.
 for (const [key, value] of Object.entries(pkg.exports)) {
-  const target = typeof value === "object" ? value.import : value;
+  const target = typeof value === "object" ? value.import.default : value;
   if (!target || !target.endsWith(".js")) continue;
   const specifier = key === "." ? "@chumlab/ui" : `@chumlab/ui/${key.slice(2)}`;
   const out = key === "." ? "chumlab-ui/index" : `chumlab-ui/${key.slice(2)}`;

@@ -1,6 +1,6 @@
-import { Switch } from "../../components/Switch";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { Switch } from "../../components/Switch/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof Switch> = [
   { name: "default", props: {} },

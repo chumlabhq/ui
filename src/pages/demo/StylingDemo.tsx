@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Section, CodeBlock, DemoWrapper } from "./components";
-import { Dropdown } from "../../components/Dropdown";
-import { Button } from "../../components/Button";
-import { Switch } from "../../components/Switch";
-import { Checkbox } from "../../components/Checkbox";
+import { Section, CodeBlock, DemoWrapper } from "./components/index.js";
+import { Dropdown } from "../../components/Dropdown/index.js";
+import { Button } from "../../components/Button/index.js";
+import { Switch } from "../../components/Switch/index.js";
+import { Checkbox } from "../../components/Checkbox/index.js";
 
 const StylingDemo = () => {
   return (

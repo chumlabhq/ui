@@ -1,4 +1,4 @@
-import type { VerifyError } from "../types";
+import type { VerifyError } from "../types.js";
 
 // Driven entirely by the frozen verify SSE events (round/pass/fixing/
 // exhausted/errors) plus the client-side render gate - no parallel channel.

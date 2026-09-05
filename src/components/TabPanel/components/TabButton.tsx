@@ -1,7 +1,7 @@
 import { memo } from "react";
-import type { Tab } from "../utils/types";
-import { useTabPanelContext } from "../utils/context";
-import { cn } from "../../../utils/scopedCn";
+import type { Tab } from "../utils/types.js";
+import { useTabPanelContext } from "../utils/context.js";
+import { cn } from "../../../utils/scopedCn.js";
 
 interface TabButtonProps {
   tab: Tab;

@@ -1,8 +1,8 @@
-import { SearchableDropdown } from "../../components/SearchableDropdown";
+import { SearchableDropdown } from "../../components/SearchableDropdown/index.js";
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
-import { OPTIONS } from "./_data";
-import { neverResolves, resolvesTo, settleAsync } from "./_async";
+import type { Fixtures } from "./types.js";
+import { OPTIONS } from "./_data.js";
+import { neverResolves, resolvesTo, settleAsync } from "./_async.js";
 
 
 const fixtures: Fixtures<typeof SearchableDropdown> = [

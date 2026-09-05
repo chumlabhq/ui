@@ -5,15 +5,15 @@ import React, {
   useRef,
   useMemo,
 } from "react";
-import type { OtpInputProps, OtpInputClasses } from "./utils/types";
-import { DEFAULT_OTPINPUT_CLASSES, UNSTYLED_OTPINPUT_CLASSES } from "./utils/constants";
-import { OtpInputLabel } from "./components/OtpInputLabel";
-import { cn } from "../../utils/scopedCn";
-import { mergeRefs } from "../../utils/mergeRefs";
-import { useControllableState } from "../../utils/useControllableState";
+import type { OtpInputProps, OtpInputClasses } from "./utils/types.js";
+import { DEFAULT_OTPINPUT_CLASSES, UNSTYLED_OTPINPUT_CLASSES } from "./utils/constants.js";
+import { OtpInputLabel } from "./components/OtpInputLabel.js";
+import { cn } from "../../utils/scopedCn.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
+import { useControllableState } from "../../utils/useControllableState.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 export { OtpInputLabel };
 
 /**

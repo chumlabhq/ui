@@ -1,27 +1,27 @@
 import { useRef, useEffect, useId, forwardRef, useCallback, useState, useMemo, memo } from "react";
-import { useLayer } from "../../utils/layers";
+import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, ReactNode } from "react";
-import type { MultiSelectDropdownProps, MultiSelectDropdownClasses } from "./utils/types";
-import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
-import { scrollOptionIntoView, isBrowser } from "./utils/helpers";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
-import { ChevronDownIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
-import MultiSelectDropdownShimmer from "./components/MultiSelectDropdownShimmer";
-import { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption";
-import { SelectedChip } from "./components/SelectedChip";
-import { cn } from "../../utils/scopedCn";
+import type { MultiSelectDropdownProps, MultiSelectDropdownClasses } from "./utils/types.js";
+import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown.js";
+import { scrollOptionIntoView, isBrowser } from "./utils/helpers.js";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
+import { ChevronDownIcon, ClearIcon as ClearIconDefault } from "./utils/icons.js";
+import MultiSelectDropdownShimmer from "./components/MultiSelectDropdownShimmer.js";
+import { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption.js";
+import { SelectedChip } from "./components/SelectedChip.js";
+import { cn } from "../../utils/scopedCn.js";
 import {
   DEFAULT_MULTISELECTDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
-} from "./utils/constants";
-import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
-import { mergeRefs } from "../../utils/mergeRefs";
+} from "./utils/constants.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { comboboxNameProps } from "../../utils/comboboxName";
-import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
-import MenuSurface from "../../utils/menu/MenuSurface";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { comboboxNameProps } from "../../utils/comboboxName.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
 const MAX_STATUS_LABELS = 5;
 
 interface MultiSelectDropdownContentProps {

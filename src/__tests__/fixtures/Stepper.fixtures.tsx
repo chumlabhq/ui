@@ -1,7 +1,7 @@
-import { Stepper } from "../../components/Stepper";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
-import { STEPS } from "./_data";
+import { Stepper } from "../../components/Stepper/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
+import { STEPS } from "./_data.js";
 
 const fixtures: Fixtures<typeof Stepper> = [
   { name: "horizontal-numbered", props: { steps: STEPS, value: 1, showDescriptions: true } },

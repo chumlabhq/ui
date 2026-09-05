@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useCascadingDropdown } from "../utils/useCascadingDropdown";
-import type { CascadingOption } from "../utils/types";
+import { useCascadingDropdown } from "../utils/useCascadingDropdown.js";
+import type { CascadingOption } from "../utils/types.js";
 
 // ─── Shared fixtures ──────────────────────────────────────────────────────────
 

@@ -1,5 +1,5 @@
-import { DotLoader } from "../../components/Loader";
-import type { Fixtures } from "./types";
+import { DotLoader } from "../../components/Loader/index.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof DotLoader> = [
   { name: "default", props: {} },

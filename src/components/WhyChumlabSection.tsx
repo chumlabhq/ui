@@ -1,4 +1,4 @@
-import Reveal from "./Reveal/Reveal";
+import Reveal from "./Reveal/Reveal.js";
 
 /**
  * Six reasons teams choose Chumlab. Hairline-grid card layout, filled icons

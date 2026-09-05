@@ -55,7 +55,12 @@ const exp = pkg.exports?.["./phone-validators"];
 if (!exp) {
   fail("package.json is missing the ./phone-validators export");
 } else {
-  for (const target of [exp.types, exp.import, exp.require]) {
+  // Every leaf of the condition tree, not three fixed keys: the entry is
+  // `{ import: { types, default }, require: { types, default } }` since the
+  // `.d.cts` split, and reading `exp.types` from that yields undefined.
+  const targets = (node) =>
+    typeof node === "string" ? [node] : Object.values(node).flatMap(targets);
+  for (const target of targets(exp)) {
     const abs = resolve(dist, "..", target);
     if (!existsSync(abs)) fail(`./phone-validators export target missing on disk: ${target}`);
   }

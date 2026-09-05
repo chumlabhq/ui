@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { createLibphonenumberValidator } from "../validators";
-import type { PhoneNumberData } from "../utils/types";
+import { createLibphonenumberValidator } from "../validators/index.js";
+import type { PhoneNumberData } from "../utils/types.js";
 
 const data = (fullNumber: string, extra: Partial<PhoneNumberData> = {}): PhoneNumberData => ({
   countryCode: "US",

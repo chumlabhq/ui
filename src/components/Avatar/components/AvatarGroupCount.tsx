@@ -1,16 +1,16 @@
 import { forwardRef, useMemo } from "react";
-import type { AvatarGroupCountProps, AvatarTooltipConfig } from "../utils/types";
-import { Tooltip } from "../../Tooltip";
-import { Slot } from "../../../utils/Slot";
-import { DEFAULT_SIZE, DEFAULT_SHAPE } from "../utils/constants";
+import type { AvatarGroupCountProps, AvatarTooltipConfig } from "../utils/types.js";
+import { Tooltip } from "../../Tooltip/index.js";
+import { Slot } from "../../../utils/Slot.js";
+import { DEFAULT_SIZE, DEFAULT_SHAPE } from "../utils/constants.js";
 import {
   getNumericSize,
   getFontSize,
   getBorderRadius,
   parseBorder,
-} from "../utils/helpers";
-import { cn } from "../../../utils/scopedCn";
-import { isTooltipConfig } from "../../../utils/isTooltipConfig";
+} from "../utils/helpers.js";
+import { cn } from "../../../utils/scopedCn.js";
+import { isTooltipConfig } from "../../../utils/isTooltipConfig.js";
 
 const variantClassNames = {
   solid:

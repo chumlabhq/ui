@@ -4,8 +4,8 @@ import {
   postToPreview,
   subscribeToPreview,
   type PreviewTheme,
-} from "../../../lib/preview/runtime";
-import type { VerifyError } from "../types";
+} from "../../../lib/preview/runtime.js";
+import type { VerifyError } from "../types.js";
 
 interface PreviewFrameProps {
   code: string | null;

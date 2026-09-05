@@ -1,5 +1,5 @@
-import type { DeliverGates, PipelineEvent } from "../types";
-import type { RenderGateStatus } from "../components/VerifyIndicator";
+import type { DeliverGates, PipelineEvent } from "../types.js";
+import type { RenderGateStatus } from "../components/VerifyIndicator.js";
 
 // Six pipeline gates surfaced as lamps. Five stream over SSE (verify substeps +
 // the qa stage); render is a client-side probe (renderGate). The reducer here

@@ -1,7 +1,7 @@
 import type { Ref } from "react";
-import { mergeRefs } from "../../../utils/mergeRefs";
-import { INTERACTIVE_TAGS, INTERACTIVE_QUERY } from "./constants";
-import { isBrowser } from "../../../utils/isBrowser";
+import { mergeRefs } from "../../../utils/mergeRefs.js";
+import { INTERACTIVE_TAGS, INTERACTIVE_QUERY } from "./constants.js";
+import { isBrowser } from "../../../utils/isBrowser.js";
 
 export function mergeTooltipRefs<T>(
   ...refs: (Ref<T> | undefined | null)[]

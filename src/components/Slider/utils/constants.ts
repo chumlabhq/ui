@@ -1,5 +1,5 @@
-import type { SliderClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { SliderClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   root: "flex flex-col gap-2",

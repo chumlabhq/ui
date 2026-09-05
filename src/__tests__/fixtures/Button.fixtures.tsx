@@ -1,6 +1,6 @@
-import { Button } from "../../components/Button";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { Button } from "../../components/Button/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof Button> = [
   { name: "default", props: {}, children: "Save" },

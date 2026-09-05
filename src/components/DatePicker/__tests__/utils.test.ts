@@ -21,7 +21,7 @@ import {
   isRangeEqual,
   sortDates,
   getDefaultPresets,
-} from "../utils";
+} from "../utils.js";
 import { startOfDay } from "date-fns";
 
 // ─── generateCalendarMonth – fixedWeeks branch (lines 154-159) ──────────────

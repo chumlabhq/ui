@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 // Stealth-mode announcement strip temporarily disabled — see SiteHeader.tsx.
 // import AnnouncementBanner from "../../../../components/AnnouncementBanner";
-import UserMenu from "../../../../components/UserMenu";
+import UserMenu from "../../../../components/UserMenu.js";
 import logoLight from "../../../../assets/images/logo-light.png";
 
 // App chrome, matching the site's main/demo header: the shared stealth

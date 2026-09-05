@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getVisiblePages } from "../utils/helpers";
+import { getVisiblePages } from "../utils/helpers.js";
 
 describe("getVisiblePages", () => {
   describe("edge cases", () => {

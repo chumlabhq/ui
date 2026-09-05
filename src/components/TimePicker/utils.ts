@@ -1,4 +1,4 @@
-import type { TimeFormat, TimeValue } from "./utils/types";
+import type { TimeFormat, TimeValue } from "./utils/types.js";
 
 /** Zero-pads a number to two digits. Internal utility. */
 export const pad = (n: number): string => n.toString().padStart(2, "0");

@@ -1,5 +1,5 @@
-import type { PaginationClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { PaginationClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_ROW_OPTIONS = [5, 10, 25, 50, 100] as const;
 

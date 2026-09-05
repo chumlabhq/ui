@@ -1,5 +1,5 @@
-import type { SwitchClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { SwitchClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const CSS_VARS = {
   trackerChecked: "--switch-tracker-checked-bg",

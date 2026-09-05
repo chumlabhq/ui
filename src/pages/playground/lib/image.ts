@@ -1,4 +1,4 @@
-import type { AttachedImage } from "../types";
+import type { AttachedImage } from "../types.js";
 
 const MAX_EDGE = 1568; // Anthropic downscales larger images anyway
 const JPEG_QUALITY = 0.85;

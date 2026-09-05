@@ -1,5 +1,5 @@
-import type { ToastType } from "./types";
-import { SuccessIcon, WarningIcon, ErrorIcon, InfoIcon } from "./icons";
+import type { ToastType } from "./types.js";
+import { SuccessIcon, WarningIcon, ErrorIcon, InfoIcon } from "./icons.js";
 
 export const getDefaultIcon = (type: ToastType) => {
   const iconClass = "w-5 h-5 shrink-0";

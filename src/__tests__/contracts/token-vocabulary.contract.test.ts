@@ -16,6 +16,7 @@
  * rather than mere inequality, and is not duplicated.
  */
 import { describe, expect, it } from "vitest";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -171,6 +172,23 @@ describe("token vocabulary contract", () => {
       (t) => (t in THEMES.dark) !== (t in THEMES.light),
     );
     expect(onlyOne, "a token defined in one theme only").toEqual([]);
+  });
+
+  it("keeps the committed tokens.css in step with index.css", () => {
+    /**
+     * `src/styles/tokens.css` is generated from this file and committed. It had
+     * drifted: `--cl-bg-panel` and `--cl-bg-item-hover` were missing outright
+     * and two values were stale. Nothing shipped wrong — `build:tokens` runs
+     * first in `build:lib`, so `dist/tokens.css` is regenerated every time —
+     * and that is precisely why it went unnoticed for as long as it did.
+     *
+     * Shelling out to the generator rather than reimplementing it: a second
+     * copy of the formatting rules would drift from the first, which is the
+     * defect this test is about.
+     */
+    expect(() =>
+      execFileSync("node", ["scripts/build-tokens.mjs", "--check"], { stdio: "pipe" }),
+    ).not.toThrow();
   });
 
   describe.each(RELATIONAL)("$token", ({ token, against, claim }) => {

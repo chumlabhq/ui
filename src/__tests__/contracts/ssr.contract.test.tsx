@@ -17,7 +17,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { renderToString } from "react-dom/server";
-import { COMPONENTS } from "./registry";
+import { COMPONENTS } from "./registry.js";
 
 describe("SSR contract", () => {
   it("runs without a DOM", () => {

@@ -10,21 +10,21 @@ import {
   memo,
   Fragment,
 } from "react";
-import { useLayer } from "../../utils/layers";
-import type { PaginationProps, PaginationClasses, IconProps, SectionName } from "./utils/types";
-import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "./utils/constants";
-import { getVisiblePages } from "./utils/helpers";
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons";
-import { cn } from "../../utils/scopedCn";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { useControllableState } from "../../utils/useControllableState";
-import { isBrowser } from "../../utils/isBrowser";
-import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
+import { useLayer } from "../../utils/layers.js";
+import type { PaginationProps, PaginationClasses, IconProps, SectionName } from "./utils/types.js";
+import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "./utils/constants.js";
+import { getVisiblePages } from "./utils/helpers.js";
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { isBrowser } from "../../utils/isBrowser.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
-import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
-import MenuSurface from "../../utils/menu/MenuSurface";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
 
 function renderIcon(
   icon: React.ComponentType<IconProps> | React.ReactNode | undefined,

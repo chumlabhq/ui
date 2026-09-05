@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { trackEvent, trackPageView } from "../lib/analytics";
+import { trackEvent, trackPageView } from "../lib/analytics.js";
 
 /**
  * Marketing-site analytics wiring. Mount once at the root of the React

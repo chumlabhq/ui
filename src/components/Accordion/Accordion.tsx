@@ -11,7 +11,7 @@ import {
   AccordionDispatchContext,
   AccordionConfigContext,
   AccordionExpandedContext,
-} from "./utils/context";
+} from "./utils/context.js";
 import {
   DEFAULT_ACCORDION_CLASSES,
   DEFAULT_HEADING_LEVEL,
@@ -26,23 +26,23 @@ import {
   SIZE_CLASSES,
   VARIANT_CLASSES,
   UNSTYLED_ACCORDION_CLASSES,
-} from "./utils/constants";
-import { Slot } from "../../utils/Slot";
+} from "./utils/constants.js";
+import { Slot } from "../../utils/Slot.js";
 import type {
   AccordionProps,
   AccordionDispatchValue,
   AccordionConfigValue,
   AccordionClasses,
   AccordionRef,
-} from "./utils/types";
-import { cn } from "../../utils/scopedCn";
-import { useAccordionFocus } from "./hooks/useAccordionFocus";
-import { useAccordionStorage, useStorageSync } from "./hooks/useAccordionStorage";
-import { useAccordionStateManager } from "./hooks/useAccordionStateManager";
-import { usePrintStyles } from "./hooks/usePrintStyles";
-import { useReducedMotion } from "./hooks/useReducedMotion";
+} from "./utils/types.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useAccordionFocus } from "./hooks/useAccordionFocus.js";
+import { useAccordionStorage, useStorageSync } from "./hooks/useAccordionStorage.js";
+import { useAccordionStateManager } from "./hooks/useAccordionStateManager.js";
+import { usePrintStyles } from "./hooks/usePrintStyles.js";
+import { useReducedMotion } from "./hooks/useReducedMotion.js";
 
-import { structuralOnly, motionSafeClasses } from "../../utils/classLayers";
+import { structuralOnly, motionSafeClasses } from "../../utils/classLayers.js";
 const DEFAULT_PREVENT_CLOSE_TIMEOUT = 10000;
 
 /**

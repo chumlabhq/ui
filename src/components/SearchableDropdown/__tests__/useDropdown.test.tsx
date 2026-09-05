@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useDropdown } from "../utils/useDropdown";
+import { useDropdown } from "../utils/useDropdown.js";
 
 // ---------------------------------------------------------------------------
 // Shared fixtures

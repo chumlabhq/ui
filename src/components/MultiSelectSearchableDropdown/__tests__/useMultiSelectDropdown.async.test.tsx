@@ -10,8 +10,8 @@
  */
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useMultiSelectDropdown } from "../utils/useMultiSelectDropdown";
-import type { MultiSelectOption } from "../utils/types";
+import { useMultiSelectDropdown } from "../utils/useMultiSelectDropdown.js";
+import type { MultiSelectOption } from "../utils/types.js";
 
 const OPTIONS: MultiSelectOption[] = [
   { value: "apple", label: "Apple" },

@@ -18,7 +18,7 @@ import { describe, expect, it } from "vitest";
 import ts from "typescript";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
-import { MEASURING_STYLE } from "../../utils/menu/measuringStyle";
+import { MEASURING_STYLE } from "../../utils/menu/measuringStyle.js";
 
 /** Properties that take a subtree out of the focus order entirely. */
 const UNFOCUSABLE = new Set(["visibility", "display", "contentVisibility"]);

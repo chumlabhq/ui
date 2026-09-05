@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { AgentNode, AgentRunState, AgentStatus } from "../lib/agents";
+import type { AgentNode, AgentRunState, AgentStatus } from "../lib/agents.js";
 
 interface AgentBreakdownProps {
   state: AgentRunState;

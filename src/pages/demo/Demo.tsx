@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { useDocumentTitle } from "../../hooks/useDocumentTitle";
-import { useCanonical, useJsonLd } from "../../hooks/useJsonLd";
-import { SiteHeader } from "../../components/SiteHeader";
-import { trackEvent } from "../../lib/analytics";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle.js";
+import { useCanonical, useJsonLd } from "../../hooks/useJsonLd.js";
+import { SiteHeader } from "../../components/SiteHeader.js";
+import { trackEvent } from "../../lib/analytics.js";
 
 interface NavItem {
   path: string;

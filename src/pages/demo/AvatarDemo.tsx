@@ -6,8 +6,8 @@ import {
   AvatarBadge,
   AvatarShimmer,
   AvatarGroupShimmer,
-} from "../../components/Avatar";
-import { useTheme } from "./ThemeContext";
+} from "../../components/Avatar/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -17,7 +17,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

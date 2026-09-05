@@ -1,5 +1,5 @@
-import { TextArea } from "../../components/TextArea";
-import type { Fixtures } from "./types";
+import { TextArea } from "../../components/TextArea/index.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof TextArea> = [
   { name: "default", props: {} },

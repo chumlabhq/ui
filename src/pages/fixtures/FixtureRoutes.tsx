@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import FixtureIndex from "./FixtureIndex";
-import FixtureRoute from "./FixtureRoute";
+import FixtureIndex from "./FixtureIndex.js";
+import FixtureRoute from "./FixtureRoute.js";
 
 /**
  * The dev-only fixture subtree, in one module so App.tsx needs exactly one

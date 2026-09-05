@@ -7,12 +7,12 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { isBrowser } from "../isBrowser";
-import { mergeRefs } from "../mergeRefs";
-import { useAnchoredPosition } from "../useAnchoredPosition";
-import { surfaceStyle } from "./measuringStyle";
-import { useStablePositionAfterOpen } from "../useStablePositionAfterOpen";
-import type { AnchoredSide } from "../anchoredPosition";
+import { isBrowser } from "../isBrowser.js";
+import { mergeRefs } from "../mergeRefs.js";
+import { useAnchoredPosition } from "../useAnchoredPosition.js";
+import { surfaceStyle } from "./measuringStyle.js";
+import { useStablePositionAfterOpen } from "../useStablePositionAfterOpen.js";
+import type { AnchoredSide } from "../anchoredPosition.js";
 
 /**
  * Extends the div's own props: a surface is a `listbox` or a `menu`, and its

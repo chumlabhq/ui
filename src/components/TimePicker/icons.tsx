@@ -1,4 +1,4 @@
-import type { TimePickerIconProps } from "./utils/types";
+import type { TimePickerIconProps } from "./utils/types.js";
 
 export function ChevronDownIcon({ className = "" }: TimePickerIconProps) {
   return (

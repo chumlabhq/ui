@@ -1,5 +1,5 @@
 import type { CSSProperties, MutableRefObject, ReactNode } from "react";
-import type { DropdownOption } from "../../Dropdown/utils/types";
+import type { DropdownOption } from "../../Dropdown/utils/types.js";
 
 export type MultiSelectOption = DropdownOption;
 

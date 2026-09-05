@@ -1,10 +1,10 @@
-import type { TableClasses } from "./utils/types";
-import { structuralOnly } from "../../utils/classLayers";
+import type { TableClasses } from "./utils/types.js";
+import { structuralOnly } from "../../utils/classLayers.js";
 
 export {
   DEFAULT_ROW_OPTIONS,
   DEFAULT_VISIBLE_PAGE_COUNT,
-} from "../Pagination";
+} from "../Pagination/index.js";
 
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   root:

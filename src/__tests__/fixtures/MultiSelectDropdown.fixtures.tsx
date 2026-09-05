@@ -1,14 +1,14 @@
-import { MultiSelectDropdown } from "../../components/MultiSelectDropdown";
+import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
-import { OPTIONS } from "./_data";
+import type { Fixtures } from "./types.js";
+import { OPTIONS } from "./_data.js";
 import {
   neverResolves,
   openMenu,
   openMenuAndSettle,
   resolvesTo,
   settleAsync,
-} from "./_async";
+} from "./_async.js";
 
 
 const fixtures: Fixtures<typeof MultiSelectDropdown> = [

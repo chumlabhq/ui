@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Tooltip } from "../../../../components/Tooltip";
+import { Tooltip } from "../../../../components/Tooltip/index.js";
 import {
   useListMyChatsQuery,
   useLazyGetChatsPageQuery,
-} from "../../../../redux/api/playgroundApi";
-import type { PlaygroundChat } from "../../types";
+} from "../../../../redux/api/playgroundApi.js";
+import type { PlaygroundChat } from "../../types.js";
 
 export type PlaygroundView = "build" | "settings";
 

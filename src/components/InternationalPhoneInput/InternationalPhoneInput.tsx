@@ -14,14 +14,14 @@ import type {
   CountryOption,
   PhoneNumberValue,
   PhoneNumberData,
-} from "./utils/types";
+} from "./utils/types.js";
 import {
   DEFAULT_COUNTRIES,
   DEFAULT_PREFERRED_COUNTRIES,
   DEFAULT_COUNTRY,
   DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES,
   UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES,
-} from "./constants";
+} from "./constants.js";
 import {
   findCountryByCode,
   formatPhoneNumber,
@@ -31,18 +31,18 @@ import {
   parseInternationalNumber,
   formatForCopy,
   computeCursorPosition,
-} from "./utils";
-import { CountryFlag } from "../CountryFlag";
-import { SearchableDropdown } from "../SearchableDropdown";
-import type { SearchableDropdownOption } from "../SearchableDropdown";
-import { useControllableState } from "../../utils/useControllableState";
-import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
-import { cn } from "../../utils/scopedCn";
-import { mergeRefs } from "../../utils/mergeRefs";
-import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
+} from "./utils.js";
+import { CountryFlag } from "../CountryFlag/index.js";
+import { SearchableDropdown } from "../SearchableDropdown/index.js";
+import type { SearchableDropdownOption } from "../SearchableDropdown/index.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
+import { cn } from "../../utils/scopedCn.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 function resolveInitialCountry(
   value: PhoneNumberValue | undefined,
   defaultValue: PhoneNumberValue | undefined,

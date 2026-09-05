@@ -8,18 +8,18 @@ import React, {
   useState,
 } from "react";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from "react";
-import type { SliderProps, SliderClasses, SliderValue } from "./utils/types";
+import type { SliderProps, SliderClasses, SliderValue } from "./utils/types.js";
 import {
   DEFAULT_SLIDER_CLASSES,
   UNSTYLED_SLIDER_CLASSES,
-} from "./utils/constants";
-import { isBrowser } from "../../utils/isBrowser";
-import { useControllableState } from "../../utils/useControllableState";
-import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
-import { cn } from "../../utils/scopedCn";
+} from "./utils/constants.js";
+import { isBrowser } from "../../utils/isBrowser.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
+import { cn } from "../../utils/scopedCn.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function clamp(val: number, min: number, max: number) {

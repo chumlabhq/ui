@@ -1,5 +1,5 @@
-import type { RadioButtonSize, RadioButtonClasses, RadioGroupClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { RadioButtonSize, RadioButtonClasses, RadioGroupClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const SIZE_MAP: Record<Exclude<RadioButtonSize, number>, number> = {
   xs: 14,

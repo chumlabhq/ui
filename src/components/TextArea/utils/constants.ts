@@ -1,5 +1,5 @@
-import type { TextAreaClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { TextAreaClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
   root: "flex flex-col",

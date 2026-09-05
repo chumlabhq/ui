@@ -20,10 +20,10 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { COMPONENTS } from "./registry";
-import { fixturesFor } from "../fixtures";
-import { setReducedMotion } from "../../test/matchMedia";
-import { SELECTOR } from "./partSelectors";
+import { COMPONENTS } from "./registry.js";
+import { fixturesFor } from "../fixtures/index.js";
+import { setReducedMotion } from "../../test/matchMedia.js";
+import { SELECTOR } from "./partSelectors.js";
 
 beforeEach(() => setReducedMotion(false));
 

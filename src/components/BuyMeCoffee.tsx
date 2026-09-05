@@ -1,17 +1,17 @@
 import { useCallback, useMemo, useState, type ReactNode } from "react";
-import Modal from "./Modal/Modal";
+import Modal from "./Modal/Modal.js";
 import {
   BuyMeCoffeeContext,
   type BuyMeCoffeeContextValue,
-} from "./useBuyMeCoffee";
-import { Button } from "./ui";
-import { trackEvent } from "../lib/analytics";
-import { useCreateFeedbackMutation } from "../redux/api/feedbackApi";
+} from "./useBuyMeCoffee.js";
+import { Button } from "./ui/index.js";
+import { trackEvent } from "../lib/analytics.js";
+import { useCreateFeedbackMutation } from "../redux/api/feedbackApi.js";
 import {
   useCreateOrderMutation,
   useVerifyPaymentMutation,
-} from "../redux/api/paymentApi";
-import { useGetMeQuery } from "../redux/api/authApi";
+} from "../redux/api/paymentApi.js";
+import { useGetMeQuery } from "../redux/api/authApi.js";
 
 /**
  * Razorpay's checkout.js attaches a global `window.Razorpay` constructor.

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
-import Modal, { ModalHeader, ModalBody, ModalFooter } from "../Modal";
+import Modal, { ModalHeader, ModalBody, ModalFooter } from "../Modal.js";
 
 // Mock scrollLock utilities
 const acquireScrollLockMock = vi.fn();
@@ -695,7 +695,7 @@ describe("Modal", () => {
 // ─── useModal hook ────────────────────────────────────────────────────────────
 
 import { renderHook } from "@testing-library/react";
-import { useModal } from "../useModal";
+import { useModal } from "../useModal.js";
 
 describe("useModal", () => {
   it("throws when used outside Modal", () => {
@@ -725,9 +725,9 @@ describe("useModal", () => {
 
 // ─── Modal icons ──────────────────────────────────────────────────────────────
 
-import { CloseIcon, InfoIcon } from "../icons";
+import { CloseIcon, InfoIcon } from "../icons.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

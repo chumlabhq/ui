@@ -1,7 +1,7 @@
-import { RadioGroup } from "../../components/RadioButton";
-import { RadioButton } from "../../components/RadioButton";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { RadioGroup } from "../../components/RadioButton/index.js";
+import { RadioButton } from "../../components/RadioButton/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 /**
  * RadioGroup takes RadioButton children, not an `options` array — passing

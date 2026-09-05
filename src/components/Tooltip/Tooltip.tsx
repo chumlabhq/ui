@@ -10,29 +10,29 @@ import {
 } from "react";
 import type { ReactElement, Ref } from "react";
 import { createPortal } from "react-dom";
-import { LAYERS } from "../../utils/layers";
-import { cn } from "../../utils/scopedCn";
-import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
-import { useControllableState } from "../../utils/useControllableState";
-import type { TooltipProps } from "./utils/types";
+import { LAYERS } from "../../utils/layers.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import type { TooltipProps } from "./utils/types.js";
 import {
   shadowPresets,
   isPresetShadow,
   wordWrapStyles,
   DEFAULT_TOOLTIP_CLASSES,
   UNSTYLED_TOOLTIP_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";
 import {
   mergeTooltipRefs,
   hasInteractiveChild,
   calculatePosition,
   type Position,
-} from "./utils/helpers";
-import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger";
-import { isBrowser } from "../../utils/isBrowser";
+} from "./utils/helpers.js";
+import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger.js";
+import { isBrowser } from "../../utils/isBrowser.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 const INTERACTIVE_ELEMENT_TYPES = new Set([
   "button",
   "a",

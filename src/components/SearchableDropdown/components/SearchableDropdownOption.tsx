@@ -1,7 +1,7 @@
 import { memo } from "react";
-import type { SearchableDropdownOption as OptionType, SearchableDropdownClasses } from "../utils/types";
-import { cn } from "../../../utils/scopedCn";
-import { CheckIcon } from "../utils/icons";
+import type { SearchableDropdownOption as OptionType, SearchableDropdownClasses } from "../utils/types.js";
+import { cn } from "../../../utils/scopedCn.js";
+import { CheckIcon } from "../utils/icons.js";
 
 export const SearchableDropdownOption = memo(function SearchableDropdownOption({
   option,

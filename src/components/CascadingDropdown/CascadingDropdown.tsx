@@ -1,19 +1,19 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useCallback } from "react";
-import { useLayer } from "../../utils/layers";
+import { useLayer } from "../../utils/layers.js";
 import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject } from "react";
-import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
-import { useCascadingDropdown } from "./utils/useCascadingDropdown";
-import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons";
-import { cn } from "../../utils/scopedCn";
-import { isBrowser } from "../../utils/isBrowser";
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { useInertPropWarning } from "../../utils/useInertPropWarning";
-import MenuSurface from "../../utils/menu/MenuSurface";
+import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types.js";
+import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
+import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
+import { cn } from "../../utils/scopedCn.js";
+import { isBrowser } from "../../utils/isBrowser.js";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
-} from "./utils/constants";
+} from "./utils/constants.js";
 
 const SubmenuItem = memo(function SubmenuItem({
   option,

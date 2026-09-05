@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { LogoMark, LogoWordmark, LogoFull } from "../index";
+import { LogoMark, LogoWordmark, LogoFull } from "../index.js";
 
 describe("BrandLogo", () => {
   describe("LogoMark", () => {

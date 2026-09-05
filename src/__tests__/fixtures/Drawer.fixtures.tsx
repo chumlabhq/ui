@@ -1,9 +1,9 @@
-import Drawer from "../../components/Drawer/Drawer";
-import DrawerCloseButton from "../../components/Drawer/components/DrawerCloseButton";
-import DrawerHeader from "../../components/Drawer/components/DrawerHeader";
-import { IndexPicker, Toggle } from "./_harness";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import Drawer from "../../components/Drawer/Drawer.js";
+import DrawerCloseButton from "../../components/Drawer/components/DrawerCloseButton.js";
+import DrawerHeader from "../../components/Drawer/components/DrawerHeader.js";
+import { IndexPicker, Toggle } from "./_harness.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof Drawer> = [
   {

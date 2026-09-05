@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useCallback, useSyncExternalStore } from "react";
-import type { AccordionContextValue, AccordionDispatchValue, AccordionItemContextValue, AccordionConfigValue } from "./types";
+import type { AccordionContextValue, AccordionDispatchValue, AccordionItemContextValue, AccordionConfigValue } from "./types.js";
 
 export const AccordionContext = createContext<AccordionContextValue | null>(null);
 

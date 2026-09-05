@@ -1,8 +1,8 @@
 /** @jsxImportSource react */
 import { describe, expect, it, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { useMenuNavigation } from "../useMenuNavigation";
-import { MENU_FIXTURES } from "./fixtures";
+import { useMenuNavigation } from "../useMenuNavigation.js";
+import { MENU_FIXTURES } from "./fixtures.js";
 
 const key = (k: string, extra: Partial<React.KeyboardEvent> = {}) =>
   ({ key: k, preventDefault: vi.fn(), ...extra }) as unknown as React.KeyboardEvent;

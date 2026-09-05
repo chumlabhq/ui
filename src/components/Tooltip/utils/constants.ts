@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
-import type { TooltipShadowPreset, TooltipWordWrap, TooltipClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { TooltipShadowPreset, TooltipWordWrap, TooltipClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 // Alpha values bumped from the original 0.12–0.30 range to 0.18–0.45 so
 // the same shadow reads correctly on both light AND dark surfaces. The

@@ -1,4 +1,4 @@
-import type { QaFinding } from "../types";
+import type { QaFinding } from "../types.js";
 
 // Mirrors the Phase 4.1 verify indicator, for the separate-context QA review.
 export type QaUIState =

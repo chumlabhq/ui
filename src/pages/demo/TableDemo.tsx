@@ -7,12 +7,12 @@ import React, {
   useCallback,
 } from "react";
 import { createPortal } from "react-dom";
-import { Table, exportTableToCSV } from "../../components/Table";
-import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
-import { Pagination } from "../../components/Pagination";
+import { Table, exportTableToCSV } from "../../components/Table/index.js";
+import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock.js";
+import { Pagination } from "../../components/Pagination/index.js";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { SortingState } from "../../components/Table";
-import { useTheme } from "./ThemeContext";
+import type { SortingState } from "../../components/Table/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -22,7 +22,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

@@ -12,12 +12,12 @@
  */
 import { describe, expect, it, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
-import { MARKER, cn } from "../../utils/scopedCn";
-import { cn as publicCn } from "../../utils/cn";
-import { MARKER as RUNTIME_MARKER } from "../../jsx/mark";
-import { COMPONENTS, classTokens } from "./registry";
+import { MARKER, cn } from "../../utils/scopedCn.js";
+import { cn as publicCn } from "../../utils/cn.js";
+import { MARKER as RUNTIME_MARKER } from "../../jsx/mark.js";
+import { COMPONENTS, classTokens } from "./registry.js";
 
-import { setReducedMotion } from "../../test/matchMedia";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 // Fixtures render motion-aware components; the stub answers nothing
 // until asked. reduced-motion.contract is where the true branch is tested.

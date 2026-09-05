@@ -6,7 +6,7 @@ import type {
   StageStartPayload,
   SubstepEventPayload,
   TimelineEntry,
-} from "../types";
+} from "../types.js";
 
 // Canonical agent-persona map (Phase 10). The pipeline runs 7 stages; the panel
 // folds them into 4 legible agents so the user watches a senior team, not a

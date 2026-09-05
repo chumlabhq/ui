@@ -1,6 +1,6 @@
-import { ResizablePanel } from "../../components/ResizablePanel";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { ResizablePanel } from "../../components/ResizablePanel/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof ResizablePanel> = [
   { name: "default", props: {}, children: <div>Panel</div> },

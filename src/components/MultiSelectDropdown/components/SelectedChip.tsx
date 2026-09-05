@@ -1,6 +1,6 @@
 import { memo } from "react";
-import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types";
-import { XIcon } from "../utils/icons";
+import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types.js";
+import { XIcon } from "../utils/icons.js";
 
 export const SelectedChip = memo(function SelectedChip({
   option,

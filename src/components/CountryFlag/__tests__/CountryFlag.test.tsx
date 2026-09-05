@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.
@@ -12,7 +12,7 @@ import {
   CountryFlagGroupCount,
   CountryFlagShimmer,
   CountryFlagGroupShimmer,
-} from "../index";
+} from "../index.js";
 
 // ---------------------------------------------------------------------------
 // CountryFlag — Rendering

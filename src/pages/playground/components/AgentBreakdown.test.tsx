@@ -1,9 +1,9 @@
 /** @vitest-environment jsdom */
 import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import AgentBreakdown from "./AgentBreakdown";
-import { agentRunFromEvents } from "../lib/agents";
-import type { PipelineEvent } from "../types";
+import AgentBreakdown from "./AgentBreakdown.js";
+import { agentRunFromEvents } from "../lib/agents.js";
+import type { PipelineEvent } from "../types.js";
 
 const ev = (
   stage: PipelineEvent["stage"],

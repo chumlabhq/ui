@@ -1,5 +1,5 @@
-import type { DropdownClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { DropdownClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
   root: "",

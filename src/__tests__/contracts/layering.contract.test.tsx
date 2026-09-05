@@ -13,8 +13,8 @@
  */
 import { describe, expect, it } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { LAYERS, LAYER_STEP, OverlayLayerContext, useLayer } from "../../utils/layers";
-import { isStructural } from "../../utils/classLayers";
+import { LAYERS, LAYER_STEP, OverlayLayerContext, useLayer } from "../../utils/layers.js";
+import { isStructural } from "../../utils/classLayers.js";
 
 /** Every overlay that establishes a layering scope, with the layer it publishes. */
 const OVERLAYS = [

@@ -1,5 +1,5 @@
-import { CountryFlag, CountryFlagGroup, CountryFlagShimmer } from "../../components/CountryFlag";
-import type { Fixtures } from "./types";
+import { CountryFlag, CountryFlagGroup, CountryFlagShimmer } from "../../components/CountryFlag/index.js";
+import type { Fixtures } from "./types.js";
 
 // An array, not a fragment: the group counts children to work out the surplus,
 // and a fragment counts as one.

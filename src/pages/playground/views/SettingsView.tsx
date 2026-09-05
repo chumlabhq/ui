@@ -1,4 +1,4 @@
-import type { PlaygroundSettings, PreviewDevice } from "../types";
+import type { PlaygroundSettings, PreviewDevice } from "../types.js";
 
 interface SettingsViewProps {
   settings: PlaygroundSettings;

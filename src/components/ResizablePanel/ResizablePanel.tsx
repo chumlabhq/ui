@@ -9,18 +9,18 @@ import {
   type KeyboardEvent,
   type CSSProperties,
 } from "react";
-import type { ResizablePanelProps } from "./utils/types";
+import type { ResizablePanelProps } from "./utils/types.js";
 import {
   DEFAULT_RESIZABLEPANEL_CLASSES,
   UNSTYLED_RESIZABLEPANEL_CLASSES,
-} from "./utils/constants";
-import { cn } from "../../utils/scopedCn";
-import { useControllableState } from "../../utils/useControllableState";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
-import { isBrowser } from "../../utils/isBrowser";
+} from "./utils/constants.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useControllableState } from "../../utils/useControllableState.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
+import { isBrowser } from "../../utils/isBrowser.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: ResizablePanel
  *

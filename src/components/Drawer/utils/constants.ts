@@ -1,5 +1,5 @@
-import type { DrawerClasses, DrawerDirection } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { DrawerClasses, DrawerDirection } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_DIRECTION: DrawerDirection = "left";
 export const DEFAULT_SIZE = "300px";

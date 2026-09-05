@@ -4,7 +4,7 @@ import {
   CountryFlagGroup,
   CountryFlagShimmer,
   CountryFlagGroupShimmer,
-} from "../../components/CountryFlag";
+} from "../../components/CountryFlag/index.js";
 import {
   DocsHero,
   Section,
@@ -14,8 +14,8 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
-import { useTheme } from "./ThemeContext";
+} from "./components/index.js";
+import { useTheme } from "./ThemeContext.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

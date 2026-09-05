@@ -1,5 +1,5 @@
-import type { CheckboxSize, CheckboxShape, CheckboxClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { CheckboxSize, CheckboxShape, CheckboxClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
   xs: 14,

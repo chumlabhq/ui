@@ -1,5 +1,5 @@
-import type { BreadcrumbClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { BreadcrumbClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
   root: "",

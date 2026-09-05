@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from "react";
-import type { StorageConfig } from "../utils/types";
-import { getDefaultStorageConfig } from "../utils/constants";
-import { isBrowser } from "../../../utils/isBrowser";
+import type { StorageConfig } from "../utils/types.js";
+import { getDefaultStorageConfig } from "../utils/constants.js";
+import { isBrowser } from "../../../utils/isBrowser.js";
 
 export function resolveStorageConfig(
   storageKey: string | StorageConfig | undefined,

@@ -1,8 +1,8 @@
 import { fireEvent } from "@testing-library/react";
-import type { Fixture } from "./types";
-import type { TableProps } from "../../components/Table/utils/types";
-import { ROWS, COLUMNS } from "./_data";
-import { tick } from "./_act";
+import type { Fixture } from "./types.js";
+import type { TableProps } from "../../components/Table/utils/types.js";
+import { ROWS, COLUMNS } from "./_data.js";
+import { tick } from "./_act.js";
 
 type Row = (typeof ROWS)[number];
 

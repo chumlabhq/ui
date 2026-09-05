@@ -13,10 +13,10 @@
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
 import { render, cleanup, act } from "@testing-library/react";
-import { COMPONENTS } from "./registry";
-import { fixturesFor } from "../fixtures";
+import { COMPONENTS } from "./registry.js";
+import { fixturesFor } from "../fixtures/index.js";
 
-import { setReducedMotion } from "../../test/matchMedia";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);

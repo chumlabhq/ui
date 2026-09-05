@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
-import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown";
-import type { MultiSelectOption } from "../../components/MultiSelectSearchableDropdown";
-import { useTheme } from "./ThemeContext";
+import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
+import type { MultiSelectOption } from "../../components/MultiSelectSearchableDropdown/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -12,12 +12,12 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 import {
   fetchCountries,
   searchCountries,
   type Country,
-} from "./lib/countries";
+} from "./lib/countries.js";
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 

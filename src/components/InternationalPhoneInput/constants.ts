@@ -1,6 +1,6 @@
-import type { CountryOption } from "./utils/types";
-import type { InternationalPhoneInputClasses } from "./utils/types";
-import { structuralOnly } from "../../utils/classLayers";
+import type { CountryOption } from "./utils/types.js";
+import type { InternationalPhoneInputClasses } from "./utils/types.js";
+import { structuralOnly } from "../../utils/classLayers.js";
 
 export const PHONE_FORMATTING_PATTERNS: Record<
   string,

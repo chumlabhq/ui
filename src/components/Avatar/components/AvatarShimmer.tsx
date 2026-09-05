@@ -1,17 +1,17 @@
 import { forwardRef } from "react";
-import type { AvatarShimmerProps, AvatarGroupShimmerProps } from "../utils/types";
+import type { AvatarShimmerProps, AvatarGroupShimmerProps } from "../utils/types.js";
 import {
   DEFAULT_SIZE,
   DEFAULT_SHAPE,
   DEFAULT_SPACING,
   DEFAULT_AVATAR_SHIMMER_CLASSES,
   UNSTYLED_AVATAR_SHIMMER_CLASSES,
-} from "../utils/constants";
-import { getNumericSize, getBorderRadius } from "../utils/helpers";
-import { Slot } from "../../../utils/Slot";
-import { cn } from "../../../utils/scopedCn";
-import { motionSafe } from "../../../utils/classLayers";
-import { useReducedMotion } from "../../../utils/useReducedMotion";
+} from "../utils/constants.js";
+import { getNumericSize, getBorderRadius } from "../utils/helpers.js";
+import { Slot } from "../../../utils/Slot.js";
+import { cn } from "../../../utils/scopedCn.js";
+import { motionSafe } from "../../../utils/classLayers.js";
+import { useReducedMotion } from "../../../utils/useReducedMotion.js";
 
 export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
   (

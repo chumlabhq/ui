@@ -1,4 +1,4 @@
-import type { Fixture } from "./types";
+import type { Fixture } from "./types.js";
 
 /**
  * The two explicit values of `reduceMotion`, on top of a component's simplest

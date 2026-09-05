@@ -1,5 +1,5 @@
-import type { TimePickerClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { TimePickerClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   root: "inline-flex flex-col gap-1 text-cl-text",

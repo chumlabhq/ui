@@ -6,10 +6,10 @@ import {
   type PasteDetectedData,
   type PhoneFormatPattern,
   type PhoneLengthRule,
-} from "../../components/InternationalPhoneInput";
-import { createLibphonenumberValidator } from "../../components/InternationalPhoneInput/validators";
-import { CountryFlag } from "../../components/CountryFlag";
-import { useTheme } from "./ThemeContext";
+} from "../../components/InternationalPhoneInput/index.js";
+import { createLibphonenumberValidator } from "../../components/InternationalPhoneInput/validators/index.js";
+import { CountryFlag } from "../../components/CountryFlag/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -20,7 +20,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // Opt-in real validation via @chumlab/ui/phone-validators (libphonenumber-js).
 const anyValidPhoneValidator = createLibphonenumberValidator({

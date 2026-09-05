@@ -1,4 +1,4 @@
-import { isBrowser } from "./isBrowser";
+import { isBrowser } from "./isBrowser.js";
 
 export type AnchoredSide = "top" | "bottom" | "left" | "right";
 

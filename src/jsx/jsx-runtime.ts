@@ -3,7 +3,7 @@
  * every rendered element carries a marker class.
  */
 import { jsx as reactJsx, jsxs as reactJsxs } from "react/jsx-runtime";
-import { mark, type Props } from "./mark";
+import { mark, type Props } from "./mark.js";
 
 export { Fragment } from "react/jsx-runtime";
 export type { JSX } from "react/jsx-runtime";

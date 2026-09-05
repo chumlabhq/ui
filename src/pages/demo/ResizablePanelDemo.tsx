@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { ResizablePanel } from "../../components/ResizablePanel";
+import { ResizablePanel } from "../../components/ResizablePanel/index.js";
 import {
   DocsHero,
   Section,
@@ -9,8 +9,8 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
-import { useTheme } from "./ThemeContext";
+} from "./components/index.js";
+import { useTheme } from "./ThemeContext.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

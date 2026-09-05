@@ -6,20 +6,20 @@ import type {
   ButtonAsAnchorProps,
   ButtonAsSpanProps,
   ButtonAsChildProps,
-} from "./utils/types";
+} from "./utils/types.js";
 import {
   DEFAULT_BUTTON_CLASSES,
   UNSTYLED_BUTTON_CLASSES,
   HOVER_ANIMATION_MAP,
   CONTINUOUS_ANIMATION_MAP,
-} from "./utils/constants";
-import { CircularLoader } from "../Loader";
-import { Tooltip } from "../Tooltip";
-import { Slot } from "../../utils/Slot";
-import { cn } from "../../utils/scopedCn";
-import { useReducedMotion } from "../../utils/useReducedMotion";
+} from "./utils/constants.js";
+import { CircularLoader } from "../Loader/index.js";
+import { Tooltip } from "../Tooltip/index.js";
+import { Slot } from "../../utils/Slot.js";
+import { cn } from "../../utils/scopedCn.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
+import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: Button
  *

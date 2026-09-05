@@ -1,8 +1,8 @@
 import { type CSSProperties } from "react";
-import type { DrawerDirection } from "./types";
+import type { DrawerDirection } from "./types.js";
 
-export { getFocusableElements } from "../../../utils/focusUtils";
-import { useReducedMotion } from "../../../utils/useReducedMotion";
+export { getFocusableElements } from "../../../utils/focusUtils.js";
+import { useReducedMotion } from "../../../utils/useReducedMotion.js";
 
 /**
  * Kept as a named export because Drawer's call sites use it, but the
@@ -92,4 +92,4 @@ export function isTopDrawer(id: string): boolean {
   return drawerStack.length > 0 && drawerStack[drawerStack.length - 1] === id;
 }
 
-export { acquireScrollLock, releaseScrollLock, resetScrollLock } from "../../../utils/scrollLock";
+export { acquireScrollLock, releaseScrollLock, resetScrollLock } from "../../../utils/scrollLock.js";

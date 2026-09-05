@@ -1,16 +1,16 @@
 import { useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { LAYERS } from "../../../utils/layers";
+import { LAYERS } from "../../../utils/layers.js";
 import type {
   ToastConfig,
   ToastContextValue,
   ToastProviderProps,
-} from "../utils/types";
-import Toast from "../Toast";
-import { ToastContext } from "../utils/context";
-import { positionClasses, stackDirectionClasses, PROGRESS_KEYFRAMES } from "../utils/constants";
-import { cn } from "../../../utils/scopedCn";
-import { isBrowser } from "../../../utils/isBrowser";
+} from "../utils/types.js";
+import Toast from "../Toast.js";
+import { ToastContext } from "../utils/context.js";
+import { positionClasses, stackDirectionClasses, PROGRESS_KEYFRAMES } from "../utils/constants.js";
+import { cn } from "../../../utils/scopedCn.js";
+import { isBrowser } from "../../../utils/isBrowser.js";
 
 interface ToastState extends ToastConfig {
   visible: boolean;

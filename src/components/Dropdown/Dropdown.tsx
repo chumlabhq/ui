@@ -8,38 +8,38 @@ import {
   useState,
   useCallback,
 } from "react";
-import { useLayer } from "../../utils/layers";
+import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, ReactNode } from "react";
 import type {
   DropdownOption,
   DropdownProps,
   DropdownClasses,
-} from "./utils/types";
-import { useDropdown } from "./utils/useDropdown";
+} from "./utils/types.js";
+import { useDropdown } from "./utils/useDropdown.js";
 import {
   ChevronDownIcon,
   CheckIcon as CheckIconDefault,
   ClearIcon as ClearIconDefault,
-} from "./utils/icons";
+} from "./utils/icons.js";
 import {
   scrollOptionIntoView,
   isBrowser,
-} from "./utils/helpers";
-import DropdownShimmer from "./components/DropdownShimmer";
-import { cn } from "../../utils/scopedCn";
+} from "./utils/helpers.js";
+import DropdownShimmer from "./components/DropdownShimmer.js";
+import { cn } from "../../utils/scopedCn.js";
 import {
   DEFAULT_DROPDOWN_CLASSES,
   UNSTYLED_DROPDOWN_CLASSES,
-} from "./utils/constants";
-import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
-import { mergeRefs } from "../../utils/mergeRefs";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
+} from "./utils/constants.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
+import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 
-import { motionSafeClasses } from "../../utils/classLayers";
-import { useReducedMotion } from "../../utils/useReducedMotion";
-import { comboboxNameProps } from "../../utils/comboboxName";
-import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
-import MenuSurface from "../../utils/menu/MenuSurface";
+import { motionSafeClasses } from "../../utils/classLayers.js";
+import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { comboboxNameProps } from "../../utils/comboboxName.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
+import MenuSurface from "../../utils/menu/MenuSurface.js";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,

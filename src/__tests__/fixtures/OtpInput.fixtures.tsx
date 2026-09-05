@@ -1,5 +1,5 @@
-import { OtpInput } from "../../components/OtpInput";
-import type { Fixtures } from "./types";
+import { OtpInput } from "../../components/OtpInput/index.js";
+import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof OtpInput> = [
   { name: "default", props: { length: 4 } },

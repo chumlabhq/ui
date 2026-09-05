@@ -16,13 +16,13 @@
  */
 import { describe, expect, it, afterEach, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
-import { SearchableDropdown } from "../../components/SearchableDropdown";
-import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown";
-import { Dropdown } from "../../components/Dropdown";
-import { MultiSelectDropdown } from "../../components/MultiSelectDropdown";
-import { CascadingDropdown } from "../../components/CascadingDropdown";
-import { fixturesFor } from "../fixtures";
-import { setReducedMotion } from "../../test/matchMedia";
+import { SearchableDropdown } from "../../components/SearchableDropdown/index.js";
+import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
+import { Dropdown } from "../../components/Dropdown/index.js";
+import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
+import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
+import { fixturesFor } from "../fixtures/index.js";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);

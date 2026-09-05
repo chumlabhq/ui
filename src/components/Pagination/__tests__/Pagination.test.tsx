@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Pagination } from "../index";
-import { DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "../utils/constants";
+import { Pagination } from "../index.js";
+import { DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "../utils/constants.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Slider } from "../../components/Slider";
-import type { SliderValue, SliderMark } from "../../components/Slider";
-import { useTheme } from "./ThemeContext";
+import { Slider } from "../../components/Slider/index.js";
+import type { SliderValue, SliderMark } from "../../components/Slider/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -11,7 +11,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

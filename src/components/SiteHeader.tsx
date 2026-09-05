@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useBuyMeCoffee } from "./useBuyMeCoffee";
-import { UserMenu } from "./UserMenu";
-import { Button } from "./ui";
-import { useEnterPlayground } from "../pages/playground/lib/enterPlayground";
-import { PLAYGROUND_ENABLED } from "../lib/flags";
-import { useTheme } from "../contexts/ThemeContext";
+import { useBuyMeCoffee } from "./useBuyMeCoffee.js";
+import { UserMenu } from "./UserMenu.js";
+import { Button } from "./ui/index.js";
+import { useEnterPlayground } from "../pages/playground/lib/enterPlayground.js";
+import { PLAYGROUND_ENABLED } from "../lib/flags.js";
+import { useTheme } from "../contexts/ThemeContext.js";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
 

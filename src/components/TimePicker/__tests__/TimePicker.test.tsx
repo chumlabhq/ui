@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, act as rtlAct } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TimePicker } from "../index";
-import { ClockFace } from "../ClockFace";
-import { UNSTYLED_TIMEPICKER_CLASSES } from "../utils/constants";
-import type { ClockFaceClasses, TimeValue } from "../utils/types";
+import { TimePicker } from "../index.js";
+import { ClockFace } from "../ClockFace.js";
+import { UNSTYLED_TIMEPICKER_CLASSES } from "../utils/constants.js";
+import type { ClockFaceClasses, TimeValue } from "../utils/types.js";
 import {
   parseTimeInput,
   formatTimeValue,
@@ -16,7 +16,7 @@ import {
   isMinutesInRange,
   parseTimeToMinutes,
   pad,
-} from "../utils";
+} from "../utils.js";
 
 describe("TimePicker", () => {
   describe("Rendering", () => {
@@ -1639,7 +1639,7 @@ describe("TimePicker utils", () => {
 
 // ─── TimePicker Icons ─────────────────────────────────────────────────────────
 
-import { ChevronDownIcon, ClockIcon, CheckIcon, ClearIcon } from "../icons";
+import { ChevronDownIcon, ClockIcon, CheckIcon, ClearIcon } from "../icons.js";
 
 describe("TimePicker Icons", () => {
   it.each([
@@ -2341,9 +2341,9 @@ describe("TimePicker (additional coverage)", () => {
 // useTimePicker — hook-level coverage tests
 // ═══════════════════════════════════════════════════════════════════════
 import { renderHook, act } from "@testing-library/react";
-import { useTimePicker } from "../useTimePicker";
+import { useTimePicker } from "../useTimePicker.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

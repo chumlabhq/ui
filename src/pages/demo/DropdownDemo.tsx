@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
-import { Dropdown } from "../../components/Dropdown";
-import type { DropdownOption } from "../../components/Dropdown";
-import { useTheme } from "./ThemeContext";
+import { Dropdown } from "../../components/Dropdown/index.js";
+import type { DropdownOption } from "../../components/Dropdown/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -12,8 +12,8 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
-import { fetchCountries, type Country } from "./lib/countries";
+} from "./components/index.js";
+import { fetchCountries, type Country } from "./lib/countries.js";
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 

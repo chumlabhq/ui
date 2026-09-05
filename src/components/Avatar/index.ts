@@ -1,13 +1,13 @@
 // AI Knowledge: See AVATAR.ai.md in this directory for full usage guide, props, styling, and patterns.
 
-export { Avatar } from "./Avatar";
-export { AvatarGroup } from "./components/AvatarGroup";
-export { AvatarGroupCount } from "./components/AvatarGroupCount";
-export { AvatarBadge } from "./components/AvatarBadge";
-export { AvatarShimmer, AvatarGroupShimmer } from "./components/AvatarShimmer";
-export { useAvatarGroupContext } from "./utils/context";
-export { DEFAULT_AVATAR_CLASSES, UNSTYLED_AVATAR_CLASSES } from "./utils/constants";
-export type { AvatarGroupContextValue } from "./utils/context";
+export { Avatar } from "./Avatar.js";
+export { AvatarGroup } from "./components/AvatarGroup.js";
+export { AvatarGroupCount } from "./components/AvatarGroupCount.js";
+export { AvatarBadge } from "./components/AvatarBadge.js";
+export { AvatarShimmer, AvatarGroupShimmer } from "./components/AvatarShimmer.js";
+export { useAvatarGroupContext } from "./utils/context.js";
+export { DEFAULT_AVATAR_CLASSES, UNSTYLED_AVATAR_CLASSES } from "./utils/constants.js";
+export type { AvatarGroupContextValue } from "./utils/context.js";
 export type {
   AvatarProps,
   AvatarGroupProps,
@@ -34,4 +34,4 @@ export type {
   BadgeOverlap,
   CountVariant,
   GroupVariant,
-} from "./utils/types";
+} from "./utils/types.js";

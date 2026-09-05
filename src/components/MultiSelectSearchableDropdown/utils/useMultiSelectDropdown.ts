@@ -1,11 +1,11 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation";
+import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation.js";
 import type {
   MultiSelectOption,
   UseMultiSelectDropdownProps,
   UseMultiSelectDropdownReturn,
-} from "./types";
-import { useControllableState } from "../../../utils/useControllableState";
+} from "./types.js";
+import { useControllableState } from "../../../utils/useControllableState.js";
 
 
 export function useMultiSelectDropdown({

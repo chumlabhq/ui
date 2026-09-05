@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { CascadingDropdown } from "../index";
-import type { CascadingOption } from "../utils/types";
+import { CascadingDropdown } from "../index.js";
+import type { CascadingOption } from "../utils/types.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.
@@ -646,7 +646,7 @@ import {
   ClearIcon,
   SearchIcon,
   CheckIcon,
-} from "../utils/icons";
+} from "../utils/icons.js";
 
 describe("CascadingDropdown Icons", () => {
   it.each([

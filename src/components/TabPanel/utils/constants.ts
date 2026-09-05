@@ -1,5 +1,5 @@
-import type { TabPanelClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { TabPanelClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_TABPANEL_CLASSES: Required<TabPanelClasses> = {
   root: "w-full",

@@ -1,5 +1,5 @@
-import type { StepperClasses } from "./types";
-import { structuralOnly } from "../../../utils/classLayers";
+import type { StepperClasses } from "./types.js";
+import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   root: "",

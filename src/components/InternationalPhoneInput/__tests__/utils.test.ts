@@ -10,8 +10,8 @@ import {
   parseInternationalNumber,
   formatForCopy,
   computeCursorPosition,
-} from "../utils";
-import type { CountryOption } from "../utils/types";
+} from "../utils.js";
+import type { CountryOption } from "../utils/types.js";
 
 // ─── Shared fixtures ──────────────────────────────────────────────────────────
 

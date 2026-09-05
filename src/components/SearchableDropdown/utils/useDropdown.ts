@@ -1,8 +1,8 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation";
-import type { SearchableDropdownOption } from "./types";
-import { useControllableState } from "../../../utils/useControllableState";
-import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
+import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation.js";
+import type { SearchableDropdownOption } from "./types.js";
+import { useControllableState } from "../../../utils/useControllableState.js";
+import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect.js";
 
 interface UseDropdownProps {
   options?: SearchableDropdownOption[];

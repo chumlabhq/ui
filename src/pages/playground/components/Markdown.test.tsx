@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import Markdown from "./Markdown";
+import Markdown from "./Markdown.js";
 
 // The refine-path intent guard answers a no-op/question follow-up as a plain
 // assistant turn, and its `message` is markdown (react-markdown + remark-gfm).

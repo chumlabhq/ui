@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
-import { TabPanel } from "../../components/TabPanel";
-import type { Tab } from "../../components/TabPanel";
-import { useTheme } from "./ThemeContext";
+import { TabPanel } from "../../components/TabPanel/index.js";
+import type { Tab } from "../../components/TabPanel/index.js";
+import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
   Section,
@@ -11,7 +11,7 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
-} from "./components";
+} from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

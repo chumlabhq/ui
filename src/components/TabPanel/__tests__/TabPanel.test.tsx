@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import { renderHook } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TabPanel } from "../index";
-import type { Tab } from "../index";
-import { useTabPanelContext } from "../utils/context";
+import { TabPanel } from "../index.js";
+import type { Tab } from "../index.js";
+import { useTabPanelContext } from "../utils/context.js";
 
-import { setReducedMotion } from "../../../test/matchMedia";
+import { setReducedMotion } from "../../../test/matchMedia.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.

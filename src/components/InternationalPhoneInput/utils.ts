@@ -3,8 +3,8 @@ import type {
   PhoneNumberData,
   PhoneFormatPattern,
   PhoneLengthRule,
-} from "./utils/types";
-import { PHONE_FORMATTING_PATTERNS, PHONE_LENGTH_RULES } from "./constants";
+} from "./utils/types.js";
+import { PHONE_FORMATTING_PATTERNS, PHONE_LENGTH_RULES } from "./constants.js";
 
 export const findCountryByCode = (
   code: string,

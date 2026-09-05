@@ -1,6 +1,6 @@
-import { Modal } from "../../components/Modal";
-import type { Fixtures } from "./types";
-import { motionOverrides } from "./_motion";
+import { Modal } from "../../components/Modal/index.js";
+import type { Fixtures } from "./types.js";
+import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof Modal> = [
   { name: "open", props: { open: true, title: "Title", description: "Description" }, children: "Body" },

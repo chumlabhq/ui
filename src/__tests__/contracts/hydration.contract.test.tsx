@@ -23,9 +23,9 @@ import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { renderToString } from "react-dom/server";
 import { hydrateRoot } from "react-dom/client";
 import { act } from "@testing-library/react";
-import { COMPONENTS } from "./registry";
-import { fixturesFor } from "../fixtures";
-import { setReducedMotion } from "../../test/matchMedia";
+import { COMPONENTS } from "./registry.js";
+import { fixturesFor } from "../fixtures/index.js";
+import { setReducedMotion } from "../../test/matchMedia.js";
 
 const candidates = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 

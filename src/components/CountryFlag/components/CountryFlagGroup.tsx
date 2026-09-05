@@ -5,14 +5,14 @@ import type {
   CountryFlagTooltipConfig,
   CountryFlagProps,
   CountryFlagGroupClasses,
-} from "../utils/types";
+} from "../utils/types.js";
 import {
   DEFAULT_COUNTRYFLAG_GROUP_CLASSES,
-} from "../utils/constants";
-import { Tooltip } from "../../Tooltip";
-import { cn } from "../../../utils/scopedCn";
-import { getPixelSize, isTooltipConfig } from "../utils/helpers";
-import { CountryFlagGroupContext } from "../utils/context";
+} from "../utils/constants.js";
+import { Tooltip } from "../../Tooltip/index.js";
+import { cn } from "../../../utils/scopedCn.js";
+import { getPixelSize, isTooltipConfig } from "../utils/helpers.js";
+import { CountryFlagGroupContext } from "../utils/context.js";
 
 export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps>(
   (
