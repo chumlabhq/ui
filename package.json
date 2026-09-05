@@ -456,6 +456,8 @@
     "llms.txt",
     "llms-full.txt",
     "ACCESSIBILITY.md",
+    "CHANGELOG.md",
+    "VERSIONING.md",
     "README.md",
     "LICENSE",
     "NOTICE"

@@ -121,6 +121,47 @@ export function areTheTypesWrong(tarball, into) {
   };
 }
 
+/**
+ * Every relative link in a shipped document has to resolve inside the tarball.
+ *
+ * The published README linked to `ACCESSIBILITY.md`, which `files` did not
+ * carry — so the one document that qualifies every accessibility claim was a
+ * 404 for everyone reading the package on npm. The repo could not see it,
+ * because on GitHub the link resolves fine.
+ *
+ * Only relative links are checked. An absolute URL is someone else's problem
+ * and a `mailto:` is not a file; a link out to the repo is the correct way to
+ * reference something that deliberately does not ship.
+ */
+export function linksResolve(tarball) {
+  const { status, stdout, output } = run("tar", ["-tzf", tarball]);
+  if (status !== 0) return { ok: false, broken: [`could not list the tarball: ${output}`] };
+
+  const entries = new Set(
+    stdout.split("\n").filter(Boolean).map((line) => line.replace(/^package\//, "").replace(/\/$/, "")),
+  );
+  const documents = [...entries].filter((name) => name.endsWith(".md") && !name.includes("/"));
+  if (documents.length === 0) return { ok: false, broken: ["the tarball ships no documents at all"] };
+
+  const dir = mkdtempSync(join(tmpdir(), "chumlab-docs-"));
+  run("tar", ["-xzf", tarball, "-C", dir]);
+
+  const broken = [];
+  let checked = 0;
+  for (const document of documents) {
+    const text = readFileSync(join(dir, "package", document), "utf8");
+    for (const [, target] of text.matchAll(/\]\(([^)\s]+)\)/g)) {
+      if (/^(https?:|mailto:|#)/.test(target)) continue;
+      checked += 1;
+      const path = target.split("#")[0];
+      if (path && !entries.has(path)) broken.push(`${document} links to "${target}", which the tarball does not carry`);
+    }
+  }
+  rmSync(dir, { recursive: true, force: true });
+
+  return { ok: broken.length === 0, broken, checked, documents: documents.length };
+}
+
 function packIgnoringScripts(into) {
   const { status, stdout, output } = run("npm", ["pack", "--ignore-scripts", "--pack-destination", into], { cwd: ROOT });
   if (status !== 0) throw new Error(`npm pack failed:\n${output}`);
@@ -205,8 +246,19 @@ function selfCheck(tarball, into) {
     saw: `${empty.entrypoints} entrypoint(s), ${empty.count} problem(s)`,
   });
 
+  const danglingLink = repack(tarball, into, "link", (pkg) => {
+    const readme = join(pkg, "README.md");
+    writeFileSync(readme, `${readFileSync(readme, "utf8")}\n[gone](CONTRIBUTING.md)\n`, "utf8");
+  });
+  const links = linksResolve(danglingLink);
+  outcomes.push({
+    plant: "a README link to a file the tarball does not carry",
+    caught: !links.ok,
+    saw: links.ok ? `nothing across ${links.checked} link(s)` : links.broken[0],
+  });
+
   for (const outcome of outcomes) {
-    console.log(`  ${outcome.caught ? "caught" : "NOT CAUGHT"}  ${outcome.plant} — attw saw ${outcome.saw}`);
+    console.log(`  ${outcome.caught ? "caught" : "NOT CAUGHT"}  ${outcome.plant} — saw ${outcome.saw}`);
   }
   return outcomes.every((o) => o.caught);
 }
@@ -235,6 +287,15 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
             "a clean verdict on nothing is not a clean verdict"
           : `✗ attw reported ${types.count} problem(s)\n${types.summary}`,
       );
+      ok = false;
+    }
+
+    const links = linksResolve(tarball);
+    if (links.ok) {
+      console.log(`✓ ${links.checked} relative link(s) across ${links.documents} shipped document(s) resolve`);
+    } else {
+      for (const line of links.broken) console.error(`  ${line}`);
+      console.error("✗ a shipped document links to something the tarball does not carry");
       ok = false;
     }
 

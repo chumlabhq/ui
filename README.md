@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@chumlab/ui"><img src="https://img.shields.io/npm/v/@chumlab/ui?color=blue&label=npm" alt="npm version" /></a>
   <a href="https://github.com/chumlabhq/ui/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License" /></a>
-  <img src="https://img.shields.io/badge/react-18%2B-blue" alt="React 18+" />
+  <img src="https://img.shields.io/badge/react-18%20%7C%2019-blue" alt="React 18 and 19" />
   <img src="https://img.shields.io/badge/tailwind-v4-blue" alt="Tailwind CSS v4" />
   <img src="https://img.shields.io/badge/typescript-strict-blue" alt="TypeScript" />
 </p>
@@ -73,7 +73,7 @@ own CSS.
 | Fully unstyled mode             | Yes                       | No                 | Yes                 |
 | Per-element `classes` overrides | Yes                       | Theme overrides    | BYO                 |
 | Runtime CSS-in-JS               | None                      | Yes (Emotion)      | None                |
-| Dark mode                       | Built-in `dark:` variants | Theme provider     | BYO                 |
+| Dark mode                       | Design tokens, no provider | Theme provider     | BYO                 |
 | Responsive (320px+)             | Yes, mobile-first         | Partial            | BYO                 |
 | SSR safe                        | Yes                       | Yes                | Yes                 |
 | Accessibility                   | [WCAG 2.2 AA, per criterion](ACCESSIBILITY.md) | Partial            | Strong              |
@@ -128,10 +128,15 @@ both.
 
 | Package | Required | Notes |
 |---------|----------|-------|
-| `react` >= 18 | Yes | |
-| `react-dom` >= 18 | Yes | |
-| `@tanstack/react-table` ^8 | Only for Table | `npm install @tanstack/react-table` |
-| `date-fns` ^4 | Only for DatePicker | `npm install date-fns` |
+| `react` 18 or 19 | Yes | |
+| `react-dom` 18 or 19 | Yes | |
+| `@tanstack/react-table` ^8 | Only for Table | Declared optional; npm will not install it for you |
+| `date-fns` ^4 | Only for DatePicker | Declared optional; npm will not install it for you |
+
+The last two are marked `optional` in `peerDependenciesMeta`, so an app that imports neither
+Table nor DatePicker installs neither. Import from the subpaths to keep it that way — the
+root barrel re-exports every component, so it pulls both chunks in whether you render them
+or not.
 
 ---
 
@@ -266,7 +271,8 @@ rather than replace them.
 
 ## Controlled & Uncontrolled
 
-Every stateful component supports both:
+Every component that owns state supports both. Omit the value prop and the component keeps
+its own; pass it with `onValueChange` and you own it.
 
 ```tsx
 // Uncontrolled — component manages state
@@ -275,6 +281,11 @@ Every stateful component supports both:
 // Controlled — you own the state
 <Input value={text} onValueChange={setText} />
 ```
+
+21 components take an explicit `default*` seed (`defaultValue`, `defaultOpen`,
+`defaultChecked`); Input and TextArea inherit `defaultValue` from the native element.
+Table is the exception: its `sorting`, `globalFilter` and `selectedRowIds` can be
+controlled or left to the component, but there is no `default*` prop to seed them with.
 
 ---
 
@@ -297,13 +308,24 @@ No theme provider, no configuration, no extra imports.
 
 ## Accessibility
 
-Every component ships with:
+[`ACCESSIBILITY.md`](ACCESSIBILITY.md) is the document to read: it records every WCAG 2.2
+Level A and AA criterion with a status, a justification, and the test that holds it —
+including the ones this package does not claim, and the three it is known to fail.
 
-- ARIA roles and states (WAI-ARIA 1.2)
-- Full keyboard navigation (arrows, Tab, Enter, Space, Escape, Home/End)
-- Focus trapping and restoration (Modal, Drawer)
-- Screen reader announcements (`aria-live`)
-- `prefers-reduced-motion` support
+The behaviours below are the ones with a contract test behind them, named so you can check:
+
+| | Held by |
+|---|---|
+| ARIA relationships point at elements that exist | `aria-relationships.contract` |
+| Every interactive element is keyboard reachable | `keyboard-reachable.contract` |
+| Arrow-key roving focus in menus, tabs and the calendar grid | `roving-focus.contract` |
+| Focus trapped and restored in Modal and Drawer | `overlay-focus.contract` |
+| Status and error messages are announced | `status-messages.contract` |
+| `prefers-reduced-motion` is honoured — and motion exists when it is not set | `reduced-motion.contract` |
+| Text contrast meets the AA ratio in both themes | `contrast.contract` |
+
+"WAI-ARIA 1.2" is not claimed as a conformance statement; the contracts above test specific
+behaviours, not the whole specification.
 
 ---
 
@@ -327,14 +349,34 @@ Every component ships with:
 
 ---
 
-## Browser Support
+## Supported runtimes
 
-| Browser                | Versions |
-| ---------------------- | -------- |
-| Chrome / Edge          | Latest 2 |
-| Firefox                | Latest 2 |
-| Safari                 | Latest 2 |
-| Mobile Chrome / Safari | Latest 2 |
+| | Supported | How it is checked |
+|---|---|---|
+| React | 18 and 19 | Both majors build and typecheck against the packed tarball in the consumer matrix |
+| React DOM | 18 and 19 | As above |
+| Node | >= 18 | The `engines` floor. Only the current LTS is exercised in CI |
+| TypeScript | 5.x, `bundler` / `node16` / node10 resolution | `attw` checks all three against the tarball on every build |
+
+React 17 is not supported: the components use the automatic JSX runtime and
+`useSyncExternalStore`.
+
+### Browsers
+
+| Engine                 | How it is checked |
+| ---------------------- | ----------------- |
+| Chromium (Chrome, Edge) | Full e2e suite, every release |
+| Firefox                | Full e2e suite, every release |
+| WebKit (Safari)        | Full e2e suite, every release |
+| Mobile Chrome (Pixel 7) | Full e2e suite, every release |
+| Mobile Safari (iPhone 14) | Full e2e suite, every release |
+
+Those are the five Playwright projects the release matrix runs, at the engine version
+Playwright ships. "Latest two versions" is the intent, but only one version of each engine
+is actually exercised, so it is not claimed here.
+
+Layout is verified at 320, 375, 768, 1024, 1440 and 1920 px in both themes, against
+recorded screenshots.
 
 ---
 
@@ -343,10 +385,23 @@ Every component ships with:
 ```bash
 git clone https://github.com/chumlabhq/ui.git && cd ui && npm install
 npm run dev            # Dev server at localhost:5173
-npm run test:run       # Unit tests (Vitest, 3,000+ tests)
-npm run test:e2e       # E2E tests (Playwright)
+npm run test:run       # Unit and contract tests (Vitest, 4,409)
+npm run test:e2e       # E2E, Chromium only (Playwright, 419)
+npm run test:e2e:all   # The five-engine matrix
+npm run verify:consumers  # Installs the packed tarball into five framework apps
 npm run build:lib      # Build library
 ```
+
+---
+
+## Project documents
+
+| | |
+|---|---|
+| [CHANGELOG.md](CHANGELOG.md) | What changed, including the behavioural changes made before the first release |
+| [VERSIONING.md](VERSIONING.md) | What counts as public API, and which changes are major, minor or patch |
+| [ACCESSIBILITY.md](ACCESSIBILITY.md) | Every WCAG 2.2 Level A and AA criterion, with a status and the test that holds it |
+| [SECURITY.md](https://github.com/chumlabhq/ui/blob/main/SECURITY.md) | How to report a vulnerability |
 
 ---
 
@@ -362,9 +417,13 @@ npm run build:lib      # Build library
 ## FAQ
 
 **Does it work with Next.js?**
-Yes — App Router and Pages Router. The interactive components already ship with
-`"use client"`, so you can import them straight into a Server Component. Import
-`@chumlab/ui/styles.css` once in your root layout.
+Yes — App Router and Pages Router, and React Router 7 in SSR mode. The interactive
+components ship with `"use client"`, so you can import them straight into a Server
+Component. Import `@chumlab/ui/styles.css` once in your root layout.
+
+This is checked rather than assumed: `npm run verify:consumers` packs the library, installs
+the tarball into throwaway apps for Vite (React 18 and 19), both Next.js routers and React
+Router 7, and fails if any of them will not build or will not server-render.
 
 **Can I use it without Tailwind CSS?**
 Yes — that is the default path. `import "@chumlab/ui/styles.css"` is precompiled
@@ -378,7 +437,7 @@ Open an issue on [GitHub](https://github.com/chumlabhq/ui/issues).
 
 ## License
 
-[MIT](LICENSE) &copy; 2026 Chumlab
+[MIT](LICENSE) &copy; 2025-2026 Chumlab
 
 ---
 

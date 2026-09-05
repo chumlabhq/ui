@@ -3,7 +3,7 @@
 **Target:** WCAG 2.2 Level AA
 **Scope:** the 30 components published from this package
 **Last reviewed:** 2026-09-06
-**Decision record:** [ADR 003](docs/adr/003-accessibility-conformance-target.md)
+**Decision record:** [ADR 003](https://github.com/chumlabhq/ui/blob/main/docs/adr/003-accessibility-conformance-target.md)
 
 ## How to read this document
 
@@ -140,7 +140,7 @@ the row says which half is ours.
 | 3.2.1 On Focus | A | Does not support | Not gated. No component initiates a context change on focus alone. | — |
 | 3.2.2 On Input | A | Does not support | Not gated. Selection components emit `onValueChange` without navigating or submitting. | — |
 | 3.2.3 Consistent Navigation | AA | Not applicable | Page-level. | — |
-| 3.2.4 Consistent Identification | AA | Partially supports | Part naming across components is a closed vocabulary with a recorded precedent for every name outside it, so the same element is identified the same way in every component. That governs the styling API and the data attributes, not the visible labels. | `key-migration.contract` (jsdom); [ADR 002](docs/adr/002-classes-key-vocabulary.md) |
+| 3.2.4 Consistent Identification | AA | Partially supports | Part naming across components is a closed vocabulary with a recorded precedent for every name outside it, so the same element is identified the same way in every component. That governs the styling API and the data attributes, not the visible labels. | `key-migration.contract` (jsdom); [ADR 002](https://github.com/chumlabhq/ui/blob/main/docs/adr/002-classes-key-vocabulary.md) |
 | 3.2.6 Consistent Help | A | Not applicable | New in 2.2. A page-level obligation about where help mechanisms appear across a set of pages. A component library has no page set. | — |
 | 3.3.1 Error Identification | A | Partially supports | Form components render the error message in a `role="alert"` region, associate it with `aria-describedby`, and mark the control `aria-invalid`. Gated for the components with error fixtures. | `fixtures.contract`, `status-messages.contract` (jsdom); `e2e/accessibility-full.spec.ts` (chromium) |
 | 3.3.2 Labels or Instructions | A | Partially supports | `label`, `description` and `required` are wired to the control; an unnamed control warns in development. | `accessibleName.test` (jsdom) |

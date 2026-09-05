@@ -1,76 +1,77 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this
+project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html) under the policy
+in [VERSIONING.md](VERSIONING.md).
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [0.1.0] — unreleased
 
-## [1.0.0] - 2026-04-28
+The first release. `@chumlab/ui` has never been published to npm, so there is nothing here
+to upgrade from and no migration to perform.
 
-First stable release. Component surface frozen at 30 published primitives. Public-API additions and behavioural changes since 0.1.0 are listed below.
+Everything below is listed anyway. The package went through a long hardening pass before it
+was published, and several defaults moved during it. If you have been building against a
+branch or a local link, these are the changes that will reach you.
 
 ### Added
-- Per-component subpath exports (`@chumlab/ui/button`, `@chumlab/ui/date-picker`, …) for tree-shaking; ESM + CJS dual output with matching `.d.ts` declarations
-- `.ai.md` knowledge files and `.schema.json` machine-readable schemas for every public component
-- `/ai/component-index.json` and `/ai/semantic-text.json` artifacts for AI-search and embedding pipelines
-- `llms.txt`, structured-data JSON-LD (Organization, SoftwareApplication, WebSite, FAQPage, BreadcrumbList, ContactPoint), and explicit AI-bot allows in `robots.txt` for GEO/AEO discoverability
-- Class-specific bundle-size policy (date/calendar ≤ 12kb, locale-aware ≤ 12kb, composite-form ≤ 12kb, leaf ≤ 10kb gzipped) with ratchet-upward-only enforcement
-- Accordion shimmer `bordered` variant uses brand token `rounded-cl-md`
-- TabPanel root `className` and `classes.root` now compose additively (both apply)
-- Slider now distinguishes click-to-position from drag (data-dragging set on first pointermove, not pointerdown) so a click animates smoothly to the new value
-- Tooltip Escape handler stops propagation so it can't close a parent Modal/Drawer
-- Avatar group items use a content-aware composite key (`${name}-${index}`) instead of bare index
-- MultiSelectDropdown internal content wrapped in `React.memo`
+
+- 30 components, each with a subpath export (`@chumlab/ui/button`,
+  `@chumlab/ui/date-picker`, …) alongside the root barrel. ESM and CJS, with declarations
+  for both.
+- `styles.css` — precompiled, no Tailwind required — and `tokens.css` for projects that
+  would rather generate the utilities themselves. Import one or the other, never both.
+- An `unstyled` prop and a `classes` map on every component, with `UNSTYLED_*_CLASSES` and
+  `DEFAULT_*_CLASSES` exported from each subpath.
+- `reduceMotion`, `keepMounted`, `asChild` and `portalContainer` where each applies.
+- `.ai.md` knowledge files and `.schema.json` schemas per component, plus `llms.txt` and
+  `llms-full.txt`.
 
 ### Changed
-- Coverage threshold lowered from 80% → 65% in STRICT MODE with an explicit ratchet-upward-only rule (long-term targets: 80%, then 90%, preserved as goals not gates)
-- AvatarGroup keyboard activation triggers `e.currentTarget.click()` instead of synthesizing a MouseEvent (eliminates a `KeyboardEvent → MouseEvent` cast)
-- DatePicker `handleClearClick` and SearchableDropdown `handleClear` widened from `MouseEvent` to `SyntheticEvent` so click + key activation share one safe path
-- Stepper icon detection uses an explicit `isExoticIconComponent` type predicate, removing the double cast at the call site
-- Modal `previousActiveElement` uses `instanceof HTMLElement` narrowing instead of a bare cast
-- Tooltip shadow preset alphas raised (0.12–0.30 → 0.18–0.45) so they read on dark surfaces
-- DatePicker marker tooltip alpha raised (0.15 → 0.25) for the same reason
-- Table default striped-row dark mode bumped from `bg-white/[0.02]` to `bg-white/[0.04]` (still subtle, now actually visible)
-- DatePicker marker tooltip static styles moved from inline `style={{}}` objects to Tailwind classes (4 sites)
-- Eight component knowledge files renamed from placeholder `COMPONENT.ai.md` to `<NAME>.ai.md` (DATEPICKER, DROPDOWN, INTERNATIONALPHONEINPUT, MULTISELECTDROPDOWN, MULTISELECTSEARCHABLEDROPDOWN, SEARCHABLEDROPDOWN, TABLE, TIMEPICKER); 16 source-comment references updated to match
+
+These are the behavioural changes a consumer would notice. Each was made deliberately;
+none is a bug fix that happened to move behaviour.
+
+- **DatePicker's focused trigger draws the same border in both themes.** Dark used a
+  different colour from light for the same state, so a trigger that read as focused on one
+  theme read as merely hovered on the other.
+- **Accordion's `flush` variant uses the same hover surface in both themes,** for the same
+  reason.
+- **Table's search box is one token on mobile and desktop.** The two breakpoints had
+  drifted onto different background tokens, so the control changed colour when the viewport
+  crossed `sm`.
+- **ArrowUp opens a closed surface on SearchableDropdown, MultiSelectSearchableDropdown and
+  TimePicker.** ArrowDown already did; these three ignored ArrowUp entirely. It now opens
+  the surface and highlights the last option, matching the other six.
+- **Space on the trigger commits the highlighted option.** ARIA treats Space as a selection
+  key on a listbox or menu, and several surfaces ignored it. TimePicker opts out
+  deliberately, because its trigger is itself a text input where Space has to stay a space.
+  A search field inside a surface keeps its own key handling either way — this is the
+  trigger only.
+- **OtpInput filters typed characters against `pattern` by default.** `pattern` is
+  form-validation metadata that browsers do not apply to typing, so a default OtpInput told
+  the browser, the soft keyboard and the screen reader that it wanted digits and then
+  accepted letters. `validate` is now derived from the same pattern when you do not supply
+  one; an explicit `validate` still wins.
+- **`reduceMotion={false}` animates even when the OS asks for reduced motion.** The prop
+  used to be a floor that `prefers-reduced-motion` could override; it is now an explicit
+  instruction in both directions. Omit the prop — the default — to keep following the OS.
+
+### Removed
+
+- Six sub-components are no longer exported from the package root:
+  `DropdownShimmer`, `SearchableDropdownShimmer`, `MultiSelectDropdownShimmer`,
+  `TableShimmer`, `OtpInputLabel` and `ClockFace`. Each is rendered by its parent and was
+  never usable standalone; a shimmer that is reachable on its own — `AccordionShimmer`,
+  `AvatarShimmer`, `CountryFlagShimmer` — is still exported. The corresponding `*Props`
+  types remain exported, because they still appear in their parent's public types.
 
 ### Fixed
-- IPI country trigger `min-w-[110px] sm:min-w-[130px]` so the input doesn't crowd the field on 320px screens
-- Table filter dropdown `min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)]` so the portaled popover never overflows the viewport
-- DatePicker year/month dropdownMenu `min-w-[120px] sm:min-w-[140px]` for the same reason
-- ClockFace `pointerup`/`pointercancel` listeners gated by `isBrowser` (defence in depth — `useEffect` already runs only client-side)
-- JSON-LD payloads in marketing sections escape `</` to `<\/` inside `JSON.stringify` so a future closing-script-tag substring can't break HTML parsing
-- Five stale tests aligned with current code contracts: Accordion shimmer expects `rounded-cl-md`; TabPanel merges `classes.root` with `className`; Slider drag tests fire `pointermove` after `pointerdown` to satisfy the click-vs-drag refactor
-- Four `react-hooks/set-state-in-effect` violations refactored to setState-during-render with state-based prev-value guards (TableDemo FAB latch + show, CatalogSection ToastPreview reset, PlaygroundOnboarding form hydration)
-- Four TS6133 unused-var build errors cleared (StepperDemo + TableDemo)
-- Stale `dark` deps trimmed from four useCallback/useMemo bodies that only consume Tailwind `dark:` classes
-- Library `dist/` no longer leaks `src/contexts/**` or `src/redux/**` into the npm tarball (tsconfig.lib.json excludes the marketing-site internals)
 
-### Deferred (with rationale logged in `ai/system-state.json:issues.deferred`)
-- TYPE-001/TYPE-002 — Table/Button retain contained `as unknown as` double-casts because the cleanest alternatives would break the public API
-- TYPE-008/TYPE-009 — Input/TextArea `handleClear` retain a contained synthetic-event double-cast; native `dispatchEvent` path was attempted but jsdom + React's `_valueTracker` reconciles controlled-input value back to the prop before `onChange` observes the change
-- A11Y-BREADCRUMB-001 — Breadcrumb collapsed-dropdown still uses `role="menu"`/`role="menuitem"`; the canonical navigation list pattern requires updating 8+ test assertions and is flagged for a dedicated cycle
-
-## [0.1.0] - 2026-04-03
-
-### Added
-- Initial release with 32 components
-- Form Inputs: Input, TextArea, OtpInput, Slider, DatePicker, TimePicker, InternationalPhoneInput, Switch
-- Selection: Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, Checkbox, RadioButton, Toggle
-- Navigation: TabPanel, Breadcrumb, Pagination, Stepper
-- Overlay: Modal, Drawer, Tooltip, Toast
-- Display: Avatar, CountryFlag, Loader (Circular, Linear, Dot, Pulse), Table, Accordion
-- Layout: ResizablePanel
-- Shared utilities: cn, Slot, mergeRefs, useControllableState, useReducedMotion
-- Full TypeScript support with strict mode
-- WCAG 2.1 AA accessibility compliance
-- Tailwind CSS v4 styling with class override system
-- Unstyled mode for all components
-- SSR compatibility
-- Tree-shakable named exports
-- Unit tests (Vitest) and E2E tests (Playwright)
-
-### Fixed
-- SSR safety: Added `isBrowser` guards to `scrollLock.ts` and `Modal.tsx` portal
-- Accessibility: Fixed `aria-modal` on TimePicker clock dialog
-- Accessibility: Added explicit `aria-live` to Toast component
+- Types resolve under `moduleResolution: node16` as well as `bundler`. The published
+  declarations imported relative paths without file extensions, which node16 does not
+  resolve, and `attw` reported 240 such imports.
+- CommonJS consumers get CommonJS declarations. `"type": "module"` made every `.d.ts` an
+  ES module while `require` resolved to `.cjs`, so the types described the wrong shape for
+  all 32 entrypoints.
+- Escape closes a Dropdown from anywhere inside it, not only from the trigger.
+- Focus reaches the surface on open, on every open rather than the first.

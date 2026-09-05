@@ -1,0 +1,92 @@
+# The fast gates: everything that can run on every push without anyone waiting.
+#
+# The slow ones — the five-engine matrix, the visual baselines, the consumer
+# matrix and the packaging gate — are in release-gates.yml. The split is by
+# cost, not by importance: `verify:consumers` alone has taken anywhere from 60s
+# to 2068s for identical code, because its wall time is npm's, not ours.
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+# A new push supersedes the run in flight for the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The npm scripts set this themselves; setting it job-wide means
+  # `playwright install` puts the browsers where the scripts will look for them,
+  # which is also the path the cache below keys on.
+  PLAYWRIGHT_BROWSERS_PATH: "0"
+
+jobs:
+  static:
+    name: typecheck and lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # `engines` allows >= 18. Only the current LTS is exercised here, and
+          # README says so rather than implying every version is covered.
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Runs tsc --build over the solution AND tsconfig.node16.json, each
+      # preceded by a planted failure it has to catch first.
+      - run: npm run typecheck
+      - run: npm run lint
+
+  unit:
+    name: unit and contract tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:run
+
+  e2e:
+    name: e2e (chromium)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Restored after `npm ci`, not before: the browsers live inside
+      # node_modules under PLAYWRIGHT_BROWSERS_PATH=0, and `npm ci` deletes that
+      # directory. Keyed on the lockfile because that is what pins the
+      # Playwright version.
+      - uses: actions/cache@v4
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      # Even on a cache hit the OS-level libraries are not in the cache.
+      - if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
