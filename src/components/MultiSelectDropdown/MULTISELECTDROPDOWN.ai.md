@@ -135,6 +135,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
 | `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
 | `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
 | `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |

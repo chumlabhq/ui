@@ -287,6 +287,11 @@
       "description": "Gap in pixels between trigger and dropdown popup.",
       "default": 4
     },
+    "typeaheadTimeout": {
+      "type": "number",
+      "description": "Timeout in milliseconds for keyboard typeahead matching.",
+      "default": 500
+    },
     "aria-label": {
       "type": "string",
       "description": "Accessible label for the dropdown."

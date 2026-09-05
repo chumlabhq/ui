@@ -17,6 +17,7 @@ export function useMultiSelectDropdown({
   onLoadOptions,
   loadOnOpen = false,
   onLoadError,
+  typeaheadTimeout = 500,
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -177,6 +178,7 @@ export function useMultiSelectDropdown({
     isOpen,
     isDisabled: (option) => !!option.disabled,
     onSelect: handleOptionToggle,
+    typeahead: { getLabel: (option) => option.label, timeout: typeaheadTimeout },
     onOpen: handleToggle,
     onClose: (reason) => {
       // Tab is already closing the surface through blur; calling handleClose

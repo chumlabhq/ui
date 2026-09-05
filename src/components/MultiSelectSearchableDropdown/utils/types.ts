@@ -91,6 +91,8 @@ export interface MultiSelectSearchableDropdownBaseProps {
   forceDropdownPosition?: boolean;
   dropdownZIndex?: number;
   dropdownGap?: number;
+  /** Timeout in milliseconds for keyboard typeahead matching. */
+  typeaheadTimeout?: number;
   keepMounted?: boolean;
   "aria-label"?: string;
   onBlur?: () => void;
@@ -179,6 +181,7 @@ export interface UseMultiSelectDropdownProps {
   onLoadInitialOptions?: () => Promise<MultiSelectOption[]>;
   loadInitialOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
+  typeaheadTimeout?: number;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;

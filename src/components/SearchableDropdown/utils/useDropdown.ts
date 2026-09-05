@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation";
 import type { SearchableDropdownOption } from "./types";
 import { useControllableState } from "../../../utils/useControllableState";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
@@ -66,6 +67,10 @@ export function useDropdown({
 }: UseDropdownProps): UseDropdownReturn {
   const displayOptionsRef = useRef<SearchableDropdownOption[]>([]);
 
+  // Owned here rather than by `useMenuNavigation`: the callbacks below reset
+  // it and are declared before the hook runs.
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+
   const [currentValue, setCurrentValue] = useControllableState<string | null>({
     value: valueProp,
     defaultValue: defaultValue ?? null,
@@ -82,49 +87,17 @@ export function useDropdown({
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);
   const [isLoadingInitial, setIsLoadingInitial] = useState(false);
   const [asyncOptions, setAsyncOptions] = useState<SearchableDropdownOption[]>([]);
   const [loadedInitialOptions, setLoadedInitialOptions] = useState<SearchableDropdownOption[]>([]);
   const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
-  const [typeaheadQuery, setTypeaheadQuery] = useState("");
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const typeaheadRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shouldRestoreFocusRef = useRef(false);
   const searchVersionRef = useRef(0);
   const loadInitialMountedRef = useRef(true);
 
-  function getFirstEnabledIndex(opts: SearchableDropdownOption[]): number {
-    return opts.findIndex((o) => !o.disabled);
-  }
-  function getLastEnabledIndex(opts: SearchableDropdownOption[]): number {
-    for (let i = opts.length - 1; i >= 0; i--) {
-      if (!opts[i].disabled) return i;
-    }
-    return -1;
-  }
-  function getNextEnabledIndex(opts: SearchableDropdownOption[], from: number): number {
-    const start = from < opts.length - 1 ? from + 1 : 0;
-    for (let i = start; i < opts.length; i++) {
-      if (!opts[i].disabled) return i;
-    }
-    for (let i = 0; i < start; i++) {
-      if (!opts[i].disabled) return i;
-    }
-    return from;
-  }
-  function getPrevEnabledIndex(opts: SearchableDropdownOption[], from: number): number {
-    const start = from > 0 ? from - 1 : opts.length - 1;
-    for (let i = start; i >= 0; i--) {
-      if (!opts[i].disabled) return i;
-    }
-    for (let i = opts.length - 1; i > start; i--) {
-      if (!opts[i].disabled) return i;
-    }
-    return from;
-  }
 
   // isOpen and currentValue are now managed by useControllableState above
 
@@ -278,7 +251,6 @@ export function useDropdown({
     setSearchQuery("");
     setFocusedIndex(-1);
     setAsyncOptions([]);
-    setTypeaheadQuery("");
     shouldRestoreFocusRef.current = true;
   }, [setIsOpen]);
 
@@ -289,7 +261,6 @@ export function useDropdown({
         setSearchQuery("");
         setFocusedIndex(-1);
         setAsyncOptions([]);
-        setTypeaheadQuery("");
         shouldRestoreFocusRef.current = true;
         return false;
       }
@@ -317,176 +288,86 @@ export function useDropdown({
     [setCurrentValue, handleClose],
   );
 
-  const handleTypeahead = useCallback(
-    (char: string) => {
-      if (!isOpen || !displayOptions.length) return;
-
-      if (typeaheadRef.current) {
-        clearTimeout(typeaheadRef.current);
-      }
-
-      const newQuery = typeaheadQuery + char.toLowerCase();
-      setTypeaheadQuery(newQuery);
-
-      const matchIndex = displayOptions.findIndex((option) =>
-        option.label.toLowerCase().startsWith(newQuery)
-      );
-
-      if (matchIndex !== -1) {
-        setFocusedIndex(matchIndex);
-      }
-
-      typeaheadRef.current = setTimeout(() => {
-        setTypeaheadQuery("");
-      }, typeaheadTimeout);
-    },
-    [isOpen, displayOptions, typeaheadQuery, typeaheadTimeout],
-  );
+  /**
+   * The shared keyboard model. Two things stay here because they are this
+   * component's own: Delete/Backspace clears only while the surface is closed,
+   * and a Space typed into the search field is a character rather than a
+   * commit — the trigger is a button, the search box is not.
+   */
+  const {
+    onKeyDown: onMenuKeyDown,
+    firstEnabledIndex,
+  } = useMenuNavigation<SearchableDropdownOption>({
+    items: displayOptions,
+    isOpen,
+    activeIndex: focusedIndex,
+    onActiveIndexChange: setFocusedIndex,
+    isDisabled: (option) => !!option.disabled,
+    onSelect: handleOptionSelect,
+    onOpen: handleOpen,
+    onClose: () => handleClose(),
+    typeahead: { getLabel: (option) => option.label, timeout: typeaheadTimeout },
+  });
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (disabled) return;
 
-      if (event.key === "Tab") {
-        if (isOpen) {
-          handleClose();
-        }
+      const inSearchField =
+        (event.target as HTMLElement | null)?.tagName === "INPUT" && showSearch && isOpen;
+
+      // The search box owns its own text. Space types, and a printable
+      // character goes to the query rather than to type-ahead.
+      if (inSearchField && (event.key === " " || event.key.length === 1)) return;
+
+      // Opening with Enter or Space lands on the first option, so the next
+      // Enter selects it. Dropdown opens with nothing active; this component
+      // has always seeded, and that is not one of the differences this slice
+      // is resolving.
+      if (!isOpen && (event.key === "Enter" || event.key === " ")) {
+        event.preventDefault();
+        handleOpen();
+        if (firstEnabledIndex !== -1) setFocusedIndex(firstEnabledIndex);
         return;
       }
 
-      const searchInputFocused = (event.target as HTMLElement).tagName === "INPUT";
-
-      if (searchInputFocused && showSearch && isOpen) {
-        if (event.key === "Escape") {
-          event.preventDefault();
-          handleClose();
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault();
-          if (displayOptions.length > 0) {
-            setFocusedIndex((prev) => {
-              const start = prev < displayOptions.length - 1 ? prev + 1 : 0;
-              for (let i = start; i < displayOptions.length; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = 0; i < start; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-        } else if (event.key === "ArrowUp") {
-          event.preventDefault();
-          if (displayOptions.length > 0) {
-            setFocusedIndex((prev) => {
-              const start = prev > 0 ? prev - 1 : displayOptions.length - 1;
-              for (let i = start; i >= 0; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = displayOptions.length - 1; i > start; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-        } else if (event.key === "Home") {
-          event.preventDefault();
-          const first = displayOptions.findIndex((o) => !o.disabled);
-          if (first !== -1) setFocusedIndex(first);
-        } else if (event.key === "End") {
-          event.preventDefault();
-          for (let i = displayOptions.length - 1; i >= 0; i--) {
-            if (!displayOptions[i].disabled) {
-              setFocusedIndex(i);
-              break;
-            }
-          }
-        } else if (event.key === "Enter" && focusedIndex >= 0 && displayOptions[focusedIndex]) {
-          event.preventDefault();
-          handleOptionSelect(displayOptions[focusedIndex]);
-        }
+      // Type-ahead does not reach a closed surface here. Unlike Dropdown, this
+      // component does not open on a typed character, so searching would move a
+      // highlight nobody can see and leave it there for the next open.
+      if (
+        !isOpen &&
+        event.key.length === 1 &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey
+      ) {
         return;
       }
 
-      switch (event.key) {
-        case "Enter":
-        case " ":
-          event.preventDefault();
-          if (!isOpen) {
-            handleOpen();
-            if (displayOptions.length > 0) {
-              const first = getFirstEnabledIndex(displayOptions);
-              if (first !== -1) setFocusedIndex(first);
-            }
-          } else if (focusedIndex >= 0 && displayOptions[focusedIndex] && !displayOptions[focusedIndex].disabled) {
-            handleOptionSelect(displayOptions[focusedIndex]);
-          }
-          break;
-        case "Escape":
-          if (isOpen) {
-            event.preventDefault();
-            handleClose();
-          }
-          break;
-        case "ArrowDown":
-          event.preventDefault();
-          if (!isOpen) {
-            handleOpen();
-            if (displayOptions.length > 0) {
-              const first = getFirstEnabledIndex(displayOptions);
-              if (first !== -1) setFocusedIndex(first);
-            }
-          } else {
-            setFocusedIndex((prev) => getNextEnabledIndex(displayOptions, prev));
-          }
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          if (isOpen) {
-            setFocusedIndex((prev) => getPrevEnabledIndex(displayOptions, prev));
-          }
-          break;
-        case "Home":
-          if (isOpen) {
-            event.preventDefault();
-            const first = getFirstEnabledIndex(displayOptions);
-            if (first !== -1) setFocusedIndex(first);
-          }
-          break;
-        case "End":
-          if (isOpen) {
-            event.preventDefault();
-            const last = getLastEnabledIndex(displayOptions);
-            if (last !== -1) setFocusedIndex(last);
-          }
-          break;
-        case "Delete":
-        case "Backspace":
-          if (clearable && currentValue && !isOpen) {
-            event.preventDefault();
-            handleClear(event);
-          }
-          break;
-        default:
-          if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-            event.preventDefault();
-            handleTypeahead(event.key);
-          }
-          break;
+      if (
+        (event.key === "Delete" || event.key === "Backspace") &&
+        clearable &&
+        currentValue &&
+        !isOpen
+      ) {
+        event.preventDefault();
+        handleClear(event);
+        return;
       }
+
+      onMenuKeyDown(event);
     },
     [
       disabled,
       isOpen,
-      focusedIndex,
-      displayOptions,
       showSearch,
       clearable,
       currentValue,
-      handleOpen,
-      handleClose,
-      handleOptionSelect,
       handleClear,
-      handleTypeahead,
+      handleOpen,
+      setFocusedIndex,
+      firstEnabledIndex,
+      onMenuKeyDown,
     ],
   );
 

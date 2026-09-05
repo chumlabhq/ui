@@ -526,11 +526,14 @@ describe("useDropdown – ArrowDown", () => {
 // ---------------------------------------------------------------------------
 
 describe("useDropdown – ArrowUp", () => {
-  it("is a no-op when dropdown is closed", () => {
+  it("opens on the last enabled option when closed", () => {
+    // Changed with the menu primitive, deliberately. ARIA's combobox pattern
+    // opens on ArrowUp and lands on the last option; Dropdown has always done
+    // this, and the branch here was guarded on `isOpen` with no else.
     const { result } = renderHook(() => useDropdown({ options }));
     act(() => result.current.handleKeyDown(makeKeyEvent("ArrowUp")));
-    expect(result.current.isOpen).toBe(false);
-    expect(result.current.focusedIndex).toBe(-1);
+    expect(result.current.isOpen).toBe(true);
+    expect(result.current.focusedIndex).toBe(3); // Date, the last enabled
   });
 
   it("moves focus to previous enabled option", () => {
@@ -883,13 +886,16 @@ describe("useDropdown – Typeahead timeout reset", () => {
     vi.useRealTimers();
   });
 
-  it("typing 'ch' focuses cherry, after timeout 'c' focuses cherry fresh", () => {
-    // Note: cherry is disabled – typeahead still sets focusedIndex but won't select
+  it("type-ahead skips a disabled match and resets after the timeout", () => {
+    // Changed with the menu primitive, deliberately. Type-ahead used to land on
+    // Cherry even though Cherry is disabled — a highlight on an option that
+    // cannot be chosen. Dropdown's type-ahead has always skipped disabled
+    // options, and arrow navigation here already did.
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true, typeaheadTimeout: 1000 }),
     );
     act(() => result.current.handleKeyDown(makeKeyEvent("c")));
-    expect(result.current.focusedIndex).toBe(2); // Cherry
+    expect(result.current.focusedIndex).toBe(-1);
     act(() => {
       vi.advanceTimersByTime(1100);
     });

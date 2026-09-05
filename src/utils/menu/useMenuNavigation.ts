@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 
 export interface MenuNavigationOptions<T> {
   items: readonly T[];
@@ -12,6 +19,25 @@ export interface MenuNavigationOptions<T> {
   /** Runs when Escape or Tab dismisses the surface. */
   onClose?: (reason: "escape" | "tab") => void;
   /**
+   * The active index, when the caller owns it.
+   *
+   * The hook keeps its own by default. A caller that resets the index from a
+   * callback declared before this hook runs — a loader clearing the highlight
+   * when its options arrive — cannot reference a setter that does not exist
+   * yet, so it passes its own state in instead.
+   */
+  activeIndex?: number;
+  onActiveIndexChange?: Dispatch<SetStateAction<number>>;
+  /**
+   * Whether Space commits the active item.
+   *
+   * True for a button trigger, where Space has no other meaning. False for a
+   * text-input trigger: ARIA's editable combobox does not bind Space precisely
+   * because it is a character, and TimePicker's input displays `2:30 PM` — a
+   * format the user cannot type if Space is intercepted.
+   */
+  commitOnSpace?: boolean;
+  /**
    * Type-to-jump. Opt-in, because the family was split on it: two comboboxes
    * implement it and two visually identical ones do not, and nothing recorded
    * why. Making it a parameter turns that into a decision.
@@ -21,7 +47,8 @@ export interface MenuNavigationOptions<T> {
 
 export interface MenuNavigation {
   activeIndex: number;
-  setActiveIndex: (index: number) => void;
+  /** `useState`'s setter, so callers can update from the previous index. */
+  setActiveIndex: Dispatch<SetStateAction<number>>;
   onKeyDown: (event: React.KeyboardEvent) => void;
   /** First selectable index, or -1. Used to seed focus when the surface opens. */
   firstEnabledIndex: number;
@@ -51,9 +78,24 @@ export function useMenuNavigation<T>({
   onSelect,
   onOpen,
   onClose,
+  activeIndex: activeIndexProp,
+  onActiveIndexChange,
+  commitOnSpace = true,
   typeahead,
 }: MenuNavigationOptions<T>): MenuNavigation {
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [internalIndex, setInternalIndex] = useState(-1);
+  const isControlled = activeIndexProp !== undefined;
+  const activeIndex = isControlled ? activeIndexProp : internalIndex;
+  // Written out rather than routed through `useControllableState`: the setter
+  // has to keep a stable identity, or every callback below it re-creates on
+  // each render and the compiler stops memoizing them.
+  const setActiveIndex = useCallback<Dispatch<SetStateAction<number>>>(
+    (value) => {
+      onActiveIndexChange?.(value);
+      if (!isControlled) setInternalIndex(value);
+    },
+    [onActiveIndexChange, isControlled],
+  );
   const typedRef = useRef("");
   const typedTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -122,20 +164,30 @@ export function useMenuNavigation<T>({
         typedRef.current = "";
       }, typeahead.timeout ?? DEFAULT_TYPEAHEAD_MS);
 
-      const query = typedRef.current;
       // Searched from the item after the active one, so repeating a letter
       // walks through the matches instead of sticking on the first.
-      for (let offset = 1; offset <= items.length; offset += 1) {
-        const index = (activeIndex + offset + items.length) % items.length;
-        if (disabled(index)) continue;
-        if (typeahead.getLabel(items[index]).toLowerCase().startsWith(query)) {
-          setActiveIndex(index);
-          return true;
+      const search = (query: string): number => {
+        for (let offset = 1; offset <= items.length; offset += 1) {
+          const index = (activeIndex + offset + items.length) % items.length;
+          if (disabled(index)) continue;
+          if (typeahead.getLabel(items[index]).toLowerCase().startsWith(query)) {
+            return index;
+          }
         }
+        return -1;
+      };
+
+      let match = search(typedRef.current);
+      // A query that matches nothing falls back to the character just typed, so
+      // starting a new word does not dead-end against the previous one.
+      if (match === -1 && typedRef.current.length > 1) {
+        match = search(key.toLowerCase());
       }
-      return false;
+      if (match === -1) return false;
+      setActiveIndex(match);
+      return true;
     },
-    [typeahead, items, activeIndex, disabled],
+    [typeahead, items, activeIndex, disabled, setActiveIndex],
   );
 
   const onKeyDown = useCallback(
@@ -180,13 +232,16 @@ export function useMenuNavigation<T>({
           break;
 
         case "Enter":
-        case " ":
-          // Space is a selection key for both listbox and menu. TimePicker was
-          // the one surface that answered Enter and ignored Space.
+        case " ": {
+          // Space is a selection key for a listbox or a menu, and TimePicker was
+          // the one surface that ignored it — but only where the trigger is not
+          // an editable field. `commitOnSpace` is that distinction.
+          if (event.key === " " && !commitOnSpace) break;
           event.preventDefault();
           if (!isOpen) onOpen?.();
           else commit();
           break;
+        }
 
         case "Escape":
           if (!isOpen) break;
@@ -203,8 +258,13 @@ export function useMenuNavigation<T>({
         default:
           // A single printable character, and no modifier — Ctrl+A and the like
           // belong to the browser.
+          //
+          // Not gated on `isOpen`: a caller that opens on the first typed
+          // character — Dropdown does — is still mid-update when this runs, so
+          // its `isOpen` reads false for one more tick and the jump would be
+          // dropped. Whether typing opens the surface is the caller's decision;
+          // finding the match is not.
           if (
-            isOpen &&
             typeahead &&
             event.key.length === 1 &&
             !event.ctrlKey &&
@@ -226,8 +286,10 @@ export function useMenuNavigation<T>({
       onSelect,
       onOpen,
       onClose,
+      commitOnSpace,
       typeahead,
       jumpToTyped,
+      setActiveIndex,
     ],
   );
 

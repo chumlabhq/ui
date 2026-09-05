@@ -90,6 +90,8 @@ export interface MultiSelectDropdownBaseProps {
   forceDropdownPosition?: boolean;
   dropdownZIndex?: number;
   dropdownGap?: number;
+  /** Timeout in milliseconds for keyboard typeahead matching. */
+  typeaheadTimeout?: number;
   "aria-label"?: string;
   onBlur?: () => void;
   onFocus?: () => void;
@@ -150,6 +152,7 @@ export interface UseMultiSelectDropdownProps {
   onLoadOptions?: () => Promise<MultiSelectOption[]>;
   loadOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
+  typeaheadTimeout?: number;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;

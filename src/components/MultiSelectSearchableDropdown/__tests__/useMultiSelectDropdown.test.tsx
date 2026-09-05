@@ -102,10 +102,16 @@ describe("useMultiSelectDropdown", () => {
       expect(result.current.focusedIndex).toBe(-1);
     });
 
-    it("resets focusedIndex on open", () => {
+    it("opens with no active option", () => {
+      // The reset moved into `useMenuNavigation`, which clears the index when
+      // the surface closes rather than when it opens. Driven the way a user
+      // drives it — open, highlight, close, reopen — the result is the same.
       const { result } = renderDefault();
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(2));
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
+      act(() => result.current.handleToggle());
+      expect(result.current.isOpen).toBe(true);
       expect(result.current.focusedIndex).toBe(-1);
     });
 
@@ -391,11 +397,14 @@ describe("useMultiSelectDropdown", () => {
       expect(result.current.focusedIndex).toBe(0);
     });
 
-    it("does not open/move focus when dropdown is closed", () => {
+    it("opens on the last enabled option when closed", () => {
+      // Changed with the menu primitive, deliberately. ARIA's combobox pattern
+      // opens on ArrowUp and lands on the last option; the branch here was
+      // guarded on `isOpen` with no else, so the key did nothing.
       const { result } = renderDefault();
       act(() => result.current.handleKeyDown(makeKey("ArrowUp")));
-      expect(result.current.isOpen).toBe(false);
-      expect(result.current.focusedIndex).toBe(-1);
+      expect(result.current.isOpen).toBe(true);
+      expect(result.current.focusedIndex).toBe(2);
     });
 
     it("calls preventDefault", () => {
@@ -502,19 +511,28 @@ describe("useMultiSelectDropdown", () => {
   // 15. Keyboard Space: when showSearch+isOpen, does NOT prevent default/select
   // -------------------------------------------------------------------------
   describe("keyboard: Space when showSearch=true and open", () => {
-    it("does NOT call preventDefault", () => {
-      const event = makeKey(" ");
-      const { result } = renderDefault({ showSearch: true, defaultOpen: true });
-      act(() => result.current.setFocusedIndex(0));
-      act(() => result.current.handleKeyDown(event));
-      expect(event.preventDefault).not.toHaveBeenCalled();
-    });
-
-    it("does NOT toggle selection", () => {
+    // Changed with the menu primitive, deliberately. Space used to be dropped
+    // whenever a search box existed, wherever focus was — so on the trigger the
+    // browser activated the button instead and closed the menu without
+    // selecting anything. The search box owns Space only while it has focus,
+    // which is how SearchableDropdown has always split the two.
+    it("toggles the focused option when the key arrives at the trigger", () => {
       const onValueChange = vi.fn();
+      const event = makeKey(" ");
       const { result } = renderDefault({ showSearch: true, defaultOpen: true, onValueChange });
       act(() => result.current.setFocusedIndex(0));
-      act(() => result.current.handleKeyDown(makeKey(" ")));
+      act(() => result.current.handleKeyDown(event));
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(onValueChange).toHaveBeenCalled();
+    });
+
+    it("leaves the key alone when the search input has it", () => {
+      const onValueChange = vi.fn();
+      const input = document.createElement("input");
+      const event = { ...makeKey(" "), target: input } as unknown as React.KeyboardEvent;
+      const { result } = renderDefault({ showSearch: true, defaultOpen: true, onValueChange });
+      act(() => result.current.setFocusedIndex(0));
+      act(() => result.current.handleKeyDown(event));
       expect(onValueChange).not.toHaveBeenCalled();
     });
   });

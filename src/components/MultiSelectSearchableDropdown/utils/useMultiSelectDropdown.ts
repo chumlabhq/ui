@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation";
 import type {
   MultiSelectOption,
   UseMultiSelectDropdownProps,
@@ -6,9 +7,6 @@ import type {
 } from "./types";
 import { useControllableState } from "../../../utils/useControllableState";
 
-function getFirstEnabledIndex(opts: MultiSelectOption[]): number {
-  return opts.findIndex((o) => !o.disabled);
-}
 
 export function useMultiSelectDropdown({
   options = [],
@@ -23,6 +21,7 @@ export function useMultiSelectDropdown({
   onLoadInitialOptions,
   loadInitialOnOpen = false,
   onLoadError,
+  typeaheadTimeout = 500,
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -39,7 +38,6 @@ export function useMultiSelectDropdown({
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);
   const [isLoadingInitial, setIsLoadingInitial] = useState(false);
   const [asyncOptions, setAsyncOptions] = useState<MultiSelectOption[]>([]);
@@ -139,17 +137,12 @@ export function useMultiSelectDropdown({
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
+    // The active index is not reset here: `useMenuNavigation` clears it when
+    // the surface closes, so resetting again would be a second owner.
     setIsOpen((prev: boolean) => {
-      if (prev) {
-        setSearchQuery("");
-        setFocusedIndex(-1);
-        setAsyncOptions([]);
-        return false;
-      }
       setSearchQuery("");
-      setFocusedIndex(-1);
       setAsyncOptions([]);
-      return true;
+      return !prev;
     });
   }, [disabled, setIsOpen]);
 
@@ -157,7 +150,6 @@ export function useMultiSelectDropdown({
     shouldRestoreFocusRef.current = true;
     setIsOpen(false);
     setSearchQuery("");
-    setFocusedIndex(-1);
     setAsyncOptions([]);
   }, [setIsOpen]);
 
@@ -191,94 +183,49 @@ export function useMultiSelectDropdown({
     [currentValues, allOptions, onValueChange, setCurrentValues]
   );
 
+  /**
+   * The shared keyboard model. Space is the one key this component decides for
+   * itself: with the search box open it is a character, otherwise it commits.
+   */
+  const {
+    activeIndex: focusedIndex,
+    setActiveIndex: setFocusedIndex,
+    onKeyDown: onMenuKeyDown,
+  } = useMenuNavigation<MultiSelectOption>({
+    items: displayOptions,
+    isOpen,
+    isDisabled: (option) => !!option.disabled,
+    onSelect: handleOptionToggle,
+    typeahead: { getLabel: (option) => option.label, timeout: typeaheadTimeout },
+    onOpen: handleToggle,
+    onClose: (reason) => {
+      // Tab already closes through blur; calling handleClose as well would set
+      // the restore-focus flag and pull focus back to the control the user is
+      // tabbing away from.
+      if (reason === "escape") handleClose();
+    },
+  });
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (disabled) return;
 
-      switch (event.key) {
-        case "Enter":
-          event.preventDefault();
-          if (isOpen && focusedIndex >= 0 && displayOptions[focusedIndex]) {
-            handleOptionToggle(displayOptions[focusedIndex]);
-          } else if (!isOpen) {
-            handleToggle();
-          }
-          break;
-        case " ":
-          if (!showSearch || !isOpen) {
-            event.preventDefault();
-            if (isOpen && focusedIndex >= 0 && displayOptions[focusedIndex]) {
-              handleOptionToggle(displayOptions[focusedIndex]);
-            } else if (!isOpen) {
-              handleToggle();
-            }
-          }
-          break;
-        case "Escape":
-          if (isOpen) {
-            event.preventDefault();
-            handleClose();
-          }
-          break;
-        case "ArrowDown":
-          event.preventDefault();
-          if (!isOpen) {
-            setIsOpen(true);
-            const first = getFirstEnabledIndex(displayOptions);
-            if (first !== -1) setFocusedIndex(first);
-          } else {
-            setFocusedIndex((prev) => {
-              const nextIndex = prev < displayOptions.length - 1 ? prev + 1 : 0;
-              for (let i = nextIndex; i < displayOptions.length; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = 0; i < nextIndex; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          if (isOpen) {
-            setFocusedIndex((prev) => {
-              const nextIndex = prev > 0 ? prev - 1 : displayOptions.length - 1;
-              for (let i = nextIndex; i >= 0; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = displayOptions.length - 1; i > nextIndex; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-          break;
-        case "Home":
-          event.preventDefault();
-          if (isOpen) {
-            const firstEnabledIndex = displayOptions.findIndex(
-              (option) => !option.disabled,
-            );
-            if (firstEnabledIndex !== -1) {
-              setFocusedIndex(firstEnabledIndex);
-            }
-          }
-          break;
-        case "End":
-          event.preventDefault();
-          if (isOpen) {
-            for (let i = displayOptions.length - 1; i >= 0; i--) {
-              if (!displayOptions[i].disabled) {
-                setFocusedIndex(i);
-                break;
-              }
-            }
-          }
-          break;
+      // The search box owns typing only while it has focus. Keys arriving at
+      // the trigger still commit on Space and still run type-ahead, which is
+      // how SearchableDropdown has always split the two.
+      const inSearchField =
+        (event.target as HTMLElement | null)?.tagName === "INPUT" && showSearch && isOpen;
+      if (
+        inSearchField &&
+        (event.key === " " ||
+          (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey))
+      ) {
+        return;
       }
+
+      onMenuKeyDown(event);
     },
-    [disabled, isOpen, focusedIndex, displayOptions, showSearch, handleToggle, handleClose, handleOptionToggle, setIsOpen]
+    [disabled, isOpen, showSearch, onMenuKeyDown],
   );
 
   return {

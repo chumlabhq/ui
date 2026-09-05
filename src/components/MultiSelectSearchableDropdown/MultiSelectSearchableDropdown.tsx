@@ -266,6 +266,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       forceDropdownPosition = false,
       dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
+      typeaheadTimeout = 500,
       keepMounted = false,
       onBlur: onBlurProp,
       onFocus: onFocusProp,
@@ -365,6 +366,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       onLoadInitialOptions,
       loadInitialOnOpen,
       onLoadError,
+      typeaheadTimeout,
       open,
       defaultOpen,
       onOpenChange,
@@ -387,11 +389,15 @@ const MultiSelectSearchableDropdown = forwardRef<
         ? `${dropdownId}-option-${focusedIndex}`
         : undefined;
 
-    // Focus search input when dropdown opens
+    // Focus the search input when the surface opens.
+    //
+    // Was a `setTimeout(…, 10)` — a guess at how long the portal takes to
+    // paint, which loses the focus entirely on a frame slower than that. The
+    // effect runs after the portal has committed, so the input exists by the
+    // time this reads the ref. SearchableDropdown has always done it this way.
     useEffect(() => {
-      if (isOpen && showSearch) {
-        const timer = setTimeout(() => searchInputRef.current?.focus({ preventScroll: true }), 10);
-        return () => clearTimeout(timer);
+      if (isOpen && showSearch && searchInputRef.current) {
+        searchInputRef.current.focus({ preventScroll: true });
       }
     }, [isOpen, showSearch]);
 

@@ -31,19 +31,22 @@ they live in.
 
 ## Where they disagree, and which is right
 
-### 1. TimePicker's listbox ignores Space — **TimePicker is wrong**
+### 1. TimePicker's listbox ignores Space — **withdrawn, TimePicker is right**
 
-Every other surface treats Space as select. TimePicker handles `Enter` and not
-`" "`. Its options are a `listbox`, and ARIA's listbox pattern names Space as a
-selection key; a keyboard user who has learned the rest of the library finds one
-menu that does not answer. Fix: TimePicker.
+Recorded here first and then measured. TimePicker's trigger is a text `<input>`,
+not a button, and ARIA's editable combobox deliberately does not bind Space
+because Space is a character — one the 12-hour format it displays contains.
+Binding it would stop the user typing. `useMenuNavigation` takes
+`commitOnSpace`, which is false here and true everywhere else, and that is the
+real distinction: button triggers commit on Space, editable ones do not.
 
-### 2. TimePicker does not skip disabled options — **TimePicker is wrong**
+### 2. TimePicker does not skip disabled options — **withdrawn, nothing to skip**
 
-Arrowing walks onto options that cannot be chosen. Every other surface with
-disabled items scans past them and wraps. TimePicker's disabled items are real,
-not hypothetical: `minTime`/`maxTime` disable everything outside the range, and
-the `open-bounded` fixture exists precisely to render them. Fix: TimePicker.
+Also withdrawn on measurement. `generateTimeOptions(format, step, minTime,
+maxTime)` filters by the bounds, so the listbox contains only selectable times;
+there is no disabled option in it to walk onto. The disabled items the
+`open-bounded` fixture renders are ClockFace's dial numbers, which are a
+different surface with its own keyboard model.
 
 ### 3. MultiSelectSearchableDropdown focuses its search with `setTimeout(…, 10)` — **SearchableDropdown is right**
 
@@ -94,3 +97,30 @@ Two behaviours are deliberately **not** unified here because they are real
 product differences rather than drift: whether committing closes the surface
 (single-select does, multi-select does not), and whether focus moves into the
 surface on open (a search input takes focus; a plain listbox does not).
+
+
+## Resolved
+
+| # | Component | Resolution |
+| --- | --- | --- |
+| 1 | TimePicker | **Withdrawn.** Its trigger is editable; Space is a character. `commitOnSpace` names the distinction. |
+| 2 | TimePicker | **Withdrawn.** Its listbox has no disabled options — the bounds filter them out of the list. |
+| 3 | MultiSelectSearchableDropdown | Fixed. The `setTimeout(…, 10)` is an effect, as in SearchableDropdown. |
+| 4 | CascadingDropdown, Pagination | Outstanding — both are in the next slice. |
+| 5 | Type-ahead | Decided: all four comboboxes offer it. It belongs to the trigger; a search box owns typing only while it has focus. `typeaheadTimeout` added to the two multi-selects. |
+| 6 | Pagination, Breadcrumb | Outstanding. `keepMounted` arrives free with `MenuSurface`; `lockScroll` and `data-open` do not. |
+| 7 | DatePicker month/year | Outstanding — next slice. |
+
+Three more differences surfaced while migrating, none of them in the original
+table because none is visible in the source:
+
+- **ArrowUp did not open a closed surface** on SearchableDropdown,
+  MultiSelectDropdown or MultiSelectSearchableDropdown. All three guarded the
+  branch on `isOpen` with no `else`. Dropdown has always opened, and ARIA's
+  combobox pattern opens onto the last option.
+- **SearchableDropdown's type-ahead could land on a disabled option.** Its own
+  test said so in a comment. Dropdown's never could, and arrow navigation in the
+  same component already skipped them.
+- **Space on MultiSelectSearchableDropdown closed the menu without selecting.**
+  The key was dropped whenever a search box existed, wherever focus was, so the
+  browser activated the trigger button instead.

@@ -179,6 +179,7 @@ const MultiSelectDropdown = forwardRef<
       forceDropdownPosition = false,
       dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
+      typeaheadTimeout = 500,
     },
     ref,
   ) => {
@@ -260,6 +261,7 @@ const MultiSelectDropdown = forwardRef<
       onLoadOptions,
       loadOnOpen,
       onLoadError,
+      typeaheadTimeout,
       open,
       defaultOpen,
       onOpenChange,

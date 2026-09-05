@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation";
 import type { DropdownOption } from "./types";
 import { useControllableState } from "../../../utils/useControllableState";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
@@ -55,8 +56,11 @@ export const useDropdown = ({
     onChange: onOpenChange,
   });
 
-  const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
+  // Owned here rather than by `useMenuNavigation`: the callbacks below reset
+  // it and are declared before the hook runs.
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+
   const [loadedOptions, setLoadedOptions] = useState<DropdownOption[]>([]);
   const [statusMessage, setStatusMessage] = useState("");
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -64,8 +68,6 @@ export const useDropdown = ({
   const hasLoadedRef = useRef(false);
   const mountedRef = useRef(true);
   const isLoadingRef = useRef(false);
-  const typeaheadRef = useRef("");
-  const typeaheadTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const shouldRestoreFocusRef = useRef(false);
 
   const displayOptionsRef = useRef<DropdownOption[]>([]);
@@ -74,9 +76,6 @@ export const useDropdown = ({
     mountedRef.current = true;
     return () => {
       mountedRef.current = false;
-      if (typeaheadTimerRef.current) {
-        clearTimeout(typeaheadTimerRef.current);
-      }
     };
   }, []);
 
@@ -251,6 +250,33 @@ export const useDropdown = ({
     setCurrentValue(null);
   }, [setCurrentValue]);
 
+
+  /**
+   * The shared keyboard model, plus the two behaviours that belong to this
+   * component rather than to menus in general: clearing with Delete/Backspace,
+   * and opening on the first typed character.
+   */
+  const {
+    onKeyDown: onMenuKeyDown,
+  } = useMenuNavigation<DropdownOption>({
+    items: displayOptions,
+    isOpen,
+    activeIndex: focusedIndex,
+    onActiveIndexChange: setFocusedIndex,
+    isDisabled: (option) => !!option.disabled,
+    onSelect: handleOptionSelect,
+    onOpen: handleOpen,
+    onClose: (reason) => {
+      if (reason === "escape") {
+        handleClose();
+        shouldRestoreFocusRef.current = true;
+      } else {
+        handleClose();
+      }
+    },
+    typeahead: { getLabel: (option) => option.label, timeout: typeaheadTimeout },
+  });
+
   const activeDescendantId = useMemo(() => {
     if (isOpen && focusedIndex >= 0 && focusedIndex < displayOptions.length) {
       return `${dropdownId}-option-${focusedIndex}`;
@@ -258,153 +284,36 @@ export const useDropdown = ({
     return undefined;
   }, [isOpen, focusedIndex, displayOptions.length, dropdownId]);
 
-  const findOptionByTypeahead = useCallback(
-    (char: string): number => {
-      typeaheadRef.current += char.toLowerCase();
-
-      if (typeaheadTimerRef.current) {
-        clearTimeout(typeaheadTimerRef.current);
-      }
-      typeaheadTimerRef.current = setTimeout(() => {
-        typeaheadRef.current = "";
-      }, typeaheadTimeout);
-
-      const searchStr = typeaheadRef.current;
-      const startIndex = focusedIndex >= 0 ? focusedIndex + 1 : 0;
-
-      for (let i = 0; i < displayOptions.length; i++) {
-        const idx = (startIndex + i) % displayOptions.length;
-        const option = displayOptions[idx];
-        if (!option.disabled && option.label.toLowerCase().startsWith(searchStr)) {
-          return idx;
-        }
-      }
-
-      if (searchStr.length > 1) {
-        const singleChar = char.toLowerCase();
-        for (let i = 0; i < displayOptions.length; i++) {
-          const idx = (startIndex + i) % displayOptions.length;
-          const option = displayOptions[idx];
-          if (!option.disabled && option.label.toLowerCase().startsWith(singleChar)) {
-            return idx;
-          }
-        }
-      }
-
-      return -1;
-    },
-    [displayOptions, focusedIndex, typeaheadTimeout],
-  );
-
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (disabled) return;
 
-      switch (event.key) {
-        case "Enter":
-        case " ":
-          event.preventDefault();
-          if (isOpen && focusedIndex >= 0 && focusedIndex < displayOptions.length) {
-            handleOptionSelect(displayOptions[focusedIndex]);
-          } else if (!isOpen) {
-            handleOpen();
-          }
-          break;
-        case "Escape":
-          if (isOpen) {
-            event.preventDefault();
-            handleClose();
-            shouldRestoreFocusRef.current = true;
-          }
-          break;
-        case "ArrowDown":
-          event.preventDefault();
-          if (!isOpen) {
-            handleOpen();
-            const firstEnabled = displayOptions.findIndex((o) => !o.disabled);
-            setFocusedIndex(firstEnabled >= 0 ? firstEnabled : 0);
-          } else {
-            setFocusedIndex((prev) => {
-              const start = prev < displayOptions.length - 1 ? prev + 1 : 0;
-              for (let i = start; i < displayOptions.length; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = 0; i < start; i++) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          if (!isOpen) {
-            handleOpen();
-            let lastEnabled = -1;
-            for (let i = displayOptions.length - 1; i >= 0; i--) {
-              if (!displayOptions[i].disabled) {
-                lastEnabled = i;
-                break;
-              }
-            }
-            setFocusedIndex(lastEnabled >= 0 ? lastEnabled : displayOptions.length - 1);
-          } else {
-            setFocusedIndex((prev) => {
-              const start = prev > 0 ? prev - 1 : displayOptions.length - 1;
-              for (let i = start; i >= 0; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              for (let i = displayOptions.length - 1; i > start; i--) {
-                if (!displayOptions[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-          break;
-        case "Home":
-          if (isOpen) {
-            event.preventDefault();
-            const first = displayOptions.findIndex((o) => !o.disabled);
-            if (first !== -1) setFocusedIndex(first);
-          }
-          break;
-        case "End":
-          if (isOpen) {
-            event.preventDefault();
-            for (let i = displayOptions.length - 1; i >= 0; i--) {
-              if (!displayOptions[i].disabled) {
-                setFocusedIndex(i);
-                break;
-              }
-            }
-          }
-          break;
-        case "Tab":
-          if (isOpen) {
-            handleClose();
-          }
-          break;
-        case "Delete":
-        case "Backspace":
-          if (clearable && currentValue) {
-            event.preventDefault();
-            handleClear();
-          }
-          break;
-        default:
-          if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-            if (!isOpen) {
-              handleOpen();
-            }
-            const idx = findOptionByTypeahead(event.key);
-            if (idx !== -1) {
-              setFocusedIndex(idx);
-            }
-          }
-          break;
+      if (
+        (event.key === "Delete" || event.key === "Backspace") &&
+        clearable &&
+        currentValue
+      ) {
+        event.preventDefault();
+        handleClear();
+        return;
       }
+
+      // Typing opens a closed dropdown before the character is searched for,
+      // which the shared model does not do: a menu whose trigger is not a text
+      // field has no reason to open on an arbitrary key.
+      if (
+        !isOpen &&
+        event.key.length === 1 &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey
+      ) {
+        handleOpen();
+      }
+
+      onMenuKeyDown(event);
     },
-    [disabled, isOpen, focusedIndex, displayOptions, handleOpen, handleClose, handleOptionSelect, findOptionByTypeahead, clearable, currentValue, handleClear],
+    [disabled, isOpen, clearable, currentValue, handleClear, handleOpen, onMenuKeyDown],
   );
 
   return {

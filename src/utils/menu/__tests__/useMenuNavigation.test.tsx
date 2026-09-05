@@ -105,6 +105,18 @@ describe("useMenuNavigation", () => {
       expect(onSelect).toHaveBeenCalledWith("Apple", 0);
     });
 
+    it("leaves Space alone for an editable trigger", () => {
+      // A text input needs the character. ARIA's editable combobox does not
+      // bind Space for the same reason.
+      const onSelect = vi.fn();
+      const event = key(" ");
+      const { result } = setup(LETTERS, [], { onSelect, commitOnSpace: false });
+      act(() => result.current.onKeyDown(key("ArrowDown")));
+      act(() => result.current.onKeyDown(event));
+      expect(onSelect).not.toHaveBeenCalled();
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+
     it("commits nothing when no item is active", () => {
       const onSelect = vi.fn();
       const { result } = setup(LETTERS, [], { onSelect });
@@ -181,10 +193,31 @@ describe("useMenuNavigation", () => {
       expect(result.current.activeIndex).toBe(2);
     });
 
+    it("falls back to the newest character when the query dead-ends", () => {
+      // Typing "ba" then "c" should land on Cherry rather than searching for
+      // "bac" and finding nothing.
+      const { result } = setup(LETTERS, [], { typeahead });
+      act(() => result.current.onKeyDown(key("b")));
+      act(() => result.current.onKeyDown(key("a")));
+      expect(result.current.activeIndex).toBe(1);
+      act(() => result.current.onKeyDown(key("c")));
+      expect(result.current.activeIndex).toBe(2);
+    });
+
     it("skips disabled matches", () => {
       const { result } = setup(LETTERS, [2], { typeahead });
       act(() => result.current.onKeyDown(key("c")));
       expect(result.current.activeIndex).toBe(-1);
+    });
+
+    it("still searches while the surface is closed", () => {
+      // A caller that opens on the first typed character is one tick behind:
+      // its `isOpen` is still false when the key arrives.
+      const { result } = renderHook(() =>
+        useMenuNavigation<string>({ items: LETTERS, isOpen: false, typeahead }),
+      );
+      act(() => result.current.onKeyDown(key("c")));
+      expect(result.current.activeIndex).toBe(2);
     });
 
     it("does nothing when the caller did not ask for it", () => {

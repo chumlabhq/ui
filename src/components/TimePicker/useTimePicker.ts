@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import type { UseTimePickerProps, UseTimePickerReturn } from "./utils/types";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
 import {
   generateTimeOptions,
   parseTimeInput,
@@ -33,6 +34,8 @@ export function useTimePicker({
 }: UseTimePickerProps): UseTimePickerReturn {
   const safeStep = clampMinuteStep(minuteStep);
   const [inputValue, setInputValue] = useState(() => computeInputValue(value, format).inputValue);
+  // Owned here rather than by `useMenuNavigation`: the callbacks below reset
+  // it and are declared before the hook runs.
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const isTypingRef = useRef(false);
   const prevFormatRef = useRef(format);
@@ -158,48 +161,49 @@ export function useTimePicker({
     commitValue();
   }, [commitValue]);
 
+  /**
+   * The shared keyboard model.
+   *
+   * No `isDisabled`: `generateTimeOptions` filters by `minTime`/`maxTime`, so
+   * the list holds only selectable times and there is nothing to skip. The
+   * disabled items a bounded range produces are ClockFace's dial numbers, which
+   * are a different surface.
+   *
+   * `commitOnSpace` is false because the trigger is a text input. ARIA's
+   * editable combobox does not bind Space — it is a character — and the
+   * 12-hour format this component displays contains one.
+   */
+  const {
+    onKeyDown: onMenuKeyDown,
+  } = useMenuNavigation<(typeof displayOptions)[number]>({
+    items: displayOptions,
+    isOpen: true,
+    activeIndex: focusedIndex,
+    onActiveIndexChange: setFocusedIndex,
+    onSelect: handleOptionSelect,
+    commitOnSpace: false,
+  });
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (disabled) return;
 
-      switch (event.key) {
-        case "Enter":
-          event.preventDefault();
-          if (focusedIndex >= 0 && displayOptions[focusedIndex]) {
-            handleOptionSelect(displayOptions[focusedIndex]);
-          } else {
-            commitValue();
-          }
-          break;
-        case "Tab":
-          commitValue();
-          break;
-        case "Escape":
-          event.preventDefault();
-          break;
-        case "ArrowDown":
-          event.preventDefault();
-          setFocusedIndex((prev) =>
-            prev < displayOptions.length - 1 ? prev + 1 : 0
-          );
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          setFocusedIndex((prev) =>
-            prev > 0 ? prev - 1 : displayOptions.length - 1
-          );
-          break;
-        case "Home":
-          event.preventDefault();
-          setFocusedIndex(0);
-          break;
-        case "End":
-          event.preventDefault();
-          setFocusedIndex(displayOptions.length - 1);
-          break;
+      // Both of these commit whatever has been typed into the input, which is
+      // this component's own behaviour: its trigger is a text field, so there is
+      // a value to parse even when no option is highlighted.
+      if (event.key === "Tab") {
+        commitValue();
+        return;
       }
+      if (event.key === "Enter" && focusedIndex < 0) {
+        event.preventDefault();
+        commitValue();
+        return;
+      }
+
+      onMenuKeyDown(event);
     },
-    [disabled, focusedIndex, displayOptions, handleOptionSelect, commitValue]
+    [disabled, focusedIndex, commitValue, onMenuKeyDown],
   );
 
   return {
