@@ -1,12 +1,10 @@
 import { useRef, useEffect, useId, forwardRef, memo, useCallback, useState, useMemo } from "react";
-import { createPortal } from "react-dom";
 import { useLayer } from "../../utils/layers";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 import { isBrowser } from "../../utils/isBrowser";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
-import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types";
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
 import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
@@ -15,7 +13,7 @@ import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { comboboxNameProps } from "../../utils/comboboxName";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
-import { surfaceStyle } from "../../utils/menu/measuringStyle";
+import MenuSurface from "../../utils/menu/MenuSurface";
 import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
@@ -58,44 +56,35 @@ function DropdownContent({
   children,
 }: DropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const isPositionStable = useStablePositionAfterOpen(isOpen);
   const coords = useAnchoredPosition(triggerElement, dropdownRef, isOpen, {
     side: preferredPosition,
     gap,
     forceSide: forcePosition,
   });
 
-  if (!isBrowser) return null;
-  if (!isOpen && !keepMounted) return null;
-
-  const dropdownStyle: CSSProperties = {
-    position: "fixed",
-    zIndex,
-    margin: 0,
-    ...surfaceStyle(
-      coords ? { top: coords.top, left: coords.left, width: coords.width } : null,
-      isPositionStable,
-    ),
-    ...(!isOpen && keepMounted ? { display: "none" } : {}),
-  };
-
-  return createPortal(
-    <div
+  return (
+    <MenuSurface
       ref={mergeRefs(dropdownRef, contentRef)}
+      trigger={triggerElement}
+      isOpen={isOpen}
+      side={preferredPosition}
+      forceSide={forcePosition}
+      gap={gap}
+      zIndex={zIndex}
+      portalContainer={portalContainer}
+      keepMounted={keepMounted}
       id={listboxId}
       role="listbox"
       aria-label={listboxAriaLabel}
       aria-multiselectable="true"
       aria-busy={loading || undefined}
       className={classes.content || undefined}
-      style={dropdownStyle}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.side ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
       {children}
-    </div>,
-    portalContainer ?? document.body,
+    </MenuSurface>
   );
 }
 

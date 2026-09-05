@@ -8,8 +8,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import type { ReactNode, CSSProperties } from "react";
-import { createPortal } from "react-dom";
+import type { ReactNode } from "react";
 import { useLayer } from "../../utils/layers";
 import type { TimePickerProps, TimePickerClasses, TimeValue, ClockFaceClasses } from "./utils/types";
 import {
@@ -19,7 +18,6 @@ import {
 import { useTimePicker } from "./useTimePicker";
 import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
-import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons";
 import { ClockFace } from "./ClockFace";
@@ -28,7 +26,7 @@ import { isBrowser } from "../../utils/isBrowser";
 
 import { cn } from "../../utils/scopedCn";
 import { motionSafeClasses } from "../../utils/classLayers";
-import { surfaceStyle } from "../../utils/menu/measuringStyle";
+import MenuSurface from "../../utils/menu/MenuSurface";
 
 const TimeOption = memo(function TimeOption({
   time,
@@ -500,7 +498,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 
     // ─── Portal dropdown positioning (matches Dropdown/DatePicker pattern) ──
     const triggerElRef = useRef<HTMLDivElement>(null);
-    const isPositionStable = useStablePositionAfterOpen(isOpen);
     const dropdownCoords = useAnchoredPosition(
       triggerElRef,
       dropdownContentRef,
@@ -508,41 +505,40 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       { side: dropdownPosition, gap: dropdownGap, forceSide: forceDropdownPosition },
     );
 
-    const portalDropdownStyle: CSSProperties = {
-      position: "fixed",
-      zIndex: dropdownZIndex,
-      margin: 0,
-      ...surfaceStyle(
-        dropdownCoords
-          ? {
-              top: dropdownCoords.top,
-              left: dropdownCoords.left,
-              // Clock variant sizes itself; dropdown variant matches trigger width
-              ...(variant === "dropdown" ? { width: dropdownCoords.width } : {}),
-            }
-          : null,
-        isPositionStable,
-      ),
-      ...(!isOpen && keepMounted ? { display: "none" } : {}),
-    };
-
-    const portalTarget = (portalContainer ?? (isBrowser ? document.body : null));
-
     const shouldRenderDropdown = variant === "dropdown"
       ? (isOpen || keepMounted)
       : isOpen; // Clock variant always remounts to reset selectionMode
 
-    const dropdownPortal = shouldRenderDropdown && portalTarget ? createPortal(
-      variant === "dropdown" ? (
-        <div
-          ref={dropdownContentRef}
-          id={listboxId}
-          role="listbox"
-          aria-label={typeof label === "string" ? label : "Time options"}
-          className={mergedClasses.content}
-          style={portalDropdownStyle}
-          data-position={dropdownCoords?.side ?? dropdownPosition}
-        >
+    const dropdownPortal = shouldRenderDropdown ? (
+      <MenuSurface
+        ref={dropdownContentRef}
+        trigger={triggerElRef}
+        isOpen={isOpen}
+        side={dropdownPosition}
+        forceSide={forceDropdownPosition}
+        gap={dropdownGap}
+        zIndex={dropdownZIndex}
+        portalContainer={portalContainer}
+        // The clock variant remounts on every open to reset its selection mode,
+        // so `keepMounted` is the dropdown variant's alone.
+        keepMounted={variant === "dropdown" ? keepMounted : false}
+        matchTriggerWidth={variant === "dropdown"}
+        {...(variant === "dropdown"
+          ? {
+              id: listboxId,
+              role: "listbox",
+              "aria-label": typeof label === "string" ? label : "Time options",
+              className: mergedClasses.content,
+              "data-position": dropdownCoords?.side ?? dropdownPosition,
+            }
+          : {
+              id: clockPopupId,
+              role: "dialog",
+              "aria-modal": true,
+              "aria-label": typeof label === "string" ? label : "Select time",
+            })}
+      >
+        {variant === "dropdown" ? (
           <div className={mergedClasses.list}>
             {displayOptions.length === 0 ? (
               <div className={mergedClasses.empty}>No matching times</div>
@@ -566,16 +562,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
               ))
             )}
           </div>
-        </div>
-      ) : (
-        <div
-          ref={dropdownContentRef}
-          id={clockPopupId}
-          role="dialog"
-          aria-modal="true"
-          aria-label={typeof label === "string" ? label : "Select time"}
-          style={portalDropdownStyle}
-        >
+        ) : (
           <ClockFace
             value={clockValue}
             format={format}
@@ -591,9 +578,8 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             cancelText={cancelText}
             okText={okText}
           />
-        </div>
-      ),
-      portalTarget,
+        )}
+      </MenuSurface>
     ) : null;
 
     const showClearButton = clearable && value && !disabled;

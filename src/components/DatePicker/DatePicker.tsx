@@ -8,7 +8,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { createPortal } from "react-dom";
 import { LAYERS, useLayer } from "../../utils/layers";
 import { cycleTabWithin } from "../../utils/focusUtils";
 import { comboboxNameProps } from "../../utils/comboboxName";
@@ -50,13 +49,12 @@ import {
   getDefaultPresets,
 } from "./utils";
 import { cn } from "../../utils/scopedCn";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
-import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { motionSafeClasses } from "../../utils/classLayers";
-import { surfaceStyle } from "../../utils/menu/measuringStyle";
+import { createPortal } from "react-dom";
+import MenuSurface from "../../utils/menu/MenuSurface";
 import {
   DEFAULT_DATEPICKER_CLASSES,
   UNSTYLED_DATEPICKER_CLASSES,
@@ -720,7 +718,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       onMonthChange,
     } as UseDatePickerProps);
 
-    const isCalendarPositionStable = useStablePositionAfterOpen(isOpen);
 
     // Internal typed accessors for the unified value
     // Read the hook's resolved selection, not the raw prop - an uncontrolled
@@ -739,16 +736,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       ? (onValueChange as ((dates: Date[] | null, dateValues: DateValue[] | null) => void) | undefined)
       : undefined;
 
-    // ─── Calendar positioning ───────────────────────────────────────────
-    // `clampOnlyWhenTriggerVisible` is DatePicker's own rule, now shared:
-    // clamping against a trigger scrolled out of view detaches the calendar and
-    // parks it at the viewport edge over unrelated content.
-    const calendarPos = useAnchoredPosition(triggerRef, calendarRef, isOpen, {
-      side: dropdownPosition,
-      gap: dropdownGap,
-      forceSide: forceDropdownPosition,
-      clampOnlyWhenTriggerVisible: true,
-    });
 
     // ─── Scroll lock ─────────────────────────────────────────────────────
     useEffect(() => {
@@ -977,7 +964,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     // Matches the guard every other portal component uses (TimePicker.tsx:604,
     // CascadingDropdown.tsx:552): `document` does not exist on the server, and
     // `keepMounted` / `open` make this branch reachable during SSR.
-    const portalTarget = isBrowser ? (portalContainer ?? document.body) : null;
 
     // ─── Render ────────────────────────────────────────────────────────
     return (
@@ -1054,9 +1040,21 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             </button>
           )}
 
-          {(isOpen || keepMounted) && portalTarget && createPortal(
-            <div
+          {(isOpen || keepMounted) && (
+            <MenuSurface
               ref={calendarRef}
+              trigger={triggerRef}
+              isOpen={isOpen}
+              side={dropdownPosition}
+              forceSide={forceDropdownPosition}
+              gap={dropdownGap}
+              zIndex={dropdownZIndex}
+              portalContainer={portalContainer}
+              keepMounted={keepMounted}
+              matchTriggerWidth={false}
+              // The calendar sizes to its content, not to the field that opens
+              // it, which is why it has always set an explicit width.
+              style={{ width: "max-content" }}
               id={calendarId}
               role="dialog"
               aria-modal="true"
@@ -1064,18 +1062,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               onKeyDown={handlePanelKeyDown}
               aria-label={`${mode === "single" ? "Date" : mode === "range" ? "Date range" : "Multiple dates"} picker`}
               className={mergedClasses.content}
-              style={{
-                position: "fixed",
-                zIndex: dropdownZIndex,
-                width: "max-content",
-                margin: 0,
-                ...(!isOpen
-                  ? { display: "none" }
-                  : surfaceStyle(
-                      calendarPos ? { top: calendarPos.top, left: calendarPos.left } : null,
-                      isCalendarPositionStable,
-                    )),
-              }}
             >
               {showPresets && (
                 <PresetsPanel
@@ -1282,8 +1268,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   )}
                 </div>
               )}
-            </div>,
-            portalTarget,
+            </MenuSurface>
           )}
         </div>
 

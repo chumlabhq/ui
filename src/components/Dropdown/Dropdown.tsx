@@ -8,7 +8,6 @@ import {
   useState,
   useCallback,
 } from "react";
-import { createPortal } from "react-dom";
 import { useLayer } from "../../utils/layers";
 import type { CSSProperties, ReactNode } from "react";
 import type {
@@ -35,13 +34,12 @@ import {
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
-import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { comboboxNameProps } from "../../utils/comboboxName";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
-import { surfaceStyle } from "../../utils/menu/measuringStyle";
+import MenuSurface from "../../utils/menu/MenuSurface";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,
@@ -147,7 +145,6 @@ const DropdownContent = memo(function DropdownContent({
   children,
 }: DropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const isPositionStable = useStablePositionAfterOpen(isOpen);
 
   const coords = useAnchoredPosition(triggerElement, dropdownRef, isOpen, {
     side: preferredPosition,
@@ -165,36 +162,28 @@ const DropdownContent = memo(function DropdownContent({
     }
   }, [isOpen, focusedIndex, dropdownId]);
 
-  if (!isBrowser) return null;
-  if (!isOpen && !keepMounted) return null;
-
-  const dropdownStyle: CSSProperties = {
-    position: "fixed",
-    zIndex,
-    margin: 0,
-    ...surfaceStyle(
-      coords ? { top: coords.top, left: coords.left, width: coords.width } : null,
-      isPositionStable,
-    ),
-    ...(!isOpen && keepMounted ? { display: "none" } : {}),
-  };
-
-  return createPortal(
-    <div
+  return (
+    <MenuSurface
       ref={mergeRefs(dropdownRef, contentRef)}
+      trigger={triggerElement}
+      isOpen={isOpen}
+      side={preferredPosition}
+      forceSide={forcePosition}
+      gap={gap}
+      zIndex={zIndex}
+      portalContainer={portalContainer}
+      keepMounted={keepMounted}
       id={listboxId}
       role="listbox"
       aria-label={ariaLabel}
       aria-busy={loading || undefined}
       className={classes.content || undefined}
-      style={dropdownStyle}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.side ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
       <div className={classes.list || undefined}>{children}</div>
-    </div>,
-    portalContainer ?? document.body,
+    </MenuSurface>
   );
 });
 
