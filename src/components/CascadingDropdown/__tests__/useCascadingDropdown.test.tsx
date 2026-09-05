@@ -721,12 +721,16 @@ describe("useCascadingDropdown", () => {
       expect(result.current.submenuFocusedIndex).toBe(1);
     });
 
-    it("is a no-op when dropdown is closed", () => {
+    it("opens on the last enabled option when closed", () => {
+      // Changed with the menu primitive, deliberately, and the fourth surface
+      // to gain it. ARIA's menu pattern opens on ArrowUp and lands on the last
+      // item; the branch here was guarded on `isOpen` with no `else`.
       const { result } = renderHook(() =>
         useCascadingDropdown({ options: flatOptions })
       );
       act(() => { result.current.handleKeyDown(makeKeyEvent("ArrowUp")); });
-      expect(result.current.focusedIndex).toBe(-1);
+      expect(result.current.isOpen).toBe(true);
+      expect(result.current.focusedIndex).toBe(2);
     });
   });
 

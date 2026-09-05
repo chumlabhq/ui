@@ -124,3 +124,75 @@ table because none is visible in the source:
 - **Space on MultiSelectSearchableDropdown closed the menu without selecting.**
   The key was dropped whenever a search box existed, wherever focus was, so the
   browser activated the trigger button instead.
+
+
+---
+
+# Composition phase: outcome
+
+## Where the twelve surfaces landed
+
+Twelve, not ten: the survey counted ten before Pagination's and Breadcrumb's
+menus were examined as surfaces in their own right, and before TimePicker's
+clock face was separated from its listbox.
+
+**Nine share the keyboard model** (`useMenuNavigation`): Dropdown,
+SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown,
+CascadingDropdown's menu, CascadingDropdown's submenu, TimePicker's listbox,
+Pagination, Breadcrumb, and DatePicker's month/year listbox.
+
+**Three do not, and should not:**
+
+| Surface | Why not |
+| --- | --- |
+| DatePicker's calendar grid | Navigates dates, not an index. Up/Down are ±7 days, Home/End are week bounds from `weekStartsOn`, PageUp/Down change month and replace the rendered set, Shift makes that a year. Nothing wraps; it pages. Fitting it would mean giving the primitive a column count, page handlers and item regeneration — carried by the nine that need none of it. |
+| TimePicker's clock face | A radial dial. Two rings of numbers navigated by angle, with its own focus cycle. |
+| Table's column-resize and row-reorder | Not menus at all: a separator and a drag handle, each with a keyboard alternative gated under 2.5.7. |
+
+**CascadingDropdown carries no two-level model, and neither does the primitive.**
+Its menu and its submenu are two independent `useMenuNavigation` instances plus
+a router — which level a key belongs to, and the two keys that move between
+them. The alternative was teaching the primitive about submenus, which the eight
+surfaces without submenus would have paid for. Two lists is what the data
+actually is.
+
+**DatePicker's month/year listbox is correctly neither portalled nor anchored.**
+It sits inside the calendar panel, which is already portalled and focus-trapped.
+Portalling it would move it out of `cycleTabWithin`'s subtree and out of its own
+click-outside check; anchoring is unnecessary because the panel is its
+containing block. Its own source says as much at the Tab branch. Not an
+oversight.
+
+## Duplication, measured across the phase
+
+| After | Positioning implementations | Files with hand-written arrow navigation | `case "Arrow…"`/Home/End branches | Portals | Hidden measuring frames |
+| --- | --- | --- | --- | --- | --- |
+| before the phase | 25 | 15 | 78 | 14 | 9 |
+| `useAnchoredPosition` | 8 | 15 | 78 | 14 | 9 |
+| the primitive + 1 migration | 8 | 14 | 74 | 14 | 9 |
+| four more surfaces | 8 | 10 | 58 | 14 | 9 |
+| focus fix + two surfaces | 8 | 8 | 50 | 12 | 0 |
+| the hard surfaces | 8 | **6** | **42** | **11** | **0** |
+
+The eight remaining `getBoundingClientRect` sites are two declared positioners —
+DatePicker's marker tooltip and Table's column filter, both estimating rather
+than measuring — plus Slider, Table, Tooltip and ClockFace, which measure for
+reasons that have nothing to do with anchoring a menu. The six files still
+writing arrow keys are the three surfaces above plus ResizablePanel, Slider and
+Table, none of which is a menu.
+
+The portal is the least converged piece: three components render through
+`MenuSurface`, and six still render their own `createPortal` while sharing
+`useAnchoredPosition` and `surfaceStyle`. That is a real remainder, not a
+rounding error, and it is the obvious next thing.
+
+## Two corrections to this survey
+
+- **CascadingDropdown was never calling `.focus()` inline from its Escape
+  handler.** Finding 4 named it on a pattern match; its restoration is an effect
+  keyed on the open transition, which is the correct shape. Pagination was the
+  only genuine inline caller, and it is fixed.
+- **TimePicker's two findings were both withdrawn** on measurement, recorded
+  above. Its trigger is an editable field, so Space is a character; and its
+  listbox has no disabled options, because `minTime`/`maxTime` filter them out
+  of the list rather than disabling them in it.

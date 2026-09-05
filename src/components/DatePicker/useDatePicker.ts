@@ -427,6 +427,21 @@ export function useDatePicker(props: UseDatePickerProps) {
     [minDate, maxDate, isDisabledDate],
   );
 
+  /**
+   * The calendar grid's keyboard model, deliberately not `useMenuNavigation`.
+   *
+   * The primitive navigates an index into a list. This navigates dates: Up and
+   * Down are ±7 days rather than ±1 item, Home and End are the bounds of the
+   * *week* computed from `weekStartsOn`, PageUp and PageDown change month —
+   * which replaces the rendered set entirely — and Shift makes that a year.
+   * Nothing wraps; it pages. There is no stable index for an index-based hook
+   * to hold.
+   *
+   * Bending the primitive to fit would mean giving it a column count, page
+   * handlers and a way to regenerate its items, and every other surface would
+   * carry that. It fits nine of twelve surfaces; this is one of the three it
+   * does not, and saying so is cheaper than the alternative.
+   */
   const handleCalendarKeyDown = useCallback(
     (event: React.KeyboardEvent, date: Date) => {
       if (disabled) return;

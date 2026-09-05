@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useMenuNavigation } from "../../../utils/menu/useMenuNavigation";
 import type {
   CascadingOption,
   CascadingValue,
@@ -385,43 +386,87 @@ export const useCascadingDropdown = ({
     return option;
   }, [activeSubmenu, options, loadedChildren]);
 
+  /**
+   * Two lists, not one two-level list.
+   *
+   * The menu and its open submenu each navigate exactly the way every other
+   * surface does — wrap at the ends, skip disabled, Home and End to the enabled
+   * extremes, Enter and Space commit. So this runs two independent
+   * `useMenuNavigation` instances rather than teaching the primitive about
+   * submenus: a concept only this component has would otherwise be paid for by
+   * the eight surfaces that do not have it.
+   *
+   * What is genuinely this component's own is the router below — which level a
+   * key belongs to, and the two keys that move between them.
+   */
+  const activeParent = getActiveParent();
+  const submenuOptions = useMemo(
+    () => (activeParent ? getFilteredSubmenuOptions(activeParent) : []),
+    [activeParent, getFilteredSubmenuOptions],
+  );
+  const isInSubmenu = !!activeSubmenu && submenuFocusedIndex >= 0;
+
+  const menuNav = useMenuNavigation<CascadingOption>({
+    items: filteredOptions,
+    isOpen,
+    activeIndex: focusedIndex,
+    onActiveIndexChange: setFocusedIndex,
+    isDisabled: (option) => !!option.disabled,
+    onSelect: (option) => {
+      // Committing a parent from the keyboard opens its submenu *and* lands on
+      // the first item, so arrows can carry straight on. Hover and click open
+      // it with nothing highlighted, which is what `openSubmenuFor` does — the
+      // difference is the point, not an inconsistency.
+      if (isParentOption(option)) {
+        openSubmenuFor(option);
+        setSubmenuFocusedIndex(0);
+        return;
+      }
+      handleMenuItemClick(option);
+    },
+    onOpen: handleToggle,
+    onClose: (reason) => {
+      if (reason === "escape" || reason === "tab") handleClose();
+    },
+  });
+
+  const submenuNav = useMenuNavigation<CascadingOption>({
+    items: submenuOptions,
+    isOpen,
+    activeIndex: submenuFocusedIndex,
+    onActiveIndexChange: setSubmenuFocusedIndex,
+    isDisabled: (option) => !!option.disabled,
+    onSelect: (option) => {
+      if (activeParent) handleSubmenuItemClick(activeParent, option);
+    },
+    // Escape inside a submenu closes the submenu, not the menu; Tab closes
+    // everything. The outer level owns both of those, so this instance is only
+    // ever asked to move and to commit.
+    onClose: () => {},
+  });
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (disabled) return;
 
-      const activeParent = getActiveParent();
-      const submenuOpts = activeParent ? getFilteredSubmenuOptions(activeParent) : [];
-      const isInSubmenu = activeSubmenu && submenuFocusedIndex >= 0;
-      const menuOpts = filteredOptions;
-
       switch (event.key) {
-        case "Enter":
-        case " ":
+        case "ArrowRight": {
           event.preventDefault();
-          if (isInSubmenu && submenuOpts[submenuFocusedIndex]) {
-            handleSubmenuItemClick(
-              activeParent!,
-              submenuOpts[submenuFocusedIndex]
-            );
-          } else if (focusedIndex >= 0 && menuOpts[focusedIndex]) {
-            const option = menuOpts[focusedIndex];
-            const dynamicChildren = loadedChildren[option.value] || [];
-            const staticChildren = option.children || [];
-            const hasSubmenu = dynamicChildren.length > 0 || staticChildren.length > 0 || option.hasChildren;
-            if (hasSubmenu) {
-              setActiveSubmenu(option.value);
-              setSubmenuFocusedIndex(0);
-              if (option.hasChildren && !loadedChildren[option.value]) {
-                loadChildrenForOption(option);
-              }
-            } else {
-              handleMenuItemClick(option);
-            }
-          } else if (!isOpen) {
-            handleToggle();
+          if (!isOpen || focusedIndex < 0) return;
+          const option = filteredOptions[focusedIndex];
+          if (option?.children && option.children.length > 0) {
+            setActiveSubmenu(option.value);
+            setSubmenuFocusedIndex(0);
           }
-          break;
-
+          return;
+        }
+        case "ArrowLeft":
+          event.preventDefault();
+          if (isInSubmenu) {
+            setSubmenuFocusedIndex(-1);
+            setActiveSubmenu(null);
+          }
+          return;
         case "Escape":
           event.preventDefault();
           if (isInSubmenu) {
@@ -430,141 +475,23 @@ export const useCascadingDropdown = ({
           } else if (isOpen) {
             handleClose();
           }
-          break;
-
-        case "ArrowDown":
-          event.preventDefault();
-          if (!isOpen) {
-            setIsOpen(true);
-            setFocusedIndex(0);
-          } else if (isInSubmenu) {
-            setSubmenuFocusedIndex((prev) => {
-              const next = prev < submenuOpts.length - 1 ? prev + 1 : 0;
-              for (let i = next; i < submenuOpts.length; i++) {
-                if (!submenuOpts[i].disabled) return i;
-              }
-              for (let i = 0; i < next; i++) {
-                if (!submenuOpts[i].disabled) return i;
-              }
-              return prev;
-            });
-          } else {
-            setFocusedIndex((prev) => {
-              const next = prev < menuOpts.length - 1 ? prev + 1 : 0;
-              for (let i = next; i < menuOpts.length; i++) {
-                if (!menuOpts[i].disabled) return i;
-              }
-              for (let i = 0; i < next; i++) {
-                if (!menuOpts[i].disabled) return i;
-              }
-              return prev;
-            });
-          }
-          break;
-
-        case "ArrowUp":
-          event.preventDefault();
-          if (isOpen) {
-            if (isInSubmenu) {
-              setSubmenuFocusedIndex((prev) => {
-                const next = prev > 0 ? prev - 1 : submenuOpts.length - 1;
-                for (let i = next; i >= 0; i--) {
-                  if (!submenuOpts[i].disabled) return i;
-                }
-                for (let i = submenuOpts.length - 1; i > next; i--) {
-                  if (!submenuOpts[i].disabled) return i;
-                }
-                return prev;
-              });
-            } else {
-              setFocusedIndex((prev) => {
-                const next = prev > 0 ? prev - 1 : menuOpts.length - 1;
-                for (let i = next; i >= 0; i--) {
-                  if (!menuOpts[i].disabled) return i;
-                }
-                for (let i = menuOpts.length - 1; i > next; i--) {
-                  if (!menuOpts[i].disabled) return i;
-                }
-                return prev;
-              });
-            }
-          }
-          break;
-
-        case "ArrowRight":
-          event.preventDefault();
-          if (isOpen && focusedIndex >= 0) {
-            const option = menuOpts[focusedIndex];
-            if (option?.children && option.children.length > 0) {
-              setActiveSubmenu(option.value);
-              setSubmenuFocusedIndex(0);
-            }
-          }
-          break;
-
-        case "ArrowLeft":
-          event.preventDefault();
-          if (isInSubmenu) {
-            setSubmenuFocusedIndex(-1);
-            setActiveSubmenu(null);
-          }
-          break;
-
-        case "Home":
-          event.preventDefault();
-          if (isOpen) {
-            if (isInSubmenu) {
-              const firstEnabled = submenuOpts.findIndex((o) => !o.disabled);
-              if (firstEnabled !== -1) setSubmenuFocusedIndex(firstEnabled);
-            } else {
-              const firstEnabled = menuOpts.findIndex((o) => !o.disabled);
-              if (firstEnabled !== -1) setFocusedIndex(firstEnabled);
-            }
-          }
-          break;
-
-        case "End":
-          event.preventDefault();
-          if (isOpen) {
-            if (isInSubmenu) {
-              for (let i = submenuOpts.length - 1; i >= 0; i--) {
-                if (!submenuOpts[i].disabled) {
-                  setSubmenuFocusedIndex(i);
-                  break;
-                }
-              }
-            } else {
-              for (let i = menuOpts.length - 1; i >= 0; i--) {
-                if (!menuOpts[i].disabled) {
-                  setFocusedIndex(i);
-                  break;
-                }
-              }
-            }
-          }
-          break;
-
+          return;
         case "Tab":
           handleClose();
-          break;
+          return;
       }
+
+      (isInSubmenu ? submenuNav : menuNav).onKeyDown(event);
     },
     [
       disabled,
       isOpen,
+      isInSubmenu,
       focusedIndex,
-      activeSubmenu,
-      submenuFocusedIndex,
       filteredOptions,
-      getActiveParent,
-      getFilteredSubmenuOptions,
-      handleToggle,
       handleClose,
-      handleMenuItemClick,
-      handleSubmenuItemClick,
-      setIsOpen,
-      loadedChildren,
-      loadChildrenForOption,
+      menuNav,
+      submenuNav,
     ]
   );
 

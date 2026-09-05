@@ -51,6 +51,7 @@ import {
 } from "./utils";
 import { cn } from "../../utils/scopedCn";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
+import { useMenuNavigation } from "../../utils/menu/useMenuNavigation";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
@@ -111,44 +112,32 @@ const CustomDropdown = memo(function CustomDropdown({
     option?.focus();
   }, [isOpen, activeIndex]);
 
-  const handleListKeyDown = (e: React.KeyboardEvent) => {
-    const last = options.length - 1;
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setActiveIndex((i) => (i >= last ? 0 : i + 1));
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setActiveIndex((i) => (i <= 0 ? last : i - 1));
-        break;
-      case "Home":
-        e.preventDefault();
-        setActiveIndex(0);
-        break;
-      case "End":
-        e.preventDefault();
-        setActiveIndex(last);
-        break;
-      case "Enter":
-      case " ":
-        e.preventDefault();
-        if (options[activeIndex]) {
-          onChange(options[activeIndex].value);
-          setIsOpen(false);
-        }
-        break;
-      case "Escape":
-        e.preventDefault();
-        setIsOpen(false);
-        break;
-      case "Tab":
-        // The listbox is inside the picker's focus trap; closing on Tab keeps
-        // the trap's cycle over the panel rather than over the menu.
-        setIsOpen(false);
-        break;
-    }
-  };
+  /**
+   * The shared keyboard model, on the only DatePicker surface it fits.
+   *
+   * A plain vertical list: wrap at the ends, Home and End, Enter and Space to
+   * commit, Escape to dismiss. The calendar grid beside it is not this shape and
+   * is deliberately left alone — see the note above `handleCalendarKeyDown`.
+   *
+   * The index stays local state because opening seeds it from the current
+   * value, and the surface is not unmounted between opens.
+   */
+  const { onKeyDown: handleListKeyDown } = useMenuNavigation<(typeof options)[number]>({
+    items: options,
+    isOpen,
+    activeIndex,
+    onActiveIndexChange: setActiveIndex,
+    onSelect: (option) => {
+      onChange(option.value);
+      setIsOpen(false);
+    },
+    onClose: () => {
+      // Tab as well as Escape: this listbox lives inside the picker's focus
+      // trap, and closing on Tab keeps the trap cycling over the panel rather
+      // than over the menu.
+      setIsOpen(false);
+    },
+  });
 
   useEffect(() => {
     if (!isBrowser) return;

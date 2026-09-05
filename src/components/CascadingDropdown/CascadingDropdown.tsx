@@ -1,18 +1,15 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useCallback } from "react";
-import { createPortal } from "react-dom";
 import { useLayer } from "../../utils/layers";
 import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons";
 import { cn } from "../../utils/scopedCn";
-import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
-import { useAnchoredPosition } from "../../utils/useAnchoredPosition";
 import { motionSafeClasses } from "../../utils/classLayers";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useInertPropWarning } from "../../utils/useInertPropWarning";
-import { surfaceStyle } from "../../utils/menu/measuringStyle";
+import MenuSurface from "../../utils/menu/MenuSurface";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -502,13 +499,10 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       };
     }, [lockScroll, isOpen]);
 
-    const isPositionStable = useStablePositionAfterOpen(isOpen);
-    const menuCoords = useAnchoredPosition(triggerRef, menuRef, isOpen, {
-      side: dropdownPosition,
-      gap: dropdownGap,
-    });
-
-    const portalTarget = isBrowser ? (portalContainer ?? document.body) : null;
+    // Positioning, the portal and the measuring frame all belong to
+    // `MenuSurface` now; only the submenu's CSS placement is still this
+    // component's, because it is a child of the menu rather than a surface of
+    // its own.
 
     const menuSearchRef = useRef<HTMLInputElement>(null);
 
@@ -688,9 +682,16 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
             </button>
           )}
 
-          {(isOpen || keepMounted) && portalTarget && createPortal(
-            <div
+          {(isOpen || keepMounted) && (
+            <MenuSurface
               ref={menuRef}
+              trigger={triggerRef}
+              isOpen={isOpen}
+              side={dropdownPosition}
+              gap={dropdownGap}
+              zIndex={dropdownZIndex}
+              portalContainer={portalContainer}
+              keepMounted={keepMounted}
               id={menuId}
               role="menu"
               onKeyDown={combinedKeyDown}
@@ -698,19 +699,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               aria-live={showMenuSearch ? "polite" : undefined}
               aria-busy={isMenuSearching || undefined}
               className={mergedClasses.content || undefined}
-              style={{
-                position: "fixed" as const,
-                zIndex: dropdownZIndex,
-                margin: 0,
-                ...(!isOpen
-                  ? { display: "none" }
-                  : surfaceStyle(
-                      menuCoords
-                        ? { top: menuCoords.top, left: menuCoords.left, width: menuCoords.width }
-                        : null,
-                      isPositionStable,
-                    )),
-              }}
             >
               {showMenuSearch && (
                 <div className={mergedClasses.searchControl || undefined}>
@@ -822,8 +810,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                   );
                 })
               )}
-            </div>,
-          portalTarget)}
+            </MenuSurface>
+          )}
         </div>
 
         {name && (
