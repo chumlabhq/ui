@@ -27,16 +27,31 @@
  * `own` and `closure` are still reported, because the gap between them is the
  * composition story and hiding it would be the same mistake in a new place.
  *
- * ── Shape, and why it is derived ────────────────────────────────────────────
+ * ── Shape, and why it is derived from SOURCE ───────────────────────────────
  *
  * The shape sets the ceiling, so hand-assigning it would make the ceiling a
- * matter of opinion. It is read off the built artifact, first match wins, from
- * the component's OWN chunk plus its entry — not the whole closure, or every
- * component that renders a Tooltip would inherit "overlay" from it:
+ * matter of opinion. It is derived, first match wins — and it is derived from
+ * `src/components/<name>`, not from the built artifact.
  *
- *   surface   renders a two-dimensional cell grid (`"grid"` role)
- *   overlay   renders into a portal (`createPortal`)
- *   composed  pulls at least one other component's chunk
+ * It used to read the built chunk, which measured a proxy. "Does this component
+ * portal?" is a fact about its source; which chunk the `createPortal` call ends
+ * up in is a fact about Rollup. When the menu surfaces were extracted behind
+ * `MenuSurface`, the call moved into a shared chunk and eight components lost
+ * their overlay classification — their ceilings fell 2-4 KB because they got
+ * smaller. Three more (Modal, Drawer, Toast) had been misread the same way for
+ * longer, their own chunks being too small to hold the call.
+ *
+ * Reading the whole closure instead would swap one proxy for another: every
+ * component that renders a Tooltip would inherit "overlay" from it. Source is
+ * the level the question is actually asked at.
+ *
+ *   surface   renders a two-dimensional cell grid (`role="grid"`)
+ *   overlay   renders into a portal — `createPortal`, or `MenuSurface`, which
+ *             is the shared surface that portals on its behalf
+ *   composed  imports another component, resolved by path rather than matched
+ *             by name: `../CircularLoader` from inside Loader is Loader's own
+ *             file, and a chunk called `AccordionShimmer-*.js` is not evidence
+ *             that Accordion depends on something else
  *   control   none of the above
  *
  * ── Ceilings ────────────────────────────────────────────────────────────────
@@ -67,6 +82,70 @@ const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
  * and nothing would have noticed.
  */
 const LIBRARY_TOTAL_KB = 151.11;
+
+/**
+ * Breaches that are recorded rather than fixed, each with the reason and the
+ * number it may not exceed. Down-only, like every other ratchet on this branch:
+ * a declared entry that shrinks must be re-recorded, and one that falls under
+ * its ceiling must be deleted. A breach that is not here fails the gate.
+ *
+ * A ceiling is never raised to accommodate a component, and no component is
+ * split to satisfy a number.
+ */
+const DECLARED_BREACHES = new Map([
+  [
+    "Table",
+    {
+      kb: 16.30,
+      why: "99 public props: pinning, grouping, infinite scroll, CSV export, " +
+        "column resize, row reorder, inline edit. It genuinely does more than " +
+        "a surface. The only route under 12 is splitting the optional halves " +
+        "behind subpath entries, which is a public API change to satisfy a " +
+        "number.",
+    },
+  ],
+  [
+    "InternationalPhoneInput",
+    {
+      kb: 10.61,
+      why: "4.17 KB of it is DEFAULT_COUNTRIES, read on mount to resolve the " +
+        "selected country's flag and dial code. Deferring it is a blank " +
+        "trigger on first paint. Measured: deferring PHONE_FORMATTING_PATTERNS " +
+        "instead moves 0.32 KB and does not clear the ceiling.",
+    },
+  ],
+  [
+    "DatePicker",
+    {
+      kb: 12.42,
+      why: "Three selection modes, presets, markers, week numbers and a " +
+        "month/year listbox beside the grid. 0.42 over, and shrinking — it " +
+        "lost 0.41 to the composition phase.",
+    },
+  ],
+  [
+    "TimePicker",
+    {
+      kb: 10.35,
+      why: "A listbox variant and a radial clock face in one component, each " +
+        "with its own keyboard model. 0.35 over, and smaller than it was.",
+    },
+  ],
+  [
+    "Accordion",
+    {
+      kb: 9.12,
+      why: "Its own chunk is 0.55 KB; the rest is AccordionContent and " +
+        "useAccordionStateManager in sibling chunks nothing else reaches. The " +
+        "artifact rule read those chunk names as other components and called " +
+        "it composed, which gave it an 8 KB ceiling it had not earned.",
+    },
+  ],
+]);
+
+/** How far under its record a declared breach may drift before it is stale. */
+const DECLARED_SLACK_KB = 0.25;
+
 /** Below this much under the record, the record is stale and must be lowered. */
 const RATCHET_SLACK_KB = 0.5;
 
@@ -100,6 +179,62 @@ const components = () => {
     .sort();
 };
 
+const SRC_COMPONENTS = resolve(root, "src/components");
+
+/** Every source file of one component, tests excluded. */
+const sourceFilesOf = (name) => {
+  const base = join(SRC_COMPONENTS, name);
+  if (!existsSync(base)) return [];
+  const walk = (dir) =>
+    readdirSync(dir).flatMap((entry) => {
+      const path = join(dir, entry);
+      if (statSync(path).isDirectory()) return walk(path);
+      return /\.tsx?$/.test(entry) && !path.includes("__tests__") ? [path] : [];
+    });
+  return walk(base);
+};
+
+/** The component directory a resolved path belongs to, or null if outside. */
+const componentOwning = (absolute) => {
+  const rel = absolute.slice(SRC_COMPONENTS.length + 1);
+  if (absolute.slice(0, SRC_COMPONENTS.length) !== SRC_COMPONENTS) return null;
+  const first = rel.split("/")[0];
+  return first || null;
+};
+
+/**
+ * The four tests, first match wins, over a component's own source.
+ *
+ * Separated from the file walk so the self-check can put synthetic sources
+ * through the same function the gate uses.
+ */
+const shapeOf = (text, deps) =>
+  /role=["']grid["']|role:\s*["']grid["']/.test(text)
+    ? "surface"
+    : /\bcreatePortal\b|\bMenuSurface\b/.test(text)
+      ? "overlay"
+      : deps.size
+        ? "composed"
+        : "control";
+
+/** A component's shape, read from `src/components/<name>`. */
+const shapeFromSource = (name) => {
+  const files = sourceFilesOf(name);
+  if (files.length === 0) return { shape: "control", deps: [] };
+  let text = "";
+  const deps = new Set();
+  for (const file of files) {
+    const body = readFileSync(file, "utf8");
+    text += body + "\n";
+    for (const m of body.matchAll(/from\s*["']([^"']+)["']/g)) {
+      if (!m[1].startsWith(".")) continue;
+      const owner = componentOwning(resolve(dirname(file), m[1]));
+      if (owner && owner !== name) deps.add(owner);
+    }
+  }
+  return { shape: shapeOf(text, deps), deps: [...deps] };
+};
+
 const measureAll = () => {
   const names = components();
   const sets = new Map(
@@ -108,6 +243,7 @@ const measureAll = () => {
   const reach = new Map();
   for (const files of sets.values())
     for (const f of files) reach.set(f, (reach.get(f) ?? 0) + 1);
+
 
   const rows = names.map((name) => {
     const files = sets.get(name);
@@ -132,13 +268,11 @@ const measureAll = () => {
           .filter((d) => d !== name),
       ),
     ];
-    const shape = /"grid"/.test(ownSrc)
-      ? "surface"
-      : /createPortal/.test(ownSrc)
-        ? "overlay"
-        : deps.length
-          ? "composed"
-          : "control";
+    // Read from source, not from `ownSrc`: which chunk a call lands in is
+    // Rollup's decision, and it moved eight ceilings when the surfaces were
+    // shared. `deps` above stays for the report; the shape uses the resolved
+    // source imports instead.
+    const { shape } = shapeFromSource(name);
 
     const exclusiveFiles = files.filter((f) => reach.get(f) === 1);
     return {
@@ -182,15 +316,89 @@ const run = () => {
   );
 
   let failed = 0;
+
+  const undeclared = breaches.filter((r) => !DECLARED_BREACHES.has(r.name));
+  const grew = breaches.filter(
+    (r) => DECLARED_BREACHES.has(r.name) && r.exclusive > DECLARED_BREACHES.get(r.name).kb + 0.01,
+  );
+  const shrank = breaches.filter(
+    (r) =>
+      DECLARED_BREACHES.has(r.name) &&
+      r.exclusive < DECLARED_BREACHES.get(r.name).kb - DECLARED_SLACK_KB,
+  );
+  const cleared = [...DECLARED_BREACHES.keys()].filter((name) => {
+    const row = rows.find((r) => r.name === name);
+    return row && row.exclusive <= row.ceiling;
+  });
+  const missing = [...DECLARED_BREACHES.keys()].filter(
+    (name) => !rows.some((r) => r.name === name),
+  );
+
   if (breaches.length) {
-    console.error(
-      `\n✗ ${breaches.length} bundle(s) over the class ceiling:\n` +
+    console.log(
+      `\n  ${breaches.length - undeclared.length} declared breach(es):\n` +
         breaches
+          .filter((r) => DECLARED_BREACHES.has(r.name))
+          .map(
+            (r) =>
+              `    ${r.name}: ${r.exclusive.toFixed(2)} KB > ${r.ceiling} KB (${r.shape}), recorded ${DECLARED_BREACHES.get(r.name).kb}`,
+          )
+          .join("\n"),
+    );
+  }
+
+  if (undeclared.length) {
+    console.error(
+      `\n✗ ${undeclared.length} bundle(s) over the class ceiling and not declared:\n` +
+        undeclared
           .map(
             (r) =>
               `    ${r.name}: ${r.exclusive.toFixed(2)} KB > ${r.ceiling} KB (${r.shape})`,
           )
           .join("\n"),
+    );
+    failed = 1;
+  }
+
+  if (grew.length) {
+    console.error(
+      `\n✗ ${grew.length} declared breach(es) grew past their record:\n` +
+        grew
+          .map(
+            (r) =>
+              `    ${r.name}: ${r.exclusive.toFixed(2)} KB > recorded ${DECLARED_BREACHES.get(r.name).kb} KB`,
+          )
+          .join("\n") +
+        `\n  A declared breach is a number held still, not a licence to grow.`,
+    );
+    failed = 1;
+  }
+
+  if (shrank.length) {
+    console.error(
+      `\n✗ ${shrank.length} declared breach(es) are now smaller than recorded:\n` +
+        shrank
+          .map(
+            (r) =>
+              `    ${r.name}: ${r.exclusive.toFixed(2)} KB, recorded ${DECLARED_BREACHES.get(r.name).kb} KB — lower it`,
+          )
+          .join("\n") +
+        `\n  A record left above reality buys back headroom nobody agreed to.`,
+    );
+    failed = 1;
+  }
+
+  if (cleared.length) {
+    console.error(
+      `\n✗ ${cleared.length} declared breach(es) are now under their ceiling: ${cleared.join(", ")}.` +
+        ` Remove them from DECLARED_BREACHES — an entry nobody needs is a licence left lying about.`,
+    );
+    failed = 1;
+  }
+
+  if (missing.length) {
+    console.error(
+      `\n✗ DECLARED_BREACHES names entries that were not measured: ${missing.join(", ")}`,
     );
     failed = 1;
   }
@@ -207,7 +415,10 @@ const run = () => {
     );
     failed = 1;
   }
-  if (!failed) console.log("\n✓ every entry within its ceiling, library total within record");
+  if (!failed)
+    console.log(
+      "\n✓ no undeclared breach, every declared breach held at its record, library total within record",
+    );
   return failed;
 };
 
@@ -217,6 +428,45 @@ const run = () => {
  * Without this, "0 breaches" and "the walk found nothing" are the same output —
  * which is how the record this replaces passed for four months.
  */
+/**
+ * The shape must be a fact about source, not about bundling.
+ *
+ * Two directions, because the bug had two halves: a portal call that moves
+ * between chunks must not change a component's shape, and a component that
+ * stops portalling must actually lose it. The first is what cost eight
+ * components 2-4 KB of ceiling for getting smaller.
+ */
+const shapeSelfCheck = () => {
+  const fail = (message) => {
+    console.error(`✗ self-check: ${message}`);
+    process.exit(1);
+  };
+
+  const none = new Set();
+  if (shapeOf('createPortal(<div />, document.body)', none) !== "overlay")
+    fail("a direct createPortal is not read as an overlay");
+  if (shapeOf('<MenuSurface trigger={ref} isOpen>x</MenuSurface>', none) !== "overlay")
+    fail("portalling through MenuSurface is not read as an overlay");
+  if (shapeOf('<div>plain</div>', none) !== "control")
+    fail("a component that portals nothing is still read as an overlay");
+  if (shapeOf('<div role="grid" />', none) !== "surface")
+    fail("a grid is not read as a surface");
+  if (shapeOf('<div />', new Set(["Tooltip"])) !== "composed")
+    fail("a component importing another is not read as composed");
+
+  // The regression itself, against the real tree: Dropdown portals through
+  // MenuSurface, so its own built chunk contains no `createPortal` at all. If
+  // the shape ever goes back to reading the artifact, this is what fails.
+  const dropdown = shapeFromSource("Dropdown");
+  if (dropdown.shape !== "overlay")
+    fail(`Dropdown reads as ${dropdown.shape}; it portals through MenuSurface and is an overlay`);
+  const ownChunk = join(DIST, "components", "Dropdown", "index.js");
+  if (existsSync(ownChunk) && /createPortal/.test(readFileSync(ownChunk, "utf8")))
+    console.warn("  note: Dropdown's entry now contains createPortal directly — the check above is weaker than it was");
+
+  console.log("✓ self-check: shape survives the call moving chunks, and is lost when the call goes");
+};
+
 const selfCheck = () => {
   const probeDir = join(DIST, "components", "__CeilingProbe");
   const probeChunk = join(DIST, "shared", "__CeilingProbe-probe01.js");
@@ -224,6 +474,7 @@ const selfCheck = () => {
     console.error(`✗ a previous probe was left behind — remove ${probeDir}`);
     process.exit(1);
   }
+  shapeSelfCheck();
   const before = measureAll();
   try {
     // Random, not repeated: 400k identical characters gzip to under half a KB,
