@@ -35,30 +35,41 @@ export default defineConfig({
       testMatch: /accessibility-full\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
     },
+    /**
+     * Visual baselines. Its own project for the same reason `a11y-full` is:
+     * 30 components x 6 widths x 2 themes is minutes, and running it in all
+     * five browser projects would multiply the baselines by five for no extra
+     * signal — a spacing change shows in one engine as well as in all of them.
+     */
+    {
+      name: "visual",
+      testMatch: /visual\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"] },
+    },
     {
       name: "chromium",
-      testIgnore: /accessibility-full\.spec\.ts/,
+      testIgnore: /(accessibility-full|visual)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "firefox",
-      testIgnore: /accessibility-full\.spec\.ts/,
+      testIgnore: /(accessibility-full|visual)\.spec\.ts/,
       use: { ...devices["Desktop Firefox"] },
     },
     {
       name: "webkit",
-      testIgnore: /accessibility-full\.spec\.ts/,
+      testIgnore: /(accessibility-full|visual)\.spec\.ts/,
       use: { ...devices["Desktop Safari"] },
     },
     // Mobile viewports
     {
       name: "Mobile Chrome",
-      testIgnore: /accessibility-full\.spec\.ts/,
+      testIgnore: /(accessibility-full|visual)\.spec\.ts/,
       use: { ...devices["Pixel 5"] },
     },
     {
       name: "Mobile Safari",
-      testIgnore: /accessibility-full\.spec\.ts/,
+      testIgnore: /(accessibility-full|visual)\.spec\.ts/,
       use: { ...devices["iPhone 12"] },
     },
   ],

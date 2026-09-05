@@ -533,18 +533,3 @@ test.describe("Repeated Interaction", () => {
   });
 });
 
-test.describe("Visual Regression", () => {
-  test("accordion collapsed state", async ({ page }) => {
-    await page.goto("/accordion");
-    await page.waitForLoadState("domcontentloaded");
-
-    const firstAccordion = page.locator('[data-orientation="vertical"]').first();
-    await firstAccordion.waitFor({ state: "visible" });
-
-    await expect(firstAccordion).toBeVisible();
-    const box = await firstAccordion.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box!.width).toBeGreaterThan(0);
-    expect(box!.height).toBeGreaterThan(0);
-  });
-});

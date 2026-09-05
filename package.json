@@ -339,6 +339,8 @@
     "build:tokens": "node scripts/build-tokens.mjs",
     "build:styles": "node scripts/build-styles.mjs",
     "test:e2e:all": "node scripts/run-e2e-matrix.mjs",
+    "test:e2e:visual": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=visual",
+    "test:e2e:visual:update": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=visual --update-snapshots",
     "test:e2e:a11y": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=a11y-full",
     "test:e2e:matrix": "node scripts/run-e2e-matrix.mjs --report"
   },

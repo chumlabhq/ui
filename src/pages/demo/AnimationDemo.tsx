@@ -1,4 +1,6 @@
-import { Section, CodeBlock } from "./components";
+import { useState } from "react";
+import { Section, CodeBlock, DemoWrapper } from "./components";
+import { Dropdown } from "../../components/Dropdown";
 
 const AnimationDemo = () => {
   return (
@@ -100,7 +102,69 @@ import { Modal } from "@chumlab/ui";
           fight them.
         </p>
       </Section>
+
+      <Section
+        title="Keeping the node for an exit"
+        description="A closed surface is unmounted, so there is nothing left to animate out. `keepMounted` leaves it in the DOM, hidden, and lets your exit transition play."
+      >
+        <CodeBlock
+          code={`// Without keepMounted the element is gone before the transition starts.
+<Dropdown options={options} keepMounted />`}
+        />
+        <KeepMountedExample />
+        <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
+          Close both menus and inspect the DOM. The first has removed its
+          listbox entirely; the second still has one, carrying{" "}
+          <code className="font-mono text-[12px] text-accent">display: none</code>.
+          That surviving node is what an exit animation, a measurement, or a
+          test query needs. It is also a node the browser keeps laying out, so
+          it is opt-in rather than the default.
+        </p>
+      </Section>
     </div>
+  );
+};
+
+const KEEP_OPTIONS = [
+  { value: "a", label: "Apple" },
+  { value: "b", label: "Banana" },
+  { value: "c", label: "Cherry" },
+];
+
+/**
+ * Two identical dropdowns differing only in `keepMounted`. The difference is
+ * visible only once both are closed, which is the whole point of the prop.
+ */
+const KeepMountedExample = () => {
+  const [count, setCount] = useState<number | null>(null);
+  return (
+    <DemoWrapper className="mt-6">
+      <div className="grid gap-8 md:grid-cols-2">
+        <div>
+          <div className="eyebrow mb-2">default — unmounts when closed</div>
+          <Dropdown options={KEEP_OPTIONS} placeholder="Pick a fruit" />
+        </div>
+        <div>
+          <div className="eyebrow mb-2">keepMounted — stays, hidden</div>
+          <Dropdown options={KEEP_OPTIONS} placeholder="Pick a fruit" keepMounted />
+        </div>
+      </div>
+      <button
+        type="button"
+        className="mt-6 text-[13px] text-accent underline underline-offset-4"
+        onClick={() =>
+          setCount(document.querySelectorAll("[role='listbox']").length)
+        }
+      >
+        Count the listboxes in the document
+      </button>
+      {count !== null && (
+        <p className="mt-2 text-[13px] text-fg-secondary">
+          {count} listbox{count === 1 ? "" : "es"} in the DOM right now — close
+          both menus and count again.
+        </p>
+      )}
+    </DemoWrapper>
   );
 };
 

@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Section, CodeBlock, DemoWrapper } from "./components";
+import { Dropdown } from "../../components/Dropdown";
 import { Button } from "../../components/Button";
 import { Switch } from "../../components/Switch";
 import { Checkbox } from "../../components/Checkbox";
@@ -142,7 +144,98 @@ const StylingDemo = () => {
           they behave identically.
         </p>
       </Section>
+
+      <Section
+        title="Render as your own element"
+        description="`asChild` merges a component's props, styling and behaviour onto the child you give it, instead of rendering its own wrapper."
+      >
+        <CodeBlock
+          code={`import { Button } from "@chumlab/ui";
+
+// Renders an <a>, not a <button>, and keeps everything Button does.
+<Button asChild>
+  <a href="/pricing">See pricing</a>
+</Button>`}
+        />
+        <DemoWrapper className="mt-6">
+          <div className="flex items-center gap-6">
+            <Button>A real button</Button>
+            <Button asChild>
+              <a href="#asChild">An anchor wearing Button</a>
+            </Button>
+          </div>
+        </DemoWrapper>
+        <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
+          The second control is an{" "}
+          <code className="font-mono text-[12px] text-accent">&lt;a&gt;</code> —
+          right-click it and you will be offered "open in new tab", which a
+          button cannot do. Use this when the semantics have to change but the
+          appearance and keyboard handling should not. Only the child's own
+          element survives; anything Button would have wrapped it in does not.
+        </p>
+      </Section>
+
+      <Section
+        title="Where floating content renders"
+        description="Menus, calendars and tooltips portal to the end of `document.body` so they cannot be clipped. `portalContainer` sends them somewhere else."
+      >
+        <CodeBlock
+          code={`const [container, setContainer] = useState<HTMLElement | null>(null);
+
+<div ref={setContainer} className="relative isolate">
+  <Dropdown options={options} portalContainer={container} />
+</div>`}
+        />
+        <PortalContainerExample />
+        <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
+          Both menus behave identically; only their position in the DOM differs.
+          Reach for this when the surface has to live inside a subtree —
+          a shadow root, a container with its own stacking context, or a modal
+          whose focus trap would otherwise treat the menu as outside itself.
+          The cost is that an ancestor with{" "}
+          <code className="font-mono text-[12px] text-accent">overflow: hidden</code>{" "}
+          will clip it, which is the clipping the default avoids.
+        </p>
+      </Section>
     </div>
+  );
+};
+
+const PORTAL_OPTIONS = [
+  { value: "a", label: "Apple" },
+  { value: "b", label: "Banana" },
+  { value: "c", label: "Cherry" },
+];
+
+/**
+ * Two identical dropdowns, one portalled to the body and one into the box
+ * beside it. Inspecting the DOM is the demonstration — there is nothing to see
+ * on screen, which is the point.
+ */
+const PortalContainerExample = () => {
+  const [container, setContainer] = useState<HTMLElement | null>(null);
+  return (
+    <DemoWrapper className="mt-6">
+      <div className="grid gap-8 md:grid-cols-2">
+        <div>
+          <div className="eyebrow mb-2">default — portals to body</div>
+          <Dropdown options={PORTAL_OPTIONS} placeholder="Pick a fruit" />
+        </div>
+        <div>
+          <div className="eyebrow mb-2">portalContainer — renders in this box</div>
+          <div
+            ref={setContainer}
+            className="relative isolate rounded-cl-md border border-border-faint p-3"
+          >
+            <Dropdown
+              options={PORTAL_OPTIONS}
+              placeholder="Pick a fruit"
+              portalContainer={container}
+            />
+          </div>
+        </div>
+      </div>
+    </DemoWrapper>
   );
 };
 
