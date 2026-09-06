@@ -245,10 +245,15 @@ describe("CascadingDropdown", () => {
       expect(trigger).toHaveAttribute("aria-invalid", "true");
     });
 
-    it("sets aria-required when required", () => {
+    it("does not put aria-required on a menu-button trigger", () => {
       render(<CascadingDropdown options={simpleOptions} required />);
       const trigger = screen.getByRole("button");
-      expect(trigger).toHaveAttribute("aria-required", "true");
+      // `aria-required` is not allowed on `button`: it belongs to the roles
+      // that take a value (combobox, listbox, textbox…), and this trigger is a
+      // menu button. axe reports `aria-allowed-attr`, critical — which nothing
+      // saw until a fixture set `required`. The requirement is carried by the
+      // label's asterisk; the five combobox siblings keep the attribute.
+      expect(trigger).not.toHaveAttribute("aria-required");
     });
 
     it("sets custom aria-label on trigger", () => {

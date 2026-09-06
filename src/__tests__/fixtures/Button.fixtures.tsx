@@ -12,5 +12,11 @@ const fixtures: Fixtures<typeof Button> = [
     children: "Save",
   },
   { name: "full-width", props: { fullWidth: true }, children: "Save" },
+  {
+    name: "as-button",
+    props: { as: "button" },
+    children: "Save",
+    note: "`as` is the escape hatch from the anchor form: it forces the button element.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

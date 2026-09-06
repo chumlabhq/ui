@@ -287,10 +287,10 @@ The audit now covers the fixture plus every body-level element React rendered. T
 portal root is told from the app root and from a third-party injection: `createPortal`
 mounts the surface's own element on `document.body`, so it carries a React fiber key, while
 the app root carries a container key and the injected checkout container carries neither.
-106 of the 372 fixtures portal something.
+113 of the 414 fixtures portal something.
 
 **The sweep reported 93 findings the first time it looked in the right place.** 25 were the
-recorded ones; 68 were new. All 68 are fixed: the sweep reports **25 findings** across 372
+recorded ones; 68 were new. All 68 are fixed: the sweep reports **25 findings** across 414
 fixtures — the recorded set, and nothing open.
 
 | Rule | Criterion | Found | Now | |
@@ -384,7 +384,7 @@ contrast defects shipped inside two components while it reported green, because
 `text-gray-500` is not a token and `bg-cl-accent/15` is an alpha of the foreground rather
 than a background any token names.
 
-`e2e/contrast-painted.spec.ts` asks the other question, of all 372 fixtures in both themes: the
+`e2e/contrast-painted.spec.ts` asks the other question, of all 414 fixtures in both themes: the
 computed foreground, against the background stack composited down to the first opaque layer,
 against WCAG AA's 4.5:1 (3:1 for large text). Both are kept. They fail for different reasons
 — the token check fails when the palette moves, the painted check fails when a component
@@ -409,12 +409,26 @@ Two tokens moved with them, and `contrast.contract` gained both as text tokens: 
 page and panel but 4.45:1 on the two hover surfaces. `--cl-warning` is deliberately left at
 3.19:1 and out of the text tokens: nothing in the package paints text with it.
 
-**What it cannot see is what no fixture renders.** `AvatarBadge`'s count variant was white on
-`bg-red-500` — 3.76:1 — and nothing put a count badge on screen, so neither gate measured it.
-It has five fixtures now and the pill uses `--cl-error`, `--cl-error-bg` and `--cl-on-error`,
-two of them minted for it. The bound itself remains: `scripts/audit-fixture-gap.mjs` finds
-201 more props that render markup no fixture produces, including two `variant` props of the
-badge's own siblings that select colour pairs nothing has painted.
+**What it cannot see is what no fixture renders**, and that bound is now measured and
+ratcheted. `scripts/audit-fixture-gap.mjs` classifies every prop with no fixture from the
+AST: 151 of 648 put markup on screen no fixture produces, and the count may fall but a rise
+fails `doc-truth.contract`. The 37 that would have changed a gate's answer — three portals,
+ten roles, ten interactive elements, two colour pairs and eighteen ARIA attributes — were
+fixtured first, and the sweeps found five defects in them the moment they rendered:
+
+- **Four dangling accessible names.** `renderTrigger` replaces the library's trigger, and
+  with it the value element `comboboxNameProps` falls back to — so `Dropdown`,
+  `MultiSelectDropdown`, `MultiSelectSearchableDropdown` and `SearchableDropdown` pointed
+  `aria-labelledby` at an id that resolved to nothing. A name the platform cannot compute is
+  worse than no name; the fallback is now suppressed when the value element is the
+  consumer's to render, and the components warn as they already did.
+- **Two more in `Modal`.** `showHeader={false}` keeps `aria-labelledby` and
+  `aria-describedby` pointing at the title and description the header no longer renders. The
+  title string is still known, so it becomes `aria-label` instead.
+- **`aria-allowed-attr`, twice.** `ButtonGroup` put `aria-orientation` on `role="group"`,
+  which does not support it — it belongs to the roles that own arrow-key navigation. And
+  `CascadingDropdown`'s trigger carried `aria-required`, which `button` does not support:
+  that trigger is a menu button, not one of the five combobox siblings that keep it.
 
 ---
 

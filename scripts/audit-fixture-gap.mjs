@@ -21,12 +21,15 @@
  */
 import ts from "typescript";
 import { execFileSync } from "node:child_process";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const JSON_ONLY = process.argv.includes("--json");
+const CHECK = process.argv.includes("--check");
+const RECORD = process.argv.includes("--record");
+const RECORD_PATH = resolve(ROOT, "docs/adr/002-fixture-gap.json");
 /** `--explain Component.prop` prints every reference site and how it was read. */
 const EXPLAIN = (process.argv.find((a) => a.startsWith("--explain=")) ?? "").split("=")[1] ?? null;
 
@@ -477,6 +480,58 @@ for (const r of results) byVerdict.set(r.verdict, (byVerdict.get(r.verdict) ?? 0
 const renders = results.filter((r) => r.verdict === "renders-markup");
 const byRank = new Map();
 for (const r of renders) byRank.set(r.rank, (byRank.get(r.rank) ?? 0) + 1);
+
+if (CHECK || RECORD) {
+  const measured = {
+    propsWithoutFixture: results.length,
+    rendersMarkup: renders.length,
+    byRank: Object.fromEntries(
+      RANK.map(([, label]) => [label, renders.filter((r) => r.rank === label).length]).filter(
+        ([, count]) => count > 0,
+      ),
+    ),
+  };
+
+  if (RECORD) {
+    const previous = JSON.parse(readFileSync(RECORD_PATH, "utf8"));
+    writeFileSync(
+      RECORD_PATH,
+      `${JSON.stringify({ ...previous, recordedOn: new Date().toISOString().slice(0, 10), ...measured }, null, 2)}\n`,
+      "utf8",
+    );
+    console.log(`recorded ${measured.rendersMarkup} props rendering unfixtured markup`);
+    process.exit(0);
+  }
+
+  const recorded = JSON.parse(readFileSync(RECORD_PATH, "utf8"));
+  const problems = [];
+  if (measured.rendersMarkup > recorded.rendersMarkup) {
+    problems.push(
+      `${measured.rendersMarkup} props render markup no fixture produces, up from ${recorded.rendersMarkup}. ` +
+        "A new prop that renders needs a fixture, or the number has to be re-recorded deliberately.",
+    );
+  }
+  if (measured.rendersMarkup < recorded.rendersMarkup) {
+    problems.push(
+      `${measured.rendersMarkup} props render markup no fixture produces, down from ${recorded.rendersMarkup}. ` +
+        "Re-record it: a ratchet that is not re-set stops being one.",
+    );
+  }
+  for (const [label, count] of Object.entries(measured.byRank)) {
+    const was = recorded.byRank[label] ?? 0;
+    if (count > was) problems.push(`"${label}" rose from ${was} to ${count}`);
+  }
+  if (problems.length) {
+    for (const problem of problems) console.error(`✗ ${problem}`);
+    console.error("  re-record with: node scripts/audit-fixture-gap.mjs --record");
+    process.exit(1);
+  }
+  console.log(
+    `✓ fixture gap holds at ${measured.rendersMarkup} props rendering unfixtured markup ` +
+      `(of ${measured.propsWithoutFixture} with no fixture)`,
+  );
+  process.exit(0);
+}
 
 if (JSON_ONLY) {
   console.log(JSON.stringify({ total: results.length, byVerdict: Object.fromEntries(byVerdict), byRank: Object.fromEntries(byRank), renders, results, unresolved }, null, 2));

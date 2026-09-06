@@ -695,7 +695,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               "aria-haspopup": "true",
               "aria-invalid": (error || undefined) as boolean | undefined,
               "aria-describedby": error && errorMessage ? errorId : undefined,
-              "aria-required": (required || undefined) as boolean | undefined,
               "aria-label": ariaLabel,
               disabled,
               onClick: handleToggle,
@@ -720,7 +719,11 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               aria-controls={isOpen ? menuId : undefined}
               aria-invalid={error || undefined}
               aria-describedby={error && errorMessage ? errorId : undefined}
-              aria-required={required || undefined}
+              // No `aria-required`: this trigger is a menu button, not a
+              // combobox, and `group`/`button` do not support the attribute —
+              // axe reports `aria-allowed-attr`, critical. The asterisk in the
+              // label is what carries the requirement here; the five siblings
+              // that DO declare `role="combobox"` keep the attribute.
               aria-label={ariaLabel}
               disabled={disabled}
               onClick={handleToggle}

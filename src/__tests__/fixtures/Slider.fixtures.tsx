@@ -33,5 +33,6 @@ const fixtures: Fixtures<typeof Slider> = [
       ui.pointerDown(thumb);
     },
   },
+  { name: "required", props: { label: "Volume", required: true } },
 ];
 export default fixtures;

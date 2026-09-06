@@ -1,5 +1,6 @@
 import { DatePicker } from "../../components/DatePicker/index.js";
 import type { Fixtures } from "./types.js";
+import { PortalTarget } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
 
 const D = new Date(2026, 0, 15);
@@ -74,5 +75,40 @@ const fixtures: Fixtures<typeof DatePicker> = [
   { name: "success", props: { label: "Date", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { disabled: true } },
   { name: "loading", props: { loading: true } },
+  { name: "required", props: { label: "Date", required: true } },
+  {
+    name: "open-no-clear",
+    props: { defaultOpen: true, value: D, showClearButton: false },
+    note: "Removes the clear control, which is one of the two buttons in the trigger.",
+  },
+  {
+    name: "open-today-action",
+    props: { defaultOpen: true, showTodayButton: true, todayAction: true },
+    note: "`todayAction` turns the footer's today button into a select-and-close action.",
+  },
+  {
+    name: "open-no-outside-days",
+    props: { defaultOpen: true, value: D, showOutsideDays: false },
+    note: "The leading and trailing cells disappear, which changes the grid's row contents.",
+  },
+  {
+    name: "open-markers-no-indicator",
+    props: {
+      defaultOpen: true,
+      value: D,
+      markers: [{ date: D, label: "Release", color: "#f00", type: "event" }],
+      showMarkerIndicator: false,
+    },
+    note: "A marked day with the dot suppressed — the branch `with-markers` never renders.",
+  },
+  {
+    name: "portal-container",
+    props: {},
+    render: () => (
+      <PortalTarget>
+        {(container) => <DatePicker defaultOpen value={D} portalContainer={container} />}
+      </PortalTarget>
+    ),
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

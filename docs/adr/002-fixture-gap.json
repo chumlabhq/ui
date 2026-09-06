@@ -1,0 +1,20 @@
+{
+  "$comment": "Props with no fixture that put markup on screen no fixture produces, classified from the AST by scripts/audit-fixture-gap.mjs. A ratchet: the count may fall, and a rise fails the gate. Re-record with `node scripts/audit-fixture-gap.mjs --record`.",
+  "$why": "AvatarBadge's `variant` was in this set and carried a 3.76:1 colour pair that no gate could measure, because measuring needs a render. The number is what turns 'some of the API is unrendered' into something that can be watched.",
+  "limits": [
+    "One hop of dataflow: a prop is followed into the variable a reference initialises, and that variable's references. A prop threaded through two variables, or through an object a `useMemo` returns, is not followed.",
+    "94 props land in `logic-only` and 115 in `passes-through`; both buckets can contain props that do reach markup by a route this does not follow. `passes-through` means 'handed to a child component' and does not decide whether the child's markup changes.",
+    "So the recorded count is a FLOOR, not a total. The error is toward under-reporting.",
+    "Identifier matching is by name within the component's own directory, so a local variable that shares a prop's name in another function in that directory can be read as a reference to it."
+  ],
+  "recordedOn": "2026-09-06",
+  "fixtures": 414,
+  "propsWithoutFixture": 648,
+  "rendersMarkup": 151,
+  "byRank": {
+    "a slot the fixtures never fill": 49,
+    "a classes key": 17,
+    "markup with none of the above": 39,
+    "the component itself, present or absent": 46
+  }
+}

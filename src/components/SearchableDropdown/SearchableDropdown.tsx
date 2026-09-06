@@ -538,7 +538,7 @@ const SearchableDropdown = forwardRef<
     "aria-invalid": (error || undefined) as boolean | undefined,
     "aria-describedby": error && errorMessage ? errorId : undefined,
     "aria-required": (required || undefined) as boolean | undefined,
-    ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel }),
+    ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger }),
     disabled,
     onClick: handleToggle,
     onKeyDown: handleKeyDownWithPassthrough,

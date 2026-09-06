@@ -15,5 +15,10 @@ const fixtures: Fixtures<typeof Stepper> = [
   { name: "disabled", props: { steps: STEPS.map((s) => ({ ...s, disabled: true })), value: 0 } },
   { name: "with-tooltips", props: { steps: STEPS.map((s) => ({ ...s, tooltip: "Tip" })), value: 1, showTooltips: true } },
   { name: "last-complete", props: { steps: STEPS, value: 2 } },
+  {
+    name: "no-connectors",
+    props: { steps: STEPS, value: 1, showConnectors: false },
+    note: "Drops the separator between steps, which carries its own role.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

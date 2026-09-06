@@ -29,5 +29,6 @@ const fixtures: Fixtures<typeof InternationalPhoneInput> = [
   { name: "disabled", props: { disabled: true } },
   { name: "readonly", props: { readOnly: true } },
   { name: "loading", props: { loading: true } },
+  { name: "required", props: { label: "Phone", required: true } },
 ];
 export default fixtures;

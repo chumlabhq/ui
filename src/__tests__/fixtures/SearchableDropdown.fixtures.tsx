@@ -80,5 +80,22 @@ const fixtures: Fixtures<typeof SearchableDropdown> = [
     act: settleAsync,
     note: "Prefetch returned nothing: the empty state, not the loading state.",
   },
+  { name: "required", props: { options: OPTIONS, label: "Fruit", required: true } },
+  {
+    name: "custom-trigger",
+    props: {
+      options: OPTIONS,
+      // Labelled, because the render props no longer carry a name of their own:
+      // the value element the fallback pointed at is the consumer's to render,
+      // and this fixture is what proved the reference dangled.
+      label: "Fruit",
+      renderTrigger: (triggerProps) => (
+        <button {...triggerProps} type="button" data-custom-trigger>
+          Pick one
+        </button>
+      ),
+    },
+    note: "The render props carry the combobox contract — role, aria-expanded, aria-controls — onto markup the library did not write.",
+  },
 ];
 export default fixtures;

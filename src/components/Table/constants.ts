@@ -40,7 +40,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   loadingBar:
     "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.06] dark:from-fg/[0.10] via-fg/[0.06] dark:via-fg/[0.10] to-fg/[0.06] dark:to-fg/[0.10]",
   control: "",
-  sortIcon: "shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
+  sortIcon: "shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
   filterButton:
     "shrink-0 ml-1 cursor-pointer transition-opacity opacity-50 hover:opacity-100 data-[active]:opacity-100",
   filterContent: "",
@@ -67,7 +67,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   searchIcon:
     "w-4 h-4 absolute top-1/2 -translate-y-1/2 text-cl-text-tertiary pointer-events-none group-data-[side=start]/search:left-3 group-data-[side=end]/search:right-3",
   clearTrigger:
-    "absolute top-1/2 -translate-y-1/2 right-2.5 p-0.5 rounded text-cl-text-tertiary hover:text-cl-text hover:bg-black/[0.04] cursor-pointer group-data-[side=end]/search:right-9",
+    "absolute top-1/2 -translate-y-1/2 right-2.5 p-0.5 rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover cursor-pointer group-data-[side=end]/search:right-9",
   searchInput: "",
   mobileCard: "",
   groupLabel: "",

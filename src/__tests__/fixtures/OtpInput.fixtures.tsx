@@ -10,5 +10,6 @@ const fixtures: Fixtures<typeof OtpInput> = [
   { name: "disabled", props: { length: 4, disabled: true } },
   { name: "loading", props: { length: 4, loading: true } },
   { name: "grouped", props: { length: 4, groups: [2, 2], separator: "-" }, note: "group and separator only exist when `groups` splits the field." },
+  { name: "required", props: { length: 4, label: "Code", required: true } },
 ];
 export default fixtures;

@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 58 |
 | Library-authored props across the public surface | 1136 |
 | With no demo | 283 (25%) |
-| With no fixture | 713 (63%) |
+| With no fixture | 649 (57%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -70,62 +70,62 @@ listed here with no demo anywhere fails the generator.
 
 | Component | Props | Inherited | No demo | No fixture | Phantom | Tier-A gaps |
 | --- | --- | --- | --- | --- | --- | --- |
-| Accordion | 32 | 271 | 9 | 22 | 0 | `asChild`, `unstyled` |
+| Accordion | 32 | 271 | 9 | 20 | 0 | `asChild`, `unstyled` |
 | AccordionContent | 11 | 279 | 4 | 10 | 0 | `asChild` |
 | AccordionItem | 6 | 277 | 3 | 5 | 0 | `asChild` |
 | AccordionShimmer | 11 | 2 | 7 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` |
 | AccordionTrigger | 10 | 277 | 3 | 9 | 0 | `asChild` |
 | Avatar | 21 | 278 | 2 | 12 | 0 | `asChild` |
 | AvatarBadge | 14 | 278 | 6 | 8 | 0 | `variant`, `asChild` |
-| AvatarGroup | 16 | 278 | 3 | 14 | 0 | `asChild` |
-| AvatarGroupCount | 14 | 278 | 9 | 13 | 0 | `size`, `shape`, `asChild` |
+| AvatarGroup | 16 | 278 | 3 | 11 | 0 | `asChild` |
+| AvatarGroupCount | 14 | 278 | 9 | 11 | 0 | `size`, `shape`, `asChild` |
 | AvatarGroupShimmer | 9 | 280 | 2 | 8 | 0 | `reduceMotion`, `asChild` |
 | AvatarShimmer | 6 | 280 | 2 | 1 | 0 | `unstyled` |
 | Breadcrumb | 24 | 277 | 10 | 18 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
-| Button | 24 | 292 | 1 | 15 | 0 | — |
-| ButtonGroup | 2 | 279 | 1 | 2 | 0 | — |
-| CascadingDropdown | 58 | 2 | 24 | 32 | 0 | `dropdownPosition`, `unstyled`, `portalContainer`, `keepMounted` |
+| Button | 24 | 292 | 1 | 14 | 0 | — |
+| ButtonGroup | 2 | 279 | 1 | 0 | 0 | — |
+| CascadingDropdown | 58 | 2 | 24 | 29 | 0 | `dropdownPosition`, `unstyled`, `portalContainer`, `keepMounted` |
 | Checkbox | 21 | 303 | 2 | 10 | 0 | `reduceMotion` |
-| CircularLoader | 7 | 280 | 4 | 5 | 0 | `reduceMotion`, `unstyled` |
+| CircularLoader | 7 | 280 | 4 | 3 | 0 | `reduceMotion`, `unstyled` |
 | CountryFlag | 13 | 278 | 3 | 8 | 0 | `unstyled` |
 | CountryFlagGroup | 8 | 279 | 3 | 4 | 0 | — |
 | CountryFlagGroupShimmer | 6 | 280 | 3 | 6 | 0 | `reduceMotion` |
 | CountryFlagShimmer | 6 | 280 | 4 | 2 | 0 | `unstyled` |
-| DatePicker | 63 | 276 | 12 | 39 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
+| DatePicker | 63 | 276 | 12 | 33 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
 | DotLoader | 7 | 280 | 4 | 3 | 0 | `reduceMotion`, `unstyled` |
-| Drawer | 30 | 278 | 7 | 24 | 0 | `unstyled`, `portalContainer` |
+| Drawer | 30 | 278 | 7 | 20 | 0 | `unstyled`, `portalContainer` |
 | DrawerBody | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerCloseButton | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerFooter | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerHeader | 1 | 279 | 1 | 1 | 0 | — |
-| Dropdown | 50 | 2 | 4 | 30 | 0 | `unstyled` |
+| Dropdown | 50 | 2 | 4 | 28 | 0 | `unstyled` |
 | Input | 26 | 307 | 2 | 11 | 0 | `unstyled` |
 | InputLabel | 4 | 0 | 0 | 4 | 0 | — |
-| InternationalPhoneInput | 48 | 296 | 9 | 34 | 0 | `unstyled`, `portalContainer` |
+| InternationalPhoneInput | 48 | 296 | 9 | 33 | 0 | `unstyled`, `portalContainer` |
 | LinearLoader | 8 | 280 | 3 | 4 | 0 | `reduceMotion`, `unstyled` |
-| Modal | 40 | 2 | 11 | 29 | 0 | — |
+| Modal | 40 | 2 | 11 | 27 | 0 | — |
 | ModalBody | 2 | 2 | 2 | 2 | 0 | — |
 | ModalFooter | 2 | 2 | 2 | 2 | 0 | — |
 | ModalHeader | 2 | 2 | 2 | 2 | 0 | — |
-| MultiSelectDropdown | 50 | 2 | 10 | 28 | 0 | `unstyled` |
-| MultiSelectSearchableDropdown | 55 | 2 | 13 | 31 | 0 | `unstyled` |
-| OtpInput | 30 | 277 | 3 | 15 | 0 | `unstyled` |
+| MultiSelectDropdown | 50 | 2 | 10 | 26 | 0 | `unstyled` |
+| MultiSelectSearchableDropdown | 55 | 2 | 13 | 29 | 0 | `unstyled` |
+| OtpInput | 30 | 277 | 3 | 14 | 0 | `unstyled` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | — |
-| Pagination | 31 | 278 | 6 | 22 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` |
+| Pagination | 31 | 278 | 6 | 21 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` |
 | PulseLoader | 6 | 280 | 4 | 3 | 0 | `reduceMotion`, `unstyled` |
 | RadioButton | 8 | 279 | 1 | 3 | 0 | `size` |
-| RadioGroup | 21 | 275 | 5 | 19 | 0 | `unstyled`, `reduceMotion` |
+| RadioGroup | 21 | 275 | 5 | 5 | 0 | `unstyled`, `reduceMotion` |
 | ResizablePanel | 14 | 279 | 2 | 11 | 0 | `reduceMotion`, `unstyled` |
-| SearchableDropdown | 57 | 2 | 6 | 35 | 0 | `unstyled` |
-| Slider | 35 | 274 | 5 | 19 | 0 | `unstyled` |
+| SearchableDropdown | 57 | 2 | 6 | 33 | 0 | `unstyled` |
+| Slider | 35 | 274 | 5 | 18 | 0 | `unstyled` |
 | Slot | 1 | 279 | 1 | 1 | 0 | — |
-| Stepper | 30 | 2 | 5 | 18 | 0 | `reduceMotion`, `unstyled` |
-| Switch | 28 | 277 | 6 | 16 | 0 | `reduceMotion` |
+| Stepper | 30 | 2 | 5 | 17 | 0 | `reduceMotion`, `unstyled` |
+| Switch | 28 | 277 | 6 | 11 | 0 | `reduceMotion` |
 | TabPanel | 26 | 2 | 6 | 17 | 0 | `reduceMotion`, `unstyled` |
 | TextArea | 25 | 293 | 1 | 7 | 0 | `unstyled` |
 | TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
-| TimePicker | 45 | 276 | 2 | 25 | 0 | `portalContainer` |
-| Toast | 21 | 2 | 21 | 12 | 0 | `type`, `unstyled` |
+| TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |
+| Toast | 21 | 2 | 21 | 10 | 0 | `type`, `unstyled` |
 | ToastProvider | 12 | 0 | 10 | 10 | 0 | `unstyled` |
-| Tooltip | 32 | 2 | 9 | 22 | 0 | `unstyled`, `portalContainer` |
+| Tooltip | 32 | 2 | 9 | 20 | 0 | `unstyled`, `portalContainer` |
 

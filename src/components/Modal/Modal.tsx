@@ -351,9 +351,19 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
               ref={mergedContentRef}
               role="dialog"
               aria-modal="true"
-              aria-label={ariaLabel}
-              aria-labelledby={hasTitle ? titleId : ariaLabelledBy}
-              aria-describedby={hasDescription ? descriptionId : ariaDescribedBy}
+              // The header is what renders the title and the description, so a
+              // dialog with `showHeader={false}` pointed both references at
+              // elements that do not exist — a name that resolves to nothing,
+              // which the platform cannot compute and a checker cannot see. The
+              // string is still known here, so it becomes the label instead.
+              aria-label={
+                ariaLabel ??
+                (!showHeader && typeof title === "string" ? title : undefined)
+              }
+              aria-labelledby={showHeader && hasTitle ? titleId : ariaLabelledBy}
+              aria-describedby={
+                showHeader && hasDescription ? descriptionId : ariaDescribedBy
+              }
               tabIndex={-1}
               className={unstyled ? [mergedClasses.content, className].filter(Boolean).join(" ") : [
                 // Full-screen anchors the panel to the viewport directly

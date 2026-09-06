@@ -363,18 +363,39 @@ function demoedProps(component) {
 const fixtureDir = join(ROOT, "src/__tests__/fixtures");
 const fixtureSource = readdirSync(fixtureDir)
   .filter((f) => f.endsWith(".fixtures.tsx"))
-  .map((f) => ({ component: basename(f, ".fixtures.tsx"), text: readFileSync(join(fixtureDir, f), "utf8") }));
+  .map((f) => {
+    const text = readFileSync(join(fixtureDir, f), "utf8");
+    return {
+      component: basename(f, ".fixtures.tsx"),
+      // What the module actually fixtures, from its own type argument. The
+      // filename is the registry's name for the class set and does not always
+      // name the export: `RadioButton.fixtures.tsx` declares
+      // `Fixtures<typeof RadioGroup>`, so matching on the filename reported all
+      // nineteen of RadioGroup's props as un-fixtured while the module was
+      // rendering them.
+      declares: /Fixtures<typeof (\w+)>/.exec(text)?.[1] ?? null,
+      text,
+    };
+  });
 
 /** FAULT 5: registry.tsx drives these over every fixture, so none declares them. */
 const CONTRACT_DRIVEN = new Set(["unstyled", "classes", "open", "keepMounted", "asChild"]);
 
 function fixturedProps(component) {
-  const file = fixtureSource.find(
-    (f) => f.component === component || f.component.endsWith(`.${component}`),
-  );
+  const file =
+    fixtureSource.find((f) => f.declares === component) ??
+    fixtureSource.find(
+      (f) => f.component === component || f.component.endsWith(`.${component}`),
+    );
   const used = new Set(CONTRACT_DRIVEN);
   if (!file) return used;
   for (const [, prop] of file.text.matchAll(/(?:^|[{,\s])([a-zA-Z][\w]*)\s*:/g)) used.add(prop);
+  // A `render` fixture writes JSX, not an object literal, so its props are
+  // attributes: `portalContainer={container}`, never `portalContainer:`. Reading
+  // only object keys counted every prop a render fixture exercises as
+  // un-fixtured — including the portal targets, which cannot be expressed any
+  // other way because the container does not exist at module scope.
+  for (const [, prop] of file.text.matchAll(/(?:^|\s)([a-zA-Z][\w]*)=[{"]/g)) used.add(prop);
   return used;
 }
 

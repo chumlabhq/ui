@@ -8,5 +8,7 @@ const fixtures: Fixtures<typeof Modal> = [
   { name: "with-icon", props: { open: true, title: "Title", showIcon: true, icon: <span>!</span> }, children: "Body" },
   { name: "full-screen", props: { open: true, fullScreen: true, title: "Title" }, children: "Body" },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true, title: "Title" }, children: "Body" },
+  { name: "open-no-header", props: { open: true, title: "Title", showHeader: false }, children: "Body" },
+  { name: "open-no-overlay", props: { open: true, title: "Title", showOverlay: false }, children: "Body" },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

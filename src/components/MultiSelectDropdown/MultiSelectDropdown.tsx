@@ -464,7 +464,7 @@ const MultiSelectDropdown = forwardRef<
               "aria-invalid": (error || undefined) as boolean | undefined,
               "aria-describedby": error && errorMessage ? errorId : undefined,
               "aria-required": (required || undefined) as boolean | undefined,
-              ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel }),
+              ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger }),
               disabled,
               onClick: handleToggle,
               onMouseDown: focusTriggerOnMouseDown,
@@ -488,7 +488,7 @@ const MultiSelectDropdown = forwardRef<
               aria-haspopup="listbox"
               aria-controls={listboxId}
               aria-activedescendant={activeDescendantId}
-              {...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel })}
+              {...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger })}
               aria-invalid={error || undefined}
               aria-describedby={error && errorMessage ? errorId : undefined}
               aria-required={required || undefined}

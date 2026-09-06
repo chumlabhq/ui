@@ -25,5 +25,6 @@ const fixtures: Fixtures<typeof TimePicker> = [
   { name: "error", props: { label: "Time", error: true, errorMessage: "Required" } },
   { name: "success", props: { label: "Time", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { disabled: true } },
+  { name: "required", props: { label: "Time", required: true } },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

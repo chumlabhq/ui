@@ -296,5 +296,18 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     act: clickSubmenu,
     note: "Click with no hover. handleMenuItemClick used to read this parent as a leaf and commit a value instead of opening the submenu.",
   },
+  { name: "required", props: { options: NESTED, label: "Category", required: true } },
+  {
+    name: "custom-trigger",
+    props: {
+      options: NESTED,
+      label: "Category",
+      renderTrigger: (triggerProps) => (
+        <button {...triggerProps} type="button" data-custom-trigger>
+          Pick one
+        </button>
+      ),
+    },
+  },
 ];
 export default fixtures;

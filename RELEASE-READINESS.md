@@ -105,7 +105,7 @@ animation settle that covered the act by accident, the sweep reported **93 findi
 listboxes, 7 scroll regions, 4 contrast on raw-palette classes, with 15 of the 68 needing the
 fixture's act as well as the scope. Two criteria moved from Supports to Partially supports.
 
-**All 68 are now fixed and the sweep reports 25 across 372 fixtures — the recorded set, and
+**All 68 are now fixed and the sweep reports 25 across 414 fixtures — the recorded set, and
 nothing open.** The popups stopped claiming to be the listbox or menu they contain: the
 portalled panel holds the search field and the status message beside a listbox that owns only
 options, `DatePicker`'s weekday row moved inside its grid, and `CascadingDropdown`'s submenu
@@ -281,7 +281,7 @@ deleting the entry is how it goes back to blocking.
 | `unstyled` drops every decorative class | `unstyled.contract` across all 30, with a ratcheted leak list |
 | Every `classes` key reaches a real element | `fixtures.contract` renders every key in every anatomy; `key-uniqueness.contract` asserts one key per element |
 | Layout holds 320–1920 px in both themes | 404 recorded screenshots — 30 components × 6 widths × 2 themes, plus 11 open surfaces × 2 widths × 2 themes — and three guards: one fails a baseline that is a picture of nothing, one fails a baseline whose render is not the same 26 hours later, and one fails an anchored surface that lands on different coordinates when the web font arrives late |
-| Text contrast meets AA in both themes | Two gates: `contrast.contract` on the token scale (every text token against every surface, plus the accent-on-tint pairs), and `contrast-painted.spec.ts` on what the browser computes over all 372 fixtures in both themes. The second is self-checked by planting a raw-palette grey the first cannot see |
+| Text contrast meets AA in both themes | Two gates: `contrast.contract` on the token scale (every text token against every surface, plus the accent-on-tint pairs), and `contrast-painted.spec.ts` on what the browser computes over all 414 fixtures in both themes. The second is self-checked by planting a raw-palette grey the first cannot see |
 | Ten owned WCAG criteria | Named contract or e2e gate per criterion, listed in `ACCESSIBILITY.md` with the engines it ran in |
 | Bundle size per component | `assert-bundle-size.mjs`, 30 entries, shape derived from source, per-entry ratchet |
 | Docs name no prop the types lack | `doc-truth.contract` |
@@ -327,6 +327,16 @@ count remaining. Sixteen of the eighteen are the "orphaned" class above: `bg-gra
 `text-gray-600`, `border-gray-300` and similar in Accordion, Avatar and Table, plus three
 gradient stops on the marketing `--fg` token set rather than `--cl-*` at all. Moving them is
 a visual decision about eleven specific elements.
+
+**Five more were a light-theme assumption written where a token belongs**, found by grepping
+for it rather than by waiting for a fourth instance: `RadioButton`'s checked dot was
+`backgroundColor: "white"` inline, so a selected radio showed an empty ring on a light
+background; `Table`'s selected tick was `stroke="white"`, 2.77:1 against the dark theme's
+accent and under SC 1.4.11's 3:1; `Avatar`'s `ringColor` defaulted to `"white"`, drawing a
+halo in dark where the ring is meant to be the page colour; and two `Table` hover washes were
+`bg-black/…` with no dark counterpart, invisible in the theme that needs them. Three of the
+five are inline styles or SVG attributes, which no class-based grep and no styles-bundle gate
+can see.
 
 **Seven of them were not a style note.** `Table`'s filter menu (`text-gray-500`,
 `text-gray-700`, `border-gray-100`, `border-gray-200`, `border-gray-300`) and the two
@@ -423,17 +433,23 @@ failure modes.
 **No Lighthouse, no real-device testing, no performance profiling in a real app.** Mobile
 Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not phones.
 
-**712 of 1136 props have no fixture, and 201 of those render markup no gate has seen.**
+**648 of 1136 props have no fixture, and 151 of those render markup no gate has seen.**
 `scripts/audit-fixture-gap.mjs` classifies every un-fixtured prop from the AST rather than
-from its name: 511 are handlers, passthroughs, attribute switches or text, and change nothing
-a gate looks at; 201 put markup on screen that no fixture produces. Ranked by what a gate
-would have caught, they are 3 portalled surfaces, 10 new roles, 10 new interactive elements,
-2 colour-pair variants, 51 slots, 48 props that decide whether the component renders at all,
-and 77 smaller ARIA and class-key differences. `AvatarBadge`'s `variant` was in that set until
-this slice, and it was the one carrying a 3.76:1 contrast pair — which is the argument for
-the number mattering rather than the number being large.
+from its name: 497 are handlers, passthroughs, attribute switches or text, and change nothing
+a gate looks at. The remaining 151 are 49 slots, 46 props that decide whether the component
+renders at all, 17 class keys and 39 smaller differences — and the count is a **ratchet**,
+checked by `doc-truth.contract`: it may fall, and a rise fails. The record carries the
+classifier's own limits, because it follows one hop of dataflow and therefore under-reports.
 
-**Visual coverage is 41 of 372 fixtures.** 30 resting subjects at six widths and eleven
+Everything above those tiers is closed. The 37 props whose markup would have changed a gate's
+answer — 3 portals, 10 roles, 10 interactive elements, 2 colour pairs, 18 ARIA attributes —
+have fixtures, and rendering them found five defects in one run: four dangling
+`aria-labelledby` references behind `renderTrigger`, two more in `Modal` behind
+`showHeader={false}`, and two `aria-allowed-attr` violations (`ButtonGroup`'s
+`aria-orientation` on `role="group"`, `CascadingDropdown`'s `aria-required` on a menu
+button). None of them was reachable before, because none of that markup had ever rendered.
+
+**Visual coverage is 41 of 414 fixtures.** 30 resting subjects at six widths and eleven
 open surfaces at two, 404 baselines in all. The rest of the fixture set has no baseline.
 
 **All eleven are now pictures of their own surface.** `CascadingDropdown/open-submenu` was

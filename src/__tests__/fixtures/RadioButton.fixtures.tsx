@@ -25,5 +25,6 @@ const fixtures: Fixtures<typeof RadioGroup> = [
   { name: "disabled", props: { disabled: true }, children: radios },
   { name: "loading", props: { loading: true }, children: radios },
   { name: "horizontal", props: { orientation: "horizontal" }, children: radios },
+  { name: "required", props: { label: "Fruit", required: true }, children: radios },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

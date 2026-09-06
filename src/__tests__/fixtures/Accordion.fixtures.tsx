@@ -52,5 +52,11 @@ const fixtures: Fixtures<typeof Accordion> = [
   { name: "multiple", props: { type: "multiple", defaultValue: ["one", "two"] }, children: items },
   { name: "headings", props: { type: "single", headingLevel: 3, defaultValue: "one" }, children: items },
   { name: "disabled", props: { type: "single", disabled: true }, children: items },
+  {
+    name: "announced",
+    props: { type: "single", collapsible: true, defaultValue: "one", announceExpanded: true },
+    children: items,
+    note: "Adds a live region that announces the expanded panel; nothing rendered it before.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

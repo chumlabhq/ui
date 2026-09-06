@@ -80,3 +80,26 @@ export function Dismissable({
     </div>
   );
 }
+
+/**
+ * A container for `portalContainer`, so a fixture can send a surface somewhere
+ * other than `document.body`.
+ *
+ * It cannot be expressed as a static prop: the element has to exist before the
+ * component mounts, and nothing at module scope does. No fixture took any
+ * component out of its default portal target until this — which is the exact
+ * shape of the scope hole the axe sweep had, one level up.
+ */
+export function PortalTarget({
+  children,
+}: {
+  children: (container: HTMLElement | null) => ReactNode;
+}) {
+  const [container, setContainer] = useState<HTMLElement | null>(null);
+  return (
+    <div data-harness="portal-target">
+      <div ref={setContainer} data-harness-portal />
+      {children(container)}
+    </div>
+  );
+}

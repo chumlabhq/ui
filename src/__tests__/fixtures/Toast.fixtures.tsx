@@ -19,5 +19,10 @@ const fixtures: Fixtures<typeof Toast> = [
       </Dismissable>
     ),
   },
+  {
+    name: "no-close-button",
+    props: { id: "t6", onRemove: () => {}, message: "Saved", showCloseButton: false },
+    note: "Removes the only interactive element in the toast.",
+  },
 ];
 export default fixtures;

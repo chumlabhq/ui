@@ -67,7 +67,10 @@ export const AvatarGroupShimmer = forwardRef<
       size = DEFAULT_SIZE,
       shape = DEFAULT_SHAPE,
       spacing = DEFAULT_SPACING,
-      ringColor = "white",
+      // The ring separates overlapping avatars from the page behind them, so
+      // it is the page colour — `white` was a light-theme default that drew a
+      // halo in dark.
+      ringColor = "var(--cl-bg)",
       animate = true,
       reduceMotion = "auto",
       className,

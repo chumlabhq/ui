@@ -203,6 +203,22 @@ describe("doc truth contract", () => {
     ).not.toThrow();
   });
 
+  /**
+   * The other half of the same question: not "is the count written down" but
+   * "is the unrendered part of the API growing".
+   *
+   * 648 props have no fixture and 151 of them put markup on screen that no
+   * fixture produces — a variant, a mode, a slot, a portal. `AvatarBadge`'s
+   * `variant` was one of them and carried a 3.76:1 colour pair that neither
+   * contrast gate could measure, because measuring needs a render. The number
+   * ratchets: it may fall, and a rise fails here.
+   */
+  it("keeps the unfixtured-markup count from growing", () => {
+    expect(() =>
+      execFileSync("node", ["scripts/audit-fixture-gap.mjs", "--check"], { stdio: "pipe" }),
+    ).not.toThrow();
+  });
+
   it("documents every sub-component the package exports", () => {
     const rootExports = readFileSync("src/index.ts", "utf8");
     const undocumented: string[] = [];

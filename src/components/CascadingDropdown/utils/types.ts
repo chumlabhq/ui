@@ -178,7 +178,6 @@ export interface CascadingDropdownTriggerRenderProps {
   "aria-haspopup": "true";
   "aria-invalid": boolean | undefined;
   "aria-describedby": string | undefined;
-  "aria-required": boolean | undefined;
   "aria-label": string | undefined;
   disabled: boolean;
   onClick: () => void;

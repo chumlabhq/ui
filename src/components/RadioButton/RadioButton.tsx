@@ -289,7 +289,12 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
                 width: iconSize ?? 10,
                 height: iconSize ?? 10,
                 borderRadius: "50%",
-                backgroundColor: "white",
+                // `--cl-text`, not `white`. The dot is white in both themes and
+                // the control it sits in is transparent, so a selected radio
+                // showed an empty ring on a light background — invisible, and
+                // written as an inline style where no class-based gate could
+                // see it. The token matches the ring the checked control draws.
+                backgroundColor: "var(--cl-text)",
                 display: "block",
               }}
             />

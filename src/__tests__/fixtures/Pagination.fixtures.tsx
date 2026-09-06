@@ -24,5 +24,14 @@ const fixtures: Fixtures<typeof Pagination> = [
   },
   { name: "with-page-info", props: { defaultValue: 1, totalPages: 5, renderPageInfo: () => "1 of 5" }, note: "pageInfo has no boolean flag; it exists only via renderPageInfo." },
   { name: "disabled", props: { defaultValue: 1, totalPages: 5, disabled: true } },
+  {
+    name: "custom-ellipsis",
+    props: {
+      defaultValue: 5,
+      totalPages: 40,
+      renderEllipsis: ({ position }) => <span data-ellipsis={position}>...</span>,
+    },
+    note: "The ellipsis is the one part of the pager a consumer can replace.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

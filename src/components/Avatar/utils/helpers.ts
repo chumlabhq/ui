@@ -197,5 +197,5 @@ export const parseBorder = (
 ): string | undefined => {
   if (!bordered) return undefined;
   if (typeof bordered === "string") return bordered;
-  return `2px solid ${generatedBorderColor || "white"}`;
+  return `2px solid ${generatedBorderColor || "var(--cl-bg)"}`;
 };

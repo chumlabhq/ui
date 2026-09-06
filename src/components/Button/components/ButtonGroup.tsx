@@ -9,7 +9,12 @@ const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
         ref={ref}
         className={cn(className) || undefined}
         role="group"
-        aria-orientation={orientation}
+        // No `aria-orientation`: `group` does not support it — the attribute is
+        // for the roles that own arrow-key navigation (toolbar, listbox, menu,
+        // radiogroup, tablist, tree). It rode along as `aria-allowed-attr`,
+        // critical, on both orientations, and nothing rendered a group until
+        // now. `data-orientation` carries the same fact for styling.
+        data-orientation={orientation}
         {...rest}
       >
         {children}

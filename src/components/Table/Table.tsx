@@ -2413,7 +2413,11 @@ function TableInner<TData>(
                               height="10"
                               viewBox="0 0 24 24"
                               fill="none"
-                              stroke="white"
+                              // On the accent-filled checkbox: white is 2.77:1
+                              // against the dark theme's accent, under SC
+                              // 1.4.11's 3:1 for a UI component. `--cl-on-accent`
+                              // is 5.17:1 light and 7.31:1 dark.
+                              stroke="var(--cl-on-accent)"
                               strokeWidth="3"
                               strokeLinecap="round"
                               strokeLinejoin="round"

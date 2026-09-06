@@ -31,6 +31,16 @@ export interface ComboboxNameOptions {
   hasLabel: boolean;
   /** The consumer's `aria-label`, used when there is no visible label. */
   ariaLabel?: string;
+  /**
+   * Whether the element `valueId` names is actually rendered.
+   *
+   * `renderTrigger` replaces the library's trigger, and the value span goes
+   * with it — so the fallback pointed `aria-labelledby` at an id that resolves
+   * to nothing, which is worse than no name: a dangling reference is a name the
+   * platform cannot compute and a checker cannot see. Found by the first
+   * fixture that ever used `renderTrigger`, on four components at once.
+   */
+  hasValueElement?: boolean;
 }
 
 export function comboboxNameProps({
@@ -38,11 +48,16 @@ export function comboboxNameProps({
   labelId,
   hasLabel,
   ariaLabel,
+  hasValueElement,
 }: ComboboxNameOptions): {
   "aria-labelledby"?: string;
   "aria-label"?: string;
 } {
   if (hasLabel) return { "aria-labelledby": labelId };
   if (ariaLabel) return { "aria-label": ariaLabel };
+  // No label, no aria-label and no value element: the control is unnamed, and
+  // `useAccessibleNameWarning` says so in development. Emitting nothing is the
+  // honest answer.
+  if (hasValueElement === false) return {};
   return { "aria-labelledby": valueId };
 }

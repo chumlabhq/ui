@@ -54,6 +54,22 @@ none is a bug fix that happened to move behaviour.
   of the accent (`bg-cl-accent/15`, with a `dark:` override at `/60` that put accent text on
   a 60% accent wash at 2.2:1). A highlighted selected row keeps its tint and deepens its text
   rather than being repainted with the hover background.
+- **Six dangling ARIA references are gone, and two invalid attributes with them.** A custom
+  `renderTrigger` on `Dropdown`, `MultiSelectDropdown`, `MultiSelectSearchableDropdown` and
+  `SearchableDropdown` left `aria-labelledby` pointing at the value element the library no
+  longer renders; it is omitted now, so label your custom trigger with `label` or
+  `aria-label`. `Modal` with `showHeader={false}` did the same with its title and
+  description, and falls back to `aria-label` from a string `title`. `ButtonGroup` published
+  `aria-orientation` on `role="group"`, which does not allow it — the orientation is
+  `data-orientation` now. `CascadingDropdown`'s trigger published `aria-required`, which
+  `button` does not allow; it is dropped, and `CascadingDropdownTriggerRenderProps` no longer
+  carries the field.
+- **Three raw whites now follow the theme.** `RadioButton`'s checked dot was `white` inline —
+  invisible on a light background — and is `--cl-text`. `Table`'s selected checkmark was
+  `stroke="white"`, 2.77:1 on the dark theme's accent, and is `--cl-on-accent`. `Avatar`'s
+  and `AvatarShimmer`'s `ringColor` defaulted to `"white"`, which drew a halo in dark; the
+  default is `var(--cl-bg)`, the page behind the avatars. Two `Table` hover washes that were
+  `bg-black/…` with no dark counterpart use `--cl-bg-item-hover`.
 - **AvatarBadge follows the theme.** All three variants were Tailwind's red ramp:
   `bg-red-500` under `text-white` is 3.76:1, the outline variant painted `bg-white` — a
   light-theme assumption — and the soft variant's `bg-red-100 text-red-700` stayed light in
