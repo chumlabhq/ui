@@ -19,11 +19,19 @@
  * output. Scraping a generator makes the gate depend on the generator's current
  * defaults, which is a second moving part to debug when the matrix goes red.
  *
+ * Building is half of it. The five general templates render ALL THIRTY components
+ * from `_app/all/`, and `verify-consumer-runtime.mjs` then starts each built
+ * application and drives it in a browser — because "did it render", "did it
+ * hydrate" and "does it still open" are not questions a build's exit code can
+ * answer, and a hydration mismatch is a recoverable error React reports at
+ * runtime rather than a compile failure.
+ *
  *   node scripts/verify-consumer-matrix.mjs                 everything
  *   node scripts/verify-consumer-matrix.mjs --target next-app
  *   node scripts/verify-consumer-matrix.mjs --tarball a.tgz reuse a pack
  *   node scripts/verify-consumer-matrix.mjs --self-check    plant the defects
  *   node scripts/verify-consumer-matrix.mjs --keep          leave the scaffolds
+ *   node scripts/verify-consumer-matrix.mjs --skip-runtime  builds only
  */
 import { spawnSync } from "node:child_process";
 import {
@@ -34,12 +42,14 @@ import {
   readFileSync,
   readdirSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { areTheTypesWrong, publint } from "./assert-packaging.mjs";
+import { runtimeChecks, serve } from "./verify-consumer-runtime.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TEMPLATES = join(ROOT, "scripts", "consumers");
@@ -99,36 +109,6 @@ function unwrapLayer(css, name) {
     }
   }
   return css;
-}
-
-/** A static server for one built consumer, on an ephemeral port. */
-async function serve(root) {
-  const { createServer } = await import("node:http");
-  const types = {
-    ".html": "text/html",
-    ".js": "text/javascript",
-    ".css": "text/css",
-    ".svg": "image/svg+xml",
-    ".woff2": "font/woff2",
-    ".json": "application/json",
-  };
-  const server = createServer((request, response) => {
-    const path = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
-    const file = join(root, path === "/" ? "index.html" : path);
-    if (!existsSync(file) || !file.startsWith(root)) {
-      response.writeHead(404).end("not found");
-      return;
-    }
-    const extension = file.slice(file.lastIndexOf("."));
-    response.writeHead(200, { "content-type": types[extension] ?? "application/octet-stream" });
-    response.end(readFileSync(file));
-  });
-  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-  const { port } = server.address();
-  return {
-    url: `http://127.0.0.1:${port}/`,
-    close: () => new Promise((resolve) => server.close(resolve)),
-  };
 }
 
 /** `#f0a` and `#ff00aa` are the same colour. */
@@ -431,12 +411,31 @@ function treeShakingChecks(dir) {
  * directory walked afterwards. `ssr` targets must leave HTML on disk — a build
  * that emitted none rendered nothing on a server, whatever its exit code said.
  */
+/**
+ * `app: "all"` is the thirty-component showcase every general template renders,
+ * and `runtime` is how the built application is started and how one component
+ * is routed to. The four purpose-built targets below keep their single-file
+ * showcase deliberately: treeshake must import only Button, no-optional-peers
+ * must not reach Table or DatePicker, and tailwind4 and strict each test one
+ * thing, which thirty components would bury.
+ */
+const ALL = {
+  app: "all",
+  runtime: { serve: "static", route: (name) => `?c=${name}` },
+};
+
+/** The frameworks that run their own production server, on their own route. */
+const SERVED = {
+  app: "all",
+  runtime: { serve: "start", route: (name) => `c/${name}` },
+};
+
 const TARGETS = [
-  { name: "vite-react19", showcase: "src", output: "dist", ssr: false, react: 19 },
-  { name: "vite-react18", showcase: "src", output: "dist", ssr: false, react: 18 },
-  { name: "next-app", showcase: ".", output: ".next", ssr: true, react: 19 },
-  { name: "next-pages", showcase: ".", output: ".next", ssr: true, react: 19 },
-  { name: "react-router7", showcase: "app", output: "build", ssr: true, react: 19 },
+  { name: "vite-react19", showcase: "src", output: "dist", ssr: false, react: 19, ...ALL },
+  { name: "vite-react18", showcase: "src", output: "dist", ssr: false, react: 18, ...ALL },
+  { name: "next-app", showcase: ".", output: ".next", ssr: true, react: 19, ...SERVED },
+  { name: "next-pages", showcase: ".", output: ".next", ssr: true, react: 19, ...SERVED },
+  { name: "react-router7", showcase: "app", output: "build", ssr: true, react: 19, ...SERVED },
   // Neither optional peer installed. `peerDependenciesMeta` marks
   // @tanstack/react-table and date-fns optional; this is the target that finds
   // out whether that is true, since a consumer taking the manifest at its word
@@ -573,7 +572,11 @@ function scaffold(target, tarball, into) {
   const dir = join(into, target.name);
   cpSync(join(TEMPLATES, target.name), dir, { recursive: true });
   mkdirSync(join(dir, target.showcase), { recursive: true });
-  cpSync(join(TEMPLATES, "_app", target.app ?? "Showcase.tsx"), join(dir, target.showcase, "Showcase.tsx"));
+  // A directory for the five general templates — all thirty components is five
+  // files, not one — and a single file for the four purpose-built ones.
+  const app = join(TEMPLATES, "_app", target.app);
+  if (statSync(app).isDirectory()) cpSync(app, join(dir, target.showcase), { recursive: true });
+  else cpSync(app, join(dir, target.showcase, "Showcase.tsx"));
 
   const manifest = join(dir, "package.json");
   writeFileSync(manifest, readFileSync(manifest, "utf8").replace("__TARBALL__", tarball), "utf8");
@@ -664,10 +667,17 @@ async function verifyConsumer(target, tarball, into) {
       });
     }
 
-    // Target-specific assertions. Two of them drive a browser, because "did an
-    // element disappear" and "did an effect run twice" are not questions a
-    // build's exit code can answer.
+    // Target-specific assertions. Most of them drive a browser, because "did an
+    // element disappear", "did an effect run twice" and "did this hydrate" are
+    // not questions a build's exit code can answer.
     if (target.checks) steps.push(...target.checks(dir, target));
+    if (target.runtime && !flag("skip-runtime")) {
+      try {
+        steps.push(...(await runtimeChecks(dir, target)));
+      } catch (error) {
+        steps.push({ label: "runtime", ok: false, output: String(error?.stack ?? error) });
+      }
+    }
     if (target.browser) {
       try {
         steps.push(...(await target.browser(dir, target)));

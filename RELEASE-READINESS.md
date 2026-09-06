@@ -24,7 +24,7 @@ measured on the date above unless the text says otherwise.
 | Unit + contract (`test:run`) | **pass** | 4409 passed, 68 skipped, 86 files. Contracts alone: 1239 passed, 68 skipped, 29 files. |
 | Coverage | **pass** | 91.79% statements, 87.15% branch, 94.42% functions, 93.70% lines. |
 | `test:e2e:all` (7 projects) | **FAIL, then 3 of 4 cleared** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 2894s. a11y-full, webkit and Mobile Safari re-run clean (§1.6); Firefox not re-run. **a11y-full is red again since 2026-09-06** — its scope was wrong, not its result (§1.2). |
-| `verify:consumers` (9 apps) | **pass** | All nine install, typecheck and build. `vite-tailwind4` asserts the marker and the token cascade in both import orders (§1.3). |
+| `verify:consumers` (9 apps) | **FAIL — 3 targets** | All nine install, typecheck and build, and the five general templates now render **all thirty components** and drive them in a browser. The three server-rendered targets fail on one component: `ToastProvider` mismatches on hydration (§1.3). |
 | `verify:packaging` (4 plants) | **pass** | publint `--strict`, attw, shipped-link check. All four planted defects caught. |
 | `npm publish --dry-run` | **pass** *(after a fix — see §1.4)* | 1635 files, 2.1 MB packed, 6.9 MB unpacked. |
 | `npm audit` (production tree) | **pass** | 0 vulnerabilities across the 4 production dependencies. |
@@ -176,6 +176,71 @@ rather than identifiers, because a bundler renames the second and keeps the firs
   pass  react-router7           typecheck · build · css · server render
   pass  vite-no-optional-peers  peers absent · typecheck · build · css resolves
 ```
+
+#### Every component, in every framework — and the one thing it found
+
+*Added 2026-09-07.* The matrix above proves the package installs; it rendered four of the
+thirty components, so it could not prove the other twenty-six do anything. The five general
+templates now render **all thirty**, each imported from **its own subpath** — so the thirty
+`exports` entries are exercised by an import a bundler has to resolve, not only by publint
+reading the manifest — on a grid page and again one per route. `scripts/verify-consumer-
+runtime.mjs` then starts each built application the way its framework does in production
+(`next start`, `react-router-serve`, a static server for Vite) and asks three questions per
+component: did it paint, did it hydrate without a recoverable error, and does the thing it
+opens still open.
+
+Hydration is read through **React 19's own channel**, not a console spy — the branch has
+already been caught once by a spy seeing nothing, because React 19 routes mismatches to
+`onRecoverableError`. React Router's template passes that callback directly in
+`app/entry.client.tsx`, which is the only template where a consumer owns the `hydrateRoot`
+call; Next owns its own, so the harness wraps the global `reportError` React and Next both
+default to, before any framework code runs. A **`__canary` route mismatches by construction**
+and every pass has to catch it — the channel is read differently in each framework, and a
+channel that has never fired proves nothing about the thirty clean results beside it.
+
+**Result: 30 of 30 render and 30 of 30 hydrate in all five templates. 28 affordances fire
+across 25 components — five (Avatar, Breadcrumb, Button, CountryFlag, Loader) have no state
+to drive. One component fails, in all three server-rendered frameworks:**
+
+`ToastProvider` (`components/ToastProvider.tsx:38`) chooses its portal target during render:
+
+```js
+const portalTarget = isBrowser ? document.body : null;
+```
+
+A server renders nothing there; the first client render adds a portal into `document.body`
+that the server HTML has no counterpart for, and React reports *"Hydration failed because the
+server rendered HTML didn't match the client"* (#418) — whose own error text names the cause:
+*"a server/client branch `if (typeof window !== 'undefined')`"*. Next surfaces it as an
+uncaught window error as well, because its handler ends at `reportError`; React Router only
+through `onRecoverableError`, which is why the same defect fails four checks on Next and one
+on React Router.
+
+`Modal` (`Modal.tsx:430`) and `Drawer` (`Drawer.tsx:497`) hold the same shape behind
+`if (!isBrowser) return null`. Both hydrate clean in the matrix because both are closed at
+first paint — and **measured, not assumed**: rendering them `open` at first paint reproduces
+the identical #418 on both. A consumer opening a dialog on page load, which is ordinary, hits
+this today.
+
+The gate this evades is worth naming, because two suites look like they cover it and neither
+can. `ssr.contract` runs under `environment: "node"`, where `isBrowser` is genuinely false —
+but it only asserts `renderToString` does not throw, and rendering nothing does not throw.
+`hydration.contract` does hydrate, but under jsdom, where `window` exists during the *server*
+render too — so `isBrowser` takes the same branch on both sides and the mismatch cannot
+happen. A real Node server and a real browser is the first place both halves are true, and
+that is the consumer matrix. Its Toast fixtures also render a bare `Toast`, never the
+provider, so the component at fault had no hydration coverage of any kind.
+
+`ai/component-index.json` records `"ssr": "safe"` for all thirty components. That is now
+known to be false for `Toast`, and conditionally false for `Modal` and `Drawer`. **Left as
+found — nothing in this pass was fixed.**
+
+**Cost:** the whole nine-target matrix takes **just under four minutes** on this machine
+(3m57s and 4m04s on two runs), against 1m24s before this change. Roughly 24s of the increase is thirty components building instead of four
+(1m24s → 1m48s with `--skip-runtime`), and 2m09s is the runtime pass — five browsers, five
+production servers and 160 page loads. No sharding is needed: the release-gates job allows
+60 minutes and this is under four. If it ever does need splitting, `--target` already does
+it, one process per template, with no shared state between them.
 
 All four packaging plants were caught: `require.types` pointed back at the ESM
 declaration (→ FalseESM), extensions stripped from `dist/index.d.ts` (→
@@ -454,10 +519,12 @@ Named plainly, because these are the gaps that no green run says anything about.
 
 **The library has never run in a real consumer's application.** `@chumlab/ui` has never been
 published — `npm view` returns 404 — so there are no downstream users and no field
-evidence. The consumer matrix is nine throwaway templates that I wrote, and they render
-**four of the thirty components** (Button, Dropdown, DatePicker, Table; the sixth renders
-two). Every claim about how this behaves inside a real application is an inference from
-those four.
+evidence. The consumer matrix is nine throwaway templates that I wrote. Since 2026-09-07 the
+five general ones render **all thirty components**, each imported from its own subpath and
+mounted on its own route, and drive one affordance on each of the twenty-five that have one
+— so the inference is no longer from four components. It is still an inference from
+templates written by the same person who wrote the library, against no real application's
+build configuration, data or interaction patterns.
 
 **No assistive technology has ever touched it.** No NVDA, no JAWS, no VoiceOver. axe is a
 static rule engine, not a screen reader; it cannot tell you whether an announcement is

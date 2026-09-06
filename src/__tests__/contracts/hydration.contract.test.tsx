@@ -18,6 +18,17 @@
  * nothing, which the self-check below exists to prove. The preference is
  * the axis that matters — with it off there is nothing for the client to
  * disagree with, which is why the previous stub's blanket `false` hid this too.
+ *
+ * WHAT THIS SUITE STRUCTURALLY CANNOT SEE, recorded 2026-09-07. It hydrates under jsdom,
+ * so `window` exists during the "server" render as well as the client one — and
+ * `isBrowser` is `typeof window !== "undefined"`, evaluated once at import. Every
+ * server/client branch in the library therefore takes the SAME path on both sides here,
+ * and the mismatch class React's own #418 text names first ("a server/client branch
+ * `if (typeof window !== 'undefined')`") cannot occur in this environment. The consumer
+ * matrix found three of them in a real Node server and a real browser — ToastProvider
+ * unconditionally, Modal and Drawer when open at first paint — and this suite was green
+ * throughout. Closing the gap means rendering the HTML in a `node` project and hydrating
+ * it in a jsdom one, which is a second vitest project rather than a change here.
  */
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { renderToString } from "react-dom/server";

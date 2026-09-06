@@ -366,7 +366,7 @@ and carries the measurement for each surface in its skip reason. RTL is a 1.1 fe
 
 | | Supported | How it is checked |
 |---|---|---|
-| React | 18 and 19 | Both majors build and typecheck against the packed tarball in the consumer matrix |
+| React | 18 and 19 | Both majors build, typecheck and render all thirty components against the packed tarball in the consumer matrix |
 | React DOM | 18 and 19 | As above |
 | Node | >= 18 | The `engines` floor. Only the current LTS is exercised in CI |
 | TypeScript | 5.x, `bundler` / `node16` / node10 resolution | `attw` checks all three against the tarball on every build |
@@ -401,7 +401,7 @@ npm run dev            # Dev server at localhost:5173
 npm run test:run       # Unit and contract tests (Vitest, 4,409)
 npm run test:e2e       # E2E, Chromium only (Playwright, 419)
 npm run test:e2e:all   # The five-engine matrix
-npm run verify:consumers  # Installs the packed tarball into five framework apps
+npm run verify:consumers  # Installs the packed tarball into nine framework apps
 npm run build:lib      # Build library
 ```
 
@@ -430,13 +430,24 @@ npm run build:lib      # Build library
 ## FAQ
 
 **Does it work with Next.js?**
-Yes — App Router and Pages Router, and React Router 7 in SSR mode. The interactive
-components ship with `"use client"`, so you can import them straight into a Server
-Component. Import `@chumlab/ui/styles.css` once in your root layout.
+Yes — App Router and Pages Router, and React Router 7 in SSR mode, with one known exception
+below. The interactive components ship with `"use client"`, so you can import them straight
+into a Server Component. Import `@chumlab/ui/styles.css` once in your root layout.
 
 This is checked rather than assumed: `npm run verify:consumers` packs the library, installs
 the tarball into throwaway apps for Vite (React 18 and 19), both Next.js routers and React
-Router 7, and fails if any of them will not build or will not server-render.
+Router 7, renders **all thirty components** in each — every one from its own subpath, on its
+own route — and fails if any will not build, will not server-render, does not hydrate
+cleanly, or stops responding to the control it advertises.
+
+**The known exception, found by that gate and not yet fixed.** `ToastProvider` decides where
+to portal during render, behind a `typeof window` branch: a server renders nothing there and
+the first client render adds it, which React reports as a hydration mismatch in all three
+server-rendered frameworks. The toast still works — React regenerates the tree — but the
+error is real and it is in the console of every page that mounts a `ToastProvider`. `Modal`
+and `Drawer` do the same when they are rendered **open** on first paint; closed, which is the
+ordinary case, both hydrate clean. Everything else in the library hydrates without a single
+recoverable error on all three. Tracked in `RELEASE-READINESS.md` §1.3.
 
 **Can I use it without Tailwind CSS?**
 Yes — that is the default path. `import "@chumlab/ui/styles.css"` is precompiled

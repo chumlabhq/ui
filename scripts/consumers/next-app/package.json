@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build": "next build"
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
     "@chumlab/ui": "__TARBALL__",
