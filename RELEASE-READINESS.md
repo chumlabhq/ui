@@ -24,7 +24,7 @@ measured on the date above unless the text says otherwise.
 | Unit + contract (`test:run`) | **pass** | 4409 passed, 68 skipped, 86 files. Contracts alone: 1239 passed, 68 skipped, 29 files. |
 | Coverage | **pass** | 91.79% statements, 87.15% branch, 94.42% functions, 93.70% lines. |
 | `test:e2e:all` (7 projects) | **FAIL, then 3 of 4 cleared** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 2894s. a11y-full, webkit and Mobile Safari re-run clean (§1.6); Firefox not re-run. **a11y-full is red again since 2026-09-06** — its scope was wrong, not its result (§1.2). |
-| `verify:consumers` (9 apps) | **FAIL, 1 of 9** | Eight install, typecheck and build. `vite-tailwind4` fails one assertion — a consumer's `--cl-*` override loses to the library's own declaration (§1.3). |
+| `verify:consumers` (9 apps) | **pass** | All nine install, typecheck and build. `vite-tailwind4` asserts the marker and the token cascade in both import orders (§1.3). |
 | `verify:packaging` (4 plants) | **pass** | publint `--strict`, attw, shipped-link check. All four planted defects caught. |
 | `npm publish --dry-run` | **pass** *(after a fix — see §1.4)* | 1635 files, 2.1 MB packed, 6.9 MB unpacked. |
 | `npm audit` (production tree) | **pass** | 0 vulnerabilities across the 4 production dependencies. |
@@ -139,16 +139,21 @@ own utilities, which is exactly the failure `build-styles.mjs` records, and the 
 page is untouched: their flex row is still flex and their preflighted button still has no
 background. **The marker holds.**
 
-**What fails is the token.** A consumer writing `:root { --cl-accent: #ff00aa }` in their own
-stylesheet gets `#5b9bff` — ours. The library ships
+**The token used to fail, and now it does not.** A consumer writing
+`:root { --cl-accent: #ff00aa }` got `#5b9bff` — ours — because the library shipped
 `:root, :root.dark, :root[data-theme="dark"] { --cl-accent: … }`, whose `:root` branch is the
-same specificity as theirs, so the later import wins — and a consumer importing the library
-after their own stylesheet loses silently. Two remedies, neither taken here: document that
-`@chumlab/ui/styles.css` must be imported first, or wrap the token block in
-`@layer chumlab.tokens`, which an unlayered consumer rule beats regardless of order. The
-second must not extend to the utilities: they are unlayered on purpose, because a layered
-`.flex:where(.cl-s)` would lose to a consumer's unlayered `.flex` and that is the failure the
-marker prevents.
+same specificity as theirs, so whichever stylesheet was imported last won. The token block is
+in `@layer chumlab.tokens` now, declared before use in both `tokens.css` and `styles.css`, and
+an unlayered rule beats every layer whatever its specificity. Asserted in **both** import
+orders against the shipped stylesheet rather than the source, and the light branch is asserted
+too: `:root[data-theme="light"]` still outranks `:root` inside the layer.
+
+The utilities stay unlayered, deliberately. A layered `.flex:where(.cl-s)` would lose to a
+consumer's unlayered `.flex`, which is the failure the marker prevents — so the four
+assertions that prove the marker still works are re-run beside the token one, and the matrix
+self-check has a third plant: unwrap the layer in the packed tarball, and the two orders must
+disagree. They do — "theirs last" still wins, "ours last" loses — which is the asymmetry that
+existed before.
 
 `vite-strict` mounts the tree in StrictMode and drives it, which no target had done — the
 vite-react19 template has always written `<StrictMode>` and the matrix has only ever built
@@ -460,10 +465,37 @@ comprehensible, whether focus order makes narrative sense, or whether a live reg
 at a useful moment. Every accessibility claim in this package is "the markup is correct",
 never "a person using a screen reader could complete the task".
 
-**No right-to-left testing.** There is one incidental `dir="rtl"` assertion in an Accordion
-unit test. Nothing systematically renders any component in RTL, and several — Drawer's
-`side`, Breadcrumb's separators, Slider's fill, Pagination's arrows — have obvious RTL
-failure modes.
+**Right-to-left is measured now, and the package does not do it.** Fourteen `dir="rtl"`
+fixtures render the anchored and directional surfaces with the direction on `<html>` — which
+is where it has to be, because every menu is portalled to the body and a `dir` on the
+component's own box never reaches it. `e2e/rtl.spec.ts` states what mirroring is and **fails
+on 7 of 10 assertions**:
+
+- **No anchored surface mirrors.** `SearchableDropdown`, `TimePicker`, `DatePicker`,
+  `Breadcrumb` and `Table`'s filter menu all align their LEFT edge to the trigger's left in
+  RTL, exactly as in LTR. `DatePicker` is the plainest: trigger `[24..1000]`, surface
+  `[24..338]`, where the mirror is `[686..1000]`. `Dropdown`, `MultiSelectDropdown` and
+  `Pagination` are skipped because their surface is sized to the trigger, so both alignments
+  coincide and the fixture says nothing either way.
+- **The one surface that flips does not flip by direction.** `CascadingDropdown`'s submenu
+  opens to the right of an item at `[25..283]` with room on both sides. The flip machinery
+  works — the LTR near-edge fixtures prove it chooses `left` when the right cannot hold it —
+  but the input is available space alone. **So this is "does not mirror", not "mirrors the
+  wrong way": there is no direction input to get wrong.**
+- **`Slider` is measured from the physical left.** At `value: 25` the thumb sits 75% from the
+  leading edge in RTL.
+- The clamp is the one thing that already mirrors, because it works from both viewport edges:
+  every surface stays fully on screen in both directions.
+
+What is NOT covered, and would still be missing if the seven were fixed: **text alignment**
+(the components use `text-left`, not `text-start`), **icon direction** (a chevron pointing
+into the reading direction, Breadcrumb's separators, Pagination's arrows), and **logical
+properties** — the package writes `left`/`right`, `pl-*`/`pr-*` and `ml-*`/`mr-*` throughout
+rather than `start`/`end`, so mirroring the positioner would leave the padding and the icons
+pointing the wrong way. `Drawer` takes a physical `direction` (`left`/`right`) rather than a
+logical one, so nothing there mirrors by design and an RTL consumer has to swap the value
+themselves. Making the package RTL-correct is a vocabulary change across every constants
+file, not a change to `useAnchoredPosition`.
 
 **No Lighthouse, no real-device testing, no performance profiling in a real app.** Mobile
 Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not phones.
@@ -590,14 +622,17 @@ In order. The first two are done; the rest are not.
    count guard so it cannot go stale the same way.
 3. ~~Clear the last 4 axe findings the corrected sweep surfaced (§1.2).~~ **Done** — fixed at
    the source, along with 31 the painted-contrast gate found once it existed.
-4. **Decide how a consumer overrides a token (§1.3).** Blocking: `verify:consumers` is red on
-   it, and the choice is one line of documentation or one `@layer` around the token block.
-5. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** The remaining
+4. ~~Decide how a consumer overrides a token (§1.3).~~ **Done** — the token block is layered
+   and both import orders are asserted against the shipped stylesheet.
+5. **Decide what RTL support means (§4).** `e2e/rtl.spec.ts` is red on 7 assertions: no
+   anchored surface mirrors, and the one surface that flips chooses its side by available
+   space alone.
+6. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** The remaining
    blocker: one project has never been seen green, and "probably environmental" is a reading,
    not a result.
-6. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
+7. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
    race against the CPU. This is one of the eleven Firefox failures and the only one with an
-   obvious fix, so it is worth doing before step 5 rather than after.
-7. Decide the 17 waived keys — delete them under R7 while it is still free.
+   obvious fix, so it is worth doing before step 6 rather than after.
+8. Decide the 17 waived keys — delete them under R7 while it is still free.
 
-Steps 4 and 5 are the remaining blockers. Step 7 gets much more expensive after 1.0.
+Steps 5 and 6 are the remaining blockers. Step 8 gets much more expensive after 1.0.

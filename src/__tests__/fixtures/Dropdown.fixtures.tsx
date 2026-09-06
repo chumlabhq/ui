@@ -1,5 +1,6 @@
 import { Dropdown } from "../../components/Dropdown/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { OPTIONS } from "./_data.js";
 import {
   neverResolves,
@@ -83,6 +84,12 @@ const fixtures: Fixtures<typeof Dropdown> = [
       ),
     },
     note: "The render props carry the combobox contract — role, aria-expanded, aria-controls — onto markup the library did not write.",
+  },
+  {
+    name: "open-rtl",
+    props: { options: OPTIONS, defaultOpen: true, label: "Fruit" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "Every anchored surface in the package aligns to the trigger's left edge; in RTL it should align to the right. e2e/rtl.spec.ts measures it."
   },
 ];
 export default fixtures;

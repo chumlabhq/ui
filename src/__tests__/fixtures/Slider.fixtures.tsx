@@ -1,5 +1,6 @@
 import { Slider } from "../../components/Slider/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 
 const fixtures: Fixtures<typeof Slider> = [
   { name: "default", props: {} },
@@ -34,5 +35,11 @@ const fixtures: Fixtures<typeof Slider> = [
     },
   },
   { name: "required", props: { label: "Volume", required: true } },
+  {
+    name: "rtl",
+    props: { defaultValue: 25, label: "Volume" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "A slider's zero is on the right in RTL; the fill and the thumb are the directional part."
+  },
 ];
 export default fixtures;

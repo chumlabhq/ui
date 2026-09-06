@@ -1,5 +1,6 @@
 import { Tooltip } from "../../components/Tooltip/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { PortalTarget } from "./_harness.js";
 
 const fixtures: Fixtures<typeof Tooltip> = [
@@ -44,6 +45,12 @@ const fixtures: Fixtures<typeof Tooltip> = [
         )}
       </PortalTarget>
     ),
+  },
+  {
+    name: "open-rtl",
+    props: { content: "Tip", open: true },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    children: <button>Trigger</button>,
   },
 ];
 export default fixtures;

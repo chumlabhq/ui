@@ -147,7 +147,13 @@ const compiled = optimize(confined, { minify: false }).code;
 // `button { padding: 0 }` beat our `.px-4`, flattening every component to zero
 // padding and square corners. Declaring the full order up front - including the
 // `base` slot we deliberately leave empty - keeps their reset where it belongs.
-const out = `@layer properties, theme, base, components, utilities;\n${compiled}`;
+// `chumlab.tokens` first, and declared here as well as in tokens.css: this file
+// inlines the token source rather than importing it, so the browser's first
+// sight of the name has to be this statement or the order is whatever the
+// compiler emitted. Its position in the list is not what makes a consumer's
+// override win — an unlayered rule beats every layer — but a declared order is
+// the difference between a deterministic cascade and an accident.
+const out = `@layer chumlab.tokens, properties, theme, base, components, utilities;\n${compiled}`;
 
 writeFileSync(OUT, out);
 

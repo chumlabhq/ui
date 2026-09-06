@@ -1,5 +1,6 @@
 import { Pagination } from "../../components/Pagination/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
 
 /**
@@ -32,6 +33,12 @@ const fixtures: Fixtures<typeof Pagination> = [
       renderEllipsis: ({ position }) => <span data-ellipsis={position}>...</span>,
     },
     note: "The ellipsis is the one part of the pager a consumer can replace.",
+  },
+  {
+    name: "rows-per-page-open-rtl",
+    props: { defaultValue: 1, totalPages: 5, showRowsPerPage: true, rowsPerPage: 10 },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    act: (c, ui) => ui.click(c.querySelector("[aria-haspopup='listbox']")),
   },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -58,7 +58,7 @@ const SENTINEL = "chumlab-consumer-smoke";
  * Chromium comes from this repo's own Playwright rather than the consumer's,
  * which keeps the consumer's manifest exactly what a consumer would write.
  */
-async function inBrowser(dir, run) {
+async function inBrowser(dir, run, page_ = "index.html") {
   const { chromium } = await import("@playwright/test");
   // Served over HTTP, not opened from `file://`: a module script and a
   // stylesheet are both cross-origin under `file://`, so the browser blocked
@@ -75,12 +75,30 @@ async function inBrowser(dir, run) {
   });
   page.on("pageerror", (error) => console_.push(`pageerror: ${error.message}`));
   try {
-    await page.goto(server.url, { waitUntil: "load" });
+    await page.goto(`${server.url}${page_}`, { waitUntil: "load" });
     return await run(page, console_);
   } finally {
     await browser.close();
     await server.close();
   }
+}
+
+/** Removes one `@layer name { … }` wrapper, keeping everything inside it. */
+function unwrapLayer(css, name) {
+  const start = css.indexOf(`@layer ${name} {`);
+  if (start < 0) return css;
+  let depth = 0;
+  for (let i = css.indexOf("{", start); i < css.length; i += 1) {
+    if (css[i] === "{") depth += 1;
+    else if (css[i] === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        const body = css.slice(css.indexOf("{", start) + 1, i);
+        return `${css.slice(0, start)}${body}${css.slice(i + 1)}`;
+      }
+    }
+  }
+  return css;
 }
 
 /** A static server for one built consumer, on an ephemeral port. */
@@ -111,6 +129,19 @@ async function serve(root) {
     url: `http://127.0.0.1:${port}/`,
     close: () => new Promise((resolve) => server.close(resolve)),
   };
+}
+
+/** `#f0a` and `#ff00aa` are the same colour. */
+function sameColour(a, b) {
+  const expand = (value) => {
+    const hex = /^#([0-9a-f]{3,8})$/i.exec(value.trim());
+    if (!hex) return value.trim().toLowerCase();
+    const digits = hex[1];
+    return digits.length <= 4
+      ? `#${[...digits].map((d) => d + d).join("")}`.toLowerCase()
+      : `#${digits}`.toLowerCase();
+  };
+  return expand(a) === expand(b);
 }
 
 /** Every rule in the built stylesheets, for the checks that ask about CSS. */
@@ -194,10 +225,14 @@ async function tailwindChecks(dir) {
           `${seen.theirs.button?.background}`,
       },
       {
-        label: "their token wins",
-        ok: seen.accent.toLowerCase() === "#ff00aa",
+        label: "token override",
+        // Compared as a colour, not as a string: the consumer's `#ff00aa` is
+        // emitted as `#f0a` by their own minifier, and a string comparison
+        // would fail on their build tool rather than on the cascade.
+        ok: sameColour(seen.accent, "#ff00aa"),
         output: `--cl-accent resolves to "${seen.accent}", consumer set #ff00aa`,
       },
+      ...(await cascadeOrders(page, dir)),
       {
         label: "no console error",
         ok: console_.length === 0,
@@ -205,6 +240,65 @@ async function tailwindChecks(dir) {
       },
     ];
   });
+}
+
+/**
+ * The same override, in both import orders, read off the shipped stylesheet.
+ *
+ * Not two entry points: Vite emits ONE stylesheet for two entries that share a
+ * module, so a second page written with the imports reversed produced the same
+ * CSS file and tested nothing. What decides the outcome is the order of the two
+ * rule sets in the document, so that is what this varies — the shipped
+ * `styles.css` and the consumer's own, injected in each order into a blank
+ * document, which is the cascade the browser actually resolves.
+ */
+async function cascadeOrders(page, dir) {
+  const ours = readFileSync(join(dir, "node_modules", "@chumlab", "ui", "dist", "styles.css"), "utf8");
+  const theirs = ":root { --cl-accent: #ff00aa; }";
+
+  const resolveIn = async (order) => {
+    await page.setContent("<!doctype html><html><head></head><body></body></html>");
+    return page.evaluate(({ sheets }) => {
+      for (const css of sheets) {
+        const style = document.createElement("style");
+        style.textContent = css;
+        document.head.append(style);
+      }
+      return getComputedStyle(document.documentElement).getPropertyValue("--cl-accent").trim();
+    }, { sheets: order });
+  };
+
+  const theirsLast = await resolveIn([ours, theirs]);
+  const oursLast = await resolveIn([theirs, ours]);
+
+  // The light branch is in the same layer as the dark one, so the layer must
+  // not have flattened them: `:root[data-theme="light"]` still outranks `:root`
+  // inside it. Asserted with no consumer rule present at all.
+  await page.setContent('<!doctype html><html data-theme="light"><head></head><body></body></html>');
+  const light = await page.evaluate((css) => {
+    const style = document.createElement("style");
+    style.textContent = css;
+    document.head.append(style);
+    return getComputedStyle(document.documentElement).getPropertyValue("--cl-accent").trim();
+  }, ours);
+
+  return [
+    {
+      label: "light branch flips",
+      ok: sameColour(light, "#2563eb"),
+      output: `--cl-accent under [data-theme="light"] resolves to "${light}", expected the light accent`,
+    },
+    {
+      label: "override wins (theirs last)",
+      ok: sameColour(theirsLast, "#ff00aa"),
+      output: `--cl-accent resolves to "${theirsLast}"`,
+    },
+    {
+      label: "override wins (ours last)",
+      ok: sameColour(oursLast, "#ff00aa"),
+      output: `--cl-accent resolves to "${oursLast}" — the order that lost before the token layer`,
+    },
+  ];
 }
 
 /** What double-invoked effects do to the portals, traps and observers. */
@@ -686,13 +780,44 @@ async function selfCheck(tarball, into) {
     by: `${describe(appRouter)}, ${describe(stillVite)}`,
   });
 
+  log("\n▸ plant 3: the token layer unwrapped");
+  const unlayered = repack(tarball, into, "unlayered-tokens", (pkg) => {
+    let touched = 0;
+    for (const file of [join(pkg, "dist", "styles.css"), join(pkg, "dist", "tokens.css")]) {
+      if (!existsSync(file)) continue;
+      const text = readFileSync(file, "utf8");
+      if (!text.includes("@layer chumlab.tokens")) continue;
+      // The layer removed and nothing else: the same declarations, unwrapped,
+      // which is what they were before. A brace-matched unwrap rather than a
+      // delete, so the rules inside survive exactly as written.
+      writeFileSync(file, unwrapLayer(text, "chumlab.tokens"), "utf8");
+      touched += 1;
+    }
+    if (touched === 0) throw new Error("no shipped stylesheet carried @layer chumlab.tokens — nothing was planted");
+    log(`  unwrapped the layer in ${touched} stylesheet(s)`);
+  });
+  const tailwindTarget = TARGETS.find((t) => t.name === "vite-tailwind4");
+  const unlayeredResult = await verifyConsumer(tailwindTarget, unlayered, join(into, "plant-tokens"));
+  const orders = unlayeredResult.steps.filter((step) => step.label.startsWith("override wins"));
+  outcomes.push({
+    plant: "a consumer's token override, with the layer removed",
+    // Both orders have to be exercised AND they have to disagree: one of them
+    // passed before the layer existed, so a plant that fails both would prove
+    // the package broken rather than the cascade order restored.
+    caught: orders.length === 2 && orders.some((step) => !step.ok) && orders.some((step) => step.ok),
+    by:
+      orders.length === 2
+        ? orders.map((step) => `${step.label}: ${step.ok ? "still wins" : "loses"}`).join(", ")
+        : `${orders.length} order(s) tested, expected 2`,
+  });
+
   log("\n══ self-check ══════════════════════════════════════════════════");
   for (const outcome of outcomes) {
     log(`  ${outcome.caught ? "caught" : "NOT CAUGHT"}  ${outcome.plant}`);
     log(`            ${outcome.by}`);
   }
   const ok = outcomes.every((o) => o.caught);
-  log(ok ? "  RESULT: both plants were caught" : "  RESULT: FAILED — a planted defect passed the matrix");
+  log(ok ? `  RESULT: all ${outcomes.length} plants were caught` : "  RESULT: FAILED — a planted defect passed the matrix");
   log("════════════════════════════════════════════════════════════════");
   return ok;
 }

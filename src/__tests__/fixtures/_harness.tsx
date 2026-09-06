@@ -1,4 +1,5 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { isBrowser } from "../../utils/isBrowser.js";
 
 /**
  * Trigger + component, for fixtures whose behaviour needs both.
@@ -102,4 +103,55 @@ export function PortalTarget({
       {children(container)}
     </div>
   );
+}
+
+/**
+ * Renders its children with the document in right-to-left.
+ *
+ * The direction has to be on `<html>`, not on a wrapper: every anchored surface
+ * in this package is portalled to `document.body`, so a `dir` set on the
+ * fixture's own box reaches the trigger and not the menu — which is the half
+ * the positioning is about.
+ *
+ * Set during render rather than in an effect, because a layout effect in a
+ * parent runs AFTER its children's, and by then `useAnchoredPosition` has
+ * already measured. Restored on unmount so one fixture cannot leak into the
+ * next in the contract tier, where they share a document.
+ */
+export function RtlBoundary({ children }: { children: ReactNode }) {
+  const original = useRef<string | null>(null);
+  const captured = useRef(false);
+
+  const apply = () => {
+    if (!isBrowser) return;
+    if (!captured.current) {
+      original.current = document.documentElement.getAttribute("dir");
+      captured.current = true;
+    }
+    // Deliberate, and the point of the harness: the document has to carry the
+    // direction before any child's layout effect measures against it.
+    // eslint-disable-next-line react-hooks/immutability
+    document.documentElement.dir = "rtl";
+  };
+
+  // During render, so a child's layout effect — which is where every anchored
+  // surface measures — sees the direction before it computes anything. A parent
+  // layout effect runs after its children's and would be too late, which is the
+  // whole reason this harness exists rather than a `dir` on a wrapper div.
+  apply();
+
+  // And again on mount, because StrictMode simulates an unmount: the cleanup
+  // below removed the attribute and the second render had nothing left to
+  // re-apply, so five of these fixtures rendered left-to-right while the two
+  // that happened to re-render later did not.
+  useEffect(() => {
+    apply();
+    return () => {
+      if (!isBrowser) return;
+      if (original.current === null) document.documentElement.removeAttribute("dir");
+      else document.documentElement.setAttribute("dir", original.current);
+    };
+  });
+
+  return <div data-harness="rtl">{children}</div>;
 }

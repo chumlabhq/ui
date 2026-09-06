@@ -1,5 +1,6 @@
 import { Stepper } from "../../components/Stepper/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
 import { STEPS } from "./_data.js";
 
@@ -19,6 +20,11 @@ const fixtures: Fixtures<typeof Stepper> = [
     name: "no-connectors",
     props: { steps: STEPS, value: 1, showConnectors: false },
     note: "Drops the separator between steps, which carries its own role.",
+  },
+  {
+    name: "horizontal-rtl",
+    props: { steps: STEPS, value: 1, showDescriptions: true },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

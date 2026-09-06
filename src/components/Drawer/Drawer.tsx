@@ -115,6 +115,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const generatedId = useId();
     const drawerId = `drawer-${generatedId}`;
     const titleId = `drawer-title-${generatedId}`;
+    // Whether a `DrawerHeader` is rendering that id right now.
+    const [hasTitle, setHasTitle] = useState(false);
     const panelRef = useRef<HTMLDivElement>(null);
     const mergedPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
     const triggerRef = useRef<Element | null>(null);
@@ -472,8 +474,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
 
     const contextValue = useMemo(
-      () => ({ onClose: handleClose, titleId }),
-      [handleClose, titleId],
+      () => ({ onClose: handleClose, titleId, registerTitle: setHasTitle }),
+      [handleClose, titleId, setHasTitle],
     );
 
     if (!isBrowser) return null;
@@ -539,9 +541,14 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               ref={mergedPanelRef}
               role="dialog"
               aria-modal={modal || undefined}
-              aria-label={ariaLabel ?? (!ariaLabelledBy && !titleId ? "Dialog" : undefined)}
+              aria-label={ariaLabel}
+              // `titleId` is a template string and therefore always truthy, so
+              // the old `!titleId` guard was dead and the panel named an element
+              // that exists only when a `DrawerHeader` renders it. A dangling
+              // reference is a name the platform cannot compute — the same
+              // defect `Modal` had behind `showHeader={false}`.
               aria-labelledby={
-                ariaLabelledBy ?? (!ariaLabel ? titleId : undefined)
+                ariaLabelledBy ?? (!ariaLabel && hasTitle ? titleId : undefined)
               }
               aria-describedby={ariaDescribedBy}
               tabIndex={-1}

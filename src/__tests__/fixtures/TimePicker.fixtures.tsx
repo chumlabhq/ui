@@ -1,5 +1,6 @@
 import { TimePicker } from "../../components/TimePicker/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof TimePicker> = [
@@ -26,5 +27,10 @@ const fixtures: Fixtures<typeof TimePicker> = [
   { name: "success", props: { label: "Time", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { disabled: true } },
   { name: "required", props: { label: "Time", required: true } },
+  {
+    name: "open-rtl",
+    props: { defaultOpen: true, label: "Time" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

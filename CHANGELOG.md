@@ -64,6 +64,16 @@ none is a bug fix that happened to move behaviour.
   `data-orientation` now. `CascadingDropdown`'s trigger published `aria-required`, which
   `button` does not allow; it is dropped, and `CascadingDropdownTriggerRenderProps` no longer
   carries the field.
+- **Design tokens ship in a cascade layer.** `@layer chumlab.tokens` wraps the `--cl-*` block
+  in both `styles.css` and `tokens.css`. A consumer's own `:root { --cl-accent: … }` now wins
+  whatever order the stylesheets are imported in; before, it won only if the library's
+  stylesheet was imported first, and lost silently otherwise. The utilities are deliberately
+  NOT layered — they are `.flex:where(.cl-s)`, and a layered rule loses to any unlayered one,
+  which would undo the scoping that keeps a consumer's own Tailwind from overriding them.
+- **Drawer no longer names a title that is not there.** The panel's `aria-labelledby` pointed
+  at the `DrawerHeader`'s id unconditionally, so a drawer composed without a header claimed a
+  name that resolved to nothing. The header registers itself now; a drawer without one is
+  unnamed unless you pass `aria-label`.
 - **DatePicker's marker tooltip uses the shadow token.** It was
   `boxShadow: "0 4px 12px rgba(0,0,0,0.25)"` inline — the dark theme's shadow painted in
   both, where `--cl-shadow-md` is a tenth of that weight in light.

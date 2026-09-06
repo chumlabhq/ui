@@ -1,6 +1,6 @@
 import { DatePicker } from "../../components/DatePicker/index.js";
 import type { Fixtures } from "./types.js";
-import { PortalTarget } from "./_harness.js";
+import { PortalTarget, RtlBoundary } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
 
 const D = new Date(2026, 0, 15);
@@ -109,6 +109,11 @@ const fixtures: Fixtures<typeof DatePicker> = [
         {(container) => <DatePicker defaultOpen value={D} portalContainer={container} />}
       </PortalTarget>
     ),
+  },
+  {
+    name: "open-rtl",
+    props: { defaultOpen: true, value: D },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

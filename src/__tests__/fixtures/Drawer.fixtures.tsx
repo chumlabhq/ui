@@ -3,6 +3,7 @@ import DrawerCloseButton from "../../components/Drawer/components/DrawerCloseBut
 import DrawerHeader from "../../components/Drawer/components/DrawerHeader.js";
 import { IndexPicker, Toggle } from "./_harness.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof Drawer> = [
@@ -84,5 +85,12 @@ const fixtures: Fixtures<typeof Drawer> = [
   { name: "open", props: { open: true }, children: <><DrawerHeader title="Drawer" />Body</> },
   { name: "open-left", props: { open: true, direction: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader title="Drawer" />Body</> },
+  {
+    name: "open-rtl",
+    props: { open: true, direction: "left" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    children: <><DrawerHeader title="Drawer" />Body</>,
+    note: "`side` is physical (left/right), not logical (start/end), so nothing here mirrors — which is the finding."
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

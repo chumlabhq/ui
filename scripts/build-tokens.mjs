@@ -82,7 +82,7 @@ if (problems.length) {
   process.exit(1);
 }
 
-const indent = (ds) => ds.map((d) => `  ${d}`).join("\n");
+const indent = (ds, depth = 1) => ds.map((d) => `${"  ".repeat(depth)}${d}`).join("\n");
 
 const generated = `/**
  * @chumlab/ui design tokens.
@@ -99,23 +99,43 @@ const generated = `/**
  *   @source "../node_modules/@chumlab/ui/dist";
  */
 
-/* Dark is the default: it is the surface the components were designed against.
+/* Declared before it is used, so the order is the one written here rather than
+ * the one the browser happens to see first. */
+@layer chumlab.tokens;
+
+/* The tokens sit in a cascade layer and the utilities deliberately do not.
  *
- * Both switches are honoured, because the components' \`dark:\` utilities key off
- * the \`.dark\` class (see the @custom-variant in styles.css). If tokens listened
- * only to [data-theme], a consumer setting class="dark" would get dark utilities
- * with light tokens - or the reverse - which is unreadable either way. */
-:root,
-:root.dark,
-:root[data-theme="dark"] {
-${indent(dark)}
+ * An unlayered declaration beats every layered one whatever its specificity, so
+ * a consumer writing \`:root { --cl-accent: … }\` in their own stylesheet wins —
+ * which it did not before: these rules are \`:root\` too, the same specificity,
+ * so it came down to which stylesheet was imported last and a consumer who
+ * imported ours second lost silently.
+ *
+ * The utilities must NOT move into a layer for the same reason in reverse: they
+ * are \`.flex:where(.cl-s)\`, and the \`.cl-s\` marker is what makes them beat a
+ * consumer's own \`.flex\` on the library's own elements. Layered, they would
+ * lose to any unlayered rule and the marker would stop meaning anything. */
+@layer chumlab.tokens {
+  /* Dark is the default: it is the surface the components were designed against.
+   *
+   * Both switches are honoured, because the components' \`dark:\` utilities key off
+   * the \`.dark\` class (see the @custom-variant in styles.css). If tokens listened
+   * only to [data-theme], a consumer setting class="dark" would get dark utilities
+   * with light tokens - or the reverse - which is unreadable either way. */
+  :root,
+  :root.dark,
+  :root[data-theme="dark"] {
+${indent(dark, 2)}
+  }
+
+  :root.light,
+  :root[data-theme="light"] {
+${indent(light, 2)}
+  }
 }
 
-:root.light,
-:root[data-theme="light"] {
-${indent(light)}
-}
-
+/* Outside the layer: \`@theme\` is a Tailwind directive that generates utilities
+ * from these names, not a rule the cascade resolves. */
 @theme inline {
 ${indent(theme)}
 }

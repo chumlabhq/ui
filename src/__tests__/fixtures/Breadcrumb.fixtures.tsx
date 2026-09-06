@@ -1,5 +1,6 @@
 import { Breadcrumb } from "../../components/Breadcrumb/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { CRUMBS } from "./_data.js";
 
 const fixtures: Fixtures<typeof Breadcrumb> = [
@@ -17,5 +18,11 @@ const fixtures: Fixtures<typeof Breadcrumb> = [
   },
   { name: "with-icons", props: { items: CRUMBS.map((i) => ({ ...i, icon: "•" })) } },
   { name: "with-tooltips", props: { items: CRUMBS.map((i) => ({ ...i, tooltip: "Tip" })), showTooltips: true } },
+  {
+    name: "collapsed-open-rtl",
+    props: { items: [...CRUMBS, ...CRUMBS], maxVisibleItems: 3 },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    act: (c, ui) => ui.click(c.querySelector("button")),
+  },
 ];
 export default fixtures;

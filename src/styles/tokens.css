@@ -13,85 +13,105 @@
  *   @source "../node_modules/@chumlab/ui/dist";
  */
 
-/* Dark is the default: it is the surface the components were designed against.
+/* Declared before it is used, so the order is the one written here rather than
+ * the one the browser happens to see first. */
+@layer chumlab.tokens;
+
+/* The tokens sit in a cascade layer and the utilities deliberately do not.
  *
- * Both switches are honoured, because the components' `dark:` utilities key off
- * the `.dark` class (see the @custom-variant in styles.css). If tokens listened
- * only to [data-theme], a consumer setting class="dark" would get dark utilities
- * with light tokens - or the reverse - which is unreadable either way. */
-:root,
-:root.dark,
-:root[data-theme="dark"] {
-  --cl-bg: #050608;
-  --cl-bg-elevated: #0a0d12;
-  --cl-bg-hover: #0a0d12;
-  --cl-bg-panel: #0a0d12;
-  --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
-  --cl-bg-input: #050608;
-  --cl-text: #edeff4;
-  --cl-text-secondary: rgba(237, 239, 244, 0.72);
-  --cl-text-tertiary: rgba(237, 239, 244, 0.52);
-  --cl-text-disabled: rgba(237, 239, 244, 0.3);
-  --cl-border: rgba(237, 239, 244, 0.08);
-  --cl-border-strong: rgba(237, 239, 244, 0.15);
-  --cl-border-input: rgba(237, 239, 244, 0.08);
-  --cl-border-input-hover: rgba(237, 239, 244, 0.25);
-  --cl-border-input-focus: #5b9bff;
-  --cl-accent: #5b9bff;
-  --cl-accent-hover: #7eb1ff;
-  --cl-accent-bg: rgba(91, 155, 255, 0.12);
-  --cl-accent-bg-hover: rgba(91, 155, 255, 0.18);
-  --cl-on-accent: #050608;
-  --cl-success: #22c55e;
-  --cl-warning: #f59e0b;
-  --cl-error: #e85d5d;
-  --cl-error-bg: rgba(232, 93, 93, 0.12);
-  --cl-on-error: #050608;
-  --cl-code-bg: #0a0d12;
-  --cl-code-text: rgba(237, 239, 244, 0.9);
-  --cl-radius-sm: 6px;
-  --cl-radius-md: 8px;
-  --cl-radius-lg: 10px;
-  --cl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --cl-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+ * An unlayered declaration beats every layered one whatever its specificity, so
+ * a consumer writing `:root { --cl-accent: … }` in their own stylesheet wins —
+ * which it did not before: these rules are `:root` too, the same specificity,
+ * so it came down to which stylesheet was imported last and a consumer who
+ * imported ours second lost silently.
+ *
+ * The utilities must NOT move into a layer for the same reason in reverse: they
+ * are `.flex:where(.cl-s)`, and the `.cl-s` marker is what makes them beat a
+ * consumer's own `.flex` on the library's own elements. Layered, they would
+ * lose to any unlayered rule and the marker would stop meaning anything. */
+@layer chumlab.tokens {
+  /* Dark is the default: it is the surface the components were designed against.
+   *
+   * Both switches are honoured, because the components' `dark:` utilities key off
+   * the `.dark` class (see the @custom-variant in styles.css). If tokens listened
+   * only to [data-theme], a consumer setting class="dark" would get dark utilities
+   * with light tokens - or the reverse - which is unreadable either way. */
+  :root,
+  :root.dark,
+  :root[data-theme="dark"] {
+    --cl-bg: #050608;
+    --cl-bg-elevated: #0a0d12;
+    --cl-bg-hover: #0a0d12;
+    --cl-bg-panel: #0a0d12;
+    --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
+    --cl-bg-input: #050608;
+    --cl-text: #edeff4;
+    --cl-text-secondary: rgba(237, 239, 244, 0.72);
+    --cl-text-tertiary: rgba(237, 239, 244, 0.52);
+    --cl-text-disabled: rgba(237, 239, 244, 0.3);
+    --cl-border: rgba(237, 239, 244, 0.08);
+    --cl-border-strong: rgba(237, 239, 244, 0.15);
+    --cl-border-input: rgba(237, 239, 244, 0.08);
+    --cl-border-input-hover: rgba(237, 239, 244, 0.25);
+    --cl-border-input-focus: #5b9bff;
+    --cl-accent: #5b9bff;
+    --cl-accent-hover: #7eb1ff;
+    --cl-accent-bg: rgba(91, 155, 255, 0.12);
+    --cl-accent-bg-hover: rgba(91, 155, 255, 0.18);
+    --cl-on-accent: #050608;
+    --cl-success: #22c55e;
+    --cl-warning: #f59e0b;
+    --cl-error: #e85d5d;
+    --cl-error-bg: rgba(232, 93, 93, 0.12);
+    --cl-on-error: #050608;
+    --cl-code-bg: #0a0d12;
+    --cl-code-text: rgba(237, 239, 244, 0.9);
+    --cl-radius-sm: 6px;
+    --cl-radius-md: 8px;
+    --cl-radius-lg: 10px;
+    --cl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --cl-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  :root.light,
+  :root[data-theme="light"] {
+    --cl-bg: #ffffff;
+    --cl-bg-elevated: #f8f9fb;
+    --cl-bg-hover: rgba(15, 18, 24, 0.04);
+    --cl-bg-panel: #ffffff;
+    --cl-bg-item-hover: rgba(15, 18, 24, 0.04);
+    --cl-bg-input: #ffffff;
+    --cl-text: #0f1218;
+    --cl-text-secondary: rgba(15, 18, 24, 0.8);
+    --cl-text-tertiary: rgba(15, 18, 24, 0.62);
+    --cl-text-disabled: rgba(15, 18, 24, 0.35);
+    --cl-border: rgba(15, 18, 24, 0.1);
+    --cl-border-strong: rgba(15, 18, 24, 0.18);
+    --cl-border-input: rgba(15, 18, 24, 0.15);
+    --cl-border-input-hover: rgba(15, 18, 24, 0.3);
+    --cl-border-input-focus: #2563eb;
+    --cl-accent: #2563eb;
+    --cl-accent-hover: #1d4ed8;
+    --cl-accent-bg: rgba(37, 99, 235, 0.1);
+    --cl-accent-bg-hover: rgba(37, 99, 235, 0.15);
+    --cl-on-accent: #ffffff;
+    --cl-success: #15803d;
+    --cl-warning: #d97706;
+    --cl-error: #b91c1c;
+    --cl-error-bg: rgba(185, 28, 28, 0.1);
+    --cl-on-error: #ffffff;
+    --cl-code-bg: #f4f5f7;
+    --cl-code-text: rgba(15, 18, 24, 0.85);
+    --cl-radius-sm: 6px;
+    --cl-radius-md: 8px;
+    --cl-radius-lg: 10px;
+    --cl-shadow-sm: 0 1px 2px rgba(15, 18, 24, 0.06);
+    --cl-shadow-md: 0 4px 12px rgba(15, 18, 24, 0.08);
+  }
 }
 
-:root.light,
-:root[data-theme="light"] {
-  --cl-bg: #ffffff;
-  --cl-bg-elevated: #f8f9fb;
-  --cl-bg-hover: rgba(15, 18, 24, 0.04);
-  --cl-bg-panel: #ffffff;
-  --cl-bg-item-hover: rgba(15, 18, 24, 0.04);
-  --cl-bg-input: #ffffff;
-  --cl-text: #0f1218;
-  --cl-text-secondary: rgba(15, 18, 24, 0.8);
-  --cl-text-tertiary: rgba(15, 18, 24, 0.62);
-  --cl-text-disabled: rgba(15, 18, 24, 0.35);
-  --cl-border: rgba(15, 18, 24, 0.1);
-  --cl-border-strong: rgba(15, 18, 24, 0.18);
-  --cl-border-input: rgba(15, 18, 24, 0.15);
-  --cl-border-input-hover: rgba(15, 18, 24, 0.3);
-  --cl-border-input-focus: #2563eb;
-  --cl-accent: #2563eb;
-  --cl-accent-hover: #1d4ed8;
-  --cl-accent-bg: rgba(37, 99, 235, 0.1);
-  --cl-accent-bg-hover: rgba(37, 99, 235, 0.15);
-  --cl-on-accent: #ffffff;
-  --cl-success: #15803d;
-  --cl-warning: #d97706;
-  --cl-error: #b91c1c;
-  --cl-error-bg: rgba(185, 28, 28, 0.1);
-  --cl-on-error: #ffffff;
-  --cl-code-bg: #f4f5f7;
-  --cl-code-text: rgba(15, 18, 24, 0.85);
-  --cl-radius-sm: 6px;
-  --cl-radius-md: 8px;
-  --cl-radius-lg: 10px;
-  --cl-shadow-sm: 0 1px 2px rgba(15, 18, 24, 0.06);
-  --cl-shadow-md: 0 4px 12px rgba(15, 18, 24, 0.08);
-}
-
+/* Outside the layer: `@theme` is a Tailwind directive that generates utilities
+ * from these names, not a rule the cascade resolves. */
 @theme inline {
   --color-cl-bg: var(--cl-bg);
   --color-cl-bg-elevated: var(--cl-bg-elevated);

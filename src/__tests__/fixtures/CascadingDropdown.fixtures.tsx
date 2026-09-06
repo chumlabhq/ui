@@ -1,5 +1,6 @@
 import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import type { ActTools } from "./_act.js";
 import { neverResolves, rejectsWith, resolvesTo } from "./_async.js";
 
@@ -308,6 +309,17 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
         </button>
       ),
     },
+  },
+  {
+    name: "open-submenu-rtl",
+    props: { options: NESTED, defaultOpen: true, keepMounted: true, showSubmenuSearch: true },
+    wrap: (node) => (
+      <RtlBoundary>
+        <div style={{ width: 260, marginRight: "auto" }}>{node}</div>
+      </RtlBoundary>
+    ),
+    note: "The submenu's side is the one thing in the package that already flips; RTL is where it should flip the other way first.",
+    act: openSubmenu,
   },
 ];
 export default fixtures;

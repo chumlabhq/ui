@@ -1,5 +1,6 @@
 import { SearchableDropdown } from "../../components/SearchableDropdown/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { OPTIONS } from "./_data.js";
 import { neverResolves, resolvesTo, settleAsync } from "./_async.js";
 
@@ -96,6 +97,11 @@ const fixtures: Fixtures<typeof SearchableDropdown> = [
       ),
     },
     note: "The render props carry the combobox contract — role, aria-expanded, aria-controls — onto markup the library did not write.",
+  },
+  {
+    name: "open-rtl",
+    props: { options: OPTIONS, defaultOpen: true, label: "Fruit" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
 ];
 export default fixtures;

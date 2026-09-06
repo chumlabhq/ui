@@ -1,4 +1,5 @@
 import type { Fixture } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import type { TableProps } from "../../components/Table/utils/types.js";
 import { ROWS, COLUMNS } from "./_data.js";
 
@@ -85,6 +86,12 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     name: "cell-editing",
     props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID },
     act: (c, ui) => ui.dblClick(c.querySelector("tbody td")),
+  },
+  {
+    name: "filter-open-rtl",
+    props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    act: (c, ui) => ui.click(c.querySelector("[data-table-filter-trigger], th button")),
   },
 ];
 export default fixtures;
