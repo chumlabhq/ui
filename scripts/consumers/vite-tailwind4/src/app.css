@@ -1,0 +1,16 @@
+/* A consumer's own Tailwind v4, with everything the library has to survive. */
+@import "tailwindcss";
+
+/* Their dark-mode strategy is a class, not the media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand: #7c3aed;
+  /* A token whose name collides with one of the library's. A consumer is
+     allowed to do this: overriding `--cl-*` is documented. */
+  --color-cl-accent: #ff00aa;
+}
+
+:root {
+  --cl-accent: #ff00aa;
+}

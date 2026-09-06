@@ -315,7 +315,10 @@ function useMarkerTooltip(
               borderRadius: 8,
               fontSize: 12,
               lineHeight: 1.5,
-              boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+              // The shadow token, not a fixed black: `--cl-shadow-md` is
+              // rgba(0,0,0,0.35) in dark and rgba(15,18,24,0.06) in light, and
+              // this was the dark value painted in both.
+              boxShadow: "var(--cl-shadow-md)",
               pointerEvents: "none",
             }}
           >

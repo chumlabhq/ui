@@ -64,6 +64,9 @@ none is a bug fix that happened to move behaviour.
   `data-orientation` now. `CascadingDropdown`'s trigger published `aria-required`, which
   `button` does not allow; it is dropped, and `CascadingDropdownTriggerRenderProps` no longer
   carries the field.
+- **DatePicker's marker tooltip uses the shadow token.** It was
+  `boxShadow: "0 4px 12px rgba(0,0,0,0.25)"` inline — the dark theme's shadow painted in
+  both, where `--cl-shadow-md` is a tenth of that weight in light.
 - **Three raw whites now follow the theme.** `RadioButton`'s checked dot was `white` inline —
   invisible on a light background — and is `--cl-text`. `Table`'s selected checkmark was
   `stroke="white"`, 2.77:1 on the dark theme's accent, and is `--cl-on-accent`. `Avatar`'s

@@ -24,7 +24,7 @@ measured on the date above unless the text says otherwise.
 | Unit + contract (`test:run`) | **pass** | 4409 passed, 68 skipped, 86 files. Contracts alone: 1239 passed, 68 skipped, 29 files. |
 | Coverage | **pass** | 91.79% statements, 87.15% branch, 94.42% functions, 93.70% lines. |
 | `test:e2e:all` (7 projects) | **FAIL, then 3 of 4 cleared** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 2894s. a11y-full, webkit and Mobile Safari re-run clean (§1.6); Firefox not re-run. **a11y-full is red again since 2026-09-06** — its scope was wrong, not its result (§1.2). |
-| `verify:consumers` (6 apps) | **pass** | 87s. Every app installed the packed tarball, typechecked and built. |
+| `verify:consumers` (9 apps) | **FAIL, 1 of 9** | Eight install, typecheck and build. `vite-tailwind4` fails one assertion — a consumer's `--cl-*` override loses to the library's own declaration (§1.3). |
 | `verify:packaging` (4 plants) | **pass** | publint `--strict`, attw, shipped-link check. All four planted defects caught. |
 | `npm publish --dry-run` | **pass** *(after a fix — see §1.4)* | 1635 files, 2.1 MB packed, 6.9 MB unpacked. |
 | `npm audit` (production tree) | **pass** | 0 vulnerabilities across the 4 production dependencies. |
@@ -126,6 +126,40 @@ painted success green**. Two light tokens moved with the fix — `--cl-success` 
 and `--cl-error` to red-700 — and both are now in the token contract's text set.
 
 ### 1.3 The consumer matrix and the tarball
+
+**Three targets were added, and they answer three premises nothing had tested.**
+
+`vite-tailwind4` is a consumer running their own Tailwind v4 — their preflight, their
+utilities, their class-based dark variant, and a token named like one of ours. It is the
+premise `.cl-s` exists for, and the other six templates import a precompiled stylesheet and
+never run Tailwind at all. Four of its five assertions pass, and they are the ones that
+matter most: **nothing disappeared** — button, combobox and table all painted with a real
+box — the library's marked `flex` rows still compute `display: flex` beside the consumer's
+own utilities, which is exactly the failure `build-styles.mjs` records, and the consumer's
+page is untouched: their flex row is still flex and their preflighted button still has no
+background. **The marker holds.**
+
+**What fails is the token.** A consumer writing `:root { --cl-accent: #ff00aa }` in their own
+stylesheet gets `#5b9bff` — ours. The library ships
+`:root, :root.dark, :root[data-theme="dark"] { --cl-accent: … }`, whose `:root` branch is the
+same specificity as theirs, so the later import wins — and a consumer importing the library
+after their own stylesheet loses silently. Two remedies, neither taken here: document that
+`@chumlab/ui/styles.css` must be imported first, or wrap the token block in
+`@layer chumlab.tokens`, which an unlayered consumer rule beats regardless of order. The
+second must not extend to the utilities: they are unlayered on purpose, because a layered
+`.flex:where(.cl-s)` would lose to a consumer's unlayered `.flex` and that is the failure the
+marker prevents.
+
+`vite-strict` mounts the tree in StrictMode and drives it, which no target had done — the
+vite-react19 template has always written `<StrictMode>` and the matrix has only ever built
+it. Through mount, opening a portalled dropdown, opening a modal, closing both, unmounting
+and remounting: **no console error or warning**, one portal root per open surface (not two),
+focus inside the dialog, zero portal roots left after unmount, and `document` listeners
+1 → 4 while a surface is open → 1 after unmount → 1 after remount. Nothing double-installs.
+
+`vite-treeshake` imports `@chumlab/ui/button` and nothing else, and the emitted JS carries no
+`data-table-filter-content`, no `pinnedRightRegion`, no `Days of the week` — string markers
+rather than identifiers, because a bundler renames the second and keeps the first.
 
 ```
   pass  publint
@@ -273,7 +307,8 @@ deleting the entry is how it goes back to blocking.
 | --- | --- |
 | 30 components, each with a subpath export | `attw` resolves all 32 entrypoints under node10, node16 (CJS and ESM) and bundler |
 | ESM and CJS, with correct types for each | `publint --strict` clean; `attw` reports 0 problems. Both were broken until the previous slice — 272 findings |
-| Installs and builds in real frameworks | `verify:consumers`: 6 apps, 2 React majors, 4 frameworks, production builds |
+| Installs and builds in real frameworks | `verify:consumers`: 9 apps, 2 React majors, 4 frameworks, production builds, one of them running its own Tailwind v4 and one mounted in StrictMode |
+| Tree-shakes | `vite-treeshake` imports only `@chumlab/ui/button` and the emitted JS is searched for markup only Table, DatePicker and CascadingDropdown write. Asserted for the first time; the README has claimed it since the beginning |
 | Server-renders under Next and React Router | The same gate greps prerendered HTML for a sentinel and a `<table>`; a build alone is not accepted as proof |
 | `"use client"` where hooks are used | The consumer self-check strips the directive from all 144 chunks and requires `next-app` to fail while `vite-react19` still passes |
 | Optional peers really are optional | `vite-no-optional-peers` installs neither and asserts their absence. Removing `peerDependenciesMeta` makes it fail — verified |
@@ -414,7 +449,7 @@ Named plainly, because these are the gaps that no green run says anything about.
 
 **The library has never run in a real consumer's application.** `@chumlab/ui` has never been
 published — `npm view` returns 404 — so there are no downstream users and no field
-evidence. The consumer matrix is six throwaway templates that I wrote, and they render
+evidence. The consumer matrix is nine throwaway templates that I wrote, and they render
 **four of the thirty components** (Button, Dropdown, DatePicker, Table; the sixth renders
 two). Every claim about how this behaves inside a real application is an inference from
 those four.
@@ -506,7 +541,7 @@ combination. Deleting those after an rc is the exact break R7 exists to prevent.
    marketing.
 
 The counter-argument is worth stating: 91.79% coverage, 4409 tests, a seven-project browser
-matrix, 404 visual baselines, six consumer apps and a per-criterion accessibility record are
+matrix, 404 visual baselines, nine consumer apps and a per-criterion accessibility record are
 not 0.1.0-shaped artefacts, and calling this 0.1.0 undersells it to anyone evaluating it.
 That is true. It is also the correct price for keeping the right to delete a key.
 
@@ -534,7 +569,7 @@ What I would want said out loud to whoever presses publish.
    published alongside a package will be quoted as fourteen failures. They are fourteen
    ungated criteria, most probably fine. The framing is honest and it is also a liability;
    the README should say this louder than it does.
-4. **Six templates are not a user.** The first real consumer will hit something none of this
+4. **Nine templates are not a user.** The first real consumer will hit something none of this
    found — most likely a bundler, a monorepo layout, or a CSS-order interaction. That is
    normal for a first release and it is the strongest argument for 0.1.0.
 5. **Firefox is unresolved, not clean.** I read those eleven as environmental. I did not
@@ -555,12 +590,14 @@ In order. The first two are done; the rest are not.
    count guard so it cannot go stale the same way.
 3. ~~Clear the last 4 axe findings the corrected sweep surfaced (§1.2).~~ **Done** — fixed at
    the source, along with 31 the painted-contrast gate found once it existed.
-4. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** The remaining
+4. **Decide how a consumer overrides a token (§1.3).** Blocking: `verify:consumers` is red on
+   it, and the choice is one line of documentation or one `@layer` around the token block.
+5. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** The remaining
    blocker: one project has never been seen green, and "probably environmental" is a reading,
    not a result.
-5. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
+6. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
    race against the CPU. This is one of the eleven Firefox failures and the only one with an
-   obvious fix, so it is worth doing before step 4 rather than after.
-6. Decide the 17 waived keys — delete them under R7 while it is still free.
+   obvious fix, so it is worth doing before step 5 rather than after.
+7. Decide the 17 waived keys — delete them under R7 while it is still free.
 
-Step 4 is the remaining blocker. Step 6 gets much more expensive after 1.0.
+Steps 4 and 5 are the remaining blockers. Step 7 gets much more expensive after 1.0.
