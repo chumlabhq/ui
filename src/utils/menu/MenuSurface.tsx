@@ -7,7 +7,7 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { isBrowser } from "../isBrowser.js";
+import { useHydrated } from "../useHydrated.js";
 import { mergeRefs } from "../mergeRefs.js";
 import { useAnchoredPosition } from "../useAnchoredPosition.js";
 import { surfaceStyle } from "./measuringStyle.js";
@@ -72,8 +72,12 @@ const MenuSurface = forwardRef<HTMLDivElement, MenuSurfaceProps>(function MenuSu
   const surfaceRef = useRef<HTMLDivElement>(null);
   const position = useAnchoredPosition(trigger, surfaceRef, isOpen, { side, gap, forceSide });
   const isStable = useStablePositionAfterOpen(isOpen);
+  const hydrated = useHydrated();
 
-  if (!isBrowser) return null;
+  // Not `isBrowser`: that is true during hydration, so an open surface — or a
+  // closed one with `keepMounted` — portalled a subtree the server never sent.
+  // The nine components here passed only while their surface was shut.
+  if (!hydrated) return null;
   if (!isOpen && !keepMounted) return null;
 
   const placed = position

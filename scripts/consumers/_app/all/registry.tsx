@@ -26,7 +26,15 @@ import { TextArea } from "@chumlab/ui/textarea";
 import { TimePicker } from "@chumlab/ui/time-picker";
 import { Tooltip } from "@chumlab/ui/tooltip";
 import type { ReactNode } from "react";
-import { DrawerDemo, HydrationCanary, ModalDemo, ToastDemo } from "./interactive";
+import { Drawer, DrawerHeader } from "@chumlab/ui/drawer";
+import { Modal } from "@chumlab/ui/modal";
+import {
+  DrawerDemo,
+  HydrationCanary,
+  ModalDemo,
+  ResponsiveTable,
+  ToastDemo,
+} from "./interactive";
 
 /**
  * All thirty components, once each, for every general consumer template.
@@ -190,6 +198,72 @@ export const ENTRIES: Entry[] = [
 ];
 
 /**
+ * The localStorage key `Accordion__stored` persists under. The harness seeds it
+ * before the sweep; nothing else in the matrix reads or writes storage.
+ */
+export const ACCORDION_STORAGE_KEY = "chumlab-matrix-accordion";
+
+/**
+ * Routes that are not one of the thirty: a component in the one state that
+ * makes the hydration question askable.
+ *
+ * Every entry here is a case that PASSED before it existed, and passed for the
+ * same reason — the portal it would have added is behind a closed surface, so a
+ * server rendering nothing and a client rendering nothing agreed. Safe while
+ * closed is not safe: a consumer opening a dialog on page load, keeping a menu
+ * mounted, or restoring an accordion from storage takes the branch the sweep
+ * never reached. These are kept off the grid page deliberately — an open modal
+ * covers the other twenty-nine.
+ */
+export const VARIANTS: Entry[] = [
+  {
+    name: "Modal__open",
+    node: (
+      <Modal open title="Modal">
+        <p>Body</p>
+      </Modal>
+    ),
+  },
+  {
+    name: "Drawer__open",
+    node: (
+      <Drawer open>
+        <DrawerHeader title="Drawer" />
+        <p>Body</p>
+      </Drawer>
+    ),
+  },
+  // Both halves of MenuSurface's escape: open at first paint, and closed but
+  // kept in the DOM. Nine components portal through it.
+  { name: "Dropdown__open", node: <Dropdown options={OPTIONS} label="Fruit" defaultOpen /> },
+  { name: "Dropdown__keepMounted", node: <Dropdown options={OPTIONS} label="Fruit" keepMounted /> },
+  {
+    name: "Tooltip__portal",
+    node: (
+      <Tooltip content="Tip" open portal>
+        <button type="button">Hover</button>
+      </Tooltip>
+    ),
+  },
+  {
+    name: "Accordion__stored",
+    node: (
+      <Accordion type="single" collapsible storageKey={ACCORDION_STORAGE_KEY}>
+        <AccordionItem value="one">
+          <AccordionTrigger>First</AccordionTrigger>
+          <AccordionContent>First body</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="two">
+          <AccordionTrigger>Second</AccordionTrigger>
+          <AccordionContent>Second body</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    ),
+  },
+  { name: "Table__responsive", node: <ResponsiveTable /> },
+];
+
+/**
  * A deliberate hydration mismatch, routed like a component.
  *
  * It is the positive control for the hydration check and it runs on every pass,
@@ -199,4 +273,18 @@ export const ENTRIES: Entry[] = [
  */
 export const CANARY: Entry = { name: "__canary", node: <HydrationCanary /> };
 
-export const NAMES = [...ENTRIES.map((entry) => entry.name), CANARY.name];
+/**
+ * Every route, including the one that lists them.
+ *
+ * The harness reads this list off `__routes` in the running application rather
+ * than keeping its own copy: the routes are generated from it in three
+ * frameworks, and a second list beside the driver is a list that drifts.
+ */
+export const ROUTES = "__routes";
+
+export const NAMES = [
+  ...ENTRIES.map((entry) => entry.name),
+  ...VARIANTS.map((variant) => variant.name),
+  CANARY.name,
+  ROUTES,
+];

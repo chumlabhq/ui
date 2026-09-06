@@ -25,10 +25,13 @@
  * server/client branch in the library therefore takes the SAME path on both sides here,
  * and the mismatch class React's own #418 text names first ("a server/client branch
  * `if (typeof window !== 'undefined')`") cannot occur in this environment. The consumer
- * matrix found three of them in a real Node server and a real browser — ToastProvider
- * unconditionally, Modal and Drawer when open at first paint — and this suite was green
- * throughout. Closing the gap means rendering the HTML in a `node` project and hydrating
- * it in a jsdom one, which is a second vitest project rather than a change here.
+ * matrix found five of them in a real Node server and a real browser — ToastProvider
+ * unconditionally, Modal, Drawer and MenuSurface when open at first paint, Table and
+ * Accordion in their state initializers — and this suite was green throughout. Closing the
+ * gap properly means rendering the HTML in a `node` project and hydrating it in a jsdom one,
+ * which is a second vitest project rather than a change here; until then the class is held
+ * by `ssr-branch.contract`, which reads the source instead, and by the consumer matrix,
+ * which is the only place it can actually be reproduced.
  */
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { renderToString } from "react-dom/server";

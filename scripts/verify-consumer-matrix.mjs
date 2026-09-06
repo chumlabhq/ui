@@ -50,9 +50,15 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { areTheTypesWrong, publint } from "./assert-packaging.mjs";
 import { runtimeChecks, serve } from "./verify-consumer-runtime.mjs";
+import { RECORD, sourceFingerprint } from "./assert-ssr-record.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TEMPLATES = join(ROOT, "scripts", "consumers");
+
+/** The library's own list, which is also what the SSR record must cover. */
+const EXPECTED_COMPONENTS = JSON.parse(
+  readFileSync(join(ROOT, "ai", "component-index.json"), "utf8"),
+).components.map((component) => component.name);
 
 /** Rendered by the shared Showcase, and the thing server-rendered HTML is searched for. */
 const SENTINEL = "chumlab-consumer-smoke";
@@ -587,6 +593,7 @@ async function verifyConsumer(target, tarball, into) {
   const dir = scaffold(target, tarball, into);
   const started = Date.now();
   const steps = [];
+  let routes = null;
 
   const step = (label, command, argv) => {
     const { status, output } = run(command, argv, { cwd: dir });
@@ -673,7 +680,9 @@ async function verifyConsumer(target, tarball, into) {
     if (target.checks) steps.push(...target.checks(dir, target));
     if (target.runtime && !flag("skip-runtime")) {
       try {
-        steps.push(...(await runtimeChecks(dir, target)));
+        const pass = await runtimeChecks(dir, target);
+        steps.push(...pass.steps);
+        routes = pass.results;
       } catch (error) {
         steps.push({ label: "runtime", ok: false, output: String(error?.stack ?? error) });
       }
@@ -687,7 +696,68 @@ async function verifyConsumer(target, tarball, into) {
     }
   }
 
-  return { target: target.name, seconds: Math.round((Date.now() - started) / 1000), steps, dir };
+  return { target: target.name, seconds: Math.round((Date.now() - started) / 1000), steps, dir, routes };
+}
+
+// ── the SSR record ────────────────────────────────────────────────────────
+
+/**
+ * Writes what the matrix measured about hydration, per component.
+ *
+ * `ai/component-index.json` carries `"ssr": "safe"` for all thirty. It was
+ * asserted rather than measured and it was wrong for three of them, so the
+ * field is derived now: this writes the evidence and `assert-ssr-record.mjs`
+ * holds the index to it. The index is NOT written here on purpose — a claim
+ * that updates itself from the measurement is not a claim anyone can be wrong
+ * about, and being wrong about it is the whole point of the gate.
+ *
+ * Only written when the matrix packed its own tarball and ran every target: a
+ * reused `--tarball` may have been built from different source, and a partial
+ * run has no evidence for the components it skipped.
+ */
+function writeSsrRecord(results) {
+  const measured = results.filter((result) => result.routes);
+  const ssrTargets = TARGETS.filter((t) => t.ssr && t.runtime).map((t) => t.name);
+  if (!ssrTargets.every((name) => measured.some((result) => result.target === name))) {
+    log(`  SSR record not written — needs a full run of ${ssrTargets.join(", ")}`);
+    return;
+  }
+
+  // A variant route is named `Component__case`; its verdict belongs to the
+  // component, because "Modal is SSR-safe" has to include Modal open.
+  const components = {};
+  for (const name of EXPECTED_COMPONENTS) components[name] = { ssr: "safe", routes: [] };
+  for (const result of measured) {
+    if (!TARGETS.find((t) => t.name === result.target)?.ssr) continue;
+    for (const route of result.routes) {
+      const component = route.name.split("__")[0];
+      const evidence = components[component];
+      if (!evidence) continue;
+      if (!evidence.routes.includes(route.name)) evidence.routes.push(route.name);
+      if (!route.hydrated || route.recoverable.length > 0) evidence.ssr = "mismatch";
+    }
+  }
+
+  const record = {
+    $comment:
+      "Derived from `npm run verify:consumers`. Every component is rendered on its own " +
+      "route in three server-rendered frameworks and hydrated with React 19's " +
+      "onRecoverableError read directly; `ssr` is what that measured, not a claim. " +
+      "`ai/component-index.json` must agree — see scripts/assert-ssr-record.mjs. " +
+      "A `__case` route is the same component in the state that makes the question " +
+      "askable, such as a Modal open at first paint.",
+    generatedAt: new Date().toISOString().slice(0, 10),
+    package: `${JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")).version}`,
+    sourceFingerprint: sourceFingerprint(),
+    templates: ssrTargets,
+    components,
+  };
+  writeFileSync(RECORD, `${JSON.stringify(record, null, 2)}\n`, "utf8");
+  const bad = Object.entries(components).filter(([, e]) => e.ssr !== "safe");
+  log(
+    `  SSR record written: ${Object.keys(components).length} component(s), ` +
+      `${bad.length === 0 ? "all safe" : `${bad.map(([name]) => name).join(", ")} mismatched`}`,
+  );
 }
 
 // ── reporting ─────────────────────────────────────────────────────────────
@@ -869,6 +939,10 @@ try {
       results.push(await verifyConsumer(target, tarball, workspace));
     }
     ok = report(results, packaging);
+
+    // Written after the report, so a failing run still says why before it
+    // records what it saw.
+    if (!only && !flag("skip-runtime") && !value("tarball")) writeSsrRecord(results);
   }
 } finally {
   if (flag("keep")) log(`\n  scaffolds kept at ${workspace}`);

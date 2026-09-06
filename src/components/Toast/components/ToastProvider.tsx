@@ -10,6 +10,7 @@ import Toast from "../Toast.js";
 import { ToastContext } from "../utils/context.js";
 import { positionClasses, stackDirectionClasses, PROGRESS_KEYFRAMES } from "../utils/constants.js";
 import { cn } from "../../../utils/scopedCn.js";
+import { useHydrated } from "../../../utils/useHydrated.js";
 import { isBrowser } from "../../../utils/isBrowser.js";
 
 interface ToastState extends ToastConfig {
@@ -35,7 +36,10 @@ export const ToastProvider = ({
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
 
-  const portalTarget = isBrowser ? document.body : null;
+  // Deferred by one render rather than decided by `isBrowser`: a server
+  // renders no container, so a first client render that portals one is a
+  // subtree the server never sent. See `useHydrated`.
+  const portalTarget = useHydrated() ? document.body : null;
 
   const restoreFocus = useCallback(() => {
     if (previousFocusRef.current && previousFocusRef.current.isConnected) {

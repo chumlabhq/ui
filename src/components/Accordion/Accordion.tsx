@@ -170,6 +170,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     isExpanded,
     pendingItem,
     internalValue,
+    storageRead,
   } = useAccordionStateManager({
     type,
     collapsible,
@@ -189,7 +190,9 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   });
 
   // ─── Storage sync ────────────────────────────────────────────────────────
-  useStorageSync(internalValue, writeToStorage, isControlled);
+  // Paused until the stored value has been read: the first commit still holds
+  // the default, and writing that back would erase what it is about to restore.
+  useStorageSync(internalValue, writeToStorage, isControlled || !storageRead);
 
   // ─── Styling ─────────────────────────────────────────────────────────────
   const sizeClasses = unstyled ? structuralOnly(SIZE_CLASSES[size]) : SIZE_CLASSES[size];

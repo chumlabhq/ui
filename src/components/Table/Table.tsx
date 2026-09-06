@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { isBrowser } from "../../utils/isBrowser.js";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { cn } from "../../utils/scopedCn.js";
 import {
   useReactTable,
@@ -64,14 +65,24 @@ const densityPaddingMap = {
   spacious: "px-5 py-4 text-base",
 } as const;
 
-/** Hook to track viewport width for responsive breakpoint. */
+/** What a server assumes, and therefore what the first client render must say. */
+const SERVER_VIEWPORT_WIDTH = 1024;
+
+/**
+ * Viewport width for the responsive breakpoint.
+ *
+ * Seeded with the server's assumption rather than the real width: a
+ * `window.innerWidth` read in the initializer runs during hydration, and with
+ * `responsiveBreakpoint` and `renderMobileCard` set it decides between a table
+ * and a list of cards — two different trees for one page. Measured in a layout
+ * effect instead, so the correction lands before paint.
+ */
 function useViewportWidth(): number {
-  const [width, setWidth] = useState(() =>
-    isBrowser ? window.innerWidth : 1024,
-  );
+  const [width, setWidth] = useState(SERVER_VIEWPORT_WIDTH);
   const rafId = useRef(0);
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!isBrowser) return;
+    setWidth(window.innerWidth);
     const handler = () => {
       cancelAnimationFrame(rafId.current);
       rafId.current = requestAnimationFrame(() => {

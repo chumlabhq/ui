@@ -23,7 +23,7 @@ import { LAYERS, LAYER_STEP, OverlayLayerContext } from "../../utils/layers.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { useHydrated } from "../../utils/useHydrated.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { cycleTabWithin } from "../../utils/focusUtils.js";
 import {
@@ -111,6 +111,9 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const mergedContentRef = useMemo(() => mergeRefs(contentRef, ref), [ref]);
     const previousActiveElement = useRef<HTMLElement | null>(null);
     const [mounted, setMounted] = useState(isOpen || keepMounted);
+    // A modal open on first paint used to portal during hydration, which is a
+    // subtree the server never sent. See `useHydrated`.
+    const hydrated = useHydrated();
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
     const effectiveDuration = prefersReducedMotion || disableAnimation ? 0 : animationDuration;
@@ -427,7 +430,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       </OverlayLayerContext.Provider>
     );
 
-    if (!isBrowser) return null;
+    if (!hydrated) return null;
     return createPortal(modalContent, document.body);
   },
 );

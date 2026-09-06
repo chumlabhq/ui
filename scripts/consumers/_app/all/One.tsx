@@ -1,4 +1,4 @@
-import { CANARY, ENTRIES } from "./registry";
+import { CANARY, ENTRIES, NAMES, ROUTES, VARIANTS } from "./registry";
 
 /**
  * One component, alone on a route.
@@ -9,7 +9,16 @@ import { CANARY, ENTRIES } from "./registry";
  * component throwing on a server takes its own page down and not the sweep.
  */
 export function One({ name }: { name: string }) {
-  const entry = [...ENTRIES, CANARY].find((candidate) => candidate.name === name);
+  if (name === ROUTES) {
+    return (
+      <main>
+        <h1>chumlab-consumer-smoke</h1>
+        <pre data-routes>{JSON.stringify(NAMES)}</pre>
+      </main>
+    );
+  }
+
+  const entry = [...ENTRIES, ...VARIANTS, CANARY].find((candidate) => candidate.name === name);
   if (!entry) return <main data-component="__unknown">{`no component named ${name}`}</main>;
   return (
     <main>

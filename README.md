@@ -430,9 +430,9 @@ npm run build:lib      # Build library
 ## FAQ
 
 **Does it work with Next.js?**
-Yes — App Router and Pages Router, and React Router 7 in SSR mode, with one known exception
-below. The interactive components ship with `"use client"`, so you can import them straight
-into a Server Component. Import `@chumlab/ui/styles.css` once in your root layout.
+Yes — App Router and Pages Router, and React Router 7 in SSR mode. The interactive components
+ship with `"use client"`, so you can import them straight into a Server Component. Import
+`@chumlab/ui/styles.css` once in your root layout.
 
 This is checked rather than assumed: `npm run verify:consumers` packs the library, installs
 the tarball into throwaway apps for Vite (React 18 and 19), both Next.js routers and React
@@ -440,14 +440,14 @@ Router 7, renders **all thirty components** in each — every one from its own s
 own route — and fails if any will not build, will not server-render, does not hydrate
 cleanly, or stops responding to the control it advertises.
 
-**The known exception, found by that gate and not yet fixed.** `ToastProvider` decides where
-to portal during render, behind a `typeof window` branch: a server renders nothing there and
-the first client render adds it, which React reports as a hydration mismatch in all three
-server-rendered frameworks. The toast still works — React regenerates the tree — but the
-error is real and it is in the console of every page that mounts a `ToastProvider`. `Modal`
-and `Drawer` do the same when they are rendered **open** on first paint; closed, which is the
-ordinary case, both hydrate clean. Everything else in the library hydrates without a single
-recoverable error on all three. Tracked in `RELEASE-READINESS.md` §1.3.
+Hydration is asserted per component, in the state that makes it interesting: a `Modal` and a
+`Drawer` open at first paint, a `Dropdown` open and a `Dropdown` kept mounted, a `Tooltip`
+portalled, an `Accordion` restoring from `localStorage`, a `Table` switching to cards below
+its breakpoint. **Zero recoverable errors across all of them in all three frameworks**, read
+through React 19's `onRecoverableError` rather than the console. What that means concretely:
+anything portalled — a modal, a drawer, a menu, a toast — is absent from the server HTML
+*and* from the first client render, and appears on the render after, so the two trees React
+compares are identical. Recorded in `docs/adr/003-ssr-hydration.md`.
 
 **Can I use it without Tailwind CSS?**
 Yes — that is the default path. `import "@chumlab/ui/styles.css"` is precompiled

@@ -49,7 +49,11 @@ const EXPECTED = JSON.parse(
   readFileSync(join(ROOT, "ai", "component-index.json"), "utf8"),
 ).components.map((component) => component.name);
 
-const NAMES = [...EXPECTED, CANARY];
+/** The route that lists the routes; see ROUTES in `_app/all/registry.tsx`. */
+const ROUTES = "__routes";
+
+/** Seeded before the sweep, for the one variant whose defect needs stored state. */
+const ACCORDION_STORAGE_KEY = "chumlab-matrix-accordion";
 
 /**
  * A floor on the affordances each component should fire, recorded from the
@@ -311,6 +315,16 @@ async function inspect(page) {
     const section = document.querySelector("[data-component]");
     if (!section) return { present: false };
     const box = section.getBoundingClientRect();
+    // A component whose whole render is a portal — an open Modal, a Drawer —
+    // leaves its own section empty, so "did it render" has to count what landed
+    // outside the page shell too. Boxes rather than nodes: a framework's
+    // injected scripts and templates are elements with no size.
+    const shell = document.querySelector("main");
+    const outside = [...document.body.querySelectorAll("*")].filter((element) => {
+      if (shell?.contains(element)) return false;
+      const rect = element.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    }).length;
     return {
       present: true,
       name: section.getAttribute("data-component"),
@@ -318,8 +332,9 @@ async function inspect(page) {
       // "no recoverable errors" is a statement about a page React never
       // touched.
       hydrated: Object.keys(section).some((key) => key.startsWith("__reactFiber$")),
-      painted: box.width > 0 && box.height > 0,
-      elements: section.querySelectorAll("*").length,
+      painted: (box.width > 0 && box.height > 0) || outside > 0,
+      elements: section.querySelectorAll("*").length + outside,
+      outside,
       recoverable: [...new Set(window.__recoverable ?? [])],
     };
   });
@@ -474,6 +489,7 @@ async function sweepComponent(page, url, name, { ssr }) {
       hydrated: Boolean(seen.hydrated),
       painted: Boolean(seen.painted),
       elements: seen.elements ?? 0,
+      outside: seen.outside ?? 0,
       recoverable: seen.recoverable ?? [],
       crashes: [...crashes],
       affordances: [],
@@ -519,6 +535,10 @@ async function sweepComponent(page, url, name, { ssr }) {
 /**
  * The whole runtime pass for one consumer: the grid page, then every component
  * on its own route.
+ *
+ * Returns the per-route results beside the steps, because the SSR record in
+ * `docs/adr/003-ssr-hydration.json` is derived from them — `ai/component-index.json`
+ * used to assert `"ssr": "safe"` with nothing behind it.
  */
 export async function runtimeChecks(dir, target) {
   const { chromium } = await import("@playwright/test");
@@ -560,13 +580,41 @@ export async function runtimeChecks(dir, target) {
         (grid.crashes.length ? `\n      crash: ${grid.crashes.join(" | ")}` : ""),
     });
 
+    // What to sweep comes from the running application, not from a list kept
+    // here: three frameworks generate their routes from the registry, and a
+    // second copy beside the driver is a copy that drifts.
+    await page.goto(`${app.url}${target.runtime.route(ROUTES)}`, { waitUntil: "load" });
+    const names = JSON.parse(await page.locator("[data-routes]").first().innerText()).filter(
+      (name) => name !== ROUTES,
+    );
+
+    // Seeded once, on the application's own origin, before anything is swept:
+    // `Accordion__stored` only diverges when storage already holds a value, and
+    // it has to be there before the page loads, not after.
+    await page.evaluate(
+      ([key]) => window.localStorage.setItem(key, JSON.stringify(["one"])),
+      [ACCORDION_STORAGE_KEY],
+    );
+
     const results = [];
-    for (const name of NAMES) {
+    for (const name of names) {
       results.push(await sweepComponent(page, `${app.url}${target.runtime.route(name)}`, name, { ssr }));
     }
 
-    const components = results.filter((result) => result.name !== CANARY);
+    const components = results.filter((result) => EXPECTED.includes(result.name));
+    const variants = results.filter(
+      (result) => result.name !== CANARY && !EXPECTED.includes(result.name),
+    );
     const canary = results.find((result) => result.name === CANARY);
+
+    const missing = EXPECTED.filter((name) => !names.includes(name));
+    if (missing.length) {
+      steps.push({
+        label: "routes",
+        ok: false,
+        output: `the application routes ${names.length} name(s) and does not route: ${missing.join(", ")}`,
+      });
+    }
 
     const unrendered = components.filter((result) => !result.painted || result.elements === 0);
     steps.push({
@@ -580,7 +628,18 @@ export async function runtimeChecks(dir, target) {
               .join("\n      "),
     });
 
-    const crashed = components.filter((result) => result.crashes.length > 0);
+    const blankVariants = variants.filter((result) => !result.painted || result.elements === 0);
+    steps.push({
+      label: `variants ${variants.length - blankVariants.length}/${variants.length}`,
+      ok: blankVariants.length === 0,
+      output:
+        `${variants.map((result) => result.name).join(", ")}` +
+        (blankVariants.length
+          ? `\n      blank: ${blankVariants.map((r) => r.name).join(", ")}`
+          : ""),
+    });
+
+    const crashed = [...components, ...variants].filter((result) => result.crashes.length > 0);
     steps.push({
       label: "no uncaught error",
       ok: crashed.length === 0,
@@ -591,15 +650,16 @@ export async function runtimeChecks(dir, target) {
     });
 
     if (ssr) {
-      const notHydrated = components.filter((result) => !result.hydrated);
-      const mismatched = components.filter((result) => result.recoverable.length > 0);
+      const routed = [...components, ...variants];
+      const notHydrated = routed.filter((result) => !result.hydrated);
+      const mismatched = routed.filter((result) => result.recoverable.length > 0);
       steps.push({
         label: "hydration",
         // Both halves: no errors, AND React actually hydrated every route. A
         // page React never reached reports no errors either.
         ok: mismatched.length === 0 && notHydrated.length === 0,
         output:
-          `${components.length - notHydrated.length} of ${components.length} route(s) hydrated, ` +
+          `${routed.length - notHydrated.length} of ${routed.length} route(s) hydrated, ` +
           `${mismatched.length} with a recoverable error` +
           (notHydrated.length ? `\n      never hydrated: ${notHydrated.map((r) => r.name).join(", ")}` : "") +
           (mismatched.length
@@ -655,7 +715,7 @@ export async function runtimeChecks(dir, target) {
       "utf8",
     );
 
-    return steps;
+    return { steps, results };
   } finally {
     await browser.close();
     await app.close();

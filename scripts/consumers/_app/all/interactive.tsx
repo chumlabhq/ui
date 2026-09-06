@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Drawer, DrawerHeader } from "@chumlab/ui/drawer";
 import { Modal } from "@chumlab/ui/modal";
+import { Table } from "@chumlab/ui/table";
 import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
 /**
@@ -58,6 +59,39 @@ export function ToastDemo() {
     <ToastProvider>
       <ToastTrigger />
     </ToastProvider>
+  );
+}
+
+/**
+ * A Table that switches to cards below a breakpoint.
+ *
+ * Here for one reason: `renderMobileCard` is a function, so this variant cannot
+ * be written in `registry.tsx`, and without it Table's viewport-width state is
+ * unobservable — the width only changes the markup when both props are set. The
+ * breakpoint is above the harness viewport (1280) and above the width a server
+ * assumes (1024), so the two disagree about which of the two trees to render.
+ *
+ * Its own two rows rather than the registry's: `registry.tsx` imports this
+ * module, so importing back would be a cycle.
+ */
+const MOBILE_ROWS = [
+  { id: "1", name: "Ada", role: "Engineer" },
+  { id: "2", name: "Grace", role: "Admiral" },
+];
+
+const MOBILE_COLUMNS = [
+  { id: "name", accessorKey: "name", header: "Name" },
+  { id: "role", accessorKey: "role", header: "Role" },
+];
+
+export function ResponsiveTable() {
+  return (
+    <Table
+      data={MOBILE_ROWS}
+      columns={MOBILE_COLUMNS}
+      responsiveBreakpoint={1200}
+      renderMobileCard={(row) => <div data-mobile-card>{row.name}</div>}
+    />
   );
 }
 

@@ -127,6 +127,11 @@ none is a bug fix that happened to move behaviour.
   used to be a floor that `prefers-reduced-motion` could override; it is now an explicit
   instruction in both directions. Omit the prop — the default — to keep following the OS.
 
+- `getDefaultStorageConfig()` (exported from `@chumlab/ui/accordion`) no longer returns a
+  `storage` handle. It ran inside a `useMemo`, so reaching for `window.localStorage` there was
+  a render-time branch on the environment; the default storage is resolved when a value is
+  actually read or written. Passing your own `storage` in a `StorageConfig` is unchanged.
+
 ### Removed
 
 - Six sub-components are no longer exported from the package root:
@@ -138,6 +143,23 @@ none is a bug fix that happened to move behaviour.
 
 ### Fixed
 
+- **Server-rendered applications hydrate without a mismatch.** Every portalled surface —
+  `Modal`, `Drawer`, `Toast`, and the nine components that portal through the shared menu
+  surface — decided where to portal *during render*, behind a `typeof window` branch, so a
+  server rendered nothing and the first client render added a subtree the server never sent.
+  React reported it as a hydration error (#418) in Next's App Router, Next's Pages Router and
+  React Router 7. `Toast` failed on every page that mounted a `ToastProvider`; the rest failed
+  as soon as they were open at first paint, or kept mounted while closed. A portal is now
+  absent from the server HTML *and* from the first client render, and appears on the render
+  after. `Tooltip` had a quieter version of the same thing: the server shipped the tip inline
+  and the client silently relocated it. See `docs/adr/003-ssr-hydration.md`.
+- `Table` no longer seeds its viewport width from `window.innerWidth` during render, which
+  rendered cards on a server and a table on the client (or the reverse) whenever
+  `responsiveBreakpoint` and `renderMobileCard` were set.
+- `Accordion` reads its stored expansion after mount rather than in a state initializer, so a
+  page with a `storageKey` and a stored value hydrates cleanly. The stored value is still
+  restored, one render later, and the write-back waits for the read so the default it is about
+  to replace is not written over it.
 - Types resolve under `moduleResolution: node16` as well as `bundler`. The published
   declarations imported relative paths without file extensions, which node16 does not
   resolve, and `attw` reported 240 such imports.

@@ -508,7 +508,9 @@
     "test:e2e:a11y": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=a11y-full",
     "test:e2e:matrix": "node scripts/run-e2e-matrix.mjs --report",
     "verify:consumers": "node scripts/verify-consumer-matrix.mjs",
-    "verify:consumers:self-check": "node scripts/verify-consumer-matrix.mjs --self-check"
+    "verify:consumers:self-check": "node scripts/verify-consumer-matrix.mjs --self-check",
+    "verify:ssr-record": "node scripts/assert-ssr-record.mjs",
+    "verify:ssr-record:self-check": "node scripts/assert-ssr-record.mjs --self-check"
   },
   "peerDependencies": {
     "@tanstack/react-table": "^8.21.3",

@@ -24,7 +24,8 @@ measured on the date above unless the text says otherwise.
 | Unit + contract (`test:run`) | **pass** | 4409 passed, 68 skipped, 86 files. Contracts alone: 1239 passed, 68 skipped, 29 files. |
 | Coverage | **pass** | 91.79% statements, 87.15% branch, 94.42% functions, 93.70% lines. |
 | `test:e2e:all` (7 projects) | **FAIL, then 3 of 4 cleared** | 2279 collected, 2245 passed, 8 failed, 8 timed out, 2894s. a11y-full, webkit and Mobile Safari re-run clean (§1.6); Firefox not re-run. **a11y-full is red again since 2026-09-06** — its scope was wrong, not its result (§1.2). |
-| `verify:consumers` (9 apps) | **FAIL — 3 targets** | All nine install, typecheck and build, and the five general templates now render **all thirty components** and drive them in a browser. The three server-rendered targets fail on one component: `ToastProvider` mismatches on hydration (§1.3). |
+| `verify:consumers` (9 apps) | **pass** | All nine install, typecheck and build; the five general templates render **all thirty components**, drive them in a browser, and the three server-rendered ones hydrate 37 routes each with zero recoverable errors. Five hydration defects were found here on 2026-09-07 and fixed (§1.3, ADR 003). |
+| `verify:ssr-record` (4 plants) | **pass** | `ai/component-index.json`'s `ssr` field is derived from the matrix run rather than asserted, and the gate fails on a contradicted verdict, an unmeasured component, a missing record or a stale one. |
 | `verify:packaging` (4 plants) | **pass** | publint `--strict`, attw, shipped-link check. All four planted defects caught. |
 | `npm publish --dry-run` | **pass** *(after a fix — see §1.4)* | 1635 files, 2.1 MB packed, 6.9 MB unpacked. |
 | `npm audit` (production tree) | **pass** | 0 vulnerabilities across the 4 production dependencies. |
@@ -200,7 +201,9 @@ channel that has never fired proves nothing about the thirty clean results besid
 
 **Result: 30 of 30 render and 30 of 30 hydrate in all five templates. 28 affordances fire
 across 25 components — five (Avatar, Breadcrumb, Button, CountryFlag, Loader) have no state
-to drive. One component fails, in all three server-rendered frameworks:**
+to drive. One component failed, in all three server-rendered frameworks, and six more failed
+as soon as the sweep asked them the question in the right state. All seven are fixed; what
+follows is what was found, because the gate is only worth what it caught.**
 
 `ToastProvider` (`components/ToastProvider.tsx:38`) chooses its portal target during render:
 
@@ -216,11 +219,37 @@ uncaught window error as well, because its handler ends at `reportError`; React 
 through `onRecoverableError`, which is why the same defect fails four checks on Next and one
 on React Router.
 
-`Modal` (`Modal.tsx:430`) and `Drawer` (`Drawer.tsx:497`) hold the same shape behind
-`if (!isBrowser) return null`. Both hydrate clean in the matrix because both are closed at
-first paint — and **measured, not assumed**: rendering them `open` at first paint reproduces
-the identical #418 on both. A consumer opening a dialog on page load, which is ordinary, hits
-this today.
+`Modal` (`Modal.tsx:430`), `Drawer` (`Drawer.tsx:497`) and `MenuSurface` — through which
+**nine** components portal — held the same shape behind `if (!isBrowser) return null`. All of
+them passed the first sweep because their surface was closed at first paint, which is not the
+same as being safe. Seven routes were added to say so, each a component in the state that
+makes the question askable, and **six of the seven mismatched in every SSR template**:
+
+```
+  route                    next-app  next-pages  react-router7   cause
+  Toast                    #418      #418        #418            ToastProvider portals unconditionally
+  Modal__open              #418      #418        #418            open at first paint
+  Drawer__open             #418      #418        #418            open at first paint
+  Dropdown__open           #418      #418        #418            MenuSurface, open
+  Dropdown__keepMounted    #418      #418        #418            MenuSurface, closed but mounted
+  Accordion__stored        #418      #418        #418            localStorage read in a state initializer
+  Table__responsive        #418      #418        #418            window.innerWidth in a state initializer
+  Tooltip__portal          clean     clean       clean           see below
+```
+
+`Tooltip__portal` reported nothing and was still wrong: the prerendered HTML shipped the tip
+**inline inside `<main>`** and the client relocated it to a portal. React deletes an unmatched
+trailing node without a recoverable error, so this one was invisible to the hydration channel
+and visible only in the HTML on disk. The source gate below is what catches that shape.
+
+**All seven are fixed.** One hook — `useHydrated()`, `useSyncExternalStore` with a server
+snapshot, the same idiom `useReducedMotion` already used — replaces every render-time
+`isBrowser` branch, and the two state initializers were moved into layout effects. The matrix
+now reports **37 of 37 routes hydrated with zero recoverable errors in all three templates**,
+with the canary still caught, so the clean result is not a dead channel. Proved on the
+strongest case: the prerendered HTML for `Modal__open` contains no `role="dialog"` at all,
+and the dialog is there after hydration (12 elements outside the page shell). ADR 003 records
+the decision and the two gates that now hold it.
 
 The gate this evades is worth naming, because two suites look like they cover it and neither
 can. `ssr.contract` runs under `environment: "node"`, where `isBrowser` is genuinely false —
@@ -231,9 +260,19 @@ happen. A real Node server and a real browser is the first place both halves are
 that is the consumer matrix. Its Toast fixtures also render a bare `Toast`, never the
 provider, so the component at fault had no hydration coverage of any kind.
 
-`ai/component-index.json` records `"ssr": "safe"` for all thirty components. That is now
-known to be false for `Toast`, and conditionally false for `Modal` and `Drawer`. **Left as
-found — nothing in this pass was fixed.**
+`ai/component-index.json` recorded `"ssr": "safe"` for all thirty components, asserted and
+never measured. It is derived now: the matrix writes `docs/adr/003-ssr-hydration.json` from
+what it saw, and `npm run verify:ssr-record` fails if the index says something the record does
+not, if a shipped component has no evidence, or if the source has changed since the record was
+written. Four plants, all caught. The index is deliberately **not** written by the matrix — a
+claim that updates itself from the measurement is not a claim anyone can be wrong about.
+
+The class is closed at source as well. `ssr-branch.contract` faults any component that asks
+`isBrowser`, `typeof window` or `typeof document` while it renders — in an effect or a
+callback is fine, in a component body, a `useState` initializer or a `useMemo` is not — and it
+follows one call hop, because Accordion's branch was in a `useCallback` (allowed) and the call
+was in an initializer (not). It runs the five defects as they were written and requires each
+to be caught, so "would have caught every one" is a test rather than a claim.
 
 **Cost:** the whole nine-target matrix takes **just under four minutes** on this machine
 (3m57s and 4m04s on two runs), against 1m24s before this change. Roughly 24s of the increase is thirty components building instead of four

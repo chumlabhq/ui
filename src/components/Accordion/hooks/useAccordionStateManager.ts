@@ -31,6 +31,8 @@ export interface UseAccordionStateManagerReturn {
   collapse: (value: string) => void;
   isExpanded: (value: string) => boolean;
   pendingItem: string | null;
+  /** False until the stored value has been applied; see the effect that sets it. */
+  storageRead: boolean;
   internalValue: Set<string>;
 }
 
@@ -68,9 +70,6 @@ export function useAccordionStateManager(
   }, [onValueChange, onExpandedChange, announce]);
 
   const [internalValue, setInternalValue] = useState<Set<string>>(() => {
-    const stored = readFromStorage();
-    if (stored) return new Set(stored);
-
     if (defaultValue !== undefined) {
       if (Array.isArray(defaultValue)) return new Set(defaultValue);
       return new Set([defaultValue]);
@@ -78,6 +77,23 @@ export function useAccordionStateManager(
 
     return new Set();
   });
+
+  /**
+   * The stored value is applied after mount, never in the initializer above.
+   *
+   * A server has no storage, so a value read during the first client render is
+   * markup the server never sent — the same class of hydration mismatch as a
+   * portal decided by `isBrowser`, and reproduced in the consumer matrix with a
+   * seeded key. A layout effect, so the correction lands before paint.
+   */
+  const [storageRead, setStorageRead] = useState(false);
+  useIsomorphicLayoutEffect(() => {
+    if (storageRead) return;
+    setStorageRead(true);
+    if (isControlled) return;
+    const stored = readFromStorage();
+    if (stored) setInternalValue(new Set(stored));
+  }, [storageRead, isControlled, readFromStorage]);
 
   const [pendingItem, setPendingItem] = useState<string | null>(null);
 
@@ -323,5 +339,6 @@ export function useAccordionStateManager(
     isExpanded,
     pendingItem,
     internalValue,
+    storageRead,
   };
 }

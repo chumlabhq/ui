@@ -95,9 +95,16 @@ jobs:
             npm-consumers-${{ runner.os }}-
 
       - run: npm ci
-      # Packs the library (which runs prepack, so this builds it too) and
-      # installs the tarball into six framework apps.
+      # Packs the library (which runs prepack, so this builds it too), installs
+      # the tarball into nine framework apps, renders all thirty components in
+      # the five general ones and hydrates each on its own route. It writes
+      # docs/adr/003-ssr-hydration.json from what it measured.
       - run: npm run verify:consumers
+      # Which `ai/component-index.json` then has to agree with. Runs here rather
+      # than in the unit tier because the record it reads is only fresh
+      # immediately after the matrix above.
+      - run: npm run verify:ssr-record
+      - run: npm run verify:ssr-record:self-check
 
   # ── the tarball itself ──────────────────────────────────────────────────
   #

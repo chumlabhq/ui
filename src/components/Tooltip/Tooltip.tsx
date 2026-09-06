@@ -30,6 +30,7 @@ import {
 } from "./utils/helpers.js";
 import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger.js";
 import { isBrowser } from "../../utils/isBrowser.js";
+import { useHydrated } from "../../utils/useHydrated.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -131,6 +132,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const [isTruncated, setIsTruncated] = useState(false);
     const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
     const [isPositioned, setIsPositioned] = useState(false);
+    const hydrated = useHydrated();
 
     const childIsInteractiveElement = useMemo(() => {
       if (asChild || truncate) return false;
@@ -490,7 +492,12 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       </svg>
     ) : null;
 
-    const portalTarget = portalContainer ?? (isBrowser ? document.body : null);
+    // Until hydration the target is null, which renders the tip inline — the
+    // same tree the server sent. It moves to the portal on the render after.
+    // Nothing reported this one: React deletes an unmatched trailing node
+    // without a recoverable error, so the server shipped a tooltip inside
+    // `<main>` and the client silently relocated it.
+    const portalTarget = portalContainer ?? (hydrated ? document.body : null);
 
     const tooltipElement = isOpen && (
       <div

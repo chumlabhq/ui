@@ -50,6 +50,7 @@ import {
 } from "./utils.js";
 import { cn } from "../../utils/scopedCn.js";
 import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
+import { useHydrated } from "../../utils/useHydrated.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -286,8 +287,9 @@ function useMarkerTooltip(
 
   // Same guard as the calendar portal. Reachable only from a pointer event
   // today, so it never fired on a server — but the state that gates it is one
-  // refactor away from being an initial value.
-  const tooltipTarget = isBrowser ? (portalContainer ?? document.body) : null;
+  // refactor away from being an initial value, which is exactly how Modal and
+  // Drawer got here.
+  const tooltipTarget = useHydrated() ? (portalContainer ?? document.body) : null;
 
   const tooltipPortal =
     isVisible && position && marker && tooltipTarget

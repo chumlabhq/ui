@@ -105,10 +105,18 @@ would still be green on a lie. The record itself has not been re-derived.
 `renderToString` throws, and a component that renders nothing on a server does not throw.
 `hydration.contract` does hydrate, but under jsdom — where `window` exists during its
 "server" render too, so a `typeof window` branch takes the same path on both sides and the
-mismatch it exists to find cannot occur. Nothing sits between the two, and on 2026-09-07 the
-consumer matrix, which has a real Node server and a real browser, found what falls through:
-`ToastProvider` mismatches on hydration in all three server-rendered frameworks, and `Modal`
-and `Drawer` do the same when they are open at first paint. See RELEASE-READINESS §1.3.
+mismatch it exists to find cannot occur. Nothing sat between the two, and on 2026-09-07 the
+consumer matrix, which has a real Node server and a real browser, found what fell through:
+seven routes mismatching in all three server-rendered frameworks, from five instances of one
+defect — `ToastProvider`, `Modal`, `Drawer`, `MenuSurface` (nine components), `Table` and
+`Accordion`.
+
+**Earned now, by two gates rather than by the record.** All five are fixed;
+`ssr-branch.contract` faults the shape at source and is required to catch all five as they
+were written, and `assert-ssr-record.mjs` ties `ai/component-index.json`'s `ssr` field to
+what the matrix measured, with a fingerprint that goes stale when the source changes — which
+is 1.1's lesson applied on purpose rather than by accident. See ADR 003 and
+RELEASE-READINESS §1.3.
 
 ### 1.6 Records that are file-existence checks wearing a quality name — `untested-claim`
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import type { StorageConfig } from "../utils/types.js";
-import { getDefaultStorageConfig } from "../utils/constants.js";
+import { defaultStorage, getDefaultStorageConfig } from "../utils/constants.js";
 import { isBrowser } from "../../../utils/isBrowser.js";
 
 export function resolveStorageConfig(
@@ -47,7 +47,7 @@ export function useAccordionStorage({
     if (!storageConfig || !isBrowser) return null;
 
     try {
-      const stored = storageConfig.storage?.getItem(storageConfig.key);
+      const stored = (storageConfig.storage ?? defaultStorage())?.getItem(storageConfig.key);
       if (stored && storageConfig.deserialize) {
         return storageConfig.deserialize(stored);
       }
@@ -63,11 +63,9 @@ export function useAccordionStorage({
       if (!storageConfig || isControlled) return;
 
       try {
-        if (storageConfig.serialize && storageConfig.storage) {
-          storageConfig.storage.setItem(
-            storageConfig.key,
-            storageConfig.serialize(Array.from(values)),
-          );
+        const storage = storageConfig.storage ?? defaultStorage();
+        if (storageConfig.serialize && storage) {
+          storage.setItem(storageConfig.key, storageConfig.serialize(Array.from(values)));
         }
       } catch {
         // Storage access may fail
@@ -79,14 +77,15 @@ export function useAccordionStorage({
   return { storageConfig, readFromStorage, writeToStorage };
 }
 
+/** `paused` covers both reasons not to write: controlled, or not yet read. */
 export function useStorageSync(
   values: Set<string>,
   writeToStorage: (values: Set<string>) => void,
-  isControlled: boolean,
+  paused: boolean,
 ) {
   useEffect(() => {
-    if (!isControlled) {
+    if (!paused) {
       writeToStorage(values);
     }
-  }, [values, writeToStorage, isControlled]);
+  }, [values, writeToStorage, paused]);
 }

@@ -44,6 +44,7 @@ import { useControllableState } from "../../utils/useControllableState.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 
+import { useHydrated } from "../../utils/useHydrated.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 
@@ -137,6 +138,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const mergedPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
     const triggerRef = useRef<Element | null>(null);
     const [mounted, setMounted] = useState(isOpen);
+    // Same as Modal: open on first paint is the case that mismatched.
+    const hydrated = useHydrated();
     const [visualOpen, setVisualOpen] = useState(false);
     const prefersReducedMotion = useReducedMotion(reduceMotionProp);
 
@@ -494,7 +497,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       [handleClose, titleId, setHasTitle],
     );
 
-    if (!isBrowser) return null;
+    if (!hydrated) return null;
     if (!keepMounted && !mounted) return null;
 
     const container = portalContainer ?? document.body;
