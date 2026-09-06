@@ -80,7 +80,6 @@ const getClasses = (dark: boolean) => ({
     footer: `flex justify-center pt-4 mt-4 border-t border-cl-border`,
     todayButton: `flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-cl-md transition-all text-cl-accent hover:bg-cl-bg-elevated`,
     markerIndicator: `w-1 h-1 rounded-full absolute bottom-1 left-1/2 -translate-x-1/2 bg-cl-accent dark:bg-cl-accent/90`,
-    markerTooltip: `absolute z-50 px-3 py-2 text-xs rounded-cl-md shadow-lg max-w-[200px] bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-cl-text`,
     monthSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
     yearSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
     monthDropdown: "",

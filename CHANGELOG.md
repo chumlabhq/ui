@@ -134,6 +134,12 @@ none is a bug fix that happened to move behaviour.
 
 ### Removed
 
+- `classes.markerTooltip` on `DatePicker`. The key was threaded through three hops and then
+  dropped: `useMarkerTooltip` writes a literal class string and never read it, so a consumer
+  setting it saw nothing. The tooltip itself is unchanged. `e2e/waived-keys.spec.ts` asserts
+  both halves — the hover opens the tooltip, and the override does not reach it — so wiring
+  it up later cannot happen without the key coming back.
+
 - Six sub-components are no longer exported from the package root:
   `DropdownShimmer`, `SearchableDropdownShimmer`, `MultiSelectDropdownShimmer`,
   `TableShimmer`, `OtpInputLabel` and `ClockFace`. Each is rendered by its parent and was
@@ -152,7 +158,9 @@ none is a bug fix that happened to move behaviour.
   as soon as they were open at first paint, or kept mounted while closed. A portal is now
   absent from the server HTML *and* from the first client render, and appears on the render
   after. `Tooltip` had a quieter version of the same thing: the server shipped the tip inline
-  and the client silently relocated it. See `docs/adr/003-ssr-hydration.md`.
+  and the client silently relocated it — with `portal` set it now renders nothing until the
+  portal target exists, so the server HTML and the first client render agree and the tip
+  appears afterwards. See `docs/adr/003-ssr-hydration.md`.
 - `Table` no longer seeds its viewport width from `window.innerWidth` during render, which
   rendered cards on a server and a table on the client (or the reverse) whenever
   `responsiveBreakpoint` and `renderMobileCard` were set.

@@ -103,6 +103,16 @@ and a `fireEvent.doubleClick` did not open edit mode).
 not implement; asserted in `e2e/slider.spec.ts`. `DatePicker.markerTooltip` — needs a real
 hover plus positioning.
 
+> **Re-attempted 2026-09-07, and this whole section is now history.** Of the seventeen keys
+> the record carried, sixteen had already been deleted from the API by this migration — the
+> waivers outlived the keys, and nothing failed, because a waiver for a key that does not
+> exist gates nothing. The browser-tier re-attempt used the fixture page's new
+> `?classes={…}` probe with real interactions (`e2e/waived-keys.spec.ts`):
+> `Table.input` is reachable and stays; `DatePicker.markerTooltip` is not — a real hover does
+> open the tooltip, but `useMarkerTooltip` writes a literal class string and never reads the
+> value threaded to it, so the key had no sink — and is deleted. `fixtures.contract` now
+> fails on a waived key that is not in the component's classes map.
+
 **Blocked on a named phase (1).** `InternationalPhoneInput.countrySelectOptionSelected` —
 kept, not deleted; its replacement route is R6-nested and deleting the child's
 `optionSelected` removed the sink it fed.

@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Drawer, DrawerHeader } from "@chumlab/ui/drawer";
 import { Modal } from "@chumlab/ui/modal";
 import { Table } from "@chumlab/ui/table";
@@ -93,6 +94,27 @@ export function ResponsiveTable() {
       renderMobileCard={(row) => <div data-mobile-card>{row.name}</div>}
     />
   );
+}
+
+/**
+ * Moves a subtree into a portal after mount, and reports NOTHING to React.
+ *
+ * The positive control for the structural check, and the reason that check
+ * exists: the server ships the node inline, the first client render ships the
+ * same node inline — so hydration compares two identical trees and is happy —
+ * and then an effect relocates it. React deletes and re-inserts without a
+ * recoverable error. `Tooltip` did exactly this with its `portal` prop, and the
+ * error channel called it clean.
+ */
+export function HydrationMover() {
+  const [moved, setMoved] = useState(false);
+  useEffect(() => setMoved(true), []);
+  const node = (
+    <div id="mover-node" role="note">
+      moved
+    </div>
+  );
+  return <div>{moved ? createPortal(node, document.body) : node}</div>;
 }
 
 /**

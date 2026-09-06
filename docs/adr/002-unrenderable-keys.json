@@ -1,38 +1,12 @@
 {
-  "$comment": "Companion record to docs/adr/002-classes-key-vocabulary.md. Keys that no prop combination drives into the DOM, with the reason. Governed by ADR 002 R7/R8: these are candidates for deletion in the vocabulary phase, NOT deleted here. fixtures.contract fails if a waived key becomes reachable, so this list cannot rot. Two reason classes: 'dead' — the key is declared but no source line renders it, verified by reference count; 'state-gated' — the key renders only in a state jsdom cannot reach (pointer capture, hover, layout measurement) and needs an e2e or a prop the component does not expose.",
+  "$comment": "Companion record to docs/adr/002-classes-key-vocabulary.md. Keys that no prop combination drives into the DOM, with the reason. Governed by ADR 002 R7/R8: these are candidates for deletion in the vocabulary phase, NOT deleted here. fixtures.contract fails if a waived key becomes reachable, so this list cannot rot. Two reason classes: 'dead' \u2014 the key is declared but no source line renders it, verified by reference count; 'state-gated' \u2014 the key renders only in a state jsdom cannot reach (pointer capture, hover, layout measurement) and needs an e2e or a prop the component does not expose. CORRECTED 2026-09-07. This list said seventeen; sixteen of them had already been deleted from the API by the key migration, so their waivers were vacuous and the '17 pieces of public API that do nothing' the release report inferred from them was false in the other direction. `DatePicker.markerTooltip` was the one still declared and still unreachable \u2014 a real hover opens the marker tooltip, but `useMarkerTooltip` writes a literal class string and never reads the value threaded to it, so the key had no sink; deleted. `Table.input` is the only survivor. `fixtures.contract` now fails on a waived key that is not in the component's classes map, which is the rot that let this stand.",
   "recordedOn": "2026-09-02",
   "waived": {
-    "CascadingDropdown": {
-      "option": "dead — grepped: no source reference outside the merge map. Superseded by menuItem.",
-      "optionSelected": "dead — grepped: no source reference outside the merge map.",
-      "optionFocused": "dead — grepped: no source reference outside the merge map.",
-      "optionDisabled": "dead — grepped: no source reference outside the merge map.",
-      "menuItemSelected": "ATTEMPTED, still unreachable — a fixture with a selected top-level leaf (defaultValue on a non-parent option) and one with a selection inside an entered submenu both failed to render it. menuItem* appears to apply only to a path no prop combination reaches. NOT confirmed dead: the grep finds real source references, unlike the five above. Re-attempt before Task 3 deletes it.",
-      "menuItemDisabled": "ATTEMPTED, still unreachable — a fixture with a disabled top-level option did not render it. Same caveat as menuItemSelected: source references exist, so this is not the same finding as `option*` above.",
-      "submenuItemFocused": "ATTEMPTED, still unreachable — entering a submenu via mouseEnter+click does not set a keyboard highlight. Needs real keyboard navigation; candidate for the browser tier rather than deletion."
-    },
-    "DatePicker": {
-      "monthDropdown": "dead — grepped: no source reference outside the merge map. The live key is monthSelect.",
-      "yearDropdown": "dead — grepped: no source reference outside the merge map. The live key is yearSelect.",
-      "navButtonDisabled": "dead — grepped: no source reference outside the merge map.",
-      "dayHover": "dead — grepped: no source reference outside the merge map. A :hover utility on `day` is the replacement.",
-      "markerTooltip": "BROWSER TIER — needs a real hover over a marked day plus positioning. The marker itself is now rendered (the with-markers fixture was opening on the wrong month, which is what made markerIndicator look unreachable); only the hover is missing. jsdom resolves no hover."
-    },
-    "Slider": {
-      "thumbActive": "BROWSER TIER — gated on isDragging, set from a pointer sequence calling setPointerCapture, which jsdom does not implement. Asserted in e2e/slider.spec.ts with a real mouse drag; classified browserTier in 002-state-attributes.json with a guard that fails if that spec stops asserting it."
-    },
     "Table": {
-      "input": "BROWSER TIER — the re-attempt the previous reason asked for has been done, and the key is NOT dead: a real double-click opens the editor, asserted in e2e/table.spec.ts (\"opens the cell editor on a real double-click\"). It stays waived here because no fixture act can reach it — a dispatched dblclick opens the editor and closes it in the same frame, since the input autofocuses away from document.body and the cell commits the edit it has just begun. A real double-click focuses the cell on mousedown first. Task 3 must not delete this key on the strength of the old reason. | RENAMED in Task 3a from `editInput`."
-    },
-    "RadioButton/RadioButton": {
-      "error": "dead — read the source: RadioButton.tsx renders error text only inside RadioGroup (:192), from DEFAULT_RADIO_GROUP_CLASSES. The item's own class set never reaches an error element.",
-      "success": "dead — same; the group owns the success message (RadioButton.tsx:198)."
-    },
-    "InternationalPhoneInput": {
-      "countrySelectOptionSelected": "KEPT, not deleted — Task 3b held this key back because its replacement route is R6-nested (countrySelect.item + data-selected) and the nesting is Task 4. Deleting the child dropdown's own `optionSelected` removed the sink this key fed, so it now renders nothing. It stays as public API rather than being removed before the replacement exists; Task 4 wires it and this waiver goes."
+      "input": "BROWSER TIER, re-attempted 2026-09-07 and CONFIRMED reachable. `e2e/waived-keys.spec.ts` renders the `editing-cell` fixture with `?classes={\"input\":\"ovr-input\"}`, double-clicks the cell for real, and the consumer's class is on the editor. It stays waived HERE because no fixture act can reach it: a dispatched dblclick opens the editor and closes it in the same frame, since the input autofocuses away from document.body and the cell commits the edit it has just begun. A real double-click focuses the cell on mousedown first. This is the only surviving waiver of the seventeen."
     }
   },
-  "$comment2": "waived: keys no fixture renders. RE-AUDITED 2026-09-02 by attempting each state with a fixture rather than by re-reading the reason. 15 keys have now been wrongly waived across three components — CascadingDropdown's six search keys (a fixture passed `showSearch`, which is not a prop), DatePicker's dayMarked/markerIndicator/presetActive (the fixture opened on the wrong month), and Table's six pin keys (canShowPinButton requires an onPinColumn handler no fixture passed). Every one had a specific, plausible, invented reason: markerIndicator's said 'marker rendering needs layout measurement jsdom does not provide'. A specific false reason is worse than a vague one because it stops the next reader checking. Every surviving reason below states what was ATTEMPTED.",
+  "$comment2": "waived: keys no fixture renders. RE-AUDITED 2026-09-02 by attempting each state with a fixture rather than by re-reading the reason. 15 keys have now been wrongly waived across three components \u2014 CascadingDropdown's six search keys (a fixture passed `showSearch`, which is not a prop), DatePicker's dayMarked/markerIndicator/presetActive (the fixture opened on the wrong month), and Table's six pin keys (canShowPinButton requires an onPinColumn handler no fixture passed). Every one had a specific, plausible, invented reason: markerIndicator's said 'marker rendering needs layout measurement jsdom does not provide'. A specific false reason is worse than a vague one because it stops the next reader checking. Every surviving reason below states what was ATTEMPTED.",
   "decorativeLeaks": {
     "Stepper": [
       "sm:px-2"
@@ -62,7 +36,7 @@
       "text-cl-text-tertiary"
     ]
   },
-  "$comment3": "motionLeaks: animation utilities that survive prefers-reduced-motion because they are written as literals at a JSX site (constants.contract's ratcheting baseline owns those) or because they come from a nested component the parent does not yet pass `unstyled` to (GATE-HONESTY §4, deferred). Neither is fixable inside the reduced-motion work without touching code that is out of scope, so they are named here rather than hidden. reduced-motion.contract fails if an entry stops leaking. | 2026-09-02: `transition-all` added to Table. It was ALWAYS there — Table.tsx:1287, a literal at the JSX call site on the column pin button — but no fixture rendered that button, so neither unstyled.contract nor reduced-motion.contract could see it. It surfaced the moment the pinned-column fixture made the control render. Not a new leak; a newly visible one. Fixing it means moving the literal into DEFAULT_TABLE_CLASSES, which is ADR 002 Task 3 work (Table holds 42 of the 125 literals on the constants ratchet).",
+  "$comment3": "motionLeaks: animation utilities that survive prefers-reduced-motion because they are written as literals at a JSX site (constants.contract's ratcheting baseline owns those) or because they come from a nested component the parent does not yet pass `unstyled` to (GATE-HONESTY \u00a74, deferred). Neither is fixable inside the reduced-motion work without touching code that is out of scope, so they are named here rather than hidden. reduced-motion.contract fails if an entry stops leaking. | 2026-09-02: `transition-all` added to Table. It was ALWAYS there \u2014 Table.tsx:1287, a literal at the JSX call site on the column pin button \u2014 but no fixture rendered that button, so neither unstyled.contract nor reduced-motion.contract could see it. It surfaced the moment the pinned-column fixture made the control render. Not a new leak; a newly visible one. Fixing it means moving the literal into DEFAULT_TABLE_CLASSES, which is ADR 002 Task 3 work (Table holds 42 of the 125 literals on the constants ratchet).",
   "motionLeaks": {
     "Button": [
       "animate-spin"
@@ -85,7 +59,7 @@
   "$comment6": "axeFixtureExpectations: which FIXTURES may carry which axe rule in the full sweep (e2e/accessibility-full.spec.ts, project a11y-full). Per-fixture, not per-rule: a rule waived globally would have hidden Avatar/with-status, which announced nothing. A finding on any fixture not listed here fails; a listed fixture that stops reporting fails too, so the list ratchets down.",
   "axeFixtureExpectations": {
     "label": {
-      "reason": "The fixture renders a bare control on purpose and must keep doing so — the library cannot force a consumer to label anything, and an external <label for> is legitimate. The silence was the defect, and it is fixed: these components now warn in dev via src/utils/useAccessibleNameWarning.ts. Every `labelled` fixture of each component is clean.",
+      "reason": "The fixture renders a bare control on purpose and must keep doing so \u2014 the library cannot force a consumer to label anything, and an external <label for> is legitimate. The silence was the defect, and it is fixed: these components now warn in dev via src/utils/useAccessibleNameWarning.ts. Every `labelled` fixture of each component is clean.",
       "fixtures": [
         "Checkbox/checked",
         "Checkbox/default",
@@ -108,14 +82,14 @@
       ]
     },
     "label-title-only": {
-      "reason": "The same defect as `label`, reported under a different rule: `showCount` adds `aria-describedby`, and axe faults a described-but-unnamed control here. Neither Input nor TextArea sets a `title` attribute — verified — and nothing in the docs or .ai.md files proposes `title` as a labelling mechanism. Covered by the same dev warning, which calls out `title` explicitly.",
+      "reason": "The same defect as `label`, reported under a different rule: `showCount` adds `aria-describedby`, and axe faults a described-but-unnamed control here. Neither Input nor TextArea sets a `title` attribute \u2014 verified \u2014 and nothing in the docs or .ai.md files proposes `title` as a labelling mechanism. Covered by the same dev warning, which calls out `title` explicitly.",
       "fixtures": [
         "Input/with-counter",
         "TextArea/with-counter"
       ]
     },
     "button-name": {
-      "reason": "3 nodes, all Switch's role=switch button in the fixtures that pass no label — the same case as `label` above: a bare control is a legitimate thing to render and the consumer supplies the name. Was 66 across seven components. The other 63 were the role=combobox trigger in DatePicker, Dropdown, MultiSelectDropdown, SearchableDropdown, MultiSelectSearchableDropdown and InternationalPhoneInput: `combobox` is not a name-from-content role, so a trigger whose only text was the selected value or the placeholder had no accessible name at all. Retired by the ADR 003 combobox slice, which names the trigger from the element already showing that text. Not waived — fixed, and the entries are gone rather than green.",
+      "reason": "3 nodes, all Switch's role=switch button in the fixtures that pass no label \u2014 the same case as `label` above: a bare control is a legitimate thing to render and the consumer supplies the name. Was 66 across seven components. The other 63 were the role=combobox trigger in DatePicker, Dropdown, MultiSelectDropdown, SearchableDropdown, MultiSelectSearchableDropdown and InternationalPhoneInput: `combobox` is not a name-from-content role, so a trigger whose only text was the selected value or the placeholder had no accessible name at all. Retired by the ADR 003 combobox slice, which names the trigger from the element already showing that text. Not waived \u2014 fixed, and the entries are gone rather than green.",
       "fixtures": [
         "Switch/checked",
         "Switch/default",
@@ -125,17 +99,18 @@
       ]
     }
   },
-  "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived — the constants ratchet is the schedule.",
-  "$axeBaselineHistory": "Emptied by the ADR 003 combobox slice. It held one entry: button-name x1 on InternationalPhoneInput's country trigger, recorded as out of scope for the phase. That trigger is the nested SearchableDropdown's, so naming the SearchableDropdown trigger retired it — IPI needed no change of its own. The per-fixture list in axeFixtureExpectations went 66 -> 3 in the same slice; the 3 that remain are Switch, a different cause. An empty baseline is the point of a ratchet, not a reason to delete the gate.",
+  "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived \u2014 the constants ratchet is the schedule.",
+  "$axeBaselineHistory": "Emptied by the ADR 003 combobox slice. It held one entry: button-name x1 on InternationalPhoneInput's country trigger, recorded as out of scope for the phase. That trigger is the nested SearchableDropdown's, so naming the SearchableDropdown trigger retired it \u2014 IPI needed no change of its own. The per-fixture list in axeFixtureExpectations went 66 -> 3 in the same slice; the 3 that remain are Switch, a different cause. An empty baseline is the point of a ratchet, not a reason to delete the gate.",
   "axeExpectationsDerivedFrom": {
     "fixtures": 428,
     "recordedOn": "2026-09-06"
   },
   "$comment_painted": "Companion record to e2e/contrast-painted.spec.ts. Text that the browser paints under WCAG AA's 4.5:1 (3:1 for large text), measured over every fixture in both themes. Distinct from contrast.contract, which checks the --cl-* scale rather than what a component actually writes: these are the sites where a component writes a colour the scale does not own. Ratchets down only; re-derive with CONTRAST_RERECORD=1 npx playwright test --project=a11y-full contrast-painted.",
   "paintedContrastExpectations": {
-    "reason": "Empty, and that is the claim. Text painted under AA over every fixture in both themes, measured from computed colour rather than from the token scale — see e2e/contrast-painted.spec.ts. Seeded at 31 on 2026-09-06 (fifteen components whose `message` key wrote both --cl-error and --cl-success unconditionally, so every error message painted success green at 3.30:1 in light; plus Slider's value tooltip, white text on the panel token, which is white in light). All 31 were fixed rather than accepted. An entry here means a measured failure on a shipped default that has been decided; adding one takes a reason.",
+    "reason": "Empty, and that is the claim. Text painted under AA over every fixture in both themes, measured from computed colour rather than from the token scale \u2014 see e2e/contrast-painted.spec.ts. Seeded at 31 on 2026-09-06 (fifteen components whose `message` key wrote both --cl-error and --cl-success unconditionally, so every error message painted success green at 3.30:1 in light; plus Slider's value tooltip, white text on the panel token, which is white in light). All 31 were fixed rather than accepted. An entry here means a measured failure on a shipped default that has been decided; adding one takes a reason.",
     "recordedOn": "2026-09-06",
     "fixtures": 428,
     "findings": []
-  }
+  },
+  "waivedCorrectedOn": "2026-09-07"
 }

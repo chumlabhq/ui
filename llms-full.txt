@@ -1156,7 +1156,7 @@ override silently drops the rest.
 │  ┌─ list (<ol>) ──────────────────────────────────────────┐ │
 │  │                                                         │ │
 │  │  [item/link] [separator] [ellipsisTrigger] [separator]  │ │
-│  │  [item/link] [separator] [itemActive]                  │ │
+│  │  [item/link] [separator] [item data-state=active]      │ │
 │  │                                                         │ │
 │  └─────────────────────────────────────────────────────────┘ │
 │                                                              │
@@ -1170,7 +1170,7 @@ override silently drops the rest.
 |------------------------|-------------|-------|
 | Trail container layout | `list` | Flex container for items + separators. |
 | Inactive item styling | `item` | Buttons/spans for non-link, non-active items. |
-| Active (last) item styling | `itemActive` | The current page indicator. |
+| Active (last) item styling | `item` + `data-[state=active]:` | The current page is the same slot in a state. |
 | Disabled item look |  | Appended to `item` class when disabled. |
 | Link items (with href) | `link` | Anchors — separate slot from `item`. |
 | Separator icon/text | `separator` | Between each item. |
@@ -1187,8 +1187,7 @@ Default classes use Tailwind `dark:` prefix. Activated by `<html class="dark">`.
 <Breadcrumb
   items={items}
   classes={{
-    item: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800",
-    itemActive: "text-gray-900 dark:text-white font-semibold",
+    item: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 data-[state=active]:text-gray-900 data-[state=active]:font-semibold dark:data-[state=active]:text-white",
     content: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
   }}
 />
@@ -1218,8 +1217,7 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
   unstyled
   classes={{
     list: "flex items-center gap-1",
-    item: "px-3 py-1.5 text-xs font-medium rounded-full cursor-pointer transition-all bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
-    itemActive: "px-3 py-1.5 text-xs font-medium rounded-full bg-blue-600 text-white",
+    item: "px-3 py-1.5 text-xs font-medium rounded-full cursor-pointer transition-all bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 data-[state=active]:bg-blue-600 data-[state=active]:text-white",
     separator: "text-gray-300 dark:text-gray-600 mx-0.5",
     ellipsisTrigger: "px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer",
     content: "rounded-xl shadow-lg py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
@@ -1840,7 +1838,7 @@ root
         └── subPositioner            (its own portal, anchored to the open item)
             └── subContent
                 ├── subSearchControl [subSearchIcon + subSearchInput]
-                └── subItem* [itemControl/checkboxChecked, itemIndicator]
+                └── subItem* [itemControl data-state=checked, itemIndicator]
 ```
 
 **`subPositioner` changed meaning in 0.1.0.** It used to be an
@@ -1858,10 +1856,10 @@ the side actually used, after any flip, is on the element as `data-side`.
 | Trigger button style | `trigger` | |
 | Dropdown background | `content` | |
 | Menu item hover | `item` | Uses hover: pseudo-class |
-| Selected item highlight | `menuItemSelected` | Stacks on top of menuItem |
+| Selected item highlight | `subItem` + `data-selected:` | The selected item is the same slot in a state |
 | Focused item (keyboard) | `menuItemFocused` | Stacks on top of menuItem |
 | Submenu panel | `subContent` | |
-| Checkbox style | `itemControl` +  | checkboxChecked applied when checked |
+| Checkbox style | `itemControl` + `data-[state=checked]:` | The checked box is the same slot in a state |
 | Search bar in menu | `searchControl`, `searchInput`, `searchIcon` | |
 | Search bar in submenu | `subSearchControl` | Falls back to `searchControl` if empty |
 | Loading state | `loading`, `loading`, `loadingItem` | |
@@ -1900,11 +1898,9 @@ classes={{
     trigger: "flex items-center justify-between w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:border-blue-400 focus:ring-2 focus:ring-blue-500",
     content: "mt-1 rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
     item: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between",
-    menuItemSelected: "bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
     subContent: "rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
-    subItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2",
-    itemControl: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center",
-    checkboxChecked: "bg-blue-600 border-blue-600 text-white",
+    subItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2 data-selected:bg-blue-50 data-selected:text-blue-700 dark:data-selected:bg-blue-900/40 dark:data-selected:text-blue-300",
+    itemControl: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-white",
     icon: "w-4 h-4 text-gray-400",
   }}
 />
@@ -2037,7 +2033,7 @@ This renders correctly with no additional props, classes, or setup.
 |------|-----------|
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
-| `classes.checked` / `classes.unchecked` | REPLACE per slot. Provide full styling — not additive. |
+| `classes.control` with `data-[state=checked]:` / `data-[state=unchecked]:` | REPLACE per slot. Provide full styling — not additive. |
 
 ---
 
@@ -2138,7 +2134,7 @@ message / message (below)
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Box color when checked | `checked` | Background + border + text color |
-| Box color when unchecked | `unchecked` | Background + border |
+| Box color when unchecked | `control` + `data-[state=unchecked]:` | Background + border |
 | Box border radius | `control` | Or use `shape` prop |
 | Label text style | `label` | Font size, color, weight |
 | Error message style | `message` | Color, size |
@@ -2150,8 +2146,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both variants:
 
 ```tsx
 classes={{
-  checked: "bg-green-600 border-green-600 text-white dark:bg-green-500 dark:border-green-500",
-  unchecked: "bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600",
+  control:
+    "data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600 data-[state=checked]:text-white dark:data-[state=checked]:bg-green-500 dark:data-[state=checked]:border-green-500 data-[state=unchecked]:bg-white data-[state=unchecked]:border-gray-300 dark:data-[state=unchecked]:bg-gray-800 dark:data-[state=unchecked]:border-gray-600",
 }}
 ```
 
@@ -2175,9 +2171,10 @@ classes={{
   shape="circle"
   classes={{
     root: "",
-    control: "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors",
-    checked: "bg-emerald-500 border-emerald-500 text-white",
-    unchecked: "bg-white dark:bg-gray-900",
+    control:
+      "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors " +
+      "data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500 data-[state=checked]:text-white " +
+      "data-[state=unchecked]:bg-white dark:data-[state=unchecked]:bg-gray-900",
     label: "text-sm font-medium text-gray-800 dark:text-gray-200",
     description: "text-xs text-gray-500 dark:text-gray-400",
   }}
@@ -2655,7 +2652,7 @@ override silently drops the rest.
 | Day cells | `item` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
 | Keyboard focus | — | The focused day carries `data-highlighted` |
-| Marked days | `markerIndicator`, `markerTooltip` | Marker visuals |
+| Marked days | `markerIndicator` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
 | Presets | `presetGroup`, `presetTrigger` | Preset buttons panel |
 | Footer / today button | `footer`, `todayTrigger` | Calendar footer |
@@ -2668,7 +2665,7 @@ Default classes use Tailwind `dark:` prefix. When overriding, always provide bot
 ```tsx
 <DatePicker classes={{
   trigger: "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100",
-  daySelected: "bg-indigo-600 dark:bg-indigo-500 text-white",
+  item: "data-selected:bg-indigo-600 data-selected:text-white dark:data-selected:bg-indigo-500",
 }} />
 ```
 
@@ -3145,9 +3142,7 @@ classes={{ trigger: "bg-white dark:bg-gray-900 text-black dark:text-white ..." }
     value: "flex-1 text-left truncate",
     content: "rounded-md shadow-lg bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700",
     list: "max-h-60 overflow-y-auto py-1",
-    item: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer",
-    optionSelected: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300",
-    optionFocused: "bg-gray-100 dark:bg-gray-700",
+    item: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer data-selected:bg-indigo-50 data-selected:text-indigo-700 dark:data-selected:bg-indigo-900/30 dark:data-selected:text-indigo-300 data-highlighted:bg-gray-100 dark:data-highlighted:bg-gray-700",
     itemIndicator: "w-4 h-4 text-indigo-600 dark:text-indigo-400",
     icon: "w-4 h-4 text-gray-400 transition-transform duration-200",
   }}
@@ -3579,17 +3574,17 @@ root
 ├── label
 ├── description
 └── control (role="group")
-    ├── countrySelect (SearchableDropdown root)
-    │   ├── countrySelectTrigger
-    │   ├── countrySelectDropdown (portal)
-    │   │   ├── countrySelectSearchInput
-    │   │   │   ├── countrySelectSearchIcon
-    │   │   │   └── countrySelectSearchInputElement
-    │   │   └── countrySelectOptionList
-    │   │       └── countrySelectOption / countrySelectOptionSelected
-    │   │           └── countrySelectCheckIcon
-    │   └── countrySelectChevron
-    │   └── countrySelectNoResults
+    ├── countrySelect (SearchableDropdown, nested classes)
+    │   ├── countrySelect.trigger
+    │   ├── countrySelect.icon
+    │   └── countrySelect.content (portal)
+    │       ├── countrySelect.searchControl
+    │       │   ├── countrySelect.searchIcon
+    │       │   └── countrySelect.searchInput
+    │       ├── countrySelect.list
+    │       │   └── countrySelect.item [data-selected]
+    │       │       └── countrySelect.itemIndicator
+    │       └── countrySelect.empty
     ├── input
     └── clearButton (when clearable)
 ├── message
@@ -3637,19 +3632,22 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. When o
     label: "text-sm font-medium text-gray-700 dark:text-gray-200",
     control: "flex gap-2 items-stretch",
     input: "flex-1 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500",
-    countrySelectTrigger: "flex items-center gap-2 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 min-w-[120px]",
-    countrySelectDropdown: "w-72 border rounded-md shadow-lg bg-white dark:bg-gray-800",
-    countrySelectOption: "flex items-center justify-between px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700",
-    countrySelectOptionSelected: "bg-indigo-50 dark:bg-indigo-900/20",
-    countrySelectOptionList: "max-h-60 overflow-y-auto",
-    countrySelectSearchInput: "flex items-center gap-2 px-3 py-2 border-b",
-    countrySelectSearchInputElement: "flex-1 bg-transparent outline-none text-sm",
-    countrySelectChevron: "w-4 h-4 shrink-0",
-    countrySelectCheckIcon: "w-4 h-4 text-indigo-600",
-    countrySelectSearchIcon: "w-4 h-4 text-gray-400",
-    countrySelectNoResults: "px-3 py-4 text-sm text-center text-gray-500",
+    // The country picker is a SearchableDropdown, and its slots are that
+    // component's own — nested here rather than flattened into eleven
+    // `countrySelect*` keys.
+    countrySelect: {
+      trigger: "flex items-center gap-2 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 min-w-[120px]",
+      content: "w-72 border rounded-md shadow-lg bg-white dark:bg-gray-800",
+      list: "max-h-60 overflow-y-auto",
+      item: "flex items-center justify-between px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 data-selected:bg-indigo-50 dark:data-selected:bg-indigo-900/20",
+      itemIndicator: "w-4 h-4 text-indigo-600",
+      searchControl: "flex items-center gap-2 px-3 py-2 border-b",
+      searchInput: "flex-1 bg-transparent outline-none text-sm",
+      searchIcon: "w-4 h-4 text-gray-400",
+      empty: "px-3 py-4 text-sm text-center text-gray-500",
+      icon: "w-4 h-4 shrink-0",
+    },
     message: "text-xs mt-1 text-red-500",
-    message: "text-xs mt-1 text-green-600",
     description: "text-xs mt-1 text-gray-400",
   }}
 />
@@ -4913,7 +4911,7 @@ root (row, flex flex-wrap)
     ├── navButton (prev)
     │   └── navIcon
     ├── list
-    │   ├── item / activePageButton
+    │   ├── item [data-state=active]
     │   └── ellipsis
     └── navButton (next)
         └── navIcon
@@ -4944,10 +4942,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
   classes={{
     root: "flex flex-wrap items-center gap-1",
     navButton: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
-    item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
-    activePageButton: "w-9 h-9 rounded-full shadow-md flex items-center justify-center text-sm bg-blue-600 text-white",
+    item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600 data-[state=active]:shadow-md data-[state=active]:bg-blue-600 data-[state=active]:border-blue-600 data-[state=active]:text-white",
     list: "flex items-center gap-1",
-    navIcon: "w-4 h-4",
     navIcon: "w-4 h-4",
     ellipsis: "px-2 text-gray-400",
   }}

@@ -240,7 +240,24 @@ makes the question askable, and **six of the seven mismatched in every SSR templ
 `Tooltip__portal` reported nothing and was still wrong: the prerendered HTML shipped the tip
 **inline inside `<main>`** and the client relocated it to a portal. React deletes an unmatched
 trailing node without a recoverable error, so this one was invisible to the hydration channel
-and visible only in the HTML on disk. The source gate below is what catches that shape.
+and visible only in the HTML on disk.
+
+**`useHydrated` did not close that one** — measured from the artifact rather than the error
+channel, `Tooltip__portal.html` still carried `role="tooltip"` inside `<main>` afterwards.
+The fix was to render nothing when a portal is asked for and its target does not exist yet,
+rather than falling back to inline. The prerendered HTML now contains no tooltip at all, and
+the tip appears in the portal on the render after hydration.
+
+**And the channel gap is closed with it.** A hydration error is only raised when the server's
+markup and the first client render disagree; anything an effect does afterwards is
+unreported by construction. The matrix now fetches each route's server HTML and compares it
+structurally with the settled DOM: additions are fine — a portal arriving after hydration is
+the point — but a landmark that moved or vanished is a fault. It carries its own control,
+`__mover`, which hydrates identically and then relocates a node into a portal: every pass
+must fault it, and every pass records that React reported **0** recoverable errors for it.
+One route is declared a legitimate replacement, `Table__responsive`, where the server renders
+cards for a viewport it cannot measure. Current reading: **166 server landmarks across 38
+routes, 0 moved or vanished**, in all three templates.
 
 **All seven are fixed.** One hook — `useHydrated()`, `useSyncExternalStore` with a server
 snapshot, the same idiom `useReducedMotion` already used — replaces every render-time
@@ -489,17 +506,42 @@ tokenised. What remains is shimmer fills, borders and icon colours — none of i
 one exception the gates cannot reach: `AvatarBadge`'s count variant is white on `bg-red-500`
 at 3.76:1, and no fixture renders a count badge.
 
-### 3.4 17 waived `classes` keys
+### 3.4 One waived `classes` key
 
-Not 18. `docs/adr/002-unrenderable-keys.json` waives, with a reason each: CascadingDropdown
-7, DatePicker 5, RadioButton 2, Slider 1, Table 1, InternationalPhoneInput 1. Five of
-CascadingDropdown's are recorded dead ("no source reference outside the merge map"); two are
-`ATTEMPTED, still unreachable` — real source references that no prop combination renders.
-A key nobody can render is a key nobody can style.
+**Corrected 2026-09-07, from seventeen.** The old figure was wrong in both directions.
+Sixteen of the seventeen had already been deleted from the API by the key migration, so
+their waivers were vacuous — a waiver for a key that does not exist gates nothing — and the
+inference drawn from the number here, "seventeen pieces of public API that do nothing", was
+false: they were not public API at all. `fixtures.contract` now fails on a waived key that is
+not in the component's classes map, which is the rot that let this stand.
 
-Alongside them the same file ratchets **21 decorative leaks** and **5 motion leaks** —
-classes that survive `unstyled` because they are JSX-site literals or come from a nested
-component the parent does not pass `unstyled` to.
+What the re-attempt found, in a real browser rather than in jsdom:
+
+- **`Table.input` survives.** `e2e/waived-keys.spec.ts` renders the `editing-cell` fixture
+  with `?classes={"input":"ovr-input"}`, double-clicks the cell for real, and the consumer's
+  class is on the editor. It stays waived because no fixture *act* can reach it — a
+  dispatched `dblclick` opens the editor and closes it in the same frame — not because a
+  consumer cannot use it.
+- **`DatePicker.markerTooltip` did not, and is deleted.** The state is reachable: a real
+  hover opens the marker tooltip, which the old reason doubted. The key still renders
+  nothing, because `useMarkerTooltip` writes a literal class string and never reads the value
+  threaded to it through three hops. It had no sink at all. The same spec asserts the tooltip
+  opens *and* that the override is absent, so wiring it later cannot happen without the key
+  coming back.
+
+Alongside them the same file ratchets **21 decorative leaks** and **5 motion leaks**.
+
+**A second, larger instance of the same defect, in the documentation.** The keys were deleted
+from the types and left in the knowledge files: 20 `classes={{…}}` examples across seven
+components taught keys that no longer exist — in the files `llms-full.txt` is generated from,
+which is the codegen product's input. A consumer or a model following one writes a key that
+does nothing. All 20 now use the current key with the state variant that replaced it
+(`item` + `data-[state=active]:` and so on), and `doc-truth.contract` gained a rule: a key
+written into a `classes` example must exist in the component's map. Planted and caught.
+
+The decorative and motion leak ratchets are unchanged: **21** and **5** — classes that
+survive `unstyled` because they are JSX-site literals or come from a nested component the
+parent does not pass `unstyled` to.
 
 ### 3.5 Two declared positioners, six declared portals
 
@@ -654,9 +696,9 @@ is stated as unsupported.
 **What 0.1.0 commits us to.** Very little, deliberately. `VERSIONING.md`'s pre-1.0 clause
 carries ADR 002 R7 forward verbatim: keys are renamed and deleted freely, with no
 deprecation cycle, and any 0.x minor may contain what would otherwise be a major change.
-A consumer is told to pin an exact version if that matters. The 17 waived keys can be
-deleted, the two `ATTEMPTED, still unreachable` keys can go, and the `classes` vocabulary
-can move under anyone's feet without a major bump.
+A consumer is told to pin an exact version if that matters — the `classes` vocabulary can
+move under anyone's feet without a major bump, which is what made the 2026-09-07 deletion of
+`DatePicker.markerTooltip` free.
 
 **What 1.0.0-rc.1 would commit us to.** A release candidate is a promise about *the shape
 of what follows*, not a lighter version of 1.0. Publishing an rc says: this vocabulary is
@@ -669,9 +711,10 @@ combination. Deleting those after an rc is the exact break R7 exists to prevent.
 
 **Recommendation: publish 0.1.0.** Three reasons, in order of weight.
 
-1. **The vocabulary is not ready to freeze.** 17 waived keys and two known-unreachable ones
-   are open questions about the public API. R7 says pre-1.0 is when you settle them, and an
-   rc is a signal that you already have.
+1. **The vocabulary is not ready to freeze.** It is closer than this said: the waived list
+   is one key, and that one is reachable in a browser. What is still open is everything R7
+   allows to move — and the documentation was teaching twenty keys that no longer existed
+   until 2026-09-07, which is not the state to declare an rc in.
 2. **The matrix is red.** Whatever the version, §1.1 has to be resolved first — but a `0.1.0`
    with a documented Safari defect is an ordinary early release, while a `1.0.0-rc.1` with
    one is a candidate for a thing that is not a candidate.
@@ -742,6 +785,8 @@ In order. The first two are done; the rest are not.
 7. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
    race against the CPU. This is one of the eleven Firefox failures and the only one with an
    obvious fix, so it is worth doing before step 6 rather than after.
-8. Decide the 17 waived keys — delete them under R7 while it is still free.
+8. ~~Decide the 17 waived keys — delete them under R7 while it is still free.~~ **Done
+   2026-09-07.** Sixteen were already gone; `DatePicker.markerTooltip` was deleted and
+   `Table.input` kept with browser-tier evidence (§3.4).
 
-Step 6 is the remaining blocker. Step 8 gets much more expensive after 1.0.
+Step 6 is the remaining blocker.

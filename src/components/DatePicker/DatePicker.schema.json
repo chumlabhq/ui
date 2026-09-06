@@ -396,9 +396,6 @@
         "markerIndicator": {
           "type": "string"
         },
-        "markerTooltip": {
-          "type": "string"
-        },
         "monthSelect": {
           "type": "string"
         },

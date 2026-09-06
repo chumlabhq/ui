@@ -49,7 +49,7 @@ This renders correctly with no additional props, classes, or setup.
 |------|-----------|
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
-| `classes.checked` / `classes.unchecked` | REPLACE per slot. Provide full styling — not additive. |
+| `classes.control` with `data-[state=checked]:` / `data-[state=unchecked]:` | REPLACE per slot. Provide full styling — not additive. |
 
 ---
 
@@ -150,7 +150,7 @@ message / message (below)
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Box color when checked | `checked` | Background + border + text color |
-| Box color when unchecked | `unchecked` | Background + border |
+| Box color when unchecked | `control` + `data-[state=unchecked]:` | Background + border |
 | Box border radius | `control` | Or use `shape` prop |
 | Label text style | `label` | Font size, color, weight |
 | Error message style | `message` | Color, size |
@@ -162,8 +162,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both variants:
 
 ```tsx
 classes={{
-  checked: "bg-green-600 border-green-600 text-white dark:bg-green-500 dark:border-green-500",
-  unchecked: "bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600",
+  control:
+    "data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600 data-[state=checked]:text-white dark:data-[state=checked]:bg-green-500 dark:data-[state=checked]:border-green-500 data-[state=unchecked]:bg-white data-[state=unchecked]:border-gray-300 dark:data-[state=unchecked]:bg-gray-800 dark:data-[state=unchecked]:border-gray-600",
 }}
 ```
 
@@ -187,9 +187,10 @@ classes={{
   shape="circle"
   classes={{
     root: "",
-    control: "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors",
-    checked: "bg-emerald-500 border-emerald-500 text-white",
-    unchecked: "bg-white dark:bg-gray-900",
+    control:
+      "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors " +
+      "data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500 data-[state=checked]:text-white " +
+      "data-[state=unchecked]:bg-white dark:data-[state=unchecked]:bg-gray-900",
     label: "text-sm font-medium text-gray-800 dark:text-gray-200",
     description: "text-xs text-gray-500 dark:text-gray-400",
   }}

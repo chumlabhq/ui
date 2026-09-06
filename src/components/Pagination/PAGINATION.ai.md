@@ -154,7 +154,7 @@ root (row, flex flex-wrap)
     ├── navButton (prev)
     │   └── navIcon
     ├── list
-    │   ├── item / activePageButton
+    │   ├── item [data-state=active]
     │   └── ellipsis
     └── navButton (next)
         └── navIcon
@@ -185,10 +185,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
   classes={{
     root: "flex flex-wrap items-center gap-1",
     navButton: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
-    item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
-    activePageButton: "w-9 h-9 rounded-full shadow-md flex items-center justify-center text-sm bg-blue-600 text-white",
+    item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600 data-[state=active]:shadow-md data-[state=active]:bg-blue-600 data-[state=active]:border-blue-600 data-[state=active]:text-white",
     list: "flex items-center gap-1",
-    navIcon: "w-4 h-4",
     navIcon: "w-4 h-4",
     ellipsis: "px-2 text-gray-400",
   }}

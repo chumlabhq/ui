@@ -137,6 +137,58 @@ function propsClaimedInProse(name: string, tags: Set<string>) {
 /** React's own, which no component declares. */
 const BUILTIN = new Set(["key", "ref"]);
 
+/**
+ * The `classes` keys a component actually has.
+ *
+ * Read off the `*Classes` interfaces rather than through the checker: the maps
+ * are plain interfaces of optional strings, and a nested one (`countrySelect`
+ * on InternationalPhoneInput) is another component's map, whose keys are that
+ * component's business.
+ */
+function classesKeysOf(name: string): Set<string> {
+  const keys = new Set<string>();
+  for (const file of existsSync(`${SRC}/${name}`) ? walk(`${SRC}/${name}`) : []) {
+    if (!/types\.ts$/.test(file)) continue;
+    const text = readFileSync(file, "utf8");
+    for (const block of text.matchAll(/export interface \w*Classes \{([\s\S]*?)\n\}/g)) {
+      for (const key of block[1].matchAll(/^\s{2}(\w+)\??:/gm)) keys.add(key[1]);
+    }
+  }
+  return keys;
+}
+
+/**
+ * Keys written into a `classes={{ … }}` in an example, which is the one place a
+ * key claim is unambiguous — a slot table row has the same shape as a prop
+ * table row, and reading those reported 1334 props as keys.
+ */
+function classesClaimedInProse(name: string): string[] {
+  const path = `${SRC}/${name}/${name.toUpperCase()}.ai.md`;
+  if (!existsSync(path)) return [];
+  const text = readFileSync(path, "utf8");
+  const claimed: string[] = [];
+  for (const fence of text.matchAll(/```(?:tsx|jsx)\n([\s\S]*?)```/g)) {
+    const sf = ts.createSourceFile("ex.tsx", fence[1], ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const visit = (node: ts.Node): void => {
+      if (
+        ts.isJsxAttribute(node) &&
+        node.name.getText(sf) === "classes" &&
+        node.initializer &&
+        ts.isJsxExpression(node.initializer) &&
+        node.initializer.expression &&
+        ts.isObjectLiteralExpression(node.initializer.expression)
+      ) {
+        for (const property of node.initializer.expression.properties) {
+          if (property.name) claimed.push(property.name.getText(sf).replace(/['"]/g, ""));
+        }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return claimed;
+}
+
 describe("doc truth contract", () => {
   describe("self-check", () => {
     it("reads props out of both prose shapes", () => {
@@ -151,6 +203,38 @@ describe("doc truth contract", () => {
       expect(propsOf("Dropdown").has("options")).toBe(true);
       expect(propsOf("Dropdown").has("notAProp")).toBe(false);
     });
+  });
+
+  it("names no `classes` key the map does not have", () => {
+    // ADR 002 R8: a key ships only if something renders it. The converse rots
+    // in the documentation instead — the key migration deleted or renamed
+    // twenty keys and the examples kept teaching the old names, in the file
+    // `llms-full.txt` is built from. A consumer following one writes a key that
+    // does nothing, and cannot tell whether it is their mistake.
+    const phantoms: string[] = [];
+    for (const name of COMPONENTS) {
+      const keys = classesKeysOf(name);
+      if (keys.size === 0) continue;
+      for (const claimed of new Set(classesClaimedInProse(name))) {
+        if (!keys.has(claimed)) phantoms.push(`${name}.${claimed}`);
+      }
+    }
+    expect(
+      phantoms.sort(),
+      "written into a `classes={{…}}` example, absent from the component's Classes map. " +
+        "Either the key was renamed (see docs/adr/002-key-migration.json) or it became a " +
+        "state attribute (002-state-attributes.json) — the example has to say so",
+    ).toEqual([]);
+  });
+
+  it("reads examples and key maps at all", () => {
+    // Both extractors, so the assertion above cannot pass on empty sets.
+    expect(classesKeysOf("Dropdown").has("item"), "no Classes keys were read").toBe(true);
+    expect(
+      classesClaimedInProse("Dropdown").length,
+      "no `classes` example keys were read",
+    ).toBeGreaterThan(3);
+    expect(classesKeysOf("Dropdown").has("optionSelected")).toBe(false);
   });
 
   it("names no prop the type does not have", () => {

@@ -184,17 +184,17 @@ root
 ├── label
 ├── description
 └── control (role="group")
-    ├── countrySelect (SearchableDropdown root)
-    │   ├── countrySelectTrigger
-    │   ├── countrySelectDropdown (portal)
-    │   │   ├── countrySelectSearchInput
-    │   │   │   ├── countrySelectSearchIcon
-    │   │   │   └── countrySelectSearchInputElement
-    │   │   └── countrySelectOptionList
-    │   │       └── countrySelectOption / countrySelectOptionSelected
-    │   │           └── countrySelectCheckIcon
-    │   └── countrySelectChevron
-    │   └── countrySelectNoResults
+    ├── countrySelect (SearchableDropdown, nested classes)
+    │   ├── countrySelect.trigger
+    │   ├── countrySelect.icon
+    │   └── countrySelect.content (portal)
+    │       ├── countrySelect.searchControl
+    │       │   ├── countrySelect.searchIcon
+    │       │   └── countrySelect.searchInput
+    │       ├── countrySelect.list
+    │       │   └── countrySelect.item [data-selected]
+    │       │       └── countrySelect.itemIndicator
+    │       └── countrySelect.empty
     ├── input
     └── clearButton (when clearable)
 ├── message
@@ -242,19 +242,22 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. When o
     label: "text-sm font-medium text-gray-700 dark:text-gray-200",
     control: "flex gap-2 items-stretch",
     input: "flex-1 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500",
-    countrySelectTrigger: "flex items-center gap-2 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 min-w-[120px]",
-    countrySelectDropdown: "w-72 border rounded-md shadow-lg bg-white dark:bg-gray-800",
-    countrySelectOption: "flex items-center justify-between px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700",
-    countrySelectOptionSelected: "bg-indigo-50 dark:bg-indigo-900/20",
-    countrySelectOptionList: "max-h-60 overflow-y-auto",
-    countrySelectSearchInput: "flex items-center gap-2 px-3 py-2 border-b",
-    countrySelectSearchInputElement: "flex-1 bg-transparent outline-none text-sm",
-    countrySelectChevron: "w-4 h-4 shrink-0",
-    countrySelectCheckIcon: "w-4 h-4 text-indigo-600",
-    countrySelectSearchIcon: "w-4 h-4 text-gray-400",
-    countrySelectNoResults: "px-3 py-4 text-sm text-center text-gray-500",
+    // The country picker is a SearchableDropdown, and its slots are that
+    // component's own — nested here rather than flattened into eleven
+    // `countrySelect*` keys.
+    countrySelect: {
+      trigger: "flex items-center gap-2 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 min-w-[120px]",
+      content: "w-72 border rounded-md shadow-lg bg-white dark:bg-gray-800",
+      list: "max-h-60 overflow-y-auto",
+      item: "flex items-center justify-between px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 data-selected:bg-indigo-50 dark:data-selected:bg-indigo-900/20",
+      itemIndicator: "w-4 h-4 text-indigo-600",
+      searchControl: "flex items-center gap-2 px-3 py-2 border-b",
+      searchInput: "flex-1 bg-transparent outline-none text-sm",
+      searchIcon: "w-4 h-4 text-gray-400",
+      empty: "px-3 py-4 text-sm text-center text-gray-500",
+      icon: "w-4 h-4 shrink-0",
+    },
     message: "text-xs mt-1 text-red-500",
-    message: "text-xs mt-1 text-green-600",
     description: "text-xs mt-1 text-gray-400",
   }}
 />

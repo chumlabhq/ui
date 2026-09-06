@@ -360,7 +360,6 @@ interface DayCellProps {
   classes: {
     day: string;
     markerIndicator: string;
-    markerTooltip: string;
   };
   isFocused: boolean;
   showOutsideDays: boolean;
@@ -683,7 +682,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       footer: classesProp?.footer ?? baseClasses.footer,
       todayTrigger: classesProp?.todayTrigger ?? baseClasses.todayTrigger,
       markerIndicator: classesProp?.markerIndicator ?? baseClasses.markerIndicator,
-      markerTooltip: classesProp?.markerTooltip ?? baseClasses.markerTooltip,
       monthSelect: classesProp?.monthSelect ?? baseClasses.monthSelect,
       yearSelect: classesProp?.yearSelect ?? baseClasses.yearSelect,
       subContent: classesProp?.subContent ?? baseClasses.subContent,
@@ -990,7 +988,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       () => ({
         day: mergedClasses.item,
         markerIndicator: mergedClasses.markerIndicator,
-        markerTooltip: mergedClasses.markerTooltip,
       }),
       [mergedClasses],
     );

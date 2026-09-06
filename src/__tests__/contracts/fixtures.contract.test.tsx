@@ -176,4 +176,43 @@ describe("fixtures contract", () => {
       ).toEqual([]);
     });
   });
+
+  /**
+   * The rot this record actually suffered.
+   *
+   * Sixteen of its seventeen entries named keys that had already been deleted
+   * from the API by the key migration, and nothing noticed: a waiver for a key
+   * that does not exist is vacuous, so every check above passed. RELEASE-
+   * READINESS then reported "17 waived keys — seventeen pieces of public API
+   * that do nothing", which was false in the other direction.
+   */
+  it("waives no key that no longer exists", () => {
+    const stale: string[] = [];
+    for (const [component, keys] of Object.entries(WAIVED.waived)) {
+      const entry = COMPONENTS.find((c) => c.name === component);
+      const defaults = entry?.defaults;
+      if (!defaults) {
+        stale.push(`${component} (no component or no default classes map)`);
+        continue;
+      }
+      const declared = new Set(
+        Object.entries(defaults).flatMap(([key, value]) =>
+          typeof value === "string"
+            ? [key]
+            : value && typeof value === "object"
+              ? Object.keys(value as object).map((nested) => `${key}.${nested}`)
+              : [],
+        ),
+      );
+      for (const key of Object.keys(keys)) {
+        if (!declared.has(key)) stale.push(`${component}.${key}`);
+      }
+    }
+    expect(
+      stale.sort(),
+      "waived keys that are not in the component's classes map any more. A waiver for a " +
+        "key that does not exist is vacuous — delete the entry from " +
+        "docs/adr/002-unrenderable-keys.json",
+    ).toEqual([]);
+  });
 });

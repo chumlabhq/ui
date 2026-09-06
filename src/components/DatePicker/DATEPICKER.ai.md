@@ -220,7 +220,7 @@ override silently drops the rest.
 | Day cells | `item` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
 | Keyboard focus | — | The focused day carries `data-highlighted` |
-| Marked days | `markerIndicator`, `markerTooltip` | Marker visuals |
+| Marked days | `markerIndicator` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
 | Presets | `presetGroup`, `presetTrigger` | Preset buttons panel |
 | Footer / today button | `footer`, `todayTrigger` | Calendar footer |
@@ -233,7 +233,7 @@ Default classes use Tailwind `dark:` prefix. When overriding, always provide bot
 ```tsx
 <DatePicker classes={{
   trigger: "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100",
-  daySelected: "bg-indigo-600 dark:bg-indigo-500 text-white",
+  item: "data-selected:bg-indigo-600 data-selected:text-white dark:data-selected:bg-indigo-500",
 }} />
 ```
 

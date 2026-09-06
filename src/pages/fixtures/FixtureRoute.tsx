@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { browserActTools } from "../../__tests__/fixtures/_act.js";
 import type { Fixture } from "../../__tests__/fixtures/types.js";
 import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegistry.js";
@@ -68,9 +68,33 @@ const SR_ONLY = {
   whiteSpace: "nowrap",
 } as const;
 
+/**
+ * `?classes={"input":"ovr-input"}` merges a `classes` map into the fixture.
+ *
+ * `fixtures.contract` proves a key reaches the DOM by overriding it with a
+ * sentinel and looking for the sentinel — in jsdom, which cannot hover, cannot
+ * double-click and implements no pointer capture. Every key waived as
+ * unrenderable was waived from there, and the waiver for `Table.input` was
+ * wrong: a real double-click opens the editor. This is the same probe with a
+ * real browser behind it, so a key can be re-attempted rather than believed.
+ *
+ * Dev-only, like the rest of this page.
+ */
+function classesFromQuery(search: string): Record<string, string> | null {
+  const raw = new URLSearchParams(search).get("classes");
+  if (!raw) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, string>) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function FixtureRoute() {
   const { component: slug = "", fixture: fixtureName = "" } = useParams();
   const component = fromSlug(slug);
+  const probeClasses = classesFromQuery(useLocation().search);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [actStatus, setActStatus] = useState("none");
@@ -158,7 +182,20 @@ export default function FixtureRoute() {
   const element = fixture.render ? (
     fixture.render()
   ) : (
-    <Component {...props} {...fixture.props}>
+    <Component
+      {...props}
+      {...fixture.props}
+      {...(probeClasses
+        ? {
+            classes: {
+              ...((props as { classes?: Record<string, string> }).classes ?? {}),
+              ...((fixture.props as { classes?: Record<string, string> } | undefined)?.classes ??
+                {}),
+              ...probeClasses,
+            },
+          }
+        : {})}
+    >
       {fixture.children as ReactNode}
     </Component>
   );

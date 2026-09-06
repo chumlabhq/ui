@@ -93,8 +93,6 @@ export interface DatePickerClasses {
   todayTrigger?: string;
   /** Marker indicator dot */
   markerIndicator?: string;
-  /** Marker tooltip */
-  markerTooltip?: string;
   /** Month select button */
   monthSelect?: string;
   /** Year select button */

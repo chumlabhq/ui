@@ -210,7 +210,7 @@ root
         └── subPositioner            (its own portal, anchored to the open item)
             └── subContent
                 ├── subSearchControl [subSearchIcon + subSearchInput]
-                └── subItem* [itemControl/checkboxChecked, itemIndicator]
+                └── subItem* [itemControl data-state=checked, itemIndicator]
 ```
 
 **`subPositioner` changed meaning in 0.1.0.** It used to be an
@@ -228,10 +228,10 @@ the side actually used, after any flip, is on the element as `data-side`.
 | Trigger button style | `trigger` | |
 | Dropdown background | `content` | |
 | Menu item hover | `item` | Uses hover: pseudo-class |
-| Selected item highlight | `menuItemSelected` | Stacks on top of menuItem |
+| Selected item highlight | `subItem` + `data-selected:` | The selected item is the same slot in a state |
 | Focused item (keyboard) | `menuItemFocused` | Stacks on top of menuItem |
 | Submenu panel | `subContent` | |
-| Checkbox style | `itemControl` +  | checkboxChecked applied when checked |
+| Checkbox style | `itemControl` + `data-[state=checked]:` | The checked box is the same slot in a state |
 | Search bar in menu | `searchControl`, `searchInput`, `searchIcon` | |
 | Search bar in submenu | `subSearchControl` | Falls back to `searchControl` if empty |
 | Loading state | `loading`, `loading`, `loadingItem` | |
@@ -270,11 +270,9 @@ classes={{
     trigger: "flex items-center justify-between w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:border-blue-400 focus:ring-2 focus:ring-blue-500",
     content: "mt-1 rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
     item: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between",
-    menuItemSelected: "bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
     subContent: "rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
-    subItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2",
-    itemControl: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center",
-    checkboxChecked: "bg-blue-600 border-blue-600 text-white",
+    subItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2 data-selected:bg-blue-50 data-selected:text-blue-700 dark:data-selected:bg-blue-900/40 dark:data-selected:text-blue-300",
+    itemControl: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-white",
     icon: "w-4 h-4 text-gray-400",
   }}
 />
@@ -402,7 +400,7 @@ const searchCountries = async (query: string) => {
 | Client-side search | `title="Client-Side Search"` | showMenuSearch + showSubmenuSearch |
 | Async search | `title="Async Server-Side Search (Debounced)"` | onMenuSearch + onSubmenuSearch with debounce |
 | Custom search styling | `title="Custom Search Styling: Teal"` | Independent menu/submenu search styles |
-| Custom checkbox | `title="Custom Checkbox - Green Rounded"` | checkbox + checkboxChecked classes |
+| Custom checkbox | `title="Custom Checkbox - Green Rounded"` | `itemControl` with a `data-[state=checked]:` variant |
 | Disabled options | `title="Disabled Options"` | Per-option disabled |
 
 Source file index:

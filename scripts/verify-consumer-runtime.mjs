@@ -52,6 +52,27 @@ const EXPECTED = JSON.parse(
 /** The route that lists the routes; see ROUTES in `_app/all/registry.tsx`. */
 const ROUTES = "__routes";
 
+/** The control for the structural check; see MOVER in `_app/all/registry.tsx`. */
+const MOVER = "__mover";
+
+/**
+ * Routes where the client is SUPPOSED to replace what the server sent, with the
+ * reason. Everything else must keep every landmark the server rendered, in the
+ * place the server put it.
+ *
+ * A short list on purpose: each entry is a component that renders one tree
+ * before it has measured something and a different one after, which is a
+ * correction rather than a defect — but it is also indistinguishable from one
+ * without a reason written down.
+ */
+const DECLARED_REPLACEMENTS = {
+  Table__responsive:
+    "The server assumes a 1024px viewport, so it renders the card layout; the client " +
+    "measures 1280 and renders the table. Both trees are correct for what each knew, and " +
+    "the switch is the point of `responsiveBreakpoint`.",
+  __mover: "The control. It exists to be faulted.",
+};
+
 /** Seeded before the sweep, for the one variant whose defect needs stored state. */
 const ACCORDION_STORAGE_KEY = "chumlab-matrix-accordion";
 
@@ -309,6 +330,76 @@ async function startApp(dir) {
   };
 }
 
+/**
+ * Landmarks the server rendered, and where each of them ended up.
+ *
+ * The hydration channel cannot see a whole class of defect: if the server and
+ * the first client render agree, React is satisfied, and anything an effect
+ * does afterwards — moving a subtree into a portal, replacing it — is reported
+ * nowhere. `Tooltip` did precisely that, shipping its tip inside `<main>` from
+ * the server and relocating it to `document.body` on mount, and every error
+ * channel called the route clean.
+ *
+ * So this compares the two trees directly: the bytes the server sent against
+ * the DOM once it has settled. Additions are fine — that is what a portal
+ * appearing after hydration looks like, and it is the shape ADR 003 asks for.
+ * A landmark that VANISHED or MOVED is the fault.
+ *
+ * Landmarks rather than every node: an id, a role, or a tag that means
+ * something on its own. Classes and state attributes are deliberately not part
+ * of the identity — those are supposed to change.
+ */
+const compareTrees = (page, html) =>
+  page.evaluate(
+    ([serverHtml]) => {
+      const TAGS = new Set([
+        "BUTTON", "INPUT", "TEXTAREA", "SELECT", "TABLE", "A", "IMG", "DIALOG",
+        "NAV", "FORM", "LABEL", "H1", "H2", "H3", "H4", "H5", "H6",
+      ]);
+      const landmark = (element) =>
+        element.id || element.getAttribute("role") || TAGS.has(element.tagName);
+      const key = (element) =>
+        element.id
+          ? `${element.tagName}#${element.id}`
+          : `${element.tagName}[${element.getAttribute("role") ?? ""}]:` +
+            `${(element.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 24)}`;
+      const path = (element) => {
+        const parts = [];
+        for (let cursor = element.parentElement; cursor; cursor = cursor.parentElement) {
+          parts.unshift(cursor.tagName);
+        }
+        return parts.join(">");
+      };
+
+      const parsed = new DOMParser().parseFromString(serverHtml, "text/html");
+      // Only what the component rendered: the shell is `<main>`, and a server
+      // cannot portal, so everything it produced is inside it.
+      const shell = parsed.querySelector("main");
+      if (!shell) return { faults: [{ kind: "no-shell", key: "main", from: "", to: "" }], seen: 0 };
+
+      const live = [...document.querySelectorAll("*")].filter(landmark);
+      const index = new Map();
+      for (const element of live) {
+        const entry = index.get(key(element)) ?? [];
+        entry.push(path(element));
+        index.set(key(element), entry);
+      }
+
+      const faults = [];
+      const server = [...shell.querySelectorAll("*")].filter(landmark);
+      for (const element of server) {
+        const paths = index.get(key(element));
+        if (!paths) {
+          faults.push({ kind: "vanished", key: key(element), from: path(element), to: "" });
+        } else if (!paths.includes(path(element))) {
+          faults.push({ kind: "moved", key: key(element), from: path(element), to: paths[0] });
+        }
+      }
+      return { faults, seen: server.length };
+    },
+    [html],
+  );
+
 /** Everything the page can tell us about one component, after it has settled. */
 async function inspect(page) {
   return page.evaluate(() => {
@@ -482,6 +573,15 @@ async function sweepComponent(page, url, name, { ssr }) {
       .catch(() => {});
     await page.waitForTimeout(250);
 
+    // Fetched rather than read from the page: `document.documentElement` is
+    // already the hydrated tree, so the only way to see what the server sent is
+    // to ask the server again.
+    const served = ssr
+      ? await fetch(url)
+          .then((response) => response.text())
+          .catch(() => "")
+      : "";
+
     const seen = await inspect(page);
     const result = {
       name,
@@ -493,6 +593,9 @@ async function sweepComponent(page, url, name, { ssr }) {
       recoverable: seen.recoverable ?? [],
       crashes: [...crashes],
       affordances: [],
+      // Compared before the sweep touches anything: an affordance that opens a
+      // menu changes the tree on purpose.
+      structure: served ? await compareTrees(page, served) : { faults: [], seen: 0 },
     };
 
     // The canary is the control and has nothing to interact with; every other
@@ -665,6 +768,34 @@ export async function runtimeChecks(dir, target) {
           (mismatched.length
             ? `\n      ${mismatched.map((r) => `${r.name}: ${r.recoverable.join(" | ")}`).join("\n      ")}`
             : ""),
+      });
+      const undeclared = routed.filter(
+        (result) => result.structure.faults.length > 0 && !DECLARED_REPLACEMENTS[result.name],
+      );
+      const mover = results.find((result) => result.name === MOVER);
+      steps.push({
+        label: "server tree preserved",
+        // Both halves, like the canary: nothing moved that should not have,
+        // AND the one thing that should have moved was seen to.
+        ok: undeclared.length === 0 && Boolean(mover?.structure.faults.length),
+        output:
+          `${routed.reduce((total, r) => total + r.structure.seen, 0)} server landmark(s) ` +
+          `across ${routed.length} route(s), ${undeclared.length} moved or vanished` +
+          (undeclared.length
+            ? `\n      ${undeclared
+                .flatMap((result) =>
+                  result.structure.faults.map(
+                    (fault) =>
+                      `${result.name}: ${fault.kind} ${fault.key}` +
+                      (fault.kind === "moved" ? ` — ${fault.from} → ${fault.to}` : ` — ${fault.from}`),
+                  ),
+                )
+                .join("\n      ")}`
+            : "") +
+          (mover?.structure.faults.length
+            ? `\n      control: __mover ${mover.structure.faults[0].kind} as expected, and ` +
+              `React reported ${mover.recoverable.length} recoverable error(s) for it`
+            : "\n      the __mover control was NOT faulted: this check is not reading anything"),
       });
       steps.push({
         label: "canary caught",

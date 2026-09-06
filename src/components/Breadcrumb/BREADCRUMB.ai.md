@@ -154,7 +154,7 @@ override silently drops the rest.
 │  ┌─ list (<ol>) ──────────────────────────────────────────┐ │
 │  │                                                         │ │
 │  │  [item/link] [separator] [ellipsisTrigger] [separator]  │ │
-│  │  [item/link] [separator] [itemActive]                  │ │
+│  │  [item/link] [separator] [item data-state=active]      │ │
 │  │                                                         │ │
 │  └─────────────────────────────────────────────────────────┘ │
 │                                                              │
@@ -168,7 +168,7 @@ override silently drops the rest.
 |------------------------|-------------|-------|
 | Trail container layout | `list` | Flex container for items + separators. |
 | Inactive item styling | `item` | Buttons/spans for non-link, non-active items. |
-| Active (last) item styling | `itemActive` | The current page indicator. |
+| Active (last) item styling | `item` + `data-[state=active]:` | The current page is the same slot in a state. |
 | Disabled item look |  | Appended to `item` class when disabled. |
 | Link items (with href) | `link` | Anchors — separate slot from `item`. |
 | Separator icon/text | `separator` | Between each item. |
@@ -185,8 +185,7 @@ Default classes use Tailwind `dark:` prefix. Activated by `<html class="dark">`.
 <Breadcrumb
   items={items}
   classes={{
-    item: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800",
-    itemActive: "text-gray-900 dark:text-white font-semibold",
+    item: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 data-[state=active]:text-gray-900 data-[state=active]:font-semibold dark:data-[state=active]:text-white",
     content: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
   }}
 />
@@ -216,8 +215,7 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
   unstyled
   classes={{
     list: "flex items-center gap-1",
-    item: "px-3 py-1.5 text-xs font-medium rounded-full cursor-pointer transition-all bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
-    itemActive: "px-3 py-1.5 text-xs font-medium rounded-full bg-blue-600 text-white",
+    item: "px-3 py-1.5 text-xs font-medium rounded-full cursor-pointer transition-all bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 data-[state=active]:bg-blue-600 data-[state=active]:text-white",
     separator: "text-gray-300 dark:text-gray-600 mx-0.5",
     ellipsisTrigger: "px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer",
     content: "rounded-xl shadow-lg py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
@@ -308,7 +306,7 @@ const items: BreadcrumbItem[] = [
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Last item is clickable | Expected behavior — it renders as a span, not interactive | Active item has `cursor-default`. Use `itemActive` class to style. |
+| Last item is clickable | Expected behavior — it renders as a span, not interactive | Active item has `cursor-default`. Style it with `item` and a `data-[state=active]:` variant. |
 | Truncation not working | Items count ≤ `maxVisibleItems` | Reduce `maxVisibleItems` or add more items. |
 | Dropdown appears off-screen | Default position doesn't fit viewport | Change `dropdownPosition` to `"bottom"`, `"left"`, or `"right"`. |
 | Custom separator not showing | Passed `separator` as string, not ReactNode | Wrap in JSX: `separator={<span>/</span>}` not `separator="/"`. |

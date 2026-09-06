@@ -561,8 +561,7 @@
             },
             "list": {
               "item": {
-                "markerIndicator": {},
-                "markerTooltip": {}
+                "markerIndicator": {}
               },
               "weekNumber": {},
               "weekday": {}

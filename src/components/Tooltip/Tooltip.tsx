@@ -526,10 +526,17 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       </div>
     );
 
-    const tooltipContent =
-      portal && portalTarget
-        ? tooltipElement && createPortal(tooltipElement, portalTarget)
-        : tooltipElement;
+    // Nothing at all until the portal target exists, rather than falling back
+    // to rendering inline: a server has no target, so the fallback shipped the
+    // tip inside `<main>` and the client moved it to the body on hydration. No
+    // hydration error was reported — React deletes an unmatched trailing node
+    // silently — which is why this one was found by comparing the HTML on disk
+    // with the DOM afterwards rather than by the error channel.
+    const tooltipContent = portal
+      ? portalTarget && tooltipElement
+        ? createPortal(tooltipElement, portalTarget)
+        : null
+      : tooltipElement;
 
     if (asChild && isValidElement(children)) {
       return (

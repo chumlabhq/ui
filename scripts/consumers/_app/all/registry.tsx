@@ -31,6 +31,7 @@ import { Modal } from "@chumlab/ui/modal";
 import {
   DrawerDemo,
   HydrationCanary,
+  HydrationMover,
   ModalDemo,
   ResponsiveTable,
   ToastDemo,
@@ -274,6 +275,12 @@ export const VARIANTS: Entry[] = [
 export const CANARY: Entry = { name: "__canary", node: <HydrationCanary /> };
 
 /**
+ * The second control, for the defect React does not report at all: a subtree
+ * that hydrates identically and then moves. See `HydrationMover`.
+ */
+export const MOVER: Entry = { name: "__mover", node: <HydrationMover /> };
+
+/**
  * Every route, including the one that lists them.
  *
  * The harness reads this list off `__routes` in the running application rather
@@ -286,5 +293,6 @@ export const NAMES = [
   ...ENTRIES.map((entry) => entry.name),
   ...VARIANTS.map((variant) => variant.name),
   CANARY.name,
+  MOVER.name,
   ROUTES,
 ];

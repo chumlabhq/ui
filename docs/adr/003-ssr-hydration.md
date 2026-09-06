@@ -29,6 +29,15 @@ it as #418, whose own text names the cause before anything else — *"a server/c
 `<main>` and the client relocated it to a portal. React deletes an unmatched trailing node
 without a recoverable error, so the divergence was real and silent.
 
+**`useHydrated` alone did not close that one, measured rather than assumed.** With the hook
+in place the server still shipped the tip inline — `portal && portalTarget` fell back to
+rendering inline whenever the target was not there yet — and the prerendered
+`Tooltip__portal.html` still carried `role="tooltip"` inside `<main>`, with the tip in
+`document.body` after hydration. What closed it was rendering **nothing** when a portal was
+asked for and the target does not exist yet: the prerendered HTML now contains no tooltip at
+all (0 occurrences), and the tip appears in the portal on the render after hydration. Two
+trees that agree, and the surface arriving later, which is the rule below.
+
 ## The decision
 
 **SSR safe means the portal is absent from the server HTML and from the first client render,
@@ -52,6 +61,32 @@ Where a value rather than a portal is at stake, the same rule applies by other m
 seeds its width with what a server assumes and measures in a layout effect; `Accordion` reads
 storage in a layout effect rather than in a state initializer, with the write-back paused
 until it has, so the default it is about to replace is not written over the stored value.
+
+## The channel that cannot see this, and what replaced it
+
+A hydration error is only reported when the server's markup and the FIRST client render
+disagree. Everything after that is invisible to it: if both agree and an effect then moves a
+subtree, React deletes and re-inserts without a word. That is not a Tooltip bug, it is a
+blind spot with a shape — and it will happen again, so the matrix now compares the two trees
+directly.
+
+`compareTrees` in `verify-consumer-runtime.mjs` fetches the server's HTML for every route,
+takes every landmark it rendered — an id, a role, or a tag that means something on its own —
+and looks for each one in the DOM once it has settled. **Additions are fine**: a portal
+appearing after hydration is exactly what this ADR asks for. A landmark that VANISHED or
+MOVED is the fault. Classes and state attributes are deliberately not part of a landmark's
+identity, because those are supposed to change.
+
+It carries its own control, like the canary: `__mover` renders a node inline, hydrates
+identically, and relocates it to a portal in an effect. Every pass must fault it, and every
+pass records that React reported **0** recoverable errors for it — which is the whole
+argument for the check existing. One route is declared as a legitimate replacement:
+`Table__responsive`, where the server renders cards for a viewport it cannot measure and the
+client renders the table. That is a correction, and it is indistinguishable from a defect
+without a reason written down.
+
+Current reading: **166 server landmarks across 38 routes, 0 moved or vanished**, in all three
+server-rendered templates.
 
 ## Two gates, because one was not enough
 

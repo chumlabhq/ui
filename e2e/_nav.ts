@@ -35,11 +35,14 @@ const describeLanding = async (page: Page, requested: string) => {
 };
 
 /** Navigates and asserts only that the resolved URL is the one requested. */
-async function gotoAsserted(page: Page, path: string): Promise<void> {
+async function gotoAsserted(page: Page, url: string): Promise<void> {
+  // The query string carries the `classes` probe; only the path identifies the
+  // page, and comparing the whole URL would fail every probed navigation.
+  const path = url.split("?")[0];
   // `domcontentloaded`, not the default `load`: the site pulls third-party
   // scripts that CSP blocks, and waiting for `load` stalls until the test
   // timeout — which reads as "the fixture never rendered".
-  await page.goto(path, { waitUntil: "domcontentloaded" });
+  await page.goto(url, { waitUntil: "domcontentloaded" });
 
   // The redirect is client-side: at `domcontentloaded` the URL is still the one
   // that was asked for, and the router rewrites it a tick later. Checking too
@@ -91,8 +94,12 @@ export async function gotoFixture(
   page: Page,
   component: string,
   fixture: string,
+  /** `classes` sentinels for the browser-tier key re-attempt; see FixtureRoute. */
+  probe?: { classes: Record<string, string> },
 ): Promise<void> {
-  const path = fixturePath(component, fixture);
+  const path =
+    fixturePath(component, fixture) +
+    (probe ? `?classes=${encodeURIComponent(JSON.stringify(probe.classes))}` : "");
   await gotoAsserted(page, path);
 
   // Checked before the marker, not after: the route renders a diagnostic page

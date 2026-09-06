@@ -250,9 +250,7 @@ classes={{ trigger: "bg-white dark:bg-gray-900 text-black dark:text-white ..." }
     value: "flex-1 text-left truncate",
     content: "rounded-md shadow-lg bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700",
     list: "max-h-60 overflow-y-auto py-1",
-    item: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer",
-    optionSelected: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300",
-    optionFocused: "bg-gray-100 dark:bg-gray-700",
+    item: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer data-selected:bg-indigo-50 data-selected:text-indigo-700 dark:data-selected:bg-indigo-900/30 dark:data-selected:text-indigo-300 data-highlighted:bg-gray-100 dark:data-highlighted:bg-gray-700",
     itemIndicator: "w-4 h-4 text-indigo-600 dark:text-indigo-400",
     icon: "w-4 h-4 text-gray-400 transition-transform duration-200",
   }}
