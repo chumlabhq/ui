@@ -130,5 +130,12 @@
   "axeExpectationsDerivedFrom": {
     "fixtures": 367,
     "recordedOn": "2026-09-06"
+  },
+  "$comment_painted": "Companion record to e2e/contrast-painted.spec.ts. Text that the browser paints under WCAG AA's 4.5:1 (3:1 for large text), measured over every fixture in both themes. Distinct from contrast.contract, which checks the --cl-* scale rather than what a component actually writes: these are the sites where a component writes a colour the scale does not own. Ratchets down only; re-derive with CONTRAST_RERECORD=1 npx playwright test --project=a11y-full contrast-painted.",
+  "paintedContrastExpectations": {
+    "reason": "Empty, and that is the claim. Text painted under AA over every fixture in both themes, measured from computed colour rather than from the token scale — see e2e/contrast-painted.spec.ts. Seeded at 31 on 2026-09-06 (fifteen components whose `message` key wrote both --cl-error and --cl-success unconditionally, so every error message painted success green at 3.30:1 in light; plus Slider's value tooltip, white text on the panel token, which is white in light). All 31 were fixed rather than accepted. An entry here means a measured failure on a shipped default that has been decided; adding one takes a reason.",
+    "recordedOn": "2026-09-06",
+    "fixtures": 367,
+    "findings": []
   }
 }

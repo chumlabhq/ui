@@ -242,9 +242,23 @@
   --cl-accent-bg-hover: rgba(37, 99, 235, 0.15);
   --cl-on-accent: #ffffff;
 
-  --cl-success: #16a34a;
+  /* green-700, not green-600. A success message is text, and #16a34a is
+     3.30:1 on white — under AA. The painted-contrast sweep measured it on
+     fifteen components at once; the token scale never had it, because
+     contrast.contract only knew the --cl-text-* ramp. #15803d is 5.02:1 and
+     one step down the same palette ramp, the way light's accent is a deeper
+     blue than dark's. */
+  --cl-success: #15803d;
+  /* --cl-warning is 3.19:1 here and is deliberately NOT raised: nothing in the
+     package paints text with it — it is a dot, a border and an icon fill — so
+     raising it would move a colour to satisfy a rule that does not apply to it.
+     It is not in contrast.contract's text tokens for the same reason. */
   --cl-warning: #d97706;
-  --cl-error: #dc2626;
+  /* red-700, for the same reason as success: #dc2626 cleared 4.83:1 on the
+     page and panel but 4.45:1 on the two hover surfaces, and a token that
+     carries content has to clear AA on every surface this package can put it
+     on rather than on the ones it happens to use today. */
+  --cl-error: #b91c1c;
 
   --cl-code-bg: #f4f5f7;
   --cl-code-text: rgba(15, 18, 24, 0.85);

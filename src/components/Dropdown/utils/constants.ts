@@ -21,7 +21,7 @@ export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
     "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   label:
     "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
-  message: "text-sm mt-1 text-cl-error text-cl-success",
+  message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   description: "text-xs mb-1 text-cl-text-tertiary",
   loading: "",
   loadingItem:

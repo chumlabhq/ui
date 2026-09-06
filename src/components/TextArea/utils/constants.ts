@@ -11,7 +11,7 @@ export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
   input:
     "flex-1 min-w-0 w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary",
   message:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
+    "text-xs mt-1.5 flex items-center gap-1.5 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   count:
     "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary",
 };

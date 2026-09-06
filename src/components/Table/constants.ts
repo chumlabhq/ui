@@ -45,14 +45,18 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     "shrink-0 ml-1 cursor-pointer transition-opacity opacity-50 hover:opacity-100 data-[active]:opacity-100",
   filterContent: "",
   filterHeader:
-    "px-3 py-2 border-b border-gray-100 flex items-center justify-between",
-  filterLabel: "text-xs font-medium text-gray-500",
+    "px-3 py-2 border-b border-cl-border flex items-center justify-between",
+  // Tokenised, not darkened. These were Tailwind's palette in a component that
+  // has tokens for exactly this: `text-gray-500` measured 4.02:1 on the panel
+  // and `text-gray-700` 1.88:1, both in dark, where a fixed grey cannot follow
+  // the surface. `contrast.contract` gates the token pairs in both themes.
+  filterLabel: "text-xs font-medium text-cl-text-tertiary",
   filterClearTrigger:
     "text-xs text-cl-accent hover:text-cl-accent-hover cursor-pointer",
   filterItem:
-    "w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors text-gray-700 hover:bg-gray-50 data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent",
+    "w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent data-[selected]:hover:bg-cl-accent-bg",
   filterItemControl:
-    "w-4 h-4 rounded border flex items-center justify-center shrink-0 border-gray-300 data-[selected]:bg-cl-accent data-[selected]:border-cl-accent",
+    "w-4 h-4 rounded border flex items-center justify-center shrink-0 border-cl-border-input data-[selected]:bg-cl-accent data-[selected]:border-cl-accent",
   expandButton: "",
   pinnedRightRegion: "",
   pinnedRightList: "",

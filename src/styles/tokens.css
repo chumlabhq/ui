@@ -76,9 +76,9 @@
   --cl-accent-bg: rgba(37, 99, 235, 0.1);
   --cl-accent-bg-hover: rgba(37, 99, 235, 0.15);
   --cl-on-accent: #ffffff;
-  --cl-success: #16a34a;
+  --cl-success: #15803d;
   --cl-warning: #d97706;
-  --cl-error: #dc2626;
+  --cl-error: #b91c1c;
   --cl-code-bg: #f4f5f7;
   --cl-code-text: rgba(15, 18, 24, 0.85);
   --cl-radius-sm: 6px;

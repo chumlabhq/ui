@@ -28,11 +28,12 @@ Supports by someone writing the test, not by someone reading the code and being 
 
 ### Where the package stands
 
-Of the 55 Level A and AA criteria: **10 Supports, 9 Partially supports, 14 Does not support,
-22 Not applicable**. 1.4.3 moved from Supports to Partially supports on 2026-09-06, when the
-axe sweep's scope was widened to include the surfaces this library portals; 1.3.1 moved with
-it and moved back once the 57 ARIA structure findings that caused it were fixed — see
-"What the sweep's scope was hiding".
+Of the 55 Level A and AA criteria: **11 Supports, 8 Partially supports, 14 Does not support,
+22 Not applicable**. 1.3.1 and 1.4.3 each moved to Partially supports on 2026-09-06, when the
+axe sweep's scope was widened to include the surfaces this library portals, and each moved
+back when the findings that caused it were fixed — 57 ARIA structure defects and 4 contrast
+defects, plus 31 more the painted-contrast gate found on its first run. Both rows are better
+evidenced than they were before they moved.
 
 The ten a component library genuinely owns — 1.3.1, 2.1.1, 2.1.2,
 2.4.3, 2.4.7, 2.4.11, 2.5.7, 2.5.8, 4.1.2 and 4.1.3 — all carry a gate, and building those
@@ -106,7 +107,7 @@ the row says which half is ours.
 | 1.3.5 Identify Input Purpose | AA | Does not support | `autoComplete` passes through to the underlying input; the package sets no purpose tokens of its own and nothing gates them. | — |
 | 1.4.1 Use of Color | A | Does not support | Not gated. Error states pair colour with an icon and a message in most components; "most" is not a claim. | — |
 | 1.4.2 Audio Control | A | Not applicable | The package plays no audio. | — |
-| 1.4.3 Contrast (Minimum) | AA | Partially supports | Every text token is checked against every surface it is used on, in both themes, parsed from `src/index.css` rather than copied into the test. Consumer overrides of the tokens are outside this. **Downgraded 2026-09-06:** the token arithmetic cannot see text painted with a raw palette class, and the widened sweep reports four — `Table`'s filter menu label and option (`text-gray-500`, `text-gray-700`) and `Pagination`'s selected option. Unfixed. | `contrast.contract` (jsdom — token arithmetic, engine-independent by construction); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
+| 1.4.3 Contrast (Minimum) | AA | Supports | Every text token is checked against every surface it is used on, in both themes, parsed from `src/index.css` rather than copied into the test. Consumer overrides of the tokens are outside this. **Downgraded and restored 2026-09-06:** the token arithmetic cannot see text painted with a raw palette class, and the widened axe sweep found four it had missed. All four are fixed, and the blind spot is closed by a second gate that measures the painted colour of every fixture in both themes — see "The contrast gates, and why there are two". | `contrast.contract` (jsdom — token arithmetic, engine-independent by construction); `e2e/contrast-painted.spec.ts` (chromium, every fixture, both themes, computed colour); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
 | 1.4.4 Resize Text | AA | Does not support | Not gated. Sizing is in `rem`-based Tailwind utilities throughout, which is the precondition, not the proof. | — |
 | 1.4.5 Images of Text | AA | Not applicable | The published `dist` contains no bitmap assets; all iconography is inline SVG and all text is live text. (The repository's `src/assets/images` holds demo-site artwork, which is not published.) | — |
 | 1.4.10 Reflow | AA | Does not support | Not gated at 320px. The components are authored mobile-first and the README claims 320px support; no test holds that claim. | — |
@@ -289,15 +290,15 @@ the app root carries a container key and the injected checkout container carries
 103 of the 364 fixtures portal something.
 
 **The sweep reported 93 findings the first time it looked in the right place.** 25 were the
-recorded ones; 68 were new. Every structural finding is fixed, and the sweep now reports
-**29 findings** across 367 fixtures, of which 4 are unrecorded and keep the gate red.
+recorded ones; 68 were new. All 68 are fixed: the sweep reports **25 findings** across 367
+fixtures — the recorded set, and nothing open.
 
 | Rule | Criterion | Found | Now | |
 | --- | --- | --- | --- | --- |
 | `aria-required-children` | 1.3.1 | 44 | **0** | — |
 | `aria-required-parent` | 1.3.1 | 13 | **0** | — |
 | `scrollable-region-focusable` | 2.1.1 | 7 | **0** | — |
-| `color-contrast` | 1.4.3 | 4 | 4 | Table 3, Pagination 1 — untouched, next slice |
+| `color-contrast` | 1.4.3 | 4 | **0** | — |
 
 **`aria-required-children` was two defects, not one.** A `listbox` or `menu` owns options or
 menu items and nothing else, and these surfaces put a search field and a status message
@@ -335,11 +336,19 @@ document gave for calling six of the seven arguable — the options are reached 
 combobox's own arrow keys — and the seventh, `TimePicker/loading`, turns out to render 96
 options behind its spinner rather than a bare message, so the exception was wrong too.
 
-**`color-contrast`** is untouched, by instruction. It is the raw-palette remainder showing up
-as a defect rather than a style note: `Table`'s filter menu paints its label `text-gray-500`
-and its options `text-gray-700` — Tailwind's palette, not the `--cl-*` tokens
-`contrast.contract` checks — and `Pagination`'s selected option fails in its highlighted
-state.
+**`color-contrast`** was the raw-palette remainder showing up as a defect rather than a style
+note, and it is fixed at the source rather than by darkening a grey. `Table`'s filter menu
+wrote `text-gray-500` (4.02:1 on the dark panel) and `text-gray-700` (1.88:1) in a component
+that has tokens for exactly this; the menu is tokenised. `Pagination`'s selected option
+painted `bg-cl-accent/15` with a `dark:` override at `/60` — the accent itself at 60%, under
+accent text, which axe measured at 2.2:1. It is `--cl-accent-bg` in both themes now, and the
+highlight no longer repaints a selected row: `data-[selected]` and `data-[highlighted]` are
+the same specificity, so which state owned the background was decided by emission order, and
+the transient one was winning. A highlighted selected option keeps its tint and deepens its
+text to `--cl-accent-hover`.
+
+Finding them took a gate that measures what is painted rather than what the tokens declare —
+see "The contrast gates, and why there are two" below.
 
 ### The findings that needed the act as well as the scope
 
@@ -363,6 +372,47 @@ context — 36 of them in the survey that found the scope hole. Given an `includ
 reports the rule inapplicable instead: it is a question about the document's landmark
 structure, which the consumer composes, not about the component. Nothing is disabled, so a
 portal that ever does report it would still be reported.
+
+---
+
+## The contrast gates, and why there are two
+
+`contrast.contract` reads `src/index.css`: every text token against every surface token, in
+both themes, plus the accent-on-tint pairs a selected row uses. It is a design constraint on
+the scale, and it is structurally blind to a component that does not use the scale. Four
+contrast defects shipped inside two components while it reported green, because
+`text-gray-500` is not a token and `bg-cl-accent/15` is an alpha of the foreground rather
+than a background any token names.
+
+`e2e/contrast-painted.spec.ts` asks the other question, of every fixture in both themes: the
+computed foreground, against the background stack composited down to the first opaque layer,
+against WCAG AA's 4.5:1 (3:1 for large text). Both are kept. They fail for different reasons
+— the token check fails when the palette moves, the painted check fails when a component
+writes a colour that is not in it — and the painted one is self-checked by planting Tailwind
+grey-500 on `Button/default`, which the token check cannot see and this one reports.
+
+**It found 31 the first time it ran, and every one is fixed.** Two shapes:
+
+- **Every `message` key wrote both colours.** `"text-sm mt-1 text-cl-error text-cl-success"`
+  — unconditional, so `tailwind-merge` kept the last one and *every error message in fifteen
+  components painted success green*. The contrast failure (3.30:1 in light) was the symptom;
+  the defect was an error announced in the colour of success, in both themes. The colour
+  follows the state now: `data-[invalid]:text-cl-error data-[valid]:text-cl-success`, on the
+  attributes ADR 002 already put there.
+- **White text on the panel token.** `Slider`'s value tooltip and `DatePicker`'s marker
+  tooltip both wrote `text-white` on `bg-cl-bg-panel`, which is white in the light theme —
+  a 1:1 tooltip.
+
+Two tokens moved with them, and `contrast.contract` gained both as text tokens: light
+`--cl-success` from `#16a34a` (3.30:1) to green-700 `#15803d` (5.02:1), and light
+`--cl-error` from `#dc2626` to red-700 `#b91c1c`, because `#dc2626` cleared 4.83:1 on the
+page and panel but 4.45:1 on the two hover surfaces. `--cl-warning` is deliberately left at
+3.19:1 and out of the text tokens: nothing in the package paints text with it.
+
+**What it cannot see is what no fixture renders.** `AvatarBadge`'s count variant is white on
+`bg-red-500` — 3.76:1 — and no fixture puts a count badge on screen, so neither gate measures
+it. That is the same bound the axe sweep has, and it is the reason the fixture set is the
+thing to grow.
 
 ---
 

@@ -30,7 +30,7 @@ export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   description: "text-xs text-cl-text-tertiary",
   control: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer data-[error]:border-cl-error has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent has-[:focus-visible]:ring-offset-cl-bg",
   itemIndicator: "",
-  message: "text-sm text-cl-error text-cl-success",
+  message: "text-sm data-[invalid]:text-cl-error data-[valid]:text-cl-success",
 };
 
 export const UNSTYLED_CHECKBOX_CLASSES: Required<CheckboxClasses> =

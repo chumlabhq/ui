@@ -343,7 +343,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   input:
     "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
   message:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
+    "text-xs mt-1.5 flex items-center gap-1.5 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   itemRow: "flex items-center gap-2 min-w-0",
   itemIcon: "shrink-0 rounded-cl-sm",
   itemText: "text-sm wrap-break-word min-w-0",

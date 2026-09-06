@@ -26,7 +26,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
     "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover first:rounded-t-cl-md last:rounded-b-cl-md",
   label:
     "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
-  message: "text-sm mt-1 text-cl-error text-cl-success",
+  message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   description: "text-xs mb-1 text-cl-text-tertiary",
   icon:
     "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",

@@ -22,7 +22,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
   empty:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary",
-  message: "text-sm mt-1 text-cl-error text-cl-success",
+  message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   description: "text-xs mb-1 text-cl-text-tertiary",
   clockContent:
     "p-3 sm:p-4 border rounded-cl-lg shadow-lg bg-cl-bg-panel border-cl-border",

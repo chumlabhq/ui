@@ -13,7 +13,7 @@ export const DEFAULT_INPUT_CLASSES: Required<InputClasses> = {
   prefix: "text-sm select-none text-cl-text-tertiary",
   suffix: "text-sm select-none text-cl-text-tertiary",
   message:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
+    "text-xs mt-1.5 flex items-center gap-1.5 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   count:
     "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary",
 };

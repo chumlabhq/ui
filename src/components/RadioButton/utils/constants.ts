@@ -32,7 +32,7 @@ export const DEFAULT_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {
   root: "",
   label: "text-sm font-medium mb-2 block text-cl-text",
   description: "text-xs text-cl-text-tertiary mb-3",
-  message: "text-xs text-cl-error mt-2 text-cl-success",
+  message: "text-xs data-[invalid]:text-cl-error mt-2 data-[valid]:text-cl-success",
 };
 
 export const UNSTYLED_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> =

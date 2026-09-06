@@ -2334,7 +2334,7 @@ function TableInner<TData>(
               setFilterDropdownState(null);
               filterTriggerRef.current?.focus();
             }}
-            className={`outline-none fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-cl-bg-panel border-gray-200 dark:border-white/[0.08]"}`}
+            className={`outline-none fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-cl-bg-panel border-cl-border"}`}
             style={{
               top: filterDropdownState.top,
               left: filterDropdownState.left,

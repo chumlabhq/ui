@@ -41,6 +41,25 @@ none is a bug fix that happened to move behaviour.
   written on it (`left-full`, `top-0`, `absolute`) no longer have any effect — the
   coordinates are inline styles. `submenuPosition` picks the preferred side and the side
   actually used is published as `data-side`.
+- **Error messages are painted in the error colour.** Every component's `message` class
+  carried `text-cl-error text-cl-success` unconditionally, so the merge kept the last one and
+  every error message rendered in the success green — in both themes, in fifteen components.
+  The colour follows `data-invalid` / `data-valid` now. If you overrode `classes.message`
+  with a colour of your own, nothing changes; if you relied on the default, your error text
+  changes colour.
+- **`--cl-error` and `--cl-success` are a step darker in the light theme** — red-700
+  `#b91c1c` and green-700 `#15803d`. The previous values were 4.45:1 and 3.30:1 against
+  surfaces this package puts them on, both under WCAG AA for text. Dark is unchanged.
+- **Pagination's selected row in the rows-per-page list uses `--cl-accent-bg`**, not an alpha
+  of the accent (`bg-cl-accent/15`, with a `dark:` override at `/60` that put accent text on
+  a 60% accent wash at 2.2:1). A highlighted selected row keeps its tint and deepens its text
+  rather than being repainted with the hover background.
+- **Table's column-filter menu is tokenised.** It wrote `text-gray-500`, `text-gray-700` and
+  three grey borders — Tailwind's palette in a component with tokens for all of them — which
+  measured 4.02:1 and 1.88:1 on the dark panel.
+- **Slider's value tooltip and DatePicker's marker tooltip write `--cl-text`,** not
+  `text-white`. Their background is the panel token, which is white in the light theme, so
+  the label was invisible there.
 - **DatePicker's focused trigger draws the same border in both themes.** Dark used a
   different colour from light for the same state, so a trigger that read as focused on one
   theme read as merely hovered on the other.

@@ -105,14 +105,25 @@ animation settle that covered the act by accident, the sweep reported **93 findi
 listboxes, 7 scroll regions, 4 contrast on raw-palette classes, with 15 of the 68 needing the
 fixture's act as well as the scope. Two criteria moved from Supports to Partially supports.
 
-**Every structural finding is now fixed and the sweep reports 29 across 367 fixtures.** The
-popups stopped claiming to be the listbox or menu they contain: the portalled panel holds the
-search field and the status message beside a listbox that owns only options, `DatePicker`'s
-weekday row moved inside its grid, and `CascadingDropdown`'s submenu was portalled out of the
-parent menu that owned its search field. All 57 structural findings are gone, the 7
-scroll-region findings went with them (axe exempts a combobox popup, which the scroller now
-is), and the 4 contrast findings are untouched by instruction. `a11y-full` stays **red** on
-those 4 alone, each named in `ACCESSIBILITY.md`.
+**All 68 are now fixed and the sweep reports 25 across 367 fixtures — the recorded set, and
+nothing open.** The popups stopped claiming to be the listbox or menu they contain: the
+portalled panel holds the search field and the status message beside a listbox that owns only
+options, `DatePicker`'s weekday row moved inside its grid, and `CascadingDropdown`'s submenu
+was portalled out of the parent menu that owned its search field. The 7 scroll-region
+findings went with them (axe exempts a combobox popup, which the scroller now is), and the 4
+contrast findings were fixed at the source: `Table`'s filter menu is tokenised rather than
+darkened, and `Pagination`'s selected option uses `--cl-accent-bg` instead of an alpha of the
+accent, with the highlight no longer repainting a selected row.
+
+**Finding those four exposed the gate that could not see them,** and closing that found 31
+more. `contrast.contract` checks the `--cl-*` scale, so a component writing `text-gray-500`
+or `bg-cl-accent/15` is invisible to it. `e2e/contrast-painted.spec.ts` measures the computed
+foreground against the composited background over every fixture in both themes; on its first
+run it reported 31, every one of them fixed rather than accepted. The largest was one line
+repeated fifteen times: every `message` key wrote `text-cl-error text-cl-success`
+unconditionally, so `tailwind-merge` kept the last and **every error message in the package
+painted success green**. Two light tokens moved with the fix — `--cl-success` to green-700
+and `--cl-error` to red-700 — and both are now in the token contract's text set.
 
 ### 1.3 The consumer matrix and the tarball
 
@@ -270,7 +281,7 @@ deleting the entry is how it goes back to blocking.
 | `unstyled` drops every decorative class | `unstyled.contract` across all 30, with a ratcheted leak list |
 | Every `classes` key reaches a real element | `fixtures.contract` renders every key in every anatomy; `key-uniqueness.contract` asserts one key per element |
 | Layout holds 320–1920 px in both themes | 404 recorded screenshots — 30 components × 6 widths × 2 themes, plus 11 open surfaces × 2 widths × 2 themes — and three guards: one fails a baseline that is a picture of nothing, one fails a baseline whose render is not the same 26 hours later, and one fails an anchored surface that lands on different coordinates when the web font arrives late |
-| Text contrast meets AA in both themes | `contrast.contract`, every text token against every surface |
+| Text contrast meets AA in both themes | Two gates: `contrast.contract` on the token scale (every text token against every surface, plus the accent-on-tint pairs), and `contrast-painted.spec.ts` on what the browser computes over all 367 fixtures in both themes. The second is self-checked by planting a raw-palette grey the first cannot see |
 | Ten owned WCAG criteria | Named contract or e2e gate per criterion, listed in `ACCESSIBILITY.md` with the engines it ran in |
 | Bundle size per component | `assert-bundle-size.mjs`, 30 entries, shape derived from source, per-entry ratchet |
 | Docs name no prop the types lack | `doc-truth.contract` |
@@ -317,6 +328,13 @@ count remaining. Sixteen of the eighteen are the "orphaned" class above: `bg-gra
 gradient stops on the marketing `--fg` token set rather than `--cl-*` at all. Moving them is
 a visual decision about eleven specific elements.
 
+**Seven of them were not a style note.** `Table`'s filter menu (`text-gray-500`,
+`text-gray-700`, `border-gray-100`, `border-gray-200`, `border-gray-300`) and the two
+tooltips that wrote `text-white` on the panel token were painting text under AA, and are
+tokenised. What remains is shimmer fills, borders and icon colours — none of it text — with
+one exception the gates cannot reach: `AvatarBadge`'s count variant is white on `bg-red-500`
+at 3.76:1, and no fixture renders a count badge.
+
 ### 3.4 17 waived `classes` keys
 
 Not 18. `docs/adr/002-unrenderable-keys.json` waives, with a reason each: CascadingDropdown
@@ -349,12 +367,12 @@ against the peer's live documentation. ADR 002's own ledger has none left. `RECA
 explicitly *not* a justification on its own — it is an admission that a citation was
 claimed and never verified.
 
-### 3.7 Accessibility: 9 partial, 14 not claimed
+### 3.7 Accessibility: 8 partial, 14 not claimed
 
-Of the 55 WCAG 2.2 Level A and AA criteria: **10 Supports, 9 Partially supports, 14 Does
-not support, 22 Not applicable.** 1.4.3 moved from Supports to Partially supports on
-2026-09-06 when the axe sweep's scope was corrected (§1.2); `a11y-full` is red on the 4
-contrast findings that remain.
+Of the 55 WCAG 2.2 Level A and AA criteria: **11 Supports, 8 Partially supports, 14 Does
+not support, 22 Not applicable.** 1.3.1 and 1.4.3 each moved to Partially supports on
+2026-09-06 when the axe sweep's scope was corrected (§1.2), and each moved back once the
+findings that caused it were fixed; `a11y-full` is green on its recorded set.
 
 Read the third column carefully, because it does not mean what it means in a VPAT.
 **"Does not support" here means "not gated, therefore not claimed."** Several of the 14 are
@@ -363,7 +381,7 @@ Non-text Contrast are the obvious candidates. The document refuses to say so unt
 fails when the behaviour regresses. That is ADR 003 D4, and it is the correct policy, but it
 means the headline number understates conformance and cannot be quoted as a failure count.
 
-The 9 "Partially supports" are the honest middle: implemented and gated for some components
+The 8 "Partially supports" are the honest middle: implemented and gated for some components
 or some part of the criterion, with the row naming which part is unproven.
 
 Anyone who needs a conformance statement should read `ACCESSIBILITY.md` per criterion, not
@@ -509,15 +527,14 @@ In order. The first two are done; the rest are not.
 2. ~~Re-record the axe expectation list against all 364 fixtures.~~ **Done, and re-derived
    again on 2026-09-06** against the corrected scope: same 25 entries, same fixtures, plus a
    count guard so it cannot go stale the same way.
-3. **Clear the last 4 axe findings the corrected sweep surfaced (§1.2).** Blocking, and
-   ahead of Firefox: all four are contrast on raw-palette classes in `Table` and
-   `Pagination`, which `contrast.contract` cannot see because it checks tokens.
-4. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** Still blocking: one
-   project has never been seen green, and "probably environmental" is a reading, not a
-   result.
+3. ~~Clear the last 4 axe findings the corrected sweep surfaced (§1.2).~~ **Done** — fixed at
+   the source, along with 31 the painted-contrast gate found once it existed.
+4. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** The remaining
+   blocker: one project has never been seen green, and "probably environmental" is a reading,
+   not a result.
 5. Replace the 400 ms wall-clock assertion in `tooltip.spec.ts` with something that is not a
    race against the CPU. This is one of the eleven Firefox failures and the only one with an
    obvious fix, so it is worth doing before step 4 rather than after.
 6. Decide the 17 waived keys — delete them under R7 while it is still free.
 
-Steps 3 and 4 are the remaining blockers. Step 6 gets much more expensive after 1.0.
+Step 4 is the remaining blocker. Step 6 gets much more expensive after 1.0.

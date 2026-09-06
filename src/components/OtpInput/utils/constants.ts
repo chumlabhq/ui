@@ -9,7 +9,7 @@ export const DEFAULT_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
     "w-10 h-10 sm:w-12 sm:h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input text-cl-text focus-visible:border-cl-border-input-focus focus-visible:ring-2 focus-visible:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed",
   label:
     "block text-sm font-medium mb-2 text-cl-text dark:text-cl-text-secondary",
-  message: "text-xs mt-2 text-cl-error text-sm text-cl-success",
+  message: "text-xs mt-2 data-[invalid]:text-cl-error text-sm data-[valid]:text-cl-success",
   separator: "text-lg select-none text-cl-text-secondary",
   description: "text-xs mb-2 text-cl-text-tertiary",
 };
@@ -21,7 +21,7 @@ export const PRESET_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
   group: "flex items-center gap-2",
   input: "w-10 h-10 sm:w-12 sm:h-12 text-center text-lg font-semibold border-2 border-cl-border-input rounded-cl-md bg-cl-bg-panel text-cl-text transition-colors focus:outline-none focus-visible:border-cl-border-input-focus focus-visible:ring-2 focus-visible:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed",
   label: "block text-sm font-medium text-cl-text dark:text-cl-text-secondary mb-2",
-  message: "text-sm text-cl-error mt-2 text-cl-success",
+  message: "text-sm data-[invalid]:text-cl-error mt-2 data-[valid]:text-cl-success",
   separator: "text-cl-text-tertiary text-lg select-none",
   description: "text-xs text-cl-text-tertiary mb-2",
 };

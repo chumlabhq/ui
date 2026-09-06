@@ -22,7 +22,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     label:
       "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
-    message: "text-sm mt-1 text-cl-error text-cl-success",
+    message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
     description: "text-xs mb-1 text-cl-text-tertiary",
     searchControl:
       "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-hover dark:bg-cl-bg",

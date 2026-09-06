@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe, getViolations } from "axe-playwright";
 import { gotoFixture, gotoGuarded } from "./_nav";
+import { markPortalRoots, PORTAL_MARK } from "./_portals.js";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -58,56 +59,10 @@ const FATAL = new Set(["critical", "serious", "moderate"]);
  * The audit covers the fixture AND whatever the fixture portalled out of it.
  *
  * Scoping to `[data-fixture]` alone meant axe had never audited a portalled
- * surface: every menu, listbox, calendar, tooltip, modal and drawer this
- * library opens is `createPortal`ed to `document.body`, outside the subtree the
- * audit was pointed at. The 25 recorded findings were all on inline form
- * controls because those are the only elements that stayed in scope, and the
- * sweep's count did not move when fifty fixtures started actually opening their
- * surfaces — not because the surfaces were clean, but because they were not in
- * the picture. 68 findings were sitting in them.
- *
- * Auditing the whole document instead would drag in the harness page's own
- * chrome, and with it a class of finding that is about the page rather than the
- * component.
+ * surface. `_portals.ts` carries the marking and the reasoning; auditing the
+ * whole document instead would drag in the harness page's own chrome, and with
+ * it a class of finding that is about the page rather than the component.
  */
-const PORTAL_MARK = "data-axe-portal";
-
-/**
- * Identified positively, by React, not by excluding what is known to be someone
- * else's.
- *
- * A portal root is a direct child of `document.body` that React rendered:
- * `createPortal` mounts the surface's own element there, so it carries a
- * `__reactFiber$…` key, while the app root carries `__reactContainer$…` and the
- * checkout SDK's injected container carries neither. The library's `cl-s` scope
- * marker is the obvious candidate and is the wrong one — `Table`'s filter menu
- * and `Modal`'s root are written with unscoped Tailwind classes and have no
- * marker anywhere inside them, so a marker test would have missed the two
- * surfaces this scope fix exists for.
- *
- * An exclusion list would need editing every time the harness gains a script
- * tag, and would fail open when nobody did.
- *
- * The mark is an attribute rather than an element handle because axe takes a
- * serialisable context: `include` is a list of selectors. It carries no ARIA or
- * style meaning, and is cleared and re-applied per fixture.
- */
-async function markPortalRoots(page: import("@playwright/test").Page): Promise<number> {
-  return page.evaluate((attribute) => {
-    for (const stale of document.querySelectorAll(`[${attribute}]`)) {
-      stale.removeAttribute(attribute);
-    }
-    let marked = 0;
-    for (const child of document.body.children) {
-      if (child.id === "root") continue;
-      if (!Object.keys(child).some((key) => key.startsWith("__reactFiber$"))) continue;
-      child.setAttribute(attribute, "");
-      marked += 1;
-    }
-    return marked;
-  }, PORTAL_MARK);
-}
-
 /**
  * `region` does not appear in these results, and it is not being suppressed.
  *

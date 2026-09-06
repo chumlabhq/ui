@@ -19,7 +19,23 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
     trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md border transition-colors cursor-pointer border-cl-border bg-cl-bg-panel hover:bg-cl-bg-item-hover text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     content: "rounded-cl-md shadow-lg py-1 border min-w-[64px] bg-cl-bg-panel border-cl-border",
     positioner: "relative",
-    item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-item-hover data-[selected]:bg-cl-accent/15 dark:data-[selected]:bg-cl-accent/60 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-item-hover text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    /**
+     * Selected owns the background; highlight does not repaint it.
+     *
+     * The selected tint was `bg-cl-accent/15` with a `dark:` override at
+     * `/60` — the accent itself, at 60%, under `text-cl-accent`. axe measured
+     * the pair at 2.2:1. An alpha of the foreground colour is a background the
+     * token contract cannot see, which is how it shipped.
+     *
+     * It is `--cl-accent-bg` in both themes now (4.50:1 light, 6.04:1 dark),
+     * and the compound variants are deliberate: `data-[selected]` and
+     * `data-[highlighted]` are the same specificity, so which one painted the
+     * background was decided by emission order rather than by intent, and the
+     * transient state was winning over the durable one. A highlighted selected
+     * option keeps its accent tint and deepens its text to `--cl-accent-hover`
+     * (5.83:1 / 7.66:1) — the cursor stays visible without a second background.
+     */
+    item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-item-hover data-[highlighted]:bg-cl-bg-item-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent data-[selected]:hover:bg-cl-accent-bg data-[selected]:data-[highlighted]:bg-cl-accent-bg data-[selected]:data-[highlighted]:text-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     icon: "w-4 h-4 transition-transform text-cl-text-tertiary",
   },
   label: "text-sm text-cl-text-secondary dark:text-cl-text-tertiary",

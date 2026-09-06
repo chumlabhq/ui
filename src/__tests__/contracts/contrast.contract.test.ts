@@ -53,7 +53,16 @@ const themeBlock = (marker: string): Record<string, string> => {
   // Thrown, not `expect`ed: this runs at module scope, where vitest refuses an
   // assertion.
   if (start < 0) throw new Error(`theme marker not found in index.css: ${marker}`);
-  const slice = CSS.slice(start, start + 2000);
+  // To the end of the block, not a fixed 2000-character window. The window was
+  // silently short: adding a comment above `--cl-error` pushed it out of range,
+  // and the only reason that surfaced is that the token was on this test's own
+  // list. A parser that reads less than it was pointed at is the same failure
+  // this file exists to catch, one level down.
+  const end = CSS.indexOf("\n}", start);
+  const slice = CSS.slice(start, end < 0 ? CSS.length : end)
+    // Comments carry hex values as prose — the reasoning for a token often
+    // quotes the value it replaced.
+    .replace(/\/\*[\s\S]*?\*\//g, "");
   const out: Record<string, string> = {};
   for (const m of slice.matchAll(/(--cl-[\w-]+):\s*([^;]+);/g)) {
     if (!(m[1] in out)) out[m[1]] = m[2].trim();
@@ -99,6 +108,13 @@ const TEXT_TOKENS = [
   "--cl-text",
   "--cl-text-secondary",
   "--cl-text-tertiary",
+  // The semantic pair, added after the painted sweep found `--cl-success` at
+  // 3.30:1 on white — on fifteen components at once, because every `message`
+  // key wrote both colours unconditionally and the last one won. They carry
+  // content, so they belong here; `--cl-warning` does not, because nothing in
+  // the package paints text with it.
+  "--cl-error",
+  "--cl-success",
 ];
 
 /** Surfaces a component can put text on. */
@@ -115,12 +131,36 @@ const SURFACES = [
   "--cl-bg-item-hover",
 ];
 
+/**
+ * Pairs that are not text-token × surface: an accent label on its own tint.
+ *
+ * Selected rows paint `--cl-accent-bg` and write on it in the accent, and the
+ * highlighted one deepens to `--cl-accent-hover` — Pagination's list is the
+ * first to use both, after its selected option shipped as `bg-cl-accent/15`
+ * with a `dark:` override at `/60`. An alpha of the foreground colour is not a
+ * token, so this gate could not see it and axe measured the result at 2.2:1.
+ *
+ * The tints are translucent and appear inside panels, so each is measured over
+ * `--cl-bg-panel` as well as `--cl-bg`.
+ */
+const ACCENT_PAIRS: Array<[string, string]> = [
+  ["--cl-accent", "--cl-accent-bg"],
+  ["--cl-accent-hover", "--cl-accent-bg"],
+];
+
+const ACCENT_BASES = ["--cl-bg", "--cl-bg-panel"];
+
 const AA_TEXT = 4.5;
 
 describe("contrast contract", () => {
   it("parsed both themes from the stylesheet", () => {
     for (const [name, theme] of Object.entries(THEMES)) {
-      for (const token of [...TEXT_TOKENS, ...SURFACES]) {
+      for (const token of [
+        ...TEXT_TOKENS,
+        ...SURFACES,
+        ...ACCENT_PAIRS.flat(),
+        ...ACCENT_BASES,
+      ]) {
         expect(theme[token], `${name} is missing ${token}`).toBeDefined();
       }
     }
@@ -140,6 +180,21 @@ describe("contrast contract", () => {
         ).toBeGreaterThanOrEqual(AA_TEXT);
       });
     });
+  });
+
+  describe.each(Object.entries(THEMES))("%s accent pairs", (_themeName, theme) => {
+    for (const [textToken, tintToken] of ACCENT_PAIRS) {
+      it.each(ACCENT_BASES)(`${textToken} clears 4.5:1 on ${tintToken} over %s`, (baseToken) => {
+        const base = resolveSurface(theme, baseToken);
+        const surface = composite(parseColor(theme[tintToken]), base);
+        const text = composite(parseColor(theme[textToken]), surface);
+        const ratio = contrast(text, surface);
+        expect(
+          Number(ratio.toFixed(2)),
+          `${textToken} on ${tintToken} over ${baseToken} is ${ratio.toFixed(2)}:1, under WCAG AA's ${AA_TEXT}:1 for text`,
+        ).toBeGreaterThanOrEqual(AA_TEXT);
+      });
+    }
   });
 
   /**
