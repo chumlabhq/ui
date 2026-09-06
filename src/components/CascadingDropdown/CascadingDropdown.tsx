@@ -194,8 +194,6 @@ const Submenu = memo(function Submenu({
 
   return (
     <div
-      role="menu"
-      aria-label={`${parent.label} submenu`}
       className={classes.subContent || undefined}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -215,29 +213,43 @@ const Submenu = memo(function Submenu({
           />
         </div>
       )}
+      {/* The panel is not the menu. A `menu` owns menu items, and the search
+          field and the loading and empty messages are neither — axe reported
+          both halves of that: an input inside the menu, and a menu with no
+          items at all while it was loading.
+
+          These two keep no role, unlike their top-level equivalents. The panel
+          is rendered inside the parent menu for positioning, so anything with a
+          role in here is an unallowed child of THAT menu — `role="status"` on
+          this div reports on `#…-menu` instead. Announcing it needs the submenu
+          to leave the parent menu's subtree first; see the residue recorded in
+          docs/adr/002-unrenderable-keys.json. */}
       {loading || isSearching ? (
         <div className={classes.loading || undefined}>{loadingText}</div>
       ) : options.length === 0 ? (
         <div className={classes.empty || undefined}>{noResultsContent}</div>
-      ) : (
-        options.map((option, index) => (
-          <SubmenuItem
-            key={option.value}
-            option={option}
-            isSelected={selectedValues.includes(option.value)}
-            isFocused={index === focusedIndex}
-            parentValue={parent.value}
-            index={index}
-            selectionMode={selectionMode}
-            classes={classes}
-            showSelectedIcon={showSelectedIcon}
-            selectedIcon={selectedIcon}
-            checkboxIcon={checkboxIcon}
-            onSelect={() => onItemClick(parent, option)}
-            onHover={onItemHover}
-          />
-        ))
-      )}
+      ) : null}
+      <div role="menu" aria-label={`${parent.label} submenu`}>
+        {loading || isSearching
+          ? null
+          : options.map((option, index) => (
+              <SubmenuItem
+                key={option.value}
+                option={option}
+                isSelected={selectedValues.includes(option.value)}
+                isFocused={index === focusedIndex}
+                parentValue={parent.value}
+                index={index}
+                selectionMode={selectionMode}
+                classes={classes}
+                showSelectedIcon={showSelectedIcon}
+                selectedIcon={selectedIcon}
+                checkboxIcon={checkboxIcon}
+                onSelect={() => onItemClick(parent, option)}
+                onHover={onItemHover}
+              />
+            ))}
+      </div>
     </div>
   );
 });
@@ -695,12 +707,12 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               zIndex={dropdownZIndex}
               portalContainer={portalContainer}
               keepMounted={keepMounted}
-              id={menuId}
-              role="menu"
               onKeyDown={combinedKeyDown}
+              // Announced even though it is no longer the menu: the search
+              // field is portalled content and needs a container that says what
+              // it belongs to (portal-semantics.contract).
+              role="group"
               aria-label={typeof label === "string" ? label : ariaLabel || "Options"}
-              aria-live={showMenuSearch ? "polite" : undefined}
-              aria-busy={isMenuSearching || undefined}
               className={mergedClasses.content || undefined}
             >
               {showMenuSearch && (
@@ -721,9 +733,12 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                   />
                 </div>
               )}
+              {/* The panel is not the menu: the search field and the loading and
+                  empty messages are siblings of it, because a `menu` owns menu
+                  items and nothing else. */}
               {externalLoading || isMenuSearching ? (
                 <>
-                  <div className={mergedClasses.loading || undefined}>{loadingText}</div>
+                  <div role="status" className={mergedClasses.loading || undefined}>{loadingText}</div>
                   <div className={mergedClasses.loading || undefined}>
                     {Array.from({ length: shimmerCount }).map((_, i) => (
                       <div key={i} className={mergedClasses.loadingItem || undefined} />
@@ -731,88 +746,98 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                   </div>
                 </>
               ) : filteredOptions.length === 0 ? (
-                <div className={mergedClasses.empty || undefined}>{noResultsContent}</div>
-              ) : (
-                filteredOptions.map((option, index) => {
-                  const staticChildren = option.children || [];
-                  const dynamicChildren = loadedChildren[option.value] || [];
-                  const children =
-                    dynamicChildren.length > 0
-                      ? dynamicChildren
-                      : staticChildren;
-                  const hasSubmenu = children.length > 0 || option.hasChildren;
-                  const submenuOpen = isSubmenuOpen(option.value);
-                  const isChildrenLoading =
-                    loadingChildren[option.value] || false;
-                  const submenuChildren = showSubmenuSearch
-                    ? getFilteredSubmenuOptions(option)
-                    : children;
+                <div role="status" className={mergedClasses.empty || undefined}>{noResultsContent}</div>
+              ) : null}
 
-                  return (
-                    <div key={option.value} className="relative">
-                      <MenuItem
-                        option={option}
-                        isFocused={index === focusedIndex}
-                        isSelected={
-                          !hasSubmenu && internalValue.root === option.value
-                        }
-                        hasSubmenu={!!hasSubmenu}
-                        isSubmenuOpen={submenuOpen}
-                        dropdownId={dropdownId}
-                        index={index}
-                        classes={mergedClasses}
-                        onHover={handleMenuItemHover}
-                        onClick={handleMenuItemClick}
-                      />
+              <div
+                id={menuId}
+                role="menu"
+                aria-label={typeof label === "string" ? label : ariaLabel || "Options"}
+                aria-live={showMenuSearch ? "polite" : undefined}
+                aria-busy={isMenuSearching || undefined}
+              >
+                {externalLoading || isMenuSearching || filteredOptions.length === 0
+                  ? null
+                  : filteredOptions.map((option, index) => {
+                    const staticChildren = option.children || [];
+                    const dynamicChildren = loadedChildren[option.value] || [];
+                    const children =
+                      dynamicChildren.length > 0
+                        ? dynamicChildren
+                        : staticChildren;
+                    const hasSubmenu = children.length > 0 || option.hasChildren;
+                    const submenuOpen = isSubmenuOpen(option.value);
+                    const isChildrenLoading =
+                      loadingChildren[option.value] || false;
+                    const submenuChildren = showSubmenuSearch
+                      ? getFilteredSubmenuOptions(option)
+                      : children;
 
-                      {hasSubmenu && submenuOpen && (
-                        <div
-                          className={cn(
-                            submenuPosition === "right"
-                              ? "absolute left-full top-0 pl-1"
-                              : "absolute right-full top-0 pr-1",
-                            mergedClasses.subPositioner,
-                          ) || undefined}
-                        >
-                          <Submenu
-                            parent={option}
-                            options={submenuChildren}
-                            selectedValues={getSelectedValuesForParent(
-                              option.value,
-                            )}
-                            focusedIndex={
-                              activeSubmenu === option.value
-                                ? submenuFocusedIndex
-                                : -1
-                            }
-                            loading={isChildrenLoading}
-                            classes={mergedClasses}
-                            noResultsContent={noResultsContent}
-                            loadingText={loadingText}
-                            showSelectedIcon={showSelectedIcon}
-                            selectedIcon={selectedIcon}
-                            checkboxIcon={checkboxIcon}
-                            onItemClick={handleSubmenuItemClick}
-                            onItemHover={handleSubmenuItemHover}
-                            onMouseEnter={handleSubmenuMouseEnter}
-                            onMouseLeave={handleSubmenuMouseLeave}
-                            showSearch={showSubmenuSearch}
-                            searchQuery={submenuSearchQuery}
-                            onSearchChange={onSubmenuSearchChange}
-                            searchPlaceholder={submenuSearchPlaceholder}
-                            searchAriaLabel={submenuSearchAriaLabel}
-                            SearchIconComponent={SearchIconComponent}
-                            isSearching={isSubmenuSearching}
-                            submenuSearchInputClass={mergedClasses.subSearchControl}
-                            submenuSearchInputElementClass={mergedClasses.subSearchInput}
-                            submenuSearchIconClass={mergedClasses.subSearchIcon}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
-              )}
+                    return (
+                      <div key={option.value} className="relative">
+                        <MenuItem
+                          option={option}
+                          isFocused={index === focusedIndex}
+                          isSelected={
+                            !hasSubmenu && internalValue.root === option.value
+                          }
+                          hasSubmenu={!!hasSubmenu}
+                          isSubmenuOpen={submenuOpen}
+                          dropdownId={dropdownId}
+                          index={index}
+                          classes={mergedClasses}
+                          onHover={handleMenuItemHover}
+                          onClick={handleMenuItemClick}
+                        />
+
+                        {hasSubmenu && submenuOpen && (
+                          <div
+                            className={cn(
+                              submenuPosition === "right"
+                                ? "absolute left-full top-0 pl-1"
+                                : "absolute right-full top-0 pr-1",
+                              mergedClasses.subPositioner,
+                            ) || undefined}
+                          >
+                            <Submenu
+                              parent={option}
+                              options={submenuChildren}
+                              selectedValues={getSelectedValuesForParent(
+                                option.value,
+                              )}
+                              focusedIndex={
+                                activeSubmenu === option.value
+                                  ? submenuFocusedIndex
+                                  : -1
+                              }
+                              loading={isChildrenLoading}
+                              classes={mergedClasses}
+                              noResultsContent={noResultsContent}
+                              loadingText={loadingText}
+                              showSelectedIcon={showSelectedIcon}
+                              selectedIcon={selectedIcon}
+                              checkboxIcon={checkboxIcon}
+                              onItemClick={handleSubmenuItemClick}
+                              onItemHover={handleSubmenuItemHover}
+                              onMouseEnter={handleSubmenuMouseEnter}
+                              onMouseLeave={handleSubmenuMouseLeave}
+                              showSearch={showSubmenuSearch}
+                              searchQuery={submenuSearchQuery}
+                              onSearchChange={onSubmenuSearchChange}
+                              searchPlaceholder={submenuSearchPlaceholder}
+                              searchAriaLabel={submenuSearchAriaLabel}
+                              SearchIconComponent={SearchIconComponent}
+                              isSearching={isSubmenuSearching}
+                              submenuSearchInputClass={mergedClasses.subSearchControl}
+                              submenuSearchInputElementClass={mergedClasses.subSearchInput}
+                              submenuSearchIconClass={mergedClasses.subSearchIcon}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
             </MenuSurface>
           )}
         </div>

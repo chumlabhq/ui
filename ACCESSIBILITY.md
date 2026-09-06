@@ -98,7 +98,7 @@ the row says which half is ours.
 | 1.2.3 Audio Description or Media Alternative | A | Not applicable | As above. | — |
 | 1.2.4 Captions (Live) | AA | Not applicable | As above. | — |
 | 1.2.5 Audio Description (Prerecorded) | AA | Not applicable | As above. | — |
-| 1.3.1 Info and Relationships | A | Partially supports | Label, description and error are associated programmatically, state is published as data attributes with a recorded vocabulary, and **every ARIA relationship in every fixture resolves to an element that exists**. That check found `Breadcrumb`'s ellipsis trigger naming a menu with no `id` at all — `aria-controls` pointing at nothing precisely while the menu was open. A dangling `aria-controls` is excused only while the control reports `aria-expanded="false"`. **Downgraded 2026-09-06:** the widened sweep reports 57 ARIA structure findings inside portalled surfaces — 44 `aria-required-children` on listboxes and menus whose options are nested one div deep, and 13 `aria-required-parent` on `DatePicker`'s weekday header row, which sits outside its own grid. Unfixed. | `aria-relationships.contract` (jsdom, every fixture); `e2e/accessibility.spec.ts` axe (all five); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
+| 1.3.1 Info and Relationships | A | Partially supports | Label, description and error are associated programmatically, state is published as data attributes with a recorded vocabulary, and **every ARIA relationship in every fixture resolves to an element that exists**. That check found `Breadcrumb`'s ellipsis trigger naming a menu with no `id` at all — `aria-controls` pointing at nothing precisely while the menu was open. A dangling `aria-controls` is excused only while the control reports `aria-expanded="false"`. **Downgraded 2026-09-06:** the widened sweep reported 57 ARIA structure findings inside portalled surfaces. 55 are fixed — the popups no longer claim to be the listbox or menu they contain, and `DatePicker`'s weekday row is inside its grid. Two remain, both `CascadingDropdown`'s submenu search field, which cannot leave its parent menu's subtree without portalling the submenu. | `aria-relationships.contract` (jsdom, every fixture); `e2e/accessibility.spec.ts` axe (all five); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
 | 1.3.2 Meaningful Sequence | A | Does not support | Not gated. DOM order is authored to match reading order, but nothing asserts it. | — |
 | 1.3.3 Sensory Characteristics | A | Does not support | Not gated. | — |
 | 1.3.4 Orientation | AA | Does not support | No component locks orientation, but nothing tests either orientation. | — |
@@ -119,7 +119,7 @@ the row says which half is ours.
 
 | SC | Level | Status | Justification | Gate |
 | --- | --- | --- | --- | --- |
-| 2.1.1 Keyboard | A | Supports | Every control reporting an interactive role can take focus, every roving group has exactly one tab stop or an active-descendant owner, and every drag has a keyboard route. The gate found seven "Clear selection" buttons shipped at `tabIndex={-1}` — for a single select there is no other way back to an empty value — and a `TabPanel` whose tablist had no tab stop at all when `defaultValue` named a disabled tab. **Open, unresolved:** the widened sweep reports `scrollable-region-focusable` on seven option scrollers. Where the scroller holds options it is arguable — arrow keys move the highlight and scroll it — but `TimePicker/loading` scrolls a message with no options and no way to reach it. | `keyboard-reachable.contract`, `roving-focus.contract`, `dragging-alternatives.contract` (jsdom, every fixture); component keyboard specs (all five) |
+| 2.1.1 Keyboard | A | Supports | Every control reporting an interactive role can take focus, every roving group has exactly one tab stop or an active-descendant owner, and every drag has a keyboard route. The gate found seven "Clear selection" buttons shipped at `tabIndex={-1}` — for a single select there is no other way back to an empty value — and a `TabPanel` whose tablist had no tab stop at all when `defaultValue` named a disabled tab. The widened sweep reported `scrollable-region-focusable` on seven option scrollers on 2026-09-06 and reports none now: axe exempts a combobox popup from that rule, and the scrolling element became the popup when the listbox role moved off the panel onto it. | `keyboard-reachable.contract`, `roving-focus.contract`, `dragging-alternatives.contract` (jsdom, every fixture); component keyboard specs (all five) |
 | 2.1.2 No Keyboard Trap | A | Supports | The three surfaces that hold focus — Modal, Drawer, DatePicker — share `cycleTabWithin`, cycle Tab both ways and release on Escape. The helper drives the order from its own focusable list rather than intervening at the boundaries, which is what makes it hold in WebKit. | `overlay-focus.contract` (jsdom, all three); `e2e/drawer.spec.ts` trap (all five). **Modal and DatePicker are jsdom-only** — an e2e trap spec for each would close that |
 | 2.1.4 Character Key Shortcuts | A | Not applicable | The package binds no single-character shortcuts. Typeahead in the select components is scoped to a focused listbox, which the criterion exempts. | — |
 | 2.2.1 Timing Adjustable | A | Does not support | Toast auto-dismisses on a timer. `duration` is adjustable and `Infinity` disables it, but nothing gates pause-on-hover or pause-on-focus, and the default is a timed dismissal. This is a real exposure, not merely an ungated one. | — |
@@ -287,50 +287,73 @@ mounts the surface's own element on `document.body`, so it carries a React fiber
 the app root carries a container key and the injected checkout container carries neither.
 103 of the 364 fixtures portal something.
 
-**The sweep now reports 93 findings and it is red.** 25 are the recorded ones. The other 68
-are new, none is recorded, and recording one takes a reason rather than a list — so
-`A11Y_RERECORD=1` refused all 68 and the gate fails naming them. Nothing here is fixed yet;
-the list is the deliverable.
+**The sweep reported 93 findings the first time it looked in the right place.** 25 were the
+recorded ones; 68 were new. The structural half of those — 57 nodes across two ARIA rules —
+is fixed, and the sweep now reports **31 findings**, of which 6 are unrecorded and keep the
+gate red.
 
-| Rule | Criterion | Nodes | Where |
-| --- | --- | --- | --- |
-| `aria-required-children` | 1.3.1 | 44 | CascadingDropdown 12, MultiSelectSearchableDropdown 12, SearchableDropdown 11, Dropdown 4, InternationalPhoneInput 2, MultiSelectDropdown 2, TimePicker 1 |
-| `aria-required-parent` | 1.3.1 | 13 | DatePicker, every fixture that renders the calendar |
-| `scrollable-region-focusable` | 2.1.1 | 7 | TimePicker 4, MultiSelectSearchableDropdown 2, InternationalPhoneInput 1 |
-| `color-contrast` | 1.4.3 | 4 | Table 3, Pagination 1 |
+| Rule | Criterion | Found | Now | Where the remainder is |
+| --- | --- | --- | --- | --- |
+| `aria-required-children` | 1.3.1 | 44 | **2** | CascadingDropdown's submenu search field |
+| `aria-required-parent` | 1.3.1 | 13 | **0** | — |
+| `scrollable-region-focusable` | 2.1.1 | 7 | **0** | — |
+| `color-contrast` | 1.4.3 | 4 | 4 | Table 3, Pagination 1 — untouched, next slice |
 
-**`aria-required-children`** is one defect with two shapes. A `listbox` or `menu` must own
-its `option`/`menuitem` children, and these surfaces nest theirs one `<div>` deep — a search
-box beside a scrolling wrapper, both untyped — so the options are grandchildren and are not
-owned. That is why it lands on populated states like `SearchableDropdown/open` and not only
-on the empty ones. The other shape is the genuinely childless surface: `Dropdown/open-empty`,
-`/loading`, `/async-load-pending` and their equivalents render a status message inside the
-listbox and no options at all.
+**`aria-required-children` was two defects, not one.** A `listbox` or `menu` owns options or
+menu items and nothing else, and these surfaces put a search field and a status message
+inside theirs. So the popup is no longer the listbox: the portalled panel holds the search
+field, the status message and a listbox of options as siblings, and the listbox carries the
+id `aria-controls` names. The second shape was the same mistake in the empty and loading
+states, where a `role="status"` message was the listbox's only child. Those messages are now
+siblings too and the listbox is genuinely empty — axe reports an empty listbox as *needs
+review*, not as a violation, and the alternative of dropping the role while empty would have
+left `aria-haspopup="listbox"`, `aria-expanded="true"` and `aria-controls` all pointing at
+something that is not a listbox. Nothing about the announcement changed: the message was
+already a live region and still is.
 
-**`aria-required-parent`** is a single line of markup, reported thirteen times: `DatePicker`
-renders its weekday header as `<div role="row">` whose parent is a plain `div`, while the
-six date rows below it sit inside the `role="grid"`. A row with no grid or rowgroup parent is
-not part of any table structure.
+**The 2 that remain are one structure.** `CascadingDropdown` renders a submenu inside its
+parent menu for positioning — the panel is a child of the item wrapper, which is a child of
+the menu — so the submenu's search field is an owned descendant of that menu however the
+panel itself is marked. axe walks through generic wrappers and through `group`, both tried
+and both verified not to help; only a role that is allowed *and* terminates the walk
+(`menu`) stops it, and then the field is an unallowed child of that menu instead. Getting it
+out means portalling the submenu the way every other surface is portalled, which repurposes
+the documented `subPositioner` class key — a major change under ADR 002 R7, and its own
+decision. Left unrecorded rather than waived: a reason is a judgement, not a formality.
 
-**`scrollable-region-focusable`** is the one to argue about rather than fix on sight. Six of
-the seven are option scrollers, and their content is reachable — arrow keys move the
-highlight through the options and scroll the region with it. `TimePicker/loading` is not:
-it scrolls a message with no options behind it, so there is no other route to the content.
+The submenu's loading and empty messages carry no role for the same reason. `role="status"`
+on them reported against the parent menu; announcing them has to wait for the same move.
 
-**`color-contrast`** is the raw-palette remainder showing up as a defect rather than as a
-style note. `Table`'s filter menu paints its label `text-gray-500` and its options
-`text-gray-700` — Tailwind's palette, not the `--cl-*` tokens `contrast.contract` checks —
-and `Pagination`'s selected option fails in its highlighted state.
+**`aria-required-parent`** was a single line of markup reported thirteen times: `DatePicker`
+rendered its weekday header as `<div role="row">` whose parent was a plain `div`, while the
+six date rows sat inside the `role="grid"`. It is inside the grid now, above the date rows.
+The grid's keyboard model counts `[role="gridcell"][tabindex="0"]` and not rows, and all
+fourteen assertions in `focusManagement.test.tsx` — one tabbable cell, day and week arrows,
+Home/End with `weekStartsOn`, PageUp/PageDown, Shift+PageUp/PageDown, Enter, the
+disabled-day step and the `maxDate` bound — pass unchanged.
 
-### 15 of the 68 need the act as well as the scope
+**`scrollable-region-focusable` went to zero as a consequence, not as a fix.** axe does not
+apply that rule to a combobox popup, and the scrolling element *is* the popup now that the
+listbox role sits on it rather than on the panel around it. That is the same reasoning this
+document gave for calling six of the seven arguable — the options are reached with the
+combobox's own arrow keys — and the seventh, `TimePicker/loading`, turns out to render 96
+options behind its spinner rather than a bare message, so the exception was wrong too.
 
-These report only once the fixture's `act` has landed, so they need both this scope fix and
-the act fix that preceded it. Nothing had ever audited them:
+**`color-contrast`** is untouched, by instruction. It is the raw-palette remainder showing up
+as a defect rather than a style note: `Table`'s filter menu paints its label `text-gray-500`
+and its options `text-gray-700` — Tailwind's palette, not the `--cl-*` tokens
+`contrast.contract` checks — and `Pagination`'s selected option fails in its highlighted
+state.
 
-- `Table/filter-open` and `/filter-selected` — all three `color-contrast` nodes
-- `Pagination/rows-per-page-open` — the selected option's contrast
-- `InternationalPhoneInput/country-open` and `/country-no-results` — the country listbox
-  and its scroller
+### The findings that needed the act as well as the scope
+
+15 of the 68 reported only once the fixture's `act` had landed, so they needed both this
+scope fix and the act fix before it. All but the `color-contrast` four are fixed:
+
+- `Table/filter-open` and `/filter-selected` — all three `color-contrast` nodes (open)
+- `Pagination/rows-per-page-open` — the selected option's contrast (open)
+- `InternationalPhoneInput/country-open` and `/country-no-results` — the country listbox and
+  its scroller
 - `CascadingDropdown/open-submenu`, `/async-submenu-search-resolved`,
   `/async-children-pending`, `/async-children-empty`, `/async-children-error` — the submenu
 - `Dropdown/async-load-pending`, `/async-load-empty`, `MultiSelectDropdown/async-load-empty`

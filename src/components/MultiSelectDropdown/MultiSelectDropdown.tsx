@@ -40,6 +40,8 @@ interface MultiSelectDropdownContentProps {
   listboxAriaLabel: string;
   loading: boolean;
   contentRef?: React.RefObject<HTMLDivElement | null>;
+  /** The loading or empty message, beside the listbox rather than inside it. */
+  status?: ReactNode;
   children: ReactNode;
 }
 
@@ -58,6 +60,7 @@ const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
   listboxAriaLabel,
   loading,
   contentRef,
+  status,
   children,
 }: MultiSelectDropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -78,17 +81,24 @@ const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
       zIndex={zIndex}
       portalContainer={portalContainer}
       keepMounted={keepMounted}
-      id={listboxId}
-      role="listbox"
-      aria-label={listboxAriaLabel}
-      aria-multiselectable="true"
-      aria-busy={loading || undefined}
       className={classes.content || undefined}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.side ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
-      <div className={classes.list || undefined}>{children}</div>
+      {status}
+      {/* The listbox owns options and nothing else; the status message is its
+          sibling in the panel. */}
+      <div
+        id={listboxId}
+        role="listbox"
+        aria-label={listboxAriaLabel}
+        aria-multiselectable="true"
+        aria-busy={loading || undefined}
+        className={classes.list || undefined}
+      >
+        {children}
+      </div>
     </MenuSurface>
   );
 });
@@ -573,38 +583,38 @@ const MultiSelectDropdown = forwardRef<
             listboxAriaLabel={listboxAriaLabel}
             loading={loading}
             contentRef={dropdownContentRef}
-          >
-            {loading ? (
-              <MultiSelectDropdownShimmer
-                count={shimmerCount}
-                className={mergedClasses.loading || undefined}
-                itemClassName={mergedClasses.loadingItem || undefined}
-                iconClassName={mergedClasses.loadingIcon || undefined}
-                barClassName={mergedClasses.loadingBar || undefined}
-              />
-            ) : displayOptions.length === 0 ? (
-              <div
-                role="status"
-                className={mergedClasses.empty || undefined}
-              >
-                {noResultsContent}
-              </div>
-            ) : (
-              displayOptions.map((option, index) => (
-                <MultiSelectDropdownOption
-                  key={option.value}
-                  option={option}
-                  isSelected={currentValue.includes(option.value)}
-                  isFocused={index === focusedIndex}
-                  dropdownId={dropdownId}
-                  index={index}
-                  classes={mergedClasses}
-                  checkboxIcon={checkboxIcon}
-                  onToggle={handleOptionToggle}
-                  onHover={setFocusedIndex}
+            status={
+              loading ? (
+                <MultiSelectDropdownShimmer
+                  count={shimmerCount}
+                  className={mergedClasses.loading || undefined}
+                  itemClassName={mergedClasses.loadingItem || undefined}
+                  iconClassName={mergedClasses.loadingIcon || undefined}
+                  barClassName={mergedClasses.loadingBar || undefined}
                 />
-              ))
-            )}
+              ) : displayOptions.length === 0 ? (
+                <div role="status" className={mergedClasses.empty || undefined}>
+                  {noResultsContent}
+                </div>
+              ) : null
+            }
+          >
+            {loading
+              ? null
+              : displayOptions.map((option, index) => (
+                  <MultiSelectDropdownOption
+                    key={option.value}
+                    option={option}
+                    isSelected={currentValue.includes(option.value)}
+                    isFocused={index === focusedIndex}
+                    dropdownId={dropdownId}
+                    index={index}
+                    classes={mergedClasses}
+                    checkboxIcon={checkboxIcon}
+                    onToggle={handleOptionToggle}
+                    onHover={setFocusedIndex}
+                  />
+                ))}
           </MultiSelectDropdownContent>
         </div>
 

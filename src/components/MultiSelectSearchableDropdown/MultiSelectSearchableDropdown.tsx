@@ -30,10 +30,8 @@ interface DropdownContentProps {
   gap: number;
   portalContainer?: HTMLElement | null;
   classes: Required<MultiSelectSearchableDropdownClasses>;
-  listboxId: string;
   dropdownId: string;
   listboxAriaLabel: string;
-  loading: boolean;
   contentRef?: React.RefObject<HTMLDivElement | null>;
   children: ReactNode;
 }
@@ -48,10 +46,8 @@ function DropdownContent({
   gap,
   portalContainer,
   classes,
-  listboxId,
   dropdownId,
   listboxAriaLabel,
-  loading,
   contentRef,
   children,
 }: DropdownContentProps) {
@@ -73,11 +69,11 @@ function DropdownContent({
       zIndex={zIndex}
       portalContainer={portalContainer}
       keepMounted={keepMounted}
-      id={listboxId}
-      role="listbox"
+      // Announced even though it is no longer the listbox — the search field
+      // inside it is portalled content with no other context
+      // (portal-semantics.contract).
+      role="group"
       aria-label={listboxAriaLabel}
-      aria-multiselectable="true"
-      aria-busy={loading || undefined}
       className={classes.content || undefined}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.side ?? preferredPosition}
@@ -691,10 +687,8 @@ const MultiSelectSearchableDropdown = forwardRef<
             gap={dropdownGap}
             portalContainer={portalContainer}
             classes={mergedClasses}
-            listboxId={listboxId}
             dropdownId={dropdownId}
             listboxAriaLabel={listboxAriaLabel}
-            loading={loading}
             contentRef={dropdownContentRef}
           >
             {showSearch && (
@@ -723,38 +717,49 @@ const MultiSelectSearchableDropdown = forwardRef<
               </div>
             )}
 
-            <div className={mergedClasses.list || undefined}>
-              {loading ? (
-                <>
-                  <div role="status" className={mergedClasses.loading || undefined}>
-                    {loadingText}
-                  </div>
-                  <div className={mergedClasses.loading || undefined}>
-                    {Array.from({ length: shimmerCount }).map((_, i) => (
-                      <div key={i} className={mergedClasses.loadingItem || undefined} />
-                    ))}
-                  </div>
-                </>
-              ) : displayOptions.length === 0 ? (
-                <div role="status" className={mergedClasses.empty || undefined}>
-                  {noResultsContent}
+            {/* Outside the listbox: it owns options and groups, and the search
+                field and status message are neither. */}
+            {loading ? (
+              <>
+                <div role="status" className={mergedClasses.loading || undefined}>
+                  {loadingText}
                 </div>
-              ) : (
-                displayOptions.map((option, index) => (
-                  <OptionItem
-                    key={option.value}
-                    option={option}
-                    isSelected={selectedValues.includes(option.value)}
-                    isFocused={index === focusedIndex}
-                    dropdownId={dropdownId}
-                    index={index}
-                    classes={mergedClasses}
-                    checkboxIcon={checkboxIcon}
-                    onToggle={handleOptionToggle}
-                    onHover={setFocusedIndex}
-                  />
-                ))
-              )}
+                <div className={mergedClasses.loading || undefined}>
+                  {Array.from({ length: shimmerCount }).map((_, i) => (
+                    <div key={i} className={mergedClasses.loadingItem || undefined} />
+                  ))}
+                </div>
+              </>
+            ) : displayOptions.length === 0 ? (
+              <div role="status" className={mergedClasses.empty || undefined}>
+                {noResultsContent}
+              </div>
+            ) : null}
+
+            <div
+              id={listboxId}
+              role="listbox"
+              aria-label={listboxAriaLabel}
+              aria-multiselectable="true"
+              aria-busy={loading || undefined}
+              className={mergedClasses.list || undefined}
+            >
+              {loading || displayOptions.length === 0
+                ? null
+                : displayOptions.map((option, index) => (
+                    <OptionItem
+                      key={option.value}
+                      option={option}
+                      isSelected={selectedValues.includes(option.value)}
+                      isFocused={index === focusedIndex}
+                      dropdownId={dropdownId}
+                      index={index}
+                      classes={mergedClasses}
+                      checkboxIcon={checkboxIcon}
+                      onToggle={handleOptionToggle}
+                      onHover={setFocusedIndex}
+                    />
+                  ))}
             </div>
           </DropdownContent>
         </div>

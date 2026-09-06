@@ -16,12 +16,27 @@ async function getListboxForTrigger(
   return page.locator(`[id="${listboxId}"]`);
 }
 
-async function getSearchInputForTrigger(
+/**
+ * The portalled panel, which is the listbox's parent.
+ *
+ * `aria-controls` names the listbox, and the listbox owns options and nothing
+ * else — the search field and the "no results" message are its siblings inside
+ * the panel.
+ */
+async function getPanelForTrigger(
   page: import("@playwright/test").Page,
   trigger: import("@playwright/test").Locator
 ) {
   const listbox = await getListboxForTrigger(page, trigger);
-  return listbox.getByRole("textbox", { name: "Search options" });
+  return listbox.locator("xpath=..");
+}
+
+async function getSearchInputForTrigger(
+  page: import("@playwright/test").Page,
+  trigger: import("@playwright/test").Locator
+) {
+  const panel = await getPanelForTrigger(page, trigger);
+  return panel.getByRole("textbox", { name: "Search options" });
 }
 
 test.describe("SearchableDropdown Component - Cross-Browser Tests", () => {
@@ -111,8 +126,8 @@ test.describe("SearchableDropdown Component - Cross-Browser Tests", () => {
       const searchInput = await getSearchInputForTrigger(page, trigger);
       await searchInput.fill("xyz");
 
-      const listbox = await getListboxForTrigger(page, trigger);
-      await expect(listbox.getByText("No results found", { exact: true })).toBeVisible();
+      const panel = await getPanelForTrigger(page, trigger);
+      await expect(panel.getByText("No results found", { exact: true })).toBeVisible();
     });
 
     test("should clear search when dropdown reopens", async ({ page }) => {

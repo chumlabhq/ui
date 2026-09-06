@@ -78,6 +78,8 @@ interface SearchableDropdownContentProps {
   searchInputRef: React.RefObject<HTMLInputElement | null>;
   onSearchInputKeyDown: (event: React.KeyboardEvent) => void;
   onSearchInputKeyDownCapture?: (event: React.KeyboardEvent) => void;
+  /** The loading or empty message, beside the listbox rather than inside it. */
+  status?: ReactNode;
   children: ReactNode;
 }
 
@@ -106,6 +108,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
   searchInputRef,
   onSearchInputKeyDown,
   onSearchInputKeyDownCapture,
+  status,
   children,
 }: SearchableDropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -143,10 +146,12 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
       portalContainer={portalContainer}
       keepMounted={keepMounted}
       matchTriggerWidth={false}
-      id={listboxId}
-      role="listbox"
+      // The panel is announced even though it is no longer the listbox: it is
+      // portalled to the body, and the search field inside it would otherwise
+      // sit in a subtree that tells a screen-reader user nothing about what it
+      // belongs to (portal-semantics.contract).
+      role="group"
       aria-label={ariaLabel}
-      aria-busy={loading || undefined}
       className={classes.content || undefined}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.side ?? preferredPosition}
@@ -184,7 +189,19 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
           />
         </div>
       )}
-      <div className={classes.list || undefined}>{children}</div>
+      {status}
+      {/* The search field and the "no results" message are siblings of the
+          listbox, not children of it: a listbox owns options and groups, and a
+          textbox inside one is announced as part of the list. */}
+      <div
+        id={listboxId}
+        role="listbox"
+        aria-label={ariaLabel}
+        aria-busy={loading || undefined}
+        className={classes.list || undefined}
+      >
+        {children}
+      </div>
     </MenuSurface>
   );
 });
@@ -634,35 +651,38 @@ const SearchableDropdown = forwardRef<
           searchInputRef={searchInputRef}
           onSearchInputKeyDown={handleSearchInputKeyDown}
           onSearchInputKeyDownCapture={handleSearchInputKeyDownCapture}
-        >
-          {loading ? (
-            <SearchableDropdownShimmer
-              count={shimmerCount}
-              className={mergedClasses.loading}
-              itemClassName={mergedClasses.loadingItem}
-            />
-          ) : displayOptions.length === 0 ? (
-            <div role="status" className={mergedClasses.empty || undefined}>
-              {noResultsContent}
-            </div>
-          ) : (
-            displayOptions.map((option, index) => (
-              <SearchableDropdownOptionComponent
-                key={option.value}
-                option={option}
-                isSelected={option.value === currentValue}
-                isFocused={index === focusedIndex}
-                dropdownId={dropdownId}
-                index={index}
-                classes={mergedClasses}
-                showSelectedIcon={showSelectedIcon}
-                selectedIcon={selectedIcon}
-                CheckIconComponent={CheckIconProp}
-                onSelect={handleOptionSelect}
-                onHover={setFocusedIndex}
+          status={
+            loading ? (
+              <SearchableDropdownShimmer
+                count={shimmerCount}
+                className={mergedClasses.loading}
+                itemClassName={mergedClasses.loadingItem}
               />
-            ))
-          )}
+            ) : displayOptions.length === 0 ? (
+              <div role="status" className={mergedClasses.empty || undefined}>
+                {noResultsContent}
+              </div>
+            ) : null
+          }
+        >
+          {loading
+            ? null
+            : displayOptions.map((option, index) => (
+                <SearchableDropdownOptionComponent
+                  key={option.value}
+                  option={option}
+                  isSelected={option.value === currentValue}
+                  isFocused={index === focusedIndex}
+                  dropdownId={dropdownId}
+                  index={index}
+                  classes={mergedClasses}
+                  showSelectedIcon={showSelectedIcon}
+                  selectedIcon={selectedIcon}
+                  CheckIconComponent={CheckIconProp}
+                  onSelect={handleOptionSelect}
+                  onHover={setFocusedIndex}
+                />
+              ))}
         </SearchableDropdownContent>
       </div>
 

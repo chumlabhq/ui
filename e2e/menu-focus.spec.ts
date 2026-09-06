@@ -39,11 +39,17 @@ test.describe("menu focus on open", () => {
         await page.locator(testCase.lands).first().waitFor({ state: "attached" });
 
         landings.push(
+          // The surface is the portalled panel, not the listbox inside it. The
+          // search field moved out of the listbox when a `listbox` was made to
+          // own options and nothing else, so "focus is inside the listbox" is
+          // no longer the same question as "focus is inside the popup".
           await page.evaluate((selector) => {
-            const surface = document.querySelector("[role='listbox'],[role='menu']");
             const target = document.querySelector(selector);
+            const surface = [...document.body.children].find(
+              (child) => child.id !== "root" && target && child.contains(target),
+            );
             const active = document.activeElement;
-            return !!(surface && active && surface.contains(active) && active === target);
+            return !!(surface && active && active === target && surface.contains(active));
           }, testCase.lands),
         );
       }
@@ -133,9 +139,11 @@ test.describe("a mouse open leaves focus somewhere real", () => {
           ({ selector, wantsTrigger }) => {
             const active = document.activeElement;
             if (!active || active === document.body) return false;
-            const open = document.querySelector("[role='listbox'],[role='menu'],[role='dialog']");
+            const inSurface = [...document.body.children].some(
+              (child) => child.id !== "root" && child.contains(active),
+            );
             const element = document.querySelector(`[data-fixture] ${selector}`);
-            return wantsTrigger ? active === element : !!(open && open.contains(active));
+            return wantsTrigger ? active === element : inSurface;
           },
           { selector: surface.trigger, wantsTrigger: surface.focus === "trigger" },
           { timeout: 5000 },
@@ -147,12 +155,17 @@ test.describe("a mouse open leaves focus somewhere real", () => {
 
       const landed = await page.evaluate((selector) => {
         const active = document.activeElement as HTMLElement | null;
-        const open = document.querySelector("[role='listbox'],[role='menu'],[role='dialog']");
         const element = document.querySelector(`[data-fixture] ${selector}`);
         return {
           onBody: active === document.body || active === null,
           onTrigger: active === element,
-          inSurface: !!(open && active && open.contains(active)),
+          // Inside the portalled panel, which is what "the surface" means: the
+          // panel holds the search field beside the listbox rather than inside
+          // it, so a listbox-scoped check would call a landing in the search
+          // field a miss.
+          inSurface: !!active && [...document.body.children].some(
+            (child) => child.id !== "root" && child.contains(active),
+          ),
           tag: active?.tagName ?? "none",
         };
       }, surface.trigger);

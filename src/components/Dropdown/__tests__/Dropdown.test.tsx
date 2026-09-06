@@ -885,9 +885,10 @@ describe('Dropdown - Empty State', () => {
     await waitForDropdownOpen();
     
     await waitFor(() => {
-      // Query within the listbox to avoid getting the live region
-      const listbox = screen.getByRole('listbox', { hidden: true });
-      expect(listbox).toHaveTextContent('No options available');
+      // The panel, not the listbox: the empty message is the listbox's sibling,
+      // because a listbox owns options and nothing else.
+      const panel = document.querySelector('[data-dropdown-id]');
+      expect(panel).toHaveTextContent('No options available');
     });
   });
 
@@ -906,9 +907,9 @@ describe('Dropdown - Empty State', () => {
     await waitForDropdownOpen();
     
     await waitFor(() => {
-      // Query within the listbox to avoid getting the live region
-      const listbox = screen.getByRole('listbox', { hidden: true });
-      expect(listbox).toHaveTextContent('Custom empty state');
+      // The panel, not the listbox: the empty message is its sibling now.
+      const panel = document.querySelector('[data-dropdown-id]');
+      expect(panel).toHaveTextContent('Custom empty state');
     });
   });
 });
@@ -1238,8 +1239,10 @@ describe('Dropdown - Position & Portal', () => {
     await user.click(screen.getByRole('combobox'));
     await waitForDropdownOpen();
     
-    const listbox = screen.getByRole('listbox');
-    expect(listbox).toHaveAttribute('data-position', expect.stringMatching(/top|bottom/));
+    // The panel carries the positioning attributes; the listbox inside it
+    // carries the options.
+    const panel = document.querySelector('[data-dropdown-id]');
+    expect(panel).toHaveAttribute('data-position', expect.stringMatching(/top|bottom/));
   });
 
   it('should set custom z-index', async () => {
@@ -1250,8 +1253,8 @@ describe('Dropdown - Position & Portal', () => {
     await user.click(screen.getByRole('combobox'));
     await waitForDropdownOpen();
     
-    const listbox = screen.getByRole('listbox');
-    expect(listbox).toHaveStyle({ zIndex: '9999' });
+    const panel = document.querySelector('[data-dropdown-id]');
+    expect(panel).toHaveStyle({ zIndex: '9999' });
   });
 
   it('should keep mounted when keepMounted is true', async () => {

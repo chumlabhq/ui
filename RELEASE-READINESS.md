@@ -100,13 +100,20 @@ portalled to `document.body`, outside it. axe had never audited a menu, listbox,
 tooltip, modal or drawer. "364 fixtures across 38 components" was true of the pages visited
 and not of the markup audited, and 25 was the count of what remained in scope. Widened to
 the fixture plus its portal roots, and waiting on `data-fixture-act` rather than on an
-animation settle that covered the act by accident, the sweep reports **93 findings: the same
-25, and 68 that had never been in a picture**. 57 are ARIA structure inside menus and
-listboxes, 7 are unreachable scroll regions, 4 are contrast on raw-palette classes; 15 of
-the 68 need the fixture's act as well as the scope. The expectation record was re-derived
-against the corrected scope and refused all 68 — a finding needs a reason, not a list — so
-`a11y-full` is **red** and each finding is named in `ACCESSIBILITY.md`. Two criteria moved
-from Supports to Partially supports as a result.
+animation settle that covered the act by accident, the sweep reported **93 findings: the same
+25, and 68 that had never been in a picture** — 57 ARIA structure findings inside menus and
+listboxes, 7 scroll regions, 4 contrast on raw-palette classes, with 15 of the 68 needing the
+fixture's act as well as the scope. Two criteria moved from Supports to Partially supports.
+
+**The structural half is now fixed and the sweep reports 31.** The popups stopped claiming to
+be the listbox or menu they contain: the portalled panel holds the search field and the
+status message beside a listbox that owns only options, and `DatePicker`'s weekday row moved
+inside its grid. 55 of the 57 structural findings are gone, the 7 scroll-region findings went
+with them (axe exempts a combobox popup, which the scroller now is), and the 4 contrast
+findings are untouched by instruction. `a11y-full` stays **red** on 6: those 4, and 2
+`aria-required-children` on `CascadingDropdown`'s submenu search field, which needs the
+submenu portalled out of its parent menu — a change that repurposes the documented
+`subPositioner` key. Each is named in `ACCESSIBILITY.md`.
 
 ### 1.3 The consumer matrix and the tarball
 
@@ -503,9 +510,10 @@ In order. The first two are done; the rest are not.
 2. ~~Re-record the axe expectation list against all 364 fixtures.~~ **Done, and re-derived
    again on 2026-09-06** against the corrected scope: same 25 entries, same fixtures, plus a
    count guard so it cannot go stale the same way.
-3. **Triage the 68 axe findings the corrected sweep surfaced (§1.2).** Blocking, and ahead
-   of Firefox: `a11y-full` is red, two criteria have moved to Partially supports, and 57 of
-   the 68 are one ARIA-structure decision each in the menu surfaces and the calendar.
+3. **Clear the last 6 axe findings the corrected sweep surfaced (§1.2).** Blocking, and
+   ahead of Firefox: 4 are contrast on raw-palette classes in `Table` and `Pagination`, and 2
+   need `CascadingDropdown`'s submenu portalled out of its parent menu, which repurposes the
+   documented `subPositioner` key and is a major change under ADR 002 R7.
 4. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** Still blocking: one
    project has never been seen green, and "probably environmental" is a reading, not a
    result.

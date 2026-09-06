@@ -1191,32 +1191,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       </div>
 
                       <div
-                        className={mergedClasses.listHeader}
-                        style={showWeekNumbers ? { gridTemplateColumns: "2rem repeat(7, 1fr)" } : undefined}
-                        role="row"
-                        aria-label="Days of the week"
-                      >
-                        {showWeekNumbers && (
-                          <div
-                            className={mergedClasses.weekNumber}
-                            aria-hidden="true"
-                          >
-                            #
-                          </div>
-                        )}
-                        {weekdays.map((day) => (
-                          <div
-                            key={day}
-                            className={mergedClasses.weekday}
-                            role="columnheader"
-                            aria-label={day}
-                          >
-                            {day}
-                          </div>
-                        ))}
-                      </div>
-
-                      <div
                         role="grid"
                         aria-label={formatDate(
                           calendarMonth.month,
@@ -1224,6 +1198,37 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           locale,
                         )}
                       >
+                        {/* Inside the grid, not above it. A `row` whose parent
+                            is not a grid, table or rowgroup belongs to no table
+                            structure, and this one sat outside while the six
+                            date rows sat inside — reported on every fixture
+                            that renders the calendar. */}
+                        <div
+                          className={mergedClasses.listHeader}
+                          style={showWeekNumbers ? { gridTemplateColumns: "2rem repeat(7, 1fr)" } : undefined}
+                          role="row"
+                          aria-label="Days of the week"
+                        >
+                          {showWeekNumbers && (
+                            <div
+                              className={mergedClasses.weekNumber}
+                              aria-hidden="true"
+                            >
+                              #
+                            </div>
+                          )}
+                          {weekdays.map((day) => (
+                            <div
+                              key={day}
+                              className={mergedClasses.weekday}
+                              role="columnheader"
+                              aria-label={day}
+                            >
+                              {day}
+                            </div>
+                          ))}
+                        </div>
+
                         {calendarMonth.weeks.map((week, weekIndex) => (
                           <div
                             key={weekIndex}

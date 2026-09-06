@@ -1050,8 +1050,8 @@ describe('SearchableDropdown - Position & Portal', () => {
     await user.click(screen.getByRole('combobox'));
     await waitForDropdownOpen();
 
-    const listbox = screen.getByRole('listbox', { hidden: true });
-    expect(listbox).toHaveAttribute('data-position');
+    const panel = document.querySelector('[data-dropdown-id]');
+    expect(panel).toHaveAttribute('data-position');
   });
 
   it('should set custom z-index', async () => {
@@ -1067,8 +1067,9 @@ describe('SearchableDropdown - Position & Portal', () => {
     await user.click(screen.getByRole('combobox'));
     await waitForDropdownOpen();
 
-    const listbox = screen.getByRole('listbox', { hidden: true });
-    expect(listbox.style.zIndex).toBe('999');
+    // The panel carries the positioning; the listbox inside it carries options.
+    const panel = document.querySelector<HTMLElement>('[data-dropdown-id]')!;
+    expect(panel.style.zIndex).toBe('999');
   });
 
   it('should keep mounted when keepMounted is true', async () => {
@@ -1086,9 +1087,9 @@ describe('SearchableDropdown - Position & Portal', () => {
 
     await user.click(screen.getByRole('combobox'));
 
-    const listbox = screen.getByRole('listbox', { hidden: true });
-    expect(listbox).toBeInTheDocument();
-    expect(listbox.style.display).toBe('none');
+    const panel = document.querySelector<HTMLElement>('[data-dropdown-id]')!;
+    expect(panel).toBeInTheDocument();
+    expect(panel.style.display).toBe('none');
   });
 });
 

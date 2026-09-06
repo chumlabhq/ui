@@ -124,6 +124,13 @@ interface DropdownContentProps {
   loading: boolean;
   ariaLabel: string;
   contentRef?: React.RefObject<HTMLDivElement | null>;
+  /**
+   * The loading or empty message, rendered beside the listbox rather than
+   * inside it. A `listbox` owns options and nothing else — axe reported
+   * "children which are not allowed: [role=status]" on four fixtures, and a
+   * screen reader reading the list would have had to read past it.
+   */
+  status?: ReactNode;
   children: ReactNode;
 }
 
@@ -143,6 +150,7 @@ const DropdownContent = memo(function DropdownContent({
   loading,
   ariaLabel,
   contentRef,
+  status,
   children,
 }: DropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -174,16 +182,24 @@ const DropdownContent = memo(function DropdownContent({
       zIndex={zIndex}
       portalContainer={portalContainer}
       keepMounted={keepMounted}
-      id={listboxId}
-      role="listbox"
-      aria-label={ariaLabel}
-      aria-busy={loading || undefined}
       className={classes.content || undefined}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.side ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
-      <div className={classes.list || undefined}>{children}</div>
+      {status}
+      {/* The listbox is the option list, not the panel around it. The panel
+          holds the status message too, and a listbox may own nothing but
+          options and groups. */}
+      <div
+        id={listboxId}
+        role="listbox"
+        aria-label={ariaLabel}
+        aria-busy={loading || undefined}
+        className={classes.list || undefined}
+      >
+        {children}
+      </div>
     </MenuSurface>
   );
 });
@@ -592,38 +608,38 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             loading={loading}
             ariaLabel={listboxAriaLabel}
             contentRef={dropdownContentRef}
-          >
-            {loading ? (
-              <DropdownShimmer
-                count={shimmerCount}
-                className={mergedClasses.loading}
-                itemClassName={mergedClasses.loadingItem}
-              />
-            ) : displayOptions.length === 0 ? (
-              <div
-                role="status"
-                className={mergedClasses.empty || undefined}
-              >
-                {noResultsContent}
-              </div>
-            ) : (
-              displayOptions.map((option, index) => (
-                <DropdownOptionItem
-                  key={option.value}
-                  option={option}
-                  isSelected={option.value === currentValue}
-                  isFocused={index === focusedIndex}
-                  dropdownId={dropdownId}
-                  index={index}
-                  classes={mergedClasses}
-                  showSelectedIcon={showSelectedIcon}
-                  selectedIcon={selectedIcon}
-                  CheckIconComponent={CheckIconProp}
-                  onSelect={handleOptionSelect}
-                  onHover={setFocusedIndex}
+            status={
+              loading ? (
+                <DropdownShimmer
+                  count={shimmerCount}
+                  className={mergedClasses.loading}
+                  itemClassName={mergedClasses.loadingItem}
                 />
-              ))
-            )}
+              ) : displayOptions.length === 0 ? (
+                <div role="status" className={mergedClasses.empty || undefined}>
+                  {noResultsContent}
+                </div>
+              ) : null
+            }
+          >
+            {loading
+              ? null
+              : displayOptions.map((option, index) => (
+                  <DropdownOptionItem
+                    key={option.value}
+                    option={option}
+                    isSelected={option.value === currentValue}
+                    isFocused={index === focusedIndex}
+                    dropdownId={dropdownId}
+                    index={index}
+                    classes={mergedClasses}
+                    showSelectedIcon={showSelectedIcon}
+                    selectedIcon={selectedIcon}
+                    CheckIconComponent={CheckIconProp}
+                    onSelect={handleOptionSelect}
+                    onHover={setFocusedIndex}
+                  />
+                ))}
           </DropdownContent>
         </div>
 

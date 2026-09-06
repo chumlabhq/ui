@@ -525,9 +525,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         matchTriggerWidth={variant === "dropdown"}
         {...(variant === "dropdown"
           ? {
-              id: listboxId,
-              role: "listbox",
-              "aria-label": typeof label === "string" ? label : "Time options",
               className: mergedClasses.content,
               "data-position": dropdownCoords?.side ?? dropdownPosition,
             }
@@ -539,11 +536,22 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             })}
       >
         {variant === "dropdown" ? (
-          <div className={mergedClasses.list}>
+          <>
+            {/* Beside the listbox, not inside it: a listbox owns options, and
+                "no matching times" is a status message. It had no role at all,
+                so a filter that emptied the list said nothing to anyone. */}
             {displayOptions.length === 0 ? (
-              <div className={mergedClasses.empty}>No matching times</div>
-            ) : (
-              displayOptions.map((time, index) => (
+              <div role="status" className={mergedClasses.empty}>
+                No matching times
+              </div>
+            ) : null}
+            <div
+              id={listboxId}
+              role="listbox"
+              aria-label={typeof label === "string" ? label : "Time options"}
+              className={mergedClasses.list}
+            >
+              {displayOptions.map((time, index) => (
                 <TimeOption
                   key={time}
                   time={time}
@@ -559,9 +567,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
                   onHover={setFocusedIndex}
                   optionTextClass={optionTextClass}
                 />
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          </>
         ) : (
           <ClockFace
             value={clockValue}
