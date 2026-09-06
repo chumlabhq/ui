@@ -38,6 +38,7 @@ import type { SearchableDropdownOption } from "../SearchableDropdown/index.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { cn } from "../../utils/scopedCn.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
@@ -195,6 +196,15 @@ const InternationalPhoneInput = forwardRef<
     const generatedId = useId();
     const inputId = id || generatedId;
     const labelId = `${inputId}-label`;
+
+    // The phone field is a textbox with a placeholder and, without `label`, no
+    // name — the placeholder is not one. The group around it carries a hardcoded
+    // "Phone number input", which names the group and not the control.
+    useAccessibleNameWarning("InternationalPhoneInput", {
+      label,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+    });
     const descriptionId = `${inputId}-description`;
     const errorId = `${inputId}-error`;
     const successId = `${inputId}-success`;

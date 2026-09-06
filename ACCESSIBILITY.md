@@ -432,6 +432,51 @@ fixtured first, and the sweeps found five defects in them the moment they render
 
 ---
 
+## Right-to-left is not supported
+
+`dir="rtl"` is out of scope for 0.1.0, and this is the statement of that rather than an
+omission. The components render and nothing is clipped — the viewport clamp is symmetrical
+because it works from both edges — but nothing mirrors.
+
+Measured, on 2026-09-06, across fourteen `dir="rtl"` fixtures. `e2e/rtl.spec.ts` keeps every
+one of these as a skipped assertion with the numbers in its skip reason, so the next person
+starts from evidence rather than from a re-measurement:
+
+| | Measured in RTL at 1024px |
+| --- | --- |
+| `SearchableDropdown` | surface `[25..267]` against a trigger at `[24..1000]` — left-aligned |
+| `TimePicker` | surface `[777..999]` against a trigger at `[813..987]` |
+| `DatePicker` | surface `[24..338]` against a trigger at `[24..1000]` |
+| `Breadcrumb` | surface `[856..1016]` against a trigger at `[882..922]` |
+| `Table` filter menu | surface `[45..225]` against a trigger at `[45..59]` |
+| `CascadingDropdown` submenu | opens to the **right** of an item at `[25..283]` with room on both sides |
+| `Slider` | at `value: 25` the thumb sits 75% from the leading edge |
+
+`Dropdown`, `MultiSelectDropdown` and `Pagination` are not in the table because their surface
+is sized to the trigger, so both alignments coincide and the measurement says nothing.
+
+**It does not mirror; it does not mirror the wrong way.** `useAnchoredPosition` takes no
+direction input at all, so there is nothing to get wrong. The flip machinery works — the LTR
+near-edge fixtures prove a submenu picks the other side when the preferred one cannot hold it
+— and its only input is available space.
+
+### The order this has to be done in
+
+1. **Logical properties across the constants files.** `pl-*`/`pr-*`, `ml-*`/`mr-*`,
+   `text-left`, `left-*`/`right-*` become their `start`/`end` equivalents. This is the
+   largest part and it comes first, because mirroring the positioner while the padding stays
+   physical produces a surface in the right place with its contents on the wrong side — a bug
+   report per component.
+2. **A direction input to `useAnchoredPosition`.** The main-axis alignment and the flip
+   preference both read it; the clamp already needs no change.
+3. **Icon mirroring.** Chevrons, Breadcrumb separators and Pagination arrows, which are
+   markup rather than layout and are the part a user notices last and complains about first.
+
+`Drawer` is deliberately outside all three: its `direction` is physical (`left`/`right`), not
+logical (`start`/`end`), so an RTL consumer swaps the value themselves.
+
+---
+
 ## Known failures
 
 These are not "ungated": they are believed to fail.
@@ -459,5 +504,7 @@ now, and `dragging-alternatives.contract` covers all six drag surfaces in the pa
   `TimePicker`, whose combobox is an `<input>`, so an unnamed combobox there would have gone
   unreported. It is named, but by its `placeholder` in the unlabelled fixtures, which is a
   weak name that axe accepts.
+- **Right-to-left**, which is not supported in 0.1.0 and has its own section above with the
+  measurements and the order the work has to be done in.
 - **Consumer overrides.** Every gate here measures the shipped defaults. `classes`,
   `unstyled` and token overrides can invalidate any row, and 1.4.3 in particular.

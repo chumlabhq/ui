@@ -45,6 +45,7 @@ import { cn } from "../../utils/scopedCn.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 
 import { isBrowser } from "../../utils/isBrowser.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
@@ -117,6 +118,21 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const titleId = `drawer-title-${generatedId}`;
     // Whether a `DrawerHeader` is rendering that id right now.
     const [hasTitle, setHasTitle] = useState(false);
+
+    /**
+     * A dialog is not named by its contents, so a drawer composed without a
+     * `DrawerHeader` and without `aria-label` has no name at all. It used to
+     * point `aria-labelledby` at the header's id regardless, which was a name
+     * that resolved to nothing; removing that made the silence visible.
+     *
+     * The header registers in an effect, and a child's effect runs before its
+     * parent's, so `hasTitle` is already true here when one is rendered.
+     */
+    useAccessibleNameWarning("Drawer", {
+      label: hasTitle || undefined,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+    });
     const panelRef = useRef<HTMLDivElement>(null);
     const mergedPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
     const triggerRef = useRef<Element | null>(null);

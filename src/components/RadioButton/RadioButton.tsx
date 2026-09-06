@@ -18,6 +18,7 @@ import {
 } from "./utils/constants.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { cn } from "../../utils/scopedCn.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 // ─── Context ──────────────────────────────────────────────────────────────────
@@ -89,6 +90,17 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const generatedId = useId();
     const groupId = rest.id || generatedId;
     const labelId = `${groupId}-label`;
+
+    // `radiogroup` takes no name from the radios inside it, so a group without
+    // `label` is announced as "group" and nothing else. The library cannot
+    // supply the name; it can say that one is missing.
+    useAccessibleNameWarning("RadioGroup", {
+      label,
+      // Read off `rest` rather than destructured: both attributes are spread
+      // onto the group element and neither has its own prop.
+      "aria-label": (rest as Record<string, unknown>)["aria-label"],
+      "aria-labelledby": (rest as Record<string, unknown>)["aria-labelledby"],
+    });
     const descriptionId = `${groupId}-description`;
     const errorId = `${groupId}-error`;
 

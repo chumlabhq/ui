@@ -465,11 +465,11 @@ comprehensible, whether focus order makes narrative sense, or whether a live reg
 at a useful moment. Every accessibility claim in this package is "the markup is correct",
 never "a person using a screen reader could complete the task".
 
-**Right-to-left is measured now, and the package does not do it.** Fourteen `dir="rtl"`
+**Right-to-left is measured now, recorded as unsupported, and out of scope for 0.1.0.** Fourteen `dir="rtl"`
 fixtures render the anchored and directional surfaces with the direction on `<html>` — which
 is where it has to be, because every menu is portalled to the body and a `dir` on the
-component's own box never reaches it. `e2e/rtl.spec.ts` states what mirroring is and **fails
-on 7 of 10 assertions**:
+component's own box never reaches it. `e2e/rtl.spec.ts` states what mirroring is and keeps
+**7 of 10 assertions skipped, each carrying its own measurement in the skip reason**:
 
 - **No anchored surface mirrors.** `SearchableDropdown`, `TimePicker`, `DatePicker`,
   `Breadcrumb` and `Table`'s filter menu all align their LEFT edge to the trigger's left in
@@ -495,7 +495,9 @@ rather than `start`/`end`, so mirroring the positioner would leave the padding a
 pointing the wrong way. `Drawer` takes a physical `direction` (`left`/`right`) rather than a
 logical one, so nothing there mirrors by design and an RTL consumer has to swap the value
 themselves. Making the package RTL-correct is a vocabulary change across every constants
-file, not a change to `useAnchoredPosition`.
+file, not a change to `useAnchoredPosition`, which is why it is a 1.1 feature with a recorded
+order rather than a patch: logical properties first, a direction input second, icons third.
+README and ACCESSIBILITY.md both say plainly that RTL is not supported.
 
 **No Lighthouse, no real-device testing, no performance profiling in a real app.** Mobile
 Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not phones.
@@ -624,9 +626,10 @@ In order. The first two are done; the rest are not.
    the source, along with 31 the painted-contrast gate found once it existed.
 4. ~~Decide how a consumer overrides a token (§1.3).~~ **Done** — the token block is layered
    and both import orders are asserted against the shipped stylesheet.
-5. **Decide what RTL support means (§4).** `e2e/rtl.spec.ts` is red on 7 assertions: no
-   anchored surface mirrors, and the one surface that flips chooses its side by available
-   space alone.
+5. ~~Decide what RTL support means (§4).~~ **Decided: out of scope for 0.1.0.** README and
+   ACCESSIBILITY.md say so plainly, the seven measurements are kept as skipped assertions
+   carrying their numbers, and the order for 1.1 is recorded — logical properties first, a
+   direction input to `useAnchoredPosition` second, icon mirroring third.
 6. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** The remaining
    blocker: one project has never been seen green, and "probably environmental" is a reading,
    not a result.
@@ -635,4 +638,4 @@ In order. The first two are done; the rest are not.
    obvious fix, so it is worth doing before step 6 rather than after.
 8. Decide the 17 waived keys — delete them under R7 while it is still free.
 
-Steps 5 and 6 are the remaining blockers. Step 8 gets much more expensive after 1.0.
+Step 6 is the remaining blocker. Step 8 gets much more expensive after 1.0.

@@ -70,6 +70,13 @@ none is a bug fix that happened to move behaviour.
   stylesheet was imported first, and lost silently otherwise. The utilities are deliberately
   NOT layered — they are `.flex:where(.cl-s)`, and a layered rule loses to any unlayered one,
   which would undo the scoping that keeps a consumer's own Tailwind from overriding them.
+- **Four components warn when they mount with no accessible name**, joining the six that
+  already did: `Drawer` (a dialog composed without a `DrawerHeader`), `RadioGroup` (a
+  `radiogroup` takes no name from its radios), `InternationalPhoneInput` (the phone field's
+  placeholder is not a name) and `TimePicker` (whose combobox is an `<input>`, which is why
+  no axe rule ever faulted it). Development only, as before.
+- **Breadcrumb's overflow menu is named.** The `role="menu"` it opens had no accessible name
+  at all; it takes the trigger's own `ellipsisAriaLabel`.
 - **Drawer no longer names a title that is not there.** The panel's `aria-labelledby` pointed
   at the `DrawerHeader`'s id unconditionally, so a drawer composed without a header claimed a
   name that resolved to nothing. The header registers itself now; a drawer without one is

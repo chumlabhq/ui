@@ -25,6 +25,7 @@ import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep }
 import { isBrowser } from "../../utils/isBrowser.js";
 
 import { cn } from "../../utils/scopedCn.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 
@@ -264,6 +265,18 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     const generatedId = useId();
     const dropdownId = id || name || generatedId;
     const listboxId = `${dropdownId}-listbox`;
+
+    // The one combobox in the package that is an `<input>`, which is why the
+    // axe sweep never faulted it: `button-name` does not apply, and the
+    // placeholder is a name axe accepts and a screen reader announces as a
+    // hint. ACCESSIBILITY.md records that gap; this is the warning it needed.
+    useAccessibleNameWarning("TimePicker", {
+      label,
+      // Off `restProps`: neither attribute has a prop of its own here, and both
+      // are spread onto the input.
+      "aria-label": (restProps as Record<string, unknown>)["aria-label"],
+      "aria-labelledby": (restProps as Record<string, unknown>)["aria-labelledby"],
+    });
     const clockPopupId = `${dropdownId}-clock`;
     const triggerId = `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;

@@ -126,9 +126,12 @@ function DropdownPortal({
   defaultTooltipProps,
   portalContainer,
   keepMounted,
+  ellipsisAriaLabel,
 }: {
   buttonRef: React.RefObject<HTMLButtonElement | null>;
   dropdownId: string;
+  /** The trigger's label, reused to name the surface it opens. */
+  ellipsisAriaLabel: string;
   dropdownClassName?: string;
   dropdownItemClassName?: string;
   dropdownItemDisabledClassName?: string;
@@ -171,6 +174,9 @@ function DropdownPortal({
       matchTriggerWidth={false}
       id={dropdownId}
       role="menu"
+      // The trigger's own label, on the surface it opens: a `menu` is not named
+      // by the items inside it, so it announced as "menu" and nothing else.
+      aria-label={ellipsisAriaLabel}
       className={dropdownClassName || undefined}
       data-state="open"
       data-position={position}
@@ -660,6 +666,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               defaultTooltipProps={defaultTooltipProps}
               portalContainer={portalContainer}
               keepMounted={keepMounted}
+              ellipsisAriaLabel={ellipsisAriaLabel}
             />
           )}
         </li>
