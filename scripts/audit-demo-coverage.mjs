@@ -264,6 +264,9 @@ for (const rootPath of roots) {
       props.set(propName, {
         tier: tierOf(propName, type, checker),
         inherited: !isLibraryAuthored(property),
+        // JSON only, for audit-fixture-gap.mjs: a slot typed `ReactNode` and a
+        // label typed `string` are the same tier and not the same risk.
+        type: checker.typeToString(type),
       });
     }
     if (props.size === 0) continue;
@@ -464,6 +467,15 @@ for (const component of components) {
     noFixture: noFixture.length,
     phantom: componentPhantoms.length,
     tierA: noDemo.filter(([, i]) => i.tier === "A").map(([n]) => n),
+    // JSON only — the markdown reports counts. `audit-fixture-gap.mjs` reads
+    // these to classify which of them put markup on screen, so the two scripts
+    // share one derivation of what "has no fixture" means.
+    noFixtureProps: noFixture.map(([name, info]) => ({
+      name,
+      tier: info.tier,
+      type: info.type ?? "",
+    })),
+    owner: ownerOf.get(component) ?? component,
   });
 }
 
@@ -486,7 +498,10 @@ if (canonicalUnproven.length > 0 && !JSON_ONLY) {
 }
 
 if (JSON_ONLY) {
-  process.stdout.write(`${JSON.stringify(derivation, null, 2)}\n`);
+  // Written synchronously to the file descriptor, not through `process.stdout`
+  // followed by `exit`: a pipe takes 64KB before it blocks, and exiting on the
+  // pending write truncated the payload mid-object for any reader.
+  writeFileSync(1, `${JSON.stringify(derivation, null, 2)}\n`);
   process.exit(0);
 }
 

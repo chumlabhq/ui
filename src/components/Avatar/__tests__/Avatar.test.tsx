@@ -302,7 +302,9 @@ describe("AvatarBadge", () => {
       render(<AvatarBadge count={5} />);
 
       const badge = screen.getByRole("status");
-      expect(badge).toHaveClass("bg-red-500");
+      // The error token, not Tailwind's red: `bg-red-500` under `text-white` is
+      // 3.76:1, and a fixed red cannot follow the theme.
+      expect(badge).toHaveClass("bg-cl-error");
     });
 
     it("applies outline variant", () => {
@@ -316,7 +318,7 @@ describe("AvatarBadge", () => {
       render(<AvatarBadge count={5} variant="soft" />);
 
       const badge = screen.getByRole("status");
-      expect(badge).toHaveClass("bg-red-100");
+      expect(badge).toHaveClass("bg-cl-error-bg");
     });
   });
 

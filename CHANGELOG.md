@@ -54,6 +54,12 @@ none is a bug fix that happened to move behaviour.
   of the accent (`bg-cl-accent/15`, with a `dark:` override at `/60` that put accent text on
   a 60% accent wash at 2.2:1). A highlighted selected row keeps its tint and deepens its text
   rather than being repainted with the hover background.
+- **AvatarBadge follows the theme.** All three variants were Tailwind's red ramp:
+  `bg-red-500` under `text-white` is 3.76:1, the outline variant painted `bg-white` — a
+  light-theme assumption — and the soft variant's `bg-red-100 text-red-700` stayed light in
+  dark. They use `--cl-error`, `--cl-error-bg` and `--cl-on-error` now. The last two are new
+  tokens; if you have overridden the `--cl-*` set, define them or the badge falls back to an
+  unset colour.
 - **Table's column-filter menu is tokenised.** It wrote `text-gray-500`, `text-gray-700` and
   three grey borders — Tailwind's palette in a component with tokens for all of them — which
   measured 4.02:1 and 1.88:1 on the dark panel.

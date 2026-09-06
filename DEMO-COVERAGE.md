@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 58 |
 | Library-authored props across the public surface | 1136 |
 | With no demo | 283 (25%) |
-| With no fixture | 718 (63%) |
+| With no fixture | 713 (63%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -76,7 +76,7 @@ listed here with no demo anywhere fails the generator.
 | AccordionShimmer | 11 | 2 | 7 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` |
 | AccordionTrigger | 10 | 277 | 3 | 9 | 0 | `asChild` |
 | Avatar | 21 | 278 | 2 | 12 | 0 | `asChild` |
-| AvatarBadge | 14 | 278 | 6 | 13 | 0 | `variant`, `asChild` |
+| AvatarBadge | 14 | 278 | 6 | 8 | 0 | `variant`, `asChild` |
 | AvatarGroup | 16 | 278 | 3 | 14 | 0 | `asChild` |
 | AvatarGroupCount | 14 | 278 | 9 | 13 | 0 | `size`, `shape`, `asChild` |
 | AvatarGroupShimmer | 9 | 280 | 2 | 8 | 0 | `reduceMotion`, `asChild` |

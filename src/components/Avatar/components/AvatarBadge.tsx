@@ -4,19 +4,29 @@ import { Slot } from "../../../utils/Slot.js";
 import { getBadgePosition, getBadgeSizeClasses } from "../utils/helpers.js";
 import { cn } from "../../../utils/scopedCn.js";
 
+/**
+ * The error token family, not Tailwind's red ramp.
+ *
+ * `bg-red-500 text-white` is 3.76:1 — under AA for the count, which is text —
+ * and `text-red-500` on `bg-white` is the same pair inverted. Neither gate
+ * could see it: `contrast.contract` reads the token scale and these were not
+ * in it, and the painted sweep only measures what a fixture renders, which
+ * nothing did. `--cl-error-bg` and `--cl-on-error` were minted for this, so all
+ * three variants follow the theme and each pair is gated.
+ */
 const variantStyles = {
   solid: {
-    dot: "bg-red-500 rounded-full",
-    count: "font-medium bg-red-500 text-white rounded-full px-1.5",
+    dot: "bg-cl-error rounded-full",
+    count: "font-medium bg-cl-error text-cl-on-error rounded-full px-1.5",
   },
   outline: {
-    dot: "border-2 border-red-500 bg-transparent rounded-full",
+    dot: "border-2 border-cl-error bg-transparent rounded-full",
     count:
-      "font-medium border-2 border-red-500 text-red-500 bg-white rounded-full px-1.5",
+      "font-medium border-2 border-cl-error text-cl-error bg-cl-bg-panel rounded-full px-1.5",
   },
   soft: {
-    dot: "bg-red-200 rounded-full",
-    count: "font-medium bg-red-100 text-red-700 rounded-full px-1.5",
+    dot: "bg-cl-error-bg rounded-full",
+    count: "font-medium bg-cl-error-bg text-cl-error rounded-full px-1.5",
   },
 };
 

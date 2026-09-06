@@ -132,7 +132,8 @@ const SURFACES = [
 ];
 
 /**
- * Pairs that are not text-token × surface: an accent label on its own tint.
+ * Pairs that are not text-token × surface: a label on a tint or a solid of its
+ * own family.
  *
  * Selected rows paint `--cl-accent-bg` and write on it in the accent, and the
  * highlighted one deepens to `--cl-accent-hover` — Pagination's list is the
@@ -146,6 +147,11 @@ const SURFACES = [
 const ACCENT_PAIRS: Array<[string, string]> = [
   ["--cl-accent", "--cl-accent-bg"],
   ["--cl-accent-hover", "--cl-accent-bg"],
+  // The error surface, minted for AvatarBadge's count pill. `--cl-error` is
+  // opaque, so compositing it over a base returns the colour itself and the
+  // pair is measured as written.
+  ["--cl-error", "--cl-error-bg"],
+  ["--cl-on-error", "--cl-error"],
 ];
 
 const ACCENT_BASES = ["--cl-bg", "--cl-bg-panel"];

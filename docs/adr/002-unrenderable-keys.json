@@ -128,14 +128,14 @@
   "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived — the constants ratchet is the schedule.",
   "$axeBaselineHistory": "Emptied by the ADR 003 combobox slice. It held one entry: button-name x1 on InternationalPhoneInput's country trigger, recorded as out of scope for the phase. That trigger is the nested SearchableDropdown's, so naming the SearchableDropdown trigger retired it — IPI needed no change of its own. The per-fixture list in axeFixtureExpectations went 66 -> 3 in the same slice; the 3 that remain are Switch, a different cause. An empty baseline is the point of a ratchet, not a reason to delete the gate.",
   "axeExpectationsDerivedFrom": {
-    "fixtures": 367,
+    "fixtures": 372,
     "recordedOn": "2026-09-06"
   },
   "$comment_painted": "Companion record to e2e/contrast-painted.spec.ts. Text that the browser paints under WCAG AA's 4.5:1 (3:1 for large text), measured over every fixture in both themes. Distinct from contrast.contract, which checks the --cl-* scale rather than what a component actually writes: these are the sites where a component writes a colour the scale does not own. Ratchets down only; re-derive with CONTRAST_RERECORD=1 npx playwright test --project=a11y-full contrast-painted.",
   "paintedContrastExpectations": {
     "reason": "Empty, and that is the claim. Text painted under AA over every fixture in both themes, measured from computed colour rather than from the token scale — see e2e/contrast-painted.spec.ts. Seeded at 31 on 2026-09-06 (fifteen components whose `message` key wrote both --cl-error and --cl-success unconditionally, so every error message painted success green at 3.30:1 in light; plus Slider's value tooltip, white text on the panel token, which is white in light). All 31 were fixed rather than accepted. An entry here means a measured failure on a shipped default that has been decided; adding one takes a reason.",
     "recordedOn": "2026-09-06",
-    "fixtures": 367,
+    "fixtures": 372,
     "findings": []
   }
 }

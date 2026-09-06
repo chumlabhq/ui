@@ -91,6 +91,7 @@ const RELATIONAL: { token: string; against: string; claim: string }[] = [
   { token: "--cl-accent-hover", against: "--cl-accent", claim: "the hover form of the accent" },
   { token: "--cl-accent-bg-hover", against: "--cl-accent-bg", claim: "the hover form of the accent background" },
   { token: "--cl-on-accent", against: "--cl-accent", claim: "is legible on the accent" },
+  { token: "--cl-on-error", against: "--cl-error", claim: "is legible on the error colour" },
 ];
 
 /** Names that assert only a role. Listed so the enumeration is complete. */
@@ -110,6 +111,7 @@ const ROLE_ONLY = [
   "--cl-success",
   "--cl-warning",
   "--cl-error",
+  "--cl-error-bg",
   "--cl-code-bg",
   "--cl-code-text",
   "--cl-shadow-sm",

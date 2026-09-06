@@ -136,6 +136,12 @@
   --cl-success: #22c55e;
   --cl-warning: #f59e0b;
   --cl-error: #e85d5d;
+  /* The error surface pair, minted for AvatarBadge — the one component that
+     paints a solid semantic surface rather than writing semantic text on a
+     neutral one. It had `bg-red-500 text-white` (3.76:1) and `bg-white` in the
+     outline variant, which is a light-theme assumption. */
+  --cl-error-bg: rgba(232, 93, 93, 0.12);
+  --cl-on-error: #050608;
 
   /* Code */
   --cl-code-bg: #0a0d12;
@@ -259,6 +265,8 @@
      carries content has to clear AA on every surface this package can put it
      on rather than on the ones it happens to use today. */
   --cl-error: #b91c1c;
+  --cl-error-bg: rgba(185, 28, 28, 0.1);
+  --cl-on-error: #ffffff;
 
   --cl-code-bg: #f4f5f7;
   --cl-code-text: rgba(15, 18, 24, 0.85);
@@ -357,6 +365,8 @@
   --color-cl-success: var(--cl-success);
   --color-cl-warning: var(--cl-warning);
   --color-cl-error: var(--cl-error);
+  --color-cl-error-bg: var(--cl-error-bg);
+  --color-cl-on-error: var(--cl-on-error);
 
   --color-cl-code-bg: var(--cl-code-bg);
   --color-cl-code-text: var(--cl-code-text);

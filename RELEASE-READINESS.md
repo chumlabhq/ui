@@ -105,7 +105,7 @@ animation settle that covered the act by accident, the sweep reported **93 findi
 listboxes, 7 scroll regions, 4 contrast on raw-palette classes, with 15 of the 68 needing the
 fixture's act as well as the scope. Two criteria moved from Supports to Partially supports.
 
-**All 68 are now fixed and the sweep reports 25 across 367 fixtures — the recorded set, and
+**All 68 are now fixed and the sweep reports 25 across 372 fixtures — the recorded set, and
 nothing open.** The popups stopped claiming to be the listbox or menu they contain: the
 portalled panel holds the search field and the status message beside a listbox that owns only
 options, `DatePicker`'s weekday row moved inside its grid, and `CascadingDropdown`'s submenu
@@ -281,7 +281,7 @@ deleting the entry is how it goes back to blocking.
 | `unstyled` drops every decorative class | `unstyled.contract` across all 30, with a ratcheted leak list |
 | Every `classes` key reaches a real element | `fixtures.contract` renders every key in every anatomy; `key-uniqueness.contract` asserts one key per element |
 | Layout holds 320–1920 px in both themes | 404 recorded screenshots — 30 components × 6 widths × 2 themes, plus 11 open surfaces × 2 widths × 2 themes — and three guards: one fails a baseline that is a picture of nothing, one fails a baseline whose render is not the same 26 hours later, and one fails an anchored surface that lands on different coordinates when the web font arrives late |
-| Text contrast meets AA in both themes | Two gates: `contrast.contract` on the token scale (every text token against every surface, plus the accent-on-tint pairs), and `contrast-painted.spec.ts` on what the browser computes over all 367 fixtures in both themes. The second is self-checked by planting a raw-palette grey the first cannot see |
+| Text contrast meets AA in both themes | Two gates: `contrast.contract` on the token scale (every text token against every surface, plus the accent-on-tint pairs), and `contrast-painted.spec.ts` on what the browser computes over all 372 fixtures in both themes. The second is self-checked by planting a raw-palette grey the first cannot see |
 | Ten owned WCAG criteria | Named contract or e2e gate per criterion, listed in `ACCESSIBILITY.md` with the engines it ran in |
 | Bundle size per component | `assert-bundle-size.mjs`, 30 entries, shape derived from source, per-entry ratchet |
 | Docs name no prop the types lack | `doc-truth.contract` |
@@ -423,7 +423,17 @@ failure modes.
 **No Lighthouse, no real-device testing, no performance profiling in a real app.** Mobile
 Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not phones.
 
-**Visual coverage is 41 of 364 fixtures.** 30 resting subjects at six widths and eleven
+**712 of 1136 props have no fixture, and 201 of those render markup no gate has seen.**
+`scripts/audit-fixture-gap.mjs` classifies every un-fixtured prop from the AST rather than
+from its name: 511 are handlers, passthroughs, attribute switches or text, and change nothing
+a gate looks at; 201 put markup on screen that no fixture produces. Ranked by what a gate
+would have caught, they are 3 portalled surfaces, 10 new roles, 10 new interactive elements,
+2 colour-pair variants, 51 slots, 48 props that decide whether the component renders at all,
+and 77 smaller ARIA and class-key differences. `AvatarBadge`'s `variant` was in that set until
+this slice, and it was the one carrying a 3.76:1 contrast pair — which is the argument for
+the number mattering rather than the number being large.
+
+**Visual coverage is 41 of 372 fixtures.** 30 resting subjects at six widths and eleven
 open surfaces at two, 404 baselines in all. The rest of the fixture set has no baseline.
 
 **All eleven are now pictures of their own surface.** `CascadingDropdown/open-submenu` was
