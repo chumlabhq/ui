@@ -31,6 +31,16 @@ branch or a local link, these are the changes that will reach you.
 These are the behavioural changes a consumer would notice. Each was made deliberately;
 none is a bug fix that happened to move behaviour.
 
+- **CascadingDropdown's submenu is portalled and anchored, and `classes.subPositioner`
+  changed meaning with it.** The submenu was a `position: absolute` child of the menu item
+  it opens from, which made it the only floating surface in the package with no viewport
+  clamp and no flip: at 1024px it opened 199px past the right edge, and at 320px it painted
+  nothing at all. It now renders through the same anchored portal as every other surface.
+  `subPositioner` is still the key for that element and still defaults to `z-[9999]`, but it
+  is the portal root rather than an absolutely-positioned wrapper, so positioning utilities
+  written on it (`left-full`, `top-0`, `absolute`) no longer have any effect — the
+  coordinates are inline styles. `submenuPosition` picks the preferred side and the side
+  actually used is published as `data-side`.
 - **DatePicker's focused trigger draws the same border in both themes.** Dark used a
   different colour from light for the same state, so a trigger that read as focused on one
   theme read as merely hovered on the other.
@@ -73,5 +83,10 @@ none is a bug fix that happened to move behaviour.
 - CommonJS consumers get CommonJS declarations. `"type": "module"` made every `.d.ts` an
   ES module while `require` resolved to `.cjs`, so the types described the wrong shape for
   all 32 entrypoints.
+- Floating surfaces re-anchor when a web font finishes loading. Position is measured from
+  the trigger's box when the surface opens, and a font that lands after that re-lays out the
+  page around a trigger whose size has not changed — which a `ResizeObserver` cannot see. On
+  a consumer's first paint, every dropdown, menu, calendar and tooltip could sit up to a
+  couple of pixels beside its trigger until the next scroll or resize.
 - Escape closes a Dropdown from anywhere inside it, not only from the trigger.
 - Focus reaches the surface on open, on every open rather than the first.

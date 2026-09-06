@@ -121,6 +121,39 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     note: "Submenu parts, and their own search box, only exist once a parent row is entered.",
     act: openSubmenu,
   },
+  /**
+   * The two anchor positions the clamp and the flip are about.
+   *
+   * The submenu was CSS-positioned until it moved onto MenuSurface, so it was
+   * the one floating surface with neither: at 1024 it opened at x=1003 with a
+   * width of 220 and left the frame, and at 320 it painted nothing at all.
+   * `cascading-submenu.spec.ts` measures both of these against their anchor.
+   */
+  {
+    name: "open-submenu-near-right",
+    props: { options: NESTED, defaultOpen: true, keepMounted: true, showSubmenuSearch: true },
+    wrap: (node) => <div style={{ width: 260, marginLeft: "auto" }}>{node}</div>,
+    act: openSubmenu,
+  },
+  {
+    name: "open-submenu-left",
+    props: {
+      options: NESTED,
+      defaultOpen: true,
+      keepMounted: true,
+      showSubmenuSearch: true,
+      submenuPosition: "left",
+    },
+    wrap: (node) => <div style={{ width: 260, marginLeft: "auto" }}>{node}</div>,
+    note: "submenuPosition honoured when the preferred side has room; the side is a layout answer and jsdom has none.",
+    act: openSubmenu,
+  },
+  {
+    name: "open-submenu-near-left",
+    props: { options: NESTED, defaultOpen: true, keepMounted: true, showSubmenuSearch: true },
+    wrap: (node) => <div style={{ width: 260, marginRight: "auto" }}>{node}</div>,
+    act: openSubmenu,
+  },
   {
     name: "open-with-selection",
     props: {

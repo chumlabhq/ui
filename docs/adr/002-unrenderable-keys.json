@@ -128,7 +128,7 @@
   "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived — the constants ratchet is the schedule.",
   "$axeBaselineHistory": "Emptied by the ADR 003 combobox slice. It held one entry: button-name x1 on InternationalPhoneInput's country trigger, recorded as out of scope for the phase. That trigger is the nested SearchableDropdown's, so naming the SearchableDropdown trigger retired it — IPI needed no change of its own. The per-fixture list in axeFixtureExpectations went 66 -> 3 in the same slice; the 3 that remain are Switch, a different cause. An empty baseline is the point of a ratchet, not a reason to delete the gate.",
   "axeExpectationsDerivedFrom": {
-    "fixtures": 364,
-    "recordedOn": "2026-09-05"
+    "fixtures": 367,
+    "recordedOn": "2026-09-06"
   }
 }

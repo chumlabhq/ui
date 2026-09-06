@@ -28,9 +28,10 @@ Supports by someone writing the test, not by someone reading the code and being 
 
 ### Where the package stands
 
-Of the 55 Level A and AA criteria: **9 Supports, 10 Partially supports, 14 Does not support,
-22 Not applicable**. 1.3.1 and 1.4.3 moved from Supports to Partially supports on 2026-09-06,
-when the axe sweep's scope was widened to include the surfaces this library portals — see
+Of the 55 Level A and AA criteria: **10 Supports, 9 Partially supports, 14 Does not support,
+22 Not applicable**. 1.4.3 moved from Supports to Partially supports on 2026-09-06, when the
+axe sweep's scope was widened to include the surfaces this library portals; 1.3.1 moved with
+it and moved back once the 57 ARIA structure findings that caused it were fixed — see
 "What the sweep's scope was hiding".
 
 The ten a component library genuinely owns — 1.3.1, 2.1.1, 2.1.2,
@@ -98,7 +99,7 @@ the row says which half is ours.
 | 1.2.3 Audio Description or Media Alternative | A | Not applicable | As above. | — |
 | 1.2.4 Captions (Live) | AA | Not applicable | As above. | — |
 | 1.2.5 Audio Description (Prerecorded) | AA | Not applicable | As above. | — |
-| 1.3.1 Info and Relationships | A | Partially supports | Label, description and error are associated programmatically, state is published as data attributes with a recorded vocabulary, and **every ARIA relationship in every fixture resolves to an element that exists**. That check found `Breadcrumb`'s ellipsis trigger naming a menu with no `id` at all — `aria-controls` pointing at nothing precisely while the menu was open. A dangling `aria-controls` is excused only while the control reports `aria-expanded="false"`. **Downgraded 2026-09-06:** the widened sweep reported 57 ARIA structure findings inside portalled surfaces. 55 are fixed — the popups no longer claim to be the listbox or menu they contain, and `DatePicker`'s weekday row is inside its grid. Two remain, both `CascadingDropdown`'s submenu search field, which cannot leave its parent menu's subtree without portalling the submenu. | `aria-relationships.contract` (jsdom, every fixture); `e2e/accessibility.spec.ts` axe (all five); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
+| 1.3.1 Info and Relationships | A | Supports | Label, description and error are associated programmatically, state is published as data attributes with a recorded vocabulary, and **every ARIA relationship in every fixture resolves to an element that exists**. That check found `Breadcrumb`'s ellipsis trigger naming a menu with no `id` at all — `aria-controls` pointing at nothing precisely while the menu was open. A dangling `aria-controls` is excused only while the control reports `aria-expanded="false"`. **Downgraded and restored 2026-09-06:** the widened sweep reported 57 ARIA structure findings inside portalled surfaces, and all 57 are fixed — the popups no longer claim to be the listbox or menu they contain, `DatePicker`'s weekday row is inside its grid, and `CascadingDropdown`'s submenu is portalled out of the menu that owned it. | `aria-relationships.contract` (jsdom, every fixture); `e2e/accessibility.spec.ts` axe (all five); `e2e/accessibility-full.spec.ts` (chromium, fixture + portals) |
 | 1.3.2 Meaningful Sequence | A | Does not support | Not gated. DOM order is authored to match reading order, but nothing asserts it. | — |
 | 1.3.3 Sensory Characteristics | A | Does not support | Not gated. | — |
 | 1.3.4 Orientation | AA | Does not support | No component locks orientation, but nothing tests either orientation. | — |
@@ -288,13 +289,12 @@ the app root carries a container key and the injected checkout container carries
 103 of the 364 fixtures portal something.
 
 **The sweep reported 93 findings the first time it looked in the right place.** 25 were the
-recorded ones; 68 were new. The structural half of those — 57 nodes across two ARIA rules —
-is fixed, and the sweep now reports **31 findings**, of which 6 are unrecorded and keep the
-gate red.
+recorded ones; 68 were new. Every structural finding is fixed, and the sweep now reports
+**29 findings** across 367 fixtures, of which 4 are unrecorded and keep the gate red.
 
-| Rule | Criterion | Found | Now | Where the remainder is |
+| Rule | Criterion | Found | Now | |
 | --- | --- | --- | --- | --- |
-| `aria-required-children` | 1.3.1 | 44 | **2** | CascadingDropdown's submenu search field |
+| `aria-required-children` | 1.3.1 | 44 | **0** | — |
 | `aria-required-parent` | 1.3.1 | 13 | **0** | — |
 | `scrollable-region-focusable` | 2.1.1 | 7 | **0** | — |
 | `color-contrast` | 1.4.3 | 4 | 4 | Table 3, Pagination 1 — untouched, next slice |
@@ -311,18 +311,14 @@ left `aria-haspopup="listbox"`, `aria-expanded="true"` and `aria-controls` all p
 something that is not a listbox. Nothing about the announcement changed: the message was
 already a live region and still is.
 
-**The 2 that remain are one structure.** `CascadingDropdown` renders a submenu inside its
-parent menu for positioning — the panel is a child of the item wrapper, which is a child of
-the menu — so the submenu's search field is an owned descendant of that menu however the
-panel itself is marked. axe walks through generic wrappers and through `group`, both tried
-and both verified not to help; only a role that is allowed *and* terminates the walk
-(`menu`) stops it, and then the field is an unallowed child of that menu instead. Getting it
-out means portalling the submenu the way every other surface is portalled, which repurposes
-the documented `subPositioner` class key — a major change under ADR 002 R7, and its own
-decision. Left unrecorded rather than waived: a reason is a judgement, not a formality.
-
-The submenu's loading and empty messages carry no role for the same reason. `role="status"`
-on them reported against the parent menu; announcing them has to wait for the same move.
+**The last 2 were one structure, and it has been taken out.** `CascadingDropdown` rendered
+its submenu inside the parent menu for positioning, so the submenu's search field was an
+owned descendant of that menu however the panel itself was marked — axe walks through
+generic wrappers and through `group`, both tried and neither helping, and the one role that
+terminates the walk (`menu`) only moved the finding down a level. The submenu is portalled
+and anchored now, like every other floating surface, which takes it out of the parent menu's
+subtree; the same move let its loading and empty messages take `role="status"`, which they
+could not carry while a status inside a menu was an unallowed child of it.
 
 **`aria-required-parent`** was a single line of markup reported thirteen times: `DatePicker`
 rendered its weekday header as `<div role="row">` whose parent was a plain `div`, while the

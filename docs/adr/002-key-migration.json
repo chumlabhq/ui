@@ -1801,7 +1801,7 @@
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 Ark Positioner, one level down",
       "promotedByAmendmentC": true,
-      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (z-[9999]); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: subContent was already claimed",
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (z-[9999]); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: subContent was already claimed | REPURPOSED before 0.1.0: the submenu moved onto MenuSurface, so this key is now the root of the submenu's own portal rather than an absolutely-positioned wrapper inside the menu item. The key, its place in the anatomy and its default (z-[9999]) are unchanged; what changed is that positioning utilities on it are inert, because useAnchoredPosition writes position/top/left inline. Free now, a major under R7 after 1.0 — recorded in CHANGELOG.md and CASCADINGDROPDOWN.ai.md.",
       "structuralBefore": [
         "z-[9999]"
       ]

@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 58 |
 | Library-authored props across the public surface | 1136 |
 | With no demo | 283 (25%) |
-| With no fixture | 719 (63%) |
+| With no fixture | 718 (63%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -84,7 +84,7 @@ listed here with no demo anywhere fails the generator.
 | Breadcrumb | 24 | 277 | 10 | 18 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
 | Button | 24 | 292 | 1 | 15 | 0 | — |
 | ButtonGroup | 2 | 279 | 1 | 2 | 0 | — |
-| CascadingDropdown | 58 | 2 | 24 | 33 | 0 | `dropdownPosition`, `unstyled`, `portalContainer`, `keepMounted` |
+| CascadingDropdown | 58 | 2 | 24 | 32 | 0 | `dropdownPosition`, `unstyled`, `portalContainer`, `keepMounted` |
 | Checkbox | 21 | 303 | 2 | 10 | 0 | `reduceMotion` |
 | CircularLoader | 7 | 280 | 4 | 5 | 0 | `reduceMotion`, `unstyled` |
 | CountryFlag | 13 | 278 | 3 | 8 | 0 | `unstyled` |

@@ -328,6 +328,27 @@ test.describe("visual baselines", () => {
 });
 
 /**
+ * Reads until two reads agree.
+ *
+ * Portals mount in a layout effect, several fixtures animate on entry and
+ * CountryFlag resolves its flag asynchronously, so a fixed delay reported a
+ * different handful of subjects on every run. Returning the last unsettled read
+ * instead of failing was worse than either: the comparison downstream then
+ * reported "renders differently 26 hours later" about a subject that had simply
+ * not finished rendering once.
+ */
+async function settle(read: () => Promise<string>, unsettled: string): Promise<string> {
+  let previous = await read();
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    const next = await read();
+    if (next === previous) return next;
+    previous = next;
+  }
+  throw new Error(unsettled);
+}
+
+/**
  * No baseline may depend on the wall clock.
  *
  * Two subjects did, and both were found by accident. The clock face renders the
@@ -380,27 +401,17 @@ test.describe("baseline determinism", () => {
               !child.className.toString().includes("razorpay"),
           )
           .map((child) => child.outerHTML);
-        return (
-          [main, ...portals]
-            .join("\n")
-            // A positioner measures its trigger's box, and that measurement
-            // lands half a subpixel apart between two loads — Breadcrumb's menu
-            // reported left: 102.25px against 101.703px. Where a surface sits is
-            // not what this gate is about, and the surfaces that DO read the
-            // clock say so in their content or their transform, neither of which
-            // is stripped.
-            .replace(/(?:top|left):\s*-?[\d.]+px;?/g, "")
-        );
+        // `top` and `left` are compared, not stripped. They were stripped
+        // because Breadcrumb's menu reported `left: 102.25px` against
+        // `101.703px` between two loads, and that half-pixel was not noise: the
+        // trigger moves when a web font replaces the fallback, and
+        // `useAnchoredPosition` had no reason to re-measure, so the surface
+        // stayed at the stale coordinate. Stripping the difference hid the
+        // defect for two slices and cost a baseline nobody could reproduce.
+        return [main, ...portals].join("\n");
       });
 
-    let previous = await capture();
-    for (let attempt = 0; attempt < 10; attempt++) {
-      await page.waitForTimeout(150);
-      const next = await capture();
-      if (next === previous) return next;
-      previous = next;
-    }
-    return previous;
+    return settle(capture, `${path} never stopped changing`);
   };
 
   for (const { component, fixture } of [...SUBJECTS, ...OPEN_SUBJECTS]) {
@@ -414,6 +425,79 @@ test.describe("baseline determinism", () => {
           `expires. Pin the fixture — a defaultValue or a value — rather than widening ` +
           `maxDiffPixels, which would swallow real changes to the same surface.`,
       ).toBe(first);
+    });
+  }
+});
+
+/**
+ * A surface anchored on a cold font cache lands where it lands on a warm one.
+ *
+ * `Breadcrumb/collapsed-open`'s baseline could not be reproduced: 123 pixels
+ * apart at both widths, with every source change stashed and on a fresh dev
+ * server, and stable at that. The cause was not the render — it was WHEN the
+ * render was measured. Geist arrives from a stylesheet on another origin, and
+ * when it lands after the menu has opened it re-lays out the crumbs ahead of
+ * the ellipsis trigger: the trigger moved 0.55px left, the menu kept the
+ * coordinate measured before the font, and its three labels sat half a pixel
+ * off. Delaying the font file by 900ms reproduces the recorded baseline
+ * byte-for-byte, which is what identified it.
+ *
+ * The 26-hour gate above could not see this: both of its renders share one
+ * browser context and the font is cached by the second. So this is the other
+ * axis — the same subject, once with the font late and once with it cached.
+ *
+ * Only the open surfaces. Every one of them is positioned from a measured
+ * trigger rect, which is the thing a late font moves; the resting subjects are
+ * in the document flow and reflow with it.
+ */
+test.describe("anchored surfaces settle after a late font", () => {
+  const FONT_FILES = /fonts\.gstatic\.com/;
+
+  const markup = async (page: import("@playwright/test").Page, path: string) => {
+    await page.goto(path);
+    await page
+      .locator("main[data-fixture-act='applied'], main[data-fixture-act='none']")
+      .waitFor({ state: "attached" });
+    await freeze(page);
+    return settle(
+      () =>
+        page.evaluate(() => {
+          const portals = [...document.body.children]
+            .filter(
+              (child) =>
+                child.id !== "root" &&
+                !/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(child.tagName) &&
+                !child.className.toString().includes("razorpay"),
+            )
+            .map((child) => child.getAttribute("style") ?? "");
+          return portals.join("\n");
+        }),
+      `${path} never stopped moving`,
+    );
+  };
+
+  for (const { component, fixture } of OPEN_SUBJECTS) {
+    test(`${component}/${fixture} anchors to the same coordinates`, async ({ page }) => {
+      const path = fixturePath(component, fixture);
+
+      // Cold first, and slowly enough that the surface is already open when the
+      // font lands. 900ms is the measured margin: the fixture page waits for
+      // 120ms of quiet before it runs the act at all.
+      await page.route(FONT_FILES, async (route) => {
+        await new Promise((resolve) => setTimeout(resolve, 900));
+        await route.continue();
+      });
+      const cold = await markup(page, path);
+
+      await page.unroute(FONT_FILES);
+      const warm = await markup(page, path);
+
+      expect(
+        cold,
+        `${component}/${fixture} is positioned differently when the font arrives late. ` +
+          "The surface was measured against a trigger that then moved, and nothing " +
+          "re-measured it — see useAnchoredPosition's `loadingdone` subscription.",
+      ).toBe(warm);
     });
   }
 });

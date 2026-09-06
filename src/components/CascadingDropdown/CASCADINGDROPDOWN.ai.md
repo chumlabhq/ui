@@ -201,17 +201,27 @@ root
     ├── trigger [icon, clearTrigger, selectedContent]
     ├── errorMessage / successMessage
     └── portal
-        └── content
-            ├── searchControl [searchIcon + searchInput]
-            ├── item* [itemIcon]
-            │   └── subPositioner
-            │       └── subContent
-            │           ├── subSearchControl [subSearchIcon + subSearchInput]
-            │           └── subItem* [itemControl/checkboxChecked, itemIndicator]
-            ├── empty
-            ├── loading
-            └── loading > loadingItem*
+        ├── content
+        │   ├── searchControl [searchIcon + searchInput]
+        │   ├── item* [itemIcon]
+        │   ├── empty
+        │   ├── loading
+        │   └── loading > loadingItem*
+        └── subPositioner            (its own portal, anchored to the open item)
+            └── subContent
+                ├── subSearchControl [subSearchIcon + subSearchInput]
+                └── subItem* [itemControl/checkboxChecked, itemIndicator]
 ```
+
+**`subPositioner` changed meaning in 0.1.0.** It used to be an
+`absolute left-full top-0` wrapper *inside* the menu item, so a consumer could
+move the submenu by overriding it with their own offsets. It is now the root of
+the submenu's own portal, positioned by `useAnchoredPosition` — the same
+clamp-and-flip every other floating surface in the package uses. Positioning
+utilities on this key no longer do anything: `top`, `left` and `position` are
+inline styles, and inline wins. Everything else it carried still applies; the
+default value (`z-[9999]`) is unchanged. Use `submenuPosition` to choose a side;
+the side actually used, after any flip, is on the element as `data-side`.
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|

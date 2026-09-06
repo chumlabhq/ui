@@ -1,6 +1,6 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useCallback } from "react";
 import { useLayer } from "../../utils/layers.js";
-import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject } from "react";
+import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject, Ref, RefObject } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types.js";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
@@ -97,6 +97,8 @@ const MenuItem = memo(function MenuItem({
   classes,
   onHover,
   onClick,
+  ref,
+  submenuId,
 }: {
   option: CascadingOption;
   isFocused: boolean;
@@ -108,6 +110,10 @@ const MenuItem = memo(function MenuItem({
   classes: Required<CascadingDropdownClasses>;
   onHover: (option: CascadingOption, index: number) => void;
   onClick: (option: CascadingOption) => void;
+  /** The submenu anchors to this element; only the open one receives it. */
+  ref?: Ref<HTMLDivElement>;
+  /** Set only while the submenu is open, so the reference always resolves. */
+  submenuId?: string;
 }) {
   const combinedClassName = cn(
     classes.item,
@@ -115,11 +121,16 @@ const MenuItem = memo(function MenuItem({
 
   return (
     <div
+      ref={ref}
       id={`${dropdownId}-option-${index}`}
       role={hasSubmenu ? "menuitem" : "menuitemradio"}
       tabIndex={isFocused ? 0 : -1}
       aria-haspopup={hasSubmenu ? "menu" : undefined}
       aria-expanded={hasSubmenu ? isSubmenuOpen : undefined}
+      // The submenu's items are a roving group with no tab stop of their own:
+      // navigation is state-driven and DOM focus stays out here. This is what
+      // points at them, and it only resolves while the submenu exists.
+      aria-controls={hasSubmenu && isSubmenuOpen ? submenuId : undefined}
       aria-checked={!hasSubmenu ? isSelected : undefined}
       aria-disabled={option.disabled}
       className={combinedClassName || undefined}
@@ -162,6 +173,11 @@ const Submenu = memo(function Submenu({
   submenuSearchInputClass,
   submenuSearchInputElementClass,
   submenuSearchIconClass,
+  anchor,
+  side,
+  zIndex,
+  portalContainer,
+  menuId,
 }: {
   parent: CascadingOption;
   options: CascadingOption[];
@@ -188,69 +204,91 @@ const Submenu = memo(function Submenu({
   submenuSearchInputClass?: string;
   submenuSearchInputElementClass?: string;
   submenuSearchIconClass?: string;
+  /** The menu item the submenu opens from. */
+  anchor: RefObject<HTMLDivElement | null>;
+  side: "left" | "right";
+  zIndex: number;
+  portalContainer?: HTMLElement | null;
+  menuId: string;
 }) {
   const selectionMode = parent.selectionMode || "single";
   const SearchIcon = SearchIconComponent || SearchIconDefault;
 
   return (
-    <div
-      className={classes.subContent || undefined}
+    // Portalled and anchored, like every other floating surface. It was a
+    // `position: absolute` child of the menu item until then, which made it the
+    // one surface in the library with no clamp and no flip: at 1024 it opened
+    // at x=1003 with 220px of width and ran off the frame, and at 320 the menu
+    // fills the viewport so the submenu painted nothing at all. Leaving the
+    // parent menu's subtree is also what lets its search field and its status
+    // messages carry their own roles — inside a `menu` they were unallowed
+    // children of it.
+    <MenuSurface
+      trigger={anchor}
+      isOpen
+      side={side}
+      gap={4}
+      zIndex={zIndex}
+      portalContainer={portalContainer}
+      matchTriggerWidth={false}
+      // Announced, like the panels the searchable dropdowns portal: the search
+      // field is portalled content and a role-less div tells a screen-reader
+      // user nothing about what it belongs to (portal-semantics.contract).
+      role="group"
+      aria-label={`${parent.label} submenu`}
+      className={classes.subPositioner || undefined}
+      // Read by the outside-click, scroll-lock and focus checks, which used to
+      // ask whether the menu element contained the target and now cannot.
+      data-cascading-submenu=""
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {showSearch && (
-        <div className={submenuSearchInputClass || classes.searchControl || undefined}>
-          <SearchIcon className={cn(submenuSearchIconClass || classes.searchIcon) || undefined} />
-          <input
-            type="text"
-            value={searchQuery || ""}
-            onChange={(e) => onSearchChange?.(e.target.value)}
-            onClick={(e) => e.stopPropagation()}
-            placeholder={searchPlaceholder || "Search..."}
-            className={submenuSearchInputElementClass || classes.searchInput || undefined}
-            aria-label={searchAriaLabel || "Search submenu"}
-            aria-autocomplete="list"
-          />
+      <div className={classes.subContent || undefined}>
+        {showSearch && (
+          <div className={submenuSearchInputClass || classes.searchControl || undefined}>
+            <SearchIcon className={cn(submenuSearchIconClass || classes.searchIcon) || undefined} />
+            <input
+              type="text"
+              value={searchQuery || ""}
+              onChange={(e) => onSearchChange?.(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              placeholder={searchPlaceholder || "Search..."}
+              className={submenuSearchInputElementClass || classes.searchInput || undefined}
+              aria-label={searchAriaLabel || "Search submenu"}
+              aria-autocomplete="list"
+            />
+          </div>
+        )}
+        {/* The panel is not the menu. A `menu` owns menu items, and the search
+            field and the loading and empty messages are neither. */}
+        {loading || isSearching ? (
+          <div role="status" className={classes.loading || undefined}>{loadingText}</div>
+        ) : options.length === 0 ? (
+          <div role="status" className={classes.empty || undefined}>{noResultsContent}</div>
+        ) : null}
+        <div id={menuId} role="menu" aria-label={`${parent.label} submenu`}>
+          {loading || isSearching
+            ? null
+            : options.map((option, index) => (
+                <SubmenuItem
+                  key={option.value}
+                  option={option}
+                  isSelected={selectedValues.includes(option.value)}
+                  isFocused={index === focusedIndex}
+                  parentValue={parent.value}
+                  index={index}
+                  selectionMode={selectionMode}
+                  classes={classes}
+                  showSelectedIcon={showSelectedIcon}
+                  selectedIcon={selectedIcon}
+                  checkboxIcon={checkboxIcon}
+                  onSelect={() => onItemClick(parent, option)}
+                  onHover={onItemHover}
+                />
+              ))}
         </div>
-      )}
-      {/* The panel is not the menu. A `menu` owns menu items, and the search
-          field and the loading and empty messages are neither — axe reported
-          both halves of that: an input inside the menu, and a menu with no
-          items at all while it was loading.
-
-          These two keep no role, unlike their top-level equivalents. The panel
-          is rendered inside the parent menu for positioning, so anything with a
-          role in here is an unallowed child of THAT menu — `role="status"` on
-          this div reports on `#…-menu` instead. Announcing it needs the submenu
-          to leave the parent menu's subtree first; see the residue recorded in
-          docs/adr/002-unrenderable-keys.json. */}
-      {loading || isSearching ? (
-        <div className={classes.loading || undefined}>{loadingText}</div>
-      ) : options.length === 0 ? (
-        <div className={classes.empty || undefined}>{noResultsContent}</div>
-      ) : null}
-      <div role="menu" aria-label={`${parent.label} submenu`}>
-        {loading || isSearching
-          ? null
-          : options.map((option, index) => (
-              <SubmenuItem
-                key={option.value}
-                option={option}
-                isSelected={selectedValues.includes(option.value)}
-                isFocused={index === focusedIndex}
-                parentValue={parent.value}
-                index={index}
-                selectionMode={selectionMode}
-                classes={classes}
-                showSelectedIcon={showSelectedIcon}
-                selectedIcon={selectedIcon}
-                checkboxIcon={checkboxIcon}
-                onSelect={() => onItemClick(parent, option)}
-                onHover={onItemHover}
-              />
-            ))}
       </div>
-    </div>
+    </MenuSurface>
   );
 });
 
@@ -407,12 +445,15 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const generatedId = useId();
     const dropdownId = id || name || generatedId;
     const menuId = `${dropdownId}-menu`;
+    const submenuId = `${dropdownId}-submenu`;
     const triggerId = `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+    /** The menu item the open submenu anchors to. */
+    const submenuAnchorRef = useRef<HTMLDivElement>(null);
 
     const {
       isOpen,
@@ -478,12 +519,26 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       prevOpenRef.current = isOpen;
     }, [isOpen]);
 
+    /**
+     * The menu and its submenu, which is no longer inside it.
+     *
+     * The submenu is portalled now, so `menuRef.contains` — which every one of
+     * these checks used — reports a click, a scroll or a focus inside it as
+     * being outside the menu entirely.
+     */
+    const inMenuSurface = useCallback((node: Node | null) => {
+      if (!node) return false;
+      if (menuRef.current?.contains(node)) return true;
+      const element = node instanceof Element ? node : node.parentElement;
+      return !!element?.closest("[data-cascading-submenu]");
+    }, []);
+
     useEffect(() => {
       if (!isOpen || !isBrowser) return;
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
         if (containerRef.current?.contains(target)) return;
-        if (menuRef.current?.contains(target)) return;
+        if (inMenuSurface(target)) return;
         handleClose();
       };
 
@@ -491,15 +546,15 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
-    }, [isOpen, handleClose]);
+    }, [isOpen, handleClose, inMenuSurface]);
 
     // Scroll lock when dropdown is open
     useEffect(() => {
       if (!lockScroll || !isOpen || !isBrowser) return;
 
       const preventScroll = (e: Event) => {
-        // Allow scroll inside the dropdown menu itself
-        if (menuRef.current?.contains(e.target as Node)) return;
+        // Allow scroll inside the dropdown menu itself, and inside its submenu
+        if (inMenuSurface(e.target as Node)) return;
         e.preventDefault();
       };
 
@@ -510,12 +565,11 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         window.removeEventListener("wheel", preventScroll, { capture: true } as EventListenerOptions);
         window.removeEventListener("touchmove", preventScroll, { capture: true } as EventListenerOptions);
       };
-    }, [lockScroll, isOpen]);
+    }, [lockScroll, isOpen, inMenuSurface]);
 
     // Positioning, the portal and the measuring frame all belong to
-    // `MenuSurface` now; only the submenu's CSS placement is still this
-    // component's, because it is a child of the menu rather than a surface of
-    // its own.
+    // `MenuSurface`, the submenu included since it stopped being a child of the
+    // menu item it opens from.
 
     const menuSearchRef = useRef<HTMLInputElement>(null);
 
@@ -540,7 +594,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       if (!menu) return;
 
       if (showMenuSearch) {
-        if (!menu.contains(document.activeElement)) {
+        if (!inMenuSurface(document.activeElement)) {
           menuSearchRef.current?.focus({ preventScroll: true });
         }
         return;
@@ -553,12 +607,12 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         active === triggerRef.current ||
         active === null ||
         active === document.body ||
-        menu.contains(active);
+        inMenuSurface(active);
       if (!ours) return;
 
       const item = menu.querySelector<HTMLElement>('[role^="menuitem"][tabindex="0"]');
       if (item && item !== active) item.focus({ preventScroll: true });
-    }, [isOpen, focusedIndex, showMenuSearch]);
+    }, [isOpen, focusedIndex, showMenuSearch, inMenuSurface]);
 
     const combinedKeyDown = useCallback(
       (event: KeyboardEvent) => {
@@ -594,6 +648,17 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       if (!selection) return [];
       return Array.isArray(selection) ? selection : [selection];
     };
+
+    /** Lazily loaded children win over the static ones, as they always have. */
+    const childrenOf = (option: CascadingOption): CascadingOption[] => {
+      const loaded = loadedChildren[option.value] || [];
+      return loaded.length > 0 ? loaded : option.children || [];
+    };
+
+    // One submenu is open at a time — `activeSubmenu` is a single value — so it
+    // is rendered once rather than per item.
+    const openSubmenuParent =
+      filteredOptions.find((option) => option.value === activeSubmenu) ?? null;
 
     return (
       <div
@@ -759,23 +824,16 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                 {externalLoading || isMenuSearching || filteredOptions.length === 0
                   ? null
                   : filteredOptions.map((option, index) => {
-                    const staticChildren = option.children || [];
-                    const dynamicChildren = loadedChildren[option.value] || [];
-                    const children =
-                      dynamicChildren.length > 0
-                        ? dynamicChildren
-                        : staticChildren;
-                    const hasSubmenu = children.length > 0 || option.hasChildren;
-                    const submenuOpen = isSubmenuOpen(option.value);
-                    const isChildrenLoading =
-                      loadingChildren[option.value] || false;
-                    const submenuChildren = showSubmenuSearch
-                      ? getFilteredSubmenuOptions(option)
-                      : children;
+                      const children = childrenOf(option);
+                      const hasSubmenu = children.length > 0 || option.hasChildren;
+                      const submenuOpen = isSubmenuOpen(option.value);
 
-                    return (
-                      <div key={option.value} className="relative">
+                      return (
                         <MenuItem
+                          key={option.value}
+                          // Only the open one: the submenu is rendered once,
+                          // below, and anchors to whichever item opened it.
+                          ref={submenuOpen ? submenuAnchorRef : undefined}
                           option={option}
                           isFocused={index === focusedIndex}
                           isSelected={
@@ -786,58 +844,57 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                           dropdownId={dropdownId}
                           index={index}
                           classes={mergedClasses}
+                          submenuId={submenuId}
                           onHover={handleMenuItemHover}
                           onClick={handleMenuItemClick}
                         />
-
-                        {hasSubmenu && submenuOpen && (
-                          <div
-                            className={cn(
-                              submenuPosition === "right"
-                                ? "absolute left-full top-0 pl-1"
-                                : "absolute right-full top-0 pr-1",
-                              mergedClasses.subPositioner,
-                            ) || undefined}
-                          >
-                            <Submenu
-                              parent={option}
-                              options={submenuChildren}
-                              selectedValues={getSelectedValuesForParent(
-                                option.value,
-                              )}
-                              focusedIndex={
-                                activeSubmenu === option.value
-                                  ? submenuFocusedIndex
-                                  : -1
-                              }
-                              loading={isChildrenLoading}
-                              classes={mergedClasses}
-                              noResultsContent={noResultsContent}
-                              loadingText={loadingText}
-                              showSelectedIcon={showSelectedIcon}
-                              selectedIcon={selectedIcon}
-                              checkboxIcon={checkboxIcon}
-                              onItemClick={handleSubmenuItemClick}
-                              onItemHover={handleSubmenuItemHover}
-                              onMouseEnter={handleSubmenuMouseEnter}
-                              onMouseLeave={handleSubmenuMouseLeave}
-                              showSearch={showSubmenuSearch}
-                              searchQuery={submenuSearchQuery}
-                              onSearchChange={onSubmenuSearchChange}
-                              searchPlaceholder={submenuSearchPlaceholder}
-                              searchAriaLabel={submenuSearchAriaLabel}
-                              SearchIconComponent={SearchIconComponent}
-                              isSearching={isSubmenuSearching}
-                              submenuSearchInputClass={mergedClasses.subSearchControl}
-                              submenuSearchInputElementClass={mergedClasses.subSearchInput}
-                              submenuSearchIconClass={mergedClasses.subSearchIcon}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
               </div>
+
+              {/* Outside the menu element and inside the panel's React tree:
+                  the portal puts its DOM on the body, and keeping the element
+                  here is what still lets a key pressed inside the submenu
+                  bubble to the menu's own handler. */}
+              {openSubmenuParent && (
+                <Submenu
+                  key={openSubmenuParent.value}
+                  menuId={submenuId}
+                  anchor={submenuAnchorRef}
+                  side={submenuPosition === "right" ? "right" : "left"}
+                  zIndex={dropdownZIndex}
+                  portalContainer={portalContainer}
+                  parent={openSubmenuParent}
+                  options={
+                    showSubmenuSearch
+                      ? getFilteredSubmenuOptions(openSubmenuParent)
+                      : childrenOf(openSubmenuParent)
+                  }
+                  selectedValues={getSelectedValuesForParent(openSubmenuParent.value)}
+                  focusedIndex={submenuFocusedIndex}
+                  loading={loadingChildren[openSubmenuParent.value] || false}
+                  classes={mergedClasses}
+                  noResultsContent={noResultsContent}
+                  loadingText={loadingText}
+                  showSelectedIcon={showSelectedIcon}
+                  selectedIcon={selectedIcon}
+                  checkboxIcon={checkboxIcon}
+                  onItemClick={handleSubmenuItemClick}
+                  onItemHover={handleSubmenuItemHover}
+                  onMouseEnter={handleSubmenuMouseEnter}
+                  onMouseLeave={handleSubmenuMouseLeave}
+                  showSearch={showSubmenuSearch}
+                  searchQuery={submenuSearchQuery}
+                  onSearchChange={onSubmenuSearchChange}
+                  searchPlaceholder={submenuSearchPlaceholder}
+                  searchAriaLabel={submenuSearchAriaLabel}
+                  SearchIconComponent={SearchIconComponent}
+                  isSearching={isSubmenuSearching}
+                  submenuSearchInputClass={mergedClasses.subSearchControl}
+                  submenuSearchInputElementClass={mergedClasses.subSearchInput}
+                  submenuSearchIconClass={mergedClasses.subSearchIcon}
+                />
+              )}
             </MenuSurface>
           )}
         </div>

@@ -105,15 +105,14 @@ animation settle that covered the act by accident, the sweep reported **93 findi
 listboxes, 7 scroll regions, 4 contrast on raw-palette classes, with 15 of the 68 needing the
 fixture's act as well as the scope. Two criteria moved from Supports to Partially supports.
 
-**The structural half is now fixed and the sweep reports 31.** The popups stopped claiming to
-be the listbox or menu they contain: the portalled panel holds the search field and the
-status message beside a listbox that owns only options, and `DatePicker`'s weekday row moved
-inside its grid. 55 of the 57 structural findings are gone, the 7 scroll-region findings went
-with them (axe exempts a combobox popup, which the scroller now is), and the 4 contrast
-findings are untouched by instruction. `a11y-full` stays **red** on 6: those 4, and 2
-`aria-required-children` on `CascadingDropdown`'s submenu search field, which needs the
-submenu portalled out of its parent menu — a change that repurposes the documented
-`subPositioner` key. Each is named in `ACCESSIBILITY.md`.
+**Every structural finding is now fixed and the sweep reports 29 across 367 fixtures.** The
+popups stopped claiming to be the listbox or menu they contain: the portalled panel holds the
+search field and the status message beside a listbox that owns only options, `DatePicker`'s
+weekday row moved inside its grid, and `CascadingDropdown`'s submenu was portalled out of the
+parent menu that owned its search field. All 57 structural findings are gone, the 7
+scroll-region findings went with them (axe exempts a combobox popup, which the scroller now
+is), and the 4 contrast findings are untouched by instruction. `a11y-full` stays **red** on
+those 4 alone, each named in `ACCESSIBILITY.md`.
 
 ### 1.3 The consumer matrix and the tarball
 
@@ -270,7 +269,7 @@ deleting the entry is how it goes back to blocking.
 | `styles.css` works with no Tailwind | `assert-styles-bundle.mjs`: 535 rules, 508 utility selectors confined to the `cl-s` marker, no preflight |
 | `unstyled` drops every decorative class | `unstyled.contract` across all 30, with a ratcheted leak list |
 | Every `classes` key reaches a real element | `fixtures.contract` renders every key in every anatomy; `key-uniqueness.contract` asserts one key per element |
-| Layout holds 320–1920 px in both themes | 404 recorded screenshots — 30 components × 6 widths × 2 themes, plus 11 open surfaces × 2 widths × 2 themes — and a guard that fails a baseline which is a picture of nothing, and one that fails a baseline whose render is not the same 26 hours later |
+| Layout holds 320–1920 px in both themes | 404 recorded screenshots — 30 components × 6 widths × 2 themes, plus 11 open surfaces × 2 widths × 2 themes — and three guards: one fails a baseline that is a picture of nothing, one fails a baseline whose render is not the same 26 hours later, and one fails an anchored surface that lands on different coordinates when the web font arrives late |
 | Text contrast meets AA in both themes | `contrast.contract`, every text token against every surface |
 | Ten owned WCAG criteria | Named contract or e2e gate per criterion, listed in `ACCESSIBILITY.md` with the engines it ran in |
 | Bundle size per component | `assert-bundle-size.mjs`, 30 entries, shape derived from source, per-entry ratchet |
@@ -350,12 +349,12 @@ against the peer's live documentation. ADR 002's own ledger has none left. `RECA
 explicitly *not* a justification on its own — it is an admission that a citation was
 claimed and never verified.
 
-### 3.7 Accessibility: 10 partial, 14 not claimed
+### 3.7 Accessibility: 9 partial, 14 not claimed
 
-Of the 55 WCAG 2.2 Level A and AA criteria: **9 Supports, 10 Partially supports, 14 Does
-not support, 22 Not applicable.** 1.3.1 and 1.4.3 moved from Supports to Partially supports
-on 2026-09-06 when the axe sweep's scope was corrected (§1.2); `a11y-full` is red on the 68
-findings that correction surfaced.
+Of the 55 WCAG 2.2 Level A and AA criteria: **10 Supports, 9 Partially supports, 14 Does
+not support, 22 Not applicable.** 1.4.3 moved from Supports to Partially supports on
+2026-09-06 when the axe sweep's scope was corrected (§1.2); `a11y-full` is red on the 4
+contrast findings that remain.
 
 Read the third column carefully, because it does not mean what it means in a VPAT.
 **"Does not support" here means "not gated, therefore not claimed."** Several of the 14 are
@@ -364,7 +363,7 @@ Non-text Contrast are the obvious candidates. The document refuses to say so unt
 fails when the behaviour regresses. That is ADR 003 D4, and it is the correct policy, but it
 means the headline number understates conformance and cannot be quoted as a failure count.
 
-The 10 "Partially supports" are the honest middle: implemented and gated for some components
+The 9 "Partially supports" are the honest middle: implemented and gated for some components
 or some part of the criterion, with the row naming which part is unproven.
 
 Anyone who needs a conformance statement should read `ACCESSIBILITY.md` per criterion, not
@@ -409,12 +408,12 @@ Chrome and Mobile Safari are desktop-engine emulations at a phone viewport, not 
 **Visual coverage is 41 of 364 fixtures.** 30 resting subjects at six widths and eleven
 open surfaces at two, 404 baselines in all. The rest of the fixture set has no baseline.
 
-**One of those eleven is not a picture of its own surface.** `CascadingDropdown/open-submenu`
-exists to watch the submenu rather than the menu that reveals it, and the submenu opens
-beyond the right edge of both recorded widths: at 320 it is placed at x=331 and paints
-nothing at all, at 1024 at x=1003 and 21 px of it is in frame. The surface has no viewport
-clamp or flip, so the baseline would not move if the submenu broke. Counted in the eleven,
-and it should not be until that is fixed.
+**All eleven are now pictures of their own surface.** `CascadingDropdown/open-submenu` was
+not: the submenu was CSS-positioned inside the menu item, with no clamp and no flip, so it
+opened at x=331 in a 320px viewport and painted nothing, and at x=1003 in a 1024px one where
+21px of it was in frame. It goes through `MenuSurface` and `useAnchoredPosition` now, the
+baseline is re-recorded from the corrected render, and `e2e/cascading-submenu.spec.ts`
+measures it against its anchor at both widths in three anchor positions.
 
 **Five fixture acts do not reach their named state on the fixture page.** `Slider/dragging`
 and `Slider/thumb-active` need pointer capture, which a dispatched event cannot obtain;
@@ -510,10 +509,9 @@ In order. The first two are done; the rest are not.
 2. ~~Re-record the axe expectation list against all 364 fixtures.~~ **Done, and re-derived
    again on 2026-09-06** against the corrected scope: same 25 entries, same fixtures, plus a
    count guard so it cannot go stale the same way.
-3. **Clear the last 6 axe findings the corrected sweep surfaced (§1.2).** Blocking, and
-   ahead of Firefox: 4 are contrast on raw-palette classes in `Table` and `Pagination`, and 2
-   need `CascadingDropdown`'s submenu portalled out of its parent menu, which repurposes the
-   documented `subPositioner` key and is a major change under ADR 002 R7.
+3. **Clear the last 4 axe findings the corrected sweep surfaced (§1.2).** Blocking, and
+   ahead of Firefox: all four are contrast on raw-palette classes in `Table` and
+   `Pagination`, which `contrast.contract` cannot see because it checks tokens.
 4. **Re-run `test:e2e:all` on an unloaded machine and settle Firefox.** Still blocking: one
    project has never been seen green, and "probably environmental" is a reading, not a
    result.

@@ -617,7 +617,7 @@ describe("CascadingDropdown — loading state", () => {
 // ─── CascadingDropdown — submenu left position ───────────────────────────────
 
 describe("CascadingDropdown — submenuPosition left", () => {
-  it("renders submenu on the left side when submenuPosition='left'", async () => {
+  it("renders the submenu through the anchored surface when submenuPosition='left'", async () => {
     const user = userEvent.setup();
     render(
       <CascadingDropdown
@@ -631,10 +631,20 @@ describe("CascadingDropdown — submenuPosition left", () => {
     const fruitItem = screen.getByText("Fruits").closest("[role='menuitem']");
     await user.hover(fruitItem!);
 
-    await screen.findByRole("menu", { name: "Fruits submenu" });
-    // The submenu container should use right-full positioning class
-    const submenuContainers = document.querySelectorAll("[class*='right-full']");
-    expect(submenuContainers.length).toBeGreaterThan(0);
+    const submenu = await screen.findByRole("menu", { name: "Fruits submenu" });
+
+    // The positioning classes this asserted on are gone: the submenu is
+    // portalled and anchored through MenuSurface, so its side is an attribute
+    // and its coordinates are inline styles. Which side it RESOLVES to is a
+    // layout question and jsdom measures every rect as zero — it reports
+    // `right` here, from a zero-width trigger at x=0 — so the side is asserted
+    // in e2e/cascading-submenu.spec.ts, where there is layout. What this tier
+    // can prove is the structure: the surface exists, and it is no longer
+    // inside the menu it opens from.
+    const surface = document.querySelector("[data-cascading-submenu]");
+    expect(surface).not.toBeNull();
+    expect(surface).toContainElement(submenu);
+    expect(screen.getByRole("menu", { name: "Options" }).contains(surface)).toBe(false);
   });
 });
 

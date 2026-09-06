@@ -52,7 +52,7 @@ const BASELINE: Record<string, number> = {
   "Avatar/components/AvatarBadge.tsx": 2,
   "Avatar/components/AvatarGroupCount.tsx": 2,
   "Avatar/components/AvatarShimmer.tsx": 1,
-  "CascadingDropdown/CascadingDropdown.tsx": 9,
+  "CascadingDropdown/CascadingDropdown.tsx": 5,
   "Checkbox/Checkbox.tsx": 1,
   "CountryFlag/components/CountryFlagGroup.tsx": 1,
   "CountryFlag/components/CountryFlagShimmer.tsx": 1,

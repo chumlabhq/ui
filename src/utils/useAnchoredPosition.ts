@@ -114,6 +114,26 @@ export function useAnchoredPosition(
     // menu that grows after its first paint — options arriving from a loader —
     // has to re-anchor. Dropdown watched the trigger; watching both is what
     // makes the wider-than-trigger clamp hold as content changes.
+    /**
+     * A web font that lands after the surface opens moves the trigger without
+     * resizing it, and the `ResizeObserver` below cannot see that: the crumb
+     * text ahead of Breadcrumb's ellipsis got 0.55px narrower when Geist
+     * replaced the fallback, the trigger slid left, and the menu stayed where
+     * the stale rect had put it. It was caught as a visual baseline that could
+     * not be reproduced — the recording had a cold font cache and every run
+     * since had a warm one — and on a consumer's first paint it is every
+     * floating surface in the package sitting beside its trigger rather than
+     * against it.
+     *
+     * `loadingdone` rather than the `ready` promise alone: `ready` resolves
+     * once, and a page that loads a second face later gets a second event.
+     */
+    const fonts: FontFaceSet | undefined = document.fonts;
+    fonts?.addEventListener?.("loadingdone", schedule);
+    // The one case the event misses: loading finished between the measurement
+    // and this subscription.
+    void fonts?.ready?.then(schedule);
+
     const observer =
       typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
     const triggerEl = resolve(trigger);
@@ -124,6 +144,7 @@ export function useAnchoredPosition(
     }
 
     return () => {
+      fonts?.removeEventListener?.("loadingdone", schedule);
       window.removeEventListener("scroll", schedule, true);
       window.removeEventListener("resize", schedule);
       window.visualViewport?.removeEventListener?.("resize", schedule);
