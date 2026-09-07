@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle.js";
 import { useCanonical, useJsonLd } from "../../hooks/useJsonLd.js";
@@ -106,6 +106,15 @@ const NAV_SECTIONS: NavSection[] = [
 ];
 
 const ALL_ITEMS: NavItem[] = NAV_SECTIONS.flatMap((s) => s.items);
+
+/** Reserves the column and stays invisible until the chunk is genuinely slow. */
+const DemoPageFallback = () => (
+  <div className="suspense-delayed min-h-[60vh] space-y-4" aria-hidden>
+    <div className="h-8 w-56 rounded-cl-md bg-bg-elevated" />
+    <div className="h-4 w-full max-w-[46ch] rounded bg-bg-elevated" />
+    <div className="h-4 w-full max-w-[38ch] rounded bg-bg-elevated" />
+  </div>
+);
 
 const Demo = () => {
   const location = useLocation();
@@ -348,7 +357,15 @@ const Demo = () => {
           className="flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-bg-base text-fg"
         >
           <div className="p-5 sm:p-7 lg:p-10 w-full max-w-none min-w-0">
-            <Outlet />
+            {/* The page chunks are local and usually resolve inside a frame, so
+                the fallback is invisible for its first 200ms (see
+                `.suspense-delayed` in index.css): a fast load never paints it,
+                and a slow one still gets something rather than a blank column.
+                The shell around it — header, sidebar, scroll position — is
+                outside the boundary and does not remount. */}
+            <Suspense fallback={<DemoPageFallback />}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
       </div>

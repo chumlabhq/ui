@@ -26,7 +26,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       bordered,
       spacing,
       // The ring separates overlapping avatars from the page behind them, so
-      // it is the page colour — `white` was a light-theme default that drew a
+      // it is the page colour — `white` is a light-theme value that draws a
       // halo in dark.
       ringColor = "var(--cl-bg)",
       showTooltip = false,

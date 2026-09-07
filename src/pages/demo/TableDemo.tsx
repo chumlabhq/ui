@@ -607,7 +607,7 @@ const darkPaginationButtonStyle =
 const darkPaginationDropdownStyle =
  "absolute bottom-full mb-1 left-0 z-50 bg-cl-bg-elevated border-cl-border rounded-cl-md shadow-xl min-w-[70px] overflow-hidden";
 const darkPaginationOptionStyle =
-  "w-full px-3 py-2 text-left text-sm text-cl-text-secondary hover:bg-cl-bg-elevated data-[selected]:bg-cl-accent data-[selected]:text-white transition-colors";
+  "w-full px-3 py-2 text-left text-sm text-cl-text-secondary hover:bg-cl-bg-elevated data-[selected]:bg-cl-accent data-[selected]:text-cl-on-accent transition-colors";
 const darkPaginationPageStyle =
   "w-8 h-8 flex items-center justify-center text-sm text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors";
 const darkPaginationNavStyle =
@@ -1148,7 +1148,7 @@ function ServerApiDemo({
               <button
                 key={pageNum}
                 onClick={() => setPage(pageNum)}
-                className={`w-8 h-8 text-sm rounded-cl-md cursor-pointer transition-colors ${page === pageNum ? "bg-cl-accent text-white" : dark ? "text-cl-text-tertiary hover:bg-cl-bg-hover" : "text-cl-text-secondary hover:bg-cl-bg-hover"}`}
+                className={`w-8 h-8 text-sm rounded-cl-md cursor-pointer transition-colors ${page === pageNum ? "bg-cl-accent text-cl-on-accent" : dark ? "text-cl-text-tertiary hover:bg-cl-bg-hover" : "text-cl-text-secondary hover:bg-cl-bg-hover"}`}
               >
                 {pageNum}
               </button>
@@ -4401,7 +4401,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       onClick={() => setActiveColor(i)}
                       className={`px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer border ${
                         activeColor === i
-                          ? "bg-cl-accent text-white border-cl-accent"
+                          ? "bg-cl-accent text-cl-on-accent border-cl-accent"
                           : "bg-cl-bg-elevated text-cl-text-secondary border-cl-border hover:bg-cl-bg-hover dark:bg-cl-text/[0.03] dark:text-cl-text-tertiary dark:border-cl-text/[0.06]"
                       }`}
                     >
@@ -4554,7 +4554,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   onClick={() => setDensity(d)}
                   className={`px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer ${
                     density === d
-                      ? "bg-cl-accent text-white"
+                      ? "bg-cl-accent text-cl-on-accent"
                       : dark
                         ? "bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated"
                         : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover"
@@ -5513,7 +5513,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     </div>
                   </div>
                   <button
-                    className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-white hover:bg-cl-accent/90 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
+                    className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
                     onClick={() => alert("Export triggered")}
                   >
                     Export Report

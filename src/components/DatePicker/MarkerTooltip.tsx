@@ -47,8 +47,7 @@ export function MarkerTooltip({ marker, tooltipId, position, placement }: Marker
             fontSize: 12,
             lineHeight: 1.5,
             // The shadow token, not a fixed black: `--cl-shadow-md` is
-            // rgba(0,0,0,0.35) in dark and rgba(15,18,24,0.06) in light, and
-            // this was the dark value painted in both.
+            // rgba(0,0,0,0.35) in dark and rgba(15,18,24,0.06) in light.
             boxShadow: "var(--cl-shadow-md)",
             pointerEvents: "none",
           }}

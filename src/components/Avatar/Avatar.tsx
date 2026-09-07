@@ -123,8 +123,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const statusSize = getStatusSize(effectiveSize);
     const borderRadius = getBorderRadius(effectiveShape);
 
-    // The prop, not the bare query: it was calming this component's JS-driven
-    // motion while leaving every motion utility in the class strings.
+    // The prop, not the bare query: the class strings carry motion utilities of
+    // their own, and only the prop reaches those.
     const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
     const baseClassesRaw = unstyled ? UNSTYLED_AVATAR_CLASSES : DEFAULT_AVATAR_CLASSES;

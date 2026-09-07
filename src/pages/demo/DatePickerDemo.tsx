@@ -51,7 +51,7 @@ const getClasses = (dark: boolean) => ({
     // bug) and turning to literal `bg-cl-text` flips the day's foreground
     // to the surface tone, making the day number invisible inside the
     // selected pill.
-    daySelected: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent`,
+    daySelected: `bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent`,
     dayToday: `ring-2 ring-inset font-semibold ring-cl-accent dark:ring-cl-accent`,
     // Disabled days: 40 % opacity is enough to read as "not allowed"
     // without dropping into illegibility. The `!` important overrides
@@ -65,8 +65,8 @@ const getClasses = (dark: boolean) => ({
     // full, square left. `hover:bg-cl-accent` (no opacity change) keeps the
     // hover state from washing the selected pill out into the lighter
     // hover overlay.
-    dayRangeStart: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent rounded-r-none`,
-    dayRangeEnd: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent rounded-l-none`,
+    dayRangeStart: `bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent rounded-r-none`,
+    dayRangeEnd: `bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent rounded-l-none`,
     // Middle range tint: 18 % in light mode (was 10 % — invisible against
     // cream paper), 22 % in dark mode. Hover deepens to 25/30 % so middle
     // days have an interactive feedback in the range strip.
@@ -924,7 +924,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             Clear
           </button>
           <button
-            className={`px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-accent text-white hover:bg-cl-accent/90`}
+            className={`px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`}
             onClick={() => setControlledDate(new Date())}
           >
             Set Today
@@ -961,7 +961,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <button
-              className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-white hover:bg-cl-accent/90 shrink-0`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 shrink-0`}
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setCalendarOpen((o) => !o)}
             >

@@ -18,43 +18,52 @@ import NotFound from "./pages/NotFound.js";
 import BlogListing from "./pages/blog/BlogListing.js";
 import BlogDetail from "./pages/blog/BlogDetail.js";
 import Demo from "./pages/demo/Demo.js";
-import AccordionDemo from "./pages/demo/AccordionDemo.js";
-import AvatarDemo from "./pages/demo/AvatarDemo.js";
-import BreadcrumbDemo from "./pages/demo/BreadcrumbDemo.js";
-import ButtonDemo from "./pages/demo/ButtonDemo.js";
-import CascadingDropdownDemo from "./pages/demo/CascadingDropdownDemo.js";
-import CheckboxDemo from "./pages/demo/CheckboxDemo.js";
-import CountryFlagDemo from "./pages/demo/CountryFlagDemo.js";
-import DatePickerDemo from "./pages/demo/DatePickerDemo.js";
-import DrawerDemo from "./pages/demo/DrawerDemo.js";
-import DropdownDemo from "./pages/demo/DropdownDemo.js";
-import InputDemo from "./pages/demo/InputDemo.js";
-import InternationalPhoneInputDemo from "./pages/demo/InternationalPhoneInputDemo.js";
-import LoaderDemo from "./pages/demo/LoaderDemo.js";
-import ModalDemo from "./pages/demo/ModalDemo.js";
-import MultiSelectDropdownDemo from "./pages/demo/MultiSelectDropdownDemo.js";
-import MultiSelectSearchableDropdownDemo from "./pages/demo/MultiSelectSearchableDropdownDemo.js";
-import OtpInputDemo from "./pages/demo/OtpInputDemo.js";
-import PaginationDemo from "./pages/demo/PaginationDemo.js";
-import RadioButtonDemo from "./pages/demo/RadioButtonDemo.js";
-import ResizablePanelDemo from "./pages/demo/ResizablePanelDemo.js";
-import SearchableDropdownDemo from "./pages/demo/SearchableDropdownDemo.js";
-import SliderDemo from "./pages/demo/SliderDemo.js";
-import StepperDemo from "./pages/demo/StepperDemo.js";
-import SwitchDemo from "./pages/demo/SwitchDemo.js";
-import TabPanelDemo from "./pages/demo/TabPanelDemo.js";
-import TableDemo from "./pages/demo/TableDemo.js";
-import TextAreaDemo from "./pages/demo/TextAreaDemo.js";
-import TimePickerDemo from "./pages/demo/TimePickerDemo.js";
-import ToastDemo from "./pages/demo/ToastDemo.js";
-import TooltipDemo from "./pages/demo/TooltipDemo.js";
-import GettingStartedDemo from "./pages/demo/GettingStartedDemo.js";
-import IntroductionDemo from "./pages/demo/IntroductionDemo.js";
-import AccessibilityDemo from "./pages/demo/AccessibilityDemo.js";
-import StylingDemo from "./pages/demo/StylingDemo.js";
-import ThemingDemo from "./pages/demo/ThemingDemo.js";
-import AnimationDemo from "./pages/demo/AnimationDemo.js";
-import AiLlmDemo from "./pages/demo/AiLlmDemo.js";
+
+/**
+ * The component pages, one chunk each.
+ *
+ * They were static imports, so every demo — every example class string and
+ * every sample dataset — landed in the entry chunk a visitor downloads before
+ * the homepage paints. `Demo` itself stays eager: it is the shell they render
+ * into, and lazy-loading it would blank the sidebar on the way to a page.
+ */
+const AccordionDemo = lazy(() => import("./pages/demo/AccordionDemo.js"));
+const AvatarDemo = lazy(() => import("./pages/demo/AvatarDemo.js"));
+const BreadcrumbDemo = lazy(() => import("./pages/demo/BreadcrumbDemo.js"));
+const ButtonDemo = lazy(() => import("./pages/demo/ButtonDemo.js"));
+const CascadingDropdownDemo = lazy(() => import("./pages/demo/CascadingDropdownDemo.js"));
+const CheckboxDemo = lazy(() => import("./pages/demo/CheckboxDemo.js"));
+const CountryFlagDemo = lazy(() => import("./pages/demo/CountryFlagDemo.js"));
+const DatePickerDemo = lazy(() => import("./pages/demo/DatePickerDemo.js"));
+const DrawerDemo = lazy(() => import("./pages/demo/DrawerDemo.js"));
+const DropdownDemo = lazy(() => import("./pages/demo/DropdownDemo.js"));
+const InputDemo = lazy(() => import("./pages/demo/InputDemo.js"));
+const InternationalPhoneInputDemo = lazy(() => import("./pages/demo/InternationalPhoneInputDemo.js"));
+const LoaderDemo = lazy(() => import("./pages/demo/LoaderDemo.js"));
+const ModalDemo = lazy(() => import("./pages/demo/ModalDemo.js"));
+const MultiSelectDropdownDemo = lazy(() => import("./pages/demo/MultiSelectDropdownDemo.js"));
+const MultiSelectSearchableDropdownDemo = lazy(() => import("./pages/demo/MultiSelectSearchableDropdownDemo.js"));
+const OtpInputDemo = lazy(() => import("./pages/demo/OtpInputDemo.js"));
+const PaginationDemo = lazy(() => import("./pages/demo/PaginationDemo.js"));
+const RadioButtonDemo = lazy(() => import("./pages/demo/RadioButtonDemo.js"));
+const ResizablePanelDemo = lazy(() => import("./pages/demo/ResizablePanelDemo.js"));
+const SearchableDropdownDemo = lazy(() => import("./pages/demo/SearchableDropdownDemo.js"));
+const SliderDemo = lazy(() => import("./pages/demo/SliderDemo.js"));
+const StepperDemo = lazy(() => import("./pages/demo/StepperDemo.js"));
+const SwitchDemo = lazy(() => import("./pages/demo/SwitchDemo.js"));
+const TabPanelDemo = lazy(() => import("./pages/demo/TabPanelDemo.js"));
+const TableDemo = lazy(() => import("./pages/demo/TableDemo.js"));
+const TextAreaDemo = lazy(() => import("./pages/demo/TextAreaDemo.js"));
+const TimePickerDemo = lazy(() => import("./pages/demo/TimePickerDemo.js"));
+const ToastDemo = lazy(() => import("./pages/demo/ToastDemo.js"));
+const TooltipDemo = lazy(() => import("./pages/demo/TooltipDemo.js"));
+const GettingStartedDemo = lazy(() => import("./pages/demo/GettingStartedDemo.js"));
+const IntroductionDemo = lazy(() => import("./pages/demo/IntroductionDemo.js"));
+const AccessibilityDemo = lazy(() => import("./pages/demo/AccessibilityDemo.js"));
+const StylingDemo = lazy(() => import("./pages/demo/StylingDemo.js"));
+const ThemingDemo = lazy(() => import("./pages/demo/ThemingDemo.js"));
+const AnimationDemo = lazy(() => import("./pages/demo/AnimationDemo.js"));
+const AiLlmDemo = lazy(() => import("./pages/demo/AiLlmDemo.js"));
 
 const App = () => {
   useScrollToTop();

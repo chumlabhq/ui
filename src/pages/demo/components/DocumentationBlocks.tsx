@@ -10,10 +10,13 @@ import { Section } from "./Section.js";
  */
 const cardClass = "rounded-2xl border border-border-faint bg-bg-elevated p-5";
 const bodyClass = "text-sm leading-relaxed text-fg-secondary";
+// The library's status tokens, not the marketing pair: `--success` is 3.30:1
+// on the light card, `--cl-success` 5.02:1, and both are already gated by
+// contrast.contract in each theme.
 const eyebrowDoClass =
-  "text-xs font-semibold uppercase tracking-wider mb-3 text-success";
+  "text-xs font-semibold uppercase tracking-wider mb-3 text-cl-success";
 const eyebrowDontClass =
-  "text-xs font-semibold uppercase tracking-wider mb-3 text-danger";
+  "text-xs font-semibold uppercase tracking-wider mb-3 text-cl-error";
 
 interface DocControlledPatternProps {
   /** Kept for API compatibility — tokens auto-theme so this is unused. */

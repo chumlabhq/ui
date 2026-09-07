@@ -92,11 +92,10 @@ const CustomDropdown = memo(function CustomDropdown({
   const selectedIndex = options.findIndex((opt) => opt.value === value);
   const selectedOption = options[selectedIndex];
 
-  // The menu declared `role="listbox"` with options that were plain tabbable
-  // buttons: no arrow keys, no roving tabindex, nothing a listbox promises. The
-  // role is right for a month/year picker, so the behaviour is implemented
-  // rather than the role dropped — with 12 months and a long year list, Tab
-  // through every option is not a substitute.
+  // `role="listbox"` is right for a month/year picker, so the behaviour it
+  // promises is implemented here rather than the role dropped: with 12 months
+  // and a long year list, tabbing through every option is not a substitute for
+  // arrow keys and a roving tabindex.
   const [activeIndex, setActiveIndex] = useState(selectedIndex);
 
   const toggleMenu = () => {
@@ -257,11 +256,9 @@ function useMarkerTooltip(
     if (!marker || !showTooltip) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const gap = 6;
-    // Default to placing the tooltip below the cell. If that would
-    // overflow the viewport bottom, anchor to the cell's TOP instead and
-    // let translateY(-100%) pull the tooltip up by its actual rendered
-    // height — much tighter than the previous fixed 80 px estimate that
-    // left a 30-50 px gap above the cell when the tooltip was shorter.
+    // Below the cell by default. If that overflows the viewport bottom, anchor
+    // to the cell's TOP and let translateY(-100%) pull the tooltip up by its
+    // rendered height, which a fixed estimate cannot do for a short tooltip.
     let top: number;
     let nextPlacement: "top" | "bottom" = "bottom";
     if (rect.bottom + gap + 100 > window.innerHeight) {
@@ -385,8 +382,6 @@ const DayCell = memo(function DayCell({
         disabled={day.isDisabled}
         className={classNames}
         data-selected={day.isSelected || undefined}
-        // The deleted dayToday key was gated on showTodayIndicator; the
-        // attribute that replaces it has to honour the same prop.
         data-today={(day.isToday && showTodayIndicator) || undefined}
         data-disabled={day.isDisabled || undefined}
         data-outside={day.isOutside || undefined}
@@ -411,8 +406,8 @@ const DayCell = memo(function DayCell({
         onClick={() => !day.isDisabled && onSelect(day.date, day.isOutside)}
         onMouseEnter={(e) => { onHover(day.date); tooltipEnter(e); }}
         onMouseLeave={() => { onHover(null); tooltipLeave(); }}
-        // SC 1.4.13: the tooltip was pointer-only, so arrow-keying onto a
-        // marked day announced nothing the marker had to say.
+        // SC 1.4.13: a pointer-only tooltip tells a keyboard user nothing when
+        // the arrow keys land on a marked day.
         onFocus={(e) => { onFocus(day.date); tooltipEnter(e); }}
         onBlur={tooltipLeave}
         onKeyDown={(e) => onKeyDown(e, day.date)}

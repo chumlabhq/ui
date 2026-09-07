@@ -495,7 +495,7 @@ const TooltipDemo = () => {
           <Tooltip
             content="Indigo arrow"
             arrowColor={dark ? "#818cf8" : "#4f46e5"}
-            classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-white bg-cl-accent dark:bg-cl-accent` }}
+            classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent dark:bg-cl-accent` }}
           >
             <button className={c.trigger}>Indigo</button>
           </Tooltip>
@@ -509,7 +509,7 @@ const TooltipDemo = () => {
           <Tooltip
             content="Rose arrow"
             arrowColor={dark ? "#fb7185" : "#e11d48"}
-            classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-white bg-cl-accent dark:bg-cl-accent` }}
+            classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent dark:bg-cl-accent` }}
           >
             <button className={c.trigger}>Rose</button>
           </Tooltip>

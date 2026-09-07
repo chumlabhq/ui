@@ -176,7 +176,7 @@ const getClasses = (_dark: boolean) => ({
     trigger:
       "cursor-pointer rounded-cl-md px-2 py-1.5 hover:bg-cl-bg-hover dark:hover:bg-cl-text/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     itemIndicator:
-      "data-[state=active]:bg-cl-accent data-[state=active]:text-white data-[state=completed]:bg-cl-accent data-[state=completed]:text-white data-[state=inactive]:bg-black/[0.06] dark:data-[state=inactive]:bg-white/10 data-[state=inactive]:text-cl-text-secondary data-[invalid]:bg-cl-error data-[invalid]:text-white",
+      "data-[state=active]:bg-cl-accent data-[state=active]:text-cl-on-accent data-[state=completed]:bg-cl-accent data-[state=completed]:text-cl-on-accent data-[state=inactive]:bg-black/[0.06] dark:data-[state=inactive]:bg-white/10 data-[state=inactive]:text-cl-text-secondary data-[invalid]:bg-cl-error data-[invalid]:text-cl-on-accent",
     itemText:
       "data-[state=active]:text-cl-accent data-[state=completed]:text-cl-text data-[state=inactive]:text-cl-text-tertiary data-[invalid]:text-cl-error",
     description:
@@ -590,7 +590,7 @@ const StepperDemo = () => {
             classes={{
               ...c.stepper,
               trigger: `flex items-center gap-2 px-3 py-2 rounded-cl-lg border-2 border-transparent transition-all hover:border-cl-border-input-focus dark:hover:border-cl-border-input-focus/30`,
-              itemIndicator: `shrink-0 rounded-cl-lg flex items-center justify-center shadow-lg bg-cl-accent text-white shadow-accent dark:bg-cl-accent dark:text-white dark:shadow-accent/20`,
+              itemIndicator: `shrink-0 rounded-cl-lg flex items-center justify-center shadow-lg bg-cl-accent text-cl-on-accent shadow-accent dark:bg-cl-accent dark:text-cl-on-accent dark:shadow-accent/20`,
               itemIcon: "w-5 h-5",
               itemText: `text-sm font-semibold text-cl-accent dark:text-cl-accent`,
             }}
@@ -736,7 +736,7 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={{
                 ...c.stepper,
-                itemIndicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-white data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-white data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-secondary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-secondary dark:data-[status=pending]:border-white/15`,
+                itemIndicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-cl-on-accent data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-cl-on-accent data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-secondary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-secondary dark:data-[status=pending]:border-white/15`,
                 itemIcon: "w-5 h-5",
               }}
             />
@@ -779,7 +779,7 @@ const StepperDemo = () => {
                       className={`flex items-center gap-2 px-3 py-2 rounded-cl-lg bg-cl-accent/10 border border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus/30`}
                     >
                       <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent text-white dark:bg-cl-accent dark:text-white`}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent text-cl-on-accent dark:bg-cl-accent dark:text-cl-on-accent`}
                       >
                         {props.index + 1}
                       </div>

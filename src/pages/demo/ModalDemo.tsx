@@ -31,7 +31,7 @@ const baseBtn =
 const getClasses = (dark: boolean) => ({
   btn: `${baseBtn} bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated`,
   btnPrimary: `${baseBtn} bg-cl-text text-cl-bg hover:opacity-90`,
-  btnAccent: `${baseBtn} bg-cl-accent text-white hover:bg-cl-accent/90`,
+  btnAccent: `${baseBtn} bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`,
   btnDanger: `${baseBtn} bg-cl-error text-cl-bg hover:bg-cl-error/90`,
   btnSuccess: `${baseBtn} bg-cl-success text-cl-bg hover:bg-cl-success/90`,
   btnWarning: `${baseBtn} bg-cl-warning text-cl-bg hover:bg-cl-warning/90`,
@@ -66,7 +66,7 @@ const ModalChildWithHook = () => {
       </div>
       <button
         onClick={close}
-        className="px-4 py-2 bg-cl-accent text-white rounded-cl-md hover:bg-cl-accent/90 transition-colors"
+        className="px-4 py-2 bg-cl-accent text-cl-on-accent rounded-cl-md hover:bg-cl-accent/90 transition-colors"
       >
         Close via useModal().close()
       </button>
@@ -428,7 +428,7 @@ const ModalDemo = () => {
         </p>
         <div className="flex justify-end gap-3 mt-5">
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90`}
             onClick={() => setUnstyledOpen(false)}
           >
             Got it
@@ -1035,7 +1035,7 @@ const ModalDemo = () => {
         showHeader={false}
         classes={{ body: "p-0" }}
       >
-        <div className="bg-cl-accent p-8 text-center text-white">
+        <div className="bg-cl-accent p-8 text-center text-cl-on-accent">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cl-text/20 backdrop-blur-sm">
             <svg
               className="h-7 w-7"
@@ -1267,7 +1267,7 @@ const ModalDemo = () => {
                 </svg>
                 <span className="hidden sm:inline">Print</span>
               </button>
-              <button className="px-3 py-2 text-sm bg-cl-accent text-white hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2">
+              <button className="px-3 py-2 text-sm bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1534,7 +1534,7 @@ const ModalDemo = () => {
                 <p className={`text-sm text-cl-accent`}>5 members with access</p>
               </div>
               <button
-                className={`px-3 py-1.5 text-white text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90`}
+                className={`px-3 py-1.5 text-cl-on-accent text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90`}
                 onClick={() => setNestedLevel2Open(true)}
               >
                 Manage

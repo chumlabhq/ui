@@ -38,10 +38,9 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   loadingRow: "border-b border-cl-border",
   loadingItem: "px-4 py-2 h-14",
   loadingBar:
-    // The same shimmer the other three components use. It was a gradient on
-    // `--fg`, the marketing namespace, which the package does not ship: the
-    // class reached `dist/shared/Table-*.js` and `dist/styles.css` had no rule
-    // for it, so this painted nothing at all in a consumer's application.
+    // The same shimmer the other three components use. Not `--fg`: that is the
+    // marketing namespace, and `dist/styles.css` ships no rule for it, so a
+    // class reaching for it paints nothing in a consumer's application.
     "h-full w-full rounded animate-pulse bg-cl-bg-item-hover",
   control: "",
   sortIcon: "shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
@@ -50,10 +49,9 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   filterContent: "",
   filterHeader:
     "px-3 py-2 border-b border-cl-border flex items-center justify-between",
-  // Tokenised, not darkened. These were Tailwind's palette in a component that
-  // has tokens for exactly this: `text-gray-500` measured 4.02:1 on the panel
-  // and `text-gray-700` 1.88:1, both in dark, where a fixed grey cannot follow
-  // the surface. `contrast.contract` gates the token pairs in both themes.
+  // Tokenised, not a fixed grey: `text-gray-500` measures 4.02:1 on the panel
+  // and `text-gray-700` 1.88:1 in dark, because a palette step cannot follow the
+  // surface. `contrast.contract` gates the token pairs in both themes.
   filterLabel: "text-xs font-medium text-cl-text-tertiary",
   filterClearTrigger:
     "text-xs text-cl-accent hover:text-cl-accent-hover cursor-pointer",

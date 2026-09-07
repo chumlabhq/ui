@@ -162,7 +162,7 @@ const getClasses = (dark: boolean) => ({
     root: `p-4 rounded-cl-md bg-cl-accent/10 dark:bg-cl-accent/20`,
     list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:text-cl-accent dark:hover:bg-cl-accent/20`,
-    itemActive: `flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full border border-none cursor-default text-white bg-cl-accent dark:text-white dark:bg-cl-accent`,
+    itemActive: `flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full border border-none cursor-default text-cl-on-accent bg-cl-accent dark:text-cl-on-accent dark:bg-cl-accent`,
     separator: dark ? "text-cl-accent" : "text-cl-accent",
     icon: "shrink-0",
     ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:hover:bg-cl-accent/20 dark:text-cl-accent`,

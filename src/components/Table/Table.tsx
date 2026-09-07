@@ -454,10 +454,9 @@ function TableInner<TData>(
       ? ({
           id: "__dragHandle",
           header: () => null,
-          // SC 2.5.7: reordering was a drag and nothing else, on a `<span>` that
-          // could not take focus. A button that moves the row with the arrow
-          // keys is the alternative the criterion asks for — a route that is not
-          // a drag, rather than a larger drag target.
+          // SC 2.5.7: a button that moves the row with the arrow keys is the
+          // alternative the criterion asks for — a route that is not a drag,
+          // rather than a larger drag target.
           cell: ({ row }) => (
             <button
               type="button"
@@ -1345,8 +1344,8 @@ function TableInner<TData>(
               data-resize-handle
               role="separator"
               aria-orientation="vertical"
-              // SC 2.5.7: resizing was reachable only by dragging the handle.
-              // The remedy is a route that is not a drag, not a bigger target.
+              // SC 2.5.7: a keyboard route to the same resize, which is what
+              // the criterion asks for rather than a bigger drag target.
               tabIndex={0}
               aria-label={`Resize ${typeof header.column.columnDef.header === "string" ? header.column.columnDef.header : header.column.id} column`}
               aria-valuenow={Math.round(header.getSize())}

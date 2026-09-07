@@ -367,12 +367,9 @@ const MultiSelectSearchableDropdown = forwardRef<
         ? `${dropdownId}-option-${focusedIndex}`
         : undefined;
 
-    // Focus the search input when the surface opens.
-    //
-    // Was a `setTimeout(…, 10)` — a guess at how long the portal takes to
-    // paint, which loses the focus entirely on a frame slower than that. The
-    // effect runs after the portal has committed, so the input exists by the
-    // time this reads the ref. SearchableDropdown has always done it this way.
+    // No timer: the effect runs after the portal has committed, so the input
+    // exists by the time this reads the ref. A delay guessed in milliseconds
+    // loses the focus on any frame slower than the guess.
     useEffect(() => {
       if (isOpen && showSearch && searchInputRef.current) {
         searchInputRef.current.focus({ preventScroll: true });

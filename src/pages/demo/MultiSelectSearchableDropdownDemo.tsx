@@ -65,7 +65,7 @@ const getClasses = (dark: boolean) => ({
     optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
     chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
     checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input`,
-    checkboxChecked: "bg-cl-accent border-cl-border-input-focus text-white",
+    checkboxChecked: "bg-cl-accent border-cl-border-input-focus text-cl-on-accent",
     checkboxIcon: "w-full h-full",
     noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
     loading: `px-3 py-4 text-sm text-center text-cl-text-secondary`,

@@ -175,7 +175,7 @@ const getClasses = (_dark: boolean) => ({
     pageButtons: "flex flex-wrap items-center gap-2",
  pageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
     activePageButton:
-      "px-3 py-1 rounded-cl-md bg-cl-accent text-white border border-cl-border-input-focus",
+      "px-3 py-1 rounded-cl-md bg-cl-accent text-cl-on-accent border border-cl-border-input-focus",
  navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
     ellipsis: `px-2 select-none text-cl-text-tertiary`,
     selector: "flex items-center gap-2",
@@ -502,7 +502,7 @@ const PaginationDemo = () => {
                   }}
                   className={`px-3 py-1.5 text-sm rounded-cl-md border cursor-pointer transition-all ${
                     externalRows === r
-                      ? "bg-cl-accent text-white border-cl-border-input-focus shadow-sm"
+                      ? "bg-cl-accent text-cl-on-accent border-cl-border-input-focus shadow-sm"
                       : dark
                         ? "border-cl-border text-cl-text-secondary hover:bg-cl-bg-elevated"
                         : "border-cl-border text-cl-text hover:bg-cl-bg-hover"
@@ -767,7 +767,7 @@ const PaginationDemo = () => {
             classes={{
               ...c.pagination,
               navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-              item: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
+              item: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-cl-on-accent data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-cl-on-accent dark:data-[active]:hover:bg-cl-accent/90`,
             }}
           />
         </DemoWrapper>

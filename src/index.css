@@ -495,6 +495,21 @@ body {
 }
 .animate-status-pulse { animation: status-pulse 2.4s ease-in-out infinite; }
 
+/* A route-level Suspense fallback that is invisible until the wait is real.
+   `both` holds the 0-opacity from-state through the delay, so a chunk that
+   resolves inside 200ms unmounts the fallback before it has painted anything —
+   which is the flash this exists to avoid. 400ms, not 200: a cold load of a
+   component page keeps the fallback mounted for 250-340ms on a local server,
+   and a fallback that fades halfway in and then leaves is the flicker rather
+   than the fix. Deliberately not in the reduced-motion list below: the
+   animation is how the delay is expressed, and switching it off would show the
+   fallback instantly rather than calm it. */
+@keyframes suspense-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.suspense-delayed { animation: suspense-appear 150ms ease-out 400ms both; }
+
 /* Mobile menu slide-in. */
 @keyframes slide-in-right {
   from { transform: translateX(100%); }

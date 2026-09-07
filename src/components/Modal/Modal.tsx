@@ -33,7 +33,7 @@ import {
 import { pushModal, popModal, isTopModal } from "./utils/helpers.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
-// ADR: one scale. These were 9999 / 10 hardcoded here.
+// ADR: one scale, so a modal and a dropdown inside it cannot disagree.
 const BASE_Z_INDEX = LAYERS.overlay;
 const Z_INDEX_INCREMENT = LAYER_STEP;
 
@@ -111,8 +111,8 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const mergedContentRef = useMemo(() => mergeRefs(contentRef, ref), [ref]);
     const previousActiveElement = useRef<HTMLElement | null>(null);
     const [mounted, setMounted] = useState(isOpen || keepMounted);
-    // A modal open on first paint used to portal during hydration, which is a
-    // subtree the server never sent. See `useHydrated`.
+    // A modal open on first paint would otherwise portal during hydration,
+    // which is a subtree the server never sent. See `useHydrated`.
     const hydrated = useHydrated();
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);

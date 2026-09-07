@@ -498,8 +498,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
     return (
       // ADR: the drawer publishes its layer so floating content opened inside
-      // it stacks above rather than at the dropdown tier. This is why popovers
-      // inside drawers used to vanish.
+      // it stacks above rather than at the dropdown tier.
       <OverlayLayerContext.Provider value={zIndex}>
       <DrawerContext.Provider value={contextValue}>
         {createPortal(
@@ -553,11 +552,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               role="dialog"
               aria-modal={modal || undefined}
               aria-label={ariaLabel}
-              // `titleId` is a template string and therefore always truthy, so
-              // the old `!titleId` guard was dead and the panel named an element
-              // that exists only when a `DrawerHeader` renders it. A dangling
-              // reference is a name the platform cannot compute — the same
-              // defect `Modal` had behind `showHeader={false}`.
+              // `hasTitle`, not `titleId`: the id is a template string and
+              // therefore always truthy, so guarding on it would point the panel
+              // at an element that exists only while a `DrawerHeader` renders.
+              // A dangling reference is a name the platform cannot compute.
               aria-labelledby={
                 ariaLabelledBy ?? (!ariaLabel && hasTitle ? titleId : undefined)
               }

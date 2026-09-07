@@ -194,8 +194,8 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const variantClasses = unstyled
     ? structuralOnly(VARIANT_CLASSES[variant])
     : VARIANT_CLASSES[variant];
-  // The prop, not the bare query: it was calming this component's JS-driven
-  // motion while leaving every motion utility in the class strings.
+  // The prop, not the bare query: the class strings carry motion utilities of
+  // their own, and only the prop reaches those.
   const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
   const baseClassesRaw = unstyled ? UNSTYLED_ACCORDION_CLASSES : DEFAULT_ACCORDION_CLASSES;

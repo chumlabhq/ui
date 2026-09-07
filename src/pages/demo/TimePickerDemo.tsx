@@ -19,7 +19,7 @@ import {
 const getClasses = (dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary:
-    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
   text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -51,7 +51,7 @@ const getClasses = (dark: boolean) => ({
     clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
     footer: "flex items-center justify-end gap-2 mt-4",
     cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-black/5 dark:text-cl-text-secondary dark:hover:bg-white/10`,
-    confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
+    confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
     row: "flex flex-col gap-1 ml-3",
     periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-black/5 dark:text-cl-text-tertiary dark:hover:bg-white/10`,
   } satisfies TimePickerClasses,
@@ -153,7 +153,7 @@ const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
   clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
-  confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent",
+  confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
   row: "flex flex-col gap-1 ml-3",
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
@@ -177,7 +177,7 @@ const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
   clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
-  confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent",
+  confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
   row: "flex flex-col gap-1 ml-3",
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
@@ -940,7 +940,7 @@ const TimePickerDemo = () => {
                 clockCenter: "fill-cl-accent",
                 footer: "flex items-center justify-end gap-2 mt-4",
                 cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md text-cl-text-secondary`,
-                confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-white",
+                confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent",
                 row: "flex flex-col gap-1 ml-3",
                 periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer text-cl-text-secondary`,
               }}

@@ -214,14 +214,11 @@ const Submenu = memo(function Submenu({
   const SearchIcon = SearchIconComponent || SearchIconDefault;
 
   return (
-    // Portalled and anchored, like every other floating surface. It was a
-    // `position: absolute` child of the menu item until then, which made it the
-    // one surface in the library with no clamp and no flip: at 1024 it opened
-    // at x=1003 with 220px of width and ran off the frame, and at 320 the menu
-    // fills the viewport so the submenu painted nothing at all. Leaving the
-    // parent menu's subtree is also what lets its search field and its status
-    // messages carry their own roles — inside a `menu` they were unallowed
-    // children of it.
+    // Portalled and anchored, like every other floating surface: an absolutely
+    // positioned child of the menu item gets no clamp and no flip, and runs off
+    // the frame at 1024 and out of the viewport at 320. Leaving the parent
+    // menu's subtree is also what lets its search field and its status messages
+    // carry their own roles — inside a `menu` they are unallowed children.
     <MenuSurface
       trigger={anchor}
       isOpen
@@ -236,8 +233,8 @@ const Submenu = memo(function Submenu({
       role="group"
       aria-label={`${parent.label} submenu`}
       className={classes.subPositioner || undefined}
-      // Read by the outside-click, scroll-lock and focus checks, which used to
-      // ask whether the menu element contained the target and now cannot.
+      // The outside-click, scroll-lock and focus checks look for this: the
+      // submenu is portalled, so `menu.contains(target)` cannot find it.
       data-cascading-submenu=""
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

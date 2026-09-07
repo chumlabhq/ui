@@ -2,10 +2,8 @@ import type { CSSProperties } from "react";
 import type { TooltipShadowPreset, TooltipWordWrap, TooltipClasses } from "./types.js";
 import { structuralOnly } from "../../../utils/classLayers.js";
 
-// Alpha values bumped from the original 0.12–0.30 range to 0.18–0.45 so
-// the same shadow reads correctly on both light AND dark surfaces. The
-// previous values were tuned for white backgrounds and went nearly
-// invisible on the dark-mode bg — addresses THEME-SHADOW-001.
+// The 0.18–0.45 alpha range carries one shadow across both surfaces: an
+// alpha tuned for a white background goes nearly invisible on the dark one.
 export const shadowPresets: Record<TooltipShadowPreset, string> = {
   none: "none",
   sm: "0 1px 2px rgba(0, 0, 0, 0.18)",
