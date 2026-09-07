@@ -491,7 +491,7 @@
     "test:e2e:firefox": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=firefox",
     "test:e2e:webkit": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=webkit",
     "test:e2e:mobile": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project='Mobile Chrome' --project='Mobile Safari'",
-    "test:all": "npm run typecheck && npm run test:run && npm run test:e2e",
+    "test:all": "npm run typecheck && node scripts/run-tests-parallel.mjs",
     "clean": "rm -rf dist",
     "build:lib": "npm run clean && npm run build:tokens && vite build --mode lib && tsc --project tsconfig.lib.json && node scripts/build-cjs-declarations.mjs && npm run build:styles",
     "postbuild:lib": "node scripts/assert-phone-bundle.mjs && node scripts/assert-flag-bundle.mjs && node scripts/assert-styles-bundle.mjs && node scripts/assert-fixture-bundle.mjs && node scripts/assert-packaging.mjs && node scripts/assert-dist-records.mjs --invalidate",
@@ -510,7 +510,8 @@
     "verify:consumers": "node scripts/verify-consumer-matrix.mjs",
     "verify:consumers:self-check": "node scripts/verify-consumer-matrix.mjs --self-check",
     "verify:ssr-record": "node scripts/assert-ssr-record.mjs",
-    "verify:ssr-record:self-check": "node scripts/assert-ssr-record.mjs --self-check"
+    "verify:ssr-record:self-check": "node scripts/assert-ssr-record.mjs --self-check",
+    "test:e2e:all:self-check": "node scripts/run-e2e-matrix.mjs --self-check"
   },
   "peerDependencies": {
     "@tanstack/react-table": "^8.21.3",

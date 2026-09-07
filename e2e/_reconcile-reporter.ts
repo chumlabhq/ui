@@ -32,10 +32,15 @@ import type {
  *
  * It reports rather than replaces: pair it with `list` or `line`.
  */
+/** The three terminal statuses that are not a pass. */
+const NOT_PASSED = new Set(["failed", "timedOut", "interrupted"]);
+
 interface Row {
   title: string;
   project: string;
   status: string;
+  /** `e2e/visual.spec.ts:509`, so a non-pass can be opened rather than hunted. */
+  where: string;
 }
 
 export default class ReconcileReporter implements Reporter {
@@ -54,10 +59,12 @@ export default class ReconcileReporter implements Reporter {
 
   onTestEnd(test: TestCase, result: TestResult): void {
     const project = test.parent.project()?.name ?? "?";
+    const file = test.location.file.replace(`${process.cwd()}/`, "");
     this.seen.set(ReconcileReporter.id(test), {
       title: test.title,
       project,
       status: result.status,
+      where: `${file}:${test.location.line}`,
     });
     this.byStatus.set(result.status, (this.byStatus.get(result.status) ?? 0) + 1);
 
@@ -114,12 +121,26 @@ export default class ReconcileReporter implements Reporter {
       );
     }
 
-    // The outcome is restated here because this is the last line of the run.
+    // The outcome is restated here because this is the last line of the run:
     // `list` puts `N failed` above its failure list and `N passed` at the
     // bottom, so the tail of a failing run reads like a passing one.
+    //
+    // Each one is NAMED. "timedOut=1" cost two full suite re-runs to answer
+    // once, and the second run cleaned up `test-results/` before the first
+    // could be read. The location was in this reporter all along.
+    const notPassedTests = [...this.seen.values()]
+      .filter((row) => NOT_PASSED.has(row.status))
+      .map((row) => ({ ...row }));
+
     if (bad > 0) {
       failed = true;
       lines.push(`  ${bad} test(s) did not pass — the count above is not a pass.`);
+      for (const row of notPassedTests.slice(0, 30)) {
+        lines.push(`    ${row.status.padEnd(11)} ${row.where}  ${row.title}  [${row.project}]`);
+      }
+      if (notPassedTests.length > 30) {
+        lines.push(`    … and ${notPassedTests.length - 30} more`);
+      }
     }
 
     const emptyProjects = [...byProject.entries()].filter(([, n]) => n === 0);
@@ -172,6 +193,7 @@ export default class ReconcileReporter implements Reporter {
             byProject: Object.fromEntries(byProject),
             unexplainedSkips: this.unexplainedSkips,
             notPassed: bad,
+            notPassedTests,
             reconciled: !failed,
             playwrightStatus: result.status,
           },

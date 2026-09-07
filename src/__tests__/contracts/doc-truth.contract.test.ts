@@ -189,6 +189,14 @@ function classesClaimedInProse(name: string): string[] {
   return claimed;
 }
 
+/**
+ * 120s rather than the project's 30s. These three shell out to an AST sweep of
+ * the whole source, and `test:all` now runs vitest and the browser suite at the
+ * same time; under that load one of them exceeded 30s and failed on a clock
+ * rather than on a claim. A timeout is not an assertion.
+ */
+const SHELL_OUT_TIMEOUT = 120_000;
+
 describe("doc truth contract", () => {
   describe("self-check", () => {
     it("reads props out of both prose shapes", () => {
@@ -267,7 +275,7 @@ describe("doc truth contract", () => {
         stdio: "pipe",
       }),
     ).not.toThrow();
-  });
+  }), SHELL_OUT_TIMEOUT;
 
   it("keeps DEMO-COVERAGE.md in step with the source", () => {
     /**
@@ -285,7 +293,7 @@ describe("doc truth contract", () => {
     expect(() =>
       execFileSync("node", ["scripts/audit-demo-coverage.mjs", "--check"], { stdio: "pipe" }),
     ).not.toThrow();
-  });
+  }), SHELL_OUT_TIMEOUT;
 
   /**
    * The other half of the same question: not "is the count written down" but
@@ -301,7 +309,7 @@ describe("doc truth contract", () => {
     expect(() =>
       execFileSync("node", ["scripts/audit-fixture-gap.mjs", "--check"], { stdio: "pipe" }),
     ).not.toThrow();
-  });
+  }), SHELL_OUT_TIMEOUT;
 
   it("documents every sub-component the package exports", () => {
     const rootExports = readFileSync("src/index.ts", "utf8");

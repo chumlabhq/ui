@@ -195,6 +195,9 @@ function runInvocation(name, extraArgs, label) {
     collected: report.collected,
     executed: report.executed,
     byStatus: report.byStatus,
+    // Carried through to the summary: the table says how many did not pass, and
+    // the thing you need is which.
+    notPassedTests: report.notPassedTests ?? [],
     exit: result.status,
     reason: passed
       ? null
@@ -228,6 +231,7 @@ function runProject(name) {
 
   return {
     ok: failed === 0,
+    notPassedTests: results.flatMap((r) => r.notPassedTests ?? []),
     shards: results.map((r, i) => ({ shard: `${i + 1}/${shards}`, ...r })),
     seconds: results.reduce((total, r) => total + r.seconds, 0),
     collected: results.reduce((total, r) => total + r.collected, 0),
@@ -303,6 +307,21 @@ function printReport(state, names) {
     `\n  totals: collected ${totalCollected}  executed ${totalExecuted}  ` +
       `${Object.entries(totals).sort().map(([k, v]) => `${k}=${v}`).join(" ")}\n`,
   );
+  // Which, not how many. Printed after the table so the last thing on screen
+  // before the verdict is the list of tests to open.
+  for (const name of names) {
+    const record = state.projects[name];
+    for (const test of record?.notPassedTests ?? []) {
+      process.stdout.write(
+        `\n  ${name}: ${test.status} ${test.where}  ${test.title}` +
+          (test.project && test.project !== name ? `  [${test.project}]` : ""),
+      );
+    }
+  }
+  if (names.some((n) => (state.projects[n]?.notPassedTests ?? []).length > 0)) {
+    process.stdout.write("\n");
+  }
+
   const unstableRan = names.filter(
     (n) => KNOWN_UNSTABLE.has(n) && state.projects[n] && !state.projects[n].ok,
   );
@@ -320,11 +339,92 @@ function printReport(state, names) {
   return allOk;
 }
 
+/**
+ * Plants a failure and a timeout, and requires the reconciliation to name both.
+ *
+ * The summary reported `timedOut=1` and nothing else, which cost two full suite
+ * re-runs to answer — and the second one deleted the artifacts the first had
+ * written. A reporter that can name a non-pass has to be shown naming one.
+ */
+function selfCheck() {
+  const spec = resolve(ROOT, "e2e/planted-non-pass.spec.ts");
+  const dir = mkdtempSync(join(tmpdir(), "e2e-selfcheck-"));
+  const jsonPath = join(dir, "reconcile.json");
+  writeFileSync(
+    spec,
+    [
+      'import { test, expect } from "@playwright/test";',
+      "",
+      'test("planted failure", async () => {',
+      "  expect(1, \"planted\").toBe(2);",
+      "});",
+      "",
+      'test("planted timeout", async () => {',
+      "  test.setTimeout(1200);",
+      "  await new Promise(() => {});",
+      "});",
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+
+  try {
+    spawnSync("npx", ["playwright", "test", "--project=chromium", spec, "--workers=2"], {
+      stdio: "inherit",
+      env: { ...process.env, PLAYWRIGHT_BROWSERS_PATH: "0", E2E_RECONCILE_JSON: jsonPath },
+    });
+    const report = existsSync(jsonPath) ? JSON.parse(readFileSync(jsonPath, "utf8")) : null;
+    const named = report?.notPassedTests ?? [];
+    const outcomes = [
+      {
+        plant: "a failing test",
+        caught: named.some(
+          (t) =>
+            t.status === "failed" &&
+            t.title === "planted failure" &&
+            /planted-non-pass\.spec\.ts:\d+$/.test(t.where),
+        ),
+      },
+      {
+        plant: "a timing-out test",
+        caught: named.some(
+          (t) =>
+            t.status === "timedOut" &&
+            t.title === "planted timeout" &&
+            /planted-non-pass\.spec\.ts:\d+$/.test(t.where),
+        ),
+      },
+    ];
+    process.stdout.write("\n══ reconciliation self-check ═══════════════════════════════════\n");
+    for (const outcome of outcomes) {
+      const row = named.find((t) => t.title.includes(outcome.plant.includes("failing") ? "failure" : "timeout"));
+      process.stdout.write(
+        `  ${outcome.caught ? "named " : "NOT NAMED"}  ${outcome.plant}` +
+          (row ? `  →  ${row.status} ${row.where}  ${row.title}` : "  →  absent from the report") +
+          "\n",
+      );
+    }
+    const ok = outcomes.every((o) => o.caught);
+    process.stdout.write(
+      ok
+        ? "  RESULT: every non-pass named its spec, line and title\n"
+        : "  RESULT: FAILED — a non-pass was reported without naming it\n",
+    );
+    process.stdout.write("════════════════════════════════════════════════════════════════\n");
+    return ok;
+  } finally {
+    rmSync(spec, { force: true });
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 const args = process.argv.slice(2);
 const names = projectNames();
 const only = args.includes("--project") ? args[args.indexOf("--project") + 1] : null;
 const reportOnly = args.includes("--report");
 const fresh = args.includes("--fresh");
+
+if (args.includes("--self-check")) process.exit(selfCheck() ? 0 : 1);
 
 if (only && !names.includes(only)) {
   process.stderr.write(`unknown project "${only}". Known: ${names.join(", ")}\n`);

@@ -199,7 +199,7 @@ describe("token vocabulary contract", () => {
     expect(() =>
       execFileSync("node", ["scripts/build-tokens.mjs", "--check"], { stdio: "pipe" }),
     ).not.toThrow();
-  });
+  }), 120_000;
 
   describe.each(RELATIONAL)("$token", ({ token, against, claim }) => {
     it.each(["dark", "light"])(`differs from ${against} in %s`, (themeName) => {
