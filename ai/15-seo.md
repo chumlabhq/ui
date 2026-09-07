@@ -77,11 +77,11 @@ Apply to the framework's global metadata location:
 <title>Chumlab UI — Free, open source React component library</title>
 <meta
   name="description"
-  content="Chumlab UI is a free, open source React component library with 30+ accessible primitives, an AI playground that ships React from prompts, and one token system for any brand. MIT licensed. Built for craft."
+  content="Chumlab UI is a free, open source React component library with 30+ accessible primitives and one token system for any brand. MIT licensed. Built for craft."
 />
 <meta
   name="keywords"
-  content="react component library, react ui library, accessible react components, headless react components, react design system, open source react components, ai react playground, chumlab"
+  content="react component library, react ui library, accessible react components, headless react components, react design system, open source react components, chumlab"
 />
 <link rel="canonical" href="https://chumlab.com/" />
 
@@ -99,7 +99,7 @@ Apply to the framework's global metadata location:
   />
   <meta
     property="og:description"
-    content="30+ accessible primitives, an AI playground, and one token system for any brand. MIT licensed."
+    content="30+ accessible primitives and one token system for any brand. MIT licensed."
   />
   <meta property="og:url" content="https://chumlab.com/" />
   <meta property="og:image" content="https://chumlab.com/og-default.png" />
@@ -126,7 +126,7 @@ Apply to the framework's global metadata location:
   />
   <meta
     name="twitter:description"
-    content="30+ accessible primitives, an AI playground, and one token system for any brand."
+    content="30+ accessible primitives and one token system for any brand."
   />
   <meta name="twitter:image" content="https://chumlab.com/og-default.png" />
   <meta

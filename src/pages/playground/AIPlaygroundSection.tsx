@@ -7,7 +7,7 @@ import { Button } from "../../components/ui/index.js";
 import GateCluster from "./components/GateCluster.js";
 import type { GateLamps, LampState } from "./lib/gates.js";
 import logoSmall from "../../assets/images/logo-small.png";
-import { PLAYGROUND_ENABLED } from "../../lib/flags.js";
+import { PLAYGROUND_ENABLED } from "./flags.js";
 
 // Register the few icons this section renders so they paint instantly and never
 // hit api.iconify.design on the public landing page. Data lifted verbatim from

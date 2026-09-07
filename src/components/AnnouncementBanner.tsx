@@ -1,5 +1,5 @@
-// Pre-launch "stealth mode" announcement strip. Shared between the marketing
-// SiteHeader and the AI Playground chrome so the copy stays in one place.
+// Pre-launch "stealth mode" announcement strip, rendered by the marketing
+// SiteHeader.
 // Colors are intentionally hard-coded so the contrast is identical across
 // light and dark surfaces.
 export default function AnnouncementBanner() {

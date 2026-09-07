@@ -62,7 +62,7 @@ const GUIDE_ITEMS: NavItem[] = [
     path: "guides/ai-llm",
     displayName: "AI & LLM",
     description:
-      "Patterns for AI playgrounds, streaming UIs, and LLM-friendly component APIs.",
+      "Patterns for chat surfaces, streaming UIs, and LLM-friendly component APIs.",
   },
 ];
 

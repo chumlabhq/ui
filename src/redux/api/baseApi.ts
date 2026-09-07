@@ -39,6 +39,9 @@ const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery,
-  tagTypes: ["PlaygroundOnboarding", "PlaygroundSettings", "Feedback", "Auth", "Chat"],
+  // The playground's own tags are not here: it adds them with
+  // `enhanceEndpoints` from its own slice, so the removed feature leaves no
+  // trace in the shipped bundle. See docs/playground-removal.md.
+  tagTypes: ["Feedback", "Auth", "Chat"],
   endpoints: () => ({}),
 });

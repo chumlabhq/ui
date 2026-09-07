@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { PREVIEW_PATH, postToPreview, subscribeToPreview } from "../../../lib/preview/runtime.js";
+import { PREVIEW_PATH, postToPreview, subscribeToPreview } from "../preview/runtime.js";
 import type { VerifyError } from "../types.js";
 
 // Render layer of the responsive gate (Phase 11). A hidden, off-screen preview

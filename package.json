@@ -467,7 +467,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "prebuild": "npm run build:lib && npm run build:preview",
+    "prebuild": "npm run build:lib",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "typecheck": "node scripts/assert-typecheck.mjs",
@@ -497,6 +497,8 @@
     "postbuild:lib": "node scripts/assert-phone-bundle.mjs && node scripts/assert-flag-bundle.mjs && node scripts/assert-styles-bundle.mjs && node scripts/assert-fixture-bundle.mjs && node scripts/assert-packaging.mjs && node scripts/assert-dist-records.mjs --invalidate",
     "build:preview": "node scripts/build-preview-vendor.mjs",
     "build:llms": "node ai/build-llms-full.mjs",
+    "verify:playground-removed": "node scripts/assert-playground-removed.mjs",
+    "verify:playground-removed:self-check": "node scripts/assert-playground-removed.mjs --self-check",
     "build:flags": "node scripts/generate-flags.mjs",
     "prepublishOnly": "npm run build:lib",
     "prepack": "npm run build:lib && npm run build:llms",

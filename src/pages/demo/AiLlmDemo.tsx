@@ -16,7 +16,7 @@ const AiLlmDemo = () => {
           AI &amp; LLM.
         </h1>
         <p className="text-[15.5px] text-fg-secondary leading-[1.6] max-w-2xl">
-          Patterns for building AI playgrounds, streaming UIs, and chat
+          Patterns for building chat surfaces, streaming UIs, and
           surfaces with Chumlab UI. Plus: what makes our component APIs
           friendly to LLM-assisted code generation.
         </p>
@@ -57,7 +57,7 @@ const AiLlmDemo = () => {
 
       <Section
         title="Streaming UIs"
-        description="The primitives we reach for when building chat or playground experiences."
+        description="The primitives we reach for when building chat and streaming experiences."
       >
         <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
           <li>

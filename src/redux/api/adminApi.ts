@@ -17,7 +17,14 @@ interface UpdateOnboardingStatusResponse {
   onboarding: PlaygroundOnboardingRecord;
 }
 
-export const adminApi = baseApi.injectEndpoints({
+/**
+ * The playground's tags live with the playground, not in `baseApi`: the site
+ * ships `baseApi`, and a tag name is a string in the bundle. Restoring the
+ * feature needs nothing here — this file already carries them.
+ */
+const playgroundBaseApi = baseApi.enhanceEndpoints({ addTagTypes: ["PlaygroundOnboarding"] });
+
+export const adminApi = playgroundBaseApi.injectEndpoints({
   endpoints: (builder) => ({
     listPlaygroundOnboardings: builder.query<
       OnboardingListResponse,

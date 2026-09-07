@@ -12,6 +12,10 @@ import { expect, type Page } from "@playwright/test";
  * A redirect is silent by design, so the only way to catch one is to check the
  * URL you ended up at against the one you asked for, and to require a marker
  * that only the intended page carries.
+ *
+ * The catch-all renders a 404 page now instead of redirecting to "/", so an
+ * unknown route keeps its URL and the comparison above cannot see it. The 404
+ * page carries `data-route-404` for exactly this reason.
  */
 
 /**
@@ -30,7 +34,7 @@ const describeLanding = async (page: Page, requested: string) => {
   return (
     `navigated to "${requested}" but landed on "${landed}"` +
     (heading ? ` (h1: ${JSON.stringify(heading.trim().slice(0, 60))})` : "") +
-    `. A redirect to "/" means the route does not exist.`
+    `. Landing anywhere else means the route redirected.`
   );
 };
 
@@ -63,6 +67,14 @@ async function gotoAsserted(page: Page, url: string): Promise<void> {
   if (landed !== path) {
     expect(landed, await describeLanding(page, path)).toBe(path);
   }
+
+  // The redirect poll above has already waited out its window, so the app has
+  // rendered and this needs no timeout of its own.
+  const notFound = await page.locator("[data-route-404]").count();
+  expect(
+    notFound,
+    `navigated to "${path}" and the site answered its 404 page. The route does not exist.`,
+  ).toBe(0);
 }
 
 /** Navigates to `path` and asserts both the resolved URL and a page marker. */

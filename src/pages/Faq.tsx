@@ -23,7 +23,7 @@ import { trackEvent } from "../lib/analytics.js";
 
 const PAGE_TITLE = "Frequently Asked Questions";
 const PAGE_DESCRIPTION =
-  "Answers to the most common questions about Chumlab. Installation, components, accessibility, theming, SSR, TypeScript, testing, and the AI Playground. Production-grade React components, MIT licensed.";
+  "Answers to the most common questions about Chumlab. Installation, components, accessibility, theming, SSR, TypeScript, and testing. Production-grade React components, MIT licensed.";
 const PAGE_URL = "https://chumlab.com/faq";
 const FAQS_PER_PAGE = 10;
 

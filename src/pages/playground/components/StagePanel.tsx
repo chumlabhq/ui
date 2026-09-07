@@ -3,7 +3,7 @@ import { Tooltip } from "../../../components/Tooltip/index.js";
 import PreviewFrame from "./PreviewFrame.js";
 import GateCluster from "./GateCluster.js";
 import logoSmall from "../../../assets/images/logo-small.png";
-import type { PreviewTheme } from "../../../lib/preview/runtime.js";
+import type { PreviewTheme } from "../preview/runtime.js";
 import type { PreviewDevice, VerifyError } from "../types.js";
 import type { GateLamps } from "../lib/gates.js";
 

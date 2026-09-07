@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useBuyMeCoffee } from "./useBuyMeCoffee.js";
 import { UserMenu } from "./UserMenu.js";
 import { Button } from "./ui/index.js";
-import { useEnterPlayground } from "../pages/playground/lib/enterPlayground.js";
-import { PLAYGROUND_ENABLED } from "../lib/flags.js";
 import { useTheme } from "../contexts/ThemeContext.js";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
@@ -17,34 +15,12 @@ const SHOW_ANNOUNCEMENT = false;
 /**
  * Deep-space site header. Solid bg-base, hairline bottom rule, plain text
  * nav links. The single CTA is an off-white pill that sends users to the
- * getting-started page. The AI Playground promotion lives in the hero
- * status pill, not the header.
- *
- * AI Playground link behaviour:
- *   On the home page, prevent default and smooth-scroll to #ai-playground.
- *   On any other page, navigate to /#ai-playground; Home reads the hash on
- *   mount and scrolls.
+ * getting-started page.
  */
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
   const { open: openBuyCoffee } = useBuyMeCoffee();
   const { theme, toggleTheme } = useTheme();
-  // Authenticated → /playground; otherwise start Google sign-in and return here.
-  const enterPlayground = useEnterPlayground();
-
-  const goToAIPlayground = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    setMenuOpen(false);
-    if (location.pathname === "/") {
-      document
-        .getElementById("ai-playground")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      window.setTimeout(() => navigate("/#ai-playground"), 150);
-    }
-  };
 
   const navLink =
     "text-[14px] font-normal text-cl-text hover:text-cl-text-secondary transition-colors duration-150";
@@ -158,18 +134,6 @@ export function SiteHeader() {
               >
                 Components
               </Link>
-              {PLAYGROUND_ENABLED && (
-                <a
-                  href="/#ai-playground"
-                  onClick={goToAIPlayground}
-                  className={navLink}
-                  data-track-event="nav_click"
-                  data-track-location="header"
-                  data-track-target="playground"
-                >
-                  Playground
-                </a>
-              )}
               <Link
                 to="/blog"
                 className={navLink}
@@ -269,20 +233,6 @@ export function SiteHeader() {
 
               {/* fullWidthMobile={false}: header CTAs stay inline next to the
                   hamburger; never stretch at any width. */}
-              {PLAYGROUND_ENABLED && (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  fullWidthMobile={false}
-                  className="hidden sm:inline-flex border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:-translate-y-px hover:shadow-[0_10px_28px_-5px_var(--accent-glow)] hover:brightness-110 active:translate-y-0 active:brightness-95"
-                  onClick={enterPlayground}
-                  data-track-event="cta_click"
-                  data-track-location="header"
-                  data-track-target="playground"
-                >
-                  Playground
-                </Button>
-              )}
 
               <Button
                 variant="primary"
@@ -365,18 +315,6 @@ export function SiteHeader() {
             >
               Components
             </Link>
-            {PLAYGROUND_ENABLED && (
-              <a
-                href="/#ai-playground"
-                onClick={goToAIPlayground}
-                className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
-                data-track-event="nav_click"
-                data-track-location="mobile_menu"
-                data-track-target="playground"
-              >
-                Playground
-              </a>
-            )}
             <Link
               to="/blog"
               onClick={() => setMenuOpen(false)}
@@ -424,22 +362,6 @@ export function SiteHeader() {
               GitHub
             </a>
 
-            {PLAYGROUND_ENABLED && (
-              <Button
-                variant="primary"
-                size="md"
-                onClick={() => {
-                  setMenuOpen(false);
-                  enterPlayground();
-                }}
-                className="mt-6 border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:brightness-110 active:brightness-95"
-                data-track-event="cta_click"
-                data-track-location="mobile_menu"
-                data-track-target="playground"
-              >
-                Playground
-              </Button>
-            )}
 
             <Button
               variant="primary"

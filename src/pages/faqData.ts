@@ -13,7 +13,6 @@
 
 export type FaqCategory =
   | "Getting Started"
-  | "AI Playground"
   | "Components"
   | "Theming"
   | "Forms"
@@ -44,7 +43,6 @@ export function faqAnchor(question: string): string {
 
 export const FAQ_CATEGORIES: FaqCategory[] = [
   "Getting Started",
-  "AI Playground",
   "Components",
   "Theming",
   "Forms",
@@ -98,50 +96,6 @@ export const FAQ_DATA: FaqEntry[] = [
     question: "How do I set up Tailwind CSS v4 for Chumlab UI?",
     answer:
       'Install Tailwind CSS v4 and its Vite or PostCSS plugin, then add `@import "tailwindcss"` to your main CSS file. Extend the Tailwind content globs to include Chumlab UI\'s distribution so its utility classes are emitted: `content: ["./node_modules/@chumlab/ui/**/*.{js,mjs}"]`.',
-  },
-
-  // ─── AI Playground ──────────────────────────────────────────────────────
-  {
-    category: "AI Playground",
-    question: "What is the Chumlab AI Playground?",
-    answer:
-      "The AI Playground is an in-product assistant that turns natural-language prompts and screenshots into production-ready React components built on Chumlab UI. It plans the requirement as a task list, streams typed JSX, and renders a live preview — so you can iterate on components without writing scaffolding.",
-  },
-  {
-    category: "AI Playground",
-    question: "What can I build with the AI Playground?",
-    answer:
-      "Anything that composes from Chumlab UI primitives: authentication screens, scheduling forms, checkout flows, analytics widgets, pricing cards, multi-step wizards, OTP verification, filter panels, and more. Generated code uses typed props, ARIA attributes, and Tailwind CSS v4 utilities out of the box.",
-  },
-  {
-    category: "AI Playground",
-    question: "Can I upload a screenshot and generate a matching component?",
-    answer:
-      "Yes. Drop an image into the playground and the AI analyses the layout, extracts text and typography, maps regions to Chumlab primitives (Input, DatePicker, Button, and so on), and emits JSX that recreates the reference. Follow-up prompts refine the output incrementally.",
-  },
-  {
-    category: "AI Playground",
-    question: "Does the AI Playground use my data for training?",
-    answer:
-      "No. Prompts, screenshots, and generated code are processed only to produce the requested component. Your inputs are not used to train models and are not retained beyond the active session.",
-  },
-  {
-    category: "AI Playground",
-    question: "Which AI model powers the Chumlab AI Playground?",
-    answer:
-      "The playground runs on frontier multi-modal large language models. The specific model may evolve over time as better models ship; regardless of the underlying model, responses consistently import from `@chumlab/ui` and target typed, accessible JSX.",
-  },
-  {
-    category: "AI Playground",
-    question: "Is the AI-generated code production-ready?",
-    answer:
-      "Yes. Output uses typed TypeScript props, follows WCAG 2.1 AA accessibility defaults, and only imports from `@chumlab/ui`. You own the code once generated — review it like any PR, adjust to your conventions, and ship.",
-  },
-  {
-    category: "AI Playground",
-    question: "Can I copy generated code and use it in my project?",
-    answer:
-      "Yes. Everything the playground outputs is yours to copy, paste, modify, and ship. There are no licensing restrictions beyond the MIT license that covers Chumlab UI itself.",
   },
 
   // ─── Components ─────────────────────────────────────────────────────────

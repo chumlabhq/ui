@@ -5,6 +5,12 @@
 //                           runtimes copied from node_modules
 //   public/preview.html     the preview document with the generated import map
 //                           and the token blocks extracted from src/index.css
+//   public/preview-bridge.js  copied from the playground tree
+//
+// Everything it writes is gitignored, and `prebuild` no longer runs it: the
+// playground is off the site (docs/playground-removal.md). The bridge itself
+// lives with the playground rather than in public/ so that a plain `npm run
+// build` ships none of it.
 //
 // @chumlab/ui is unpublished, so no CDN can resolve it - the iframe's import
 // map must point every allowlisted specifier at these local files.
@@ -187,6 +193,10 @@ ${JSON.stringify({ imports: importMap }, null, 2)}
 `;
 
 writeFileSync(path.join(repoRoot, "public", "preview.html"), html);
+copyFileSync(
+  path.join(repoRoot, "src", "pages", "playground", "preview", "preview-bridge.js"),
+  path.join(repoRoot, "public", "preview-bridge.js")
+);
 rmSync(shimDir, { recursive: true, force: true });
 
 console.log(

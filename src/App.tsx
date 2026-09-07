@@ -1,9 +1,8 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useScrollToTop } from "./hooks/useScrollToTop.js";
 import { useAnalytics } from "./hooks/useAnalytics.js";
 import { BuyMeCoffeeProvider } from "./components/BuyMeCoffee.js";
-import { PLAYGROUND_ENABLED } from "./lib/flags.js";
 
 // Fixture pages exist so e2e can drive components without going through demo
 // prose (E2E-INVENTORY.md). The import sits inside a ternary on
@@ -14,10 +13,8 @@ const FixtureRoutes = import.meta.env.DEV
   ? lazy(() => import("./pages/fixtures/FixtureRoutes.js"))
   : null;
 import Home from "./pages/Home.js";
-import OauthRedirect from "./pages/oauth/OauthRedirect.js";
-import Playground from "./pages/playground/Playground.js";
-import PlaygroundAdmin from "./pages/playground/PlaygroundAdmin.js";
 import Faq from "./pages/Faq.js";
+import NotFound from "./pages/NotFound.js";
 import BlogListing from "./pages/blog/BlogListing.js";
 import BlogDetail from "./pages/blog/BlogDetail.js";
 import Demo from "./pages/demo/Demo.js";
@@ -121,18 +118,11 @@ const App = () => {
         <Route path="toast" element={<ToastDemo />} />
         <Route path="tooltip" element={<TooltipDemo />} />
       </Route>
-      {/* Registered only while the playground is enabled. With the flag off
-          these paths fall through to the catch-all below and redirect home, so
-          /playground is unreachable by direct URL as well as unlinked. */}
-      {PLAYGROUND_ENABLED && (
-        <Route path="playground">
-          <Route index element={<Playground />} />
-          <Route path="admin" element={<PlaygroundAdmin />} />
-          {/* Route-based chat: the open chat lives in the URL so a refresh
-              restores it (static /admin still wins by route ranking). */}
-          <Route path=":chatId" element={<Playground />} />
-        </Route>
-      )}
+      {/* No /playground and no /oauth/google. The playground was removed from
+          the site on 2026-09-07 and returns as a feature release; its code is
+          still in `src/pages/playground` and is not reachable from any route,
+          so it neither renders nor enters the bundle. `docs/playground-removal.md`
+          is the restore list. Both paths fall through to the catch-all below. */}
       {FixtureRoutes && (
         <Route
           path="__fixtures/*"
@@ -143,8 +133,7 @@ const App = () => {
           }
         />
       )}
-      <Route path="oauth/google" element={<OauthRedirect />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
     </BuyMeCoffeeProvider>
   );

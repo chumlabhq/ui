@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { BLOG_POSTS } from "./blog/blogData.js";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
-import AIPlaygroundSection from "./playground/AIPlaygroundSection.js";
 import { SiteHeader } from "../components/SiteHeader.js";
 import { SiteFooter } from "../components/SiteFooter.js";
 import { WhyChumlabSection } from "../components/WhyChumlabSection.js";
@@ -11,7 +10,6 @@ import { CatalogSection } from "../components/CatalogSection.js";
 import { ChumlabComparisonSection } from "../components/ChumlabComparisonSection.js";
 import Reveal from "../components/Reveal/Reveal.js";
 import { Button } from "../components/ui/index.js";
-import { PLAYGROUND_ENABLED } from "../lib/flags.js";
 
 // ─── FAQ preview (subset of full FAQ data) ─────────────────────────────────
 
@@ -20,7 +18,7 @@ const HOME_FAQS: Array<{ id: string; question: string; answer: string }> = [
     id: "free",
     question: "Is Chumlab free to use?",
     answer:
-      "Yes. Chumlab is fully open source under the MIT license. Use it in personal projects, side hustles, and commercial products without paying a cent or asking permission. The components, the docs, and the AI Playground are all free.",
+      "Yes. Chumlab is fully open source under the MIT license. Use it in personal projects, side hustles, and commercial products without paying a cent or asking permission. The components and the docs are all free.",
   },
   {
     id: "nextjs",
@@ -125,16 +123,6 @@ const Home = () => {
   });
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    if (window.location.hash === "#ai-playground") {
-      window.setTimeout(() => {
-        document
-          .getElementById("ai-playground")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 250);
-    }
-  }, []);
-
   const copyInstall = () => {
     navigator.clipboard.writeText("npm i @chumlab/ui");
     setCopied(true);
@@ -163,58 +151,6 @@ const Home = () => {
           {/* Announcement pill — chip-inside-a-pill. On screens below
               640px the message text collapses, leaving just the chip + arrow
               so the pill never wraps. */}
-          {PLAYGROUND_ENABLED && (
-            <Link
-              to="/?openPlayground=1#ai-playground"
-              className="hero-pill group inline-flex items-center transition-colors max-w-full"
-              data-track-event="cta_click"
-              data-track-location="home_hero_pill"
-              data-track-target="ai_playground"
-              style={{
-                gap: 10,
-                padding: "4px 16px 4px 4px",
-                border: "0.5px solid var(--border-soft)",
-                borderRadius: 100,
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.borderColor = "var(--border-active)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.borderColor = "var(--border-soft)")
-              }
-            >
-              <span
-                className="inline-flex items-center shrink-0"
-                style={{
-                  background: "var(--accent)",
-                  color: "var(--bg-base)",
-                  padding: "4px 11px",
-                  borderRadius: 100,
-                  fontSize: 10.5,
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  gap: 5,
-                }}
-              >
-                <SparkleGlyph />
-                AI Playground
-              </span>
-              <span
-                className="hidden sm:inline text-fg whitespace-nowrap"
-                style={{ fontSize: 13, fontWeight: 500 }}
-              >
-                Skip writing components from scratch
-              </span>
-              <span
-                aria-hidden
-                className="transition-all duration-150 group-hover:translate-x-1 group-hover:[color:var(--text-primary)]"
-                style={{ color: "var(--text-tertiary)", fontSize: 14 }}
-              >
-                &rarr;
-              </span>
-            </Link>
-          )}
 
           {/* Headline — mixed weights + opacity hierarchy. Mobile allows
               natural wrapping (2-3 lines is fine); on `sm:` and up the lines
@@ -330,11 +266,6 @@ const Home = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          SECTION 2 — AI PLAYGROUND (moved up: was slot 5)
-      ══════════════════════════════════════════════════════════════════ */}
-      <AIPlaygroundSection />
-
-      {/* ══════════════════════════════════════════════════════════════════
           SECTION 3 — WHY CHUMLAB
       ══════════════════════════════════════════════════════════════════ */}
       <WhyChumlabSection />
@@ -393,19 +324,6 @@ function CopyIcon() {
   );
 }
 
-function SparkleGlyph() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M12 3l1.6 4.4 4.4 1.6-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3zM18.5 14l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6.6-1.7z" />
-    </svg>
-  );
-}
 
 /* ─── FAQ section ──────────────────────────────────────────────────────────
    Hand-rolled single-open accordion. Single useState owns the currently-open

@@ -66,17 +66,6 @@ const IconPalette = (
   </svg>
 );
 
-const IconSparkle = (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path d="M12 2l2.4 5.4L20 8.6l-4 4 1 5.6-5-2.7-5 2.7 1-5.6-4-4 5.6-1.2L12 2z" />
-  </svg>
-);
 
 const IconWrench = (
   <svg
@@ -103,7 +92,7 @@ const IconAlert = (
 );
 
 const ROWS: Row[] = [
-  // Row 1 — left to right
+  // Row 1
   {
     icon: IconLightning,
     question: (
@@ -131,7 +120,7 @@ const ROWS: Row[] = [
       "Hit your launch date, ship the polish that matters",
     ],
   },
-  // Row 2 — right to left (flipped on lg)
+  // Row 2
   {
     icon: IconPalette,
     question: (
@@ -159,35 +148,7 @@ const ROWS: Row[] = [
       "Looks custom, feels custom, ships in hours",
     ],
   },
-  // Row 3 — left to right
-  {
-    icon: IconSparkle,
-    question: (
-      <>
-        Going from idea <Italic>to working UI.</Italic>
-      </>
-    ),
-    todayAnswer:
-      "You sketch on paper. Translate to Figma. Hand to a designer. Wait. Then a developer rebuilds it in code. The whole loop takes a week.",
-    todayBullets: [
-      "Idea to mockup to handoff to code: four steps, four delays",
-      "Stakeholder feedback adds days for every revision",
-      "Quick experiments cost the same as real features",
-    ],
-    chumlabHeadline: (
-      <>
-        Type a prompt. <ItalicLight>Get real React.</ItalicLight>
-      </>
-    ),
-    chumlabAnswer:
-      "Describe what you want or drop a screenshot. The AI Playground gives you production ready code, built on Chumlab primitives, in seconds.",
-    chumlabBullets: [
-      "Describe in plain English or paste any screenshot",
-      "Output is real, working React. Not mockups",
-      "Test ten ideas in the time it took to brief one",
-    ],
-  },
-  // Row 4 — right to left (flipped on lg)
+  // Row 3
   {
     icon: IconWrench,
     question: (
@@ -215,7 +176,7 @@ const ROWS: Row[] = [
       "Time you spent on dependency drama: zero",
     ],
   },
-  // Row 5 — left to right
+  // Row 4
   {
     icon: IconAlert,
     question: (
@@ -366,7 +327,7 @@ export function ChumlabComparisonSection() {
               className={ROW_CLASSES}
               tabIndex={0}
               role="group"
-              aria-label={`Comparison ${idx + 1} of 5`}
+              aria-label={`Comparison ${idx + 1} of ${ROWS.length}`}
             >
               {/* LEFT — Icon, Question, TODAY label, description */}
               <div>

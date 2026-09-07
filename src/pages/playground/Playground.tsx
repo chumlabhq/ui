@@ -35,7 +35,7 @@ import {
 import { resolveGateLamps } from "./lib/gates.js";
 import { friendlyError } from "./lib/friendlyError.js";
 import { startAuth } from "./lib/enterPlayground.js";
-import type { PreviewTheme } from "../../lib/preview/runtime.js";
+import type { PreviewTheme } from "./preview/runtime.js";
 import type {
   AttachedImage,
   ClarifyEventPayload,

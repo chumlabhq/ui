@@ -32,13 +32,13 @@ A README that:
 ```markdown
 # Chumlab UI
 
-A free, open source React component library with 30+ accessible primitives, an AI playground that ships React from prompts, and one token system for any brand.
+A free, open source React component library with 30+ accessible primitives and one token system for any brand.
 
 [![npm](https://img.shields.io/npm/v/@chumlab/ui)](https://www.npmjs.com/package/@chumlab/ui)
 [![License](https://img.shields.io/npm/l/@chumlab/ui)](https://opensource.org/licenses/MIT)
 [![Stars](https://img.shields.io/github/stars/chumlab/ui)](https://github.com/chumlab/ui)
 
-[Documentation](https://chumlab.com) · [Components](https://chumlab.com/components) · [AI Playground](https://chumlab.com/playground)
+[Documentation](https://chumlab.com) · [Components](https://chumlab.com/components)
 
 ---
 
@@ -68,7 +68,6 @@ That's it. No providers to wire, no global CSS to import, no theme setup.
 ## What you get
 
 - 30+ React components, all accessible (WCAG 2.1 AA)
-- AI playground that generates working React from prompts or screenshots
 - One token system controls all components
 - Tree-shakable, zero runtime dependencies
 - ~4.2kb gzipped per component
@@ -100,7 +99,6 @@ Forms, navigation, overlays, data display — all 30+ primitives listed at [chum
 
 - [Getting started](https://chumlab.com/docs)
 - [Components](https://chumlab.com/components)
-- [AI Playground](https://chumlab.com/playground)
 - [Theming guide](https://chumlab.com/docs/theming)
 - [FAQ](https://chumlab.com/faq)
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useLazyGetMeQuery } from "../../redux/api/authApi.js";
+import { useLazyGetMeQuery } from "../../../redux/api/authApi.js";
 
 /**
  * Landing page after server-side Google OAuth callback. The backend has

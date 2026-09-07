@@ -1,10 +1,9 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useBuyMeCoffee } from "./useBuyMeCoffee.js";
 import { useTheme } from "../contexts/ThemeContext.js";
 import Reveal from "./Reveal/Reveal.js";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
-import { PLAYGROUND_ENABLED } from "../lib/flags.js";
 
 /**
  * Deep-space site footer. Four-row layout:
@@ -18,8 +17,8 @@ import { PLAYGROUND_ENABLED } from "../lib/flags.js";
  * `is-visible` on each row; `prefers-reduced-motion: reduce` short-circuits).
  *
  * Spec hrefs that have no matching `App.tsx` route map to existing
- * conventions: `/components → /accordion`, `/playground → /#ai-playground`,
- * `/docs → /getting-started`, `/changelog → GitHub releases`,
+ * conventions: `/components → /accordion`, `/docs → /getting-started`,
+ * `/changelog → GitHub releases`,
  * `/license → GitHub LICENSE`. The Support button still triggers the
  * existing BuyMeCoffee modal (no `/support` route exists).
  */
@@ -36,21 +35,8 @@ const STARS: Array<{ x: string; y: string; size: string; opacity: number }> = [
 ];
 
 export function SiteFooter() {
-  const navigate = useNavigate();
-  const location = useLocation();
   const { open: openBuyCoffee } = useBuyMeCoffee();
   const { theme } = useTheme();
-
-  const goToAIPlayground = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    if (location.pathname === "/") {
-      document
-        .getElementById("ai-playground")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      navigate("/#ai-playground");
-    }
-  };
 
   return (
     <Reveal
@@ -115,20 +101,6 @@ export function SiteFooter() {
               >
                 Components
               </Link>
-            </FooterLink>
-            <FooterLink>
-              {PLAYGROUND_ENABLED && (
-                <a
-                  href="/#ai-playground"
-                  onClick={goToAIPlayground}
-                  className={`${LINK_CLASS} inline-flex items-center gap-2`}
-                  data-track-event="nav_click"
-                  data-track-location="footer"
-                  data-track-target="playground"
-                >
-                  AI Playground
-                </a>
-              )}
             </FooterLink>
             <FooterLink>
               <Link

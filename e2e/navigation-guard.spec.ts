@@ -16,14 +16,15 @@ test.describe("navigation guard", () => {
     await expect(page.locator('[data-fixture="Dropdown/open"]')).toBeVisible();
   });
 
-  test("fails on a route that redirects", async ({ page }) => {
-    // Any unmatched path redirects to "/", which is what made the old
-    // /demo/<name> URLs pass silently.
+  test("fails on a route that does not exist", async ({ page }) => {
+    // Unmatched paths used to redirect to "/", which is what made the old
+    // /demo/<name> URLs pass silently. They render the 404 page now, so the
+    // guard has to recognise that page rather than a change of URL.
     const error = await gotoGuarded(page, "/no-such-route", "body").catch(
       (e: Error) => e,
     );
-    expect(error, "the guard did not fire on a redirect").toBeInstanceOf(Error);
-    expect(String(error)).toContain("landed on");
+    expect(error, "the guard did not fire on a missing route").toBeInstanceOf(Error);
+    expect(String(error)).toContain("/no-such-route");
   });
 
   test.describe("the paths the suite used to use", () => {
@@ -34,7 +35,7 @@ test.describe("navigation guard", () => {
         );
         expect(
           error,
-          `${stale} did not trip the guard — it silently served the home page for the whole suite`,
+          `${stale} did not trip the guard — it silently served another page for the whole suite`,
         ).toBeInstanceOf(Error);
         expect(String(error)).toContain(stale);
       });
