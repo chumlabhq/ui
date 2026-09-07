@@ -1,4 +1,5 @@
 import type { Fixture } from "./types.js";
+import type { ActTools } from "./_act.js";
 import { RtlBoundary } from "./_harness.js";
 import type { TableProps } from "../../components/Table/utils/types.js";
 import { ROWS, COLUMNS } from "./_data.js";
@@ -7,6 +8,22 @@ type Row = (typeof ROWS)[number];
 
 const GET_ID = (r: Row) => r.id;
 const FILTERABLE = { role: { options: [{ label: "Engineer", value: "Engineer" }], multi: true } };
+
+/**
+ * Opens a column's filter panel and waits for it to arrive.
+ *
+ * The panel is a chunk of its own (see `FilterPanel`), so in the browser tier
+ * the click starts a fetch and one `settle` is a frame, not a round trip. A
+ * fixture that queried straight through would silently render the unopened
+ * state and take a visual baseline of it.
+ */
+const openFilterPanel = async (container: HTMLElement, ui: ActTools) => {
+  ui.click(container.querySelector("[data-table-filter-trigger], th button"));
+  for (let i = 0; i < 25; i += 1) {
+    if (container.ownerDocument.querySelector("[data-table-filter-content]")) return;
+    await ui.settle(10);
+  }
+};
 
 // `Fixture<TableProps<Row>>` rather than `Fixtures<typeof Table>`: Table is
 // generic over its row, and `ComponentProps` of a generic forwardRef collapses
@@ -76,7 +93,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   {
     name: "filter-open",
     props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
-    act: (c, ui) => ui.click(c.querySelector("[data-table-filter-trigger], th button")),
+    act: openFilterPanel,
   },
   {
     name: "filter-selected",
@@ -84,8 +101,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     // `filterClearTrigger` only appears once a value is selected, so the act
     // opens the panel AND picks an option.
     act: async (c, ui) => {
-      ui.click(c.querySelector("[data-table-filter-trigger], th button"));
-      await ui.settle();
+      await openFilterPanel(c, ui);
       ui.click(c.ownerDocument.querySelector("[data-table-filter-content] button"));
       await ui.settle();
     },
@@ -99,7 +115,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     name: "filter-open-rtl",
     props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
-    act: (c, ui) => ui.click(c.querySelector("[data-table-filter-trigger], th button")),
+    act: openFilterPanel,
   },
 ];
 export default fixtures;

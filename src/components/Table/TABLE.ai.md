@@ -315,6 +315,7 @@ const [sorting, setSorting] = useState<SortingState>([]);
 | `constants.ts` | DEFAULT + UNSTYLED class maps |
 | `utils/types.ts` | TableProps, TableClasses, TableView, re-exports from TanStack |
 | `utils.ts` | getColumnId, getSortDirection, exportTableToCSV, copyToClipboard |
+| `FilterPanel.tsx` | The column-filter dialog, loaded on demand: it is portalled, it only exists after a filter is opened, and it owns its own focus, positioning and dismissal |
 | `TableShimmer.tsx` | Loading skeleton component |
 | `icons.tsx` | Sort, Pin, Expand, Drag, Search, Filter icons |
 | `index.ts` | Public exports |

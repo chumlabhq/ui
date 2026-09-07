@@ -92,7 +92,7 @@ const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
  * DOWN only. Individual entries can each stay green while the aggregate drifts,
  * and nothing would have noticed.
  */
-const LIBRARY_TOTAL_KB = 148.35;
+const LIBRARY_TOTAL_KB = 147.76;
 
 /**
  * Breaches that are recorded rather than fixed, each with the reason and the
@@ -107,12 +107,24 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.76,
-      why: "99 public props: pinning, grouping, infinite scroll, CSV export, " +
-        "column resize, row reorder, inline edit. It genuinely does more than " +
-        "a surface. The only route under 12 is splitting the optional halves " +
-        "behind subpath entries, which is a public API change to satisfy a " +
-        "number.",
+      kb: 16.21,
+      why: "16.76 until the column-filter dialog moved into a chunk of its own " +
+        "(FilterPanel), with the popup behaviour that reads its element — focus " +
+        "in, reposition, close on an outside click. It is the only part of " +
+        "Table that exists after an interaction rather than at the first paint, " +
+        "which is what ADR 003 allows to arrive late. Every other feature is " +
+        "gated by a prop the consumer sets before the first render — resize " +
+        "handles, filter triggers, the search bar, the mobile cards — so a " +
+        "chunk arriving a frame later would widen a header or swap the tree " +
+        "after paint. Measured, not assumed: deferring all of those anyway " +
+        "reaches 14.67, and 11.64 arrives only when renderHeaderCell, " +
+        "renderCell, renderRow and renderTable go too. The residue is the grid. " +
+        "Its props, state, TanStack config and 45 class slots cost 11.64 with " +
+        "every cell stubbed out — 97% of a surface's ceiling before anything is " +
+        "drawn. Subpath entries do not help: they split what a consumer imports " +
+        "separately, and these are props on one component. The one exception is " +
+        "`exportTableToCSV` at 0.40 KB, which the component never calls and any " +
+        "consumer's tree-shaker already drops.",
     },
   ],
   [

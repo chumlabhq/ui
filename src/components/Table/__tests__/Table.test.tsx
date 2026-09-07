@@ -1160,9 +1160,10 @@ describe("Table", () => {
       });
       await user.click(filterButtons[0]);
 
-      // Filter dropdown should appear (portal renders filter content)
-      const filterContent = document.querySelector("[data-table-filter-content]");
-      expect(filterContent).toBeInTheDocument();
+      // Awaited, not queried straight away: the panel is a chunk of its own
+      // now (see FilterPanel), so it lands on the render after the click.
+      const filterContent = await screen.findByRole("dialog");
+      expect(filterContent).toHaveAttribute("data-table-filter-content");
       // The dropdown should contain Filter text
       expect(filterContent?.textContent).toContain("Filter");
     });

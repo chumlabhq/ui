@@ -83,7 +83,13 @@ const BASELINE: Record<string, number> = {
   "SearchableDropdown/components/SearchableDropdownOption.tsx": 1,
   "Stepper/Stepper.tsx": 9,
   "Switch/Switch.tsx": 0,
-  "Table/Table.tsx": 51,
+  // 51 before the column-filter dialog moved into its own chunk: the three that
+  // went with it are the same strings in a new file. They stay literals rather
+  // than becoming class-map keys because they are the popup's structure —
+  // `fixed`, the z-index, the viewport clamp — and a consumer who overrode
+  // `filterContent` would otherwise take the positioning with it.
+  "Table/Table.tsx": 48,
+  "Table/FilterPanel.tsx": 3,
   "Table/icons.tsx": 0,
   "TextArea/TextArea.tsx": 1,
   "TimePicker/TimePicker.tsx": 5,

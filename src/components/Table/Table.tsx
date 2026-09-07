@@ -11,6 +11,7 @@ import {
 import { createPortal } from "react-dom";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
+import { useLazyComponent } from "../../utils/useLazyComponent.js";
 import { cn } from "../../utils/scopedCn.js";
 import {
   useReactTable,
@@ -41,6 +42,7 @@ import {
   copyToClipboard,
 } from "./utils.js";
 import TableShimmer from "./TableShimmer.js";
+import type { FilterPanelProps } from "./FilterPanel.js";
 import {
   DEFAULT_TABLE_CLASSES,
   UNSTYLED_TABLE_CLASSES,
@@ -97,6 +99,10 @@ function useViewportWidth(): number {
   }, []);
   return width;
 }
+
+/** Module-scope constant: an inline arrow would miss the cache every render. */
+const loadFilterPanel = () =>
+  import("./FilterPanel.js").then((m) => m.default);
 
 const FALLBACK_COLUMNS: never[] = [];
 const FALLBACK_DATA: never[] = [];
@@ -317,6 +323,25 @@ function TableInner<TData>(
   const filterItemControlClassName = classesProp?.filterItemControl ?? base.filterItemControl;
   const clearTriggerClassName = classesProp?.clearTrigger ?? base.clearTrigger;
 
+  const filterPanelClasses = useMemo(
+    () => ({
+      content: filterDropdownClassName,
+      header: filterHeaderClassName,
+      label: filterLabelClassName,
+      clearTrigger: filterClearTriggerClassName,
+      item: filterItemClassName,
+      itemControl: filterItemControlClassName,
+    }),
+    [
+      filterDropdownClassName,
+      filterHeaderClassName,
+      filterLabelClassName,
+      filterClearTriggerClassName,
+      filterItemClassName,
+      filterItemControlClassName,
+    ],
+  );
+
   const columns = columnsProp ?? FALLBACK_COLUMNS;
   const data = dataProp ?? FALLBACK_DATA;
   const shouldShowHeader = showHeader;
@@ -343,67 +368,23 @@ function TableInner<TData>(
     left: number;
   } | null>(null);
   const openFilterColumn = filterDropdownState?.columnId ?? null;
-  const filterDropdownRef = useRef<HTMLDivElement>(null);
   const filterDropdownId = `${useId()}-column-filter`;
-
-  // The filter icon button ref for repositioning
+  // The filter icon button, so the panel can tell its own trigger from an
+  // outside click.
   const filterTriggerRef = useRef<HTMLButtonElement | null>(null);
 
-  // Close filter dropdown on click outside; close on any scroll.
-  // Tolerates portals spawned from within the filter content (e.g. nested dropdowns)
-  // by checking for the data-table-filter-content attribute on ancestors.
-  useEffect(() => {
-    if (!filterDropdownState) return;
+  const FilterPanel = useLazyComponent<FilterPanelProps>(
+    filterDropdownState !== null,
+    loadFilterPanel,
+  );
 
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node;
-      // Click inside the filter dropdown itself
-      if (filterDropdownRef.current?.contains(target)) return;
-      // Click on the trigger button
-      if (filterTriggerRef.current?.contains(target)) return;
-      // Click inside a portal spawned from within the filter content (e.g. MultiSelectSearchableDropdown
-      // renders its own portal with data-dropdown-id). Check for our marker OR any dropdown portal.
-      if (target instanceof HTMLElement || target instanceof SVGElement) {
-        const el = (target as Element).closest("[data-table-filter-content], [data-dropdown-id]");
-        if (el) return;
-      }
-      setFilterDropdownState(null);
-    };
-
-    // Close on scroll, but NOT when scrolling inside the dropdown or its child portals
-    const handleScroll = (e: Event) => {
-      const target = e.target as Node;
-      if (filterDropdownRef.current?.contains(target)) return;
-      if (target instanceof HTMLElement && target.closest("[data-table-filter-content], [data-dropdown-id]")) return;
-      setFilterDropdownState(null);
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", handleScroll, true);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleScroll, true);
-    };
-  }, [filterDropdownState]);
-
-  // After the filter dropdown portal renders, check if it overflows the viewport
-  // and adjust position if needed (more accurate than the estimated width above).
-  useEffect(() => {
-    if (!filterDropdownState || !filterDropdownRef.current) return;
-    const el = filterDropdownRef.current;
-    // The dialog role's half of the bargain: it portals to body, so without
-    // this Tab from the trigger walks into the next column header and the
-    // filter options are unreachable from the keyboard entirely.
-    el.focus({ preventScroll: true });
-    const rect = el.getBoundingClientRect();
-    const vw = window.innerWidth;
-    if (rect.right > vw - 8) {
-      // Shift left so it stays within viewport with 8px padding
-      const shift = rect.right - vw + 8;
-      el.style.left = `${filterDropdownState.left - shift}px`;
-    }
-  }, [filterDropdownState]);
+  // Stable: the panel subscribes its outside-click and scroll listeners to
+  // this, and a new identity every render would re-subscribe both on every
+  // hover the table re-renders for.
+  const closeFilterPanel = useCallback(() => {
+    setFilterDropdownState(null);
+    filterTriggerRef.current?.focus();
+  }, []);
 
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);
   const sorting = sortingProp ?? internalSorting;
@@ -1349,7 +1330,9 @@ function TableInner<TData>(
                 aria-haspopup="dialog"
                 aria-expanded={openFilterColumn === columnId}
                 aria-controls={
-                  openFilterColumn === columnId ? filterDropdownId : undefined
+                  openFilterColumn === columnId && FilterPanel
+                    ? filterDropdownId
+                    : undefined
                 }
                 title="Filter column"
               >
@@ -1460,6 +1443,7 @@ function TableInner<TData>(
       filterIconClassName,
       openFilterColumn,
       getColumnFilterValues,
+      FilterPanel,
     ],
   );
 
@@ -2311,140 +2295,29 @@ function TableInner<TData>(
           </div>
         ))}
 
-      {/* Column filter dropdown portal */}
+      {/* Column filter dialog — its own chunk; see FilterPanel. */}
       {filterDropdownState &&
         filterableColumns &&
         filterableColumns[filterDropdownState.columnId] &&
+        FilterPanel &&
         createPortal(
-          <div
-            ref={filterDropdownRef}
-            data-table-filter-content
+          // Module-cached identity — see `useLazyComponent`.
+          <FilterPanel
+            triggerRef={filterTriggerRef}
             id={filterDropdownId}
-            // A non-modal dialog, not a menu.
-            //
-            // It had no role at all: a plain portalled div, so it announced
-            // itself as nothing and axe had nothing to fault — which is how the
-            // a11y phase walked past it. `menu` is the nearest role name and the
-            // wrong one. A menu puts screen readers into application mode and
-            // promises arrow-key roving over a single tab stop; these are
-            // ordinary buttons the user reaches with Tab, and claiming `menu`
-            // would take that away rather than describe it. What this actually
-            // is, is a popup holding a group of toggles, which is `dialog`.
-            //
-            // The role brings obligations the popup did not meet, so they are
-            // met below: focus moves in on open (it is portalled to body, so
-            // Tab from the trigger reached the next column header instead),
-            // Escape closes, and focus returns to the trigger.
-            role="dialog"
-            aria-modal={false}
-            aria-label={`Filter ${filterDropdownState.columnId}`}
-            tabIndex={-1}
-            onKeyDown={(e) => {
-              if (e.key !== "Escape") return;
-              e.stopPropagation();
-              setFilterDropdownState(null);
-              filterTriggerRef.current?.focus();
-            }}
-            className={`outline-none fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-cl-bg-panel border-cl-border"}`}
-            style={{
-              top: filterDropdownState.top,
-              left: filterDropdownState.left,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {renderColumnFilter ? (
-              renderColumnFilter(
-                filterDropdownState.columnId,
-                getColumnFilterValues(filterDropdownState.columnId),
-                (values) =>
-                  setColumnFilterValues(filterDropdownState.columnId, values),
-              )
-            ) : (
-              <>
-                <div className={filterHeaderClassName}>
-                  <span className={filterLabelClassName}>
-                    Filter {filterDropdownState.columnId}
-                  </span>
-                  {getColumnFilterValues(filterDropdownState.columnId).length >
-                    0 && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setColumnFilterValues(filterDropdownState.columnId, [])
-                      }
-                      className={filterClearTriggerClassName}
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
-                {filterableColumns[filterDropdownState.columnId].options.map(
-                  (opt) => {
-                    const currentVals = getColumnFilterValues(
-                      filterDropdownState.columnId,
-                    );
-                    const isSelected = currentVals.includes(opt.value);
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        className={filterItemClassName}
-                        // A toggle in both modes — single-select clears when the
-                        // selected value is clicked again — so the checkmark
-                        // beside it has a state to announce.
-                        aria-pressed={isSelected}
-                        data-selected={isSelected || undefined}
-                        onClick={() => {
-                          if (
-                            filterableColumns[filterDropdownState.columnId]
-                              .multi !== false
-                          ) {
-                            setColumnFilterValues(
-                              filterDropdownState.columnId,
-                              isSelected
-                                ? currentVals.filter((v) => v !== opt.value)
-                                : [...currentVals, opt.value],
-                            );
-                          } else {
-                            setColumnFilterValues(
-                              filterDropdownState.columnId,
-                              isSelected ? [] : [opt.value],
-                            );
-                            setFilterDropdownState(null);
-                          }
-                        }}
-                      >
-                        <div
-                          className={filterItemControlClassName}
-                          data-selected={isSelected || undefined}
-                        >
-                          {isSelected && (
-                            <svg
-                              width="10"
-                              height="10"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              // On the accent-filled checkbox: white is 2.77:1
-                              // against the dark theme's accent, under SC
-                              // 1.4.11's 3:1 for a UI component. `--cl-on-accent`
-                              // is 5.17:1 light and 7.31:1 dark.
-                              stroke="var(--cl-on-accent)"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </div>
-                        {opt.label}
-                      </button>
-                    );
-                  },
-                )}
-              </>
-            )}
-          </div>,
+            columnId={filterDropdownState.columnId}
+            top={filterDropdownState.top}
+            left={filterDropdownState.left}
+            options={filterableColumns[filterDropdownState.columnId].options}
+            multi={filterableColumns[filterDropdownState.columnId].multi}
+            values={getColumnFilterValues(filterDropdownState.columnId)}
+            onValuesChange={(values) =>
+              setColumnFilterValues(filterDropdownState.columnId, values)
+            }
+            onClose={closeFilterPanel}
+            renderColumnFilter={renderColumnFilter}
+            classes={filterPanelClasses}
+          />,
           document.body,
         )}
     </div>
