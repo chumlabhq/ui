@@ -470,16 +470,29 @@ Over their class ceiling, each with a reason and a per-entry ratchet that stops 
 
 Library total 151.01 KB across 78 chunks, against a recorded ceiling of 151.11 KB.
 
-### 3.2 78 remaining `dark:` variants
+### 3.2 Six remaining `dark:` variants
 
-ADR 006 closed the retirement at a declared endpoint: 283 of 361 retired, 78 kept and every
-one classified — **33 deliberately retained** (29 of them text-scale steps that both clear
-AA), **29 blocked on a token** that does not exist and should not be minted without an ADR
-005 decision, **16 orphaned** raw-palette pairs that predate the token system. Gated by
-`dark-variants.contract` with ceilings of 60 (group B) and 18 (group C).
+**Re-derived and closed out on 2026-09-07 (ADR 007), from 78.** The inherited figure was
+already stale — source carried 76 — and the three decisions the 27 "blocked" sites were
+waiting on turned out to be two WCAG failures and one real choice:
 
-The README no longer describes dark mode as "built-in `dark:` variants" — the mechanism is
-design tokens — but 78 utilities still work the old way.
+- the **focus ring** on `Input`, `TextArea` and `InternationalPhoneInput` measured **1.60:1**
+  in dark and the **focus border 2.54:1**, against SC 1.4.11's 3:1;
+- the three **graphical accent fills** measured **1.65:1**, where the minimum alpha that
+  reaches 3:1 is 58%, so no softened value was available to pick;
+- the **accent wash** was the one genuine decision, and it needed the measurement that accent
+  text on an accent tint is 4.20:1 in light at any alpha the tint can take.
+
+Three tokens were minted (`--cl-text-chrome`, `--cl-text-chrome-quiet`, `--cl-bg-recessed`),
+one corrected (`--cl-bg-input`, which was the page colour in dark and therefore invisible),
+and 70 of the 76 variants are gone. The six that remain are **enumerated with a reason each**
+in `dark-variants.contract` rather than held under a ceiling: two that step *up* in dark, two
+`dark:shadow-none`, the Modal scrim, and Slider's thumb.
+
+The migration also fixed three defects that were not `dark:` questions at all: Table's search
+placeholder at **2.54:1 light / 3.04:1 dark**, Table's loading shimmer painting **nothing**
+(its gradient was on the marketing `--fg` namespace, which the package does not ship), and
+`MultiSelectSearchableDropdown`'s search bar painting the panel colour onto the panel.
 
 ### 3.3 The raw-palette remainder
 

@@ -4,6 +4,13 @@
 **Date:** 2026-09-08
 **Related:** ADR 004 (`dark:` retirement), ADR 005 (token vocabulary)
 
+> **Superseded in part by ADR 007 (2026-09-07).** The endpoint below held for two days. The
+> three decisions this document deferred were taken, and two of them turned out not to be
+> decisions: the softened accent was failing SC 1.4.11 at 1.65:1 and the focus ring at
+> 1.60:1, so the value that cleared the floor was the only one available. 70 of the 76
+> variants that were left are gone; the ceilings here are replaced by an enumerated list of
+> six. The classification below is kept as the record of what was known then.
+
 ## Where it ended
 
 | Group | Start | End | Retired |

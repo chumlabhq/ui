@@ -10,7 +10,7 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
   row: "flex items-center gap-2",
   list: "flex flex-wrap items-center gap-2",
   item:
-    "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text dark:text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-chrome focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
   navButton:
     "p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
   ellipsis: "px-2 select-none text-cl-text-tertiary",
@@ -38,8 +38,8 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
     item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-item-hover data-[highlighted]:bg-cl-bg-item-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent data-[selected]:hover:bg-cl-accent-bg data-[selected]:data-[highlighted]:bg-cl-accent-bg data-[selected]:data-[highlighted]:text-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     icon: "w-4 h-4 transition-transform text-cl-text-tertiary",
   },
-  label: "text-sm text-cl-text-secondary dark:text-cl-text-tertiary",
-  navIcon: "w-5 h-5 text-cl-text-secondary dark:text-cl-text-tertiary",
+  label: "text-sm text-cl-text-chrome-quiet",
+  navIcon: "w-5 h-5 text-cl-text-chrome-quiet",
   pageInfo: "flex items-center",
 };
 

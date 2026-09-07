@@ -20,9 +20,9 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
       "w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input",
     itemIndicator: "w-full h-full",
     chip:
-      "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/15 dark:bg-cl-text/10 text-cl-accent dark:text-cl-text",
+      "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-bg text-cl-accent",
     chipRemove:
-      "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-text-secondary",
+      "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent-hover rounded-cl-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
     empty:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     clearTrigger: "",
@@ -31,11 +31,11 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
     loadingItem:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     label:
-      "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
+      "block text-sm font-medium mb-1 text-cl-text-chrome",
     message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
     description: "text-xs mb-1 text-cl-text-tertiary",
     searchControl:
-      "flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:bg-cl-bg-elevated",
+      "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-recessed",
     searchInput:
       "flex-1 bg-transparent outline-none flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary",
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",

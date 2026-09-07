@@ -13,7 +13,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   header: "",
   headerRow: "",
   headerCell:
-    "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated border-cl-border",
+    "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
   headerCellText: "flex items-center",
   body: "",
   item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-item-hover",
@@ -38,7 +38,11 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   loadingRow: "border-b border-cl-border",
   loadingItem: "px-4 py-2 h-14",
   loadingBar:
-    "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.06] dark:from-fg/[0.10] via-fg/[0.06] dark:via-fg/[0.10] to-fg/[0.06] dark:to-fg/[0.10]",
+    // The same shimmer the other three components use. It was a gradient on
+    // `--fg`, the marketing namespace, which the package does not ship: the
+    // class reached `dist/shared/Table-*.js` and `dist/styles.css` had no rule
+    // for it, so this painted nothing at all in a consumer's application.
+    "h-full w-full rounded animate-pulse bg-cl-bg-item-hover",
   control: "",
   sortIcon: "shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
   filterButton:
@@ -73,7 +77,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   groupLabel: "",
   resizeHandle: "",
   resizeIndicator:
-    "w-0.5 h-3/5 rounded-full transition-colors bg-transparent group-hover/resize:bg-gray-400 dark:group-hover/resize:bg-gray-500 data-[resizing]:bg-cl-accent",
+    "w-0.5 h-3/5 rounded-full transition-colors bg-transparent group-hover/resize:bg-cl-text-tertiary data-[resizing]:bg-cl-accent",
   loadingFooter: "",
 };
 

@@ -28,6 +28,15 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- **`dark:` variants are down to six**, from 361 before the retirement began and 76 at the
+  start of this pass. Interface text moved onto two new tokens (`--cl-text-chrome`,
+  `--cl-text-chrome-quiet`), the accent tints onto `--cl-accent-bg`, input surfaces onto
+  `--cl-bg-input` — whose dark value was the page colour and is now the 4% wash its six call
+  sites were writing by hand — and menu search bars onto `--cl-bg-recessed`. If you were
+  overriding any of these through `classes`, the slot is unchanged; the value it resolves to
+  in dark may not be. See `docs/adr/007-dark-variant-endpoint.md` for what got louder or
+  quieter, per family, with the measurements.
+
 These are the behavioural changes a consumer would notice. Each was made deliberately;
 none is a bug fix that happened to move behaviour.
 
@@ -149,6 +158,23 @@ none is a bug fix that happened to move behaviour.
 
 ### Fixed
 
+- **Focus indicators are visible in dark.** The focus ring on `Input`, `TextArea` and
+  `InternationalPhoneInput` was softened to 30% in dark and measured 1.60:1 against the
+  surface behind it; the focus border was softened to 50% and measured 2.54:1. WCAG SC 1.4.11
+  asks for 3:1. Both are solid in both themes now, and the criterion is gated over every
+  fixture — it was not among the ten this package measured, which is how this shipped.
+- **`Table`'s search placeholder cleared AA in neither theme** — 2.54:1 in light, 3.04:1 in
+  dark. The painted-contrast sweep reads an element's `color` and a placeholder is painted by
+  `::placeholder`, so nothing could see it. It reads both now.
+- **`Table`'s loading shimmer painted nothing.** Its gradient was written on `--fg`, the
+  marketing surface's namespace, which the package does not ship: the class reached the
+  bundle and no rule for it existed in `styles.css`. It uses the same token the other three
+  shimmers do.
+- **`MultiSelectSearchableDropdown`'s search bar was invisible in dark**, painting the panel
+  colour onto the panel.
+- Slider's range, TabPanel's active indicator and TimePicker's clock hand were softened to
+  30% of the accent in dark — 1.65:1 against what they sit on, where a meaningful graphical
+  object needs 3:1. They are solid in both themes; they are brighter in dark than they were.
 - **Server-rendered applications hydrate without a mismatch.** Every portalled surface —
   `Modal`, `Drawer`, `Toast`, and the nine components that portal through the shared menu
   surface — decided where to portal *during render*, behind a `typeof window` branch, so a

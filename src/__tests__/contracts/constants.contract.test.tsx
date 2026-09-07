@@ -18,7 +18,12 @@
  * fails immediately; retiring one means deleting its line here.
  */
 import { describe, expect, it, beforeEach } from "vitest";
+import { readFileSync } from "node:fs";
 import { isStructural } from "../../utils/classLayers.js";
+// The AST literal reader, shared rather than re-implemented: a regex over
+// quotes desynchronises on an apostrophe in a comment, which this file's own
+// docblock records.
+import { literals as fileLiterals } from "./dark-variants.contract.test.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
 
@@ -164,6 +169,68 @@ const scan = (): Finding[] => {
   return found;
 };
 
+/**
+ * Colour namespaces the shipped stylesheet can actually generate utilities for.
+ *
+ * `src/styles/tokens.css` is what a consumer imports, and its `@theme` block is
+ * the whole list. Anything else is a class that reaches `dist/shared/*.js` with
+ * no rule in `dist/styles.css` — which paints nothing and is invisible to every
+ * other gate here: the DOM has the class, the stylesheet has no declaration,
+ * and nothing compares the two. Table's loading shimmer shipped that way, as a
+ * gradient on `--fg` from the marketing surface, until ADR 007 §4.
+ */
+const SHIPPED_COLOURS = new Set(
+  [...readFileSync("src/styles/tokens.css", "utf8").matchAll(/--color-([\w-]+):/g)].map((m) => m[1]),
+);
+
+/** Tailwind's own palette and keywords, which it generates without a theme. */
+const BUILTIN_COLOUR =
+  /^(inherit|current|transparent|black|white|none|auto)$|^(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}$/;
+
+/**
+ * The same prefixes carry sizes, alignments and line styles: `text-center`,
+ * `border-2`, `shadow-lg`, `to-90%`. Listed rather than inferred, so a word
+ * this does not know fails loudly instead of being read as a colour — or, worse,
+ * a colour namespace being read as a keyword.
+ */
+const NOT_A_COLOUR =
+  /^(\d|\[|linear-|radial|conic|gradient-|xs$|sm$|md$|lg$|xl$|\dxl$|left$|center$|right$|justify$|start$|end$|top$|bottom$|middle$|wrap$|nowrap$|balance$|pretty$|ellipsis$|clip$|solid$|dashed$|dotted$|double$|hidden$|collapse$|separate$|inset$|offset$|x$|y$|t$|r$|b$|l$|s$|e$|wavy$|line$|base$|through$)/;
+
+/** Utilities whose value is a colour rather than a size or a keyword. */
+const COLOUR_UTILITY =
+  /^(bg|text|border|from|via|to|ring|shadow|fill|stroke|placeholder|divide|outline|caret|accent|decoration)-(.+)$/;
+
+/** Every colour namespace a class string reaches for, with where it was written. */
+/** True when a class token reaches for a colour the package cannot generate. */
+export const unshippedColour = (token: string): boolean => {
+  const utility = token.split(":").pop() ?? "";
+  const parts = COLOUR_UTILITY.exec(utility);
+  if (!parts) return false;
+  // `bg-white/10`, `from-fg/[0.06]`, `text-cl-text-chrome`
+  const value = parts[2].replace(/\/.*$/, "").replace(/\[.*$/, "");
+  if (!value || BUILTIN_COLOUR.test(value) || NOT_A_COLOUR.test(value)) return false;
+  return !SHIPPED_COLOURS.has(value);
+};
+
+/**
+ * Every class-shaped literal in the shipped source, not only the ones at a
+ * `className=` site: the shimmer that shipped painting nothing was a value in a
+ * constants object, which a className-scoped scan would never have read.
+ */
+const colourNamespaces = (): Finding[] => {
+  const found: Finding[] = [];
+  for (const path of Object.keys(sources)) {
+    if (NOT_SHIPPED.test(path)) continue;
+    const file = path.replace("../../components/", "");
+    for (const raw of fileLiterals(path.replace("../../", "src/"))) {
+      for (const token of raw.trim().split(/\s+/)) {
+        if (token && unshippedColour(token)) found.push({ file, line: 0, value: token });
+      }
+    }
+  }
+  return found;
+};
+
 describe("constants contract", () => {
   const findings = scan();
 
@@ -217,6 +284,26 @@ describe("constants contract", () => {
     expect(
       stale,
       `Baseline entries are above actual — ratchet them down:\n${stale.join("\n")}`,
+    ).toEqual([]);
+  });
+
+  it("names no colour the shipped stylesheet cannot generate", () => {
+    // Self-check first: the rule has to be able to see the shape it exists for.
+    // The shimmer exactly as it shipped, and the utilities beside it that must
+    // not be faulted.
+    const shimmer =
+      "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.06] dark:from-fg/[0.10] " +
+      "via-fg/[0.06] text-center text-sm border-2 bg-cl-bg-item-hover text-cl-text-chrome";
+    expect(
+      shimmer.split(/\s+/).filter(unshippedColour),
+      "the namespace check cannot see a marketing-namespace class, or faults a real one",
+    ).toEqual(["from-fg/[0.06]", "dark:from-fg/[0.10]", "via-fg/[0.06]"]);
+
+    const orphans = colourNamespaces();
+    expect(
+      [...new Set(orphans.map((f) => `${f.file} ${f.value}`))],
+      "this colour namespace is not in the `@theme` block of src/styles/tokens.css, so the " +
+        "class ships in the JS and no rule for it exists in the CSS — it paints nothing",
     ).toEqual([]);
   });
 

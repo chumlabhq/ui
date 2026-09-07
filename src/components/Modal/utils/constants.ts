@@ -15,7 +15,7 @@ export const DEFAULT_MODAL_CLASSES: Required<ModalClasses> = {
     "w-full max-w-lg rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-panel data-[fullscreen]:!fixed data-[fullscreen]:!inset-0 data-[fullscreen]:outline-none data-[fullscreen]:max-w-none data-[fullscreen]:m-0 data-[fullscreen]:rounded-none relative outline-none transition-all transform opacity-0 scale-95 data-[open]:opacity-100 data-[open]:scale-100",
   header: "flex items-start gap-3 p-6 pb-4",
   title: "font-semibold text-lg text-cl-text",
-  description: "mt-1 text-sm text-cl-text-secondary dark:text-cl-text-tertiary",
+  description: "mt-1 text-sm text-cl-text-chrome-quiet",
   icon: "",
   closeTrigger:
     "shrink-0 p-1.5 rounded-cl-md hover:bg-cl-bg-hover transition-colors ml-auto",

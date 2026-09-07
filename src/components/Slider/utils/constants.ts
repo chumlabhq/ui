@@ -7,7 +7,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   description: "text-xs text-cl-text-tertiary",
   control: "relative select-none touch-none",
   track: "rounded-full bg-cl-bg-hover",
-  range: "rounded-full bg-cl-accent dark:bg-cl-accent/30",
+  range: "rounded-full bg-cl-accent",
   thumb:
     "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab",
   valueText:

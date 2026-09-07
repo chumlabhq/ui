@@ -20,14 +20,14 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
       "w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input",
     itemIndicator: "w-full h-full",
     chip:
-      "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/15 dark:bg-cl-text/10 text-cl-accent dark:text-cl-text",
+      "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-bg text-cl-accent",
     chipRemove:
-      "w-4 h-4 p-0.5 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-text-secondary appearance-none border-none bg-transparent",
+      "w-4 h-4 p-0.5 shrink-0 cursor-pointer hover:text-cl-accent-hover appearance-none border-none bg-transparent rounded-cl-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
     empty:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     clearTrigger: "",
     label:
-      "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
+      "block text-sm font-medium mb-1 text-cl-text-chrome",
     message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
     description: "text-xs mb-1 text-cl-text-tertiary",
     loading: "px-3 py-2 bg-cl-bg-hover animate-pulse",

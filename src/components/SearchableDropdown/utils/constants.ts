@@ -21,11 +21,11 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     empty:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     label:
-      "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
+      "block text-sm font-medium mb-1 text-cl-text-chrome",
     message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
     description: "text-xs mb-1 text-cl-text-tertiary",
     searchControl:
-      "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-hover dark:bg-cl-bg",
+      "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-recessed",
     searchInput:
       "flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary",
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",

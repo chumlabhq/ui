@@ -112,5 +112,14 @@
     "fixtures": 428,
     "findings": []
   },
-  "waivedCorrectedOn": "2026-09-07"
+  "waivedCorrectedOn": "2026-09-07",
+  "$comment_nontext": "SC 1.4.11 expectations for the non-text pass in e2e/contrast-painted.spec.ts, added by ADR 007. A finding here is a focus indicator or an accent-painted graphical object under 3:1 that is recorded with a reason rather than fixed. Same rule as the painted-contrast record above: an entry that stops reporting is stale and fails the gate.",
+  "nonTextContrastExpectations": {
+    "recordedOn": "2026-09-07",
+    "findings": [
+      "Toast/with-content dark: button (focus)",
+      "Toast/with-content light: button (focus)"
+    ],
+    "reason": "The fixture's own `<button>Undo</button>`, passed through Toast's `content` prop \u2014 the library styles the toast, not the arbitrary nodes a consumer puts inside it, so this is Chromium's default focus ring at 1.75:1 on the toast surface. Recorded rather than fixed because styling it would be the fixture pretending to be the library. It is a real thing a consumer can do: a bare button inside a toast gets the UA ring."
+  }
 }

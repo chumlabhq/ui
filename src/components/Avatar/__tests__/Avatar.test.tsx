@@ -668,7 +668,7 @@ describe("AvatarGroupCount", () => {
     it("applies solid variant by default", () => {
       render(<AvatarGroupCount count={5} />);
 
-      expect(screen.getByRole("status")).toHaveClass("bg-gray-200");
+      expect(screen.getByRole("status")).toHaveClass("bg-cl-bg-item-hover");
     });
 
     it("applies outline variant", () => {
@@ -680,7 +680,7 @@ describe("AvatarGroupCount", () => {
     it("applies ghost variant", () => {
       render(<AvatarGroupCount count={5} variant="ghost" />);
 
-      expect(screen.getByRole("status")).not.toHaveClass("bg-gray-200");
+      expect(screen.getByRole("status")).not.toHaveClass("bg-cl-bg-item-hover");
       expect(screen.getByRole("status")).not.toHaveClass("border-2");
     });
   });

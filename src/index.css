@@ -101,10 +101,25 @@
   --cl-bg-hover: #0a0d12;
   --cl-bg-panel: #0a0d12;
   --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
-  --cl-bg-input: #050608;
+  /* 4% ink rather than the page colour it used to be. An input painted
+     #050608 on a #050608 page is invisible except for its border, which is
+     why six call sites overrode it with this exact wash — ADR 007 §2. */
+  --cl-bg-input: rgba(237, 239, 244, 0.04);
+  /* Sits BELOW the surface it is on: the search bar inside a menu panel.
+     SearchableDropdown wrote `bg-cl-bg-hover dark:bg-cl-bg` and
+     MultiSelectSearchableDropdown wrote `dark:bg-cl-bg-elevated`, which paints
+     #0a0d12 on a #0a0d12 panel and does nothing at all. ADR 007 §2. */
+  --cl-bg-recessed: #050608;
 
   /* Text */
   --cl-text: #edeff4;
+  /* Interface text — labels, headers, item and trigger text, separators — as
+     opposed to content. Twenty-three call sites across sixteen components
+     wrote the primary step in light and one step down in dark, by hand; this
+     is that rule as a value rather than as `dark:` variants. ADR 007 §4.
+     Both steps are gated in contrast.contract against every surface. */
+  --cl-text-chrome: rgba(237, 239, 244, 0.72);
+  --cl-text-chrome-quiet: rgba(237, 239, 244, 0.52);
   /* Both raised together, and that is the point: tertiary at 45% measured
      4.02:1 on --cl-bg, under the 4.5:1 WCAG AA needs for text, and it had
      failed in three separate places before anyone measured it. Lifting only
@@ -226,8 +241,13 @@
   --cl-bg-panel: #ffffff;
   --cl-bg-item-hover: rgba(15, 18, 24, 0.04);
   --cl-bg-input: #ffffff;
+  --cl-bg-recessed: rgba(15, 18, 24, 0.04);
 
   --cl-text: #0f1218;
+  /* The same two roles as dark, one step up the scale: in light the primary
+     step is legible as interface text and dark's is not. */
+  --cl-text-chrome: #0f1218;
+  --cl-text-chrome-quiet: rgba(15, 18, 24, 0.8);
   /* Light needed the bigger lift: tertiary at 50% was 3.46:1 on --cl-bg-hover,
      and the minimum that clears 4.5:1 there is 58%. Secondary follows for the
      same reason it does in dark — at 70% against a 62% tertiary the pair
@@ -344,8 +364,11 @@
   --color-cl-bg-item-hover: var(--cl-bg-item-hover);
   --color-cl-bg-hover: var(--cl-bg-hover);
   --color-cl-bg-input: var(--cl-bg-input);
+  --color-cl-bg-recessed: var(--cl-bg-recessed);
 
   --color-cl-text: var(--cl-text);
+  --color-cl-text-chrome: var(--cl-text-chrome);
+  --color-cl-text-chrome-quiet: var(--cl-text-chrome-quiet);
   --color-cl-text-secondary: var(--cl-text-secondary);
   --color-cl-text-tertiary: var(--cl-text-tertiary);
   --color-cl-text-disabled: var(--cl-text-disabled);

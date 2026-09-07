@@ -1658,7 +1658,7 @@ function TableInner<TData>(
       return (
         <React.Fragment key={row.id}>
           <tr
-            className={`${rowClassName} ${isStriped ? stripedClassNameProp || "bg-gray-50 dark:bg-white/[0.04]" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${expandOnRowClick && expandable ? "cursor-pointer" : ""}`}
+            className={`${rowClassName} ${isStriped ? stripedClassNameProp || "bg-cl-bg-item-hover" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${expandOnRowClick && expandable ? "cursor-pointer" : ""}`}
             onClick={(e) => handleRowClick(row, e)}
             onMouseEnter={(e) =>
               handleRowHover(rowIndex, { current: e.currentTarget })
@@ -1967,7 +1967,7 @@ function TableInner<TData>(
                 value={globalFilter ?? ""}
                 onChange={handleSearchChange}
                 placeholder={searchPlaceholder}
-                className={`w-full pl-8 pr-8 py-2 border rounded bg-inherit text-inherit border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 ${searchInputClassName}`}
+                className={`w-full pl-8 pr-8 py-2 border rounded bg-cl-bg-input text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary ${searchInputClassName}`}
                 aria-label="Search table"
               />
               {globalFilter && (

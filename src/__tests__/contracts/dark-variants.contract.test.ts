@@ -40,7 +40,7 @@ const RAW_PALETTE =
  * `border-cl-border dark:border-cl-border` no-op in Breadcrumb from this
  * contract, which then reported group A empty while it was not.
  */
-function literals(file: string): string[] {
+export function literals(file: string): string[] {
   const text = readFileSync(file, "utf8");
   const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const out: string[] = [];
@@ -77,6 +77,13 @@ interface Found {
   base: string;
 }
 
+/** How many class-shaped string literals the walker can see at all. */
+export function classLiteralCount(root = resolve(process.cwd(), "src/components")): number {
+  let total = 0;
+  for (const file of sourceFiles(root)) total += literals(file).length;
+  return total;
+}
+
 export function classifyDarkVariants(root = resolve(process.cwd(), "src/components")) {
   const groups: Record<"A" | "B" | "C", Found[]> = { A: [], B: [], C: [] };
 
@@ -99,15 +106,32 @@ export function classifyDarkVariants(root = resolve(process.cwd(), "src/componen
 }
 
 /**
- * The declared endpoint, not a backlog.
+ * The endpoint, enumerated rather than counted.
  *
- * ADR 006 closes the phase at 78 variants and classifies every one: 33
- * deliberately retained, 29 blocked on a token decision, 16 orphaned from a
- * palette that predates the token system. These numbers hold the line — a new
- * `dark:` variant fails here, and the remainder falls only when one of those
- * decisions is taken.
+ * ADR 006 closed the phase at 78 with a ceiling on each group. ADR 007 took the
+ * three decisions those numbers were waiting on and applied them: 70 of the 76
+ * that were left are gone — onto `--cl-text-chrome`, `--cl-accent-bg`,
+ * `--cl-bg-input`, `--cl-bg-item-hover`, `--cl-bg-recessed`, or onto nothing at
+ * all where the variant was painting a focus ring at 1.60:1.
+ *
+ * Six remain, and at six a ceiling is the wrong instrument: each is listed with
+ * its reason, so adding one fails and retiring one fails until the list is
+ * updated. That is the ADR 002 DECLARED idiom, which is what a number stops
+ * being able to express once it is small.
  */
-const CEILING = { B: 60, C: 18 };
+const DECLARED: Record<string, string> = {
+  "Breadcrumb/utils/constants.ts dark:text-cl-text-secondary":
+    "The separator steps UP in dark rather than down — the only site that does, so it is a per-site judgement and not the chrome scale.",
+  "Input/utils/constants.ts dark:shadow-none":
+    "A drop shadow does not read on a near-black surface. No token expresses a shadow in one theme and none in the other.",
+  "TextArea/utils/constants.ts dark:shadow-none": "As Input.",
+  "Modal/utils/constants.ts dark:bg-black/70":
+    "The scrim. A token was considered and declined in ADR 006; nothing has changed.",
+  "Slider/utils/constants.ts dark:bg-cl-text":
+    "The thumb is near-white in both themes, which no token holds, and it has exactly one caller. ADR 005 wants a repeated need before a mint.",
+  "TimePicker/utils/constants.ts dark:hover:text-cl-text":
+    "Steps UP on hover in dark. The second of the two sites that go the other way.",
+};
 
 describe("dark variant contract", () => {
   const groups = classifyDarkVariants();
@@ -129,12 +153,11 @@ describe("dark variant contract", () => {
     });
 
     it("is looking at real source", () => {
-      // Guards the walker: a broken path would report zero of everything and
-      // every assertion below would pass while proving nothing.
-      // Guards the walker: a broken path reports zero of everything and every
-      // assertion below passes while proving nothing. The floor tracks the
-      // declared endpoint — 78 at ADR 006.
-      expect(groups.A.length + groups.B.length + groups.C.length).toBeGreaterThan(50);
+      // Guards the walker. It cannot be a floor on the variant count any more —
+      // that count is six — so it reads the corpus instead: a broken path finds
+      // no class literals at all, and every assertion below would pass while
+      // proving nothing.
+      expect(classLiteralCount()).toBeGreaterThan(500);
     });
   });
 
@@ -147,15 +170,15 @@ describe("dark variant contract", () => {
     expect(groups.A).toHaveLength(0);
   });
 
-  it("does not grow the token-swap backlog", () => {
-    expect(groups.B.length, "group B is a ratchet — it may fall, not rise").toBeLessThanOrEqual(
-      CEILING.B,
-    );
-  });
-
-  it("does not grow the raw-palette backlog", () => {
-    expect(groups.C.length, "group C is a ratchet — it may fall, not rise").toBeLessThanOrEqual(
-      CEILING.C,
-    );
+  it("carries only the six variants ADR 007 declared", () => {
+    const found = [...groups.B, ...groups.C]
+      .map((entry) => `${entry.file.replace(/.*src\/components\//, "")} ${entry.token}`)
+      .sort();
+    expect(
+      found,
+      "every `dark:` variant in the package is enumerated in DECLARED with its reason. " +
+        "A new one is a colour decision that belongs in a token; a missing one means a " +
+        "decision was taken and this record was not updated",
+    ).toEqual(Object.keys(DECLARED).sort());
   });
 });

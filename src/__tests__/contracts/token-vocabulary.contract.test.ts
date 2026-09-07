@@ -92,6 +92,10 @@ const RELATIONAL: { token: string; against: string; claim: string }[] = [
   { token: "--cl-accent-bg-hover", against: "--cl-accent-bg", claim: "the hover form of the accent background" },
   { token: "--cl-on-accent", against: "--cl-accent", claim: "is legible on the accent" },
   { token: "--cl-on-error", against: "--cl-error", claim: "is legible on the error colour" },
+  // ADR 007. "quiet" is a relation to the chrome step, and "recessed" is a
+  // relation to the surface it is set into — both assert something checkable.
+  { token: "--cl-text-chrome-quiet", against: "--cl-text-chrome", claim: "is quieter than the chrome text" },
+  { token: "--cl-bg-recessed", against: "--cl-bg-panel", claim: "sits below the panel surface" },
 ];
 
 /** Names that assert only a role. Listed so the enumeration is complete. */
@@ -103,6 +107,10 @@ const ROLE_ONLY = [
   "--cl-border",
   "--cl-border-input",
   "--cl-text",
+  // ADR 007: interface text as opposed to content. A role, and it claims no
+  // relation to `--cl-text` — in light the two are the same value, which is
+  // the same shape as `--cl-bg-panel` equalling `--cl-bg` there.
+  "--cl-text-chrome",
   "--cl-text-secondary",
   "--cl-text-tertiary",
   "--cl-text-disabled",

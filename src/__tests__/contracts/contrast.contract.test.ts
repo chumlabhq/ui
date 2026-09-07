@@ -108,6 +108,12 @@ const TEXT_TOKENS = [
   "--cl-text",
   "--cl-text-secondary",
   "--cl-text-tertiary",
+  // Minted by ADR 007 for the twenty-three sites that wrote the primary step
+  // in light and one step down in dark by hand. Added HERE FIRST, before any
+  // site migrated onto them: a token nothing measures is where this class of
+  // defect lives, and the `dark:` pair they replace was never measured either.
+  "--cl-text-chrome",
+  "--cl-text-chrome-quiet",
   // The semantic pair, added after the painted sweep found `--cl-success` at
   // 3.30:1 on white — on fifteen components at once, because every `message`
   // key wrote both colours unconditionally and the last one won. They carry
@@ -129,6 +135,8 @@ const SURFACES = [
   // Minted by ADR 006 for the hovered-item surface. Translucent, so
   // `resolveSurface` composites it over `--cl-bg` before measuring.
   "--cl-bg-item-hover",
+  // Minted by ADR 007 for the search bar inside a menu panel.
+  "--cl-bg-recessed",
 ];
 
 /**
@@ -147,6 +155,10 @@ const SURFACES = [
 const ACCENT_PAIRS: Array<[string, string]> = [
   ["--cl-accent", "--cl-accent-bg"],
   ["--cl-accent-hover", "--cl-accent-bg"],
+  // The hovered tint, and why the text deepens on it: `--cl-accent` on
+  // `--cl-accent-bg-hover` is 4.20:1 in light — the value DatePicker's today
+  // button painted before ADR 007 — while `--cl-accent-hover` on it is 5.28:1.
+  ["--cl-accent-hover", "--cl-accent-bg-hover"],
   // The error surface, minted for AvatarBadge's count pill. `--cl-error` is
   // opaque, so compositing it over a base returns the colour itself and the
   // pair is measured as written.
@@ -157,6 +169,23 @@ const ACCENT_PAIRS: Array<[string, string]> = [
 const ACCENT_BASES = ["--cl-bg", "--cl-bg-panel"];
 
 const AA_TEXT = 4.5;
+
+/**
+ * SC 1.4.11 Non-text Contrast: 3:1 for a focus indicator, a control boundary or
+ * a graphical object that carries meaning.
+ *
+ * `--cl-accent` is the graphical fill — Slider's range, TabPanel's active
+ * indicator, TimePicker's clock dot — and `--cl-border-input-focus` is the
+ * focus border. Both shipped softened in dark (30% and 50%), at 1.65:1 and
+ * 2.54:1, until ADR 007.
+ */
+const AA_NON_TEXT = 3;
+
+const NON_TEXT_TOKENS = ["--cl-accent", "--cl-border-input-focus"];
+
+/** The surfaces those paints sit on. Not `--cl-bg-item-hover`: nothing paints
+ *  a focus ring or a fill on top of a hovered item's wash. */
+const NON_TEXT_SURFACES = ["--cl-bg", "--cl-bg-elevated", "--cl-bg-panel", "--cl-bg-input"];
 
 describe("contrast contract", () => {
   it("parsed both themes from the stylesheet", () => {
@@ -199,6 +228,30 @@ describe("contrast contract", () => {
           Number(ratio.toFixed(2)),
           `${textToken} on ${tintToken} over ${baseToken} is ${ratio.toFixed(2)}:1, under WCAG AA's ${AA_TEXT}:1 for text`,
         ).toBeGreaterThanOrEqual(AA_TEXT);
+      });
+    }
+  });
+
+  /**
+   * SC 1.4.11, at the token level.
+   *
+   * The criterion was not among the ten this package gated, which is how a
+   * focus ring at 1.60:1 shipped — see ADR 007 §1(c). The browser tier measures
+   * what is actually painted, over the fixtures; this measures the values those
+   * paints come from, so a token revaluation cannot quietly take the ring or a
+   * graphical fill under the floor between two browser runs.
+   */
+  describe.each(Object.entries(THEMES))("%s non-text contrast", (_themeName, theme) => {
+    for (const token of NON_TEXT_TOKENS) {
+      it.each(NON_TEXT_SURFACES)(`${token} clears 3:1 against %s`, (surfaceToken) => {
+        const surface = resolveSurface(theme, surfaceToken);
+        const paint = composite(parseColor(theme[token]), surface);
+        const ratio = contrast(paint, surface);
+        expect(
+          Number(ratio.toFixed(2)),
+          `${token} on ${surfaceToken} is ${ratio.toFixed(2)}:1, under WCAG AA's ${AA_NON_TEXT}:1 ` +
+            `for a focus indicator or a graphical object`,
+        ).toBeGreaterThanOrEqual(AA_NON_TEXT);
       });
     }
   });

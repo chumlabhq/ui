@@ -14,10 +14,10 @@ import { isTooltipConfig } from "../../../utils/isTooltipConfig.js";
 
 const variantClassNames = {
   solid:
-    "font-medium bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 select-none",
+    "font-medium bg-cl-bg-item-hover text-cl-text-secondary select-none",
   outline:
-    "font-medium border-2 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 bg-transparent select-none",
-  ghost: "font-medium text-gray-600 dark:text-gray-300 select-none",
+    "font-medium border-2 border-cl-border text-cl-text-secondary bg-transparent select-none",
+  ghost: "font-medium text-cl-text-secondary select-none",
 };
 
 export const AvatarGroupCount = forwardRef<
