@@ -37,7 +37,7 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
     searchControl:
       "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-recessed",
     searchInput:
-      "flex-1 bg-transparent outline-none flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary",
+      "flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent rounded-cl-sm",
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
     count:
       "inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-item-hover text-cl-text-secondary",

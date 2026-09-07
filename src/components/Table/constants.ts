@@ -78,7 +78,10 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   resizeHandle: "",
   resizeIndicator:
     "w-0.5 h-3/5 rounded-full transition-colors bg-transparent group-hover/resize:bg-cl-text-tertiary data-[resizing]:bg-cl-accent",
-  loadingFooter: "",
+  // The infinite-scroll labels. Carried at the JSX site as `text-gray-400`
+  // and `text-gray-500` until ADR 007, where `unstyled` could not strip it
+  // and no fixture rendered it.
+  loadingFooter: "text-cl-text-tertiary",
 };
 
 export const UNSTYLED_TABLE_CLASSES: Required<TableClasses> =

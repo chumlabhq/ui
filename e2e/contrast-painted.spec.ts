@@ -56,6 +56,8 @@ interface Recorded {
     reason: string;
     recordedOn: string;
     findings: string[];
+    unindicated: string[];
+    unindicatedReason: string;
   };
 }
 
@@ -63,6 +65,8 @@ const recorded = JSON.parse(readFileSync(RECORDED_PATH, "utf8")) as Recorded;
 const EXPECTED = new Set(recorded.paintedContrastExpectations?.findings ?? []);
 /** SC 1.4.11 findings recorded with a reason; see the record's $comment_nontext. */
 const EXPECTED_NON_TEXT = new Set(recorded.nonTextContrastExpectations?.findings ?? []);
+/** Focusable elements with no indicator anywhere in their chain — SC 2.4.7. */
+const EXPECTED_UNINDICATED = new Set(recorded.nonTextContrastExpectations?.unindicated ?? []);
 const RERECORD = process.env.CONTRAST_RERECORD === "1";
 
 interface Finding {
@@ -85,7 +89,41 @@ interface Finding {
  *    reported as unmeasurable rather than guessed at.
  */
 const MEASURE = `(() => {
+  /**
+   * CSS Color 4. Tailwind v4 emits its own palette in oklch — text-gray-400 is
+   * oklch(0.707 0.022 261.325) — and a parser that knows only rgb() and hex
+   * returned null for it, so every element painted with a palette colour was
+   * skipped in silence. That is the exact class this sweep exists to catch:
+   * Table's three "Loading more" labels sat at 2.54:1 in light through every
+   * green run. The self-check planted a hex, which parses, so it never noticed.
+   */
+  const fromOklab = (L, a, b, alpha) => {
+    const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+    const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+    const s2 = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+    const linear = [
+      4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s2,
+      -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s2,
+      -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s2,
+    ];
+    return linear.map((v) => {
+      const c = v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(Math.max(v, 0), 1 / 2.4) - 0.055;
+      return Math.min(255, Math.max(0, Math.round(c * 255)));
+    }).concat(alpha);
+  };
+  const parseModern = (text) => {
+    const m = /^okl(ab|ch)\\(([^)]+)\\)/.exec(text.trim());
+    if (!m) return null;
+    const parts = m[2].split(/[\\s/]+/).filter(Boolean);
+    const num = (v) => (String(v).endsWith("%") ? parseFloat(v) / 100 : parseFloat(v));
+    const alpha = parts.length > 3 ? num(parts[3]) : 1;
+    if (m[1] === "ab") return fromOklab(num(parts[0]), num(parts[1]), num(parts[2]), alpha);
+    const hue = (num(parts[2]) * Math.PI) / 180;
+    return fromOklab(num(parts[0]), num(parts[1]) * Math.cos(hue), num(parts[1]) * Math.sin(hue), alpha);
+  };
   const parse = (value) => {
+    const modern = parseModern(String(value));
+    if (modern) return modern;
     const m = /rgba?\\(([^)]+)\\)/.exec(value);
     if (!m) return null;
     const parts = m[1].split(/[,/]/).map((p) => parseFloat(p.trim()));
@@ -182,7 +220,10 @@ const MEASURE = `(() => {
       const style = getComputedStyle(el);
       const background = backgroundOf(el);
       const foreground = parse(style.color);
-      if (!foreground) continue;
+      if (!foreground) {
+        out.push({ key: selectorFor(el), ratio: 0, detail: "unreadable colour " + style.color, unmeasurable: true });
+        continue;
+      }
       if (!background) {
         out.push({ key: selectorFor(el), ratio: 0, detail: "background is an image or gradient", unmeasurable: true });
         continue;
@@ -220,6 +261,38 @@ const MEASURE = `(() => {
  *     softened those three to 1.65:1.
  */
 const MEASURE_NONTEXT = `(() => {
+  /**
+   * CSS Color 4, because Tailwind v4 emits it. A ring-white/80 computes to
+   * "oklab(0.999994 0.0000455677 0.0000200868 / 0.8)", and a parser that knows
+   * only rgb() and hex returns null for it — which this pass then reads as "no
+   * focus indicator". Toast's close button rings perfectly well and was
+   * reported unindicated in twelve fixture/theme pairs because of this.
+   */
+  const fromOklab = (L, a, b, alpha) => {
+    const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+    const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+    const s2 = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+    const linear = [
+      4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s2,
+      -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s2,
+      -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s2,
+    ];
+    const encoded = linear.map((v) => {
+      const c = v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(Math.max(v, 0), 1 / 2.4) - 0.055;
+      return Math.min(255, Math.max(0, Math.round(c * 255)));
+    });
+    return [encoded[0], encoded[1], encoded[2], alpha];
+  };
+  const parseModern = (text) => {
+    const m = /^okl(ab|ch)\\(([^)]+)\\)/.exec(text);
+    if (!m) return null;
+    const parts = m[2].split(/[\\s/]+/).filter(Boolean);
+    const num = (v) => (String(v).endsWith("%") ? parseFloat(v) / 100 : parseFloat(v));
+    const alpha = parts.length > 3 ? num(parts[3]) : 1;
+    if (m[1] === "ab") return fromOklab(num(parts[0]), num(parts[1]), num(parts[2]), alpha);
+    const hue = (num(parts[2]) * Math.PI) / 180;
+    return fromOklab(num(parts[0]), num(parts[1]) * Math.cos(hue), num(parts[1]) * Math.sin(hue), alpha);
+  };
   const parse = (value) => {
     const text = String(value).trim();
     // Hex as well as rgb(): the tokens are written as hex in the stylesheet, and
@@ -231,6 +304,8 @@ const MEASURE_NONTEXT = `(() => {
       const d = hex[1].length === 3 ? [...hex[1]].map((c) => c + c).join("") : hex[1];
       return [parseInt(d.slice(0, 2), 16), parseInt(d.slice(2, 4), 16), parseInt(d.slice(4, 6), 16), 1];
     }
+    const modern = parseModern(text);
+    if (modern) return modern;
     const m = /rgba?\\(([^)]+)\\)/.exec(text);
     if (!m) return null;
     const parts = m[1].split(/[ ,/]+/).filter(Boolean).map(Number);
@@ -290,16 +365,38 @@ const MEASURE_NONTEXT = `(() => {
     }
     return alpha !== null;
   };
-  /** The colour a focus indicator paints, out of whatever property changed. */
-  const indicatorColour = (before, after) => {
+  /**
+   * The colours a focus indicator paints, out of whatever property changed.
+   *
+   * Plural, and that is the fix: a Tailwind v4 ring computes to
+   * "rgba(0,0,0,0) 0px 0px 0px 0px, rgba(0,0,0,0) 0px 0px 0px 0px,
+   *  rgb(5,6,8) 0px 0px 0px 2px, rgb(91,155,255) 0px 0px 0px 4px" —
+   * two transparent placeholders, then the offset ring in the page colour, then
+   * the accent ring. Reading the FIRST colour out of that string returns
+   * rgba(0,0,0,0), which reads as "this element has no focus indicator". That
+   * one line reported 757 elements as unindicated; 654 of them ring perfectly
+   * well. An indicator made of layers is visible if any layer is, so every
+   * layer is measured and the best one is the verdict.
+   */
+  const indicatorColours = (before, after) => {
+    const out = [];
     if (after.outlineStyle !== "none" && parseFloat(after.outlineWidth) > 0 &&
         (before.outlineStyle === "none" || before.outlineColor !== after.outlineColor ||
          before.outlineWidth !== after.outlineWidth)) {
-      return parse(after.outlineColor);
+      const outline = parse(after.outlineColor);
+      if (outline) out.push(outline);
     }
-    if (after.boxShadow !== before.boxShadow && after.boxShadow !== "none") return parse(after.boxShadow);
-    if (after.borderColor !== before.borderColor) return parse(after.borderColor);
-    return null;
+    if (after.boxShadow !== before.boxShadow && after.boxShadow !== "none") {
+      for (const m of after.boxShadow.matchAll(/(rgba?|oklab|oklch)\\([^)]+\\)/g)) {
+        const colour = parse(m[0]);
+        if (colour && colour[3] > 0) out.push(colour);
+      }
+    }
+    if (after.borderColor !== before.borderColor) {
+      const border = parse(after.borderColor);
+      if (border) out.push(border);
+    }
+    return out.filter((colour) => colour[3] > 0);
   };
   const snapshot = (el) => {
     const s = getComputedStyle(el);
@@ -347,22 +444,50 @@ const MEASURE_NONTEXT = `(() => {
   }
   const active = document.activeElement;
   for (const el of focusable.slice(0, 8)) {
-    const before = snapshot(el);
+    // Blurred first, so "before" is a genuinely unfocused baseline. Several of
+    // these are already focused when their fixture opens — a combobox with its
+    // panel open, a slider thumb the fixture's act pointer-downed — and the ring
+    // was in both snapshots, so the diff saw no change and called it no ring.
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    // The element and the ancestors that might draw for it: focus-within puts
+    // the ring on the control wrapping an input, which is what
+    // wcag-layout.spec.ts already accepts for 2.4.7 — "the indicator need not
+    // sit on the focused node". Reading only the node reported 150 elements as
+    // unindicated whose component rings perfectly well.
+    const chain = [el];
+    for (let node = el.parentElement, i = 0; node && i < 4 && !node.hasAttribute("data-fixture"); node = node.parentElement, i += 1) {
+      chain.push(node);
+    }
+    const before = chain.map(snapshot);
     const behind = el.parentElement ? backgroundOf(el.parentElement) : null;
     // focusVisible where the browser honours it: the library draws its rings
     // with focus-visible, and a programmatic focus that does not set the
     // modality reports "nothing changed" on a component that rings fine.
     el.focus({ focusVisible: true });
-    const after = snapshot(el);
-    const colour = indicatorColour(before, after);
+    const colours = [];
+    let drawnOn = null;
+    chain.forEach((node, i) => {
+      if (colours.length) return;
+      const found = indicatorColours(before[i], snapshot(node));
+      if (found.length) {
+        colours.push(...found);
+        drawnOn = node === el ? "self" : "ancestor";
+      }
+    });
     if (!behind) continue;
-    if (!colour || colour[3] === 0) {
+    if (colours.length === 0) {
       out.push({ kind: "focus-none", key: selectorFor(el), ratio: null, detail: "nothing changed on focus" });
       continue;
     }
-    const painted = over(colour, behind);
-    out.push({ kind: "focus", key: selectorFor(el), ratio: Math.round(ratio(painted, behind) * 100) / 100,
-               detail: "rgb(" + painted.map(Math.round).join(", ") + ") on rgb(" + behind.map(Math.round).join(", ") + ")" });
+    let best = null;
+    for (const colour of colours) {
+      const painted = over(colour, behind);
+      const value = ratio(painted, behind);
+      if (!best || value > best.value) best = { value, painted };
+    }
+    out.push({ kind: "focus", key: selectorFor(el), ratio: Math.round(best.value * 100) / 100,
+               detail: drawnOn + ", " + colours.length + " layer(s), best rgb(" +
+                 best.painted.map(Math.round).join(", ") + ") on rgb(" + behind.map(Math.round).join(", ") + ")" });
   }
   if (active instanceof HTMLElement) active.focus(); else document.activeElement?.blur?.();
   return out;
@@ -480,6 +605,9 @@ test.describe("painted contrast", () => {
         `floors=${AA_TEXT}/${AA_LARGE} seconds=${seconds}`,
     );
     console.log(
+      `CONTRAST_NONTEXT_UNINDICATED ${JSON.stringify([...new Set(unindicated)].slice(0, 40))}`,
+    );
+    console.log(
       `CONTRAST_NONTEXT indicators=${indicators} fills=${fills} ` +
         `findings=${nonTextFindings.length} no-indicator=${unindicated.length} floor=${AA_NON_TEXT}`,
     );
@@ -541,6 +669,20 @@ test.describe("painted contrast", () => {
       (key) => !nonTextFindings.some((f) => f.key === key),
     );
     expect(staleNonText, "these no longer report — remove them from the record").toEqual([]);
+
+    // SC 2.4.7, asserted rather than counted. The number this reports was 757
+    // when the pass was written and 654 of those were rings it could not read —
+    // a transparent placeholder layer, a baseline taken while the element was
+    // already focused, an indicator drawn by `focus-within` on an ancestor. It
+    // is an assertion now because a count nobody asserts is a count that moves.
+    const unexpectedUnindicated = unindicated.filter((key) => !EXPECTED_UNINDICATED.has(key));
+    expect(
+      unexpectedUnindicated,
+      "focusable, and nothing in its chain paints an indicator — SC 2.4.7. Give it the " +
+        "library's ring, or record it with a reason in docs/adr/002-unrenderable-keys.json",
+    ).toEqual([]);
+    const staleUnindicated = [...EXPECTED_UNINDICATED].filter((key) => !unindicated.includes(key));
+    expect(staleUnindicated, "these now show an indicator — remove them from the record").toEqual([]);
   });
 
   /**
@@ -562,6 +704,24 @@ test.describe("painted contrast", () => {
       clean.filter((m) => m.ratio < (m.floor ?? AA_TEXT)),
       "Button/default is not clean to start with, so the plant proves nothing",
     ).toEqual([]);
+
+    // The class form first, which is how it actually ships: Tailwind v4 computes
+    // its palette to oklch, and a parser that read only rgb() and hex skipped
+    // every element painted that way in silence.
+    await page.evaluate(() => {
+      const classed = document.createElement("span");
+      classed.className = "planted-oklch text-gray-400 cl-s";
+      classed.textContent = "planted";
+      document.querySelector("[data-fixture]")!.append(classed);
+    });
+    const viaClass = (await page.evaluate(MEASURE)) as Array<{ key: string; ratio: number; detail: string }>;
+    const oklch = viaClass.find((m) => m.key.startsWith("span.planted-oklch"));
+    expect(oklch, "a Tailwind palette class was not measured at all").toBeDefined();
+    expect(
+      oklch!.detail,
+      "the palette colour was not resolved — Tailwind v4 emits oklch()",
+    ).toContain("oklch");
+    await page.evaluate(() => document.querySelector(".planted-oklch")?.remove());
 
     await page.evaluate(() => {
       const planted = document.createElement("span");

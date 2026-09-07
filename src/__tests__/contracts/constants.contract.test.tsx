@@ -196,6 +196,10 @@ const BUILTIN_COLOUR =
 const NOT_A_COLOUR =
   /^(\d|\[|linear-|radial|conic|gradient-|xs$|sm$|md$|lg$|xl$|\dxl$|left$|center$|right$|justify$|start$|end$|top$|bottom$|middle$|wrap$|nowrap$|balance$|pretty$|ellipsis$|clip$|solid$|dashed$|dotted$|double$|hidden$|collapse$|separate$|inset$|offset$|x$|y$|t$|r$|b$|l$|s$|e$|wavy$|line$|base$|through$)/;
 
+/** A Tailwind palette colour written as a class: `bg-gray-200`, `via-gray-300`. */
+const RAW_PALETTE_CLASS =
+  /^(bg|text|border|from|via|to|ring|shadow|fill|stroke|placeholder|divide|outline|caret|decoration)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}(\/.*)?$/;
+
 /** Utilities whose value is a colour rather than a size or a keyword. */
 const COLOUR_UTILITY =
   /^(bg|text|border|from|via|to|ring|shadow|fill|stroke|placeholder|divide|outline|caret|accent|decoration)-(.+)$/;
@@ -305,6 +309,32 @@ describe("constants contract", () => {
       "this colour namespace is not in the `@theme` block of src/styles/tokens.css, so the " +
         "class ships in the JS and no rule for it exists in the CSS — it paints nothing",
     ).toEqual([]);
+  });
+
+  it("introduces no new raw-palette colour", () => {
+    // The singleton form of the `dark:` defect. ADR 006 retired 44 raw-palette
+    // PAIRS; these have no `dark:` counterpart, so nothing counted them — a
+    // fixed grey that cannot follow the theme, which is what the comment in
+    // Table's own constants file says about the two it already replaced.
+    // Every one is a shimmer surface, and only one of the five components has a
+    // fixture that renders it: `bg-gray-200` reaches the DOM through Avatar's
+    // loading state and nowhere else, and Table's shimmer is reached by no
+    // fixture at all. Ratchets DOWN only.
+    const DECLARED_RAW = 13;
+    const found = Object.entries(sources)
+      .filter(([path]) => !NOT_SHIPPED.test(path))
+      .flatMap(([path]) =>
+        fileLiterals(path.replace("../../", "src/")).flatMap((raw) =>
+          raw
+            .split(/\s+/)
+            .filter((token) => RAW_PALETTE_CLASS.test(token.split(":").pop() ?? ""))
+            .map((token) => `${path.replace("../../components/", "")} ${token}`),
+        ),
+      );
+    expect(
+      found.length,
+      `raw palette classes in shipped source — ratchet, may fall only:\n${found.join("\n")}`,
+    ).toBeLessThanOrEqual(DECLARED_RAW);
   });
 
   it("allows no structural utility at a call site, at any baseline", () => {

@@ -158,6 +158,15 @@ none is a bug fix that happened to move behaviour.
 
 ### Fixed
 
+- **Five controls had no focus indicator at all** — `outline-none` with nothing in its place:
+  `InternationalPhoneInput`'s country trigger, and the search inputs of `CascadingDropdown`,
+  `SearchableDropdown`, `MultiSelectSearchableDropdown` and `InternationalPhoneInput`. All
+  five carry the library's standard ring now. Found by asserting, rather than counting, that
+  every focusable element in every fixture shows one.
+- **`Table`'s infinite-scroll labels** were `text-gray-400` and `text-gray-500` — a fixed grey
+  that cannot follow the theme, at 2.54:1 in light. They are `--cl-text-tertiary`, carried by
+  the `loadingFooter` slot so `unstyled` and `classes` can both reach them, and a fixture
+  renders the end-of-list state for the first time.
 - **Focus indicators are visible in dark.** The focus ring on `Input`, `TextArea` and
   `InternationalPhoneInput` was softened to 30% in dark and measured 1.60:1 against the
   surface behind it; the focus border was softened to 50% and measured 2.54:1. WCAG SC 1.4.11

@@ -45,7 +45,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   searchControl:
     "flex items-center gap-2 px-3 py-2 border-b border-cl-border",
   searchInput:
-    "flex-1 bg-transparent text-sm text-cl-text placeholder:text-cl-text-tertiary focus:outline-none",
+    "flex-1 bg-transparent text-sm text-cl-text placeholder:text-cl-text-tertiary focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent rounded-cl-sm",
   searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
   subSearchControl: "",
   subSearchInput: "",

@@ -97,9 +97,8 @@ no token holds and has one caller.
    composites the accent onto the element's own background — and at the token
    level in `contrast.contract`, so a revaluation cannot take the ring under the
    floor between two browser runs. ACCESSIBILITY.md moves 1.4.11 to Partially
-   supports and **2.4.7 down from Supports**: the indicator it certified had
-   never been measured, and 767 focusable elements still change nothing visible
-   on focus.
+   supports. It also moved 2.4.7 down from Supports on the strength of a number
+   this pass reported and could not support — see the addendum.
 2. **`::placeholder` was invisible to the painted sweep**, which reads
    `style.color`. It reads the pseudo-element too now. Its first run measured
    **nothing** and reported zero findings — the plant that proves the pass can
@@ -122,3 +121,79 @@ no token holds and has one caller.
 - `Table.tsx` has three `text-gray-400` / `text-gray-500` infinite-scroll
   labels with no `dark:` variant, so they were never in this inventory. Same
   defect class, unfixtured, unmeasured.
+
+---
+
+## Addendum, 2026-09-07 — the 757 was the gate, not the library
+
+The pass above reported **757 focusable elements with no visible focus
+indicator**, and 2.4.7 was downgraded on it. Diagnosed before anything was
+decided, by re-measuring every focusable element in every fixture against a much
+wider property set — the element, its ancestors, its descendants, both
+pseudo-elements, and `:focus-visible` itself.
+
+**`:focus-visible` was not the cause.** It matched on 664 of 667 elements under
+programmatic focus. The three counts:
+
+| | |
+| --- | --- |
+| A real indicator the diff could not see | **751** — essentially all of it |
+| Legitimately none, because focus lives elsewhere | **0** |
+| Genuinely no indicator | **5 library elements**, across 41 fixture/theme pairs |
+
+Four blind spots, each found by fixing the one before it:
+
+1. **The first colour in a box-shadow is not the ring.** Tailwind v4 computes a
+   ring as `rgba(0,0,0,0) 0 0 0 0, rgba(0,0,0,0) 0 0 0 0, rgb(5,6,8) 0 0 0 2px,
+   rgb(91,155,255) 0 0 0 4px` — two transparent placeholders, the offset ring,
+   then the ring. Reading the first `rgba()` returned alpha 0, which read as "no
+   indicator". Every layer is measured now. **757 → 145.**
+2. **No blur before the baseline.** A combobox with its panel already open, a
+   slider thumb the fixture's `act` pointer-downed: already focused, so the ring
+   was in both snapshots. **145 → 89.**
+3. **The indicator is often on an ancestor** — `focus-within:ring-2` on the
+   control wrapping an `<input>`, which `wcag-layout.spec.ts` already accepts
+   for 2.4.7. The chain is walked now. **89 → 10.**
+4. **oklab/oklch.** `ring-white/80` computes to
+   `oklab(0.999994 0.0000455677 0.0000200868 / 0.8)` and the parser knew only
+   hex and `rgb()`. **10 → 0.**
+
+**The fourth was also in the text sweep, and there it mattered more.**
+`text-gray-400` computes to `oklch(0.707 0.022 261.325)`; the parser returned
+null and the element was skipped **in silence** (`if (!foreground) continue`).
+Every element painted with a Tailwind palette colour was invisible to the gate
+built to catch exactly that — and its self-check planted a hex, which parses.
+That is why Table's three infinite-scroll labels sat at 2.54:1 in light through
+every green run. An unreadable colour is reported as unmeasurable now rather than
+skipped, and the self-check plants the class form as well as the hex.
+
+**The five that genuinely had none** — `outline-none` with nothing in its place —
+carry the library's standard ring now: `InternationalPhoneInput`'s country
+trigger, and the search inputs of `CascadingDropdown`, `SearchableDropdown`,
+`MultiSelectSearchableDropdown` and `InternationalPhoneInput`. Two were reported
+by the gate; the other three are the identical shape and sat outside its
+eight-elements-per-fixture sample.
+
+**SC 2.4.7 is asserted now rather than counted**: no focusable element in any
+fixture may lack an indicator, and the recorded exception list is empty. 1349
+indicators across 429 fixtures in both themes. ACCESSIBILITY.md restores 2.4.7 to
+Supports on that evidence.
+
+## Addendum — Table's infinite-scroll labels, and the singleton sweep
+
+The three `text-gray-400` / `text-gray-500` labels are `--cl-text-tertiary`, and
+the colour moved into the `loadingFooter` slot rather than staying at the JSX
+site: the new `Table/infinite-end` fixture immediately failed `unstyled.contract`
+with `text-cl-text-tertiary` surviving `unstyled`, which is ADR 001's defect and
+was equally true of the grey nobody could see. **What the gates report on the new
+fixture:** painted contrast 5.26:1 light / 5.11:1 dark, axe clean, no focus
+finding, and one `unstyled` leak — fixed rather than recorded.
+
+**The singleton sweep** — a raw palette colour with no `dark:` counterpart, which
+is why the `dark:` inventory never counted it: **13 sites, 5 components, every
+one a shimmer surface.** `Avatar` 3, `CountryFlag` 3, `MultiSelectDropdown` 2,
+`Table/TableShimmer.tsx` 5. Ratcheted in `constants.contract` at 13. A browser
+sweep of all 429 fixtures says which are reachable at all: **`bg-gray-200`
+renders only through Avatar's loading state, and `TableShimmer` is rendered by no
+fixture in the suite.** Not migrated here: that is a visual decision about five
+components' skeletons, and it wants its own pass.

@@ -56,6 +56,14 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "mobile", props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999 } },
   { name: "load-more", props: { data: ROWS, columns: COLUMNS, hasMore: true, loadingMore: true, enableInfiniteScroll: true, onLoadMore: () => {} } },
   {
+    name: "infinite-end",
+    props: { data: ROWS, columns: COLUMNS, enableInfiniteScroll: true, hasMore: false, infiniteEndContent: "No more rows", onLoadMore: () => {} },
+    note:
+      "The end-of-list label, which no fixture reached. It shipped `text-gray-500` — a fixed " +
+      "grey that cannot follow the theme, and one the painted sweep could not read either, " +
+      "because Tailwind v4 computes its palette to oklch(). ADR 007.",
+  },
+  {
     name: "pinned-right",
     props: { data: ROWS, columns: COLUMNS, pinnableColumns: ["name", "role"], pinnedRightColumns: ["role"] },
   },

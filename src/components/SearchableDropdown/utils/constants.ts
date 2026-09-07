@@ -27,7 +27,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     searchControl:
       "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-recessed",
     searchInput:
-      "flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary",
+      "flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent rounded-cl-sm",
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
     loading: "",
     loadingItem:

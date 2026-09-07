@@ -2026,7 +2026,7 @@ function TableInner<TData>(
         {/* Infinite scroll loading for mobile */}
         {enableInfiniteScroll && loadingMore && (
           <div
-            className={`text-center flex items-center justify-center py-3 text-gray-400 ${loadingMoreClassName}`}
+            className={`text-center flex items-center justify-center py-3 ${loadingMoreClassName}`}
             data-loading-more
           >
             {loadingMoreContent ?? "Loading more..."}
@@ -2290,7 +2290,7 @@ function TableInner<TData>(
       {/* Infinite scroll loading indicator */}
       {enableInfiniteScroll && loadingMore && (
         <div
-          className={`w-full text-center flex items-center justify-center py-3 text-gray-400 ${loadingMoreClassName}`}
+          className={`w-full text-center flex items-center justify-center py-3 ${loadingMoreClassName}`}
           data-loading-more
         >
           {loadingMoreContent ?? "Loading more..."}
@@ -2298,7 +2298,7 @@ function TableInner<TData>(
       )}
       {enableInfiniteScroll && !hasMore && infiniteEndContent !== undefined && (
         <div
-          className={`w-full text-center py-3 text-gray-500 text-sm ${loadingMoreClassName}`}
+          className={`w-full text-center py-3 text-sm ${loadingMoreClassName}`}
         >
           {infiniteEndContent}
         </div>
