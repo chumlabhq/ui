@@ -15,7 +15,9 @@
 import { spawn } from "node:child_process";
 
 const RUNNERS = [
-  { name: "vitest", command: "npx", args: ["vitest", "run"] },
+  // Through the wrapper, so a vitest non-pass is named and a run that collects
+  // fewer files than it should fails rather than reading as a pass.
+  { name: "vitest", command: "node", args: ["scripts/run-vitest.mjs"] },
   {
     name: "playwright (chromium)",
     command: "npx",

@@ -163,6 +163,32 @@ describe("DEFAULT_COUNTRIES", () => {
     expect(DEFAULT_COUNTRIES.length).toBeGreaterThan(0);
   });
 
+  /**
+   * The list is a packed string now — `<ISO2><dial>|<name>` joined by `~` —
+   * unpacked at module load, which is 2.16 KB gzipped smaller than the array of
+   * object literals it replaced. These are the invariants the packing rests on:
+   * a two-character code, a numeric dial code, and the two fields that are
+   * derived rather than stored. A hand-edit to the string that breaks any of
+   * them would otherwise show up as one wrong flag in one dropdown row.
+   */
+  it("unpacks every row into the shape the packing derives", () => {
+    expect(DEFAULT_COUNTRIES).toHaveLength(193);
+    const broken = DEFAULT_COUNTRIES.filter(
+      (country) =>
+        country.value.length !== 2 ||
+        country.flag !== country.value.toLowerCase() ||
+        !/^\+\d+$/.test(country.dialCode) ||
+        country.label !== `${country.name} (${country.dialCode})` ||
+        country.name.length === 0,
+    );
+    expect(broken).toEqual([]);
+  });
+
+  it("has no duplicate country code", () => {
+    const codes = DEFAULT_COUNTRIES.map((country) => country.value);
+    expect(new Set(codes).size).toBe(codes.length);
+  });
+
   it("includes United States with correct dial code", () => {
     const us = DEFAULT_COUNTRIES.find((c) => c.value === "US");
     expect(us).toBeDefined();

@@ -1,6 +1,7 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
+import VitestReconcileReporter from "./src/test/reconcile-reporter.js";
 
 const CONTRACTS = "src/__tests__/contracts/**/*.{test,spec}.{ts,tsx}";
 
@@ -57,6 +58,9 @@ export default defineConfig({
         "src/**/index.ts",
       ],
     },
-    reporters: ["verbose"],
+    // `includeTaskLocation` is what gives the reconciliation reporter a line
+    // number; without it a non-pass names a file and nothing else.
+    includeTaskLocation: true,
+    reporters: ["verbose", new VitestReconcileReporter()],
   },
 });

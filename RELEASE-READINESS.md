@@ -464,7 +464,7 @@ measured Accordion against a Button's ceiling was fixed rather than its number m
 | Component | Gzipped | Ceiling | Class | |
 | --- | --- | --- | --- | --- |
 | Table | 16.76 KB | 12 KB | surface | declared |
-| InternationalPhoneInput | 10.65 KB | 8 KB | composed | declared |
+| InternationalPhoneInput | 8.69 KB | 8 KB | composed | declared, **from 10.65** — 0.69 over |
 | Accordion | 9.16 KB | 8 KB | composed | declared — was measured against 6 |
 | DatePicker | 12.03 KB | 12 KB | surface | declared, **from 12.59** — 0.03 over |
 | TimePicker | **7.93 KB** | 10 KB | overlay | **clears**, from 10.50 |
@@ -495,7 +495,16 @@ control → composed: **Accordion, Input, Loader, RadioButton, TextArea**. Accor
 1.16 KB over the 8 KB it now earns, and that is declared with a reason rather than
 accommodated.
 
-Library total **150.76 KB** across 80 chunks, at its recorded ceiling. The three surviving
+**InternationalPhoneInput's 193 countries are a packed string.** The array of object literals
+was 4.06 KB gzipped and four fifths of it was structure rather than information: five repeated
+keys a bundler cannot dedupe, plus `flag` and `label`, which are derivable from the other three
+in all 193 rows. Packed as `<ISO2><dial>|<name>` and unpacked at module load it is 1.90 KB —
+**2.16 KB less**, and 1.96 KB off the component's exclusive cost. The decoded array is
+byte-identical to the literal it replaced, asserted row by row, and the parse is **0.036 ms**
+once per module load, not per render: `selectedCountry` resolves out of it during the first
+render to paint the trigger, which is exactly why the data itself cannot be deferred.
+
+Library total **148.35 KB** across 80 chunks, at its recorded ceiling. The three surviving
 breach records were re-derived: Table 16.30 → 16.76 and InternationalPhoneInput 10.61 → 10.65
 **grew**, both from ADR 007's class strings, which the bundle gate was not run against at the
 time.

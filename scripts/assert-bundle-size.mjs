@@ -92,7 +92,7 @@ const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
  * DOWN only. Individual entries can each stay green while the aggregate drifts,
  * and nothing would have noticed.
  */
-const LIBRARY_TOTAL_KB = 150.76;
+const LIBRARY_TOTAL_KB = 148.35;
 
 /**
  * Breaches that are recorded rather than fixed, each with the reason and the
@@ -118,11 +118,16 @@ const DECLARED_BREACHES = new Map([
   [
     "InternationalPhoneInput",
     {
-      kb: 10.65,
-      why: "4.17 KB of it is DEFAULT_COUNTRIES, read on mount to resolve the " +
-        "selected country's flag and dial code. Deferring it is a blank " +
-        "trigger on first paint. Measured: deferring PHONE_FORMATTING_PATTERNS " +
-        "instead moves 0.32 KB and does not clear the ceiling.",
+      kb: 8.69,
+      why: "10.65 until the 193 countries were packed into a delimited string " +
+        "parsed at module load: 4.06 KB gzipped of object literals became 1.90, " +
+        "and four fifths of what was there was structure rather than " +
+        "information — five repeated keys a bundler cannot dedupe, plus `flag` " +
+        "and `label`, which are derivable from the other three in all 193 rows. " +
+        "The remaining 0.69 over is the data itself, which cannot be deferred: " +
+        "`selectedCountry` resolves out of it during the first render to paint " +
+        "the trigger's flag and dial code, so deferring it is a blank trigger " +
+        "on first paint. The parse is 0.036 ms, once per module load.",
     },
   ],
   [

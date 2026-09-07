@@ -477,7 +477,7 @@
     "verify:packaging:self-check": "node scripts/assert-packaging.mjs --self-check",
     "preview": "vite preview",
     "test": "vitest",
-    "test:run": "vitest run",
+    "test:run": "node scripts/run-vitest.mjs",
     "test:contracts": "vitest run --project=contracts",
     "test:unit": "vitest run --project=unit",
     "test:ui": "vitest --ui",
@@ -511,7 +511,8 @@
     "verify:consumers:self-check": "node scripts/verify-consumer-matrix.mjs --self-check",
     "verify:ssr-record": "node scripts/assert-ssr-record.mjs",
     "verify:ssr-record:self-check": "node scripts/assert-ssr-record.mjs --self-check",
-    "test:e2e:all:self-check": "node scripts/run-e2e-matrix.mjs --self-check"
+    "test:e2e:all:self-check": "node scripts/run-e2e-matrix.mjs --self-check",
+    "test:run:self-check": "node scripts/run-vitest.mjs --self-check"
   },
   "peerDependencies": {
     "@tanstack/react-table": "^8.21.3",

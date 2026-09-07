@@ -28,6 +28,11 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- `InternationalPhoneInput` carries its 193 countries as a packed string unpacked at module
+  load rather than as an array of object literals — 2.16 KB less gzipped, with the same data:
+  the decoded array is identical row for row. `DEFAULT_COUNTRIES` is unchanged as an export
+  and as a value.
+
 - **`TimePicker`'s clock face, `DatePicker`'s presets and its marker tooltip load on demand.**
   Each is behind a prop that is off by default, and each is now a separate chunk fetched when
   that prop is set — so a consumer of the time dropdown no longer pays for the analog clock.
