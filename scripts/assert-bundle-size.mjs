@@ -48,11 +48,22 @@
  *   surface   renders a two-dimensional cell grid (`role="grid"`)
  *   overlay   renders into a portal — `createPortal`, or `MenuSurface`, which
  *             is the shared surface that portals on its behalf
- *   composed  imports another component, resolved by path rather than matched
- *             by name: `../CircularLoader` from inside Loader is Loader's own
- *             file, and a chunk called `AccordionShimmer-*.js` is not evidence
- *             that Accordion depends on something else
+ *   composed  EITHER ships sub-components of its own — a named export the
+ *             package root re-exports from this component's directory, with a
+ *             `<Tag>Props` type of its own, which is the same derivation
+ *             `build-subcomponent-schemas.mjs` uses — OR imports another
+ *             component, resolved by path rather than matched by name:
+ *             `../CircularLoader` from inside Loader is Loader's own file, and
+ *             a chunk called `AccordionShimmer-*.js` is not evidence that
+ *             Accordion depends on something else
  *   control   none of the above
+ *
+ * The positive half was added because "else control" is a default, not a
+ * classification. Accordion portals nothing and imports no sibling, so it fell
+ * to control by elimination and was measured against a Button's ceiling while
+ * shipping four sub-components and 27 props. A component that ships its own
+ * composition is composed on any reading of the ladder; that it also has to be
+ * caught by an import was an artefact of there being only one test.
  *
  * ── Ceilings ────────────────────────────────────────────────────────────────
  *
@@ -81,7 +92,7 @@ const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
  * DOWN only. Individual entries can each stay green while the aggregate drifts,
  * and nothing would have noticed.
  */
-const LIBRARY_TOTAL_KB = 151.11;
+const LIBRARY_TOTAL_KB = 150.76;
 
 /**
  * Breaches that are recorded rather than fixed, each with the reason and the
@@ -96,7 +107,7 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.30,
+      kb: 16.76,
       why: "99 public props: pinning, grouping, infinite scroll, CSV export, " +
         "column resize, row reorder, inline edit. It genuinely does more than " +
         "a surface. The only route under 12 is splitting the optional halves " +
@@ -107,7 +118,7 @@ const DECLARED_BREACHES = new Map([
   [
     "InternationalPhoneInput",
     {
-      kb: 10.61,
+      kb: 10.65,
       why: "4.17 KB of it is DEFAULT_COUNTRIES, read on mount to resolve the " +
         "selected country's flag and dial code. Deferring it is a blank " +
         "trigger on first paint. Measured: deferring PHONE_FORMATTING_PATTERNS " +
@@ -117,28 +128,28 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.42,
-      why: "Three selection modes, presets, markers, week numbers and a " +
-        "month/year listbox beside the grid. 0.42 over, and shrinking — it " +
-        "lost 0.41 to the composition phase.",
-    },
-  ],
-  [
-    "TimePicker",
-    {
-      kb: 10.35,
-      why: "A listbox variant and a radial clock face in one component, each " +
-        "with its own keyboard model. 0.35 over, and smaller than it was.",
+      kb: 12.03,
+      why: "12.59 before its optional halves moved into chunks of their own: " +
+        "the presets panel with the default-preset helper it now resolves, and " +
+        "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
+        "comment text — this gate measures the unminified dist, which a " +
+        "consumer's bundler strips. Week numbers were the third candidate and " +
+        "are not one: the rendering is fourteen lines interleaved in the day " +
+        "grid, and a column that arrives with a chunk would reflow the grid " +
+        "after paint.",
     },
   ],
   [
     "Accordion",
     {
-      kb: 9.12,
-      why: "Its own chunk is 0.55 KB; the rest is AccordionContent and " +
-        "useAccordionStateManager in sibling chunks nothing else reaches. The " +
-        "artifact rule read those chunk names as other components and called " +
-        "it composed, which gave it an 8 KB ceiling it had not earned.",
+      kb: 9.16,
+      why: "Composed, and still 1.16 over. Its own chunk is 0.52 KB; the rest " +
+        "is AccordionContent and useAccordionStateManager in sibling chunks " +
+        "nothing else reaches. It shipped four sub-components against a " +
+        "Button's 6 KB ceiling until the shape rule gained a positive test for " +
+        "composed — the 8 KB it is measured against now is the one it earns, " +
+        "and it is over that too. Nothing here is optional behind a prop: an " +
+        "item, a trigger and a content panel are what an accordion is.",
     },
   ],
 ]);
@@ -208,19 +219,48 @@ const componentOwning = (absolute) => {
  * Separated from the file walk so the self-check can put synthetic sources
  * through the same function the gate uses.
  */
-const shapeOf = (text, deps) =>
+const shapeOf = (text, deps, ships = []) =>
   /role=["']grid["']|role:\s*["']grid["']/.test(text)
     ? "surface"
     : /\bcreatePortal\b|\bMenuSurface\b/.test(text)
       ? "overlay"
-      : deps.size
+      : deps.size || ships.length
         ? "composed"
         : "control";
+
+/**
+ * Sub-components a component ships: a value export the package root re-exports
+ * from this component's directory, which also declares a `<Tag>Props` type.
+ *
+ * Both halves matter. The root export is what makes it shipped rather than an
+ * internal file — `TabButton` is exported from TabPanel's own index and not
+ * from the package, so a consumer cannot compose with it. The props type is
+ * what makes it a component rather than an icon: every component's index
+ * exports `ChevronDownIcon` and friends, and none of them is composition.
+ * This is the derivation `build-subcomponent-schemas.mjs` already uses to
+ * decide what to write a schema for.
+ */
+const shipsSubComponents = (name, ownSource) => {
+  const rootExports = readFileSync(join(SRC_COMPONENTS, "..", "index.ts"), "utf8");
+  const tags = new Set();
+  for (const m of rootExports.matchAll(
+    /export\s*(type\s*)?\{([^}]*)\}\s*from\s*["']\.\/components\/([^/"']+)/g,
+  )) {
+    if (m[1] || m[3] !== name) continue;
+    for (const part of m[2].split(",")) {
+      const tag = part.trim().replace(/^type\s+/, "").split(/\s+as\s+/).pop()?.trim();
+      if (!tag || tag === name) continue;
+      if (!/^[A-Z][A-Za-z0-9]*$/.test(tag) || /^[A-Z0-9_]+$/.test(tag)) continue;
+      if (new RegExp(`(interface|type)\\s+${tag}Props\\b`).test(ownSource)) tags.add(tag);
+    }
+  }
+  return [...tags];
+};
 
 /** A component's shape, read from `src/components/<name>`. */
 const shapeFromSource = (name) => {
   const files = sourceFilesOf(name);
-  if (files.length === 0) return { shape: "control", deps: [] };
+  if (files.length === 0) return { shape: "control", deps: [], ships: [] };
   let text = "";
   const deps = new Set();
   for (const file of files) {
@@ -232,7 +272,8 @@ const shapeFromSource = (name) => {
       if (owner && owner !== name) deps.add(owner);
     }
   }
-  return { shape: shapeOf(text, deps), deps: [...deps] };
+  const ships = shipsSubComponents(name, text);
+  return { shape: shapeOf(text, deps, ships), deps: [...deps], ships };
 };
 
 const measureAll = () => {
@@ -453,6 +494,18 @@ const shapeSelfCheck = () => {
     fail("a grid is not read as a surface");
   if (shapeOf('<div />', new Set(["Tooltip"])) !== "composed")
     fail("a component importing another is not read as composed");
+  if (shapeOf('<div />', none, ["AccordionItem"]) !== "composed")
+    fail("a component shipping a sub-component is not read as composed");
+  if (shapeOf('<div />', none, []) !== "control")
+    fail("a component shipping nothing and importing nothing is not read as control");
+  // Against the real tree, both directions: Accordion ships four sub-components
+  // and imports no sibling — it is the component the positive test was added
+  // for — and Checkbox ships none and must stay a control.
+  const accordion = shapeFromSource("Accordion");
+  if (accordion.shape !== "composed" || accordion.ships.length === 0)
+    fail(`Accordion reads as ${accordion.shape}; it ships ${accordion.ships.length} sub-component(s)`);
+  if (shapeFromSource("Checkbox").shape !== "control")
+    fail("Checkbox ships no sub-component and must still read as a control");
 
   // The regression itself, against the real tree: Dropdown portals through
   // MenuSurface, so its own built chunk contains no `createPortal` at all. If
@@ -464,7 +517,10 @@ const shapeSelfCheck = () => {
   if (existsSync(ownChunk) && /createPortal/.test(readFileSync(ownChunk, "utf8")))
     console.warn("  note: Dropdown's entry now contains createPortal directly — the check above is weaker than it was");
 
-  console.log("✓ self-check: shape survives the call moving chunks, and is lost when the call goes");
+  console.log(
+    "✓ self-check: shape survives the call moving chunks, is lost when the call goes, " +
+      "and composed has a positive test",
+  );
 };
 
 const selfCheck = () => {

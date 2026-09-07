@@ -456,19 +456,49 @@ deleting the entry is how it goes back to blocking.
 Everything in this section is deliberate and recorded. None of it is a surprise; all of it
 is a thing a consumer could hit.
 
-### 3.1 Five declared bundle breaches
+### 3.1 Four declared bundle breaches
 
-Over their class ceiling, each with a reason and a per-entry ratchet that stops it growing:
+**Was five.** One closed on 2026-09-07, one came within 0.03 KB, and the shape rule that
+measured Accordion against a Button's ceiling was fixed rather than its number moved.
 
-| Component | Gzipped | Ceiling | Class |
-| --- | --- | --- | --- |
-| Table | 16.28 KB | 12 KB | surface |
-| DatePicker | 12.42 KB | 12 KB | surface |
-| InternationalPhoneInput | 10.61 KB | 8 KB | composed |
-| TimePicker | 10.33 KB | 10 KB | overlay |
-| Accordion | 9.12 KB | 6 KB | control |
+| Component | Gzipped | Ceiling | Class | |
+| --- | --- | --- | --- | --- |
+| Table | 16.76 KB | 12 KB | surface | declared |
+| InternationalPhoneInput | 10.65 KB | 8 KB | composed | declared |
+| Accordion | 9.16 KB | 8 KB | composed | declared — was measured against 6 |
+| DatePicker | 12.03 KB | 12 KB | surface | declared, **from 12.59** — 0.03 over |
+| TimePicker | **7.93 KB** | 10 KB | overlay | **clears**, from 10.50 |
 
-Library total 151.01 KB across 78 chunks, against a recorded ceiling of 151.11 KB.
+`variant="clock"` is half of TimePicker and the default is the dropdown list; `showPresets`
+and the marker tooltip are off by default in DatePicker. All three are behind a dynamic import
+now — `useLazyComponent`, the same shape as CountryFlag's packaged flags — so they leave the
+eager static closure, which is what the gate measures. Null on a server and on the first
+client render, so the two trees agree: the consumer matrix reports hydration clean and the
+server tree preserved on all three SSR targets.
+
+**DatePicker misses by 0.03 KB, and the last 0.18 KB of it is comment text.** The gate
+measures the unminified `dist`, which is what the package ships and not what a consumer's
+bundler serves; three `eslint-disable` justifications and a note on a dangling `aria-describedby`
+are the difference between 11.85 and 12.03. Deleting them to buy 30 bytes would be fitting the
+code to the number, so it is declared instead. **Week numbers were the third candidate named
+and are not one:** the rendering is fourteen lines interleaved in the day grid, and a column
+arriving with a chunk would reflow the grid after paint — which is the blank-first-paint cost
+the whole shape exists to avoid.
+
+**Accordion is composed, not control.** The shape rule tested `role="grid"` → surface,
+`createPortal`/`MenuSurface` → overlay, a cross-component import → composed, else control —
+and Accordion portals nothing and imports no sibling, so it fell to control **by elimination**
+while shipping four sub-components. `composed` has a positive test now: a component that ships
+sub-components the package root re-exports, each with its own props type, which is the
+derivation `build-subcomponent-schemas.mjs` already uses. Five components moved, all
+control → composed: **Accordion, Input, Loader, RadioButton, TextArea**. Accordion is still
+1.16 KB over the 8 KB it now earns, and that is declared with a reason rather than
+accommodated.
+
+Library total **150.76 KB** across 80 chunks, at its recorded ceiling. The three surviving
+breach records were re-derived: Table 16.30 → 16.76 and InternationalPhoneInput 10.61 → 10.65
+**grew**, both from ADR 007's class strings, which the bundle gate was not run against at the
+time.
 
 ### 3.2 Six remaining `dark:` variants
 

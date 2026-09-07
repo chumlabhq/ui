@@ -275,7 +275,7 @@ describe("doc truth contract", () => {
         stdio: "pipe",
       }),
     ).not.toThrow();
-  }), SHELL_OUT_TIMEOUT;
+  }, SHELL_OUT_TIMEOUT);
 
   it("keeps DEMO-COVERAGE.md in step with the source", () => {
     /**
@@ -293,7 +293,7 @@ describe("doc truth contract", () => {
     expect(() =>
       execFileSync("node", ["scripts/audit-demo-coverage.mjs", "--check"], { stdio: "pipe" }),
     ).not.toThrow();
-  }), SHELL_OUT_TIMEOUT;
+  }, SHELL_OUT_TIMEOUT);
 
   /**
    * The other half of the same question: not "is the count written down" but
@@ -309,7 +309,7 @@ describe("doc truth contract", () => {
     expect(() =>
       execFileSync("node", ["scripts/audit-fixture-gap.mjs", "--check"], { stdio: "pipe" }),
     ).not.toThrow();
-  }), SHELL_OUT_TIMEOUT;
+  }, SHELL_OUT_TIMEOUT);
 
   it("documents every sub-component the package exports", () => {
     const rootExports = readFileSync("src/index.ts", "utf8");

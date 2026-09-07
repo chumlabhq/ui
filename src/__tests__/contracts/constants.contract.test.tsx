@@ -61,7 +61,11 @@ const BASELINE: Record<string, number> = {
   "Checkbox/Checkbox.tsx": 1,
   "CountryFlag/components/CountryFlagGroup.tsx": 1,
   "CountryFlag/components/CountryFlagShimmer.tsx": 1,
-  "DatePicker/DatePicker.tsx": 21,
+  // 21 before the optional halves moved into their own chunks: six of those
+  // literals went with the marker tooltip, which is the same code in a new
+  // file rather than any of it being cleaned up.
+  "DatePicker/DatePicker.tsx": 15,
+  "DatePicker/MarkerTooltip.tsx": 6,
   "Drawer/Drawer.tsx": 8,
   "Input/Input.tsx": 1,
   "InternationalPhoneInput/InternationalPhoneInput.tsx": 0,

@@ -28,6 +28,14 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- **`TimePicker`'s clock face, `DatePicker`'s presets and its marker tooltip load on demand.**
+  Each is behind a prop that is off by default, and each is now a separate chunk fetched when
+  that prop is set — so a consumer of the time dropdown no longer pays for the analog clock.
+  TimePicker's exclusive cost falls from 10.50 KB to 7.93 and DatePicker's from 12.59 to
+  12.03 — TimePicker is under its ceiling, DatePicker is 0.03 KB over it. The subtree is absent from the server HTML and
+  from the first client render, exactly like a portal, and arrives on a later render; if you
+  render `variant="clock"` or `showPresets` you may see one frame without it.
+
 - **`dark:` variants are down to six**, from 361 before the retirement began and 76 at the
   start of this pass. Interface text moved onto two new tokens (`--cl-text-chrome`,
   `--cl-text-chrome-quiet`), the accent tints onto `--cl-accent-bg`, input surfaces onto

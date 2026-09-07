@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { LAYERS, useLayer } from "../../utils/layers.js";
+import { useLayer } from "../../utils/layers.js";
 import { cycleTabWithin } from "../../utils/focusUtils.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -46,11 +46,13 @@ import {
   getYear,
   getMonth,
   isSameDay,
-  getDefaultPresets,
 } from "./utils.js";
 import { cn } from "../../utils/scopedCn.js";
 import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 import { useHydrated } from "../../utils/useHydrated.js";
+import { useLazyComponent } from "../../utils/useLazyComponent.js";
+import type { PresetsPanelProps } from "./PresetsPanel.js";
+import type { MarkerTooltipProps } from "./MarkerTooltip.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -291,55 +293,21 @@ function useMarkerTooltip(
   // Drawer got here.
   const tooltipTarget = useHydrated() ? (portalContainer ?? document.body) : null;
 
+  // The subtree lives in its own chunk; the state and the handlers above do
+  // not. See `MarkerTooltip`.
+  const Tooltip = useLazyComponent<MarkerTooltipProps>(showTooltip, loadMarkerTooltip);
+
   const tooltipPortal =
-    isVisible && position && marker && tooltipTarget
+    isVisible && position && marker && tooltipTarget && Tooltip
       ? createPortal(
-          <div
-            role="tooltip"
-            id={tooltipId}
-            className="bg-cl-bg-elevated text-cl-text border border-cl-border"
-            style={{
-              position: "fixed",
-              zIndex: LAYERS.tooltip,
-              top: position.top,
-              left: position.left,
-              // When anchored to the cell's top edge (placement="top"),
-              // pull the tooltip up by its full height so the gap is
-              // exactly `gap` regardless of the tooltip's content height.
-              // For bottom placement, the tooltip sits below — only X is
-              // centered.
-              transform:
-                placement === "top"
-                  ? "translate(-50%, -100%)"
-                  : "translateX(-50%)",
-              maxWidth: 240,
-              padding: "8px 12px",
-              borderRadius: 8,
-              fontSize: 12,
-              lineHeight: 1.5,
-              // The shadow token, not a fixed black: `--cl-shadow-md` is
-              // rgba(0,0,0,0.35) in dark and rgba(15,18,24,0.06) in light, and
-              // this was the dark value painted in both.
-              boxShadow: "var(--cl-shadow-md)",
-              pointerEvents: "none",
-            }}
-          >
-            <div className="flex items-center gap-1.5">
-              {marker.color && (
-                <span
-                  className="w-2 h-2 rounded-full shrink-0"
-                  style={{ backgroundColor: marker.color }}
-                />
-              )}
-              <span className="font-semibold">{marker.label}</span>
-            </div>
-            {marker.description && (
-              <div className="text-cl-text-secondary mt-0.5">{marker.description}</div>
-            )}
-            {marker.type && (
-              <div className="text-cl-text-tertiary mt-1 capitalize text-[11px]">{marker.type}</div>
-            )}
-          </div>,
+          // Module-cached identity — see `useLazyComponent`.
+          // eslint-disable-next-line react-hooks/static-components
+          <Tooltip
+            marker={marker}
+            tooltipId={tooltipId}
+            position={position}
+            placement={placement}
+          />,
           tooltipTarget,
         )
       : null;
@@ -348,7 +316,10 @@ function useMarkerTooltip(
     tooltipPortal,
     handleMouseEnter,
     handleMouseLeave,
-    describedBy: isVisible ? tooltipId : undefined,
+    // Gated on the tooltip existing, not merely on it being wanted: the
+    // subtree is in a chunk now, and a reference to an element that has not
+    // arrived is a dangling `aria-describedby`.
+    describedBy: isVisible && Tooltip ? tooltipId : undefined,
   };
 }
 
@@ -471,91 +442,13 @@ const DayCell = memo(function DayCell({
 
 DayCell.displayName = "DayCell";
 
-// ─── PresetsPanel ────────────────────────────────────────────────────────────
 
-interface PresetsPanelProps {
-  presets: DatePreset[];
-  mode: "single" | "range" | "multiple";
-  value?: Date | null;
-  rangeValue?: DateRange | null;
-  multipleValue?: Date[] | null;
-  presetsClassName: string;
-  presetButtonClassName: string;
-  onPresetClick: (preset: DatePreset) => void;
-}
+/** See `useLazyComponent`: the loader has to be a module-scope constant. */
+const loadPresets = () =>
+  import("./PresetsPanel.js").then((module) => module.PresetsPanel);
 
-const PresetsPanel = memo(function PresetsPanel({
-  presets,
-  mode,
-  value,
-  rangeValue,
-  multipleValue,
-  presetsClassName,
-  presetButtonClassName,
-  onPresetClick,
-}: PresetsPanelProps) {
-  const isPresetActive = useCallback(
-    (preset: DatePreset) => {
-      const presetValue = preset.getValue();
-
-      if (mode === "single" && value) {
-        return presetValue instanceof Date && isSameDay(presetValue, value);
-      }
-
-      if (mode === "range" && rangeValue?.start && rangeValue?.end) {
-        if (
-          presetValue &&
-          typeof presetValue === "object" &&
-          "start" in presetValue
-        ) {
-          return (
-            presetValue.start &&
-            presetValue.end &&
-            isSameDay(presetValue.start, rangeValue.start) &&
-            isSameDay(presetValue.end, rangeValue.end)
-          );
-        }
-      }
-
-      if (mode === "multiple" && multipleValue?.length) {
-        if (Array.isArray(presetValue)) {
-          if (presetValue.length !== multipleValue.length) return false;
-          return presetValue.every((d) =>
-            multipleValue.some((v) => isSameDay(d, v)),
-          );
-        }
-      }
-
-      return false;
-    },
-    [mode, value, rangeValue, multipleValue],
-  );
-
-  return (
-    <div className={presetsClassName} role="group" aria-label="Date presets" style={{ width: 0, minWidth: "100%" }}>
-      {presets.map((preset) => {
-        const isActive = isPresetActive(preset);
-        return (
-          <button
-            key={preset.label}
-            type="button"
-            className={cn(
-              presetButtonClassName,
-            )}
-            data-active={isActive || undefined}
-            // ADR 002 R4 / Amendment E: data-active converges on data-state.
-            data-state={isActive ? "active" : undefined}
-            onClick={() => onPresetClick(preset)}
-          >
-            {preset.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-});
-
-PresetsPanel.displayName = "PresetsPanel";
+const loadMarkerTooltip = () =>
+  import("./MarkerTooltip.js").then((module) => module.MarkerTooltip);
 
 // ─── DatePicker ──────────────────────────────────────────────────────────────
 
@@ -977,9 +870,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     // ─── Derived ───────────────────────────────────────────────────────
     const weekdays = getWeekdayHeaders(weekStartsOn, "EEE", locale);
-    const effectivePresets = presets || getDefaultPresets(mode);
     const fullWidthClass = fullWidth ? "w-full" : "";
     const showFooter = showTodayButton;
+
+    // Fetched at mount when `showPresets` is set, null until it resolves. The
+    // panel is inside a portal that only opens on interaction, so the chunk is
+    // always there before anyone can see the space it fills.
+    const PresetsPanel = useLazyComponent<PresetsPanelProps>(showPresets, loadPresets);
 
     // No hardcoded width — calendar auto-sizes to its grid content
 
@@ -1094,9 +991,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               aria-label={`${mode === "single" ? "Date" : mode === "range" ? "Date range" : "Multiple dates"} picker`}
               className={mergedClasses.content}
             >
-              {showPresets && (
+              {showPresets && PresetsPanel && (
+                // eslint-disable-next-line react-hooks/static-components
                 <PresetsPanel
-                  presets={effectivePresets}
+                  presets={presets}
                   mode={mode}
                   value={singleValue}
                   rangeValue={rangeValue}

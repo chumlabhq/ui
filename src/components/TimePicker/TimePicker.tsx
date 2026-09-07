@@ -20,7 +20,7 @@ import { useControllableState } from "../../utils/useControllableState.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons.js";
-import { ClockFace } from "./ClockFace.js";
+import { useClockFace } from "./useClockFace.js";
 import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep } from "./utils.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 
@@ -213,6 +213,10 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       row: classesProp?.row ?? baseClasses.row,
       periodButton: classesProp?.periodButton ?? baseClasses.periodButton,
     }), [classesProp, baseClasses]);
+
+    // Fetched at mount when the clock variant is asked for, and null until it
+    // resolves — see `useClockFace`.
+    const ClockFace = useClockFace(variant === "clock");
 
     // Clock classes sub-object
     const clockClasses = useMemo<Required<ClockFaceClasses>>(() => ({
@@ -583,7 +587,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
               ))}
             </div>
           </>
-        ) : (
+        ) : ClockFace ? (
+          // Module-cached identity — see `useLazyComponent`.
+          // eslint-disable-next-line react-hooks/static-components
           <ClockFace
             value={clockValue}
             format={format}
@@ -599,7 +605,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             cancelText={cancelText}
             okText={okText}
           />
-        )}
+        ) : null}
       </MenuSurface>
     ) : null;
 

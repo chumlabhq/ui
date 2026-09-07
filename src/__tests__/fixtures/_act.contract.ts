@@ -39,4 +39,9 @@ export const contractActTools: ActTools = {
 /** Runs a fixture's act, if it has one. The single call site for the tier. */
 export const applyAct = async (fixture: Pick<Fixture, "act">, container: HTMLElement) => {
   if (fixture.act) await fixture.act(container, contractActTools);
+  // Settled whether or not there was an act. A subtree behind a dynamic import
+  // — TimePicker's clock face, DatePicker's presets and marker tooltip —
+  // resolves on a microtask, and a contract that read the DOM synchronously
+  // would see the component without the half the fixture asked for.
+  await contractActTools.settle();
 };
