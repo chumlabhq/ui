@@ -96,9 +96,9 @@ function BlogCard({ post }: { post: (typeof BLOG_POSTS)[0] }) {
           />
           {post.category}
         </span>
-        <h3 className="mt-3 font-sans text-[19px] font-medium leading-[1.3] text-fg group-hover:text-accent transition-colors">
+        <h2 className="mt-3 font-sans text-[19px] font-medium leading-[1.3] text-fg group-hover:text-accent transition-colors">
           {post.title}
-        </h3>
+        </h2>
         <p className="mt-2 text-[14px] text-fg-secondary leading-[1.55] line-clamp-2">
           {post.excerpt}
         </p>

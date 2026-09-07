@@ -195,7 +195,10 @@ export const PropRow: React.FC<PropRowProps> = ({
   <tr className="rule rule-t">
     <td
       className="px-4 py-2 font-mono text-[13px] break-words align-top"
-      style={{ color: "var(--accent)" }}
+      // ADR 007's step: accent-as-text deepens one stop rather than sitting at
+      // the resting accent. 8.91:1 dark and 6.70:1 light on the card, against
+      // 7.02 and 5.17 for `--accent` itself at 13px.
+      style={{ color: "var(--cl-accent-hover)" }}
     >
       {name}
     </td>

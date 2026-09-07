@@ -270,7 +270,7 @@ const Demo = () => {
                         [
                           "flex items-center gap-2 px-3 py-2 rounded-md font-sans text-[14px] leading-[1.4] transition-colors",
                           isActive
-                            ? "bg-accent text-white font-medium"
+                            ? "bg-accent text-cl-on-accent font-medium"
                             : "text-fg-secondary hover:text-fg hover:bg-fg/5",
                         ].join(" ")
                       }

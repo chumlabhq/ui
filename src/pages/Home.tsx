@@ -130,138 +130,141 @@ const Home = () => {
     <div className="min-h-screen bg-bg-base text-fg">
       <SiteHeader />
 
-      <section className="hero-section">
-        <div
-          className="flex flex-col items-center w-full text-center gap-6 sm:gap-8"
-          style={{ maxWidth: 1100, padding: "0 24px" }}
-        >
-          {/* Announcement pill — chip-inside-a-pill. On screens below
-              640px the message text collapses, leaving just the chip + arrow
-              so the pill never wraps. */}
-
-          {/* Headline — mixed weights + opacity hierarchy. Mobile allows
-              natural wrapping (2-3 lines is fine); on `sm:` and up the lines
-              stay locked via `sm:whitespace-nowrap` so the intended 2-line
-              composition holds. */}
-          <h1
-            className="font-sans text-center mx-auto text-fg"
-            style={{
-              fontSize: "clamp(40px, 9vw, 104px)",
-              lineHeight: 0.98,
-              letterSpacing: "-0.045em",
-              maxWidth: 1100,
-            }}
+      <main id="main">
+        <section className="hero-section">
+          <div
+            className="flex flex-col items-center w-full text-center gap-6 sm:gap-8"
+            style={{ maxWidth: 1100, padding: "0 24px" }}
           >
-            <span className="hero-h1-line1 block sm:whitespace-nowrap">
-              <span className="font-semibold text-fg">Components</span>{" "}
-              <span className="font-light text-fg/55">that ship</span>
-            </span>
-            <span className="hero-h1-line2 block sm:whitespace-nowrap">
-              <span className="font-light text-fg/55">at the</span>{" "}
-              <span className="font-semibold text-fg">speed</span>{" "}
-              <span className="font-light text-fg/55">of</span>{" "}
-              <em className="font-serif italic font-normal text-accent text-[1.02em]">
-                thought.
-              </em>
-            </span>
-          </h1>
+            {/* Announcement pill — chip-inside-a-pill. On screens below
+                640px the message text collapses, leaving just the chip + arrow
+                so the pill never wraps. */}
 
-          <p
-            className="hero-descriptor mx-auto"
-            style={{
-              fontSize: 18,
-              fontWeight: 400,
-              lineHeight: 1.5,
-              color: "var(--text-secondary)",
-              maxWidth: 580,
-            }}
-          >
-            A component library for <TypedRotator /> who care about craft.
-            Customisable, accessible, and fast.
-          </p>
-
-          {/* CTAs: primary button + inline npm pill. Stack on mobile and
-              switch to inline at sm+. The Button component owns the
-              w-full sm:w-auto rule — the wrapper just needs to allow
-              stacking. The `max-w-[320px]` keeps each button capped on
-              narrow screens so they don't span the full hero width. */}
-          <div className="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0">
-            <Button
-              variant="primary"
-              size="lg"
-              as="a"
-              href="/accordion"
-              className="group"
-              data-track-event="cta_click"
-              data-track-location="home_hero"
-              data-track-target="browse_components"
-              endIcon={
-                <span
-                  aria-hidden
-                  className="transition-transform duration-150 group-hover:translate-x-1"
-                >
-                  →
-                </span>
-              }
+            {/* Headline — mixed weights + opacity hierarchy. Mobile allows
+                natural wrapping (2-3 lines is fine); on `sm:` and up the lines
+                stay locked via `sm:whitespace-nowrap` so the intended 2-line
+                composition holds. */}
+            <h1
+              className="font-sans text-center mx-auto text-fg"
+              style={{
+                fontSize: "clamp(40px, 9vw, 104px)",
+                lineHeight: 0.98,
+                letterSpacing: "-0.045em",
+                maxWidth: 1100,
+              }}
             >
-              Browse components
-            </Button>
+              <span className="hero-h1-line1 block sm:whitespace-nowrap">
+                <span className="font-semibold text-fg">Components</span>{" "}
+                <span className="font-light text-fg/55">that ship</span>
+              </span>
+              <span className="hero-h1-line2 block sm:whitespace-nowrap">
+                <span className="font-light text-fg/55">at the</span>{" "}
+                <span className="font-semibold text-fg">speed</span>{" "}
+                <span className="font-light text-fg/55">of</span>{" "}
+                <em className="font-serif italic font-normal text-accent text-[1.02em]">
+                  thought.
+                </em>
+              </span>
+            </h1>
 
-            <Button
-              variant="secondary"
-              size="lg"
-              type="button"
-              onClick={copyInstall}
-              aria-label="Copy npm install command"
-              className="font-mono"
-              data-track-event="cta_click"
-              data-track-location="home_hero"
-              data-track-target="copy_npm_install"
+            <p
+              className="hero-descriptor mx-auto"
+              style={{
+                fontSize: 18,
+                fontWeight: 400,
+                lineHeight: 1.5,
+                color: "var(--text-secondary)",
+                maxWidth: 580,
+              }}
             >
-              {copied ? (
-                <span className="inline-flex items-center gap-2 text-[13px]">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+              A component library for <TypedRotator /> who care about craft.
+              Customisable, accessible, and fast.
+            </p>
+
+            {/* CTAs: primary button + inline npm pill. Stack on mobile and
+                switch to inline at sm+. The Button component owns the
+                w-full sm:w-auto rule — the wrapper just needs to allow
+                stacking. The `max-w-[320px]` keeps each button capped on
+                narrow screens so they don't span the full hero width. */}
+            <div className="hero-ctas flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-[320px] sm:max-w-none mx-auto sm:mx-0">
+              <Button
+                variant="primary"
+                size="lg"
+                as="a"
+                href="/accordion"
+                className="group"
+                data-track-event="cta_click"
+                data-track-location="home_hero"
+                data-track-target="browse_components"
+                endIcon={
+                  <span
                     aria-hidden
+                    className="transition-transform duration-150 group-hover:translate-x-1"
                   >
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                  <span style={{ color: "var(--accent)" }}>Copied</span>
-                </span>
-              ) : (
-                <>
-                  <span className="inline-flex items-baseline gap-1.5 text-[13px]">
-                    <span style={{ color: "var(--text-tertiary)" }}>$</span>
-                    <span style={{ color: "var(--text-primary)" }}>npm i</span>
-                    <span style={{ color: "var(--accent)" }}>@chumlab/ui</span>
+                    →
                   </span>
-                  <CopyIcon />
-                </>
-              )}
-            </Button>
+                }
+              >
+                Browse components
+              </Button>
+
+              <Button
+                variant="secondary"
+                size="lg"
+                type="button"
+                onClick={copyInstall}
+                aria-label="Copy npm install command"
+                className="font-mono"
+                data-track-event="cta_click"
+                data-track-location="home_hero"
+                data-track-target="copy_npm_install"
+              >
+                {copied ? (
+                  <span className="inline-flex items-center gap-2 text-[13px]">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden
+                    >
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <span style={{ color: "var(--accent)" }}>Copied</span>
+                  </span>
+                ) : (
+                  <>
+                    <span className="inline-flex items-baseline gap-1.5 text-[13px]">
+                      <span style={{ color: "var(--text-tertiary)" }}>$</span>
+                      <span style={{ color: "var(--text-primary)" }}>npm i</span>
+                      <span style={{ color: "var(--accent)" }}>@chumlab/ui</span>
+                    </span>
+                    <CopyIcon />
+                  </>
+                )}
+              </Button>
+            </div>
+
           </div>
+        </section>
 
-        </div>
-      </section>
+        <WhyChumlabSection />
 
-      <WhyChumlabSection />
+        <GetStartedSection />
 
-      <GetStartedSection />
+        <CatalogSection />
 
-      <CatalogSection />
+        <ChumlabComparisonSection />
 
-      <ChumlabComparisonSection />
+        <FaqSection />
 
-      <FaqSection />
+        <BlogSection featured={featured} stackedPosts={stackedPosts} />
 
-      <BlogSection featured={featured} stackedPosts={stackedPosts} />
+      </main>
 
       <SiteFooter />
     </div>
@@ -514,8 +517,6 @@ const FaqItem = forwardRef<HTMLButtonElement, FaqItemProps>(
         {/* Grid-rows trick: smooth height animation without measuring DOM. */}
         <div
           id={answerId}
-          role="region"
-          aria-labelledby={answerId + "-trigger"}
           className="grid transition-[grid-template-rows] duration-300 ease-out"
           style={{
             gridTemplateRows: isOpen ? "1fr" : "0fr",

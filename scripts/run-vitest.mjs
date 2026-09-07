@@ -27,7 +27,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * passing one in every summary vitest prints. Raise it when tests are added —
  * `node scripts/run-vitest.mjs` prints the current numbers on every run.
  */
-const SUITE_FLOOR = { files: 91, tests: 4741 };
+const SUITE_FLOOR = { files: 92, tests: 4749 };
 
 const args = process.argv.slice(2).filter((a) => a !== "--self-check");
 const selfCheck = process.argv.includes("--self-check");

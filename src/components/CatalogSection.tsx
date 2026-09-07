@@ -265,6 +265,10 @@ export function CatalogSection() {
                         transformStyle: "preserve-3d",
                         ...getCardStyle(offset),
                       }}
+                      // `inert` as well as `aria-hidden`: the peek cards
+                      // render live previews, and a hidden subtree that is
+                      // still tabbable is worse than an unhidden one.
+                      inert={offset !== 0}
                       aria-hidden={offset !== 0}
                     >
                       <PreviewCard

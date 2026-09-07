@@ -46,7 +46,10 @@ export function TypographicCover({
       {eyebrow && (
         <div
           className="absolute top-5 left-5 sm:top-7 sm:left-7 text-[10.5px] tracking-[0.14em] uppercase font-sans z-10"
-          style={{ color: fg, opacity: 0.7 }}
+          // No opacity: two of the four palettes put the accent on the page
+          // ground, where it is 4.94:1 in light at full strength — any
+          // transparency at all takes a 10.5px label under AA.
+          style={{ color: fg }}
         >
           {eyebrow}
         </div>

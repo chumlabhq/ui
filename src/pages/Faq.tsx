@@ -252,7 +252,7 @@ const Faq = () => {
               accessibility, licensing. If your question isn&rsquo;t here,{" "}
               <a
                 href="mailto:hello@chumlab.com?subject=Question%20about%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
-                className="text-fg hover:text-accent transition-colors underline-offset-4 hover:underline"
+                className="text-fg hover:text-accent transition-colors underline underline-offset-4"
                 data-track-event="email_click"
                 data-track-location="faq_intro"
                 data-track-target="hello"
@@ -373,7 +373,7 @@ const Faq = () => {
                   us at{" "}
                   <a
                     href="mailto:hello@chumlab.com?subject=Question%20about%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
-                    className="text-fg hover:text-accent transition-colors underline-offset-4 hover:underline"
+                    className="text-fg hover:text-accent transition-colors underline underline-offset-4"
                     data-track-event="email_click"
                     data-track-location="faq_empty_state"
                     data-track-target="hello"
@@ -655,9 +655,11 @@ const FaqRow = forwardRef<HTMLButtonElement, FaqRowProps>(function FaqRow(
         </span>
       </button>
 
+      {/* No `role="region"`: the trigger's aria-expanded/aria-controls is the
+          disclosure pattern, and 59 named landmarks on one page is the
+          pollution the APG warns about rather than an aid. */}
       <div
         id={answerId}
-        role="region"
         className="grid transition-[grid-template-rows] duration-300 ease-out"
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
       >
