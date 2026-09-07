@@ -118,6 +118,17 @@ override silently drops the rest.
 // Passing only `thumb: "data-[disabled]:…"` drops the base and the other 1 states.
 ```
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the thumb. A range slider has one thumb per value. |
+| `ArrowRight`, `ArrowUp` | Increases by `step`. `ArrowLeft`/`ArrowDown` decrease. Holding `Shift` uses the larger step. |
+| `PageUp`, `PageDown` | Moves by the larger step. |
+| `Home`, `End` | Jumps to the minimum or maximum. |
+
+---
+
 ## Accessibility
 
 - `role="slider"` on each thumb with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`

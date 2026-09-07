@@ -1,10 +1,13 @@
-import { useState, useCallback, useEffect } from "react";
+import {
+  useState,
+  useCallback,
+  useEffect } from "react";
 import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
 import type {
   CascadingOption,
   CascadingValue,
   CascadingDropdownClasses,
-} from "../../components/CascadingDropdown/index.js";
+  } from "../../components/CascadingDropdown/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -15,6 +18,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import {
   fetchCountries,
@@ -615,6 +621,10 @@ const CascadingDropdownDemo = () => {
         description="A nested dropdown component with support for submenus, single/multi-select modes, async loading of children, custom icons, and full keyboard navigation."
         code={`import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="CascadingDropdown" />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -1852,289 +1862,7 @@ const CascadingDropdownDemo = () => {
         </div>
       </Section>
 
-      <Section title="Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="options"
-              type="CascadingOption[]"
-              defaultVal="[]"
-              description="Array of options with optional children"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="CascadingValue"
-              description="Controlled value (object mapping parent to selected children)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="CascadingValue"
-              defaultVal="{}"
-              description="Initial value for uncontrolled mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(value, path) => void"
-              description="Called when selection changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onLoadChildren"
-              type="(parent) => Promise<CascadingOption[]>"
-              description="Async function to load children for a parent option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="id"
-              type="string"
-              defaultVal="auto-generated"
-              description="Unique identifier for the dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="name"
-              type="string"
-              description="Form field name"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="placeholder"
-              type="string"
-              defaultVal='"Select an option"'
-              description="Placeholder text when no selection"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable the dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Show error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error message to display"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label for the dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Mark as required field (adds asterisk to label)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="noResultsContent"
-              type="ReactNode"
-              defaultVal='"No options available"'
-              description="Content shown when no options available"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loadingText"
-              type="string"
-              defaultVal='"Loading..."'
-              description="Text shown while loading options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="Show loading state for main menu"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showChevron"
-              type="boolean"
-              defaultVal="true"
-              description="Show/hide chevron in trigger button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showSelectedIcon"
-              type="boolean"
-              defaultVal="true"
-              description="Show/hide selected icon in single-select mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectedIcon"
-              type="ReactNode"
-              description="Custom icon for selected items in single-select mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="clearable"
-              type="boolean"
-              defaultVal="false"
-              description="Show a clear button to deselect all values"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkboxIcon"
-              type="ReactNode"
-              description="Custom icon inside checkbox for multi-select mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ClearIcon"
-              type="ComponentType"
-              description="Custom clear icon component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Make dropdown take full width of container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuPosition"
-              type='"right" | "left"'
-              defaultVal='"right"'
-              description="Position of submenus relative to parent"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="closeOnSelect"
-              type="boolean"
-              defaultVal="true"
-              description="Close dropdown after selection"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showMenuSearch"
-              type="boolean"
-              defaultVal="false"
-              description="Show search input in the main menu"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showSubmenuSearch"
-              type="boolean"
-              defaultVal="false"
-              description="Show search input in submenus"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="menuSearchPlaceholder"
-              type="string"
-              defaultVal='"Search..."'
-              description="Placeholder for the menu search input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuSearchPlaceholder"
-              type="string"
-              defaultVal='"Search..."'
-              description="Placeholder for the submenu search input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onMenuSearch"
-              type="(query) => Promise<CascadingOption[]>"
-              description="Async search for main menu. Disables client-side filtering when provided."
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onSubmenuSearch"
-              type="(query, parent) => Promise<CascadingOption[]>"
-              description="Async search for submenus. Receives parent option and query string."
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="searchDebounceMs"
-              type="number"
-              defaultVal="300"
-              description="Debounce delay (ms) for async search callbacks"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="SearchIcon"
-              type="ComponentType<{ className?: string }>"
-              description="Custom search icon component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="CascadingDropdownClasses"
-              description="Slot class overrides (25 slots including searchInput, searchInputElement, searchIcon)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="Additional CSS class for the root element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles for the root element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="lockScroll"
-              type="boolean"
-              defaultVal="false"
-              description="Lock body scroll when dropdown is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Portal target container for the dropdown menu"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownZIndex"
-              type="number"
-              defaultVal="50"
-              description="z-index of the portal dropdown menu"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-label"
-              type="string"
-              description="Accessible label for the dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderTrigger"
-              type="(props) => ReactNode"
-              description="Custom trigger renderer — receives ARIA props, isOpen, displayValue, and placeholder"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      <ComponentDocs name="CascadingDropdown" />
 
       <Section title="CascadingOption Interface" isDarkMode={dark}>
         <div className={c.card}>

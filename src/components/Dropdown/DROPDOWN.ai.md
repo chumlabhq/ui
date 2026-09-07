@@ -314,6 +314,20 @@ const [value, setValue] = useState<string | null>(null);
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu from the trigger, and selects the focused option. |
+| `ArrowDown`, `ArrowUp` | Moves between options, opening the menu first if it is closed. |
+| `Home`, `End` | Jumps to the first or last option. |
+| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+| `Backspace`, `Delete` | Clears the selection when the trigger has focus and `clearable` is set. |
+| Printable characters | Type-ahead within `typeaheadTimeout` of the last keystroke. |
+
+---
+
 ## Accessibility
 
 - Trigger: `role="combobox"` with `aria-expanded`, `aria-haspopup="listbox"`, `aria-controls`

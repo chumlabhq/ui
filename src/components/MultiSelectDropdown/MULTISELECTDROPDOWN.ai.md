@@ -246,6 +246,18 @@ const [values, setValues] = useState<string[]>([]);
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu, and toggles the focused option without closing it. |
+| `ArrowDown`, `ArrowUp` | Moves between options. `aria-activedescendant` on the trigger follows, so focus itself never leaves it. |
+| `Home`, `End` | Jumps to the first or last option. |
+| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+
+---
+
 ## Accessibility
 
 - `role="combobox"` on trigger with `aria-expanded`, `aria-haspopup="listbox"`, `aria-controls`

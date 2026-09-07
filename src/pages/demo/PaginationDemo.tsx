@@ -1,4 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import {
+  useState,
+  useRef,
+  useEffect } from "react";
 import { Pagination } from "../../components/Pagination/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
@@ -11,6 +14,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -253,6 +259,10 @@ const PaginationDemo = () => {
         description="A flexible, accessible pagination component with optional rows-per-page selector, custom ellipsis rendering, page info display, section reordering, i18n support, and extensive class-driven styling via the classes prop."
         code={`import { Pagination } from "@chumlab/ui/pagination";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Pagination" />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -980,189 +990,7 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
-      <Section title="Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="value"
-              type="number"
-              description="Current active page (1-indexed, controlled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="number"
-              defaultVal="1"
-              description="Initial page for uncontrolled usage"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="totalPages"
-              type="number"
-              description="Total number of pages"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(page: number) => void"
-              description="Callback when page changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="siblingCount"
-              type="number"
-              defaultVal="1"
-              description="Number of sibling pages around the current page"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showRowsPerPage"
-              type="boolean"
-              defaultVal="false"
-              description="Show the rows-per-page selector"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rowsPerPage"
-              type="number"
-              description="Current rows per page value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onRowsPerPageChange"
-              type="(rows: number) => void"
-              description="Callback when rows per page changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rowOptions"
-              type="number[]"
-              defaultVal="[5, 10, 25, 50, 100]"
-              description="Available options for rows per page"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rowsPerPageLabel"
-              type="string"
-              defaultVal='"rows"'
-              description="Label shown after the rows selector"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showLabel"
-              type="string"
-              defaultVal='"Show"'
-              description="Label shown before the rows selector (i18n)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownAriaLabel"
-              type="string"
-              defaultVal='"Rows per page"'
-              description="ARIA label for the dropdown listbox (i18n)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownPosition"
-              type={'"top" | "bottom"'}
-              defaultVal='"top"'
-              description="Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownZIndex"
-              type="number"
-              defaultVal="50"
-              description="z-index of the rows-per-page dropdown portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="prevIcon"
-              type="ComponentType | ReactNode"
-              description="Custom icon for the previous button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="nextIcon"
-              type="ComponentType | ReactNode"
-              description="Custom icon for the next button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownIcon"
-              type="ComponentType | ReactNode"
-              description="Custom icon for the dropdown button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderEllipsis"
-              type="(props) => ReactNode"
-              description="Custom render for ellipsis. Receives { position, onValueChange }"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderPageInfo"
-              type="(props) => ReactNode"
-              description="Custom render for page info. Receives { value, totalPages, rowsPerPage }"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="sectionOrder"
-              type="SectionName[]"
-              defaultVal='["selector","pageInfo","nav"]'
-              description="Order of rendered sections"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="PaginationClasses"
-              description="Slot class overrides (14 slots)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Container element for the dropdown portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="prevAriaLabel"
-              type="string"
-              defaultVal='"Previous page"'
-              description="Accessible label for the previous button (i18n)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="nextAriaLabel"
-              type="string"
-              defaultVal='"Next page"'
-              description="Accessible label for the next button (i18n)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="paginationAriaLabel"
-              type="string"
-              defaultVal='"Pagination"'
-              description="Accessible label for the nav landmark (i18n)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="pageAriaLabel"
-              type="(page: number) => string"
-              description="Function to generate accessible label for page buttons (i18n)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      <ComponentDocs name="Pagination" />
 
       <Section title="PaginationClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

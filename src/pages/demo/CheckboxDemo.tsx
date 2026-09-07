@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import { Checkbox } from "../../components/Checkbox/index.js";
 import {
   DocsHero,
@@ -9,6 +11,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
@@ -105,6 +110,10 @@ const CheckboxDemo = () => {
         description="A customizable checkbox component with support for labels, descriptions, custom icons, indeterminate state, sizes, shapes, error handling, and fully accessible via native input."
         code={`import { Checkbox } from "@chumlab/ui/checkbox";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Checkbox" />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -583,140 +592,8 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props Tables ───────────────────────────────────────────────── */}
-      <Section title="Checkbox Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label text next to checkbox"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="ReactNode"
-              description="Helper text below label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checked"
-              type="boolean"
-              description="Controlled checked state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultChecked"
-              type="boolean"
-              defaultVal="false"
-              description="Initial checked state (uncontrolled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="indeterminate"
-              type="boolean"
-              defaultVal="false"
-              description="Indeterminate visual state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(checked: boolean) => void"
-              description="Callback when checked changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable the checkbox"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Mark as required (shows * and aria-required)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Error state (sets aria-invalid)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error text (role=alert, linked via aria-describedby)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type='"xs"|"sm"|"md"|"lg"|"xl"|number'
-              description="Checkbox size"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shape"
-              type='"square"|"rounded"|"circle"'
-              description="Checkbox shape"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkedIcon"
-              type="ReactNode"
-              description="Custom checked icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="uncheckedIcon"
-              type="ReactNode"
-              description="Custom unchecked icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="indeterminateIcon"
-              type="ReactNode"
-              description="Custom indeterminate icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="CheckboxClasses"
-              description="Slot class overrides (10 slots)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reduceMotion"
-              type='boolean|"auto"'
-              defaultVal='"auto"'
-              description="Disable transition animations"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onFocus"
-              type="(e) => void"
-              description="Focus event callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onBlur"
-              type="(e) => void"
-              description="Blur event callback"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Checkbox" />
 
       <Section title="CheckboxClasses" isDarkMode={dark}>
         <div className={c.card}>

@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { RadioGroup, RadioButton } from "../../components/RadioButton/index.js";
+import {
+  useState } from "react";
+import { RadioGroup,
+  RadioButton } from "../../components/RadioButton/index.js";
 import {
   DocsHero,
   Section,
@@ -9,6 +11,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
@@ -144,6 +149,10 @@ const RadioButtonDemo = () => {
         description="A customizable radio button group component with support for labels, descriptions, custom icons, sizes, color variants, orientations, error and success states, loading, and fully accessible via native radio inputs."
         code={`import { RadioGroup, RadioButton } from "@chumlab/ui/radio-button";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="RadioButton" />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -715,48 +724,10 @@ const RadioButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── RadioGroup Props Table ──────────────────────────────────────── */}
-      <Section title="RadioGroup Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="value" type="string" description="Currently selected value (controlled)" isDarkMode={dark} />
-            <PropRow name="defaultValue" type="string" defaultVal='""' description="Initial selected value (uncontrolled)" isDarkMode={dark} />
-            <PropRow name="onValueChange" type="(value: string) => void" description="Fires when the selected value changes" isDarkMode={dark} />
-            <PropRow name="name" type="string" description="Field name for form submission" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Text label for the group" isDarkMode={dark} />
-            <PropRow name="description" type="ReactNode" description="Helper text for the group" isDarkMode={dark} />
-            <PropRow name="required" type="boolean" defaultVal="false" description="Required field indicator (shows * and aria-required)" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disables all radio buttons in the group" isDarkMode={dark} />
-            <PropRow name="error" type="boolean" defaultVal="false" description="Displays the group in an error state (sets aria-invalid)" isDarkMode={dark} />
-            <PropRow name="errorMessage" type="ReactNode" description="Error message displayed below the group (role=alert)" isDarkMode={dark} />
-            <PropRow name="success" type="boolean" defaultVal="false" description="Displays the group in a success state" isDarkMode={dark} />
-            <PropRow name="successMessage" type="ReactNode" description="Success message displayed below the group" isDarkMode={dark} />
-            <PropRow name="loading" type="boolean" defaultVal="false" description="Loading state (reduces opacity, disables pointer events)" isDarkMode={dark} />
-            <PropRow name="size" type='"xs"|"sm"|"md"|"lg"|"xl"|number' description="Size of all radio indicators in the group" isDarkMode={dark} />
-            <PropRow name="orientation" type='"horizontal"|"vertical"' defaultVal='"vertical"' description="Layout orientation of the radio buttons" isDarkMode={dark} />
-            <PropRow name="classes" type="RadioGroupClasses" description="Slot class overrides (root, label, description, error, success)" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Removes all default styling" isDarkMode={dark} />
-            <PropRow name="reduceMotion" type='boolean|"auto"' description="Controls motion preferences" isDarkMode={dark} />
-            <PropRow name="children" type="ReactNode" description="RadioButton children" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="RadioButton" />
 
       {/* ─── RadioButton Props Table ─────────────────────────────────────── */}
-      <Section title="RadioButton Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="value" type="string" description="Unique value for this radio option" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Text label rendered beside the radio" isDarkMode={dark} />
-            <PropRow name="description" type="ReactNode" description="Helper text rendered below the label" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disables this radio option" isDarkMode={dark} />
-            <PropRow name="size" type='"xs"|"sm"|"md"|"lg"|"xl"|number' description="Size of the radio indicator (overrides group size)" isDarkMode={dark} />
-            <PropRow name="checkedIcon" type="ReactNode" description="Custom icon for the checked state (replaces the inner dot)" isDarkMode={dark} />
-            <PropRow name="uncheckedIcon" type="ReactNode" description="Custom icon shown when unchecked" isDarkMode={dark} />
-            <PropRow name="classes" type="RadioButtonClasses" description="Slot class overrides (root, label, description, radio, checked, unchecked, icon, error, success)" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── RadioButtonClasses ────────────────────────────────────────── */}
       <Section title="RadioButtonClasses Slots" isDarkMode={dark}>

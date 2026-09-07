@@ -28,15 +28,15 @@ import type { Tab, TabPanelProps } from "@chumlab/ui/tab-panel";
 import { TabPanel } from "@chumlab/ui/tab-panel";
 
 const tabs = [
-  { id: "home", itemText: "Home" },
-  { id: "profile", itemText: "Profile" },
-  { id: "settings", itemText: "Settings" },
+  { id: "home", label: "Home" },
+  { id: "profile", label: "Profile" },
+  { id: "settings", label: "Settings" },
 ];
 
 export default function Example() {
   return (
     <TabPanel tabs={tabs} defaultValue="home">
-      {(item) => <div style={{ padding: 16 }}>{item.itemText} content</div>}
+      {(item) => <div style={{ padding: 16 }}>{item.label} content</div>}
     </TabPanel>
   );
 }
@@ -198,6 +198,17 @@ const tabs = [
 ```tsx
 <TabPanel tabs={tabs} orientation="vertical" />
 ```
+
+---
+
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves into the tab list, landing on the active tab, then out to the panel. |
+| `ArrowRight`, `ArrowLeft` | Moves between tabs; a vertical list uses `ArrowDown`/`ArrowUp`, and right-to-left swaps the horizontal pair. With `activationMode="automatic"` the tab activates as focus lands. |
+| `Home`, `End` | Moves to the first or last tab. |
+| `Enter`, `Space` | Activates the focused tab under `activationMode="manual"`. |
 
 ---
 

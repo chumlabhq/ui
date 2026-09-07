@@ -26,7 +26,7 @@ import { ToastProvider, useToast } from "@chumlab/ui/toast";
 ```tsx
 import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-function App() {
+export default function App() {
   return (
     <ToastProvider>
       <MyComponent />
@@ -71,6 +71,18 @@ toast.toast({ type, title, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();
 ```
+
+---
+
+## Keyboard Interactions
+
+A toast takes focus only when it has an action; otherwise it announces itself and stays out of the tab order.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Escape` | Dismisses the toast when `dismissOnEscape` is set. |
+| `Tab` | Moves to the toast's action and close button while it is on screen. |
+| `Enter`, `Space` | Activates the focused action. |
 
 ---
 

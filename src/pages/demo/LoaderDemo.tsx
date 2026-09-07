@@ -3,7 +3,7 @@ import {
   LinearLoader,
   DotLoader,
   PulseLoader,
-} from "../../components/Loader/index.js";
+  } from "../../components/Loader/index.js";
 import {
   DocsHero,
   Section,
@@ -13,6 +13,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
@@ -38,6 +41,10 @@ const LoaderDemo = () => {
         description='Lightweight, animated loading indicators. Four variants — CircularLoader, LinearLoader, DotLoader, and PulseLoader — each configurable for size, speed, and color. All use role="status" and aria-label out of the box.'
         code={`import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "@chumlab/ui/loader";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Loader" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -588,220 +595,14 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Props — CircularLoader ─────────────────────────────────────── */}
-      <Section title="CircularLoader Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="size"
-              type="number"
-              defaultVal="20"
-              description="Width and height of the loader in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="thickness"
-              type="number"
-              defaultVal="2"
-              description="Stroke width of the track and spinner arc"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="speed"
-              type="number"
-              defaultVal="0.75"
-              description="Animation duration in seconds (lower = faster)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="trackColor"
-              type="string"
-              defaultVal="currentColor"
-              description="Color of the background track circle (rendered at 20% opacity)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class(es) on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ref"
-              type="Ref<HTMLDivElement>"
-              description="Forwarded ref to the root div"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Loader" />
 
       {/* ── Props — LinearLoader ───────────────────────────────────────── */}
-      <Section title="LinearLoader Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="height"
-              type="number"
-              defaultVal="4"
-              description="Height of the bar in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="width"
-              type="string | number"
-              defaultVal='"100%"'
-              description="Width of the bar (CSS value)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="speed"
-              type="number"
-              defaultVal="1.5"
-              description="Animation duration in seconds"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="trackColor"
-              type="string"
-              description="Background track color"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="borderRadius"
-              type="number"
-              defaultVal="9999"
-              description="Border radius in pixels (pill by default)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class(es) on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ref"
-              type="Ref<HTMLDivElement>"
-              description="Forwarded ref to the root div"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ── Props — DotLoader ──────────────────────────────────────────── */}
-      <Section title="DotLoader Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="dotSize"
-              type="number"
-              defaultVal="8"
-              description="Diameter of each dot in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="gap"
-              type="number"
-              defaultVal="4"
-              description="Gap between dots in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="count"
-              type="number"
-              defaultVal="3"
-              description="Number of dots"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="speed"
-              type="number"
-              defaultVal="1.4"
-              description="Full animation cycle duration in seconds"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class(es) on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ref"
-              type="Ref<HTMLDivElement>"
-              description="Forwarded ref to the root div"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ── Props — PulseLoader ────────────────────────────────────────── */}
-      <Section title="PulseLoader Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="size"
-              type="number"
-              defaultVal="40"
-              description="Diameter of the circle in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="speed"
-              type="number"
-              defaultVal="1.5"
-              description="Animation duration in seconds"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rings"
-              type="number"
-              defaultVal="2"
-              description="Number of ripple rings"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class(es) on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles on the root div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ref"
-              type="Ref<HTMLDivElement>"
-              description="Forwarded ref to the root div"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ── Accessibility ──────────────────────────────────────────────── */}
       <Section

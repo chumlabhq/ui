@@ -249,6 +249,17 @@ const steps = [
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus into the step list. |
+| `ArrowRight`, `ArrowDown` | Moves to the next step. `ArrowLeft`/`ArrowUp` move back. `loop` wraps past the ends. |
+| `Home`, `End` | Jumps to the first or last step. |
+| `Enter`, `Space` | Activates the focused step, when the step is clickable. |
+
+---
+
 ## Accessibility
 
 - `role="navigation"` with `aria-label="Progress"` on root (configurable)

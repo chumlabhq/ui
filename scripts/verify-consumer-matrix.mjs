@@ -437,11 +437,11 @@ const SERVED = {
 };
 
 const TARGETS = [
-  { name: "vite-react19", showcase: "src", output: "dist", ssr: false, react: 19, ...ALL },
-  { name: "vite-react18", showcase: "src", output: "dist", ssr: false, react: 18, ...ALL },
-  { name: "next-app", showcase: ".", output: ".next", ssr: true, react: 19, ...SERVED },
-  { name: "next-pages", showcase: ".", output: ".next", ssr: true, react: 19, ...SERVED },
-  { name: "react-router7", showcase: "app", output: "build", ssr: true, react: 19, ...SERVED },
+  { name: "vite-react19", snippets: "react", showcase: "src", output: "dist", ssr: false, react: 19, ...ALL },
+  { name: "vite-react18", snippets: "react", showcase: "src", output: "dist", ssr: false, react: 18, ...ALL },
+  { name: "next-app", snippets: "next", showcase: ".", output: ".next", ssr: true, react: 19, ...SERVED },
+  { name: "next-pages", snippets: "next", showcase: ".", output: ".next", ssr: true, react: 19, ...SERVED },
+  { name: "react-router7", snippets: "react", showcase: "app", output: "build", ssr: true, react: 19, ...SERVED },
   // Neither optional peer installed. `peerDependenciesMeta` marks
   // @tanstack/react-table and date-fns optional; this is the target that finds
   // out whether that is true, since a consumer taking the manifest at its word
@@ -583,6 +583,18 @@ function scaffold(target, tarball, into) {
   const app = join(TEMPLATES, "_app", target.app);
   if (statSync(app).isDirectory()) cpSync(app, join(dir, target.showcase), { recursive: true });
   else cpSync(app, join(dir, target.showcase, "Showcase.tsx"));
+
+  // The copy-paste snippets the site offers, in the flavour this target is:
+  // the React variant for the client-rendered and non-RSC targets, the Next
+  // variant — which differs only by a "use client" line, and only where the
+  // example has state of its own — for the two app/pages routers. A copy
+  // button shipping code nobody compiled is worse than no copy button, so
+  // this target's typecheck and production build are what stands behind it.
+  if (target.snippets) {
+    cpSync(join(TEMPLATES, "_app", "snippets", target.snippets), join(dir, target.showcase, "snippets"), {
+      recursive: true,
+    });
+  }
 
   const manifest = join(dir, "package.json");
   writeFileSync(manifest, readFileSync(manifest, "utf8").replace("__TARBALL__", tarball), "utf8");

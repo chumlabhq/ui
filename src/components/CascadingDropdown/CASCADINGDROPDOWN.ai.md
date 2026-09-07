@@ -360,6 +360,20 @@ const searchCountries = async (query: string) => {
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu from the trigger, and selects the focused item. |
+| `ArrowDown`, `ArrowUp` | Moves between items in the open menu. |
+| `ArrowRight` | Opens the focused item's submenu and moves into it. `ArrowLeft` closes it and returns to the parent. |
+| `Home`, `End` | Jumps to the first or last item of the current level. |
+| `Escape` | Closes the deepest open menu and returns focus to its trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+| Printable characters | Type-ahead: jumps to the first item starting with what you typed. |
+
+---
+
 ## Accessibility
 
 - `role="menu"` on dropdown container, `role="menuitem"` / `role="menuitemcheckbox"` / `role="menuitemradio"` on items

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import {
+  useState } from "react";
 import {
   DatePicker,
   type DateRange,
   type DateMarker,
-} from "../../components/DatePicker/index.js";
+  } from "../../components/DatePicker/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -14,6 +15,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import {
   subDays,
@@ -252,6 +256,10 @@ const DatePickerDemo = () => {
 
 import { DatePicker } from "@chumlab/ui/date-picker";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="DatePicker" />
 
       {/* ─── Single Date ────────────────────────────────────────────────── */}
       <Section
@@ -1751,291 +1759,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props Tables ───────────────────────────────────────────────── */}
-      <Section title="DatePicker Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="mode"
-              type='"single"|"range"|"multiple"'
-              defaultVal='"single"'
-              description="Date selection mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="Date | null (single) · DateRange | null (range) · Date[] | null (multiple)"
-              description="Selected value — type depends on mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(value, richValue) => void"
-              description="Fires when selection changes — callback signature depends on mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onClear"
-              type="() => void"
-              description="Clear callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="minDate"
-              type="Date"
-              description="Minimum selectable date"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxDate"
-              type="Date"
-              description="Maximum selectable date"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabledDates"
-              type="DisabledDateOptions"
-              description="Disabled dates configuration"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="weekStartsOn"
-              type="0-6"
-              defaultVal="0"
-              description="First day of week (0=Sunday)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="locale"
-              type="Locale"
-              description="date-fns locale object"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="numberOfMonths"
-              type="number"
-              defaultVal="1"
-              description="Months to display side by side"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dateFormat"
-              type="string"
-              defaultVal='"MMM d, yyyy"'
-              description="Display format string"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showTodayIndicator"
-              type="boolean"
-              defaultVal="false"
-              description="Highlight today with a ring"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showTodayButton"
-              type="boolean"
-              defaultVal="false"
-              description="Show jump-to-today footer button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showWeekNumbers"
-              type="boolean"
-              defaultVal="false"
-              description="Show ISO week numbers"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showOutsideDays"
-              type="boolean"
-              defaultVal="true"
-              description="Show days from adjacent months"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fixedWeeks"
-              type="boolean"
-              defaultVal="false"
-              description="Always show 6 weeks"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showPresets"
-              type="boolean"
-              defaultVal="false"
-              description="Show preset quick-select buttons"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="presets"
-              type="DatePreset[]"
-              description="Custom presets (auto-generated if omitted)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="markers"
-              type="DateMarker[]"
-              description="Dates to highlight with indicators"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showMarkerIndicator"
-              type="boolean"
-              defaultVal="false"
-              description="Show colored dots on marked dates"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showMarkerTooltip"
-              type="boolean"
-              defaultVal="false"
-              description="Show tooltip on hover for marked dates"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label above trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="placeholder"
-              type="string"
-              description="Trigger placeholder text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable the picker"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error text below trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Required field"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Full width trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showClearButton"
-              type="boolean"
-              defaultVal="false"
-              description="Show clear button in trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="DatePickerClasses"
-              description="Slot class overrides (40+ slots)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reduceMotion"
-              type='boolean|"auto"'
-              defaultVal='"auto"'
-              description="Disable transitions"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Calendar portal target"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="lockScroll"
-              type="boolean"
-              defaultVal="false"
-              description="Lock body scroll while calendar is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownPosition"
-              type='"top" | "bottom"'
-              defaultVal='"bottom"'
-              description="Preferred calendar position (auto-flips when insufficient space)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="forceDropdownPosition"
-              type="boolean"
-              defaultVal="false"
-              description="When true, locks the calendar to the specified dropdownPosition without auto-flipping"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownZIndex"
-              type="number"
-              defaultVal="50"
-              description="z-index of the calendar popup"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownGap"
-              type="number"
-              defaultVal="4"
-              description="Gap in pixels between trigger and calendar popup"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="open"
-              type="boolean"
-              description="Controlled open state of the calendar"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultOpen"
-              type="boolean"
-              defaultVal="false"
-              description="Default open state (uncontrolled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onOpenChange"
-              type="(open: boolean) => void"
-              description="Called when the open state changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onMonthChange"
-              type="(month) => void"
-              description="Month navigation callback"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="DatePicker" />
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section

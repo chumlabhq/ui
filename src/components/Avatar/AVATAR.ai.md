@@ -391,6 +391,17 @@ For grouped avatars, match `ringColor` to your background:
 
 ---
 
+## Keyboard Interactions
+
+Only an avatar with `onClick` is focusable; a plain one is an image and takes no keyboard input.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to a clickable avatar, and to the overflow count in an `AvatarGroup`. |
+| `Enter`, `Space` | Activates it, firing the same `onClick` a pointer would. |
+
+---
+
 ## Accessibility
 
 - **`role="img"`** with `aria-label` set to `name` or `alt` on the root element

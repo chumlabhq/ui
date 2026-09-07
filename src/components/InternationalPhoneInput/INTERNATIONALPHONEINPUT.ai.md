@@ -322,6 +322,20 @@ const euCountries = [
 
 ---
 
+## Keyboard Interactions
+
+The number itself is a native `<input>`. The country selector is a listbox with its own keys.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves between the country trigger and the number field. |
+| `Enter`, `Space` | Opens the country list, and picks the focused country. |
+| `ArrowDown`, `ArrowUp` | Moves through countries. |
+| `Escape` | Closes the country list. |
+| Printable characters | Filters the country list by name or dial code. |
+
+---
+
 ## Accessibility
 
 - Label auto-associated via `htmlFor`; falls back to `aria-label="Phone number input"` when no label

@@ -1,10 +1,12 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import { Stepper } from "../../components/Stepper/index.js";
 import type {
   Step,
   StepStatus,
   StepTooltipConfig,
-} from "../../components/Stepper/index.js";
+  } from "../../components/Stepper/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -15,6 +17,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -245,6 +250,10 @@ const StepperDemo = () => {
         description='A navigation component that displays progress through a sequence of steps. Uses semantic <ol>/<li> markup with proper ARIA attributes, conditional role="button" only on interactive steps, and focus-visible ring for keyboard accessibility.'
         code={`import { Stepper } from "@chumlab/ui/stepper";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Stepper" />
 
       {/* ─── Basic ────────────────────────────────────────────────────── */}
       <Section
@@ -824,208 +833,8 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props Tables ─────────────────────────────────────────────── */}
-      <Section title="Stepper Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="steps"
-              type="Step[]"
-              defaultVal="[]"
-              description="Array of step objects"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="string | number"
-              description="Currently active step ID (controlled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="string | number"
-              description="Initial step ID for uncontrolled usage"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(stepId: string | number) => void"
-              description="Callback when a step is activated"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="beforeStepChange"
-              type="(nextStepId, currentStepId) => boolean"
-              description="Return false to prevent a step transition"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="orientation"
-              type={'"horizontal" | "vertical"'}
-              defaultVal="horizontal"
-              description="Layout direction"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="variant"
-              type={'"numbered" | "icon" | "dot"'}
-              defaultVal="numbered"
-              description="Visual style of step indicators"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="activationMode"
-              type={'"automatic" | "manual"'}
-              defaultVal="manual"
-              description="Whether arrow keys activate steps immediately or only move focus"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="isStepClickable"
-              type="(stepId, status) => boolean"
-              defaultVal="completed/active"
-              description="Custom logic for step clickability"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="getStepStatus"
-              type="(stepId, index, activeIndex) => StepStatus"
-              defaultVal="auto"
-              description="Custom status logic (pending/active/completed/error)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showLabels"
-              type="boolean"
-              defaultVal="true"
-              description="Show step labels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showDescriptions"
-              type="boolean"
-              defaultVal="false"
-              description="Show step descriptions"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showConnectors"
-              type="boolean"
-              defaultVal="true"
-              description="Show connectors between steps"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="labelPosition"
-              type={'"bottom" | "right"'}
-              defaultVal="right"
-              description="Position of labels relative to indicator"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="completedIcon"
-              type="ComponentType | ReactNode"
-              defaultVal="CheckIcon"
-              description="Global icon for completed steps"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorIcon"
-              type="ComponentType | ReactNode"
-              defaultVal="ErrorIcon"
-              description="Global icon for error steps"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Whether container takes full width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-label"
-              type="string"
-              defaultVal='"Progress"'
-              description="Accessible label for the navigation landmark"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showTooltips"
-              type="boolean"
-              defaultVal="false"
-              description="Enable tooltips on steps with tooltip content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltipDefaults"
-              type="StepperTooltipDefaults"
-              defaultVal="{}"
-              description="Default tooltip configuration for all steps"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="StepperClasses"
-              defaultVal="{}"
-              description="Object of class overrides for internal slots (root, list, step, indicator, etc.)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="Shorthand for classes.root — merged with classes.root when both are provided"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="id"
-              type="string"
-              defaultVal="auto (useId)"
-              description="Deterministic ID for SSR and testing"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ref"
-              type="Ref<HTMLDivElement>"
-              description="Ref forwarded to the root element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles on the root element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable all steps globally"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loop"
-              type="boolean"
-              defaultVal="false"
-              description="Loop keyboard navigation at boundaries"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderStep"
-              type="(props, defaultElement) => ReactNode"
-              description="Custom step rendering via render prop"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Stepper" />
 
       <Section title="Step Object Properties" isDarkMode={dark}>
         <div className={c.card}>

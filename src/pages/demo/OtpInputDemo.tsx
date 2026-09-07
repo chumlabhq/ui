@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import { OtpInput } from "../../components/OtpInput/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
@@ -10,6 +12,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -54,6 +59,10 @@ const OtpInputDemo = () => {
         description="A one-time password input with per-character fields, keyboard navigation, paste support, grouping, validation, and fully customizable styling."
         code={`import { OtpInput } from "@chumlab/ui/otp-input";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="OtpInput" />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -576,174 +585,8 @@ const OtpInputDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props Table ────────────────────────────────────────────────── */}
-      <Section title="OtpInput Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="length"
-              type="number"
-              defaultVal="6"
-              description="Number of input fields"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="string"
-              description="Controlled value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="string"
-              description="Initial value (uncontrolled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(value) => void"
-              description="Value change callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onComplete"
-              type="(value) => void"
-              description="Fires when all fields filled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="ReactNode"
-              description="Helper text below label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Required field"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="boolean"
-              defaultVal="false"
-              description="Success state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="successMessage"
-              type="ReactNode"
-              description="Success text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="Loading state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable all inputs"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="groups"
-              type="number[]"
-              description="Split into groups"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="separator"
-              type="ReactNode"
-              description="Between groups"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="allowPaste"
-              type="boolean"
-              defaultVal="true"
-              description="Allow paste"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="autoFocusFirst"
-              type="boolean"
-              defaultVal="false"
-              description="Auto-focus first"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="inputType"
-              type='"text"|"password"|"tel"'
-              defaultVal='"text"'
-              description="Input type"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="validate"
-              type="(char) => boolean"
-              description="Character validation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderInput"
-              type="(props) => ReactNode"
-              description="Custom field render"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="name"
-              type="string"
-              description="Hidden input name"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Full width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="OtpInputClasses"
-              description="Slot overrides (8 slots)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip defaults"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="OtpInput" />
 
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>

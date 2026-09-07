@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Button, ButtonGroup } from "../../components/Button/index.js";
+import {
+  useState } from "react";
+import { Button,
+  ButtonGroup } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -10,6 +12,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -213,6 +218,10 @@ const ButtonDemo = () => {
         description="A flexible, accessible button component supporting icons, loading states, animations, tooltips, polymorphic rendering (button, link, span), and extensive customization via the classes system."
         code={`import { Button, ButtonGroup } from "@chumlab/ui/button";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Button" />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -982,203 +991,8 @@ const ButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props Tables ───────────────────────────────────────────────── */}
-      <Section title="Button Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              description="Button content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="as"
-              type='"button"|"a"|"span"'
-              defaultVal='"button"'
-              description="Rendered HTML element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type='"sm"|"md"|"lg"'
-              description="Size variant — emits data-size on the root element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable the button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="Show loading state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loadingText"
-              type="ReactNode"
-              description="Replace children during loading"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loaderPosition"
-              type='"left"|"right"'
-              defaultVal='"right"'
-              description="Loader placement"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loaderSize"
-              type="number"
-              defaultVal="16"
-              description="Default loader size in px"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loader"
-              type="ReactNode"
-              description="Custom loader element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="startIcon"
-              type="ReactNode"
-              description="Leading icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="endIcon"
-              type="ReactNode"
-              description="Trailing icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="iconAnimation"
-              type="IconAnimation"
-              defaultVal='"none"'
-              description="Icon animation effect"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="animateOnHover"
-              type="boolean"
-              defaultVal="true"
-              description="Animate only on hover (false = continuous)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="animateIcon"
-              type='"leading"|"trailing"|"both"'
-              defaultVal='"trailing"'
-              description="Which icon(s) to animate"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reduceMotion"
-              type='boolean|"auto"'
-              defaultVal='"auto"'
-              description="Disable animations (auto respects OS)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Span full container width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="ButtonClasses"
-              description="Slot class overrides: root, content, startIcon, endIcon, loader"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltip"
-              type="ReactNode"
-              description="Tooltip content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltipProps"
-              type="ButtonTooltipProps"
-              description="Tooltip configuration"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="href"
-              type="string"
-              description='Link URL (when as="a")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="target"
-              type="string"
-              description='Link target (when as="a")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rel"
-              type="string"
-              description='Link rel (when as="a")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="type"
-              type='"button"|"submit"|"reset"'
-              defaultVal='"button"'
-              description="Button type attribute"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="ButtonGroup Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              defaultVal="required"
-              description="Button components to render"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class for the group container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="orientation"
-              type='"horizontal"|"vertical"'
-              defaultVal='"horizontal"'
-              description="Group orientation for aria-orientation"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Button" />
 
       <Section title="ButtonClasses" isDarkMode={dark}>
         <div className={c.card}>

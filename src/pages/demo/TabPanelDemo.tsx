@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import { TabPanel } from "../../components/TabPanel/index.js";
 import type { Tab } from "../../components/TabPanel/index.js";
 import { useTheme } from "./ThemeContext.js";
@@ -11,6 +13,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -344,6 +349,10 @@ const TabPanelDemo = () => {
         description="A tabbed interface component with full keyboard navigation, RTL support, accessibility, roving tabindex, and extensive styling customization. Supports icons as ReactNode, count badges, tooltips, vertical orientation, manual activation, dynamic tabs with automatic fallback, and both controlled and uncontrolled modes."
         code={`import { TabPanel } from "@chumlab/ui/tab-panel";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="TabPanel" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -1236,174 +1245,8 @@ const TabPanelDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props Table ─────────────────────────────────────────────────── */}
-      <Section title="TabPanel Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="tabs"
-              type="Tab[]"
-              defaultVal="required"
-              description="Array of tab configuration objects"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="id"
-              type="string"
-              defaultVal="auto-generated"
-              description="Deterministic ID for SSR/testing"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="string"
-              description="Controlled active tab ID"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="string"
-              defaultVal="tabs[0].id"
-              description="Initial active tab for uncontrolled mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(tabId: string) => void"
-              description="Callback when active tab changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="children"
-              type="ReactNode | (tab: Tab) => ReactNode"
-              description="Panel content or render function receiving active tab"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="orientation"
-              type={'"horizontal" | "vertical"'}
-              defaultVal='"horizontal"'
-              description="Tab orientation -- affects keyboard navigation axis"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="activationMode"
-              type={'"automatic" | "manual"'}
-              defaultVal='"automatic"'
-              description="Automatic: arrows activate. Manual: Enter/Space activates"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loop"
-              type="boolean"
-              defaultVal="true"
-              description="Whether keyboard navigation wraps around at ends"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="iconPosition"
-              type={'"left" | "right"'}
-              defaultVal='"left"'
-              description="Position of icon relative to label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showZeroCount"
-              type="boolean"
-              defaultVal="false"
-              description="Show count badge even when value is 0"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="alwaysShowLabels"
-              type="boolean"
-              defaultVal="true"
-              description="Show labels on all tabs or only the active one"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showTooltips"
-              type="boolean"
-              defaultVal="true"
-              description="Enable tooltips on tabs with tooltip content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltipPosition"
-              type={'"top" | "bottom" | "left" | "right"'}
-              defaultVal='"bottom"'
-              description="Position of tooltip relative to tab"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltipOffset"
-              type="number"
-              defaultVal="4"
-              description="Distance between tooltip and tab (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable all tabs globally"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderTab"
-              type="(props: TabRenderProps, defaultElement: ReactElement) => ReactNode"
-              description="Custom render function for each tab trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-label"
-              type="string"
-              defaultVal='"Tabs"'
-              description="Accessible label for the tablist element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="TabPanelClasses"
-              description="Record of class names for all internal elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="Root element class name (fallback for classes.root)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Root element inline styles"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="forceMount"
-              type="boolean"
-              defaultVal="false"
-              description="Mount all tab panels eagerly, regardless of active state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="keepMounted"
-              type="boolean"
-              defaultVal="false"
-              description="Keep a tab panel mounted after it has been activated at least once"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="TabPanel" />
 
       {/* ─── Tab Object Props ────────────────────────────────────────────── */}
       <Section title="Tab Object Properties" isDarkMode={dark}>

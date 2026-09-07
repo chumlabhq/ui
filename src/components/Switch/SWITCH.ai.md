@@ -75,6 +75,17 @@ override silently drops the rest.
 // Passing only `control: "data-[disabled]:…"` drops the base and the other 2 states.
 ```
 
+## Keyboard Interactions
+
+A `<button role="switch">`, not a checkbox — which is why `Enter` activates it as well as `Space`.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the switch. |
+| `Enter`, `Space` | Toggles it. |
+
+---
+
 ## Accessibility
 
 - `<button role="switch" aria-checked>` — native ARIA switch pattern

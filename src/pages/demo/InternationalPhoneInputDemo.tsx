@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import {
   InternationalPhoneInput,
   type PhoneNumberData,
@@ -6,7 +8,7 @@ import {
   type PasteDetectedData,
   type PhoneFormatPattern,
   type PhoneLengthRule,
-} from "../../components/InternationalPhoneInput/index.js";
+  } from "../../components/InternationalPhoneInput/index.js";
 import { createLibphonenumberValidator } from "../../components/InternationalPhoneInput/validators/index.js";
 import { CountryFlag } from "../../components/CountryFlag/index.js";
 import { useTheme } from "./ThemeContext.js";
@@ -20,6 +22,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // Opt-in real validation via @chumlab/ui/phone-validators (libphonenumber-js).
@@ -239,6 +244,10 @@ const InternationalPhoneInputDemo = () => {
 // Opt-in real validation (libphonenumber-js). Only needed if you use \`validate\`:
 import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="InternationalPhoneInput" />
 
       <div className="space-y-8">
         <Section
@@ -1559,307 +1568,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
         </Section>
       </div>
 
-      <Section title="InternationalPhoneInput Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="value"
-              type="PhoneNumberValue"
-              description="Controlled phone value ({ countryCode, phoneNumber })"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="PhoneNumberValue"
-              description="Initial phone value (uncontrolled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(data: PhoneNumberData) => void"
-              description="Callback when phone data changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onCountryChange"
-              type="(country: CountryOption) => void"
-              description="Callback when country changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultCountry"
-              type="string"
-              defaultVal='"us"'
-              description="Default country code"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="countries"
-              type="CountryOption[]"
-              defaultVal="DEFAULT_COUNTRIES"
-              description="List of available countries"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="preferredCountries"
-              type="string[]"
-              defaultVal='["us","gb","ca","au"]'
-              description="Countries to show at top of list"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label text (auto-associated via htmlFor)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Whether the field is required"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Whether the input is disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="readOnly"
-              type="boolean"
-              defaultVal="false"
-              description="Whether the input is read-only"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Whether to show error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description='Error message (role="alert")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="boolean"
-              defaultVal="false"
-              description="Whether to show success state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="successMessage"
-              type="ReactNode"
-              description='Success message (role="status")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="placeholder"
-              type="string"
-              defaultVal='"Enter phone number"'
-              description="Input placeholder text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Whether to take full width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="validateOnBlur"
-              type="boolean"
-              defaultVal="true"
-              description="Whether to validate on blur"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="validationMessage"
-              type="ReactNode"
-              description="Custom validation error message (i18n support)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="validate"
-              type="(data: PhoneNumberData) => boolean | { valid: boolean; message?: string }"
-              description="Authoritative custom validation; overrides the built-in for the emitted isValid and the blur error. Use createLibphonenumberValidator() from @chumlab/ui/phone-validators for real per-country validation."
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="autoComplete"
-              type="string"
-              defaultVal='"off"'
-              description="Native input autocomplete. Defaults to off so browser autofill can't corrupt the national-number field; pass e.g. tel-national to opt in."
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="enablePasteDetection"
-              type="boolean"
-              defaultVal="false"
-              description="Auto-detect country from pasted numbers"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="copyFormat"
-              type='"e164"|"international"|"national"'
-              defaultVal='"e164"'
-              description="Format used when copying (Ctrl+C)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onPasteDetected"
-              type="(data: PasteDetectedData) => void"
-              description="Callback when paste is detected"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="name"
-              type="string"
-              description="Form field name (renders hidden inputs)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="id"
-              type="string"
-              description="Custom ID (auto-generated if omitted)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="countryDropdownPlaceholder"
-              type="string"
-              defaultVal='"Country"'
-              description="Placeholder for country dropdown trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="countrySearchPlaceholder"
-              type="string"
-              defaultVal='"Search countries..."'
-              description="Placeholder for country search input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="countryDropdownAriaLabel"
-              type="string"
-              defaultVal='"Select country"'
-              description="Accessible label for the country dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectedIcon"
-              type="ReactNode"
-              description="Custom icon for selected country option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="flagSize"
-              type="number"
-              defaultVal="22"
-              description="Pixel width of the flag in the trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio."
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderCountryOption"
-              type="(props: CountryOptionRenderProps) => ReactNode"
-              description="Custom renderer for country options in dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderSelectedCountry"
-              type="(country: CountryOption) => ReactNode"
-              description="Custom renderer for selected country in trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="formatPatterns"
-              type="Record<string, PhoneFormatPattern>"
-              description="Custom formatting patterns (extends defaults)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="lengthRules"
-              type="Record<string, PhoneLengthRule>"
-              description="Custom validation length rules (extends defaults)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class for the root container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles for the root container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="InternationalPhoneInputClasses"
-              description="Slot-based class overrides for internal elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownPosition"
-              type='"top" | "bottom"'
-              defaultVal='"bottom"'
-              description="Vertical placement of the country dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="forceDropdownPosition"
-              type="boolean"
-              defaultVal="false"
-              description="Lock to dropdownPosition, no auto-flip"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownZIndex"
-              type="number"
-              defaultVal="50"
-              description="Z-index of the country dropdown popup"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownGap"
-              type="number"
-              defaultVal="4"
-              description="Gap (px) between trigger and dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Portal target for the country dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="lockScroll"
-              type="boolean"
-              defaultVal="false"
-              description="Lock body scroll while country dropdown is open"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      <ComponentDocs name="InternationalPhoneInput" />
 
       <Section title="InternationalPhoneInputClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

@@ -1,4 +1,6 @@
-import { useCallback, useState } from "react";
+import {
+  useCallback,
+  useState } from "react";
 import { Breadcrumb } from "../../components/Breadcrumb/index.js";
 import type { BreadcrumbItem } from "../../components/Breadcrumb/index.js";
 import { useTheme } from "./ThemeContext.js";
@@ -11,6 +13,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -197,6 +202,10 @@ const BreadcrumbDemo = () => {
         description="A navigation component that shows the user&apos;s current location in a hierarchical structure. Supports truncation with an accessible ellipsis dropdown, icons, tooltips, links, disabled items, custom separators, and full keyboard navigation."
         code={`import { Breadcrumb } from "@chumlab/ui/breadcrumb";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Breadcrumb" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -748,166 +757,8 @@ const BreadcrumbDemo = () => {
         )}
       </Section>
 
-      {/* ─── Props Table ────────────────────────────────────────────────── */}
-      <Section title="BreadcrumbProps" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="items"
-              type="BreadcrumbItem[]"
-              defaultVal="required"
-              description="Array of breadcrumb items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxVisibleItems"
-              type="number"
-              defaultVal="4"
-              description="Max items before truncation (minimum 2)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="separator"
-              type="ReactNode"
-              defaultVal="ChevronRight"
-              description="Custom separator between items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="separatorIcon"
-              type="ComponentType"
-              defaultVal="ChevronRightIcon"
-              description="Custom separator icon component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ellipsisIcon"
-              type="ComponentType"
-              defaultVal="EllipsisIcon"
-              description="Custom ellipsis icon component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onItemClick"
-              type="(item) => void"
-              description="Callback when any item is clicked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onDropdownOpenChange"
-              type="(open: boolean) => void"
-              description="Callback when dropdown opens/closes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="BreadcrumbClasses"
-              description="Class overrides for all 13 internal elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="Additional class on root (merged with classes.root)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles on root"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-label"
-              type="string"
-              defaultVal='"Breadcrumb"'
-              description="Accessible label for the nav landmark"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="iconSize"
-              type="number | string"
-              defaultVal="16"
-              description="Size for separator/ellipsis icons"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showTooltips"
-              type="boolean"
-              defaultVal="true"
-              description="Enable tooltips on items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltipPosition"
-              type="TooltipSide"
-              defaultVal='"bottom"'
-              description="Default tooltip position"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltipOffset"
-              type="number"
-              defaultVal="4"
-              description="Tooltip offset in px"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultTooltipProps"
-              type="BreadcrumbTooltipProps"
-              description="Default config for all tooltips"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ellipsisTooltip"
-              type="ReactNode"
-              description="Tooltip content for ellipsis button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ellipsisTooltipProps"
-              type="BreadcrumbTooltipProps"
-              description="Tooltip config for ellipsis button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownPosition"
-              type='"top"|"bottom"|"left"|"right"'
-              defaultVal='"top"'
-              description="Dropdown position relative to ellipsis"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownZIndex"
-              type="number"
-              defaultVal="50"
-              description="z-index of the dropdown portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Container for dropdown portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ellipsisAriaLabel"
-              type="string"
-              defaultVal='"Show collapsed..."'
-              description="Accessible label for ellipsis button"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Breadcrumb" />
 
       <Section title="BreadcrumbItem" isDarkMode={dark}>
         <div className={c.card}>

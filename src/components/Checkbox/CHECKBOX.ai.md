@@ -16,7 +16,7 @@ Use `<Checkbox label="Accept" checked={val} onValueChange={setVal} />` for a bas
 ## Import
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/control";
+import { Checkbox } from "@chumlab/ui/checkbox";
 ```
 
 ---
@@ -24,7 +24,7 @@ import { Checkbox } from "@chumlab/ui/control";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/control";
+import { Checkbox } from "@chumlab/ui/checkbox";
 import { useState } from "react";
 
 export default function Example() {
@@ -250,6 +250,17 @@ const someChecked = items.some(Boolean);
   uncheckedIcon={<HeartOutlineIcon className="w-3 h-3 text-gray-400" />}
 />
 ```
+
+---
+
+## Keyboard Interactions
+
+A native `<input type="checkbox">`, so the browser owns this — `Enter` deliberately does nothing, as it does not on any checkbox.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the checkbox. |
+| `Space` | Toggles it, including out of the indeterminate state. |
 
 ---
 

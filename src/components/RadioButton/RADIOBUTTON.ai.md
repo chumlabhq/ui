@@ -101,6 +101,18 @@ export default function Example() {
 // Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
 ```
 
+## Keyboard Interactions
+
+Native `<input type="radio">` elements in a group, so the browser owns the roving focus.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves into the group, landing on the checked radio — or the first one when none is checked. |
+| `ArrowDown`, `ArrowRight` | Moves to the next radio and selects it. `ArrowUp`/`ArrowLeft` move back. |
+| `Space` | Selects the focused radio. |
+
+---
+
 ## Accessibility
 
 - Native `<input type="radio">` — browser handles arrow key navigation

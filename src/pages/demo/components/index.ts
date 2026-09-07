@@ -19,6 +19,7 @@ export {
   CodeFenced,
   InlineCode,
 } from "./primitives.js";
+export { ComponentDocs, CopyPasteBlock, SetupNote } from "./ComponentDocs.js";
 export {
   DocControlledPattern,
   DocEdgeCases,

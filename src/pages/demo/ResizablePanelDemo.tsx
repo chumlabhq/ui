@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import { ResizablePanel } from "../../components/ResizablePanel/index.js";
 import {
   DocsHero,
@@ -9,6 +11,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
@@ -181,6 +186,10 @@ const ResizablePanelDemo = () => {
         description="A panel component with a draggable separator handle for resizing. Supports horizontal and vertical orientations, keyboard navigation, pointer events for mouse and touch, controlled and uncontrolled modes, custom constraints, resize callbacks, Escape to cancel, handle content slots, CSS custom properties, and full accessibility via WAI-ARIA separator semantics."
         code={`import { ResizablePanel } from "@chumlab/ui/resizable-panel";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="ResizablePanel" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -936,137 +945,8 @@ const ResizablePanelDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props ────────────────────────────────────────────────────── */}
-      <Section title="ResizablePanel Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              description="Content to render inside the panel"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="number"
-              description="Controlled panel size in pixels (width or height depending on resizeDirection)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="number"
-              defaultVal="300"
-              description="Initial size for uncontrolled mode (clamped to [minValue, maxValue])"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(value: number) => void"
-              description="Callback fired continuously as size changes during resize"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onResizeStart"
-              type="(value: number) => void"
-              description="Callback fired when a resize gesture begins, receiving the current size"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onResizeEnd"
-              type="(value: number) => void"
-              description="Callback fired when a resize gesture ends, with the final size"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="minValue"
-              type="number"
-              defaultVal="200"
-              description="Minimum size constraint in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxValue"
-              type="number"
-              defaultVal="800"
-              description="Maximum size constraint in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="resizeDirection"
-              type='"left" | "right" | "top" | "bottom"'
-              defaultVal='"right"'
-              description='Which edge has the resize handle. "left"/"right" manage width; "top"/"bottom" manage height.'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="step"
-              type="number"
-              defaultVal="10"
-              description="Keyboard arrow key increment in pixels (Shift multiplies by 5)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable all resize interactions (pointer, keyboard, and focus)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-label"
-              type="string"
-              defaultVal='"Resize panel"'
-              description="Accessible label for the separator handle element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="ResizablePanelClasses"
-              defaultVal="{}"
-              description="Object of class overrides for internal slots (root, handle)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="handleContent"
-              type="ReactNode"
-              description="Content rendered inside the separator handle (e.g. grip icon)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="Shorthand for classes.root — merged with classes.root when both are provided"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles merged onto the root element (managed size property cannot be overridden)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="id"
-              type="string"
-              defaultVal="auto-generated"
-              description="Deterministic ID for the root element (auto-generated via useId if omitted)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="...rest"
-              type="HTMLDivElement props"
-              description="All standard HTML div attributes are forwarded to the root element (e.g. data-testid, event handlers)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="ResizablePanel" />
 
       <Section title="ResizablePanelClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

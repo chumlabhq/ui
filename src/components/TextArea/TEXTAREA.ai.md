@@ -16,7 +16,7 @@ Use `<TextArea label="Message" placeholder="Write..." />` for a labeled textarea
 ## Import
 
 ```tsx
-import { TextArea, TextAreaLabel } from "@chumlab/ui/input";
+import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";
 ```
 
 ---
@@ -24,7 +24,7 @@ import { TextArea, TextAreaLabel } from "@chumlab/ui/input";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { TextArea } from "@chumlab/ui/input";
+import { TextArea } from "@chumlab/ui/textarea";
 
 export default function Example() {
   return (
@@ -195,6 +195,16 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
   required
 />
 ```
+
+---
+
+## Keyboard Interactions
+
+A native `<textarea>`: the browser owns text entry and selection.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the field, and out of it — it does not insert a tab character. |
 
 ---
 

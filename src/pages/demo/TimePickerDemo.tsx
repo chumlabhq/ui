@@ -1,4 +1,5 @@
-import { useState } from "react";
+import {
+  useState } from "react";
 import { TimePicker } from "../../components/TimePicker/index.js";
 import type { TimePickerClasses } from "../../components/TimePicker/index.js";
 import { useTheme } from "./ThemeContext.js";
@@ -12,6 +13,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -290,6 +294,10 @@ const TimePickerDemo = () => {
         title="TimePicker"
         description="A time input with dropdown or clock variant, smart time parsing, 12/24-hour formats, min/max constraints, clearable, keyboard navigation, and full accessibility."
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="TimePicker" />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       {/* DROPDOWN VARIANT                                                  */}
@@ -1493,53 +1501,8 @@ const TimePickerDemo = () => {
         </div>
       </Section>
 
-      {/* ─── 37. Props Reference ─────────────────────────────────────────── */}
-      <Section title="Props Reference" isDarkMode={dark}>
-        <PropsTable isDarkMode={dark}>
-          <PropRow isDarkMode={dark} name="value" type="string | null" description='Controlled time value (e.g. "14:30" or "2:30 PM").' />
-          <PropRow isDarkMode={dark} name="defaultValue" type="string | null" description="Default time value for uncontrolled usage." />
-          <PropRow isDarkMode={dark} name="onValueChange" type="(time: string | null, timeValue: TimeValue | null) => void" description="Called when the selected time changes." />
-          <PropRow isDarkMode={dark} name="format" type='"12h" | "24h"' defaultVal='"24h"' description="Time display format." />
-          <PropRow isDarkMode={dark} name="minuteStep" type="number" defaultVal="15" description="Interval between minute options; invalid values clamped to 1-60." />
-          <PropRow isDarkMode={dark} name="minTime" type="string" description='Minimum selectable time (e.g. "09:00"). Applies to both dropdown and clock variants.' />
-          <PropRow isDarkMode={dark} name="maxTime" type="string" description='Maximum selectable time (e.g. "17:00"). Applies to both dropdown and clock variants.' />
-          <PropRow isDarkMode={dark} name="variant" type='"dropdown" | "clock"' defaultVal='"dropdown"' description="Visual variant: dropdown list or analog clock face." />
-          <PropRow isDarkMode={dark} name="placeholder" type="string" description="Custom placeholder text for the input." />
-          <PropRow isDarkMode={dark} name="disabled" type="boolean" defaultVal="false" description="Disables the component." />
-          <PropRow isDarkMode={dark} name="error" type="boolean" defaultVal="false" description="Marks the component as having an error (visual only)." />
-          <PropRow isDarkMode={dark} name="errorMessage" type="ReactNode" description="Error message displayed below the input." />
-          <PropRow isDarkMode={dark} name="label" type="ReactNode" description="Label displayed above the input." />
-          <PropRow isDarkMode={dark} name="required" type="boolean" defaultVal="false" description="Shows a required indicator on the label." />
-          <PropRow isDarkMode={dark} name="clearable" type="boolean" defaultVal="false" description="Show a clear button when a value is selected." />
-          <PropRow isDarkMode={dark} name="onClear" type="() => void" description="Called when the clear button is clicked." />
-          <PropRow isDarkMode={dark} name="showEndIcon" type="boolean" defaultVal="true" description="Show the chevron/end icon in the trigger." />
-          <PropRow isDarkMode={dark} name="endIcon" type="ReactNode" description="Custom end icon element replacing the default chevron." />
-          <PropRow isDarkMode={dark} name="showSelectedIcon" type="boolean" defaultVal="true" description="Show a check icon on the selected option." />
-          <PropRow isDarkMode={dark} name="selectedIcon" type="ReactNode" description="Custom selected icon element replacing the default checkmark." />
-          <PropRow isDarkMode={dark} name="renderOptionContent" type="(time: string, isSelected: boolean) => ReactNode" description="Custom renderer for dropdown option content." />
-          <PropRow isDarkMode={dark} name="fullWidth" type="boolean" defaultVal="false" description="Expand the picker to fill its parent container." />
-          <PropRow isDarkMode={dark} name="open" type="boolean" description="Controlled open state of the dropdown/clock." />
-          <PropRow isDarkMode={dark} name="defaultOpen" type="boolean" defaultVal="false" description="Default open state (uncontrolled)." />
-          <PropRow isDarkMode={dark} name="onOpenChange" type="(open: boolean) => void" description="Called when the open state changes." />
-          <PropRow isDarkMode={dark} name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll when dropdown is open." />
-          <PropRow isDarkMode={dark} name="dropdownPosition" type={'"top" | "bottom"'} defaultVal='"bottom"' description="Position of the dropdown relative to the trigger." />
-          <PropRow isDarkMode={dark} name="forceDropdownPosition" type="boolean" defaultVal="false" description="When true, locks the dropdown to the specified dropdownPosition without auto-flipping." />
-          <PropRow isDarkMode={dark} name="dropdownZIndex" type="number" defaultVal="50" description="Z-index for the dropdown portal." />
-          <PropRow isDarkMode={dark} name="dropdownGap" type="number" defaultVal="4" description="Gap between trigger and dropdown in pixels." />
-          <PropRow isDarkMode={dark} name="keepMounted" type="boolean" defaultVal="false" description="Keep dropdown DOM mounted when closed." />
-          <PropRow isDarkMode={dark} name="portalContainer" type="HTMLElement | null" description="Custom container for the dropdown portal. Defaults to document.body." />
-          <PropRow isDarkMode={dark} name="classes" type="TimePickerClasses" description="CSS class overrides for all sub-elements." />
-          <PropRow isDarkMode={dark} name="unstyled" type="boolean" defaultVal="false" description="Removes all default styling so you can apply your own." />
-          <PropRow isDarkMode={dark} name="reduceMotion" type='boolean | "auto"' defaultVal='"auto"' description='Controls motion. "auto" respects the OS prefers-reduced-motion setting.' />
-          <PropRow isDarkMode={dark} name="onBlur" type="() => void" description="Called when the input loses focus." />
-          <PropRow isDarkMode={dark} name="onCancel" type="() => void" description="Called when the clock cancel button is pressed." />
-          <PropRow isDarkMode={dark} name="onConfirm" type="() => void" description="Called when the clock confirm button is pressed." />
-          <PropRow isDarkMode={dark} name="cancelText" type="string" defaultVal='"Cancel"' description="Text for the clock cancel button (i18n)." />
-          <PropRow isDarkMode={dark} name="okText" type="string" defaultVal='"OK"' description="Text for the clock OK button (i18n)." />
-          <PropRow isDarkMode={dark} name="name" type="string" description="HTML name attribute; renders a hidden input for form submission." />
-          <PropRow isDarkMode={dark} name="...rest" type="HTMLAttributes" description="Standard HTML div attributes (data-testid, aria-*, etc.) pass through to the root element." />
-        </PropsTable>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="TimePicker" />
 
       {/* ─── 38. TimePickerClasses Slots ─────────────────────────────────── */}
       <Section

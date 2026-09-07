@@ -192,6 +192,16 @@ const [show, setShow] = useState(false);
 
 ---
 
+## Keyboard Interactions
+
+A native `<input>`: the browser owns text entry, selection and the clear affordance.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the field. `disabled` removes it from the tab order; `readOnly` does not. |
+
+---
+
 ## Accessibility
 
 - Native `<input>` element with proper `type`, `id`, `name`

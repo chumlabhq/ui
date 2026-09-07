@@ -99,6 +99,15 @@ export default function Example() {
 | `defaultSnapPointIndex` | number | — | Initial snap point index for uncontrolled usage. |
 | `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Escape` | Closes the drawer, unless `closeOnEscape={false}`. |
+| `Tab` | Cycles focus inside the panel while `trapFocus` is on, and never reaches the page behind it. |
+
+---
+
 ## Accessibility
 
 - `role="dialog"` with `aria-modal` when modal

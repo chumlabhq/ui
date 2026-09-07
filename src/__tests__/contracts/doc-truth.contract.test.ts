@@ -25,7 +25,7 @@
 import { describe, expect, it } from "vitest";
 import ts from "typescript";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
 import index from "../../../ai/component-index.json";
 
@@ -195,6 +195,72 @@ function classesClaimedInProse(name: string): string[] {
  * same time; under that load one of them exceeded 30s and failed on a clock
  * rather than on a claim. A timeout is not an assertion.
  */
+/**
+ * The keys a component's own code demonstrably handles.
+ *
+ * A lower bound, on purpose. It reads `e.key === "Escape"` and
+ * `["Enter", " "].includes(e.key)` out of the component's files and the shared
+ * hooks it imports, and it cannot see three real things: a key held in a
+ * variable (`TabPanel` computes `forwardKey` from the orientation), a key the
+ * browser handles natively (`Space` on a `<button>`, arrow keys in a radio
+ * group), and a key a nested component owns. So the gate below runs one way —
+ * every key found here must be documented — and a table may list more.
+ */
+function keysHandledBy(name: string): Set<string> {
+  const own = existsSync(`${SRC}/${name}`) ? walk(`${SRC}/${name}`) : [];
+  const shared = new Set<string>();
+  for (const file of own) {
+    const text = readFileSync(file, "utf8");
+    for (const m of text.matchAll(/from\s+"(\.\.\/[^"]*utils[^"]*)"/g)) {
+      const base = join(dirname(file), m[1]).replace(/\.js$/, "");
+      for (const candidate of [`${base}.ts`, `${base}.tsx`]) {
+        if (existsSync(candidate)) shared.add(candidate);
+      }
+    }
+  }
+
+  const keys = new Set<string>();
+  for (const file of [...own, ...shared]) {
+    const text = readFileSync(file, "utf8");
+    for (const m of text.matchAll(/(?:\b(?:e|ev|event)\.key|\bkey)\s*===\s*"([^"]+)"/g)) keys.add(m[1]);
+    for (const m of text.matchAll(/\[((?:\s*"[^"]+"\s*,?)+)\]\s*\.includes\(\s*(?:e|ev|event)\.key/g)) {
+      for (const k of m[1].matchAll(/"([^"]+)"/g)) keys.add(k[1]);
+    }
+    // `switch (e.key)`, which is how Slider, OtpInput and Table read theirs.
+    // Scanned with brace depth rather than another regex: a `case "x":` inside
+    // a nested switch on something else is not a key.
+    for (const m of text.matchAll(/switch\s*\(\s*(?:[\w.]*\.)?key\s*\)\s*\{/g)) {
+      let depth = 1;
+      let i = m.index + m[0].length;
+      const start = i;
+      while (i < text.length && depth > 0) {
+        const c = text[i];
+        if (c === "{") depth += 1;
+        else if (c === "}") depth -= 1;
+        i += 1;
+      }
+      for (const c of text.slice(start, i).matchAll(/case\s+"([^"]*)"\s*:/g)) keys.add(c[1]);
+    }
+  }
+  keys.delete("");
+  return keys;
+}
+
+/** The keys a component's `## Keyboard Interactions` table names. */
+function keysDocumentedBy(name: string): Set<string> {
+  const path = `${SRC}/${name}/${name.toUpperCase()}.ai.md`;
+  if (!existsSync(path)) return new Set();
+  const body = readFileSync(path, "utf8")
+    .split(/^## /m)
+    .find((s) => s.startsWith("Keyboard Interactions"));
+  if (!body) return new Set();
+  const named = new Set<string>();
+  for (const m of body.matchAll(/`([^`]+)`/g)) named.add(m[1]);
+  // `Space` is how a table names the key the source writes as " ".
+  if (named.has("Space")) named.add(" ");
+  return named;
+}
+
 const SHELL_OUT_TIMEOUT = 120_000;
 
 describe("doc truth contract", () => {
@@ -308,6 +374,50 @@ describe("doc truth contract", () => {
   it("keeps the unfixtured-markup count from growing", () => {
     expect(() =>
       execFileSync("node", ["scripts/audit-fixture-gap.mjs", "--check"], { stdio: "pipe" }),
+    ).not.toThrow();
+  }, SHELL_OUT_TIMEOUT);
+
+  it("documents every key the component handles", () => {
+    /**
+     * The site's Keyboard Interactions section is this table, so a key the
+     * component answers and the table omits is a key nobody can discover
+     * except by pressing it. `ai/component-index.json` has carried an empty
+     * `a11y.keyboard` array for all thirty components since it was generated;
+     * this is the half that is actually written down.
+     */
+    const undocumented: string[] = [];
+    for (const name of COMPONENTS) {
+      const documented = keysDocumentedBy(name);
+      for (const key of keysHandledBy(name)) {
+        if (!documented.has(key)) undocumented.push(`${name}.${key === " " ? "Space" : key}`);
+      }
+    }
+    expect(
+      undocumented.sort(),
+      "handled in the component's source, absent from its `## Keyboard Interactions` table. " +
+        "The table may list more than the source handles — native behaviour and keys held in " +
+        "variables are real — but never less",
+    ).toEqual([]);
+  });
+
+  it("reads keys out of both sides", () => {
+    // Both extractors, so the assertion above cannot pass on empty sets.
+    expect(keysHandledBy("Slider").has("ArrowRight"), "no handled keys were read").toBe(true);
+    expect(keysDocumentedBy("Slider").has("ArrowRight"), "no documented keys were read").toBe(true);
+    expect(keysHandledBy("Slider").has("F13")).toBe(false);
+  });
+
+  it("keeps the component pages in step with the source they render from", () => {
+    /**
+     * The pages carried their own prop tables until this branch: 1595
+     * hand-written rows, 263 of which named neither a prop, a `classes` slot
+     * nor a data attribute, with 223 real props missing altogether. They read
+     * `src/pages/demo/generated/componentDocs.ts` now, and this is what stops
+     * that file — and the copy-paste snippets the consumer matrix compiles —
+     * drifting from the schemas and .ai.md files it is built from.
+     */
+    expect(() =>
+      execFileSync("node", ["scripts/build-component-docs.mjs", "--check"], { stdio: "pipe" }),
     ).not.toThrow();
   }, SHELL_OUT_TIMEOUT);
 

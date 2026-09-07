@@ -1,4 +1,6 @@
-import { useState, useCallback } from "react";
+import {
+  useState,
+  useCallback } from "react";
 import { Dropdown } from "../../components/Dropdown/index.js";
 import type { DropdownOption } from "../../components/Dropdown/index.js";
 import { useTheme } from "./ThemeContext.js";
@@ -12,6 +14,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import { fetchCountries, type Country } from "./lib/countries.js";
 
@@ -392,6 +397,10 @@ const DropdownDemo = () => {
         description="A fully accessible select dropdown component for choosing from a list of options. Supports controlled and uncontrolled modes, portal rendering, keyboard navigation with type-ahead search, async option loading, clearable selection, custom trigger rendering, and complete style customization via a classes object."
         code={`import { Dropdown } from "@chumlab/ui/dropdown";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Dropdown" />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -1785,309 +1794,8 @@ const DropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Props ───────────────────────────────────────────────────────── */}
-      <Section title="Dropdown Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="options"
-              type="DropdownOption[]"
-              defaultVal="[]"
-              description="Array of selectable options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="string | null"
-              description="Controlled selected value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="string"
-              description="Initial value in uncontrolled mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(value: string | null, option: DropdownOption | null) => void"
-              description="Callback when selection changes (null when cleared)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="open"
-              type="boolean"
-              description="Controlled open state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultOpen"
-              type="boolean"
-              defaultVal="false"
-              description="Initial open state in uncontrolled mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onOpenChange"
-              type="(open: boolean) => void"
-              description="Callback when open state changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="id"
-              type="string"
-              defaultVal="auto-generated"
-              description="ID for ARIA attribute generation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="name"
-              type="string"
-              description="Form field name -- renders a hidden input for native form submission"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="placeholder"
-              type="ReactNode"
-              defaultVal='"Select an option"'
-              description="Placeholder content when no selection"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable the entire dropdown"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Show error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error message displayed below trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Accessible label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Whether the field is required"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="clearable"
-              type="boolean"
-              defaultVal="false"
-              description="Show clear button and allow deselection"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="noResultsContent"
-              type="ReactNode"
-              defaultVal='"No options available"'
-              description="Content shown when options is empty"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showChevron"
-              type="boolean"
-              defaultVal="true"
-              description="Show the dropdown chevron icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showSelectedIcon"
-              type="boolean"
-              defaultVal="true"
-              description="Show check icon on selected option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectedIcon"
-              type="ReactNode"
-              description="Custom icon for selected option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Stretch to fill container width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="External loading state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onLoadOptions"
-              type="() => Promise<DropdownOption[]>"
-              description="Async function to load options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loadOnOpen"
-              type="boolean"
-              defaultVal="false"
-              description="Trigger onLoadOptions when dropdown opens"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onLoadError"
-              type="(error: unknown) => void"
-              description="Callback when async loading fails"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shimmerCount"
-              type="number"
-              defaultVal="5"
-              description="Number of shimmer skeleton items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="DropdownClasses"
-              description="Class names for all internal elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="Root class name (merged with classes.root)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Root inline styles"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="keepMounted"
-              type="boolean"
-              defaultVal="false"
-              description="Keep portal in DOM when closed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="lockScroll"
-              type="boolean"
-              defaultVal="false"
-              description="Lock body scroll while dropdown is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Portal target container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownPosition"
-              type='"top" | "bottom"'
-              defaultVal='"bottom"'
-              description="Preferred popup position (auto-flips)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="forceDropdownPosition"
-              type="boolean"
-              defaultVal="false"
-              description="When true, locks the dropdown to the specified dropdownPosition without auto-flipping"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownZIndex"
-              type="number"
-              defaultVal="50"
-              description="z-index of the popup"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownGap"
-              type="number"
-              defaultVal="4"
-              description="Gap between trigger and popup (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="typeaheadTimeout"
-              type="number"
-              defaultVal="500"
-              description="Typeahead buffer timeout in ms"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-label"
-              type="string"
-              description="Listbox aria-label (falls back to label text)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onBlur"
-              type="() => void"
-              description="Called when trigger loses focus"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onFocus"
-              type="() => void"
-              description="Called when trigger gains focus"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onKeyDown"
-              type="(event: React.KeyboardEvent) => void"
-              description="Custom keydown handler"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderTrigger"
-              type="(props: DropdownTriggerRenderProps) => ReactNode"
-              description="Custom trigger render function"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ChevronIcon"
-              type="ComponentType"
-              defaultVal="ChevronDownIcon"
-              description="Custom chevron icon component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="CheckIcon"
-              type="ComponentType"
-              defaultVal="CheckIcon"
-              description="Custom check icon component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ClearIcon"
-              type="ComponentType"
-              defaultVal="ClearIcon"
-              description="Custom clear icon component"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Dropdown" />
 
       <Section title="DropdownClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

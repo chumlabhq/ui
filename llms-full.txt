@@ -544,6 +544,17 @@ root
 structural ones stay. The pulse is in the defaults, so `unstyled`, `animate={false}`
 and `prefers-reduced-motion` each switch it off.
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the next trigger in the tab order. |
+| `ArrowDown`, `ArrowUp` | Moves focus between triggers. `orientation="horizontal"` uses `ArrowRight`/`ArrowLeft` instead. Disabled items are skipped, and `loop` wraps past the ends. |
+| `Home`, `End` | Moves focus to the first or last trigger. |
+| `Enter`, `Space` | Toggles the focused item. In `type="single"` without `collapsible`, the open item cannot be closed this way. |
+
+---
+
 ### Anti-patterns
 
 ```tsx
@@ -973,6 +984,17 @@ For grouped avatars, match `ringColor` to your background:
 
 ---
 
+### Keyboard Interactions
+
+Only an avatar with `onClick` is focusable; a plain one is an image and takes no keyboard input.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to a clickable avatar, and to the overflow count in an `AvatarGroup`. |
+| `Enter`, `Space` | Activates it, firing the same `onClick` a pointer would. |
+
+---
+
 ### Anti-patterns
 
 ```tsx
@@ -1291,6 +1313,18 @@ const items: BreadcrumbItem[] = [
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves through the crumbs, and to the ellipsis trigger when the trail is collapsed. |
+| `Enter`, `Space` | Follows a crumb, or opens the collapsed-items menu from the ellipsis. |
+| `ArrowDown`, `ArrowUp` | Moves between items inside the open menu. |
+| `Home`, `End` | Jumps to the first or last item in the menu. |
+| `Escape` | Closes the menu and returns focus to the ellipsis. |
+
+---
+
 ---
 
 ## Button
@@ -1591,6 +1625,15 @@ const [saving, setSaving] = useState(false);
   Continue
 </Button>
 ```
+
+---
+
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the button. `disabled` and `loading` both remove it from the tab order. |
+| `Enter`, `Space` | Activates it. With `as="span"` the handler is added for you, since a span has no native activation. |
 
 ---
 
@@ -1988,6 +2031,20 @@ const searchCountries = async (query: string) => {
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu from the trigger, and selects the focused item. |
+| `ArrowDown`, `ArrowUp` | Moves between items in the open menu. |
+| `ArrowRight` | Opens the focused item's submenu and moves into it. `ArrowLeft` closes it and returns to the parent. |
+| `Home`, `End` | Jumps to the first or last item of the current level. |
+| `Escape` | Closes the deepest open menu and returns focus to its trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+| Printable characters | Type-ahead: jumps to the first item starting with what you typed. |
+
+---
+
 ---
 
 ## Checkbox
@@ -2000,7 +2057,7 @@ const searchCountries = async (query: string) => {
 ### Import
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/control";
+import { Checkbox } from "@chumlab/ui/checkbox";
 ```
 
 ---
@@ -2008,7 +2065,7 @@ import { Checkbox } from "@chumlab/ui/control";
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/control";
+import { Checkbox } from "@chumlab/ui/checkbox";
 import { useState } from "react";
 
 export default function Example() {
@@ -2237,6 +2294,17 @@ const someChecked = items.some(Boolean);
 
 ---
 
+### Keyboard Interactions
+
+A native `<input type="checkbox">`, so the browser owns this — `Enter` deliberately does nothing, as it does not on any checkbox.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the checkbox. |
+| `Space` | Toggles it, including out of the indeterminate state. |
+
+---
+
 ---
 
 ## CountryFlag
@@ -2433,6 +2501,12 @@ CountryFlag is image-based — no dark mode classes needed. Group count uses `bg
 ```tsx
 <CountryFlag code="us" tooltip="United States" size="lg" />
 ```
+
+---
+
+### Keyboard Interactions
+
+Presentational: it renders an image and takes no keyboard input.
 
 ---
 
@@ -2801,6 +2875,19 @@ import { fr } from "date-fns/locale";
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the calendar from the trigger, and selects the focused day. |
+| `ArrowLeft`, `ArrowRight` | Moves a day. `ArrowUp`/`ArrowDown` move a week. Disabled days are stepped over rather than focused. |
+| `Home`, `End` | Jumps to the start or end of the week, honouring `weekStartsOn`. |
+| `PageUp`, `PageDown` | Changes month. With `Shift`, changes year. |
+| `Escape` | Closes the calendar and returns focus to the trigger. |
+| `Tab` | Cycles within the panel, which is `role="dialog" aria-modal="true"` and traps focus in both directions. |
+
+---
+
 ---
 
 ## Drawer
@@ -2895,6 +2982,15 @@ export default function Example() {
 | `activeSnapPointIndex` | number | — | Controlled active snap point index. |
 | `defaultSnapPointIndex` | number | — | Initial snap point index for uncontrolled usage. |
 | `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
+
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Escape` | Closes the drawer, unless `closeOnEscape={false}`. |
+| `Tab` | Cycles focus inside the panel while `trapFocus` is on, and never reaches the page behind it. |
+
+---
 
 ---
 
@@ -3206,6 +3302,20 @@ const [value, setValue] = useState<string | null>(null);
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu from the trigger, and selects the focused option. |
+| `ArrowDown`, `ArrowUp` | Moves between options, opening the menu first if it is closed. |
+| `Home`, `End` | Jumps to the first or last option. |
+| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+| `Backspace`, `Delete` | Clears the selection when the trigger has focus and `clearable` is set. |
+| Printable characters | Type-ahead within `typeaheadTimeout` of the last keystroke. |
+
+---
+
 ---
 
 ## Input
@@ -3391,6 +3501,16 @@ const [show, setShow] = useState(false);
   successMessage="Looks good!"
 />
 ```
+
+---
+
+### Keyboard Interactions
+
+A native `<input>`: the browser owns text entry, selection and the clear affordance.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the field. `disabled` removes it from the tab order; `readOnly` does not. |
 
 ---
 
@@ -3712,6 +3832,20 @@ const euCountries = [
 
 ---
 
+### Keyboard Interactions
+
+The number itself is a native `<input>`. The country selector is a listbox with its own keys.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves between the country trigger and the number field. |
+| `Enter`, `Space` | Opens the country list, and picks the focused country. |
+| `ArrowDown`, `ArrowUp` | Moves through countries. |
+| `Escape` | Closes the country list. |
+| Printable characters | Filters the country list by name or dial code. |
+
+---
+
 ---
 
 ## Loader
@@ -3850,6 +3984,12 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ### Styling Guide
 
 Each variant has its own class slots. Circular: `root`, `control`, `track`, `range`. Linear: `root`, `range`. Dot: `root`, `range`. Pulse: `root`, `range`.
+
+---
+
+### Keyboard Interactions
+
+Presentational: a loader is `role="status"` and takes no keyboard input.
 
 ---
 
@@ -4168,6 +4308,15 @@ const emailRef = useRef<HTMLInputElement>(null);
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Escape` | Closes the modal, unless `closeOnEscape={false}`. With nesting, only the topmost one closes. |
+| `Tab` | Cycles focus inside the dialog while `trapFocus` is on. Focus returns to the trigger on close. |
+
+---
+
 ---
 
 ## MultiSelectDropdown
@@ -4407,6 +4556,18 @@ const [values, setValues] = useState<string[]>([]);
   lockScroll
 />
 ```
+
+---
+
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu, and toggles the focused option without closing it. |
+| `ArrowDown`, `ArrowUp` | Moves between options. `aria-activedescendant` on the trigger follows, so focus itself never leaves it. |
+| `Home`, `End` | Jumps to the first or last option. |
+| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus on. |
 
 ---
 
@@ -4652,6 +4813,19 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu, and toggles the focused option without closing it. |
+| `ArrowDown`, `ArrowUp` | Moves between the filtered options. `aria-activedescendant` sits on the search input, which holds focus. |
+| `Home`, `End` | Jumps to the first or last filtered option. |
+| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+| Printable characters | Types into the search box and filters the list. |
+
+---
+
 ---
 
 ## OtpInput
@@ -4758,6 +4932,19 @@ filter is now derived from the same pattern, so all four agree.
 - An explicit `validate` still wins outright.
 - A pattern that will not compile falls back to accepting everything, matching
   what the browser does with the attribute.
+
+---
+
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus into the group; the boxes themselves are reached with the arrow keys. |
+| `ArrowLeft`, `ArrowRight` | Moves between boxes. |
+| `Home`, `End` | Jumps to the first or last box. |
+| `Backspace` | Clears the current box, or steps back and clears the previous one when it is already empty. |
+| `Delete` | Clears the current box without moving. |
+| Printable characters | Fills the box and advances. A paste of the full code fills every box at once. |
 
 ---
 
@@ -5016,6 +5203,18 @@ const [rows, setRows] = useState(10);
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves between the page buttons, the navigation arrows and the rows-per-page trigger. |
+| `Enter`, `Space` | Activates the focused control. |
+| `ArrowDown`, `ArrowUp` | Moves between options in the open rows-per-page menu. |
+| `Home`, `End` | Jumps to the first or last option in that menu. |
+| `Escape` | Closes it and returns focus to the trigger. |
+
+---
+
 ---
 
 ## RadioButton
@@ -5113,6 +5312,18 @@ export default function Example() {
 // Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
 ```
 
+### Keyboard Interactions
+
+Native `<input type="radio">` elements in a group, so the browser owns the roving focus.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves into the group, landing on the checked radio — or the first one when none is checked. |
+| `ArrowDown`, `ArrowRight` | Moves to the next radio and selects it. `ArrowUp`/`ArrowLeft` move back. |
+| `Space` | Selects the focused radio. |
+
+---
+
 ---
 
 ## ResizablePanel
@@ -5166,6 +5377,19 @@ export default function Example() {
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `handleContent` | object | — | React.ReactNode — Custom content rendered inside the resize handle. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
+
+### Keyboard Interactions
+
+The handle is `role="separator"` and focusable, so resizing never requires a drag (SC 2.5.7).
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the handle. |
+| `ArrowLeft`, `ArrowRight` | Resizes in steps. A vertical panel uses `ArrowUp`/`ArrowDown`. |
+| `Home`, `End` | Jumps to the minimum or maximum size. |
+| `Escape` | Abandons the resize and restores the size it started at. |
+
+---
 
 ---
 
@@ -5437,6 +5661,20 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu, and selects the focused option. |
+| `ArrowDown`, `ArrowUp` | Moves between the filtered options. `aria-activedescendant` sits on the search input, which holds focus. |
+| `Home`, `End` | Jumps to the first or last filtered option. |
+| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+| `Backspace`, `Delete` | Clears the selection when the search box is empty and `clearable` is set. |
+| Printable characters | Filters the list. |
+
+---
+
 ---
 
 ## Slider
@@ -5550,6 +5788,17 @@ override silently drops the rest.
 
 // Passing only `thumb: "data-[disabled]:…"` drops the base and the other 1 states.
 ```
+
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the thumb. A range slider has one thumb per value. |
+| `ArrowRight`, `ArrowUp` | Increases by `step`. `ArrowLeft`/`ArrowDown` decrease. Holding `Shift` uses the larger step. |
+| `PageUp`, `PageDown` | Moves by the larger step. |
+| `Home`, `End` | Jumps to the minimum or maximum. |
+
+---
 
 ---
 
@@ -5796,6 +6045,17 @@ const steps = [
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus into the step list. |
+| `ArrowRight`, `ArrowDown` | Moves to the next step. `ArrowLeft`/`ArrowUp` move back. `loop` wraps past the ends. |
+| `Home`, `End` | Jumps to the first or last step. |
+| `Enter`, `Space` | Activates the focused step, when the step is clickable. |
+
+---
+
 ---
 
 ## Switch
@@ -5867,6 +6127,17 @@ override silently drops the rest.
 // Passing only `control: "data-[disabled]:…"` drops the base and the other 2 states.
 ```
 
+### Keyboard Interactions
+
+A `<button role="switch">`, not a checkbox — which is why `Enter` activates it as well as `Space`.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the switch. |
+| `Enter`, `Space` | Toggles it. |
+
+---
+
 ### All Props
 
 <!-- generated from Switch.schema.json — edit the schema, not this table -->
@@ -5927,7 +6198,7 @@ Or use the `classes` prop with 14 slots for full control.
 ### Import
 
 ```tsx
-import { Table } from "@chumlab/ui/list";
+import { Table } from "@chumlab/ui/table";
 import { Pagination } from "@chumlab/ui/pagination";
 import type { ColumnDef } from "@tanstack/react-table";
 ```
@@ -5937,7 +6208,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { Table } from "@chumlab/ui/list";
+import { Table } from "@chumlab/ui/table";
 import type { ColumnDef } from "@tanstack/react-table";
 
 interface User { name: string; email: string; }
@@ -6162,6 +6433,21 @@ const [sorting, setSorting] = useState<SortingState>([]);
 
 ---
 
+### Keyboard Interactions
+
+Cell navigation is on the grid itself; the controls inside a cell keep their own behaviour.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves between the interactive elements — search, filter triggers, resize handles, the controls in a cell. |
+| `ArrowLeft`, `ArrowRight` | Moves the focused cell along a row. `ArrowUp`/`ArrowDown` move down a column. |
+| `Home`, `End` | Moves to the first or last cell in the row. |
+| `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. |
+| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. |
+| `ArrowLeft`, `ArrowRight` on a resize handle | Resizes the column in steps, so column widths are reachable without a drag (SC 2.5.7). |
+
+---
+
 ---
 
 ## TabPanel
@@ -6186,15 +6472,15 @@ import type { Tab, TabPanelProps } from "@chumlab/ui/tab-panel";
 import { TabPanel } from "@chumlab/ui/tab-panel";
 
 const tabs = [
-  { id: "home", itemText: "Home" },
-  { id: "profile", itemText: "Profile" },
-  { id: "settings", itemText: "Settings" },
+  { id: "home", label: "Home" },
+  { id: "profile", label: "Profile" },
+  { id: "settings", label: "Settings" },
 ];
 
 export default function Example() {
   return (
     <TabPanel tabs={tabs} defaultValue="home">
-      {(item) => <div style={{ padding: 16 }}>{item.itemText} content</div>}
+      {(item) => <div style={{ padding: 16 }}>{item.label} content</div>}
     </TabPanel>
   );
 }
@@ -6359,6 +6645,17 @@ const tabs = [
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves into the tab list, landing on the active tab, then out to the panel. |
+| `ArrowRight`, `ArrowLeft` | Moves between tabs; a vertical list uses `ArrowDown`/`ArrowUp`, and right-to-left swaps the horizontal pair. With `activationMode="automatic"` the tab activates as focus lands. |
+| `Home`, `End` | Moves to the first or last tab. |
+| `Enter`, `Space` | Activates the focused tab under `activationMode="manual"`. |
+
+---
+
 ---
 
 ## TextArea
@@ -6371,7 +6668,7 @@ const tabs = [
 ### Import
 
 ```tsx
-import { TextArea, TextAreaLabel } from "@chumlab/ui/input";
+import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";
 ```
 
 ---
@@ -6379,7 +6676,7 @@ import { TextArea, TextAreaLabel } from "@chumlab/ui/input";
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { TextArea } from "@chumlab/ui/input";
+import { TextArea } from "@chumlab/ui/textarea";
 
 export default function Example() {
   return (
@@ -6550,6 +6847,16 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
   required
 />
 ```
+
+---
+
+### Keyboard Interactions
+
+A native `<textarea>`: the browser owns text entry and selection.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the field, and out of it — it does not insert a tab character. |
 
 ---
 
@@ -6775,6 +7082,20 @@ const [time, setTime] = useState<string | null>(null);
 
 ---
 
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the panel from the trigger, and picks the focused time. |
+| `ArrowDown`, `ArrowUp` | Moves through the options in the focused column. On the clock face the same keys move the hand by one step. |
+| `ArrowLeft`, `ArrowRight` | Moves between the hour, minute, second and meridiem columns. |
+| `Home`, `End` | Jumps to the first or last option in the column. |
+| `PageUp`, `PageDown` | Moves by the larger step on the clock face. |
+| `Escape` | Closes the panel and returns focus to the trigger. |
+| `Tab` | Cycles within the open panel. |
+
+---
+
 ---
 
 ## Toast
@@ -6797,7 +7118,7 @@ import { ToastProvider, useToast } from "@chumlab/ui/toast";
 ```tsx
 import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-function App() {
+export default function App() {
   return (
     <ToastProvider>
       <MyComponent />
@@ -6842,6 +7163,18 @@ toast.toast({ type, title, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();
 ```
+
+---
+
+### Keyboard Interactions
+
+A toast takes focus only when it has an action; otherwise it announces itself and stays out of the tab order.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Escape` | Dismisses the toast when `dismissOnEscape` is set. |
+| `Tab` | Moves to the toast's action and close button while it is on screen. |
+| `Enter`, `Space` | Activates the focused action. |
 
 ---
 
@@ -7011,5 +7344,14 @@ trigger (span wrapper, or merged via asChild)
 #### Dark mode
 
 Defaults include `dark:` variants. Content uses `bg-white dark:bg-gray-800`, `text-gray-900 dark:text-white`, `border-gray-200 dark:border-gray-700`.
+
+---
+
+### Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the trigger, which shows the tooltip — hover is not the only way in. |
+| `Escape` | Hides it while the trigger keeps focus. |
 
 ---

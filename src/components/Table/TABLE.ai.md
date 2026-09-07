@@ -16,7 +16,7 @@ Use `<Table columns={[...]} data={[...]} />` for a data table. Built on TanStack
 ## Import
 
 ```tsx
-import { Table } from "@chumlab/ui/list";
+import { Table } from "@chumlab/ui/table";
 import { Pagination } from "@chumlab/ui/pagination";
 import type { ColumnDef } from "@tanstack/react-table";
 ```
@@ -26,7 +26,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { Table } from "@chumlab/ui/list";
+import { Table } from "@chumlab/ui/table";
 import type { ColumnDef } from "@tanstack/react-table";
 
 interface User { name: string; email: string; }
@@ -248,6 +248,21 @@ const [sorting, setSorting] = useState<SortingState>([]);
 ```tsx
 <Table columns={columns} data={data} pinnedColumns={["name"]} onPinColumn={(id, pinned) => ...} />
 ```
+
+---
+
+## Keyboard Interactions
+
+Cell navigation is on the grid itself; the controls inside a cell keep their own behaviour.
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves between the interactive elements — search, filter triggers, resize handles, the controls in a cell. |
+| `ArrowLeft`, `ArrowRight` | Moves the focused cell along a row. `ArrowUp`/`ArrowDown` move down a column. |
+| `Home`, `End` | Moves to the first or last cell in the row. |
+| `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. |
+| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. |
+| `ArrowLeft`, `ArrowRight` on a resize handle | Resizes the column in steps, so column widths are reachable without a drag (SC 2.5.7). |
 
 ---
 

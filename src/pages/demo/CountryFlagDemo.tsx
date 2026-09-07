@@ -1,10 +1,11 @@
-import { useState } from "react";
+import {
+  useState } from "react";
 import {
   CountryFlag,
   CountryFlagGroup,
   CountryFlagShimmer,
   CountryFlagGroupShimmer,
-} from "../../components/CountryFlag/index.js";
+  } from "../../components/CountryFlag/index.js";
 import {
   DocsHero,
   Section,
@@ -14,6 +15,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
@@ -56,6 +60,10 @@ const CountryFlagDemo = () => {
         description="A lightweight component for rendering country flags from SVG files. Supports sizes, aspect ratios, tooltips, grouping with overflow, loading shimmer, error fallback, and fully customizable styling."
         code={`import { CountryFlag, CountryFlagGroup } from "@chumlab/ui/country-flag";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="CountryFlag" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -504,150 +512,8 @@ const CountryFlagDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Props Tables ───────────────────────────────────────────────── */}
-      <Section title="CountryFlag Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="code"
-              type="string"
-              defaultVal="required"
-              description="Two-letter ISO country code"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type="CountryFlagSize | number"
-              defaultVal='"md"'
-              description="Flag width (height from aspect ratio)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aspectRatio"
-              type="number"
-              defaultVal="0.75"
-              description="Height / width ratio"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="alt"
-              type="string"
-              description='Alt text (defaults to "CODE flag")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fallback"
-              type="ReactNode"
-              description="Content when image fails"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="Show shimmer placeholder"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltip"
-              type="ReactNode | TooltipConfig"
-              description="Tooltip content or config"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="basePath"
-              type="string"
-              defaultVal='"/flags"'
-              description="Base path for SVG files"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="CountryFlagClasses"
-              description="Slot overrides: root, image, fallback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reduceMotion"
-              type='boolean | "auto"'
-              defaultVal='"auto"'
-              description="Disable fade-in animation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onLoad"
-              type="(e) => void"
-              description="Image load callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onError"
-              type="(e) => void"
-              description="Image error callback"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="CountryFlagGroup Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              defaultVal="required"
-              description="CountryFlag components"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="max"
-              type="number"
-              description="Max visible flags"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type="CountryFlagSize | number"
-              defaultVal='"md"'
-              description="Size for surplus badge"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showCountTooltip"
-              type="boolean"
-              defaultVal="false"
-              description="Auto tooltip from hidden flag names"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="surplusTooltipContent"
-              type="ReactNode"
-              description="Explicit surplus tooltip"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderSurplus"
-              type="(count) => ReactNode"
-              description="Custom surplus renderer"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="CountryFlagGroupClasses"
-              description="Slot overrides: root, item, count"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="CountryFlag" />
 
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>

@@ -1,5 +1,8 @@
-import { useState, useRef } from "react";
-import { ToastProvider, useToast } from "../../components/Toast/index.js";
+import {
+  useState,
+  useRef } from "react";
+import { ToastProvider,
+  useToast } from "../../components/Toast/index.js";
 import type { ToastPosition } from "../../components/Toast/utils/types.js";
 import {
   DocsHero,
@@ -10,6 +13,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
@@ -49,6 +55,10 @@ const ToastDemoContent = ({
         description="A flexible, accessible notification system for displaying brief messages to users. Supports multiple variants, customizable durations, progress indicators, custom content, and extensive styling options."
         code={`import { ToastProvider, useToast } from "@chumlab/ui/toast";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Toast" />
 
       {/* ─── Basic Variants ───────────────────────────────────────────── */}
       <Section
@@ -1112,93 +1122,7 @@ const ToastDemoContent = ({
         </div>
       </Section>
 
-      <Section title="ToastProvider Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              description="Application content to wrap"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="position"
-              type="ToastPosition"
-              defaultVal='"bottom-right"'
-              description="Screen position for toast container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxToasts"
-              type="number"
-              defaultVal="5"
-              description="Maximum visible toasts (older ones auto-dismissed)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultDuration"
-              type="number"
-              defaultVal="5000"
-              description="Default duration for all toasts (ms)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="gap"
-              type="number"
-              defaultVal="12"
-              description="Gap between stacked toasts (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="containerClassName"
-              type="string"
-              description="CSS class for the toast container wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="zIndex"
-              type="number"
-              defaultVal="9999"
-              description="Z-index for the toast portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dismissOnEscape"
-              type="boolean"
-              defaultVal="false"
-              description="Dismiss all toasts when Escape key is pressed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="animationDuration"
-              type="number"
-              defaultVal="200"
-              description="Duration of entry/exit animations in milliseconds"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="containerAriaLabel"
-              type="string"
-              defaultVal='"Notifications"'
-              description="Accessible label for the toast container region"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="ToastClasses"
-              description="Default class overrides applied to all toasts"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default styles from all toasts"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      <ComponentDocs name="Toast" />
 
       <Section title="ToastClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

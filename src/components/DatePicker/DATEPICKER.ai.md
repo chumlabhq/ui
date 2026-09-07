@@ -369,6 +369,19 @@ import { fr } from "date-fns/locale";
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the calendar from the trigger, and selects the focused day. |
+| `ArrowLeft`, `ArrowRight` | Moves a day. `ArrowUp`/`ArrowDown` move a week. Disabled days are stepped over rather than focused. |
+| `Home`, `End` | Jumps to the start or end of the week, honouring `weekStartsOn`. |
+| `PageUp`, `PageDown` | Changes month. With `Shift`, changes year. |
+| `Escape` | Closes the calendar and returns focus to the trigger. |
+| `Tab` | Cycles within the panel, which is `role="dialog" aria-modal="true"` and traps focus in both directions. |
+
+---
+
 ## Accessibility
 
 - **Keyboard:** Arrow keys navigate days, Home/End jump to the bounds of the week (honouring `weekStartsOn`), PageUp/PageDown change months, Shift+PageUp/PageDown change years, Enter/Space selects a day, Escape closes the calendar. Disabled days are stepped over rather than focused. The month and year menus are listboxes: arrows, Home/End, Enter to choose, Escape to close.

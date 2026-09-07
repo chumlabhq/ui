@@ -1,5 +1,8 @@
-import { useState, useRef } from "react";
-import { TextArea, TextAreaLabel } from "../../components/TextArea/index.js";
+import {
+  useState,
+  useRef } from "react";
+import { TextArea,
+  TextAreaLabel } from "../../components/TextArea/index.js";
 import type { TextAreaClasses } from "../../components/TextArea/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
@@ -11,6 +14,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -201,6 +207,10 @@ const TextAreaDemo = () => {
         description="A production-grade, multi-line text input. Supports icons, validation states, character counts, clearable, loading states, description text, and complete styling control through the classes prop."
         code={`import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="TextArea" />
 
       {/* ─── Examples ───────────────────────────────────────────────── */}
       <div className="space-y-8">
@@ -954,201 +964,8 @@ const TextAreaDemo = () => {
         </Section>
       </div>
 
-      {/* ─── Props Tables ───────────────────────────────────────────────── */}
-      <Section title="TextArea Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label above the textarea"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="ReactNode"
-              description="Helper text below the label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Shows * and sets aria-required"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disables the textarea"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="readOnly"
-              type="boolean"
-              defaultVal="false"
-              description="Makes textarea read-only"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rows"
-              type="number"
-              defaultVal="4"
-              description="Visible row count"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Error state (sets aria-invalid)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error text (role=alert)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="boolean"
-              defaultVal="false"
-              description="Success validation state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="successMessage"
-              type="ReactNode"
-              description="Success text (role=status)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="startIcon"
-              type="ReactNode"
-              description="Icon before textarea"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="endIcon"
-              type="ReactNode"
-              description="Icon after textarea"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onStartIconClick"
-              type="() => void"
-              description="Makes start icon a button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onEndIconClick"
-              type="() => void"
-              description="Makes end icon a button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="startIconLabel"
-              type="string"
-              description="Accessible label for start icon button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="endIconLabel"
-              type="string"
-              description="Accessible label for end icon button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="clearable"
-              type="boolean"
-              defaultVal="false"
-              description="Shows clear button when has value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onClear"
-              type="() => void"
-              description="Callback when clear clicked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showCount"
-              type="boolean"
-              defaultVal="false"
-              description="Show character count (needs maxLength)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="autoResize"
-              type="boolean"
-              defaultVal="false"
-              description="Auto-grow/shrink height to fit content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(val: string) => void"
-              description="Convenience callback with string value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="Shows loader, disables textarea"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loader"
-              type="ReactNode"
-              defaultVal="CircularLoader"
-              description="Custom loader component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loaderSize"
-              type="number"
-              defaultVal="16"
-              description="Default loader size in px"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Spans full container width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type='"sm" | "md" | "lg"'
-              description="Size variant (emits data-size)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class for the root container element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="TextAreaClasses"
-              description="Slot-based class overrides for internal elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="When true, all default classes are removed; only classes overrides apply"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="TextArea" />
 
       <Section title="TextAreaClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

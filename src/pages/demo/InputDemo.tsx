@@ -1,5 +1,8 @@
-import { useState, useRef } from "react";
-import { Input, InputLabel } from "../../components/Input/index.js";
+import {
+  useState,
+  useRef } from "react";
+import { Input,
+  InputLabel } from "../../components/Input/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -10,6 +13,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -280,6 +286,10 @@ const InputDemo = () => {
         description="A production-grade, fully accessible text input. Supports icons, prefix/suffix addons, clearable, character counts, validation states, loading, and complete styling control through the classes prop."
         code={`import { Input, InputLabel } from "@chumlab/ui/input";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Input" />
 
       {/* ─── Examples ─────────────────────────────────────────────────── */}
       <div className="space-y-8">
@@ -1245,177 +1255,8 @@ const InputDemo = () => {
         </Section>
       </div>
 
-      {/* ─── Props Tables ───────────────────────────────────────────────── */}
-      <Section title="Input Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label above the input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="ReactNode"
-              description="Helper text below the label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Error state (sets aria-invalid)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error text below input (role=alert)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="boolean"
-              defaultVal="false"
-              description="Success validation state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="successMessage"
-              type="ReactNode"
-              description="Success text below input (role=status)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type='"sm"|"md"|"lg"'
-              description="Size variant (emits data-size)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="prefix"
-              type="ReactNode"
-              description='Inline addon before input (e.g. "$")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="suffix"
-              type="ReactNode"
-              description='Inline addon after input (e.g. "USD")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="startIcon"
-              type="ReactNode"
-              description="Icon before input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="endIcon"
-              type="ReactNode"
-              description="Icon after input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onStartIconClick"
-              type="() => void"
-              description="Makes leading icon a button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onEndIconClick"
-              type="() => void"
-              description="Makes trailing icon a button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="startIconLabel"
-              type="string"
-              description="Accessible label for leading icon button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="endIconLabel"
-              type="string"
-              description="Accessible label for trailing icon button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(val: string) => void"
-              description="Convenience callback with string value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="clearable"
-              type="boolean"
-              defaultVal="false"
-              description="Shows clear button when input has value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onClear"
-              type="() => void"
-              description="Callback when clear button clicked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showCount"
-              type="boolean"
-              defaultVal="false"
-              description="Show character count (needs maxLength)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="Shows loader, disables input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loader"
-              type="ReactNode"
-              description="Custom loader component"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loaderSize"
-              type="number"
-              defaultVal="16"
-              description="Default loader size in px"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fullWidth"
-              type="boolean"
-              defaultVal="false"
-              description="Spans full container width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="InputClasses"
-              description="Slot-based class overrides for internal elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class for the root container element"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Input" />
 
       <Section title="InputClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

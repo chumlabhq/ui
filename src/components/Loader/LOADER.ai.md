@@ -145,6 +145,12 @@ Each variant has its own class slots. Circular: `root`, `control`, `track`, `ran
 
 ---
 
+## Keyboard Interactions
+
+Presentational: a loader is `role="status"` and takes no keyboard input.
+
+---
+
 ## Accessibility
 
 - All variants use `role="status"` + `aria-live="polite"` + `aria-label="Loading"`

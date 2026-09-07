@@ -1,4 +1,5 @@
-import { useState } from "react";
+import {
+  useState } from "react";
 import {
   Avatar,
   AvatarGroup,
@@ -6,7 +7,7 @@ import {
   AvatarBadge,
   AvatarShimmer,
   AvatarGroupShimmer,
-} from "../../components/Avatar/index.js";
+  } from "../../components/Avatar/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -17,6 +18,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -75,6 +79,10 @@ const AvatarDemo = () => {
         description="A flexible avatar component for displaying user images, initials, or fallback content. Supports status indicators, badges, tooltips, auto-generated colors, grouping, and fully customizable styling via the classes system."
         code={`import { Avatar, AvatarGroup, AvatarGroupCount, AvatarBadge } from "@chumlab/ui/avatar";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Avatar" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -1119,7 +1127,6 @@ const AvatarDemo = () => {
         </DemoWrapper>
       </Section>
 
-
       {/* ─── Group Size / Shape / Bordered ─────────────────────────────── */}
       <Section
         title="Group Inherited Props"
@@ -1218,7 +1225,6 @@ const AvatarDemo = () => {
         </DemoWrapper>
       </Section>
 
-
       {/* ─── Reduce Motion ──────────────────────────────────────────────── */}
       <Section
         title="Reduce Motion"
@@ -1248,426 +1254,8 @@ const AvatarDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props Tables ───────────────────────────────────────────────── */}
-      <Section title="Avatar Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="name"
-              type="string"
-              description="User name for initials generation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="src"
-              type="string"
-              description="Image URL"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="alt"
-              type="string"
-              description="Image alt text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type='"xs"|"sm"|"md"|"lg"|"xl"|number'
-              defaultVal='"md"'
-              description="Size preset or pixel value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shape"
-              type='"circle"|"rounded"|"square"'
-              defaultVal='"circle"'
-              description="Avatar shape"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxInitials"
-              type="number"
-              defaultVal="2"
-              description="Max characters for initials"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="fallback"
-              type="ReactNode"
-              description="Custom fallback when no name/image"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="autoColor"
-              type="boolean"
-              defaultVal="false"
-              description="Generate colors from name"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="colors"
-              type="AvatarColors"
-              description="Custom color palettes for autoColor"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="bordered"
-              type="boolean | string"
-              description="Add border (true or CSS string)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="status"
-              type="AvatarStatus | AvatarStatusConfig"
-              description="Status indicator"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltip"
-              type="ReactNode | AvatarTooltipConfig"
-              description="Tooltip content or config"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="imageConfig"
-              type="AvatarImageConfig"
-              description="Image loading options (lazy, srcSet, priority, etc.)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="AvatarClasses"
-              description="Slot class overrides: root, inner, image, initials, fallback, status"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="textStyle"
-              type="CSSProperties"
-              description="Inline styles for initials text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="boolean"
-              defaultVal="false"
-              description="Show shimmer placeholder"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reduceMotion"
-              type='boolean | "auto"'
-              defaultVal='"auto"'
-              description="Disable fade-in and shimmer pulse"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onLoad"
-              type="() => void"
-              description="Image load success callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onError"
-              type="() => void"
-              description="Image load error callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child element"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="AvatarGroup Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="max"
-              type="number"
-              description="Maximum visible avatars"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type="AvatarSize"
-              defaultVal='"md"'
-              description="Size for all children"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shape"
-              type="AvatarShape"
-              defaultVal='"circle"'
-              description="Shape for all children"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="bordered"
-              type="boolean | string"
-              description="Border for all children"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="spacing"
-              type="number"
-              defaultVal="-8"
-              description="Overlap spacing in px (negative = overlap)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ringColor"
-              type="string"
-              defaultVal='"white"'
-              description="Ring color between stacked avatars"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="variant"
-              type='"stack"|"grid"|"inline"'
-              defaultVal='"stack"'
-              description="Layout variant"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="total"
-              type="number"
-              description="Override total count for surplus calculation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showTooltip"
-              type="boolean"
-              defaultVal="false"
-              description="Show hidden names in surplus tooltip"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reverseOrder"
-              type="boolean"
-              defaultVal="false"
-              description="Reverse child order"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderSurplus"
-              type="(count) => ReactNode"
-              description="Custom surplus renderer"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onAvatarClick"
-              type="(info, event) => void"
-              description="Click handler: {index, name}"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="AvatarGroupClasses"
-              description="Slot class overrides: root, item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dir"
-              type='"ltr"|"rtl"'
-              defaultVal='"ltr"'
-              description="Text direction"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="AvatarGroupCount Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="count"
-              type="number"
-              description="Surplus count to display"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type="AvatarSize"
-              defaultVal='"md"'
-              description="Size matching group avatars"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shape"
-              type="AvatarShape"
-              defaultVal='"circle"'
-              description="Shape matching group avatars"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="max"
-              type="number"
-              description='Max before showing "+"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showPlus"
-              type="boolean"
-              defaultVal="true"
-              description='Prefix with "+"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="format"
-              type="(count) => string"
-              description="Custom display format function"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="variant"
-              type='"solid"|"outline"|"ghost"'
-              defaultVal='"solid"'
-              description="Visual variant"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltip"
-              type="ReactNode | AvatarTooltipConfig"
-              description="Tooltip on hover"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="bordered"
-              type="boolean | string"
-              description="Border style"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onClick"
-              type="() => void"
-              description="Click handler"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="AvatarBadge Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="count"
-              type="number"
-              description="Notification count"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="max"
-              type="number"
-              defaultVal="99"
-              description='Max before showing "+"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dot"
-              type="boolean"
-              defaultVal="false"
-              description="Show dot instead of count"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showZero"
-              type="boolean"
-              defaultVal="false"
-              description="Show badge when count is 0"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="position"
-              type="CornerPosition"
-              defaultVal='"top-right"'
-              description="Badge position corner"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="variant"
-              type='"solid"|"outline"|"soft"'
-              defaultVal='"solid"'
-              description="Visual variant"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="color"
-              type="string"
-              description="Custom badge color"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type='"xs"|"sm"|"md"|"lg"'
-              defaultVal='"md"'
-              description="Badge size"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="pulse"
-              type="boolean"
-              defaultVal="false"
-              description="Pulse animation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="invisible"
-              type="boolean"
-              defaultVal="false"
-              description="Render but visually hide"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="overlap"
-              type='"circular"|"rectangular"'
-              defaultVal='"circular"'
-              description="Overlap positioning mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="offset"
-              type="BadgeOffset"
-              description="Fine-tune position with {x, y} px"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Avatar" />
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section

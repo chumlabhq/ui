@@ -289,6 +289,18 @@ const items: BreadcrumbItem[] = [
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves through the crumbs, and to the ellipsis trigger when the trail is collapsed. |
+| `Enter`, `Space` | Follows a crumb, or opens the collapsed-items menu from the ellipsis. |
+| `ArrowDown`, `ArrowUp` | Moves between items inside the open menu. |
+| `Home`, `End` | Jumps to the first or last item in the menu. |
+| `Escape` | Closes the menu and returns focus to the ellipsis. |
+
+---
+
 ## Accessibility
 
 - **Landmark:** `<nav aria-label="Breadcrumb">` — configurable via `aria-label` prop

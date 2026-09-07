@@ -1,11 +1,13 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import {
   Drawer,
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
   DrawerCloseButton,
-} from "../../components/Drawer/index.js";
+  } from "../../components/Drawer/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -16,6 +18,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -144,6 +149,10 @@ const DrawerDemo = () => {
         description="A sliding panel overlay with focus trapping, scroll lock, swipe-to-close, snap points, stacked drawer support, and fully accessible keyboard navigation."
         code={`import { Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerCloseButton } from "@chumlab/ui/drawer";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Drawer" />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -706,244 +715,8 @@ const DrawerDemo = () => {
         </Drawer>
       </Section>
 
-      {/* ─── Props Table ────────────────────────────────────────────────── */}
-      <Section title="Drawer Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="open"
-              type="boolean"
-              defaultVal="required"
-              description="Whether the drawer is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onOpenChange"
-              type="(open: boolean) => void"
-              defaultVal="required"
-              description="Called when the drawer's open state changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="direction"
-              type='"left"|"right"|"top"|"bottom"'
-              defaultVal='"left"'
-              description="Slide direction"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type="string"
-              defaultVal='"300px"'
-              description="Width (left/right) or height (top/bottom)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="duration"
-              type="number"
-              defaultVal="300"
-              description="Animation duration in ms"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="overlayColor"
-              type="string"
-              defaultVal='"black"'
-              description="Overlay background color"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="overlayOpacity"
-              type="number"
-              defaultVal="0.5"
-              description="Overlay opacity (0–1)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="overlayBlur"
-              type="number"
-              defaultVal="0"
-              description="Overlay backdrop blur in px"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="lockScroll"
-              type="boolean"
-              defaultVal="true"
-              description="Lock body scroll when open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="closeOnOverlayClick"
-              type="boolean"
-              defaultVal="true"
-              description="Close on overlay click"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="closeOnEscape"
-              type="boolean"
-              defaultVal="true"
-              description="Close on Escape key"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="trapFocus"
-              type="boolean"
-              defaultVal="true"
-              description="Trap focus inside drawer"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="restoreFocus"
-              type="boolean"
-              defaultVal="true"
-              description="Restore focus to trigger on close"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="initialFocus"
-              type="RefObject<HTMLElement>"
-              description="Focus this element on open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="modal"
-              type="boolean"
-              defaultVal="true"
-              description="Render as modal with overlay"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="keepMounted"
-              type="boolean"
-              defaultVal="false"
-              description="Keep in DOM when closed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="swipeable"
-              type="boolean"
-              defaultVal="false"
-              description="Enable swipe-to-close"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="swipeThreshold"
-              type="number"
-              defaultVal="0.4"
-              description="Swipe distance fraction to close"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="snapPoints"
-              type="number[]"
-              description="Snap positions as fractions (e.g. [0.3, 0.6, 1])"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="activeSnapPointIndex"
-              type="number"
-              description="Controlled snap point index"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultSnapPointIndex"
-              type="number"
-              defaultVal="0"
-              description="Initial snap point index"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onSnapPointIndexChange"
-              type="(index) => void"
-              description="Snap point change callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="DrawerClasses"
-              description="Slot overrides: root, overlay, panel"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reduceMotion"
-              type='boolean | "auto"'
-              description="Override reduced motion (auto = system)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Portal target"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onTransitionEnd"
-              type="(open: boolean) => void"
-              description="Fires after animation completes"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="Sub-Component Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            DrawerHeader, DrawerBody, DrawerFooter
-          </p>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              description="Content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-          <p
-            className={`text-xs font-semibold mt-5 mb-3 text-cl-text-secondary`}
-          >
-            DrawerCloseButton
-          </p>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              description="Custom close icon (default: X icon)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onClick"
-              type="(e) => void"
-              description="Custom click handler (closes drawer unless e.preventDefault)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Drawer" />
 
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>

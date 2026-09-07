@@ -58,6 +58,19 @@ export default function Example() {
 | `handleContent` | object | — | React.ReactNode — Custom content rendered inside the resize handle. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 
+## Keyboard Interactions
+
+The handle is `role="separator"` and focusable, so resizing never requires a drag (SC 2.5.7).
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the handle. |
+| `ArrowLeft`, `ArrowRight` | Resizes in steps. A vertical panel uses `ArrowUp`/`ArrowDown`. |
+| `Home`, `End` | Jumps to the minimum or maximum size. |
+| `Escape` | Abandons the resize and restores the size it started at. |
+
+---
+
 ## Accessibility
 
 - `role="separator"` on the drag handle

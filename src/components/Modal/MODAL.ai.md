@@ -319,6 +319,15 @@ const emailRef = useRef<HTMLInputElement>(null);
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Escape` | Closes the modal, unless `closeOnEscape={false}`. With nesting, only the topmost one closes. |
+| `Tab` | Cycles focus inside the dialog while `trapFocus` is on. Focus returns to the trigger on close. |
+
+---
+
 ## Accessibility
 
 - `role="dialog"` with `aria-modal="true"` on content

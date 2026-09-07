@@ -1,5 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Modal, useModal } from "../../components/Modal/index.js";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback } from "react";
+import { Modal,
+  useModal } from "../../components/Modal/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -10,6 +15,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -136,6 +144,10 @@ const ModalDemo = () => {
         description="Accessible dialog overlays for focused interactions and important content."
         code={`import { Modal, useModal } from "@chumlab/ui/modal";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Modal" />
 
       {/* ─── Basic ───────────────────────────────────────────────────────── */}
       <Section
@@ -377,7 +389,6 @@ const ModalDemo = () => {
           </div>
         </DemoWrapper>
       </Section>
-
 
       {/* ─── Modal Instances ─────────────────────────────────────────────── */}
 
@@ -1626,82 +1637,15 @@ const ModalDemo = () => {
         </Modal>
       </Modal>
 
-      {/* ─── Props Tables ────────────────────────────────────────────────── */}
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
 
-      <Section title="Modal Props" isDarkMode={dark}>
-        <PropsTable isDarkMode={dark}>
-          <PropRow isDarkMode={dark} name="open" type="boolean" description="Controls modal visibility" />
-          <PropRow isDarkMode={dark} name="onOpenChange" type="(open: boolean) => void" description="Callback when open state changes" />
-          <PropRow isDarkMode={dark} name="children" type="ReactNode" description="Modal body content" />
-          <PropRow isDarkMode={dark} name="title" type="ReactNode" description="Modal title (supports HTML)" />
-          <PropRow isDarkMode={dark} name="description" type="ReactNode" description="Modal description" />
-          <PropRow isDarkMode={dark} name="icon" type="ReactNode" description="Icon to display in header" />
-          <PropRow isDarkMode={dark} name="showIcon" type="boolean" defaultVal="false" description="Show icon in header" />
-          <PropRow isDarkMode={dark} name="showCloseButton" type="boolean" defaultVal="true" description="Show close button" />
-          <PropRow isDarkMode={dark} name="closeIcon" type="ReactNode" description="Custom close icon" />
-          <PropRow isDarkMode={dark} name="showHeader" type="boolean" defaultVal="true" description="Show header section" />
-          <PropRow isDarkMode={dark} name="showOverlay" type="boolean" defaultVal="true" description="Show overlay backdrop" />
-          <PropRow isDarkMode={dark} name="preventOutsideClick" type="boolean" defaultVal="false" description="Prevent closing on outside click" />
-          <PropRow isDarkMode={dark} name="closeOnEscape" type="boolean" defaultVal="true" description="Close on Escape key" />
-          <PropRow isDarkMode={dark} name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll when open" />
-          <PropRow isDarkMode={dark} name="maxWidth" type="string | number" description="Maximum width" />
-          <PropRow isDarkMode={dark} name="maxHeight" type="string | number" description="Maximum height" />
-          <PropRow isDarkMode={dark} name="minWidth" type="string | number" description="Minimum width" />
-          <PropRow isDarkMode={dark} name="minHeight" type="string | number" description="Minimum height" />
-          <PropRow isDarkMode={dark} name="fullScreen" type="boolean" defaultVal="false" description="Full screen mode" />
-          <PropRow isDarkMode={dark} name="centered" type="boolean" defaultVal="true" description="Center modal vertically" />
-          <PropRow isDarkMode={dark} name="overlayColor" type="string" defaultVal='"black"' description="Overlay background color" />
-          <PropRow isDarkMode={dark} name="overlayOpacity" type="number" defaultVal="0.5" description="Overlay opacity (0-1)" />
-          <PropRow isDarkMode={dark} name="animationDuration" type="number" defaultVal="200" description="Animation duration in ms" />
-          <PropRow isDarkMode={dark} name="disableAnimation" type="boolean" defaultVal="false" description="Disable open/close animations" />
-          <PropRow isDarkMode={dark} name="nestingLevel" type="number" description="External nesting level override" />
-          <PropRow isDarkMode={dark} name="maxNestingLevel" type="number" defaultVal="5" description="Maximum nested modal depth" />
-          <PropRow isDarkMode={dark} name="zIndex" type="number" description="Custom z-index value" />
-          <PropRow isDarkMode={dark} name="classes" type="ModalClasses" description="Object with class overrides for each slot: root, overlay, container, content, header, title, description, icon, closeButton, closeIcon, body" />
-          <PropRow isDarkMode={dark} name="unstyled" type="boolean" defaultVal="false" description="Strips all default styles; use with classes prop for full control" />
-          <PropRow isDarkMode={dark} name="reduceMotion" type='boolean | "auto"' description='Disable animations (true) or respect prefers-reduced-motion ("auto")' />
-          <PropRow isDarkMode={dark} name="trapFocus" type="boolean" defaultVal="true" description="Trap focus within the modal when open" />
-          <PropRow isDarkMode={dark} name="restoreFocus" type="boolean" defaultVal="true" description="Restore focus to the trigger element on close" />
-          <PropRow isDarkMode={dark} name="initialFocus" type="RefObject<HTMLElement | null>" description="Element to receive focus when the modal opens" />
-          <PropRow isDarkMode={dark} name="keepMounted" type="boolean" defaultVal="false" description="Keep modal DOM mounted when closed (hidden via display:none)" />
-          <PropRow isDarkMode={dark} name="aria-label" type="string" description="Accessible label for modal" />
-          <PropRow isDarkMode={dark} name="aria-labelledby" type="string" description="ID of labelling element" />
-          <PropRow isDarkMode={dark} name="aria-describedby" type="string" description="ID of describing element" />
-        </PropsTable>
-      </Section>
+      <ComponentDocs name="Modal" />
 
       <Section title="Styling Props" isDarkMode={dark}>
         <PropsTable isDarkMode={dark}>
           <PropRow isDarkMode={dark} name="className" type="string" description="Additional class for modal content" />
           <PropRow isDarkMode={dark} name="contentStyle" type="CSSProperties" description="Inline styles for content wrapper" />
           <PropRow isDarkMode={dark} name="classes" type="ModalClasses" description="CSS class overrides for modal sub-elements (root, overlay, container, content, header, title, description, icon, closeButton, closeIcon, body)" />
-        </PropsTable>
-      </Section>
-
-      <Section title="Sub Components" isDarkMode={dark}>
-        <p className={`text-sm mb-4 ${c.text}`}>
-          Optional sub-components for more granular control over modal structure.
-          These can be used instead of or in addition to the built-in header/body structure.
-        </p>
-        <PropsTable isDarkMode={dark}>
-          <PropRow
-            isDarkMode={dark}
-            name="ModalHeader"
-            type="ReactNode + className?"
-            description="Custom header wrapper with data-modal-header attribute"
-          />
-          <PropRow
-            isDarkMode={dark}
-            name="ModalBody"
-            type="ReactNode + className?"
-            description="Custom body wrapper with data-modal-body attribute"
-          />
-          <PropRow
-            isDarkMode={dark}
-            name="ModalFooter"
-            type="ReactNode + className?"
-            description="Custom footer wrapper with data-modal-footer attribute"
-          />
         </PropsTable>
       </Section>
 

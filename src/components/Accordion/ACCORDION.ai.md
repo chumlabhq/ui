@@ -461,6 +461,17 @@ root
 structural ones stay. The pulse is in the defaults, so `unstyled`, `animate={false}`
 and `prefers-reduced-motion` each switch it off.
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the next trigger in the tab order. |
+| `ArrowDown`, `ArrowUp` | Moves focus between triggers. `orientation="horizontal"` uses `ArrowRight`/`ArrowLeft` instead. Disabled items are skipped, and `loop` wraps past the ends. |
+| `Home`, `End` | Moves focus to the first or last trigger. |
+| `Enter`, `Space` | Toggles the focused item. In `type="single"` without `collapsible`, the open item cannot be closed this way. |
+
+---
+
 ## Accessibility
 
 - **Keyboard:** ArrowDown/Up navigates items, Home/End jump to first/last, Enter/Space toggles, disabled items are skipped, loop wraps focus

@@ -259,6 +259,18 @@ const [rows, setRows] = useState(10);
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves between the page buttons, the navigation arrows and the rows-per-page trigger. |
+| `Enter`, `Space` | Activates the focused control. |
+| `ArrowDown`, `ArrowUp` | Moves between options in the open rows-per-page menu. |
+| `Home`, `End` | Jumps to the first or last option in that menu. |
+| `Escape` | Closes it and returns focus to the trigger. |
+
+---
+
 ## Accessibility
 
 - `<nav aria-label="Pagination">` landmark (configurable via `paginationAriaLabel`)

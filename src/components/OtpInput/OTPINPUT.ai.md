@@ -113,6 +113,19 @@ filter is now derived from the same pattern, so all four agree.
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus into the group; the boxes themselves are reached with the arrow keys. |
+| `ArrowLeft`, `ArrowRight` | Moves between boxes. |
+| `Home`, `End` | Jumps to the first or last box. |
+| `Backspace` | Clears the current box, or steps back and clears the previous one when it is already empty. |
+| `Delete` | Clears the current box without moving. |
+| Printable characters | Fills the box and advances. A paste of the full code fills every box at once. |
+
+---
+
 ## Accessibility
 
 - Each input has proper `aria-label` ("Digit 1 of 6")

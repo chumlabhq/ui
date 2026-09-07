@@ -1,6 +1,8 @@
-import { useState } from "react";
+import {
+  useState } from "react";
 import { Slider } from "../../components/Slider/index.js";
-import type { SliderValue, SliderMark } from "../../components/Slider/index.js";
+import type { SliderValue,
+  SliderMark } from "../../components/Slider/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -11,6 +13,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -115,6 +120,10 @@ const SliderDemo = () => {
         description="A range input component supporting single and range values, discrete steps, marks with labels, value tooltips, custom thumb rendering, vertical orientation, and full keyboard navigation. Includes form integration with hidden inputs, label, error states, and the standard classes/unstyled system."
         code={`import { Slider } from "@chumlab/ui/slider";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Slider" />
 
       {/* ── Basic ────────────────────────────────────────────────────── */}
       <Section title="Basic Usage" description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation (arrow keys). No custom classes needed." isDarkMode={dark}>
@@ -700,41 +709,7 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      <Section title="Props Reference" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="value" type="number | [number, number]" description="Current value — number for single, tuple for range" isDarkMode={dark} />
-            <PropRow name="defaultValue" type="number | [number, number]" description="Default uncontrolled value" isDarkMode={dark} />
-            <PropRow name="onValueChange" type="(value) => void" description="Fires on every value change during drag" isDarkMode={dark} />
-            <PropRow name="onValueCommit" type="(value) => void" description="Fires when the user finishes dragging (pointer up)" isDarkMode={dark} />
-            <PropRow name="min" type="number" defaultVal="0" description="Minimum value" isDarkMode={dark} />
-            <PropRow name="max" type="number" defaultVal="100" description="Maximum value" isDarkMode={dark} />
-            <PropRow name="step" type="number" defaultVal="1" description="Step increment" isDarkMode={dark} />
-            <PropRow name="minStepsBetweenThumbs" type="number" defaultVal="0" description="Minimum distance between range thumbs (in steps)" isDarkMode={dark} />
-            <PropRow name="orientation" type='"horizontal" | "vertical"' defaultVal='"horizontal"' description="Slider orientation" isDarkMode={dark} />
-            <PropRow name="inverted" type="boolean" defaultVal="false" description="Reverse the slider direction" isDarkMode={dark} />
-            <PropRow name="showTooltip" type="boolean" defaultVal="false" description="Show value tooltip on hover/drag" isDarkMode={dark} />
-            <PropRow name="tooltipAlways" type="boolean" defaultVal="false" description="Always show tooltip" isDarkMode={dark} />
-            <PropRow name="formatTooltip" type="(value: number) => string" defaultVal="String" description="Format the tooltip display value" isDarkMode={dark} />
-            <PropRow name="marks" type="SliderMark[]" description="Array of { value, label? } for tick marks" isDarkMode={dark} />
-            <PropRow name="showMarkLabels" type="boolean" defaultVal="true" description="Show mark label text" isDarkMode={dark} />
-            <PropRow name="markDotSize" type="number" defaultVal="6" description="Diameter of mark dots in pixels" isDarkMode={dark} />
-            <PropRow name="transitionDuration" type="number" defaultVal="200" description="Duration in ms of the click-to-jump animation when the user clicks a mark or any point on the track. Set to 0 to disable. Automatically suppressed during an active drag." isDarkMode={dark} />
-            <PropRow name="renderMark" type="(props) => ReactNode" description="Custom mark dot renderer. Receives { value, label, isActive, isDisabled, percent }" isDarkMode={dark} />
-            <PropRow name="renderThumb" type="(props) => ReactNode" description="Custom thumb content renderer. Receives { value, index, isDragging, isDisabled }" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Label above the slider" isDarkMode={dark} />
-            <PropRow name="description" type="ReactNode" description="Description below the label" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable the slider" isDarkMode={dark} />
-            <PropRow name="required" type="boolean" defaultVal="false" description="Mark as required (appends *)" isDarkMode={dark} />
-            <PropRow name="error" type="boolean" defaultVal="false" description="Error state" isDarkMode={dark} />
-            <PropRow name="errorMessage" type="ReactNode" description="Error message shown below" isDarkMode={dark} />
-            <PropRow name="name" type="string" description="Form input name — renders hidden input(s)" isDarkMode={dark} />
-            <PropRow name="classes" type="SliderClasses" description="CSS class overrides per slot (root, track, range, thumb, tooltip, mark, etc.)" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Remove all default classes" isDarkMode={dark} />
-            <PropRow name="ref" type="Ref<HTMLDivElement>" description="Forwarded ref to the root div" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
+      <ComponentDocs name="Slider" />
 
       <Section title="SliderClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

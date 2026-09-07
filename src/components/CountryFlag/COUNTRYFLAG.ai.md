@@ -203,6 +203,12 @@ CountryFlag is image-based — no dark mode classes needed. Group count uses `bg
 
 ---
 
+## Keyboard Interactions
+
+Presentational: it renders an image and takes no keyboard input.
+
+---
+
 ## Accessibility
 
 - `role="img"` with `aria-label` on root span

@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -9,7 +11,7 @@ import {
   MinusIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from "../../components/Accordion/index.js";
+  } from "../../components/Accordion/index.js";
 import type { AccordionRef } from "../../components/Accordion/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
@@ -21,6 +23,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -152,7 +157,6 @@ const AccordionDemo = () => {
   ]);
   const [nextId, setNextId] = useState(3);
 
-
   // Toggle log
   const [toggleLog, setToggleLog] = useState<string[]>([]);
 
@@ -179,6 +183,10 @@ const AccordionDemo = () => {
         description="A composable, accessible accordion component following WAI-ARIA patterns. Supports keyboard navigation, single/multiple modes, controlled/uncontrolled state, RTL support, and fully customizable styling."
         code={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@chumlab/ui/accordion";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Accordion" />
 
       {/* ─── Basic (Single Mode) ────────────────────────────────────────── */}
       <Section
@@ -1549,348 +1557,8 @@ const AccordionDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Props Table ────────────────────────────────────────────────── */}
-      <Section title="Accordion Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="type"
-              type='"single" | "multiple"'
-              description="Selection mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="string | string[]"
-              description="Controlled expanded value(s)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultValue"
-              type="string | string[]"
-              description="Initial expanded value(s)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(v) => void"
-              description="Callback when value changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="collapsible"
-              type="boolean"
-              defaultVal="false"
-              description="Allow collapsing all items (single mode)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable all items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="orientation"
-              type='"vertical" | "horizontal"'
-              defaultVal='"vertical"'
-              description="Orientation for keyboard navigation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dir"
-              type='"ltr" | "rtl"'
-              defaultVal='"ltr"'
-              description="Text direction"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loop"
-              type="boolean"
-              defaultVal="true"
-              description="Loop keyboard navigation"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="size"
-              type='"sm" | "md" | "lg"'
-              defaultVal='"md"'
-              description="Size preset"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="variant"
-              type='"default" | "bordered" | "separated" | "flush"'
-              defaultVal='"default"'
-              description="Visual variant"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="headingLevel"
-              type="1-6"
-              defaultVal="3"
-              description="Heading level for triggers"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="AccordionClasses"
-              description="Custom class overrides for all slots"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="animationDuration"
-              type="number"
-              defaultVal="300"
-              description="Animation duration in ms"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="animationEasing"
-              type="string"
-              defaultVal='"ease-in-out"'
-              description="CSS easing function"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="reduceMotion"
-              type='boolean | "auto"'
-              defaultVal='"auto"'
-              description="Disable animations"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="expandOnPrint"
-              type="boolean"
-              defaultVal="false"
-              description="Expand all items when printing"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxExpanded"
-              type="number"
-              description="Max expanded items (multiple mode)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultExpandAll"
-              type="boolean"
-              defaultVal="false"
-              description="Expand all on mount (multiple mode)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="storageKey"
-              type="string | StorageConfig"
-              description="Persist state to storage"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="preventClose"
-              type="(v) => boolean | Promise<boolean>"
-              description="Guard before closing an item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="preventCloseTimeout"
-              type="number"
-              defaultVal="10000"
-              description="Timeout for async preventClose"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onExpandedChange"
-              type="(event) => void"
-              description="Detailed expand/collapse event"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="announceExpanded"
-              type="boolean"
-              defaultVal="false"
-              description="Announce changes to screen readers"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child element"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="AccordionItem Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="value"
-              type="string"
-              description="Unique identifier for this item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable this item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onExpandedChange"
-              type="(isExpanded: boolean) => void"
-              description="Callback when this item expands or collapses"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child element"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="AccordionTrigger Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="iconPosition"
-              type='"left" | "right" | "none"'
-              defaultVal='"right"'
-              description="Position of the indicator icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="expandedIcon"
-              type="ReactNode"
-              description="Custom icon when expanded"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="collapsedIcon"
-              type="ReactNode"
-              description="Custom icon when collapsed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="iconAnimation"
-              type='"rotate" | "switch" | "none"'
-              defaultVal='"rotate"'
-              description="Icon animation style"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="subtitle"
-              type="ReactNode"
-              description="Secondary text below the trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="leftSlot"
-              type="ReactNode"
-              description="Content before the trigger text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rightSlot"
-              type="ReactNode"
-              description="Content after the trigger text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child element"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="AccordionContent Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="forceMount"
-              type="boolean"
-              defaultVal="false"
-              description="Always render in DOM"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="lazyLoad"
-              type="boolean"
-              defaultVal="false"
-              description="Defer render until first open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unmountOnClose"
-              type="boolean"
-              defaultVal="false"
-              description="Remove from DOM when closed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="animationDuration"
-              type="number"
-              description="Override accordion-level duration"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="animationEasing"
-              type="string"
-              description="Override accordion-level easing"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onOpenStart"
-              type="() => void"
-              description="Called when open animation starts"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onOpenEnd"
-              type="() => void"
-              description="Called when open animation ends"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onCloseStart"
-              type="() => void"
-              description="Called when close animation starts"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onCloseEnd"
-              type="() => void"
-              description="Called when close animation ends"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Merge props onto child element"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      <ComponentDocs name="Accordion" />
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section

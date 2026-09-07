@@ -1,4 +1,6 @@
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef } from "react";
 import { Switch } from "../../components/Switch/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
@@ -10,6 +12,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 const getClasses = (dark: boolean) => ({
@@ -120,6 +125,10 @@ const SwitchDemo = () => {
         description="A toggle switch for binary on/off states. Fully accessible with WAI-ARIA support, keyboard navigation, form semantics, and customizable via the classes slot system."
         code={`import { Switch } from "@chumlab/ui/switch";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Switch" />
 
       {/* ── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -663,144 +672,7 @@ const SwitchDemo = () => {
         </div>
       </Section>
 
-      <Section title="API Reference" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="checked"
-              type="boolean"
-              description="Controlled checked state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultChecked"
-              type="boolean"
-              defaultVal="false"
-              description="Initial checked state (uncontrolled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onValueChange"
-              type="(checked: boolean) => void"
-              description="Callback when checked state changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Label text for the switch"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="ReactNode"
-              description="Description text below the label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="name"
-              type="string"
-              description="Form field name (renders hidden input)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="value"
-              type="string"
-              defaultVal='"on"'
-              description="Value submitted with form when checked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="id"
-              type="string"
-              description="Custom ID (auto-generated if omitted)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Whether the switch is disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="required"
-              type="boolean"
-              defaultVal="false"
-              description="Sets aria-required, shows asterisk on label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="boolean"
-              defaultVal="false"
-              description="Whether the switch is in error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorMessage"
-              type="ReactNode"
-              description="Error message displayed below the switch"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkedIcon"
-              type="ReactNode"
-              description="Icon inside the thumb when checked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="uncheckedIcon"
-              type="ReactNode"
-              description="Icon inside the thumb when unchecked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="transitionDuration"
-              type="number"
-              description="Custom transition duration in ms"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="transitionTimingFunction"
-              type="string"
-              description="Custom CSS timing function"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderLabel"
-              type="(props: SwitchRenderProps) => ReactNode"
-              description="Render function for custom label content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="renderDescription"
-              type="(props: SwitchRenderProps) => ReactNode"
-              description="Render function for custom description"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="SwitchClasses"
-              description="Class overrides for all internal elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="Additional class merged onto root container"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      <ComponentDocs name="Switch" />
 
       {/* ── SwitchClasses ──────────────────────────────────────────────── */}
       <Section title="SwitchClasses Slots" isDarkMode={dark}>

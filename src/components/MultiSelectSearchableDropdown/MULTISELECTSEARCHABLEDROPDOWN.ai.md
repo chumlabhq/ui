@@ -246,6 +246,19 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the menu, and toggles the focused option without closing it. |
+| `ArrowDown`, `ArrowUp` | Moves between the filtered options. `aria-activedescendant` sits on the search input, which holds focus. |
+| `Home`, `End` | Jumps to the first or last filtered option. |
+| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Tab` | Closes the menu and moves focus on. |
+| Printable characters | Types into the search box and filters the list. |
+
+---
+
 ## Accessibility
 
 - `role="combobox"` with full ARIA attributes on trigger

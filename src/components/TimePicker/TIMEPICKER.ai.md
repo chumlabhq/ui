@@ -226,6 +226,20 @@ const [time, setTime] = useState<string | null>(null);
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Enter`, `Space` | Opens the panel from the trigger, and picks the focused time. |
+| `ArrowDown`, `ArrowUp` | Moves through the options in the focused column. On the clock face the same keys move the hand by one step. |
+| `ArrowLeft`, `ArrowRight` | Moves between the hour, minute, second and meridiem columns. |
+| `Home`, `End` | Jumps to the first or last option in the column. |
+| `PageUp`, `PageDown` | Moves by the larger step on the clock face. |
+| `Escape` | Closes the panel and returns focus to the trigger. |
+| `Tab` | Cycles within the open panel. |
+
+---
+
 ## Accessibility
 
 - `role="combobox"` with `aria-expanded`, `aria-haspopup`, `aria-controls`

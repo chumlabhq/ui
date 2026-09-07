@@ -115,6 +115,15 @@ Defaults include `dark:` variants. Content uses `bg-white dark:bg-gray-800`, `te
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the trigger, which shows the tooltip — hover is not the only way in. |
+| `Escape` | Hides it while the trigger keeps focus. |
+
+---
+
 ## Accessibility
 
 - `role="tooltip"` on the content element

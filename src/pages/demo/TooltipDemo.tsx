@@ -1,4 +1,5 @@
-import { useState } from "react";
+import {
+  useState } from "react";
 import { Tooltip } from "../../components/Tooltip/index.js";
 import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
@@ -11,6 +12,9 @@ import {
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
+  ComponentDocs,
+  CopyPasteBlock,
+  SetupNote,
 } from "./components/index.js";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -77,6 +81,10 @@ const TooltipDemo = () => {
         description="A flexible, accessible tooltip component that supports positioning, custom styling, rich HTML content, and auto-truncation with tooltip on overflow."
         code={`import { Tooltip } from "@chumlab/ui/tooltip";`}
       />
+
+      <SetupNote />
+
+      <CopyPasteBlock name="Tooltip" />
 
       {/* ─── Basic Tooltip ────────────────────────────────────────────── */}
       <Section
@@ -723,225 +731,7 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      <Section title="Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="children"
-              type="ReactNode"
-              description="Trigger element or text content for truncate mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="ReactNode"
-              description="Tooltip content (supports text or HTML)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="side"
-              type={`"top"|"right"|"bottom"|"left"`}
-              defaultVal='"top"'
-              description="Preferred side for tooltip placement"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="align"
-              type={`"start"|"center"|"end"`}
-              defaultVal='"center"'
-              description="Alignment along the side axis"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="sideOffset"
-              type="number"
-              defaultVal="6"
-              description="Distance from trigger element (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="alignOffset"
-              type="number"
-              defaultVal="0"
-              description="Offset from alignment edge (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxWidth"
-              type="string | number"
-              defaultVal="300"
-              description="Maximum width of tooltip"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="wordWrap"
-              type={`"normal"|"break-word"|"nowrap"`}
-              defaultVal='"break-word"'
-              description="Text wrapping behavior within tooltip"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="delayDuration"
-              type="number"
-              defaultVal="200"
-              description="Delay before showing (ms)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="hideDelayDuration"
-              type="number"
-              defaultVal="100"
-              description="Delay before hiding tooltip (ms)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disableHoverableContent"
-              type="boolean"
-              defaultVal="false"
-              description="Disable hovering over tooltip content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="open"
-              type="boolean"
-              description="Controlled open state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="defaultOpen"
-              type="boolean"
-              defaultVal="false"
-              description="Initial open state (uncontrolled)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onOpenChange"
-              type="(open: boolean) => void"
-              description="Callback when open state changes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showArrow"
-              type="boolean"
-              defaultVal="true"
-              description="Show tooltip arrow"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="arrowSize"
-              type="number"
-              defaultVal="6"
-              description="Size of the tooltip arrow in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="arrowColor"
-              type="string"
-              description="Arrow fill color (useful for gradients)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              defaultVal="false"
-              description="Disable the tooltip"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="truncate"
-              type="boolean"
-              defaultVal="false"
-              description="Enable auto-truncation mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="truncateWidth"
-              type="number | string"
-              description="Max width for truncation (number = px, string = CSS)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shadow"
-              type='preset | string'
-              defaultVal='"lg"'
-              description="Shadow preset or custom box-shadow CSS"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="zIndex"
-              type="number"
-              defaultVal="9999"
-              description="Z-index for stacking control"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portal"
-              type="boolean"
-              defaultVal="true"
-              description="Whether to render tooltip in a portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="portalContainer"
-              type="HTMLElement | null"
-              defaultVal="document.body"
-              description="Custom container element for the tooltip portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="asChild"
-              type="boolean"
-              defaultVal="false"
-              description="Clone handlers onto child instead of wrapping in a span"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="triggerDisplay"
-              type='CSSProperties["display"]'
-              defaultVal='"inline-flex"'
-              description="CSS display value for the trigger wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="className"
-              type="string"
-              description="CSS class for outer wrapper (in truncate mode)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="TooltipClasses"
-              description="Slot class overrides (4 slots)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Remove all default classes"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="contentStyle"
-              type="CSSProperties"
-              description="Inline styles for tooltip content (useful for gradients)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="arrowStyle"
-              type="CSSProperties"
-              description="Inline styles for the arrow element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="baseArrowStyle"
-              type="CSSProperties"
-              description="Base inline styles for the arrow"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
+      <ComponentDocs name="Tooltip" />
 
       <Section title="TooltipClasses Slots" isDarkMode={dark}>
         <div className={c.card}>

@@ -307,6 +307,15 @@ const [saving, setSaving] = useState(false);
 
 ---
 
+## Keyboard Interactions
+
+| Key | Behaviour |
+|-----|-----------|
+| `Tab` | Moves focus to the button. `disabled` and `loading` both remove it from the tab order. |
+| `Enter`, `Space` | Activates it. With `as="span"` the handler is added for you, since a span has no native activation. |
+
+---
+
 ## Accessibility
 
 - **Keyboard:** Enter/Space triggers click. When `as="span"`, keyboard handling is added automatically.
