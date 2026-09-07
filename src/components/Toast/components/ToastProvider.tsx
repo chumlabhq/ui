@@ -97,13 +97,10 @@ export const ToastProvider = ({
       setToasts((prev) => {
         const newToasts = [...prev, toastConfig];
         if (newToasts.length > maxToasts) {
-          // Mark overflow toasts as invisible (triggers exit animation)
-          // but keep them in the array until the animation completes
           const overflowCount = newToasts.length - maxToasts;
           const result = newToasts.map((t, i) =>
             i < overflowCount && t.visible ? { ...t, visible: false } : t,
           );
-          // Remove them from DOM after exit animation finishes
           const overflowIds = newToasts.slice(0, overflowCount).map((t) => t.id);
           const tid = setTimeout(() => {
             timeoutIdsRef.current.delete(tid);

@@ -293,18 +293,12 @@ const SearchableDropdown = forwardRef<
     SearchIcon: SearchIconProp = SearchIcon,
   } = props;
 
-  // ADR: floating content resolves its layer from the nearest overlay, so a
-  // dropdown inside a drawer stacks above it. An explicit prop still wins.
   const dropdownZIndex = useLayer(dropdownZIndexProp);
-
 
   const prefersReducedMotion = useReducedMotion();
 
   const baseClassesRaw = unstyled ? UNSTYLED_SEARCHABLEDROPDOWN_CLASSES : DEFAULT_SEARCHABLEDROPDOWN_CLASSES;
 
-  // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-  // this handles the other reason to stop animating. Applied to the defaults
-  // only — a class string the consumer supplied is theirs to control.
   const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
   const mergedClasses: Required<SearchableDropdownClasses> = useMemo(
@@ -339,8 +333,6 @@ const SearchableDropdown = forwardRef<
   const labelId = `${dropdownId}-label`;
   const valueId = `${dropdownId}-value`;
 
-  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
-  // control named only by its own value says nothing about what it selects.
   useAccessibleNameWarning("SearchableDropdown", { label, "aria-label": ariaLabel });
   const errorId = `${dropdownId}-error`;
   const statusId = `${dropdownId}-status`;
@@ -452,13 +444,11 @@ const SearchableDropdown = forwardRef<
     }
   }, [isOpen, shouldRestoreFocusRef, triggerNode]);
 
-  // Scroll lock when dropdown is open — uses event prevention (works on any scrollable ancestor)
   const dropdownContentRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (!lockScroll || !isOpen || !isBrowser) return;
 
     const preventScroll = (e: Event) => {
-      // Allow scroll inside the dropdown content itself
       if (dropdownContentRef.current?.contains(e.target as Node)) return;
       e.preventDefault();
     };
@@ -611,9 +601,6 @@ const SearchableDropdown = forwardRef<
         {clearable && selectedOption && (
           <button
             type="button"
-            // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
-            // with a pointer — and for a single select there is no other way
-            // back to an empty value.
             aria-label="Clear selection"
             className={mergedClasses.clearTrigger || undefined}
             onClick={(e) => {

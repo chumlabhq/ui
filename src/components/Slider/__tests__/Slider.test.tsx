@@ -250,7 +250,6 @@ describe("Slider", () => {
       const slider = screen.getByRole("slider");
       fireEvent.keyDown(slider, { key: "ArrowRight" });
 
-      // Value stays at max
       expect(slider).toHaveAttribute("aria-valuenow", "100");
     });
 
@@ -262,7 +261,6 @@ describe("Slider", () => {
       const slider = screen.getByRole("slider");
       fireEvent.keyDown(slider, { key: "ArrowLeft" });
 
-      // Value stays at min
       expect(slider).toHaveAttribute("aria-valuenow", "0");
     });
   });
@@ -429,7 +427,6 @@ describe("Slider", () => {
       const dotsOnly = [{ value: 25 }, { value: 50 }, { value: 75 }];
       const { container } = render(<Slider marks={dotsOnly} />);
 
-      // Should render mark dots (positioned absolutely with borderRadius 50%)
       const dots = container.querySelectorAll("[style*='border-radius: 50%']");
       expect(dots.length).toBeGreaterThanOrEqual(3);
     });
@@ -645,7 +642,6 @@ describe("Slider", () => {
 
       const slider = screen.getByRole("slider");
 
-      // Simulate pointer down on thumb
       fireEvent.pointerDown(slider, {
         button: 0,
         clientX: 50,
@@ -734,7 +730,6 @@ describe("Slider", () => {
 
       expect(slider).toHaveAttribute("data-dragging");
 
-      // Simulate pointer up on document
       act(() => {
         document.dispatchEvent(new PointerEvent("pointerup"));
       });
@@ -882,14 +877,12 @@ describe("Slider", () => {
 
       const track = container.querySelector("[data-slot='track']") as HTMLElement;
       if (track) {
-        // Click close to the lower thumb (value ~20)
         fireEvent.pointerDown(track, {
           button: 0,
           clientX: 10,
           clientY: 10,
           pointerId: 1,
         });
-        // Should have been called
         if (onValueChange.mock.calls.length > 0) {
           const val = onValueChange.mock.calls[0][0];
           expect(Array.isArray(val)).toBe(true);
@@ -949,7 +942,6 @@ describe("Slider", () => {
       );
 
       const sliders = screen.getAllByRole("slider");
-      // Confirm both thumbs are present
       expect(sliders).toHaveLength(2);
       // Fire keyboard on lower thumb to verify lower thumb path works
       fireEvent.keyDown(sliders[0], { key: "Home" });
@@ -977,7 +969,6 @@ describe("Slider", () => {
 
       const slider = screen.getByRole("slider");
 
-      // Before drag — body should be default
       expect(document.body.style.cursor).toBe("");
 
       fireEvent.pointerDown(slider, { button: 0, clientX: 50, clientY: 10, pointerId: 1 });
@@ -1020,7 +1011,6 @@ describe("Slider", () => {
 
       const slider = screen.getByRole("slider");
 
-      // Start drag
       fireEvent.pointerDown(slider, {
         button: 0,
         clientX: 50,
@@ -1028,7 +1018,6 @@ describe("Slider", () => {
         pointerId: 1,
       });
 
-      // Move pointer
       act(() => {
         document.dispatchEvent(
           new PointerEvent("pointermove", {
@@ -1038,7 +1027,6 @@ describe("Slider", () => {
         );
       });
 
-      // Release pointer
       act(() => {
         document.dispatchEvent(new PointerEvent("pointerup"));
       });

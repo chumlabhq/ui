@@ -860,8 +860,6 @@ describe("useToast Hook", () => {
   });
 });
 
-// ─── getDefaultIcon ─────────────────────────────────────────────────────────
-
 import { getDefaultIcon } from "../utils/getDefaultIcon.js";
 
 import { setReducedMotion } from "../../../test/matchMedia.js";

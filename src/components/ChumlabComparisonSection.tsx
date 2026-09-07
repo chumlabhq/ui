@@ -66,7 +66,6 @@ const IconPalette = (
   </svg>
 );
 
-
 const IconWrench = (
   <svg
     width="20"
@@ -92,7 +91,6 @@ const IconAlert = (
 );
 
 const ROWS: Row[] = [
-  // Row 1
   {
     icon: IconLightning,
     question: (
@@ -120,7 +118,6 @@ const ROWS: Row[] = [
       "Hit your launch date, ship the polish that matters",
     ],
   },
-  // Row 2
   {
     icon: IconPalette,
     question: (
@@ -148,7 +145,6 @@ const ROWS: Row[] = [
       "Looks custom, feels custom, ships in hours",
     ],
   },
-  // Row 3
   {
     icon: IconWrench,
     question: (
@@ -176,7 +172,6 @@ const ROWS: Row[] = [
       "Time you spent on dependency drama: zero",
     ],
   },
-  // Row 4
   {
     icon: IconAlert,
     question: (
@@ -286,10 +281,6 @@ export function ChumlabComparisonSection() {
       />
 
       <div className="mx-auto max-w-[1180px] px-4 sm:px-5 md:px-6 lg:px-8">
-        {/* Header block — typography matches sibling sections
-            (WhyChumlabSection, CatalogSection): h2 uses
-            text-[clamp(32px,6vw,72px)] and the lede uses
-            text-base sm:text-lg with mt-5 sm:mt-6. */}
         <div className="mb-16 max-w-[720px]">
           <Reveal delay={0} translateY={12} duration={200}>
             <h2
@@ -313,10 +304,8 @@ export function ChumlabComparisonSection() {
           </Reveal>
         </div>
 
-        {/* 5 Rows — TODAY always on the left, WITH CHUMLAB always on
-            the right. No alternating flip on any breakpoint. Tight 60ms
-            stagger keeps every row under the 500ms delay cap so a user
-            scrolling fast doesn't hit blank rows below. */}
+        {/* 60ms stagger, so the last row still clears the 500ms delay cap
+            and nobody scrolling fast meets a blank row. */}
         <div className="comparison-rows">
           {ROWS.map((row, idx) => (
             <Reveal

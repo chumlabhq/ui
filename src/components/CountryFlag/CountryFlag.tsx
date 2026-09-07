@@ -81,15 +81,9 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     const packagedSrc = usePackagedFlag(usePackaged && normalizedCode ? normalizedCode : null);
     const src = usePackaged ? packagedSrc : `${basePath}/${normalizedCode}.svg`;
 
-    // ─── Merged classes ─────────────────────────────────────────────────
-    // The prop, not the bare query: it was calming this component's JS-driven
-    // motion while leaving every motion utility in the class strings.
     const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
     const baseClassesRaw = unstyled ? UNSTYLED_COUNTRYFLAG_CLASSES : DEFAULT_COUNTRYFLAG_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses: Required<CountryFlagClasses> = useMemo(
       () => ({
@@ -101,7 +95,6 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
       [classesProp, baseClasses],
     );
 
-    // ─── Cached image check ─────────────────────────────────────────────
     const imgRef = useCallback((node: HTMLImageElement | null) => {
       if (node && node.complete && node.naturalWidth > 0) {
         setIsImageLoaded(true);

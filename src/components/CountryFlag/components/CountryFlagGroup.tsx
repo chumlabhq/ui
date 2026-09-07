@@ -34,7 +34,6 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
     const effectiveMax =
       max != null && Number.isFinite(max) && max > 0 ? Math.floor(max) : undefined;
 
-    // Use default classes (no unstyled on group — consumer uses classes to override)
     const mergedClasses: Required<CountryFlagGroupClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? DEFAULT_COUNTRYFLAG_GROUP_CLASSES.root,

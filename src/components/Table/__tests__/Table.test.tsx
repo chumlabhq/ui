@@ -181,14 +181,12 @@ describe("Table", () => {
 
       const sortButton = screen.getByRole("button", { name: "Sort by age" });
 
-      // Click once -> sorts (direction depends on Table default)
       await user.click(sortButton);
 
       let rows = screen.getAllByRole("row");
       const firstDataCells1 = within(rows[1]).getAllByRole("gridcell");
       const firstAge = firstDataCells1[1].textContent;
 
-      // Click again -> reverses direction
       await user.click(sortButton);
 
       rows = screen.getAllByRole("row");
@@ -212,7 +210,6 @@ describe("Table", () => {
       const sortButton = screen.getByRole("button", { name: "Sort by age" });
       await user.click(sortButton);
 
-      // Should have a sort direction (ascending or descending)
       const sortValue = ageHeader.getAttribute("aria-sort");
       expect(["ascending", "descending"]).toContain(sortValue);
     });
@@ -320,11 +317,9 @@ describe("Table", () => {
       );
 
       const checkboxes = screen.getAllByRole("checkbox");
-      // Select then deselect first row
       await user.click(checkboxes[1]);
       await user.click(checkboxes[1]);
 
-      // Last call should be empty array (deselected)
       const lastCall = onSelectionChange.mock.calls[onSelectionChange.mock.calls.length - 1];
       expect(lastCall[0]).toEqual([]);
     });
@@ -341,7 +336,6 @@ describe("Table", () => {
       );
 
       const checkboxes = screen.getAllByRole("checkbox");
-      // Row checkboxes at indices 1 and 3 should be checked
       expect(checkboxes[1]).toBeChecked();
       expect(checkboxes[2]).not.toBeChecked();
       expect(checkboxes[3]).toBeChecked();
@@ -462,7 +456,6 @@ describe("Table", () => {
       );
 
       const rows = screen.getAllByRole("row");
-      // Click the first data row (index 1)
       await user.click(rows[1]);
 
       expect(onRowClick).toHaveBeenCalledWith(
@@ -509,7 +502,6 @@ describe("Table", () => {
       );
 
       const rows = screen.getAllByRole("row");
-      // Data rows should have data-clickable
       expect(rows[1]).toHaveAttribute("data-clickable", "true");
     });
   });
@@ -612,7 +604,6 @@ describe("Table", () => {
       const clearButton = screen.getByRole("button", { name: "Clear search" });
       await user.click(clearButton);
 
-      // All rows should be back
       expect(screen.getByText("Alice")).toBeInTheDocument();
       expect(screen.getByText("Bob")).toBeInTheDocument();
       expect(screen.getByText("Charlie")).toBeInTheDocument();
@@ -762,7 +753,6 @@ describe("Table", () => {
         />
       );
 
-      // Should have separate grids for pinned and unpinned
       const grids = screen.getAllByRole("grid");
       expect(grids.length).toBe(2);
     });
@@ -808,7 +798,6 @@ describe("Table", () => {
       render(<Table columns={columns} data={data} />);
 
       const cells = screen.getAllByRole("gridcell");
-      // Focus the first cell
       fireEvent.keyDown(cells[0], { key: "ArrowRight" });
 
       // Verify that the focus state was updated (cell gets tabIndex 0)
@@ -889,7 +878,6 @@ describe("Table", () => {
       );
 
       const rows = screen.getAllByRole("row");
-      // Bob's row (index 2) should be selected
       expect(rows[2]).toHaveAttribute("data-selected", "true");
     });
   });
@@ -980,9 +968,7 @@ describe("Table", () => {
       await user.keyboard("{Escape}");
 
       expect(onCellEdit).not.toHaveBeenCalled();
-      // Input should be gone
       expect(screen.queryByDisplayValue("Alice")).not.toBeInTheDocument();
-      // Original cell text should be back
       expect(screen.getByText("Alice")).toBeInTheDocument();
     });
   });
@@ -1164,7 +1150,6 @@ describe("Table", () => {
       // now (see FilterPanel), so it lands on the render after the click.
       const filterContent = await screen.findByRole("dialog");
       expect(filterContent).toHaveAttribute("data-table-filter-content");
-      // The dropdown should contain Filter text
       expect(filterContent?.textContent).toContain("Filter");
     });
 
@@ -1230,7 +1215,6 @@ describe("Table", () => {
         />
       );
 
-      // The search input should still exist but no SVG icon sibling
       expect(screen.getByLabelText("Search table")).toBeInTheDocument();
       const searchWrapper = container.querySelector("[data-table-search]");
       const icons = searchWrapper?.querySelectorAll("svg");
@@ -1249,7 +1233,6 @@ describe("Table", () => {
         />
       );
 
-      // Should have separate grids for pinned sections
       const grids = screen.getAllByRole("grid");
       expect(grids.length).toBeGreaterThanOrEqual(2);
     });
@@ -1276,8 +1259,6 @@ describe("Table", () => {
     });
   });
 });
-
-// ── Utility function tests ──────────────────────────────────────────────────
 
 describe("getColumnId", () => {
   it("returns accessorKey when available", () => {
@@ -1449,7 +1430,6 @@ describe("exportTableToCSV", () => {
 
     exportTableToCSV(testData, testColumns);
 
-    // The link.download should be set to "table-export.csv"
     expect(clickSpy).toHaveBeenCalled();
   });
 
@@ -1463,7 +1443,6 @@ describe("exportTableToCSV", () => {
     exportTableToCSV(testData, testColumns);
 
     const blob = createObjectURLSpy.mock.calls[0][0] as Blob;
-    // Read blob content
     expect(blob).toBeDefined();
     expect(clickSpy).toHaveBeenCalled();
   });
@@ -1490,7 +1469,6 @@ describe("exportTableToCSV", () => {
       { accessorKey: "name", header: "Name" },
     ];
 
-    // Should not throw
     exportTableToCSV(testData, testColumns);
     expect(clickSpy).toHaveBeenCalled();
   });
@@ -1626,8 +1604,6 @@ describe("copyToClipboard", () => {
   });
 });
 
-// ─── Table Icons ──────────────────────────────────────────────────────────────
-
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -1749,7 +1725,6 @@ describe("Table – additional coverage", () => {
         <Table columns={columns} data={data} hideVerticalScrollbar ariaLabel="t" />,
       );
       const region = container.querySelector("[data-table-container]");
-      // should get scrollbar hide class applied
       expect(region).toBeInTheDocument();
     });
 
@@ -1914,7 +1889,6 @@ describe("Table – additional coverage", () => {
           ariaLabel="t"
         />,
       );
-      // age column should be hidden
       expect(screen.queryByText("Age")).not.toBeInTheDocument();
     });
   });
@@ -1981,9 +1955,7 @@ describe("Table – additional coverage", () => {
       );
       const filterBtn = screen.getByLabelText("Filter name");
       await userEvent.click(filterBtn);
-      // The filter dropdown content should be in DOM
       expect(document.querySelector("[data-table-filter-content]")).toBeInTheDocument();
-      // Click Alice option (inside the filter dropdown button)
       const aliceOptions = screen.getAllByText("Alice");
       const aliceBtn = aliceOptions.find((el) => el.closest("[data-table-filter-content]"));
       if (aliceBtn) await userEvent.click(aliceBtn);

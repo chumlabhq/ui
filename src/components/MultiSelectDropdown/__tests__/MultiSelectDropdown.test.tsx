@@ -158,7 +158,6 @@ describe("MultiSelectDropdown", () => {
 
       // "Apple" appears both as a chip and in the listbox; find options in the portaled dropdown
       const allApples = screen.getAllByText("Apple");
-      // Click the one in the dropdown list (last occurrence)
       await user.click(allApples[allApples.length - 1]);
 
       expect(onValueChange).toHaveBeenCalledWith([], []);
@@ -527,7 +526,6 @@ describe("MultiSelectDropdown", () => {
       const trigger = screen.getByRole("combobox");
       trigger.focus();
 
-      // Navigate to some later option
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{ArrowDown}");
@@ -569,9 +567,7 @@ describe("MultiSelectDropdown", () => {
       const trigger = screen.getByRole("combobox");
       trigger.focus();
 
-      // Focus first option
       await user.keyboard("{ArrowDown}");
-      // Select it with Enter
       await user.keyboard("{Enter}");
 
       expect(onValueChange).toHaveBeenCalledWith(
@@ -655,7 +651,6 @@ describe("MultiSelectDropdown", () => {
       render(
         <MultiSelectDropdown options={options} loading defaultOpen />
       );
-      // Shimmer renders presentation items
       const shimmerItems = document.querySelectorAll('[role="presentation"]');
       expect(shimmerItems.length).toBeGreaterThan(0);
     });
@@ -809,7 +804,6 @@ describe("MultiSelectDropdown", () => {
       await user.click(screen.getByRole("combobox"));
       await user.click(screen.getByText("Banana"));
 
-      // onValueChange should not have been called for the disabled option
       expect(onValueChange).not.toHaveBeenCalled();
     });
   });

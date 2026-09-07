@@ -2,10 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useDropdown } from "../utils/useDropdown.js";
 
-// ---------------------------------------------------------------------------
-// Shared fixtures
-// ---------------------------------------------------------------------------
-
 const options = [
   { value: "apple", label: "Apple" },
   { value: "banana", label: "Banana" },
@@ -48,10 +44,6 @@ function makeMouseEvent(): React.MouseEvent {
   } as unknown as React.MouseEvent;
 }
 
-// ---------------------------------------------------------------------------
-// 1. Initial state defaults
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – initial state", () => {
   it("defaults: isOpen=false, searchQuery='', focusedIndex=-1", () => {
     const { result } = renderHook(() => useDropdown({ options }));
@@ -88,10 +80,6 @@ describe("useDropdown – initial state", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 2. defaultValue initialization
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – defaultValue", () => {
   it("sets internalValue to defaultValue", () => {
     const { result } = renderHook(() =>
@@ -114,10 +102,6 @@ describe("useDropdown – defaultValue", () => {
     expect(result.current.selectedOption).toBeNull();
   });
 });
-
-// ---------------------------------------------------------------------------
-// 3. handleOpen
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – handleOpen", () => {
   it("opens the dropdown", () => {
@@ -148,10 +132,6 @@ describe("useDropdown – handleOpen", () => {
     expect(result.current.isOpen).toBe(true);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 4. handleClose
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – handleClose", () => {
   it("closes the dropdown", () => {
@@ -190,10 +170,6 @@ describe("useDropdown – handleClose", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 5. handleToggle
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – handleToggle", () => {
   it("opens when closed", () => {
     const { result } = renderHook(() => useDropdown({ options }));
@@ -230,10 +206,6 @@ describe("useDropdown – handleToggle", () => {
     expect(result.current.isOpen).toBe(false);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 6. handleClear
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – handleClear", () => {
   it("calls event.stopPropagation()", () => {
@@ -274,14 +246,10 @@ describe("useDropdown – handleClear", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 7. handleOptionSelect
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – handleOptionSelect", () => {
   it("sets internalValue to the selected option's value", () => {
     const { result } = renderHook(() => useDropdown({ options, defaultOpen: true }));
-    act(() => result.current.handleOptionSelect(options[1])); // banana
+    act(() => result.current.handleOptionSelect(options[1]));
     expect(result.current.internalValue).toBe("banana");
   });
 
@@ -293,7 +261,7 @@ describe("useDropdown – handleOptionSelect", () => {
 
   it("updates selectedOption after selection", () => {
     const { result } = renderHook(() => useDropdown({ options, defaultOpen: true }));
-    act(() => result.current.handleOptionSelect(options[0])); // apple
+    act(() => result.current.handleOptionSelect(options[0]));
     expect(result.current.selectedOption).toEqual(options[0]);
   });
 
@@ -309,14 +277,10 @@ describe("useDropdown – handleOptionSelect", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true, onValueChange }),
     );
-    act(() => result.current.handleOptionSelect(options[3])); // date
+    act(() => result.current.handleOptionSelect(options[3]));
     expect(onValueChange).toHaveBeenCalledWith("date", options[3]);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 8. Controlled value + onValueChange
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – controlled value", () => {
   it("uses the controlled value prop", () => {
@@ -333,7 +297,7 @@ describe("useDropdown – controlled value", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, value: "banana", onValueChange, defaultOpen: true }),
     );
-    act(() => result.current.handleOptionSelect(options[0])); // apple
+    act(() => result.current.handleOptionSelect(options[0]));
     expect(onValueChange).toHaveBeenCalledWith("apple", options[0]);
     // internalValue stays as controlled prop "banana"
     expect(result.current.internalValue).toBe("banana");
@@ -344,15 +308,11 @@ describe("useDropdown – controlled value", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, onValueChange, defaultOpen: true }),
     );
-    act(() => result.current.handleOptionSelect(options[3])); // date
+    act(() => result.current.handleOptionSelect(options[3]));
     const [, passedOption] = onValueChange.mock.calls[0];
     expect(passedOption).toEqual(options[3]);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 9. Controlled open + onOpenChange
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – controlled open", () => {
   it("respects controlled open=true", () => {
@@ -386,16 +346,12 @@ describe("useDropdown – controlled open", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 10. Sync filtering via setSearchQuery
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – sync filtering", () => {
   it("filters displayOptions by searchQuery (case-insensitive)", () => {
     const { result } = renderHook(() => useDropdown({ options }));
     act(() => result.current.setSearchQuery("an"));
     // "banana" contains "an"; "Apple", "Cherry", "Date" do not
-    expect(result.current.displayOptions).toEqual([options[1]]); // banana
+    expect(result.current.displayOptions).toEqual([options[1]]);
   });
 
   it("returns all options when searchQuery is empty", () => {
@@ -420,13 +376,9 @@ describe("useDropdown – sync filtering", () => {
   it("filtering handles uppercase query", () => {
     const { result } = renderHook(() => useDropdown({ options }));
     act(() => result.current.setSearchQuery("APP"));
-    expect(result.current.displayOptions).toEqual([options[0]]); // Apple
+    expect(result.current.displayOptions).toEqual([options[0]]);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 11. showSearch=false: no filtering applied
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – showSearch=false", () => {
   it("displayOptions equals all options even when searchQuery is set", () => {
@@ -437,10 +389,6 @@ describe("useDropdown – showSearch=false", () => {
     expect(result.current.displayOptions).toEqual(options);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 12. selectedOption computed correctly
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – selectedOption", () => {
   it("is null when no value is selected", () => {
@@ -459,7 +407,7 @@ describe("useDropdown – selectedOption", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true }),
     );
-    act(() => result.current.handleOptionSelect(options[3])); // date
+    act(() => result.current.handleOptionSelect(options[3]));
     expect(result.current.selectedOption).toEqual(options[3]);
   });
 
@@ -471,10 +419,6 @@ describe("useDropdown – selectedOption", () => {
     expect(result.current.selectedOption).toBeNull();
   });
 });
-
-// ---------------------------------------------------------------------------
-// 13. ArrowDown key
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – ArrowDown", () => {
   it("opens when closed and focuses first enabled option", () => {
@@ -488,9 +432,9 @@ describe("useDropdown – ArrowDown", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true }),
     );
-    act(() => result.current.setFocusedIndex(0)); // apple
+    act(() => result.current.setFocusedIndex(0));
     act(() => result.current.handleKeyDown(makeKeyEvent("ArrowDown")));
-    expect(result.current.focusedIndex).toBe(1); // banana
+    expect(result.current.focusedIndex).toBe(1);
   });
 
   it("skips disabled options when moving down", () => {
@@ -499,7 +443,7 @@ describe("useDropdown – ArrowDown", () => {
     );
     act(() => result.current.setFocusedIndex(1)); // banana → next enabled skips cherry(disabled) → date
     act(() => result.current.handleKeyDown(makeKeyEvent("ArrowDown")));
-    expect(result.current.focusedIndex).toBe(3); // date
+    expect(result.current.focusedIndex).toBe(3);
   });
 
   it("wraps from last to first enabled when moving down", () => {
@@ -521,10 +465,6 @@ describe("useDropdown – ArrowDown", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 14. ArrowUp key
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – ArrowUp", () => {
   it("opens on the last enabled option when closed", () => {
     // Changed with the menu primitive, deliberately. ARIA's combobox pattern
@@ -540,17 +480,17 @@ describe("useDropdown – ArrowUp", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true }),
     );
-    act(() => result.current.setFocusedIndex(3)); // date
+    act(() => result.current.setFocusedIndex(3));
     act(() => result.current.handleKeyDown(makeKeyEvent("ArrowUp")));
     // prev of date(3) skips cherry(2, disabled) → banana(1)
-    expect(result.current.focusedIndex).toBe(1); // banana
+    expect(result.current.focusedIndex).toBe(1);
   });
 
   it("wraps from first to last enabled when moving up", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true }),
     );
-    act(() => result.current.setFocusedIndex(0)); // apple
+    act(() => result.current.setFocusedIndex(0));
     act(() => result.current.handleKeyDown(makeKeyEvent("ArrowUp")));
     expect(result.current.focusedIndex).toBe(3); // wraps to date (last enabled)
   });
@@ -566,10 +506,6 @@ describe("useDropdown – ArrowUp", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 15. Home / End keys
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – Home and End", () => {
   it("Home focuses first enabled option when open", () => {
     const { result } = renderHook(() =>
@@ -577,7 +513,7 @@ describe("useDropdown – Home and End", () => {
     );
     act(() => result.current.setFocusedIndex(3));
     act(() => result.current.handleKeyDown(makeKeyEvent("Home")));
-    expect(result.current.focusedIndex).toBe(0); // apple
+    expect(result.current.focusedIndex).toBe(0);
   });
 
   it("End focuses last enabled option when open", () => {
@@ -622,10 +558,6 @@ describe("useDropdown – Home and End", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 16. Enter key
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – Enter", () => {
   it("opens when closed and focuses first enabled option", () => {
     const { result } = renderHook(() => useDropdown({ options }));
@@ -638,7 +570,7 @@ describe("useDropdown – Enter", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true }),
     );
-    act(() => result.current.setFocusedIndex(1)); // banana
+    act(() => result.current.setFocusedIndex(1));
     act(() => result.current.handleKeyDown(makeKeyEvent("Enter")));
     expect(result.current.internalValue).toBe("banana");
     expect(result.current.isOpen).toBe(false);
@@ -662,10 +594,6 @@ describe("useDropdown – Enter", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 17. Space key
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – Space", () => {
   it("opens when closed", () => {
     const { result } = renderHook(() => useDropdown({ options }));
@@ -677,7 +605,7 @@ describe("useDropdown – Space", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true }),
     );
-    act(() => result.current.setFocusedIndex(0)); // apple
+    act(() => result.current.setFocusedIndex(0));
     act(() => result.current.handleKeyDown(makeKeyEvent(" ")));
     expect(result.current.internalValue).toBe("apple");
   });
@@ -689,10 +617,6 @@ describe("useDropdown – Space", () => {
     expect(event.preventDefault).toHaveBeenCalled();
   });
 });
-
-// ---------------------------------------------------------------------------
-// 18. Escape key
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – Escape", () => {
   it("closes when open", () => {
@@ -721,10 +645,6 @@ describe("useDropdown – Escape", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 19. Tab key
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – Tab", () => {
   it("closes dropdown when open", () => {
     const { result } = renderHook(() =>
@@ -751,10 +671,6 @@ describe("useDropdown – Tab", () => {
     expect(event.preventDefault).not.toHaveBeenCalled();
   });
 });
-
-// ---------------------------------------------------------------------------
-// 20. Delete / Backspace
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – Delete and Backspace", () => {
   it("Delete clears value when clearable+hasValue+closed", () => {
@@ -807,10 +723,6 @@ describe("useDropdown – Delete and Backspace", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 21. Typeahead: letter accumulation and focus
-// ---------------------------------------------------------------------------
-
 describe("useDropdown – Typeahead (searchInputFocused=false)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -842,7 +754,6 @@ describe("useDropdown – Typeahead (searchInputFocused=false)", () => {
   it("no-op when dropdown is closed", () => {
     const { result } = renderHook(() => useDropdown({ options }));
     act(() => result.current.handleKeyDown(makeKeyEvent("a")));
-    // Pressing 'a' when closed should not open via typeahead
     expect(result.current.focusedIndex).toBe(-1);
   });
 
@@ -851,13 +762,13 @@ describe("useDropdown – Typeahead (searchInputFocused=false)", () => {
       useDropdown({ options, defaultOpen: true, typeaheadTimeout: 500 }),
     );
     act(() => result.current.handleKeyDown(makeKeyEvent("b")));
-    expect(result.current.focusedIndex).toBe(1); // Banana
+    expect(result.current.focusedIndex).toBe(1);
     act(() => {
       vi.advanceTimersByTime(600); // past 500ms timeout
     });
     // Now type 'a' – should match Apple fresh (no accumulated query)
     act(() => result.current.handleKeyDown(makeKeyEvent("a")));
-    expect(result.current.focusedIndex).toBe(0); // Apple
+    expect(result.current.focusedIndex).toBe(0);
   });
 
   it("does not trigger typeahead with modifier keys (ctrl)", () => {
@@ -873,10 +784,6 @@ describe("useDropdown – Typeahead (searchInputFocused=false)", () => {
     expect(result.current.focusedIndex).toBe(-1);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 22. Typeahead resets after timeout (separate focused test)
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – Typeahead timeout reset", () => {
   beforeEach(() => {
@@ -901,29 +808,25 @@ describe("useDropdown – Typeahead timeout reset", () => {
     });
     // After reset, 'b' should go to Banana
     act(() => result.current.handleKeyDown(makeKeyEvent("b")));
-    expect(result.current.focusedIndex).toBe(1); // Banana
+    expect(result.current.focusedIndex).toBe(1);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 23. Search input focused path (searchInputFocused=true)
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – searchInputFocused path", () => {
   it("ArrowDown moves focus when input is focused", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true, showSearch: true }),
     );
-    act(() => result.current.setFocusedIndex(0)); // apple
+    act(() => result.current.setFocusedIndex(0));
     act(() => result.current.handleKeyDown(makeInputKeyEvent("ArrowDown")));
-    expect(result.current.focusedIndex).toBe(1); // banana
+    expect(result.current.focusedIndex).toBe(1);
   });
 
   it("ArrowUp moves focus when input is focused", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true, showSearch: true }),
     );
-    act(() => result.current.setFocusedIndex(3)); // date
+    act(() => result.current.setFocusedIndex(3));
     act(() => result.current.handleKeyDown(makeInputKeyEvent("ArrowUp")));
     expect(result.current.focusedIndex).toBe(1); // skips cherry (disabled) → banana
   });
@@ -960,14 +863,14 @@ describe("useDropdown – searchInputFocused path", () => {
     );
     act(() => result.current.setFocusedIndex(0));
     act(() => result.current.handleKeyDown(makeInputKeyEvent("End")));
-    expect(result.current.focusedIndex).toBe(3); // date
+    expect(result.current.focusedIndex).toBe(3);
   });
 
   it("Enter selects focused option from input", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true, showSearch: true }),
     );
-    act(() => result.current.setFocusedIndex(1)); // banana
+    act(() => result.current.setFocusedIndex(1));
     act(() => result.current.handleKeyDown(makeInputKeyEvent("Enter")));
     expect(result.current.internalValue).toBe("banana");
     expect(result.current.isOpen).toBe(false);
@@ -996,7 +899,7 @@ describe("useDropdown – searchInputFocused path", () => {
     const { result } = renderHook(() =>
       useDropdown({ options, defaultOpen: true, showSearch: true }),
     );
-    act(() => result.current.setFocusedIndex(0)); // apple
+    act(() => result.current.setFocusedIndex(0));
     act(() => result.current.handleKeyDown(makeInputKeyEvent("ArrowUp")));
     expect(result.current.focusedIndex).toBe(3); // wraps to date
   });
@@ -1013,10 +916,6 @@ describe("useDropdown – searchInputFocused path", () => {
     expect(result.current.isOpen).toBe(false);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 24. loadInitialOnOpen
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – loadInitialOnOpen", () => {
   it("loads initial options on first open", async () => {
@@ -1077,23 +976,17 @@ describe("useDropdown – loadInitialOnOpen", () => {
     );
 
     await act(async () => { result.current.handleOpen(); });
-    // isLoadingInitial should be true while unresolved
     expect(result.current.isLoadingInitial).toBe(true);
 
     // Resolve the promise and flush all resulting microtasks + state updates
     await act(async () => {
       resolve([]);
       await promise;
-      // Flush any remaining promise microtasks
       await new Promise((r) => setTimeout(r, 0));
     });
     expect(result.current.isLoadingInitial).toBe(false);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 25. onLoadError called on load failure
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – onLoadError", () => {
   it("calls onLoadError when onLoadInitialOptions rejects", async () => {
@@ -1128,19 +1021,13 @@ describe("useDropdown – onLoadError", () => {
 
     act(() => { result.current.setSearchQuery("apple"); });
 
-    // Flush the setTimeout(fn, 0) debounce
     await act(async () => { vi.runAllTimers(); });
-    // Flush the rejected promise microtasks
     await act(async () => { await Promise.resolve(); });
 
     vi.useRealTimers();
     expect(onLoadError).toHaveBeenCalledWith(error);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 26. disabled: all keyboard actions are no-ops
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – disabled mode (keyboard)", () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -1190,10 +1077,6 @@ describe("useDropdown – disabled mode (keyboard)", () => {
     expect(result.current.focusedIndex).toBe(-1);
   });
 });
-
-// ---------------------------------------------------------------------------
-// 27. Async mode – displayOptions behavior
-// ---------------------------------------------------------------------------
 
 describe("useDropdown – async mode (onSearch)", () => {
   it("displayOptions returns allInitialOptions when searchQuery is empty", () => {

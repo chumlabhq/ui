@@ -1,4 +1,3 @@
-// AI Knowledge: See DRAWER.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Drawer } from "./Drawer.js";
 export { default as DrawerHeader } from "./components/DrawerHeader.js";
 export { default as DrawerBody } from "./components/DrawerBody.js";

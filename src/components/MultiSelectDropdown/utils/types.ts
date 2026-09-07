@@ -4,21 +4,28 @@ import type { DropdownOption } from "../../Dropdown/utils/types.js";
 export type MultiSelectOption = DropdownOption;
 
 export interface MultiSelectDropdownClasses {
+  /** Root container element */
   root?: string;
   control?: string;
+  /** Trigger button */
   trigger?: string;
   value?: string;
+  /** Dropdown menu container */
   content?: string;
   list?: string;
   item?: string;
   icon?: string;
   itemControl?: string;
   itemIndicator?: string;
+  /** Selected chip styling */
   chip?: string;
+  /** Chip remove button */
   chipRemove?: string;
   empty?: string;
+  /** Label element */
   label?: string;
   message?: string;
+  /** Description/helper text */
   description?: string;
   clearTrigger?: string;
   loading?: string;

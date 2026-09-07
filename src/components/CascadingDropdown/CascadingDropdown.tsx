@@ -50,7 +50,6 @@ const SubmenuItem = memo(function SubmenuItem({
   const combinedCheckboxClassName = cn(
     classes.itemControl,
   );
-  // ADR 002 R4: the state the checkboxChecked key named; Radix Checkbox spelling.
   const checkboxState = isSelected ? "checked" : "unchecked";
 
   return (
@@ -380,8 +379,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     },
     ref,
   ) => {
-    // ADR: floating content resolves its layer from the nearest overlay, so a
-    // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
     // `loadChildrenForOption` runs only for an option whose `hasChildren` is
@@ -405,9 +402,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const shimmerCount = Math.min(Math.max(0, rawShimmerCount), 50);
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_CASCADINGDROPDOWN_CLASSES : DEFAULT_CASCADINGDROPDOWN_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<CascadingDropdownClasses> = useMemo(
@@ -510,7 +504,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
     const SearchIconComponent = SearchIconProp || SearchIconDefault;
 
-    // Restore focus to trigger when dropdown closes
     const prevOpenRef = useRef(false);
     useEffect(() => {
       if (prevOpenRef.current && !isOpen) {
@@ -548,12 +541,10 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       };
     }, [isOpen, handleClose, inMenuSurface]);
 
-    // Scroll lock when dropdown is open
     useEffect(() => {
       if (!lockScroll || !isOpen || !isBrowser) return;
 
       const preventScroll = (e: Event) => {
-        // Allow scroll inside the dropdown menu itself, and inside its submenu
         if (inMenuSurface(e.target as Node)) return;
         e.preventDefault();
       };
@@ -750,9 +741,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
           {clearable && hasValue && (
             <button
               type="button"
-              // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
-              // with a pointer — and for a single select there is no other way
-              // back to an empty value.
               aria-label="Clear selection"
               className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {

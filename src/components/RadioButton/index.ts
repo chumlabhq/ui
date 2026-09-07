@@ -1,4 +1,3 @@
-// AI Knowledge: See RADIOBUTTON.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as RadioGroup } from "./RadioButton.js";
 export { RadioButton } from "./RadioButton.js";
 export type {

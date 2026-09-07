@@ -47,7 +47,6 @@ export function exportTableToCSV<TData>(
   filename = "table-export",
 ): void {
   if (typeof document === "undefined") return;
-  // Build header row and accessor functions
   const headers: string[] = [];
   const accessors: ((row: TData) => unknown)[] = [];
 
@@ -56,7 +55,6 @@ export function exportTableToCSV<TData>(
     const id = def.accessorKey ?? def.id;
     if (!id || id.startsWith("__")) continue;
 
-    // Use header as label if it's a string, otherwise fall back to id
     const headerLabel = typeof def.header === "string" ? def.header : id;
     headers.push(headerLabel);
 
@@ -100,7 +98,6 @@ export async function copyToClipboard(text: string): Promise<boolean> {
       await navigator.clipboard.writeText(text);
       return true;
     }
-    // Fallback for older browsers
     const textarea = document.createElement("textarea");
     textarea.value = text;
     textarea.style.position = "fixed";

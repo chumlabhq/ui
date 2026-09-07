@@ -12,8 +12,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -21,8 +19,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const UserIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -83,8 +79,6 @@ const ThumbsUpIcon = ({ className = "" }: { className?: string }) => (
     <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
   </svg>
 );
-
-// ─── Step Data ───────────────────────────────────────────────────────────────
 
 const basicSteps: Step[] = [
   { id: 1, label: "Step 1" },
@@ -169,8 +163,6 @@ const perStepIconSteps: Step[] = [
   { id: 3, label: "Publish" },
 ];
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (_dark: boolean) => ({
   // Same overrides for light + dark — the underlying tokens (cl-accent,
   // cl-success, cl-error, cl-bg-hover, cl-bg-elevated) are theme-aware,
@@ -199,8 +191,6 @@ const getClasses = (_dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const StepperDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -255,7 +245,6 @@ const StepperDemo = () => {
 
       <CopyPasteBlock name="Stepper" />
 
-      {/* ─── Basic ────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Works out-of-the-box with built-in styles and dark mode. Click a step or use the buttons to navigate. No custom classes needed."
@@ -263,7 +252,7 @@ const StepperDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full">
-            {/* Basic usage — works out-of-the-box with built-in styles */}
+            {}
             <Stepper
               steps={basicSteps}
               value={basicStep}
@@ -274,7 +263,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Uncontrolled ─────────────────────────────────────────────── */}
       <Section
         title="Uncontrolled Usage"
         description="Use defaultValue instead of value for uncontrolled mode. The component manages its own active step state internally."
@@ -291,7 +279,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Icon Variant ─────────────────────────────────────────────── */}
       <Section
         title="Icon Variant with Descriptions"
         description="Use variant='icon' with showDescriptions and labelPosition='bottom' for a rich checkout-style stepper with horizontal connectors."
@@ -316,7 +303,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Vertical ─────────────────────────────────────────────────── */}
       <Section
         title="Vertical Stepper"
         description="Set orientation='vertical' for a top-to-bottom step layout."
@@ -334,7 +320,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Dot Variant ──────────────────────────────────────────────── */}
       <Section
         title="Dot Variant"
         description="Minimal dot indicators — ideal for carousels or wizards. Labels are hidden, aria-label is auto-generated for each step."
@@ -356,7 +341,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Hidden Connectors ────────────────────────────────────────── */}
       <Section
         title="Hidden Connectors"
         description="Set showConnectors={false} to remove the connecting lines between steps."
@@ -376,7 +360,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Error State ──────────────────────────────────────────────── */}
       <Section
         title="Error State"
         description="Use getStepStatus to override the default linear status calculation — here step 2 is always 'error'."
@@ -398,7 +381,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Disabled Steps ───────────────────────────────────────────── */}
       <Section
         title="Disabled Steps"
         description="Individual steps can be disabled via the step object's disabled property. Disabled steps are not interactive even when isStepClickable returns true."
@@ -420,7 +402,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Globally Disabled ────────────────────────────────────────── */}
       <Section
         title="Globally Disabled"
         description="Set disabled on the root component to disable all steps regardless of their individual disabled state."
@@ -444,7 +425,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Non-linear Navigation ────────────────────────────────────── */}
       <Section
         title="Non-linear Navigation"
         description="Set isStepClickable={() => true} to allow clicking any step regardless of its status."
@@ -468,7 +448,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Step Change Prevention ───────────────────────────────────── */}
       <Section
         title="Step Change Prevention"
         description="Use beforeStepChange to validate or prevent step transitions. Return false to block the change. Here, steps can only advance one at a time."
@@ -500,7 +479,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Keyboard Navigation with Loop ────────────────────────────── */}
       <Section
         title="Keyboard Navigation with Loop"
         description="Arrow keys move focus between interactive steps. Home/End jump to first/last. Set loop to wrap around at boundaries."
@@ -529,7 +507,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Automatic Activation Mode ────────────────────────────────── */}
       <Section
         title="Automatic Activation Mode"
         description="Set activationMode='automatic' so arrow keys activate steps immediately as focus moves, matching TabPanel's automatic mode."
@@ -555,7 +532,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom Completed & Error Icons ───────────────────────────── */}
       <Section
         title="Custom Completed & Error Icons"
         description="Override the default CheckIcon and ErrorIcon globally via completedIcon and errorIcon props."
@@ -579,7 +555,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Per-Step Icon Overrides ──────────────────────────────────── */}
       <Section
         title="Per-Step Icon Overrides"
         description="Each step can override the global completedIcon and errorIcon via step.completedIcon and step.errorIcon."
@@ -597,7 +572,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom Styling ───────────────────────────────────────────── */}
       <Section
         title="Custom Styling"
         description="Full visual customization via the classes prop. Each slot replaces the default — no class merging conflicts."
@@ -624,7 +598,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Full Width ───────────────────────────────────────────────── */}
       <Section
         title="Full Width"
         description="Set fullWidth to make the stepper expand to fill its container."
@@ -641,7 +614,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom ID ────────────────────────────────────────────────── */}
       <Section
         title="Custom ID"
         description="Use the id prop for deterministic IDs useful for SSR and testing. Auto-generated via useId() if not provided."
@@ -670,7 +642,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Ref Forwarding ───────────────────────────────────────────── */}
       <Section
         title="Ref Forwarding"
         description="Use ref to access the root DOM element for programmatic scroll, measurement, or focus management."
@@ -697,7 +668,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom Aria Label ────────────────────────────────────────── */}
       <Section
         title="Custom Aria Label"
         description="Use aria-label to provide a meaningful accessible name for the navigation landmark."
@@ -726,7 +696,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Tooltips (Simple) ───────────────────────────────────── */}
       <Section
         title="With Tooltips (Simple)"
         description="Enable showTooltips and add a tooltip string to each step for hover-activated tooltips."
@@ -752,7 +721,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Tooltips (Custom Config) ────────────────────────────── */}
       <Section
         title="With Tooltips (Custom Config)"
         description="Each step can have a StepTooltipConfig object for per-step tooltip customization including position, JSX content, max width, and shadow."
@@ -787,7 +755,6 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Render Step ────────────────────────────────────────────────── */}
       <Section
         title="Custom Step Rendering"
         description="Use renderStep for fully custom step rendering. You receive the render props and the default element."
@@ -835,325 +802,6 @@ const StepperDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Stepper" />
-
-      <Section title="Step Object Properties" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="id"
-              type="string | number"
-              defaultVal="required"
-              description="Unique identifier for the step"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="ReactNode"
-              description="Step label text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="ReactNode"
-              description="Step description text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="ComponentType | ReactNode"
-              description="Custom icon (icon variant)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="completedIcon"
-              type="ComponentType | ReactNode"
-              description="Per-step override for completed icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="errorIcon"
-              type="ComponentType | ReactNode"
-              description="Per-step override for error icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              description="Whether the step is disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltip"
-              type="ReactNode | StepTooltipConfig"
-              description="Tooltip content or configuration object"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="StepperClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root navigation container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="list"
-              type="string"
-              description="The <ol> list wrapping all steps"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="stepContainer"
-              type="string"
-              description="Each <li> wrapper (step + connector)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="step"
-              type="string"
-              description="Clickable step area (indicator + labels)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="indicator"
-              type="string"
-              description="Number/icon circle indicator"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="indicatorIcon"
-              type="string"
-              description="Icon/SVG inside the indicator"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="labelWrapper"
-              type="string"
-              description="Container for label + description"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Step label text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="string"
-              description="Step description text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="connector"
-              type="string"
-              description="Line between steps (use data-status for per-status)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="StepTooltipConfig Properties" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="content"
-              type="ReactNode"
-              defaultVal="required"
-              description="Tooltip content (text or JSX)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="side"
-              type={'"top" | "right" | "bottom" | "left"'}
-              description="Override tooltip position for this step"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="align"
-              type={'"start" | "center" | "end"'}
-              description="Override tooltip alignment"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="sideOffset"
-              type="number"
-              description="Distance from trigger (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="alignOffset"
-              type="number"
-              description="Offset from aligned edge (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxWidth"
-              type="string | number"
-              description="Maximum tooltip width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="delayDuration"
-              type="number"
-              description="Delay before showing (ms)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showArrow"
-              type="boolean"
-              description="Show tooltip arrow"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="arrowColor"
-              type="string"
-              description="Custom arrow color"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shadow"
-              type="TooltipShadow"
-              description="Tooltip shadow preset"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="contentClassName"
-              type="string"
-              description="Custom class for tooltip content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="contentStyle"
-              type="CSSProperties"
-              description="Inline styles for tooltip content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="arrowClassName"
-              type="string"
-              description="Custom class for tooltip arrow"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="arrowStyle"
-              type="CSSProperties"
-              description="Inline styles for tooltip arrow"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="StepperTooltipDefaults Properties" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="side"
-              type={'"top" | "right" | "bottom" | "left"'}
-              defaultVal="top"
-              description="Default tooltip position for all steps"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="align"
-              type={'"start" | "center" | "end"'}
-              defaultVal="center"
-              description="Default tooltip alignment"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="sideOffset"
-              type="number"
-              defaultVal="6"
-              description="Default distance from trigger (px)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="delayDuration"
-              type="number"
-              defaultVal="200"
-              description="Default delay before showing (ms)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="maxWidth"
-              type="string | number"
-              defaultVal="300"
-              description="Default maximum tooltip width"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showArrow"
-              type="boolean"
-              defaultVal="true"
-              description="Default show/hide arrow"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shadow"
-              type="TooltipShadow"
-              defaultVal="lg"
-              description="Default shadow preset"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-orientation"
-              type="root, ol, li"
-              description={'"horizontal" | "vertical"'}
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-variant"
-              type="root"
-              description={'"numbered" | "icon" | "dot"'}
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-status"
-              type="li, step, indicator, label, description, connector"
-              description={'"pending" | "active" | "completed" | "error"'}
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="step"
-              description="Present when step is disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-clickable"
-              type="step"
-              description="Present when step is interactive"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-next-status"
-              type="connector"
-              description="Status of the next step"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

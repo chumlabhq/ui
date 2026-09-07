@@ -6,8 +6,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -16,8 +14,6 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const HeartIcon = ({ className }: { className?: string }) => (
   <svg
@@ -52,8 +48,6 @@ const EmptyHeartIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (_dark: boolean) => ({
   checkbox: {
     root: "",
@@ -72,8 +66,6 @@ const getClasses = (_dark: boolean) => ({
   label: `text-xs font-medium text-cl-text-tertiary`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const CheckboxDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -115,14 +107,13 @@ const CheckboxDemo = () => {
 
       <CopyPasteBlock name="Checkbox" />
 
-      {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="A simple checkbox with built-in styles. Works out-of-the-box with proper sizing, dark mode, and keyboard support (Space to toggle)."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Basic usage — works out-of-the-box with built-in styles */}
+          {}
           <div className="flex flex-col gap-3">
             <Checkbox
               label="Accept terms and conditions"
@@ -141,7 +132,6 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Label ─────────────────────────────────────────────────── */}
       <Section
         title="With Label"
         description="Use the label prop to add an accessible label."
@@ -159,7 +149,6 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Description ───────────────────────────────────────────── */}
       <Section
         title="With Label and Description"
         description="Add context using the description prop."
@@ -178,7 +167,6 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Required ───────────────────────────────────────────────────── */}
       <Section
         title="Required"
         description="Shows asterisk and sets aria-required."
@@ -196,7 +184,6 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Indeterminate ──────────────────────────────────────────────── */}
       <Section
         title="Indeterminate State"
         description='Use indeterminate for "select all" scenarios where some items are selected.'
@@ -215,7 +202,6 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Sizes ──────────────────────────────────────────────────────── */}
       <Section
         title="Sizes"
         description="Presets: xs, sm, md, lg, xl, or any custom number."
@@ -562,7 +548,6 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ─────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override any internal element with the classes prop. 10 slots available."
@@ -594,121 +579,6 @@ const CheckboxDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Checkbox" />
-
-      <Section title="CheckboxClasses" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="labelContainer"
-              type="string"
-              description="Label + description wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label text span"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="string"
-              description="Description text span"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkbox"
-              type="string"
-              description="Checkbox visual container (always applied)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checked"
-              type="string"
-              description="Applied when checked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unchecked"
-              type="string"
-              description="Applied when unchecked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="indeterminate"
-              type="string"
-              description="Applied when indeterminate"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="string"
-              description="Icon element class"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message container"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-checked"
-              type="root, checkbox span"
-              description="Present when checked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-indeterminate"
-              type="root, checkbox span"
-              description="Present when indeterminate"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, checkbox span"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root, checkbox span"
-              description="Present when error=true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-size"
-              type="root"
-              description="Size preset string value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-shape"
-              type="root"
-              description="Shape value"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

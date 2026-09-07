@@ -282,7 +282,6 @@ describe("RadioButton", () => {
         </RadioGroup>
       );
 
-      // Tab to the first radio and activate it
       await user.tab();
       await user.keyboard(" ");
 
@@ -302,7 +301,6 @@ describe("RadioButton", () => {
       await user.tab();
 
       const radios = screen.getAllByRole("radio");
-      // One of the radios should be focused
       expect(
         radios[0] === document.activeElement ||
           radios[1] === document.activeElement

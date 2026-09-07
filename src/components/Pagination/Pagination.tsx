@@ -212,8 +212,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     },
     ref,
   ) => {
-    // ADR: floating content resolves its layer from the nearest overlay, so a
-    // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
     const instanceId = useId();
@@ -230,12 +228,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const baseClassesRaw = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
 
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-
-    // this handles the other reason to stop animating. Applied to the defaults
-
-    // only — a class string the consumer supplied is theirs to control.
-
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,
@@ -244,7 +236,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       item: classesProp?.item ?? baseClasses.item,
       navButton: classesProp?.navButton ?? baseClasses.navButton,
       ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
-      // ADR 002 R6: merged per slot, so overriding `trigger` keeps the rest.
       rowsPerPage: { ...baseClasses.rowsPerPage, ...classesProp?.rowsPerPage },
       label: classesProp?.label ?? baseClasses.label,
       navIcon: classesProp?.navIcon ?? baseClasses.navIcon,

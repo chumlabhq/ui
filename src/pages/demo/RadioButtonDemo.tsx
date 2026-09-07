@@ -6,8 +6,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -16,8 +14,6 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const CheckCircleIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -48,8 +44,6 @@ const ThumbsUpIcon = ({ className }: { className?: string }) => (
     <path d="M2 20h2c.55 0 1-.45 1-1v-9c0-.55-.45-1-1-1H2v11zm19.83-7.12c.11-.25.17-.52.17-.8V11c0-1.1-.9-2-2-2h-5.5l.92-4.65c.05-.22.02-.46-.08-.66-.23-.45-.52-.86-.88-1.22L14 2 7.59 8.41C7.21 8.79 7 9.3 7 9.83v7.84C7 18.95 8.05 20 9.34 20h8.11c.7 0 1.36-.37 1.72-.97l2.66-6.15z" />
   </svg>
 );
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (_dark: boolean) => ({
   group: {
@@ -82,7 +76,6 @@ const getClasses = (_dark: boolean) => ({
     error: "",
     success: "",
   },
-  // Color variants
   radioGreen: {
     root: "flex items-center gap-2",
     label: `text-sm font-medium text-cl-text`,
@@ -134,8 +127,6 @@ const getClasses = (_dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
-// ─── Demo ────────────────────────────────────────────────────────────────────
-
 const RadioButtonDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
@@ -154,14 +145,13 @@ const RadioButtonDemo = () => {
 
       <CopyPasteBlock name="RadioButton" />
 
-      {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Works out-of-the-box with built-in styles and dark mode. No custom classes needed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Basic usage — works out-of-the-box with built-in styles */}
+          {}
           <RadioGroup
             name="basic"
             defaultValue="email"
@@ -176,7 +166,6 @@ const RadioButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Labels and Descriptions ────────────────────────────────── */}
       <Section
         title="With Labels and Descriptions"
         description="Add context using the label and description props on each radio button."
@@ -211,7 +200,6 @@ const RadioButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Required ───────────────────────────────────────────────────── */}
       <Section
         title="Required"
         description="Shows asterisk on the group label and sets aria-required."
@@ -233,7 +221,6 @@ const RadioButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Horizontal Layout ──────────────────────────────────────────── */}
       <Section
         title="Horizontal Layout"
         description='Use orientation="horizontal" for inline radio buttons.'
@@ -254,7 +241,6 @@ const RadioButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Sizes ──────────────────────────────────────────────────────── */}
       <Section
         title="Sizes"
         description="Presets: xs, sm, md, lg, xl. Also supports a custom number."
@@ -488,7 +474,6 @@ const RadioButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ───────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override individual slots (root, label, description, radio, checked, unchecked, icon) for full control."
@@ -728,36 +713,6 @@ const RadioButtonDemo = () => {
       <ComponentDocs name="RadioButton" />
 
       {/* ─── RadioButton Props Table ─────────────────────────────────────── */}
-
-      {/* ─── RadioButtonClasses ────────────────────────────────────────── */}
-      <Section title="RadioButtonClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="root" type="string" description="Root label container wrapping radio and text" isDarkMode={dark} />
-            <PropRow name="label" type="string" description="Label text element" isDarkMode={dark} />
-            <PropRow name="description" type="string" description="Description text below the label" isDarkMode={dark} />
-            <PropRow name="radio" type="string" description="The radio indicator circle (always applied)" isDarkMode={dark} />
-            <PropRow name="checked" type="string" description="Applied when the radio is checked — use for fill/border color" isDarkMode={dark} />
-            <PropRow name="unchecked" type="string" description="Applied when the radio is unchecked" isDarkMode={dark} />
-            <PropRow name="icon" type="string" description="The inner dot/icon inside the indicator" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="Data Attributes" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="data-checked" type="RadioButton, RadioGroup" description="Present when checked / has a selected value" isDarkMode={dark} />
-            <PropRow name="data-disabled" type="RadioButton, RadioGroup" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-value" type="RadioButton" description="The value prop of the radio button" isDarkMode={dark} />
-            <PropRow name="data-error" type="RadioGroup" description="Present when error=true" isDarkMode={dark} />
-            <PropRow name="data-valid" type="RadioGroup" description="Present when success=true" isDarkMode={dark} />
-            <PropRow name="data-loading" type="RadioGroup" description="Present when loading=true" isDarkMode={dark} />
-            <PropRow name="data-orientation" type="RadioGroup" description='"horizontal" or "vertical"' isDarkMode={dark} />
-            <PropRow name="data-reduce-motion" type="RadioGroup" description="Present when reduced motion is active" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

@@ -8,8 +8,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -17,8 +15,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (_dark: boolean) => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -49,8 +45,6 @@ const getClasses = (_dark: boolean) => ({
   },
 });
 
-// ─── Custom thumb icons ──────────────────────────────────────────────────────
-
 const HeartIcon = () => (
   <svg viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-cl-accent">
     <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
@@ -69,13 +63,10 @@ const VolumeIcon = () => (
   </svg>
 );
 
-// ─── Component ───────────────────────────────────────────────────────────────
-
 const SliderDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
 
-  // ─── State ──────────────────────────────────────────────────────────
   const [basic, setBasic] = useState(50);
   const [range, setRange] = useState<SliderValue>([25, 75]);
   const [stepped, setStepped] = useState(50);
@@ -125,11 +116,10 @@ const SliderDemo = () => {
 
       <CopyPasteBlock name="Slider" />
 
-      {/* ── Basic ────────────────────────────────────────────────────── */}
       <Section title="Basic Usage" description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation (arrow keys). No custom classes needed." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="flex flex-col gap-6 w-full sm:max-w-sm">
-            {/* Basic usage — works out-of-the-box with built-in styles */}
+            {}
             <Slider
               label="Volume"
               value={basic}
@@ -144,7 +134,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Range ────────────────────────────────────────────────────── */}
       <Section title="Range Slider" description="Pass a [number, number] tuple as value for two-thumb range selection." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-sm space-y-3">
@@ -156,7 +145,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── With Label & Description ──────────────────────────────── */}
       <Section title="Label & Description" description="Form-integrated slider with label, description, and error state." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-8 w-full sm:max-w-sm">
@@ -710,43 +698,6 @@ const SliderDemo = () => {
       </Section>
 
       <ComponentDocs name="Slider" />
-
-      <Section title="SliderClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="root" type="string" description="Root container" isDarkMode={dark} />
-            <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
-            <PropRow name="description" type="string" description="Description text" isDarkMode={dark} />
-            <PropRow name="wrapper" type="string" description="Track wrapper (contains track + thumbs)" isDarkMode={dark} />
-            <PropRow name="track" type="string" description="Full-length track background" isDarkMode={dark} />
-            <PropRow name="range" type="string" description="Filled portion of the track" isDarkMode={dark} />
-            <PropRow name="thumb" type="string" description="Draggable thumb element" isDarkMode={dark} />
-            <PropRow name="thumbActive" type="string" description="Active/dragging thumb" isDarkMode={dark} />
-            <PropRow name="thumbDisabled" type="string" description="Disabled thumb" isDarkMode={dark} />
-            <PropRow name="tooltip" type="string" description="Value tooltip" isDarkMode={dark} />
-            <PropRow name="mark" type="string" description="Mark container" isDarkMode={dark} />
-            <PropRow name="markDot" type="string" description="Mark tick dot" isDarkMode={dark} />
-            <PropRow name="markDotActive" type="string" description="Active mark dot (within range)" isDarkMode={dark} />
-            <PropRow name="markLabel" type="string" description="Mark label text" isDarkMode={dark} />
-            <PropRow name="error" type="string" description="Error message" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="data-disabled" type="Root, thumb" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-error" type="Root" description="Present when error state is active" isDarkMode={dark} />
-            <PropRow name="data-loading" type="Root" description="Present when loading=true" isDarkMode={dark} />
-            <PropRow name="data-valid" type="Root" description="Present when success=true (without error)" isDarkMode={dark} />
-            <PropRow name="data-orientation" type="Root, wrapper" description='"horizontal" or "vertical"' isDarkMode={dark} />
-            <PropRow name="data-index" type="Thumb" description="0 for single/first thumb, 1 for second range thumb" isDarkMode={dark} />
-            <PropRow name="data-dragging" type="Thumb" description="Present when thumb is being dragged" isDarkMode={dark} />
-            <PropRow name="data-disabled" type="Thumb" description="Present on disabled thumbs" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
 
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>

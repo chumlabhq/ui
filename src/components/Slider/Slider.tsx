@@ -20,7 +20,6 @@ import { cn } from "../../utils/scopedCn.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function clamp(val: number, min: number, max: number) {
   return Math.min(max, Math.max(min, val));
@@ -47,8 +46,6 @@ function percentToValue(pct: number, min: number, max: number, step: number) {
 function isRange(v: SliderValue): v is [number, number] {
   return Array.isArray(v);
 }
-
-// ─── Thumb ────────────────────────────────────────────────────────────────────
 
 interface ThumbProps {
   value: number;
@@ -165,7 +162,6 @@ function Thumb({
       }}
       data-index={index}
       data-dragging={isDragging || undefined}
-      // ADR 002 R4: the state the thumbActive key named.
       data-state={isDragging ? "active" : undefined}
       data-disabled={disabled || undefined}
       onPointerDown={(e) => onPointerDown(e, index)}
@@ -190,8 +186,6 @@ function Thumb({
     </div>
   );
 }
-
-// ─── Slider ───────────────────────────────────────────────────────────────────
 
 /**
  * Component: Slider
@@ -250,14 +244,12 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
     },
     ref,
   ) => {
-    // ─── IDs ────────────────────────────────────────────────────────────
     const generatedId = useId();
     const sliderId = id || generatedId;
     const labelId = `${sliderId}-label`;
     const descriptionId = `${sliderId}-description`;
     const errorId = `${sliderId}-error`;
 
-    // ─── Controllable state ─────────────────────────────────────────────
     const [currentValue, setCurrentValue] = useControllableState<SliderValue>({
       value: valueProp,
       defaultValue: defaultValue ?? min,
@@ -269,7 +261,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       ? currentValue
       : [currentValue as number, currentValue as number];
 
-    // ─── Drag state ─────────────────────────────────────────────────────
     const [activeThumb, setActiveThumb] = useState<number | null>(null);
     // Only true once an actual pointermove has fired after pointerdown.
     // Lets a plain click on a mark/track animate smoothly to the new
@@ -285,14 +276,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       commitRef.current = onValueCommit;
     });
 
-    // ─── Classes ────────────────────────────────────────────────────────
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled
       ? UNSTYLED_SLIDER_CLASSES
       : DEFAULT_SLIDER_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mc: Required<SliderClasses> = useMemo(
       () => ({
@@ -310,7 +297,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [classesProp, baseClasses],
     );
 
-    // ─── Value update helpers ───────────────────────────────────────────
     const updateValue = useCallback(
       (thumbIndex: number, newVal: number) => {
         const clamped = clamp(snapToStep(newVal, min, step), min, max);
@@ -319,7 +305,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           const next: [number, number] = [...prev];
           next[thumbIndex] = clamped;
 
-          // Enforce minimum distance
           const minDist = minStepsBetweenThumbs * step;
           if (thumbIndex === 0 && next[0] > next[1] - minDist) {
             next[0] = next[1] - minDist;
@@ -337,7 +322,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [isRangeMode, min, max, step, minStepsBetweenThumbs, setCurrentValue],
     );
 
-    // ─── Pointer → value conversion ─────────────────────────────────────
     const getValueFromPointer = useCallback(
       (clientX: number, clientY: number) => {
         const track = trackRef.current;
@@ -356,7 +340,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [min, max, step, orientation, inverted],
     );
 
-    // ─── Find closest thumb ─────────────────────────────────────────────
     const getClosestThumb = useCallback(
       (val: number) => {
         if (!isRangeMode) return 0;
@@ -370,7 +353,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [isRangeMode],
     );
 
-    // ─── Pointer handlers ───────────────────────────────────────────────
     const handleTrackPointerDown = useCallback(
       (e: React.PointerEvent) => {
         if (disabled || e.button !== 0) return;
@@ -431,7 +413,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       };
     }, [activeThumb, getValueFromPointer, updateValue, isRangeMode]);
 
-    // ─── Keyboard handler ───────────────────────────────────────────────
     const handleKeyDown = useCallback(
       (e: ReactKeyboardEvent, index: number) => {
         if (disabled) return;
@@ -478,7 +459,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [disabled, step, min, max, updateValue, isRangeMode],
     );
 
-    // ─── Layout calculations ────────────────────────────────────────────
     const isHorizontal = orientation === "horizontal";
     const TRACK_SIZE = 6; // px — thickness of the track bar
     const THUMB_SIZE = 20; // px — diameter of the thumb
@@ -489,7 +469,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
     const rangeStart = isRangeMode ? Math.min(pct0, pct1) : 0;
     const rangeEnd = isRangeMode ? Math.max(pct0, pct1) : pct0;
 
-    // Range needs explicit top/bottom (horizontal) or left/right (vertical)
     const rangeStyle: CSSProperties = isHorizontal
       ? {
           position: "absolute",
@@ -538,7 +517,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           marginRight: `${Math.max(thumbPad, markLabelSpace)}px`,
         };
 
-    // ─── aria-describedby ───────────────────────────────────────────────
     const ariaDescribedBy =
       [
         description ? descriptionId : null,
@@ -547,7 +525,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         .filter(Boolean)
         .join(" ") || undefined;
 
-    // ─── Render ─────────────────────────────────────────────────────────
     return (
       <div
         ref={ref}

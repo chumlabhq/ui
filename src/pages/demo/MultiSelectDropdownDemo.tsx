@@ -9,8 +9,6 @@ import {
   Section,
   DemoWrapper,
   DemoLabel,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -19,8 +17,6 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { fetchCountries, type Country } from "./lib/countries.js";
-
-// ─── Static Data ────────────────────────────────────────────────────────────
 
 const staticOptions: MultiSelectOption[] = [
   { value: "apple", label: "Apple" },
@@ -111,8 +107,6 @@ const disabledItemOptions: MultiSelectOption[] = [
   { value: "option5", label: "Available Option 3" },
 ];
 
-// ─── Icons ──────────────────────────────────────────────────────────────────
-
 const CustomChevronIcon = ({
   className,
   style,
@@ -136,8 +130,6 @@ const CustomChevronIcon = ({
     />
   </svg>
 );
-
-// ─── Themed Classes ─────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
   dropdown: {
@@ -171,25 +163,16 @@ const getClasses = (dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
-// ─── Demo ───────────────────────────────────────────────────────────────────
-
 const MultiSelectDropdownDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
 
-  // Basic
   const [basicValue, setBasicValue] = useState<string[]>([]);
-  // Custom content
   const [countryValue, setCountryValue] = useState<string[]>([]);
-  // Status indicators
   const [statusValue, setStatusValue] = useState<string[]>([]);
-  // Disabled items
   const [disabledItemValue, setDisabledItemValue] = useState<string[]>([]);
-  // Async
   const [asyncValue, setAsyncValue] = useState<string[]>([]);
-  // Label
   const [labelValue, setLabelValue] = useState<string[]>([]);
-  // Controlled open
   const [controlledOpen, setControlledOpen] = useState(false);
   const [controlledValue, setControlledValue] = useState<string[]>([]);
   // State Variations section — independent state per card so each card is
@@ -206,62 +189,41 @@ const MultiSelectDropdownDemo = () => {
     "banana",
     "cherry",
   ]);
-  // No chips
   const [noChipsValue, setNoChipsValue] = useState<string[]>([]);
-  // Disabled state
   const [disabledValue, setDisabledValue] = useState<string[]>([
     "apple",
     "banana",
   ]);
-  // Error
   const [errorValue, setErrorValue] = useState<string[]>([]);
-  // Description
   const [descriptionValue, setDescriptionValue] = useState<string[]>([]);
-  // Success
   const [successValue, setSuccessValue] = useState<string[]>([]);
-  // Form integration
   const [formIntegrationValue, setFormIntegrationValue] = useState<string[]>(
     [],
   );
-  // Chevron
   const [noChevronValue, setNoChevronValue] = useState<string[]>([]);
-  // Full width
   const [fullWidthValue, setFullWidthValue] = useState<string[]>([]);
-  // Position
   const [posTopValue, setPosTopValue] = useState<string[]>([]);
   const [posBotValue, setPosBotValue] = useState<string[]>([]);
-  // Force position
   const [forceBotValue, setForceBotValue] = useState<string[]>([]);
   const [forceTopValue, setForceTopValue] = useState<string[]>([]);
   const [forceLockValue, setForceLockValue] = useState<string[]>([]);
-  // Keep mounted
   const [keepMountedValue, setKeepMountedValue] = useState<string[]>([]);
-  // Custom gap
   const [customGapValue, setCustomGapValue] = useState<string[]>([]);
-  // Z-index
   const [zIndexValue, setZIndexValue] = useState<string[]>([]);
-  // Focus / blur
   const [focusMessage, setFocusMessage] = useState("");
-  // Custom keydown
   const [customKeyDownValue, setCustomKeyDownValue] = useState<string[]>([]);
   const [keyDownMessage, setKeyDownMessage] = useState("");
-  // className, style, aria-label
   const [classNameDemoValue, setClassNameDemoValue] = useState<string[]>([]);
   const [classNameStyleValue, setClassNameStyleValue] = useState<string[]>([]);
   const [ariaLabelDemoValue, setAriaLabelDemoValue] = useState<string[]>([]);
-  // Themes
   const [darkThemeValue, setDarkThemeValue] = useState<string[]>([]);
   const [purpleThemeValue, setPurpleThemeValue] = useState<string[]>([]);
-  // Custom checkboxes
   const [greenCheckboxValue, setGreenCheckboxValue] = useState<string[]>([]);
   const [orangeCheckboxValue, setOrangeCheckboxValue] = useState<string[]>([]);
   const [customIconValue, setCustomIconValue] = useState<string[]>([]);
-  // Keyboard demo
   const [keyboardDemoValue, setKeyboardDemoValue] = useState<string[]>([]);
-  // Scroll lock
   const [scrollLockValue, setScrollLockValue] = useState<string[]>([]);
   const [scrollUnlockedValue, setScrollUnlockedValue] = useState<string[]>([]);
-  // Style variants
   const [variantDefaultValue, setVariantDefaultValue] = useState<string[]>([]);
   const [variantBorderlessValue, setVariantBorderlessValue] = useState<
     string[]
@@ -1518,235 +1480,6 @@ const MultiSelectDropdownDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="MultiSelectDropdown" />
-
-      <Section title="MultiSelectDropdownClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="wrapper"
-              type="string"
-              description="Inner wrapper (relative positioned)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="trigger"
-              type="string"
-              description="Trigger button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="triggerText"
-              type="string"
-              description="Text span inside trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="string"
-              description="Dropdown menu container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionList"
-              type="string"
-              description="Options list wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="option"
-              type="string"
-              description="Base option styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionSelected"
-              type="string"
-              description="Additional class for selected options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionFocused"
-              type="string"
-              description="Additional class for keyboard-focused options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionDisabled"
-              type="string"
-              description="Additional class for disabled options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="chevron"
-              type="string"
-              description="Chevron icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkbox"
-              type="string"
-              description="Base checkbox styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkboxChecked"
-              type="string"
-              description="Additional class for checked checkbox"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkboxIcon"
-              type="string"
-              description="Checkbox icon styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="chip"
-              type="string"
-              description="Selected chip styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="chipRemove"
-              type="string"
-              description="Chip remove button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="moreCount"
-              type="string"
-              description='"+N more" badge'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="noResults"
-              type="string"
-              description="No results message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="string"
-              description="Description/helper text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="string"
-              description="Success message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shimmer"
-              type="string"
-              description="Shimmer container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shimmerItem"
-              type="string"
-              description="Individual shimmer item"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ─────────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-open"
-              type="root, trigger"
-              description="Present when the dropdown is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, trigger, option"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root, trigger"
-              description="Present when in error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-valid"
-              type="root, trigger"
-              description="Present when in success state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-full-width"
-              type="root"
-              description="Present when fullWidth is true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-placeholder"
-              type="trigger"
-              description="Present when no option is selected"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-selected"
-              type="option"
-              description="Present on selected options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-highlighted"
-              type="option"
-              description="Present on the keyboard-focused option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-value"
-              type="option"
-              description="The option's value string"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-state"
-              type="content (portal)"
-              description='"open" or "closed"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-position"
-              type="content (portal)"
-              description='"top" or "bottom" (actual position)'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ───────────────────────────────────────────────── */}
       <Section

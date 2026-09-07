@@ -10,8 +10,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -21,15 +19,12 @@ import {
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (_dark: boolean) => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
-  // Flag styling
   flag: "rounded-[3px]",
   flagLg: "rounded",
   flagGroup: {
@@ -45,8 +40,6 @@ const getClasses = (_dark: boolean) => ({
   },
   fallback: `inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const CountryFlagDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -65,21 +58,19 @@ const CountryFlagDemo = () => {
 
       <CopyPasteBlock name="CountryFlag" />
 
-      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Render a flag by passing a two-letter ISO country code."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          {/* Basic usage — just pass a country code */}
+          {}
           {["us", "gb", "jp", "de", "fr", "in", "br", "ca"].map((code) => (
             <CountryFlag key={code} code={code} size={48} />
           ))}
         </DemoWrapper>
       </Section>
 
-      {/* ─── Sizes ──────────────────────────────────────────────────────── */}
       <Section
         title="Sizes"
         description="Presets: xs, sm, md, lg, xl, 2xl, or any custom pixel number."
@@ -417,7 +408,6 @@ const CountryFlagDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ─────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override internal elements with the classes prop. Slots: root, image, fallback."
@@ -514,37 +504,6 @@ const CountryFlagDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="CountryFlag" />
-
-      <Section title="Data Attributes" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-loading"
-              type="root span"
-              description="Present while image is loading"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root span"
-              description="Present when image failed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-code"
-              type="root span"
-              description="Normalized country code"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="role"
-              type="root span, group, shimmer"
-              description='role="img" / "group" / "status"'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

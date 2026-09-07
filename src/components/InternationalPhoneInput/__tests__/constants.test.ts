@@ -10,8 +10,6 @@ import {
   UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES,
 } from "../constants.js";
 
-// ─── PHONE_FORMATTING_PATTERNS ────────────────────────────────────────────────
-
 describe("PHONE_FORMATTING_PATTERNS", () => {
   // Lines 33-40: GERMANY pattern
   describe("GERMANY", () => {
@@ -143,8 +141,6 @@ describe("PHONE_FORMATTING_PATTERNS", () => {
     });
   });
 });
-
-// ─── Static exports ───────────────────────────────────────────────────────────
 
 describe("DEFAULT_PREFERRED_COUNTRIES", () => {
   it("exports the correct default preferred countries", () => {

@@ -11,8 +11,6 @@ import { ChumlabComparisonSection } from "../components/ChumlabComparisonSection
 import Reveal from "../components/Reveal/Reveal.js";
 import { Button } from "../components/ui/index.js";
 
-// ─── FAQ preview (subset of full FAQ data) ─────────────────────────────────
-
 const HOME_FAQS: Array<{ id: string; question: string; answer: string }> = [
   {
     id: "free",
@@ -45,8 +43,6 @@ const HOME_FAQS: Array<{ id: string; question: string; answer: string }> = [
       "Currently 30+ primitives covering forms (Input, Select, Combobox, OTPInput, InternationalPhoneInput), overlays (Modal, Drawer, Popover, Tooltip), data (Table, DataGrid, Pagination), feedback (Toast, Alert, Banner), and layout (Card, Divider, Tabs, Accordion). The catalog grows every release — see our roadmap on GitHub.",
   },
 ];
-
-// ─── Typed rotator ──────────────────────────────────────────────────────────
 
 const TYPED_WORDS = [
   "developers",
@@ -113,8 +109,6 @@ function TypedRotator() {
   );
 }
 
-// ─── Page ───────────────────────────────────────────────────────────────────
-
 const Home = () => {
   useDocumentTitle("Components that ship at the speed of thought");
   const [randomBlogs] = useState(() => {
@@ -136,13 +130,6 @@ const Home = () => {
     <div className="min-h-screen bg-bg-base text-fg">
       <SiteHeader />
 
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION 1 — HERO (full viewport, vertically centered)
-          The header above is `position: fixed` so the hero is the first
-          in-flow block. `min-height: 100dvh` + `padding-top: header-height`
-          gives the hero exactly the viewport height; the inner flex column
-          centers within the visible area below the fixed header.
-      ══════════════════════════════════════════════════════════════════ */}
       <section className="hero-section">
         <div
           className="flex flex-col items-center w-full text-center gap-6 sm:gap-8"
@@ -179,7 +166,6 @@ const Home = () => {
             </span>
           </h1>
 
-          {/* Subheading */}
           <p
             className="hero-descriptor mx-auto"
             style={{
@@ -265,43 +251,22 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION 3 — WHY CHUMLAB
-      ══════════════════════════════════════════════════════════════════ */}
       <WhyChumlabSection />
 
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION 4 — GET STARTED
-      ══════════════════════════════════════════════════════════════════ */}
       <GetStartedSection />
 
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION 5 — THE CATALOG
-      ══════════════════════════════════════════════════════════════════ */}
       <CatalogSection />
 
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION 6 — CHUMLAB VS. THE TYPICAL SETUP
-      ══════════════════════════════════════════════════════════════════ */}
       <ChumlabComparisonSection />
 
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION 7 — FAQ
-      ══════════════════════════════════════════════════════════════════ */}
       <FaqSection />
 
-
-      {/* ══════════════════════════════════════════════════════════════════
-          SECTION 8 — FROM THE BLOG
-      ══════════════════════════════════════════════════════════════════ */}
       <BlogSection featured={featured} stackedPosts={stackedPosts} />
 
       <SiteFooter />
     </div>
   );
 };
-
-// ─── Small helpers ──────────────────────────────────────────────────────────
 
 function CopyIcon() {
   return (
@@ -323,15 +288,6 @@ function CopyIcon() {
     </svg>
   );
 }
-
-
-/* ─── FAQ section ──────────────────────────────────────────────────────────
-   Hand-rolled single-open accordion. Single useState owns the currently-open
-   id, the panel uses the CSS-Grid rows trick (0fr → 1fr) for a smooth
-   measured-free expand, and arrow-up/down keys move focus between rows.
-   IntersectionObserver fades in the title block, items (60ms stagger), and
-   CTA on first scroll-into-view; reduced-motion short-circuits to the
-   visible state with no transition. */
 
 function FaqSection() {
   const [openId, setOpenId] = useState<string | null>(null);
@@ -578,12 +534,6 @@ const FaqItem = forwardRef<HTMLButtonElement, FaqItemProps>(
   },
 );
 
-/* ─── Blog section ─────────────────────────────────────────────────────────
-   Three random posts: a featured card spans 2×2 on lg, two smaller cards
-   stack on the right. Covers are inline-SVG typographic treatments per
-   category — never images. Hover lifts the card (gap grows), tints the
-   cover, recolors the title + Read link. */
-
 interface BlogPostLite {
   id: string;
   title: string;
@@ -770,6 +720,5 @@ function BlogCard({
     </Link>
   );
 }
-
 
 export default Home;

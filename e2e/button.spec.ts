@@ -43,7 +43,6 @@ test.describe("Button Component - Cross-Browser Tests", () => {
       const button = page.locator("button:visible").first();
       await expect(button).toBeVisible();
 
-      // Click should not throw
       await button.click();
     });
 
@@ -63,7 +62,6 @@ test.describe("Keyboard Navigation", () => {
     test("should be focusable via Tab key", async ({ page }) => {
       await page.keyboard.press("Tab");
 
-      // Some button should have focus
       const focusedElement = page.locator(":focus");
       await expect(focusedElement).toBeVisible();
     });
@@ -115,7 +113,6 @@ test.describe("Keyboard Navigation", () => {
       // The guard used to make this pass when the element was absent, which is
       // the failure the test exists to catch. Assert presence, then behaviour.
       await expect(loadingButton.first()).toBeVisible();
-      // Button should be disabled
       await expect(loadingButton).toBeDisabled();
     });
   });
@@ -137,7 +134,6 @@ test.describe("Keyboard Navigation", () => {
       // The guard used to make this pass when the element was absent, which is
       // the failure the test exists to catch. Assert presence, then behaviour.
       await expect(disabledButton.first()).toBeVisible();
-      // Click should not throw, but button remains disabled
       await disabledButton.click({ force: true });
       await expect(disabledButton).toBeDisabled();
     });
@@ -174,20 +170,17 @@ test.describe("Keyboard Navigation", () => {
       const group = groups.first();
       await expect(group).toBeVisible();
 
-      // Group should contain buttons
       const buttonsInGroup = group.locator("button");
       expect(await buttonsInGroup.count()).toBeGreaterThan(0);
     });
 
   });
 
-
   test.describe("Icon Animations", () => {
     test("should apply animation classes on hover", async ({
       page,
       browserName,
     }) => {
-      // Find buttons with icons that might animate
       const buttonWithIcon = page
         .locator("button:has(.transition-transform)")
         .first();
@@ -205,7 +198,6 @@ test.describe("Keyboard Navigation", () => {
         await buttonWithIcon.hover();
       }
 
-      // Animation classes should be present
       const iconContainer = buttonWithIcon.locator(".transition-transform");
       await expect(iconContainer).toBeVisible();
     });
@@ -304,7 +296,6 @@ test.describe("Button Accessibility Tests", () => {
 
 test.describe("Button Responsive Tests", () => {
 
-
   test("full-width buttons should span container width", async ({ page }) => {
     await page.goto("/button");
     await page.waitForLoadState("domcontentloaded");
@@ -318,7 +309,6 @@ test.describe("Button Responsive Tests", () => {
     await fullWidthButton.scrollIntoViewIfNeeded();
     await expect(fullWidthButton).toBeVisible();
 
-    // Should have w-full class
     const hasFullWidth = await fullWidthButton.evaluate((el) => {
       return el.classList.contains("w-full");
     });
@@ -338,17 +328,14 @@ test.describe("Button Focus Management", () => {
     const button = page.locator("button:visible").first();
     await button.focus();
 
-    // Button should be focused
     await expect(button).toBeFocused();
   });
 
   test("disabled buttons should not receive focus via Tab", async ({
     page,
   }) => {
-    // Focus first element and Tab through
     await page.keyboard.press("Tab");
 
-    // Get currently focused element
     const focused = page.locator(":focus");
 
     // If focused element exists, it should not be disabled
@@ -382,7 +369,6 @@ test.describe("Button Focus Management", () => {
   });
 
 });
-
 
 /**
  * The three of button.spec.ts's six stale tests that need a browser

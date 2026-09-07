@@ -154,7 +154,6 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      // Click on day 15 of the current month
       const dayCells = screen.getAllByRole("gridcell");
       const day15 = dayCells.find(
         (cell) =>
@@ -555,7 +554,6 @@ describe("DatePicker", () => {
       expect(trigger).not.toHaveClass("rounded-cl-md");
       expect(trigger).not.toHaveClass("px-3");
 
-      // It should still be functional
       await openCalendar(user);
       expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
@@ -601,7 +599,6 @@ describe("DatePicker", () => {
           cell.textContent?.trim() === "5" &&
           !cell.getAttribute("data-outside"),
       );
-      // Click start date
       await user.click(day5!);
       expect(onValueChange).toHaveBeenCalledTimes(1);
       const [range1] = onValueChange.mock.calls[0];
@@ -625,7 +622,6 @@ describe("DatePicker", () => {
         advanceTimers: vi.advanceTimersByTime,
       });
       const onValueChange = vi.fn();
-      // Set up with a start date already selected (end of month range)
       const startDate = new Date(2025, 5, 20);
       render(
         <DatePicker
@@ -637,7 +633,6 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      // Click a date before the start to trigger swap
       const dayCells = screen.getAllByRole("gridcell");
       const day5 = dayCells.find(
         (cell) =>
@@ -645,7 +640,6 @@ describe("DatePicker", () => {
           !cell.getAttribute("data-outside"),
       );
       await user.click(day5!);
-      // onValueChange should have been called with swapped dates
       expect(onValueChange).toHaveBeenCalled();
     });
   });
@@ -691,7 +685,6 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      // Click on day 10 again to deselect it
       const dayCells = screen.getAllByRole("gridcell");
       const day10 = dayCells.find(
         (cell) =>
@@ -865,7 +858,6 @@ describe("DatePicker", () => {
       const listbox = screen.getByRole("listbox");
       expect(listbox).toBeInTheDocument();
 
-      // Select January
       const janOption = screen.getByRole("option", { name: /January/i });
       await user.click(janOption);
 
@@ -921,17 +913,14 @@ describe("DatePicker", () => {
       );
       expect(day15).toBeDefined();
 
-      // Focus day 15
       act(() => {
         day15!.focus();
       });
 
-      // Press ArrowRight to move to day 16
       await user.keyboard("{ArrowRight}");
       // The focused date should now be 16
       await flushPositionFrames();
 
-      // Check that a cell with data-highlighted exists
       const focusedCell = screen
         .getAllByRole("gridcell")
         .find((cell) => cell.getAttribute("data-highlighted"));
@@ -1073,7 +1062,6 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      // Day 5 should be disabled
       const dayCells = screen.getAllByRole("gridcell");
       const day5 = dayCells.find(
         (cell) =>
@@ -1096,7 +1084,6 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      // Day 25 should be disabled
       const dayCells = screen.getAllByRole("gridcell");
       const day25 = dayCells.find(
         (cell) =>
@@ -1277,13 +1264,10 @@ describe("DatePicker", () => {
       await user.click(nextButton);
       await user.click(nextButton);
 
-      // Click "Go to today"
       await user.click(screen.getByText("Go to today"));
 
-      // Should not select a date
       expect(onValueChange).not.toHaveBeenCalled();
 
-      // Calendar should still be open showing current month
       const now = new Date();
       const currentMonthName = now.toLocaleString("default", { month: "long" });
       expect(screen.getByText(currentMonthName)).toBeInTheDocument();
@@ -1368,7 +1352,6 @@ describe("DatePicker", () => {
       render(<DatePicker mode="range" value={range} />);
 
       const trigger = screen.getByRole("combobox");
-      // Should contain formatted date text
       expect(trigger.textContent).toContain("Jun 10, 2025");
       expect(trigger.textContent).toContain("Jun 20, 2025");
     });
@@ -1423,7 +1406,6 @@ describe("DatePicker", () => {
         "true",
       );
 
-      // Click outside the datepicker
       await act(async () => {
         document.dispatchEvent(
           new MouseEvent("mousedown", { bubbles: true }),
@@ -1506,7 +1488,6 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      // Click "Last 7 Days" preset
       await user.click(screen.getByText("Last 7 Days"));
 
       expect(onValueChange).toHaveBeenCalledTimes(1);
@@ -1534,7 +1515,6 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      // Click "Today" preset
       await user.click(screen.getByText("Today"));
 
       expect(onValueChange).toHaveBeenCalledTimes(1);
@@ -1564,7 +1544,6 @@ describe("DatePicker", () => {
         day1!.focus();
       });
 
-      // Press ArrowLeft - should cross to previous month
       await user.keyboard("{ArrowLeft}");
       await flushPositionFrames();
 
@@ -1682,8 +1661,6 @@ describe("DatePicker", () => {
   });
 });
 
-// ─── Coverage: uncovered branches ────────────────────────────────────────────
-
 describe("Tab from the trigger", () => {
   /**
    * The trigger used to close the calendar on Tab. That fought the focus order
@@ -1739,7 +1716,6 @@ describe("Calendar keyboard: minDate/maxDate blocks navigation (useDatePicker ha
       await user.keyboard("{ArrowRight}");
       await flushPositionFrames();
 
-      // focusedDate should NOT have advanced past day 15
       const focusedCell = screen
         .getAllByRole("gridcell")
         .find((cell) => cell.getAttribute("data-highlighted"));
@@ -1825,7 +1801,6 @@ describe("lockScroll prop", () => {
     render(<DatePicker lockScroll />);
     await openCalendar(user);
 
-    // Close by clicking the trigger again
     await user.click(screen.getByRole("combobox"));
 
     const wheelRemoveCalls = removeEventSpy.mock.calls.filter(([event]) => event === "wheel");
@@ -1861,8 +1836,6 @@ describe("dropdownPosition top flipping (DatePicker.tsx lines 668-671)", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 });
-
-// ─── DatePicker Icons ─────────────────────────────────────────────────────────
 
 import {
   ChevronLeftIcon,
@@ -1934,8 +1907,6 @@ describe("DatePicker Icons", () => {
     });
   });
 });
-
-// ─── Utils: uncovered lines ───────────────────────────────────────────────────
 
 import {
   getPreviousYear,
@@ -2009,10 +1980,6 @@ describe("utils — isRangeEqual (lines 293-301)", () => {
   });
 });
 
-// ─── DatePicker lockScroll — preventScroll/preventKeyScroll branches ──────────
-// Targets: DatePicker.tsx lines 705-706 (calendarRef.contains in preventScroll)
-//          and lines 714-717 (preventKeyScroll handler body)
-
 describe("lockScroll — preventScroll and preventKeyScroll handler branches", () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
@@ -2031,7 +1998,6 @@ describe("lockScroll — preventScroll and preventKeyScroll handler branches", (
       bubbles: true,
       cancelable: true,
     });
-    // Dispatch on an element inside the calendar portal
     dialog.dispatchEvent(wheelInsideCalendar);
 
     // The preventScroll handler sees calendarRef.contains(target) === true and returns early
@@ -2046,13 +2012,11 @@ describe("lockScroll — preventScroll and preventKeyScroll handler branches", (
     render(<DatePicker lockScroll />);
     await openCalendar(user);
 
-    // The lockScroll effect should have registered a 'wheel' listener with capture
     const wheelAdded = addSpy.mock.calls.some(
       ([type, , opts]) => type === "wheel" && (opts as AddEventListenerOptions)?.capture === true,
     );
     expect(wheelAdded).toBe(true);
 
-    // Close and verify cleanup
     await user.click(screen.getByRole("combobox"));
     const wheelRemoved = removeSpy.mock.calls.some(
       ([type]) => type === "wheel",
@@ -2084,7 +2048,6 @@ describe("lockScroll — preventScroll and preventKeyScroll handler branches", (
     render(<DatePicker lockScroll />);
     await openCalendar(user);
 
-    // Dispatch keydown scroll key from document.body as the target
     const scrollKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
     for (const key of scrollKeys) {
       const keydownOnBody = new KeyboardEvent("keydown", {

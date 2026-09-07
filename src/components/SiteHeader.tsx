@@ -28,9 +28,6 @@ export function SiteHeader() {
   return (
     <>
       <div className="header-mount-fade pointer-events-auto fixed top-0 left-0 right-0 z-50">
-        {/* Pre-launch announcement strip — TEMPORARILY DISABLED (stealth
-            banner off). Gated on SHOW_ANNOUNCEMENT; --header-height in
-            index.css is dropped to the bar-only 64px while it's off. */}
         {SHOW_ANNOUNCEMENT && (
         <div
           className="text-[#050608] bg-gradient-to-r from-[#7eb1ff] via-[#5b9bff] to-[#7eb1ff]"
@@ -38,9 +35,6 @@ export function SiteHeader() {
           aria-label="Pre-launch announcement"
         >
           <div className="w-full px-3 sm:px-6 md:px-8">
-            {/* Mobile: stacked column. Pill anchors the top, icon + full
-                wrapped message sit below. Height is auto and the responsive
-                --header-height var compensates so hero offsets stay aligned. */}
             <div className="sm:hidden flex flex-col items-center gap-2 py-2.5 text-center">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#050608] text-[#7eb1ff] px-2.5 py-0.5 text-[10px] font-bold tracking-[0.12em] uppercase">
                 <span className="relative flex h-1.5 w-1.5" aria-hidden>
@@ -67,7 +61,6 @@ export function SiteHeader() {
               </div>
             </div>
 
-            {/* sm+: single horizontal line with separator dots. */}
             <div className="hidden sm:flex items-center justify-center gap-3.5 h-12 text-[14px] md:text-[15px] font-semibold tracking-[-0.01em] whitespace-nowrap">
               <svg
                 width="18"
@@ -114,9 +107,6 @@ export function SiteHeader() {
               data-track-location="header"
               data-track-target="logo"
             >
-              {/* The PNG already includes the wordmark — no separate text node.
-                  Logo flips with theme: light variant on dark surfaces, dark
-                  variant on light surfaces. */}
               <img
                 src={theme === "dark" ? logoLight : logoDark}
                 alt="Chumlab"
@@ -173,7 +163,7 @@ export function SiteHeader() {
                     ? "Switch to light mode"
                     : "Switch to dark mode"
                 }
-                className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-text/5 text-cl-text-secondary hover:text-cl-text transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-text/5 text-cl-text-secondary hover:text-cl-text transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg"
                 data-track-event="theme_toggle"
                 data-track-from={theme}
                 data-track-to={theme === "dark" ? "light" : "dark"}
@@ -251,7 +241,7 @@ export function SiteHeader() {
               {/* Hamburger — mobile only. Same 36×36 box as the theme
                   toggle so the right-edge optical balance matches. */}
               <button
-                className="md:hidden flex items-center justify-center w-9 h-9 rounded-md border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-text/5 text-cl-text-secondary hover:text-cl-text transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg"
+                className="md:hidden flex items-center justify-center w-9 h-9 rounded-md border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-text/5 text-cl-text-secondary hover:text-cl-text transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg"
                 onClick={() => setMenuOpen(true)}
                 aria-label="Open menu"
                 data-track-event="mobile_menu_open"
@@ -361,7 +351,6 @@ export function SiteHeader() {
             >
               GitHub
             </a>
-
 
             <Button
               variant="primary"

@@ -105,7 +105,6 @@ describe("InternationalPhoneInput", () => {
       const input = screen.getByPlaceholderText("Enter phone number");
       await user.type(input, "2025551234");
 
-      // The input should have the formatted value
       expect((input as HTMLInputElement).value).toBeTruthy();
       expect((input as HTMLInputElement).value.length).toBeGreaterThan(0);
     });
@@ -119,7 +118,6 @@ describe("InternationalPhoneInput", () => {
       await user.type(input, "2025551234");
 
       expect(onValueChange).toHaveBeenCalled();
-      // The last call should contain phoneNumber data
       const lastCall = onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
       expect(lastCall).toHaveProperty("phoneNumber");
       expect(lastCall).toHaveProperty("countryCode");
@@ -156,7 +154,6 @@ describe("InternationalPhoneInput", () => {
       const input = screen.getByPlaceholderText(
         "Enter phone number"
       ) as HTMLInputElement;
-      // Should have formatted phone number
       expect(input.value).toBeTruthy();
     });
 
@@ -275,7 +272,6 @@ describe("InternationalPhoneInput", () => {
       await user.type(input, "123"); // Too short for US
       await user.tab(); // Blur
 
-      // Should show validation error message
       expect(
         screen.getByText("Please enter a valid phone number")
       ).toBeInTheDocument();
@@ -342,7 +338,6 @@ describe("InternationalPhoneInput", () => {
 
       const input = screen.getByPlaceholderText("Enter phone number");
 
-      // Simulate pasting a UK number
       const pasteEvent = new Event("paste", { bubbles: true, cancelable: true });
       Object.defineProperty(pasteEvent, "clipboardData", {
         value: {
@@ -415,7 +410,6 @@ describe("InternationalPhoneInput", () => {
         <InternationalPhoneInput onCountryChange={onCountryChange} />
       );
 
-      // Open the country dropdown - click on the trigger that shows "+1"
       const dialCode = screen.getByText("+1");
       const trigger = dialCode.closest("button") ?? dialCode.parentElement;
       expect(trigger, "no country trigger to click").not.toBeNull();
@@ -450,7 +444,6 @@ describe("InternationalPhoneInput", () => {
 
       await user.type(input, "999");
 
-      // Value should not change when readOnly
       expect(input.value).toBe(initialValue);
     });
   });
@@ -566,7 +559,6 @@ describe("InternationalPhoneInput", () => {
       });
       input.dispatchEvent(pasteEvent);
 
-      // onPasteDetected should be called with detectedCountry: null
       expect(onPasteDetected).toHaveBeenCalledWith(
         expect.objectContaining({
           rawValue: "2025551234",
@@ -636,7 +628,6 @@ describe("InternationalPhoneInput", () => {
 
       input.dispatchEvent(copyEvent);
 
-      // The handler should have written to clipboard (e164 format by default)
       expect(clipboardData["text/plain"]).toBeTruthy();
       expect(clipboardData["text/plain"]).toContain("2025551234");
     });

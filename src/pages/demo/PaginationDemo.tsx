@@ -9,8 +9,6 @@ import {
   Section,
   DemoWrapper,
   DemoLabel,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -18,8 +16,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const ArrowLeftIcon = ({ className }: { className?: string }) => (
   <svg
@@ -94,8 +90,6 @@ const DoubleArrowRightIcon = ({ className }: { className?: string }) => (
     />
   </svg>
 );
-
-// ─── Jump-to-Page Ellipsis ───────────────────────────────────────────────────
 
 const JumpToPageEllipsis = ({
   onValueChange,
@@ -174,8 +168,6 @@ const JumpToPageEllipsis = ({
   );
 };
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (_dark: boolean) => ({
   pagination: {
     root: "flex flex-wrap items-center gap-2",
@@ -206,8 +198,6 @@ const getClasses = (_dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const PaginationDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -264,14 +254,13 @@ const PaginationDemo = () => {
 
       <CopyPasteBlock name="Pagination" />
 
-      {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Minimal setup with value, totalPages, and onValueChange."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          {/* Basic usage — works out-of-the-box with built-in styles */}
+          {}
           <Pagination
             value={basicPage}
             totalPages={5}
@@ -280,7 +269,6 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Rows Per Page ───────────────────────────────────────── */}
       <Section
         title="With Rows Per Page"
         description="Enable the rows-per-page selector with showRowsPerPage, rowsPerPage, and onRowsPerPageChange."
@@ -305,7 +293,6 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Many Pages & Sibling Count ──────────────────────────────── */}
       <Section
         title="Many Pages & Sibling Count"
         description="Ellipsis appear automatically for large page counts. Use siblingCount to control how many pages surround the current one."
@@ -341,7 +328,6 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom Ellipsis (Jump to Page) ──────────────────────────── */}
       <Section
         title="Custom Ellipsis (Jump to Page)"
         description="Replace the default ellipsis with interactive content via renderEllipsis. Click an ellipsis to type a page number and press Enter."
@@ -427,7 +413,6 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Page Info Display ────────────────────────────────────────── */}
       <Section
         title="Page Info Display"
         description='Use renderPageInfo to show contextual information like "Page X of Y" between sections.'
@@ -991,181 +976,6 @@ const PaginationDemo = () => {
       </Section>
 
       <ComponentDocs name="Pagination" />
-
-      <Section title="PaginationClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Outer nav container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="nav"
-              type="string"
-              description="Navigation area wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="pageButtons"
-              type="string"
-              description="Page buttons container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="pageButton"
-              type="string"
-              description="Inactive page buttons"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="activePageButton"
-              type="string"
-              description="Active page button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="navButton"
-              type="string"
-              description="Prev/next buttons"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ellipsis"
-              type="string"
-              description="Ellipsis elements"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selector"
-              type="string"
-              description="Rows-per-page selector container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectorButton"
-              type="string"
-              description="Rows selector trigger button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectorDropdown"
-              type="string"
-              description="Rows dropdown menu (visual styles only, rendered via portal)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectorDropdownWrapper"
-              type="string"
-              description="Dropdown wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectorOption"
-              type="string"
-              description="Each dropdown option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description='"Show" and rows label text'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownIcon"
-              type="string"
-              description="Dropdown chevron icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="prevIcon"
-              type="string"
-              description="Previous icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="nextIcon"
-              type="string"
-              description="Next icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="pageInfo"
-              type="string"
-              description="Page info section wrapper"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-disabled"
-              type="nav buttons"
-              description="Present when prev/next is disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-active"
-              type="page buttons"
-              description="Present on the active page button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-selected"
-              type="row options"
-              description="Present on the selected row option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-highlighted"
-              type="row options"
-              description="Present on the keyboard-focused option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name='aria-current="page"'
-              type="page buttons"
-              description="ARIA active page indicator"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-state"
-              type="dropdown portal"
-              description='"open" when the dropdown is visible'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-direction"
-              type="dropdown portal"
-              description='"up" or "down" based on dropdownPosition'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-expanded"
-              type="selector button"
-              description="Indicates dropdown open state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-controls"
-              type="selector button"
-              description="References the listbox when open"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

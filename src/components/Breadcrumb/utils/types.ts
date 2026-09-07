@@ -30,12 +30,18 @@ export interface BreadcrumbItem {
 }
 
 export interface BreadcrumbClasses {
+  /** Root container (nav element) */
   root?: string;
+  /** Breadcrumb list (ol element) */
   list?: string;
+  /** Non-active breadcrumb item */
   item?: string;
+  /** Item rendered as anchor (has href) */
   link?: string;
+  /** Separator element */
   separator?: string;
   itemIcon?: string;
+  /** Ellipsis container (li) */
   ellipsis?: string;
   ellipsisTrigger?: string;
   content?: string;

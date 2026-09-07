@@ -117,7 +117,6 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const generatedId = useId();
     const drawerId = `drawer-${generatedId}`;
     const titleId = `drawer-title-${generatedId}`;
-    // Whether a `DrawerHeader` is rendering that id right now.
     const [hasTitle, setHasTitle] = useState(false);
 
     /**
@@ -171,12 +170,6 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       : 0;
 
     const baseClassesRaw = unstyled ? UNSTYLED_DRAWER_CLASSES : DEFAULT_DRAWER_CLASSES;
-
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-
-    // this handles the other reason to stop animating. Applied to the defaults
-
-    // only — a class string the consumer supplied is theirs to control.
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<DrawerClasses> = useMemo(
@@ -490,7 +483,6 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         }
       }
     }, []);
-
 
     const contextValue = useMemo(
       () => ({ onClose: handleClose, titleId, registerTitle: setHasTitle }),

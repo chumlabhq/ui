@@ -24,8 +24,6 @@ import {
 } from "../utils.js";
 import { startOfDay } from "date-fns";
 
-// ─── generateCalendarMonth – fixedWeeks branch (lines 154-159) ──────────────
-
 describe("generateCalendarMonth – fixedWeeks", () => {
   const baseOptions = {
     weekStartsOn: 0 as const,
@@ -60,8 +58,6 @@ describe("generateCalendarMonth – fixedWeeks", () => {
   });
 });
 
-// ─── generateCalendarMonth – showWeekNumbers (line 205) ──────────────────────
-
 describe("generateCalendarMonth – showWeekNumbers", () => {
   const baseOptions = {
     weekStartsOn: 1 as const, // Monday start
@@ -78,10 +74,8 @@ describe("generateCalendarMonth – showWeekNumbers", () => {
     const jan2024 = new Date(2024, 0, 1);
     const result = generateCalendarMonth(jan2024, baseOptions);
     for (const week of result.weeks) {
-      // First day of each week should have weekNumber defined
       expect(week[0].weekNumber).toBeDefined();
       expect(typeof week[0].weekNumber).toBe("number");
-      // Subsequent days within the week should not have weekNumber
       for (let i = 1; i < week.length; i++) {
         expect(week[i].weekNumber).toBeUndefined();
       }
@@ -101,8 +95,6 @@ describe("generateCalendarMonth – showWeekNumbers", () => {
     }
   });
 });
-
-// ─── generateCalendarMonth – trailing partial week (line 218) ─────────────────
 
 describe("generateCalendarMonth – trailing partial week handling", () => {
   it("month is correctly split into full 7-day weeks (no leftover days)", () => {
@@ -124,8 +116,6 @@ describe("generateCalendarMonth – trailing partial week handling", () => {
     }
   });
 });
-
-// ─── isDateDisabled – various option paths ───────────────────────────────────
 
 describe("isDateDisabled", () => {
   const today = startOfDay(new Date());
@@ -180,8 +170,6 @@ describe("isDateDisabled", () => {
   });
 });
 
-// ─── findMarker ───────────────────────────────────────────────────────────────
-
 describe("findMarker", () => {
   it("returns undefined when markers is undefined", () => {
     expect(findMarker(new Date())).toBeUndefined();
@@ -198,8 +186,6 @@ describe("findMarker", () => {
     expect(findMarker(date, [marker])).toBe(marker);
   });
 });
-
-// ─── formatDateRange ──────────────────────────────────────────────────────────
 
 describe("formatDateRange", () => {
   it("returns empty string when both start and end are missing", () => {
@@ -224,8 +210,6 @@ describe("formatDateRange", () => {
     expect(result).toContain(" - ");
   });
 });
-
-// ─── formatMultipleDates ──────────────────────────────────────────────────────
 
 describe("formatMultipleDates", () => {
   it("returns empty string for empty array", () => {
@@ -255,8 +239,6 @@ describe("formatMultipleDates", () => {
   });
 });
 
-// ─── getMonthOptions ──────────────────────────────────────────────────────────
-
 describe("getMonthOptions", () => {
   it("returns 12 month options", () => {
     expect(getMonthOptions()).toHaveLength(12);
@@ -270,8 +252,6 @@ describe("getMonthOptions", () => {
     expect(getMonthOptions()[11].value).toBe(11);
   });
 });
-
-// ─── getYearOptions ───────────────────────────────────────────────────────────
 
 describe("getYearOptions", () => {
   it("returns correct number of years for default range (100)", () => {
@@ -292,8 +272,6 @@ describe("getYearOptions", () => {
   });
 });
 
-// ─── isRangeEqual ─────────────────────────────────────────────────────────────
-
 describe("isRangeEqual", () => {
   it("returns true when both ranges are null", () => {
     expect(isRangeEqual(null, null)).toBe(true);
@@ -313,8 +291,6 @@ describe("isRangeEqual", () => {
   });
 });
 
-// ─── sortDates ────────────────────────────────────────────────────────────────
-
 describe("sortDates", () => {
   it("sorts dates in ascending order", () => {
     const dates = [new Date(2024, 2, 1), new Date(2024, 0, 1), new Date(2024, 1, 1)];
@@ -331,8 +307,6 @@ describe("sortDates", () => {
     expect(dates[0]).toEqual(original[0]);
   });
 });
-
-// ─── getDefaultPresets ────────────────────────────────────────────────────────
 
 describe("getDefaultPresets", () => {
   it("returns 3 presets for single mode", () => {
@@ -374,8 +348,6 @@ describe("getDefaultPresets", () => {
   });
 });
 
-// ─── getWeekdayHeaders ────────────────────────────────────────────────────────
-
 describe("getWeekdayHeaders", () => {
   it("returns 7 weekday headers", () => {
     expect(getWeekdayHeaders(0)).toHaveLength(7);
@@ -391,8 +363,6 @@ describe("getWeekdayHeaders", () => {
     expect(headers[0]).toBe("Mon");
   });
 });
-
-// ─── navigation helpers ───────────────────────────────────────────────────────
 
 describe("date navigation helpers", () => {
   const base = new Date(2024, 5, 15); // June 15, 2024
@@ -421,8 +391,6 @@ describe("date navigation helpers", () => {
     expect(setYearOfDate(base, 2030).getFullYear()).toBe(2030);
   });
 });
-
-// ─── toDateString / fromDateString / toDateValue / formatDate ─────────────────
 
 describe("basic date utils", () => {
   it("toDateString formats correctly", () => {

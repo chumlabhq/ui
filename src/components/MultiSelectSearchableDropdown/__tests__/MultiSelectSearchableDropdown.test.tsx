@@ -178,7 +178,6 @@ describe("MultiSelectSearchableDropdown", () => {
 
       // "Apple" appears both as a chip and in the dropdown options
       const allApples = screen.getAllByText("Apple");
-      // Click the dropdown option (last occurrence)
       await user.click(allApples[allApples.length - 1]);
 
       expect(onValueChange).toHaveBeenCalledWith([], []);
@@ -252,9 +251,7 @@ describe("MultiSelectSearchableDropdown", () => {
       const searchInput = screen.getByPlaceholderText("Search...");
       await user.type(searchInput, "app");
 
-      // Only Apple should be visible after filtering
       expect(screen.getByText("Apple")).toBeInTheDocument();
-      // Other options should be filtered out
       expect(screen.queryByText("Banana")).not.toBeInTheDocument();
     });
 

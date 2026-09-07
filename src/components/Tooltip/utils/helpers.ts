@@ -9,8 +9,6 @@ export function mergeTooltipRefs<T>(
   return mergeRefs(...refs.filter((r): r is Ref<T> | undefined => r !== null));
 }
 
-// ─── Interactive child detection ────────────────────────────────
-
 export const hasInteractiveChild = (wrapper: HTMLElement): boolean => {
   for (let i = 0; i < wrapper.children.length; i++) {
     const child = wrapper.children[i] as HTMLElement;
@@ -24,8 +22,6 @@ export const hasInteractiveChild = (wrapper: HTMLElement): boolean => {
   }
   return false;
 };
-
-// ─── Position calculation (merged from positionUtils.ts) ────────
 
 export interface Position {
   top: number;

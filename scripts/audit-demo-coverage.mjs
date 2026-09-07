@@ -64,8 +64,6 @@ const args = process.argv.slice(2);
 const CHECK = args.includes("--check");
 const JSON_ONLY = args.includes("--json");
 
-// ── tiering ───────────────────────────────────────────────────────────────
-
 /**
  * Names that are a whole mode whatever their type says. Kept explicit because
  * `unstyled: boolean` and `disabled: boolean` are the same type and not the
@@ -155,8 +153,6 @@ const LEFT_UNDEMONSTRATED = new Map([
       "demonstrated. `type` is the internal discriminant of the same idea.",
   ],
 ]);
-
-// ── 1. the types ──────────────────────────────────────────────────────────
 
 /**
  * One root: the package entry. "Reachable from the package root" is the test
@@ -290,8 +286,6 @@ for (const [component, props] of surface) {
   }
 }
 
-// ── 2. the demos ──────────────────────────────────────────────────────────
-
 const demoDir = join(ROOT, "src/pages/demo");
 
 /**
@@ -358,8 +352,6 @@ function demoedProps(component) {
   return demoUsage.get(component) ?? new Set();
 }
 
-// ── 3. the fixtures + 5. the contracts ────────────────────────────────────
-
 const fixtureDir = join(ROOT, "src/__tests__/fixtures");
 const fixtureSource = readdirSync(fixtureDir)
   .filter((f) => f.endsWith(".fixtures.tsx"))
@@ -399,8 +391,6 @@ function fixturedProps(component) {
   return used;
 }
 
-// ── 4. the docs ───────────────────────────────────────────────────────────
-
 /**
  * FAULT 4: by section, and only when the whole first cell is the name.
  */
@@ -430,8 +420,6 @@ function documentedProps(component) {
   }
   return documented;
 }
-
-// ── derive ────────────────────────────────────────────────────────────────
 
 const components = [...surface.keys()].sort();
 const rows = [];
@@ -525,8 +513,6 @@ if (JSON_ONLY) {
   writeFileSync(1, `${JSON.stringify(derivation, null, 2)}\n`);
   process.exit(0);
 }
-
-// ── render ────────────────────────────────────────────────────────────────
 
 const lines = [];
 lines.push("# Demo and fixture coverage of the public API");

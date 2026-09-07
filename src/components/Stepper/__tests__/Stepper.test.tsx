@@ -589,9 +589,7 @@ describe("Stepper", () => {
       renderStepper({ value: 2, onValueChange, isStepClickable: () => true });
       const buttons = screen.getAllByRole("button");
       buttons[0].focus();
-      // Press a key that is not handled by the switch (e.g. Tab)
       await user.keyboard("{Escape}");
-      // Focus should not have moved and no value change should have occurred
       expect(onValueChange).not.toHaveBeenCalled();
     });
   });
@@ -599,7 +597,6 @@ describe("Stepper", () => {
   describe("List blur handling (line 813)", () => {
     it("resets lastFocusedStep when focus leaves the stepper entirely", async () => {
       const user = userEvent.setup();
-      // Render stepper with an outside button to receive focus
       const { container } = render(
         <div>
           <Stepper steps={basicSteps} defaultValue={1} value={2} isStepClickable={() => true} />

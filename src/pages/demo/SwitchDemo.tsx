@@ -7,8 +7,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -130,7 +128,6 @@ const SwitchDemo = () => {
 
       <CopyPasteBlock name="Switch" />
 
-      {/* ── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Works out-of-the-box with built-in styles and dark mode. No custom classes needed."
@@ -138,7 +135,7 @@ const SwitchDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="flex flex-col gap-4">
-            {/* Basic usage — works out-of-the-box with built-in styles */}
+            {}
             <Switch
               label="Email notifications"
               checked={basicSwitch}
@@ -156,7 +153,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Uncontrolled ───────────────────────────────────────────────── */}
       <Section
         title="Uncontrolled Switch"
         description="Use defaultChecked for uncontrolled mode — no state management needed."
@@ -171,7 +167,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── With Label ─────────────────────────────────────────────────── */}
       <Section
         title="With Label"
         description="The label prop adds an accessible label linked via htmlFor."
@@ -187,7 +182,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── With Label and Description ─────────────────────────────────── */}
       <Section
         title="With Label and Description"
         description="Add additional context using the description prop."
@@ -204,7 +198,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Required ───────────────────────────────────────────────────── */}
       <Section
         title="Required"
         description="The required prop adds aria-required and shows an asterisk after the label."
@@ -221,7 +214,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── With Icons ─────────────────────────────────────────────────── */}
       <Section
         title="With Icons"
         description="Add icons inside the thumb using checkedIcon and uncheckedIcon."
@@ -254,7 +246,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Disabled States ────────────────────────────────────────────── */}
       <Section
         title="Disabled States"
         description="Disable the switch with the disabled prop."
@@ -278,7 +269,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Error State ────────────────────────────────────────────────── */}
       <Section
         title="Error State"
         description="Use error and errorMessage props to display validation errors."
@@ -307,7 +297,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Success State ────────────────────────────────────────────── */}
       <Section
         title="Success State"
         description="Display a success message when validation passes."
@@ -325,7 +314,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Loading State ────────────────────────────────────────────── */}
       <Section
         title="Loading State"
         description="Display a loading indicator while an async action is pending."
@@ -339,7 +327,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── onValueChange Callback ───────────────────────────────────── */}
       <Section
         title="onValueChange Callback"
         description="Primary event handler for checked state changes."
@@ -353,7 +340,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Custom Colors ──────────────────────────────────────────────── */}
       <Section
         title="Custom Colors"
         description="Override tracker colors via the classes prop."
@@ -383,7 +369,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Custom Sizes ───────────────────────────────────────────────── */}
       <Section
         title="Custom Sizes"
         description="Override tracker and thumb sizes via classes."
@@ -425,7 +410,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── CSS Custom Properties ──────────────────────────────────────── */}
       <Section
         title="CSS Custom Properties (Theming)"
         description="Use CSS custom properties to theme switches globally or per-instance."
@@ -471,7 +455,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Custom Animation ───────────────────────────────────────────── */}
       <Section
         title="Custom Animation Timing"
         description="Use transitionDuration and transitionTimingFunction for custom animations."
@@ -499,7 +482,6 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Render Props ───────────────────────────────────────────────── */}
       <Section
         title="Render Props"
         description="Use renderLabel and renderDescription for dynamic content based on switch state."
@@ -642,129 +624,7 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Data Attributes ────────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-checked"
-              type="root, button"
-              description="Present when checked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, button"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root"
-              description="Present when error=true"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
       <ComponentDocs name="Switch" />
-
-      {/* ── SwitchClasses ──────────────────────────────────────────────── */}
-      <Section title="SwitchClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Outer container div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="innerRow"
-              type="string"
-              description="Inner flex row (label + button)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="labelContainer"
-              type="string"
-              description="Wrapper around label + description"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabledLabel"
-              type="string"
-              description="Merged onto label when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="string"
-              description="Description span element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tracker"
-              type="string"
-              description="Track/slider button element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabledTracker"
-              type="string"
-              description="Merged onto tracker when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkedTracker"
-              type="string"
-              description="Merged onto tracker when checked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="uncheckedTracker"
-              type="string"
-              description="Merged onto tracker when unchecked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="thumb"
-              type="string"
-              description="Thumb (handle) span element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkedThumb"
-              type="string"
-              description="Merged onto thumb when checked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="uncheckedThumb"
-              type="string"
-              description="Merged onto thumb when unchecked"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message div"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ── Accessibility ──────────────────────────────────────────────── */}
       <Section

@@ -5,7 +5,6 @@ import { createLibphonenumberValidator } from "./InternationalPhoneInput/validat
 import Reveal from "./Reveal/Reveal.js";
 import { Button } from "./ui/index.js";
 
-// Real per-country validation (any valid line type) for the phone preview.
 const previewPhoneValidator = createLibphonenumberValidator();
 
 /**
@@ -118,8 +117,6 @@ export function CatalogSection() {
     setCopyState("copied");
     window.setTimeout(() => setCopyState("idle"), 1500);
   };
-
-  // (Entry animations now flow through the shared <Reveal> component below.)
 
   return (
     <section
@@ -310,8 +307,6 @@ export function CatalogSection() {
   );
 }
 
-/* ─── Card-deck stage helpers ───────────────────────────────────────────── */
-
 /**
  * Resting 3D transform + opacity + z-index per offset. Active card sits flat
  * and pushed forward via translateZ; peek cards tilt in toward the focus
@@ -325,7 +320,6 @@ export function CatalogSection() {
 function getCardStyle(offset: number): React.CSSProperties {
   const absOffset = Math.abs(offset);
   if (absOffset === 0) {
-    // Active: flat, scaled 1, pushed forward in 3D space, full opacity.
     return {
       transform: "translateX(0) translateZ(40px) scale(1) rotateY(0deg)",
       opacity: 1,
@@ -362,8 +356,6 @@ function getCardStyle(offset: number): React.CSSProperties {
   };
 }
 
-/* ─── PreviewCard (one card in the deck) ────────────────────────────────── */
-
 interface PreviewCardProps {
   entry: CatalogEntry;
   isActive: boolean;
@@ -389,9 +381,6 @@ function PreviewCard({
     <figure
       className="bg-cl-bg-elevated border border-cl-border rounded-lg overflow-hidden relative h-full flex flex-col"
       style={{
-        // Active card: layered shadow stack — close + medium + far + outer
-        // hairline ring + inset top highlight. Reads as a card floating in
-        // front of the deck without resorting to a colored glow.
         boxShadow: isActive
           ? [
               "0 4px 12px -4px rgba(0,0,0,0.25)",
@@ -434,7 +423,7 @@ function PreviewCard({
                 ? "Import statement copied"
                 : "Copy import statement"
             }
-            className={`w-[22px] h-[22px] rounded-md border bg-transparent transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 ${
+            className={`w-[22px] h-[22px] rounded-md border bg-transparent transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent ${
               !isActive
                 ? "border-cl-border text-cl-text-disabled cursor-default"
                 : copyState === "copied"
@@ -478,7 +467,7 @@ function PreviewCard({
               if (!isActive) e.preventDefault();
             }}
             aria-label={`Open ${entry.id} component docs`}
-            className={`w-[22px] h-[22px] rounded-md border border-cl-border bg-transparent transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 ${
+            className={`w-[22px] h-[22px] rounded-md border border-cl-border bg-transparent transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent ${
               isActive
                 ? "text-cl-text-secondary hover:text-cl-text hover:border-cl-border-input-hover"
                 : "text-cl-text-disabled pointer-events-none"
@@ -540,8 +529,6 @@ function PreviewCard({
   );
 }
 
-/* ─── DatePicker preview ────────────────────────────────────────────────── */
-
 type Preset = "today" | "yesterday" | "last7" | "thisweek";
 
 // Today is hardcoded for stability so the preview always shows the same demo.
@@ -554,13 +541,9 @@ interface RangeSpec {
 }
 
 const PRESETS: Record<Preset, RangeSpec> = {
-  // April 26, 2026
   today: { startKey: 20260426, endKey: 20260426 },
-  // April 25, 2026
   yesterday: { startKey: 20260425, endKey: 20260425 },
-  // Last 7 days inclusive: April 20–26
   last7: { startKey: 20260420, endKey: 20260426 },
-  // This week (Mon-Sun): April 20–26
   thisweek: { startKey: 20260420, endKey: 20260426 },
 };
 
@@ -587,9 +570,6 @@ function DatePickerPreview({ frozen = false }: { frozen?: boolean }) {
   // range end relative to the current start.
   const [pickStage, setPickStage] = useState<"start" | "end">("start");
 
-  // Effective range — preset takes precedence; otherwise derive from custom
-  // selection. When neither exists (cold initial state shouldn't happen since
-  // "thisweek" is the default preset), fall back to a no-op range.
   const range: RangeSpec = activePreset
     ? PRESETS[activePreset]
     : customStart !== null
@@ -598,9 +578,6 @@ function DatePickerPreview({ frozen = false }: { frozen?: boolean }) {
 
   const todayKey = dateKey(TODAY.y, TODAY.m, TODAY.d);
 
-  // Build the visible 7-column grid for the current view month. Leading cells
-  // come from the previous month, trailing cells from the next, so the grid
-  // always lines up on Monday and ends on Sunday.
   const cells: Array<{ y: number; m: number; d: number; inMonth: boolean }> =
     [];
   const firstIdx = firstWeekdayIndex(viewYear, viewMonth);
@@ -709,7 +686,7 @@ function DatePickerPreview({ frozen = false }: { frozen?: boolean }) {
             aria-label="Previous month"
             onClick={goPrevMonth}
             tabIndex={frozen ? -1 : 0}
-            className="w-7 h-7 rounded-md border border-cl-border-input flex items-center justify-center text-cl-text-secondary hover:text-cl-text hover:border-cl-border-input-hover transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated"
+            className="w-7 h-7 rounded-md border border-cl-border-input flex items-center justify-center text-cl-text-secondary hover:text-cl-text hover:border-cl-border-input-hover transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated"
           >
             <svg
               viewBox="0 0 24 24"
@@ -725,7 +702,7 @@ function DatePickerPreview({ frozen = false }: { frozen?: boolean }) {
             aria-label="Next month"
             onClick={goNextMonth}
             tabIndex={frozen ? -1 : 0}
-            className="w-7 h-7 rounded-md border border-cl-border-input flex items-center justify-center text-cl-text-secondary hover:text-cl-text hover:border-cl-border-input-hover transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated"
+            className="w-7 h-7 rounded-md border border-cl-border-input flex items-center justify-center text-cl-text-secondary hover:text-cl-text hover:border-cl-border-input-hover transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated"
           >
             <svg
               viewBox="0 0 24 24"
@@ -795,7 +772,7 @@ function DatePickerPreview({ frozen = false }: { frozen?: boolean }) {
               tabIndex={!cell.inMonth || frozen ? -1 : 0}
               aria-label={cellLabel}
               aria-pressed={inRange}
-              className={`relative w-full h-7 sm:h-8 flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg-elevated ${
+              className={`relative w-full h-7 sm:h-8 flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg-elevated ${
                 cell.inMonth ? "cursor-pointer" : "cursor-default"
               } ${radius} ${bg} ${color} ${weight} ${cell.inMonth ? hover : ""}`}
             >
@@ -833,7 +810,7 @@ function DatePickerPreview({ frozen = false }: { frozen?: boolean }) {
               type="button"
               onClick={() => onPresetClick(key)}
               tabIndex={frozen ? -1 : 0}
-              className={`text-[11px] px-3 py-1.5 rounded-full border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated ${
+              className={`text-[11px] px-3 py-1.5 rounded-full border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated ${
                 isActive
                   ? "border-cl-border-input-focus/40 bg-cl-accent/10 text-cl-accent"
                   : "border-cl-border-input text-cl-text-secondary hover:border-cl-border-input-hover hover:text-cl-text"
@@ -875,8 +852,6 @@ function formatRangeText(range: RangeSpec): {
     dayCount: dayCount === 1 ? "1 day" : `${dayCount} days`,
   };
 }
-
-/* ─── InternationalPhoneInput preview ───────────────────────────────────── */
 
 const PHONE_COUNTRIES = [
   {
@@ -1023,7 +998,7 @@ function PhonePreview({ frozen = false }: { frozen?: boolean }) {
                 type="button"
                 onClick={() => handleSelect(c.code)}
                 tabIndex={frozen ? -1 : 0}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated ${
                   isActive
                     ? "bg-cl-accent/10 border border-cl-border-input-focus/40 text-cl-accent"
                     : "bg-cl-bg-elevated border border-cl-border hover:border-cl-border-input-hover text-cl-text-secondary hover:text-cl-text"
@@ -1039,7 +1014,7 @@ function PhonePreview({ frozen = false }: { frozen?: boolean }) {
             type="button"
             onClick={() => handleSelect("US")}
             tabIndex={frozen ? -1 : 0}
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated ${
+            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated ${
               active === "US"
                 ? "bg-cl-accent/10 border border-cl-border-input-focus/40 text-cl-accent"
                 : "bg-cl-bg-elevated border border-cl-border hover:border-cl-border-input-hover text-cl-text-secondary hover:text-cl-text"
@@ -1066,8 +1041,6 @@ function PhonePreview({ frozen = false }: { frozen?: boolean }) {
     </figure>
   );
 }
-
-/* ─── Table preview ─────────────────────────────────────────────────────── */
 
 interface TableRow {
   name: string;
@@ -1307,7 +1280,7 @@ function TablePreview({ frozen = false }: { frozen?: boolean }) {
                     if (!frozen) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
                   }}
                   tabIndex={frozen ? -1 : 0}
-                  className="flex items-center gap-1 hover:text-cl-text transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 rounded-md"
+                  className="flex items-center gap-1 hover:text-cl-text transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent rounded-md"
                 >
                   Name
                   <span
@@ -1391,8 +1364,6 @@ function TablePreview({ frozen = false }: { frozen?: boolean }) {
     </figure>
   );
 }
-
-/* ─── Input preview ─────────────────────────────────────────────────────── */
 
 const BIO_MAX = 200;
 const PASSWORD_MIN = 8;
@@ -1549,8 +1520,6 @@ function InputPreview({ frozen = false }: { frozen?: boolean }) {
   );
 }
 
-/* ─── Toast preview ─────────────────────────────────────────────────────── */
-
 type ToastId = "success" | "info" | "comment";
 
 const TOAST_DEFAULTS: ToastId[] = ["success", "info", "comment"];
@@ -1610,7 +1579,7 @@ function ToastEmptyContent({ onReplay }: { onReplay: () => void }) {
       <button
         type="button"
         onClick={onReplay}
-        className="group inline-flex items-center gap-2 mt-1 px-3.5 py-2 rounded-md border border-cl-border-input bg-cl-bg hover:border-cl-border-input-focus/40 hover:bg-cl-accent/[0.04] transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated"
+        className="group inline-flex items-center gap-2 mt-1 px-3.5 py-2 rounded-md border border-cl-border-input bg-cl-bg hover:border-cl-border-input-focus/40 hover:bg-cl-accent/[0.04] transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg-elevated"
       >
         <svg
           viewBox="0 0 24 24"
@@ -1698,7 +1667,7 @@ function ToastPreview({
               {t.action && (
                 <button
                   type="button"
-                  className="text-[11px] font-medium text-cl-accent hover:text-[#7eb1ff] transition-colors mt-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 rounded-md px-1"
+                  className="text-[11px] font-medium text-cl-accent hover:text-[#7eb1ff] transition-colors mt-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent rounded-md px-1"
                 >
                   {t.action} →
                 </button>
@@ -1708,7 +1677,7 @@ function ToastPreview({
               type="button"
               aria-label="Dismiss"
               onClick={() => dismiss(id)}
-              className="text-cl-text-disabled hover:text-cl-text-secondary transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 rounded-md"
+              className="text-cl-text-disabled hover:text-cl-text-secondary transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent rounded-md"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5" aria-hidden>
                 <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12Z" />
@@ -1720,8 +1689,6 @@ function ToastPreview({
     </figure>
   );
 }
-
-/* ─── Filled list-row icons (currentColor) ──────────────────────────────── */
 
 function DatePickerIcon() {
   return (

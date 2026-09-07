@@ -46,7 +46,6 @@ export function SiteFooter() {
       duration={200}
       className="relative bg-bg-base border-t border-cl-border mt-12 sm:mt-16 overflow-hidden"
     >
-      {/* Decorative starfield (top half only). */}
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-[55%] pointer-events-none"
@@ -67,14 +66,11 @@ export function SiteFooter() {
       </div>
 
       <div className="relative mx-auto max-w-[1200px] px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8">
-        {/* ROW 1 — Brand block. Logo flips with theme: the light-variant
-            PNG (white wordmark) on dark surfaces, the dark-variant PNG
-            (black wordmark) on cream paper. */}
         <div className="mb-6">
           <Link
             to="/"
             aria-label="Chumlab home"
-            className="inline-flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-4 focus-visible:ring-offset-cl-bg rounded-md"
+            className="inline-flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-4 focus-visible:ring-offset-cl-bg rounded-md"
             data-track-event="nav_click"
             data-track-location="footer"
             data-track-target="logo"
@@ -87,9 +83,7 @@ export function SiteFooter() {
           </Link>
         </div>
 
-        {/* ROW 2 — Link columns */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 mb-6">
-          {/* Product */}
           <FooterColumn title="Product">
             <FooterLink>
               <Link
@@ -115,7 +109,6 @@ export function SiteFooter() {
             </FooterLink>
           </FooterColumn>
 
-          {/* Resources */}
           <FooterColumn title="Resources">
             <FooterLink>
               <Link
@@ -141,7 +134,6 @@ export function SiteFooter() {
             </FooterLink>
           </FooterColumn>
 
-          {/* Company */}
           <FooterColumn title="Company">
             <FooterLink>
               <button
@@ -237,7 +229,7 @@ export function SiteFooter() {
               <span>Got feedback? Ping us at</span>
               <a
                 href="mailto:hello@chumlab.com?subject=Feedback%20on%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
-                className="text-cl-text hover:text-cl-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg rounded"
+                className="text-cl-text hover:text-cl-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg rounded"
                 data-track-event="email_click"
                 data-track-location="footer"
                 data-track-target="feedback"
@@ -253,7 +245,7 @@ export function SiteFooter() {
 }
 
 const LINK_CLASS =
-  "font-sans text-[14px] text-cl-text hover:text-cl-text transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg rounded";
+  "font-sans text-[14px] text-cl-text hover:text-cl-text transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg rounded";
 
 function FooterColumn({
   title,

@@ -9,10 +9,13 @@ export interface DropdownOption {
 }
 
 export interface DropdownClasses {
+  /** Root container element */
   root?: string;
   control?: string;
+  /** Trigger button (combobox) */
   trigger?: string;
   value?: string;
+  /** Dropdown popup container (portal) */
   content?: string;
   list?: string;
   item?: string;
@@ -20,6 +23,7 @@ export interface DropdownClasses {
   itemIndicator?: string;
   clearTrigger?: string;
   empty?: string;
+  /** Label element */
   label?: string;
   message?: string;
   description?: string;

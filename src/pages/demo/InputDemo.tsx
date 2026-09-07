@@ -8,8 +8,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -17,8 +15,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const Icon = ({
   d,
@@ -211,10 +207,7 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (dark: boolean) => ({
-  // InputClasses object for the `classes` prop
   input: {
     root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
     input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
@@ -227,7 +220,6 @@ const getClasses = (dark: boolean) => ({
     suffix: `text-sm select-none text-cl-text-tertiary`,
     count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`,
   },
-  // Variant wrapper overrides
   wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
   wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
   wrapperDisabled: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
@@ -236,7 +228,6 @@ const getClasses = (dark: boolean) => ({
   iconHover: dark
     ? "text-cl-text-tertiary hover:text-cl-text-secondary"
     : "text-cl-text-tertiary hover:text-cl-text-secondary",
-  // Demo UI classes
   badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent/10 text-cl-accent ring-1 ring-inset ring-cl-accent/10 dark:bg-cl-accent/10 dark:text-cl-accent dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -252,14 +243,11 @@ const getClasses = (dark: boolean) => ({
   divider: `border-t border-cl-border`,
 });
 
-// ─── Demo ────────────────────────────────────────────────────────────────────
-
 const InputDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // State
   const [showPw, setShowPw] = useState(false);
   const [search, setSearch] = useState("");
   // An alert() here blocks the page and every automated check with it.
@@ -270,7 +258,6 @@ const InputDemo = () => {
   const [url, setUrl] = useState("");
   const [amount, setAmount] = useState("");
 
-  // Validation
   const emailOk = email.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const emailBad = email.length > 0 && !emailOk;
   const userOk = username.length >= 3;
@@ -291,9 +278,7 @@ const InputDemo = () => {
 
       <CopyPasteBlock name="Input" />
 
-      {/* ─── Examples ─────────────────────────────────────────────────── */}
       <div className="space-y-8">
-        {/* Basic */}
         <Section
           title="Basic Usage"
           description="Works out-of-the-box with built-in styles, dark mode, and focus states. No custom classes needed."
@@ -301,7 +286,7 @@ const InputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark} layout="block">
             <div className="flex flex-col gap-4 w-full sm:max-w-sm">
-              {/* Basic usage — works out-of-the-box with built-in styles */}
+              {}
               <Input
                 label="Full Name"
                 placeholder="Enter your name..."
@@ -321,7 +306,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Size Variants */}
         <Section
           title="Size Variants"
           description="The size prop emits data-size on the container for CSS targeting."
@@ -360,7 +344,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Label, Description, Required */}
         <Section
           title="Label, Description & Required"
           description="Semantic labels with helper text and required indicators."
@@ -385,7 +368,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Icons */}
         <Section
           title="Icons"
           description="Static leading/trailing icons. Add a click handler to make them interactive buttons."
@@ -451,7 +433,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Prefix & Suffix */}
         <Section
           title="Prefix & Suffix"
           description="Inline text addons for context — currency, domains, units, handles."
@@ -495,7 +476,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Clearable */}
         <Section
           title="Clearable"
           description="Built-in clear button appears when the field has a value. Works in both controlled and uncontrolled modes."
@@ -524,7 +504,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Character Count */}
         <Section
           title="Character Count"
           description="Show remaining characters with showCount + maxLength."
@@ -565,7 +544,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Validation States */}
         <Section
           title="Validation States"
           description="Error and success feedback with proper ARIA attributes."
@@ -604,7 +582,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Live Validation */}
         <Section
           title="Live Validation"
           description="Real-time feedback as you type. Try entering an email."
@@ -639,7 +616,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Password Toggle */}
         <Section
           title="Password Toggle"
           description="Show/hide password with a clickable trailing icon."
@@ -668,7 +644,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* onValueChange */}
         <Section
           title="onValueChange Callback"
           description="Convenience callback that gives you the string value directly."
@@ -694,7 +669,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Loading */}
         <Section
           title="Loading State"
           description="Disables input and shows a spinner. Supports custom loaders."
@@ -797,7 +771,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Input Types */}
         <Section
           title="Input Types"
           description="All standard HTML input types work out of the box."
@@ -1257,127 +1230,6 @@ const InputDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Input" />
-
-      <Section title="InputClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container (label + input row + error/success)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="wrapper"
-              type="string"
-              description="Input row wrapper (icons + input)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="string"
-              description="Helper/description text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="input"
-              type="string"
-              description="Native <input> element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="prefix"
-              type="string"
-              description="Prefix addon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="suffix"
-              type="string"
-              description="Suffix addon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="string"
-              description="Success message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="count"
-              type="string"
-              description="Character count display"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-disabled"
-              type="container, input"
-              description="Present when disabled or loading"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="container, input"
-              description="Present when error = true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-valid"
-              type="container, input"
-              description="Present when success = true (without error)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-loading"
-              type="container"
-              description="Present when loading = true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-size"
-              type="container"
-              description="Present when size is set"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-readonly"
-              type="container, input"
-              description="Present when readOnly = true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-slot"
-              type="every sub-element"
-              description="Always present — identifies structural parts"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

@@ -159,26 +159,17 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       onConfirm,
       cancelText,
       okText,
-      // Remaining HTML attributes (data-testid, aria-*, event handlers, etc.)
-      ...restProps
+        ...restProps
     },
     ref,
   ) => {
-    // ADR: floating content resolves its layer from the nearest overlay, so a
-    // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
-    // ── Class merging (matches library pattern: classes ?? base) ────────
-    // The prop, not the bare query: it was calming this component's JS-driven
-    // motion while leaving every motion utility in the class strings.
     const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
     const baseClassesRaw = unstyled
       ? UNSTYLED_TIMEPICKER_CLASSES
       : DEFAULT_TIMEPICKER_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
     const mergedClasses = useMemo<Required<TimePickerClasses>>(() => ({
@@ -218,7 +209,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     // resolves — see `useClockFace`.
     const ClockFace = useClockFace(variant === "clock");
 
-    // Clock classes sub-object
     const clockClasses = useMemo<Required<ClockFaceClasses>>(() => ({
       clockContent: mergedClasses.clockContent,
       clockDisplay: mergedClasses.clockDisplay,
@@ -238,7 +228,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       periodButton: mergedClasses.periodButton,
     }), [mergedClasses]);
 
-    // Option classes sub-object for TimeOption
     const optionClasses = useMemo(() => ({
       option: mergedClasses.item,
       selectedIcon: mergedClasses.itemIndicator,
@@ -246,7 +235,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
 
-    // Controllable value state (supports both controlled and uncontrolled)
     const [value, setValueState] = useControllableState<string | null>({
       value: valueProp,
       defaultValue: defaultValue ?? null,
@@ -408,7 +396,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       }
     }, [isOpen]);
 
-    // Scroll focused option into view
     useEffect(() => {
       if (!isOpen || focusedIndex < 0 || !isBrowser) return;
       const optionEl = document.getElementById(`${dropdownId}-option-${focusedIndex}`);
@@ -513,7 +500,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       onCancel?.();
     }, [handleClose, onCancel]);
 
-    // ─── Portal dropdown positioning (matches Dropdown/DatePicker pattern) ──
     const triggerElRef = useRef<HTMLDivElement>(null);
     const dropdownCoords = useAnchoredPosition(
       triggerElRef,

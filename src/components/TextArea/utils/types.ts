@@ -10,12 +10,16 @@ export interface TextAreaLabelProps {
 export type TextAreaSize = "sm" | "md" | "lg";
 
 export interface TextAreaClasses {
+  /** Outermost container (same element as className) */
   root?: string;
   control?: string;
+  /** Label element */
   label?: string;
+  /** Helper/description text */
   description?: string;
   input?: string;
   message?: string;
+  /** Character count display */
   count?: string;
 }
 

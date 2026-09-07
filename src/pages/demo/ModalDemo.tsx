@@ -10,8 +10,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -19,8 +17,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 // Buttons follow the home-page CTA system: primary = the inverse-fg pill
 // (the "Browse components" treatment), secondary = an elevated-surface
@@ -43,7 +39,6 @@ const getClasses = (dark: boolean) => ({
   text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
   card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   label: `text-xs font-medium text-cl-text-tertiary`,
-  // Modal-specific
   modalContent: "w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border",
   modalHeader: "flex items-start gap-3 p-6 pb-4",
   modalTitle: "font-semibold text-lg text-cl-text",
@@ -58,8 +53,6 @@ const getClasses = (dark: boolean) => ({
   input:
     "w-full px-3 py-2.5 rounded-cl-md bg-cl-bg border border-cl-border text-cl-text placeholder:text-cl-text-tertiary outline-none transition-colors focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/15 dark:[color-scheme:dark]",
 });
-
-// ─── useModal Child Demo ────────────────────────────────────────────────────
 
 const ModalChildWithHook = () => {
   const { close, nestingLevel } = useModal();
@@ -81,8 +74,6 @@ const ModalChildWithHook = () => {
   );
 };
 
-// ─── Keep Mounted Logger ────────────────────────────────────────────────────
-
 const KeepMountedLogger = ({ onLog }: { onLog: (msg: string) => void }) => {
   useEffect(() => {
     onLog("Mounted");
@@ -90,8 +81,6 @@ const KeepMountedLogger = ({ onLog }: { onLog: (msg: string) => void }) => {
   }, [onLog]);
   return <p className="text-cl-text-secondary">This content logs mount/unmount events.</p>;
 };
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const ModalDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -113,7 +102,6 @@ const ModalDemo = () => {
   const [nestedLevel1Open, setNestedLevel1Open] = useState(false);
   const [nestedLevel2Open, setNestedLevel2Open] = useState(false);
 
-  // New demo states
   const [classesOpen, setClassesOpen] = useState(false);
   const [unstyledOpen, setUnstyledOpen] = useState(false);
   const [reduceMotionOpen, setReduceMotionOpen] = useState(false);
@@ -236,7 +224,6 @@ const ModalDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ──────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override individual sub-element styles via the classes prop."
@@ -1641,14 +1628,6 @@ const ModalDemo = () => {
 
       <ComponentDocs name="Modal" />
 
-      <Section title="Styling Props" isDarkMode={dark}>
-        <PropsTable isDarkMode={dark}>
-          <PropRow isDarkMode={dark} name="className" type="string" description="Additional class for modal content" />
-          <PropRow isDarkMode={dark} name="contentStyle" type="CSSProperties" description="Inline styles for content wrapper" />
-          <PropRow isDarkMode={dark} name="classes" type="ModalClasses" description="CSS class overrides for modal sub-elements (root, overlay, container, content, header, title, description, icon, closeButton, closeIcon, body)" />
-        </PropsTable>
-      </Section>
-
       <DocControlledPattern
         isDarkMode={dark}
         summary="Use `open` with `onOpenChange` (and title/description props) for controlled visibility. Nesting levels are bounded—design flows that avoid deep modal stacks."
@@ -1674,23 +1653,6 @@ const ModalDemo = () => {
           "Do not remove visible focus outlines.",
         ]}
       />
-
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="data-modal-root" type="root" description="Marks the modal root wrapper" isDarkMode={dark} />
-            <PropRow name="data-open" type="root" description="'true' when the modal is open" isDarkMode={dark} />
-            <PropRow name="data-nesting-level" type="root" description="Current nesting depth (0-based)" isDarkMode={dark} />
-            <PropRow name="data-reduce-motion" type="root" description="'true' when reduced motion is enabled" isDarkMode={dark} />
-            <PropRow name="data-modal-overlay" type="overlay" description="Marks the overlay/backdrop element" isDarkMode={dark} />
-            <PropRow name="data-modal-container" type="container" description="Marks the modal container" isDarkMode={dark} />
-            <PropRow name="data-modal-content" type="content" description="Marks the modal content wrapper" isDarkMode={dark} />
-            <PropRow name="data-modal-header" type="header" description="Marks the modal header area" isDarkMode={dark} />
-            <PropRow name="data-modal-body" type="body" description="Marks the modal body area" isDarkMode={dark} />
-            <PropRow name="data-modal-footer" type="footer" description="Marks the modal footer area" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
 
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>

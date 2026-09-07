@@ -98,9 +98,6 @@ export function useDropdown({
   const searchVersionRef = useRef(0);
   const loadInitialMountedRef = useRef(true);
 
-
-  // isOpen and currentValue are now managed by useControllableState above
-
   const isAsync = typeof onSearch === "function";
 
   const allInitialOptions = useMemo(
@@ -145,7 +142,6 @@ export function useDropdown({
     };
   }, []);
 
-  // Reset hasLoadedInitial when load config changes (render-time derived state)
   const [prevLoadConfig, setPrevLoadConfig] = useState({ onLoadInitialOptions, loadInitialOnOpen });
   if (
     prevLoadConfig.onLoadInitialOptions !== onLoadInitialOptions ||
@@ -159,7 +155,6 @@ export function useDropdown({
 
   const shouldLoadInitial = isOpen && loadInitialOnOpen && !!onLoadInitialOptions && !hasLoadedInitial;
 
-  // Derive loading state from shouldLoadInitial (pre-fetch = loading)
   const [prevShouldLoad, setPrevShouldLoad] = useState(false);
   if (prevShouldLoad !== shouldLoadInitial) {
     setPrevShouldLoad(shouldLoadInitial);
@@ -190,10 +185,8 @@ export function useDropdown({
     return () => { cancelled = true; };
   }, [shouldLoadInitial, onLoadInitialOptions, onLoadError]);
 
-  // Derive: should we be in search mode
   const hasActiveSearch = isAsync && !!onSearch && !!searchQuery.trim();
 
-  // Reset async state when search clears (render-time derived state)
   const [prevHasActiveSearch, setPrevHasActiveSearch] = useState(false);
   if (prevHasActiveSearch !== hasActiveSearch) {
     setPrevHasActiveSearch(hasActiveSearch);

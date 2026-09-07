@@ -11,12 +11,16 @@ export interface SwitchRenderProps {
 }
 
 export interface SwitchClasses {
+  /** Outer container div */
   root?: string;
   row?: string;
   labelGroup?: string;
+  /** Label element */
   label?: string;
+  /** Description span element */
   description?: string;
   control?: string;
+  /** Thumb (handle) span element */
   thumb?: string;
   message?: string;
   loading?: string;

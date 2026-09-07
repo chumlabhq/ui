@@ -151,7 +151,6 @@ describe("DotLoader", () => {
   it("renders 3 dots by default", () => {
     render(<DotLoader />);
     const loader = screen.getByRole("status");
-    // Filter out the <style> element
     const dotElements = Array.from(loader.children).filter(
       (el) => el.tagName !== "STYLE"
     );

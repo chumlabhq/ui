@@ -125,13 +125,11 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const announcerRef = useRef<HTMLDivElement>(null);
 
-  // ─── Reduced motion ──────────────────────────────────────────────────────
   const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
-  // ─── Print styles (deduplicated singleton) ───────────────────────────────
+  // One <style> for every Accordion on the page, not one each.
   usePrintStyles(expandOnPrint);
 
-  // ─── Focus management ────────────────────────────────────────────────────
   const {
     registerItem,
     unregisterItem,
@@ -141,14 +139,12 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     itemCount,
   } = useAccordionFocus({ loop });
 
-  // ─── Storage ─────────────────────────────────────────────────────────────
   const isControlled = controlledValue !== undefined;
   const { readFromStorage, writeToStorage } = useAccordionStorage({
     storageKey,
     isControlled,
   });
 
-  // ─── Announcer ───────────────────────────────────────────────────────────
   const announce = useCallback(
     (message: string) => {
       if (announcerRef.current && announceExpanded) {
@@ -158,7 +154,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     [announceExpanded],
   );
 
-  // ─── State management ────────────────────────────────────────────────────
   const {
     expandedValues,
     expandedStore,
@@ -189,12 +184,8 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     readFromStorage,
   });
 
-  // ─── Storage sync ────────────────────────────────────────────────────────
-  // Paused until the stored value has been read: the first commit still holds
-  // the default, and writing that back would erase what it is about to restore.
   useStorageSync(internalValue, writeToStorage, isControlled || !storageRead);
 
-  // ─── Styling ─────────────────────────────────────────────────────────────
   const sizeClasses = unstyled ? structuralOnly(SIZE_CLASSES[size]) : SIZE_CLASSES[size];
   // ADR 001: `unstyled` strips decoration, not layout. The variant and size maps
   // are default class sets like any other, so they take the same split rather
@@ -208,9 +199,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
   const baseClassesRaw = unstyled ? UNSTYLED_ACCORDION_CLASSES : DEFAULT_ACCORDION_CLASSES;
-  // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-  // this handles the other reason to stop animating. Applied to the defaults
-  // only — a class string the consumer supplied is theirs to control.
   const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
   const mergedClasses: AccordionClasses = useMemo(
@@ -238,7 +226,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     [classesProp, sizeClasses, variantClasses, baseClasses, unstyled],
   );
 
-  // ─── Imperative handle ───────────────────────────────────────────────────
   const toggle = useCallback(
     (value: string) => toggleItem(value),
     [toggleItem],
@@ -271,7 +258,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     ],
   );
 
-  // ─── Context values ──────────────────────────────────────────────────────
   const dispatchValue: AccordionDispatchValue = useMemo(
     () => ({
       toggleItem,
@@ -337,7 +323,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     ],
   );
 
-  // ─── Render ──────────────────────────────────────────────────────────────
   const hasExpanded = expandedValues.size > 0;
   const Comp = asChild ? Slot : "div";
 

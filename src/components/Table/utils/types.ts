@@ -191,7 +191,6 @@ export interface TableProps<TData> {
   className?: string;
   children?: ReactNode;
 
-  // ── Sorting ──────────────────────────────────────────────────────────
   /** Enable column sorting. */
   sortable?: boolean;
   /** Callback when sorting state changes. */
@@ -201,7 +200,6 @@ export interface TableProps<TData> {
   /** When true, sorting is handled server-side; the table will not sort data locally. */
   manualSorting?: boolean;
 
-  // ── Multi-Row Selection ──────────────────────────────────────────────
   /** Row selection mode. Defaults to "none". */
   selectionMode?: "single" | "multiple" | "none";
   /** Array of selected row IDs (controlled). */
@@ -211,13 +209,11 @@ export interface TableProps<TData> {
   /** Whether the header "select all" checkbox selects all rows on the current page or all rows. Defaults to "page". */
   selectAllMode?: "page" | "all";
 
-  // ── Global Search ────────────────────────────────────────────────────
   /** Global filter value for searching across all columns. */
   globalFilter?: string;
   /** Callback when the global filter value changes. */
   onGlobalFilterChange?: (value: string) => void;
 
-  // ── Column Filters ───────────────────────────────────────────────────
   /** Controlled column filters state. */
   columnFilters?: ColumnFiltersState;
   /** Callback when column filters change. */
@@ -231,7 +227,6 @@ export interface TableProps<TData> {
   /** Render custom filter dropdown content for a column. Receives column ID, current values, and setter. */
   renderColumnFilter?: (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode;
 
-  // ── Row Expansion ────────────────────────────────────────────────────
   /** Enable row expansion. */
   expandable?: boolean;
   /** Array of expanded row IDs (controlled). */
@@ -247,27 +242,22 @@ export interface TableProps<TData> {
   /** Make the entire row clickable to toggle expansion instead of just the icon. */
   expandOnRowClick?: boolean;
 
-  // ── Column Visibility ────────────────────────────────────────────────
   /** Controlled column visibility. Keys are column IDs, values indicate visibility. */
   columnVisibility?: Record<string, boolean>;
   /** Callback when column visibility changes. */
   onColumnVisibilityChange?: (visibility: Record<string, boolean>) => void;
 
-  // ── Striped Rows ─────────────────────────────────────────────────────
   /** Alternate row background colors. */
   striped?: boolean;
   /** Custom class for striped (alternating) rows. Overrides the default bg-gray-50. */
   stripedClassName?: string;
 
-  // ── Density / Compact Mode ───────────────────────────────────────────
   /** Controls cell padding density. Defaults to "comfortable". */
   density?: "compact" | "comfortable" | "spacious";
 
-  // ── Right Column Freeze ──────────────────────────────────────────────
   /** Column IDs to pin to the right side of the table. */
   pinnedRightColumns?: string[];
 
-  // ── Inline Cell Editing ──────────────────────────────────────────────
   /** Enable inline cell editing on double-click. */
   editable?: boolean;
   /** Column IDs that are editable. If not set, all columns are editable when `editable` is true. */
@@ -275,7 +265,6 @@ export interface TableProps<TData> {
   /** Callback when a cell value is edited. */
   onCellEdit?: (rowId: string, columnId: string, value: unknown) => void;
 
-  // ── Column Resizing ──────────────────────────────────────────────────
   /** Enable column resizing via drag handles. */
   enableColumnResizing?: boolean;
   /** Controlled column sizing state. */
@@ -283,19 +272,16 @@ export interface TableProps<TData> {
   /** Callback when column sizing changes. */
   onColumnSizingChange?: (sizing: ColumnSizingState) => void;
 
-  // ── Server-Side / Manual Modes ───────────────────────────────────────
   /** When true, pagination is handled server-side. */
   manualPagination?: boolean;
   /** When true, filtering is handled server-side; the table will not filter data locally. */
   manualFiltering?: boolean;
 
-  // ── Column Reordering ────────────────────────────────────────────────
   /** Controlled column order (array of column IDs). */
   columnOrder?: string[];
   /** Callback when column order changes. */
   onColumnOrderChange?: (order: string[]) => void;
 
-  // ── Row Drag & Drop ──────────────────────────────────────────────────
   /** Enable row drag-and-drop reordering. */
   enableRowDragDrop?: boolean;
   /** Callback when a row is reordered. */
@@ -303,23 +289,19 @@ export interface TableProps<TData> {
   /** Place the drag handle column on the left or right side. */
   dragColumnPosition?: "left" | "right";
 
-  // ── Footer / Summary Row ─────────────────────────────────────────────
   /** Show the table footer (tfoot). */
   showFooter?: boolean;
   /** Custom footer content rendered inside `<tfoot>`. */
   footerContent?: ReactNode;
 
-  // ── Context Menu ─────────────────────────────────────────────────────
   /** Callback on right-click of a row. */
   onContextMenu?: (event: React.MouseEvent, row: TData) => void;
 
-  // ── Copy to Clipboard ────────────────────────────────────────────────
   /** Enable single-click cell copy to clipboard. */
   enableCopyOnClick?: boolean;
   /** Callback after a cell value is copied. */
   onCellCopy?: (value: string, rowId: string, columnId: string) => void;
 
-  // ── Infinite Scroll ──────────────────────────────────────────────────
   /** Enable infinite scroll loading. */
   enableInfiniteScroll?: boolean;
   /** Callback when user scrolls near the bottom. */
@@ -331,19 +313,16 @@ export interface TableProps<TData> {
   /** Content shown when all data is loaded (hasMore is false). */
   infiniteEndContent?: ReactNode;
 
-  // ── Responsive Mobile ────────────────────────────────────────────────
   /** Viewport width below which the table renders as card layout. */
   responsiveBreakpoint?: number;
   /** Render function for mobile card layout. */
   renderMobileCard?: (row: TData) => ReactNode;
 
-  // ── Row Grouping ─────────────────────────────────────────────────────
   /** Column IDs to group rows by. */
   groupBy?: string[];
   /** Callback when group-by columns change. */
   onGroupByChange?: (groupBy: string[]) => void;
 
-  // ── Global Search Component ──────────────────────────────────────────
   /** Show a built-in search bar above the table. */
   showSearch?: boolean;
   /** Placeholder text for the search bar. */
@@ -351,7 +330,6 @@ export interface TableProps<TData> {
   /** Position of the search icon. */
   searchIconPosition?: "left" | "right" | "none";
 
-  // ── Customizable Icons / Components ─────────────────────────────────
   /** Custom checkbox component for multi-row selection. */
   CheckboxIcon?: ComponentType<{ checked: boolean; indeterminate?: boolean; className?: string }>;
   /** Simple color customization for the default checkbox. */
@@ -363,7 +341,6 @@ export interface TableProps<TData> {
   /** Callback when the search clear button is clicked. */
   onSearchClear?: () => void;
 
-  // ── Infinite Scroll Customization ───────────────────────────────────
   /** Custom content for the loading more indicator in infinite scroll. */
   loadingMoreContent?: ReactNode;
 }

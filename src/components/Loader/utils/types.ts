@@ -1,7 +1,5 @@
 import type { HTMLAttributes } from "react";
 
-// ─── Classes types ──────────────────────────────────────────────────────────
-
 /** CSS class overrides for CircularLoader sub-elements. */
 export interface CircularLoaderClasses {
   /** Root wrapper element. */
@@ -37,8 +35,6 @@ export interface PulseLoaderClasses {
   /** Core dot element. */
   range?: string;
 }
-
-// ─── Props types ────────────────────────────────────────────────────────────
 
 /**
  * Props for the CircularLoader component.

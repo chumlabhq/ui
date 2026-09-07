@@ -6,8 +6,11 @@ export type TooltipShadow = TooltipShadowPreset | (string & {});
 export type TooltipWordWrap = "normal" | "break-word" | "nowrap";
 
 export interface TooltipClasses {
+  /** Trigger wrapper element */
   trigger?: string;
+  /** Tooltip content container */
   content?: string;
+  /** Arrow SVG element */
   arrow?: string;
 }
 

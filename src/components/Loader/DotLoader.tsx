@@ -33,7 +33,6 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
 
     const baseClasses = motionSafeClasses(
       baseClassesRaw,
-      // The prop overrides the query, per useReducedMotion's contract.
       useReducedMotion(reduceMotion),
     );
     const mergedClasses: Required<DotLoaderClasses> = useMemo(

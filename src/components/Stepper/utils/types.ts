@@ -41,7 +41,9 @@ export interface Step {
 }
 
 export interface StepperClasses {
+  /** Root navigation container */
   root?: string;
+  /** The <ol> list wrapping all steps */
   list?: string;
   item?: string;
   trigger?: string;
@@ -50,6 +52,7 @@ export interface StepperClasses {
   itemIcon?: string;
   row?: string;
   itemText?: string;
+  /** Step description text */
   description?: string;
   separator?: string;
 }

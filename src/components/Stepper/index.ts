@@ -1,4 +1,3 @@
-// AI Knowledge: See STEPPER.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Stepper } from "./Stepper.js";
 export type {
   StepperProps,

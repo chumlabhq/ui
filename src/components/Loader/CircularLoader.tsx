@@ -41,7 +41,6 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
 
     const baseClasses = motionSafeClasses(
       baseClassesRaw,
-      // The prop overrides the query, per useReducedMotion's contract.
       useReducedMotion(reduceMotion),
     );
     const mergedClasses: Required<CircularLoaderClasses> = useMemo(

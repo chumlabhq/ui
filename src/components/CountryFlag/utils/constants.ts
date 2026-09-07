@@ -35,9 +35,6 @@ export const UNSTYLED_COUNTRYFLAG_CLASSES: Required<CountryFlagClasses> =
 export const DEFAULT_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasses> = {
   root: "flex items-center -space-x-1.5",
   item: "",
-  // Surplus chip — sits next to the flag stack with the same surface +
-  // hairline outline as the flag tiles, so the count badge reads as a
-  // peer of the flags rather than a stray dark rectangle.
   count:
     "shrink-0 inline-flex items-center justify-center rounded-cl-sm border border-cl-border bg-cl-bg-elevated text-cl-text-secondary text-[10px] font-medium tabular-nums select-none",
 };

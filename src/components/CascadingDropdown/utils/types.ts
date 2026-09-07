@@ -19,8 +19,10 @@ export interface CascadingValue {
 }
 
 export interface CascadingDropdownClasses {
+  /** Root container div */
   root?: string;
   control?: string;
+  /** Trigger button */
   trigger?: string;
   /** The trigger\'s value/placeholder text. */
   value?: string;
@@ -29,6 +31,7 @@ export interface CascadingDropdownClasses {
   subContent?: string;
   subPositioner?: string;
   subItem?: string;
+  /** Label element */
   label?: string;
   message?: string;
   description?: string;
@@ -37,6 +40,7 @@ export interface CascadingDropdownClasses {
   itemIndicator?: string;
   itemControl?: string;
   empty?: string;
+  /** Loading message */
   loading?: string;
   clearTrigger?: string;
   loadingItem?: string;

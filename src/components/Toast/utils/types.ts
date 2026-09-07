@@ -21,9 +21,11 @@ export interface ToastClasses {
   /** R2 `track`: the auto-dismiss progress groove that `indicator` fills. */
   track?: string;
   title?: string;
+  /** Description text element */
   description?: string;
   indicator?: string;
   closeTrigger?: string;
+  /** Icon wrapper element */
   icon?: string;
 }
 

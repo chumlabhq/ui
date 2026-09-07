@@ -8,8 +8,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -17,8 +15,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -117,8 +113,6 @@ const TrashIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-// ─── Tab Data ────────────────────────────────────────────────────────────────
-
 const basicTabs: Tab[] = [
   { id: "home", label: "Home" },
   { id: "profile", label: "Profile" },
@@ -211,8 +205,6 @@ const rtlTabs: Tab[] = [
   },
 ];
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 // `text-cl-text-secondary`, never tertiary: tertiary is ~3.4:1 on the page
 // ground and fails WCAG AA for text. The library moved TabPanel's own
 // `tabInactive` off it (TabPanel/utils/constants.ts:14); this map used to hand
@@ -286,8 +278,6 @@ const getClasses = (dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const TabPanelDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -1223,7 +1213,6 @@ const TabPanelDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── 29. Data Attributes ─────────────────────────────────────────── */}
       <Section
         title="Data Attributes Demo"
         description="The TabPanel component applies data attributes for CSS-based styling. Use data-[state=active], data-[disabled], etc."
@@ -1249,195 +1238,6 @@ const TabPanelDemo = () => {
       <ComponentDocs name="TabPanel" />
 
       {/* ─── Tab Object Props ────────────────────────────────────────────── */}
-      <Section title="Tab Object Properties" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="id"
-              type="string"
-              defaultVal="required"
-              description="Unique identifier for the tab"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              defaultVal="required"
-              description="Tab label text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="ReactNode"
-              description="Icon element rendered in the tab (any ReactNode)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="count"
-              type="number"
-              description="Count badge value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              description="Disable this specific tab"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltip"
-              type="ReactNode"
-              description="Tooltip content (shown on inactive tabs when showTooltips is true)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="TabPanelClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tabList"
-              type="string"
-              description='Tab list container (role="tablist")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tab"
-              type="string"
-              description="Tab button base"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tabActive"
-              type="string"
-              description="Tab button active state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tabInactive"
-              type="string"
-              description="Tab button inactive state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tabDisabled"
-              type="string"
-              description="Tab button disabled state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tabFocus"
-              type="string"
-              description="Tab button focus ring"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label text base"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="labelActive"
-              type="string"
-              description="Label active state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="labelInactive"
-              type="string"
-              description="Label inactive state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="string"
-              description="Icon wrapper base"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="iconActive"
-              type="string"
-              description="Icon active state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="iconInactive"
-              type="string"
-              description="Icon inactive state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="count"
-              type="string"
-              description="Count badge base"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="countActive"
-              type="string"
-              description="Count badge active state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="countInactive"
-              type="string"
-              description="Count badge inactive state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="indicator"
-              type="string"
-              description="Active tab indicator element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="panel"
-              type="string"
-              description="Tab panel content area"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ─────────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-state"
-              type="tab button, panel"
-              description={'"active" or "inactive"'}
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, tab button"
-              description="Present when the tab or entire component is disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-orientation"
-              type="root, tab button, panel"
-              description={'"horizontal" or "vertical"'}
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ───────────────────────────────────────────────── */}
       <Section

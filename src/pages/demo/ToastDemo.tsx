@@ -8,8 +8,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -18,8 +16,6 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (_dark: boolean) => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -33,8 +29,6 @@ const getClasses = (_dark: boolean) => ({
   btnError: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-white hover:bg-cl-error/90`,
   btnInfo: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-white hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90`,
 });
-
-// ─── Toast Demo Content ──────────────────────────────────────────────────────
 
 const ToastDemoContent = ({
   position,
@@ -60,7 +54,6 @@ const ToastDemoContent = ({
 
       <CopyPasteBlock name="Toast" />
 
-      {/* ─── Basic Variants ───────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Four toast types for different notification contexts: success, warning, error, and info."
@@ -97,7 +90,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Description ─────────────────────────────────────────── */}
       <Section
         title="With Description"
         description="Add secondary text using the description prop for more context."
@@ -140,7 +132,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Duration ─────────────────────────────────────────────────── */}
       <Section
         title="Duration"
         description="Control how long toasts stay visible with the duration prop (in milliseconds). Use Infinity for persistent toasts."
@@ -194,7 +185,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Progress Bar ─────────────────────────────────────────────── */}
       <Section
         title="Progress Bar"
         description="Toggle the progress indicator with showProgress. The bar shows remaining time before auto-dismiss."
@@ -226,7 +216,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom Progress Color ────────────────────────────────────── */}
       <Section
         title="Custom Progress Color"
         description="Customize the progress bar with progressColor (inline style) or classes.progress (Tailwind classes)."
@@ -278,7 +267,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Close Button ─────────────────────────────────────────────── */}
       <Section
         title="Close Button"
         description="Toggle the close button visibility with showCloseButton prop."
@@ -311,7 +299,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Pause on Hover ───────────────────────────────────────────── */}
       <Section
         title="Pause on Hover"
         description="Control whether the auto-dismiss timer pauses when hovering over the toast."
@@ -345,7 +332,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Escape Key Dismissal ─────────────────────────────────────── */}
       <Section
         title="Escape Key Dismissal"
         description="Enable keyboard dismissal with the dismissOnEscape prop on ToastProvider."
@@ -383,7 +369,6 @@ const ToastDemoContent = ({
         </div>
       </Section>
 
-      {/* ─── Custom Icon ──────────────────────────────────────────────── */}
       <Section
         title="Custom Icon"
         description="Replace the default type icon with a custom icon using the icon prop."
@@ -447,7 +432,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Icon Styling ─────────────────────────────────────────────── */}
       <Section
         title="Icon Styling"
         description="Customize the icon wrapper with classes.icon slot."
@@ -484,7 +468,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom Content ───────────────────────────────────────────── */}
       <Section
         title="Custom Content (content prop)"
         description="Replace message/description with fully custom content using the content prop."
@@ -580,7 +563,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Custom Styling (classes prop) ────────────────────────────── */}
       <Section
         title="Custom Styling"
         description="Customize toast appearance using the classes prop with slot overrides."
@@ -658,7 +640,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Inline Styles ────────────────────────────────────────────── */}
       <Section
         title="Inline Styles"
         description="Use the style prop for inline CSS customization."
@@ -715,7 +696,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── CSS Variables ────────────────────────────────────────────── */}
       <Section
         title="CSS Variables (Theming)"
         description="Toast colors can be customized globally using CSS custom properties for design system integration."
@@ -745,7 +725,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Callbacks ────────────────────────────────────────────────── */}
       <Section
         title="Callbacks"
         description="Use onDismiss callback to execute code when a toast is dismissed."
@@ -777,7 +756,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Programmatic Dismiss ─────────────────────────────────────── */}
       <Section
         title="Programmatic Dismiss"
         description="Use dismiss(id) to remove a specific toast, or dismissAll() to clear all toasts."
@@ -826,7 +804,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── Multiple Toasts & Max Limit ──────────────────────────────── */}
       <Section
         title="Multiple Toasts & Max Limit"
         description="Toasts stack automatically. When maxToasts is exceeded, oldest toasts are dismissed."
@@ -1012,215 +989,7 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      <Section title="ToastConfig Props" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="type"
-              type='"success"|"warning"|"error"|"info"'
-              description="Toast variant type determining colors and default icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="message"
-              type="ReactNode"
-              description="Primary toast message (ignored if content is provided)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="ReactNode"
-              description="Secondary description text (ignored if content is provided)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="ReactNode"
-              description="Custom content replacing message/description"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="duration"
-              type="number"
-              defaultVal="5000"
-              description="Auto-dismiss time in ms (Infinity for persistent)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showProgress"
-              type="boolean"
-              defaultVal="true"
-              description="Show progress bar indicating time remaining"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="progressColor"
-              type="string"
-              description="Progress bar color (CSS color value)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="ReactNode"
-              description="Custom icon (overrides type-based default)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="showCloseButton"
-              type="boolean"
-              defaultVal="true"
-              description="Show close button for manual dismissal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="pauseOnHover"
-              type="boolean"
-              defaultVal="true"
-              description="Pause auto-dismiss timer on hover"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="role"
-              type='"alert"|"status"'
-              defaultVal="auto"
-              description='ARIA role (defaults to "alert" for error/warning, "status" for success/info)'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onDismiss"
-              type="() => void"
-              description="Callback fired when toast is dismissed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="style"
-              type="CSSProperties"
-              description="Inline styles for the toast container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="closeAriaLabel"
-              type="string"
-              defaultVal='"Close notification"'
-              description="Accessible label for the close button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="classes"
-              type="ToastClasses"
-              description="Slot class overrides (7 slots)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="unstyled"
-              type="boolean"
-              defaultVal="false"
-              description="Strip all default styles"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
       <ComponentDocs name="Toast" />
-
-      <Section title="ToastClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="container"
-              type="string"
-              description="Outer toast container element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="string"
-              description="Content wrapper (icon, text, close button)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="message"
-              type="string"
-              description="Message text element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="string"
-              description="Description text element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="progress"
-              type="string"
-              description="Progress bar element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="closeButton"
-              type="string"
-              description="Close button element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="string"
-              description="Icon wrapper element"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="useToast Methods" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="toast"
-              type="(config: ToastConfig | string) => string"
-              description="Create a toast with full config or simple string message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="(message: ReactNode, options?: ToastConfig) => string"
-              description="Create a success toast"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="warning"
-              type="(message: ReactNode, options?: ToastConfig) => string"
-              description="Create a warning toast"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="(message: ReactNode, options?: ToastConfig) => string"
-              description="Create an error toast"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="info"
-              type="(message: ReactNode, options?: ToastConfig) => string"
-              description="Create an info toast"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dismiss"
-              type="(id: string) => void"
-              description="Dismiss a specific toast by ID"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dismissAll"
-              type="() => void"
-              description="Dismiss all visible toasts"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section
@@ -1302,15 +1071,6 @@ const ToastDemoContent = ({
         ]}
       />
 
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="data-toast-id" type="toast" description="Unique identifier for the toast instance" isDarkMode={dark} />
-            <PropRow name="data-toast-type" type="toast" description="'success' | 'error' | 'warning' | 'info' | 'default'" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
-
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div className={`space-y-2 text-sm text-cl-text-secondary`}>
@@ -1344,8 +1104,6 @@ const ToastDemoContent = ({
     </div>
   );
 };
-
-// ─── Wrapper Component ───────────────────────────────────────────────────────
 
 const ToastDemo = () => {
   const [position, setPosition] = useState<ToastPosition>("bottom-right");

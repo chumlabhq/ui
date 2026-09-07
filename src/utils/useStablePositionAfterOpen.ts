@@ -4,7 +4,6 @@ export function useStablePositionAfterOpen(isOpen: boolean): boolean {
   const [stable, setStable] = useState(false);
   const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
 
-  // Reset stable immediately when isOpen changes (render-time derived state)
   if (prevIsOpen !== isOpen) {
     setPrevIsOpen(isOpen);
     if (!isOpen) {

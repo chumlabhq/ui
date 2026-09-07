@@ -551,7 +551,6 @@ export default function Playground() {
     void patchSettings(patch);
   };
 
-  // ---- Track C guard ----
   if (meLoading) return <AuthSplash message="Loading the playground…" />;
   if (!authedUser) return <AuthSplash message="Taking you to sign-in…" />;
   if (onbLoading) return <AuthSplash message="Loading the playground…" />;

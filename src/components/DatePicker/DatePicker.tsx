@@ -63,8 +63,6 @@ import {
   UNSTYLED_DATEPICKER_CLASSES,
 } from "./constants.js";
 
-// ─── Sub-component interfaces ────────────────────────────────────────────────
-
 interface DropdownProps {
   value: number;
   options: { value: number; label: string }[];
@@ -233,8 +231,6 @@ const CustomDropdown = memo(function CustomDropdown({
 
 CustomDropdown.displayName = "CustomDropdown";
 
-// ─── Marker Tooltip Hook ─────────────────────────────────────────────────────
-
 /**
  * The marker tooltip is the other surface that estimates rather than measures,
  * and it had the mirror of Table's problem. It carries `role="tooltip"`, which
@@ -293,8 +289,6 @@ function useMarkerTooltip(
   // Drawer got here.
   const tooltipTarget = useHydrated() ? (portalContainer ?? document.body) : null;
 
-  // The subtree lives in its own chunk; the state and the handlers above do
-  // not. See `MarkerTooltip`.
   const Tooltip = useLazyComponent<MarkerTooltipProps>(showTooltip, loadMarkerTooltip);
 
   const tooltipPortal =
@@ -322,8 +316,6 @@ function useMarkerTooltip(
     describedBy: isVisible && Tooltip ? tooltipId : undefined,
   };
 }
-
-// ─── DayCell ─────────────────────────────────────────────────────────────────
 
 interface DayCellProps {
   day: CalendarDay;
@@ -359,7 +351,6 @@ const DayCell = memo(function DayCell({
   onFocus,
   onKeyDown,
 }: DayCellProps) {
-  // Hooks must be called unconditionally — before any early return
   const markerColor = day.marker?.color;
   const dayId = `${datePickerId}-day-${day.date.toISOString()}`;
   const {
@@ -442,15 +433,12 @@ const DayCell = memo(function DayCell({
 
 DayCell.displayName = "DayCell";
 
-
 /** See `useLazyComponent`: the loader has to be a module-scope constant. */
 const loadPresets = () =>
   import("./PresetsPanel.js").then((module) => module.PresetsPanel);
 
 const loadMarkerTooltip = () =>
   import("./MarkerTooltip.js").then((module) => module.MarkerTooltip);
-
-// ─── DatePicker ──────────────────────────────────────────────────────────────
 
 /**
  * DatePicker -- a full-featured date picker supporting single, range, and multiple
@@ -530,24 +518,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     },
     ref,
   ) => {
-    // ADR: floating content resolves its layer from the nearest overlay, so a
-    // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
-    // ─── Resolved props ───────────────────────────────────────────────
     const resolvedShowClearButton = showClearButton ?? clearable ?? true;
 
-    // ─── Merged classes ────────────────────────────────────────────────
-    // The prop, not the bare query: it was calming this component's JS-driven
-    // motion while leaving every motion utility in the class strings.
     const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
     const baseClassesRaw = unstyled
       ? UNSTYLED_DATEPICKER_CLASSES
       : DEFAULT_DATEPICKER_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
     const mergedClasses = useMemo<Required<DatePickerClasses>>(() => ({
@@ -581,18 +560,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       subItem: classesProp?.subItem ?? baseClasses.subItem,
     }), [classesProp, baseClasses]);
 
-    // ─── Reduced motion ────────────────────────────────────────────────
     useReducedMotion(reduceMotion);
 
-    // ─── IDs ───────────────────────────────────────────────────────────
     const generatedId = useId();
     const datePickerId = id || name || generatedId;
     const triggerId = `${datePickerId}-trigger`;
     const labelId = `${datePickerId}-label`;
     const valueId = `${datePickerId}-value`;
 
-  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
-  // control named only by its own value says nothing about what it selects.
   useAccessibleNameWarning("DatePicker", { label });
     const calendarId = `${datePickerId}-calendar`;
     const errorId = `${datePickerId}-error`;
@@ -601,7 +576,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const triggerRef = useRef<HTMLButtonElement>(null);
     const calendarRef = useRef<HTMLDivElement>(null);
 
-    // ─── Hook ──────────────────────────────────────────────────────────
     const {
       isOpen,
       currentValue,
@@ -643,10 +617,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       onMonthChange,
     } as UseDatePickerProps);
 
-
-    // Internal typed accessors for the unified value
-    // Read the hook's resolved selection, not the raw prop - an uncontrolled
-    // picker keeps its selection internally and the prop stays undefined.
     const singleValue = mode === "single" ? (currentValue as Date | null | undefined) : undefined;
     const rangeValue = mode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
     const multipleValue = mode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
@@ -661,14 +631,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       ? (onValueChange as ((dates: Date[] | null, dateValues: DateValue[] | null) => void) | undefined)
       : undefined;
 
-
-    // ─── Scroll lock ─────────────────────────────────────────────────────
     useEffect(() => {
       if (!isOpen || !lockScroll) return;
 
-      // Block wheel and touch scroll globally — works regardless of which element scrolls
       const preventScroll = (e: Event) => {
-        // Allow scroll inside the calendar itself
         if (calendarRef.current?.contains(e.target as Node)) return;
         e.preventDefault();
       };
@@ -676,7 +642,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       window.addEventListener("wheel", preventScroll, { capture: true, passive: false });
       window.addEventListener("touchmove", preventScroll, { capture: true, passive: false });
 
-      // Also block keyboard scroll (arrow keys, page up/down, space on body)
       const preventKeyScroll = (e: KeyboardEvent) => {
         if (calendarRef.current?.contains(e.target as Node)) return;
         const scrollKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
@@ -693,7 +658,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       };
     }, [isOpen, lockScroll]);
 
-    // ─── Click outside ─────────────────────────────────────────────────
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent | TouchEvent) => {
         const target = event.target as Node;
@@ -713,11 +677,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       };
     }, [isOpen, handleClose]);
 
-    // ─── Focus management ──────────────────────────────────────────────
-    // The panel declares `role="dialog" aria-modal="true"`, which tells
-    // assistive tech the rest of the page is inert. Until this landed nothing
-    // made that true: there was no trap, and the directory called `.focus()`
-    // nowhere. The trap is Modal's, shared through `cycleTabWithin`.
     const previousActiveElement = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
@@ -787,7 +746,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       [handleClose],
     );
 
-    // ─── Display value ─────────────────────────────────────────────────
     const displayValue = (() => {
       if (mode === "single" && singleValue) {
         return formatDate(singleValue, dateFormat, locale);
@@ -809,9 +767,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     const hasValue = displayValue !== "";
 
-    // ─── Callbacks ─────────────────────────────────────────────────────
-    // SyntheticEvent so this can be invoked from both onClick (MouseEvent)
-    // and the keyboard activation path (KeyboardEvent) without unsafe casts.
     const handleClearClick = useCallback(
       (e: React.SyntheticEvent) => {
         e.stopPropagation();
@@ -868,7 +823,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       [mode, emitSingle, emitRange, emitMultiple, setCurrentValue, handleClose],
     );
 
-    // ─── Derived ───────────────────────────────────────────────────────
     const weekdays = getWeekdayHeaders(weekStartsOn, "EEE", locale);
     const fullWidthClass = fullWidth ? "w-full" : "";
     const showFooter = showTodayButton;
@@ -878,9 +832,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     // always there before anyone can see the space it fills.
     const PresetsPanel = useLazyComponent<PresetsPanelProps>(showPresets, loadPresets);
 
-    // No hardcoded width — calendar auto-sizes to its grid content
-
-    // ─── Classes for DayCell sub-component ─────────────────────────────
     const dayCellClasses = useMemo(
       () => ({
         day: mergedClasses.item,
@@ -889,11 +840,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       [mergedClasses],
     );
 
-    // Matches the guard every other portal component uses (TimePicker.tsx:604,
-    // CascadingDropdown.tsx:552): `document` does not exist on the server, and
-    // `keepMounted` / `open` make this branch reachable during SSR.
-
-    // ─── Render ────────────────────────────────────────────────────────
     return (
       <div
         ref={ref}

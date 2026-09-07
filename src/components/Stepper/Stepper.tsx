@@ -125,7 +125,6 @@ interface StepItemInternalProps {
   nextStepStatus?: StepStatus;
 }
 
-
 /**
  * ADR 002 R4. `data-status` is this component's own enum
  * (completed | active | pending | error). `data-state` is the library-wide one,
@@ -269,7 +268,6 @@ const StepItem = memo(function StepItem({
         className={cn(
           classes.row,
         )}
-        // ADR 002 R4: the state the labelWrapperBottom key named.
         data-align={isLabelBottom ? "bottom" : undefined}
       >
         {showLabels && step.label && (
@@ -297,12 +295,10 @@ const StepItem = memo(function StepItem({
       </div>
     ) : null;
 
-  // ─── Shared interactive wrapper props ──────────────────────────────
   const sharedAriaLabel =
     stepAriaLabel ||
     (showLabels ? (statusSuffix ? `${stepLabelText}${statusSuffix}` : undefined) : undefined);
 
-  // ─── VERTICAL LAYOUT ─────────────────────────────────────────────
   if (!isHorizontal) {
     // Connector margin: step padding-left (8px from px-2) + half indicator width
     const stepPaddingLeft = 8; // px-2 = 0.5rem = 8px
@@ -375,24 +371,6 @@ const StepItem = memo(function StepItem({
     );
   }
 
-  // ─── HORIZONTAL LAYOUT ────────────────────────────────────────────
-  //
-  // Connectors are rendered as SEPARATE <li> elements by the Stepper
-  // parent (between step <li> items). This StepItem only renders the
-  // step itself.
-  //
-  // labelPosition="right":
-  //   Button wraps [indicator + label] in a horizontal row.
-  //   Connector <li> sits between steps at the same vertical center.
-  //
-  // labelPosition="bottom":
-  //   The <li> uses a 2-row CSS grid so that:
-  //   - Row 1: indicator (button) — fixed height, connector aligns here
-  //   - Row 2: label/description — below, handled by CSS, never affects
-  //     the connector's vertical position
-  //   The button wraps ONLY the indicator. The label is a separate
-  //   element in row 2. This cleanly separates concerns.
-
   if (isLabelBottom) {
     // Button wraps only the indicator for clean connector alignment
     const bottomAriaLabel = `${stepLabelText}${statusSuffix}`;
@@ -450,7 +428,6 @@ const StepItem = memo(function StepItem({
     );
   }
 
-  // labelPosition="right" — button wraps indicator + label together
   const stepContent = isInteractive ? (
     <button
       ref={(el) => setStepRef(index, el)}
@@ -553,9 +530,6 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
     const baseClassesRaw = unstyled
       ? UNSTYLED_STEPPER_CLASSES
       : DEFAULT_STEPPER_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     // Variant sizing is a default class set like any other, so it takes the

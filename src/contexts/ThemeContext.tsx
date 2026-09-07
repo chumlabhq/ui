@@ -32,7 +32,7 @@ function readInitialTheme(): Theme {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored === "light" || stored === "dark") return stored;
   } catch {
-    /* SSR or restricted storage */
+    // Reading localStorage throws outright when site data is blocked.
   }
   return "dark";
 }
@@ -62,7 +62,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     try {
       window.localStorage.setItem(STORAGE_KEY, theme);
     } catch {
-      /* ignore */
+      // The theme still applies; it just will not survive a reload.
     }
     // Two RAFs: first ensures the new theme styles have been applied,
     // second re-enables transitions cleanly so the next interaction

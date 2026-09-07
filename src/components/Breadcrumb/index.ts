@@ -1,4 +1,3 @@
-// AI Knowledge: See BREADCRUMB.ai.md in this directory for full usage guide, props, styling, and patterns.
 
 export { default as Breadcrumb } from "./Breadcrumb.js";
 

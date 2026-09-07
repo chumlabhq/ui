@@ -76,11 +76,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       }
     }, [disabled, isChecked, setIsChecked]);
 
-    // ─── Merged classes ─────────────────────────────────────────────────
     const baseClassesRaw = unstyled ? UNSTYLED_SWITCH_CLASSES : DEFAULT_SWITCH_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<SwitchClasses> = useMemo(
       () => ({
@@ -122,7 +118,6 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         style={style}
         data-disabled={disabled || undefined}
         data-checked={isChecked || undefined}
-        // ADR 002 R4; Radix Switch precedent.
         data-state={isChecked ? "checked" : "unchecked"}
         data-error={error || undefined}
         data-loading={loading || undefined}
@@ -195,7 +190,6 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           >
             <span
               className={mergedClasses.thumb || undefined}
-              // ADR 002 R4: the state the checkedThumb/uncheckedThumb keys named.
               data-state={isChecked ? "checked" : "unchecked"}
               style={transitionStyle}
             >

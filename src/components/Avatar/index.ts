@@ -1,4 +1,3 @@
-// AI Knowledge: See AVATAR.ai.md in this directory for full usage guide, props, styling, and patterns.
 
 export { Avatar } from "./Avatar.js";
 export { AvatarGroup } from "./components/AvatarGroup.js";

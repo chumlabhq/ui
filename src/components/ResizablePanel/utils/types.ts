@@ -1,6 +1,7 @@
 import type { ReactNode, ComponentPropsWithoutRef } from "react";
 
 export interface ResizablePanelClasses {
+  /** Root container div that wraps children and the handle */
   root?: string;
   handle?: string;
 }

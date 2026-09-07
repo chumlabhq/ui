@@ -539,8 +539,6 @@ function walk(dir, extension, found = []) {
   return found;
 }
 
-// ── the package under test ────────────────────────────────────────────────
-
 function pack(into) {
   log("▸ npm pack");
   const { status, output, stdout } = run("npm", ["pack", "--pack-destination", into], { cwd: ROOT });
@@ -571,8 +569,6 @@ function repack(tarball, into, suffix, mutate) {
   if (status !== 0) throw new Error(`repack failed: ${output}`);
   return planted;
 }
-
-// ── one consumer ──────────────────────────────────────────────────────────
 
 function scaffold(target, tarball, into) {
   const dir = join(into, target.name);
@@ -711,8 +707,6 @@ async function verifyConsumer(target, tarball, into) {
   return { target: target.name, seconds: Math.round((Date.now() - started) / 1000), steps, dir, routes };
 }
 
-// ── the SSR record ────────────────────────────────────────────────────────
-
 /**
  * Writes what the matrix measured about hydration, per component.
  *
@@ -772,8 +766,6 @@ function writeSsrRecord(results) {
   );
 }
 
-// ── reporting ─────────────────────────────────────────────────────────────
-
 function report(results, packaging) {
   log("\n══ consumer matrix ═════════════════════════════════════════════");
   for (const check of packaging) {
@@ -805,8 +797,6 @@ function report(results, packaging) {
   }
   return bad.length === 0;
 }
-
-// ── self-check ────────────────────────────────────────────────────────────
 
 /**
  * Two plants, each aimed at a failure this matrix exists to catch and at
@@ -913,8 +903,6 @@ async function selfCheck(tarball, into) {
   log("════════════════════════════════════════════════════════════════");
   return ok;
 }
-
-// ── driver ────────────────────────────────────────────────────────────────
 
 const workspace = mkdtempSync(join(tmpdir(), "chumlab-consumers-"));
 let ok = false;

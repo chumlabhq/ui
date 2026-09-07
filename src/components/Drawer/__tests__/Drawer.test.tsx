@@ -315,7 +315,6 @@ describe("Drawer", () => {
       const user = userEvent.setup();
       renderDrawer();
 
-      // Wait for drawer to fully mount and attach event listeners
       await act(async () => {
         await new Promise((r) => setTimeout(r, 100));
       });
@@ -862,7 +861,6 @@ describe("Drawer", () => {
       });
 
       const panel = screen.getByRole("dialog");
-      // Mock offsetWidth
       Object.defineProperty(panel, "offsetWidth", { value: 300, configurable: true });
 
       await act(async () => {
@@ -895,7 +893,6 @@ describe("Drawer", () => {
 
     it("overlay opacity is set when drawer is visualOpen", async () => {
       renderDrawer({ overlayOpacity: 0.7 });
-      // Wait for visual open via RAF
       await act(async () => {
         await new Promise((r) => setTimeout(r, 50));
       });
@@ -1098,7 +1095,6 @@ describe("Drawer", () => {
         vi.advanceTimersByTime(200);
       });
 
-      // Should not throw
       expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
 

@@ -9,8 +9,6 @@ import {
   Section,
   DemoWrapper,
   DemoLabel,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -23,8 +21,6 @@ import {
   searchCountries,
   type Country,
 } from "./lib/countries.js";
-
-// ─── Static Data ────────────────────────────────────────────────────────────
 
 const fruitOptions: SearchableDropdownOption[] = [
   { value: "apple", label: "Apple" },
@@ -116,8 +112,6 @@ const disabledItemOptions: SearchableDropdownOption[] = [
   { value: "option5", label: "Available Option 3" },
 ];
 
-// ─── Icons ──────────────────────────────────────────────────────────────────
-
 const StarIcon = ({ className }: { className?: string }) => (
   <svg
     viewBox="0 0 20 20"
@@ -155,8 +149,6 @@ const CustomChevronIcon = ({
   </svg>
 );
 
-// ─── Themed Classes ─────────────────────────────────────────────────────────
-
 const getClasses = (dark: boolean) => ({
   dropdown: {
     wrapper: "relative",
@@ -187,8 +179,6 @@ const getClasses = (dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
-
-// ─── Extra theme variants for the theme demos ───────────────────────────────
 
 const darkTheme = {
   wrapper: "relative",
@@ -235,8 +225,6 @@ const warmTheme = {
   checkIcon: "w-4 h-4 shrink-0 text-cl-warning",
   noResults: "px-3 py-4 text-sm text-cl-warning text-center",
 };
-
-// ─── Demo ───────────────────────────────────────────────────────────────────
 
 const SearchableDropdownDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -1631,217 +1619,6 @@ const SearchableDropdownDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="SearchableDropdown" />
-
-      <Section title="SearchableDropdownClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="wrapper"
-              type="string"
-              description="Inner wrapper around trigger and portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="trigger"
-              type="string"
-              description="Trigger button (combobox)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="triggerText"
-              type="string"
-              description="Text span inside trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="string"
-              description="Dropdown popup container (portal)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="searchInput"
-              type="string"
-              description="Search input area wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="searchInputElement"
-              type="string"
-              description="Search input element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="searchIcon"
-              type="string"
-              description="Search icon element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionList"
-              type="string"
-              description="Scrollable option list wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="option"
-              type="string"
-              description="Individual option element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionSelected"
-              type="string"
-              description="Additional class for selected option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionFocused"
-              type="string"
-              description="Additional class for keyboard-focused option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionDisabled"
-              type="string"
-              description="Additional class for disabled option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="chevron"
-              type="string"
-              description="Chevron icon element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkIcon"
-              type="string"
-              description="Check/selected icon element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="clearIcon"
-              type="string"
-              description="Clear button element (shown when clearable)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="noResults"
-              type="string"
-              description="Empty state container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shimmer"
-              type="string"
-              description="Shimmer container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shimmerItem"
-              type="string"
-              description="Individual shimmer skeleton item"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ─────────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-open"
-              type="root, trigger"
-              description="Present when the dropdown is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, trigger, option"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root, trigger"
-              description="Present when in error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-valid"
-              type="root, trigger"
-              description="Present when in success state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-full-width"
-              type="root"
-              description="Present when fullWidth is true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-placeholder"
-              type="trigger"
-              description="Present when no option is selected"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-selected"
-              type="option"
-              description="Present on the selected option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-highlighted"
-              type="option"
-              description="Present on the keyboard-focused option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-value"
-              type="option"
-              description="The option's value string"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-state"
-              type="content (portal)"
-              description='"open" or "closed"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-position"
-              type="content (portal)"
-              description='"top" or "bottom" (actual position)'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ───────────────────────────────────────────────── */}
       <Section

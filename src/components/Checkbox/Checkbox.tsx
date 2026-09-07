@@ -76,7 +76,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const generatedId = useId();
     const checkboxId = id || generatedId;
 
-    // A control nobody can name is a control nobody can use. Dev-only.
     useAccessibleNameWarning("Checkbox", {
       label,
       "aria-label": (rest as Record<string, unknown>)["aria-label"],
@@ -101,11 +100,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
     }, [indeterminate]);
 
-    // ─── Merged classes system ──────────────────────────────────────────
     const baseClassesRaw = unstyled ? UNSTYLED_CHECKBOX_CLASSES : DEFAULT_CHECKBOX_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<CheckboxClasses> = useMemo(
       () => ({
@@ -120,7 +115,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       [classesProp, baseClasses],
     );
 
-    // ─── Size & shape ───────────────────────────────────────────────────
     const { boxSize, iconSize } = useMemo(() => {
       if (typeof size === "number") {
         return { boxSize: size, iconSize: Math.round(size * 0.6) };
@@ -135,14 +129,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       return { width: boxSize, height: boxSize };
     }, [boxSize]);
 
-    // ─── State class ────────────────────────────────────────────────────
-    // ADR 002 R4: checked/unchecked/indeterminate are data-state values on
-    // `control`, so there is no state class to pick between.
     const stateClassName = undefined;
 
-    // ─── Handlers ───────────────────────────────────────────────────────
-    // The native readonly attribute does nothing on checkboxes, so the guard has
-    // to live here - readOnly blocks the change but must not read as disabled.
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!disabled && !readOnly) {
@@ -152,7 +140,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       [disabled, readOnly, setIsChecked],
     );
 
-    // ─── Icon ───────────────────────────────────────────────────────────
     const renderedIcon = useMemo(() => {
       if (indeterminate) {
         return indeterminateIcon || <IndeterminateIcon className={mergedClasses.itemIndicator || undefined} size={iconSize} />;
@@ -163,7 +150,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       return uncheckedIcon || null;
     }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, mergedClasses.itemIndicator, iconSize]);
 
-    // ─── Described by ───────────────────────────────────────────────────
     const describedBy = [
       description ? descriptionId : null,
       error && errorMessage ? errorId : null,

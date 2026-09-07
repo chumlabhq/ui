@@ -1,4 +1,3 @@
-// AI Knowledge: See COUNTRYFLAG.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { CountryFlag } from "./CountryFlag.js";
 export { CountryFlagGroup, CountryFlagGroupCount } from "./components/CountryFlagGroup.js";
 export {

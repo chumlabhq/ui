@@ -1,4 +1,3 @@
-// AI Knowledge: See ACCORDION.ai.md in this directory for full usage guide, props, styling, and patterns.
 
 export { default as Accordion } from "./Accordion.js";
 export { default as AccordionItem } from "./components/AccordionItem.js";
@@ -66,4 +65,3 @@ export {
   useIsItemExpanded,
   useExpandedStore,
 } from "./utils/context.js";
-

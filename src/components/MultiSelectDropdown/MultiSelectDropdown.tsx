@@ -87,8 +87,6 @@ const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
       data-dropdown-id={dropdownId}
     >
       {status}
-      {/* The listbox owns options and nothing else; the status message is its
-          sibling in the panel. */}
       <div
         id={listboxId}
         role="listbox"
@@ -185,15 +183,10 @@ const MultiSelectDropdown = forwardRef<
     },
     ref,
   ) => {
-    // ADR: floating content resolves its layer from the nearest overlay, so a
-    // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_MULTISELECTDROPDOWN_CLASSES : DEFAULT_MULTISELECTDROPDOWN_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<MultiSelectDropdownClasses> = useMemo(
@@ -231,8 +224,6 @@ const MultiSelectDropdown = forwardRef<
     const labelId = `${dropdownId}-label`;
     const valueId = `${dropdownId}-value`;
 
-  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
-  // control named only by its own value says nothing about what it selects.
   useAccessibleNameWarning("MultiSelectDropdown", { label, "aria-label": ariaLabel });
     const errorId = `${dropdownId}-error`;
 
@@ -306,13 +297,11 @@ const MultiSelectDropdown = forwardRef<
       if (optionEl) scrollOptionIntoView(optionEl);
     }, [isOpen, focusedIndex, dropdownId]);
 
-    // Scroll lock when dropdown is open
     const dropdownContentRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
       if (!lockScroll || !isOpen || !isBrowser) return;
 
       const preventScroll = (e: Event) => {
-        // Allow scroll inside the dropdown content itself
         if (dropdownContentRef.current?.contains(e.target as Node)) return;
         e.preventDefault();
       };
@@ -553,9 +542,6 @@ const MultiSelectDropdown = forwardRef<
           {clearable && currentValue.length > 0 && (
             <button
               type="button"
-              // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
-              // with a pointer — and for a single select there is no other way
-              // back to an empty value.
               aria-label="Clear all selections"
               className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {

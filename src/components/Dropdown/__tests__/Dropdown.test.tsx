@@ -111,13 +111,10 @@ describe('Dropdown - Controlled Behavior', () => {
       />
     );
     
-    // Open dropdown
     await user.click(screen.getByRole('combobox'));
     
-    // Wait for option to be visible
     const cherryOption = await screen.findByRole('option', { name: 'Cherry' });
     
-    // Select option
     await user.click(cherryOption);
     
     expect(handleChange).toHaveBeenCalledWith('cherry', expect.objectContaining({
@@ -140,7 +137,6 @@ describe('Dropdown - Controlled Behavior', () => {
     
     expect(screen.getByRole('combobox')).toHaveTextContent('Apple');
     
-    // Try to select different option
     await user.click(screen.getByRole('combobox'));
     const bananaOption = await screen.findByRole('option', { name: 'Banana' });
     await user.click(bananaOption);
@@ -148,7 +144,6 @@ describe('Dropdown - Controlled Behavior', () => {
     // Value shouldn't change without parent updating
     expect(screen.getByRole('combobox')).toHaveTextContent('Apple');
     
-    // Update from parent
     rerender(
       <Dropdown 
         options={fruitOptions}
@@ -171,11 +166,9 @@ describe('Dropdown - Controlled Behavior', () => {
       />
     );
     
-    // Open
     await user.click(screen.getByRole('combobox'));
     expect(handleOpenChange).toHaveBeenCalledWith(true);
     
-    // Close
     await user.keyboard('{Escape}');
     expect(handleOpenChange).toHaveBeenCalledWith(false);
   });
@@ -195,7 +188,6 @@ describe('Dropdown - Uncontrolled Behavior', () => {
     
     expect(screen.getByRole('combobox')).toHaveTextContent('Apple');
     
-    // Select new option
     await user.click(screen.getByRole('combobox'));
     const elderberryOption = await screen.findByRole('option', { name: 'Elderberry' });
     await user.click(elderberryOption);
@@ -248,7 +240,6 @@ describe('Dropdown - Click Interactions', () => {
     const disabledOption = await screen.findByRole('option', { name: /option 2.*disabled/i });
     await user.click(disabledOption);
     
-    // Should stay open
     expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'true');
   });
 
@@ -280,15 +271,12 @@ describe('Dropdown - Click Interactions', () => {
     
     const trigger = screen.getByRole('combobox');
     
-    // Open
     await user.click(trigger);
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     
-    // Close
     await user.click(trigger);
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
     
-    // Open again
     await user.click(trigger);
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
   });
@@ -345,7 +333,6 @@ describe('Dropdown - Keyboard Navigation', () => {
     await user.keyboard('{ArrowDown}'); // Move to third option (Cherry)
     await user.keyboard('{Enter}');     // Select Cherry
     
-    // Verify Cherry was selected
     await waitFor(() => {
       expect(handleChange).toHaveBeenCalledWith('cherry', expect.any(Object));
     }, { timeout: 3000 });
@@ -365,14 +352,13 @@ describe('Dropdown - Keyboard Navigation', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    await user.keyboard('{ArrowDown}'); // Open and focus first (Apple)
+    await user.keyboard('{ArrowDown}');
     await waitForDropdownOpen();
     await user.keyboard('{ArrowDown}'); // Second (Banana)
     await user.keyboard('{ArrowDown}'); // Third (Cherry)
-    await user.keyboard('{ArrowUp}');   // Back to second (Banana)
-    await user.keyboard('{Enter}');     // Select Banana
+    await user.keyboard('{ArrowUp}');
+    await user.keyboard('{Enter}');
     
-    // Verify Banana was selected
     await waitFor(() => {
       expect(handleChange).toHaveBeenCalledWith('banana', expect.any(Object));
     }, { timeout: 3000 });
@@ -386,7 +372,7 @@ describe('Dropdown - Keyboard Navigation', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    await user.keyboard('{ArrowDown}'); // Open
+    await user.keyboard('{ArrowDown}');
     await waitForDropdownOpen();
     await user.keyboard('{End}');       // Go to last
     await user.keyboard('{Home}');      // Jump to first
@@ -405,7 +391,7 @@ describe('Dropdown - Keyboard Navigation', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    await user.keyboard('{ArrowDown}'); // Open
+    await user.keyboard('{ArrowDown}');
     await waitForDropdownOpen();
     await user.keyboard('{End}');       // Jump to last
     
@@ -429,16 +415,15 @@ describe('Dropdown - Keyboard Navigation', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    await user.keyboard('{ArrowDown}'); // Open and focus first (Apple)
+    await user.keyboard('{ArrowDown}');
     await waitForDropdownOpen();
-    await user.keyboard('{ArrowDown}'); // Move to second (Banana)
+    await user.keyboard('{ArrowDown}');
     
-    // Wait for focus to be set
     await waitFor(() => {
       expect(trigger.getAttribute('aria-activedescendant')).toBeTruthy();
     });
     
-    await user.keyboard('{Enter}');     // Select Banana
+    await user.keyboard('{Enter}');
     
     await waitFor(() => {
       expect(handleChange).toHaveBeenCalledWith('banana', expect.any(Object));
@@ -460,11 +445,10 @@ describe('Dropdown - Keyboard Navigation', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    await user.keyboard('{ArrowDown}'); // Open and focus first (Apple)
+    await user.keyboard('{ArrowDown}');
     await waitForDropdownOpen();
-    await user.keyboard('{ArrowDown}'); // Move to second (Banana)
+    await user.keyboard('{ArrowDown}');
     
-    // Wait for focus to be set
     await waitFor(() => {
       expect(trigger.getAttribute('aria-activedescendant')).toBeTruthy();
     });
@@ -525,7 +509,6 @@ describe('Dropdown - Keyboard Navigation', () => {
     await user.keyboard('{ArrowDown}'); // Skip disabled (Option 4), focus Option 5
     await user.keyboard('{Enter}');     // Select Option 5
     
-    // Verify Option 5 was selected (disabled options were skipped)
     await waitFor(() => {
       expect(handleChange).toHaveBeenCalledWith('opt5', expect.any(Object));
     }, { timeout: 3000 });
@@ -539,7 +522,7 @@ describe('Dropdown - Keyboard Navigation', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    await user.keyboard('{ArrowDown}'); // Open
+    await user.keyboard('{ArrowDown}');
     await waitForDropdownOpen();
     await user.keyboard('{End}');       // Last option
     await user.keyboard('{ArrowDown}'); // Wrap to first
@@ -564,12 +547,11 @@ describe('Dropdown - Keyboard Navigation', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    await user.keyboard('{ArrowDown}'); // Open and focus first (Apple)
+    await user.keyboard('{ArrowDown}');
     await waitForDropdownOpen();
     await user.keyboard('{ArrowUp}');   // Wrap from first to last (Elderberry)
     await user.keyboard('{Enter}');     // Select last (Elderberry)
     
-    // Verify Elderberry (last option) was selected - wrapping works
     await waitFor(() => {
       expect(handleChange).toHaveBeenCalledWith('elderberry', expect.any(Object));
     }, { timeout: 3000 });
@@ -604,7 +586,6 @@ describe('Dropdown - Type-ahead Search', () => {
     const trigger = screen.getByRole('combobox');
     trigger.focus();
     
-    // Type 'el' quickly
     await user.keyboard('el');
     
     await waitForDropdownOpen();
@@ -652,7 +633,6 @@ describe('Dropdown - Clearable Behavior', () => {
     
     render(<Dropdown options={fruitOptions} clearable />);
     
-    // Select option
     await user.click(screen.getByRole('combobox'));
     const appleOption = await screen.findByRole('option', { name: 'Apple' });
     await user.click(appleOption);
@@ -694,7 +674,6 @@ describe('Dropdown - Clearable Behavior', () => {
     
     await user.click(screen.getByRole('combobox'));
     
-    // Click already-selected option
     const cherryOption = await screen.findByRole('option', { name: 'Cherry' });
     await user.click(cherryOption);
     
@@ -1184,7 +1163,6 @@ describe('Dropdown - Custom Icons', () => {
       />
     );
     
-    // Chevron should not be in the document
     const trigger = screen.getByRole('combobox');
     expect(within(trigger).queryByRole('img', { hidden: true })).not.toBeInTheDocument();
   });
@@ -1269,13 +1247,11 @@ describe('Dropdown - Position & Portal', () => {
     const portal = container.ownerDocument.body.querySelector('[data-state="closed"]');
     expect(portal).toBeInTheDocument();
     
-    // Open
     await user.click(trigger);
     await waitForDropdownOpen();
     const openPortal = container.ownerDocument.body.querySelector('[data-state="open"]');
     expect(openPortal).toBeVisible();
     
-    // Close - should still be in DOM but hidden via data-state
     await user.keyboard('{Escape}');
     await waitFor(() => {
       const closedPortal = container.ownerDocument.body.querySelector('[data-state="closed"]');
@@ -1320,12 +1296,10 @@ describe('Dropdown - Edge Cases', () => {
     
     const trigger = screen.getByRole('combobox');
     
-    // Rapid clicks
     for (let i = 0; i < 10; i++) {
       await user.click(trigger);
     }
     
-    // Should be in a valid state
     expect(trigger).toHaveAttribute('aria-expanded', expect.stringMatching(/true|false/));
   });
 
@@ -1334,7 +1308,6 @@ describe('Dropdown - Edge Cases', () => {
 
     unmount();
 
-    // Should not throw errors
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 });
@@ -1440,13 +1413,11 @@ describe('Dropdown - Uncontrolled Mode with onValueChange', () => {
 
     const trigger = screen.getByRole('combobox');
 
-    // Select first option
     await user.click(trigger);
     const apple = await screen.findByRole('option', { name: 'Apple' });
     await user.click(apple);
     expect(trigger).toHaveTextContent('Apple');
 
-    // Select another option
     await user.click(trigger);
     const banana = await screen.findByRole('option', { name: 'Banana' });
     await user.click(banana);
@@ -1541,7 +1512,6 @@ describe('Dropdown - Shimmer Loading State', () => {
     await user.click(screen.getByRole('combobox'));
     await waitForDropdownOpen();
 
-    // Transition from loading to loaded
     rerender(<Dropdown options={fruitOptions} loading={false} defaultOpen />);
 
     await waitFor(() => {
@@ -1585,7 +1555,6 @@ describe('Dropdown - LockScroll', () => {
 
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
 
-    // Close and verify cleanup
     await user.keyboard('{Escape}');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
   });
@@ -1656,12 +1625,10 @@ describe('Dropdown - LockScroll Advanced', () => {
 
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
 
-    // Dispatch a wheel event inside the listbox — should NOT be prevented
     const listbox = screen.getByRole('listbox', { hidden: true });
     const wheelEventInside = new Event('wheel', { bubbles: true, cancelable: true });
     listbox.dispatchEvent(wheelEventInside);
 
-    // The event should NOT be defaultPrevented (scroll inside dropdown is allowed)
     expect(wheelEventInside.defaultPrevented).toBe(false);
   });
 
@@ -1676,7 +1643,6 @@ describe('Dropdown - LockScroll Advanced', () => {
 
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
 
-    // Dispatch a wheel event outside the dropdown content (on document.body)
     const wheelEventOutside = new Event('wheel', { bubbles: true, cancelable: true });
     Object.defineProperty(wheelEventOutside, 'target', { value: document.body, configurable: true });
 
@@ -1698,11 +1664,9 @@ describe('Dropdown - LockScroll Advanced', () => {
     await user.click(trigger);
     await waitForDropdownOpen();
 
-    // Verify touchmove listener was added
     const touchmoveAdded = addSpy.mock.calls.some(([type]) => type === 'touchmove');
     expect(touchmoveAdded).toBe(true);
 
-    // Close and verify cleanup
     await user.keyboard('{Escape}');
     await waitFor(() => {
       expect(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -1726,14 +1690,12 @@ describe('Dropdown - VisualViewport Repositioning', () => {
     await user.click(trigger);
     await waitForDropdownOpen();
 
-    // Simulate visualViewport resize event if available
     const vv = window.visualViewport;
     if (vv && typeof vv.dispatchEvent === 'function') {
       const resizeEvent = new Event('resize');
       vv.dispatchEvent(resizeEvent);
     }
 
-    // Dropdown should still be open and functional
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('listbox', { hidden: true })).toBeInTheDocument();
   });
@@ -1747,14 +1709,12 @@ describe('Dropdown - VisualViewport Repositioning', () => {
     await user.click(trigger);
     await waitForDropdownOpen();
 
-    // Simulate visualViewport scroll event if available
     const vv = window.visualViewport;
     if (vv && typeof vv.dispatchEvent === 'function') {
       const scrollEvent = new Event('scroll');
       vv.dispatchEvent(scrollEvent);
     }
 
-    // Dropdown should still be open and functional
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('listbox', { hidden: true })).toBeInTheDocument();
   });
@@ -1770,13 +1730,10 @@ describe('Dropdown - ResizeObserver on Dropdown Content', () => {
     await user.click(trigger);
     await waitForDropdownOpen();
 
-    // Trigger a window resize which causes DropdownContent to reposition
     window.dispatchEvent(new Event('resize'));
 
-    // Wait a tick for rAF callbacks
     await new Promise(resolve => setTimeout(resolve, 50));
 
-    // Dropdown should still be open
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('listbox', { hidden: true })).toBeInTheDocument();
   });
@@ -1815,24 +1772,20 @@ describe('Dropdown - VisualViewport listeners (lines 249-263)', () => {
       await user.click(trigger);
       await waitForDropdownOpen();
 
-      // visualViewport.addEventListener should have been called for resize and scroll
       const addCalls = mockVV.addEventListener.mock.calls.map(([type]) => type);
       expect(addCalls).toContain('resize');
       expect(addCalls).toContain('scroll');
 
-      // Dispatch a viewport resize to exercise the handler path (lines 253-254)
       mockVV.dispatchEvent(new Event('resize'));
 
       // Dropdown should stay open after viewport resize
       expect(trigger).toHaveAttribute('aria-expanded', 'true');
 
-      // Close the dropdown — this should trigger cleanup (lines 257-260)
       await user.keyboard('{Escape}');
       await waitFor(() => {
         expect(trigger).toHaveAttribute('aria-expanded', 'false');
       });
 
-      // removeEventListener should have been called for resize and scroll
       const removeCalls = mockVV.removeEventListener.mock.calls.map(([type]) => type);
       expect(removeCalls).toContain('resize');
       expect(removeCalls).toContain('scroll');
@@ -1850,7 +1803,6 @@ describe('Dropdown - VisualViewport listeners (lines 249-263)', () => {
   });
 
   it('skips visualViewport listener when vv.addEventListener is not a function (line 248 guard)', async () => {
-    // Set visualViewport to an object without addEventListener
     const origVV = Object.getOwnPropertyDescriptor(window, 'visualViewport');
     Object.defineProperty(window, 'visualViewport', {
       value: { width: 1024, height: 768 } as unknown as VisualViewport,
@@ -1863,7 +1815,6 @@ describe('Dropdown - VisualViewport listeners (lines 249-263)', () => {
       render(<Dropdown options={fruitOptions} />);
 
       const trigger = screen.getByRole('combobox');
-      // Should open without errors even when addEventListener is missing
       await user.click(trigger);
       await waitForDropdownOpen();
 
@@ -1970,7 +1921,6 @@ describe('Dropdown - scroll handler cancels existing rAF (lines 193-196)', () =>
     window.dispatchEvent(new Event('scroll', { bubbles: true }));
     window.dispatchEvent(new Event('scroll', { bubbles: true }));
 
-    // cancelAnimationFrame should have been called at least once
     expect(cancelSpy).toHaveBeenCalled();
 
     cancelSpy.mockRestore();

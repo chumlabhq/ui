@@ -111,7 +111,6 @@ describe("TimePicker", () => {
       const input = screen.getByRole("combobox");
       await user.click(input);
 
-      // Dropdown should be expanded
       expect(input).toHaveAttribute("aria-expanded", "true");
     });
   });
@@ -305,7 +304,6 @@ describe("TimePicker", () => {
     });
   });
 
-  // ─── Dropdown keyboard navigation ────────────────────────────────────
   describe("Dropdown keyboard navigation", () => {
     it("opens dropdown on ArrowDown and focuses first option", async () => {
       const user = userEvent.setup();
@@ -313,11 +311,9 @@ describe("TimePicker", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
-      // Close first
       await user.keyboard("{Escape}");
       expect(input).toHaveAttribute("aria-expanded", "false");
 
-      // ArrowDown should reopen
       await user.keyboard("{ArrowDown}");
       expect(input).toHaveAttribute("aria-expanded", "true");
     });
@@ -354,7 +350,6 @@ describe("TimePicker", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
-      // Go down twice then select
       await user.keyboard("{ArrowDown}{ArrowDown}{Enter}");
 
       // Second option is 01:00
@@ -362,7 +357,6 @@ describe("TimePicker", () => {
     });
   });
 
-  // ─── Typing and filtering ────────────────────────────────────────────
   describe("Typing and filtering", () => {
     it("filters dropdown options as user types", async () => {
       const user = userEvent.setup();
@@ -372,7 +366,6 @@ describe("TimePicker", () => {
       await user.click(input);
       await user.type(input, "14");
 
-      // The portal-rendered listbox should contain the filtered option
       const options = document.querySelectorAll("[role='option']");
       const labels = Array.from(options).map((o) => o.getAttribute("aria-label") || o.textContent);
       expect(labels.some(l => l?.includes("14:00"))).toBe(true);
@@ -413,7 +406,6 @@ describe("TimePicker", () => {
     });
   });
 
-  // ─── Unstyled mode ──────────────────────────────────────────────────
   describe("Unstyled mode", () => {
     // ADR 001: the root default is "inline-flex flex-col gap-1 text-cl-text …",
     // which carries both categories — display and flex-direction are structural
@@ -428,7 +420,6 @@ describe("TimePicker", () => {
     });
   });
 
-  // ─── Loading state ──────────────────────────────────────────────────
   describe("Loading state", () => {
     it("sets data-loading on root when loading", () => {
       const { container } = render(<TimePicker loading />);
@@ -437,7 +428,6 @@ describe("TimePicker", () => {
     });
   });
 
-  // ─── Data attributes ───────────────────────────────────────────────
   describe("Data attributes on open", () => {
     it("sets data-open on root when opened", async () => {
       const user = userEvent.setup();
@@ -510,7 +500,6 @@ describe("TimePicker", () => {
         getData: () => "14:30",
       };
 
-      // Simulate paste event
       input.dispatchEvent(
         Object.assign(new Event("paste", { bubbles: true }), {
           clipboardData,
@@ -531,7 +520,6 @@ describe("TimePicker", () => {
       await user.click(input);
       await user.keyboard("{ArrowDown}{ArrowDown}{Home}");
 
-      // Should not throw and input should still be expanded
       expect(input).toHaveAttribute("aria-expanded", "true");
     });
 
@@ -556,7 +544,6 @@ describe("TimePicker", () => {
       await user.type(input, "14:30");
       await user.keyboard("{Tab}");
 
-      // Tab should commit the typed value
       expect(input).toBeInTheDocument();
     });
 
@@ -574,9 +561,6 @@ describe("TimePicker", () => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════
-// ClockFace standalone tests
-// ═══════════════════════════════════════════════════════════════════════
 describe("ClockFace", () => {
   const blankClasses: Required<ClockFaceClasses> = {
     clockContent: UNSTYLED_TIMEPICKER_CLASSES.clockContent,
@@ -665,7 +649,6 @@ describe("ClockFace", () => {
     it("renders numbers 1-12 without inner ring", () => {
       render(<ClockFace {...defaultProps} format="12h" value={{ hours: 3, minutes: 0, period: "AM" }} />);
       const slider = screen.getByRole("slider");
-      // Should have 12 on the face, no inner ring
       const innerEls = slider.querySelectorAll("[data-inner]");
       expect(innerEls.length).toBe(0);
     });
@@ -721,7 +704,6 @@ describe("ClockFace", () => {
       const user = userEvent.setup();
       render(<ClockFace {...defaultProps} minuteStep={15} />);
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
 
@@ -1001,7 +983,6 @@ describe("ClockFace", () => {
       const onValueChange = vi.fn();
       render(<ClockFace {...defaultProps} minuteStep={5} onValueChange={onValueChange} />);
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
 
@@ -1019,7 +1000,6 @@ describe("ClockFace", () => {
       const onValueChange = vi.fn();
       render(<ClockFace {...defaultProps} minuteStep={5} onValueChange={onValueChange} />);
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
 
@@ -1039,7 +1019,6 @@ describe("ClockFace", () => {
         <ClockFace {...defaultProps} minuteStep={5} value={{ hours: 10, minutes: 55 }} onValueChange={onValueChange} />,
       );
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "55");
       await user.click(minutesBtn!);
 
@@ -1057,7 +1036,6 @@ describe("ClockFace", () => {
       const onValueChange = vi.fn();
       render(<ClockFace {...defaultProps} onValueChange={onValueChange} />);
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
 
@@ -1075,7 +1053,6 @@ describe("ClockFace", () => {
       const onValueChange = vi.fn();
       render(<ClockFace {...defaultProps} minuteStep={15} onValueChange={onValueChange} />);
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
 
@@ -1093,7 +1070,6 @@ describe("ClockFace", () => {
       const onValueChange = vi.fn();
       render(<ClockFace {...defaultProps} minuteStep={5} onValueChange={onValueChange} />);
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
 
@@ -1209,7 +1185,6 @@ describe("ClockFace", () => {
         />,
       );
 
-      // Switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "00");
       await user.click(minutesBtn!);
 
@@ -1223,7 +1198,6 @@ describe("ClockFace", () => {
   describe("Display with null value", () => {
     it("uses default time value when value is null", () => {
       render(<ClockFace {...defaultProps} value={null} />);
-      // Should still render without error
       expect(screen.getByRole("slider")).toBeInTheDocument();
       expect(screen.getByLabelText("Select hours")).toBeInTheDocument();
     });
@@ -1261,12 +1235,10 @@ describe("ClockFace", () => {
       const user = userEvent.setup();
       render(<ClockFace {...defaultProps} />);
 
-      // Focus the first button to set up for Tab trap
       const buttons = screen.getAllByRole("button");
       const firstButton = buttons[0];
       firstButton.focus();
 
-      // Press Tab repeatedly - should not throw
       await user.keyboard("{Tab}");
       await user.keyboard("{Tab}");
       expect(document.activeElement).toBeTruthy();
@@ -1289,12 +1261,10 @@ describe("ClockFace", () => {
       const user = userEvent.setup();
       render(<ClockFace {...defaultProps} />);
 
-      // First switch to minutes
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
       expect(screen.getByLabelText("Select minutes")).toBeInTheDocument();
 
-      // Switch back to hours
       const hoursBtn = screen.getAllByRole("button").find((b) => b.textContent === "10");
       await user.click(hoursBtn!);
       expect(screen.getByLabelText("Select hours")).toBeInTheDocument();
@@ -1302,9 +1272,6 @@ describe("ClockFace", () => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════
-// Utils unit tests
-// ═══════════════════════════════════════════════════════════════════════
 describe("TimePicker utils", () => {
 
   describe("pad", () => {
@@ -1637,8 +1604,6 @@ describe("TimePicker utils", () => {
   });
 });
 
-// ─── TimePicker Icons ─────────────────────────────────────────────────────────
-
 import { ChevronDownIcon, ClockIcon, CheckIcon, ClearIcon } from "../icons.js";
 
 describe("TimePicker Icons", () => {
@@ -1667,9 +1632,6 @@ describe("TimePicker Icons", () => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════
-// ClockFace — additional coverage tests
-// ═══════════════════════════════════════════════════════════════════════
 describe("ClockFace (additional coverage)", () => {
   const blankClasses: Required<ClockFaceClasses> = {
     clockContent: UNSTYLED_TIMEPICKER_CLASSES.clockContent,
@@ -1718,7 +1680,6 @@ describe("ClockFace (additional coverage)", () => {
       const rect = { left: 0, top: 0, width: 200, height: 200, bottom: 200, right: 200 };
       vi.spyOn(slider, "getBoundingClientRect").mockReturnValue(rect as DOMRect);
 
-      // Simulate pointer down roughly at the 3 o'clock position (right side center)
       slider.dispatchEvent(
         new PointerEvent("pointerdown", {
           bubbles: true,
@@ -1729,7 +1690,6 @@ describe("ClockFace (additional coverage)", () => {
         }),
       );
 
-      // onValueChange should have been called with an updated hours value
       expect(onValueChange).toHaveBeenCalled();
     });
 
@@ -1770,7 +1730,6 @@ describe("ClockFace (additional coverage)", () => {
       vi.spyOn(slider, "getBoundingClientRect").mockReturnValue(rect as DOMRect);
 
       slider.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 190, clientY: 100, button: 0, pointerId: 1 }));
-      // pointer up should not throw
       slider.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 190, clientY: 100, pointerId: 1 }));
 
       expect(slider).toBeInTheDocument();
@@ -1787,7 +1746,6 @@ describe("ClockFace (additional coverage)", () => {
       vi.spyOn(slider, "getBoundingClientRect").mockReturnValue(rect as DOMRect);
 
       slider.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 190, clientY: 100, button: 0, pointerId: 1 }));
-      // pointercancel should end the drag without throwing
       slider.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true, clientX: 190, clientY: 100, pointerId: 1 }));
 
       expect(slider).toBeInTheDocument();
@@ -1804,10 +1762,8 @@ describe("ClockFace (additional coverage)", () => {
       vi.spyOn(slider, "getBoundingClientRect").mockReturnValue(rect as DOMRect);
 
       slider.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 190, clientY: 100, button: 0, pointerId: 1 }));
-      // Different pointerId — should be ignored
       slider.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, clientX: 190, clientY: 100, pointerId: 99 }));
 
-      // Component should still be in dragging state (no error)
       expect(slider).toBeInTheDocument();
     });
 
@@ -1845,7 +1801,6 @@ describe("ClockFace (additional coverage)", () => {
         />,
       );
 
-      // Switch to minutes mode
       const minutesBtn = screen.getAllByRole("button").find((b) => b.textContent === "30");
       await user.click(minutesBtn!);
       onValueChange.mockClear();
@@ -1873,7 +1828,6 @@ describe("ClockFace (additional coverage)", () => {
       render(<ClockFace {...defaultProps} onValueChange={onValueChange} />);
 
       const slider = screen.getByRole("slider");
-      // Move without first pressing down — isDragging is false, should be ignored
       slider.dispatchEvent(new PointerEvent("pointermove", { bubbles: true, clientX: 190, clientY: 100, pointerId: 1 }));
 
       expect(onValueChange).not.toHaveBeenCalled();
@@ -1913,7 +1867,6 @@ describe("ClockFace (additional coverage)", () => {
       render(<ClockFace {...defaultProps} />);
 
       const buttons = screen.getAllByRole("button");
-      // Focus the first button (Hours display button)
       buttons[0].focus();
       expect(document.activeElement).toBe(buttons[0]);
 
@@ -1923,7 +1876,6 @@ describe("ClockFace (additional coverage)", () => {
         new KeyboardEvent("keydown", { key: "Tab", shiftKey: true, bubbles: true }),
       );
 
-      // Focus should have been moved (last focusable element)
       expect(document.activeElement).toBeTruthy();
     });
 
@@ -1957,7 +1909,6 @@ describe("ClockFace (additional coverage)", () => {
         />,
       );
 
-      // Click AM when already in AM mode — still fires onValueChange
       await user.click(screen.getByText("AM"));
       expect(onValueChange).toHaveBeenCalledWith(
         expect.objectContaining({ period: "AM" }),
@@ -2008,7 +1959,6 @@ describe("ClockFace (additional coverage)", () => {
       // Start drag to enter dragging state
       slider.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, clientX: 190, clientY: 100, button: 0, pointerId: 1 }));
 
-      // Dispatch window-level pointerup to trigger the global listener
       window.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
 
       // Component should handle it without errors
@@ -2017,9 +1967,6 @@ describe("ClockFace (additional coverage)", () => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════
-// TimePicker — additional coverage tests
-// ═══════════════════════════════════════════════════════════════════════
 describe("TimePicker (additional coverage)", () => {
   describe("Keyboard navigation — Escape when closed", () => {
     it("does nothing when Escape is pressed and dropdown is closed", async () => {
@@ -2027,11 +1974,9 @@ describe("TimePicker (additional coverage)", () => {
       render(<TimePicker format="24h" />);
 
       const input = screen.getByRole("combobox");
-      // Don't open the dropdown first
       input.focus();
       await user.keyboard("{Escape}");
 
-      // Should remain closed with no error
       expect(input).toHaveAttribute("aria-expanded", "false");
     });
   });
@@ -2058,7 +2003,6 @@ describe("TimePicker (additional coverage)", () => {
       slider.focus();
       await user.keyboard("{ArrowUp}"); // hours 10 → 11 (calls handleClockChange)
 
-      // Confirm
       await user.click(screen.getByText("OK"));
 
       expect(onValueChange).toHaveBeenCalledWith("11:00", expect.objectContaining({ hours: 11 }));
@@ -2091,7 +2035,6 @@ describe("TimePicker (additional coverage)", () => {
 
       expect(onCancel).toHaveBeenCalledTimes(1);
       expect(onValueChange).not.toHaveBeenCalled();
-      // Dropdown closed
       expect(input).toHaveAttribute("aria-expanded", "false");
     });
 
@@ -2125,7 +2068,6 @@ describe("TimePicker (additional coverage)", () => {
       const input = screen.getByRole("combobox");
       await user.click(input);
 
-      // Trigger a scroll event — should not throw
       window.dispatchEvent(new Event("scroll", { bubbles: true }));
 
       expect(input).toHaveAttribute("aria-expanded", "true");
@@ -2138,7 +2080,6 @@ describe("TimePicker (additional coverage)", () => {
       const input = screen.getByRole("combobox");
       await user.click(input);
 
-      // Trigger a resize event — should not throw
       window.dispatchEvent(new Event("resize"));
 
       expect(input).toHaveAttribute("aria-expanded", "true");
@@ -2149,7 +2090,6 @@ describe("TimePicker (additional coverage)", () => {
     it("renders dropdown content even when closed with keepMounted=true", () => {
       render(<TimePicker format="24h" minuteStep={60} keepMounted />);
 
-      // Dropdown should be in DOM even when closed
       const listbox = document.querySelector('[role="listbox"]');
       expect(listbox).toBeInTheDocument();
     });
@@ -2167,7 +2107,6 @@ describe("TimePicker (additional coverage)", () => {
       await user.keyboard("{ArrowDown}"); // focus index 0
       await user.keyboard("{ArrowUp}"); // should wrap to last
 
-      // Input should still be open
       expect(input).toHaveAttribute("aria-expanded", "true");
     });
   });
@@ -2194,10 +2133,9 @@ describe("TimePicker (additional coverage)", () => {
       render(<TimePicker format="24h" />);
 
       const input = screen.getByRole("combobox");
-      await user.click(input); // opens
+      await user.click(input);
       expect(input).toHaveAttribute("aria-expanded", "true");
 
-      // Click again on input (not trigger wrapper)
       await user.click(input); // should not crash
       expect(input).toBeInTheDocument();
     });
@@ -2235,7 +2173,6 @@ describe("TimePicker (additional coverage)", () => {
       const input = screen.getByRole("combobox");
       await user.click(input);
 
-      // Custom renderer should be called
       expect(renderOptionContent).toHaveBeenCalled();
       // Custom output appears in the DOM
       const customEls = document.querySelectorAll("[data-testid='custom']");
@@ -2272,7 +2209,6 @@ describe("TimePicker (additional coverage)", () => {
       const input = screen.getByRole("combobox");
       await user.click(input);
 
-      // Component should be open and functional
       expect(input).toHaveAttribute("aria-expanded", "true");
     });
 
@@ -2328,7 +2264,6 @@ describe("TimePicker (additional coverage)", () => {
       const input = screen.getByRole("combobox");
       await user.click(input);
 
-      // Listbox should be inside custom portal container
       const listbox = portalEl.querySelector('[role="listbox"]');
       expect(listbox).toBeInTheDocument();
 
@@ -2337,9 +2272,6 @@ describe("TimePicker (additional coverage)", () => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════
-// useTimePicker — hook-level coverage tests
-// ═══════════════════════════════════════════════════════════════════════
 import { renderHook, act } from "@testing-library/react";
 import { useTimePicker } from "../useTimePicker.js";
 
@@ -2384,7 +2316,6 @@ describe("useTimePicker (additional coverage)", () => {
       // displayOptions should be populated (24h, step=15 → 96 options)
       const lastIndex = result.current.displayOptions.length - 1;
 
-      // First set focusedIndex to 0
       act(() => {
         result.current.setFocusedIndex(0);
       });
@@ -2446,12 +2377,10 @@ describe("useTimePicker (additional coverage)", () => {
         useTimePicker({ ...baseProps, value: "14:30", onValueChange }),
       );
 
-      // Simulate user clearing the input
       act(() => {
         result.current.handleInputChange("");
       });
 
-      // commitValue via blur
       act(() => {
         result.current.handleBlur();
       });
@@ -2483,7 +2412,6 @@ describe("useTimePicker (additional coverage)", () => {
         useTimePicker({ ...baseProps, onValueChange }),
       );
 
-      // Focus first option
       act(() => {
         result.current.setFocusedIndex(0);
       });
@@ -2549,7 +2477,6 @@ describe("useTimePicker (additional coverage)", () => {
         useTimePicker({ ...baseProps, disabled: true }),
       );
 
-      // Should not throw
       act(() => {
         result.current.handleToggle();
       });

@@ -1307,7 +1307,6 @@ describe("Accordion", () => {
       const user = userEvent.setup();
       renderAccordion({ type: "single" });
 
-      // Tab into the accordion to focus the first trigger
       await user.tab();
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       expect(trigger1).toHaveFocus();
@@ -1427,7 +1426,6 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      // Should render without throwing
       expect(screen.getByRole("button", { name: "Item 1" })).toBeInTheDocument();
     });
 
@@ -1456,7 +1454,6 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      // Should render without throwing
       expect(screen.getByRole("button", { name: "Item 1" })).toBeInTheDocument();
     });
   });
@@ -1554,7 +1551,6 @@ describe("AccordionShimmer", () => {
     expect(root).toHaveAttribute("aria-label", "Loading 3 accordion items");
     expect(root).toHaveAttribute("aria-busy", "true");
 
-    // Should render 3 items
     const items = root.children;
     expect(items.length).toBe(3);
   });

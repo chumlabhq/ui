@@ -82,7 +82,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const generatedId = useId();
     const textAreaId = id || generatedId;
 
-    // A control nobody can name is a control nobody can use. Dev-only.
     useAccessibleNameWarning("TextArea", {
       label,
       "aria-label": (rest as Record<string, unknown>)["aria-label"],
@@ -96,12 +95,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const isDisabled = disabled;
     const isInteractive = !isDisabled && !readOnly && !loading;
 
-    // ─── Merged classes ─────────────────────────────────────────────────
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_TEXTAREA_CLASSES : DEFAULT_TEXTAREA_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<TextAreaClasses> = useMemo(
       () => ({
@@ -125,7 +120,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const internalRef = useRef<HTMLTextAreaElement | null>(null);
     const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
 
-    // ─── Auto-resize ─────────────────────────────────────────────────
     const adjustHeight = useCallback(() => {
       const el = internalRef.current;
       if (!el || !autoResize) return;
@@ -137,7 +131,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       adjustHeight();
     }, [currentValue, adjustHeight]);
 
-    // Build aria-describedby from description + error/success/count IDs
     const ariaDescribedBy =
       [
         description ? descriptionId : null,
@@ -165,7 +158,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       const textarea = internalRef.current;
       if (!textarea) return;
 
-      // Set native value to empty via the prototype setter
       const nativeValueSetter = Object.getOwnPropertyDescriptor(
         HTMLTextAreaElement.prototype,
         "value",

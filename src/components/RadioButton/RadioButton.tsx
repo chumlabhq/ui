@@ -21,7 +21,6 @@ import { cn } from "../../utils/scopedCn.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
-// ─── Context ──────────────────────────────────────────────────────────────────
 
 interface RadioGroupContextValue {
   name?: string;
@@ -45,8 +44,6 @@ function useRadioGroupContext() {
   }
   return ctx;
 }
-
-// ─── RadioGroup ───────────────────────────────────────────────────────────────
 
 /**
  * Component: RadioGroup + RadioButton
@@ -119,11 +116,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       [disabled, setSelectedValue],
     );
 
-    // ─── Merged classes ─────────────────────────────────────────────────
     const baseClassesRaw = unstyled ? UNSTYLED_RADIO_GROUP_CLASSES : DEFAULT_RADIO_GROUP_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<RadioGroupClasses> = useMemo(
       () => ({
@@ -135,7 +128,6 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       [classesProp, baseClasses],
     );
 
-    // ─── Described by ───────────────────────────────────────────────────
     const describedBy = [
       description ? descriptionId : null,
       error && errorMessage ? errorId : null,
@@ -216,8 +208,6 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
 RadioGroup.displayName = "RadioGroup";
 
-// ─── RadioButton ──────────────────────────────────────────────────────────────
-
 const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
   (
     {
@@ -244,7 +234,6 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
     const generatedId = useId();
     const radioId = rest.id || generatedId;
 
-    // ─── Merged classes ─────────────────────────────────────────────────
     const baseClassesRaw = unstyled ? UNSTYLED_RADIO_CLASSES : DEFAULT_RADIO_CLASSES;
     const baseClasses = motionSafeClasses(
       baseClassesRaw,
@@ -263,7 +252,6 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
       [classesProp, baseClasses],
     );
 
-    // ─── Size ───────────────────────────────────────────────────────────
     const { boxSize, iconSize } = useMemo(() => {
       if (size === undefined) {
         return { boxSize: undefined, iconSize: undefined };
@@ -279,18 +267,14 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
       return { width: boxSize, height: boxSize };
     }, [boxSize]);
 
-    // ─── State class ────────────────────────────────────────────────────
-    // ADR 002 R4: data-state="checked"/"unchecked" on `control`.
     const stateClassName = undefined;
 
-    // ─── Handler ────────────────────────────────────────────────────────
     const handleChange = useCallback(() => {
       if (!isDisabled) {
         ctx.onSelect(value);
       }
     }, [isDisabled, ctx, value]);
 
-    // ─── Icon ───────────────────────────────────────────────────────────
     const renderedIcon = useMemo(() => {
       if (isChecked) {
         return (
@@ -323,7 +307,6 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         className={cn(mergedClasses.root, className) || undefined}
         style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
         data-checked={isChecked || undefined}
-        // ADR 002 R4; Radix RadioGroup precedent.
         data-state={isChecked ? "checked" : "unchecked"}
         data-disabled={isDisabled || undefined}
         data-value={value}

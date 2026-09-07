@@ -155,7 +155,6 @@ const Demo = () => {
   }, [activeItem, canonicalUrl]);
   useJsonLd("page-tech-article", techArticleJsonLd);
 
-  // Close mobile sidebar on route change.
   const [prevPathname, setPrevPathname] = useState(location.pathname);
   if (prevPathname !== location.pathname) {
     setPrevPathname(location.pathname);

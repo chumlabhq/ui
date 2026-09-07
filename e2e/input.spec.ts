@@ -19,7 +19,6 @@ test.describe("Input Component - Cross-Browser Tests", () => {
     await waitForInputVisible(page);
   });
 
-
   test.describe("Labels", () => {
     test("should display labels for inputs", async ({ page }) => {
       const labels = page.locator("label");
@@ -49,7 +48,6 @@ test.describe("Input Component - Cross-Browser Tests", () => {
       await expect(label.first()).toBeVisible();
       await label.click();
 
-      // The associated input should be focused
       const forAttr = await label.getAttribute("for");
       if (forAttr) {
         const input = page.locator(`#${forAttr}`);
@@ -98,7 +96,6 @@ test.describe("Input Component - Cross-Browser Tests", () => {
       await expect(disabledInput.first()).toBeVisible();
       const valueBefore = await disabledInput.inputValue();
 
-      // Attempt to type (should not work on disabled input)
       await disabledInput.type("test").catch(() => {
         // Expected to fail or do nothing
       });
@@ -110,7 +107,6 @@ test.describe("Input Component - Cross-Browser Tests", () => {
 
   test.describe("Loading States", () => {
     test("should display loader when loading", async ({ page }) => {
-      // Look for loader elements (CircularLoader or custom)
       const loaders = page.locator('[data-loading="true"]');
 
       // The guard used to make this pass when the element was absent, which is
@@ -129,10 +125,8 @@ test.describe("Input Keyboard Navigation", () => {
   });
 
   test("should focus input on tab", async ({ page }) => {
-    // Tab into the page
     await page.keyboard.press("Tab");
 
-    // Eventually an input should be focused
     const focusedElement = page.locator(":focus");
     await expect(focusedElement).toBeVisible();
   });
@@ -142,13 +136,10 @@ test.describe("Input Keyboard Navigation", () => {
     const count = await inputs.count();
 
     if (count >= 2) {
-      // Focus first input
       await inputs.first().focus();
 
-      // Tab to next element
       await page.keyboard.press("Tab");
 
-      // Something should be focused
       const focusedElement = page.locator(":focus");
       await expect(focusedElement).toBeVisible();
     }
@@ -221,7 +212,6 @@ test.describe("Input Accessibility Tests", () => {
     expect(criticalViolations).toHaveLength(0);
   });
 
-
   test("should have aria-invalid on error inputs", async ({ page }) => {
     const errorInputs = page.locator(
       '[data-error="true"] input, input[aria-invalid="true"]',
@@ -291,7 +281,6 @@ test.describe("Input Responsive Tests", () => {
     const timeout = browserName === "firefox" ? 10000 : 5000;
     await input.waitFor({ state: "attached", timeout });
 
-    // Verify inputs exist
     const count = await page.locator("input").count();
     expect(count).toBeGreaterThan(0);
 
@@ -336,15 +325,12 @@ test.describe("Input Responsive Tests", () => {
     await page.waitForLoadState("domcontentloaded");
     await waitForInputVisible(page);
 
-    // Find the DemoWrapper containers (border rounded-lg) that contain inputs
-    // These are the main demo containers that should have reasonable width
     const demoContainers = page.locator(".border.rounded-lg").filter({
       has: page.locator("input"),
     });
 
     const count = await demoContainers.count();
     if (count > 0) {
-      // Scroll to first demo container to ensure it's visible
       const container = demoContainers.first();
       await container.scrollIntoViewIfNeeded();
 
@@ -355,7 +341,6 @@ test.describe("Input Responsive Tests", () => {
       const containerBox = await container.boundingBox();
 
       if (inputBox && containerBox && inputBox.width > 50) {
-        // Input should have reasonable width (at least 100px for a functional input)
         expect(inputBox.width).toBeGreaterThan(100);
       } else {
         // If we can't get bounding boxes, just verify the input exists
@@ -365,14 +350,12 @@ test.describe("Input Responsive Tests", () => {
   });
 });
 
-
 test.describe("Input Form Integration", () => {
 
   test("should support different input types", async ({ page }) => {
     await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
 
-    // Check for various input types
     const textInputs = page.locator('input[type="text"]');
     const emailInputs = page.locator('input[type="email"]');
     const passwordInputs = page.locator('input[type="password"]');
@@ -413,7 +396,6 @@ test.describe("Input (fixtures)", () => {
     await page.keyboard.type("typed after tab");
     await expect(input).toHaveValue("typed after tab");
   });
-
 
   test("keeps every character of fast typing", async ({ page }) => {
     await gotoFixture(page, "Input", "default");

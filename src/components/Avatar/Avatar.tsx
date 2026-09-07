@@ -127,14 +127,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     // motion while leaving every motion utility in the class strings.
     const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
-
     const baseClassesRaw = unstyled ? UNSTYLED_AVATAR_CLASSES : DEFAULT_AVATAR_CLASSES;
-
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-
-    // this handles the other reason to stop animating. Applied to the defaults
-
-    // only — a class string the consumer supplied is theirs to control.
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
@@ -165,7 +158,6 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       onLoad?.();
     }, [onLoad]);
 
-    // Check if image is already cached on mount
     const imgRef = useCallback((node: HTMLImageElement | null) => {
       if (node && node.complete && node.naturalWidth > 0) {
         setImageLoaded(true);

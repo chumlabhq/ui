@@ -53,10 +53,6 @@ type ButtonAsAnchorProps = ButtonOwnProps & {
 
 export type ButtonProps = ButtonAsButtonProps | ButtonAsAnchorProps;
 
-// ─── canonical style tokens ──────────────────────────────────────────────
-// All radii converge on rounded-md (6px) for primary/secondary/icon buttons.
-// Ghost has no radius (text-only with focus ring on a tight rounded shape).
-
 const BASE_CLASSES =
   "inline-flex items-center justify-center gap-2 font-medium select-none cursor-pointer transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-base)] disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -66,7 +62,6 @@ const SIZE_CLASSES: Record<Size, string> = {
   lg: "h-11 px-5 text-[14px] rounded-md",
 };
 
-// Icon variant uses square sizing instead of horizontal padding.
 const ICON_SIZE_CLASSES: Record<Size, string> = {
   sm: "w-8 h-8 rounded-md",
   md: "w-10 h-10 rounded-md",

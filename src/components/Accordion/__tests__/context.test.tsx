@@ -23,8 +23,6 @@ import type {
 } from "../utils/types.js";
 import React from "react";
 
-// ─── createExpandedStore ────────────────────────────────────────────────────
-
 describe("createExpandedStore", () => {
   it("getSnapshot returns the initial set", () => {
     const initial = new Set(["a", "b"]);
@@ -71,7 +69,6 @@ describe("createExpandedStore", () => {
     const listener = vi.fn();
     store.subscribe(listener);
 
-    // Pass the exact same reference – should not notify
     store.setValues(initial);
 
     expect(listener).not.toHaveBeenCalled();
@@ -90,8 +87,6 @@ describe("createExpandedStore", () => {
     expect(l2).toHaveBeenCalledTimes(1);
   });
 });
-
-// ─── useExpandedStore ────────────────────────────────────────────────────────
 
 describe("useExpandedStore", () => {
   it("throws when used outside AccordionExpandedContext", () => {
@@ -113,8 +108,6 @@ describe("useExpandedStore", () => {
     expect(result.current).toBe(store);
   });
 });
-
-// ─── useAccordionContext ─────────────────────────────────────────────────────
 
 describe("useAccordionContext", () => {
   it("throws when used outside AccordionContext", () => {
@@ -142,8 +135,6 @@ describe("useAccordionContext", () => {
   });
 });
 
-// ─── useAccordionDispatch ────────────────────────────────────────────────────
-
 describe("useAccordionDispatch", () => {
   it("throws when used outside AccordionDispatchContext", () => {
     expect(() =>
@@ -170,8 +161,6 @@ describe("useAccordionDispatch", () => {
     expect(result.current).toBe(dispatch);
   });
 });
-
-// ─── useAccordionConfig ──────────────────────────────────────────────────────
 
 describe("useAccordionConfig", () => {
   it("throws when used outside AccordionConfigContext", () => {
@@ -207,8 +196,6 @@ describe("useAccordionConfig", () => {
   });
 });
 
-// ─── useAccordionItemContext ─────────────────────────────────────────────────
-
 describe("useAccordionItemContext", () => {
   it("throws when used outside AccordionItemContext", () => {
     expect(() =>
@@ -235,8 +222,6 @@ describe("useAccordionItemContext", () => {
     expect(result.current).toEqual(itemCtx);
   });
 });
-
-// ─── useAccordionItem ────────────────────────────────────────────────────────
 
 function makeAllContextWrapper(
   expanded: Set<string>,
@@ -386,8 +371,6 @@ describe("useAccordionItem", () => {
     expect(toggleItem).not.toHaveBeenCalled();
   });
 });
-
-// ─── useAccordionState ───────────────────────────────────────────────────────
 
 describe("useAccordionState", () => {
   it("returns correct state when nothing is expanded", () => {

@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import Modal, { ModalHeader, ModalBody, ModalFooter } from "../Modal.js";
 
-// Mock scrollLock utilities
 const acquireScrollLockMock = vi.fn();
 const releaseScrollLockMock = vi.fn();
 
@@ -150,12 +149,10 @@ describe("Modal", () => {
         expect(screen.getByRole("dialog")).toBeInTheDocument();
       });
 
-      // Focus the last focusable element (Second button)
       const secondBtn = screen.getByText("Second");
       secondBtn.focus();
       expect(document.activeElement).toBe(secondBtn);
 
-      // Dispatch a Tab keydown event (the modal listens via document capture)
       const tabEvent = new KeyboardEvent("keydown", {
         key: "Tab",
         bubbles: true,
@@ -180,12 +177,10 @@ describe("Modal", () => {
         expect(screen.getByRole("dialog")).toBeInTheDocument();
       });
 
-      // Focus the close button (first focusable element in the modal)
       const closeBtn = screen.getByRole("button", { name: "Close modal" });
       closeBtn.focus();
       expect(document.activeElement).toBe(closeBtn);
 
-      // Dispatch a Shift+Tab keydown event
       const shiftTabEvent = new KeyboardEvent("keydown", {
         key: "Tab",
         shiftKey: true,
@@ -212,12 +207,10 @@ describe("Modal", () => {
         </div>
       );
 
-      // Focus the trigger button
       const trigger = screen.getByTestId("trigger");
       trigger.focus();
       expect(document.activeElement).toBe(trigger);
 
-      // Open the modal
       rerender(
         <div>
           <button data-testid="trigger">Open</button>
@@ -227,12 +220,10 @@ describe("Modal", () => {
         </div>
       );
 
-      // Wait for focus to move into modal
       await waitFor(() => {
         expect(screen.getByRole("dialog")).toBeInTheDocument();
       });
 
-      // Close the modal
       rerender(
         <div>
           <button data-testid="trigger">Open</button>
@@ -242,7 +233,6 @@ describe("Modal", () => {
         </div>
       );
 
-      // Focus should be restored to the trigger
       await waitFor(() => {
         expect(document.activeElement).toBe(trigger);
       });
@@ -269,7 +259,6 @@ describe("Modal", () => {
       const trigger = screen.getByTestId("trigger");
       trigger.focus();
 
-      // Open the modal
       rerender(
         <div>
           <button data-testid="trigger">Open</button>
@@ -291,7 +280,6 @@ describe("Modal", () => {
       // Clear spy call history so we only track calls during close
       focusSpy.mockClear();
 
-      // Close the modal
       rerender(
         <div>
           <button data-testid="trigger">Open</button>
@@ -306,7 +294,6 @@ describe("Modal", () => {
         </div>
       );
 
-      // Focus should NOT have been called on the trigger during close
       const triggerFocusCalls = focusSpy.mock.contexts.filter(
         (ctx) => ctx === trigger
       );
@@ -454,7 +441,6 @@ describe("Modal", () => {
         </Modal>
       );
 
-      // The dialog should still be in the DOM
       expect(screen.getByRole("dialog", { hidden: true })).toBeInTheDocument();
     });
 
@@ -611,7 +597,6 @@ describe("Modal", () => {
       );
 
       const dialog = screen.getByRole("dialog");
-      // Unstyled mode should not include the default layout classes
       expect(dialog.className).not.toContain("bg-white");
     });
 
@@ -692,8 +677,6 @@ describe("Modal", () => {
   });
 });
 
-// ─── useModal hook ────────────────────────────────────────────────────────────
-
 import { renderHook } from "@testing-library/react";
 import { useModal } from "../useModal.js";
 
@@ -722,8 +705,6 @@ describe("useModal", () => {
     expect(ctx!.close).toBeDefined();
   });
 });
-
-// ─── Modal icons ──────────────────────────────────────────────────────────────
 
 import { CloseIcon, InfoIcon } from "../icons.js";
 

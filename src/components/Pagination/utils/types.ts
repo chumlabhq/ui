@@ -18,11 +18,14 @@ export interface PageInfoRenderProps {
 export type SectionName = "selector" | "pageInfo" | "nav";
 
 export interface PaginationClasses {
+  /** Outer nav container */
   root?: string;
   row?: string;
   list?: string;
   item?: string;
+  /** Prev/next buttons */
   navButton?: string;
+  /** Ellipsis elements */
   ellipsis?: string;
   /**
    * ADR 002 R6: the rows-per-page selector is a dropdown's anatomy, so its key
@@ -40,6 +43,7 @@ export interface PaginationClasses {
   };
   label?: string;
   navIcon?: string;
+  /** Page info section wrapper */
   pageInfo?: string;
 }
 

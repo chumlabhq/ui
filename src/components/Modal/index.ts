@@ -1,4 +1,3 @@
-// AI Knowledge: See MODAL.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Modal, ModalHeader, ModalBody, ModalFooter } from "./Modal.js";
 export { useModal } from "./useModal.js";
 export type {

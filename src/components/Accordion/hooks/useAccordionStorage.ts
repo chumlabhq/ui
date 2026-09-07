@@ -17,7 +17,6 @@ export function resolveStorageConfig(
   return {
     ...defaults,
     ...storageKey,
-    // Ensure serialize/deserialize are never undefined even if explicitly passed as undefined
     serialize: storageKey.serialize ?? defaults.serialize,
     deserialize: storageKey.deserialize ?? defaults.deserialize,
   };
@@ -68,7 +67,7 @@ export function useAccordionStorage({
           storage.setItem(storageConfig.key, storageConfig.serialize(Array.from(values)));
         }
       } catch {
-        // Storage access may fail
+        // Private browsing and a full quota both throw on setItem.
       }
     },
     [storageConfig, isControlled],

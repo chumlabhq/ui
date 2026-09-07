@@ -9,8 +9,6 @@ import {
   Section,
   DemoWrapper,
   DemoLabel,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -19,8 +17,6 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { fetchCountries, type Country } from "./lib/countries.js";
-
-// ─── Static Data ────────────────────────────────────────────────────────────
 
 const fruitOptions: DropdownOption[] = [
   { value: "apple", label: "Apple" },
@@ -109,8 +105,6 @@ const disabledItemOptions: DropdownOption[] = [
   { value: "option5", label: "Available Option 3" },
 ];
 
-// ─── Icons ──────────────────────────────────────────────────────────────────
-
 const CustomChevronIcon = ({
   className,
   style,
@@ -134,8 +128,6 @@ const CustomChevronIcon = ({
     />
   </svg>
 );
-
-// ─── Themed Classes ─────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
   dropdown: {
@@ -166,8 +158,6 @@ const getClasses = (dark: boolean) => ({
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
-
-// ─── Extra theme variants for the theme demos ───────────────────────────────
 
 const darkTheme = {
   wrapper: "relative",
@@ -241,105 +231,75 @@ const getMinimalTheme = (dark: boolean) => ({
   noResults: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
 });
 
-// ─── Demo ───────────────────────────────────────────────────────────────────
-
 const DropdownDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
   const minimalTheme = getMinimalTheme(dark);
 
-  // Basic
   const [basicValue, setBasicValue] = useState<string | null>(null);
-  // State variations (uncontrolled, no state needed)
-  // Uncontrolled (no state needed)
-  // Controlled open
   const [controlledOpen, setControlledOpen] = useState(false);
   const [controlledValue, setControlledValue] = useState<string | null>(null);
-  // Clearable
   const [clearableValue, setClearableValue] = useState<string | null>(null);
-  // Render trigger
   const [renderTriggerValue, setRenderTriggerValue] = useState<string | null>(
     null,
   );
-  // Custom content
   const [countryValue, setCountryValue] = useState<string | null>(null);
-  // Async
   const [asyncCountryValue, setAsyncCountryValue] = useState<string | null>(
     null,
   );
-  // Status
   const [statusValue, setStatusValue] = useState<string | null>(null);
-  // Custom selected & icons
   const [customSelectedValue, setCustomSelectedValue] = useState<string | null>(
     null,
   );
   const [customIconValue, setCustomIconValue] = useState<string | null>(null);
   const [noIconValue, setNoIconValue] = useState<string | null>(null);
-  // Focus styling
   const [purpleFocusValue, setPurpleFocusValue] = useState<string | null>(null);
   const [greenFocusValue, setGreenFocusValue] = useState<string | null>(null);
-  // Theme demos
   const [darkThemeValue, setDarkThemeValue] = useState<string | null>(null);
   const [warmThemeValue, setWarmThemeValue] = useState<string | null>(null);
   const [coolThemeValue, setCoolThemeValue] = useState<string | null>(null);
   const [minimalThemeValue, setMinimalThemeValue] = useState<string | null>(
     null,
   );
-  // Disabled items
   const [disabledItemValue, setDisabledItemValue] = useState<string | null>(
     null,
   );
-  // Label & required
   const [labeledValue, setLabeledValue] = useState<string | null>(null);
   const [requiredValue, setRequiredValue] = useState<string | null>(null);
-  // Disabled state
   const [disabledValue] = useState<string | null>("apple");
-  // Error
   const [errorValue, setErrorValue] = useState<string | null>(null);
 
   const [successValue, setSuccessValue] = useState<string | null>(null);
-  // Chevron
   const [customChevronValue, setCustomChevronValue] = useState<string | null>(
     null,
   );
   const [noChevronValue, setNoChevronValue] = useState<string | null>(null);
-  // Full width
   const [fullWidthValue, setFullWidthValue] = useState<string | null>(null);
-  // Position
   const [posTopValue, setPosTopValue] = useState<string | null>(null);
   const [posBotValue, setPosBotValue] = useState<string | null>(null);
   const [forceBotValue, setForceBotValue] = useState<string | null>(null);
   const [forceTopValue, setForceTopValue] = useState<string | null>(null);
   const [forceLockValue, setForceLockValue] = useState<string | null>(null);
-  // Keep mounted
   const [keepMountedValue, setKeepMountedValue] = useState<string | null>(null);
-  // Gap
   const [customGapValue, setCustomGapValue] = useState<string | null>(null);
-  // Typeahead timeout
   const [customTimeoutValue, setCustomTimeoutValue] = useState<string | null>(
     null,
   );
-  // Z-index
   const [zIndexValue, setZIndexValue] = useState<string | null>(null);
-  // Custom clear icon
   const [customClearIconValue, setCustomClearIconValue] = useState<
     string | null
   >("apple");
-  // Custom check icon
   const [customCheckIconValue, setCustomCheckIconValue] = useState<
     string | null
   >(null);
-  // Form integration
   const [formIntegrationValue, setFormIntegrationValue] = useState<
     string | null
   >(null);
   const [focusMessage, setFocusMessage] = useState<string>("");
-  // Custom key down
   const [customKeyDownValue, setCustomKeyDownValue] = useState<string | null>(
     null,
   );
   const [keyDownMessage, setKeyDownMessage] = useState<string>("");
-  // className / style
   const [classNameStyleValue, setClassNameStyleValue] = useState<string | null>(
     null,
   );
@@ -1354,7 +1314,6 @@ const DropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Type-ahead Navigation ──────────────────────────────────────── */}
       <Section
         title="Type-ahead Navigation"
         description="Type while the dropdown is focused to jump to the first matching option, exactly like a native select. Multi-character input is buffered for 500ms."
@@ -1377,7 +1336,6 @@ const DropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Custom Typeahead Timeout ────────────────────────────────────── */}
       <Section
         title="Custom Typeahead Timeout"
         description="Adjust the typeaheadTimeout (in milliseconds) to control how long the component waits before resetting the search buffer."
@@ -1796,199 +1754,6 @@ const DropdownDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Dropdown" />
-
-      <Section title="DropdownClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="wrapper"
-              type="string"
-              description="Inner wrapper around trigger and portal"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="trigger"
-              type="string"
-              description="Trigger button (combobox)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="triggerText"
-              type="string"
-              description="Text span inside trigger"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="string"
-              description="Dropdown popup container (portal)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionList"
-              type="string"
-              description="Scrollable option list wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="option"
-              type="string"
-              description="Individual option element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionSelected"
-              type="string"
-              description="Additional class for selected option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionFocused"
-              type="string"
-              description="Additional class for keyboard-focused option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="optionDisabled"
-              type="string"
-              description="Additional class for disabled option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="chevron"
-              type="string"
-              description="Chevron icon element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkIcon"
-              type="string"
-              description="Check/selected icon element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="clearIcon"
-              type="string"
-              description="Clear button element (shown when clearable)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="noResults"
-              type="string"
-              description="Empty state container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shimmer"
-              type="string"
-              description="Shimmer container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="shimmerItem"
-              type="string"
-              description="Individual shimmer skeleton item"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ─────────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-open"
-              type="root, trigger"
-              description="Present when the dropdown is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, trigger, option"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root, trigger"
-              description="Present when in error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-valid"
-              type="root, trigger"
-              description="Present when in success state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-full-width"
-              type="root"
-              description="Present when fullWidth is true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-placeholder"
-              type="trigger"
-              description="Present when no option is selected"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-selected"
-              type="option"
-              description="Present on the selected option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-highlighted"
-              type="option"
-              description="Present on the keyboard-focused option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-value"
-              type="option"
-              description="The option's value string"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-state"
-              type="content (portal)"
-              description='"open" or "closed"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-position"
-              type="content (portal)"
-              description='"top" or "bottom" (actual position)'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ───────────────────────────────────────────────── */}
       <Section

@@ -20,8 +20,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -30,15 +28,12 @@ import {
   SetupNote,
 } from "./components/index.js";
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (_dark: boolean) => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
 });
 
-// Basic User interface
 interface User {
   id: string;
   name: string;
@@ -49,7 +44,6 @@ interface User {
   joinDate: string;
 }
 
-// Extended User interface for comprehensive demo
 interface ExtendedUser extends User {
   phone: string;
   location: string;
@@ -605,7 +599,6 @@ function getPaginationClasses(_dark: boolean) {
   };
 }
 
-// Dark/Modern pagination styles
 const darkPaginationContainerStyle =
   "flex items-center justify-between mt-4 px-4 py-3 bg-cl-bg rounded-cl-md";
 const darkPaginationRowSelectorStyle = "flex items-center gap-3";
@@ -682,7 +675,6 @@ const PerformanceBadge = ({
   );
 };
 
-// ─── Server API Demo (extracted to prevent IIFE remounting) ────────────────
 interface Product {
   id: number;
   title: string;
@@ -821,7 +813,6 @@ function ServerApiDemo({
   const handleColumnFiltersChange = React.useCallback((newFilters: { id: string; value: unknown }[]) => {
     setColumnFilters(newFilters);
 
-    // Extract category filter (server-side)
     const catFilter = newFilters.find((f) => f.id === "category");
     const catValues = Array.isArray(catFilter?.value) ? (catFilter.value as string[]) : [];
     // dummyjson supports one category at a time — use the last selected
@@ -832,7 +823,6 @@ function ServerApiDemo({
       setPage(1);
     }
 
-    // Extract status filter (client-side)
     const statusFilter = newFilters.find((f) => f.id === "availabilityStatus");
     const statusValues = Array.isArray(statusFilter?.value) ? (statusFilter.value as string[]) : [];
     setSelectedStatuses(statusValues);
@@ -1189,18 +1179,15 @@ const TableDemo = () => {
   const [starPinnedCols, setStarPinnedCols] = useState<string[]>(["name"]);
   const [sepPinnedCols, setSepPinnedCols] = useState<string[]>(["name", "email"]);
 
-  // State for dark/modern pagination
   const [darkCurrentPage, setDarkCurrentPage] = useState(1);
   const [darkRowsPerPage, setDarkRowsPerPage] = useState(3);
 
-  // State for floating actions demo
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
   const [hoveredRowRef, setHoveredRowRef] =
     useState<React.RefObject<HTMLTableRowElement> | null>(null);
   const [isFloatingActionsHovered, setIsFloatingActionsHovered] =
     useState(false);
 
-  // State for comprehensive demo
   const [compHoveredRowIndex, setCompHoveredRowIndex] = useState<number | null>(
     null,
   );
@@ -1258,7 +1245,6 @@ const TableDemo = () => {
     [dark],
   );
 
-  // Extended columns for scroll demos
   const extendedColumns: ColumnDef<ExtendedUser>[] = useMemo(
     () => [
       {
@@ -1359,7 +1345,6 @@ const TableDemo = () => {
 
   const totalPages = Math.ceil(sampleData.length / rowsPerPage);
 
-  // Data for dark pagination
   const darkPaginatedData = useMemo(() => {
     const start = (darkCurrentPage - 1) * darkRowsPerPage;
     return sampleData.slice(start, start + darkRowsPerPage);
@@ -1494,17 +1479,12 @@ const TableDemo = () => {
       ? extendedSampleData[compHoveredRowIndex]
       : undefined;
 
-  // ── New demo state ─────────────────────────────────────────────────────
-  // Column Sorting
   const [sortingState, setSortingState] = useState<SortingState>([]);
 
-  // Multi-Row Selection
   const [multiSelectedIds, setMultiSelectedIds] = useState<string[]>([]);
 
-  // Row Expansion
   const [expandedRowIds, setExpandedRowIds] = useState<string[]>([]);
 
-  // Column Visibility Toggle
   const [colVisibility, setColVisibility] = useState<Record<string, boolean>>({
     name: true,
     email: true,
@@ -1514,15 +1494,11 @@ const TableDemo = () => {
     joinDate: true,
   });
 
-  // Striped (no extra state needed)
-
-  // Density Modes
   const [density, setDensity] = useState<
     "compact" | "comfortable" | "spacious"
   >("comfortable");
 
   // Column Resizing (no extra state needed beyond enableColumnResizing)
-
   // Inline Cell Editing
   const [editedCells, setEditedCells] = useState<
     { rowId: string; columnId: string; value: unknown }[]
@@ -1530,20 +1506,15 @@ const TableDemo = () => {
 
   // CSV Export (no extra state needed)
 
-  // Row Drag & Drop
   const [dragDropData, setDragDropData] = useState<User[]>(() =>
     sampleData.slice(0, 6),
   );
 
-  // Context Menu
   const [contextMenuInfo, setContextMenuInfo] = useState<string | null>(null);
 
-  // Copy to Clipboard
   const [lastCopied, setLastCopied] = useState<string | null>(null);
 
-  // Infinite Scroll
   const infiniteScrollTableRef = useRef<HTMLDivElement>(null);
-  // Generate a larger dataset
   const allInfiniteData = useMemo(() => {
     const data: User[] = [];
     for (let i = 0; i < 50; i++) {
@@ -1562,7 +1533,6 @@ const TableDemo = () => {
   const [infiniteHasMore, setInfiniteHasMore] = useState(true);
   const [infiniteLoading, setInfiniteLoading] = useState(false);
 
-  // Infinite Scroll demo variants
   const inf2Ref = useRef<HTMLDivElement>(null);
   const [inf2Data, setInf2Data] = useState<User[]>(() =>
     allInfiniteData.slice(0, 10),
@@ -1623,20 +1593,16 @@ const TableDemo = () => {
     }, 1200);
   }, [inf4Loading, inf4HasMore, allInfiniteData]);
 
-  // Built-in Search Bar
   const [builtInSearchFilter, setBuiltInSearchFilter] = useState("");
 
-  // Server-Side Mode
   const [serverSorting, setServerSorting] = useState<SortingState>([]);
   const [serverData, setServerData] = useState<User[]>(sampleData.slice(0, 5));
   const [serverLoading, setServerLoading] = useState(false);
 
-  // Editable data for inline editing
   const [editableData, setEditableData] = useState<User[]>(() =>
     sampleData.slice(0, 5),
   );
 
-  // Infinite scroll load more handler
   const handleLoadMore = useCallback(() => {
     if (infiniteLoading || !infiniteHasMore) return;
     setInfiniteLoading(true);
@@ -1654,7 +1620,6 @@ const TableDemo = () => {
     }, 1000);
   }, [infiniteLoading, infiniteHasMore, allInfiniteData]);
 
-  // Server-side sorting handler
   const handleServerSortingChange = useCallback((newSorting: SortingState) => {
     setServerSorting(newSorting);
     setServerLoading(true);
@@ -1698,7 +1663,6 @@ const TableDemo = () => {
     [dark],
   );
 
-  // Columns with actions for right pinning
   const rightPinColumns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -1728,7 +1692,6 @@ const TableDemo = () => {
     [],
   );
 
-  // Columns for footer demo
   const footerColumns: ColumnDef<ExtendedUser>[] = useMemo(
     () => [
       {
@@ -1839,7 +1802,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               React.useState(false);
             const dotMenuRef = React.useRef<HTMLDivElement>(null);
 
-            // Close menu on click outside
             React.useEffect(() => {
               if (!dotMenuState) return;
               const handler = (e: MouseEvent) => {
@@ -1854,7 +1816,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               return () => document.removeEventListener("mousedown", handler);
             }, [dotMenuState]);
 
-            // Close menu when hovering a different row
             React.useEffect(() => {
               if (dotMenuState && dotHoverIdx !== null) {
                 const hoveredRowId = sampleData[dotHoverIdx]?.id;
@@ -5497,7 +5458,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <tr>
               <td colSpan={100} className="p-0">
                 <div
-                  className={`px-5 py-4 flex items-center justify-between bg-gradient-to-r from-cl-accent/15 to-cl-accent/10 border-t-2 border-cl-border-input-focus dark:bg-gradient-to-r dark:from-cl-accent/150/[0.06] dark:to-cl-accent/0.04 dark:border-t-2 dark:border dark:border-cl-border-input-focus/20`}
+                  className={`px-5 py-4 flex items-center justify-between bg-gradient-to-r from-cl-accent/15 to-cl-accent/10 border-t-2 border-cl-border-input-focus dark:bg-gradient-to-r dark:from-cl-accent/[0.06] dark:to-cl-accent/[0.04] dark:border-t-2 dark:border dark:border-cl-border-input-focus/20`}
                 >
                   <div className="flex items-center gap-6">
                     <div>
@@ -7698,319 +7659,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <ComponentDocs name="Table" />
-
-      <Section title="Table Styling Props" isDarkMode={dark}>
-        <div className={c.card}>
-        <PropsTable isDarkMode={dark}>
-          <PropRow
-            name="containerClassName"
-            type="string"
-            description="Root container wrapper"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="tableClassName"
-            type="string"
-            description="Table element (default for both pinned/unpinned)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinnedTableClassName"
-            type="string"
-            description="Pinned columns table element"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="unpinnedTableClassName"
-            type="string"
-            description="Unpinned columns table element"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="headerClassName"
-            type="string"
-            description="thead element"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="headerRowClassName"
-            type="string"
-            description="Header row (tr) element"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="headerCellClassName"
-            type="string"
-            description="th elements"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="headerCellHoverClassName"
-            type="string"
-            description="th hover state"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="headerCellContentClassName"
-            type="string"
-            description="Header cell content wrapper"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="bodyClassName"
-            type="string"
-            description="tbody element"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="rowClassName"
-            type="string"
-            description="tr elements (unselected)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="selectedRowClassName"
-            type="string"
-            description="tr elements (selected)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="cellClassName"
-            type="string"
-            description="td elements"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinnedContainerClassName"
-            type="string"
-            description="Pinned columns container"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="unpinnedContainerClassName"
-            type="string"
-            description="Scrollable columns container"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="emptyClassName"
-            type="string"
-            description="Empty state container"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinButtonClassName"
-            type="string"
-            description="Pin button (unpinned state)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinnedPinButtonClassName"
-            type="string"
-            description="Pin button (pinned state)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinIconClassName"
-            type="string"
-            description="Pin icon (unpinned state)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinIconHoverClassName"
-            type="string"
-            description="Pin icon hover (unpinned)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinnedPinIconClassName"
-            type="string"
-            description="Pin icon (pinned state)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="pinnedPinIconHoverClassName"
-            type="string"
-            description="Pin icon hover (pinned)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="shimmerClassName"
-            type="string"
-            description="Shimmer container class"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="shimmerRowClassName"
-            type="string"
-            description="Shimmer row wrapper class"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="shimmerCellClassName"
-            type="string"
-            description="Shimmer cell wrapper class"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="shimmerBarClassName"
-            type="string"
-            description="Shimmer bar element class"
-            isDarkMode={dark}
-          />
-        </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="TableShimmer Props" isDarkMode={dark}>
-        <div className={c.card}>
-        <PropsTable isDarkMode={dark}>
-          <PropRow
-            name="rowCount"
-            type="number"
-            defaultVal="10"
-            description="Number of shimmer rows"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="className"
-            type="string"
-            defaultVal="default"
-            description="Container class (via shimmerClassName on Table)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="rowClassName"
-            type="string"
-            defaultVal="default"
-            description="Row wrapper class (via shimmerRowClassName)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="cellClassName"
-            type="string"
-            defaultVal="default"
-            description="Cell wrapper class (via shimmerCellClassName)"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="shimmerClassName"
-            type="string"
-            defaultVal="default"
-            description="Shimmer bar class (via shimmerBarClassName)"
-            isDarkMode={dark}
-          />
-        </PropsTable>
-        <p
-          className={`mt-3 text-sm text-cl-text-secondary`}
-        >
-          Note: When using Table component, pass these props with the "shimmer"
-          prefix (e.g.,{" "}
-          <code
-            className={`px-1 rounded bg-cl-bg-elevated`}
-          >
-            shimmerClassName
-          </code>
-          ,{" "}
-          <code
-            className={`px-1 rounded bg-cl-bg-elevated`}
-          >
-            shimmerRowClassName
-          </code>
-          , etc.)
-        </p>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-table-container"
-              type="root"
-              description="Always present on the scrollable container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-testid"
-              type="root"
-              description="Test identifier for integration tests"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-pinned"
-              type="cell, header"
-              description='Present on pinned columns ("left" or "right")'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-column-index"
-              type="cell, header"
-              description="Zero-based column index for CSS targeting"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-selected"
-              type="row"
-              description="Present on selected rows"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-clickable"
-              type="row"
-              description="Present when onRowClick is provided"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-highlighted"
-              type="cell"
-              description="Present on the keyboard-focused cell"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-sorted"
-              type="header"
-              description="Present on sorted column headers ('asc' or 'desc')"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-expanded"
-              type="row"
-              description="Present on expanded rows"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-striped"
-              type="row"
-              description="Present on alternating rows when striped is enabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-editable"
-              type="cell"
-              description="Present on editable cells"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-dragging"
-              type="row"
-              description="Present on a row being dragged"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-group-header"
-              type="row"
-              description="Present on group header rows"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

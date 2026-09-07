@@ -8,8 +8,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -17,8 +15,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const HomeIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -59,8 +55,6 @@ const ArrowIcon = ({
     />
   </svg>
 );
-
-// ─── Data ────────────────────────────────────────────────────────────────────
 
 const basicItems: BreadcrumbItem[] = [
   { id: "home", label: "Home" },
@@ -137,8 +131,6 @@ const itemsWithDisabled: BreadcrumbItem[] = [
   { id: "phones", label: "Phones" },
 ];
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (dark: boolean) => ({
   breadcrumb: {
     list: "flex flex-wrap items-center gap-1",
@@ -183,8 +175,6 @@ const getClasses = (dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
-// ─── Demo ────────────────────────────────────────────────────────────────────
-
 const BreadcrumbDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
@@ -207,14 +197,13 @@ const BreadcrumbDemo = () => {
 
       <CopyPasteBlock name="Breadcrumb" />
 
-      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Standard breadcrumb trail with default chevron separators."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Basic usage — works out-of-the-box with built-in styles */}
+          {}
           <Breadcrumb
             items={basicItems}
             onItemClick={handleItemClick}
@@ -222,7 +211,6 @@ const BreadcrumbDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Truncation ─────────────────────────────────────────────────── */}
       <Section
         title="Truncation (maxVisibleItems)"
         description="When items exceed maxVisibleItems, middle items collapse into an accessible dropdown."
@@ -759,209 +747,6 @@ const BreadcrumbDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Breadcrumb" />
-
-      <Section title="BreadcrumbItem" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="id"
-              type="string"
-              defaultVal="required"
-              description="Unique identifier"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              defaultVal="required"
-              description="Display text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="href"
-              type="string"
-              description="Link URL (renders as <a>)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onClick"
-              type="() => void"
-              description="Per-item click handler"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="ReactNode"
-              description="Icon element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="iconPosition"
-              type='"left"|"right"'
-              defaultVal='"left"'
-              description="Icon position relative to label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              description="Disable this item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="ReactNode"
-              description="Custom content instead of label"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltip"
-              type="ReactNode"
-              description="Tooltip content"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="tooltipProps"
-              type="BreadcrumbTooltipProps"
-              description="Tooltip config override for this item"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="BreadcrumbClasses" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container (nav element)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="list"
-              type="string"
-              description="Breadcrumb list (ol element)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="item"
-              type="string"
-              description="Non-active breadcrumb item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="itemActive"
-              type="string"
-              description="Current/last breadcrumb item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="itemDisabled"
-              type="string"
-              description="Disabled breadcrumb item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="link"
-              type="string"
-              description="Item rendered as anchor (has href)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="separator"
-              type="string"
-              description="Separator element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="icon"
-              type="string"
-              description="Icon wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ellipsis"
-              type="string"
-              description="Ellipsis container (li)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="ellipsisButton"
-              type="string"
-              description="Ellipsis trigger button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdown"
-              type="string"
-              description="Dropdown menu container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownItem"
-              type="string"
-              description="Dropdown menu item"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="dropdownItemDisabled"
-              type="string"
-              description="Disabled dropdown item"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use these for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-state"
-              type="item, dropdown"
-              description='"active" | "inactive" | "open"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="item, dropdown item"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-truncated"
-              type="root (nav)"
-              description="Present when items are truncated"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-dropdown-open"
-              type="root (nav)"
-              description="Present when dropdown is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-clickable"
-              type="item (button)"
-              description="Present when item has a click handler"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-position"
-              type="dropdown (portal)"
-              description='"top" | "bottom" | "left" | "right"'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

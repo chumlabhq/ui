@@ -8,10 +8,6 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     await page.locator('[role="img"]').first().waitFor({ state: "visible" });
   });
 
-  // -------------------------------------------------------------------------
-  // Basic rendering
-  // -------------------------------------------------------------------------
-
   test.describe("Flag rendering", () => {
     test("should render flag images on the page", async ({ page }) => {
       const flags = page.locator('[role="img"] img');
@@ -21,18 +17,12 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
       expect(count).toBeGreaterThan(0);
     });
 
-
   });
-
-  // -------------------------------------------------------------------------
-  // Flag groups
-  // -------------------------------------------------------------------------
 
   test.describe("Flag groups", () => {
     test("should display all flags in a group without max", async ({
       page,
     }) => {
-      // "3 flags, md size" section
       const groups = page.locator('[role="group"]');
       const firstGroup = groups.first();
       await expect(firstGroup).toBeVisible();
@@ -42,7 +32,6 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     });
 
     test("should show count badge when max is applied", async ({ page }) => {
-      // Look for "+N" badges
       const countBadges = page.locator('[role="group"] [role="img"]').filter({
         hasText: /^\+\d+$/,
       });
@@ -56,7 +45,6 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     test("should include hidden count in group aria-label", async ({
       page,
     }) => {
-      // Find groups that have a surplus badge (they contain "+N")
       const groups = page.locator('[role="group"]');
       const groupCount = await groups.count();
 
@@ -72,13 +60,8 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // Accessibility
-  // -------------------------------------------------------------------------
-
   test.describe("Accessibility", () => {
     test("every flag has role=img and an aria-label", async ({ page }) => {
-      // Check the first several standalone flags (not in groups)
       const flags = page.locator('[role="img"]');
       const count = Math.min(await flags.count(), 10);
 
@@ -108,10 +91,6 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
       }
     });
   });
-
-  // -------------------------------------------------------------------------
-  // Shimmer loading states
-  // -------------------------------------------------------------------------
 
   test.describe("Shimmer placeholders", () => {
     test("should render shimmer via loading prop on CountryFlag", async ({ page }) => {
@@ -144,10 +123,6 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
 
   });
 
-  // -------------------------------------------------------------------------
-  // Visual dimensions (cross-browser)
-  // -------------------------------------------------------------------------
-
   test.describe("Dimensions", () => {
     test("flag aspect ratio is approximately 4:3", async ({ page }) => {
       const flag = page.locator('[role="img"]').first();
@@ -155,16 +130,11 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
 
       if (box && box.width > 0) {
         const ratio = box.height / box.width;
-        // Should be ~0.75 (allow ±0.05 for rounding)
         expect(ratio).toBeGreaterThan(0.7);
         expect(ratio).toBeLessThan(0.8);
       }
     });
   });
-
-  // -------------------------------------------------------------------------
-  // Error / fallback states
-  // -------------------------------------------------------------------------
 
 });
 

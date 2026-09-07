@@ -59,7 +59,6 @@ export function useAccordionStateManager(
 
   const isControlled = controlledValue !== undefined;
 
-  // Use refs for latest callback values to avoid stale closures
   const onValueChangeRef = useRef(onValueChange);
   const onExpandedChangeRef = useRef(onExpandedChange);
   const announceRef = useRef(announce);
@@ -105,7 +104,6 @@ export function useAccordionStateManager(
     return internalValue;
   }, [isControlled, controlledValue, internalValue]);
 
-  // Use ref for expandedValues to avoid stale closures in controlled mode
   const expandedValuesRef = useRef(expandedValues);
   useIsomorphicLayoutEffect(() => {
     expandedValuesRef.current = expandedValues;
@@ -116,7 +114,6 @@ export function useAccordionStateManager(
     expandedStore.setValues(expandedValues);
   }, [expandedValues, expandedStore]);
 
-  // defaultExpandAll — use layout effect to run synchronously before paint
   const defaultExpandAllApplied = useRef(false);
   useIsomorphicLayoutEffect(() => {
     if (
@@ -132,8 +129,6 @@ export function useAccordionStateManager(
       }
     }
   }, [defaultExpandAll, type, isControlled, getOrderedItems]);
-
-  // ─── Unified state change logic ──────────────────────────────────────────
 
   const fireCallbacks = useCallback(
     (newSet: Set<string>, changedValue?: string, wasExpanded?: boolean) => {

@@ -99,14 +99,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     const prefersReducedMotionForClasses = useReducedMotion();
 
-
     const baseClassesRaw = unstyled ? UNSTYLED_TOOLTIP_CLASSES : DEFAULT_TOOLTIP_CLASSES;
-
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-
-    // this handles the other reason to stop animating. Applied to the defaults
-
-    // only — a class string the consumer supplied is theirs to control.
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses = useMemo(() => ({
@@ -297,7 +290,6 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }, hideDelayDuration);
     }, [setOpen, hideDelayDuration]);
 
-    // Touch support: long-press to show, tap elsewhere to dismiss
     const touchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleTouchStart = useCallback(() => {

@@ -7,8 +7,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -16,8 +14,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (_dark: boolean) => ({
   otp: {
@@ -37,8 +33,6 @@ const getClasses = (_dark: boolean) => ({
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const OtpInputDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -64,7 +58,6 @@ const OtpInputDemo = () => {
 
       <CopyPasteBlock name="OtpInput" />
 
-      {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation. No custom classes needed."
@@ -72,7 +65,7 @@ const OtpInputDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="flex flex-col gap-4">
-            {/* Basic usage — works out-of-the-box with built-in styles */}
+            {}
             <OtpInput
               label="Verification Code"
               description="Enter the 6-digit code sent to your phone"
@@ -83,7 +76,6 @@ const OtpInputDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Label ─────────────────────────────────────────────────── */}
       <Section
         title="With Label"
         description="Accessible labeling via the label prop."
@@ -94,7 +86,6 @@ const OtpInputDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Description ────────────────────────────────────────── */}
       <Section
         title="With Description"
         description="Add helper text below the label."
@@ -110,7 +101,6 @@ const OtpInputDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Required ───────────────────────────────────────────────────── */}
       <Section
         title="Required"
         description="Shows asterisk and sets aria-required."
@@ -121,7 +111,6 @@ const OtpInputDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Lengths ────────────────────────────────────────────────────── */}
       <Section
         title="Custom Length"
         description="Control the number of fields."
@@ -422,7 +411,6 @@ const OtpInputDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ─────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override styling with the classes prop — 8 slots."
@@ -505,7 +493,6 @@ const OtpInputDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Tel Input Type ────────────────────────────────────────────── */}
       <Section
         title="Telephone Input Type"
         description='inputType="tel" shows number pad on mobile devices.'
@@ -587,43 +574,6 @@ const OtpInputDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="OtpInput" />
-
-      <Section title="Data Attributes" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-index"
-              type="input"
-              description="Field index"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-filled"
-              type="input"
-              description="Has value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, input"
-              description="Disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root, input"
-              description="Error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-group"
-              type="group div"
-              description="Group index"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>

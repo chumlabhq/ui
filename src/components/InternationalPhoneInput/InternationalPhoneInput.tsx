@@ -166,9 +166,6 @@ const InternationalPhoneInput = forwardRef<
     const baseClassesRaw = unstyled
       ? UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES
       : DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<InternationalPhoneInputClasses> = useMemo(
@@ -179,9 +176,6 @@ const InternationalPhoneInput = forwardRef<
         control: classesProp?.control ?? baseClasses.control,
         input: classesProp?.input ?? baseClasses.input,
         message: classesProp?.message ?? baseClasses.message,
-        // ADR 002 R6: one key carrying the child's whole bag. Merged per slot
-        // so a consumer overriding `trigger` keeps the other defaults, matching
-        // how a flat key behaves at the top level.
         countrySelect: { ...baseClasses.countrySelect, ...classesProp?.countrySelect },
         itemRow: classesProp?.itemRow ?? baseClasses.itemRow,
         itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
@@ -327,8 +321,6 @@ const InternationalPhoneInput = forwardRef<
       ],
     );
 
-    // Apply the authoritative custom validator (if any) on top of the built-in
-    // result, returning the final validity + optional message.
     const runValidate = useCallback(
       (data: PhoneNumberData): { isValid: boolean; message?: string } => {
         if (!validate) return { isValid: data.isValid };
@@ -657,9 +649,6 @@ const InternationalPhoneInput = forwardRef<
           {clearable && phoneInput && !disabled && !readOnly && (
             <button
               type="button"
-              // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
-              // with a pointer — and for a single select there is no other way
-              // back to an empty value.
               aria-label="Clear phone number"
               onClick={handleClear}
               style={{ cursor: "pointer" }}

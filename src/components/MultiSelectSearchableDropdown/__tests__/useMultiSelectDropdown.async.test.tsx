@@ -19,10 +19,6 @@ const OPTIONS: MultiSelectOption[] = [
   { value: "cherry", label: "Cherry" },
 ];
 
-// ---------------------------------------------------------------------------
-// 18b / 19 / 20. Async onSearch with real short debounce
-// ---------------------------------------------------------------------------
-
 describe("useMultiSelectDropdown – async onSearch", () => {
   it("calls onSearch after debounce and populates displayOptions", async () => {
     const asyncResults: MultiSelectOption[] = [{ value: "x", label: "X" }];
@@ -125,12 +121,6 @@ describe("useMultiSelectDropdown – async onSearch", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 21. loadInitialOnOpen
-// Note: these tests do NOT pass onSearch alongside onLoadInitialOptions to
-// avoid the setAsyncOptions([]) infinite re-render in the debounce effect.
-// ---------------------------------------------------------------------------
-
 describe("useMultiSelectDropdown – loadInitialOnOpen", () => {
   it("calls onLoadInitialOptions on first open", async () => {
     const initialResults: MultiSelectOption[] = [{ value: "loaded", label: "Loaded" }];
@@ -163,7 +153,7 @@ describe("useMultiSelectDropdown – loadInitialOnOpen", () => {
     await act(async () => { result.current.handleToggle(); }); // first open
     expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
 
-    act(() => result.current.handleToggle()); // close
+    act(() => result.current.handleToggle());
     await act(async () => { result.current.handleToggle(); }); // second open
     expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
   });
@@ -266,7 +256,6 @@ describe("useMultiSelectDropdown – loadInitialOnOpen", () => {
     // Open → triggers loadInitialOnOpen effect
     act(() => result.current.handleToggle());
 
-    // Wait for the load promise to resolve
     await act(async () => {
       await new Promise<void>((resolve) => setTimeout(resolve, 0));
     });

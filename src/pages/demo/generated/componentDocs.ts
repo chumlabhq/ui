@@ -20,6 +20,21 @@ export interface KeyboardRow {
   description: string;
 }
 
+export interface MemberDoc {
+  name: string;
+  type: string;
+  required: boolean;
+  description: string;
+}
+
+export interface DataAttributeDoc {
+  name: string;
+  /** The literal values it takes, when the source enumerates them. */
+  values: string[];
+  /** `always`, `when <expression>`, or `varies` where sites disagree. */
+  when: string;
+}
+
 export interface ComponentDoc {
   name: string;
   subpath: string;
@@ -27,6 +42,10 @@ export interface ComponentDoc {
   anatomy: string;
   props: PropDoc[];
   subComponents: { name: string; props: PropDoc[] }[];
+  classes: { map: string; keys: MemberDoc[] }[];
+  shapes: { name: string; description: string; members: MemberDoc[] }[];
+  dataAttributes: DataAttributeDoc[];
+  cssVariables: string[];
   accessibility: string[];
   keyboard: { note: string; rows: KeyboardRow[] } | null;
   snippets: { react: string; next: string; needsClientBoundary: boolean } | null;
@@ -517,6 +536,379 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "AccordionClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemText",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "body",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": "ADR 002 R2: the chevron glyph inside the `icon` slot. Both carried `icon`, so an override on the slot also hit the glyph — R9's ancestor clause. `itemIndicator` is already in R2's closed list, so no precedent is owed."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIcon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "triggerActions",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "header",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "map": "AccordionShimmerClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemText",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "titleBar",
+            "type": "string",
+            "required": false,
+            "description": "The title placeholder bar. NOVEL: no peer ships a skeleton anatomy."
+          },
+          {
+            "name": "descriptionBar",
+            "type": "string",
+            "required": false,
+            "description": "The description placeholder bars, in the trigger and in the body."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "body",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "AccordionContextValue",
+        "description": "",
+        "members": [
+          {
+            "name": "type",
+            "type": "AccordionType",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "collapsible",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "loop",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "itemCount",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "announceExpanded",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "maxExpanded",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "pendingItem",
+            "type": "string | null",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "AccordionExpandEvent",
+        "description": "",
+        "members": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isExpanded",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "expandedCount",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "totalCount",
+            "type": "number",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "AccordionItemContextValue",
+        "description": "",
+        "members": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isExpanded",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "triggerId",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "contentId",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "descriptionId",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onToggle",
+            "type": "(isExpanded: boolean) => void",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "AnimationCallbacks",
+        "description": "",
+        "members": [
+          {
+            "name": "onOpenStart",
+            "type": "() => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onOpenEnd",
+            "type": "() => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onCloseStart",
+            "type": "() => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onCloseEnd",
+            "type": "() => void",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "StorageConfig",
+        "description": "",
+        "members": [
+          {
+            "name": "key",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "storage",
+            "type": "Storage",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "serialize",
+            "type": "(values: string[]) => string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "deserialize",
+            "type": "(stored: string) => string[]",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-accordion-expand-print",
+        "values": [],
+        "when": "when expandOnPrint"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-orientation",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-pending",
+        "values": [],
+        "when": "when isPending"
+      },
+      {
+        "name": "data-size",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "all-closed",
+          "closed",
+          "has-expanded",
+          "open"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-type",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-value",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-variant",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "**Keyboard:** ArrowDown/Up navigates items, Home/End jump to first/last, Enter/Space toggles, disabled items are skipped, loop wraps focus",
       "**ARIA:** Triggers have `aria-expanded` + `aria-controls`, content has `role=\"region\"` + `aria-labelledby`, headings provide semantic structure",
@@ -1148,6 +1540,309 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "AvatarClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container."
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": "Inner wrapper around image/initials/fallback."
+          },
+          {
+            "name": "image",
+            "type": "string",
+            "required": false,
+            "description": "The `<img>` element."
+          },
+          {
+            "name": "fallback",
+            "type": "string",
+            "required": false,
+            "description": "Initials text element."
+          },
+          {
+            "name": "status",
+            "type": "string",
+            "required": false,
+            "description": "Status indicator dot."
+          },
+          {
+            "name": "loading",
+            "type": "AvatarShimmerClasses",
+            "required": false,
+            "description": "R6: the skeleton's own bag. AvatarShimmer is a component, not a part."
+          }
+        ]
+      },
+      {
+        "map": "AvatarGroupClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Group container."
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": "Individual avatar wrapper within the group."
+          },
+          {
+            "name": "surplus",
+            "type": "string",
+            "required": false,
+            "description": "Surplus count indicator."
+          }
+        ]
+      },
+      {
+        "map": "AvatarShimmerClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "AvatarColors",
+        "description": "Custom color palettes for auto-colored avatars.",
+        "members": [
+          {
+            "name": "backgrounds",
+            "type": "string[]",
+            "required": false,
+            "description": "Background color pool."
+          },
+          {
+            "name": "borders",
+            "type": "string[]",
+            "required": false,
+            "description": "Border color pool."
+          },
+          {
+            "name": "text",
+            "type": "string[]",
+            "required": false,
+            "description": "Text color pool."
+          }
+        ]
+      },
+      {
+        "name": "AvatarGroupContextValue",
+        "description": "",
+        "members": [
+          {
+            "name": "size",
+            "type": "AvatarSize",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "shape",
+            "type": "AvatarShape",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "bordered",
+            "type": "boolean | string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "ringColor",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "AvatarImageConfig",
+        "description": "Advanced image loading configuration.",
+        "members": [
+          {
+            "name": "srcSet",
+            "type": "string",
+            "required": false,
+            "description": "Responsive image source set."
+          },
+          {
+            "name": "sizes",
+            "type": "string",
+            "required": false,
+            "description": "Responsive image sizes descriptor."
+          },
+          {
+            "name": "loading",
+            "type": "ImgHTMLAttributes<HTMLImageElement>[\"loading\"]",
+            "required": false,
+            "description": "Image loading strategy (`\"lazy\"` or `\"eager\"`)."
+          },
+          {
+            "name": "decoding",
+            "type": "ImgHTMLAttributes<HTMLImageElement>[\"decoding\"]",
+            "required": false,
+            "description": "Image decoding hint."
+          },
+          {
+            "name": "crossOrigin",
+            "type": "ImgHTMLAttributes<HTMLImageElement>[\"crossOrigin\"]",
+            "required": false,
+            "description": "CORS attribute for the image request."
+          },
+          {
+            "name": "referrerPolicy",
+            "type": "ImgHTMLAttributes<HTMLImageElement>[\"referrerPolicy\"]",
+            "required": false,
+            "description": "Referrer policy for the image request."
+          },
+          {
+            "name": "fetchPriority",
+            "type": "\"high\" | \"low\" | \"auto\"",
+            "required": false,
+            "description": "Fetch priority hint."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Custom CSS class for the `<img>` element."
+          }
+        ]
+      },
+      {
+        "name": "AvatarStatusConfig",
+        "description": "Full configuration object for avatar status indicators.",
+        "members": [
+          {
+            "name": "type",
+            "type": "AvatarStatus",
+            "required": true,
+            "description": "Status type (online, offline, away, busy)."
+          },
+          {
+            "name": "position",
+            "type": "CornerPosition",
+            "required": false,
+            "description": "Corner position for the indicator."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Custom CSS class for the indicator."
+          },
+          {
+            "name": "color",
+            "type": "string",
+            "required": false,
+            "description": "Custom color override for the indicator dot."
+          }
+        ]
+      },
+      {
+        "name": "AvatarTooltipConfig",
+        "description": "Full configuration object for avatar tooltips.",
+        "members": [
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Tooltip content."
+          },
+          {
+            "name": "side",
+            "type": "TooltipSide",
+            "required": false,
+            "description": "Side on which the tooltip appears."
+          },
+          {
+            "name": "align",
+            "type": "TooltipAlign",
+            "required": false,
+            "description": "Alignment along the tooltip side."
+          },
+          {
+            "name": "sideOffset",
+            "type": "number",
+            "required": false,
+            "description": "Pixel offset from the avatar edge."
+          },
+          {
+            "name": "delayDuration",
+            "type": "number",
+            "required": false,
+            "description": "Delay in ms before the tooltip appears."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": "Custom CSS class for the tooltip."
+          },
+          {
+            "name": "showArrow",
+            "type": "boolean",
+            "required": false,
+            "description": "Whether to show a directional arrow."
+          }
+        ]
+      },
+      {
+        "name": "BadgeOffset",
+        "description": "Pixel offset for badge positioning.",
+        "members": [
+          {
+            "name": "x",
+            "type": "number",
+            "required": false,
+            "description": "Horizontal offset in pixels."
+          },
+          {
+            "name": "y",
+            "type": "number",
+            "required": false,
+            "description": "Vertical offset in pixels."
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-has-image",
+        "values": [],
+        "when": "when showImage"
+      },
+      {
+        "name": "data-shape",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [
+      "--avatar-bg",
+      "--avatar-border",
+      "--avatar-dark-bg",
+      "--avatar-dark-border",
+      "--avatar-dark-text",
+      "--avatar-text"
+    ],
     "accessibility": [
       "**`role=\"img\"`** with `aria-label` set to `name` or `alt` on the root element",
       "**Image alt text:** Falls through to `alt` prop, or `name` if `alt` not provided",
@@ -1355,6 +2050,183 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "BreadcrumbClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container (nav element)"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": "Breadcrumb list (ol element)"
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": "Non-active breadcrumb item"
+          },
+          {
+            "name": "link",
+            "type": "string",
+            "required": false,
+            "description": "Item rendered as anchor (has href)"
+          },
+          {
+            "name": "separator",
+            "type": "string",
+            "required": false,
+            "description": "Separator element"
+          },
+          {
+            "name": "itemIcon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "ellipsis",
+            "type": "string",
+            "required": false,
+            "description": "Ellipsis container (li)"
+          },
+          {
+            "name": "ellipsisTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "collapsedItem",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "BreadcrumbItem",
+        "description": "",
+        "members": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onClick",
+            "type": "() => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "iconPosition",
+            "type": "IconPosition",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "tooltip",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "tooltipProps",
+            "type": "BreadcrumbTooltipProps",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-breadcrumb-dropdown-id",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-clickable",
+        "values": [],
+        "when": "when isClickable"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when isDisabled"
+      },
+      {
+        "name": "data-dropdown-open",
+        "values": [],
+        "when": "when isDropdownOpen"
+      },
+      {
+        "name": "data-position",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "active",
+          "inactive",
+          "open"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-truncated",
+        "values": [],
+        "when": "when shouldTruncate"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "**Landmark:** `<nav aria-label=\"Breadcrumb\">` — configurable via `aria-label` prop",
       "**Semantic list:** `<ol>` with `<li>` for screen reader enumeration",
@@ -1596,6 +2468,46 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "ButtonClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root button/anchor/span element."
+          },
+          {
+            "name": "itemText",
+            "type": "string",
+            "required": false,
+            "description": "Inner content wrapper."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": "Leading icon wrapper."
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": "Loader/spinner wrapper."
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-orientation",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "**Keyboard:** Enter/Space triggers click. When `as=\"span\"`, keyboard handling is added automatically.",
       "**Focus ring:** Default classes include `focus-visible:ring-2`. Always visible on keyboard navigation, hidden on mouse click.",
@@ -2042,6 +2954,290 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "CascadingDropdownClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container div"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Trigger button"
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "The trigger\\'s value/placeholder text."
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "subContent",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "subPositioner",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "subItem",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIcon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemControl",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "empty",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": "Loading message"
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loadingItem",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "searchControl",
+            "type": "string",
+            "required": false,
+            "description": "Search input wrapper in the main menu (contains icon + input)."
+          },
+          {
+            "name": "searchInput",
+            "type": "string",
+            "required": false,
+            "description": "The search `<input>` element in the main menu."
+          },
+          {
+            "name": "searchIcon",
+            "type": "string",
+            "required": false,
+            "description": "Search icon in the main menu search input."
+          },
+          {
+            "name": "subSearchControl",
+            "type": "string",
+            "required": false,
+            "description": "Search input wrapper in submenus. Falls back to `searchInput` if not set."
+          },
+          {
+            "name": "subSearchInput",
+            "type": "string",
+            "required": false,
+            "description": "The search `<input>` element in submenus. Falls back to `searchInputElement` if not set."
+          },
+          {
+            "name": "subSearchIcon",
+            "type": "string",
+            "required": false,
+            "description": "Search icon in submenu search inputs. Falls back to `searchIcon` if not set."
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "CascadingOption",
+        "description": "",
+        "members": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "selectedContent",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "children",
+            "type": "CascadingOption[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "selectionMode",
+            "type": "SelectionMode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "hasChildren",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-cascading-submenu",
+        "values": [
+          ""
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-checked",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-full-width",
+        "values": [],
+        "when": "when fullWidth"
+      },
+      {
+        "name": "data-has-submenu",
+        "values": [],
+        "when": "when hasSubmenu"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-state",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"menu\"` on dropdown container, `role=\"menuitem\"` / `role=\"menuitemcheckbox\"` / `role=\"menuitemradio\"` on items",
       "Full keyboard navigation: Arrow keys, Enter, Space, Escape, Home, End",
@@ -2285,6 +3481,119 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "CheckboxClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container wrapping checkbox and label."
+          },
+          {
+            "name": "labelGroup",
+            "type": "string",
+            "required": false,
+            "description": "Container for the label and description text."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label text element."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description text below the label."
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": "The checkbox indicator box."
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": "The check/indeterminate icon inside the indicator."
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": "Error message element."
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-checked",
+        "values": [],
+        "when": "when isChecked"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when disabled"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-indeterminate",
+        "values": [],
+        "when": "when indeterminate"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-readonly",
+        "values": [],
+        "when": "when readOnly"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-shape",
+        "values": [],
+        "when": "when shape"
+      },
+      {
+        "name": "data-size",
+        "values": [],
+        "when": "when typeof size === \"string\""
+      },
+      {
+        "name": "data-state",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "Uses native `<input type=\"checkbox\">` — full browser keyboard/screen reader support",
       "`<label>` wraps the input (implicit association)",
@@ -2573,6 +3882,157 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "CountryFlagClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loading",
+            "type": "CountryFlagShimmerClasses",
+            "required": false,
+            "description": "R6: the skeleton's own bag. CountryFlagShimmer is a component, not a part."
+          },
+          {
+            "name": "image",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "fallback",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "map": "CountryFlagGroupClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "map": "CountryFlagShimmerClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "CountryFlagGroupContextValue",
+        "description": "",
+        "members": [
+          {
+            "name": "itemClassName",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "CountryFlagSize | number",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "CountryFlagTooltipConfig",
+        "description": "",
+        "members": [
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "side",
+            "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"center\" | \"end\"",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "sideOffset",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "delayDuration",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showArrow",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-code",
+        "values": [],
+        "when": "when normalizedCode"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when hasError"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when !showFallback && !isImageLoaded"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"img\"` with `aria-label` on root span",
       "Alt text defaults to country code, customizable via `alt` prop",
@@ -3032,6 +4492,510 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "DatePickerClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container"
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Trigger button"
+          },
+          {
+            "name": "input",
+            "type": "string",
+            "required": false,
+            "description": "Text input inside trigger"
+          },
+          {
+            "name": "triggerActions",
+            "type": "string",
+            "required": false,
+            "description": "The trigger's clear/calendar icon row."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": "Calendar icon in trigger"
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": "Clear button in trigger"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label above trigger"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": "Error message below trigger"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description text below label"
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Calendar popover container"
+          },
+          {
+            "name": "header",
+            "type": "string",
+            "required": false,
+            "description": "Calendar header (month/year nav)"
+          },
+          {
+            "name": "row",
+            "type": "string",
+            "required": false,
+            "description": "Month navigation container"
+          },
+          {
+            "name": "navButton",
+            "type": "string",
+            "required": false,
+            "description": "Navigation button (prev/next month/year)"
+          },
+          {
+            "name": "listRow",
+            "type": "string",
+            "required": false,
+            "description": "Multi-month grid wrapper"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": "Single month grid"
+          },
+          {
+            "name": "listHeader",
+            "type": "string",
+            "required": false,
+            "description": "Weekday header row"
+          },
+          {
+            "name": "weekday",
+            "type": "string",
+            "required": false,
+            "description": "Individual weekday label"
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": "Calendar day cell"
+          },
+          {
+            "name": "weekNumber",
+            "type": "string",
+            "required": false,
+            "description": "Week number column"
+          },
+          {
+            "name": "presetGroup",
+            "type": "string",
+            "required": false,
+            "description": "Preset buttons container"
+          },
+          {
+            "name": "presetTrigger",
+            "type": "string",
+            "required": false,
+            "description": "Individual preset button"
+          },
+          {
+            "name": "footer",
+            "type": "string",
+            "required": false,
+            "description": "Calendar footer"
+          },
+          {
+            "name": "todayTrigger",
+            "type": "string",
+            "required": false,
+            "description": "Today button in footer"
+          },
+          {
+            "name": "markerIndicator",
+            "type": "string",
+            "required": false,
+            "description": "Marker indicator dot"
+          },
+          {
+            "name": "monthSelect",
+            "type": "string",
+            "required": false,
+            "description": "Month select button"
+          },
+          {
+            "name": "yearSelect",
+            "type": "string",
+            "required": false,
+            "description": "Year select button"
+          },
+          {
+            "name": "subContent",
+            "type": "string",
+            "required": false,
+            "description": "Generic dropdown menu"
+          },
+          {
+            "name": "subItem",
+            "type": "string",
+            "required": false,
+            "description": "Dropdown item"
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "CalendarDay",
+        "description": "",
+        "members": [
+          {
+            "name": "date",
+            "type": "Date",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "dayOfMonth",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isToday",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isSelected",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isDisabled",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isOutside",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isRangeStart",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isRangeEnd",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isInRange",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isMarked",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "marker",
+            "type": "DateMarker",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "weekNumber",
+            "type": "number",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "DateMarker",
+        "description": "",
+        "members": [
+          {
+            "name": "date",
+            "type": "Date",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "type",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "color",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "DatePreset",
+        "description": "",
+        "members": [
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "getValue",
+            "type": "() => Date | DateRange | Date[]",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "DateRange",
+        "description": "",
+        "members": [
+          {
+            "name": "start",
+            "type": "Date | null",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "end",
+            "type": "Date | null",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "DateRangeValue",
+        "description": "",
+        "members": [
+          {
+            "name": "start",
+            "type": "DateValue | null",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "end",
+            "type": "DateValue | null",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "DateValue",
+        "description": "",
+        "members": [
+          {
+            "name": "date",
+            "type": "Date",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "dateString",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "DisabledDateOptions",
+        "description": "",
+        "members": [
+          {
+            "name": "before",
+            "type": "Date",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "after",
+            "type": "Date",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disablePast",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disableFuture",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "dates",
+            "type": "Date[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "daysOfWeek",
+            "type": "number[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "custom",
+            "type": "(date: Date) => boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-active",
+        "values": [],
+        "when": "when isActive"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-in-range",
+        "values": [],
+        "when": "when day.isInRange"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-marked",
+        "values": [],
+        "when": "when day.isMarked"
+      },
+      {
+        "name": "data-marker-type",
+        "values": [],
+        "when": "when day.marker?.type"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-outside",
+        "values": [],
+        "when": "when day.isOutside"
+      },
+      {
+        "name": "data-range",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-range-end",
+        "values": [],
+        "when": "when day.isRangeEnd"
+      },
+      {
+        "name": "data-range-start",
+        "values": [],
+        "when": "when day.isRangeStart"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-state",
+        "values": [],
+        "when": "when isActive"
+      },
+      {
+        "name": "data-today",
+        "values": [],
+        "when": "when (day.isToday && showTodayIndicator)"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "**Keyboard:** Arrow keys navigate days, Home/End jump to the bounds of the week (honouring `weekStartsOn`), PageUp/PageDown change months, Shift+PageUp/PageDown change years, Enter/Space selects a day, Escape closes the calendar. Disabled days are stepped over rather than focused. The month and year menus are listboxes: arrows, Home/End, Enter to choose, Escape to close.",
       "**Naming:** the trigger is named by `label`, and falls back to the element showing the selected date or placeholder — `combobox` is not a name-from-content role. The clear control is a real `<button>` beside the trigger, not a `role=\"button\"` span inside it.",
@@ -3345,6 +5309,78 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "DrawerClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "overlay",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-direction",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drawer-body",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drawer-close",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drawer-footer",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drawer-header",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drawer-overlay",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drawer-panel",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "closed",
+          "open"
+        ],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"dialog\"` with `aria-modal` when modal",
       "Default `aria-label=\"Dialog\"` when no label/labelledby provided",
@@ -3735,6 +5771,213 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "DropdownClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container element"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Trigger button (combobox)"
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Dropdown popup container (portal)"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "empty",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loadingItem",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "DropdownOption",
+        "description": "",
+        "members": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "selectedContent",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-dropdown-id",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-full-width",
+        "values": [],
+        "when": "when fullWidth"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-position",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "closed",
+          "open"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-value",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "Trigger: `role=\"combobox\"` with `aria-expanded`, `aria-haspopup=\"listbox\"`, `aria-controls`",
       "Popup: `role=\"listbox\"` with `role=\"option\"` children",
@@ -4014,6 +6257,103 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "InputClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container (label + input row + error/success)"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Helper/description text"
+          },
+          {
+            "name": "input",
+            "type": "string",
+            "required": false,
+            "description": "Native <input> element"
+          },
+          {
+            "name": "prefix",
+            "type": "string",
+            "required": false,
+            "description": "Prefix addon"
+          },
+          {
+            "name": "suffix",
+            "type": "string",
+            "required": false,
+            "description": "Suffix addon"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "required": false,
+            "description": "Character count display"
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when isDisabled"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-readonly",
+        "values": [],
+        "when": "when readOnly"
+      },
+      {
+        "name": "data-size",
+        "values": [],
+        "when": "when size"
+      },
+      {
+        "name": "data-slot",
+        "values": [
+          "input"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "when (!error && success)"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "Native `<input>` element with proper `type`, `id`, `name`",
       "Label associated via `htmlFor` / `id` pairing",
@@ -4393,6 +6733,287 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "InternationalPhoneInputClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Outer container div"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "input",
+            "type": "string",
+            "required": false,
+            "description": "Phone number input element"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "countrySelect",
+            "type": "SearchableDropdownClasses",
+            "required": false,
+            "description": "ADR 002 R6: the country picker is a SearchableDropdown, so its key takes that component's own classes object rather than a string. `unstyled` reaches it by the same path."
+          },
+          {
+            "name": "itemRow",
+            "type": "string",
+            "required": false,
+            "description": "The option row IPI renders into the child's `item` slot. These are IPI's own parts, not the dropdown's: SearchableDropdown has no itemRow/itemIcon/ itemText, and adding them would grow that component's API for one caller."
+          },
+          {
+            "name": "itemIcon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemText",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "triggerRow",
+            "type": "string",
+            "required": false,
+            "description": "The selected country shown on the trigger."
+          },
+          {
+            "name": "flag",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "CountryOption",
+        "description": "",
+        "members": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "flag",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "dialCode",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "PasteDetectedData",
+        "description": "",
+        "members": [
+          {
+            "name": "rawValue",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "detectedCountry",
+            "type": "CountryOption | null",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "phoneNumber",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "PhoneFormatPattern",
+        "description": "",
+        "members": [
+          {
+            "name": "pattern",
+            "type": "(digits: string) => string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "countries",
+            "type": "readonly string[]",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "PhoneLengthRule",
+        "description": "",
+        "members": [
+          {
+            "name": "min",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "PhoneNumberData",
+        "description": "",
+        "members": [
+          {
+            "name": "fullNumber",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "isValid",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "nationalNumber",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "internationalNumber",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "PhoneNumberValue",
+        "description": "",
+        "members": [
+          {
+            "name": "countryCode",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "phoneNumber",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when disabled"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when displayError"
+      },
+      {
+        "name": "data-full-width",
+        "values": [],
+        "when": "when fullWidth"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-readonly",
+        "values": [],
+        "when": "when readOnly"
+      },
+      {
+        "name": "data-slot",
+        "values": [
+          "error",
+          "input",
+          "label",
+          "root",
+          "success",
+          "wrapper"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "Label auto-associated via `htmlFor`; falls back to `aria-label=\"Phone number input\"` when no label",
       "Required inputs set `aria-required=\"true\"` and show asterisk (hidden from screen readers)",
@@ -4664,6 +7285,101 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           }
         ]
       }
+    ],
+    "classes": [
+      {
+        "map": "CircularLoaderClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root wrapper element."
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": "SVG element."
+          },
+          {
+            "name": "track",
+            "type": "string",
+            "required": false,
+            "description": "Background track circle."
+          },
+          {
+            "name": "range",
+            "type": "string",
+            "required": false,
+            "description": "Foreground arc circle."
+          }
+        ]
+      },
+      {
+        "map": "DotLoaderClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root wrapper element."
+          },
+          {
+            "name": "range",
+            "type": "string",
+            "required": false,
+            "description": "Individual dot element."
+          }
+        ]
+      },
+      {
+        "map": "LinearLoaderClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root wrapper element."
+          },
+          {
+            "name": "range",
+            "type": "string",
+            "required": false,
+            "description": "Animated bar element."
+          }
+        ]
+      },
+      {
+        "map": "PulseLoaderClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root wrapper element."
+          },
+          {
+            "name": "range",
+            "type": "string",
+            "required": false,
+            "description": "Core dot element."
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      }
+    ],
+    "cssVariables": [
+      "--loader-size",
+      "--loader-speed",
+      "--loader-track"
     ],
     "accessibility": [
       "All variants use `role=\"status\"` + `aria-live=\"polite\"` + `aria-label=\"Loading\"`",
@@ -5027,6 +7743,143 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "ModalClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root fixed-position wrapper."
+          },
+          {
+            "name": "overlay",
+            "type": "string",
+            "required": false,
+            "description": "Backdrop overlay."
+          },
+          {
+            "name": "positioner",
+            "type": "string",
+            "required": false,
+            "description": "Scroll/centering container."
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Dialog content panel."
+          },
+          {
+            "name": "header",
+            "type": "string",
+            "required": false,
+            "description": "Header section."
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": "Title element."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description element."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": "Header icon wrapper."
+          },
+          {
+            "name": "closeTrigger",
+            "type": "string",
+            "required": false,
+            "description": "Close button."
+          },
+          {
+            "name": "closeIcon",
+            "type": "string",
+            "required": false,
+            "description": "Close icon inside the close button."
+          },
+          {
+            "name": "body",
+            "type": "string",
+            "required": false,
+            "description": "Body content area."
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-centered",
+        "values": [],
+        "when": "when centered"
+      },
+      {
+        "name": "data-fullscreen",
+        "values": [],
+        "when": "when fullScreen"
+      },
+      {
+        "name": "data-modal-body",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-modal-container",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-modal-content",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-modal-footer",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-modal-header",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-modal-overlay",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-modal-root",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-nesting-level",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"dialog\"` with `aria-modal=\"true\"` on content",
       "`aria-labelledby` auto-linked to title when present",
@@ -5423,6 +8276,212 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "MultiSelectDropdownClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container element"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Trigger button"
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Dropdown menu container"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemControl",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "chip",
+            "type": "string",
+            "required": false,
+            "description": "Selected chip styling"
+          },
+          {
+            "name": "chipRemove",
+            "type": "string",
+            "required": false,
+            "description": "Chip remove button"
+          },
+          {
+            "name": "empty",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description/helper text"
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loadingItem",
+            "type": "string",
+            "required": false,
+            "description": "One row of the skeleton. It shared `loading` with the container above it."
+          },
+          {
+            "name": "loadingIcon",
+            "type": "string",
+            "required": false,
+            "description": "The two skeleton shapes inside a `loadingItem`. Their styling was a call-site literal in MultiSelectDropdownShimmer, which has no `classes` prop — routed through this bag rather than giving the sub-component a second way in. NOVEL: no peer library ships a skeleton anatomy."
+          },
+          {
+            "name": "loadingBar",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-checked",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-dropdown-id",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-full-width",
+        "values": [],
+        "when": "when fullWidth"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-position",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "closed",
+          "open"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"combobox\"` on trigger with `aria-expanded`, `aria-haspopup=\"listbox\"`, `aria-controls`",
       "`role=\"listbox\"` with `aria-multiselectable=\"true\"` on option list",
@@ -5863,6 +8922,255 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "MultiSelectSearchableDropdownClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container element"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Trigger button"
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Dropdown content (portaled, background, border, shadow)"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemControl",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "chip",
+            "type": "string",
+            "required": false,
+            "description": "Selected chip"
+          },
+          {
+            "name": "chipRemove",
+            "type": "string",
+            "required": false,
+            "description": "Chip remove button"
+          },
+          {
+            "name": "empty",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": "Loading message"
+          },
+          {
+            "name": "loadingItem",
+            "type": "string",
+            "required": false,
+            "description": "One row of the skeleton. It shared `loading` with the container above it."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "searchControl",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "searchInput",
+            "type": "string",
+            "required": false,
+            "description": "Search input wrapper"
+          },
+          {
+            "name": "searchIcon",
+            "type": "string",
+            "required": false,
+            "description": "Search icon"
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "MultiSelectOption",
+        "description": "",
+        "members": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "selectedContent",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-checked",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-dropdown-id",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-full-width",
+        "values": [],
+        "when": "when fullWidth"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-position",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "closed",
+          "open"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"combobox\"` with full ARIA attributes on trigger",
       "`role=\"listbox\"` with `aria-multiselectable=\"true\"` on option list",
@@ -6131,6 +9439,95 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "OtpInputClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "group",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "input",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "separator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when disabled"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-group",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "Each input has proper `aria-label` (\"Digit 1 of 6\")",
       "Label associated via `id` / `htmlFor`",
@@ -6403,6 +9800,114 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "PaginationClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Outer nav container"
+          },
+          {
+            "name": "row",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "navButton",
+            "type": "string",
+            "required": false,
+            "description": "Prev/next buttons"
+          },
+          {
+            "name": "ellipsis",
+            "type": "string",
+            "required": false,
+            "description": "Ellipsis elements"
+          },
+          {
+            "name": "rowsPerPage",
+            "type": "{ root?: string; positioner?: string; trigger?: string; content?: string; item?: string; icon?: string; }",
+            "required": false,
+            "description": "ADR 002 R6: the rows-per-page selector is a dropdown's anatomy, so its key carries that whole shape. Unlike InternationalPhoneInput's `countrySelect` this is not a rendered child component — Pagination builds the markup inline — so the object is namespaced here rather than imported from one."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "navIcon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "pageInfo",
+            "type": "string",
+            "required": false,
+            "description": "Page info section wrapper"
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-active",
+        "values": [],
+        "when": "when safeCurrentPage === item"
+      },
+      {
+        "name": "data-direction",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when activeOptionIndex === index"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "when selectedValue === option"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "open"
+        ],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`<nav aria-label=\"Pagination\">` landmark (configurable via `paginationAriaLabel`)",
       "`aria-current=\"page\"` on active page button",
@@ -6612,6 +10117,129 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "RadioButtonClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root label container wrapping radio and text."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label text element."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description text below the label."
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": "The radio indicator circle."
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": "The inner dot/icon inside the indicator."
+          }
+        ]
+      },
+      {
+        "map": "RadioGroupClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Group label text."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Group description text."
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": "Error message element."
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-checked",
+        "values": [],
+        "when": "when isChecked"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-orientation",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "checked",
+          "unchecked"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-value",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "Native `<input type=\"radio\">` — browser handles arrow key navigation",
       "`<div role=\"radiogroup\">` wrapper with `aria-label`",
@@ -6753,6 +10381,53 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "ResizablePanelClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container div that wraps children and the handle"
+          },
+          {
+            "name": "handle",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-direction",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when disabled"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-resizing",
+        "values": [],
+        "when": "when isResizing"
+      }
+    ],
+    "cssVariables": [
+      "--resizable-panel-max",
+      "--resizable-panel-min",
+      "--resizable-panel-size"
+    ],
     "accessibility": [
       "`role=\"separator\"` on the drag handle",
       "`aria-valuenow`, `aria-valuemin`, `aria-valuemax` for current size",
@@ -7199,6 +10874,194 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "SearchableDropdownClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container element"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Trigger button (combobox)"
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Dropdown popup container (portal)"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "empty",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "searchControl",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "searchInput",
+            "type": "string",
+            "required": false,
+            "description": "Search input area wrapper"
+          },
+          {
+            "name": "searchIcon",
+            "type": "string",
+            "required": false,
+            "description": "Search icon element"
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loadingItem",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-dropdown-id",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-full-width",
+        "values": [],
+        "when": "when fullWidth"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-position",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "closed",
+          "open"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-value",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"combobox\"` on trigger with `aria-expanded`, `aria-haspopup=\"listbox\"`, `aria-controls`",
       "`role=\"listbox\"` with `aria-label`, `aria-busy` on option list",
@@ -7508,6 +11371,141 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "SliderClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label above the slider"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description below the label"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": "Horizontal/vertical wrapper around track + thumbs"
+          },
+          {
+            "name": "track",
+            "type": "string",
+            "required": false,
+            "description": "Full-length track background"
+          },
+          {
+            "name": "range",
+            "type": "string",
+            "required": false,
+            "description": "Filled portion of the track"
+          },
+          {
+            "name": "thumb",
+            "type": "string",
+            "required": false,
+            "description": "Draggable thumb(s)"
+          },
+          {
+            "name": "valueText",
+            "type": "string",
+            "required": false,
+            "description": "Value tooltip above the thumb"
+          },
+          {
+            "name": "marker",
+            "type": "string",
+            "required": false,
+            "description": "Mark tick container"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": "Error message"
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "SliderMark",
+        "description": "",
+        "members": [
+          {
+            "name": "value",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when disabled"
+      },
+      {
+        "name": "data-dragging",
+        "values": [],
+        "when": "when isDragging"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-index",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-orientation",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-state",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"slider\"` on each thumb with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`",
       "`aria-valuetext` for screen reader value announcement",
@@ -7766,6 +11764,354 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "StepperClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root navigation container"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": "The <ol> list wrapping all steps"
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "indicatorTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIcon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "row",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemText",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Step description text"
+          },
+          {
+            "name": "separator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "Step",
+        "description": "",
+        "members": [
+          {
+            "name": "id",
+            "type": "string | number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ComponentType<IconProps> | ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "completedIcon",
+            "type": "ComponentType<IconProps> | ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "errorIcon",
+            "type": "ComponentType<IconProps> | ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "tooltip",
+            "type": "ReactNode | StepTooltipConfig",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "StepTooltipConfig",
+        "description": "",
+        "members": [
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "side",
+            "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"center\" | \"end\"",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "sideOffset",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "alignOffset",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "maxWidth",
+            "type": "string | number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "delayDuration",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showArrow",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "arrowColor",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "shadow",
+            "type": "TooltipShadow",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "contentClassName",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "contentStyle",
+            "type": "CSSProperties",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "arrowClassName",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "arrowStyle",
+            "type": "CSSProperties",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "StepperTooltipDefaults",
+        "description": "",
+        "members": [
+          {
+            "name": "side",
+            "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"center\" | \"end\"",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "sideOffset",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "alignOffset",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "maxWidth",
+            "type": "string | number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "delayDuration",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showArrow",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "arrowColor",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "shadow",
+            "type": "TooltipShadow",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "contentClassName",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "contentStyle",
+            "type": "CSSProperties",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "arrowClassName",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "arrowStyle",
+            "type": "CSSProperties",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-align",
+        "values": [],
+        "when": "when isLabelBottom"
+      },
+      {
+        "name": "data-clickable",
+        "values": [
+          "true"
+        ],
+        "when": "varies"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-next-status",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-orientation",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-status",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-variant",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"navigation\"` with `aria-label=\"Progress\"` on root (configurable)",
       "Semantic `<ol>/<li>` markup for step sequence",
@@ -8018,6 +12364,114 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "SwitchClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Outer container div"
+          },
+          {
+            "name": "row",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "labelGroup",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description span element"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "thumb",
+            "type": "string",
+            "required": false,
+            "description": "Thumb (handle) span element"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-checked",
+        "values": [],
+        "when": "when isChecked"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when disabled"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "checked",
+          "unchecked"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`<button role=\"switch\" aria-checked>` — native ARIA switch pattern",
       "Label associated via `htmlFor` / `id` pairing",
@@ -8750,6 +13204,427 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "TableClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container wrapping the entire table region."
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": "The `<table>` element itself."
+          },
+          {
+            "name": "header",
+            "type": "string",
+            "required": false,
+            "description": "The `<thead>` element."
+          },
+          {
+            "name": "headerRow",
+            "type": "string",
+            "required": false,
+            "description": "ADR 002 R9 ancestor clause: the <tr> inside `header`. Both read the same key, so an override on the <thead> also hit the row. Qualifier-first compound of `row`, an existing amendment term."
+          },
+          {
+            "name": "headerCell",
+            "type": "string",
+            "required": false,
+            "description": "Individual `<th>` elements."
+          },
+          {
+            "name": "headerCellText",
+            "type": "string",
+            "required": false,
+            "description": "The content wrapper inside each header cell."
+          },
+          {
+            "name": "body",
+            "type": "string",
+            "required": false,
+            "description": "The `<tbody>` element."
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": "Each `<tr>` in the body."
+          },
+          {
+            "name": "cell",
+            "type": "string",
+            "required": false,
+            "description": "Individual `<td>` elements."
+          },
+          {
+            "name": "pinnedRegion",
+            "type": "string",
+            "required": false,
+            "description": "Container for pinned columns."
+          },
+          {
+            "name": "pinnedList",
+            "type": "string",
+            "required": false,
+            "description": "The `<table>` element for pinned columns."
+          },
+          {
+            "name": "scrollRegion",
+            "type": "string",
+            "required": false,
+            "description": "Container for unpinned (scrollable) columns."
+          },
+          {
+            "name": "empty",
+            "type": "string",
+            "required": false,
+            "description": "The empty-state wrapper."
+          },
+          {
+            "name": "pinIcon",
+            "type": "string",
+            "required": false,
+            "description": "Pin icon (unpinned state)."
+          },
+          {
+            "name": "pinButton",
+            "type": "string",
+            "required": false,
+            "description": "Pin button (unpinned state)."
+          },
+          {
+            "name": "loading",
+            "type": "string",
+            "required": false,
+            "description": "Shimmer container."
+          },
+          {
+            "name": "loadingRow",
+            "type": "string",
+            "required": false,
+            "description": "Shimmer row."
+          },
+          {
+            "name": "loadingItem",
+            "type": "string",
+            "required": false,
+            "description": "Shimmer cell."
+          },
+          {
+            "name": "loadingBar",
+            "type": "string",
+            "required": false,
+            "description": "Shimmer bar animation."
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": "Checkbox input for row selection."
+          },
+          {
+            "name": "sortIcon",
+            "type": "string",
+            "required": false,
+            "description": "Sort direction indicator icon."
+          },
+          {
+            "name": "filterButton",
+            "type": "string",
+            "required": false,
+            "description": "Filter icon button in header."
+          },
+          {
+            "name": "filterContent",
+            "type": "string",
+            "required": false,
+            "description": "Filter dropdown container."
+          },
+          {
+            "name": "filterHeader",
+            "type": "string",
+            "required": false,
+            "description": "The column-filter panel's parts. TanStack Table is headless and names data roles, not elements, so it is no peer here — these are qualifier-first compounds of R2 heads (header, label, clearTrigger, item, control), all NOVEL. Selection is `data-selected` (R4), not a second class set."
+          },
+          {
+            "name": "filterLabel",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "filterClearTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "filterItem",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "filterItemControl",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "expandButton",
+            "type": "string",
+            "required": false,
+            "description": "Expand/collapse icon button."
+          },
+          {
+            "name": "pinnedRightRegion",
+            "type": "string",
+            "required": false,
+            "description": "Right-pinned column container."
+          },
+          {
+            "name": "pinnedRightList",
+            "type": "string",
+            "required": false,
+            "description": "The `<table>` element for right-pinned columns."
+          },
+          {
+            "name": "input",
+            "type": "string",
+            "required": false,
+            "description": "Inline edit input field."
+          },
+          {
+            "name": "dragHandle",
+            "type": "string",
+            "required": false,
+            "description": "Drag handle for row reordering."
+          },
+          {
+            "name": "footer",
+            "type": "string",
+            "required": false,
+            "description": "The `<tfoot>` element."
+          },
+          {
+            "name": "searchControl",
+            "type": "string",
+            "required": false,
+            "description": "The box around the search field. It shared `searchInput` with the <input> inside it — the same split already made in CascadingDropdown, SearchableDropdown and MultiSelectSearchableDropdown."
+          },
+          {
+            "name": "searchIcon",
+            "type": "string",
+            "required": false,
+            "description": "R2 `searchIcon` and `clearTrigger`. Both search boxes — the desktop one and the mobile card one — render these; their styling was a call-site literal, so `unstyled` could not strip it and no consumer could reach it. Side placement is `data-side` on `searchControl` (R4), not two class sets."
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "searchInput",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "mobileCard",
+            "type": "string",
+            "required": false,
+            "description": "Mobile card layout wrapper."
+          },
+          {
+            "name": "groupLabel",
+            "type": "string",
+            "required": false,
+            "description": "Group header row."
+          },
+          {
+            "name": "resizeHandle",
+            "type": "string",
+            "required": false,
+            "description": "Column resize handle."
+          },
+          {
+            "name": "resizeIndicator",
+            "type": "string",
+            "required": false,
+            "description": "ADR 002 R10: the bar inside `resizeHandle`. It had no key and carried decorative colour as a call-site literal, so `unstyled` could not strip it and no consumer could reach it. Head noun `indicator` (VERIFIED, Radix Checkbox.Indicator); the state it showed is now `data-resizing`."
+          },
+          {
+            "name": "loadingFooter",
+            "type": "string",
+            "required": false,
+            "description": "Loading more indicator for infinite scroll."
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-active",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-clickable",
+        "values": [],
+        "when": "when onRowClick"
+      },
+      {
+        "name": "data-column-index",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-density",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drag-handle",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-dragging",
+        "values": [],
+        "when": "when dragRowIndex === rowIndex"
+      },
+      {
+        "name": "data-edit-input",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-editing",
+        "values": [],
+        "when": "when isEditing"
+      },
+      {
+        "name": "data-expanded",
+        "values": [],
+        "when": "when isExpanded"
+      },
+      {
+        "name": "data-expanded-content",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-group-row",
+        "values": [],
+        "when": "when isGroupRow"
+      },
+      {
+        "name": "data-grouped",
+        "values": [],
+        "when": "when isGrouped"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-loading-more",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-mobile-card",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-mobile-view",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-pinned",
+        "values": [],
+        "when": "when isPinned"
+      },
+      {
+        "name": "data-resize-handle",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-resizing",
+        "values": [],
+        "when": "when header.column.getIsResizing()"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-side",
+        "values": [
+          "start"
+        ],
+        "when": "varies"
+      },
+      {
+        "name": "data-sorted",
+        "values": [],
+        "when": "when sortDir"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "closed",
+          "open"
+        ],
+        "when": "varies"
+      },
+      {
+        "name": "data-striped",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-table-container",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-table-filter-content",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-table-footer",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-table-search",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-testid",
+        "values": [
+          "table-container"
+        ],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"columnheader\"` with `aria-sort` on sortable headers",
       "`role=\"gridcell\"` on body cells",
@@ -8987,6 +13862,250 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "ResolvedClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": true,
+            "description": "Root container"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "itemText",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "itemIcon",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "required": true,
+            "description": "Count badge base"
+          },
+          {
+            "name": "indicator",
+            "type": "string",
+            "required": true,
+            "description": "Active tab indicator element"
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "map": "TabPanelClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Root container"
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemText",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemIcon",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "required": false,
+            "description": "Count badge base"
+          },
+          {
+            "name": "indicator",
+            "type": "string",
+            "required": false,
+            "description": "Active tab indicator element"
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "Tab",
+        "description": "",
+        "members": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "count",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "tooltip",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "TabPanelContextValue",
+        "description": "",
+        "members": [
+          {
+            "name": "tabListId",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "iconPosition",
+            "type": "IconPosition",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "showZeroCount",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "alwaysShowLabels",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "orientation",
+            "type": "Orientation",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "activationMode",
+            "type": "ActivationMode",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "classNames",
+            "type": "ResolvedClasses",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "onSelect",
+            "type": "(tabId: string) => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "onKeyDown",
+            "type": "(e: KeyboardEvent<HTMLButtonElement>, index: number) => void",
+            "required": true,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-orientation",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-reduce-motion",
+        "values": [],
+        "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-state",
+        "values": [
+          "active",
+          "inactive"
+        ],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"tablist\"` with `aria-label`, `aria-orientation`",
       "`role=\"tab\"` with `aria-selected`, `aria-controls`, `aria-disabled`",
@@ -9310,6 +14429,96 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "TextAreaClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Outermost container (same element as className)"
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Helper/description text"
+          },
+          {
+            "name": "input",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "required": false,
+            "description": "Character count display"
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [
+      {
+        "name": "data-auto-resize",
+        "values": [],
+        "when": "when autoResize"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when isDisabled"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-readonly",
+        "values": [],
+        "when": "when readOnly"
+      },
+      {
+        "name": "data-size",
+        "values": [],
+        "when": "when size"
+      },
+      {
+        "name": "data-slot",
+        "values": [
+          "textarea"
+        ],
+        "when": "always"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "when (!error && success)"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "Native `<textarea>` element",
       "Label associated via `htmlFor` / `id` pairing",
@@ -9661,6 +14870,349 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "TimePickerClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": "Outermost container."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "required": false,
+            "description": "Label element."
+          },
+          {
+            "name": "control",
+            "type": "string",
+            "required": false,
+            "description": "Relative-positioned wrapper around trigger + dropdown."
+          },
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Combobox trigger container."
+          },
+          {
+            "name": "input",
+            "type": "string",
+            "required": false,
+            "description": "Text input element."
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": "End icon wrapper / chevron."
+          },
+          {
+            "name": "clearTrigger",
+            "type": "string",
+            "required": false,
+            "description": "Clear icon button."
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Dropdown panel (listbox)."
+          },
+          {
+            "name": "list",
+            "type": "string",
+            "required": false,
+            "description": "Scrollable option list wrapper."
+          },
+          {
+            "name": "item",
+            "type": "string",
+            "required": false,
+            "description": "Individual option."
+          },
+          {
+            "name": "itemIndicator",
+            "type": "string",
+            "required": false,
+            "description": "Check-mark icon inside a selected option."
+          },
+          {
+            "name": "empty",
+            "type": "string",
+            "required": false,
+            "description": "\"No matching times\" message."
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": false,
+            "description": "Error message element."
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description element."
+          },
+          {
+            "name": "clockContent",
+            "type": "string",
+            "required": false,
+            "description": "Clock variant outermost container."
+          },
+          {
+            "name": "clockDisplay",
+            "type": "string",
+            "required": false,
+            "description": "Hours / minutes display row."
+          },
+          {
+            "name": "clockHours",
+            "type": "string",
+            "required": false,
+            "description": "Hours button in the display."
+          },
+          {
+            "name": "clockMinutes",
+            "type": "string",
+            "required": false,
+            "description": "Minutes button in the display."
+          },
+          {
+            "name": "clockSeparator",
+            "type": "string",
+            "required": false,
+            "description": "Colon separator in the display."
+          },
+          {
+            "name": "clockFace",
+            "type": "string",
+            "required": false,
+            "description": "Circular clock face."
+          },
+          {
+            "name": "clockHand",
+            "type": "string",
+            "required": false,
+            "description": "SVG hand overlay."
+          },
+          {
+            "name": "clockHandLine",
+            "type": "string",
+            "required": false,
+            "description": "SVG line of the hand."
+          },
+          {
+            "name": "clockHandDot",
+            "type": "string",
+            "required": false,
+            "description": "Dot at the tip of the hand."
+          },
+          {
+            "name": "clockNumber",
+            "type": "string",
+            "required": false,
+            "description": "Number label on the clock face."
+          },
+          {
+            "name": "clockCenter",
+            "type": "string",
+            "required": false,
+            "description": "Center dot of the clock."
+          },
+          {
+            "name": "footer",
+            "type": "string",
+            "required": false,
+            "description": "Actions row (Cancel / OK)."
+          },
+          {
+            "name": "cancelButton",
+            "type": "string",
+            "required": false,
+            "description": "Cancel button."
+          },
+          {
+            "name": "confirmButton",
+            "type": "string",
+            "required": false,
+            "description": "OK button."
+          },
+          {
+            "name": "row",
+            "type": "string",
+            "required": false,
+            "description": "AM/PM toggle container."
+          },
+          {
+            "name": "periodButton",
+            "type": "string",
+            "required": false,
+            "description": "Individual AM or PM button."
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "TimeValue",
+        "description": "",
+        "members": [
+          {
+            "name": "hours",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "minutes",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "period",
+            "type": "\"AM\" | \"PM\"",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "UseTimePickerReturn",
+        "description": "",
+        "members": [
+          {
+            "name": "inputValue",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "focusedIndex",
+            "type": "number",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "displayOptions",
+            "type": "string[]",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "setFocusedIndex",
+            "type": "React.Dispatch<React.SetStateAction<number>>",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "handleToggle",
+            "type": "() => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "handleClose",
+            "type": "() => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "handleOpen",
+            "type": "() => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "handleInputChange",
+            "type": "(value: string) => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "handleOptionSelect",
+            "type": "(time: string) => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "handleKeyDown",
+            "type": "(event: React.KeyboardEvent) => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "handleBlur",
+            "type": "() => void",
+            "required": true,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-active",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-disabled",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-error",
+        "values": [],
+        "when": "when error"
+      },
+      {
+        "name": "data-highlighted",
+        "values": [],
+        "when": "when isFocused"
+      },
+      {
+        "name": "data-inner",
+        "values": [],
+        "when": "when isInner"
+      },
+      {
+        "name": "data-invalid",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
+        "name": "data-open",
+        "values": [],
+        "when": "when isOpen"
+      },
+      {
+        "name": "data-selected",
+        "values": [],
+        "when": "when isSelected"
+      },
+      {
+        "name": "data-state",
+        "values": [],
+        "when": "varies"
+      },
+      {
+        "name": "data-valid",
+        "values": [],
+        "when": "varies"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"combobox\"` with `aria-expanded`, `aria-haspopup`, `aria-controls`",
       "`aria-activedescendant` tracks focused option in dropdown",
@@ -9942,6 +15494,232 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
+    "classes": [
+      {
+        "map": "ToastClasses",
+        "keys": [
+          {
+            "name": "root",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "body",
+            "type": "string",
+            "required": false,
+            "description": "ADR 002 R2: the padded row inside `root`. It had no key and was reached by applying `root` to two different elements, so any override on `root` styled both the container and this."
+          },
+          {
+            "name": "track",
+            "type": "string",
+            "required": false,
+            "description": "R2 `track`: the auto-dismiss progress groove that `indicator` fills."
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "description": "Description text element"
+          },
+          {
+            "name": "indicator",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "closeTrigger",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "string",
+            "required": false,
+            "description": "Icon wrapper element"
+          }
+        ]
+      }
+    ],
+    "shapes": [
+      {
+        "name": "ToastConfig",
+        "description": "",
+        "members": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "type",
+            "type": "ToastType",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "message",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "content",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showProgress",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "progressColor",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showCloseButton",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onDismiss",
+            "type": "() => void",
+            "required": false,
+            "description": "Fires when the toast is dismissed."
+          },
+          {
+            "name": "role",
+            "type": "\"alert\" | \"status\"",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "style",
+            "type": "React.CSSProperties",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "pauseOnHover",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "closeAriaLabel",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "classes",
+            "type": "ToastClasses",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "unstyled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "name": "ToastContextValue",
+        "description": "",
+        "members": [
+          {
+            "name": "toast",
+            "type": "(config: Omit<ToastConfig, \"id\"> | string) => string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "success",
+            "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "warning",
+            "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "error",
+            "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "info",
+            "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "dismiss",
+            "type": "(id: string) => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "dismissAll",
+            "type": "() => void",
+            "required": true,
+            "description": ""
+          }
+        ]
+      }
+    ],
+    "dataAttributes": [
+      {
+        "name": "data-toast-id",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-toast-type",
+        "values": [],
+        "when": "always"
+      }
+    ],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"alert\"` for error/warning, `role=\"status\"` for success/info",
       "`aria-live=\"assertive\"` for alerts, `\"polite\"` for status",
@@ -10209,6 +15987,34 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       }
     ],
     "subComponents": [],
+    "classes": [
+      {
+        "map": "TooltipClasses",
+        "keys": [
+          {
+            "name": "trigger",
+            "type": "string",
+            "required": false,
+            "description": "Trigger wrapper element"
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "required": false,
+            "description": "Tooltip content container"
+          },
+          {
+            "name": "arrow",
+            "type": "string",
+            "required": false,
+            "description": "Arrow SVG element"
+          }
+        ]
+      }
+    ],
+    "shapes": [],
+    "dataAttributes": [],
+    "cssVariables": [],
     "accessibility": [
       "`role=\"tooltip\"` on the content element",
       "`aria-describedby` links trigger to tooltip via generated ID",

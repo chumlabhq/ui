@@ -15,12 +15,15 @@ export interface Tab {
 }
 
 export interface TabPanelClasses {
+  /** Root container */
   root?: string;
   list?: string;
   item?: string;
   itemText?: string;
   itemIcon?: string;
+  /** Count badge base */
   count?: string;
+  /** Active tab indicator element */
   indicator?: string;
   content?: string;
 }
@@ -81,12 +84,15 @@ export interface TabPanelProps {
 }
 
 export interface ResolvedClasses {
+  /** Root container */
   root: string;
   list: string;
   item: string;
   itemText: string;
   itemIcon: string;
+  /** Count badge base */
   count: string;
+  /** Active tab indicator element */
   indicator: string;
   content: string;
 }

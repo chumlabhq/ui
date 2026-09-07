@@ -29,8 +29,6 @@ import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 
-// ─── Dropdown Item ─────────────────────────────────────────────────────────
-
 function CollapsedDropdownItem({
   item,
   itemClassName,
@@ -103,8 +101,6 @@ function CollapsedDropdownItem({
 
 CollapsedDropdownItem.displayName = "CollapsedDropdownItem";
 
-// ─── Dropdown Portal ───────────────────────────────────────────────────────
-
 function DropdownPortal({
   buttonRef,
   dropdownId,
@@ -153,7 +149,6 @@ function DropdownPortal({
 }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Auto-focus first enabled item
   useEffect(() => {
     if (menuItemRefs.current.length > 0) {
       const firstEnabled = menuItemRefs.current.find((el) => el && !el.disabled);
@@ -204,8 +199,6 @@ function DropdownPortal({
 }
 
 DropdownPortal.displayName = "DropdownPortal";
-
-// ─── Breadcrumb ────────────────────────────────────────────────────────────
 
 /**
  * Component: Breadcrumb
@@ -260,8 +253,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     },
     ref,
   ) => {
-    // ADR: floating content resolves its layer from the nearest overlay, so a
-    // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
     const generatedId = useId();
@@ -277,7 +268,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const dropdownGap = 0;
     const mountedRef = useRef(false);
 
-    // ─── Notify on dropdown state change (skip initial mount) ────────
     useEffect(() => {
       if (!mountedRef.current) {
         mountedRef.current = true;
@@ -286,12 +276,8 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       onDropdownOpenChange?.(isDropdownOpen);
     }, [isDropdownOpen, onDropdownOpenChange]);
 
-    // ─── Merged classes system ────────────────────────────────────────
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_BREADCRUMB_CLASSES : DEFAULT_BREADCRUMB_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<BreadcrumbClasses> = useMemo(
       () => ({
@@ -309,7 +295,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       [classesProp, baseClasses],
     );
 
-    // ─── Click outside ───────────────────────────────────────────────
     const handleClickOutside = useCallback(
       (event: MouseEvent | TouchEvent) => {
         const target = event.target as Node;
@@ -318,7 +303,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         for (const el of menuEls) {
           if (el?.contains(target)) return;
         }
-        // Use instance-specific selector
         const portalDropdown = (target as HTMLElement).closest?.(
           `[data-breadcrumb-dropdown-id="${dropdownId}"]`,
         );
@@ -338,7 +322,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       };
     }, [isDropdownOpen, handleClickOutside]);
 
-    // ─── Close on scroll ─────────────────────────────────────────────
     useEffect(() => {
       if (!isDropdownOpen || !isBrowser) return;
       const handleScroll = () => setIsDropdownOpen(false);
@@ -346,7 +329,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       return () => window.removeEventListener("scroll", handleScroll, true);
     }, [isDropdownOpen]);
 
-    // ─── Close on Escape (document level) ────────────────────────────
     useEffect(() => {
       if (!isDropdownOpen || !isBrowser) return;
       const handleEscape = (e: KeyboardEvent) => {
@@ -359,13 +341,11 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       return () => document.removeEventListener("keydown", handleEscape);
     }, [isDropdownOpen]);
 
-    // ─── Close on focus leaving ──────────────────────────────────────
     useEffect(() => {
       if (!isDropdownOpen || !isBrowser) return;
       const handleFocusOut = (e: FocusEvent) => {
         const related = e.relatedTarget as Node | null;
         if (!related) return;
-        // If focus is going to the ellipsis button or a menu item, keep open
         if (ellipsisButtonRef.current?.contains(related)) return;
         for (const el of menuItemRefs.current) {
           if (el?.contains(related)) return;
@@ -380,7 +360,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       return () => document.removeEventListener("focusout", handleFocusOut);
     }, [isDropdownOpen, dropdownId]);
 
-    // ─── Item click ──────────────────────────────────────────────────
     const handleItemClick = useCallback(
       (item: BreadcrumbItem) => {
         if (item.disabled) return;
@@ -413,7 +392,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       [],
     );
 
-    // ─── Truncation logic ────────────────────────────────────────────
     const { visibleItems, collapsedItems, shouldTruncate } = useMemo(() => {
       const totalItems = items.length;
       const effectiveMaxVisible = Math.max(maxVisibleItems, 2);
@@ -490,8 +468,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       [activeItemIndex, setActiveItemIndex, onMenuKeyDown],
     );
 
-
-    // ─── Icons ───────────────────────────────────────────────────────
     const SeparatorComponent = SeparatorIconProp || ChevronRightIcon;
     const EllipsisComponent = EllipsisIconProp || DefaultEllipsisIcon;
 
@@ -502,7 +478,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       return { className: iconSize };
     }, [iconSize]);
 
-    // ─── Render helpers ──────────────────────────────────────────────
     const renderSeparator = useCallback(
       (key: string) => (
         <li key={key} role="presentation" aria-hidden="true" className={mergedClasses.separator || undefined}>
@@ -520,7 +495,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 
         const content = <BreadcrumbItemContent item={item} iconClassName={mergedClasses.itemIcon} />;
 
-        // Only merge when tooltip is actually shown to avoid unnecessary object creation
         const mergedTooltipProps = showTooltips && item.tooltip
           ? { ...defaultTooltipProps, ...item.tooltipProps }
           : null;
@@ -696,7 +670,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       keepMounted,
     ]);
 
-    // ─── Build rendered items ────────────────────────────────────────
     const renderedItems = useMemo(() => {
       const result: React.ReactNode[] = [];
 

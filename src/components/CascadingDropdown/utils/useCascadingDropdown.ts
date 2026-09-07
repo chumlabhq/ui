@@ -30,7 +30,6 @@ export const useCascadingDropdown = ({
     value,
     defaultValue: defaultValue ?? {},
     onChange: () => {
-      // onChange with path is handled directly in updateValue
     },
   });
 
@@ -47,7 +46,6 @@ export const useCascadingDropdown = ({
   const submenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHoveringSubmenuRef = useRef(false);
 
-  // ─── Search state ─────────────────────────────────────────────────
   const [menuSearchQuery, setMenuSearchQuery] = useState("");
   const [submenuSearchQuery, setSubmenuSearchQuery] = useState("");
   const [isMenuSearching, setIsMenuSearching] = useState(false);
@@ -57,7 +55,6 @@ export const useCascadingDropdown = ({
   const menuSearchVersionRef = useRef(0);
   const submenuSearchVersionRef = useRef(0);
 
-  // ─── Menu search: useEffect-based debounce (matches SearchableDropdown pattern)
   const hasActiveMenuSearch = !!onMenuSearch && !!menuSearchQuery.trim();
 
   useEffect(() => {
@@ -91,7 +88,6 @@ export const useCascadingDropdown = ({
     return () => clearTimeout(timer);
   }, [hasActiveMenuSearch, menuSearchQuery, onMenuSearch, searchDebounceMs]);
 
-  // ─── Submenu search: useEffect-based debounce
   const activeSubmenuParent = useMemo(
     () => (activeSubmenu ? options.find((opt) => opt.value === activeSubmenu) ?? null : null),
     [activeSubmenu, options],
@@ -130,11 +126,9 @@ export const useCascadingDropdown = ({
     return () => clearTimeout(timer);
   }, [hasActiveSubmenuSearch, submenuSearchQuery, onSubmenuSearch, searchDebounceMs, activeSubmenuParent]);
 
-  // ─── Derived filtered options ─────────────────────────────────────
   const isMenuAsync = !!onMenuSearch;
   const filteredOptions = useMemo(() => {
     if (isMenuAsync) {
-      // Async mode: show async results when searching, otherwise show all options
       if (menuSearchQuery.trim()) {
         return asyncMenuResults ?? options;
       }
@@ -143,7 +137,6 @@ export const useCascadingDropdown = ({
     if (!showMenuSearch || !menuSearchQuery.trim()) {
       return options;
     }
-    // Client-side filter
     const q = menuSearchQuery.toLowerCase();
     return options.filter((opt) => opt.label.toLowerCase().includes(q));
   }, [isMenuAsync, showMenuSearch, menuSearchQuery, options, asyncMenuResults]);
@@ -169,7 +162,6 @@ export const useCascadingDropdown = ({
     [isSubmenuAsync, showSubmenuSearch, submenuSearchQuery, asyncSubmenuResults, loadedChildren],
   );
 
-  // ─── Search change handlers (simple state setters) ────────────────
   const onMenuSearchChange = useCallback(
     (query: string) => {
       setMenuSearchQuery(query);

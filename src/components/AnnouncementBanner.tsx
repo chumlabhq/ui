@@ -10,8 +10,6 @@ export default function AnnouncementBanner() {
       aria-label="Pre-launch announcement"
     >
       <div className="w-full px-3 sm:px-6 md:px-8">
-        {/* Mobile: stacked column. Pill anchors the top, icon + full wrapped
-            message sit below. */}
         <div className="sm:hidden flex flex-col items-center gap-2 py-2.5 text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-[#050608] text-[#7eb1ff] px-2.5 py-0.5 text-[10px] font-bold tracking-[0.12em] uppercase">
             <span className="relative flex h-1.5 w-1.5" aria-hidden>
@@ -38,7 +36,6 @@ export default function AnnouncementBanner() {
           </div>
         </div>
 
-        {/* sm+: single horizontal line with separator dots. */}
         <div className="hidden sm:flex items-center justify-center gap-3.5 h-12 text-[14px] md:text-[15px] font-semibold tracking-[-0.01em] whitespace-nowrap">
           <svg
             width="18"

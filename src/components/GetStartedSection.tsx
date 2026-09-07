@@ -95,9 +95,7 @@ export function GetStartedSection() {
       />
 
       <div className="mx-auto max-w-[1180px] px-4 sm:px-5 md:px-6 lg:px-8">
-        {/* Two-column grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-15 items-center">
-          {/* LEFT — editorial timeline */}
           <div>
             <Reveal delay={50} translateY={12} duration={200}>
               <h2
@@ -122,16 +120,13 @@ export function GetStartedSection() {
 
             <Reveal delay={150} translateY={12} duration={200}>
             <div className="relative pl-7 mb-8">
-              {/* Static dim line */}
               <div className="absolute left-[7px] top-2 bottom-2 w-px bg-fg/[0.08]" />
 
-              {/* Animated progress line */}
               <div
                 className="timeline-progress absolute left-[7px] top-2 w-px bg-gradient-to-b from-accent to-accent/40"
                 style={{ height: "0%" }}
               />
 
-              {/* Step 1 */}
               <div className="step step-1 relative pb-7">
                 <div className="marker absolute -left-[28.5px] top-[5px] w-4 h-4 rounded-full bg-bg-base border-[1.5px] border-accent/40 flex items-center justify-center z-10">
                   <div className="dot w-1.5 h-1.5 rounded-full bg-accent/40" />
@@ -151,7 +146,6 @@ export function GetStartedSection() {
                 </p>
               </div>
 
-              {/* Step 2 */}
               <div className="step step-2 relative pb-7">
                 <div className="marker absolute -left-[28.5px] top-[5px] w-4 h-4 rounded-full bg-bg-base border-[1.5px] border-accent/40 flex items-center justify-center z-10">
                   <div className="dot w-1.5 h-1.5 rounded-full bg-accent/40" />
@@ -171,7 +165,6 @@ export function GetStartedSection() {
                 </p>
               </div>
 
-              {/* Step 3 */}
               <div className="step step-3 relative">
                 <div className="marker absolute -left-[28.5px] top-[5px] w-4 h-4 rounded-full bg-bg-base border-[1.5px] border-accent/40 flex items-center justify-center z-10">
                   <div className="dot w-1.5 h-1.5 rounded-full bg-accent/40" />
@@ -192,7 +185,6 @@ export function GetStartedSection() {
               </div>
             </div>
 
-            {/* CTAs */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-3.5">
               <Button
                 variant="primary"
@@ -235,7 +227,6 @@ export function GetStartedSection() {
             </Reveal>
           </div>
 
-          {/* RIGHT — synchronized terminal */}
           <Reveal
             delay={150}
             translateY={0}
@@ -270,7 +261,6 @@ export function GetStartedSection() {
                 className="px-6 py-6 h-[250px] sm:h-[290px] overflow-hidden relative font-mono text-[12px] sm:text-[13px] leading-[1.85] text-fg/85"
               >
                 <div className="term-tape">
-                  {/* Block 1: Install (height 120px) */}
                   <div className="h-[120px] flex flex-col">
                     <div className="h-[24px] flex items-center">
                       <span className="text-fg/40">$</span>
@@ -295,7 +285,6 @@ export function GetStartedSection() {
                     </div>
                   </div>
 
-                  {/* Block 2: Import (height 120px) */}
                   <div className="h-[120px] flex flex-col">
                     <div className="h-[24px] flex items-center">
                       <span className="text-fg/40">$</span>&nbsp;cat
@@ -320,7 +309,6 @@ export function GetStartedSection() {
                     </div>
                   </div>
 
-                  {/* Block 3: Use (height 120px) — ONLY this block has the blink cursor */}
                   <div className="h-[120px] flex flex-col">
                     <div className="h-[24px] flex items-center">
                       &lt;<span className="text-[color:var(--code-fn)]">Button</span>&nbsp;

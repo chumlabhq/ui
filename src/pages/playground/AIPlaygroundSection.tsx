@@ -44,8 +44,6 @@ addIcon("logos:google-icon", {
  * prevents stale callbacks from updating state after teardown.
  */
 
-// ─── Token model (lightweight syntax highlighter) ─────────────────────────
-
 type TokenKind = "kw" | "str" | "fn" | "punc" | "comment";
 interface Token {
   k: TokenKind;
@@ -118,8 +116,6 @@ function renderCode(code: Token[][], upTo: number): React.ReactNode[] {
   }
   return els;
 }
-
-// ─── Preview components (polished mockups of generated output) ────────────
 
 function OTPInputPreview() {
   const boxes: Array<{ value: string; focus: boolean }> = [
@@ -514,8 +510,6 @@ function LoginScreenshotSkeleton() {
   );
 }
 
-// ─── Cycles ───────────────────────────────────────────────────────────────
-
 interface PlanTask {
   label: string;
   tag: string;
@@ -838,8 +832,6 @@ const CYCLES: Cycle[] = [
   },
 ];
 
-// ─── Phase machine ────────────────────────────────────────────────────────
-
 type Phase =
   | "inputTyping"
   | "sendBeat"
@@ -1067,11 +1059,6 @@ function usePlaygroundLoop({
   return { cycleIdx, phase, promptChars, codeChars };
 }
 
-// ─── Agent breakdown (mirrors the real playground's AgentBreakdown) ─────────
-// The demo animates the same 4-agent relay the product shows: Router plans,
-// Developer writes, Verifier runs the deterministic gates, QA reviews — then a
-// deliver seal. Agent state is derived from the loop `phase`; no extra timers.
-
 type MockAgentStatus = "queued" | "running" | "done";
 interface MockAgent {
   id: string;
@@ -1244,8 +1231,6 @@ function MockAgentBreakdown({ phase, cycle }: { phase: Phase; cycle: Cycle }) {
     </div>
   );
 }
-
-// ─── Mock playground shell (mirrors the real /playground 3-pane app) ────────
 
 const SIDEBAR_CHATS = [
   "A 6-digit OTP input",
@@ -1595,8 +1580,6 @@ function MockPlaygroundShell({
   );
 }
 
-// ─── Section ──────────────────────────────────────────────────────────────
-
 export default function AIPlaygroundSection() {
   const [params, setParams] = useSearchParams();
   const enterPlayground = useEnterPlayground();
@@ -1883,8 +1866,6 @@ export default function AIPlaygroundSection() {
     </>
   );
 }
-
-// ─── Shared message wrappers ──────────────────────────────────────────────
 
 // The real MessageList has no avatars next to bubbles — AI left, user right.
 function AIMessage({ children }: { children: React.ReactNode }) {

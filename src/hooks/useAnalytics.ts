@@ -34,7 +34,6 @@ export function useAnalytics() {
   const location = useLocation();
   const isFirstNavigation = useRef(true);
 
-  // Page views on route change.
   useEffect(() => {
     if (isFirstNavigation.current) {
       isFirstNavigation.current = false;

@@ -114,7 +114,6 @@ export interface SliderProps
    */
   transitionDuration?: number;
 
-  // ─── Form ───────────────────────────────────────────────────────────
   id?: string;
   name?: string;
   label?: ReactNode;
@@ -128,11 +127,9 @@ export interface SliderProps
   successMessage?: ReactNode;
   loading?: boolean;
 
-  // ─── Styling ────────────────────────────────────────────────────────
   classes?: SliderClasses;
   unstyled?: boolean;
 
-  // ─── Accessibility ──────────────────────────────────────────────────
   "aria-label"?: string;
   "aria-labelledby"?: string;
   "aria-valuetext"?: string;

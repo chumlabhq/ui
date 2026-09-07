@@ -207,6 +207,229 @@ function keyboardOf(name) {
   return { note: note.startsWith("|") ? "" : note, rows };
 }
 
+/** ── the three reference tables, derived from the source ──────────────── */
+
+const walkSource = (dir) =>
+  existsSync(dir)
+    ? readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const path = join(dir, entry.name);
+        if (entry.isDirectory()) return path.includes("__tests__") ? [] : walkSource(path);
+        return /\.tsx?$/.test(entry.name) && !path.includes("__tests__") ? [path] : [];
+      })
+    : [];
+
+const parse = (file) =>
+  ts.createSourceFile(
+    file,
+    readFileSync(file, "utf8"),
+    ts.ScriptTarget.Latest,
+    true,
+    /\.tsx$/.test(file) ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+  );
+
+/** The JSDoc text on a declaration, as one line, or "". */
+function docOf(node) {
+  const jsDoc = node.jsDoc?.[node.jsDoc.length - 1];
+  const comment = jsDoc?.comment;
+  const text = typeof comment === "string" ? comment : (comment ?? []).map((c) => c.text).join("");
+  return text.replace(/\s*\n\s*/g, " ").trim();
+}
+
+function membersOf(decl, sf) {
+  const members = ts.isInterfaceDeclaration(decl)
+    ? decl.members
+    : ts.isTypeLiteralNode(decl.type ?? {})
+      ? decl.type.members
+      : [];
+  return [...members]
+    .filter((m) => m.name)
+    .map((m) => ({
+      name: m.name.getText(sf).replace(/^["']|["']$/g, ""),
+      type: m.type ? m.type.getText(sf).replace(/\s*\n\s*/g, " ") : "unknown",
+      required: !m.questionToken,
+      description: docOf(m),
+    }));
+}
+
+/**
+ * Every `*Classes` interface a component declares.
+ *
+ * The same derivation `doc-truth.contract` reads its key names from, with the
+ * JSDoc on each key carried through — so a slot's description lives on the type
+ * that owns it rather than in a table beside it. A key with no JSDoc renders
+ * with an empty description, which is the honest state and says where to fix it.
+ */
+function classesOf(name) {
+  const maps = [];
+  for (const file of walkSource(join(SRC, name))) {
+    if (!/types\.tsx?$/.test(file)) continue;
+    const sf = parse(file);
+    ts.forEachChild(sf, (node) => {
+      if (!ts.isInterfaceDeclaration(node) || !/Classes$/.test(node.name.text)) return;
+      maps.push({ map: node.name.text, keys: membersOf(node, sf) });
+    });
+  }
+  return maps.sort((a, b) => a.map.localeCompare(b.map));
+}
+
+/**
+ * The data shapes a consumer has to build: an exported interface or type alias
+ * a prop's own type names, which is not a props bag and not a class map.
+ *
+ * Reached by name from the props rather than listed: `Tab` is documentation
+ * because `tabs: Tab[]` asks for one, and `DropdownTriggerRenderProps` is not
+ * because nothing takes it as input.
+ *
+ * The names come from the TypeScript props interfaces, not from the schema:
+ * the schema renders `tabs: Tab[]` as `array`, so nothing there says `Tab`.
+ */
+function shapesOf(name) {
+  const declared = new Map();
+  for (const file of walkSource(join(SRC, name))) {
+    const sf = parse(file);
+    ts.forEachChild(sf, (node) => {
+      const isExported = node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+      if (!isExported) return;
+      if (ts.isInterfaceDeclaration(node)) declared.set(node.name.text, { node, sf });
+      else if (ts.isTypeAliasDeclaration(node) && ts.isTypeLiteralNode(node.type))
+        declared.set(node.name.text, { node, sf });
+    });
+  }
+
+  const namesIn = (value) => {
+    const text = typeof value === "string" ? value : "";
+    const out = [];
+    for (const m of text.matchAll(/\b([A-Z][A-Za-z0-9]*)\b/g)) {
+      if (/Props$|Classes$/.test(m[1])) continue;
+      if (declared.has(m[1])) out.push(m[1]);
+    }
+    return out;
+  };
+
+  const wanted = new Set();
+  for (const file of walkSource(join(SRC, name))) {
+    const sf = parse(file);
+    ts.forEachChild(sf, (node) => {
+      // The props bags a consumer fills in.
+      if (
+        (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) &&
+        /Props$/.test(node.name.text)
+      ) {
+        for (const tag of namesIn(node.getText(sf))) wanted.add(tag);
+      }
+      // What an exported hook hands back — `useToast()` returns the object the
+      // "useToast Methods" table used to describe by hand.
+      const decl = ts.isVariableStatement(node) ? node.declarationList.declarations[0] : node;
+      const isHook =
+        decl?.name &&
+        /^use[A-Z]/.test(decl.name.getText?.(sf) ?? "") &&
+        node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+      if (isHook) {
+        const returns =
+          decl.type?.getText(sf) ??
+          (ts.isVariableDeclaration(decl) && decl.initializer?.type?.getText?.(sf)) ??
+          "";
+        for (const tag of namesIn(returns)) wanted.add(tag);
+      }
+    });
+  }
+
+  // A shape can name another — `Step.tooltip` is a `StepTooltipConfig` — so
+  // follow the references until nothing new appears.
+  for (let added = true; added; ) {
+    added = false;
+    for (const tag of [...wanted]) {
+      const entry = declared.get(tag);
+      for (const next of namesIn(entry.node.getText(entry.sf))) {
+        if (!wanted.has(next)) {
+          wanted.add(next);
+          added = true;
+        }
+      }
+    }
+  }
+
+  // Public is the same test doc-truth uses: re-exported from the component's
+  // own entry. An internal helper type a prop happens to name is the
+  // component's business, not the consumer's.
+  const entryFile = join(SRC, name, "index.ts");
+  const entry = existsSync(entryFile) ? readFileSync(entryFile, "utf8") : "";
+
+  return [...wanted]
+    .filter((tag) => new RegExp(`\\b${tag}\\b`).test(entry))
+    .sort()
+    .map((tag) => {
+      const { node, sf } = declared.get(tag);
+      return { name: tag, description: docOf(node), members: membersOf(node, sf) };
+    })
+    .filter((shape) => shape.members.length > 0);
+}
+
+/**
+ * Every `data-*` attribute the component renders, and when.
+ *
+ * Read off the JSX rather than out of a record: `002-state-attribute-catalogue`
+ * classifies the eighty-six attribute NAMES the library emits, which is a
+ * different question from which of them this component puts on the page. The
+ * two emission shapes carry their own answer — `x || undefined` is present
+ * while `x` holds, and a ternary of two literals is an enumerated value — and
+ * anything else reports as always present rather than being guessed at.
+ */
+function dataAttributesOf(name) {
+  const found = new Map();
+  for (const file of walkSource(join(SRC, name))) {
+    if (!/\.tsx$/.test(file)) continue;
+    const sf = parse(file);
+    const visit = (node) => {
+      if (ts.isJsxAttribute(node) && /^data-/.test(node.name.getText(sf))) {
+        const attribute = node.name.getText(sf);
+        const init = node.initializer;
+        let values = [];
+        let when = "always";
+        if (init && ts.isJsxExpression(init) && init.expression) {
+          const expr = init.expression;
+          if (ts.isConditionalExpression(expr)) {
+            const whenTrue = expr.whenTrue.getText(sf);
+            const whenFalse = expr.whenFalse.getText(sf);
+            const literals = [whenTrue, whenFalse].filter((t) => /^["'].*["']$/.test(t));
+            if (literals.length === 2) values = literals.map((t) => t.slice(1, -1));
+            else if (whenFalse === "undefined") when = `when ${expr.condition.getText(sf)}`;
+          } else if (
+            ts.isBinaryExpression(expr) &&
+            expr.operatorToken.kind === ts.SyntaxKind.BarBarToken &&
+            expr.right.getText(sf) === "undefined"
+          ) {
+            when = `when ${expr.left.getText(sf)}`;
+          }
+        } else if (init && ts.isStringLiteral(init)) {
+          values = [init.text];
+        }
+        const existing = found.get(attribute);
+        const merged = {
+          name: attribute,
+          values: [...new Set([...(existing?.values ?? []), ...values])].sort(),
+          when: existing && existing.when !== when ? "varies" : when,
+        };
+        found.set(attribute, merged);
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return [...found.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/** CSS custom properties the component sets on its own elements. */
+function cssVariablesOf(name) {
+  const found = new Set();
+  for (const file of walkSource(join(SRC, name))) {
+    for (const m of readFileSync(file, "utf8").matchAll(/["'](--[a-z][a-z0-9-]*)["']\s*:/g)) {
+      found.add(m[1]);
+    }
+  }
+  return [...found].sort();
+}
+
 /** ── assembly ─────────────────────────────────────────────────────────── */
 
 const docs = [];
@@ -234,16 +457,23 @@ for (const name of COMPONENTS) {
   const keyboard = keyboardOf(name);
   if (!keyboard) problems.push(`${name}: no "## Keyboard Interactions" section`);
 
+  const props = propsFrom(schema.properties, schema.required);
+  const subComponents = Object.entries(schema.subComponents ?? {}).map(([tag, sub]) => ({
+    name: tag,
+    props: propsFrom(sub.properties, sub.required),
+  }));
+
   docs.push({
     name,
     subpath,
     summary,
     anatomy,
-    props: propsFrom(schema.properties, schema.required),
-    subComponents: Object.entries(schema.subComponents ?? {}).map(([tag, sub]) => ({
-      name: tag,
-      props: propsFrom(sub.properties, sub.required),
-    })),
+    props,
+    subComponents,
+    classes: classesOf(name),
+    shapes: shapesOf(name),
+    dataAttributes: dataAttributesOf(name),
+    cssVariables: cssVariablesOf(name),
     accessibility: accessibilityOf(name),
     keyboard,
     snippets: code
@@ -280,6 +510,21 @@ export interface KeyboardRow {
   description: string;
 }
 
+export interface MemberDoc {
+  name: string;
+  type: string;
+  required: boolean;
+  description: string;
+}
+
+export interface DataAttributeDoc {
+  name: string;
+  /** The literal values it takes, when the source enumerates them. */
+  values: string[];
+  /** \`always\`, \`when <expression>\`, or \`varies\` where sites disagree. */
+  when: string;
+}
+
 export interface ComponentDoc {
   name: string;
   subpath: string;
@@ -287,6 +532,10 @@ export interface ComponentDoc {
   anatomy: string;
   props: PropDoc[];
   subComponents: { name: string; props: PropDoc[] }[];
+  classes: { map: string; keys: MemberDoc[] }[];
+  shapes: { name: string; description: string; members: MemberDoc[] }[];
+  dataAttributes: DataAttributeDoc[];
+  cssVariables: string[];
   accessibility: string[];
   keyboard: { note: string; rows: KeyboardRow[] } | null;
   snippets: { react: string; next: string; needsClientBoundary: boolean } | null;

@@ -1,7 +1,3 @@
-// AI Knowledge: See ../INTERNATIONALPHONEINPUT.ai.md for the `validate` prop and
-// opt-in validation guide. This subpath (`@chumlab/ui/phone-validators`) pulls in
-// libphonenumber-js and is intentionally NOT part of the default component bundle.
-// Uses the `/max` metadata for full per-country validation accuracy.
 import {
   isValidPhoneNumber,
   isPossiblePhoneNumber,

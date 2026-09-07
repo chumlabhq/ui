@@ -4,10 +4,13 @@ import type { DropdownOption } from "../../Dropdown/utils/types.js";
 export type SearchableDropdownOption = DropdownOption;
 
 export interface SearchableDropdownClasses {
+  /** Root container element */
   root?: string;
   control?: string;
+  /** Trigger button (combobox) */
   trigger?: string;
   value?: string;
+  /** Dropdown popup container (portal) */
   content?: string;
   list?: string;
   item?: string;
@@ -15,11 +18,14 @@ export interface SearchableDropdownClasses {
   itemIndicator?: string;
   clearTrigger?: string;
   empty?: string;
+  /** Label element */
   label?: string;
   message?: string;
   description?: string;
   searchControl?: string;
+  /** Search input area wrapper */
   searchInput?: string;
+  /** Search icon element */
   searchIcon?: string;
   loading?: string;
   loadingItem?: string;

@@ -18,8 +18,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -27,8 +25,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const Icon = ({
   d,
@@ -81,10 +77,7 @@ const SettingsIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const getClasses = (dark: boolean) => ({
-  // Accordion component classes
   accordion: {
     root: "w-full",
     item: dark
@@ -100,7 +93,6 @@ const getClasses = (dark: boolean) => ({
     subtitle: `font-normal mt-0.5 text-cl-text-tertiary`,
     heading: "",
   },
-  // Variant overrides
   accordionBordered: {
     root: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
     item: dark
@@ -116,7 +108,6 @@ const getClasses = (dark: boolean) => ({
     item: "",
     trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-cl-text hover:text-cl-accent focus-visible:ring-cl-accent dark:text-cl-text dark:hover:text-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
   },
-  // Demo UI classes (matching InputDemo/TextAreaDemo pattern)
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
@@ -129,20 +120,15 @@ const getClasses = (dark: boolean) => ({
   divider: `border-t border-cl-border`,
 });
 
-// ─── Demo ────────────────────────────────────────────────────────────────────
-
 const AccordionDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
 
-  // Controlled state
   const [singleValue, setSingleValue] = useState<string | null>("item-1");
   const [multipleValue, setMultipleValue] = useState<string[]>(["multi-1"]);
 
-  // Imperative ref
   const accordionRef = useRef<AccordionRef>(null);
 
-  // Dynamic items
   const [dynamicItems, setDynamicItems] = useState([
     {
       id: "dyn-1",
@@ -157,7 +143,6 @@ const AccordionDemo = () => {
   ]);
   const [nextId, setNextId] = useState(3);
 
-  // Toggle log
   const [toggleLog, setToggleLog] = useState<string[]>([]);
 
   const addItem = () => {
@@ -949,7 +934,6 @@ const AccordionDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Subtitles & Slots ──────────────────────────────────────────── */}
       <Section
         title="Subtitles & Slots"
         description="Add subtitles and custom left/right slot content to triggers."
@@ -1559,66 +1543,6 @@ const AccordionDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Accordion" />
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use these for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-state"
-              type="Accordion, Item, Trigger, Content"
-              description='"has-expanded"|"all-closed" (root), "open"|"closed" (items)'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="Item, Trigger"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-pending"
-              type="Item"
-              description="Present during async preventClose"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-orientation"
-              type="Accordion, Item, Trigger, Content"
-              description='"vertical"|"horizontal"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-value"
-              type="Item"
-              description="The item's value string"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-type"
-              type="Accordion"
-              description='"single"|"multiple"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-size"
-              type="Accordion"
-              description="Size preset value"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-variant"
-              type="Accordion"
-              description="Variant value"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

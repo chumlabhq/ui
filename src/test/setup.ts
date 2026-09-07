@@ -9,7 +9,6 @@ import { resetReducedMotionCache } from "../utils/useReducedMotion.js";
 // throw on `Object.defineProperty(window, …)`.
 const hasDom = typeof window !== "undefined";
 
-// Cleanup after each test
 afterEach(() => {
   if (hasDom) {
     cleanup();
@@ -34,7 +33,6 @@ if (hasDom) {
   // See src/test/matchMedia.ts for why "false by default" was the wrong stub.
   installMatchMedia();
 
-  // Mock scrollIntoView
   Element.prototype.scrollIntoView = vi.fn();
 
   // Suppress React 19 console warnings in tests

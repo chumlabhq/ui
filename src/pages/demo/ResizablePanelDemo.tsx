@@ -6,8 +6,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -16,8 +14,6 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (_dark: boolean) => ({
   panel: {
@@ -31,8 +27,6 @@ const getClasses = (_dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const ResizablePanelDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -947,85 +941,6 @@ const ResizablePanelDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="ResizablePanel" />
-
-      <Section title="ResizablePanelClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container div that wraps children and the handle"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="handle"
-              type="string"
-              description='Drag handle element (role="separator") — positioned on the edge specified by resizeDirection'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-resizing"
-              type="root, handle"
-              description="Present during an active pointer drag"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, handle"
-              description="Present when the component is disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-direction"
-              type="handle"
-              description='"left", "right", "top", or "bottom" — which edge the handle is on'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── CSS Custom Properties ────────────────────────────────────── */}
-      <Section
-        title="CSS Custom Properties"
-        description="The component exposes CSS custom properties on the root element for flexible styling and integration with external CSS."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="--resizable-panel-size"
-              type="root"
-              description="Current size in pixels (rounded)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="--resizable-panel-min"
-              type="root"
-              description="Minimum size constraint in pixels"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="--resizable-panel-max"
-              type="root"
-              description="Maximum size constraint in pixels"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

@@ -9,8 +9,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -18,8 +16,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const MessageIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -141,10 +137,7 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-// ─── Themed Classes (identical structure to InputDemo) ───────────────────────
-
 const getClasses = (dark: boolean) => ({
-  // ── TextAreaClasses object for the `classes` prop ──
   textarea: {
     control: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
     input: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-disabled`,
@@ -154,13 +147,11 @@ const getClasses = (dark: boolean) => ({
     count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`,
   } satisfies TextAreaClasses,
 
-  // ── Wrapper variants for validation states ──
   wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:text-cl-text-secondary dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
   wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:text-cl-text-secondary dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
   wrapperDisabled: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
   disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled`,
 
-  // ── Misc UI helpers ──
   container: "flex flex-col",
   icon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
   iconHover: dark
@@ -179,8 +170,6 @@ const getClasses = (dark: boolean) => ({
   tableCell: "py-2.5 px-4",
   divider: `border-t border-cl-border`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const TextAreaDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -212,9 +201,7 @@ const TextAreaDemo = () => {
 
       <CopyPasteBlock name="TextArea" />
 
-      {/* ─── Examples ───────────────────────────────────────────────── */}
       <div className="space-y-8">
-        {/* Basic */}
         <Section
           title="Basic Usage"
           description="Works out-of-the-box with built-in styles, dark mode, and focus states. No custom classes needed."
@@ -222,7 +209,7 @@ const TextAreaDemo = () => {
         >
           <DemoWrapper isDarkMode={dark} layout="block">
             <div className="flex flex-col gap-4 w-full sm:max-w-md">
-              {/* Basic usage — works out-of-the-box with built-in styles */}
+              {}
               <TextArea label="Message" placeholder="Write your message..." />
               <TextArea
                 label="Bio"
@@ -235,7 +222,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Size Variants */}
         <Section
           title="Size Variants"
           description="The size prop emits data-size on the container for CSS targeting."
@@ -966,115 +952,6 @@ const TextAreaDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="TextArea" />
-
-      <Section title="TextAreaClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Outermost container (same element as className)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="wrapper"
-              type="string"
-              description="Textarea row wrapper (icons + textarea)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="description"
-              type="string"
-              description="Helper/description text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="textarea"
-              type="string"
-              description="Native <textarea> element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="success"
-              type="string"
-              description="Success message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="count"
-              type="string"
-              description="Character count display"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-disabled"
-              type="container, textarea"
-              description="Present when disabled or loading"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="container, textarea"
-              description="Present when error = true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-valid"
-              type="container, textarea"
-              description="Present when success = true (without error)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-loading"
-              type="container"
-              description="Present when loading = true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-size"
-              type="container"
-              description="Present when size is set"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-readonly"
-              type="container, textarea"
-              description="Present when readOnly = true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-slot"
-              type="every sub-element"
-              description="Always present — identifies structural parts"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

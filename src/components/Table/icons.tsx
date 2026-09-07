@@ -131,11 +131,8 @@ export function PinIcon({ className = "" }: IconProps) {
   );
 }
 
-
 export function FilterIcon({ className = "", active = false }: IconProps & { active?: boolean }) {
   return (
-    // ADR 002 R4: `active` is a state, so it is an attribute the caller's
-    // `filterButton` classes can target — not a class this leaf picks itself.
     <svg className={className} data-active={active || undefined} viewBox="0 0 24 24" fill="currentColor">
       <path d="M3 4a1 1 0 011-1h16a1 1 0 01.78 1.625l-6.28 7.85V18.5a1 1 0 01-.553.894l-3 1.5A1 1 0 0110 20v-7.525L3.22 4.625A1 1 0 013 4z" />
     </svg>

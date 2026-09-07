@@ -1,4 +1,3 @@
-// AI Knowledge: See MULTISELECTSEARCHABLEDROPDOWN.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as MultiSelectSearchableDropdown } from "./MultiSelectSearchableDropdown.js";
 export type {
   MultiSelectOption,

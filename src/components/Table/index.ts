@@ -1,4 +1,3 @@
-// AI Knowledge: See TABLE.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Table } from "./Table.js";
 export type {
   TableProps,

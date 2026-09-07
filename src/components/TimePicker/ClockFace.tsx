@@ -88,7 +88,6 @@ export function ClockFace({
     [value, format],
   );
 
-  // ── Min/max helpers ──────────────────────────────────────────────────
   const isHourDisabled = useCallback(
     (hour: number): boolean => {
       if (!minTime && !maxTime) return false;
@@ -125,7 +124,6 @@ export function ClockFace({
     );
   }, [displayValue, format, minTime, maxTime]);
 
-  // ── Numbers to render ────────────────────────────────────────────────
   const outerNumbers = useMemo(() => {
     if (selectionMode === "minutes") {
       // Always show 12 cardinal markers (0, 5, 10, …, 55) regardless of
@@ -172,7 +170,6 @@ export function ClockFace({
     return { handAngle: angle, isInnerRing: false };
   }, [selectionMode, displayValue, format]);
 
-  // ── Pointer interaction ──────────────────────────────────────────────
   const handleClockInteraction = useCallback(
     (clientX: number, clientY: number) => {
       if (disabled || !clockRef.current) return;
@@ -255,7 +252,7 @@ export function ClockFace({
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
       } catch {
-        /* already released */
+        // Already released, which pointercancel and pointerup can race to do.
       }
       endDrag();
     },
@@ -268,7 +265,7 @@ export function ClockFace({
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
       } catch {
-        /* already released */
+        // Already released, which pointercancel and pointerup can race to do.
       }
       endDrag();
     },
@@ -290,7 +287,6 @@ export function ClockFace({
     };
   }, [isDragging, endDrag]);
 
-  // ── Period toggle ────────────────────────────────────────────────────
   const togglePeriod = useCallback(
     (period: "AM" | "PM") => {
       if (disabled) return;
@@ -299,7 +295,6 @@ export function ClockFace({
     [disabled, displayValue, onValueChange],
   );
 
-  // ── Keyboard navigation ──────────────────────────────────────────────
   const adjustFromKeyboard = useCallback(
     (delta: number) => {
       if (disabled) return;
@@ -376,7 +371,6 @@ export function ClockFace({
     [disabled, adjustFromKeyboard, selectionMode, format, displayValue, onValueChange, safeStep],
   );
 
-  // ── Focus trap ───────────────────────────────────────────────────────
   const handleContainerKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key !== "Tab" || !containerRef.current) return;
@@ -402,7 +396,6 @@ export function ClockFace({
     [],
   );
 
-  // ── Number rendering ─────────────────────────────────────────────────
   const renderNumber = useCallback(
     (num: number, index: number, isInner: boolean) => {
       const total = 12;

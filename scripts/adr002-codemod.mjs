@@ -70,7 +70,6 @@ for (const sf of program.getSourceFiles()) {
   if (sf.isDeclarationFile || !sf.fileName.startsWith(resolve(ROOT, "src"))) continue;
 
   const visit = (node) => {
-    // 1. the interface declaration itself
     if (ts.isInterfaceDeclaration(node) && PLAN[node.name.text]) {
       const map = PLAN[node.name.text];
       const taken = new Set();

@@ -46,7 +46,6 @@ async function clickOption(
   }
 }
 
-// Dispatch a mousedown on document to trigger click-outside close logic
 async function closeDropdownViaClickOutside(
   page: import("@playwright/test").Page,
 ) {
@@ -210,7 +209,6 @@ test.describe("MultiSelectDropdown Component - Cross-Browser Tests", () => {
       await page.keyboard.press("Space");
 
       await expect(trigger).toContainText("Banana");
-      // Dropdown stays open for multi-select
       await expect(page.getByRole("listbox").first()).toBeVisible();
     });
 

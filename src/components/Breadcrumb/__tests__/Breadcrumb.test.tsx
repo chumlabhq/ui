@@ -84,7 +84,6 @@ describe("Breadcrumb", () => {
 
       // Separators have role="presentation" and aria-hidden="true"
       const separators = container.querySelectorAll('li[role="presentation"]');
-      // 2 separators for 3 items
       expect(separators.length).toBe(2);
     });
 
@@ -347,12 +346,10 @@ describe("Breadcrumb", () => {
     it("shows first item and last N-1 items based on maxVisibleItems", () => {
       render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
 
-      // First item always visible
       expect(screen.getByText("Root")).toBeInTheDocument();
       // Last 2 items visible (maxVisibleItems=3 means first + last 2)
       expect(screen.getByText("Level4")).toBeInTheDocument();
       expect(screen.getByText("Current")).toBeInTheDocument();
-      // Middle items should NOT be visible
       expect(screen.queryByText("Level1")).not.toBeInTheDocument();
       expect(screen.queryByText("Level2")).not.toBeInTheDocument();
       expect(screen.queryByText("Level3")).not.toBeInTheDocument();
@@ -387,7 +384,6 @@ describe("Breadcrumb", () => {
       await user.click(level1Item!);
 
       expect(onItemClick).toHaveBeenCalledWith(expect.objectContaining({ id: "2", label: "Level1" }));
-      // Dropdown should close
       expect(document.querySelector("[role='menu']")).not.toBeInTheDocument();
     });
 
@@ -507,7 +503,6 @@ describe("Breadcrumb", () => {
         <Breadcrumb items={itemsWithTooltip} showTooltips={false} />,
       );
 
-      // Tooltip wrapper should not be present
       expect(container.querySelector("[data-tooltip]")).not.toBeInTheDocument();
     });
   });
@@ -669,7 +664,6 @@ describe("Breadcrumb", () => {
       // When iconSize is a string, separator icons get className instead of style
       const nav = screen.getByRole("navigation");
       expect(nav).toBeInTheDocument();
-      // SVG separators should be rendered with className from iconSize string
       const svgs = document.querySelectorAll('li[role="presentation"] svg');
       expect(svgs.length).toBe(2);
       svgs.forEach((svg) => {
@@ -742,7 +736,6 @@ describe("Breadcrumb", () => {
       });
       await user.click(ellipsisButton);
 
-      // Menu should be open; navigate with ArrowDown then press Enter
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{Enter}");
 

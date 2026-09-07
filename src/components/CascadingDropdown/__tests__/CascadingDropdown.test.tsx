@@ -171,17 +171,14 @@ describe("CascadingDropdown", () => {
 
       await user.click(screen.getByRole("button"));
 
-      // Hover over parent to open submenu
       const fruitItem = screen.getByText("Fruits").closest("[role='menuitem']");
       await user.hover(fruitItem!);
 
-      // Wait for submenu to appear
       const submenu = await screen.findByRole("menu", {
         name: "Fruits submenu",
       });
       expect(submenu).toBeInTheDocument();
 
-      // Click on submenu option
       const appleOption = within(submenu).getByText("Apple");
       await user.click(appleOption);
 
@@ -269,8 +266,6 @@ describe("CascadingDropdown", () => {
   });
 });
 
-// ─── CascadingDropdown — Scroll lock (line ~462-479) ─────────────────────────
-
 describe("CascadingDropdown — Scroll lock", () => {
   it("attaches wheel and touchmove listeners when lockScroll is true and dropdown opens", async () => {
     const user = userEvent.setup();
@@ -306,8 +301,8 @@ describe("CascadingDropdown — Scroll lock", () => {
 
     render(<CascadingDropdown options={simpleOptions} lockScroll />);
     const trigger = screen.getByRole("button");
-    await user.click(trigger); // open
-    await user.click(trigger); // close
+    await user.click(trigger);
+    await user.click(trigger);
 
     const wheelRemoved = removeSpy.mock.calls.filter(([type]) => type === "wheel");
     expect(wheelRemoved.length).toBeGreaterThan(0);
@@ -315,8 +310,6 @@ describe("CascadingDropdown — Scroll lock", () => {
     removeSpy.mockRestore();
   });
 });
-
-// ─── CascadingDropdown — renderTrigger prop (line ~530, 542, 571-594) ─────────
 
 describe("CascadingDropdown — renderTrigger prop", () => {
   it("calls renderTrigger with the expected props and renders the result", async () => {
@@ -369,8 +362,6 @@ describe("CascadingDropdown — renderTrigger prop", () => {
   });
 });
 
-// ─── CascadingDropdown — Clearable (lines ~634-637) ──────────────────────────
-
 describe("CascadingDropdown — Clearable", () => {
   it("shows clear button when clearable and a value is selected", async () => {
     const user = userEvent.setup();
@@ -398,12 +389,10 @@ describe("CascadingDropdown — Clearable", () => {
       />
     );
 
-    // Select a value first
     await user.click(screen.getByRole("button", { name: /select an option/i }));
     await user.click(screen.getByText("Fruits"));
     onValueChange.mockClear();
 
-    // Now click the clear button
     const clearBtn = screen.getByRole("button", { name: /clear selection/i });
     await user.click(clearBtn);
 
@@ -418,28 +407,21 @@ describe("CascadingDropdown — Clearable", () => {
   });
 });
 
-// ─── CascadingDropdown — keepMounted (line ~643) ─────────────────────────────
-
 describe("CascadingDropdown — keepMounted", () => {
   it("keeps the menu in the DOM when closed with keepMounted=true", async () => {
     const user = userEvent.setup();
     render(<CascadingDropdown options={simpleOptions} keepMounted />);
 
-    // Menu should be present in DOM even before opening (keepMounted)
     const menu = screen.getByRole("menu", { hidden: true });
     expect(menu).toBeInTheDocument();
 
-    // Open then close
     const trigger = screen.getByRole("button");
     await user.click(trigger);
     await user.click(trigger);
 
-    // Menu should still be in DOM after close
     expect(screen.getByRole("menu", { hidden: true })).toBeInTheDocument();
   });
 });
-
-// ─── CascadingDropdown — getSelectedValuesForParent single string (line ~542) ─
 
 describe("CascadingDropdown — single-mode submenu selection display", () => {
   it("shows selected icon on a single-mode submenu item when closeOnSelect is false", async () => {
@@ -466,7 +448,6 @@ describe("CascadingDropdown — single-mode submenu selection display", () => {
 
     await user.click(screen.getByRole("button"));
 
-    // Hover to open submenu
     const fruitItem = screen.getByText("Fruits").closest("[role='menuitem']");
     await user.hover(fruitItem!);
 
@@ -476,7 +457,6 @@ describe("CascadingDropdown — single-mode submenu selection display", () => {
     const appleOption = within(submenu).getByText("Apple");
     await user.click(appleOption);
 
-    // Submenu should still be open, Apple should be selected (getSelectedValuesForParent returns [string])
     const submenuAfter = await screen.findByRole("menu", {
       name: "Fruits submenu",
     });
@@ -484,8 +464,6 @@ describe("CascadingDropdown — single-mode submenu selection display", () => {
     expect(within(submenuAfter).getByText("Apple").closest("[aria-checked]")).toHaveAttribute("aria-checked", "true");
   });
 });
-
-// ─── CascadingDropdown — keyboard navigation ─────────────────────────────────
 
 describe("CascadingDropdown — keyboard navigation", () => {
   it("opens the dropdown with ArrowDown key", async () => {
@@ -543,8 +521,6 @@ describe("CascadingDropdown — keyboard navigation", () => {
   });
 });
 
-// ─── CascadingDropdown — menu search (lines ~667-668) ────────────────────────
-
 describe("CascadingDropdown — menu search", () => {
   it("renders search input when showMenuSearch is true", async () => {
     const user = userEvent.setup();
@@ -585,8 +561,6 @@ describe("CascadingDropdown — menu search", () => {
   });
 });
 
-// ─── CascadingDropdown — loading state (lines ~676-681) ──────────────────────
-
 describe("CascadingDropdown — loading state", () => {
   it("shows loading text and shimmer items when loading=true (lines ~676-681)", async () => {
     const user = userEvent.setup();
@@ -619,8 +593,6 @@ describe("CascadingDropdown — loading state", () => {
   });
 });
 
-// ─── CascadingDropdown — submenu left position ───────────────────────────────
-
 describe("CascadingDropdown — submenuPosition left", () => {
   it("renders the submenu through the anchored surface when submenuPosition='left'", async () => {
     const user = userEvent.setup();
@@ -652,8 +624,6 @@ describe("CascadingDropdown — submenuPosition left", () => {
     expect(screen.getByRole("menu", { name: "Options" }).contains(surface)).toBe(false);
   });
 });
-
-// ─── CascadingDropdown Icons ──────────────────────────────────────────────────
 
 import {
   ChevronDownIcon,

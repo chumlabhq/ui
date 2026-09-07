@@ -29,7 +29,6 @@ export const getInitials = (name?: string, maxInitials: number = 2): string => {
       .slice(0, maxInitials);
   }
 
-  // Single-word name: return just the first letter (industry standard)
   return cleanName[0];
 };
 
@@ -95,7 +94,6 @@ export const generateColors = (
 
   const hash = hashString(name.toLowerCase().trim());
 
-  // Use same index across all arrays for consistent palette mapping
   const index = hash % Math.max(backgrounds.length, borders.length, textColors.length);
 
   return {

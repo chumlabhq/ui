@@ -1,4 +1,3 @@
-// AI Knowledge: See DROPDOWN.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Dropdown } from "./Dropdown.js";
 export type {
   DropdownOption,

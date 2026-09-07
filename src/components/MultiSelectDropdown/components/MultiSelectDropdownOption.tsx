@@ -34,7 +34,6 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
     cn(
       classes.itemControl,
     ) || undefined;
-  // ADR 002 R4: the state the checkboxChecked key named.
   const checkboxState = isSelected ? "checked" : "unchecked";
 
   return (

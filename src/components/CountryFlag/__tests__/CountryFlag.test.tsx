@@ -14,10 +14,6 @@ import {
   CountryFlagGroupShimmer,
 } from "../index.js";
 
-// ---------------------------------------------------------------------------
-// CountryFlag — Rendering
-// ---------------------------------------------------------------------------
-
 describe("CountryFlag", () => {
   describe("Rendering", () => {
     it("builds the src from basePath when one is supplied", () => {
@@ -124,10 +120,6 @@ describe("CountryFlag", () => {
     });
   });
 
-  // ---------------------------------------------------------------------------
-  // CountryFlag — Image lifecycle callbacks
-  // ---------------------------------------------------------------------------
-
   describe("Image lifecycle", () => {
     it("calls onLoad with the native event when the image loads", () => {
       const onLoad = vi.fn();
@@ -171,11 +163,9 @@ describe("CountryFlag", () => {
     it("resets error state when code prop changes", () => {
       const { rerender } = render(<CountryFlag code="xx" basePath="/flags" />);
 
-      // Trigger error for the first code
       const img1 = screen.getByRole("img").querySelector("img")!;
       fireEvent.error(img1);
 
-      // Change code — should show a new image, not fallback
       rerender(<CountryFlag code="us" basePath="/flags" />);
 
       const img2 = screen.getByRole("img").querySelector("img");
@@ -183,10 +173,6 @@ describe("CountryFlag", () => {
       expect(img2).toHaveAttribute("src", "/flags/us.svg");
     });
   });
-
-  // ---------------------------------------------------------------------------
-  // CountryFlag — Accessibility
-  // ---------------------------------------------------------------------------
 
   describe("Accessibility", () => {
     it("sets role=img on the wrapper", () => {
@@ -218,10 +204,6 @@ describe("CountryFlag", () => {
       expect(img).toHaveAttribute("aria-hidden", "true");
     });
   });
-
-  // ---------------------------------------------------------------------------
-  // CountryFlag — loading prop
-  // ---------------------------------------------------------------------------
 
   describe("Loading prop", () => {
     it("renders shimmer placeholder when loading=true", () => {
@@ -260,10 +242,6 @@ describe("CountryFlag", () => {
     });
   });
 });
-
-// ---------------------------------------------------------------------------
-// CountryFlagGroup
-// ---------------------------------------------------------------------------
 
 describe("CountryFlagGroup", () => {
   describe("Rendering", () => {
@@ -415,10 +393,6 @@ describe("CountryFlagGroup", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// CountryFlagGroupCount
-// ---------------------------------------------------------------------------
-
 describe("CountryFlagGroupCount", () => {
   it("renders the count with a plus prefix", () => {
     render(<CountryFlagGroupCount count={5} />);
@@ -461,10 +435,6 @@ describe("CountryFlagGroupCount", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// CountryFlagShimmer
-// ---------------------------------------------------------------------------
-
 describe("CountryFlagShimmer", () => {
   it("renders a loading placeholder with correct dimensions", () => {
     render(<CountryFlagShimmer size="lg" />);
@@ -498,10 +468,6 @@ describe("CountryFlagShimmer", () => {
     expect(screen.getByRole("status").className).not.toContain("animate-pulse");
   });
 });
-
-// ---------------------------------------------------------------------------
-// CountryFlagGroupShimmer
-// ---------------------------------------------------------------------------
 
 describe("CountryFlagGroupShimmer", () => {
   it("renders the specified number of shimmer items", () => {

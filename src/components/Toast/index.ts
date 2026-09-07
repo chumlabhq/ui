@@ -1,4 +1,3 @@
-// AI Knowledge: See TOAST.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Toast } from "./Toast.js";
 export { ToastProvider } from "./components/ToastProvider.js";
 export { useToast } from "./utils/context.js";

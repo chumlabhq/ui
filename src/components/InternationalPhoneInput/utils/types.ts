@@ -45,9 +45,12 @@ export interface PhoneFormatPattern {
 }
 
 export interface InternationalPhoneInputClasses {
+  /** Outer container div */
   root?: string;
+  /** Label element */
   label?: string;
   control?: string;
+  /** Phone number input element */
   input?: string;
   message?: string;
   /**
@@ -156,7 +159,6 @@ export interface InternationalPhoneInputProps
   classes?: InternationalPhoneInputClasses;
   unstyled?: boolean;
 
-  // ─── Dropdown positioning ────────────────────────────────────────
   /** Vertical placement of the country dropdown relative to the trigger. */
   dropdownPosition?: "top" | "bottom";
   /** When true, locks the country dropdown to the specified dropdownPosition without auto-flipping. */

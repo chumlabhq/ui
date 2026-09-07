@@ -36,9 +36,7 @@ describe("getVisiblePages", () => {
       const result = getVisiblePages(20, 18, 1);
       expect(result[0]).toBe(1);
       expect(result[1]).toBe("ellipsis");
-      // last element should be 20
       expect(result[result.length - 1]).toBe(20);
-      // rightRange should not contain another ellipsis
       expect(result.filter((x) => x === "ellipsis")).toHaveLength(1);
     });
 

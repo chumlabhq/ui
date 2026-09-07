@@ -476,8 +476,6 @@ export function DiagramHtmlCssJsPath() {
   );
 }
 
-// ─── Blog 3: How the Web Works diagrams ─────────────────────────────────────
-
 function FlowArrow() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeOpacity="0.15" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mx-1 hidden sm:block">
@@ -652,8 +650,6 @@ export function DiagramRenderingPipeline() {
   );
 }
 
-// ─── Blog 4: What is the DOM diagrams ────────────────────────────────────────
-
 export function DiagramDomTree() {
   // Node positions (x center, y center) on a 480x340 canvas
   const nodes = [
@@ -808,8 +804,6 @@ export function DiagramDomUpdateCycle() {
   );
 }
 
-// ─── Blog 5: Flexbox vs Grid diagrams ────────────────────────────────────────
-
 export function DiagramFlexboxLayout() {
   const items = ["Logo", "Home", "About", "Contact", "Login"];
   return (
@@ -957,8 +951,6 @@ export function DiagramLayoutDecisionFlow() {
     </div>
   );
 }
-
-// ─── Blog 6: JavaScript vs TypeScript diagrams ──────────────────────────────
 
 export function DiagramJsVsTsLayers() {
   return (
@@ -1110,8 +1102,6 @@ export function DiagramJsTsLearningPath() {
     </div>
   );
 }
-
-// ─── Blog 7: Async JavaScript diagrams ───────────────────────────────────────
 
 export function DiagramSyncVsAsync() {
   return (
@@ -1330,8 +1320,6 @@ export function DiagramFullAsyncFlow() {
   );
 }
 
-// ─── APIs: REST vs GraphQL diagrams ─────────────────────────────────────────
-
 export function DiagramApiCommunication() {
   return (
     <div className="rounded-xl border border-white/8 bg-white/3 p-6">
@@ -1530,8 +1518,6 @@ export function DiagramApiDecisionFlow() {
   );
 }
 
-// ─── Client storage: LocalStorage, SessionStorage, Cookies ────────────────
-
 export function DiagramLocalStorageLifecycle() {
   const events = [
     { label: "setItem('theme', 'dark')", ok: true, sub: "Written to disk (origin)" },
@@ -1719,8 +1705,6 @@ export function DiagramStorageDecisionFlow() {
     </div>
   );
 }
-
-// ─── React.js diagrams ──────────────────────────────────────────────────────
 
 export function DiagramReactComponentTree() {
   const chip = (label: string, color: string) => (
@@ -2189,8 +2173,6 @@ export function BlogDiagram({ type }: { type: string }) {
   }
 }
 
-// ─── Blog: React Performance diagrams ─────────────────────────────────────────
-
 function DiagramReactRerenderControl() {
   return (
     <div className="rounded-xl border border-white/8 bg-white/3 p-6">
@@ -2324,8 +2306,6 @@ function DiagramReactRenderingFlow() {
   );
 }
 
-// ─── Blog: Structure Large React Apps diagrams ────────────────────────────────
-
 function DiagramReactFeatureStructure() {
   const features = [
     { name: "auth", items: ["components/", "hooks/", "services/"], color: "#3b82f6" },
@@ -2446,8 +2426,6 @@ function DiagramReactFullArchitecture() {
     </div>
   );
 }
-
-// ─── Blog: What is Next.js diagrams ───────────────────────────────────────────
 
 function DiagramNextjsFileRouting() {
   const routes = [
@@ -2570,8 +2548,6 @@ function DiagramNextjsVsReactTable() {
   );
 }
 
-// ─── Blog: Next.js vs React diagrams ──────────────────────────────────────────
-
 function DiagramReactNextjsComparison() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -2682,8 +2658,6 @@ function DiagramReactNextjsDecision() {
   );
 }
 
-// ─── Blog: React vs Angular vs Vue diagrams ───────────────────────────────────
-
 function DiagramFrameworkComparisonTable() {
   const rows = [
     { feature: "Type", react: "Library", angular: "Full Framework", vue: "Framework" },
@@ -2759,8 +2733,6 @@ function DiagramFrameworkDecisionFlow() {
     </div>
   );
 }
-
-// ─── Blog: Vue.js vs React diagrams ───────────────────────────────────────────
 
 function DiagramVueReactLearningCurve() {
   return (
@@ -2876,8 +2848,6 @@ function DiagramVueReactComparisonTable() {
     </div>
   );
 }
-
-// ─── Blog: When to Use Angular diagram ────────────────────────────────────────
 
 function DiagramAngularDecisionFlow() {
   const yes = [

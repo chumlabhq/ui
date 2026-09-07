@@ -17,10 +17,6 @@ function makeKeyEvent(key: string): React.KeyboardEvent {
   } as unknown as React.KeyboardEvent;
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 function renderDefault(
   overrides: Partial<Parameters<typeof useMultiSelectDropdown>[0]> = {},
 ) {
@@ -28,10 +24,6 @@ function renderDefault(
     useMultiSelectDropdown({ options, ...overrides }),
   );
 }
-
-// ---------------------------------------------------------------------------
-// 1. Initial state
-// ---------------------------------------------------------------------------
 
 describe("useMultiSelectDropdown", () => {
   describe("initial state", () => {
@@ -71,10 +63,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 2. defaultValue initialization
-  // -------------------------------------------------------------------------
-
   describe("defaultValue initialization", () => {
     it("initialises currentValue from defaultValue", () => {
       const { result } = renderDefault({ defaultValue: ["apple", "banana"] });
@@ -88,10 +76,6 @@ describe("useMultiSelectDropdown", () => {
       ]);
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 3. handleToggle opens/closes and resets focus
-  // -------------------------------------------------------------------------
 
   describe("handleToggle", () => {
     it("opens the dropdown when closed", () => {
@@ -124,16 +108,12 @@ describe("useMultiSelectDropdown", () => {
 
     it("resets focusedIndex to -1 on close", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(1));
-      act(() => result.current.handleToggle()); // close
+      act(() => result.current.handleToggle());
       expect(result.current.focusedIndex).toBe(-1);
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 4. handleToggle disabled=true is a no-op
-  // -------------------------------------------------------------------------
 
   describe("handleToggle when disabled", () => {
     it("does not open the dropdown when disabled=true", () => {
@@ -143,37 +123,29 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 5. handleClose
-  // -------------------------------------------------------------------------
-
   describe("handleClose", () => {
     it("closes the dropdown", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.handleClose());
       expect(result.current.isOpen).toBe(false);
     });
 
     it("sets shouldRestoreFocusRef.current to true", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.handleClose());
       expect(result.current.shouldRestoreFocusRef.current).toBe(true);
     });
 
     it("resets focusedIndex to -1", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(1));
       act(() => result.current.handleClose());
       expect(result.current.focusedIndex).toBe(-1);
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 6. handleOptionToggle selects / deselects
-  // -------------------------------------------------------------------------
 
   describe("handleOptionToggle", () => {
     it("selects an option", () => {
@@ -220,10 +192,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 7. handleOptionToggle ignores disabled options
-  // -------------------------------------------------------------------------
-
   describe("handleOptionToggle with disabled option", () => {
     it("does not select a disabled option", () => {
       const onValueChange = vi.fn();
@@ -233,10 +201,6 @@ describe("useMultiSelectDropdown", () => {
       expect(onValueChange).not.toHaveBeenCalled();
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 8. handleRemoveOption
-  // -------------------------------------------------------------------------
 
   describe("handleRemoveOption", () => {
     it("removes a specific value from current selection", () => {
@@ -274,10 +238,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 9. Controlled value (value prop)
-  // -------------------------------------------------------------------------
-
   describe("controlled value", () => {
     it("uses value prop as currentValue", () => {
       const { result } = renderHook(() =>
@@ -296,10 +256,6 @@ describe("useMultiSelectDropdown", () => {
       ]);
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 10. Controlled open (open prop, onOpenChange called)
-  // -------------------------------------------------------------------------
 
   describe("controlled open", () => {
     it("uses the open prop as isOpen", () => {
@@ -328,10 +284,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 11. Keyboard: ArrowDown opens and moves focus
-  // -------------------------------------------------------------------------
-
   describe("keyboard – ArrowDown", () => {
     it("opens the dropdown when closed", () => {
       const { result } = renderDefault();
@@ -347,15 +299,15 @@ describe("useMultiSelectDropdown", () => {
 
     it("moves focus to next option when already open", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(0));
       act(() => result.current.handleKeyDown(makeKeyEvent("ArrowDown")));
-      expect(result.current.focusedIndex).toBe(1); // banana
+      expect(result.current.focusedIndex).toBe(1);
     });
 
     it("wraps from last option to first enabled option", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(3)); // date (last)
       act(() => result.current.handleKeyDown(makeKeyEvent("ArrowDown")));
       expect(result.current.focusedIndex).toBe(0); // wraps to apple
@@ -369,23 +321,19 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 12. Keyboard: ArrowUp moves focus up and wraps
-  // -------------------------------------------------------------------------
-
   describe("keyboard – ArrowUp", () => {
     it("moves focus to the previous option", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
-      act(() => result.current.setFocusedIndex(1)); // banana
+      act(() => result.current.handleToggle());
+      act(() => result.current.setFocusedIndex(1));
       act(() => result.current.handleKeyDown(makeKeyEvent("ArrowUp")));
-      expect(result.current.focusedIndex).toBe(0); // apple
+      expect(result.current.focusedIndex).toBe(0);
     });
 
     it("wraps from first option to last enabled option", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
-      act(() => result.current.setFocusedIndex(0)); // apple
+      act(() => result.current.handleToggle());
+      act(() => result.current.setFocusedIndex(0));
       act(() => result.current.handleKeyDown(makeKeyEvent("ArrowUp")));
       expect(result.current.focusedIndex).toBe(3); // date (last enabled)
     });
@@ -403,21 +351,17 @@ describe("useMultiSelectDropdown", () => {
 
     it("calls preventDefault", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       const event = makeKeyEvent("ArrowUp");
       act(() => result.current.handleKeyDown(event));
       expect(event.preventDefault).toHaveBeenCalled();
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 13. Keyboard: Home / End
-  // -------------------------------------------------------------------------
-
   describe("keyboard – Home", () => {
     it("focuses the first enabled option", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(3));
       act(() => result.current.handleKeyDown(makeKeyEvent("Home")));
       expect(result.current.focusedIndex).toBe(0);
@@ -433,7 +377,7 @@ describe("useMultiSelectDropdown", () => {
   describe("keyboard – End", () => {
     it("focuses the last enabled option", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.setFocusedIndex(0));
       act(() => result.current.handleKeyDown(makeKeyEvent("End")));
       expect(result.current.focusedIndex).toBe(3); // date is the last enabled
@@ -446,16 +390,12 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 14. Keyboard: Enter selects the focused option
-  // -------------------------------------------------------------------------
-
   describe("keyboard – Enter", () => {
     it("selects the focused option when open", () => {
       const onValueChange = vi.fn();
       const { result } = renderDefault({ onValueChange });
-      act(() => result.current.handleToggle()); // open
-      act(() => result.current.setFocusedIndex(0)); // apple
+      act(() => result.current.handleToggle());
+      act(() => result.current.setFocusedIndex(0));
       act(() => result.current.handleKeyDown(makeKeyEvent("Enter")));
       expect(result.current.currentValue).toEqual(["apple"]);
       expect(onValueChange).toHaveBeenCalledWith(
@@ -466,8 +406,8 @@ describe("useMultiSelectDropdown", () => {
 
     it("deselects if the focused option was already selected", () => {
       const { result } = renderDefault({ defaultValue: ["apple"] });
-      act(() => result.current.handleToggle()); // open
-      act(() => result.current.setFocusedIndex(0)); // apple
+      act(() => result.current.handleToggle());
+      act(() => result.current.setFocusedIndex(0));
       act(() => result.current.handleKeyDown(makeKeyEvent("Enter")));
       expect(result.current.currentValue).toEqual([]);
     });
@@ -495,16 +435,12 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 15. Keyboard: Space selects the focused option
-  // -------------------------------------------------------------------------
-
   describe("keyboard – Space", () => {
     it("selects the focused option when open", () => {
       const onValueChange = vi.fn();
       const { result } = renderDefault({ onValueChange });
-      act(() => result.current.handleToggle()); // open
-      act(() => result.current.setFocusedIndex(1)); // banana
+      act(() => result.current.handleToggle());
+      act(() => result.current.setFocusedIndex(1));
       act(() => result.current.handleKeyDown(makeKeyEvent(" ")));
       expect(result.current.currentValue).toEqual(["banana"]);
     });
@@ -523,28 +459,24 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 16. Keyboard: Escape closes the dropdown
-  // -------------------------------------------------------------------------
-
   describe("keyboard – Escape", () => {
     it("closes the dropdown when open", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.handleKeyDown(makeKeyEvent("Escape")));
       expect(result.current.isOpen).toBe(false);
     });
 
     it("sets shouldRestoreFocusRef.current to true on Escape", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       act(() => result.current.handleKeyDown(makeKeyEvent("Escape")));
       expect(result.current.shouldRestoreFocusRef.current).toBe(true);
     });
 
     it("calls preventDefault when open", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
+      act(() => result.current.handleToggle());
       const event = makeKeyEvent("Escape");
       act(() => result.current.handleKeyDown(event));
       expect(event.preventDefault).toHaveBeenCalled();
@@ -557,10 +489,6 @@ describe("useMultiSelectDropdown", () => {
       expect(event.preventDefault).not.toHaveBeenCalled();
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 17. Keyboard: all keys are no-ops when disabled
-  // -------------------------------------------------------------------------
 
   describe("keyboard when disabled", () => {
     const disabledCases: string[] = [
@@ -589,10 +517,6 @@ describe("useMultiSelectDropdown", () => {
       });
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 18. loadOnOpen: calls onLoadOptions on open, uses loaded options
-  // -------------------------------------------------------------------------
 
   describe("loadOnOpen – loads on toggle", () => {
     it("calls onLoadOptions when toggling open with loadOnOpen=true", async () => {
@@ -640,10 +564,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 19. loadOnOpen: only loads once (hasLoadedRef prevents re-load)
-  // -------------------------------------------------------------------------
-
   describe("loadOnOpen – loads only once", () => {
     it("does not call onLoadOptions a second time on re-open", async () => {
       const loadedOpts: MultiSelectOption[] = [
@@ -652,20 +572,13 @@ describe("useMultiSelectDropdown", () => {
       const onLoadOptions = vi.fn().mockResolvedValue(loadedOpts);
       const { result } = renderDefault({ loadOnOpen: true, onLoadOptions });
 
-      // First open – loads
       await act(async () => result.current.handleToggle());
-      // Close
       await act(async () => result.current.handleToggle());
-      // Second open – should NOT reload
       await act(async () => result.current.handleToggle());
 
       expect(onLoadOptions).toHaveBeenCalledOnce();
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 20. onLoadError called on rejection
-  // -------------------------------------------------------------------------
 
   describe("onLoadError", () => {
     it("calls onLoadError when onLoadOptions rejects", async () => {
@@ -696,10 +609,6 @@ describe("useMultiSelectDropdown", () => {
       expect(result.current.isLoadingOptions).toBe(false);
     });
   });
-
-  // -------------------------------------------------------------------------
-  // 21. selectedOptions computed correctly
-  // -------------------------------------------------------------------------
 
   describe("selectedOptions", () => {
     it("returns the option objects matching currentValue", () => {
@@ -732,15 +641,11 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 22. ArrowDown skips disabled options
-  // -------------------------------------------------------------------------
-
   describe("ArrowDown skips disabled options", () => {
     it("skips the disabled cherry option (index 2) when moving down from banana (index 1)", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
-      act(() => result.current.setFocusedIndex(1)); // banana
+      act(() => result.current.handleToggle());
+      act(() => result.current.setFocusedIndex(1));
       act(() => result.current.handleKeyDown(makeKeyEvent("ArrowDown")));
       // cherry (index 2) is disabled, so should land on date (index 3)
       expect(result.current.focusedIndex).toBe(3);
@@ -760,17 +665,13 @@ describe("useMultiSelectDropdown", () => {
 
     it("ArrowUp skips the disabled cherry option when moving up from date (index 3)", () => {
       const { result } = renderDefault();
-      act(() => result.current.handleToggle()); // open
-      act(() => result.current.setFocusedIndex(3)); // date
+      act(() => result.current.handleToggle());
+      act(() => result.current.setFocusedIndex(3));
       act(() => result.current.handleKeyDown(makeKeyEvent("ArrowUp")));
       // cherry (index 2) is disabled, so should land on banana (index 1)
       expect(result.current.focusedIndex).toBe(1);
     });
   });
-
-  // -------------------------------------------------------------------------
-  // Additional edge cases
-  // -------------------------------------------------------------------------
 
   describe("defaultOpen", () => {
     it("starts open when defaultOpen=true", () => {

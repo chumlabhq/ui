@@ -43,7 +43,6 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
 
     const baseClasses = motionSafeClasses(
       baseClassesRaw,
-      // The prop overrides the query, per useReducedMotion's contract.
       useReducedMotion(reduceMotion),
     );
     const mergedClasses: Required<PulseLoaderClasses> = useMemo(

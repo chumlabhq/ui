@@ -119,13 +119,9 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const effectiveDuration = prefersReducedMotion || disableAnimation ? 0 : animationDuration;
     const shouldAnimate = effectiveDuration > 0;
 
-    // Merge classes: individual classNames take precedence over classes object
     const baseClassesRaw = unstyled
       ? UNSTYLED_MODAL_CLASSES
       : DEFAULT_MODAL_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses = useMemo<Required<ModalClasses>>(() => ({
@@ -153,7 +149,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       setIsOpen(false);
     }, [setIsOpen]);
 
-    // Mount/unmount management
     const [prevOpen, setPrevOpen] = useState(isOpen);
     if (prevOpen !== isOpen) {
       setPrevOpen(isOpen);
@@ -176,7 +171,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }
     }, [isOpen, modalId]);
 
-    // Keyboard: Escape + Focus trap
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
         if (!isOpen) return;
@@ -207,7 +201,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }
     }, [isOpen, handleKeyDown]);
 
-    // Scroll lock
     useEffect(() => {
       if (lockScroll && isOpen) {
         acquireScrollLock();
@@ -215,7 +208,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }
     }, [isOpen, lockScroll]);
 
-    // Focus management
     useEffect(() => {
       if (isOpen) {
         const active = document.activeElement;
@@ -347,7 +339,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             className={mergedClasses.positioner || undefined}
             onClick={handleOverlayClick}
             data-modal-container
-            // ADR 002 R4: the state the `centered` literal expressed.
             data-centered={centered || undefined}
           >
             <div
@@ -384,8 +375,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
               style={contentStyles}
               onClick={handleContentClick}
               data-modal-content
-              // ADR 002 R4: the states the fullScreen ternary and the isOpen
-              // animation literals expressed.
               data-fullscreen={fullScreen || undefined}
               data-open={isOpen || undefined}
             >

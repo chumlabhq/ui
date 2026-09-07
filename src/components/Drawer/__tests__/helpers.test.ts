@@ -12,8 +12,6 @@ import {
   usePrefersReducedMotion,
 } from "../utils/helpers.js";
 
-// ─── getDirectionStyles ──────────────────────────────────────────────────────
-
 describe("getDirectionStyles", () => {
   const size = "400px";
   const fraction = 1; // fully open → closedPercent = 0
@@ -67,8 +65,6 @@ describe("getDirectionStyles", () => {
   });
 });
 
-// ─── getClosingDelta ─────────────────────────────────────────────────────────
-
 describe("getClosingDelta", () => {
   it("returns deltaY for 'bottom'", () => {
     expect(getClosingDelta("bottom", 10, 50)).toBe(50);
@@ -86,8 +82,6 @@ describe("getClosingDelta", () => {
     expect(getClosingDelta("right", 30, 0)).toBe(30);
   });
 });
-
-// ─── getTransformString ──────────────────────────────────────────────────────
 
 describe("getTransformString", () => {
   it("returns translateX with negative percent for 'left'", () => {
@@ -111,8 +105,6 @@ describe("getTransformString", () => {
   });
 });
 
-// ─── isHorizontalDirection ───────────────────────────────────────────────────
-
 describe("isHorizontalDirection", () => {
   it("returns true for 'left'", () => {
     expect(isHorizontalDirection("left")).toBe(true);
@@ -131,8 +123,6 @@ describe("isHorizontalDirection", () => {
   });
 });
 
-// ─── getTouchAction ──────────────────────────────────────────────────────────
-
 describe("getTouchAction", () => {
   it("returns 'pan-y' for horizontal drawers (left/right)", () => {
     expect(getTouchAction("left")).toBe("pan-y");
@@ -144,9 +134,6 @@ describe("getTouchAction", () => {
     expect(getTouchAction("bottom")).toBe("pan-x");
   });
 });
-
-// ─── pushDrawer / popDrawer / isTopDrawer ────────────────────────────────────
-// The drawer stack is a module-level singleton so we manage state carefully.
 
 describe("Drawer stack management", () => {
   // Clean up after each test by popping any IDs we push.
@@ -202,9 +189,6 @@ describe("Drawer stack management", () => {
     expect(isTopDrawer("drawer-a")).toBe(true);
   });
 });
-
-// ─── usePrefersReducedMotion ─────────────────────────────────────────────────
-// Covers lines 9-21: subscribeReducedMotion + getReducedMotionSnapshot
 
 describe("usePrefersReducedMotion", () => {
   it("returns false when window.matchMedia reports no reduced-motion preference", () => {

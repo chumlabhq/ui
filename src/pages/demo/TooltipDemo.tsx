@@ -7,8 +7,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -16,8 +14,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (_dark: boolean) => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -28,8 +24,6 @@ const getClasses = (_dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
  trigger: `cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover border border-cl-border focus-visible:ring-border-active dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const TooltipDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -86,7 +80,6 @@ const TooltipDemo = () => {
 
       <CopyPasteBlock name="Tooltip" />
 
-      {/* ─── Basic Tooltip ────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Works out-of-the-box with built-in styles and dark mode. Wrap any element to show a tooltip on hover."
@@ -106,7 +99,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Positions ────────────────────────────────────────────────── */}
       <Section
         title="Positions"
         description="Use the side prop to control tooltip placement: top, right, bottom, or left."
@@ -128,7 +120,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Alignment ────────────────────────────────────────────────── */}
       <Section
         title="Alignment"
         description="Use align prop to control tooltip alignment along the side axis: start, center, or end."
@@ -147,7 +138,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Offsets ──────────────────────────────────────────────────── */}
       <Section
         title="Offsets"
         description="Use sideOffset and alignOffset to fine-tune tooltip positioning."
@@ -169,7 +159,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Arrow ────────────────────────────────────────────────────── */}
       <Section
         title="Arrow"
         description="Toggle the arrow visibility with showArrow prop."
@@ -185,7 +174,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Delay Duration ───────────────────────────────────────────── */}
       <Section
         title="Delay Duration"
         description="Control how long to wait before showing the tooltip with delayDuration (in milliseconds)."
@@ -207,7 +195,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Max Width ────────────────────────────────────────────────── */}
       <Section
         title="Max Width"
         description="Control tooltip width with maxWidth prop (number for pixels or string for CSS value)."
@@ -232,7 +219,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Text Wrapping ────────────────────────────────────────────── */}
       <Section
         title="Text Wrapping (Word Wrap)"
         description="Control how text wraps using wordWrap prop: 'break-word' (default), 'normal', or 'nowrap'."
@@ -268,7 +254,6 @@ const TooltipDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Controlled State ─────────────────────────────────────────── */}
       <Section
         title="Controlled State"
         description="Use open and onOpenChange props for controlled tooltip state."
@@ -718,7 +703,6 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section
         title="Data Attributes"
         description="The Tooltip trigger wrapper applies data attributes for CSS-based styling."
@@ -732,55 +716,6 @@ const TooltipDemo = () => {
       </Section>
 
       <ComponentDocs name="Tooltip" />
-
-      <Section title="TooltipClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="trigger"
-              type="string"
-              description="Trigger wrapper element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="string"
-              description="Tooltip content container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="arrow"
-              type="string"
-              description="Arrow SVG element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="baseArrow"
-              type="string"
-              description="Base arrow container"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes Reference ────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="aria-describedby"
-              type="trigger"
-              description="Links trigger to tooltip content when open"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section
@@ -863,14 +798,6 @@ const TooltipDemo = () => {
           "Do not block pointer events on the trigger.",
         ]}
       />
-
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="data-state" type="trigger" description="'open' or 'closed' — inherited via asChild" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
 
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>

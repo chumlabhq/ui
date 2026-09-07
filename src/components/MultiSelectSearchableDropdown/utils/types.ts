@@ -9,28 +9,37 @@ export interface MultiSelectOption {
 }
 
 export interface MultiSelectSearchableDropdownClasses {
+  /** Root container element */
   root?: string;
   control?: string;
+  /** Trigger button */
   trigger?: string;
   value?: string;
+  /** Dropdown content (portaled, background, border, shadow) */
   content?: string;
   list?: string;
   item?: string;
   icon?: string;
   itemControl?: string;
   itemIndicator?: string;
+  /** Selected chip */
   chip?: string;
+  /** Chip remove button */
   chipRemove?: string;
   empty?: string;
   clearTrigger?: string;
+  /** Loading message */
   loading?: string;
   /** One row of the skeleton. It shared `loading` with the container above it. */
   loadingItem?: string;
+  /** Label element */
   label?: string;
   message?: string;
   description?: string;
   searchControl?: string;
+  /** Search input wrapper */
   searchInput?: string;
+  /** Search icon */
   searchIcon?: string;
   count?: string;
 }

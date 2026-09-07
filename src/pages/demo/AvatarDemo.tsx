@@ -13,8 +13,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -22,8 +20,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
   subtleColors: {
@@ -63,8 +59,6 @@ const getClasses = (dark: boolean) => ({
   darkBg: `p-4 rounded-cl-md bg-cl-bg-elevated dark:bg-cl-bg`,
 });
 
-// ─── Demo ────────────────────────────────────────────────────────────────────
-
 const AvatarDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
@@ -84,14 +78,13 @@ const AvatarDemo = () => {
 
       <CopyPasteBlock name="Avatar" />
 
-      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Avatar with image, initials, and custom fallback."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          {/* Basic usage — works out-of-the-box with built-in styles */}
+          {}
           <Avatar
             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
             alt="John Doe"
@@ -102,7 +95,6 @@ const AvatarDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Sizes ──────────────────────────────────────────────────────── */}
       <Section
         title="Sizes"
         description="Presets: xs, sm, md, lg, xl, or any custom pixel number."
@@ -1028,7 +1020,6 @@ const AvatarDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ─────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override internal element styling with the classes prop. Slots: root, inner, image, initials, fallback, status."
@@ -1256,54 +1247,6 @@ const AvatarDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Avatar" />
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use these for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-has-image"
-              type="Avatar root"
-              description="Present when rendering an image (not initials/fallback)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-shape"
-              type="Avatar root"
-              description='"circle"|"rounded"|"square"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-state"
-              type="AvatarBadge (via content)"
-              description="Can be used for custom state styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="role"
-              type="Avatar root"
-              description='role="img" when showing initials/fallback (not image)'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="role"
-              type="AvatarGroup"
-              description='role="group" with auto-generated aria-label'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="role"
-              type="AvatarBadge, Shimmer"
-              description='role="status" for live region semantics'
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

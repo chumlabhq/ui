@@ -76,8 +76,6 @@ export function WhyChumlabSection() {
       className="bg-cl-bg py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16"
     >
       <div className="mx-auto max-w-[1200px] px-5 sm:px-6 lg:px-8">
-        {/* Header — H2 and lede stagger separately so the eye lands on the
-            headline first, then the supporting line. */}
         <div className="mb-10 sm:mb-12 md:mb-16 max-w-[720px]">
           <Reveal delay={0} translateY={12} duration={200}>
             <h2

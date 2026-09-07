@@ -13,8 +13,6 @@ import {
 } from "../utils.js";
 import type { CountryOption } from "../utils/types.js";
 
-// ─── Shared fixtures ──────────────────────────────────────────────────────────
-
 const US: CountryOption = {
   value: "us",
   label: "United States",
@@ -58,8 +56,6 @@ const ZA: CountryOption = {
 
 const COUNTRIES = [US, GB, CA, FR, ZA];
 
-// ─── findCountryByCode ────────────────────────────────────────────────────────
-
 describe("findCountryByCode", () => {
   it("returns null for an empty string", () => {
     expect(findCountryByCode("", COUNTRIES)).toBeNull();
@@ -100,8 +96,6 @@ describe("findCountryByCode", () => {
   });
 });
 
-// ─── findCountryByDialCode ────────────────────────────────────────────────────
-
 describe("findCountryByDialCode", () => {
   it("returns null for an empty string", () => {
     expect(findCountryByDialCode("", COUNTRIES)).toBeNull();
@@ -126,8 +120,6 @@ describe("findCountryByDialCode", () => {
     expect(findCountryByDialCode("44", COUNTRIES)).toBeNull();
   });
 });
-
-// ─── getDigitsOnly ────────────────────────────────────────────────────────────
 
 describe("getDigitsOnly", () => {
   it("returns the same string when it already contains only digits", () => {
@@ -158,8 +150,6 @@ describe("getDigitsOnly", () => {
     expect(getDigitsOnly("a1b2c3")).toBe("123");
   });
 });
-
-// ─── isEmptyPhoneNumber ───────────────────────────────────────────────────────
 
 describe("isEmptyPhoneNumber", () => {
   it("returns true for null", () => {
@@ -194,8 +184,6 @@ describe("isEmptyPhoneNumber", () => {
     expect(isEmptyPhoneNumber("  5  ")).toBe(false);
   });
 });
-
-// ─── formatPhoneNumber ────────────────────────────────────────────────────────
 
 describe("formatPhoneNumber", () => {
   it("returns empty string for an empty phone string", () => {
@@ -320,8 +308,6 @@ describe("formatPhoneNumber", () => {
   });
 });
 
-// ─── validatePhoneNumber ──────────────────────────────────────────────────────
-
 describe("validatePhoneNumber", () => {
   it("returns an invalid empty result for an empty phone string", () => {
     const result = validatePhoneNumber("", US, undefined, undefined);
@@ -393,7 +379,6 @@ describe("validatePhoneNumber", () => {
       dialCode: "+1",
       name: "United States",
     };
-    // US max is 10; 11 digits should be invalid.
     const result = validatePhoneNumber("20255512345", US_UPPER, undefined, undefined);
     expect(result.isValid).toBe(false);
   });
@@ -485,8 +470,6 @@ describe("validatePhoneNumber", () => {
   });
 });
 
-// ─── sortCountryOptions ───────────────────────────────────────────────────────
-
 describe("sortCountryOptions", () => {
   const unsorted = [FR, ZA, GB, US, CA];
 
@@ -562,8 +545,6 @@ describe("sortCountryOptions", () => {
   });
 });
 
-// ─── parseInternationalNumber ─────────────────────────────────────────────────
-
 describe("parseInternationalNumber", () => {
   it("returns no country and raw digits when value has no leading +", () => {
     const result = parseInternationalNumber("2025551234", COUNTRIES);
@@ -625,7 +606,6 @@ describe("parseInternationalNumber", () => {
     const result = parseInternationalNumber("+9991234567", COUNTRIES);
     expect(result.dialCode).toBeNull();
     expect(result.detectedCountry).toBeNull();
-    // phoneNumber should still be all digits.
     expect(result.phoneNumber).toBe("9991234567");
   });
 
@@ -646,8 +626,6 @@ describe("parseInternationalNumber", () => {
     expect(result.phoneNumber).toBe("");
   });
 });
-
-// ─── formatForCopy ────────────────────────────────────────────────────────────
 
 describe("formatForCopy", () => {
   it("returns empty string when phone has no digits", () => {
@@ -729,8 +707,6 @@ describe("formatForCopy", () => {
     );
   });
 });
-
-// ─── computeCursorPosition ────────────────────────────────────────────────────
 
 describe("computeCursorPosition", () => {
   it("returns 0 when cursor is at position 0 (no digits before cursor)", () => {

@@ -258,7 +258,6 @@ describe("Input", () => {
       render(<Input aria-label="test" name="email" clearable value="test" onChange={onChange} />);
       await user.click(screen.getByRole("button", { name: "Clear input" }));
       expect(onChange).toHaveBeenCalledTimes(1);
-      // The event target should be a real HTMLInputElement
       const event = onChange.mock.calls[0][0];
       expect(event.target).toBeInstanceOf(HTMLInputElement);
       expect(event.target.value).toBe("");

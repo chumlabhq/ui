@@ -45,7 +45,6 @@ function serverGates(state: VerifyUIState): { lint: GateStatus; types: GateStatu
   const kinds = new Set(state.errors.map((e) => e.kind));
   if (kinds.has("lint")) return { lint: "failed", types: "pending" };
   if (kinds.has("type")) return { lint: "passed", types: "failed" };
-  // render-only failure: the server gates passed before delivery
   return { lint: "passed", types: "passed" };
 }
 

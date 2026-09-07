@@ -14,28 +14,22 @@
  */
 
 const STRUCTURAL: RegExp[] = [
-  // Position & stacking
   /^(static|relative|absolute|fixed|sticky)$/,
   /^(inset|top|right|bottom|left)(-|$)/,
   /^z-/,
   /^(isolate|isolation-)/,
-  // Display
   /^(block|inline-block|inline|flex|inline-flex|grid|inline-grid|contents|hidden|flow-root)$/,
   /^table(-|$)/,
-  // Flex & grid participation
   /^flex-(row|row-reverse|col|col-reverse|wrap|wrap-reverse|nowrap|1|auto|initial|none)$/,
   /^(grow|shrink)(-|$)/,
   /^basis-/,
   /^(grid-cols|grid-rows|grid-flow|auto-cols|auto-rows|col|row|order)-/,
   /^(items|justify|content|self|place)-/,
-  // Overflow & clipping
   /^(overflow|overscroll)-/,
   /^(truncate|text-ellipsis|text-clip)$/,
   /^whitespace-/,
-  // Sizing
   /^(w|h|min-w|min-h|max-w|max-h|size)-/,
   /^aspect-/,
-  // Box model that changes participation
   /^(box-border|box-content)$/,
   /^(float|clear)-/,
 ];

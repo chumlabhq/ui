@@ -79,7 +79,6 @@ export const useDropdown = ({
     };
   }, []);
 
-  // Reset loaded state when onLoadOptions function changes
   const prevLoadOptionsRef = useRef(onLoadOptions);
   useIsomorphicLayoutEffect(() => {
     if (prevLoadOptionsRef.current !== onLoadOptions) {
@@ -90,7 +89,6 @@ export const useDropdown = ({
     }
   });
 
-  // Sync hasLoadedRef after render to match hasLoaded state
   useIsomorphicLayoutEffect(() => {
     hasLoadedRef.current = hasLoaded;
   });
@@ -102,7 +100,6 @@ export const useDropdown = ({
     return options;
   }, [options, loadedOptions, loadOnOpen, onLoadOptions, hasLoaded]);
 
-  // Keep ref in sync for use in onChange callback
   useEffect(() => {
     displayOptionsRef.current = displayOptions;
   }, [displayOptions]);
@@ -249,7 +246,6 @@ export const useDropdown = ({
   const handleClear = useCallback(() => {
     setCurrentValue(null);
   }, [setCurrentValue]);
-
 
   /**
    * The shared keyboard model, plus the two behaviours that belong to this

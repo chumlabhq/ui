@@ -1,4 +1,3 @@
-// AI Knowledge: See SEARCHABLEDROPDOWN.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as SearchableDropdown } from "./SearchableDropdown.js";
 export type {
   SearchableDropdownOption,

@@ -60,12 +60,6 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
 
     const baseClassesRaw = unstyled ? UNSTYLED_RESIZABLEPANEL_CLASSES : DEFAULT_RESIZABLEPANEL_CLASSES;
 
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-
-    // this handles the other reason to stop animating. Applied to the defaults
-
-    // only — a class string the consumer supplied is theirs to control.
-
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo(() => ({
       root: classesProp?.root ?? baseClasses.root,

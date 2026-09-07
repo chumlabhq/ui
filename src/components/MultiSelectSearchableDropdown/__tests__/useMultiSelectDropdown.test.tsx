@@ -3,10 +3,6 @@ import { renderHook, act } from "@testing-library/react";
 import { useMultiSelectDropdown } from "../utils/useMultiSelectDropdown.js";
 import type { MultiSelectOption } from "../utils/types.js";
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 function makeKey(key: string): React.KeyboardEvent {
   return {
     key,
@@ -33,14 +29,7 @@ function renderDefault(
   return renderHook(() => useMultiSelectDropdown({ options: OPTIONS, ...overrides }));
 }
 
-// ---------------------------------------------------------------------------
-// Test suite
-// ---------------------------------------------------------------------------
-
 describe("useMultiSelectDropdown", () => {
-  // -------------------------------------------------------------------------
-  // 1. Initial state
-  // -------------------------------------------------------------------------
   describe("initial state", () => {
     it("defaults: isOpen=false, searchQuery='', focusedIndex=-1, selectedValues=[]", () => {
       const { result } = renderDefault();
@@ -75,9 +64,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 2. handleToggle opens/closes, resets searchQuery on close
-  // -------------------------------------------------------------------------
   describe("handleToggle", () => {
     it("opens when closed", () => {
       const { result } = renderDefault();
@@ -97,7 +83,7 @@ describe("useMultiSelectDropdown", () => {
       act(() => result.current.handleToggle());
       act(() => result.current.setSearchQuery("app"));
       act(() => result.current.setFocusedIndex(1));
-      act(() => result.current.handleToggle()); // close
+      act(() => result.current.handleToggle());
       expect(result.current.searchQuery).toBe("");
       expect(result.current.focusedIndex).toBe(-1);
     });
@@ -125,9 +111,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 3. handleToggle with disabled=true: no-op
-  // -------------------------------------------------------------------------
   describe("handleToggle when disabled", () => {
     it("does not open when disabled=true", () => {
       const { result } = renderDefault({ disabled: true });
@@ -136,14 +119,11 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 4. Sync mode: setSearchQuery filters displayOptions
-  // -------------------------------------------------------------------------
   describe("sync filtering", () => {
     it("filters displayOptions by searchQuery (case-insensitive)", () => {
       const { result } = renderDefault({ showSearch: true });
       act(() => result.current.setSearchQuery("ban"));
-      expect(result.current.displayOptions).toEqual([OPTIONS[1]]); // Banana
+      expect(result.current.displayOptions).toEqual([OPTIONS[1]]);
     });
 
     it("returns all options when searchQuery is empty", () => {
@@ -167,13 +147,10 @@ describe("useMultiSelectDropdown", () => {
     it("partial match on label is case-insensitive", () => {
       const { result } = renderDefault({ showSearch: true });
       act(() => result.current.setSearchQuery("CHER"));
-      expect(result.current.displayOptions).toEqual([OPTIONS[2]]); // Cherry
+      expect(result.current.displayOptions).toEqual([OPTIONS[2]]);
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 5. showSearch=false: displayOptions not filtered by searchQuery
-  // -------------------------------------------------------------------------
   describe("showSearch=false", () => {
     it("displayOptions is not filtered by searchQuery when showSearch=false", () => {
       const { result } = renderDefault({ showSearch: false });
@@ -182,9 +159,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 6. handleOptionToggle: selects, deselects, calls onValueChange
-  // -------------------------------------------------------------------------
   describe("handleOptionToggle", () => {
     it("selects an option and calls onValueChange", () => {
       const onValueChange = vi.fn();
@@ -210,9 +184,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 7. handleOptionToggle: skips disabled options
-  // -------------------------------------------------------------------------
   describe("handleOptionToggle with disabled option", () => {
     it("does not toggle a disabled option", () => {
       const onValueChange = vi.fn();
@@ -225,9 +196,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 8. handleRemoveOption: removes value, calls onValueChange
-  // -------------------------------------------------------------------------
   describe("handleRemoveOption", () => {
     it("removes a selected value and calls onValueChange", () => {
       const onValueChange = vi.fn();
@@ -250,9 +218,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 9. handleClose: sets shouldRestoreFocusRef.current=true
-  // -------------------------------------------------------------------------
   describe("handleClose", () => {
     it("sets shouldRestoreFocusRef.current to true", () => {
       const { result } = renderDefault({ defaultOpen: true });
@@ -276,9 +241,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 10. Controlled values (value prop) + controlled open
-  // -------------------------------------------------------------------------
   describe("controlled mode", () => {
     it("respects controlled value prop", () => {
       const { result } = renderHook(() =>
@@ -314,9 +276,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 11. Keyboard ArrowDown: opens when closed, moves focus, wraps, skips disabled
-  // -------------------------------------------------------------------------
   describe("keyboard: ArrowDown", () => {
     it("opens dropdown and focuses first enabled option when closed", () => {
       const { result } = renderDefault();
@@ -369,9 +328,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 12. Keyboard ArrowUp: moves up, wraps
-  // -------------------------------------------------------------------------
   describe("keyboard: ArrowUp", () => {
     it("moves focus to previous option", () => {
       const { result } = renderDefault({ defaultOpen: true });
@@ -415,9 +371,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 13. Keyboard Home/End
-  // -------------------------------------------------------------------------
   describe("keyboard: Home", () => {
     it("focuses first enabled option", () => {
       const { result } = renderHook(() =>
@@ -466,9 +419,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 14. Keyboard Enter: opens when closed; selects when open+focused
-  // -------------------------------------------------------------------------
   describe("keyboard: Enter", () => {
     it("opens dropdown when closed", () => {
       const { result } = renderDefault();
@@ -507,9 +457,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 15. Keyboard Space: when showSearch+isOpen, does NOT prevent default/select
-  // -------------------------------------------------------------------------
   describe("keyboard: Space when showSearch=true and open", () => {
     // Changed with the menu primitive, deliberately. Space used to be dropped
     // whenever a search box existed, wherever focus was — so on the trigger the
@@ -537,9 +484,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 16. Keyboard Space: when !showSearch, selects focused
-  // -------------------------------------------------------------------------
   describe("keyboard: Space when showSearch=false", () => {
     it("opens dropdown when closed", () => {
       const { result } = renderDefault({ showSearch: false });
@@ -564,9 +508,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 17. Keyboard Escape: closes
-  // -------------------------------------------------------------------------
   describe("keyboard: Escape", () => {
     it("closes the dropdown when open", () => {
       const { result } = renderDefault({ defaultOpen: true });
@@ -596,9 +537,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 18. Async mode: isAsync detection and synchronous state
-  // -------------------------------------------------------------------------
   describe("async mode: isAsync detection", () => {
     it("in async mode, empty query shows allInitialOptions", () => {
       const onSearch = vi.fn().mockResolvedValue([]);
@@ -632,9 +570,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 22. selectedOptions computed from allOptions
-  // -------------------------------------------------------------------------
   describe("selectedOptions computation", () => {
     it("returns selectedOptions matching selectedValues from options", () => {
       const { result } = renderDefault({ defaultValue: ["apple", "cherry"] });
@@ -664,9 +599,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // 23. initialOptions prop (synchronous aspects)
-  // -------------------------------------------------------------------------
   describe("initialOptions prop (sync)", () => {
     it("makes initialOptions available in displayOptions (async, empty query)", () => {
       const initialOpts: MultiSelectOption[] = [
@@ -707,9 +639,6 @@ describe("useMultiSelectDropdown", () => {
     });
   });
 
-  // -------------------------------------------------------------------------
-  // Extra: disabled prop makes handleKeyDown a no-op
-  // -------------------------------------------------------------------------
   describe("handleKeyDown when disabled", () => {
     it("Enter does nothing when disabled=true", () => {
       const onValueChange = vi.fn();
@@ -743,7 +672,6 @@ describe("useMultiSelectDropdown", () => {
       const { result } = renderDefault({ disabled: true, defaultOpen: true });
       act(() => result.current.setFocusedIndex(2));
       act(() => result.current.handleKeyDown(makeKey("Home")));
-      // focusedIndex unchanged (disabled)
       expect(result.current.focusedIndex).toBe(2);
     });
   });

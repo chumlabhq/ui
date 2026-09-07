@@ -58,7 +58,6 @@ export function useDatePicker(props: UseDatePickerProps) {
     defaultValue: defaultValue ?? null,
   });
 
-  // Internal typed accessors for the unified value/onValueChange
   const singleValue = mode === "single" ? (currentValue as Date | null | undefined) : undefined;
   const rangeValue = mode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
   const multipleValue = mode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;

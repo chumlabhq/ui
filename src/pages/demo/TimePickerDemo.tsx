@@ -8,8 +8,6 @@ import {
   Section,
   DemoWrapper,
   DemoLabel,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -17,8 +15,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
@@ -60,8 +56,6 @@ const getClasses = (dark: boolean) => ({
     periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-black/5 dark:text-cl-text-tertiary dark:hover:bg-white/10`,
   } satisfies TimePickerClasses,
 });
-
-// ─── Theme variants (dropdown) ──────────────────────────────────────────────
 
 const darkTheme: TimePickerClasses = {
   root: "inline-flex flex-col gap-1 text-cl-text",
@@ -115,8 +109,6 @@ const getMinimalTheme = (): TimePickerClasses => ({
   itemIndicator: `w-4 h-4 shrink-0 text-cl-text-secondary`,
   empty: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
 });
-
-// ─── Clock theme variants ───────────────────────────────────────────────────
 
 const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 text-cl-text`,
@@ -190,8 +182,6 @@ const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
 
-// ─── Custom icon components ──────────────────────────────────────────────────
-
 const ClockEndIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className} aria-hidden="true" width={16} height={16}>
     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
@@ -204,13 +194,10 @@ const StarCheckIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// ─── Demo ────────────────────────────────────────────────────────────────────
-
 const TimePickerDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
 
-  // ── State ────────────────────────────────────────────────────────────────
   const [basic24, setBasic24] = useState<string | null>(null);
   const [twelve, setTwelve] = useState<string | null>(null);
   const [step5, setStep5] = useState<string | null>(null);
@@ -240,39 +227,29 @@ const TimePickerDemo = () => {
   const [eventLog, setEventLog] = useState<string[]>([]);
   const [eventsTime, setEventsTime] = useState<string | null>(null);
 
-  // Theme variant state
   const [darkThemeVal, setDarkThemeVal] = useState<string | null>(null);
   const [warmThemeVal, setWarmThemeVal] = useState<string | null>(null);
   const [coolThemeVal, setCoolThemeVal] = useState<string | null>(null);
   const [minimalThemeVal, setMinimalThemeVal] = useState<string | null>(null);
 
-  // Custom icon state
   const [customEndIconVal, setCustomEndIconVal] = useState<string | null>(null);
   const [noEndIconVal, setNoEndIconVal] = useState<string | null>(null);
   const [customCheckVal, setCustomCheckVal] = useState<string | null>(null);
   const [noCheckVal, setNoCheckVal] = useState<string | null>(null);
 
-  // Gap state
   const [gapLargeVal, setGapLargeVal] = useState<string | null>(null);
 
-  // Force position state
   const [forceBotVal, setForceBotVal] = useState<string | null>(null);
   const [forceTopVal, setForceTopVal] = useState<string | null>(null);
   const [forceLockVal, setForceLockVal] = useState<string | null>(null);
 
-  // Form integration state
   const [blurFocusVal, setBlurFocusVal] = useState<string | null>(null);
   const [focusMessage, setFocusMessage] = useState("");
 
-  // className/style/aria-label state
   const [styleVal, setStyleVal] = useState<string | null>(null);
 
-  // defaultOpen
-
-  // Clearable
   const [clearableVal, setClearableVal] = useState<string | null>("14:30");
 
-  // Clock variant additional state
   const [clockStep5, setClockStep5] = useState<string | null>(null);
   const [clockStep1, setClockStep1] = useState<string | null>(null);
   const [clockMinMax, setClockMinMax] = useState<string | null>(null);
@@ -299,18 +276,13 @@ const TimePickerDemo = () => {
 
       <CopyPasteBlock name="TimePicker" />
 
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      {/* DROPDOWN VARIANT                                                  */}
-      {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-
-      {/* ─── 1. Basic (24h) ──────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Default dropdown variant with 24-hour format and 15-minute steps."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
-          {/* Basic usage — works out-of-the-box with built-in styles */}
+          {}
           <TimePicker
             value={basic24}
             onValueChange={(v) => setBasic24(v)}
@@ -318,7 +290,6 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── 2. 12-Hour Format ───────────────────────────────────────────── */}
       <Section
         title="12-Hour Format"
         description="AM/PM time format with smart period detection."
@@ -1378,7 +1349,6 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── 34. Classes System ──────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override individual slots with the classes prop for targeted styling."
@@ -1431,21 +1401,6 @@ const TimePickerDemo = () => {
             </div>
           </div>
         </DemoWrapper>
-      </Section>
-
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="data-disabled" type="root, trigger" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-error" type="root" description="Present when error=true" isDarkMode={dark} />
-            <PropRow name="data-open" type="root" description="Present when dropdown/clock is open" isDarkMode={dark} />
-            <PropRow name="data-loading" type="root" description="Present when loading=true" isDarkMode={dark} />
-            <PropRow name="data-valid" type="root" description="Present when success=true (without error)" isDarkMode={dark} />
-            <PropRow name="data-position" type="dropdown" description='"top" or "bottom" — current dropdown position' isDarkMode={dark} />
-            <PropRow name="data-selected" type="option" description="Present on the currently selected time option" isDarkMode={dark} />
-            <PropRow name="data-highlighted" type="option" description="Present on the keyboard-focused time option" isDarkMode={dark} />
-          </PropsTable>
-        </div>
       </Section>
 
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
@@ -1503,52 +1458,6 @@ const TimePickerDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="TimePicker" />
-
-      {/* ─── 38. TimePickerClasses Slots ─────────────────────────────────── */}
-      <Section
-        title="TimePickerClasses Slots"
-        description="All available class slots for targeted styling."
-        isDarkMode={dark}
-      >
-        <PropsTable isDarkMode={dark}>
-          <PropRow isDarkMode={dark} name="root" type="string" description="Outermost container." />
-          <PropRow isDarkMode={dark} name="label" type="string" description="Label element." />
-          <PropRow isDarkMode={dark} name="wrapper" type="string" description="Relative-positioned wrapper around trigger + dropdown." />
-          <PropRow isDarkMode={dark} name="trigger" type="string" description="Combobox trigger container." />
-          <PropRow isDarkMode={dark} name="input" type="string" description="Text input element." />
-          <PropRow isDarkMode={dark} name="endIcon" type="string" description="End icon wrapper / chevron." />
-          <PropRow isDarkMode={dark} name="clearIcon" type="string" description="Clear icon button." />
-          <PropRow isDarkMode={dark} name="dropdown" type="string" description="Dropdown panel (listbox)." />
-          <PropRow isDarkMode={dark} name="optionList" type="string" description="Scrollable option list wrapper." />
-          <PropRow isDarkMode={dark} name="option" type="string" description="Individual option." />
-          <PropRow isDarkMode={dark} name="optionSelected" type="string" description="Modifier added to the selected option." />
-          <PropRow isDarkMode={dark} name="optionFocused" type="string" description="Modifier added to the keyboard-focused option." />
-          <PropRow isDarkMode={dark} name="selectedIcon" type="string" description="Check-mark icon inside a selected option." />
-          <PropRow isDarkMode={dark} name="noResults" type="string" description="'No matching times' message." />
-          <PropRow isDarkMode={dark} name="error" type="string" description="Error message element." />
-          <PropRow isDarkMode={dark} name="clockContainer" type="string" description="Clock variant outermost container." />
-          <PropRow isDarkMode={dark} name="clockDisplay" type="string" description="Hours / minutes display row." />
-          <PropRow isDarkMode={dark} name="clockDisplayHours" type="string" description="Hours button in the display." />
-          <PropRow isDarkMode={dark} name="clockDisplayMinutes" type="string" description="Minutes button in the display." />
-          <PropRow isDarkMode={dark} name="clockDisplayActive" type="string" description="Active (selected) display button modifier." />
-          <PropRow isDarkMode={dark} name="clockDisplaySeparator" type="string" description="Colon separator in the display." />
-          <PropRow isDarkMode={dark} name="clockFace" type="string" description="Circular clock face." />
-          <PropRow isDarkMode={dark} name="clockHand" type="string" description="SVG hand overlay." />
-          <PropRow isDarkMode={dark} name="clockHandLine" type="string" description="SVG line of the hand." />
-          <PropRow isDarkMode={dark} name="clockHandDot" type="string" description="Dot at the tip of the hand." />
-          <PropRow isDarkMode={dark} name="clockNumber" type="string" description="Number label on the clock face." />
-          <PropRow isDarkMode={dark} name="clockNumberSelected" type="string" description="Selected number modifier." />
-          <PropRow isDarkMode={dark} name="clockNumberInner" type="string" description="Inner-ring number modifier (24h)." />
-          <PropRow isDarkMode={dark} name="clockNumberDisabled" type="string" description="Disabled number modifier (out of min/max range)." />
-          <PropRow isDarkMode={dark} name="clockCenter" type="string" description="Center dot of the clock." />
-          <PropRow isDarkMode={dark} name="clockActions" type="string" description="Actions row (Cancel / OK)." />
-          <PropRow isDarkMode={dark} name="clockCancelButton" type="string" description="Cancel button." />
-          <PropRow isDarkMode={dark} name="clockOkButton" type="string" description="OK button." />
-          <PropRow isDarkMode={dark} name="clockPeriodToggle" type="string" description="AM/PM toggle container." />
-          <PropRow isDarkMode={dark} name="clockPeriodButton" type="string" description="Individual AM or PM button." />
-          <PropRow isDarkMode={dark} name="clockPeriodActive" type="string" description="Active period button modifier." />
-        </PropsTable>
-      </Section>
 
       {/* ─── 39. Controlled Pattern ──────────────────────────────────────── */}
       <DocControlledPattern

@@ -3,8 +3,6 @@ import { renderHook, act } from "@testing-library/react";
 import { useCascadingDropdown } from "../utils/useCascadingDropdown.js";
 import type { CascadingOption } from "../utils/types.js";
 
-// ─── Shared fixtures ──────────────────────────────────────────────────────────
-
 const flatOptions: CascadingOption[] = [
   { value: "fruits", label: "Fruits" },
   { value: "vegetables", label: "Vegetables" },
@@ -72,10 +70,7 @@ function makeKeyEvent(key: string): React.KeyboardEvent {
   } as unknown as React.KeyboardEvent;
 }
 
-// ─── Tests ────────────────────────────────────────────────────────────────────
-
 describe("useCascadingDropdown", () => {
-  // ── 1. Initial state ────────────────────────────────────────────────────────
   describe("initial state", () => {
     it("returns isOpen=false by default", () => {
       const { result } = renderHook(() =>
@@ -145,7 +140,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 2. handleToggle ─────────────────────────────────────────────────────────
   describe("handleToggle", () => {
     it("opens dropdown when closed", () => {
       const { result } = renderHook(() =>
@@ -201,7 +195,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 3. handleClose ──────────────────────────────────────────────────────────
   describe("handleClose", () => {
     it("sets isOpen to false", () => {
       const { result } = renderHook(() =>
@@ -252,7 +245,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 4. handleMenuItemHover ──────────────────────────────────────────────────
   describe("handleMenuItemHover", () => {
     it("sets focusedIndex to the hovered index", () => {
       const { result } = renderHook(() =>
@@ -288,7 +280,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 5. handleMenuItemClick ──────────────────────────────────────────────────
   describe("handleMenuItemClick", () => {
     it("selects a flat option and updates internalValue", () => {
       const { result } = renderHook(() =>
@@ -355,7 +346,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 6. handleSubmenuItemClick — single-select ───────────────────────────────
   describe("handleSubmenuItemClick (single-select)", () => {
     it("selects a submenu item (single mode)", () => {
       const { result } = renderHook(() =>
@@ -432,7 +422,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 7. handleSubmenuItemClick — multi-select ────────────────────────────────
   describe("handleSubmenuItemClick (multi-select)", () => {
     it("adds item to multi-select array", () => {
       const { result } = renderHook(() =>
@@ -478,7 +467,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 8. Controlled value ─────────────────────────────────────────────────────
   describe("controlled value", () => {
     it("uses provided value prop as internalValue", () => {
       const { result } = renderHook(() =>
@@ -505,7 +493,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 9. Controlled open ──────────────────────────────────────────────────────
   describe("controlled open", () => {
     it("uses provided open prop", () => {
       const { result } = renderHook(() =>
@@ -522,7 +509,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 10. getDisplayValue ─────────────────────────────────────────────────────
   describe("getDisplayValue", () => {
     it("returns empty string when nothing is selected", () => {
       const { result } = renderHook(() =>
@@ -583,7 +569,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 11. isSubmenuOpen ───────────────────────────────────────────────────────
   describe("isSubmenuOpen", () => {
     it("returns false when no submenu is active", () => {
       const { result } = renderHook(() =>
@@ -602,7 +587,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 12. Keyboard – ArrowDown ────────────────────────────────────────────────
   describe("keyboard navigation – ArrowDown", () => {
     it("opens dropdown and focuses first item if closed", () => {
       const { result } = renderHook(() =>
@@ -626,7 +610,6 @@ describe("useCascadingDropdown", () => {
       const { result } = renderHook(() =>
         useCascadingDropdown({ options: flatOptions, defaultOpen: true })
       );
-      // Start at last index
       act(() => { result.current.setFocusedIndex(2); });
       act(() => { result.current.handleKeyDown(makeKeyEvent("ArrowDown")); });
       expect(result.current.focusedIndex).toBe(0);
@@ -667,7 +650,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 13. Keyboard – ArrowUp ──────────────────────────────────────────────────
   describe("keyboard navigation – ArrowUp", () => {
     it("moves focus up within main menu", () => {
       const { result } = renderHook(() =>
@@ -734,7 +716,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 14. Keyboard – Home / End ───────────────────────────────────────────────
   describe("keyboard navigation – Home / End", () => {
     it("Home focuses the first enabled menu item", () => {
       const { result } = renderHook(() =>
@@ -796,7 +777,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 15. Keyboard – ArrowRight ───────────────────────────────────────────────
   describe("keyboard navigation – ArrowRight", () => {
     it("opens submenu for the focused item with children", () => {
       const { result } = renderHook(() =>
@@ -834,7 +814,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 16. Keyboard – ArrowLeft ────────────────────────────────────────────────
   describe("keyboard navigation – ArrowLeft", () => {
     it("closes submenu and resets submenuFocusedIndex", () => {
       const { result } = renderHook(() =>
@@ -861,7 +840,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 17. Keyboard – Escape ───────────────────────────────────────────────────
   describe("keyboard navigation – Escape", () => {
     it("closes submenu when in submenu context", () => {
       const { result } = renderHook(() =>
@@ -885,7 +863,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 18. Keyboard – Enter / Space ───────────────────────────────────────────
   describe("keyboard navigation – Enter / Space", () => {
     it("selects focused submenu item on Enter", () => {
       const onValueChange = vi.fn();
@@ -960,7 +937,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 19. Keyboard – Tab ──────────────────────────────────────────────────────
   describe("keyboard navigation – Tab", () => {
     it("closes dropdown on Tab", () => {
       const { result } = renderHook(() =>
@@ -971,7 +947,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 20. Keyboard – disabled dropdown ───────────────────────────────────────
   describe("keyboard navigation – disabled dropdown", () => {
     it("ignores all key events when disabled", () => {
       const { result } = renderHook(() =>
@@ -982,7 +957,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 21. handleSubmenuItemHover ──────────────────────────────────────────────
   describe("handleSubmenuItemHover", () => {
     it("sets submenuFocusedIndex", () => {
       const { result } = renderHook(() =>
@@ -993,7 +967,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 22. handleSubmenuMouseEnter / Leave ─────────────────────────────────────
   describe("handleSubmenuMouseEnter / Leave", () => {
     it("handleSubmenuMouseEnter does not throw", () => {
       const { result } = renderHook(() =>
@@ -1014,7 +987,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 23. Client-side menu search ─────────────────────────────────────────────
   describe("client-side menu search (showMenuSearch)", () => {
     it("filters options by search query", () => {
       const { result } = renderHook(() =>
@@ -1052,7 +1024,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 24. Client-side submenu search ──────────────────────────────────────────
   describe("client-side submenu search (showSubmenuSearch)", () => {
     it("filters submenu options by query", () => {
       const { result } = renderHook(() =>
@@ -1082,7 +1053,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 25. Async menu search ───────────────────────────────────────────────────
   describe("async menu search (onMenuSearch)", () => {
     beforeEach(() => { vi.useFakeTimers(); });
 
@@ -1098,7 +1068,6 @@ describe("useCascadingDropdown", () => {
       act(() => { result.current.onMenuSearchChange("fru"); });
       // Not called immediately
       expect(onMenuSearch).not.toHaveBeenCalled();
-      // Advance timers
       await act(async () => { vi.advanceTimersByTime(300); });
       expect(onMenuSearch).toHaveBeenCalledWith("fru");
     });
@@ -1125,7 +1094,6 @@ describe("useCascadingDropdown", () => {
     afterEach(() => { vi.useRealTimers(); });
   });
 
-  // ── 26. setFocusedIndex / setSubmenuFocusedIndex ────────────────────────────
   describe("setFocusedIndex and setSubmenuFocusedIndex", () => {
     it("setFocusedIndex updates focusedIndex", () => {
       const { result } = renderHook(() =>
@@ -1144,7 +1112,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 27. getFilteredSubmenuOptions – loadedChildren fallback ─────────────────
   describe("getFilteredSubmenuOptions with static children", () => {
     it("returns children from the option when no loadedChildren", () => {
       const { result } = renderHook(() =>
@@ -1163,7 +1130,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 28. onLoadChildren (async child loading) ────────────────────────────────
   describe("onLoadChildren", () => {
     it("loads children when hovering option with hasChildren", async () => {
       const dynamicChildren: CascadingOption[] = [
@@ -1200,7 +1166,6 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  // ── 29. menuSearchQuery / submenuSearchQuery state ──────────────────────────
   describe("search query state", () => {
     it("tracks menuSearchQuery", () => {
       const { result } = renderHook(() =>

@@ -8,8 +8,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -46,7 +44,6 @@ const LoaderDemo = () => {
 
       <CopyPasteBlock name="Loader" />
 
-      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="All four loader variants work out-of-the-box with built-in styles and proper aria attributes."
@@ -60,7 +57,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── All Variants ───────────────────────────────────────────────── */}
       <Section
         title="All Variants"
         description="Four loader variants for different use cases."
@@ -101,9 +97,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ━━━ CIRCULAR LOADER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-
-      {/* ── Circular — Sizes ───────────────────────────────────────────── */}
       <Section
         title="Circular — Sizes"
         description="Use the size prop to control dimensions in pixels."
@@ -124,7 +117,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Circular — Colors ──────────────────────────────────────────── */}
       <Section
         title="Circular — Colors"
         description="The spinner uses currentColor, so you can set the color via a CSS class or inline style."
@@ -156,7 +148,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Circular — Speed ───────────────────────────────────────────── */}
       <Section
         title="Circular — Speed"
         description="Control the animation duration in seconds. Lower values spin faster."
@@ -182,7 +173,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Circular — Track Color ─────────────────────────────────────── */}
       <Section
         title="Circular — Track Color"
         description="The trackColor prop sets the background circle color. By default it uses currentColor at 20% opacity."
@@ -222,7 +212,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Circular — Thickness ───────────────────────────────────────── */}
       <Section
         title="Circular — Thickness"
         description="The thickness prop controls the stroke width of both the track and the spinner arc."
@@ -249,9 +238,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ━━━ LINEAR LOADER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-
-      {/* ── Linear — Basic ─────────────────────────────────────────────── */}
       <Section
         title="Linear — Basic"
         description="An indeterminate horizontal progress bar. Great for page-level or section-level loading states."
@@ -267,7 +253,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Linear — Heights ───────────────────────────────────────────── */}
       <Section
         title="Linear — Heights"
         description="The height prop controls bar thickness in pixels."
@@ -289,7 +274,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Linear — Colors ────────────────────────────────────────────── */}
       <Section
         title="Linear — Colors"
         description="Uses currentColor for the bar and a separate trackColor for the background."
@@ -313,7 +297,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Linear — Speed ─────────────────────────────────────────────── */}
       <Section
         title="Linear — Speed"
         description="Animation duration in seconds via the speed prop."
@@ -339,9 +322,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ━━━ DOT LOADER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-
-      {/* ── Dot — Basic ────────────────────────────────────────────────── */}
       <Section
         title="Dot — Basic"
         description="Three bouncing dots. A common pattern in messaging and chat interfaces."
@@ -355,7 +335,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Dot — Sizes & Count ────────────────────────────────────────── */}
       <Section
         title="Dot — Sizes & Count"
         description="Control the dot diameter, gap, and number of dots."
@@ -398,7 +377,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Dot — Colors ───────────────────────────────────────────────── */}
       <Section
         title="Dot — Colors"
         description="Uses currentColor, so apply any color class or inline style."
@@ -430,9 +408,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ━━━ PULSE LOADER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-
-      {/* ── Pulse — Basic ──────────────────────────────────────────────── */}
       <Section
         title="Pulse — Basic"
         description="A pulsing dot with expanding ripple rings. Great for center-screen loading states."
@@ -446,7 +421,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Pulse — Sizes ──────────────────────────────────────────────── */}
       <Section
         title="Pulse — Sizes & Rings"
         description="Control the circle diameter and the number of ripple rings."
@@ -487,9 +461,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ━━━ IN CONTEXT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-
-      {/* ── With Label ─────────────────────────────────────────────────── */}
       <Section
         title="With Label"
         description="Pair loaders with text for a common loading pattern."
@@ -526,7 +497,6 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── In Context ─────────────────────────────────────────────────── */}
       <Section
         title="In Context"
         description="Real-world usage patterns showing loaders in buttons, cards, and inline alerts."
@@ -534,7 +504,6 @@ const LoaderDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-6">
-            {/* Buttons */}
             <div className="flex items-center gap-4 flex-wrap">
               <button type="button" className={c.btnDisabled} disabled>
                 <CircularLoader
@@ -552,7 +521,6 @@ const LoaderDemo = () => {
               </button>
             </div>
 
-            {/* Card loading */}
             <div className={c.sectionCard}>
               <CircularLoader
                 size={36}
@@ -562,7 +530,6 @@ const LoaderDemo = () => {
               <p className={c.textMuted}>Loading content...</p>
             </div>
 
-            {/* Full-width linear bar */}
             <div
               className={`rounded-cl-lg border overflow-hidden border-cl-border`}
             >
@@ -582,7 +549,6 @@ const LoaderDemo = () => {
               </div>
             </div>
 
-            {/* Inline alert */}
             <div className={c.inlineAlert}>
               <CircularLoader
                 size={14}
@@ -595,16 +561,8 @@ const LoaderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Loader" />
 
-      {/* ── Props — LinearLoader ───────────────────────────────────────── */}
-
-      {/* ── Props — DotLoader ──────────────────────────────────────────── */}
-
-      {/* ── Props — PulseLoader ────────────────────────────────────────── */}
-
-      {/* ── Accessibility ──────────────────────────────────────────────── */}
       <Section
         title="Accessibility"
         description="Built-in accessibility features across all loader variants."
@@ -633,24 +591,6 @@ const LoaderDemo = () => {
               </p>
             ))}
           </div>
-        </div>
-      </Section>
-
-      {/* ── Data Attributes ────────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-reduce-motion"
-              type="root"
-              description="Present when reduced motion is active"
-              isDarkMode={dark}
-            />
-          </PropsTable>
         </div>
       </Section>
 

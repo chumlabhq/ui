@@ -82,7 +82,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const generatedId = useId();
     const inputId = id || generatedId;
 
-    // A control nobody can name is a control nobody can use. Dev-only.
     useAccessibleNameWarning("Input", {
       label,
       "aria-label": (rest as Record<string, unknown>)["aria-label"],
@@ -105,7 +104,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const internalRef = useRef<HTMLInputElement | null>(null);
     const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
 
-    // Build aria-describedby from description + error/success/count IDs
     const ariaDescribedBy =
       [
         description ? descriptionId : null,
@@ -116,12 +114,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         .filter(Boolean)
         .join(" ") || undefined;
 
-    // ─── Merged classes ─────────────────────────────────────────────────
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_INPUT_CLASSES : DEFAULT_INPUT_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<InputClasses> = useMemo(
       () => ({
@@ -155,7 +149,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       const input = internalRef.current;
       if (!input) return;
 
-      // Set native input value to empty via the prototype setter
       const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
         HTMLInputElement.prototype,
         "value",

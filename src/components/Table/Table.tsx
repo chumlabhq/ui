@@ -167,23 +167,19 @@ function TableInner<TData>(
     className,
     children,
 
-    // Sorting
     sortable = false,
     onSortingChange,
     sorting: sortingProp,
     manualSorting = false,
 
-    // Selection
     selectionMode = "none",
     selectedRowIds: selectedRowIdsProp,
     onSelectionChange,
     selectAllMode = "page",
 
-    // Global filter
     globalFilter: globalFilterProp,
     onGlobalFilterChange,
 
-    // Column filters
     columnFilters: columnFiltersProp,
     onColumnFiltersChange,
     enableColumnFilters = false,
@@ -191,7 +187,6 @@ function TableInner<TData>(
     FilterIcon: CustomFilterIcon,
     renderColumnFilter,
 
-    // Expansion
     expandable = false,
     expandedRowIds: expandedRowIdsProp,
     onExpandedChange,
@@ -200,20 +195,15 @@ function TableInner<TData>(
     expandColumnPosition = "left",
     expandOnRowClick = false,
 
-    // Column visibility
     columnVisibility: columnVisibilityProp,
     onColumnVisibilityChange,
 
-    // Striped
     striped = false,
     stripedClassName: stripedClassNameProp,
 
-    // Density
     density = "comfortable",
 
-    // Right pinned
     pinnedRightColumns = [],
-
 
     editable = false,
     editableColumns,
@@ -253,12 +243,10 @@ function TableInner<TData>(
     groupBy: groupByProp,
     onGroupByChange,
 
-
     showSearch = false,
     searchPlaceholder = "Search...",
     searchIconPosition = "left",
 
-    // Customizable icons / components
     CheckboxIcon: CustomCheckboxIcon,
     checkboxColor,
     DragHandleIcon: CustomDragHandleIcon,
@@ -268,13 +256,8 @@ function TableInner<TData>(
   }: TableProps<TData>,
   ref: React.Ref<HTMLDivElement>,
 ) {
-  // Per-slot resolution: a supplied slot replaces the default for that slot
-  // only, so a partial `classes` object keeps defaults everywhere else.
   const prefersReducedMotion = useReducedMotion();
   const baseRaw = unstyled ? UNSTYLED_TABLE_CLASSES : DEFAULT_TABLE_CLASSES;
-  // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-  // this handles the other reason to stop animating. Applied to the defaults
-  // only — a class string the consumer supplied is theirs to control.
   const base = motionSafeClasses(baseRaw, prefersReducedMotion);
 
   const containerClassName = classesProp?.root ?? base.root;
@@ -351,17 +334,14 @@ function TableInner<TData>(
   } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // ── Editing state ──────────────────────────────────────────────────────
   const [editingCell, setEditingCell] = useState<{
     rowId: string;
     columnId: string;
   } | null>(null);
   const [editValue, setEditValue] = useState<string>("");
 
-  // ── Drag & drop state ──────────────────────────────────────────────────
   const [dragRowIndex, setDragRowIndex] = useState<number | null>(null);
 
-  // ── Column filter dropdown state ──────────────────────────────────────
   const [filterDropdownState, setFilterDropdownState] = useState<{
     columnId: string;
     top: number;
@@ -389,12 +369,10 @@ function TableInner<TData>(
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);
   const sorting = sortingProp ?? internalSorting;
 
-  // Internal column filters state (uncontrolled mode)
   const [internalColumnFilters, setInternalColumnFilters] =
     useState<ColumnFiltersState>([]);
   const columnFilters = columnFiltersProp ?? internalColumnFilters;
 
-  // Helper to get/set filter values for a column
   const getColumnFilterValues = useCallback(
     (colId: string): string[] => {
       const filter = columnFilters.find((f) => f.id === colId);
@@ -421,7 +399,6 @@ function TableInner<TData>(
   const [internalGlobalFilter, setInternalGlobalFilter] = useState<string>("");
   const globalFilter = globalFilterProp ?? internalGlobalFilter;
 
-  // Internal column visibility state (uncontrolled mode)
   const [internalColumnVisibility, setInternalColumnVisibility] =
     useState<VisibilityState>({});
   const columnVisibility = columnVisibilityProp ?? internalColumnVisibility;
@@ -469,11 +446,9 @@ function TableInner<TData>(
     [editableColumns],
   );
 
-  // Build augmented columns with checkbox, expand, and drag handle columns
   const augmentedColumns = useMemo(() => {
     const cols: ColumnDef<TData, unknown>[] = [];
 
-    // Drag handle column
     const DragHandleIconComponent = CustomDragHandleIcon || DragHandleIcon;
     const dragCol: ColumnDef<TData, unknown> | null = enableRowDragDrop
       ? ({
@@ -516,7 +491,6 @@ function TableInner<TData>(
       cols.push(dragCol);
     }
 
-    // Checkbox column for multi-select
     if (selectionMode === "multiple") {
       cols.push({
         id: "__selection",
@@ -634,7 +608,6 @@ function TableInner<TData>(
       cols.push(expandCol);
     }
 
-    // Push user columns, setting filterFn for filterable columns
     const userCols = (columns as ColumnDef<TData, unknown>[]).map((col) => {
       if (!filterableColumns) return col;
       const colId =
@@ -680,7 +653,6 @@ function TableInner<TData>(
 
   const densityClass = densityPaddingMap[density] || "";
 
-  // Determine if we need filtering model
   const needsFiltering =
     globalFilter !== undefined ||
     enableColumnFilters ||
@@ -693,7 +665,6 @@ function TableInner<TData>(
     getCoreRowModel: getCoreRowModel(),
     autoResetPageIndex: false,
     manualPagination,
-    // Custom filter function for multi-value column filters
     filterFns: {
       multiValue: (row, columnId, filterValue) => {
         if (!Array.isArray(filterValue) || filterValue.length === 0)
@@ -704,7 +675,6 @@ function TableInner<TData>(
     },
     ...(filterableColumns ? { enableColumnFilters: true } : {}),
 
-    // Sorting
     ...(sortable
       ? {
           getSortedRowModel: manualSorting ? undefined : getSortedRowModel(),
@@ -731,7 +701,6 @@ function TableInner<TData>(
       ...(grouping.length > 0 ? { grouping } : {}),
     },
 
-    // Filtering
     ...(needsFiltering
       ? {
           getFilteredRowModel: manualFiltering
@@ -775,7 +744,6 @@ function TableInner<TData>(
         }
       : {}),
 
-    // Column visibility
     onColumnVisibilityChange: (updater) => {
       const newVisibility =
         typeof updater === "function" ? updater(columnVisibility) : updater;
@@ -783,7 +751,6 @@ function TableInner<TData>(
       onColumnVisibilityChange?.(newVisibility);
     },
 
-    // Row selection
     ...(selectionMode !== "none"
       ? {
           enableRowSelection: true,
@@ -799,10 +766,8 @@ function TableInner<TData>(
         }
       : {}),
 
-    // Row ID
     ...(getRowId ? { getRowId: (row: TData) => getRowId(row) } : {}),
 
-    // Column resizing
     ...(enableColumnResizing
       ? {
           enableColumnResizing: true,
@@ -816,7 +781,6 @@ function TableInner<TData>(
         }
       : {}),
 
-    // Column order
     ...(columnOrder.length > 0
       ? {
           onColumnOrderChange: (updater) => {
@@ -828,7 +792,6 @@ function TableInner<TData>(
         }
       : {}),
 
-    // Grouping
     ...(grouping.length > 0
       ? {
           getGroupedRowModel: getGroupedRowModel(),
@@ -889,13 +852,9 @@ function TableInner<TData>(
         typeof minHeight === "number" ? `${minHeight}px` : minHeight;
     }
 
-    // Hide scrollbars while keeping scroll functionality
-    // Firefox
     if (hideVerticalScrollbar || hideHorizontalScrollbar) {
       style.scrollbarWidth = "none";
-      // IE and Edge
       style.msOverflowStyle = "none";
-      // Smooth scrolling on iOS
       style.WebkitOverflowScrolling = "touch";
     }
 
@@ -935,14 +894,10 @@ function TableInner<TData>(
   const needsHoistedScroll =
     !!maxHeight && (stickyHeader || hasStickyFooter);
 
-  // ── Responsive breakpoint ─────────────────────────────────────────────
   const viewportWidth = useViewportWidth();
   const isMobileView =
     responsiveBreakpoint !== undefined && viewportWidth < responsiveBreakpoint;
 
-  // ── Infinite scroll ───────────────────────────────────────────────────
-  // scrollSentinelRef removed - using scroll event listener instead
-  // ── Infinite scroll via scroll event (more reliable than IntersectionObserver) ──
   const loadingMoreRef = useRef(loadingMore);
   loadingMoreRef.current = loadingMore;
   const hasMoreRef = useRef(hasMore);
@@ -965,7 +920,6 @@ function TableInner<TData>(
         return;
 
       const { scrollTop, scrollHeight, clientHeight } = container;
-      // Trigger when user is within 100px of the bottom
       if (scrollHeight - scrollTop - clientHeight < 100) {
         onLoadMoreRef.current();
       }
@@ -1082,7 +1036,6 @@ function TableInner<TData>(
     [onPinColumn, canPinMore],
   );
 
-  // ── Inline editing handlers ───────────────────────────────────────────
   const handleCellDoubleClick = useCallback(
     (rowId: string, columnId: string, currentValue: unknown) => {
       if (!editable) return;
@@ -1106,7 +1059,6 @@ function TableInner<TData>(
     setEditValue("");
   }, []);
 
-  // ── Cell copy handler ─────────────────────────────────────────────────
   const handleCellClick = useCallback(
     async (cellText: string, rowId: string, columnId: string) => {
       if (!enableCopyOnClick) return;
@@ -1116,7 +1068,6 @@ function TableInner<TData>(
     [enableCopyOnClick, onCellCopy],
   );
 
-  // ── Drag & drop handlers ──────────────────────────────────────────────
   const handleDragStart = useCallback(
     (e: React.DragEvent, rowIndex: number) => {
       setDragRowIndex(rowIndex);
@@ -1146,7 +1097,6 @@ function TableInner<TData>(
     setDragRowIndex(null);
   }, []);
 
-  // ── Search bar handler ────────────────────────────────────────────────
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -1309,8 +1259,6 @@ function TableInner<TData>(
                   } else {
                     const rect = e.currentTarget.getBoundingClientRect();
                     filterTriggerRef.current = e.currentTarget;
-                    // Check if dropdown would overflow viewport on the right.
-                    // If so, align to the right edge of the trigger instead.
                     const dropdownWidth = 220; // estimated min-w
                     const spaceRight = window.innerWidth - rect.left;
                     const left = spaceRight < dropdownWidth
@@ -1324,7 +1272,6 @@ function TableInner<TData>(
                   }
                 }}
                 className={filterIconClassName}
-                // ADR 002 R4: the state the opacity ternary expressed.
                 data-active={getColumnFilterValues(columnId).length > 0 || undefined}
                 aria-label={`Filter ${columnId}`}
                 aria-haspopup="dialog"
@@ -1353,7 +1300,6 @@ function TableInner<TData>(
             {canShowPinButton && (
               <button
                 type="button"
-                // ADR 002 R4: the state the pinnedPinButton key named.
                 data-state={isPinned ? "active" : undefined}
                 onClick={(e) => handlePinClick(columnId, isPinned, e)}
                 disabled={isDisabled}
@@ -1410,7 +1356,6 @@ function TableInner<TData>(
             >
               <div
                 className={resizeIndicatorClassName}
-                // ADR 002 R4: the state the resizing ternary expressed.
                 data-resizing={header.column.getIsResizing() || undefined}
               />
             </div>
@@ -1471,7 +1416,6 @@ function TableInner<TData>(
       const rowSpan = meta?.rowSpan;
       const colSpan = meta?.colSpan;
 
-      // Inline editing
       const rowId = cell.row.id;
       const isEditing =
         editingCell?.rowId === rowId && editingCell?.columnId === columnId;
@@ -1480,7 +1424,6 @@ function TableInner<TData>(
         !isSyntheticColumn &&
         (!editableColumnSet || editableColumnSet.has(columnId));
 
-      // Column sizing
       const cellStyle: React.CSSProperties = {};
       if (enableColumnResizing) {
         const size = cell.column.getSize();
@@ -1489,7 +1432,6 @@ function TableInner<TData>(
         cellStyle.maxWidth = size;
       }
 
-      // Grouped cell rendering
       const isGrouped = cell.getIsGrouped();
       const isAggregated = cell.getIsAggregated();
       const isPlaceholder = cell.getIsPlaceholder();
@@ -1545,7 +1487,6 @@ function TableInner<TData>(
         flexRender(cell.column.columnDef.cell, cell.getContext())
       );
 
-      // Get text content for copy
       const cellTextValue = cell.getValue();
       const cellText = cellTextValue != null ? String(cellTextValue) : "";
 
@@ -1663,7 +1604,6 @@ function TableInner<TData>(
             data-clickable={onRowClick ? true : undefined}
             data-striped={isStriped || undefined}
             data-expanded={isExpanded || undefined}
-            // ADR 002 R4 / Amendment E: data-expanded converges on data-state.
             data-state={isExpanded ? "open" : "closed"}
             data-group-row={isGroupRow || undefined}
             data-dragging={dragRowIndex === rowIndex || undefined}
@@ -1915,7 +1855,6 @@ function TableInner<TData>(
   const rows = table.getRowModel().rows;
   const isEmpty = rows.length === 0;
 
-  // ── Mobile card view ──────────────────────────────────────────────────
   if (isMobileView && renderMobileCard) {
     return (
       <div
@@ -2026,7 +1965,6 @@ function TableInner<TData>(
       getColumnId(col.columnDef as { accessorKey?: string; id?: string }),
     );
 
-  // Synthetic columns (__selection, __expand, __dragHandle) should always appear in the unpinned/main section
   const syntheticColumnIds = new Set([
     "__selection",
     "__expand",
@@ -2124,8 +2062,6 @@ function TableInner<TData>(
             <div className={`mb-3 ${searchBarClassName}`} data-table-search>
               <div
                 className="relative group/search"
-                // ADR 002 R4: the side the icon sits on, which both the icon and
-                // the clear button position against.
                 data-side={showIcon ? (iconLeft ? "start" : "end") : undefined}
               >
                 {showIcon && <IconComponent className={searchIconClassName} />}

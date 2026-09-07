@@ -19,7 +19,6 @@ import {
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
 } from "./utils/constants.js";
 
-
 interface DropdownContentProps {
   triggerElement: HTMLElement | null;
   isOpen: boolean;
@@ -114,7 +113,6 @@ const OptionItem = memo(function OptionItem({
     cn(
       classes.itemControl,
     ) || undefined;
-  // ADR 002 R4: the state the checkboxChecked key named.
   const checkboxState = isSelected ? "checked" : "unchecked";
 
   return (
@@ -264,17 +262,12 @@ const MultiSelectSearchableDropdown = forwardRef<
     },
     ref
   ) => {
-    // ADR: floating content resolves its layer from the nearest overlay, so a
-    // dropdown inside a drawer stacks above it. An explicit prop still wins.
     const dropdownZIndex = useLayer(dropdownZIndexProp);
 
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled
       ? UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES
       : DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES;
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-    // this handles the other reason to stop animating. Applied to the defaults
-    // only — a class string the consumer supplied is theirs to control.
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<MultiSelectSearchableDropdownClasses> = useMemo(
@@ -313,8 +306,6 @@ const MultiSelectSearchableDropdown = forwardRef<
     const labelId = `${dropdownId}-label`;
     const valueId = `${dropdownId}-value`;
 
-  // The value fallback in `comboboxNameProps` gives the trigger a name, but a
-  // control named only by its own value says nothing about what it selects.
   useAccessibleNameWarning("MultiSelectSearchableDropdown", { label, "aria-label": ariaLabel });
     const errorId = `${dropdownId}-error`;
 
@@ -388,7 +379,6 @@ const MultiSelectSearchableDropdown = forwardRef<
       }
     }, [isOpen, showSearch]);
 
-    // Restore focus to trigger when dropdown closes
     useEffect(() => {
       if (!isOpen && prevIsOpenRef.current) {
         if (shouldRestoreFocusRef.current) {
@@ -399,7 +389,6 @@ const MultiSelectSearchableDropdown = forwardRef<
       prevIsOpenRef.current = isOpen;
     }, [isOpen, shouldRestoreFocusRef]);
 
-    // Scroll focused option into view
     useEffect(() => {
       if (!isOpen || focusedIndex < 0 || !isBrowser) return;
       const optionEl = document.getElementById(`${dropdownId}-option-${focusedIndex}`);
@@ -412,7 +401,6 @@ const MultiSelectSearchableDropdown = forwardRef<
       }
     }, [isOpen, focusedIndex, dropdownId]);
 
-    // Scroll lock when dropdown is open
     const dropdownContentRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
       if (!lockScroll || !isOpen || !isBrowser) return;
@@ -431,7 +419,6 @@ const MultiSelectSearchableDropdown = forwardRef<
       };
     }, [lockScroll, isOpen]);
 
-    // Click outside to close (portal-aware)
     useEffect(() => {
       if (!isOpen || !isBrowser) return;
 
@@ -452,7 +439,6 @@ const MultiSelectSearchableDropdown = forwardRef<
       };
     }, [isOpen, handleClose, triggerNode, dropdownId]);
 
-    // Global keyboard handling for Escape/Tab when portal is open
     useEffect(() => {
       if (!isOpen || !isBrowser) return;
       const handleDocumentKeyDown = (event: globalThis.KeyboardEvent) => {
@@ -662,9 +648,6 @@ const MultiSelectSearchableDropdown = forwardRef<
           {clearable && selectedValues.length > 0 && (
             <button
               type="button"
-              // SC 2.1.1: this was tabIndex={-1}, so clearing could only be done
-              // with a pointer — and for a single select there is no other way
-              // back to an empty value.
               aria-label="Clear all selections"
               className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {

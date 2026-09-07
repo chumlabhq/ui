@@ -1,6 +1,11 @@
 import { useState, type FC } from "react";
 import { Section, PropsTable, PropRow } from "./Section.js";
-import { COMPONENT_DOCS, type ComponentDoc, type PropDoc } from "../generated/componentDocs.js";
+import {
+  COMPONENT_DOCS,
+  type ComponentDoc,
+  type MemberDoc,
+  type PropDoc,
+} from "../generated/componentDocs.js";
 
 /**
  * The four reference sections every component page carries: Anatomy, API
@@ -15,6 +20,23 @@ import { COMPONENT_DOCS, type ComponentDoc, type PropDoc } from "../generated/co
 const cardClass = "rounded-2xl border border-border-faint bg-bg-elevated p-5";
 const preClass =
   "rounded-cl-lg border border-cl-border bg-cl-code-bg text-cl-code-text font-mono text-[12px] leading-[1.65] px-4 py-3 overflow-x-auto";
+
+/**
+ * A block that scrolls has to be reachable by keyboard, or the only way to read
+ * the right-hand side of a long line is a mouse. axe reports it as
+ * `scrollable-region-focusable`; `tabIndex={0}` is the whole fix.
+ */
+const scrollableCode = { tabIndex: 0 } as const;
+
+const memberRows = (members: MemberDoc[]) =>
+  members.map((member) => (
+    <PropRow
+      key={member.name}
+      name={member.required ? `${member.name} *` : member.name}
+      type={member.type}
+      description={member.description}
+    />
+  ));
 
 const propRows = (props: PropDoc[]) =>
   props.map((prop) => (
@@ -37,7 +59,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
         title="Anatomy"
         description="The parts this component composes, taken from its own example — so it cannot describe a composition the code does not use."
       >
-        <pre className={preClass}>
+        <pre className={preClass} {...scrollableCode}>
           <code>{doc.anatomy}</code>
         </pre>
       </Section>
@@ -58,6 +80,97 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           </div>
         ))}
       </Section>
+
+      {doc.classes.length > 0 && (
+        <Section
+          title="Class overrides"
+          description="Every slot the classes prop accepts, read off the *Classes interfaces. A slot with no description has none on its type either."
+        >
+          {doc.classes.map((map) => (
+            <div key={map.map} className="mt-6 first:mt-0">
+              <h3 className="font-mono text-[13px] text-fg mb-3">{map.map}</h3>
+              <div className={cardClass}>
+                <PropsTable>{memberRows(map.keys)}</PropsTable>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
+
+      {doc.dataAttributes.length > 0 && (
+        <Section
+          title="Data attributes"
+          description="What the component puts on the DOM, for your own CSS and your own tests. Read off the JSX, so it is what ships rather than what was written down."
+        >
+          <div className="overflow-x-auto w-full min-w-0">
+            <table className="w-full table-fixed text-left min-w-[560px]">
+              <colgroup>
+                <col className="w-[34%]" />
+                <col className="w-[30%]" />
+                <col className="w-[36%]" />
+              </colgroup>
+              <thead>
+                <tr className="text-fg-tertiary rule rule-b">
+                  <th className="px-4 py-2 eyebrow">Attribute</th>
+                  <th className="px-4 py-2 eyebrow">Values</th>
+                  <th className="px-4 py-2 eyebrow">Present</th>
+                </tr>
+              </thead>
+              <tbody>
+                {doc.dataAttributes.map((attribute) => (
+                  <tr key={attribute.name} className="rule rule-t">
+                    <td className="px-4 py-2 font-mono text-[13px] align-top break-words" style={{ color: "var(--accent)" }}>
+                      {attribute.name}
+                    </td>
+                    <td className="px-4 py-2 font-mono text-xs align-top break-words text-fg-secondary">
+                      {attribute.values.length > 0 ? attribute.values.join(" | ") : "—"}
+                    </td>
+                    <td className="px-4 py-2 font-mono text-xs align-top break-words text-fg-tertiary">
+                      {attribute.when}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
+      )}
+
+      {doc.shapes.length > 0 && (
+        <Section
+          title="Types"
+          description="The shapes a prop asks you to build, and what an exported hook hands back."
+        >
+          {doc.shapes.map((shape) => (
+            <div key={shape.name} className="mt-6 first:mt-0">
+              <h3 className="font-mono text-[13px] text-fg mb-1">{shape.name}</h3>
+              {shape.description && (
+                <p className="text-[13px] text-fg-secondary mb-3 max-w-[680px]">{shape.description}</p>
+              )}
+              <div className={cardClass}>
+                <PropsTable>{memberRows(shape.members)}</PropsTable>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
+
+      {doc.cssVariables.length > 0 && (
+        <Section
+          title="CSS custom properties"
+          description="Set by the component on its own elements, so your CSS can read them."
+        >
+          <div className={cardClass}>
+            <ul className="list-disc pl-5 space-y-2 text-sm text-fg-secondary">
+              {doc.cssVariables.map((variable) => (
+                <li key={variable} className="font-mono text-[13px]">
+                  {variable}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Section>
+      )}
 
       {doc.accessibility.length > 0 && (
         <Section title="Accessibility">
@@ -169,7 +282,7 @@ export const CopyPasteBlock: FC<{ name: string }> = ({ name }) => {
         </button>
       </div>
 
-      <pre className={preClass}>
+      <pre className={preClass} {...scrollableCode}>
         <code>{code}</code>
       </pre>
 
@@ -216,7 +329,7 @@ export const SetupNote: FC = () => (
     description="One import. No Tailwind configuration, no content globs, no plugin."
   >
     <div className={cardClass}>
-      <pre className={preClass}>
+      <pre className={preClass} {...scrollableCode}>
         <code>{'import "@chumlab/ui/styles.css";'}</code>
       </pre>
       <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-fg-secondary mt-4">

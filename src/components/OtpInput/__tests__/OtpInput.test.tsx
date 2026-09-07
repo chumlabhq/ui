@@ -946,7 +946,6 @@ describe("OtpInput - Multi-character Input Handling", () => {
 
     const inputs = screen.getAllByRole("textbox");
 
-    // Simulate an onChange event with multiple characters (browser auto-fill)
     const { fireEvent } = await import("@testing-library/react");
     fireEvent.change(inputs[0], { target: { value: "1234" } });
 
@@ -1010,7 +1009,6 @@ describe("OtpInput - Multi-character Input Handling", () => {
     const inputs = screen.getAllByRole("textbox");
 
     const { fireEvent } = await import("@testing-library/react");
-    // Type 3 chars into input[0] — should move focus to index 2
     fireEvent.change(inputs[0], { target: { value: "123" } });
 
     expect(inputs[2]).toHaveFocus();
@@ -1031,7 +1029,6 @@ describe("OtpInput - Individual Input Paste Prevention", () => {
 
     const inputs = screen.getAllByRole("textbox");
 
-    // Paste directly on an individual input (not the wrapper)
     const clipboardData = { getData: () => "123456" };
     const pasteEvent = new Event("paste", { bubbles: true, cancelable: true });
     Object.defineProperty(pasteEvent, "clipboardData", { value: clipboardData });
@@ -1058,7 +1055,6 @@ describe("OtpInput - Individual Input Paste Prevention", () => {
     // The React onPaste prop would not be set, so the attribute is not on the DOM element.
     // We can verify there's no 'onpaste' attribute on the element.
     expect(inputs[0]).not.toHaveAttribute("onpaste");
-    // All inputs should still exist and be interactable
     expect(inputs).toHaveLength(6);
   });
 });

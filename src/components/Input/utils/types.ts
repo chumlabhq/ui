@@ -10,14 +10,21 @@ export interface InputLabelProps {
 export type InputSize = "sm" | "md" | "lg";
 
 export interface InputClasses {
+  /** Root container (label + input row + error/success) */
   root?: string;
   control?: string;
+  /** Label element */
   label?: string;
+  /** Helper/description text */
   description?: string;
+  /** Native <input> element */
   input?: string;
+  /** Prefix addon */
   prefix?: string;
+  /** Suffix addon */
   suffix?: string;
   message?: string;
+  /** Character count display */
   count?: string;
 }
 

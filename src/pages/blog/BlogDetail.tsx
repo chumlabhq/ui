@@ -244,10 +244,6 @@ export default function BlogDetail() {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // (Hero entry animations now flow through the shared <Reveal> component
-  // below — eyebrow / H1 / subtitle / meta / cover each stagger to the
-  // global rhythm.)
-
   if (!post) {
     return <Navigate to="/blog" replace />;
   }

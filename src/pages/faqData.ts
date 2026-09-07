@@ -54,7 +54,6 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
 ];
 
 export const FAQ_DATA: FaqEntry[] = [
-  // ─── Getting Started ────────────────────────────────────────────────────
   {
     category: "Getting Started",
     question: "What is Chumlab UI?",
@@ -98,7 +97,6 @@ export const FAQ_DATA: FaqEntry[] = [
       'Install Tailwind CSS v4 and its Vite or PostCSS plugin, then add `@import "tailwindcss"` to your main CSS file. Extend the Tailwind content globs to include Chumlab UI\'s distribution so its utility classes are emitted: `content: ["./node_modules/@chumlab/ui/**/*.{js,mjs}"]`.',
   },
 
-  // ─── Components ─────────────────────────────────────────────────────────
   {
     category: "Components",
     question: "How many components does Chumlab UI include?",
@@ -149,7 +147,6 @@ export const FAQ_DATA: FaqEntry[] = [
       "Yes. Compound components (Accordion, Modal, Dropdown, TabPanel) use explicit sub-components and React context, so you can interleave arbitrary children, swap triggers via the `asChild` slot pattern, and project custom content without fighting the API.",
   },
 
-  // ─── Theming ────────────────────────────────────────────────────────────
   {
     category: "Theming",
     question: "How do I customise component styles?",
@@ -199,7 +196,6 @@ export const FAQ_DATA: FaqEntry[] = [
       "Yes. Because Chumlab UI references CSS variables rather than hard-coded colours, you can change tokens at runtime (per page, per tenant, per theme) by updating variables on any parent element. Theme switches are instant and cacheable at the CDN.",
   },
 
-  // ─── Forms ──────────────────────────────────────────────────────────────
   {
     category: "Forms",
     question: "Does Chumlab UI work with React Hook Form?",
@@ -231,7 +227,6 @@ export const FAQ_DATA: FaqEntry[] = [
       'Yes. Passing `error` sets `aria-invalid="true"` on the input; passing `errorMessage` links the message with `aria-describedby` for screen readers. Passing `required` propagates `aria-required="true"` to the input at the same time.',
   },
 
-  // ─── Accessibility ──────────────────────────────────────────────────────
   {
     category: "Accessibility",
     question: "Is Chumlab UI accessible?",
@@ -275,7 +270,6 @@ export const FAQ_DATA: FaqEntry[] = [
       "Yes. Modal and Drawer trap Tab focus inside the overlay while open, restore focus to the element that opened them on close, and lock background scroll. The initial focus target can be overridden via `initialFocusRef`.",
   },
 
-  // ─── Technical ──────────────────────────────────────────────────────────
   {
     category: "Technical",
     question: "Is Chumlab UI tree-shakeable?",
@@ -331,7 +325,6 @@ export const FAQ_DATA: FaqEntry[] = [
       "Yes. The package ships both ESM (`.js`) and CJS (`.cjs`) builds alongside TypeScript declarations. Modern bundlers pick ESM for optimal tree-shaking; legacy Node.js and CommonJS consumers fall back to CJS automatically.",
   },
 
-  // ─── Testing ────────────────────────────────────────────────────────────
   {
     category: "Testing",
     question: "Is Chumlab UI easy to test?",
@@ -357,7 +350,6 @@ export const FAQ_DATA: FaqEntry[] = [
       "Yes. Stable `data-*` attributes and proper ARIA roles make Playwright `getByRole` and `getByTestId` selectors reliable across renders. Cypress works equivalently; no special setup is required beyond a running dev server.",
   },
 
-  // ─── Migration ──────────────────────────────────────────────────────────
   {
     category: "Migration",
     question: "How is Chumlab UI different from shadcn/ui?",
@@ -383,7 +375,6 @@ export const FAQ_DATA: FaqEntry[] = [
       "Radix UI and Chumlab UI share the same composition philosophy (compound components, `asChild` slot pattern). Most Radix components have a Chumlab UI counterpart with a very similar API — the main change is that Chumlab UI ships styling out of the box, whereas Radix is unstyled.",
   },
 
-  // ─── Licensing ──────────────────────────────────────────────────────────
   {
     category: "Licensing",
     question: "What license is Chumlab UI under?",

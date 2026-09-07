@@ -75,7 +75,6 @@ function trackFaqExpand(question: string, category: FaqCategory) {
   }
 }
 
-// Slug ↔ display-name bridge for the URL `?cat=` param.
 function categorySlug(cat: FaqCategory): string {
   return cat.toLowerCase().replace(/\s+/g, "-");
 }
@@ -155,7 +154,6 @@ const Faq = () => {
     1,
     Math.ceil(filteredFaqs.length / FAQS_PER_PAGE),
   );
-  // Clamp currentPage if filters shrink the list past the current page.
   useEffect(() => {
     if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
@@ -226,9 +224,6 @@ const Faq = () => {
       buttonRefs.current[total - 1]?.focus();
     }
   };
-
-  // (Bottom CTA entry animations now flow through the shared <Reveal>
-  // component below.)
 
   return (
     <div className="relative min-h-screen bg-bg-base text-fg">

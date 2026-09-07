@@ -42,7 +42,6 @@ export function useTimePicker({
 
   const [lastValidValue, setLastValidValue] = useState(() => computeInputValue(value, format).lastValid);
 
-  // Refs for values needed in commitValue to avoid stale closures
   const lastValidRef = useRef(lastValidValue);
   const inputValueRef = useRef(inputValue);
 
@@ -59,7 +58,6 @@ export function useTimePicker({
     [format, safeStep, minTime, maxTime]
   );
 
-  // Sync input display when value or format changes from outside.
   /* eslint-disable react-hooks/set-state-in-effect -- batched state sync on prop change */
   useEffect(() => {
     const formatChanged = prevFormatRef.current !== format;

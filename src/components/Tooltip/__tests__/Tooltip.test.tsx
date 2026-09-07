@@ -643,7 +643,6 @@ describe("Tooltip", () => {
       // and starts a new one
       await user.hover(trigger);
 
-      // Advance fully past the delay — tooltip should now appear
       await act(async () => { vi.advanceTimersByTime(300); });
 
       await waitFor(() => {
@@ -662,11 +661,9 @@ describe("Tooltip", () => {
 
       const trigger = screen.getByText("Trigger");
 
-      // Open tooltip
       await user.hover(trigger);
       await waitFor(() => { expect(screen.getByRole("tooltip")).toBeInTheDocument(); });
 
-      // Leave — starts hide timeout
       await user.unhover(trigger);
       await act(async () => { vi.advanceTimersByTime(100); });
 
@@ -674,7 +671,6 @@ describe("Tooltip", () => {
       await user.hover(trigger);
       await act(async () => { vi.advanceTimersByTime(300); });
 
-      // Tooltip should still be open
       expect(screen.getByRole("tooltip")).toBeInTheDocument();
     });
   });
@@ -695,7 +691,6 @@ describe("Tooltip", () => {
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
       });
 
-      // Simulate touchstart on an outside element — hits handleTouchOutside (lines 305-311)
       act(() => {
         const touchEvent = new TouchEvent("touchstart", {
           bubbles: true,
@@ -812,7 +807,6 @@ describe("Tooltip", () => {
       const button = screen.getByTestId("aschild-btn");
       // Should NOT be wrapped in a span -- button's parent should not be a trigger span
       expect(button.parentElement?.tagName).not.toBe("SPAN");
-      // The button itself should still be in the document
       expect(button).toBeInTheDocument();
     });
 
@@ -962,7 +956,6 @@ describe("Tooltip", () => {
       await waitFor(() => {
         const tooltip = screen.getByRole("tooltip");
         const container = screen.getByTestId("inline-container");
-        // When portal is false, tooltip should be inside the container
         expect(container.contains(tooltip)).toBe(true);
       });
     });
@@ -989,7 +982,6 @@ describe("Tooltip", () => {
 
   describe("Truncation-Only Mode", () => {
     afterEach(() => {
-      // Reset the prototype overrides
       Object.defineProperty(HTMLElement.prototype, "scrollWidth", {
         configurable: true,
         get() {
@@ -1020,7 +1012,6 @@ describe("Tooltip", () => {
         </Tooltip>
       );
 
-      // Should render the text but without a tooltip (not truncated)
       expect(screen.getByText("Short text that fits")).toBeInTheDocument();
       expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
     });
@@ -1064,7 +1055,6 @@ describe("Tooltip", () => {
       );
 
       const textSpans = screen.getAllByText("Truncated with width");
-      // The trigger span should have the max-width style
       const styledSpan = textSpans.find(el => el.style.maxWidth);
       expect(styledSpan).toBeTruthy();
       expect(styledSpan!.style.maxWidth).toBe("150px");
@@ -1331,7 +1321,6 @@ describe("Tooltip", () => {
       });
 
       const tooltip = screen.getByRole("tooltip");
-      // Move to tooltip, then leave it
       await user.hover(tooltip);
       await user.unhover(tooltip);
 
@@ -1554,7 +1543,6 @@ describe("Tooltip", () => {
 
       expect(screen.getByRole("tooltip")).toBeInTheDocument();
 
-      // After another 400ms it should be gone
       await act(async () => {
         vi.advanceTimersByTime(400);
       });
@@ -1566,7 +1554,6 @@ describe("Tooltip", () => {
   });
 });
 
-// ── Direct tests for tooltip positioning helpers ────────────────────────────
 import { computeForSide, wouldOverflow, calculatePosition } from "../utils/helpers.js";
 
 import { setReducedMotion } from "../../../test/matchMedia.js";
@@ -1690,7 +1677,6 @@ describe("calculatePosition", () => {
   it("adjusts arrowLeft when left is clamped", () => {
     const edgeTrigger = makeDOMRect(5, 200, 20, 30);
     const pos = calculatePosition(edgeTrigger, tooltip, "top", "center", 6, 0);
-    // arrowLeft should be clamped between 12 and tooltipWidth - 12
     if (pos.arrowLeft !== undefined) {
       expect(pos.arrowLeft).toBeGreaterThanOrEqual(12);
       expect(pos.arrowLeft).toBeLessThanOrEqual(120 - 12);
@@ -1725,4 +1711,3 @@ describe("calculatePosition", () => {
     expect(pos.top).toBeLessThanOrEqual(600 - 8 - 40);
   });
 });
-

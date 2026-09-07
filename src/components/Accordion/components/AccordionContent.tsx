@@ -73,7 +73,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       };
     }, [item.isExpanded]);
 
-    // Observe content size changes while expanded (debounced)
     useEffect(() => {
       if (!item.isExpanded || !contentNodeRef.current) return;
       if (typeof ResizeObserver === "undefined") return;
@@ -94,7 +93,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       };
     }, [item.isExpanded]);
 
-    // Animation callbacks via transitionend (with fallback for duration=0)
     const endFiredRef = useRef(false);
     useEffect(() => {
       const node = contentNodeRef.current;
@@ -118,7 +116,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
         }
       };
 
-      // For zero-duration (reduced motion), fire callbacks immediately
       if (effectiveDuration === 0) {
         fireEnd();
         return;
@@ -127,9 +124,7 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       if (!node) return;
 
       const handleTransitionEnd = (e: TransitionEvent) => {
-        // Only respond to transitions on this element (not children)
         if (e.target !== node) return;
-        // Only respond to max-height transition (the primary one)
         if (e.propertyName !== "max-height") return;
         fireEnd();
       };
@@ -174,7 +169,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       opacity: showExpanded ? 1 : 0,
       visibility: showExpanded ? "visible" : "hidden",
       overflow: showExpanded ? undefined : "hidden",
-      // Prevent interaction with content during close animation
       pointerEvents: showExpanded ? undefined : "none",
       transitionDuration: `${effectiveDuration}ms`,
       transitionTimingFunction: animationEasing,

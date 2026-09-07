@@ -13,8 +13,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -22,8 +20,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const CloseIcon = () => (
   <svg
@@ -40,7 +36,6 @@ const CloseIcon = () => (
     />
   </svg>
 );
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (_dark: boolean) => ({
   // Drawer panel surface. bg-cl-bg uses the page background colour so the
@@ -52,7 +47,6 @@ const getClasses = (_dark: boolean) => ({
   body: `flex-1 overflow-y-auto px-6 py-5`,
   footer: `flex items-center justify-end gap-3 px-6 py-4 border-t border-cl-border bg-cl-bg-elevated`,
   title: `text-[17px] font-semibold text-cl-text leading-tight tracking-[-0.01em]`,
-  // Close button: ghost style, square, no chrome until hover.
   closeBtn: `inline-flex items-center justify-center w-9 h-9 rounded-cl-md transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg`,
   text: "text-cl-text-secondary leading-relaxed",
   // Button system follows the docs spec: primary = filled accent pill,
@@ -66,8 +60,6 @@ const getClasses = (_dark: boolean) => ({
   label: `text-xs font-medium text-cl-text-tertiary`,
 });
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
 function useDrawerState(initial = false) {
   const [open, setOpen] = useState(initial);
   return {
@@ -77,8 +69,6 @@ function useDrawerState(initial = false) {
     onClose: () => setOpen(false),
   };
 }
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const DrawerDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -557,7 +547,6 @@ const DrawerDemo = () => {
         </Drawer>
       </Section>
 
-      {/* ─── Classes System ─────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override root, overlay, and panel styling with the classes prop."
@@ -718,67 +707,6 @@ const DrawerDemo = () => {
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Drawer" />
 
-      <Section title="Data Attributes" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-state"
-              type="root"
-              description='"open" | "closed"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-direction"
-              type="root, panel"
-              description='"left"|"right"|"top"|"bottom"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-drawer-panel"
-              type="panel div"
-              description="Identifies the panel element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-drawer-overlay"
-              type="overlay div"
-              description="Identifies the overlay"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-drawer-header"
-              type="DrawerHeader"
-              description="Identifies the header"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-drawer-body"
-              type="DrawerBody"
-              description="Identifies the body"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-drawer-footer"
-              type="DrawerFooter"
-              description="Identifies the footer"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-drawer-close"
-              type="DrawerCloseButton"
-              description="Identifies the close button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-autofocus"
-              type="any element"
-              description="Auto-focused on open (if no initialFocus ref)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>
           <div
@@ -861,15 +789,6 @@ const DrawerDemo = () => {
           "Do not disable Escape handling without an obvious close affordance.",
         ]}
       />
-
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow name="data-state" type="root" description="'open' or 'closed'" isDarkMode={dark} />
-            <PropRow name="data-direction" type="root" description="'left' | 'right' | 'top' | 'bottom'" isDarkMode={dark} />
-          </PropsTable>
-        </div>
-      </Section>
 
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>

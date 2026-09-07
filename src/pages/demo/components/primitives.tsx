@@ -18,13 +18,6 @@ import {
 } from "react";
 import { cn } from "../../../utils/cn.js";
 
-// ─── <Btn /> ────────────────────────────────────────────────────────────────
-//
-// One source of truth for every button rendered inside a demo. Variants
-// match the Phase 3 spec exactly. Primary / secondary / ghost / destructive
-// share padding, radius (--cl-radius-md = 8 px), and font; only colors
-// differ. Icon-only is its own square treatment.
-
 type BtnVariant =
   | "primary"
   | "secondary"
@@ -90,12 +83,6 @@ export const Btn = forwardRef<HTMLButtonElement, BtnProps>(function Btn(
   );
 });
 
-// ─── <Field /> family ───────────────────────────────────────────────────────
-//
-// Standardised input/textarea/select. Each renders the spec's surface:
-// bg-cl-bg-input, 1 px solid bg-cl-border-input, focus ring via
-// box-shadow so the border-width never shifts.
-
 const fieldBase =
   "w-full bg-cl-bg-input text-cl-text placeholder:text-cl-text-tertiary " +
   "border border-cl-border-input rounded-cl-md " +
@@ -158,8 +145,6 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   },
 );
 
-// ─── <Callout /> ────────────────────────────────────────────────────────────
-
 interface CalloutProps {
   variant?: "info" | "success" | "warning";
   /** Optional inline label. Defaults to the variant's name (Tip/Success/Warning). */
@@ -204,11 +189,6 @@ export const Callout: React.FC<CalloutProps> = ({
   </div>
 );
 
-// ─── <Chip /> ───────────────────────────────────────────────────────────────
-//
-// Filter / option chip. Selected inverts colors (text bg becomes the chip
-// bg) so the affordance reads without burning the accent token.
-
 interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
 }
@@ -239,12 +219,6 @@ export const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
     />
   );
 });
-
-// ─── <CodeFenced /> ─────────────────────────────────────────────────────────
-//
-// Code block with eyebrow header + copy button. Replaces the legacy
-// `<CodeBlock>` from Section.tsx (which is kept as a thin compatibility
-// alias so existing imports don't break).
 
 interface CodeFencedProps {
   /** Source code body. */
@@ -298,7 +272,7 @@ export const CodeFenced: React.FC<CodeFencedProps> = ({
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {
-      /* clipboard blocked — silently ignore */
+      // No clipboard permission: leave the button in its idle state.
     }
   };
   return (
@@ -321,14 +295,13 @@ export const CodeFenced: React.FC<CodeFencedProps> = ({
           <CopyIcon check={copied} />
         </button>
       </div>
-      <pre className="px-4 py-3 font-mono text-[12px] leading-[1.65] text-cl-code-text overflow-x-auto">
+      {/* Scrolls, so it needs a tab stop — axe's scrollable-region-focusable. */}
+      <pre tabIndex={0} className="px-4 py-3 font-mono text-[12px] leading-[1.65] text-cl-code-text overflow-x-auto">
         <code>{code}</code>
       </pre>
     </div>
   );
 };
-
-// ─── <InlineCode /> ─────────────────────────────────────────────────────────
 
 export const InlineCode: React.FC<{ children: ReactNode; className?: string }> = ({
   children,

@@ -234,12 +234,6 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
 
     const baseClassesRaw = unstyled ? UNSTYLED_TABPANEL_CLASSES : DEFAULT_TABPANEL_CLASSES;
 
-    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-
-    // this handles the other reason to stop animating. Applied to the defaults
-
-    // only — a class string the consumer supplied is theirs to control.
-
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const resolvedClasses: ResolvedClasses = useMemo(
       () => ({

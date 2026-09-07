@@ -1,4 +1,3 @@
-// AI Knowledge: See INTERNATIONALPHONEINPUT.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as InternationalPhoneInput } from "./InternationalPhoneInput.js";
 export type {
   InternationalPhoneInputProps,

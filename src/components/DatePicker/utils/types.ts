@@ -127,17 +127,14 @@ interface BaseDatePickerProps
   /** Fires when the displayed month changes via navigation. */
   onMonthChange?: (month: Date) => void;
 
-  // ─── Controlled open state ────────────────────────────────────────
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 
-  // ─── Constraints ────────────────────────────────────────────────────
   minDate?: Date;
   maxDate?: Date;
   disabledDates?: DisabledDateOptions;
 
-  // ─── Display ────────────────────────────────────────────────────────
   weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   locale?: Locale;
   numberOfMonths?: number;
@@ -150,16 +147,13 @@ interface BaseDatePickerProps
   outsideDaysSelectable?: boolean;
   fixedWeeks?: boolean;
 
-  // ─── Presets ────────────────────────────────────────────────────────
   showPresets?: boolean;
   presets?: DatePreset[];
 
-  // ─── Markers ────────────────────────────────────────────────────────
   markers?: DateMarker[];
   showMarkerIndicator?: boolean;
   showMarkerTooltip?: boolean;
 
-  // ─── Form ───────────────────────────────────────────────────────────
   id?: string;
   name?: string;
   placeholder?: string;
@@ -179,11 +173,9 @@ interface BaseDatePickerProps
   required?: boolean;
   fullWidth?: boolean;
 
-  // ─── Trigger UI ─────────────────────────────────────────────────────
   showClearButton?: boolean;
   showCalendarIcon?: boolean;
 
-  // ─── Custom icons ───────────────────────────────────────────────────
   calendarIcon?: ReactNode;
   clearIcon?: ReactNode;
   prevMonthIcon?: ReactNode;
@@ -194,17 +186,13 @@ interface BaseDatePickerProps
   monthDropdownSelectedIcon?: ReactNode;
   yearDropdownSelectedIcon?: ReactNode;
 
-  // ─── Styling ────────────────────────────────────────────────────────
   classes?: DatePickerClasses;
   unstyled?: boolean;
 
-  // ─── Portal ─────────────────────────────────────────────────────────
   portalContainer?: HTMLElement | null;
 
-  // ─── Scroll behavior ──────────────────────────────────────────────
   lockScroll?: boolean;
 
-  // ─── Dropdown positioning ────────────────────────────────────────
   /** Z-index of the calendar popup. */
   dropdownZIndex?: number;
   /** Vertical placement of the calendar popup relative to the trigger. */
@@ -216,7 +204,6 @@ interface BaseDatePickerProps
   /** Keep the calendar DOM mounted when closed. */
   keepMounted?: boolean;
 
-  // ─── Motion ─────────────────────────────────────────────────────────
   reduceMotion?: boolean | "auto";
 }
 

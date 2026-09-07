@@ -46,7 +46,6 @@ export interface TimePickerClasses {
   /** Description element. */
   description?: string;
 
-  // ── Clock variant slots ──────────────────────────────────────────────
   /** Clock variant outermost container. */
   clockContent?: string;
   /** Hours / minutes display row. */
@@ -139,7 +138,6 @@ export interface ClockFaceProps {
   okText?: string;
 }
 
-// Props from HTMLAttributes that conflict with our explicit definitions
 type OmittedHTMLProps = "children" | "color" | "onBlur" | "defaultValue";
 
 /**
@@ -211,13 +209,11 @@ export interface TimePickerProps
   /** Visual variant: dropdown list or analog clock face. Default: `"dropdown"`. */
   variant?: TimePickerVariant;
 
-  // ── Clearable ──────────────────────────────────────────────────────────
   /** Show a clear button when a value is selected. Default: `false`. */
   clearable?: boolean;
   /** Called when the clear button is clicked. */
   onClear?: () => void;
 
-  // ── Controlled open state ────────────────────────────────────────────
   /** Controlled open state. */
   open?: boolean;
   /** Default open state (uncontrolled). */
@@ -225,7 +221,6 @@ export interface TimePickerProps
   /** Called when the open state changes. */
   onOpenChange?: (open: boolean) => void;
 
-  // ── Dropdown behavior ──────────────────────────────────────────────
   /** Lock body scroll when dropdown is open. Default: `false`. */
   lockScroll?: boolean;
   /** Position of the dropdown relative to the trigger. Default: `"bottom"`. */
@@ -241,7 +236,6 @@ export interface TimePickerProps
   /** Custom container element for the dropdown portal. Defaults to `document.body`. */
   portalContainer?: HTMLElement | null;
 
-  // ── Styling ──────────────────────────────────────────────────────────
   /** CSS class overrides for all sub-elements. */
   classes?: TimePickerClasses;
   /**
@@ -255,7 +249,6 @@ export interface TimePickerProps
    */
   reduceMotion?: boolean | "auto";
 
-  // ── Clock variant ──────────────────────────────────────────────────────
   /** Called when the clock cancel button is pressed. */
   onCancel?: () => void;
   /** Called when the clock confirm button is pressed. */

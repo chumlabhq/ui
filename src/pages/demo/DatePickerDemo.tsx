@@ -10,8 +10,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -28,8 +26,6 @@ import {
   startOfWeek,
 } from "date-fns";
 import { fr, de } from "date-fns/locale";
-
-// ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
   datepicker: {
@@ -97,15 +93,11 @@ const getClasses = (dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
-// ─── Demo ────────────────────────────────────────────────────────────────────
-
 const DatePickerDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
 
-  // Single mode
   const [singleDate, setSingleDate] = useState<Date | null>(null);
-  // Range mode
   const [rangeValue, setRangeValue] = useState<DateRange | null>(null);
   // Independent state for each "Range Selection — Custom Colors" example
   // so picking dates in one variant doesn't propagate into the others.
@@ -113,14 +105,10 @@ const DatePickerDemo = () => {
   const [rangeAmber, setRangeAmber] = useState<DateRange | null>(null);
   const [rangeRose, setRangeRose] = useState<DateRange | null>(null);
   const [rangeGradient, setRangeGradient] = useState<DateRange | null>(null);
-  // Multiple mode
   const [multipleDates, setMultipleDates] = useState<Date[] | null>(null);
-  // Controlled
   const [controlledDate, setControlledDate] = useState<Date | null>(new Date());
-  // Controlled open
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [openControlDate, setOpenControlDate] = useState<Date | null>(null);
-  // Event log
   const [eventLog, setEventLog] = useState<string[]>([]);
   const [successDate, setSuccessDate] = useState<Date | null>(new Date());
   const [clearableDate, setClearableDate] = useState<Date | null>(new Date());
@@ -152,7 +140,6 @@ const DatePickerDemo = () => {
     },
   ];
 
-  // Rich event markers (holidays, absences, events)
   const eventMarkers: DateMarker[] = [
     {
       date: addDays(today, 1),
@@ -210,7 +197,6 @@ const DatePickerDemo = () => {
     },
   ];
 
-  // Custom presets
   const customPresets = [
     { label: "Today", getValue: () => today },
     { label: "Yesterday", getValue: () => subDays(today, 1) },
@@ -261,7 +247,6 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
 
       <CopyPasteBlock name="DatePicker" />
 
-      {/* ─── Single Date ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
         description="Default single-date mode. Click a day to select it."
@@ -273,7 +258,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           className="overflow-visible"
         >
           <div className="w-full sm:max-w-xs">
-            {/* Basic usage — works out-of-the-box with built-in styles */}
+            {}
             <DatePicker
               value={singleDate}
               onValueChange={(date) => setSingleDate(date)}
@@ -284,7 +269,6 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         </DemoWrapper>
       </Section>
 
-      {/* ─── Range Selection ────────────────────────────────────────────── */}
       <Section
         title="Date Range Selection"
         description='Use mode="range" to select a start and end date.'
@@ -317,7 +301,6 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         </DemoWrapper>
       </Section>
 
-      {/* ─── Range Customization ──────────────────────────────────────── */}
       <Section
         title="Range Selection — Custom Colors"
         description="Customize the range start, end, and middle day colors, plus the trigger and calendar accent."
@@ -1431,7 +1414,6 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ─────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Override any internal element via the classes prop — 40+ slots for trigger, calendar, days, header, weekdays, presets, footer, dropdowns, and more."
@@ -1761,96 +1743,6 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="DatePicker" />
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-disabled"
-              type="root, trigger"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root"
-              description="Present when error=true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-open"
-              type="root"
-              description="Present when calendar is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-valid"
-              type="root"
-              description="Present when success=true (without error)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-loading"
-              type="root"
-              description="Present when loading=true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-mode"
-              type="root"
-              description='"single" | "range" | "multiple"'
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-today"
-              type="day cell"
-              description="Present on today's date"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-selected"
-              type="day cell"
-              description="Present on selected dates"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-outside"
-              type="day cell"
-              description="Present on outside-month days"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-range-start"
-              type="day cell"
-              description="Present on range start"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-range-end"
-              type="day cell"
-              description="Present on range end"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-in-range"
-              type="day cell"
-              description="Present on days within range"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-marked"
-              type="day cell"
-              description="Present on marked dates"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

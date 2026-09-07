@@ -7,8 +7,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -16,8 +14,6 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const SearchIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -174,8 +170,6 @@ const ExternalLinkIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-// ─── Themed Classes ──────────────────────────────────────────────────────────
-
 const base =
   "cursor-pointer text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none";
 
@@ -194,8 +188,6 @@ const getClasses = (_dark: boolean) => ({
   label: `text-xs font-medium text-cl-text-tertiary`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
-
-// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const ButtonDemo = () => {
   const { isDarkMode: dark } = useTheme();
@@ -773,7 +765,6 @@ const ButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Classes System ─────────────────────────────────────────────── */}
       <Section
         title="Classes System"
         description="Use the classes prop to override internal element styling. Slots: root, content, startIcon, endIcon, loader."
@@ -993,85 +984,6 @@ const ButtonDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Button" />
-
-      <Section title="ButtonClasses" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root button/anchor/span element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="string"
-              description="Inner content wrapper span"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="startIcon"
-              type="string"
-              description="Leading icon wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="endIcon"
-              type="string"
-              description="Trailing icon wrapper"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loader"
-              type="string"
-              description="Loader wrapper"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use these for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-loading"
-              type="button element"
-              description="Present when loading=true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="button element"
-              description="Present when disabled or loading"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-full-width"
-              type="button element"
-              description="Present when fullWidth=true"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-busy"
-              type="button element"
-              description="Set when loading"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="aria-disabled"
-              type="button element"
-              description="Set when disabled or loading"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section

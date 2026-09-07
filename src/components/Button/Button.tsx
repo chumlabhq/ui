@@ -75,15 +75,9 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
 
   const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
-  // ─── Merged classes system ──────────────────────────────────────────
-  // The prop, not the bare query: it was calming this component's JS-driven
-  // motion while leaving every motion utility in the class strings.
   const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
   const baseClassesRaw = unstyled ? UNSTYLED_BUTTON_CLASSES : DEFAULT_BUTTON_CLASSES;
-  // Motion is decorative under ADR 001, so `unstyled` has already removed it;
-  // this handles the other reason to stop animating. Applied to the defaults
-  // only — a class string the consumer supplied is theirs to control.
   const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
   const mergedClasses: Required<ButtonClasses> = useMemo(
     () => ({
@@ -179,7 +173,6 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     "data-size": size || undefined,
   };
 
-  // Stable disabled click handler — shared across all paths
   const handleDisabledClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -205,7 +198,6 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     );
   };
 
-  // ─── asChild ────────────────────────────────────────────────────────
   if (asChild && children) {
     const { onClick: childOnClick, ...childRest } = rest as ButtonAsChildProps;
 
@@ -227,7 +219,6 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     );
   }
 
-  // ─── as="a" ─────────────────────────────────────────────────────────
   if (as === "a") {
     const {
       href,
@@ -257,7 +248,6 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     );
   }
 
-  // ─── as="span" ──────────────────────────────────────────────────────
   if (as === "span") {
     const {
       onClick,
@@ -303,7 +293,6 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     );
   }
 
-  // ─── as="button" (default) ──────────────────────────────────────────
   const {
     type: buttonType,
     onClick,

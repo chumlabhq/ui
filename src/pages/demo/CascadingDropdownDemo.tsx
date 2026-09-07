@@ -13,8 +13,6 @@ import {
   DocsHero,
   Section,
   DemoWrapper,
-  PropsTable,
-  PropRow,
   DocControlledPattern,
   DocEdgeCases,
   DocDoDont,
@@ -27,8 +25,6 @@ import {
   fetchCountriesByRegion,
   searchCountries,
 } from "./lib/countries.js";
-
-// ─── Static Data ────────────────────────────────────────────────────────────
 
 const regionOptionsMulti: CascadingOption[] = [
   {
@@ -256,8 +252,6 @@ const disabledOptions: CascadingOption[] = [
   },
 ];
 
-// ─── Searchable options (large list for search demos) ────────────────────────
-
 const searchableCategoryOptions: CascadingOption[] = [
   {
     value: "electronics",
@@ -345,7 +339,6 @@ const asyncSearchRegions = async (
   query: string,
 ): Promise<CascadingOption[]> => {
   const data = await searchCountries(query);
-  // Return unique regions that have matching countries
   const regionSet = new Set(data.map((c) => c.region).filter(Boolean));
   return Array.from(regionSet)
     .sort()
@@ -388,8 +381,6 @@ const asyncSearchCountries = async (
     }));
 };
 
-// ─── Themed Classes ─────────────────────────────────────────────────────────
-
 const getClasses = () => ({
   cascading: {
     root: "",
@@ -421,13 +412,6 @@ const getClasses = () => ({
   descText: `text-sm mt-2 w-full text-cl-text-secondary`,
 });
 
-// ─── Blue Theme Variant ─────────────────────────────────────────────────────
-//
-// Brand-blue cascade. Menu/submenu surfaces sit on bg-cl-bg-elevated so
-// they're fully opaque (the previous bg-cl-accent/10 was so transparent
-// the page underneath bled through). The accent shows up only on the
-// trigger pill, the focus ring, the chevrons, and the selected highlight.
-
 const getBlueClasses = (_dark: boolean): CascadingDropdownClasses => ({
   trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent border-cl-accent bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/15`,
   content: `rounded-cl-md shadow-cl-md bg-cl-bg-elevated border border-cl-accent`,
@@ -441,18 +425,12 @@ const getBlueClasses = (_dark: boolean): CascadingDropdownClasses => ({
   empty: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
 });
 
-// Backwards-compat alias — the demo still references getPurpleClasses by name
-// in a few spots. Re-export under both names so we don't have to rewrite
-// every call site.
 const getPurpleClasses = getBlueClasses;
-
-// ─── Demo ───────────────────────────────────────────────────────────────────
 
 const CascadingDropdownDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
-  // ─── State ──────────────────────────────────────────────────────────────
   const [basicValue, setBasicValue] = useState<CascadingValue>({});
   const [multiValue, setMultiValue] = useState<CascadingValue>({});
   const [mixedValue, setMixedValue] = useState<CascadingValue>({});
@@ -490,13 +468,11 @@ const CascadingDropdownDemo = () => {
     electronics: "laptops",
   });
 
-  // ─── Prefetch on Mount ──────────────────────────────────────────────────
   const [prefetchValue, setPrefetchValue] = useState<CascadingValue>({});
   const [prefetchOptions, setPrefetchOptions] = useState<CascadingOption[]>([]);
   const [isPrefetchLoading, setIsPrefetchLoading] = useState(true);
   const [hasPrefetchLoaded, setHasPrefetchLoaded] = useState(false);
 
-  // ─── Load on Open ──────────────────────────────────────────────────────
   const [loadOnOpenValue, setLoadOnOpenValue] = useState<CascadingValue>({});
   const [loadOnOpenOptions, setLoadOnOpenOptions] = useState<CascadingOption[]>(
     [],
@@ -506,7 +482,6 @@ const CascadingDropdownDemo = () => {
   const [loadOnOpenDropdownClicked, setLoadOnOpenDropdownClicked] =
     useState(false);
 
-  // Search demos
   const [syncSearchValue, setSyncSearchValue] = useState<CascadingValue>({});
   const [asyncSearchValue, setAsyncSearchValue] = useState<CascadingValue>({});
   const [styledSearchValue1, setStyledSearchValue1] = useState<CascadingValue>({});
@@ -587,13 +562,6 @@ const CascadingDropdownDemo = () => {
     [],
   );
 
-  // ─── Dark-only theme variant for explicit dark demos ────────────────────
-  // Renamed from "darkOnly" — the demo originally hard-coded text-white
-  // and dropped the bare `border` width keyword, which broke it in light
-  // mode (white text on cream paper, no visible card border). Switched
-  // to brand tokens so the override theme-tracks correctly. Surfaces use
-  // bg-cl-bg-elevated (off-white in light, near-black in dark) and the
-  // bordered container reads in both modes.
   const themedSurfaceClasses: CascadingDropdownClasses = {
     trigger:
       "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-border rounded-cl-md bg-cl-bg-elevated text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent",
@@ -611,7 +579,6 @@ const CascadingDropdownDemo = () => {
       "w-4 h-4 shrink-0 border border-cl-border-input rounded-cl-sm flex items-center justify-center",
     empty: "px-3 py-4 text-sm text-cl-text-tertiary text-center",
   };
-  // Back-compat: existing call sites use `darkOnlyClasses`.
   const darkOnlyClasses = themedSurfaceClasses;
 
   return (
@@ -1178,11 +1145,9 @@ const CascadingDropdownDemo = () => {
                 </svg>
               )}
               classes={{
-                // Menu search: full-width border-bottom style
                 searchControl: `flex items-center gap-2 px-3 py-2.5 border-b-2 border border-cl-border-input-focus bg-cl-accent/30 dark:border dark:border-cl-border-input-focus dark:bg-cl-bg-elevated/50`,
                 searchInput: `flex-1 bg-transparent text-sm focus:outline-none text-cl-text placeholder-teal-500/50 dark:text-white dark:placeholder-teal-400/60`,
                 searchIcon: `w-5 h-5 shrink-0 text-cl-accent dark:text-cl-accent`,
-                // Submenu search: compact pill style
                 subSearchControl: `flex items-center gap-1.5 mx-2 my-1.5 px-2.5 py-1 rounded-full bg-cl-accent/10 ring-1 ring-cl-accent dark:bg-cl-accent/30 dark:ring-1 dark:ring-cl-accent/20`,
                 subSearchInput: `flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-teal-500/60 dark:text-cl-accent dark:placeholder-teal-400/50`,
                 subSearchIcon: `w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/70`,
@@ -1219,11 +1184,9 @@ const CascadingDropdownDemo = () => {
                 </svg>
               )}
               classes={{
-                // Menu search: full-width purple background
                 searchControl: `flex items-center gap-2 px-3 py-2.5 bg-cl-accent/10 border-b border-cl-border-input-focus dark:bg-cl-accent/30 dark:border-b dark:border dark:border-cl-border-input-focus/30`,
                 searchInput: `flex-1 bg-transparent text-sm focus:outline-none text-cl-accent placeholder-purple-400 dark:text-cl-accent dark:placeholder-purple-400/60`,
                 searchIcon: `w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent`,
-                // Submenu search: compact underline style with filter icon
                 subSearchControl: `flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30`,
                 subSearchInput: `flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-purple-400/70 dark:text-cl-accent dark:placeholder-purple-400/50`,
                 subSearchIcon: `w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/60`,
@@ -1863,284 +1826,6 @@ const CascadingDropdownDemo = () => {
       </Section>
 
       <ComponentDocs name="CascadingDropdown" />
-
-      <Section title="CascadingOption Interface" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="value"
-              type="string"
-              description="Unique identifier"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Display text"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="content"
-              type="ReactNode"
-              description="Custom display content in menu"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectedContent"
-              type="ReactNode"
-              description="Custom content shown in trigger when selected"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="disabled"
-              type="boolean"
-              description="Disable this option"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="children"
-              type="CascadingOption[]"
-              description="Nested submenu options"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="selectionMode"
-              type='"single" | "multi"'
-              description="Selection mode for this submenu"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="hasChildren"
-              type="boolean"
-              description="Indicates this option has async children (use with onLoadChildren)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      <Section title="CascadingDropdownClasses Slots" isDarkMode={dark}>
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="root"
-              type="string"
-              description="Root container div"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="wrapper"
-              type="string"
-              description="Dropdown wrapper (relative positioned)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="trigger"
-              type="string"
-              description="Trigger button"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="menu"
-              type="string"
-              description="Main dropdown menu container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="menuItem"
-              type="string"
-              description="Main menu item styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="menuItemSelected"
-              type="string"
-              description="Additional class for selected main menu items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="menuItemFocused"
-              type="string"
-              description="Additional class for focused main menu items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="menuItemDisabled"
-              type="string"
-              description="Additional class for disabled main menu items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenu"
-              type="string"
-              description="Submenu container (background, border, shadow)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuContainer"
-              type="string"
-              description="Submenu position wrapper (z-index, positioning)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuItem"
-              type="string"
-              description="Submenu item styling"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuItemSelected"
-              type="string"
-              description="Additional class for selected submenu items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuItemFocused"
-              type="string"
-              description="Additional class for focused submenu items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="label"
-              type="string"
-              description="Label element"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="error"
-              type="string"
-              description="Error message container"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="chevron"
-              type="string"
-              description="Main trigger chevron icon"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuChevron"
-              type="string"
-              description="Submenu chevron icon on menu items"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkIcon"
-              type="string"
-              description="Check icon for single-select mode"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkbox"
-              type="string"
-              description="Checkbox container for multi-select (size, border, shape)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="checkboxChecked"
-              type="string"
-              description="Additional class for checked checkbox (background, color)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="noResults"
-              type="string"
-              description="No results message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="loading"
-              type="string"
-              description="Loading message"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="searchInput"
-              type="string"
-              description="Search input wrapper (contains icon + input element)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="searchInputElement"
-              type="string"
-              description="The search <input> element itself"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="searchIcon"
-              type="string"
-              description="Search icon inside the menu search input"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuSearchInput"
-              type="string"
-              description="Search input wrapper in submenus (falls back to searchInput if not set)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuSearchInputElement"
-              type="string"
-              description="Search <input> element in submenus (falls back to searchInputElement)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="submenuSearchIcon"
-              type="string"
-              description="Search icon in submenus (falls back to searchIcon)"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
-
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Use for CSS-based state styling."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-open"
-              type="root, trigger"
-              description="Present when the dropdown is open"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-disabled"
-              type="root, trigger, option"
-              description="Present when disabled"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-error"
-              type="root, trigger"
-              description="Present when in error state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-valid"
-              type="root, trigger"
-              description="Present when in success state"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-has-submenu"
-              type="option"
-              description="Present on options that have child submenus"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="data-value"
-              type="option"
-              description="The option's value string"
-              isDarkMode={dark}
-            />
-          </PropsTable>
-        </div>
-      </Section>
 
       {/* ─── Accessibility ──────────────────────────────────────────────── */}
       <Section

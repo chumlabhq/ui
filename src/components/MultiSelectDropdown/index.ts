@@ -1,4 +1,3 @@
-// AI Knowledge: See MULTISELECTDROPDOWN.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as MultiSelectDropdown } from "./MultiSelectDropdown.js";
 export { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption.js";
 export { SelectedChip } from "./components/SelectedChip.js";

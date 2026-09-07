@@ -1,4 +1,3 @@
-// AI Knowledge: See CASCADINGDROPDOWN.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as CascadingDropdown } from "./CascadingDropdown.js";
 export type {
   CascadingOption,
