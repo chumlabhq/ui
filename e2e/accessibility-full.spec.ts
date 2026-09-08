@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe, getViolations } from "axe-playwright";
-import { gotoFixture, gotoGuarded } from "./_nav";
+import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { markPortalRoots, PORTAL_MARK } from "./_portals.js";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -91,7 +91,7 @@ test.describe("accessibility (full sweep)", () => {
   test("audits every fixture", async ({ page }) => {
     const started = Date.now();
 
-    await gotoGuarded(page, "/__fixtures", "[data-fixture-index]");
+    await gotoFixtureIndex(page);
     const paths = await page
       .locator("[data-fixture-index] a")
       .evaluateAll((links) =>

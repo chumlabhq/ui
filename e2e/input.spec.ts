@@ -132,17 +132,35 @@ test.describe("Input Keyboard Navigation", () => {
   });
 
   test("should navigate through inputs with tab", async ({ page }) => {
-    const inputs = page.locator("input");
-    const count = await inputs.count();
+    /**
+     * `input:visible`, and the assertion is that focus MOVED.
+     *
+     * This read `page.locator("input").first()`, which on the docs page is
+     * whichever input the DOM happens to order first — often one that is
+     * off-screen, where `.focus()` is a no-op. Focus therefore stayed on
+     * `<body>`, Tab moved to whatever was tabbable first, and the test passed
+     * on that instead. What it landed on differed per engine: an anchor in
+     * Chromium, a `<pre>` in Mobile Safari, an input in WebKit — and under
+     * matrix load it landed on nothing at all and `:focus` failed to resolve,
+     * which is the only run in which the test said anything.
+     */
+    const inputs = page.locator("input:visible");
+    await expect(inputs.first()).toBeVisible();
+    if ((await inputs.count()) < 2) test.skip(true, "the page renders one visible input");
 
-    if (count >= 2) {
-      await inputs.first().focus();
+    await inputs.first().focus();
+    const from = await page.evaluate(() => document.activeElement?.outerHTML?.slice(0, 60) ?? null);
+    expect(from, "the first visible input did not take focus").not.toBeNull();
 
-      await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
 
-      const focusedElement = page.locator(":focus");
-      await expect(focusedElement).toBeVisible();
-    }
+    const to = await page.evaluate(() => ({
+      html: document.activeElement?.outerHTML?.slice(0, 60) ?? null,
+      isBody: document.activeElement === document.body,
+    }));
+    expect(to.isBody, "Tab left focus on <body>").toBe(false);
+    expect(to.html, "Tab did not move focus").not.toBe(from);
+    await expect(page.locator(":focus")).toBeVisible();
   });
 
   test("should activate icon buttons with Enter key", async ({ page }) => {

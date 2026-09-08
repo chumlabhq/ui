@@ -31,6 +31,19 @@ const CASES = [
 test.describe("menu focus on open", () => {
   for (const testCase of CASES) {
     test(`${testCase.component} moves focus into its surface, every open`, async ({ page }) => {
+      /**
+       * Five full mounts in one test, because the defect it guards is about the
+       * first open after mount and reopening the same instance would not ask
+       * the question. That costs 8.8s in Firefox at one worker and over 30s
+       * under a contended four-worker matrix, which is where it timed out
+       * before the assertion could run.
+       *
+       * `test.slow()` and not a longer wait anywhere: the budget is what was
+       * wrong, not the synchronisation. Every step still waits on a condition,
+       * and a component that genuinely stopped moving focus still fails.
+       */
+      test.slow();
+
       const landings: boolean[] = [];
 
       for (let open = 0; open < OPENS; open += 1) {

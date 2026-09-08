@@ -90,6 +90,24 @@ export async function gotoGuarded(
   ).toBeAttached({ timeout: 10000 });
 }
 
+/**
+ * Navigates to the fixture index and waits for it to have enumerated.
+ *
+ * The index renders its container on the first commit and fills the list from
+ * an async effect, so `[data-fixture-index]` is attached before there is
+ * anything behind it. Every spec that enumerates fixtures goes through here
+ * rather than asserting the count itself: a guard each caller has to remember
+ * is one the next caller will not.
+ */
+export async function gotoFixtureIndex(page: Page): Promise<void> {
+  await gotoGuarded(page, "/__fixtures", "[data-fixture-index]");
+  await expect(
+    page.locator("[data-fixture-index-ready]"),
+    "the fixture index never finished enumerating — it renders its container " +
+      "before the list, so reading links now would read an empty page",
+  ).toBeAttached({ timeout: 30000 });
+}
+
 /** URL slug for a registry name: `RadioButton/RadioButton` -> `RadioButton.RadioButton`. */
 export const fixtureSlug = (component: string) => component.replace("/", ".");
 

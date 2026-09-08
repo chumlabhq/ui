@@ -78,9 +78,41 @@ test.describe("SC 2.4.7 Focus Visible", () => {
     test(`${component}/${fixture} shows an indicator on every focusable`, async ({ page }) => {
       await gotoFixture(page, component, fixture);
 
-      const unindicated = await page.evaluate((sel) => {
+      const unindicated = await page.evaluate(async (sel) => {
         const root = document.querySelector("[data-fixture]")!;
         const failures: string[] = [];
+
+        /**
+         * The indicator is a transition, so the value has to be read after it
+         * lands rather than in the tick that starts it.
+         *
+         * `Input`'s control carries `transition-all duration-150`. Reading in
+         * the same tick as `.focus()` gives Firefox's pre-transition value and
+         * Chromium's target value, which is how this criterion passed in one
+         * engine and failed in the other on identical, correct markup.
+         *
+         * Waited on `finished`, not slept: a fixed delay is the timing guess
+         * this suite has removed four times. The cap is only a stop for an
+         * animation that never ends — `animate-pulse` on a shimmer would
+         * otherwise hang the audit, which is the same reason the a11y sweep
+         * filters to finite animations.
+         */
+        const settle = async () => {
+          // Forces the style recalc that creates the transition. Without it
+          // `getAnimations()` is empty and there is nothing to await.
+          void getComputedStyle(root).boxShadow;
+          const finite = root
+            .getAnimations({ subtree: true })
+            .filter((a) => {
+              const timing = a.effect?.getComputedTiming();
+              return timing != null && Number.isFinite(timing.endTime ?? Infinity);
+            })
+            .map((a) => a.finished.catch(() => undefined));
+          await Promise.race([
+            Promise.all(finite),
+            new Promise((resolve) => setTimeout(resolve, 1000)),
+          ]);
+        };
 
         for (const el of root.querySelectorAll<HTMLElement>(sel)) {
           const r = el.getBoundingClientRect();
@@ -108,7 +140,11 @@ test.describe("SC 2.4.7 Focus Visible", () => {
               .join("//");
 
           const idle = snapshot(el);
-          el.focus();
+          // `focusVisible: true`, because the library draws its rings with
+          // `focus-visible` and a programmatic focus that does not set the
+          // modality reports "nothing changed" on a control that rings fine.
+          el.focus({ focusVisible: true });
+          await settle();
           const focused = snapshot(el);
 
           // Something visible must change. Which property carries it is the

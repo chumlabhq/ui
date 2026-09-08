@@ -380,10 +380,19 @@ Four attempts, none green to the bar. The record, so nobody repeats it:
 | 4 shards, run 3 | shard 2 FAIL — `pagination.spec.ts` :80, :244 |
 
 **What the failures are.** A 30-second timeout on a test that passes in isolation in under
-three seconds. **What they are not:** in four attempts, not one Firefox failure has been a
-failed assertion — no wrong value, no missing element, no broken behaviour. Every one is the
-harness failing to drive the page, and every one of those tests passes in Chromium, WebKit,
-Mobile Chrome and Mobile Safari.
+three seconds. Every one is the harness failing to drive the page, and every one of those
+tests passes in Chromium, WebKit, Mobile Chrome and Mobile Safari.
+
+**Corrected 2026-09-08.** This paragraph used to say that in four attempts not one Firefox
+failure had ever been a failed assertion. That stopped being true on the 2026-09-08 matrix
+run, which produced one: `wcag-layout.spec.ts:78`, SC 2.4.7 Focus Visible on `Input/labelled`,
+reproducible in isolation in 2.5s. It was a defect in the gate rather than in the component —
+it read computed style in the same tick as `.focus()`, so Firefox returned the pre-transition
+value where Chromium returned the target, and the criterion had been passing by engine rather
+than by evidence. The gate waits for the transition to finish now. The claim is worth
+correcting rather than deleting: "always a timeout, never an assertion" was the reason for
+treating Firefox as environmental, and it held for exactly as long as nobody had a gate
+precise enough to disagree with it.
 
 **They concentrate.** Shard 2 failed in 2 of 3 runs and every failure was in
 `pagination.spec.ts`. That is where to look next.

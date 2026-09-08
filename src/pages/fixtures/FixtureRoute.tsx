@@ -58,6 +58,36 @@ const quiet = (idleMs = 120, capMs = 1500) =>
     const cap = window.setTimeout(done, capMs);
   });
 
+/**
+ * Is the page still across exactly the window the act will occupy?
+ *
+ * `quiet()` answers "has the DOM fallen silent", which on a contended machine
+ * it may never do inside the cap — chunks were still landing during the act's
+ * own two frames, and the diff that followed was attributed to the act.
+ * `CascadingDropdown/open-search`, whose act is a bare `settle`, reported
+ * "applied" under a contended matrix and "no-op" everywhere else.
+ *
+ * So after the wait the page is asked exactly the question the act is about to
+ * ask, with no act: snapshot, run one settle cycle, snapshot again. A cycle
+ * that comes back dirty is retried until the deadline, so a slow machine gets
+ * more time because it asked for it and a ready page pays two frames.
+ *
+ * The deadline is a bound, not a guess — being wrong about it costs a status of
+ * "unsettled", which the gate reports rather than reads as evidence. Retrying
+ * `quiet()` itself was tried instead and cost the cap on every attempt: Mobile
+ * Chrome went from 282s to 2.2h.
+ */
+const documentHoldsStill = async (deadlineMs = 3000) => {
+  await quiet();
+  const until = performance.now() + deadlineMs;
+  do {
+    const before = document.documentElement.outerHTML;
+    await browserActTools.settle();
+    if (document.documentElement.outerHTML === before) return true;
+  } while (performance.now() < until);
+  return false;
+};
+
 /** Reachable by a screen reader, invisible on the page. */
 const SR_ONLY = {
   position: "absolute",
@@ -140,7 +170,10 @@ export default function FixtureRoute() {
       // The whole document, not the container: every surface these fixtures
       // open is portalled to the body, so a container-scoped diff would call
       // "open the dropdown" a no-op.
-      await quiet();
+      // A page that never holds still is reported rather than guessed at: the
+      // act still runs, but `data-fixture-act` says so, and a spec cannot read
+      // a no-op as proof of anything.
+      const settled = await documentHoldsStill();
       const before = document.documentElement.outerHTML;
       try {
         await act(container, browserActTools);
@@ -150,7 +183,8 @@ export default function FixtureRoute() {
         return;
       }
       if (cancelled) return;
-      setActStatus(document.documentElement.outerHTML === before ? "no-op" : "applied");
+      const changed = document.documentElement.outerHTML !== before;
+      setActStatus(changed ? "applied" : settled ? "no-op" : "unsettled");
     })();
     return () => {
       cancelled = true;

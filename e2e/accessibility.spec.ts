@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe, getViolations } from "axe-playwright";
-import { gotoGuarded } from "./_nav";
+import { gotoFixtureIndex } from "./_nav";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -51,7 +51,7 @@ test.describe("accessibility", () => {
 
   test("no component fixture has an axe violation", async ({ page }) => {
 
-    await gotoGuarded(page, "/__fixtures", "[data-fixture-index]");
+    await gotoFixtureIndex(page);
     const paths = await page
       .locator("[data-fixture-index] a")
       .evaluateAll((links) =>

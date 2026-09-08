@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { gotoGuarded } from "./_nav.js";
+import { gotoFixtureIndex } from "./_nav";
 
 /**
  * Every fixture act has to do something in a real browser.
@@ -51,7 +51,7 @@ const DECLARED = new Map([
 test.describe("fixture acts", () => {
   test("every act applies in the browser", async ({ page }) => {
     test.setTimeout(180_000);
-    await gotoGuarded(page, "/__fixtures", "[data-fixture-index]");
+    await gotoFixtureIndex(page);
     const paths = await page.locator("li[data-has-act] a").evaluateAll((links) =>
       links.map((link) => new URL((link as HTMLAnchorElement).href).pathname),
     );
@@ -91,6 +91,9 @@ test.describe("fixture acts", () => {
       }
     }
 
+    // "unsettled" is the fixture page saying the document never held still, so
+    // it could not attribute the diff to the act either way. It is reported
+    // rather than read as a no-op: an unmeasurable act is not a passing one.
     expect(failures, `${failures.length} of ${paths.length} acts did not apply`).toEqual([]);
     expect(
       declaredButApplied,

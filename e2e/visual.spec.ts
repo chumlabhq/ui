@@ -392,7 +392,36 @@ test.describe("baseline determinism", () => {
     // subjects as non-deterministic on the strength of that one URL.
     const capture = () =>
       page.evaluate(() => {
-        const main = document.querySelector("main")?.outerHTML ?? "";
+        /**
+         * Attribute order is normalised; nothing is dropped.
+         *
+         * `outerHTML` serialises attributes in the order they were first
+         * written, which the DOM itself treats as unordered and no screenshot
+         * can see. `CountryFlag/resolved` fades its flag in on load, so the
+         * inline `style` lands after `src` on the cold first render and before
+         * it on the second, when the image is already in the HTTP cache — the
+         * same names, the same values, a different order, reported as "renders
+         * differently 26 hours later".
+         *
+         * This is not the `top`/`left` stripping below: every attribute name
+         * and value is still compared, so a real difference still fails and
+         * still names the attribute.
+         */
+        const canonical = (node: Node): string => {
+          if (node.nodeType === Node.TEXT_NODE) return node.nodeValue ?? "";
+          if (node.nodeType === Node.COMMENT_NODE) return `<!--${node.nodeValue ?? ""}-->`;
+          if (!(node instanceof Element)) return "";
+          const tag = node.tagName.toLowerCase();
+          const attrs = [...node.attributes]
+            .map((a) => `${a.name}="${a.value}"`)
+            .sort()
+            .join(" ");
+          const children = [...node.childNodes].map(canonical).join("");
+          return `<${tag}${attrs ? ` ${attrs}` : ""}>${children}</${tag}>`;
+        };
+
+        const mainEl = document.querySelector("main");
+        const main = mainEl ? canonical(mainEl) : "";
         const portals = [...document.body.children]
           .filter(
             (child) =>
@@ -400,7 +429,7 @@ test.describe("baseline determinism", () => {
               !/^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(child.tagName) &&
               !child.className.toString().includes("razorpay"),
           )
-          .map((child) => child.outerHTML);
+          .map((child) => canonical(child));
         // `top` and `left` are compared, not stripped. They were stripped
         // because Breadcrumb's menu reported `left: 102.25px` against
         // `101.703px` between two loads, and that half-pixel was not noise: the

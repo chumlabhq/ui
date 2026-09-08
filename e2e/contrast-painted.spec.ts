@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { gotoGuarded } from "./_nav";
+import { gotoFixtureIndex } from "./_nav";
 import { markPortalRoots, PORTAL_MARK } from "./_portals.js";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -498,7 +498,7 @@ test.describe("painted contrast", () => {
 
   test("every fixture clears AA in both themes", async ({ page }) => {
     const started = Date.now();
-    await gotoGuarded(page, "/__fixtures", "[data-fixture-index]");
+    await gotoFixtureIndex(page);
     const paths = await page
       .locator("[data-fixture-index] a")
       .evaluateAll((links) => links.map((a) => (a as HTMLAnchorElement).getAttribute("href") ?? ""));
