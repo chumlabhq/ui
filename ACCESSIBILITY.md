@@ -291,10 +291,10 @@ The audit now covers the fixture plus every body-level element React rendered. T
 portal root is told from the app root and from a third-party injection: `createPortal`
 mounts the surface's own element on `document.body`, so it carries a React fiber key, while
 the app root carries a container key and the injected checkout container carries neither.
-113 of the 414 fixtures portal something.
+125 of the 429 fixtures portal something.
 
 **The sweep reported 93 findings the first time it looked in the right place.** 25 were the
-recorded ones; 68 were new. All 68 are fixed: the sweep reports **25 findings** across 414
+recorded ones; 68 were new. All 68 are fixed: the sweep reports **25 findings** across 429
 fixtures — the recorded set, and nothing open.
 
 | Rule | Criterion | Found | Now | |
@@ -388,7 +388,7 @@ contrast defects shipped inside two components while it reported green, because
 `text-gray-500` is not a token and `bg-cl-accent/15` is an alpha of the foreground rather
 than a background any token names.
 
-`e2e/contrast-painted.spec.ts` asks the other question, of all 414 fixtures in both themes: the
+`e2e/contrast-painted.spec.ts` asks the other question, of all 429 fixtures in both themes: the
 computed foreground, against the background stack composited down to the first opaque layer,
 against WCAG AA's 4.5:1 (3:1 for large text). Both are kept. They fail for different reasons
 — the token check fails when the palette moves, the painted check fails when a component

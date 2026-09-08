@@ -92,7 +92,7 @@ const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
  * DOWN only. Individual entries can each stay green while the aggregate drifts,
  * and nothing would have noticed.
  */
-const LIBRARY_TOTAL_KB = 147.76;
+const LIBRARY_TOTAL_KB = 146.65;
 
 /**
  * Breaches that are recorded rather than fixed, each with the reason and the
@@ -107,7 +107,7 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.21,
+      kb: 15.79,
       why: "16.76 until the column-filter dialog moved into a chunk of its own " +
         "(FilterPanel), with the popup behaviour that reads its element — focus " +
         "in, reposition, close on an outside click. It is the only part of " +
