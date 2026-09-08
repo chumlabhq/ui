@@ -88,30 +88,153 @@ const FLOOR = 4.15;
 const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
 
 /**
- * The whole library, deduplicated: every entry's closure unioned once. Ratchets
- * DOWN only. Individual entries can each stay green while the aggregate drifts,
- * and nothing would have noticed.
+ * The whole library, deduplicated: every entry's closure unioned once.
+ * Individual entries can each stay green while the aggregate drifts, and
+ * nothing would have noticed.
  *
- * DECLARED INCREASE, the first one: 146.65 -> 148.52. The previous figure was
- * recorded by e7f7940 on 2026-09-08 ("re-measure every gate record"); this one
- * was recorded by the slice that restored the state styling 6dd1925 deleted.
- * Measured 148.51 against 146.65, so +1.86, split by building the tree twice:
+ * Every move of this number is a row here, and every row states why. It used
+ * to be a bare constant that only ratcheted down, and a down-only ratchet
+ * cannot tell a library that got leaner from one that stopped doing its job:
+ * both read as a smaller number, and the second one is a defect. That is not
+ * hypothetical. 6dd1925 deleted the default styling for every checked,
+ * selected and active state; the loss landed in a8c7a15's re-record two days
+ * later, where 43 commits shared one window and no single cause had to be
+ * named. The gate went green on a regression, and stayed green for five days.
  *
- *   +1.82  restored state styling and TabPanel's flex layout
- *   +0.04  18 added `cursor-pointer` class tokens across 13 components
- *
- * The deletion itself never showed up here. At 6dd1925 this number was 155.76
- * and the commit did not touch it, because the total only has to stay UNDER
- * the record — a library that shrinks by losing its styling passes a ratchet
- * that only ever falls, silently and by design. There was no drop to read: the
- * shortfall sat unmeasured for five days and was then folded into a general
- * re-measure, which recorded the regression as the new normal. That is the
- * hole, and it is a hole a downward ratchet cannot close on its own.
- *
- * No entry moved past its class ceiling: the four declared breaches are
- * unchanged and no new one appeared.
+ * So a drop nobody can attribute is now a question rather than a pass: see
+ * `attribution` below.
  */
-const LIBRARY_TOTAL_KB = 148.52;
+
+/**
+ * @typedef {object} TotalMove
+ * @property {number} kb           the record as of this move
+ * @property {string} commit       where it moved
+ * @property {string} date         when
+ * @property {string} reason       why, in a sentence a reader can check
+ * @property {"measured"|"attributed"|"unattributed"} attribution
+ *   `measured`     — the first record, taken when the gate was written.
+ *   `attributed`   — a named change in the window accounts for the delta.
+ *   `unattributed` — nothing in the window accounts for it. Allowed, but a
+ *                    drop of this kind must also answer `question`.
+ * @property {string} [question]   what was checked before accepting it
+ */
+
+/** @type {TotalMove[]} */
+const LIBRARY_TOTAL_HISTORY = [
+  {
+    kb: 155.76,
+    commit: "c1d6d2e",
+    date: "2026-09-02",
+    attribution: "measured",
+    reason:
+      "First record, measured when this gate was written. Nothing to compare against yet.",
+  },
+  {
+    kb: 151.11,
+    commit: "a8c7a15",
+    date: "2026-09-05",
+    attribution: "unattributed",
+    reason:
+      "Re-record after the gate went red on the shrink check. 43 commits in the window, " +
+      "40 of them touching src/; the commit's own source change is Dropdown.tsx +28 lines, " +
+      "which adds rather than removes. No single change accounts for -4.65 KB.",
+    question:
+      "Established retroactively on 2026-09-09, and the answer is bad: 6dd1925 is in this " +
+      "window. It deleted 104 state keys AND the default styling for the states they named, " +
+      "worth about 1.8 KB of the drop. Restoring that styling is what raised the record to " +
+      "148.52. This row is the one the gate should have refused, and it is left here as an " +
+      "unattributed drop rather than tidied into a reason it never had.",
+  },
+  {
+    kb: 150.76,
+    commit: "aa3a802",
+    date: "2026-09-07",
+    attribution: "attributed",
+    reason:
+      "DatePicker's optional halves deferred behind useLazyComponent — MarkerTooltip and " +
+      "PresetsPanel moved out of the entry's static closure.",
+  },
+  {
+    kb: 148.35,
+    commit: "c75d126",
+    date: "2026-09-07",
+    attribution: "attributed",
+    reason:
+      "InternationalPhoneInput's country data packed: constants.ts lost 262 lines of " +
+      "per-country object literals for a compact encoding.",
+  },
+  {
+    kb: 147.76,
+    commit: "ad3f479",
+    date: "2026-09-07",
+    attribution: "attributed",
+    reason:
+      "Table's column-filter dialog split into FilterPanel.tsx and loaded from its own " +
+      "chunk, taking 218 lines out of Table's static closure.",
+  },
+  {
+    kb: 146.65,
+    commit: "e7f7940",
+    date: "2026-09-08",
+    attribution: "unattributed",
+    reason:
+      "Re-measure of every gate record. This commit changes no file under src/ at all; " +
+      "5 of the 6 commits in the window do, and none of them is a size change anyone named.",
+    question:
+      "Re-checked on 2026-09-09. The window is after 6dd1925, so this drop is not the " +
+      "deleted styling; it is ordinary drift from the token and portal work in those five " +
+      "commits. Accepted as drift, not as a saving anyone can claim.",
+  },
+  {
+    kb: 148.52,
+    commit: "(uncommitted)",
+    date: "2026-09-09",
+    attribution: "attributed",
+    reason:
+      "INCREASE, the first this record has had. Restored the state styling 6dd1925 deleted " +
+      "across Checkbox, RadioButton, Switch, Stepper and TabPanel. Measured 148.51 against " +
+      "146.65 and split by building the tree twice: +1.82 KB the restored styling and " +
+      "TabPanel's flex layout, +0.04 KB the 18 added cursor-pointer class tokens.",
+  },
+];
+
+const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
+
+/**
+ * The ledger has to hold before any measurement is trusted, because a move
+ * recorded without a reason is the failure this whole structure exists to
+ * prevent — and it would otherwise be found by a reader, months later, with no
+ * way left to establish what happened.
+ */
+const auditHistory = () => {
+  const problems = [];
+  for (const [i, m] of LIBRARY_TOTAL_HISTORY.entries()) {
+    const at = `${m.commit} (${m.kb} KB)`;
+    // A one-word reason is the same as no reason once the context is gone.
+    if (!m.reason || m.reason.trim().length < 40) {
+      problems.push(`${at}: no usable reason for the move`);
+    }
+    if (i === 0) continue;
+    const delta = m.kb - LIBRARY_TOTAL_HISTORY[i - 1].kb;
+    if (Math.abs(delta) < 0.01) {
+      problems.push(`${at}: recorded as a move but the number did not change`);
+    }
+    if (m.attribution === "measured") {
+      problems.push(`${at}: only the first record may be "measured"`);
+    }
+    // The clause this ledger exists for. An unattributed rise is someone
+    // failing to explain growth, which the grow check already catches; an
+    // unattributed FALL is the library quietly losing something, which nothing
+    // else catches at all.
+    if (m.attribution === "unattributed" && delta < 0 && !m.question) {
+      problems.push(
+        `${at}: an unattributed drop of ${delta.toFixed(2)} KB with no \`question\` — ` +
+          "say what was checked before this was accepted, or attribute it",
+      );
+    }
+  }
+  return problems;
+};
 
 /**
  * Breaches that are recorded rather than fixed, each with the reason and the
@@ -479,16 +602,26 @@ const run = () => {
     );
     failed = 1;
   }
+  const historyProblems = auditHistory();
+  if (historyProblems.length) {
+    console.error(`\n✗ LIBRARY_TOTAL_HISTORY does not hold:`);
+    for (const p of historyProblems) console.error(`    ${p}`);
+    failed = 1;
+  }
   if (libraryTotal > LIBRARY_TOTAL_KB + 0.01) {
     console.error(
       `\n✗ the library grew: ${libraryTotal.toFixed(2)} KB > recorded ${LIBRARY_TOTAL_KB} KB.` +
-        ` Every entry can stay under its ceiling while the whole gets heavier; this is that check.`,
+        ` Every entry can stay under its ceiling while the whole gets heavier; this is that check.` +
+        ` Raising the record is allowed, but it is a move like any other: append it to` +
+        ` LIBRARY_TOTAL_HISTORY with the reason it grew.`,
     );
     failed = 1;
   } else if (libraryTotal < LIBRARY_TOTAL_KB - RATCHET_SLACK_KB) {
     console.error(
       `\n✗ the library shrank to ${libraryTotal.toFixed(2)} KB, under the recorded ${LIBRARY_TOTAL_KB} KB.` +
-        ` Ratchet LIBRARY_TOTAL_KB down in this file — a record left above reality buys back headroom nobody agreed to.`,
+        ` Append a move to LIBRARY_TOTAL_HISTORY — a record left above reality buys back headroom nobody agreed to.` +
+        ` Say what got smaller. If nothing in the window explains it, mark it "unattributed" and answer the` +
+        ` \`question\` field: a drop no one can account for is the library losing something, until shown otherwise.`,
     );
     failed = 1;
   }
@@ -513,6 +646,70 @@ const run = () => {
  * stops portalling must actually lose it. The first is what cost eight
  * components 2-4 KB of ceiling for getting smaller.
  */
+/**
+ * The ledger's rules, shown failing.
+ *
+ * `auditHistory` reads a module-level array, so the check runs against copies
+ * with one field removed rather than against the real rows. A rule that stops
+ * matching reports nothing, which is indistinguishable from a ledger that is
+ * in order.
+ */
+const historySelfCheck = () => {
+  const fail = (message) => {
+    console.error(`✗ self-check: ${message}`);
+    process.exit(1);
+  };
+
+  const audit = (rows) => {
+    const real = LIBRARY_TOTAL_HISTORY.splice(0, LIBRARY_TOTAL_HISTORY.length, ...rows);
+    try {
+      return auditHistory();
+    } finally {
+      LIBRARY_TOTAL_HISTORY.splice(0, LIBRARY_TOTAL_HISTORY.length, ...real);
+    }
+  };
+
+  const base = {
+    kb: 100,
+    commit: "0000000",
+    date: "2026-01-01",
+    attribution: "measured",
+    reason: "A first record long enough to clear the length floor this gate applies.",
+  };
+  const drop = {
+    ...base,
+    kb: 90,
+    commit: "1111111",
+    attribution: "unattributed",
+    reason: "A drop nobody has accounted for, stated at length but never actually explained.",
+  };
+
+  if (audit([base, { ...drop, question: "checked, and here is what was found" }]).length)
+    fail("a well-formed ledger was reported as broken");
+
+  if (!audit([base, drop]).some((p) => p.includes("question")))
+    fail("an unattributed drop with no question passed — the clause this ledger exists for");
+
+  if (!audit([base, { ...drop, attribution: "attributed", reason: "too short" }]).some((p) => p.includes("no usable reason")))
+    fail("a move with no usable reason passed");
+
+  if (!audit([base, { ...base, commit: "2222222", attribution: "attributed" }]).some((p) => p.includes("did not change")))
+    fail("a move that moves nothing passed");
+
+  if (!audit([base, { ...base, kb: 90, commit: "3333333" }]).some((p) => p.includes('"measured"')))
+    fail("a second row claiming to be the first measurement passed");
+
+  // An unattributed RISE is fine: the grow check already refuses unexplained
+  // growth, and asking for a `question` there would be asking twice.
+  if (audit([base, { ...drop, kb: 110 }]).length)
+    fail("an unattributed rise was refused, which is the grow check's job, not this one");
+
+  console.log(
+    "✓ self-check: the ledger refuses a reasonless move, a still move, a duplicate first " +
+      "record, and an unattributed drop that answers no question",
+  );
+};
+
 const shapeSelfCheck = () => {
   const fail = (message) => {
     console.error(`✗ self-check: ${message}`);
@@ -566,6 +763,7 @@ const selfCheck = () => {
     console.error(`✗ a previous probe was left behind — remove ${probeDir}`);
     process.exit(1);
   }
+  historySelfCheck();
   shapeSelfCheck();
   const before = measureAll();
   try {

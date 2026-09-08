@@ -277,7 +277,7 @@ const duplicateTokens = (): string[] => {
       if (tokens.length < 2) continue;
       // Class strings only. Prose in a comment or a JSDoc line repeats words
       // constantly and is not what this is about.
-      if (!tokens.every((t) => LOOKS_LIKE_UTILITY.test(t) || /^[a-z][a-z0-9:[\]\/.,%()#-]*$/.test(t))) continue;
+      if (!tokens.every((t) => LOOKS_LIKE_UTILITY.test(t) || /^[a-z][a-z0-9:[\]/.,%()#-]*$/.test(t))) continue;
       const counts = new Map<string, number>();
       for (const t of tokens) counts.set(t, (counts.get(t) ?? 0) + 1);
       for (const [token, n] of counts) {
