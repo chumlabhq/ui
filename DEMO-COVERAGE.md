@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 58 |
 | Library-authored props across the public surface | 1136 |
 | With no demo | 283 (25%) |
-| With no fixture | 649 (57%) |
+| With no fixture | 648 (57%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -121,7 +121,7 @@ listed here with no demo anywhere fails the generator.
 | Slot | 1 | 279 | 1 | 1 | 0 | — |
 | Stepper | 30 | 2 | 5 | 17 | 0 | `reduceMotion`, `unstyled` |
 | Switch | 28 | 277 | 6 | 11 | 0 | `reduceMotion` |
-| TabPanel | 26 | 2 | 6 | 17 | 0 | `reduceMotion`, `unstyled` |
+| TabPanel | 26 | 2 | 6 | 16 | 0 | `reduceMotion`, `unstyled` |
 | TextArea | 25 | 293 | 1 | 7 | 0 | `unstyled` |
 | TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
 | TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |

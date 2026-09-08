@@ -99,10 +99,26 @@ const AiLlmDemo = () => {
 }`}
         />
         <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
-          The cursor uses our built-in{" "}
+          The{" "}
           <code className="font-mono text-[12px] text-accent">animate-cursor</code>{" "}
-          keyframe — same one driving the homepage&rsquo;s typed rotator.
+          class above is this site&rsquo;s, not the package&rsquo;s —{" "}
+          <code className="font-mono text-[12px] text-accent">
+            @chumlab/ui/styles.css
+          </code>{" "}
+          carries component styling only, so paste the keyframe into your own
+          stylesheet or the bar will not blink:
         </p>
+        <CodeBlock
+          code={`@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+.animate-cursor { animation: cursor-blink 0.9s steps(1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-cursor { animation: none; }
+}`}
+        />
       </Section>
 
       <Section

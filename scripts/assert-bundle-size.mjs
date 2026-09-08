@@ -91,8 +91,27 @@ const CEILINGS = { control: 6, composed: 8, overlay: 10, surface: 12 };
  * The whole library, deduplicated: every entry's closure unioned once. Ratchets
  * DOWN only. Individual entries can each stay green while the aggregate drifts,
  * and nothing would have noticed.
+ *
+ * DECLARED INCREASE, the first one: 146.65 -> 148.52. The previous figure was
+ * recorded by e7f7940 on 2026-09-08 ("re-measure every gate record"); this one
+ * was recorded by the slice that restored the state styling 6dd1925 deleted.
+ * Measured 148.51 against 146.65, so +1.86, split by building the tree twice:
+ *
+ *   +1.82  restored state styling and TabPanel's flex layout
+ *   +0.04  18 added `cursor-pointer` class tokens across 13 components
+ *
+ * The deletion itself never showed up here. At 6dd1925 this number was 155.76
+ * and the commit did not touch it, because the total only has to stay UNDER
+ * the record — a library that shrinks by losing its styling passes a ratchet
+ * that only ever falls, silently and by design. There was no drop to read: the
+ * shortfall sat unmeasured for five days and was then folded into a general
+ * re-measure, which recorded the regression as the new normal. That is the
+ * hole, and it is a hole a downward ratchet cannot close on its own.
+ *
+ * No entry moved past its class ceiling: the four declared breaches are
+ * unchanged and no new one appeared.
  */
-const LIBRARY_TOTAL_KB = 146.65;
+const LIBRARY_TOTAL_KB = 148.52;
 
 /**
  * Breaches that are recorded rather than fixed, each with the reason and the

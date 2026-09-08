@@ -49,6 +49,8 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "Button", fixture: "with-icons" },
   { component: "CascadingDropdown", fixture: "closed" },
   { component: "Checkbox", fixture: "labelled" },
+  // The checked state, for the same reason as RadioButton above.
+  { component: "Checkbox", fixture: "checked" },
   { component: "CountryFlag", fixture: "resolved" },
   { component: "DatePicker", fixture: "closed" },
   { component: "Drawer", fixture: "open" },
@@ -61,13 +63,19 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "MultiSelectSearchableDropdown", fixture: "closed" },
   { component: "OtpInput", fixture: "default" },
   { component: "Pagination", fixture: "default" },
-  { component: "RadioButton", fixture: "default" },
+  // `with-value`, not `default`: the resting subject has nothing selected, so
+  // when 6dd1925 deleted the checked fill this baseline did not move and could
+  // not have. A selected radio had never been in a picture.
+  { component: "RadioButton", fixture: "with-value" },
   { component: "ResizablePanel", fixture: "default" },
   { component: "SearchableDropdown", fixture: "closed" },
   { component: "Slider", fixture: "default" },
   { component: "Stepper", fixture: "horizontal-numbered" },
   { component: "Switch", fixture: "labelled" },
   { component: "TabPanel", fixture: "default" },
+  // `iconPosition` had never been rendered by a fixture, so it had never been
+  // photographed and had never worked.
+  { component: "TabPanel", fixture: "icon-left" },
   { component: "Table", fixture: "default" },
   { component: "TextArea", fixture: "labelled" },
   { component: "TimePicker", fixture: "closed" },
@@ -171,7 +179,10 @@ test.describe("visual baselines", () => {
   for (const width of WIDTHS) {
     test.describe(`${width}px`, () => {
       for (const { component, fixture } of SUBJECTS) {
-        test(`${component} renders as recorded`, async ({ page }) => {
+        // The fixture is in the title because a component can have more than one
+        // subject now — `Checkbox/labelled` and `Checkbox/checked`. Snapshot
+        // filenames already carried it, so no baseline is renamed by this.
+        test(`${component}/${fixture} renders as recorded`, async ({ page }) => {
           await page.setViewportSize({ width, height: 900 });
           await gotoFixture(page, component, fixture);
           const subject = page.locator("[data-fixture]");

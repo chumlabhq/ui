@@ -7,7 +7,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "block text-sm font-medium mb-1 text-cl-text-chrome",
   control: "relative",
   trigger:
-    "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-cl-md transition-colors cursor-text border-cl-border-input bg-cl-bg-panel hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-transparent",
+    "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-cl-md transition-colors cursor-text border-cl-border-input bg-cl-bg-panel hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-transparent cursor-pointer",
   input:
     "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text",
   icon:
@@ -44,9 +44,9 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockCenter: "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton:
-    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-item-hover",
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-item-hover cursor-pointer",
   confirmButton:
-    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent cursor-pointer",
   row: "flex flex-col gap-1 ml-3",
   periodButton:
     "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-item-hover",

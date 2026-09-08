@@ -1467,7 +1467,7 @@ function TableInner<TData>(
             e.stopPropagation();
             cell.row.toggleExpanded();
           }}
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 cursor-pointer"
         >
           {cell.row.getIsExpanded() ? (
             <CollapseIcon className="w-4 h-4" />

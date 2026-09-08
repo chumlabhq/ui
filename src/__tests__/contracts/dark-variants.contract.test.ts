@@ -114,7 +114,7 @@ export function classifyDarkVariants(root = resolve(process.cwd(), "src/componen
  * `--cl-bg-input`, `--cl-bg-item-hover`, `--cl-bg-recessed`, or onto nothing at
  * all where the variant was painting a focus ring at 1.60:1.
  *
- * Six remain, and at six a ceiling is the wrong instrument: each is listed with
+ * Seven remain, and at seven a ceiling is the wrong instrument: each is listed with
  * its reason, so adding one fails and retiring one fails until the list is
  * updated. That is the ADR 002 DECLARED idiom, which is what a number stops
  * being able to express once it is small.
@@ -131,6 +131,8 @@ const DECLARED: Record<string, string> = {
     "The thumb is near-white in both themes, which no token holds, and it has exactly one caller. ADR 005 wants a repeated need before a mint.",
   "TimePicker/utils/constants.ts dark:hover:text-cl-text":
     "Steps UP on hover in dark. The second of the two sites that go the other way.",
+  "Switch/utils/constants.ts dark:data-[state=unchecked]:bg-[var(--switch-tracker-unchecked-bg,#4b5563)]":
+    "The off-track. It needs a solid mid-grey and every neutral in the palette is a surface or a low-alpha overlay, so there is nothing to point at — the same gap Table has. Restored with the track colours 6dd1925 deleted, carrying the reason it was written with. Retires when a solid neutral is minted.",
 };
 
 describe("dark variant contract", () => {
@@ -154,7 +156,7 @@ describe("dark variant contract", () => {
 
     it("is looking at real source", () => {
       // Guards the walker. It cannot be a floor on the variant count any more —
-      // that count is six — so it reads the corpus instead: a broken path finds
+      // that count is seven — so it reads the corpus instead: a broken path finds
       // no class literals at all, and every assertion below would pass while
       // proving nothing.
       expect(classLiteralCount()).toBeGreaterThan(500);
@@ -170,7 +172,7 @@ describe("dark variant contract", () => {
     expect(groups.A).toHaveLength(0);
   });
 
-  it("carries only the six variants ADR 007 declared", () => {
+  it("carries only the variants declared here, with a reason each", () => {
     const found = [...groups.B, ...groups.C]
       .map((entry) => `${entry.file.replace(/.*src\/components\//, "")} ${entry.token}`)
       .sort();

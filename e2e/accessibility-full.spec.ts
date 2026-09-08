@@ -14,7 +14,7 @@ const WAIVERS_PATH = resolve(process.cwd(), "docs/adr/002-unrenderable-keys.json
 
 interface Waivers {
   axeFixtureExpectations: Record<string, { reason: string; fixtures: string[] }>;
-  axeExpectationsDerivedFrom: { fixtures: number; recordedOn: string };
+  axeExpectationsDerivedFrom: { fixtures: string[]; recordedOn: string };
 }
 
 const waivers = JSON.parse(readFileSync(WAIVERS_PATH, "utf8")) as Waivers;
@@ -102,6 +102,7 @@ test.describe("accessibility (full sweep)", () => {
     const findings: Finding[] = [];
     const components = new Set<string>();
     let audited = 0;
+    const auditedFixtures: string[] = [];
     let portalled = 0;
     const actFailures: string[] = [];
 
@@ -177,6 +178,7 @@ test.describe("accessibility (full sweep)", () => {
       // nothing, and most fixtures portal nothing.
       const violations = await getViolations(page, { include });
       audited += 1;
+      auditedFixtures.push(path.replace("/__fixtures/", ""));
 
       for (const v of violations) {
         if (!FATAL.has(v.impact ?? "")) continue;
@@ -262,8 +264,16 @@ test.describe("accessibility (full sweep)", () => {
           ),
         ].sort();
       }
-      waivers.axeExpectationsDerivedFrom = {
-        fixtures: audited,
+      // Re-read before writing. `contrast-painted` re-records into this same
+      // file and the two specs run concurrently, so writing the copy read at
+      // import time restores whatever the other spec had just written. That is
+      // not hypothetical: the first per-fixture re-record of both lists left
+      // contrast's still holding a bare count, because this write landed last
+      // and put the stale value back.
+      const onDisk = JSON.parse(readFileSync(WAIVERS_PATH, "utf8")) as Waivers;
+      onDisk.axeFixtureExpectations = waivers.axeFixtureExpectations;
+      onDisk.axeExpectationsDerivedFrom = {
+        fixtures: [...auditedFixtures].sort(),
         recordedOn: new Date().toISOString().slice(0, 10),
       };
       // `JSON.stringify(x, null, 2)` is the file's canonical form and it round
@@ -272,7 +282,7 @@ test.describe("accessibility (full sweep)", () => {
       // escaped non-ASCII, and the first re-record normalised 29 `\u2014`
       // sequences to literal em-dashes across the whole file. That
       // normalisation is committed; do not escape them again.
-      writeFileSync(WAIVERS_PATH, `${JSON.stringify(waivers, null, 2)}\n`, "utf8");
+      writeFileSync(WAIVERS_PATH, `${JSON.stringify(onDisk, null, 2)}\n`, "utf8");
       console.log(
         `AXE_RERECORDED ${accepted} newly listed, ${refused.length} refused, ` +
           `derived from ${audited} fixtures`,
@@ -283,18 +293,30 @@ test.describe("accessibility (full sweep)", () => {
     }
 
     /**
-     * The list was derived against a fixture count. If the count has moved, the
-     * list describes a different suite — which is exactly how four findings on
-     * fixtures added after it was written came to read as unrecorded defects.
-     * Same shape as the dist fingerprint in assert-dist-records.mjs.
+     * Keyed per fixture, not by a total.
+     *
+     * It was a count, and a count makes every fixture's verdict depend on every
+     * other fixture's existence: adding two TabPanel fixtures invalidated a
+     * record covering 429 unrelated ones and forced a full re-derive that
+     * changed nothing else. A fixture's verdict belongs to that fixture.
+     *
+     * So the question is only whether the list still describes fixtures that
+     * exist. A fixture it names that has since gone is a stale entry and has to
+     * be re-derived; a fixture that is new is simply not in the list yet, and
+     * its findings are caught by the unexpected check below like any other.
+     * Adding a fixture adds an entry rather than invalidating the set.
      */
+    const auditedNow = new Set(auditedFixtures);
+    // Tolerates the old numeric form so a run before the first re-derive says
+    // what to do rather than throwing on `.filter`.
+    const recordedFixtures = Array.isArray(DERIVED_FROM.fixtures) ? DERIVED_FROM.fixtures : [];
+    const vanished = recordedFixtures.filter((f) => !auditedNow.has(f));
     expect(
-      audited,
-      `the axe expectation list was derived from ${DERIVED_FROM.fixtures} fixtures ` +
-        `(${DERIVED_FROM.recordedOn}) and this run audited ${audited}. The list ` +
-        "describes a suite that no longer exists — re-derive it with " +
+      vanished,
+      `the axe expectation list names ${vanished.length} fixture(s) that no longer exist ` +
+        `(recorded ${DERIVED_FROM.recordedOn}). Re-derive it with ` +
         "`A11Y_RERECORD=1 npm run test:e2e:a11y` and read what it refuses.",
-    ).toBe(DERIVED_FROM.fixtures);
+    ).toEqual([]);
 
     const unexpected = findings
       .filter((f) => !(EXPECTED[f.id]?.fixtures ?? []).includes(key(f)))

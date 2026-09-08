@@ -10,6 +10,16 @@
  * so a key cannot be deleted in Task 3 without its replacement being asserted
  * here first.
  *
+ * What it does NOT assert, and what caught fire for it: that the library still
+ * paints the state itself. This suite and `state-replacement.contract` between
+ * them prove a consumer can reach and restyle a state; neither asks whether the
+ * default styling survived the deletion. It did not — 6dd1925 removed the state
+ * keys and their styling together, and a checked checkbox, a selected radio, a
+ * checked switch, every Stepper status and every active tab painted exactly like
+ * their resting state while all of this stayed green. `e2e/default-state.spec.ts`
+ * is the other half: it renders each state in a browser and requires it to look
+ * different from resting.
+ *
  * It asserts three things per requirement:
  *   1. the attribute reaches the DOM on the right part, in some fixture state
  *   2. every documented value is reachable

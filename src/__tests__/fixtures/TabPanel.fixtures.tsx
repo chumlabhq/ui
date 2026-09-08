@@ -3,6 +3,13 @@ import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
 import { TABS } from "./_data.js";
 
+/** A shape rather than a glyph: the fixture is about placement, not iconography. */
+const CircleIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+    <circle cx="8" cy="8" r="6" />
+  </svg>
+);
+
 const fixtures: Fixtures<typeof TabPanel> = [
   { name: "default", props: { tabs: TABS }, children: (tab) => `${tab.label} panel` },
   { name: "vertical", props: { tabs: TABS, orientation: "vertical" } },
@@ -19,6 +26,21 @@ const fixtures: Fixtures<typeof TabPanel> = [
       defaultValue: "two",
     },
     note: "The only fixture that renders `countInactive`. TABS gives its count to the tab that is active by default, so the inactive badge never appeared — which is how its contrast went unaudited.",
+  },
+  {
+    name: "icon-left",
+    props: {
+      tabs: TABS.map((t) => ({ ...t, icon: <CircleIcon /> })),
+      iconPosition: "left" as const,
+    },
+    note: "The first fixture to give a tab an icon. `iconPosition` had never been rendered by any fixture, so it was in the 151 props whose markup no gate had seen — and it had never worked: the tab button had no flex layout, so the icon sat above the label in both positions rather than beside it.",
+  },
+  {
+    name: "icon-right",
+    props: {
+      tabs: TABS.map((t) => ({ ...t, icon: <CircleIcon /> })),
+      iconPosition: "right" as const,
+    },
   },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

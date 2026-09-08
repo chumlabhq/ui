@@ -32,7 +32,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     "flex items-center justify-center py-12 text-cl-text-tertiary",
   pinIcon: "text-cl-text-tertiary w-4 h-4",
   pinButton:
-    "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover",
+    "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover cursor-pointer",
   loading:
     "w-full border rounded-cl-md overflow-hidden border-cl-border",
   loadingRow: "border-b border-cl-border",

@@ -30,25 +30,37 @@ const AnimationDemo = () => {
         <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
           <li>
             <span className="text-fg font-medium">Hover transitions</span>:{" "}
-            <code className="font-mono text-[12px] text-accent">200ms ease-out</code>{" "}
-            for color, background, and border.
+            <code className="font-mono text-[12px] text-accent">transition-colors</code>{" "}
+            for color, background, and border; the components that pin a
+            duration use{" "}
+            <code className="font-mono text-[12px] text-accent">duration-200</code>.
           </li>
           <li>
-            <span className="text-fg font-medium">Mount/unmount</span>:{" "}
+            <span className="text-fg font-medium">Drawer slide</span>:{" "}
             <code className="font-mono text-[12px] text-accent">
-              cubic-bezier(0.32, 0.72, 0.24, 1)
+              cubic-bezier(0.32, 0.72, 0, 1)
             </code>{" "}
-            for overlays and drawers — feels like a soft material.
+            — feels like a soft material. Modal is plainer: an opacity and
+            scale transition over{" "}
+            <code className="font-mono text-[12px] text-accent">animationDuration</code>,
+            200ms by default.
           </li>
           <li>
-            <span className="text-fg font-medium">Accordion expand</span>:
-            CSS Grid <code className="font-mono text-[12px] text-accent">grid-template-rows: 0fr → 1fr</code>{" "}
-            — measured-free, no JS layout reads.
+            <span className="text-fg font-medium">Accordion expand</span>: a{" "}
+            <code className="font-mono text-[12px] text-accent">max-height</code>{" "}
+            and opacity transition, 300ms{" "}
+            <code className="font-mono text-[12px] text-accent">ease-in-out</code>{" "}
+            by default. It measures: the panel reads its own{" "}
+            <code className="font-mono text-[12px] text-accent">scrollHeight</code>{" "}
+            on open, because a height transition cannot animate to{" "}
+            <code className="font-mono text-[12px] text-accent">auto</code>.
           </li>
           <li>
-            <span className="text-fg font-medium">Toast stack</span>:
-            slide-in + fade, 300ms; auto-dismiss + manual close share the
-            same exit transition.
+            <span className="text-fg font-medium">Toast stack</span>: slide-in +
+            fade over{" "}
+            <code className="font-mono text-[12px] text-accent">animationDuration</code>,
+            500ms by default; auto-dismiss and manual close share the same exit
+            transition.
           </li>
         </ul>
       </Section>
@@ -96,10 +108,15 @@ import { Modal } from "@chumlab/ui";
 </AnimatePresence>`}
         />
         <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
-          Most overlay primitives accept an{" "}
-          <code className="font-mono text-[12px] text-accent">animation=&quot;none&quot;</code>{" "}
-          prop to disable defaults so your motion library doesn&rsquo;t
-          fight them.
+          Modal takes{" "}
+          <code className="font-mono text-[12px] text-accent">disableAnimation</code>{" "}
+          to drop its defaults entirely, and both Modal and Toast take{" "}
+          <code className="font-mono text-[12px] text-accent">animationDuration</code>{" "}
+          to retime them, so your motion library doesn&rsquo;t fight them.
+          Drawer and Tooltip expose neither — override their transitions
+          through{" "}
+          <code className="font-mono text-[12px] text-accent">classes</code>{" "}
+          instead.
         </p>
       </Section>
 

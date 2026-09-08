@@ -16,7 +16,7 @@ const AccessibilityDemo = () => {
           Accessibility.
         </h1>
         <p className="text-[15.5px] text-fg-secondary leading-[1.6] max-w-2xl">
-          Chumlab UI targets WCAG 2.1 AA across every primitive. If something
+          Chumlab UI targets WCAG 2.2 AA across every primitive. If something
           isn&rsquo;t accessible, treat it as a bug — open an issue and we ship
           a fix.
         </p>
@@ -133,14 +133,19 @@ const AccessibilityDemo = () => {
 
       <Section title="Testing" description="What we run on every release.">
         <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
-          <li>Automated axe-core scans against every demo page.</li>
           <li>
-            Manual screen-reader sweeps (VoiceOver, NVDA) for new primitives and
-            any change to focus management.
+            Automated axe-core scans over every component fixture — each
+            component in each of its states, not just the pages in this site.
           </li>
           <li>
-            Keyboard-only smoke tests in CI for the big composite widgets
-            (Modal, Drawer, Dropdown, Table, DatePicker).
+            A keyboard-reachability contract over every fixture, plus per-widget
+            end-to-end focus tests (Dropdown, Drawer, Table, menu focus).
+          </li>
+          <li>
+            <span className="text-fg font-medium">Not</span> tested with a
+            screen reader. No NVDA, JAWS or VoiceOver run has ever been done.
+            axe is a static rule engine — it cannot tell you whether an
+            announcement makes sense, only whether the markup permits one.
           </li>
         </ul>
       </Section>

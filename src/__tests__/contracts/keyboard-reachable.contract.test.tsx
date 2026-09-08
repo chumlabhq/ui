@@ -145,6 +145,70 @@ const renderFixture = async (
 
 const withFixtures = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 
+
+/**
+ * SC 2.1.1's sibling in mouse terms: a control has to look clickable.
+ *
+ * Tailwind v4's preflight does not set `cursor: pointer` on a button, and this
+ * package ships no preflight at all — `assert-styles-bundle.mjs` asserts that,
+ * because a consumer's own page styling is not ours to touch. So the cursor is
+ * on us, on every clickable element, explicitly. It was on almost none: a sweep
+ * of all 429 fixtures found 242 of 475 interactive elements computing something
+ * other than `pointer`, and nothing had ever looked. It is not in a screenshot,
+ * axe has no rule for it, and the contrast gate reads colour.
+ *
+ * Asserted on the class string rather than on computed style because jsdom
+ * applies no stylesheet — `getComputedStyle` here would report the default for
+ * everything and pass every time. That the class then resolves to a real rule
+ * is `assert-styles-bundle.mjs`'s job, and it already counts the emitted
+ * utilities.
+ *
+ * `grab`, `col-resize`, `row-resize`, `text` and `not-allowed` are deliberate
+ * and left alone: a slider thumb, a resize handle and a disabled control are
+ * each saying something a pointer would contradict.
+ */
+const CLICKABLE = [
+  "button",
+  '[role="button"]',
+  '[role="tab"]',
+  '[role="option"]',
+  '[role="menuitem"]',
+  '[role="menuitemcheckbox"]',
+  '[role="menuitemradio"]',
+  '[role="switch"]',
+  '[role="checkbox"]',
+  '[role="radio"]',
+  "summary",
+].join(", ");
+
+const DELIBERATE_CURSORS = /cursor-(pointer|grab|grabbing|col-resize|row-resize|text|not-allowed|default)/;
+
+const withoutCursor = (): string[] => {
+  const bad: string[] = [];
+  for (const el of document.querySelectorAll(CLICKABLE)) {
+    if (el.hasAttribute("disabled")) continue;
+    if (el.getAttribute("aria-disabled") === "true") continue;
+    if (el.getAttribute("aria-hidden") === "true") continue;
+    // The native input inside a styled control is visually replaced by it; the
+    // label and the control carry the cursor for the whole thing.
+    if (el.tagName === "INPUT" && el.closest("label")) continue;
+    const cls = el.getAttribute("class") ?? "";
+    // Only what the library rendered. A `renderTrigger` returns the consumer's
+    // own element — `<button {...triggerProps}>` with no class of ours on it —
+    // and its cursor is theirs to set, not a defect here. Every element the
+    // library renders carries the `cl-s` marker, which is what makes the two
+    // tellable apart; without this the gate reports a consumer's markup as a
+    // library defect and cannot be made green by fixing the library.
+    if (!/\bcl-s\b/.test(cls)) continue;
+    if (DELIBERATE_CURSORS.test(cls)) continue;
+    bad.push(
+      `${el.tagName.toLowerCase()}${el.getAttribute("role") ? `[role=${el.getAttribute("role")}]` : ""}` +
+        ` has no cursor: "${cls.slice(0, 60)}"`,
+    );
+  }
+  return bad;
+};
+
 describe("keyboard reachability contract", () => {
   describe("self-check", () => {
     it("catches a control that cannot take focus", () => {
@@ -182,18 +246,56 @@ describe("keyboard reachability contract", () => {
     });
   });
 
+  describe("cursor self-check", () => {
+    it("catches a clickable element with no cursor", () => {
+      const host = document.createElement("div");
+      host.innerHTML = '<button class="cl-s px-2">Go</button>';
+      document.body.append(host);
+      expect(withoutCursor().join(" ")).toContain("has no cursor");
+      host.remove();
+    });
+
+    it("accepts the same element once it says pointer", () => {
+      const host = document.createElement("div");
+      host.innerHTML = '<button class="cl-s px-2 cursor-pointer">Go</button>';
+      document.body.append(host);
+      expect(withoutCursor()).toEqual([]);
+      host.remove();
+    });
+
+    it("leaves a deliberate non-pointer cursor alone", () => {
+      const host = document.createElement("div");
+      host.innerHTML = '<button class="cl-s cursor-grab" role="button">Drag</button>';
+      document.body.append(host);
+      expect(withoutCursor()).toEqual([]);
+      host.remove();
+    });
+  });
+
+  /**
+   * Both questions off one render pass.
+   *
+   * They were two loops over the same fixtures, which rendered every fixture of
+   * every component twice. That is the heaviest file in the suite and doubling
+   * it made the act-driven contracts elsewhere flake noticeably more often —
+   * Table's and TimePicker's, which open a surface and read it. Asking both
+   * questions of one render costs nothing and gives that back.
+   */
   for (const component of withFixtures) {
-    it(`${component.name} leaves no control out of the keyboard's reach`, async () => {
-      const bad: string[] = [];
+    it(`${component.name} keeps its controls reachable and clickable`, async () => {
+      const unreached: string[] = [];
+      const uncursored: string[] = [];
       for (const fixture of fixturesFor(component.name)) {
         await renderFixture(
           component.Component as React.ComponentType<Record<string, unknown>>,
           fixture,
         );
-        bad.push(...unreachable().map((b) => `${fixture.name}: ${b}`));
+        unreached.push(...unreachable().map((b) => `${fixture.name}: ${b}`));
+        uncursored.push(...withoutCursor().map((b) => `${fixture.name}: ${b}`));
         cleanup();
       }
-      expect([...new Set(bad)], "a control no keyboard user can reach").toEqual([]);
+      expect([...new Set(unreached)], "a control no keyboard user can reach").toEqual([]);
+      expect([...new Set(uncursored)], "a control that does not look clickable").toEqual([]);
     });
   }
 });

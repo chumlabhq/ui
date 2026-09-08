@@ -17,7 +17,7 @@ const IntroductionDemo = () => {
         </h1>
         <p className="text-[15.5px] text-fg-secondary leading-[1.6] max-w-2xl">
           Chumlab UI is an open-source React component library for builders who
-          care about craft. 30+ accessible, themeable primitives shipped with
+          care about craft. 30 accessible, themeable primitives shipped with
           TypeScript types, full keyboard support, and zero vendor lock-in. MIT
           licensed, free forever.
         </p>
@@ -31,8 +31,12 @@ const IntroductionDemo = () => {
           <li>
             <span className="text-fg font-medium">Forms</span> — Input,
             TextArea, Checkbox, RadioButton, Switch, Slider, Dropdown,
-            SearchableDropdown, MultiSelect, Cascading, OTPInput, DatePicker,
-            TimePicker, InternationalPhoneInput.
+            SearchableDropdown, MultiSelectDropdown,
+            MultiSelectSearchableDropdown, CascadingDropdown, OtpInput,
+            DatePicker, TimePicker, InternationalPhoneInput.
+          </li>
+          <li>
+            <span className="text-fg font-medium">Actions</span> — Button.
           </li>
           <li>
             <span className="text-fg font-medium">Overlays</span> — Modal,

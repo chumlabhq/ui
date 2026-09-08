@@ -17,7 +17,7 @@ export const DEFAULT_MODAL_CLASSES: Required<ModalClasses> = {
   description: "mt-1 text-sm text-cl-text-chrome-quiet",
   icon: "",
   closeTrigger:
-    "shrink-0 p-1.5 rounded-cl-md hover:bg-cl-bg-hover transition-colors ml-auto",
+    "shrink-0 p-1.5 rounded-cl-md hover:bg-cl-bg-hover transition-colors ml-auto cursor-pointer",
   closeIcon: "w-5 h-5 text-cl-text-tertiary",
   body: "px-6 pb-6",
 };

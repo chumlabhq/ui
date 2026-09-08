@@ -37,6 +37,17 @@ const sources = import.meta.glob("../../components/**/*.tsx", {
   import: "default",
 }) as Record<string, string>;
 
+/**
+ * The `.ts` half — `utils/constants.ts` and the component-root `constants.ts`,
+ * where the default class strings actually live. `sources` above is `.tsx`
+ * only, which is why the duplicate check below needs its own glob.
+ */
+const constantSources = import.meta.glob("../../components/**/*.ts", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+}) as Record<string, string>;
+
 /** Marketing and docs-only files; not part of the published package. */
 const NOT_SHIPPED =
   /(CatalogSection|ChumlabComparison|GetStarted|SiteHeader|SiteFooter|BuyMeCoffee|WhyChumlab|Typographic|UserMenu|Announcement|FaqLogo|Reveal|\/ui\/|BrandLogo|__tests__)/;
@@ -245,8 +256,55 @@ const colourNamespaces = (): Finding[] => {
   return found;
 };
 
+/**
+ * A class token repeated inside one string.
+ *
+ * Harmless to the browser and a reliable sign that two passes edited the same
+ * string: `"… transition-colors cursor-pointer cursor-pointer"` reached a diff
+ * on this branch because one applier appended its class twice in a single
+ * operation, and four components carried it before anyone looked. Nothing else
+ * would have caught it — it changes no computed style, so no visual baseline
+ * moves and no contrast reading shifts. It is cheap to check and it dates the
+ * edit that caused it.
+ */
+const duplicateTokens = (): string[] => {
+  const found: string[] = [];
+  for (const [path, source] of Object.entries({ ...sources, ...constantSources })) {
+    if (NOT_SHIPPED.test(path)) continue;
+    const file = path.replace("../../components/", "");
+    for (const literal of literalsIn(source)) {
+      const tokens = literal.split(/\s+/).filter(Boolean);
+      if (tokens.length < 2) continue;
+      // Class strings only. Prose in a comment or a JSDoc line repeats words
+      // constantly and is not what this is about.
+      if (!tokens.every((t) => LOOKS_LIKE_UTILITY.test(t) || /^[a-z][a-z0-9:[\]\/.,%()#-]*$/.test(t))) continue;
+      const counts = new Map<string, number>();
+      for (const t of tokens) counts.set(t, (counts.get(t) ?? 0) + 1);
+      for (const [token, n] of counts) {
+        if (n > 1) found.push(`${file}: "${token}" appears ${n} times in one class string`);
+      }
+    }
+  }
+  return [...new Set(found)];
+};
+
 describe("constants contract", () => {
   const findings = scan();
+
+  it("repeats no class token inside one string", () => {
+    expect(duplicateTokens(), "the same class applied twice to one element").toEqual([]);
+  });
+
+  it("notices a planted double", () => {
+    // The check reads real source, so the plant is a literal put through the
+    // same splitter rather than a file written to disk.
+    const planted = "flex items-center gap-2 cursor-pointer cursor-pointer";
+    const counts = new Map<string, number>();
+    for (const t of planted.split(/\s+/)) counts.set(t, (counts.get(t) ?? 0) + 1);
+    expect([...counts.entries()].filter(([, n]) => n > 1)).toEqual([["cursor-pointer", 2]]);
+    // and the real scan is clean, so the two together mean something
+    expect(duplicateTokens()).toEqual([]);
+  });
 
   it("reads component source", () => {
     // A broken glob would make every assertion below vacuously pass.

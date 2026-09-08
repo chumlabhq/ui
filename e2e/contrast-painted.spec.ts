@@ -49,7 +49,8 @@ interface Recorded {
   paintedContrastExpectations: {
     reason: string;
     recordedOn: string;
-    fixtures: number;
+    /** The fixtures this list was derived from, not how many. See the guard. */
+    fixtures: string[];
     findings: string[];
   };
   nonTextContrastExpectations: {
@@ -507,6 +508,7 @@ test.describe("painted contrast", () => {
     const findings: Finding[] = [];
     const unmeasurable: string[] = [];
     let audited = 0;
+    const auditedFixtures: string[] = [];
     // Counted and reported: this pass found nothing on its first run because it
     // was measuring nothing, and "0 findings" reads identically either way.
     let placeholders = 0;
@@ -541,6 +543,7 @@ test.describe("painted contrast", () => {
       });
       await markPortalRoots(page);
       audited += 1;
+      auditedFixtures.push(path.replace("/__fixtures/", ""));
 
       for (const theme of ["dark", "light"] as const) {
         await page.evaluate((next) => {
@@ -616,23 +619,38 @@ test.describe("painted contrast", () => {
     }
 
     if (RERECORD) {
-      recorded.paintedContrastExpectations = {
+      // Re-read before writing: `accessibility-full` re-records into this same
+      // file concurrently, and writing the import-time copy puts back whatever
+      // it had just written. See the matching note in that spec.
+      const { writeFileSync, readFileSync: readNow } = await import("node:fs");
+      const onDisk = JSON.parse(readNow(RECORDED_PATH, "utf8")) as typeof recorded;
+      onDisk.paintedContrastExpectations = {
         ...recorded.paintedContrastExpectations,
         recordedOn: new Date().toISOString().slice(0, 10),
-        fixtures: audited,
+        fixtures: [...auditedFixtures].sort(),
         findings: [...new Set(findings.map((f) => f.key))].sort(),
       };
-      const { writeFileSync } = await import("node:fs");
-      writeFileSync(RECORDED_PATH, `${JSON.stringify(recorded, null, 2)}\n`, "utf8");
+      writeFileSync(RECORDED_PATH, `${JSON.stringify(onDisk, null, 2)}\n`, "utf8");
       console.log(`CONTRAST_RERECORDED ${findings.length} findings from ${audited} fixtures`);
       return;
     }
 
+    /**
+     * Keyed per fixture, not by a total — the same change as the axe list.
+     * A count made every fixture's verdict depend on every other fixture's
+     * existence, so adding two invalidated a record covering 429 unrelated
+     * ones. Only a fixture the list names and that no longer exists makes the
+     * list stale; a new fixture is caught by the unexpected check below.
+     */
+    const auditedNow = new Set(auditedFixtures);
+    const vanished = (recorded.paintedContrastExpectations.fixtures ?? []).filter(
+      (f) => !auditedNow.has(f),
+    );
     expect(
-      audited,
-      `the recorded list was derived from ${recorded.paintedContrastExpectations.fixtures} ` +
-        `fixtures and this run audited ${audited}`,
-    ).toBe(recorded.paintedContrastExpectations.fixtures);
+      vanished,
+      `the recorded contrast list names ${vanished.length} fixture(s) that no longer exist — ` +
+        "re-derive it with `CONTRAST_RERECORD=1`",
+    ).toEqual([]);
 
     const unexpected = [...new Set(findings.map((f) => `${f.key} — ${f.ratio}:1`))].filter(
       (line) => !EXPECTED.has(line.split(" — ")[0]),

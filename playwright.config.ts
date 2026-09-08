@@ -34,7 +34,7 @@ export default defineConfig({
       name: "a11y-full",
       // The painted-contrast sweep runs here too: it walks the same 367 fixture
       // pages, twice each for the two themes, which is the same shape of cost.
-      testMatch: /(accessibility-full|contrast-painted)\.spec\.ts/,
+      testMatch: /(accessibility-full|contrast-painted|default-state)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
     },
     /**
@@ -50,28 +50,28 @@ export default defineConfig({
     },
     {
       name: "chromium",
-      testIgnore: /(accessibility-full|contrast-painted|visual)\.spec\.ts/,
+      testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "firefox",
-      testIgnore: /(accessibility-full|contrast-painted|visual)\.spec\.ts/,
+      testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
       use: { ...devices["Desktop Firefox"] },
     },
     {
       name: "webkit",
-      testIgnore: /(accessibility-full|contrast-painted|visual)\.spec\.ts/,
+      testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
       use: { ...devices["Desktop Safari"] },
     },
     // Mobile viewports
     {
       name: "Mobile Chrome",
-      testIgnore: /(accessibility-full|contrast-painted|visual)\.spec\.ts/,
+      testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
       use: { ...devices["Pixel 5"] },
     },
     {
       name: "Mobile Safari",
-      testIgnore: /(accessibility-full|contrast-painted|visual)\.spec\.ts/,
+      testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
       use: { ...devices["iPhone 12"] },
     },
   ],
