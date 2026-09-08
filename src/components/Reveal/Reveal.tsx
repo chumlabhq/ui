@@ -6,7 +6,6 @@ import {
   type CSSProperties,
   type ElementType,
   type ReactNode,
-  type TransitionEvent,
 } from "react";
 
 const EASING = "cubic-bezier(0.32, 0.72, 0.24, 1)";
@@ -99,6 +98,34 @@ export default function Reveal({
     return () => observer.disconnect();
   }, [node, visible]);
 
+  // Settle on the animations actually finishing, not on a `transitionend`
+  // event. The event is not guaranteed: it never fires when the browser had no
+  // style change to animate — an element already at its final value on its
+  // first paint — and an unsettled Reveal keeps `translate3d(0,0,0) scale(1)`,
+  // which is the lingering identity transform described above. Four of them
+  // were sitting directly above the footer, which is the seam that keeps being
+  // reported there.
+  //
+  // `getAnimations()` answers the same question without the gap: an empty list
+  // means there was nothing to wait for and we settle at once, which is exactly
+  // the case the event misses.
+  useEffect(() => {
+    if (settled || !visible || !node) return;
+
+    let cancelled = false;
+    // Forces the style recalc that creates the transition. Without it the list
+    // can still be empty and we would settle a frame before the paint.
+    void getComputedStyle(node).opacity;
+    const running = node.getAnimations().map((a) => a.finished.catch(() => undefined));
+    void Promise.all(running).then(() => {
+      if (!cancelled) setSettled(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [node, visible, settled]);
+
   // When the caller passes 0/0/1, there's nothing to translate or scale —
   // skip the transform entirely so we never promote the element to a GPU
   // compositor layer in the first place. Without this branch, an identity
@@ -128,23 +155,12 @@ export default function Reveal({
           ...style,
         };
 
-  const handleTransitionEnd = (e: TransitionEvent<HTMLElement>) => {
-    if (e.target !== e.currentTarget) return;
-    // Identity-transform Reveals only run an opacity transition, so we
-    // can't only listen for transform — we'd never settle. Either ending
-    // is enough; both fire at the same time anyway when both transition.
-    if (e.propertyName !== "transform" && e.propertyName !== "opacity") return;
-    if (!visible) return;
-    setSettled(true);
-  };
-
   return createElement(
     Tag,
     {
       ref: setNode,
       className,
       style: mergedStyle,
-      onTransitionEnd: settled ? undefined : handleTransitionEnd,
       ...rest,
     },
     children,

@@ -1,3 +1,4 @@
+import type { SwitchClasses } from "../../components/Switch/index.js";
 import {
   useState,
   useRef } from "react";
@@ -15,21 +16,13 @@ import {
   SetupNote,
 } from "./components/index.js";
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   switch: {
     label: `text-sm font-medium text-cl-text cursor-pointer`,
-    disabledLabel: `text-cl-text-tertiary cursor-not-allowed`,
     description: `text-xs text-cl-text-secondary`,
-    tracker: `relative inline-flex items-center h-5 w-9 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
-    disabledTracker: "opacity-50 cursor-not-allowed",
     thumb:
       "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
-    checkedTracker: dark ? "bg-cl-accent" : "bg-cl-accent",
-    uncheckedTracker: dark ? "bg-cl-text/10" : "bg-cl-bg-hover",
-    checkedThumb: "translate-x-4.5",
-    uncheckedThumb: "translate-x-0.5",
-    error: `text-sm mt-2 text-cl-error`,
-  },
+  } satisfies SwitchClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -92,7 +85,7 @@ const MoonIcon = () => (
 
 const SwitchDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const switchRef = useRef<HTMLButtonElement>(null);
 
   const [basicSwitch, setBasicSwitch] = useState(false);

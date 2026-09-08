@@ -1,3 +1,4 @@
+import type { CheckboxClasses } from "../../components/Checkbox/index.js";
 import {
   useState,
   useRef } from "react";
@@ -51,16 +52,9 @@ const EmptyHeartIcon = ({ className }: { className?: string }) => (
 const getClasses = (_dark: boolean) => ({
   checkbox: {
     root: "",
-    labelContainer: "flex flex-col",
     label: `text-sm font-medium text-cl-text`,
     description: `text-xs text-cl-text-secondary`,
-    checkbox: `inline-flex items-center justify-center border-2 transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-cl-accent focus-within:ring-offset-cl-bg`,
-    checked: `bg-cl-accent border border-cl-border-input-focus text-cl-on-accent`,
-    unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
-    indeterminate: `bg-cl-accent border border-cl-border-input-focus text-cl-on-accent`,
-    icon: "",
-    error: `text-xs mt-1 text-cl-error`,
-  },
+  } satisfies CheckboxClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,

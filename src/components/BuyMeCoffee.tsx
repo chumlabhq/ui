@@ -11,7 +11,7 @@ import {
   useCreateOrderMutation,
   useVerifyPaymentMutation,
 } from "../redux/api/paymentApi.js";
-import { useGetMeQuery } from "../redux/api/authApi.js";
+import { AUTH_ENABLED, useGetMeQuery } from "../redux/api/authApi.js";
 
 /**
  * Razorpay's checkout.js attaches a global `window.Razorpay` constructor.
@@ -117,7 +117,14 @@ function BuyMeCoffeeModal({
   const [verifyPayment] = useVerifyPaymentMutation();
   const [createFeedback] = useCreateFeedbackMutation();
 
-  const { data: meData, isError: meHasError } = useGetMeQuery();
+  // Skipped, alongside the OAuth removal in App.tsx. With no sign-in route the
+  // cookie is never set, so this answered 401 on every page load and
+  // `authedUser` was always undefined — every branch below already took the
+  // anonymous path. Skipped rather than deleted so the wiring and its types
+  // stay intact: drop `AUTH_ENABLED` back to a live check to restore it.
+  const { data: meData, isError: meHasError } = useGetMeQuery(undefined, {
+    skip: !AUTH_ENABLED,
+  });
   const authedUser = meHasError ? undefined : meData?.user;
 
   const submitting = creatingOrder || paying;

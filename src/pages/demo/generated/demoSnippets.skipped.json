@@ -1,0 +1,525 @@
+{
+  "sections": [
+    {
+      "component": "Accordion",
+      "title": "Dynamic Items",
+      "reason": "`removeItem` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Basic Usage",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "With Icons",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Icons + Truncation",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Custom Content",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "With Links",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Per-Item Click Handlers",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Tooltips",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Ellipsis Tooltip",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Pill Style",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Colored Theme",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "Combined: Tooltips + Icons + Truncation",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Breadcrumb",
+      "title": "onDropdownOpenChange",
+      "reason": "`handleItemClick` closes over page state"
+    },
+    {
+      "component": "Button",
+      "title": "Interactive Loading",
+      "reason": "`simulateLoading` closes over page state"
+    },
+    {
+      "component": "CascadingDropdown",
+      "title": "Async Single-Select (Countries API)",
+      "reason": "`fetchCountriesByRegion` is not declared on the page"
+    },
+    {
+      "component": "CascadingDropdown",
+      "title": "Async Multi-Select (Countries API)",
+      "reason": "`fetchCountriesByRegion` is not declared on the page"
+    },
+    {
+      "component": "CascadingDropdown",
+      "title": "Fully Async - Prefetch on Mount",
+      "reason": "`fetchCountriesByRegion` is not declared on the page"
+    },
+    {
+      "component": "CascadingDropdown",
+      "title": "Fully Async - Load on Open",
+      "reason": "`resetLoadOnOpenDemo` closes over page state"
+    },
+    {
+      "component": "CascadingDropdown",
+      "title": "Async Server-Side Search (Debounced)",
+      "reason": "`fetchCountriesByRegion` is not declared on the page"
+    },
+    {
+      "component": "DatePicker",
+      "title": "Events Calendar (Holidays, Absences, Deadlines)",
+      "reason": "`addDays` is not declared on the page"
+    },
+    {
+      "component": "DatePicker",
+      "title": "Custom Presets (Single)",
+      "reason": "`subDays` is not declared on the page"
+    },
+    {
+      "component": "DatePicker",
+      "title": "Custom Range Presets",
+      "reason": "`startOfWeek` is not declared on the page"
+    },
+    {
+      "component": "DatePicker",
+      "title": "Event Callbacks",
+      "reason": "`log` closes over page state"
+    },
+    {
+      "component": "Dropdown",
+      "title": "Custom Trigger (renderTrigger)",
+      "reason": "`placeholder` is not declared on the page"
+    },
+    {
+      "component": "Dropdown",
+      "title": "Async Data Fetching with Shimmer",
+      "reason": "`fetchCountries` is not declared on the page"
+    },
+    {
+      "component": "Dropdown",
+      "title": "Native Form Participation",
+      "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "Input",
+      "title": "Character Count",
+      "reason": "`userOk` closes over page state"
+    },
+    {
+      "component": "Input",
+      "title": "Live Validation",
+      "reason": "`emailBad` closes over page state"
+    },
+    {
+      "component": "Input",
+      "title": "Registration Form",
+      "reason": "`userOk` closes over page state"
+    },
+    {
+      "component": "InternationalPhoneInput",
+      "title": "Validation States",
+      "reason": "`successOk` closes over page state"
+    },
+    {
+      "component": "InternationalPhoneInput",
+      "title": "Real Validation (libphonenumber)",
+      "reason": "`createLibphonenumberValidator` is not declared on the page"
+    },
+    {
+      "component": "InternationalPhoneInput",
+      "title": "Form Semantics",
+      "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "title": "Async Data Fetching with Shimmer",
+      "reason": "`fetchCountries` is not declared on the page"
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "title": "Native Form Participation",
+      "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "title": "Async Search (Real API)",
+      "reason": "`searchCountries` is not declared on the page"
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "title": "Async with Dynamic Prefetch",
+      "reason": "`searchCountries` is not declared on the page"
+    },
+    {
+      "component": "OtpInput",
+      "title": "Form Integration",
+      "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "ResizablePanel",
+      "title": "Resize Callbacks",
+      "reason": "`addLog` closes over page state"
+    },
+    {
+      "component": "SearchableDropdown",
+      "title": "Custom Trigger (renderTrigger)",
+      "reason": "`placeholder` is not declared on the page"
+    },
+    {
+      "component": "SearchableDropdown",
+      "title": "Async Search (Real API)",
+      "reason": "`searchCountries` is not declared on the page"
+    },
+    {
+      "component": "SearchableDropdown",
+      "title": "Async with Static Initial Options",
+      "reason": "`searchCountries` is not declared on the page"
+    },
+    {
+      "component": "SearchableDropdown",
+      "title": "Async with Dynamic Prefetch",
+      "reason": "`searchCountries` is not declared on the page"
+    },
+    {
+      "component": "SearchableDropdown",
+      "title": "Native Form Participation",
+      "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "Slider",
+      "title": "Custom Thumb",
+      "reason": "`value` is not declared on the page"
+    },
+    {
+      "component": "Switch",
+      "title": "Form Semantics",
+      "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Underlined Style",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Pill Style",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "With Icons (Left)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "With Icons (Right)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Icon Only (Labels Hidden)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "With Count Badges (Hide Zero)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "With Count Badges (Show Zero)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "With Tooltips (Bottom)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "With Tooltips (Top)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Disabled Tab",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "All Tabs Disabled",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Custom Focus Styles",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Keyboard Navigation",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "RTL Support",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Dynamic Tabs (Add / Remove)",
+      "reason": "`addDynamicTab` closes over page state"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Uncontrolled (defaultValue)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Manual Activation Mode",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "No Loop (loop={false})",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Render Function Children",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Custom Tab Rendering (renderTab)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "classes Record",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Custom ID",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Custom Aria Label",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Force Mount (All Panels)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Keep Mounted (Lazy Persist)",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "TabPanel",
+      "title": "Data Attributes Demo",
+      "reason": "page styling `c.tabs` could not be resolved"
+    },
+    {
+      "component": "Table",
+      "title": "Custom Pin Icon (Star)",
+      "reason": "`handleStarPinColumn` closes over page state"
+    },
+    {
+      "component": "Table",
+      "title": "Custom Pin Separator Styling",
+      "reason": "`handleSepPinColumn` closes over page state"
+    },
+    {
+      "component": "Table",
+      "title": "Inline Cell Editing",
+      "reason": "page styling `c.value` could not be resolved"
+    },
+    {
+      "component": "Table",
+      "title": "Infinite Scroll",
+      "reason": "`handleLoadMore` closes over page state"
+    },
+    {
+      "component": "Table",
+      "title": "Infinite Scroll (Skeleton Loader)",
+      "reason": "`handleLoadMore2` closes over page state"
+    },
+    {
+      "component": "Table",
+      "title": "Infinite Scroll (Progress Bar Loader)",
+      "reason": "`handleLoadMore3` closes over page state"
+    },
+    {
+      "component": "Table",
+      "title": "Infinite Scroll (No Loading UI, Silent Load)",
+      "reason": "`handleLoadMore4` closes over page state"
+    },
+    {
+      "component": "Table",
+      "title": "Server-Side Mode",
+      "reason": "`handleServerSortingChange` closes over page state"
+    },
+    {
+      "component": "TextArea",
+      "title": "Character Count",
+      "reason": "`bioOk` closes over page state"
+    },
+    {
+      "component": "TextArea",
+      "title": "Live Validation",
+      "reason": "`bioBad` closes over page state"
+    },
+    {
+      "component": "TimePicker",
+      "title": "Clearable",
+      "reason": "`log` closes over page state"
+    },
+    {
+      "component": "Table",
+      "title": "Basic Usage",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Built-in Search Bar (Default)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Column Resizing (Basic)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Column Sorting",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Column Visibility (Toggle Checkboxes)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Context Menu",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Copy to Clipboard",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "CSV Export",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Density Modes",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Global Search (Basic)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Multi-Row Selection (Checkboxes)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Row Drag & Drop (Default)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Row Expansion",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Striped Rows (Bold Stripes with Border)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Striped Rows (CSS-only via data-striped)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Striped Rows (Default)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Table",
+      "title": "Striped Rows (Hover Interaction)",
+      "reason": "does not typecheck: TS1005 ':' expected."
+    },
+    {
+      "component": "Pagination",
+      "title": "Custom Ellipsis (Jump to Page)",
+      "reason": "does not typecheck: TS2322 Type '{ onValueChange: (page: number) => void; false: boolean; variant: \"default\"; }' is not assignable to type 'IntrinsicAttributes & { onValueChange: (page: number) => void; dark: boolean; variant?: \"default\" | \"pill\" | \"ghost\" | undefined; }'."
+    },
+    {
+      "component": "Stepper",
+      "title": "With Tooltips (Custom Config)",
+      "reason": "does not typecheck: TS2304 Cannot find name 'StepTooltipConfig'."
+    },
+    {
+      "component": "Table",
+      "title": "Footer / Summary Row",
+      "reason": "does not typecheck: TS2304 Cannot find name 'User'."
+    },
+    {
+      "component": "Table",
+      "title": "Right Column Pinning",
+      "reason": "does not typecheck: TS2304 Cannot find name 'ColumnDef'."
+    },
+    {
+      "component": "Toast",
+      "title": "Position",
+      "reason": "does not typecheck: TS2304 Cannot find name 'ToastPosition'."
+    }
+  ],
+  "droppedClassesKeys": []
+}

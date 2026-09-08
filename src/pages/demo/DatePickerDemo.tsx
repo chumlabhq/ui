@@ -1,3 +1,4 @@
+import type { DatePickerClasses } from "../../components/DatePicker/index.js";
 import {
   useState } from "react";
 import {
@@ -27,65 +28,28 @@ import {
 } from "date-fns";
 import { fr, de } from "date-fns/locale";
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   datepicker: {
     root: "",
     trigger: `flex items-center gap-2 w-full px-3.5 py-2.5 rounded-cl-lg border text-sm transition-all cursor-pointer bg-white border-cl-border text-cl-text shadow-sm shadow-black/[0.04] hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-cl-text dark:hover:border-cl-text/20 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
     input: "flex-1 text-left truncate",
-    calendarIcon: `w-5 h-5 shrink-0 text-cl-text-tertiary`,
-    clearButton: `p-1 rounded-full transition-colors shrink-0 text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary dark:hover:bg-cl-text/10`,
     label: `block text-[13px] font-medium mb-1.5 text-cl-text-secondary`,
-    error: `text-xs mt-1.5 text-cl-error`,
- calendar: `rounded-cl-lg shadow-xl p-4 bg-cl-bg-elevated border border-cl-border`,
     header: "flex items-center justify-between mb-4",
-    monthNav: "flex items-center gap-1",
     navButton: `p-1.5 rounded-cl-md transition-colors text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-text/10`,
-    navButtonDisabled: "opacity-30 cursor-not-allowed hover:bg-transparent",
-    monthGrid: "flex gap-8",
-    grid: "",
-    weekdayHeader: "grid grid-cols-7 mb-2",
     weekday: `text-xs font-semibold text-center py-2 uppercase tracking-wide text-cl-text-tertiary`,
-    day: `relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text`,
-    // Selected day uses the brand accent so it reads in both modes —
-    // bg-cl-text would be off-white in dark mode (the giant-white-circle
-    // bug) and turning to literal `bg-cl-text` flips the day's foreground
-    // to the surface tone, making the day number invisible inside the
-    // selected pill.
-    daySelected: `bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent`,
-    dayToday: `ring-2 ring-inset font-semibold ring-cl-accent dark:ring-cl-accent`,
-    // Disabled days: 40 % opacity is enough to read as "not allowed"
-    // without dropping into illegibility. The `!` important overrides
-    // the base `text-cl-text` that would otherwise win source-order
-    // cascade and keep disabled days looking the same colour as enabled.
-    dayDisabled: `cursor-not-allowed hover:bg-transparent !text-cl-text-disabled opacity-40`,
-    dayOutside: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
-    // Range start/end: solid accent pill, but DON'T strip the half-radius
-    // the base day class provides. The base is `rounded-full` (40 px); start
-    // keeps its left corners full, square right; end keeps its right corners
-    // full, square left. `hover:bg-cl-accent` (no opacity change) keeps the
-    // hover state from washing the selected pill out into the lighter
-    // hover overlay.
-    dayRangeStart: `bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent rounded-r-none`,
-    dayRangeEnd: `bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent rounded-l-none`,
-    // Middle range tint: 18 % in light mode (was 10 % — invisible against
-    // cream paper), 22 % in dark mode. Hover deepens to 25/30 % so middle
-    // days have an interactive feedback in the range strip.
-    dayRangeMiddle: `bg-cl-accent/[0.18] hover:bg-cl-accent/25 dark:bg-cl-accent/25 dark:hover:bg-cl-accent/30 text-cl-text rounded-none`,
-    dayHover: "",
-    dayMarked: "",
     weekNumber: `text-xs flex items-center justify-center text-cl-text-disabled`,
-    presets: `flex flex-wrap gap-2 pb-4 mb-4 border-b border-cl-border`,
-    presetButton: `px-3 py-1.5 text-xs font-semibold rounded-full transition-all bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-text/6 dark:text-cl-text-secondary dark:hover:bg-cl-text/[0.12]`,
-    presetActive: `bg-cl-accent/10 text-cl-accent ring-1 ring-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent dark:ring-1 dark:ring-cl-accent/30`,
     footer: `flex justify-center pt-4 mt-4 border-t border-cl-border`,
-    todayButton: `flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-cl-md transition-all text-cl-accent hover:bg-cl-bg-elevated`,
     markerIndicator: `w-1 h-1 rounded-full absolute bottom-1 left-1/2 -translate-x-1/2 bg-cl-accent dark:bg-cl-accent/90`,
     monthSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
     yearSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
-    monthDropdown: "",
-    yearDropdown: "",
- dropdownMenu: `absolute z-[60] mt-1 max-h-60 overflow-auto rounded-cl-md shadow-lg py-1 min-w-[140px] bg-cl-bg-elevated border border-cl-border`,
-    dropdownItem: `flex items-center justify-between w-full px-3 py-2 text-sm text-left cursor-pointer text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/6`,
+  } satisfies DatePickerClasses,
+
+  /* Class strings this page reuses in its own markup. Not `classes`
+     keys — DatePicker has no such slots, and passing them there styled
+     nothing. */
+  datepickerExtra: {
+    calendar: `rounded-cl-lg shadow-xl p-4 bg-cl-bg-elevated border border-cl-border`,
+    day: `relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text`,
   },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
@@ -95,7 +59,7 @@ const getClasses = (dark: boolean) => ({
 
 const DatePickerDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [singleDate, setSingleDate] = useState<Date | null>(null);
   const [rangeValue, setRangeValue] = useState<DateRange | null>(null);
@@ -374,7 +338,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   classes={{
                     ...c.datepicker,
                     trigger: `${c.datepicker.trigger} border border-cl-border-input-focus focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
-                    item: `${c.datepicker.day} font-semibold`,
+                    item: `${c.datepickerExtra.day} font-semibold`,
                     weekday: `text-xs font-bold text-center py-2 uppercase tracking-wider text-cl-accent dark:text-cl-accent/60`,
                     header: "flex items-center justify-between mb-4",
                     monthSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-bold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-accent hover:bg-cl-bg-elevated`,
@@ -1456,7 +1420,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   placeholder="Large calendar"
                   classes={{
                     ...c.datepicker,
-                    content: `${c.datepicker.calendar} p-6`,
+                    content: `${c.datepickerExtra.calendar} p-6`,
                     weekday: `text-sm font-bold text-center py-3 uppercase tracking-wider text-cl-text-secondary`,
                     item: `relative w-12 h-12 flex items-center justify-center text-base font-semibold rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text`,
                     header: "flex items-center justify-between mb-6",

@@ -1,3 +1,4 @@
+import type { AccordionClasses } from "../../components/Accordion/index.js";
 import {
   useState,
   useRef } from "react";
@@ -84,11 +85,17 @@ const getClasses = (dark: boolean) => ({
       ? "border-b border-cl-border last:border-b-0"
       : "border-b border-cl-border last:border-b-0",
     trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent dark:text-cl-text dark:hover:bg-cl-bg-elevated dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
-    triggerInner: "flex-1 text-left",
     content: `px-4 py-4 text-sm text-cl-text-secondary`,
+    icon: `h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
+  } satisfies AccordionClasses,
+
+  /* Class strings this page reuses in its own markup. Not `classes`
+     keys — Accordion has no such slots, and passing them there styled
+     nothing. */
+  accordionExtra: {
+    triggerInner: "flex-1 text-left",
     contentWrapper:
       "overflow-hidden transition-[max-height,opacity,visibility]",
-    icon: `h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
     iconWrapper: "shrink-0",
     subtitle: `font-normal mt-0.5 text-cl-text-tertiary`,
     heading: "",
@@ -573,11 +580,11 @@ const AccordionDemo = () => {
                   classes={{
                     root: c.accordion.root,
                     item: c.accordion.item,
-                    itemText: c.accordion.triggerInner,
-                    content: c.accordion.contentWrapper,
-                    icon: c.accordion.iconWrapper,
-                    description: c.accordion.subtitle,
-                    header: c.accordion.heading,
+                    itemText: c.accordionExtra.triggerInner,
+                    content: c.accordionExtra.contentWrapper,
+                    icon: c.accordionExtra.iconWrapper,
+                    description: c.accordionExtra.subtitle,
+                    header: c.accordionExtra.heading,
                   }}
                 >
                   <AccordionItem value={`${size}-1`}>

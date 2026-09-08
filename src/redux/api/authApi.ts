@@ -1,5 +1,18 @@
 import { baseApi } from "./baseApi.js";
 
+/**
+ * Whether the site has a way to sign in.
+ *
+ * `false` since the playground and its `/oauth/google` route left the site on
+ * 2026-09-07 (see the note in `App.tsx`). Nothing sets the auth cookie any
+ * more, so `/api/auth/me` answered 401 on every page load of every route —
+ * a guaranteed-failing request on a page that has no signed-in state to show.
+ *
+ * The endpoints stay wired and typed. Callers pass `skip: !AUTH_ENABLED`, so
+ * restoring sign-in is this one flag rather than a hunt through components.
+ */
+export const AUTH_ENABLED = false;
+
 export interface AuthUser {
   _id: string;
   email: string;

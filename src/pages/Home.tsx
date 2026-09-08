@@ -321,7 +321,7 @@ function FaqSection() {
   return (
     <section
       aria-labelledby="faq-heading"
-      className="relative py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16 bg-bg-base"
+      className="relative py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16"
     >
       <div className="mx-auto max-w-[1200px] px-4 sm:px-5 md:px-6 lg:px-8">
         {/* Title row — H2 + subtitle on the left, desktop CTA on the right.
@@ -566,7 +566,7 @@ function BlogSection({
   return (
     <section
       aria-labelledby="blog-heading"
-      className="relative py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16 bg-bg-base"
+      className="relative py-8 sm:py-10 md:py-12 lg:py-14 xl:py-16"
     >
       <div className="mx-auto max-w-[1200px] px-4 sm:px-5 md:px-6 lg:px-8">
         {/* Title row — H2 + subtitle on the left, desktop CTA on the right. */}

@@ -1,5 +1,7 @@
 import { useState, type FC } from "react";
 import { Section, PropsTable, PropRow } from "./Section.js";
+import { preClass, scrollableCode } from "./codeBlock.js";
+import { NextIcon, ReactIcon } from "./Icons.js";
 import {
   COMPONENT_DOCS,
   type ComponentDoc,
@@ -18,15 +20,9 @@ import {
  * missing altogether. A second copy of an API is a copy that drifts.
  */
 const cardClass = "rounded-2xl border border-border-faint bg-bg-elevated p-5";
-const preClass =
-  "rounded-cl-lg border border-cl-border bg-cl-code-bg text-cl-code-text font-mono text-[12px] leading-[1.65] px-4 py-3 overflow-x-auto";
 
-/**
- * A block that scrolls has to be reachable by keyboard, or the only way to read
- * the right-hand side of a long line is a mouse. axe reports it as
- * `scrollable-region-focusable`; `tabIndex={0}` is the whole fix.
- */
-const scrollableCode = { tabIndex: 0 } as const;
+
+
 
 const memberRows = (members: MemberDoc[]) =>
   members.map((member) => (
@@ -253,12 +249,13 @@ export const CopyPasteBlock: FC<{ name: string }> = ({ name }) => {
       type="button"
       onClick={() => setVariant(key)}
       aria-pressed={variant === key}
-      className={`px-3 py-1 rounded-md text-[13px] transition-colors cursor-pointer ${
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[13px] transition-colors cursor-pointer ${
         variant === key
           ? "bg-bg-elevated text-fg border border-border-soft"
           : "text-fg-tertiary border border-transparent hover:text-fg-secondary"
       }`}
     >
+      {key === "react" ? <ReactIcon /> : <NextIcon />}
       {label}
     </button>
   );

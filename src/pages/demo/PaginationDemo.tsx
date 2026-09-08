@@ -1,3 +1,4 @@
+import type { PaginationClasses } from "../../components/Pagination/index.js";
 import {
   useState,
   useRef,
@@ -171,14 +172,8 @@ const JumpToPageEllipsis = ({
 const getClasses = (_dark: boolean) => ({
   pagination: {
     root: "flex flex-wrap items-center gap-2",
-    nav: "flex items-center gap-2",
-    pageButtons: "flex flex-wrap items-center gap-2",
- pageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-    activePageButton:
-      "px-3 py-1 rounded-cl-md bg-cl-accent text-cl-on-accent border border-cl-border-input-focus",
- navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
+    navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
     ellipsis: `px-2 select-none text-cl-text-tertiary`,
-    selector: "flex items-center gap-2",
     rowsPerPage: {
       trigger: `flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10`,
       content: `rounded-cl-md shadow-lg py-1 min-w-[64px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
@@ -187,10 +182,8 @@ const getClasses = (_dark: boolean) => ({
       item: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-text/10 dark:data-[selected]:bg-cl-accent/60 dark:data-[selected]:text-cl-accent dark:data-[highlighted]:bg-cl-text/10`,
     },
     label: `text-sm text-cl-text-secondary`,
-    prevIcon: `w-5 h-5 text-cl-text-secondary`,
-    nextIcon: `w-5 h-5 text-cl-text-secondary`,
     pageInfo: "flex items-center",
-  },
+  } satisfies PaginationClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,

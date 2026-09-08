@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useBuyMeCoffee } from "./useBuyMeCoffee.js";
 import { useTheme } from "../contexts/ThemeContext.js";
-import Reveal from "./Reveal/Reveal.js";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
 
@@ -39,13 +38,24 @@ export function SiteFooter() {
   const { theme } = useTheme();
 
   return (
-    <Reveal
-      as="footer"
-      delay={0}
-      translateY={0}
-      duration={200}
-      className="relative bg-bg-base border-t border-cl-border mt-12 sm:mt-16 overflow-hidden"
-    >
+    // A full-width rule, and no background of its own.
+    //
+    // The background is the load-bearing part. Every section used to re-declare
+    // `bg-bg-base` on top of a root that already had it — identical colour, but
+    // a separate paint each time, and adjacent paints of `rgb(5, 6, 8)` do not
+    // come out identical on a P3 / high-dynamic-range display. The 64px margin
+    // gap between the last section and this element rendered as a visibly
+    // darker band. Proved by stripping the section backgrounds in the live page
+    // and watching it go. One element paints the page now; nothing beneath it
+    // repaints the same colour, and the rule sits on an unbroken surface.
+    //
+    // Deliberately NOT wrapped in `Reveal`. The footer is the largest flat
+    // surface on the site, and Reveal gives whatever it wraps `will-change:
+    // opacity` — which promotes it to its own compositing layer, painting the
+    // same token a shade off the section above it. It also meant the footer
+    // could sit at `opacity: 0` indefinitely when its observer never reported
+    // an intersection.
+    <footer className="relative border-t border-cl-border mt-12 sm:mt-16 overflow-hidden">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-[55%] pointer-events-none"
@@ -240,7 +250,7 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-    </Reveal>
+    </footer>
   );
 }
 

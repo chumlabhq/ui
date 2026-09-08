@@ -1,3 +1,4 @@
+import type { MultiSelectSearchableDropdownClasses } from "../../components/MultiSelectSearchableDropdown/index.js";
 import {
   useState,
   useCallback } from "react";
@@ -48,33 +49,18 @@ const countryOptions: MultiSelectOption[] = [
   { value: "in", label: "India", content: <span>India</span> },
 ];
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   dropdown: {
     root: "",
-    wrapper: "relative",
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
-    triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
- content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
+    content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
-    searchInputElement: dark ? "text-cl-text placeholder:text-cl-text-tertiary" : "",
     searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
-    optionList: "max-h-60 overflow-y-auto",
-    option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
-    optionSelected: dark ? "bg-cl-accent/50 font-medium" : "bg-cl-accent/10 font-medium",
-    optionFocused: dark ? "bg-white/10" : "bg-black/5",
-    optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
-    checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input`,
-    checkboxChecked: "bg-cl-accent border-cl-border-input-focus text-cl-on-accent",
-    checkboxIcon: "w-full h-full",
-    noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
     loading: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
     label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
-    error: `text-sm mt-1 text-cl-error`,
     chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-text/10 dark:text-cl-text`,
     chipRemove: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-text-secondary`,
-    moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-text/10 dark:text-cl-text-secondary`,
-  },
+  } satisfies MultiSelectSearchableDropdownClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -84,7 +70,7 @@ const getClasses = (dark: boolean) => ({
 
 const MultiSelectSearchableDropdownDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [basicValue, setBasicValue] = useState<string[]>([]);
   const [countryValue, setCountryValue] = useState<string[]>([]);

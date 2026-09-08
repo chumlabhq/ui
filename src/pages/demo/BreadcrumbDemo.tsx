@@ -1,3 +1,4 @@
+import type { BreadcrumbClasses } from "../../components/Breadcrumb/index.js";
 import {
   useCallback,
   useState } from "react";
@@ -135,19 +136,18 @@ const getClasses = (dark: boolean) => ({
   breadcrumb: {
     list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border border-none rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-bg-elevated`,
-    itemActive: `flex items-center gap-1 px-2 py-1 text-sm font-medium bg-transparent border border-none cursor-default text-cl-text`,
-    itemDisabled: dark
-      ? "opacity-40 cursor-not-allowed hover:bg-transparent hover:text-cl-text-tertiary"
-      : "opacity-40 cursor-not-allowed hover:bg-transparent hover:text-cl-text-tertiary",
     separator: dark ? "text-cl-text-secondary" : "text-cl-text-tertiary",
-    icon: "shrink-0",
     link: `flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline`,
+  } satisfies BreadcrumbClasses,
+
+  /* Class strings this page reuses in its own markup. Not `classes`
+     keys — Breadcrumb has no such slots, and passing them there styled
+     nothing. */
+  breadcrumbExtra: {
+    icon: "shrink-0",
     ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
- dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-elevated border border-cl-border`,
+    dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-elevated border border-cl-border`,
     dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
-    dropdownItemDisabled: dark
-      ? "opacity-50 cursor-not-allowed"
-      : "opacity-50 cursor-not-allowed",
   },
   pill: {
     list: "flex flex-wrap items-center gap-2",
@@ -162,11 +162,15 @@ const getClasses = (dark: boolean) => ({
     root: `p-4 rounded-cl-md bg-cl-accent/10 dark:bg-cl-accent/20`,
     list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:text-cl-accent dark:hover:bg-cl-accent/20`,
-    itemActive: `flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full border border-none cursor-default text-cl-on-accent bg-cl-accent dark:text-cl-on-accent dark:bg-cl-accent`,
     separator: dark ? "text-cl-accent" : "text-cl-accent",
-    icon: "shrink-0",
+  } satisfies BreadcrumbClasses,
+
+  /* Class strings this page reuses in its own markup. Not `classes`
+     keys — Breadcrumb has no such slots, and passing them there styled
+     nothing. */
+  coloredExtra: {
     ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:hover:bg-cl-accent/20 dark:text-cl-accent`,
- dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-white border border-cl-border-input-focus dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus`,
+    dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-white border border-cl-border-input-focus dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus`,
     dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/20`,
   },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -227,9 +231,9 @@ const BreadcrumbDemo = () => {
                 maxVisibleItems={3}
                 classes={{
                   ...c.breadcrumb,
-                  ellipsisTrigger: c.breadcrumb.ellipsisButton,
-                  content: c.breadcrumb.dropdown,
-                  collapsedItem: c.breadcrumb.dropdownItem,
+                  ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+                  content: c.breadcrumbExtra.dropdown,
+                  collapsedItem: c.breadcrumbExtra.dropdownItem,
                 }}
                 onItemClick={handleItemClick}
               />
@@ -245,9 +249,9 @@ const BreadcrumbDemo = () => {
                 maxVisibleItems={4}
                 classes={{
                   ...c.breadcrumb,
-                  ellipsisTrigger: c.breadcrumb.ellipsisButton,
-                  content: c.breadcrumb.dropdown,
-                  collapsedItem: c.breadcrumb.dropdownItem,
+                  ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+                  content: c.breadcrumbExtra.dropdown,
+                  collapsedItem: c.breadcrumbExtra.dropdownItem,
                 }}
                 onItemClick={handleItemClick}
               />
@@ -271,7 +275,7 @@ const BreadcrumbDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Breadcrumb
             items={itemsWithIcons}
-            classes={{ ...c.breadcrumb, itemIcon: c.breadcrumb.icon }}
+            classes={{ ...c.breadcrumb, itemIcon: c.breadcrumbExtra.icon }}
             onItemClick={handleItemClick}
           />
         </DemoWrapper>
@@ -316,10 +320,10 @@ const BreadcrumbDemo = () => {
             maxVisibleItems={3}
             classes={{
               ...c.breadcrumb,
-              ellipsisTrigger: c.breadcrumb.ellipsisButton,
-              content: c.breadcrumb.dropdown,
-              collapsedItem: c.breadcrumb.dropdownItem,
-              itemIcon: c.breadcrumb.icon,
+              ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+              content: c.breadcrumbExtra.dropdown,
+              collapsedItem: c.breadcrumbExtra.dropdownItem,
+              itemIcon: c.breadcrumbExtra.icon,
             }}
             onItemClick={handleItemClick}
           />
@@ -433,7 +437,7 @@ const BreadcrumbDemo = () => {
             items={itemsWithTooltips}
             showTooltips
             tooltipPosition="bottom"
-            classes={{ ...c.breadcrumb, itemIcon: c.breadcrumb.icon }}
+            classes={{ ...c.breadcrumb, itemIcon: c.breadcrumbExtra.icon }}
             onItemClick={handleItemClick}
           />
         </DemoWrapper>
@@ -454,9 +458,9 @@ const BreadcrumbDemo = () => {
             ellipsisTooltipProps={{ side: "top", delayDuration: 200 }}
             classes={{
               ...c.breadcrumb,
-              ellipsisTrigger: c.breadcrumb.ellipsisButton,
-              content: c.breadcrumb.dropdown,
-              collapsedItem: c.breadcrumb.dropdownItem,
+              ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+              content: c.breadcrumbExtra.dropdown,
+              collapsedItem: c.breadcrumbExtra.dropdownItem,
             }}
             onItemClick={handleItemClick}
           />
@@ -501,9 +505,9 @@ const BreadcrumbDemo = () => {
                 maxVisibleItems={3}
                 classes={{
                   ...c.breadcrumb,
-                  ellipsisTrigger: c.breadcrumb.ellipsisButton,
-                  content: c.breadcrumb.dropdown,
-                  collapsedItem: c.breadcrumb.dropdownItem,
+                  ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+                  content: c.breadcrumbExtra.dropdown,
+                  collapsedItem: c.breadcrumbExtra.dropdownItem,
                 }}
                 onItemClick={handleItemClick}
               />
@@ -531,9 +535,9 @@ const BreadcrumbDemo = () => {
                   dropdownPosition={pos}
                   classes={{
                     ...c.breadcrumb,
-                    ellipsisTrigger: c.breadcrumb.ellipsisButton,
-                    content: c.breadcrumb.dropdown,
-                    collapsedItem: c.breadcrumb.dropdownItem,
+                    ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+                    content: c.breadcrumbExtra.dropdown,
+                    collapsedItem: c.breadcrumbExtra.dropdownItem,
                   }}
                   onItemClick={handleItemClick}
                 />
@@ -606,9 +610,9 @@ const BreadcrumbDemo = () => {
                   iconSize={size}
                   classes={{
                     ...c.breadcrumb,
-                    ellipsisTrigger: c.breadcrumb.ellipsisButton,
-                    content: c.breadcrumb.dropdown,
-                    collapsedItem: c.breadcrumb.dropdownItem,
+                    ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+                    content: c.breadcrumbExtra.dropdown,
+                    collapsedItem: c.breadcrumbExtra.dropdownItem,
                   }}
                   onItemClick={handleItemClick}
                 />
@@ -704,9 +708,9 @@ const BreadcrumbDemo = () => {
             classes={{
               ...c.colored,
               itemIcon: "shrink-0",
-              ellipsisTrigger: c.colored.ellipsisButton,
-              content: c.colored.dropdown,
-              collapsedItem: c.colored.dropdownItem,
+              ellipsisTrigger: c.coloredExtra.ellipsisButton,
+              content: c.coloredExtra.dropdown,
+              collapsedItem: c.coloredExtra.dropdownItem,
             }}
             onItemClick={handleItemClick}
           />
@@ -725,9 +729,9 @@ const BreadcrumbDemo = () => {
             maxVisibleItems={3}
             classes={{
               ...c.breadcrumb,
-              ellipsisTrigger: c.breadcrumb.ellipsisButton,
-              content: c.breadcrumb.dropdown,
-              collapsedItem: c.breadcrumb.dropdownItem,
+              ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
+              content: c.breadcrumbExtra.dropdown,
+              collapsedItem: c.breadcrumbExtra.dropdownItem,
             }}
             onItemClick={handleItemClick}
             onDropdownOpenChange={(open) => {

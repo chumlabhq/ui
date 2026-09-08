@@ -1,3 +1,4 @@
+import type { InputClasses } from "../../components/Input/index.js";
 import {
   useState,
   useRef } from "react";
@@ -211,14 +212,18 @@ const getClasses = (dark: boolean) => ({
   input: {
     root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
     input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
-    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-    error: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-error`,
-    success: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-success`,
     description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
     prefix: `text-sm select-none text-cl-text-tertiary`,
     suffix: `text-sm select-none text-cl-text-tertiary`,
     count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`,
+  } satisfies InputClasses,
+
+  /* Class strings this page reuses in its own markup. Not `classes`
+     keys — Input has no such slots, and passing them there styled
+     nothing. */
+  inputExtra: {
+    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
   },
   wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
   wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
@@ -264,7 +269,7 @@ const InputDemo = () => {
   const userBad = username.length > 0 && username.length < 3;
 
   const wrapperFor = (err: boolean, ok: boolean) =>
-    err ? c.wrapperError : ok ? c.wrapperSuccess : c.input.wrapper;
+    err ? c.wrapperError : ok ? c.wrapperSuccess : c.inputExtra.wrapper;
 
   return (
     <div className="space-y-10">
@@ -764,7 +769,7 @@ const InputDemo = () => {
                 readOnly
                 classes={{
                   ...c.input,
-                  control: `${c.input.wrapper} cursor-default`,
+                  control: `${c.inputExtra.wrapper} cursor-default`,
                 }}
               />
             </div>

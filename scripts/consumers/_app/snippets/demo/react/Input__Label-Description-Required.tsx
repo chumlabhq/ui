@@ -1,0 +1,37 @@
+import { Input } from "@chumlab/ui/input";
+
+export default function InputExample() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
+                  <Input
+                    label="Email address"
+                    description="We'll never share your email."
+                    placeholder="you@example.com"
+                    type="email"
+                    classes={({
+        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
+        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
+        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
+        prefix: `text-sm select-none text-cl-text-tertiary`,
+        suffix: `text-sm select-none text-cl-text-tertiary`,
+        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
+      })}
+                  />
+                  <Input
+                    label="Full name"
+                    placeholder="John Doe"
+                    required
+                    classes={({
+        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
+        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
+        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
+        prefix: `text-sm select-none text-cl-text-tertiary`,
+        suffix: `text-sm select-none text-cl-text-tertiary`,
+        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
+      })}
+                  />
+                </div>
+  );
+}

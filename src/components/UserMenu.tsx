@@ -1,13 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { Avatar } from "./Avatar/Avatar.js";
-import { useGetMeQuery, useLogoutMutation } from "../redux/api/authApi.js";
+import {
+  AUTH_ENABLED,
+  useGetMeQuery,
+  useLogoutMutation,
+} from "../redux/api/authApi.js";
 
 /**
  * Deep-space account chip. Renders nothing when there's no signed-in user.
  * Dropdown sits on bg-overlay with a hairline border. No gradients.
  */
 export function UserMenu() {
-  const { data, isLoading, isError } = useGetMeQuery();
+  // Skipped while there is no sign-in route (see AUTH_ENABLED). Without it this
+  // fired a 401 on every page load to decide it had nothing to render.
+  const { data, isLoading, isError } = useGetMeQuery(undefined, {
+    skip: !AUTH_ENABLED,
+  });
   const [logout, { isLoading: loggingOut }] = useLogoutMutation();
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);

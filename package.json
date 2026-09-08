@@ -514,7 +514,10 @@
     "verify:ssr-record": "node scripts/assert-ssr-record.mjs",
     "verify:ssr-record:self-check": "node scripts/assert-ssr-record.mjs --self-check",
     "test:e2e:all:self-check": "node scripts/run-e2e-matrix.mjs --self-check",
-    "test:run:self-check": "node scripts/run-vitest.mjs --self-check"
+    "test:run:self-check": "node scripts/run-vitest.mjs --self-check",
+    "build:demo-snippets": "node scripts/build-demo-snippets.mjs",
+    "verify:demo-snippets": "node scripts/build-demo-snippets.mjs --check",
+    "verify:demo-snippets:typecheck": "node scripts/typecheck-demo-snippets.mjs"
   },
   "peerDependencies": {
     "@tanstack/react-table": "^8.21.3",

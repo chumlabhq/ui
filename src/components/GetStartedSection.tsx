@@ -85,7 +85,7 @@ export function GetStartedSection() {
       ref={sectionRef}
       id="get-started"
       aria-labelledby="get-started-heading"
-      className="relative py-20 sm:py-24 md:py-28 lg:py-32 bg-bg-base"
+      className="relative py-20 sm:py-24 md:py-28 lg:py-32"
     >
       <script
         type="application/ld+json"

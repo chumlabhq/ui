@@ -1,4 +1,22 @@
+import { useLocation } from "react-router-dom";
 import { cn } from "../../../utils/cn.js";
+import { DEMO_SNIPPETS } from "../generated/demoSnippets.js";
+import { DemoSnippetBlock } from "./DemoSnippetBlock.js";
+
+/**
+ * Which component page we are on, from the route.
+ *
+ * Read here rather than threaded through every `<Section>` because the demo
+ * pages are hand-written and there are thirty-seven of them: a prop would mean
+ * touching all of them to add one affordance, and forgetting one would put the
+ * page back to having a copy button on some demos and not others.
+ */
+const BY_SLUG = new Map(
+  Object.keys(DEMO_SNIPPETS).map((name) => [
+    name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase(),
+    name,
+  ]),
+);
 
 interface SectionProps {
   title: React.ReactNode;
@@ -17,21 +35,28 @@ export const Section: React.FC<SectionProps> = ({
   title,
   description,
   children,
-}) => (
-  <section className="space-y-4 mt-12 first:mt-0">
-    <div className="mb-2">
-      <h2 className="font-sans font-medium text-cl-text text-[20px] sm:text-[22px] leading-[1.25] tracking-[-0.02em]">
-        {title}
-      </h2>
-      {description && (
-        <p className="font-sans text-[14px] text-cl-text-secondary leading-[1.6] mt-2 max-w-[680px]">
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
+}) => {
+  const { pathname } = useLocation();
+  const component = BY_SLUG.get(pathname.replace(/^\//, ""));
+  const heading = typeof title === "string" ? title : null;
+
+  return (
+    <section className="space-y-4 mt-12 first:mt-0">
+      <div className="mb-2">
+        <h2 className="font-sans font-medium text-cl-text text-[20px] sm:text-[22px] leading-[1.25] tracking-[-0.02em]">
+          {title}
+        </h2>
+        {description && (
+          <p className="font-sans text-[14px] text-cl-text-secondary leading-[1.6] mt-2 max-w-[680px]">
+            {description}
+          </p>
+        )}
+      </div>
+      {children}
+      {component && heading && <DemoSnippetBlock component={component} title={heading} />}
+    </section>
+  );
+};
 
 interface DocsHeroProps {
   /** Eyebrow tag — uppercase, mono. Defaults to "Documentation". */

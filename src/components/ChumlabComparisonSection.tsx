@@ -271,7 +271,7 @@ export function ChumlabComparisonSection() {
     <section
       id="chumlab-comparison"
       aria-labelledby="comparison-heading"
-      className="relative py-20 sm:py-24 md:py-28 lg:py-32 bg-bg-base"
+      className="relative py-20 sm:py-24 md:py-28 lg:py-32"
     >
       <script
         type="application/ld+json"

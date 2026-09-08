@@ -1,3 +1,4 @@
+import type { DropdownClasses } from "../../components/Dropdown/index.js";
 import {
   useState,
   useCallback } from "react";
@@ -129,28 +130,13 @@ const CustomChevronIcon = ({
   </svg>
 );
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   dropdown: {
     root: "w-full",
-    wrapper: "relative w-full",
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
-    triggerText: "flex-1 text-left truncate",
- content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
-    optionList: "max-h-60 overflow-y-auto",
-    option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
-    optionSelected: dark
-      ? "bg-cl-accent/50 font-medium"
-      : "bg-cl-accent/10 font-medium",
-    optionFocused: dark ? "bg-white/10" : "bg-black/5",
-    optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
-    checkIcon: `w-4 h-4 shrink-0 text-cl-accent`,
-    clearIcon: `absolute right-8 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated cursor-pointer text-cl-text-secondary`,
-    noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
+    content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
-    error: `text-sm mt-1 text-cl-error`,
-    shimmerItem: `mx-2 my-1.5 h-4 rounded bg-cl-text/10 animate-pulse`,
-  },
+  } satisfies DropdownClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -233,7 +219,7 @@ const getMinimalTheme = (dark: boolean) => ({
 
 const DropdownDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const minimalTheme = getMinimalTheme(dark);
 
   const [basicValue, setBasicValue] = useState<string | null>(null);

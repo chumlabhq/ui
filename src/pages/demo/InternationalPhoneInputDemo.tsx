@@ -1,3 +1,4 @@
+import type { InternationalPhoneInputClasses } from "../../components/InternationalPhoneInput/index.js";
 import {
   useState,
   useRef } from "react";
@@ -97,11 +98,8 @@ const getClasses = () => ({
   phone: {
     root: "flex flex-col gap-1",
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-    wrapper: "flex gap-2 items-stretch",
     input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]`,
-    error: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-error`,
-    success: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-success`,
-           countrySelect: {
+    countrySelect: {
              trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-white hover:bg-cl-bg-hover text-cl-text dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:hover:bg-cl-text/6 dark:text-cl-text-secondary`,
              content: `w-72 rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-text/10`,
              searchControl: `flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border dark:border-cl-text/10`,
@@ -113,7 +111,7 @@ const getClasses = () => ({
              searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
              empty: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
            },
-  },
+  } satisfies InternationalPhoneInputClasses,
   phoneError: {
     input: `flex-1 h-10 px-3 rounded-cl-md border bg-cl-error/[0.04] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30 dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:focus:ring-2 dark:focus:ring-cl-error/30`,
                 countrySelect: {

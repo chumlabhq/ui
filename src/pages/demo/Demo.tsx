@@ -261,7 +261,7 @@ const Demo = () => {
               <div className="px-3 mb-3 eyebrow text-fg-tertiary">
                 {section.title}
               </div>
-              <ul className="space-y-1 list-none m-0 p-0">
+              <ul className="space-y-2 list-none m-0 p-0">
                 {section.items.map((item) => (
                   <li key={item.path}>
                     <NavLink

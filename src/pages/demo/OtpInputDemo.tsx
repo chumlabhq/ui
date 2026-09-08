@@ -1,3 +1,4 @@
+import type { OtpInputClasses } from "../../components/OtpInput/index.js";
 import {
   useState,
   useRef } from "react";
@@ -17,14 +18,11 @@ import {
 
 const getClasses = (_dark: boolean) => ({
   otp: {
-    wrapper: "flex items-center gap-2",
     group: "flex items-center gap-2",
     input: `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20 dark:disabled:opacity-50 dark:disabled:cursor-not-allowed`,
     label: `block text-sm font-medium mb-2 text-cl-text-secondary`,
-    error: `text-xs mt-2 text-cl-error`,
-    success: `text-sm mt-2 text-cl-success`,
     separator: `text-lg select-none text-cl-text-disabled`,
-  },
+  } satisfies OtpInputClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,

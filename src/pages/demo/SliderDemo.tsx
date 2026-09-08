@@ -1,3 +1,4 @@
+import type { SliderClasses } from "../../components/Slider/index.js";
 import {
   useState } from "react";
 import { Slider } from "../../components/Slider/index.js";
@@ -30,19 +31,10 @@ const getClasses = (_dark: boolean) => ({
     root: "flex flex-col gap-2 w-full",
     label: `text-sm font-medium text-cl-text`,
     description: `text-xs text-cl-text-secondary`,
-    wrapper: "relative select-none touch-none",
     track: `rounded-full bg-cl-bg-hover dark:bg-cl-text/[0.12]`,
     range: "rounded-full bg-cl-accent",
     thumb: `absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-white dark:focus-visible:ring-offset-cl-bg`,
-    thumbActive: "cursor-grabbing shadow-lg ring-2 ring-cl-accent ring-offset-2",
-    thumbDisabled: "opacity-50 cursor-not-allowed",
-    tooltip: "absolute px-2 py-1 text-xs font-medium text-white bg-cl-bg rounded-cl-md shadow-sm whitespace-nowrap pointer-events-none",
-    mark: "absolute",
-    markDot: `rounded-full bg-white border-2 border-cl-border-input dark:border-2 dark:border-cl-border`,
-    markDotActive: `border border-cl-border-input-focus dark:border dark:border-cl-border-input-focus bg-white`,
-    markLabel: `text-xs text-cl-text-secondary`,
-    error: "text-sm text-cl-error mt-1",
-  },
+  } satisfies SliderClasses,
 });
 
 const HeartIcon = () => (
