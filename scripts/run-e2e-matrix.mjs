@@ -122,38 +122,35 @@ const SHARDS = new Map([
 /**
  * Projects whose failures are recorded rather than blocking, with the reason.
  *
- * Firefox is here after four attempts to make it green: 4 workers, 1 worker,
- * and three sharded runs. Sharding did produce the first fully green Firefox
- * run this suite has ever had (run 2 of 3, all four shards, 749s), so it helps
- * — but it did not hold across two consecutive runs, which was the bar.
+ * Empty, and the emptying is the point.
  *
- * What the failures are, across every attempt: a 30-second timeout on a test
- * that passes in isolation in under three seconds. What they are NOT: any
- * assertion about the library. Not one Firefox failure has been a wrong value,
- * a missing element or a broken behaviour — they are the harness failing to
- * drive the page, and the same tests pass in Chromium, WebKit, Mobile Chrome
- * and Mobile Safari.
+ * Firefox sat here from 2026-09-05 to 2026-09-08 on this reason: "30s harness
+ * timeouts, never a failed assertion". Across four attempts every Firefox
+ * non-pass had been a 30-second timeout on a test that passes in isolation in
+ * under three seconds, concentrated in `pagination.spec.ts`, and never a wrong
+ * value or a missing element. "Never an assertion" was the whole argument for
+ * calling it environmental.
  *
- * They concentrate: shard 2 failed in 2 of 3 runs and EVERY failure was in
- * `pagination.spec.ts` — :80, :168, :190, :244, :498, :569 across the runs.
- * That is the place to look next, and it is not the rows-per-page trigger:
- * removing the `focusTriggerOnMouseDown` handler added on 2026-09-05 and
- * re-running shard 2 still failed, on `:498`, which does not touch the
- * dropdown at all.
+ * It was false, and what disproved it was a gate precise enough to disagree.
+ * `wcag-layout.spec.ts` read computed style in the same tick as `.focus()`, so
+ * Firefox returned the pre-transition value where Chromium returned the target,
+ * and SC 2.4.7 had been passing by engine rather than by evidence. Fixing it
+ * produced exactly the failed assertion the waiver said had never happened —
+ * and then, with the gate able to see, a green Firefox: all four shards, twice
+ * on 2026-09-08, on merit.
  *
- * So Firefox runs, its result is reported, and it does not gate the release.
- * That is a deliberate reduction in coverage and it is written down rather than
- * quietly dropped: a Firefox regression will now show as `unstable` in this
- * table and someone has to read it. Removing this entry is how it goes back to
- * blocking.
+ * Two harness fixes carried the rest: `menu-focus.spec.ts` mounts five times in
+ * one test and needed the budget rather than a longer wait (`test.slow()`), and
+ * the fixture index now stamps readiness so a spec cannot enumerate an empty
+ * page under load. Every engine had both defects; Firefox was the slowest and
+ * therefore the first to show them.
+ *
+ * So the reduction in coverage is over: a Firefox regression fails the matrix
+ * again, like every other project. The history stays because the lesson is not
+ * about Firefox — a waiver survives exactly as long as nothing is sharp enough
+ * to contradict its reason, and this one survived five weeks.
  */
-const KNOWN_UNSTABLE = new Map([
-  [
-    "firefox",
-    "30s harness timeouts, never a failed assertion; concentrated in " +
-      "pagination.spec.ts. See RELEASE-READINESS.md §1.7.",
-  ],
-]);
+const KNOWN_UNSTABLE = new Map();
 
 /** One `playwright test` invocation, reconciled on its own. */
 function runInvocation(name, extraArgs, label) {
@@ -280,7 +277,15 @@ function printReport(state, names) {
       record.ok ? "pass" : unstable ? "unstable" : "FAIL",
       String(record.collected),
       String(record.executed),
-      record.ok ? `${record.seconds}s` : `${record.reason} — recorded, not blocking`,
+      // "not blocking" only when something actually waives it. The suffix used
+      // to be unconditional, so a failing project read as tolerated in the one
+      // table anyone reads, while RESULT below correctly said FAILED. It went
+      // unnoticed while Firefox was the only failing project and was waived.
+      record.ok
+        ? `${record.seconds}s`
+        : unstable
+          ? `${record.reason} — recorded, not blocking`
+          : record.reason,
     ]);
     // A sharded project reports its shards too. "3 of 4 shards did not pass"
     // names the count and not which, and which is the thing you need.

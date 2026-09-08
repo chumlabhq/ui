@@ -8,9 +8,10 @@ This is written for someone who has not followed the work and has to decide whet
 the package. It says what is claimed and what proves each claim, what is knowingly untrue or
 ungated, what has never been tested at all, and what publishing commits us to.
 
-**The package is not publishable today.** One gate fails — `typecheck` — and it blocks a
-second. Everything else is green, including the browser matrix, which had never been seen
-green in full before this date. §1.2 has the detail; §7 has what remains.
+**The package is not publishable today.** Every gate passes except the browser matrix, which
+is red in three projects — and the same tree was green in all seven earlier the same day, with
+nothing but a type declaration changed in `e2e/` since. §1.2 has the numbers and the two
+readings they admit; §7 has what remains.
 
 ---
 
@@ -21,10 +22,10 @@ green in full before this date. §1.2 has the detail; §7 has what remains.
 | Gate | Verdict | Evidence |
 | --- | --- | --- |
 | `lint` | pass | 0 errors, 7 warnings — the standing baseline, unchanged |
-| `typecheck` | **FAIL** | `e2e/wcag-layout.spec.ts(146,22)`: `focusVisible` is not in TypeScript's `FocusOptions`. The gate caught its own planted error first, so the failure is the tree's, not the gate's |
+| `typecheck` | pass | Both configs clean, each after rejecting its own planted error. `focusVisible` is declared in a local augmentation in `wcag-layout.spec.ts` rather than cast away at the call site: it is in the HTML standard and shipped in every engine here, and TypeScript's DOM lib simply has not caught up |
 | `test:run` | pass | 92 files, 4749 collected, 4749 executed, 4681 passed, 68 skipped. Contracts 1577, unit 3172 |
 | `test:coverage` | pass | 92.04% statements, 87.39% branch, 94.71% functions, 93.95% lines |
-| `test:e2e:all` (7 projects) | pass | 2512 collected, 2512 executed, 2444 passed, 68 skipped. Measured earlier on 2026-09-08 and **not re-run**: the recorded verdicts are tied to a fingerprint of `src/` and `e2e/`, neither of which has changed since |
+| `test:e2e:all` (7 projects) | **FAIL** | 2512 collected, 2512 executed, 2427 passed, 71 skipped, 14 non-passes across firefox (8), Mobile Chrome (4) and webkit (2). No project is waived any more (§3.6), so this is the aggregate verdict |
 | `verify:consumers` | pass | 9 apps, 2 React majors, 4 frameworks, production builds; plus `publint` and `attw` as their own rows |
 | `verify:consumers:self-check` | pass | 3 plants caught: a subpath export pointing at a missing file, `"use client"` stripped from 154 chunks, the token layer unwrapped |
 | `verify:packaging` | pass | `publint --strict` clean; `attw` clean across node10, node16 and bundler over 32 entrypoints; 8 relative links across 4 shipped documents resolve inside the tarball |
@@ -33,7 +34,7 @@ green in full before this date. §1.2 has the detail; §7 has what remains.
 | `assert-bundle-size --self-check` | pass | 2 plants: shape derivation, and a 25.48 KB entry breaching a 6 KB ceiling |
 | `verify:ssr-record` | pass | Every component's `ssr` verdict is what the consumer matrix measured, across `next-app`, `next-pages` and `react-router7`; 30 components, all safe |
 | `verify:ssr-record:self-check` | pass | 4 plants caught |
-| `verify:playground-removed` | **BLOCKED** | Reads `dist/index.html`, which requires the site build, which runs `tsc -b` and fails on the same line as `typecheck`. Not a result either way |
+| `verify:playground-removed` | pass | 0 hits for `/playground|chumlab\.ai/i` across the built site, no preview artefacts, and `/playground` and `/oauth/google` both answer the 404 page |
 | `verify:playground-removed:self-check` | pass | 3 plants caught, against a synthetic tree the site build is not needed for |
 | `build-tokens --check` | pass | `tokens.css` matches `src/index.css`, 35 dark and 35 light |
 | `audit-demo-coverage --check` | pass | 1136 props, 0 tier-A gaps |
@@ -52,37 +53,62 @@ and no preflight, and 1161 built files carry no fixture-harness code.
 
 ```
   project        verdict  collected  executed  note
-  a11y-full      pass     5          5         306s
-  visual         pass     257        257       145s
-  chromium       pass     450        450       199s
-  firefox        pass     450        450       406s  (4 shards: 146/89/86/85s)
-  webkit         pass     450        450       255s
-  Mobile Chrome  pass     450        450       227s
-  Mobile Safari  pass     450        450       252s
+  a11y-full      pass     5          5         316s
+  visual         pass     257        257       152s
+  chromium       pass     450        450       259s
+  firefox        FAIL     450        450       1 of 4 shard(s) did not pass
+    └ 1/4        pass     113        113       283s
+    └ 2/4        pass     113        113       173s
+    └ 3/4        FAIL     112        112       8 test(s) did not pass
+    └ 4/4        pass     112        112       125s
+  webkit         FAIL     450        450       2 test(s) did not pass
+  Mobile Chrome  FAIL     450        450       4 test(s) did not pass
+  Mobile Safari  pass     450        450       266s
 
-  totals: collected 2512  executed 2512  passed=2444 skipped=68
+  totals: collected 2512  executed 2512  passed=2427 skipped=71 failed=6 timedOut=8
 ```
 
-**This is the first time all seven have been green together.** Firefox in particular had
-never been seen green, and its failures had been read as environmental for four attempts.
-That reading was half wrong. One of them was a defect in a criterion gate: `wcag-layout.spec.ts`
-snapshotted computed style in the same tick as `.focus()`, so Firefox returned the
-pre-transition value where Chromium returned the target, and SC 2.4.7 had been passing by
-engine rather than by evidence. The gate waits for the transition to finish now, and with it
-able to see, **every one of the 13 focusables it checks has an indicator in Firefox** — by
-box-shadow for Button, Switch, Pagination and Slider, by the native outline for Checkbox, and
-by box-shadow plus border colour on the wrapping control for Input and Dropdown.
+The fourteen: eight in `searchable-dropdown.spec.ts` in Firefox (four timeouts, four
+assertions, one contiguous block); `fixture-act.spec.ts` and `table.spec.ts:50` in WebKit;
+three `accordion.spec.ts` keyboard tests and the axe fixture sweep in Mobile Chrome.
+
+**Earlier the same day, on the same tree, all seven were green** — 2444 passed, no
+non-passes. The only change to `e2e/` between the two runs is a `declare global` adding
+`focusVisible` to `FocusOptions`, which emits nothing and cannot alter behaviour.
+
+That leaves two readings, and this document will not pick one for you.
+
+- **The machine.** Every project ran slower than its green counterpart, and shard 3 ran
+  **27.7 minutes against 86 seconds**. Re-run alone on a quiet machine immediately afterwards,
+  the same shard passed: **101 passed, 11 skipped, 2.1 minutes, no failures.** Three
+  independent projects going red at once, in specs that have never failed together, is the
+  signature this suite has produced twice before under load (once from a harness change that
+  cost one project 2.2h, once from an OS index rebuild).
+- **A real contention defect.** The failures are not scattered — eight consecutive tests in
+  one spec is what a genuine race looks like, and `CascadingDropdown/open-search` was exactly
+  that: reproducible only under four-worker load and closed by a real fix, not by a re-run.
+
+**What is recorded is FAIL.** A green matrix taken on a contended machine is not a
+measurement, and neither is a red one; the difference is that a red one is at least not a
+claim. The next step is to re-run on a quiet machine — and if `searchable-dropdown.spec.ts`
+comes back, to fix it rather than re-run it again.
 
 The reporter behind those numbers is itself tested: `run-e2e-matrix.mjs --self-check` plants a
 failing test and a timing-out test and requires both to be named by spec, line and title. A
-project that collects zero tests fails, because a filter matching nothing is not a pass.
+project that collects zero tests fails, because a filter matching nothing is not a pass. One
+defect in it was found and fixed while writing this: the per-project note appended "recorded,
+not blocking" to *every* failing project, not only a waived one, so the table contradicted its
+own `RESULT: FAILED`. It had gone unnoticed because Firefox was the only project that ever
+failed and Firefox was waived.
 
-Two things about this run are worth knowing before quoting it. The first full attempt reported
-webkit at 1.0h with 267 non-passes and Mobile Chrome at 2.2h with 162 — a harness change that
-retried a mutation-idle window on every fixture, which a loaded machine never satisfies. The
-second attempt reported webkit and Mobile Safari red while a Spotlight index rebuild held the
-machine at load 99–118; both re-ran clean, with no code change between. **A green matrix on a
-contended machine is not a measurement, and this suite is sensitive enough to say so.**
+Firefox's own history is worth keeping. It had never been seen green until 2026-09-08, and its
+failures had been read as environmental for four attempts on the strength of "always a timeout,
+never an assertion". That was false: `wcag-layout.spec.ts` read computed style in the same tick
+as `.focus()`, so Firefox returned the pre-transition value where Chromium returned the target,
+and SC 2.4.7 had been passing by engine rather than by evidence. With the gate fixed, **every
+one of the 13 focusables it checks has an indicator in Firefox** — by box-shadow for Button,
+Switch, Pagination and Slider, by the native outline for Checkbox, and by box-shadow plus
+border colour on the wrapping control for Input and Dropdown.
 
 ### 1.3 One gate failed and named its own fix
 
@@ -103,17 +129,23 @@ to, so both were lowered to what this run measured. No ceiling moved and no comp
   12.32, 12.42) were chunk-file sizes and were never comparable to it.
 - `docs/adr/003-ssr-hydration.json` — rewritten by the consumer matrix, 30 components.
 - `scripts/assert-bundle-size.mjs` — the two ratchets in §1.3.
+- `scripts/run-e2e-matrix.mjs` — Firefox's waiver removed and `KNOWN_UNSTABLE` emptied
+  (§3.6), and the per-project note corrected so "recorded, not blocking" appears only when
+  something actually waives the project (§1.2).
+- `e2e/wcag-layout.spec.ts` — `focusVisible` declared rather than cast, which is what
+  unblocked `typecheck` and the site build.
 - `ACCESSIBILITY.md` — three stale fixture counts corrected to what the sweep measured
   (429 fixtures, 125 of them portalling). The same document already said 429 in two other
   places, so it disagreed with itself.
 
 ### 1.5 What could not be regenerated, and why
 
-- **`verify:playground-removed`.** Blocked by the `typecheck` failure, not skipped. Its
-  self-check passes, so the gate is known to work; what is unknown is this tree's answer.
-- **The browser matrix.** Deliberately not re-run: it is green against the standing
-  fingerprint and nothing in `src/` or `e2e/` has changed since. Re-running it would have
-  measured the same tree twice.
+- **The consumer matrix, packaging, bundle-size, ssr-record and the four `--check` gates.**
+  Not re-run after the last two changes, deliberately: those gates measure `src/` and `dist/`,
+  and the changes touched only `e2e/` and `scripts/`. The claim is checked rather than
+  asserted — `dist/` was rebuilt afterwards and fingerprints byte-identically
+  (`sha256:0b75e3e0…:1163`), so the artifact those gates measured is the artifact that is
+  here now.
 - **The `/ai` 20-step pipeline (`ai/run.md`).** Steps 01–19 are agent-driven audits — SEO,
   brand consistency, deep security review, demo review. They are prompt documents, not
   scripts; executing them means an agent forming judgements, and writing fresh PASS verdicts
@@ -212,17 +244,39 @@ ADR 005's token ledger carries one name written from model recall and never chec
 the peer's live documentation. ADR 002's own ledger has none left. `RECALLED` is explicitly
 not a justification — it is an admission that a citation was claimed and never verified.
 
-### 3.6 Firefox is still declared known-unstable, and should not be
+### 3.6 Firefox's waiver, and why it is gone
 
-`run-e2e-matrix.mjs` carries Firefox in `KNOWN_UNSTABLE`, which means it runs and prints but
-does not gate the aggregate verdict. Two things about that are now false. Firefox passed on
-merit today, all four shards, and had passed on merit once before on the same tree. And the
-waiver's stated reason — "30s harness timeouts, never a failed assertion" — was disproved by
-the SC 2.4.7 gate bug in §1.2, which produced exactly the failed assertion the waiver said had
-never happened. That reason was the whole basis for treating Firefox as environmental.
+**Removed 2026-09-08.** `KNOWN_UNSTABLE` is now empty and every project gates the release
+verdict again. This entry stays because the absence of a waiver records nothing, and the
+reason it went is worth more than the fact.
 
-**Removing the waiver is a policy decision and has been left for a human.** Until it is
-removed, a Firefox regression will be printed and will not fail the matrix.
+From 2026-09-05 Firefox ran and printed but did not gate, on this reason: "30s harness
+timeouts, never a failed assertion". Across four attempts every Firefox non-pass had been a
+30-second timeout on a test that passes alone in under three seconds, concentrated in
+`pagination.spec.ts`, and never a wrong value or a missing element. That was the entire
+argument for calling it environmental rather than a defect.
+
+It was false. `wcag-layout.spec.ts` read computed style in the same tick as `.focus()`, so
+Firefox returned the pre-transition value where Chromium returned the target; SC 2.4.7 had
+been passing by engine rather than by evidence. Fixing the gate produced exactly the failed
+assertion the waiver said had never happened. Two harness defects carried the timeouts — a
+five-mount test given a longer wait instead of a bigger budget, and a fixture index a spec
+could enumerate before it had populated — and both were engine-neutral. Firefox was the
+slowest project and therefore the first to show them.
+
+With those fixed Firefox went green on merit twice, all four shards each time, and it gates
+like everything else now.
+
+**It is red in the run this document records** (§1.2), on eight tests in
+`searchable-dropdown.spec.ts`, and the waiver has stayed off. That is the decision landing
+rather than a reason to reverse it: a project that fails should say so, and the answer to a
+red Firefox is to find out whether it is the machine or a race and fix whichever it is. Shard
+3 passes alone on a quiet machine in 2.1 minutes against 27.7 in the matrix, which is evidence
+and not a verdict.
+
+**The lesson is not about Firefox.** A waiver survives exactly as long as nothing is sharp
+enough to contradict its reason. This one survived five weeks, and what ended it was building
+a gate precise enough to disagree with it — not a decision to stop trusting it.
 
 ### 3.7 SC 1.4.11's painted gate runs only in Chrome
 
@@ -360,43 +414,52 @@ is true. It is also the correct price for keeping the right to delete a key.
 
 What should be said out loud to whoever presses publish.
 
-1. **A broken gate reached a commit.** `typecheck` fails on the current tree, and it failed
-   because the change that broke it was verified against `tsconfig.app.json`, which does not
-   include `e2e/`. A gate that is not run is not a gate. This is small and one line wide, and
-   it is exactly the shape of the thing that gets waved through at the end of a long session.
-2. **Firefox is green and still waived.** The waiver's stated reason is now known to be false
-   (§3.6). Leaving it in place means the engine that just went green for the first time is the
-   one engine whose regressions do not fail the matrix.
-3. **The matrix is sensitive to the machine, and today proved it twice.** Once through a
-   harness change that cost 2.2h on one project, once through an OS index rebuild that turned
-   two projects red with no code change. Read a red matrix for load before reading it for
-   defects — and never read a green one taken under load at all.
-4. **A gate went stale without anyone noticing, and it was the accessibility gate.** The axe
+1. **The matrix is not green, and nobody should publish until it is.** Three projects are red
+   on a tree that was green in all seven hours earlier (§1.2). Whether that is the machine or
+   a contention race, the honest position is the same: the last recorded verdict is FAILED.
+2. **A broken gate reached a commit, and the branch did not notice for a day.** `typecheck`
+   was red at the previous commit because the change that broke it was verified against
+   `tsconfig.app.json`, which does not include `e2e/`. Fixed now. A gate that is not run is
+   not a gate, and this is the shape of the thing that gets waved through at the end of a
+   long session.
+3. **A waiver hid a reporting bug for five weeks.** The matrix table appended "recorded, not
+   blocking" to every failing project, not only a waived one — invisible while Firefox was
+   the only project that ever failed and Firefox was waived. Fixed (§1.2). Two mistakes
+   compounding is how a table comes to disagree with its own verdict.
+4. **The matrix is sensitive to the machine, and today proved it three times.** A harness
+   change cost one project 2.2h; an OS index rebuild turned two projects red with no code
+   change; and this run went red in three while a shard that failed in 27.7 minutes passed
+   alone in 2.1. Read a red matrix for load before reading it for defects — and never read a
+   green one taken under load at all.
+5. **A gate went stale without anyone noticing, and it was the accessibility gate.** The axe
    expectation list was recorded against 276 fixtures while the suite had 364. It now records
    the count it was derived from and fails when that moves — but the same shape of failure has
    been found in `ai/system-state.json`, `src/styles/tokens.css`, `ACCESSIBILITY.md` (again,
    today) and in this document. Assume there are more. A guard on how much a gate ran is not a
    guard on what it looked at.
-5. **The accessibility numbers will be misread.** "13 Does not support" published alongside a
+6. **The accessibility numbers will be misread.** "13 Does not support" published alongside a
    package will be quoted as thirteen failures. They are thirteen ungated criteria, most
    probably fine. The framing is honest and it is also a liability.
-6. **Single-engine iteration cannot see a whole class of bug.** Three components once
+7. **Single-engine iteration cannot see a whole class of bug.** Three components once
    announced the highlighted option to `<body>` for every Safari user and a fourth never
    closed, and Chromium masked all four. The release matrix is the only thing that catches
    that. If it is ever skipped to save forty minutes, this comes back.
-7. **`npm publish` is a one-way door.** 0.1.0 can never be republished, and the package name
+8. **`npm publish` is a one-way door.** 0.1.0 can never be republished, and the package name
    is claimed permanently on first publish.
 
 ---
 
 ## 7. What remains
 
-1. **Fix `e2e/wcag-layout.spec.ts:146`.** `focusVisible` is a real DOM option that
-   TypeScript's `FocusOptions` does not declare. One line. It unblocks `typecheck` and the
-   site build, and therefore `verify:playground-removed`.
-2. **Re-run the browser matrix.** The fix lands in `e2e/`, which invalidates the fingerprint
-   and all seven recorded verdicts by design. Roughly 30 minutes on a quiet machine.
-3. **Run `verify:playground-removed`** against the site build, which step 1 unblocks.
-4. **Decide Firefox's waiver** (§3.6). It is a policy call, not a measurement.
+One thing.
 
-Nothing else is outstanding. Steps 1–3 are mechanical; step 4 is a judgement.
+**Settle the browser matrix.** Re-run it on a quiet machine. If it comes back green, the
+2026-09-08 red was load and the record says so. If `searchable-dropdown.spec.ts` comes back in
+Firefox — or `fixture-act`/`table` in WebKit, or the accordion keyboard tests in Mobile Chrome
+— then it is a contention race and it gets fixed, the way `CascadingDropdown/open-search` was
+fixed rather than re-run. Either outcome is a result. A third run started because the second
+was disliked is not.
+
+Nothing else is outstanding. `typecheck`, the site build and `verify:playground-removed` are
+closed; Firefox's waiver is gone and will not come back; every other gate in §1.1 passes
+against a `dist/` that has been shown to be the one they measured.

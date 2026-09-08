@@ -2,6 +2,19 @@ import { test, expect } from "@playwright/test";
 import { gotoFixture } from "./_nav";
 
 /**
+ * `focusVisible` is in the HTML standard and shipped in every engine this suite
+ * runs; TypeScript's DOM lib has not declared it. Augmented rather than cast at
+ * the call site: a cast says "trust me" about a call the next reader has every
+ * reason to doubt, and the option is the difference between measuring SC 2.4.7
+ * and measuring nothing (see the snapshot pair below).
+ */
+declare global {
+  interface FocusOptions {
+    focusVisible?: boolean;
+  }
+}
+
+/**
  * The three criteria that cannot be answered without layout.
  *
  * SC 2.4.7 Focus Visible, SC 2.4.11 Focus Not Obscured (Minimum) and SC 2.5.8
