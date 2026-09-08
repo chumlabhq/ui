@@ -8,10 +8,10 @@ This is written for someone who has not followed the work and has to decide whet
 the package. It says what is claimed and what proves each claim, what is knowingly untrue or
 ungated, what has never been tested at all, and what publishing commits us to.
 
-**The package is not publishable today.** Every gate passes except the browser matrix, which
-is red in three projects — and the same tree was green in all seven earlier the same day, with
-nothing but a type declaration changed in `e2e/` since. §1.2 has the numbers and the two
-readings they admit; §7 has what remains.
+**Every gate passes.** The browser matrix is green in all seven projects, and the run carries
+the machine it ran on so a future red one can be read without a second measurement. One real
+race was found and fixed on the way there; thirteen other non-passes turned out to be a
+machine that had run out of memory. §1.2 has both.
 
 ---
 
@@ -25,7 +25,7 @@ readings they admit; §7 has what remains.
 | `typecheck` | pass | Both configs clean, each after rejecting its own planted error. `focusVisible` is declared in a local augmentation in `wcag-layout.spec.ts` rather than cast away at the call site: it is in the HTML standard and shipped in every engine here, and TypeScript's DOM lib simply has not caught up |
 | `test:run` | pass | 92 files, 4749 collected, 4749 executed, 4681 passed, 68 skipped. Contracts 1577, unit 3172 |
 | `test:coverage` | pass | 92.04% statements, 87.39% branch, 94.71% functions, 93.95% lines |
-| `test:e2e:all` (7 projects) | **FAIL** | 2512 collected, 2512 executed, 2427 passed, 71 skipped, 14 non-passes across firefox (8), Mobile Chrome (4) and webkit (2). No project is waived any more (§3.6), so this is the aggregate verdict |
+| `test:e2e:all` (7 projects) | pass | 2512 collected, 2512 executed, 2443 passed, 69 skipped, no non-passes. No project is waived any more (§3.6), so every one of the seven had to pass on merit. Each project's load average, free memory and free swap are recorded with it |
 | `verify:consumers` | pass | 9 apps, 2 React majors, 4 frameworks, production builds; plus `publint` and `attw` as their own rows |
 | `verify:consumers:self-check` | pass | 3 plants caught: a subpath export pointing at a missing file, `"use client"` stripped from 154 chunks, the token layer unwrapped |
 | `verify:packaging` | pass | `publint --strict` clean; `attw` clean across node10, node16 and bundler over 32 entrypoints; 8 relative links across 4 shipped documents resolve inside the tarball |
@@ -53,53 +53,68 @@ and no preflight, and 1161 built files carry no fixture-harness code.
 
 ```
   project        verdict  collected  executed  note
-  a11y-full      pass     5          5         316s
-  visual         pass     257        257       152s
-  chromium       pass     450        450       259s
-  firefox        FAIL     450        450       1 of 4 shard(s) did not pass
-    └ 1/4        pass     113        113       283s
-    └ 2/4        pass     113        113       173s
-    └ 3/4        FAIL     112        112       8 test(s) did not pass
-    └ 4/4        pass     112        112       125s
-  webkit         FAIL     450        450       2 test(s) did not pass
-  Mobile Chrome  FAIL     450        450       4 test(s) did not pass
-  Mobile Safari  pass     450        450       266s
+  a11y-full      pass     5          5         323s
+  visual         pass     257        257       154s
+  chromium       pass     450        450       329s
+  firefox        pass     450        450       844s
+    └ 1/4        pass     113        113       398s
+    └ 2/4        pass     113        113       144s
+    └ 3/4        pass     112        112       170s
+    └ 4/4        pass     112        112       132s
+  webkit         pass     450        450       318s
+  Mobile Chrome  pass     450        450       228s
+  Mobile Safari  pass     450        450       277s
 
-  totals: collected 2512  executed 2512  passed=2427 skipped=71 failed=6 timedOut=8
+  totals: collected 2512  executed 2512  passed=2443 skipped=69
+
+  machine at each project's start:
+    a11y-full      load 22.04, free 148MB of 8192MB, swap free 1715MB
+    visual         load 3.97, free 1210MB of 8192MB, swap free 1259MB
+    chromium       load 7.76, free 1345MB of 8192MB, swap free 846MB
+    firefox        load 42.68, free 587MB of 8192MB, swap free 1436MB
+    webkit         load 19.39, free 2282MB of 8192MB, swap free 1407MB
+    Mobile Chrome  load 17.58, free 1663MB of 8192MB, swap free 1344MB
+    Mobile Safari  load 12.16, free 1626MB of 8192MB, swap free 1249MB
 ```
 
-The fourteen: eight in `searchable-dropdown.spec.ts` in Firefox (four timeouts, four
-assertions, one contiguous block); `fixture-act.spec.ts` and `table.spec.ts:50` in WebKit;
-three `accordion.spec.ts` keyboard tests and the axe fixture sweep in Mobile Chrome.
+Green in all seven, with no project waived — see §3.6 — so each passed on merit. Firefox's
+shard 3, which had produced eight non-passes and taken 27.7 minutes on the previous attempt,
+passed in 170 seconds.
 
-**Earlier the same day, on the same tree, all seven were green** — 2444 passed, no
-non-passes. The only change to `e2e/` between the two runs is a `declare global` adding
-`focusVisible` to `FocusOptions`, which emits nothing and cannot alter behaviour.
+**The machine figures are new, and they are there because the matrix had gone red twice for
+reasons that took a separate measurement afterwards to establish.** A run that cannot be
+interpreted without another run is not a record. Note that they are printed on a green run
+too: a green run's numbers are what a later red one gets read against.
 
-That leaves two readings, and this document will not pick one for you.
+Note also which instrument matters. When three projects went red on 2026-09-08 the load
+average was 20, which is unremarkable for four workers and said nothing. What said everything
+was 6.5 GB of 7 GB of swap in use on an 8 GB machine, 238 MB of free memory, and this in the
+Firefox log: `browserType.launch: Timeout 180000ms exceeded`, four times. **The browser never
+started.** Every other non-pass in that run was a `page.goto` or navigation timeout of the same
+family. Eight consecutive tests in one spec looked like shared state and was four workers each
+failing to launch. Neither `searchable-dropdown.spec.ts` in Firefox nor `accordion.spec.ts` in
+Mobile Chrome reproduces under deliberate four-worker contention — 30 and 25 tests
+respectively, green at load 27.
 
-- **The machine.** Every project ran slower than its green counterpart, and shard 3 ran
-  **27.7 minutes against 86 seconds**. Re-run alone on a quiet machine immediately afterwards,
-  the same shard passed: **101 passed, 11 skipped, 2.1 minutes, no failures.** Three
-  independent projects going red at once, in specs that have never failed together, is the
-  signature this suite has produced twice before under load (once from a harness change that
-  cost one project 2.2h, once from an OS index rebuild).
-- **A real contention defect.** The failures are not scattered — eight consecutive tests in
-  one spec is what a genuine race looks like, and `CascadingDropdown/open-search` was exactly
-  that: reproducible only under four-worker load and closed by a real fix, not by a re-run.
+**One of the fourteen was real, and it is fixed.** WebKit's `fixture-act.spec.ts` reported
+`CascadingDropdown/open-search` as applied when it is declared a no-op — a race that had been
+narrowed once before and not closed. The fixture page decides whether the document held still
+across a window the size of the act's own, and it was watching only the DOM. A route chunk
+landing inside that window renders after the snapshot is taken and the diff is attributed to
+the act. The control cycle now watches the resource timeline as well: a request that lands
+inside the window adds an entry, and a page still fetching its own code is not still whatever
+its DOM says. Stress-tested at three concurrent runs against one dev server, which is heavier
+contention than the matrix produces.
 
-**What is recorded is FAIL.** A green matrix taken on a contended machine is not a
-measurement, and neither is a red one; the difference is that a red one is at least not a
-claim. The next step is to re-run on a quiet machine — and if `searchable-dropdown.spec.ts`
-comes back, to fix it rather than re-run it again.
-
-The reporter behind those numbers is itself tested: `run-e2e-matrix.mjs --self-check` plants a
+The reporter behind these numbers is itself tested: `run-e2e-matrix.mjs --self-check` plants a
 failing test and a timing-out test and requires both to be named by spec, line and title. A
-project that collects zero tests fails, because a filter matching nothing is not a pass. One
-defect in it was found and fixed while writing this: the per-project note appended "recorded,
+project that collects zero tests fails, because a filter matching nothing is not a pass. Two
+defects in it were found and fixed while writing this. The per-project note appended "recorded,
 not blocking" to *every* failing project, not only a waived one, so the table contradicted its
-own `RESULT: FAILED`. It had gone unnoticed because Firefox was the only project that ever
-failed and Firefox was waived.
+own `RESULT: FAILED` — invisible while Firefox was the only project that ever failed and
+Firefox was waived. And the first cut of the swap warning above picked the project with the
+least free memory and then printed *its* swap figure, so the run whose swap fell to 846 MB
+warned about nothing.
 
 Firefox's own history is worth keeping. It had never been seen green until 2026-09-08, and its
 failures had been read as environmental for four attempts on the strength of "always a timeout,
@@ -130,8 +145,11 @@ to, so both were lowered to what this run measured. No ceiling moved and no comp
 - `docs/adr/003-ssr-hydration.json` — rewritten by the consumer matrix, 30 components.
 - `scripts/assert-bundle-size.mjs` — the two ratchets in §1.3.
 - `scripts/run-e2e-matrix.mjs` — Firefox's waiver removed and `KNOWN_UNSTABLE` emptied
-  (§3.6), and the per-project note corrected so "recorded, not blocking" appears only when
-  something actually waives the project (§1.2).
+  (§3.6); the per-project note corrected so "recorded, not blocking" appears only when
+  something actually waives the project; and load average, free memory and free swap now
+  recorded at each project's start and printed in the reconciliation (§1.2).
+- `src/pages/fixtures/FixtureRoute.tsx` — the act's control cycle watches the resource
+  timeline as well as the DOM, which closes the `CascadingDropdown/open-search` race (§1.2).
 - `e2e/wcag-layout.spec.ts` — `focusVisible` declared rather than cast, which is what
   unblocked `typecheck` and the site build.
 - `ACCESSIBILITY.md` — three stale fixture counts corrected to what the sweep measured
@@ -414,9 +432,11 @@ is true. It is also the correct price for keeping the right to delete a key.
 
 What should be said out loud to whoever presses publish.
 
-1. **The matrix is not green, and nobody should publish until it is.** Three projects are red
-   on a tree that was green in all seven hours earlier (§1.2). Whether that is the machine or
-   a contention race, the honest position is the same: the last recorded verdict is FAILED.
+1. **This machine cannot comfortably run its own matrix.** 8 GB of RAM against seven browser
+   projects at four workers, and a run has already failed because a browser could not launch
+   in 180 seconds. The suite now records the conditions, and the green run in §1.2 was taken
+   with swap down to 846 MB — which is close. Anyone re-running it should free memory first,
+   and a red run should be read against its recorded figures before it is read as a defect.
 2. **A broken gate reached a commit, and the branch did not notice for a day.** `typecheck`
    was red at the previous commit because the change that broke it was verified against
    `tsconfig.app.json`, which does not include `e2e/`. Fixed now. A gate that is not run is
@@ -451,15 +471,10 @@ What should be said out loud to whoever presses publish.
 
 ## 7. What remains
 
-One thing.
+Nothing in the gate list. Every gate in §1.1 passes, the matrix is green in all seven projects
+with no waiver, and `dist/` has been shown to be the artifact the packaging, consumer and
+ssr-record gates measured.
 
-**Settle the browser matrix.** Re-run it on a quiet machine. If it comes back green, the
-2026-09-08 red was load and the record says so. If `searchable-dropdown.spec.ts` comes back in
-Firefox — or `fixture-act`/`table` in WebKit, or the accordion keyboard tests in Mobile Chrome
-— then it is a contention race and it gets fixed, the way `CascadingDropdown/open-search` was
-fixed rather than re-run. Either outcome is a result. A third run started because the second
-was disliked is not.
-
-Nothing else is outstanding. `typecheck`, the site build and `verify:playground-removed` are
-closed; Firefox's waiver is gone and will not come back; every other gate in §1.1 passes
-against a `dist/` that has been shown to be the one they measured.
+What is left is not work, it is the judgement in §5 and the risks in §6 — most of all that
+nine templates are not a user, no assistive technology has touched this, and `npm publish` is
+a one-way door.

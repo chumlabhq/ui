@@ -25,7 +25,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdtempSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { tmpdir } from "node:os";
+import { tmpdir, loadavg, freemem, totalmem, platform } from "node:os";
 
 const ROOT = process.cwd();
 const STATE = resolve(ROOT, "e2e/.matrix-state.json");
@@ -152,11 +152,54 @@ const SHARDS = new Map([
  */
 const KNOWN_UNSTABLE = new Map();
 
+/**
+ * What the machine had when the project started.
+ *
+ * Recorded because load has now been the explanation for a red matrix twice,
+ * and both times it took a separate measurement afterwards to establish that —
+ * by which point the machine had moved on. A run that cannot be interpreted
+ * without a second run is not a record.
+ *
+ * Swap, not just load average. On 2026-09-08 three projects went red on a tree
+ * that was green hours earlier, and the cause was 6.5 GB of 7 GB of swap in use
+ * on an 8 GB machine: four Firefox workers could not launch inside 180 seconds.
+ * Load average was 20, which is unremarkable for a four-worker run and said
+ * nothing. Free memory said everything.
+ */
+function machine() {
+  const mb = (bytes) => Math.round(bytes / 1048576);
+  const snapshot = {
+    load1: Number(loadavg()[0].toFixed(2)),
+    freeMb: mb(freemem()),
+    totalMb: mb(totalmem()),
+    swapUsedMb: null,
+    swapFreeMb: null,
+  };
+
+  if (platform() === "darwin") {
+    const out = spawnSync("sysctl", ["-n", "vm.swapusage"], { encoding: "utf8" }).stdout ?? "";
+    const used = /used = ([\d.]+)M/.exec(out);
+    const free = /free = ([\d.]+)M/.exec(out);
+    if (used) snapshot.swapUsedMb = Math.round(Number(used[1]));
+    if (free) snapshot.swapFreeMb = Math.round(Number(free[1]));
+  }
+
+  return snapshot;
+}
+
+/** One line, for the table's own column and for the per-project header. */
+function machineLine(m) {
+  if (!m) return "";
+  const swap = m.swapFreeMb == null ? "" : `, swap free ${m.swapFreeMb}MB`;
+  return `load ${m.load1}, free ${m.freeMb}MB of ${m.totalMb}MB${swap}`;
+}
+
 /** One `playwright test` invocation, reconciled on its own. */
 function runInvocation(name, extraArgs, label) {
   const dir = mkdtempSync(join(tmpdir(), "e2e-matrix-"));
   const jsonPath = join(dir, "reconcile.json");
-  process.stdout.write(`\n▸ ${label}\n`);
+  const before = machine();
+  process.stdout.write(`\n▸ ${label}   [${machineLine(before)}]\n`);
 
   const started = Date.now();
   const result = spawnSync(
@@ -179,6 +222,7 @@ function runInvocation(name, extraArgs, label) {
     return {
       ok: false,
       seconds,
+      machine: before,
       collected: 0,
       executed: 0,
       reason: `no reconciliation was written (exit ${result.status ?? "signal " + result.signal})`,
@@ -189,6 +233,7 @@ function runInvocation(name, extraArgs, label) {
   return {
     ok: passed,
     seconds,
+    machine: before,
     collected: report.collected,
     executed: report.executed,
     byStatus: report.byStatus,
@@ -226,8 +271,16 @@ function runProject(name) {
     }
   }
 
+  // The tightest moment any shard saw, not the first: a project is red because
+  // of its worst minute, and averaging that away is how the evidence is lost.
+  const machines = results.map((r) => r.machine).filter(Boolean);
+  const worst = machines.length
+    ? machines.reduce((a, b) => (b.freeMb < a.freeMb ? b : a))
+    : null;
+
   return {
     ok: failed === 0,
+    machine: worst,
     notPassedTests: results.flatMap((r) => r.notPassedTests ?? []),
     shards: results.map((r, i) => ({ shard: `${i + 1}/${shards}`, ...r })),
     seconds: results.reduce((total, r) => total + r.seconds, 0),
@@ -312,6 +365,36 @@ function printReport(state, names) {
     `\n  totals: collected ${totalCollected}  executed ${totalExecuted}  ` +
       `${Object.entries(totals).sort().map(([k, v]) => `${k}=${v}`).join(" ")}\n`,
   );
+  // The machine each project ran on, printed whether or not anything failed.
+  // A green run's figures are what a later red one is read against, so they are
+  // only useful if they are always there.
+  const machines = names
+    .map((name) => [name, state.projects[name]?.machine])
+    .filter(([, m]) => m);
+  if (machines.length) {
+    process.stdout.write("\n  machine at each project's start:\n");
+    const width = Math.max(...machines.map(([name]) => name.length));
+    for (const [name, m] of machines) {
+      process.stdout.write(`    ${name.padEnd(width)}  ${machineLine(m)}\n`);
+    }
+    // Lowest swap, not lowest free memory. The first cut of this warning picked
+    // the project with the least free RAM and then read ITS swap figure, which
+    // is a different project — so the run whose swap fell to 846MB printed no
+    // warning at all. A gate that reports the wrong row is the thing this file
+    // exists to prevent.
+    const swaps = machines.filter(([, m]) => m.swapFreeMb != null);
+    const tightest = swaps.length
+      ? swaps.reduce((a, b) => (b[1].swapFreeMb < a[1].swapFreeMb ? b : a))
+      : null;
+    if (tightest && tightest[1].swapFreeMb < 1024) {
+      process.stdout.write(
+        `\n  Swap fell to ${tightest[1].swapFreeMb}MB during ${tightest[0]}. A browser that\n` +
+          `  cannot launch inside its timeout fails tests that have nothing wrong with them —\n` +
+          `  read any non-pass against this before reading it as a defect.\n`,
+      );
+    }
+  }
+
   // Which, not how many. Printed after the table so the last thing on screen
   // before the verdict is the list of tests to open.
   for (const name of names) {

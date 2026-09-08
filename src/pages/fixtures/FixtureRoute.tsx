@@ -62,15 +62,23 @@ const quiet = (idleMs = 120, capMs = 1500) =>
  * Is the page still across exactly the window the act will occupy?
  *
  * `quiet()` answers "has the DOM fallen silent", which on a contended machine
- * it may never do inside the cap — chunks were still landing during the act's
- * own two frames, and the diff that followed was attributed to the act.
- * `CascadingDropdown/open-search`, whose act is a bare `settle`, reported
- * "applied" under a contended matrix and "no-op" everywhere else.
+ * it may never do inside the cap. So after the wait the page is asked exactly
+ * the question the act is about to ask, with no act: snapshot, run one settle
+ * cycle, snapshot again. A cycle that comes back dirty is retried until the
+ * deadline, so a slow machine gets more time because it asked for it and a
+ * ready page pays two frames.
  *
- * So after the wait the page is asked exactly the question the act is about to
- * ask, with no act: snapshot, run one settle cycle, snapshot again. A cycle
- * that comes back dirty is retried until the deadline, so a slow machine gets
- * more time because it asked for it and a ready page pays two frames.
+ * The DOM is not the only thing to hold still. A route chunk that arrives
+ * during the act's own two frames renders after the snapshot is taken, and the
+ * diff is attributed to the act — which is how `CascadingDropdown/open-search`,
+ * whose act is a bare `settle`, reported "applied" under a contended matrix and
+ * "no-op" everywhere else. The DOM-only cycle narrowed that window and did not
+ * close it: it came back once on 2026-09-08, on a machine that was swapping.
+ *
+ * So the cycle watches the resource timeline too. A request that lands inside
+ * the window adds an entry, and a page still fetching its own code is not still
+ * whatever its DOM says. That is the actual signal, where the DOM was a proxy
+ * for it.
  *
  * The deadline is a bound, not a guess — being wrong about it costs a status of
  * "unsettled", which the gate reports rather than reads as evidence. Retrying
@@ -79,11 +87,13 @@ const quiet = (idleMs = 120, capMs = 1500) =>
  */
 const documentHoldsStill = async (deadlineMs = 3000) => {
   await quiet();
+  const resources = () => performance.getEntriesByType("resource").length;
   const until = performance.now() + deadlineMs;
   do {
-    const before = document.documentElement.outerHTML;
+    const dom = document.documentElement.outerHTML;
+    const fetched = resources();
     await browserActTools.settle();
-    if (document.documentElement.outerHTML === before) return true;
+    if (document.documentElement.outerHTML === dom && resources() === fetched) return true;
   } while (performance.now() < until);
   return false;
 };
