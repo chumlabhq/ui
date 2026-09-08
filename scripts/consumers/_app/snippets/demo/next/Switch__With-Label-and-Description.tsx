@@ -8,7 +8,7 @@ export default function SwitchExample() {
   return (
     <Switch
                 label="Dark mode"
-                description="Enable false theme for the application"
+                description="Enable dark theme for the application"
                 checked={descSwitch}
                 onValueChange={setDescSwitch}
                 classes={({

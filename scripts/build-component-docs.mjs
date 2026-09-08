@@ -457,11 +457,32 @@ for (const name of COMPONENTS) {
   const keyboard = keyboardOf(name);
   if (!keyboard) problems.push(`${name}: no "## Keyboard Interactions" section`);
 
-  const props = propsFrom(schema.properties, schema.required);
+  /**
+   * A `oneOf` schema documents its props in branches, not at the root.
+   *
+   * Four components are shaped that way — Accordion, BrandLogo, Loader and
+   * RadioButton — and reading only `schema.properties` showed the site an
+   * empty API table for the two that have no flat root: `RadioButton`'s own
+   * nine props, `classes` among them, were documented in the schema and
+   * displayed nowhere. The branch named for the component is its root; any
+   * other branch is a component in its own right, so it joins the
+   * sub-component tables unless one is already there.
+   */
+  const branches = schema.oneOf ?? [];
+  const ownBranch = branches.find((b) => b.title === name);
+  const props = propsFrom(
+    { ...(ownBranch?.properties ?? {}), ...(schema.properties ?? {}) },
+    [...(ownBranch?.required ?? []), ...(schema.required ?? [])],
+  );
   const subComponents = Object.entries(schema.subComponents ?? {}).map(([tag, sub]) => ({
     name: tag,
     props: propsFrom(sub.properties, sub.required),
   }));
+  for (const branch of branches) {
+    if (!branch.title || branch.title === name) continue;
+    if (subComponents.some((sc) => sc.name === branch.title)) continue;
+    subComponents.push({ name: branch.title, props: propsFrom(branch.properties, branch.required) });
+  }
 
   docs.push({
     name,

@@ -15,8 +15,8 @@ export default function ToastExample() {
                       description: "Using classes.container to override styles",
                       classes: {
                         // bg is hardcoded white, so the text needs to be
-                        // hardcoded false too — text-cl-text would invert to
-                        // near-white in false mode and disappear on the white
+                        // hardcoded dark too — text-cl-text would invert to
+                        // near-white in dark mode and disappear on the white
                         // surface. Using the light-mode --cl-text hex value.
                         root: "bg-white border border-[#e5e7eb] text-[#0f1218]",
                         description: "text-[#0f1218]/70",

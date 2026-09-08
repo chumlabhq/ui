@@ -9962,7 +9962,71 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/radio-button",
     "summary": "A radio button group with labels, descriptions, custom icons, sizes, orientations, and validation states.",
     "anatomy": "<RadioGroup>\n  <RadioButton />\n</RadioGroup>",
-    "props": [],
+    "props": [
+      {
+        "name": "value",
+        "type": "string",
+        "required": true,
+        "default": null,
+        "description": "Unique value for this radio option."
+      },
+      {
+        "name": "label",
+        "type": "object",
+        "required": false,
+        "default": null,
+        "description": "React.ReactNode - Text label rendered beside the radio."
+      },
+      {
+        "name": "description",
+        "type": "object",
+        "required": false,
+        "default": null,
+        "description": "React.ReactNode - Helper text rendered below the label."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "default": "false",
+        "description": "Disables this radio option."
+      },
+      {
+        "name": "size",
+        "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | number",
+        "required": false,
+        "default": null,
+        "description": "Size of the radio indicator. Inherits the group's size when unset."
+      },
+      {
+        "name": "checkedIcon",
+        "type": "object",
+        "required": false,
+        "default": null,
+        "description": "React.ReactNode - Custom icon for the checked state."
+      },
+      {
+        "name": "uncheckedIcon",
+        "type": "object",
+        "required": false,
+        "default": null,
+        "description": "React.ReactNode - Custom icon for the unchecked state."
+      },
+      {
+        "name": "classes",
+        "type": "object",
+        "required": false,
+        "default": null,
+        "description": "CSS class overrides for radio sub-elements."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Additional class names applied to the radio root."
+      }
+    ],
     "subComponents": [
       {
         "name": "RadioGroup",

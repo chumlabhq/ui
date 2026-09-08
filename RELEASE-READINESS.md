@@ -8,10 +8,10 @@ This is written for someone who has not followed the work and has to decide whet
 the package. It says what is claimed and what proves each claim, what is knowingly untrue or
 ungated, what has never been tested at all, and what publishing commits us to.
 
-**Every gate passes.** The browser matrix is green in all seven projects, and the run carries
-the machine it ran on so a future red one can be read without a second measurement. One real
-race was found and fixed on the way there; thirteen other non-passes turned out to be a
-machine that had run out of memory. §1.2 has both.
+**Every gate passes except the browser matrix, which has not been measured in full.** Four of
+its seven projects are green on the current tree; webkit went red under machine starvation and
+the last two never ran. That is one clean run away from settled, and it is the only thing
+outstanding. §1.2 has the numbers and the machine they were taken on.
 
 ---
 
@@ -25,7 +25,7 @@ machine that had run out of memory. §1.2 has both.
 | `typecheck` | pass | Both configs clean, each after rejecting its own planted error. `focusVisible` is declared in a local augmentation in `wcag-layout.spec.ts` rather than cast away at the call site: it is in the HTML standard and shipped in every engine here, and TypeScript's DOM lib simply has not caught up |
 | `test:run` | pass | 92 files, 4749 collected, 4749 executed, 4681 passed, 68 skipped. Contracts 1577, unit 3172 |
 | `test:coverage` | pass | 92.04% statements, 87.39% branch, 94.71% functions, 93.95% lines |
-| `test:e2e:all` (7 projects) | pass | 2512 collected, 2512 executed, 2443 passed, 69 skipped, no non-passes. No project is waived any more (§3.6), so every one of the seven had to pass on merit. Each project's load average, free memory and free swap are recorded with it |
+| `test:e2e:all` (7 projects) | **INCOMPLETE** | Four projects green on the current tree — a11y-full, visual, chromium and firefox (all four shards). webkit went red under machine starvation and Mobile Chrome / Mobile Safari never ran; the run was stopped rather than continued. No project is waived (§3.6), so this is not a passing matrix. §1.2 has the figures |
 | `verify:consumers` | pass | 9 apps, 2 React majors, 4 frameworks, production builds; plus `publint` and `attw` as their own rows |
 | `verify:consumers:self-check` | pass | 3 plants caught: a subpath export pointing at a missing file, `"use client"` stripped from 154 chunks, the token layer unwrapped |
 | `verify:packaging` | pass | `publint --strict` clean; `attw` clean across node10, node16 and bundler over 32 entrypoints; 8 relative links across 4 shipped documents resolve inside the tarball |
@@ -39,7 +39,9 @@ machine that had run out of memory. §1.2 has both.
 | `build-tokens --check` | pass | `tokens.css` matches `src/index.css`, 35 dark and 35 light |
 | `audit-demo-coverage --check` | pass | 1136 props, 0 tier-A gaps |
 | `audit-fixture-gap --check` | pass | 151 props render unfixtured markup, of 648 with no fixture |
-| `build-component-docs --check` | pass | 30 components, 60 snippets |
+| `build-component-docs --check` | pass | 30 components, 60 snippets. Reads `oneOf` schemas now: `RadioButton`'s own nine props, `classes` among them, were documented in the schema and shown nowhere |
+| `build-demo-snippets --check` | pass | 626 of 708 demo sections carry a copy button, extracted from the pages' own JSX |
+| `typecheck-demo-snippets` | pass | 1252 snippet files compiled against `dist/`. The generator prunes to a fixpoint, so a snippet that does not compile never gets a button |
 | `verify:dist-records` | pass **after re-measurement** | Four records describing `dist/` were re-measured and the fingerprint re-stamped (§1.4) |
 | `npm publish --dry-run` | pass | 1661 files, 2.2 MB packed, 7.0 MB unpacked |
 | `npm audit` (production tree) | pass | 0 vulnerabilities across the 3 production dependencies and their tree. The dev tree reports 12 (9 high, 1 moderate, 2 low); none of it ships |
@@ -51,79 +53,61 @@ and no preflight, and 1161 built files carry no fixture-harness code.
 
 ### 1.2 The browser matrix
 
+**Not green, and not measured in full.** The last run was stopped part way.
+
 ```
   project        verdict  collected  executed  note
-  a11y-full      pass     5          5         323s
-  visual         pass     257        257       154s
-  chromium       pass     450        450       329s
-  firefox        pass     450        450       844s
-    └ 1/4        pass     113        113       398s
-    └ 2/4        pass     113        113       144s
-    └ 3/4        pass     112        112       170s
-    └ 4/4        pass     112        112       132s
-  webkit         pass     450        450       318s
-  Mobile Chrome  pass     450        450       228s
-  Mobile Safari  pass     450        450       277s
-
-  totals: collected 2512  executed 2512  passed=2443 skipped=69
+  a11y-full      pass     5          5         347s
+  visual         pass     257        257       155s
+  chromium       pass     450        450       314s
+  firefox        pass     450        450       661s   (300/131/121/109s)
+  webkit         FAIL     450        450       258 test(s) did not pass
+  Mobile Chrome  NOT RUN  -          -         -
+  Mobile Safari  NOT RUN  -          -         -
 
   machine at each project's start:
-    a11y-full      load 22.04, free 148MB of 8192MB, swap free 1715MB
-    visual         load 3.97, free 1210MB of 8192MB, swap free 1259MB
-    chromium       load 7.76, free 1345MB of 8192MB, swap free 846MB
-    firefox        load 42.68, free 587MB of 8192MB, swap free 1436MB
-    webkit         load 19.39, free 2282MB of 8192MB, swap free 1407MB
-    Mobile Chrome  load 17.58, free 1663MB of 8192MB, swap free 1344MB
-    Mobile Safari  load 12.16, free 1626MB of 8192MB, swap free 1249MB
+    a11y-full      load 4.15,  free 110MB of 8192MB,  swap free 1192MB
+    visual         load 4.52,  free 1280MB of 8192MB, swap free 1362MB
+    chromium       load 11.04, free 1598MB of 8192MB, swap free 1474MB
+    firefox        load 21.08, free 1259MB of 8192MB, swap free 833MB
+    webkit         load 22.61, free 3111MB of 8192MB, swap free 4048MB
 ```
 
-Green in all seven, with no project waived — see §3.6 — so each passed on merit. Firefox's
-shard 3, which had produced eight non-passes and taken 27.7 minutes on the previous attempt,
-passed in 170 seconds.
+**webkit is red for memory, and that is a statement about the machine rather than the
+package.** It took 1.1 hours for 440 tests and 258 of them did not pass — the mass-timeout
+signature. By the time it was running, the machine was at load 57, 111MB free, and macOS had
+shrunk the swap file from 7GB to 3GB with 442MB left. The top consumers were all system
+daemons: `duetexpertd`, `GenerativeExperiencesRuntime`, `mobileassetd`, `PerfPowerServices`.
+Nothing in this repo was competing with it.
 
-**The machine figures are new, and they are there because the matrix had gone red twice for
-reasons that took a separate measurement afterwards to establish.** A run that cannot be
-interpreted without another run is not a record. Note that they are printed on a green run
-too: a green run's numbers are what a later red one gets read against.
+The run was stopped there rather than continued. webkit had already decided the aggregate
+verdict, and two more projects at an hour each would have produced numbers that had to be
+discarded anyway. It was not re-run in the hope of a green.
 
-Note also which instrument matters. When three projects went red on 2026-09-08 the load
-average was 20, which is unremarkable for four workers and said nothing. What said everything
-was 6.5 GB of 7 GB of swap in use on an 8 GB machine, 238 MB of free memory, and this in the
-Firefox log: `browserType.launch: Timeout 180000ms exceeded`, four times. **The browser never
-started.** Every other non-pass in that run was a `page.goto` or navigation timeout of the same
-family. Eight consecutive tests in one spec looked like shared state and was four workers each
-failing to launch. Neither `searchable-dropdown.spec.ts` in Firefox nor `accordion.spec.ts` in
-Mobile Chrome reproduces under deliberate four-worker contention — 30 and 25 tests
-respectively, green at load 27.
+**The run before it found a real defect, which is fixed.** `fixture-act.spec.ts` failed in
+chromium on `Table/filter-selected: target element not found`, on a healthy machine — swap
+free 1529MB, every other project green. Not a memory failure and not a flake to wave through:
+`openFilterPanel` waited for the filter panel to mount and the act then went straight for a
+button inside it that had not rendered yet. It passed three times out of three in isolation,
+which is what that race looks like. The fixture polls for the element now, the way the panel
+itself is polled for, and chromium was green on the next run.
 
-**One of the fourteen was real, and it is fixed.** WebKit's `fixture-act.spec.ts` reported
-`CascadingDropdown/open-search` as applied when it is declared a no-op — a race that had been
-narrowed once before and not closed. The fixture page decides whether the document held still
-across a window the size of the act's own, and it was watching only the DOM. A route chunk
-landing inside that window renders after the snapshot is taken and the diff is attributed to
-the act. The control cycle now watches the resource timeline as well: a request that lands
-inside the window adds an entry, and a page still fetching its own code is not still whatever
-its DOM says. Stress-tested at three concurrent runs against one dev server, which is heavier
-contention than the matrix produces.
+**What is still owed before publishing: one clean matrix.** Four projects are green on the
+current tree. webkit, Mobile Chrome and Mobile Safari have not been measured on it.
 
 The reporter behind these numbers is itself tested: `run-e2e-matrix.mjs --self-check` plants a
 failing test and a timing-out test and requires both to be named by spec, line and title. A
-project that collects zero tests fails, because a filter matching nothing is not a pass. Two
-defects in it were found and fixed while writing this. The per-project note appended "recorded,
-not blocking" to *every* failing project, not only a waived one, so the table contradicted its
-own `RESULT: FAILED` — invisible while Firefox was the only project that ever failed and
-Firefox was waived. And the first cut of the swap warning above picked the project with the
-least free memory and then printed *its* swap figure, so the run whose swap fell to 846 MB
-warned about nothing.
+project that collects zero tests fails, because a filter matching nothing is not a pass. The
+machine figures are printed for every project, green or red, because a green run's numbers are
+what a later red one gets read against — that is what made the webkit result above readable
+without a second measurement.
 
 Firefox's own history is worth keeping. It had never been seen green until 2026-09-08, and its
 failures had been read as environmental for four attempts on the strength of "always a timeout,
 never an assertion". That was false: `wcag-layout.spec.ts` read computed style in the same tick
 as `.focus()`, so Firefox returned the pre-transition value where Chromium returned the target,
 and SC 2.4.7 had been passing by engine rather than by evidence. With the gate fixed, **every
-one of the 13 focusables it checks has an indicator in Firefox** — by box-shadow for Button,
-Switch, Pagination and Slider, by the native outline for Checkbox, and by box-shadow plus
-border colour on the wrapping control for Input and Dropdown.
+one of the 13 focusables it checks has an indicator in Firefox**.
 
 ### 1.3 One gate failed and named its own fix
 
@@ -471,10 +455,12 @@ What should be said out loud to whoever presses publish.
 
 ## 7. What remains
 
-Nothing in the gate list. Every gate in §1.1 passes, the matrix is green in all seven projects
-with no waiver, and `dist/` has been shown to be the artifact the packaging, consumer and
-ssr-record gates measured.
+**One clean browser matrix.** Four projects are green on the current tree; webkit, Mobile
+Chrome and Mobile Safari have not been measured on it (§1.2). Run it on a machine that is not
+swapping — this one has 8GB and has now produced three red matrices for memory, twice from
+macOS background daemons rather than anything in the repo. The run records its own conditions,
+so the result will say which it was.
 
-What is left is not work, it is the judgement in §5 and the risks in §6 — most of all that
-nine templates are not a user, no assistive technology has touched this, and `npm publish` is
-a one-way door.
+Nothing else is owed. Every other gate in §1.1 passes, and `dist/` has been rebuilt and shown
+to fingerprint identically to the artifact the packaging, consumer and ssr-record gates
+measured.

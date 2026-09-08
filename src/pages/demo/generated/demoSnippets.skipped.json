@@ -97,21 +97,6 @@
     },
     {
       "component": "DatePicker",
-      "title": "Events Calendar (Holidays, Absences, Deadlines)",
-      "reason": "`addDays` is not declared on the page"
-    },
-    {
-      "component": "DatePicker",
-      "title": "Custom Presets (Single)",
-      "reason": "`subDays` is not declared on the page"
-    },
-    {
-      "component": "DatePicker",
-      "title": "Custom Range Presets",
-      "reason": "`startOfWeek` is not declared on the page"
-    },
-    {
-      "component": "DatePicker",
       "title": "Event Callbacks",
       "reason": "`log` closes over page state"
     },
@@ -412,108 +397,13 @@
     },
     {
       "component": "Table",
-      "title": "Basic Usage",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Built-in Search Bar (Default)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Column Resizing (Basic)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Column Sorting",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Column Visibility (Toggle Checkboxes)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Context Menu",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Copy to Clipboard",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "CSV Export",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Density Modes",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Global Search (Basic)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Multi-Row Selection (Checkboxes)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Row Drag & Drop (Default)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Row Expansion",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Striped Rows (Bold Stripes with Border)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Striped Rows (CSS-only via data-striped)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Striped Rows (Default)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Table",
-      "title": "Striped Rows (Hover Interaction)",
-      "reason": "does not typecheck: TS1005 ':' expected."
-    },
-    {
-      "component": "Pagination",
-      "title": "Custom Ellipsis (Jump to Page)",
-      "reason": "does not typecheck: TS2322 Type '{ onValueChange: (page: number) => void; false: boolean; variant: \"default\"; }' is not assignable to type 'IntrinsicAttributes & { onValueChange: (page: number) => void; dark: boolean; variant?: \"default\" | \"pill\" | \"ghost\" | undefined; }'."
-    },
-    {
-      "component": "Stepper",
-      "title": "With Tooltips (Custom Config)",
-      "reason": "does not typecheck: TS2304 Cannot find name 'StepTooltipConfig'."
-    },
-    {
-      "component": "Table",
       "title": "Footer / Summary Row",
       "reason": "does not typecheck: TS2304 Cannot find name 'User'."
     },
     {
       "component": "Table",
-      "title": "Right Column Pinning",
-      "reason": "does not typecheck: TS2304 Cannot find name 'ColumnDef'."
+      "title": "Global Search (Basic)",
+      "reason": "does not typecheck: TS2686 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead."
     },
     {
       "component": "Toast",

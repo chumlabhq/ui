@@ -60,8 +60,16 @@ for (const dir of readdirSync(join(root, "src/components"))) {
   const schemaPath = join(root, "src/components", dir, `${dir}.schema.json`);
   if (!existsSync(schemaPath)) continue;
   const schema = JSON.parse(readFileSync(schemaPath, "utf8"));
-  const keys = Object.keys(schema.properties?.classes?.properties ?? {});
-  if (keys.length) CLASSES_KEYS.set(dir, new Set(keys));
+  // `oneOf` schemas keep their props in branches. Reading only the root meant
+  // RadioButton and Loader were never validated at all, which is why seven
+  // dead `classes` keys survived this check and only `satisfies` found them.
+  const branches = [schema, ...(schema.oneOf ?? [])];
+  for (const branch of branches) {
+    const keys = Object.keys(branch.properties?.classes?.properties ?? {});
+    if (!keys.length) continue;
+    const target = branch.title && branch !== schema ? branch.title : dir;
+    CLASSES_KEYS.set(target, new Set([...(CLASSES_KEYS.get(target) ?? []), ...keys]));
+  }
 }
 const droppedKeys = [];
 
@@ -76,6 +84,9 @@ function subpathOf(name) {
   }
   return null;
 }
+
+/** Peer dependencies: present in any app that uses the component needing them. */
+const PEERS = new Set(Object.keys(pkg.peerDependencies ?? {}));
 
 /** Names a snippet may use without importing or declaring them. */
 const GLOBALS = new Set([
@@ -144,7 +155,9 @@ function freeIdentifiers(nodes, sf, usedTypes = new Set()) {
       typeNames(n);
       return;
     }
-    if (ts.isAsExpression(n) || ts.isSatisfiesExpression?.(n)) { use(n.expression); return; }
+    // `x as StepTooltipConfig` — the expression AND the type it names, which
+    // the snippet still has to import.
+    if (ts.isAsExpression(n) || ts.isSatisfiesExpression?.(n)) { use(n.expression); if (n.type) use(n.type); return; }
     if (ts.isPropertyAccessExpression(n)) { use(n.expression); return; }
     if (ts.isPropertyAssignment(n) && !ts.isComputedPropertyName(n.name)) { use(n.initializer); return; }
     if (ts.isIdentifier(n)) { used.add(n.text); return; }
@@ -167,6 +180,10 @@ function pageSymbols(sf) {
     const raw = st.moduleSpecifier.getText(sf).slice(1, -1);
     let spec = null;
     if (raw === "react") spec = "react";
+    // A declared peer dependency is something the consumer already has —
+    // `ColumnDef` comes from @tanstack/react-table, which anyone using Table
+    // has installed. Treating it as unavailable cost 18 Table snippets.
+    else if (PEERS.has(raw)) spec = raw;
     else {
       const m = /components\/([A-Za-z0-9]+)\/index/.exec(raw);
       if (m) spec = subpathOf(m[1]);
@@ -351,6 +368,69 @@ function classTable(sf) {
     table.set(key, { expression: text });
   }
   return table;
+}
+
+/**
+ * `dark` → `false`, as an identifier and nowhere else.
+ *
+ * Two textual attempts got this wrong in ways that only differ in whether the
+ * compiler notices. `\bdark\b` rewrote the `dark` inside `dark:bg-cl-bg`,
+ * turning 168 Tailwind variant classes into `false:bg-cl-bg` — valid
+ * TypeScript, silently wrong output. Excluding `:` and `-` fixed that and then
+ * hit `<StatusBadge dark={dark} />`, rewriting the ATTRIBUTE NAME to
+ * `false={false}` — a syntax error, and the cause of all seventeen Table
+ * snippets that would not parse.
+ *
+ * So it is done on the tree: identifiers only, never a JSX attribute name,
+ * never anything inside a string.
+ */
+function replaceDarkIdentifier(text) {
+  // Parsed as-is, not wrapped in a fragment: this runs over inlined `const`
+  // declarations as well as JSX bodies, and wrapping a declaration in `<>…</>`
+  // produced a parse with no identifiers in it at all, so `dark` survived in
+  // six snippets. The parse only has to locate identifiers; it does not have
+  // to be a valid program.
+  const sf = ts.createSourceFile("frag.tsx", text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const offset = 0;
+  const cuts = [];
+  /**
+   * A reference, not a name. `dark` appears in the inlined page components as
+   * a destructured parameter and as a member of its props type
+   * (`{ status, dark = false }: { dark?: boolean }`), and rewriting those
+   * produced `false = false` — the parse error behind the seventeen Table
+   * snippets. The same guards `freeIdentifiers` uses, for the same reason.
+   */
+  const isDeclarationName = (n) => {
+    const p = n.parent;
+    if (!p) return false;
+    if ((ts.isBindingElement(p) || ts.isParameter(p) || ts.isVariableDeclaration(p)) && p.name === n) return true;
+    if (ts.isBindingElement(p) && p.propertyName === n) return true;
+    if ((ts.isPropertySignature(p) || ts.isPropertyDeclaration(p)) && p.name === n) return true;
+    if (ts.isPropertyAssignment(p) && p.name === n) return true;
+    if (ts.isShorthandPropertyAssignment(p)) return true;
+    if (ts.isPropertyAccessExpression(p) && p.name === n) return true;
+    if ((ts.isFunctionDeclaration(p) || ts.isMethodDeclaration(p)) && p.name === n) return true;
+    return false;
+  };
+
+  const walk = (n) => {
+    if (ts.isJsxAttribute(n)) {
+      // The attribute name is not a reference; its value is.
+      if (n.initializer) walk(n.initializer);
+      return;
+    }
+    if (ts.isIdentifier(n) && n.text === "dark") {
+      if (!isDeclarationName(n)) cuts.push({ start: n.getStart(sf) - offset, end: n.getEnd() - offset });
+      return;
+    }
+    ts.forEachChild(n, walk);
+  };
+  walk(sf);
+  let out = text;
+  for (const cut of cuts.sort((a, b) => b.start - a.start)) {
+    out = out.slice(0, cut.start) + "false" + out.slice(cut.end);
+  }
+  return out;
 }
 
 /** Strip the common indent so a pasted snippet is not stair-stepped. */
@@ -586,10 +666,7 @@ function build(section, sf, symbols, classes, componentName) {
       if (!entry) { missingKey = key; return _m; }
       return "literal" in entry ? JSON.stringify(entry.literal) : `(${entry.expression})`;
     });
-    // Only the identifier. `\bdark\b` also matched the `dark` in `dark:bg-cl-bg`
-    // and turned 168 Tailwind variant classes into `false:bg-cl-bg` — still
-    // valid TypeScript, which is why the typecheck gate could not see it.
-    return out.replace(/(?<![\w:-])dark(?![\w:-])/g, "false");
+    return replaceDarkIdentifier(out);
   };
 
   let code = resolvePageScope(dedent(bodyText));

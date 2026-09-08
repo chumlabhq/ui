@@ -17,12 +17,27 @@ const FILTERABLE = { role: { options: [{ label: "Engineer", value: "Engineer" }]
  * fixture that queried straight through would silently render the unopened
  * state and take a visual baseline of it.
  */
-const openFilterPanel = async (container: HTMLElement, ui: ActTools) => {
-  ui.click(container.querySelector("[data-table-filter-trigger], th button"));
+/**
+ * Poll for an element rather than assume the last act produced it.
+ *
+ * The panel and its contents do not arrive together: `filter-selected` opened
+ * the panel, waited for `[data-table-filter-content]`, then went straight for a
+ * `button` inside it — which under a four-worker matrix had not rendered yet,
+ * and the act reported "target element not found". Passing three times out of
+ * three in isolation is what that looks like.
+ */
+const waitForElement = async (root: Document | HTMLElement, selector: string, ui: ActTools) => {
   for (let i = 0; i < 25; i += 1) {
-    if (container.ownerDocument.querySelector("[data-table-filter-content]")) return;
+    const found = root.querySelector(selector);
+    if (found) return found;
     await ui.settle(10);
   }
+  return null;
+};
+
+const openFilterPanel = async (container: HTMLElement, ui: ActTools) => {
+  ui.click(container.querySelector("[data-table-filter-trigger], th button"));
+  await waitForElement(container.ownerDocument, "[data-table-filter-content]", ui);
 };
 
 // `Fixture<TableProps<Row>>` rather than `Fixtures<typeof Table>`: Table is
@@ -102,7 +117,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     // opens the panel AND picks an option.
     act: async (c, ui) => {
       await openFilterPanel(c, ui);
-      ui.click(c.ownerDocument.querySelector("[data-table-filter-content] button"));
+      ui.click(await waitForElement(c.ownerDocument, "[data-table-filter-content] button", ui));
       await ui.settle();
     },
   },
