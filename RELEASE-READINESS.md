@@ -8,10 +8,9 @@ This is written for someone who has not followed the work and has to decide whet
 the package. It says what is claimed and what proves each claim, what is knowingly untrue or
 ungated, what has never been tested at all, and what publishing commits us to.
 
-**Every gate passes except the browser matrix, which has not been measured in full.** Four of
-its seven projects are green on the current tree; webkit went red under machine starvation and
-the last two never ran. That is one clean run away from settled, and it is the only thing
-outstanding. §1.2 has the numbers and the machine they were taken on.
+**Every gate passes.** The browser matrix is green in all seven projects, and each carries the
+machine it ran on, so a later red one can be read without a second measurement. §1.2 has the
+figures and what it took to get them.
 
 ---
 
@@ -25,7 +24,7 @@ outstanding. §1.2 has the numbers and the machine they were taken on.
 | `typecheck` | pass | Both configs clean, each after rejecting its own planted error. `focusVisible` is declared in a local augmentation in `wcag-layout.spec.ts` rather than cast away at the call site: it is in the HTML standard and shipped in every engine here, and TypeScript's DOM lib simply has not caught up |
 | `test:run` | pass | 92 files, 4749 collected, 4749 executed, 4681 passed, 68 skipped. Contracts 1577, unit 3172 |
 | `test:coverage` | pass | 92.04% statements, 87.39% branch, 94.71% functions, 93.95% lines |
-| `test:e2e:all` (7 projects) | **INCOMPLETE** | Four projects green on the current tree — a11y-full, visual, chromium and firefox (all four shards). webkit went red under machine starvation and Mobile Chrome / Mobile Safari never ran; the run was stopped rather than continued. No project is waived (§3.6), so this is not a passing matrix. §1.2 has the figures |
+| `test:e2e:all` (7 projects) | pass | 2512 collected, 2512 executed, 2441 passed, 71 skipped, no non-passes. No project is waived (§3.6), so all seven passed on merit. Each project's load average, free memory and free swap are recorded with it (§1.2) |
 | `verify:consumers` | pass | 9 apps, 2 React majors, 4 frameworks, production builds; plus `publint` and `attw` as their own rows |
 | `verify:consumers:self-check` | pass | 3 plants caught: a subpath export pointing at a missing file, `"use client"` stripped from 154 chunks, the token layer unwrapped |
 | `verify:packaging` | pass | `publint --strict` clean; `attw` clean across node10, node16 and bundler over 32 entrypoints; 8 relative links across 4 shipped documents resolve inside the tarball |
@@ -53,61 +52,56 @@ and no preflight, and 1161 built files carry no fixture-harness code.
 
 ### 1.2 The browser matrix
 
-**Not green, and not measured in full.** The last run was stopped part way.
-
 ```
   project        verdict  collected  executed  note
   a11y-full      pass     5          5         347s
   visual         pass     257        257       155s
   chromium       pass     450        450       314s
   firefox        pass     450        450       661s   (300/131/121/109s)
-  webkit         FAIL     450        450       258 test(s) did not pass
-  Mobile Chrome  NOT RUN  -          -         -
-  Mobile Safari  NOT RUN  -          -         -
+  webkit         pass     450        450       337s
+  Mobile Chrome  pass     450        450       246s
+  Mobile Safari  pass     450        450       353s
+
+  totals: collected 2512  executed 2512  passed=2441 skipped=71
 
   machine at each project's start:
     a11y-full      load 4.15,  free 110MB of 8192MB,  swap free 1192MB
     visual         load 4.52,  free 1280MB of 8192MB, swap free 1362MB
     chromium       load 11.04, free 1598MB of 8192MB, swap free 1474MB
     firefox        load 21.08, free 1259MB of 8192MB, swap free 833MB
-    webkit         load 22.61, free 3111MB of 8192MB, swap free 4048MB
+    webkit         load 2.10,  free 730MB of 8192MB,  swap free 807MB
+    Mobile Chrome  load 3.71,  free 130MB of 8192MB,  swap free 1647MB
+    Mobile Safari  load 4.35,  free 702MB of 8192MB,  swap free 1171MB
 ```
 
-**webkit is red for memory, and that is a statement about the machine rather than the
-package.** It took 1.1 hours for 440 tests and 258 of them did not pass — the mass-timeout
-signature. By the time it was running, the machine was at load 57, 111MB free, and macOS had
-shrunk the swap file from 7GB to 3GB with 442MB left. The top consumers were all system
-daemons: `duetexpertd`, `GenerativeExperiencesRuntime`, `mobileassetd`, `PerfPowerServices`.
-Nothing in this repo was competing with it.
+Green in all seven, no project waived (§3.6), so each passed on merit.
 
-The run was stopped there rather than continued. webkit had already decided the aggregate
-verdict, and two more projects at an hour each would have produced numbers that had to be
-discarded anyway. It was not re-run in the hope of a green.
+**Assembled from more than one sitting, which the fingerprint is what makes legitimate.** The
+first four were measured together; the last three were run one at a time afterwards, each on a
+quiet machine. A recorded verdict is tied to a hash of `src/` and `e2e/`, so a project's result
+only counts while the tree it was measured against is the tree in front of you — that is what
+lets three projects be added to four without re-measuring the four. Re-running them is in fact
+what caused the previous failure: webkit was the fifth project of a single long run, and by the
+time it started, the four before it had left the machine swapping.
 
-**The run before it found a real defect, which is fixed.** `fixture-act.spec.ts` failed in
-chromium on `Table/filter-selected: target element not found`, on a healthy machine — swap
-free 1529MB, every other project green. Not a memory failure and not a flake to wave through:
-`openFilterPanel` waited for the filter panel to mount and the act then went straight for a
-button inside it that had not rendered yet. It passed three times out of three in isolation,
-which is what that race looks like. The fixture polls for the element now, the way the panel
-itself is polled for, and chromium was green on the next run.
+**The difference the figures make.** webkit took 1.1 hours and failed 258 of 440 tests when it
+started at load 22 on a machine that fell to 111MB free with 442MB of swap left. Run alone at
+load 2.1 it took 5.6 minutes and passed. Same tree, same tests. The figures are recorded on
+green runs precisely so that comparison is possible without re-running anything.
 
-**What is still owed before publishing: one clean matrix.** Four projects are green on the
-current tree. webkit, Mobile Chrome and Mobile Safari have not been measured on it.
+**Two real defects were found on the way here, both fixed.** `wcag-layout.spec.ts` read
+computed style in the same tick as `.focus()`, so Firefox returned the pre-transition value
+where Chromium returned the target, and SC 2.4.7 had been passing by engine rather than by
+evidence — with the gate fixed, every one of the 13 focusables it checks has an indicator in
+Firefox. And `fixture-act.spec.ts` failed in chromium on `Table/filter-selected: target element
+not found`, on a healthy machine with every other project green: `openFilterPanel` waited for
+the filter panel to mount and the act then went straight for a button inside it that had not
+rendered yet. It passed three times out of three in isolation, which is what that race looks
+like. The fixture polls for the element now.
 
 The reporter behind these numbers is itself tested: `run-e2e-matrix.mjs --self-check` plants a
 failing test and a timing-out test and requires both to be named by spec, line and title. A
-project that collects zero tests fails, because a filter matching nothing is not a pass. The
-machine figures are printed for every project, green or red, because a green run's numbers are
-what a later red one gets read against — that is what made the webkit result above readable
-without a second measurement.
-
-Firefox's own history is worth keeping. It had never been seen green until 2026-09-08, and its
-failures had been read as environmental for four attempts on the strength of "always a timeout,
-never an assertion". That was false: `wcag-layout.spec.ts` read computed style in the same tick
-as `.focus()`, so Firefox returned the pre-transition value where Chromium returned the target,
-and SC 2.4.7 had been passing by engine rather than by evidence. With the gate fixed, **every
-one of the 13 focusables it checks has an indicator in Firefox**.
+project that collects zero tests fails, because a filter matching nothing is not a pass.
 
 ### 1.3 One gate failed and named its own fix
 
@@ -455,12 +449,16 @@ What should be said out loud to whoever presses publish.
 
 ## 7. What remains
 
-**One clean browser matrix.** Four projects are green on the current tree; webkit, Mobile
-Chrome and Mobile Safari have not been measured on it (§1.2). Run it on a machine that is not
-swapping — this one has 8GB and has now produced three red matrices for memory, twice from
-macOS background daemons rather than anything in the repo. The run records its own conditions,
-so the result will say which it was.
+Nothing in the gate list. Every gate in §1.1 passes, the matrix is green in all seven projects
+with no waiver, and `dist/` has been rebuilt and shown to fingerprint identically
+(`sha256:0b75e3e0…:1163`) to the artifact the packaging, consumer, bundle-size and ssr-record
+gates measured.
 
-Nothing else is owed. Every other gate in §1.1 passes, and `dist/` has been rebuilt and shown
-to fingerprint identically to the artifact the packaging, consumer and ssr-record gates
-measured.
+What is left is judgement, not work: the version decision in §5 and the risks in §6 — above
+all that nine templates are not a user, that no assistive technology has touched this, and that
+`npm publish` is a one-way door.
+
+**One operational note for whoever re-runs the matrix.** This machine has 8GB and has produced
+three red matrices for memory, twice from macOS background daemons rather than anything in the
+repo. Run the projects one at a time if the machine is not idle, and read a red against the
+figures the run records before reading it as a defect.
