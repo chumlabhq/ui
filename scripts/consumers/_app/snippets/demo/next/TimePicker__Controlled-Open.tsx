@@ -9,7 +9,7 @@ export default function TimePickerExample() {
   return (
     <div className="flex items-center gap-4">
       <button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={() => setControlledOpen((o) => !o)}
       >

@@ -14,14 +14,14 @@ export default function LoaderExample() {
         </button>
         <button
           type="button"
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
         >
           <CircularLoader size={16} className="text-cl-accent" />
           Processing
         </button>
         <button
           type="button"
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
         >
           <DotLoader dotSize={5} gap={3} className="text-cl-accent" />
         </button>

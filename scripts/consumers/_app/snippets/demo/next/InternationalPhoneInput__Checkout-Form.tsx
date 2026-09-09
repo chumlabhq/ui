@@ -118,7 +118,7 @@ export default function InternationalPhoneInputExample() {
       />
       <button
         type="submit"
-        className="w-full py-2.5 px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
+        className="w-full py-2.5 px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer cursor-pointer"
       >
         Complete Checkout
       </button>

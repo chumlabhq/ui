@@ -102,6 +102,11 @@ const scopeUtilities = (css) => {
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = resolve(root, "dist");
 const TOKENS = resolve(root, "src/styles/tokens.css");
+// Keyframes the components name inline. Without these in the shipped sheet a
+// consumer's accordion has an animation-name pointing at nothing, so the panel
+// snaps instead of animating — which is what shipped while they lived only in
+// src/index.css, the site's own stylesheet.
+const KEYFRAMES = resolve(root, "src/styles/keyframes.css");
 const OUT = resolve(DIST, "styles.css");
 
 const tokens = readFileSync(TOKENS, "utf8");
@@ -124,6 +129,8 @@ const input = `
 @custom-variant dark (&:where(:root:not(.light):not([data-theme="light"]), :root:not(.light):not([data-theme="light"]) *));
 
 ${tokens}
+
+${readFileSync(KEYFRAMES, "utf8")}
 `;
 
 const compiler = await compile(input, { base: root, onDependency: () => {} });

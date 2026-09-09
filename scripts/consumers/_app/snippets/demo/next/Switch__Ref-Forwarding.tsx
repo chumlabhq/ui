@@ -26,14 +26,14 @@ export default function SwitchExample() {
         <button
           type="button"
           onClick={() => switchRef.current?.focus()}
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer"
         >
           Focus Switch
         </button>
         <button
           type="button"
           onClick={() => switchRef.current?.click()}
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer"
         >
           Toggle Switch
         </button>

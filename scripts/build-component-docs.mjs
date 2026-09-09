@@ -478,9 +478,13 @@ function dataAttributesOf(name) {
 function cssVariablesOf(name) {
   const found = new Set();
   for (const file of walkSource(join(SRC, name))) {
-    for (const m of readFileSync(file, "utf8").matchAll(/["'](--[a-z][a-z0-9-]*)["']\s*:/g)) {
-      found.add(m[1]);
-    }
+    const text = readFileSync(file, "utf8");
+    // A style-object key: `{ "--cl-foo": value }`
+    for (const m of text.matchAll(/["'](--[a-z][a-z0-9-]*)["']\s*:/g)) found.add(m[1]);
+    // …and a direct write: `el.style.setProperty("--cl-foo", value)`. Accordion
+    // sets its content height that way, so the variable that is now the whole
+    // animation contract was documented nowhere a consumer would look.
+    for (const m of text.matchAll(/setProperty\(\s*["'](--[a-z][a-z0-9-]*)["']/g)) found.add(m[1]);
   }
   return [...found].sort();
 }

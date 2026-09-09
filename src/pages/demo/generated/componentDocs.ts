@@ -880,7 +880,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "always"
       }
     ],
-    "cssVariables": [],
+    "cssVariables": [
+      "--cl-accordion-content-height"
+    ],
     "accessibility": [
       "**Keyboard:** ArrowDown/Up navigates items, Home/End jump to first/last, Enter/Space toggles, disabled items are skipped, loop wraps focus",
       "**ARIA:** Triggers have `aria-expanded` + `aria-controls`, content has `role=\"region\"` + `aria-labelledby`, headings provide semantic structure",

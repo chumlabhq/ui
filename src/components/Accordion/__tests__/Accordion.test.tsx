@@ -730,7 +730,7 @@ describe("Accordion", () => {
       );
 
       const content = screen.getByRole("region", { hidden: true });
-      expect(content).toHaveStyle({ transitionDuration: "500ms" });
+      expect(content).toHaveStyle({ animationDuration: "500ms" });
     });
   });
 
@@ -1287,7 +1287,7 @@ describe("Accordion", () => {
       expect(onCloseEnd).toHaveBeenCalled();
     });
 
-    it("sets transitionDuration to 0ms with reduceMotion='always'", () => {
+    it("sets animationDuration to 0ms with reduceMotion='always'", () => {
       render(
         <Accordion type="single" defaultValue="item-1" reduceMotion={true}>
           <AccordionItem value="item-1">
@@ -1298,7 +1298,7 @@ describe("Accordion", () => {
       );
 
       const content = screen.getByRole("region", { hidden: true });
-      expect(content).toHaveStyle({ transitionDuration: "0ms" });
+      expect(content).toHaveStyle({ animationDuration: "0ms" });
     });
   });
 

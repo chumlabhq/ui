@@ -16,8 +16,8 @@ export default function ResizablePanelExample() {
           onClick={() => setDisabledToggle((p) => !p)}
           className={
             disabledToggle
-            ? "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-error hover:bg-cl-error text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error dark:text-cl-bg"
-            : "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success hover:bg-cl-success text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success dark:text-cl-bg"
+            ? "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-error hover:bg-cl-error text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error dark:text-cl-bg cursor-pointer"
+            : "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success hover:bg-cl-success text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success dark:text-cl-bg cursor-pointer"
           }
         >
           {disabledToggle ? "Disabled" : "Enabled"}

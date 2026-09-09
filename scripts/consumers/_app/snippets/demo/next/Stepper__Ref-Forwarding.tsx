@@ -39,7 +39,7 @@ export default function StepperExample() {
           () =>
           stepperRef.current?.scrollIntoView({ behavior: "smooth" })
         }
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer"
       >
         Scroll to Stepper
       </button>

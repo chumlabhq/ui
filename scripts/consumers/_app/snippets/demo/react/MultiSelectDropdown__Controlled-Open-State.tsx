@@ -40,7 +40,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <button
         type="button"
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={() => setControlledOpen((o) => !o)}
       >
@@ -50,7 +50,7 @@ export default function MultiSelectDropdownExample() {
         controlledValue.length > 0 && (
           <button
             type="button"
-            className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated"
+            className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={() => setControlledValue([])}
           >

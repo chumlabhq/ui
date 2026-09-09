@@ -25,6 +25,7 @@ import {
   ComponentDocs,
   CopyPasteBlock,
   SetupNote,
+  CodeBlock,
 } from "./components/index.js";
 
 const Icon = ({
@@ -85,7 +86,6 @@ const getClasses = (dark: boolean) => ({
       ? "border-b border-cl-border last:border-b-0"
       : "border-b border-cl-border last:border-b-0",
     trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent dark:text-cl-text dark:hover:bg-cl-bg-elevated dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
-    content: `px-4 py-4 text-sm text-cl-text-secondary`,
     icon: `h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
   } satisfies AccordionClasses,
 
@@ -1187,6 +1187,76 @@ const AccordionDemo = () => {
       </Section>
 
       {/* ─── Animation ──────────────────────────────────────────────────── */}
+      <Section
+        title="Composition with asChild"
+        description="Render your own element for a part, keeping its behaviour, ARIA and keyboard handling."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <Accordion type="single" collapsible defaultValue="ac-1">
+            <AccordionItem value="ac-1">
+              <AccordionTrigger asChild>
+                <h3 className="flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover">
+                  A heading, not a button wrapper
+                </h3>
+              </AccordionTrigger>
+              <AccordionContent>
+                `asChild` hands the trigger&rsquo;s props to the element you pass, so this is your
+                markup with the accordion&rsquo;s keyboard handling and `aria-expanded` on it.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="ac-2">
+              <AccordionTrigger>An ordinary trigger</AccordionTrigger>
+              <AccordionContent>
+                Both behave identically; only the rendered element differs.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </DemoWrapper>
+        <p className="text-[13px] text-fg-tertiary leading-[1.6] max-w-2xl mt-3">
+          Only the child&rsquo;s own element survives — anything the part would have wrapped it in
+          does not. `AccordionItem`, `AccordionTrigger` and `AccordionContent` all take it.
+        </p>
+      </Section>
+
+      <Section
+        title="Your own open and close animation"
+        description="The panel's height is a CSS custom property, so the animation is yours to replace."
+        isDarkMode={dark}
+      >
+        <p className="text-[14px] text-fg-secondary leading-[1.6] max-w-2xl mb-4">
+          <code className="font-mono text-[12px] text-accent">AccordionContent</code>{" "}
+          measures its content once each time it opens and writes the result to{" "}
+          <code className="font-mono text-[12px] text-accent">--cl-accordion-content-height</code>{" "}
+          on the panel. The shipped keyframes animate <code className="font-mono text-[12px] text-accent">height</code>{" "}
+          between <code className="font-mono text-[12px] text-accent">0</code> and that value. Write your own against
+          the same variable and point the panel at them — the measurement keeps working, because it is
+          the component that does it.
+        </p>
+        <CodeBlock
+          code={`/* your stylesheet */
+@keyframes my-accordion-open {
+  from { height: 0; opacity: 0; }
+  to   { height: var(--cl-accordion-content-height); opacity: 1; }
+}
+
+@keyframes my-accordion-close {
+  from { height: var(--cl-accordion-content-height); opacity: 1; }
+  to   { height: 0; opacity: 0; }
+}
+
+/* the panel carries data-state, so you can select on it */
+[data-state="open"]  > .my-panel { animation: my-accordion-open  240ms ease-out forwards; }
+[data-state="closed"] > .my-panel { animation: my-accordion-close 240ms ease-in  forwards; }`}
+        />
+        <p className="text-[13px] text-fg-tertiary leading-[1.6] max-w-2xl mt-3">
+          The animating element is a bare clipper — no padding, margin or border. Keep it that way:
+          padding on the element whose height is animating stops it collapsing cleanly, which reads as
+          a stutter and then a snap. Put your padding on the inner element, which is what{" "}
+          <code className="font-mono text-[12px] text-accent">classes.body</code> styles.
+        </p>
+      </Section>
+
       <Section
         title="Animation Customization"
         description="Adjust animation duration, easing, and reduce motion support."

@@ -4,6 +4,7 @@ import { Slot } from "../../../utils/Slot.js";
 import { mergeRefs } from "../../../utils/mergeRefs.js";
 import type { AccordionContentProps } from "../utils/types.js";
 import { cn } from "../../../utils/scopedCn.js";
+import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect.js";
 
 const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
   (
@@ -32,11 +33,9 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
     const animationEasing = propAnimationEasing ?? config.animationEasing;
     const effectiveDuration = config.reduceMotion ? 0 : animationDuration;
 
-    const [showExpanded, setShowExpanded] = useState(false);
     const [hasBeenOpened, setHasBeenOpened] = useState(item.isExpanded);
     const [prevIsExpanded, setPrevIsExpanded] = useState(item.isExpanded);
     const [isClosing, setIsClosing] = useState(false);
-    const rafRef = useRef<number | null>(null);
 
     if (item.isExpanded !== prevIsExpanded) {
       setPrevIsExpanded(item.isExpanded);
@@ -45,26 +44,47 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       }
       if (!item.isExpanded && prevIsExpanded) {
         setIsClosing(true);
-        setShowExpanded(false);
       }
     }
 
     const contentNodeRef = useRef<HTMLDivElement>(null);
+    const innerRef = useRef<HTMLDivElement>(null);
 
+    /**
+     * Measure once, into a custom property, and let CSS keyframes do the rest.
+     *
+     * Two earlier attempts failed here. A `max-height` transition read
+     * `scrollHeight` on every open, and the first open read content that had
+     * never been laid out, so the transition ran to the wrong target and a
+     * ResizeObserver corrected it a frame later. Grid rows removed the
+     * measurement but jittered anyway, because the row being clipped was also
+     * the element carrying `px-4 py-4` — a clipper with padding cannot collapse
+     * cleanly, so it stuck and then snapped.
+     *
+     * So: the animating element is a bare clipper with no padding, margin or
+     * border, all of that lives on the inner div, and the height it animates to
+     * is written once to `--cl-accordion-content-height`. Animation is
+     * suppressed for the read so the measurement is the content's natural
+     * height rather than whatever frame the animation is on.
+     *
+     * The variable is deliberately on the element rather than kept in state: a
+     * consumer can write their own keyframes against it, which is the whole
+     * point of Radix exposing it.
+     */
+    useIsomorphicLayoutEffect(() => {
+      const node = contentNodeRef.current;
+      const inner = innerRef.current;
+      if (!node || !inner) return;
 
-    useEffect(() => {
-      if (item.isExpanded) {
-        rafRef.current = requestAnimationFrame(() => {
-          setShowExpanded(true);
-        });
+      const previous = node.style.animationName;
+      node.style.animationName = "none";
+      const height = inner.getBoundingClientRect().height;
+      if (height > 0) {
+        node.style.setProperty("--cl-accordion-content-height", `${height}px`);
       }
+      node.style.animationName = previous;
+    }, [item.isExpanded, children]);
 
-      return () => {
-        if (rafRef.current) {
-          cancelAnimationFrame(rafRef.current);
-        }
-      };
-    }, [item.isExpanded]);
 
 
     const endFiredRef = useRef(false);
@@ -97,19 +117,25 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
 
       if (!node) return;
 
-      const handleTransitionEnd = (e: TransitionEvent) => {
+      // `animationend`, not `transitionend`. The panel is driven by keyframes
+      // now, so the old listener — which also required `propertyName ===
+      // "max-height"` — could never fire, and the timeout below had quietly
+      // become the only thing firing onOpenEnd and onCloseEnd, always ~50ms
+      // late. A fallback that is load-bearing is not a fallback.
+      const handleAnimationEnd = (e: AnimationEvent) => {
         if (e.target !== node) return;
-        if (e.propertyName !== "max-height") return;
+        if (e.animationName !== "cl-accordion-down" && e.animationName !== "cl-accordion-up") return;
         fireEnd();
       };
 
-      node.addEventListener("transitionend", handleTransitionEnd);
+      node.addEventListener("animationend", handleAnimationEnd);
 
-      // Safety fallback: if transitionend doesn't fire (e.g., display:none parent)
+      // A real fallback: an element in a `display: none` subtree runs no
+      // animation, so nothing would fire.
       const fallbackTimer = setTimeout(fireEnd, effectiveDuration + 50);
 
       return () => {
-        node.removeEventListener("transitionend", handleTransitionEnd);
+        node.removeEventListener("animationend", handleAnimationEnd);
         clearTimeout(fallbackTimer);
       };
     }, [
@@ -136,30 +162,40 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       return null;
     }
 
-    const wrapperClassName = cn(config.classes.content, className);
+    // Deliberately NOT on the animating element.
+    //
+    // `content` used to be the clipper's own class, so a consumer writing
+    // `classes={{ content: "px-4 py-4" }}` put padding back on the element
+    // whose height is being animated — and a clipper with padding cannot
+    // collapse to nothing, so it sticks and then snaps. That is the fault this
+    // component has now had three times, and the third time a consumer
+    // reintroduced it through a slot the library invited them to style.
+    //
+    // The clipper is internal now. Nothing a consumer can name lands on it, so
+    // padding on `content` or `body` is inside the animated region where it is
+    // clipped correctly.
+    const panelClassName = cn(config.classes.content, className);
 
-    // A grid row that animates from 0fr to 1fr, not a measured max-height.
-    //
-    // The old path read `scrollHeight` on every open. On the FIRST open that
-    // read happens against content that has never been laid out — it is
-    // `visibility: hidden` inside a `max-height: 0` box — so the height came
-    // back wrong, the transition ran to the wrong target, and a ResizeObserver
-    // corrected it a frame later. That is the jitter, and it is why only the
-    // first open of an item stutters. Closing had the mirror problem: the panel
-    // held its measured height until the measurement caught up.
-    //
-    // The browser can interpolate a grid track without being told the height,
-    // so there is nothing to measure and nothing to correct. This is also what
-    // the Animation guide has always claimed the component does.
     const contentStyle: React.CSSProperties = {
-      display: "grid",
-      gridTemplateRows: showExpanded ? "1fr" : "0fr",
-      opacity: showExpanded ? 1 : 0,
-      visibility: showExpanded ? "visible" : "hidden",
-      pointerEvents: showExpanded ? undefined : "none",
-      transitionProperty: "grid-template-rows, opacity, visibility",
-      transitionDuration: `${effectiveDuration}ms`,
-      transitionTimingFunction: animationEasing,
+      overflow: "hidden",
+      // `data-state` selects the keyframe; the element carries no padding, so
+      // there is nothing to re-lay out while the height runs.
+      animationName: effectiveDuration
+        ? item.isExpanded
+          ? "cl-accordion-down"
+          : "cl-accordion-up"
+        : undefined,
+      animationDuration: `${effectiveDuration}ms`,
+      animationTimingFunction: animationEasing,
+      animationFillMode: "forwards",
+      // With motion off there is no animation to hold the end state.
+      height: effectiveDuration
+        ? undefined
+        : item.isExpanded
+          ? "var(--cl-accordion-content-height, auto)"
+          : 0,
+      visibility: item.isExpanded || isClosing ? "visible" : "hidden",
+      pointerEvents: item.isExpanded ? undefined : "none",
     };
 
     const Comp = asChild ? Slot : "div";
@@ -174,21 +210,14 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
         data-state={item.isExpanded ? "open" : "closed"}
         data-disabled={item.disabled || undefined}
         data-orientation={config.orientation}
-        className={wrapperClassName || undefined}
         style={contentStyle}
         {...rest}
       >
         {asChild ? (
           children
         ) : (
-          <div
-            // The grid row itself. `min-height: 0` lets it shrink below its
-            // content's intrinsic height, which is what makes 0fr collapse at
-            // all; `overflow: hidden` keeps the content clipped on the way.
-            style={{ minHeight: 0, overflow: "hidden" }}
-            className={cn(config.classes.body) || undefined}
-          >
-            {children}
+          <div ref={innerRef} className={panelClassName || undefined}>
+            <div className={cn(config.classes.body) || undefined}>{children}</div>
           </div>
         )}
       </Comp>

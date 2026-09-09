@@ -198,34 +198,41 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       expect(hasFocusStyles).toBe(true);
     });
 
-    test("should animate content transitions", async ({ page }) => {
+    test("the panel animates against its measured height", async ({ page }) => {
       const accordion = page.locator('[data-orientation="vertical"]').first();
       const trigger = accordion.getByRole("button").first();
-
       const contentId = await trigger.getAttribute("aria-controls");
-      if (contentId) {
-        const content = page.locator(`#${contentId}`);
+      expect(contentId, "the trigger names no panel").toBeTruthy();
 
-        // Check for CSS transitions
-        // Longhands, not the `transition` shorthand. Firefox serialises the
-        // shorthand to "" whenever it cannot round-trip it — here, a
-        // multi-property transition — while reporting the same
-        // `transitionDuration` and `transitionProperty` as Chromium. Asserting
-        // the shorthand was asserting Chromium's serialisation rather than the
-        // presence of a transition, and it was the only remaining firefox
-        // failure once that project was actually being run.
-        const hasTransition = await content.evaluate((el) => {
-          const styles = window.getComputedStyle(el);
-          return (
-            styles.transitionDuration !== "0s" &&
-            styles.transitionDuration !== "" &&
-            styles.transitionProperty !== "none" &&
-            styles.transitionProperty !== ""
-          );
-        });
+      // Open it: the panel is not mounted until it has been opened once.
+      if ((await trigger.getAttribute("aria-expanded")) !== "true") await trigger.click();
+      const content = page.locator(`#${contentId}`);
+      await expect(content).toBeVisible();
 
-        expect(hasTransition).toBe(true);
-      }
+      // This asserted a CSS transition, which the component no longer uses —
+      // it was testing the max-height machinery rather than that the panel
+      // animates. Replaced rather than deleted because the animation being
+      // wired at all is exactly what broke repeatedly, and nothing else in the
+      // suite would have noticed: the keyframes shipped missing from
+      // dist/styles.css and every unit test still passed.
+      const state = await content.evaluate((el) => {
+        const cs = window.getComputedStyle(el);
+        return {
+          name: cs.animationName,
+          duration: cs.animationDuration,
+          heightVar: el.style.getPropertyValue("--cl-accordion-content-height"),
+          padding: cs.padding,
+          overflow: cs.overflow,
+        };
+      });
+
+      expect(["cl-accordion-down", "cl-accordion-up"]).toContain(state.name);
+      expect(state.duration, "the panel has no animation duration").not.toBe("0s");
+      expect(state.heightVar, "nothing measured the content height").toMatch(/^\d/);
+      // The animating element must stay a bare clipper: padding on it stops the
+      // height collapsing cleanly, which is the stutter this component had.
+      expect(state.padding).toBe("0px");
+      expect(state.overflow).toBe("hidden");
     });
 
     test("should rotate chevron icon when expanded", async ({ page }) => {

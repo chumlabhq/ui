@@ -12,11 +12,11 @@ recorded there because they belong next to the code that implements them.
 | --- | --- |
 | Components audited | 58 |
 | Library-authored props across the public surface | 1136 |
-| With no demo | 283 (25%) |
+| With no demo | 282 (25%) |
 | With no fixture | 648 (57%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
-| Tier-A demonstrated canonically (once, for the library) | 52 |
+| Tier-A demonstrated canonically (once, for the library) | 51 |
 | Tier-A left undemonstrated with a recorded reason | 21 |
 | **Tier-A gaps (a whole mode, no demo, no reason)** | **0** |
 
@@ -51,7 +51,7 @@ listed here with no demo anywhere fails the generator.
 | Prop | Components | Where the one demo is |
 | --- | --- | --- |
 | `unstyled` | 30 | StylingDemo — live side-by-side against the styled render |
-| `asChild` | 10 | StylingDemo — `<Button asChild><a/></Button>`, a real anchor beside a button |
+| `asChild` | 9 | StylingDemo — `<Button asChild><a/></Button>`, a real anchor beside a button |
 | `portalContainer` | 8 | StylingDemo — two identical dropdowns, one portalled into the box beside it |
 | `keepMounted` | 4 | AnimationDemo — two dropdowns, one kept, counting `[role=listbox]` nodes |
 
@@ -74,7 +74,7 @@ listed here with no demo anywhere fails the generator.
 | AccordionContent | 11 | 279 | 4 | 10 | 0 | `asChild` |
 | AccordionItem | 6 | 277 | 3 | 5 | 0 | `asChild` |
 | AccordionShimmer | 11 | 2 | 7 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` |
-| AccordionTrigger | 10 | 277 | 3 | 9 | 0 | `asChild` |
+| AccordionTrigger | 10 | 277 | 2 | 9 | 0 | — |
 | Avatar | 21 | 278 | 2 | 12 | 0 | `asChild` |
 | AvatarBadge | 14 | 278 | 6 | 8 | 0 | `variant`, `asChild` |
 | AvatarGroup | 16 | 278 | 3 | 11 | 0 | `asChild` |

@@ -87,7 +87,7 @@ export default function ResizablePanelExample() {
         <button
           type="button"
           onClick={() => setControlledWidth(320)}
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
         >
           Reset
         </button>

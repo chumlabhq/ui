@@ -216,7 +216,7 @@ export default function TableExample() {
               {contextMenuInfo}
               <button
                 onClick={() => setContextMenuInfo(null)}
-                className="ml-3 underline text-xs text-cl-warning dark:text-cl-warning"
+                className="ml-3 underline text-xs text-cl-warning dark:text-cl-warning cursor-pointer"
               >
                 Dismiss
               </button>

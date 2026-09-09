@@ -1,0 +1,25 @@
+/* Animation keyframes the components reference by name.
+ *
+ * These MUST ship in dist/styles.css. AccordionContent sets
+ * `animation-name: cl-accordion-down` inline, so if the keyframes are missing
+ * from the consumer's stylesheet the name resolves to nothing and the panel
+ * snaps open with no animation at all — which is exactly what shipped when
+ * these lived only in src/index.css, the site's own stylesheet.
+ *
+ * `src/styles/tokens.css` is generated from src/index.css by
+ * scripts/build-tokens.mjs and holds only --cl-* declarations, so it is not a
+ * place to put them: an edit there is overwritten by the next build.
+ */
+
+/* The height comes from --cl-accordion-content-height, which AccordionContent
+ * measures once per open and writes to the element. It is a custom property so
+ * a consumer can write their own keyframes against it. */
+@keyframes cl-accordion-down {
+  from { height: 0; }
+  to { height: var(--cl-accordion-content-height, auto); }
+}
+
+@keyframes cl-accordion-up {
+  from { height: var(--cl-accordion-content-height, auto); }
+  to { height: 0; }
+}

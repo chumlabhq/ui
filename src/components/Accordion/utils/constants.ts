@@ -9,7 +9,7 @@ export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
     "flex w-full items-center justify-between text-left font-medium transition-colors text-cl-text hover:bg-cl-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
   itemText: "flex-1 text-left",
   body: "text-cl-text-secondary",
-  content: "transition-[grid-template-rows,opacity,visibility]",
+  content: "",
   icon: "shrink-0",
   itemIndicator:
     "text-cl-text-tertiary transition-transform duration-200",
