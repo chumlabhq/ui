@@ -67,7 +67,7 @@ const BASELINE: Record<string, number> = {
   "Accordion/components/AccordionShimmer.tsx": 0,
   "Avatar/components/AvatarBadge.tsx": 2,
   "Avatar/components/AvatarGroupCount.tsx": 2,
-  "Avatar/components/AvatarShimmer.tsx": 1,
+  "Avatar/components/AvatarShimmer.tsx": 0,
   "CascadingDropdown/CascadingDropdown.tsx": 5,
   "Checkbox/Checkbox.tsx": 1,
   "CountryFlag/components/CountryFlagGroup.tsx": 1,
@@ -215,7 +215,7 @@ const BUILTIN_COLOUR =
  * a colour namespace being read as a keyword.
  */
 const NOT_A_COLOUR =
-  /^(\d|\[|linear-|radial|conic|gradient-|xs$|sm$|md$|lg$|xl$|\dxl$|left$|center$|right$|justify$|start$|end$|top$|bottom$|middle$|wrap$|nowrap$|balance$|pretty$|ellipsis$|clip$|solid$|dashed$|dotted$|double$|hidden$|collapse$|separate$|inset$|offset$|x$|y$|t$|r$|b$|l$|s$|e$|wavy$|line$|base$|through$)/;
+  /^(\d|\[|linear-|radial|conic|gradient-|xs$|sm$|md$|lg$|xl$|\dxl$|left$|center$|right$|justify$|start$|end$|top$|bottom$|middle$|wrap$|nowrap$|balance$|pretty$|ellipsis$|clip$|solid$|dashed$|dotted$|double$|hidden$|collapse$|separate$|inset$|offset$|x$|y$|t$|r$|b$|l$|s$|e$|wavy$|line$|base$|through$|box$)/;
 
 /** A Tailwind palette colour written as a class: `bg-gray-200`, `via-gray-300`. */
 const RAW_PALETTE_CLASS =
@@ -365,7 +365,12 @@ describe("constants contract", () => {
     // not be faulted.
     const shimmer =
       "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.06] dark:from-fg/[0.10] " +
-      "via-fg/[0.06] text-center text-sm border-2 bg-cl-bg-item-hover text-cl-text-chrome";
+      "via-fg/[0.06] text-center text-sm border-2 bg-cl-bg-item-hover text-cl-text-chrome " +
+      // `border-box` is a `box-sizing` VALUE, not a class. It parses as the
+      // `border-` colour utility with a namespace of `box` and was faulted as
+      // an unshippable colour; the same shape reaches this scan from any
+      // `boxSizing` in a style object.
+      "border-box";
     expect(
       shimmer.split(/\s+/).filter(unshippedColour),
       "the namespace check cannot see a marketing-namespace class, or faults a real one",

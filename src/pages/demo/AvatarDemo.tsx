@@ -535,6 +535,32 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Tone</p>
+            <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
+              {(
+                [
+                  { tone: "accent" as const, label: "accent (default)", count: 5 },
+                  { tone: "error" as const, label: "error", count: 5 },
+                  { tone: "accent" as const, label: "accent dot", dot: true },
+                  { tone: "error" as const, label: "error dot", dot: true },
+                ]
+              ).map(({ tone, label, count, dot }, i) => (
+                <div key={label} className="text-center pt-2 pb-1">
+                  <div className="relative inline-flex">
+                    <Avatar name={label} style={badgeToneStyle(i)} />
+                    <AvatarBadge tone={tone} count={count} dot={dot} />
+                  </div>
+                  <p className={`text-xs mt-3 ${c.label}`}>{label}</p>
+                </div>
+              ))}
+            </DemoWrapper>
+            <p className={`${c.note}`}>
+              A count is a notification, not a fault, so the default is the
+              accent. Reserve <code>tone="error"</code> for a badge that reports
+              something wrong.
+            </p>
+          </div>
+          <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>Positions</p>
             <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
               {(

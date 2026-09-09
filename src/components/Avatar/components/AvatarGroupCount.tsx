@@ -131,6 +131,10 @@ export const AvatarGroupCount = forwardRef<
         )
       : fontSize;
 
+    // Only the default variant takes the group fill: `outline` and `ghost` are
+    // deliberate treatments a caller asked for and are left as they are.
+    const isGroupSolid = Boolean(groupCtx) && variant === "solid";
+
     const displayCount = useMemo(() => {
       if (format) return format(count);
       // Standalone keeps the `99+` it always showed; only the group form, which
@@ -160,9 +164,7 @@ export const AvatarGroupCount = forwardRef<
         className={cn(
           "shrink-0 inline-flex items-center justify-center",
           variantClassNames[variant],
-          // Only the default variant: `outline` and `ghost` are deliberate
-          // treatments a caller asked for and are left as they are.
-          groupCtx && variant === "solid" && GROUP_SOLID_CLASSES,
+          isGroupSolid && GROUP_SOLID_CLASSES,
           onClick && "cursor-pointer hover:opacity-80 transition-opacity",
           className,
         )}

@@ -8,7 +8,7 @@ export default function AccordionExample() {
   return (
     <Accordion
       type="single"
-      value={singleValue ?? undefined}
+      value={singleValue}
       onValueChange={setSingleValue}
       collapsible
       classes={

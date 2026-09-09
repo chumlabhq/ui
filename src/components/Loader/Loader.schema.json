@@ -91,7 +91,8 @@
         },
         "trackColor": {
           "type": "string",
-          "description": "Background track color."
+          "description": "Background track color.",
+          "default": "currentColor"
         },
         "borderRadius": {
           "type": "number",
@@ -298,7 +299,8 @@
         },
         "trackColor": {
           "type": "string | undefined",
-          "description": "Background track color"
+          "description": "Background track color",
+          "default": "currentColor"
         },
         "borderRadius": {
           "type": "number | undefined",

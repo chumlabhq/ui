@@ -161,7 +161,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `count` | `number` | Number of additional (hidden) avatars. |
 | `size` | `AvatarSize \| undefined` | Size matching the group's avatar size. |
 | `shape` | `AvatarShape \| undefined` | Shape matching the group's avatar shape. |
-| `max` | `number \| undefined` | Maximum count before showing `max+`. |
+| `max` | `number \| undefined` | Maximum count before showing `max+`. Inside an `AvatarGroup` this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one. |
 | `showPlus` | `boolean \| undefined` | Whether to show a `+` prefix. Default: `true`. |
 | `format` | `((count: number) => string) \| undefined` | Custom format function for the count display. |
 | `variant` | `CountVariant \| undefined` | Visual style variant. |
@@ -186,6 +186,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `color` | `string \| undefined` | Background color of the badge. |
 | `size` | `BadgeSize \| undefined` | Badge size preset. Default: `"sm"`. |
 | `variant` | `BadgeVariant \| undefined` | Visual style variant. Default: `"solid"`. |
+| `tone` | `BadgeTone \| undefined` | Token family the badge draws from. Default: `"accent"` — a count is a notification, not a fault. Use `"error"` for a badge that reports one. |
 | `overlap` | `BadgeOverlap \| undefined` | Shape of the element the badge overlaps. |
 | `pulse` | `boolean \| undefined` | Adds a pulsing animation to the badge. |
 | `invisible` | `boolean \| undefined` | Hides the badge while preserving its DOM presence. |

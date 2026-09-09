@@ -45,6 +45,10 @@ const WIDTHS = [320, 375, 768, 1024, 1440, 1920];
 const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "Accordion", fixture: "single-open" },
   { component: "Avatar", fixture: "in-group" },
+  // The surplus is the one member of a group that is not an Avatar, and it was
+  // in no baseline: `in-group` has no `max`, so nothing ever photographed the
+  // count's circle, ring or overlap. Its geometry regressed three times.
+  { component: "Avatar", fixture: "group-surplus" },
   { component: "Breadcrumb", fixture: "default" },
   { component: "Button", fixture: "with-icons" },
   { component: "CascadingDropdown", fixture: "closed" },

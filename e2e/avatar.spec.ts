@@ -34,6 +34,30 @@ test.describe("Avatar (fixtures)", () => {
     }
   });
 
+  test("the surplus overlaps like an avatar and stays its size", async ({ page }) => {
+    await gotoFixture(page, "Avatar", "group-surplus");
+
+    const members = page.locator('[data-fixture] [role="group"] > div');
+    await expect(members).toHaveCount(3);
+
+    const boxes = [];
+    for (let i = 0; i < 3; i++) boxes.push((await members.nth(i).boundingBox())!);
+
+    // The claim no unit test can make: the surplus is laid out as a member of
+    // the stack, not a caption after it. Reported three times as "a gap between
+    // the last avatar and the surplus" while the computed margin looked right,
+    // so this measures painted geometry rather than style strings.
+    const steps = [boxes[1].x - boxes[0].x, boxes[2].x - boxes[1].x];
+    expect(
+      Math.abs(steps[1] - steps[0]),
+      `surplus steps ${steps[1]}px where the avatars step ${steps[0]}px`,
+    ).toBeLessThan(0.5);
+
+    // And it is the avatars' size, not a pill that grows with its digits.
+    expect(Math.abs(boxes[2].width - boxes[0].width)).toBeLessThan(0.5);
+    expect(Math.abs(boxes[2].height - boxes[0].height)).toBeLessThan(0.5);
+  });
+
   test("decodes and shows a real image", async ({ page }) => {
     await gotoFixture(page, "Avatar", "image-decodable");
 
@@ -54,6 +78,26 @@ test.describe("Avatar (fixtures)", () => {
     await gotoFixture(page, "Avatar", "with-status");
     await injectAxe(page);
     await checkA11y(page, "[data-fixture]", { detailedReport: true });
+  });
+
+  test("the surplus keeps its role and name as a circle in the stack", async ({
+    page,
+  }) => {
+    await gotoFixture(page, "Avatar", "group-surplus");
+    await injectAxe(page);
+    await checkA11y(page, "[data-fixture]", { detailedReport: true });
+
+    // The surplus was restyled twice — pill to circle, then refilled. Neither
+    // is allowed to move what it reports: it is a status, it says how many are
+    // hidden, and the group still counts every member including them.
+    const surplus = page.locator('[data-fixture] [role="status"]');
+    await expect(surplus).toHaveCount(1);
+    await expect(surplus).toHaveAccessibleName("2 more members not shown");
+    await expect(surplus).toHaveText("+2");
+
+    await expect(page.locator('[data-fixture] [role="group"]')).toHaveAccessibleName(
+      "Avatar group with 4 members, 2 more not shown",
+    );
   });
 
   test("fits inside a 375px viewport", async ({ page }) => {

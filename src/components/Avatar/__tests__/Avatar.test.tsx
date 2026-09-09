@@ -440,6 +440,107 @@ describe("AvatarGroup", () => {
 
       expect(screen.getByText("+8")).toBeInTheDocument();
     });
+
+    it("renders a single child with no surplus and no leading offset", () => {
+      const { container } = render(
+        <AvatarGroup>
+          <Avatar name="John Doe" />
+        </AvatarGroup>,
+      );
+
+      expect(screen.getByText("JD")).toBeInTheDocument();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      // The first member never carries the overlap; with one child that is the
+      // only member, so a stray margin would show as the group being indented.
+      const first = container.querySelector('[role="group"]')
+        ?.firstElementChild as HTMLElement;
+      // React serialises a numeric 0 without a unit, unlike the -8 below it.
+      expect(first.style.marginInlineStart).toBe("0");
+    });
+
+    it("renders an empty group without a surplus", () => {
+      render(<AvatarGroup />);
+
+      const group = screen.getByRole("group");
+      expect(group).toBeEmptyDOMElement();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      // Still announces itself honestly rather than claiming members it has not
+      // got — `total` is what a caller uses to say there are more elsewhere.
+      expect(group).toHaveAccessibleName("Avatar group with 0 members");
+    });
+
+    it("does not show a surplus when max covers every child", () => {
+      render(
+        <AvatarGroup max={3}>
+          <Avatar name="John Doe" />
+          <Avatar name="Jane Smith" />
+          <Avatar name="Bob Lee" />
+        </AvatarGroup>,
+      );
+
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Surplus in the stack", () => {
+    const renderSurplusGroup = (count: number) =>
+      render(
+        <AvatarGroup max={1} total={count + 1}>
+          <Avatar name="John Doe" />
+        </AvatarGroup>,
+      );
+
+    it("caps the count at 99 so three digits never reach the circle", () => {
+      renderSurplusGroup(1200);
+
+      // `+99`, not `+99+`: the `+` prefix already says "more".
+      expect(screen.getByRole("status")).toHaveTextContent("+99");
+      expect(screen.getByRole("status")).not.toHaveTextContent("+99+");
+    });
+
+    it("leaves an explicit max alone inside a group", () => {
+      render(
+        <AvatarGroup max={1} total={51}>
+          <Avatar name="John Doe" />
+        </AvatarGroup>,
+      );
+      expect(screen.getByRole("status")).toHaveTextContent("+50");
+    });
+
+    it("is the same fixed width as the avatars beside it", () => {
+      renderSurplusGroup(47);
+
+      // The defect this replaces: `minWidth` alone let a two-digit count widen
+      // the circle into a pill and push the rest of the row along.
+      const surplus = screen.getByRole("status");
+      expect(surplus.style.width).toBe("40px");
+      expect(surplus.style.maxWidth).toBe("40px");
+      expect(surplus.style.height).toBe("40px");
+    });
+
+    it("overlaps its neighbour by the same margin every avatar gets", () => {
+      renderSurplusGroup(2);
+
+      const group = screen.getByRole("group");
+      const wrappers = [...group.children] as HTMLElement[];
+      const margins = wrappers.slice(1).map((w) => w.style.marginInlineStart);
+      // Reported three times as "a gap between the last avatar and the
+      // surplus". The surplus wrapper is a stack slot like any other.
+      expect(margins).toEqual(margins.map(() => "-8px"));
+      expect(wrappers[wrappers.length - 1]).toContainElement(
+        screen.getByRole("status"),
+      );
+    });
+
+    it("keeps the standalone pill, which was never the problem", () => {
+      render(<AvatarGroupCount count={1200} />);
+
+      const count = screen.getByRole("status");
+      // No group context: no cap, no fixed width, symmetric padding.
+      expect(count).toHaveTextContent("+1200");
+      expect(count.style.width).toBe("");
+      expect(count.style.minWidth).toBe("40px");
+    });
   });
 
   describe("Custom Surplus", () => {

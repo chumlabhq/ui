@@ -164,14 +164,40 @@ function defaultsOfTag(tag, files, consts) {
         (ts.isFunctionDeclaration(node) && node.name?.text === tag);
       if (isTag) {
         const found = {};
+        const destructured = new Set();
         const scan = (inner) => {
-          if (ts.isBindingElement(inner) && ts.isIdentifier(inner.name) && inner.initializer) {
-            const resolved = resolve(inner.initializer, sf);
-            if (resolved !== undefined) found[inner.name.text] = resolved;
+          if (ts.isBindingElement(inner) && ts.isIdentifier(inner.name)) {
+            destructured.add(inner.name.text);
+            if (inner.initializer) {
+              const resolved = resolve(inner.initializer, sf);
+              if (resolved !== undefined) found[inner.name.text] = resolved;
+            }
           }
           ts.forEachChild(inner, scan);
         };
         scan(node);
+
+        // A default resolved in the body rather than in the destructuring:
+        // `const effectiveShape = shape ?? DEFAULT_SHAPE`. Only the binding
+        // elements were read, so `AvatarGroup`'s `shape` and `spacing` — which
+        // do have defaults — rendered "-", and hand-writing them into the
+        // schema did not survive the next run of this script.
+        const fallbacks = (inner) => {
+          if (
+            ts.isVariableDeclaration(inner) &&
+            inner.initializer &&
+            ts.isBinaryExpression(inner.initializer) &&
+            inner.initializer.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken &&
+            ts.isIdentifier(inner.initializer.left) &&
+            destructured.has(inner.initializer.left.text) &&
+            found[inner.initializer.left.text] === undefined
+          ) {
+            const resolved = resolve(inner.initializer.right, sf);
+            if (resolved !== undefined) found[inner.initializer.left.text] = resolved;
+          }
+          ts.forEachChild(inner, fallbacks);
+        };
+        fallbacks(node);
         if (Object.keys(found).length) { out = found; return; }
       }
       ts.forEachChild(node, visit);

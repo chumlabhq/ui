@@ -6,6 +6,7 @@ import {
   DEFAULT_SPACING,
   DEFAULT_AVATAR_SHIMMER_CLASSES,
   UNSTYLED_AVATAR_SHIMMER_CLASSES,
+  AVATAR_GROUP_SHIMMER_CLASSES,
 } from "../utils/constants.js";
 import { getNumericSize, getBorderRadius } from "../utils/helpers.js";
 import { Slot } from "../../../utils/Slot.js";
@@ -103,14 +104,14 @@ export const AvatarGroupShimmer = forwardRef<
       position: "relative" as const,
     };
     const fillClassName = cn(
-      "w-full h-full bg-gray-200",
+      AVATAR_GROUP_SHIMMER_CLASSES.fill,
       shouldAnimate && "animate-pulse",
     );
 
     return (
       <Comp
         ref={ref}
-        className={cn("flex items-center", className)}
+        className={cn(AVATAR_GROUP_SHIMMER_CLASSES.root, className)}
         style={style}
         role="status"
         aria-label="Loading avatar group"
@@ -118,7 +119,7 @@ export const AvatarGroupShimmer = forwardRef<
         {Array.from({ length: count }).map((_, index) => (
           <div
             key={index}
-            className="shrink-0"
+            className={AVATAR_GROUP_SHIMMER_CLASSES.item}
             style={{
               ...ringStyle,
               marginInlineStart: index === 0 ? 0 : spacing,
@@ -130,7 +131,7 @@ export const AvatarGroupShimmer = forwardRef<
         ))}
         {showCount && (
           <div
-            className="shrink-0"
+            className={AVATAR_GROUP_SHIMMER_CLASSES.item}
             style={{ ...ringStyle, marginInlineStart: spacing, zIndex: 0 }}
           >
             <div className={fillClassName} style={{ borderRadius }} />

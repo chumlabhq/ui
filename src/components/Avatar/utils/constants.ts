@@ -151,3 +151,15 @@ export const DEFAULT_AVATAR_SHIMMER_CLASSES: Required<AvatarShimmerClasses> = {
 
 export const UNSTYLED_AVATAR_SHIMMER_CLASSES: Required<AvatarShimmerClasses> =
   structuralOnly(DEFAULT_AVATAR_SHIMMER_CLASSES);
+
+/**
+ * `AvatarGroupShimmer`'s internal parts. It exposes no `classes` bag, so these
+ * are not a public slot map — they live here because a class string at a call
+ * site is a class string wherever it is, and the group shimmer needs two
+ * elements per placeholder: the ring must not inherit the fill's pulse.
+ */
+export const AVATAR_GROUP_SHIMMER_CLASSES = {
+  root: "flex items-center",
+  item: "shrink-0",
+  fill: "w-full h-full bg-gray-200",
+} as const;

@@ -125,7 +125,8 @@
     "portalContainer": {
       "type": "object",
       "description": "HTMLElement | null — Portal container for the drawer.",
-      "x-tsType": "HTMLElement | null | undefined"
+      "x-tsType": "HTMLElement | null | undefined",
+      "x-defaultSource": "document.body"
     },
     "initialFocus": {
       "type": "object",

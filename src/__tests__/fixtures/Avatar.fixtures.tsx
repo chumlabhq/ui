@@ -29,6 +29,19 @@ const fixtures: Fixtures<typeof Avatar> = [
     ),
   },
   {
+    name: "group-surplus",
+    note: "The surplus count had no fixture at all, so the one part of the group that is not an Avatar was never painted in a baseline, never measured by e2e and never sat in an axe run. Its overlap regressed three times before this existed.",
+    props: {},
+    render: () => (
+      <AvatarGroup max={2}>
+        <Avatar name="Ada Lovelace" />
+        <Avatar name="Bob Barker" />
+        <Avatar name="Cy Coleman" />
+        <Avatar name="Dee Dee" />
+      </AvatarGroup>
+    ),
+  },
+  {
     name: "image-decodable",
     props: { src: PNG_1PX, alt: "Ada" },
     note: "A data URI, not a URL: the fixture page has no network and CSP blocks one, so a real decode needs the bytes inline.",

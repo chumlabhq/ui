@@ -52,7 +52,7 @@
     },
     "fallback": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom fallback content when no image or name is available.",
+      "description": "React.ReactNode — Custom fallback content when no image or name is available.",
       "x-tsType": "ReactNode"
     },
     "autoColor": {
@@ -94,7 +94,8 @@
           "type": "string"
         }
       ],
-      "description": "Adds a border ring. Pass true for default color or a CSS color string."
+      "description": "Adds a border ring. Pass true for default color or a CSS color string.",
+      "x-defaultSource": "groupCtx?.bordered"
     },
     "status": {
       "oneOf": [
@@ -269,7 +270,7 @@
     },
     "textStyle": {
       "type": "object",
-      "description": "CSSProperties \u2014 Inline styles for the initials text.",
+      "description": "CSSProperties — Inline styles for the initials text.",
       "x-tsType": "CSSProperties | undefined"
     },
     "loading": {
@@ -292,12 +293,12 @@
     },
     "onLoad": {
       "type": "object",
-      "description": "() => void \u2014 Fires when the avatar image finishes loading.",
+      "description": "() => void — Fires when the avatar image finishes loading.",
       "x-tsType": "(() => void) | undefined"
     },
     "onError": {
       "type": "object",
-      "description": "() => void \u2014 Fires when the avatar image fails to load.",
+      "description": "() => void — Fires when the avatar image fails to load.",
       "x-tsType": "(() => void) | undefined"
     },
     "asChild": {
@@ -406,7 +407,7 @@
         },
         "max": {
           "type": "number | undefined",
-          "description": "Maximum count before showing `max+`. Inside an AvatarGroup this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one."
+          "description": "Maximum count before showing `max+`. Inside an `AvatarGroup` this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one."
         },
         "showPlus": {
           "type": "boolean | undefined",
@@ -501,11 +502,7 @@
         },
         "tone": {
           "type": "BadgeTone | undefined",
-          "description": "Token family the badge draws from. A count is a notification, not a fault; use `error` for a badge that reports one.",
-          "enum": [
-            "accent",
-            "error"
-          ],
+          "description": "Token family the badge draws from. Default: `\"accent\"` — a count is a notification, not a fault. Use `\"error\"` for a badge that reports one.",
           "default": "accent"
         },
         "overlap": {

@@ -194,8 +194,14 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     }
 
     const showImage = src && !imageError;
-    const showFallback = !showImage && fallback && !initials;
-    const showInitials = !showImage && initials;
+    // Initials and fallback stay under the image until it actually paints.
+    // Rendering only the `<img>` while it loaded left a blank tinted disc for
+    // the whole request, where Radix, MUI and shadcn all show the fallback in
+    // that window. The image fades in over the top, so it reads as a crossfade
+    // rather than the flash of initials that Radix's `delayMs` exists to avoid.
+    const imagePending = Boolean(showImage) && !imageLoaded;
+    const showFallback = (!showImage || imagePending) && fallback && !initials;
+    const showInitials = (!showImage || imagePending) && initials;
 
     const containerStyle: React.CSSProperties = {
       width: numericSize,
@@ -235,6 +241,26 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           className={mergedClasses.control || undefined}
           style={{ borderRadius }}
         >
+          {showFallback && (
+            <span
+              className={mergedClasses.fallback || undefined}
+              // Decorative while an image is on its way: the `<img>`'s `alt`
+              // is the accessible name, and a second copy underneath would
+              // read the avatar out twice.
+              aria-hidden={showImage || undefined}
+            >
+              {fallback}
+            </span>
+          )}
+          {showInitials && (
+            <span
+              className={mergedClasses.fallback || undefined}
+              style={textStyle}
+              aria-hidden={showImage || undefined}
+            >
+              {initials}
+            </span>
+          )}
           {showImage && (
             <img
               ref={imgRef}
@@ -259,14 +285,6 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
                     }
               }
             />
-          )}
-          {showFallback && (
-            <span className={mergedClasses.fallback || undefined}>{fallback}</span>
-          )}
-          {showInitials && (
-            <span className={mergedClasses.fallback || undefined} style={textStyle}>
-              {initials}
-            </span>
           )}
         </div>
 

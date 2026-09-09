@@ -1004,7 +1004,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "bordered",
         "type": "boolean | string",
         "required": false,
-        "default": null,
+        "default": "groupCtx?.bordered",
         "description": "Adds a border ring. Pass true for default color or a CSS color string."
       },
       {
@@ -1232,7 +1232,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "number",
             "required": false,
             "default": null,
-            "description": "Maximum count before showing `max+`. Inside an AvatarGroup this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one."
+            "description": "Maximum count before showing `max+`. Inside an `AvatarGroup` this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one."
           },
           {
             "name": "showPlus",
@@ -1367,10 +1367,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "tone",
-            "type": "\"accent\" | \"error\"",
+            "type": "BadgeTone",
             "required": false,
             "default": "\"accent\"",
-            "description": "Token family the badge draws from. A count is a notification, not a fault; use `error` for a badge that reports one."
+            "description": "Token family the badge draws from. Default: `\"accent\"` — a count is a notification, not a fault. Use `\"error\"` for a badge that reports one."
           },
           {
             "name": "overlap",
@@ -5139,7 +5139,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "portalContainer",
         "type": "HTMLElement | null",
         "required": false,
-        "default": null,
+        "default": "document.body",
         "description": "HTMLElement | null — Portal container for the drawer."
       },
       {
@@ -7091,7 +7091,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "trackColor",
             "type": "string",
             "required": false,
-            "default": null,
+            "default": "\"currentColor\"",
             "description": "Background track color"
           },
           {
@@ -13589,7 +13589,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "id",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "generatedId",
         "description": "HTML id attribute."
       },
       {
