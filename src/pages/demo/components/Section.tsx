@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { Inline } from "./inlineMarkdown.js";
 import { cn } from "../../../utils/cn.js";
 import { DEMO_SNIPPETS } from "../generated/demoSnippets.js";
 import { DemoSnippetBlock } from "./DemoSnippetBlock.js";
@@ -234,7 +235,7 @@ export const PropRow: React.FC<PropRowProps> = ({
       {defaultVal ?? "-"}
     </td>
     <td className="px-4 py-2 text-[13px] break-words align-top text-fg-secondary">
-      {description ?? "-"}
+      {description ? <Inline text={description} /> : "-"}
     </td>
   </tr>
 );

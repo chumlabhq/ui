@@ -480,7 +480,7 @@ const StepperDemo = () => {
       </Section>
 
       <Section
-        title="Keyboard Navigation with Loop"
+        title="Try it: Keyboard Navigation with Loop"
         description="Arrow keys move focus between interactive steps. Home/End jump to first/last. Set loop to wrap around at boundaries."
         isDarkMode={dark}
       >
@@ -804,75 +804,6 @@ const StepperDemo = () => {
       <ComponentDocs name="Stepper" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Semantic <ol>/<li> list structure — screen readers announce "item 2 of 4"',
-              'role="navigation" with configurable aria-label landmark',
-              'Native <button type="button"> for interactive steps with roving tabIndex',
-              'aria-current="step" on the active step',
-              "aria-disabled on disabled steps",
-              'Auto-generated aria-label when labels are hidden (dot variant) — "Step 2 of 4"',
-              'Indicator content is aria-hidden="true" — the step label provides the accessible name',
-              'All SVG icons include aria-hidden="true"',
-              'Connectors are aria-hidden="true" to avoid screen reader noise',
-              "Default focus-visible ring on interactive steps for keyboard navigation",
-              "RTL-aware arrow key navigation — respects direction: rtl on the element",
-              "motion-reduce:transition-none applied to all animated elements",
-              "Supports ref forwarding for programmatic focus management",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              [
-                "Tab",
-                "Move focus into the stepper (lands on active or first interactive step)",
-              ],
-              ["\u2192 / \u2193", "Move focus to the next interactive step"],
-              [
-                "\u2190 / \u2191",
-                "Move focus to the previous interactive step",
-              ],
-              ["Home", "Move focus to the first interactive step"],
-              ["End", "Move focus to the last interactive step"],
-              [
-                "Enter / Space",
-                "Activate the focused step (fires onValueChange)",
-              ],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

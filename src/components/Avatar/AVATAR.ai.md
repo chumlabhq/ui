@@ -150,7 +150,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `reverseOrder` | `boolean \| undefined` | Reverses the visual stacking order. |
 | `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Custom render function for the surplus count indicator. |
 | `onAvatarClick` | `((info: { index: number; name?: string \| undefined; }, event: MouseEvent<Element, MouseEvent>) => void) \| undefined` | Click handler for individual avatars within the group. |
-| `dir` | `Direction \| undefined` | Text direction for RTL-aware layouts. |
+| `dir` | `Direction \| undefined` | Text direction. Sets `dir` on the group; the layout itself does not mirror. |
 | `classes` | `AvatarGroupClasses \| undefined` | CSS class overrides for group sub-elements. |
 | `asChild` | `boolean \| undefined` | Merges group props onto the child element via Slot. |
 
@@ -169,7 +169,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `bordered` | `string \| boolean \| undefined` | Adds a border ring. |
 | `textClassName` | `string \| undefined` | CSS class for the count text. |
 | `textStyle` | `CSSProperties \| undefined` | Inline styles for the count text. |
-| `aria-live` | `"polite" \| "assertive" \| "off" \| undefined` | ARIA live region behavior for screen readers. |
+| `aria-live` | `"off" \| "polite" \| "assertive" \| undefined` | ARIA live region behavior for screen readers. |
 | `asChild` | `boolean \| undefined` | Merges count props onto the child element via Slot. |
 | `children` | `ReactNode` | Custom content replacing the default count display. |
 
@@ -189,15 +189,15 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `overlap` | `BadgeOverlap \| undefined` | Shape of the element the badge overlaps. |
 | `pulse` | `boolean \| undefined` | Adds a pulsing animation to the badge. |
 | `invisible` | `boolean \| undefined` | Hides the badge while preserving its DOM presence. |
-| `aria-live` | `"polite" \| "assertive" \| "off" \| undefined` | ARIA live region behavior for screen readers. |
+| `aria-live` | `"off" \| "polite" \| "assertive" \| undefined` | ARIA live region behavior for screen readers. |
 | `asChild` | `boolean \| undefined` | Merges badge props onto the child element via Slot. |
 
 ### AvatarShimmer
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `classes` | `AvatarShimmerClasses \| undefined` | — |
-| `unstyled` | `boolean \| undefined` | — |
+| `classes` | `AvatarShimmerClasses \| undefined` | Class overrides for this component's slots. |
+| `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |
 | `size` | `AvatarSize \| undefined` | Shimmer size matching the avatar size. |
 | `shape` | `AvatarShape \| undefined` | Shimmer shape matching the avatar shape. |
 | `animate` | `boolean \| undefined` | Enables the shimmer animation. Default: `true`. |

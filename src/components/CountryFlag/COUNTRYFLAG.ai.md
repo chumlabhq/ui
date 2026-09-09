@@ -114,36 +114,36 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `children` | `ReactNode` | — |
-| `max` | `number \| undefined` | — |
-| `size` | `number \| CountryFlagSize \| undefined` | — |
-| `showCountTooltip` | `boolean \| undefined` | — |
-| `countTooltip` | `Omit<CountryFlagTooltipConfig, "content"> \| undefined` | — |
-| `surplusTooltipContent` | `ReactNode` | — |
-| `renderSurplus` | `((count: number) => ReactNode) \| undefined` | — |
-| `classes` | `CountryFlagGroupClasses \| undefined` | — |
+| `children` | `ReactNode` | Content rendered inside this element. |
+| `max` | `number \| undefined` | How many flags to show before the rest are collapsed into a surplus count. |
+| `size` | `number \| CountryFlagSize \| undefined` | Flag size for every member of the group. |
+| `showCountTooltip` | `boolean \| undefined` | Shows a tooltip on the surplus count listing the hidden countries. |
+| `countTooltip` | `Omit<CountryFlagTooltipConfig, "content"> \| undefined` | Tooltip settings for the surplus count. Its content comes from `surplusTooltipContent`. |
+| `surplusTooltipContent` | `ReactNode` | Content for the surplus count's tooltip, replacing the generated country list. |
+| `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Renders the surplus indicator yourself, given the number of hidden flags. |
+| `classes` | `CountryFlagGroupClasses \| undefined` | Class overrides for this component's slots. |
 
 ### CountryFlagShimmer
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `classes` | `CountryFlagShimmerClasses \| undefined` | — |
-| `unstyled` | `boolean \| undefined` | — |
-| `size` | `number \| CountryFlagSize \| undefined` | — |
-| `aspectRatio` | `number \| undefined` | — |
-| `animate` | `boolean \| undefined` | — |
-| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
+| `classes` | `CountryFlagShimmerClasses \| undefined` | Class overrides for this component's slots. |
+| `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |
+| `size` | `number \| CountryFlagSize \| undefined` | Matches the flag size the placeholder stands in for. |
+| `aspectRatio` | `number \| undefined` | Width-to-height ratio of the placeholder, matching the flag it stands in for. |
+| `animate` | `boolean \| undefined` | Whether the placeholder pulses. Set false for a still skeleton. |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Whether to stop the shimmer animation. `"auto"` follows the OS reduced-motion setting. |
 
 ### CountryFlagGroupShimmer
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `count` | `number \| undefined` | — |
-| `size` | `number \| CountryFlagSize \| undefined` | — |
-| `aspectRatio` | `number \| undefined` | — |
-| `animate` | `boolean \| undefined` | — |
-| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
-| `showCount` | `boolean \| undefined` | — |
+| `count` | `number \| undefined` | How many placeholder flags to draw. |
+| `size` | `number \| CountryFlagSize \| undefined` | Matches the flag size the placeholder stands in for. |
+| `aspectRatio` | `number \| undefined` | Width-to-height ratio of each placeholder. |
+| `animate` | `boolean \| undefined` | Whether the placeholders pulse. Set false for a still skeleton. |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Whether to stop the shimmer animation. `"auto"` follows the OS reduced-motion setting. |
+| `showCount` | `boolean \| undefined` | Also draws a placeholder for the surplus count. |
 
 ---
 

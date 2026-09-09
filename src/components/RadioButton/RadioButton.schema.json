@@ -20,23 +20,28 @@
         },
         "onValueChange": {
           "type": "object",
-          "description": "(value: string) => void - Fires when the selected value changes."
+          "description": "(value: string) => void - Fires when the selected value changes.",
+          "x-tsType": "((value: string) => void) | undefined"
         },
         "onFocus": {
           "type": "object",
-          "description": "(event: FocusEvent<HTMLInputElement>) => void - Fires when a radio receives focus."
+          "description": "(event: FocusEvent<HTMLInputElement>) => void - Fires when a radio receives focus.",
+          "x-tsType": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined"
         },
         "onBlur": {
           "type": "object",
-          "description": "(event: FocusEvent<HTMLInputElement>) => void - Fires when a radio loses focus."
+          "description": "(event: FocusEvent<HTMLInputElement>) => void - Fires when a radio loses focus.",
+          "x-tsType": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined"
         },
         "label": {
           "type": "object",
-          "description": "React.ReactNode - Text label for the group."
+          "description": "React.ReactNode - Text label for the group.",
+          "x-tsType": "ReactNode"
         },
         "description": {
           "type": "object",
-          "description": "React.ReactNode - Helper text for the group."
+          "description": "React.ReactNode - Helper text for the group.",
+          "x-tsType": "ReactNode"
         },
         "name": {
           "type": "string",
@@ -59,7 +64,8 @@
         },
         "errorMessage": {
           "type": "object",
-          "description": "React.ReactNode - Error message displayed below the group."
+          "description": "React.ReactNode - Error message displayed below the group.",
+          "x-tsType": "ReactNode"
         },
         "success": {
           "type": "boolean",
@@ -68,7 +74,8 @@
         },
         "successMessage": {
           "type": "object",
-          "description": "React.ReactNode - Success message displayed below the group."
+          "description": "React.ReactNode - Success message displayed below the group.",
+          "x-tsType": "ReactNode"
         },
         "loading": {
           "type": "boolean",
@@ -119,7 +126,8 @@
             "message": {
               "type": "string"
             }
-          }
+          },
+          "x-tsType": "RadioGroupClasses | undefined"
         },
         "unstyled": {
           "type": "boolean",
@@ -140,7 +148,8 @@
         },
         "children": {
           "type": "object",
-          "description": "React.ReactNode - RadioButton children."
+          "description": "React.ReactNode - RadioButton children.",
+          "x-tsType": "ReactNode"
         },
         "className": {
           "type": "string",
@@ -162,11 +171,13 @@
         },
         "label": {
           "type": "object",
-          "description": "React.ReactNode - Text label rendered beside the radio."
+          "description": "React.ReactNode - Text label rendered beside the radio.",
+          "x-tsType": "ReactNode"
         },
         "description": {
           "type": "object",
-          "description": "React.ReactNode - Helper text rendered below the label."
+          "description": "React.ReactNode - Helper text rendered below the label.",
+          "x-tsType": "ReactNode"
         },
         "disabled": {
           "type": "boolean",
@@ -193,11 +204,13 @@
         },
         "checkedIcon": {
           "type": "object",
-          "description": "React.ReactNode - Custom icon for the checked state."
+          "description": "React.ReactNode - Custom icon for the checked state.",
+          "x-tsType": "ReactNode"
         },
         "uncheckedIcon": {
           "type": "object",
-          "description": "React.ReactNode - Custom icon for the unchecked state."
+          "description": "React.ReactNode - Custom icon for the unchecked state.",
+          "x-tsType": "ReactNode"
         },
         "classes": {
           "type": "object",
@@ -221,7 +234,8 @@
             "message": {
               "type": "string"
             }
-          }
+          },
+          "x-tsType": "RadioButtonClasses | undefined"
         },
         "className": {
           "type": "string",
@@ -243,7 +257,8 @@
         },
         "defaultValue": {
           "type": "string | undefined",
-          "description": "Initial selected value for uncontrolled usage."
+          "description": "Initial selected value for uncontrolled usage.",
+          "default": ""
         },
         "onValueChange": {
           "type": "((value: string) => void) | undefined",
@@ -271,15 +286,18 @@
         },
         "required": {
           "type": "boolean | undefined",
-          "description": "Required field indicator."
+          "description": "Required field indicator.",
+          "default": false
         },
         "disabled": {
           "type": "boolean | undefined",
-          "description": "Disables all radio buttons in the group."
+          "description": "Disables all radio buttons in the group.",
+          "default": false
         },
         "error": {
           "type": "boolean | undefined",
-          "description": "Displays the group in an error state."
+          "description": "Displays the group in an error state.",
+          "default": false
         },
         "errorMessage": {
           "type": "ReactNode",
@@ -287,7 +305,8 @@
         },
         "success": {
           "type": "boolean | undefined",
-          "description": "Displays the group in a success state."
+          "description": "Displays the group in a success state.",
+          "default": false
         },
         "successMessage": {
           "type": "ReactNode",
@@ -295,15 +314,18 @@
         },
         "loading": {
           "type": "boolean | undefined",
-          "description": "Loading state."
+          "description": "Loading state.",
+          "default": false
         },
         "size": {
           "type": "RadioButtonSize | undefined",
-          "description": "Size of all radio indicators."
+          "description": "Size of all radio indicators.",
+          "default": "md"
         },
         "orientation": {
-          "type": "\"horizontal\" | \"vertical\" | undefined",
-          "description": "Layout orientation. Default: \"vertical\"."
+          "type": "\"vertical\" | \"horizontal\" | undefined",
+          "description": "Layout orientation. Default: \"vertical\".",
+          "default": "vertical"
         },
         "classes": {
           "type": "RadioGroupClasses | undefined",
@@ -311,7 +333,8 @@
         },
         "unstyled": {
           "type": "boolean | undefined",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",

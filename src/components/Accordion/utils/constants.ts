@@ -99,9 +99,8 @@ export const PRINT_STYLES = `
 /**
  * Resolved when the value is read or written, not while the component renders.
  * `resolveStorageConfig` runs inside a `useMemo`, so reaching for
- * `window.localStorage` there is a render-path branch on the environment — the
- * class `ssr-branch.contract` exists for, even though a storage handle cannot
- * itself produce different markup.
+ * `window.localStorage` there would branch the render path on the environment,
+ * even though a storage handle cannot itself produce different markup.
  */
 export const defaultStorage = (): Storage | undefined =>
   isBrowser ? window.localStorage : undefined;
@@ -119,7 +118,7 @@ export function getDefaultStorageConfig(): Omit<StorageConfig, "key"> {
   };
 }
 
-/** AccordionShimmer's own anatomy (ADR 002 R1). */
+/** AccordionShimmer's own default classes. */
 export const DEFAULT_ACCORDION_SHIMMER_CLASSES: Required<AccordionShimmerClasses> = {
   root: "w-full",
   item: "",

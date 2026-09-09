@@ -130,18 +130,18 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `children` | `ReactNode` | — |
+| `children` | `ReactNode` | Content rendered inside this element. |
 | `position` | `ToastPosition \| undefined` | Toast position on screen. Default: `"bottom-right"`. |
-| `maxToasts` | `number \| undefined` | — |
-| `containerClassName` | `string \| undefined` | — |
-| `defaultDuration` | `number \| undefined` | — |
-| `animationDuration` | `number \| undefined` | — |
-| `gap` | `number \| undefined` | — |
-| `zIndex` | `number \| undefined` | — |
-| `dismissOnEscape` | `boolean \| undefined` | — |
-| `containerAriaLabel` | `string \| undefined` | — |
-| `classes` | `ToastClasses \| undefined` | — |
-| `unstyled` | `boolean \| undefined` | — |
+| `maxToasts` | `number \| undefined` | How many toasts may be visible at once. Older ones leave as new ones arrive. |
+| `containerClassName` | `string \| undefined` | Additional classes for the toast container. |
+| `defaultDuration` | `number \| undefined` | How long a toast stays up, in milliseconds, when it does not set its own. |
+| `animationDuration` | `number \| undefined` | Enter and exit transition duration in milliseconds. |
+| `gap` | `number \| undefined` | Space between stacked toasts, in pixels. |
+| `zIndex` | `number \| undefined` | Stacking order for the toast container. |
+| `dismissOnEscape` | `boolean \| undefined` | Dismisses the newest toast when Escape is pressed. |
+| `containerAriaLabel` | `string \| undefined` | Accessible name for the toast region. |
+| `classes` | `ToastClasses \| undefined` | Class overrides for this component's slots. |
+| `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |
 
 ---
 

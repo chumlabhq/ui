@@ -14,7 +14,7 @@ export interface CountryFlagTooltipConfig {
 
 export interface CountryFlagClasses {
   root?: string;
-  /** R6: the skeleton's own bag. CountryFlagShimmer is a component, not a part. */
+  /** The skeleton's own bag — `CountryFlagShimmer` is a component, not a part. */
   loading?: CountryFlagShimmerClasses;
   image?: string;
   fallback?: string;
@@ -58,13 +58,21 @@ export interface CountryFlagProps
 }
 
 export interface CountryFlagGroupProps extends HTMLAttributes<HTMLDivElement> {
+  /** Content rendered inside this element. */
   children: ReactNode;
+  /** How many flags to show before the rest are collapsed into a surplus count. */
   max?: number;
+  /** Flag size for every member of the group. */
   size?: CountryFlagSize | number;
+  /** Shows a tooltip on the surplus count listing the hidden countries. */
   showCountTooltip?: boolean;
+  /** Tooltip settings for the surplus count. Its content comes from `surplusTooltipContent`. */
   countTooltip?: Omit<CountryFlagTooltipConfig, "content">;
+  /** Content for the surplus count's tooltip, replacing the generated country list. */
   surplusTooltipContent?: ReactNode;
+  /** Renders the surplus indicator yourself, given the number of hidden flags. */
   renderSurplus?: (count: number) => ReactNode;
+  /** Class overrides for this component's slots. */
   classes?: CountryFlagGroupClasses;
 }
 
@@ -76,8 +84,8 @@ export interface CountryFlagGroupCountProps
 }
 
 /**
- * ADR 002: CountryFlagShimmer is root-exported and COUNTRYFLAG.ai.md:19 shows it
- * imported directly, so it is a component with its own styling route.
+ * Class slots for `CountryFlagShimmer`, which is a component you render
+ * yourself rather than a part of `CountryFlag`, so it carries its own bag.
  */
 export interface CountryFlagShimmerClasses {
   root?: string;
@@ -85,20 +93,32 @@ export interface CountryFlagShimmerClasses {
 
 export interface CountryFlagShimmerProps
   extends HTMLAttributes<HTMLSpanElement> {
+  /** Class overrides for this component's slots. */
   classes?: CountryFlagShimmerClasses;
+  /** Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. */
   unstyled?: boolean;
+  /** Matches the flag size the placeholder stands in for. */
   size?: CountryFlagSize | number;
+  /** Width-to-height ratio of the placeholder, matching the flag it stands in for. */
   aspectRatio?: number;
+  /** Whether the placeholder pulses. Set false for a still skeleton. */
   animate?: boolean;
+  /** Whether to stop the shimmer animation. `"auto"` follows the OS reduced-motion setting. */
   reduceMotion?: boolean | "auto";
 }
 
 export interface CountryFlagGroupShimmerProps
   extends HTMLAttributes<HTMLDivElement> {
+  /** How many placeholder flags to draw. */
   count?: number;
+  /** Matches the flag size the placeholder stands in for. */
   size?: CountryFlagSize | number;
+  /** Width-to-height ratio of each placeholder. */
   aspectRatio?: number;
+  /** Whether the placeholders pulse. Set false for a still skeleton. */
   animate?: boolean;
+  /** Whether to stop the shimmer animation. `"auto"` follows the OS reduced-motion setting. */
   reduceMotion?: boolean | "auto";
+  /** Also draws a placeholder for the surplus count. */
   showCount?: boolean;
 }

@@ -30,7 +30,8 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(page: number) => void - Fires when the current page changes."
+      "description": "(page: number) => void - Fires when the current page changes.",
+      "x-tsType": "((page: number) => void) | undefined"
     },
     "value": {
       "type": "number",
@@ -43,7 +44,8 @@
     },
     "onRowsPerPageChange": {
       "type": "object",
-      "description": "(rows: number) => void - Fires when the rows-per-page value changes."
+      "description": "(rows: number) => void - Fires when the rows-per-page value changes.",
+      "x-tsType": "((rows: number) => void) | undefined"
     },
     "showRowsPerPage": {
       "type": "boolean",
@@ -72,7 +74,7 @@
         "bottom"
       ],
       "default": "top",
-      "description": "Vertical placement of the rows-per-page dropdown \u2014 opens upward (top) or downward (bottom)."
+      "description": "Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom)."
     },
     "dropdownZIndex": {
       "type": "number",
@@ -86,23 +88,28 @@
     },
     "dropdownIcon": {
       "type": "object",
-      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the rows-per-page dropdown."
+      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the rows-per-page dropdown.",
+      "x-tsType": "ReactNode | ComponentType<IconProps>"
     },
     "prevIcon": {
       "type": "object",
-      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the previous page button."
+      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the previous page button.",
+      "x-tsType": "ReactNode | ComponentType<IconProps>"
     },
     "nextIcon": {
       "type": "object",
-      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the next page button."
+      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the next page button.",
+      "x-tsType": "ReactNode | ComponentType<IconProps>"
     },
     "renderEllipsis": {
       "type": "object",
-      "description": "(props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element."
+      "description": "(props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element.",
+      "x-tsType": "((props: EllipsisRenderProps) => ReactNode) | undefined"
     },
     "renderPageInfo": {
       "type": "object",
-      "description": "(props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display."
+      "description": "(props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display.",
+      "x-tsType": "((props: PageInfoRenderProps) => ReactNode) | undefined"
     },
     "sectionOrder": {
       "type": "array",
@@ -114,7 +121,8 @@
           "pageInfo",
           "nav"
         ]
-      }
+      },
+      "x-defaultSource": "DEFAULT_SECTION_ORDER"
     },
     "reduceMotion": {
       "type": [
@@ -179,7 +187,8 @@
         "pageInfo": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "PaginationClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -188,7 +197,8 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null - Portal target for the rows-per-page dropdown."
+      "description": "HTMLElement | null - Portal target for the rows-per-page dropdown.",
+      "x-tsType": "HTMLElement | null | undefined"
     },
     "keepMounted": {
       "type": "boolean",
@@ -211,7 +221,8 @@
     },
     "pageAriaLabel": {
       "type": "object",
-      "description": "(page: number) => string - Function to generate aria-label for each page button."
+      "description": "(page: number) => string - Function to generate aria-label for each page button.",
+      "x-tsType": "((page: number) => string) | undefined"
     }
   },
   "required": [

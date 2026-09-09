@@ -7,8 +7,8 @@ interface MultiSelectDropdownShimmerProps {
   /**
    * Fed from MultiSelectDropdown's `loadingIcon` / `loadingBar`. The shimmer
    * takes className props rather than a `classes` bag of its own: it is a
-   * sub-component, and two routes to style one component's output is the
-   * divergence R2 exists to prevent.
+   * sub-component, and two routes to style one component's output would
+   * diverge.
    */
   iconClassName?: string;
   barClassName?: string;

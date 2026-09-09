@@ -1828,64 +1828,6 @@ const CascadingDropdownDemo = () => {
       <ComponentDocs name="CascadingDropdown" />
 
       {/* ─── Accessibility ──────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              "Uses combobox / listbox ARIA pattern with proper roles",
-              'Menu items have role="option" with aria-selected state',
-              "Submenus announced via aria-haspopup and aria-expanded",
-              "Disabled items marked with aria-disabled",
-              "Label auto-associated via id linking",
-              "Error messages connected via aria-describedby",
-              "Required state sets aria-required on the trigger",
-              "Focus management follows WAI-ARIA combobox best practices",
-              "Supports all standard keyboard navigation patterns",
-              'Hidden <input type="hidden"> for native form participation when name is set',
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["\u2191 / \u2193", "Navigate options"],
-              ["\u2192", "Open submenu"],
-              ["\u2190", "Close submenu"],
-              ["Enter / Space", "Select option"],
-              ["Escape", "Close dropdown / submenu"],
-              ["Home / End", "Jump to first / last option"],
-              ["Tab", "Close and move focus"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

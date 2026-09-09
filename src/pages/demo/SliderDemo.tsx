@@ -691,48 +691,6 @@ const SliderDemo = () => {
 
       <ComponentDocs name="Slider" />
 
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
-        <div className={c.card}>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              'Each thumb renders role="slider" with aria-valuenow, aria-valuemin, and aria-valuemax',
-              "aria-label per thumb provides an accessible name for screen readers",
-              "Full keyboard control for value adjustment",
-              'aria-orientation is set to match the orientation prop ("horizontal" or "vertical")',
-              "Label is linked via aria-labelledby when provided",
-              "Error message is linked via aria-describedby for screen reader announcements",
-              "Hidden inputs are rendered for native form submission when name is set",
-              "Range sliders render two separate slider roles — one per thumb",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>
-            Keyboard Reference
-          </p>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              ["Arrow Left / Down", "Decrease value by one step"],
-              ["Arrow Right / Up", "Increase value by one step"],
-              ["Home", "Set to minimum value"],
-              ["End", "Set to maximum value"],
-              ["Page Up", "Increase by larger step (10x)"],
-              ["Page Down", "Decrease by larger step (10x)"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       <DocControlledPattern
         isDarkMode={dark}
         summary="Use `value` with `onValueChange` for controlled mode, or `defaultValue` for uncontrolled. Pass a number for single-thumb, or a [number, number] tuple for range mode. Use `onValueCommit` to fire only when the user finishes dragging — useful for debounced API calls."

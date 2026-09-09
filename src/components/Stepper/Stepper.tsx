@@ -126,11 +126,11 @@ interface StepItemInternalProps {
 }
 
 /**
- * ADR 002 R4. `data-status` is this component's own enum
+ * `data-status` is this component's own enum
  * (completed | active | pending | error). `data-state` is the library-wide one,
  * and `error` is not a position in it — an errored step is still active or
  * pending — so it carries `data-invalid` alongside rather than replacing the
- * state. Ark Steps sets the precedent for `completed`.
+ * state.
  */
 const stateAttrsFor = (status: string) =>
   ({

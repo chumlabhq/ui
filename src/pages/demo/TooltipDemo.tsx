@@ -718,60 +718,6 @@ const TooltipDemo = () => {
       <ComponentDocs name="Tooltip" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Tooltip has role="tooltip" for proper semantics',
-              "Trigger has aria-describedby pointing to tooltip when open",
-              "Unique tooltip ID generated via useId() for proper ARIA association",
-              'Arrow has aria-hidden="true" as it is decorative',
-              "Trigger is focusable via tabIndex={0}",
-              "Opens on focus and hover for keyboard and mouse users",
-              "Keep tooltip content concise and supplementary",
-              "Avoid interactive elements inside tooltips",
-              "Use appropriate delay to prevent accidental triggers",
-              "Test with screen readers to ensure proper announcements",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Focus trigger element to show tooltip"],
-              ["Escape", "Close tooltip when open"],
-              ["Tab", "Move focus away to close tooltip"],
-            ].map(([key, desc], i) => (
-              <div key={`${key}-${i}`} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}
@@ -799,39 +745,6 @@ const TooltipDemo = () => {
         ]}
       />
 
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
-        <div className={c.card}>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              "aria-describedby on the trigger references the tooltip content",
-              "role=\"tooltip\" on the tooltip element",
-              "Triggered on hover and focus for mouse and keyboard users",
-              "Touch long-press support for mobile devices",
-              "Escape key dismisses the tooltip",
-              "disableHoverableContent prevents tooltip from staying open on content hover",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              ["Tab", "Trigger tooltip via focus"],
-              ["Escape", "Dismiss the tooltip"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
     </div>
   );
 };

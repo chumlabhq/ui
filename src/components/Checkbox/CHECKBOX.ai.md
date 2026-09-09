@@ -266,7 +266,7 @@ A native `<input type="checkbox">`, so the browser owns this — `Enter` deliber
 
 ## Accessibility
 
-- Uses native `<input type="checkbox">` — full browser keyboard/screen reader support
+- Uses native `<input type="checkbox">`, so keyboard behaviour and accessibility-tree semantics come from the platform rather than from ARIA
 - `<label>` wraps the input (implicit association)
 - `aria-invalid` set when `error={true}`
 - `aria-required` set when `required={true}`

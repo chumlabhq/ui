@@ -19,15 +19,18 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "Callback when the selected value changes. Signature depends on mode."
+      "description": "Callback when the selected value changes. Signature depends on mode.",
+      "x-tsType": "((dates: Date[] | null, dateValues: DateValue[] | null) => void) | undefined"
     },
     "onClear": {
       "type": "object",
-      "description": "() => void \u2014 Called when the clear button is clicked."
+      "description": "() => void — Called when the clear button is clicked.",
+      "x-tsType": "(() => void) | undefined"
     },
     "onMonthChange": {
       "type": "object",
-      "description": "(month: Date) => void \u2014 Called when the displayed month changes."
+      "description": "(month: Date) => void — Called when the displayed month changes.",
+      "x-tsType": "((month: Date) => void) | undefined"
     },
     "open": {
       "type": "boolean",
@@ -40,15 +43,18 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void"
+      "description": "(open: boolean) => void",
+      "x-tsType": "((open: boolean) => void) | undefined"
     },
     "minDate": {
       "type": "object",
-      "description": "Date \u2014 Earliest selectable date."
+      "description": "Date — Earliest selectable date.",
+      "x-tsType": "Date | undefined"
     },
     "maxDate": {
       "type": "object",
-      "description": "Date \u2014 Latest selectable date."
+      "description": "Date — Latest selectable date.",
+      "x-tsType": "Date | undefined"
     },
     "disabledDates": {
       "type": "object",
@@ -56,11 +62,11 @@
       "properties": {
         "before": {
           "type": "object",
-          "description": "Date \u2014 Disable dates before this date."
+          "description": "Date — Disable dates before this date."
         },
         "after": {
           "type": "object",
-          "description": "Date \u2014 Disable dates after this date."
+          "description": "Date — Disable dates after this date."
         },
         "disablePast": {
           "type": "boolean"
@@ -84,9 +90,10 @@
         },
         "custom": {
           "type": "object",
-          "description": "(date: Date) => boolean \u2014 Custom disable function."
+          "description": "(date: Date) => boolean — Custom disable function."
         }
-      }
+      },
+      "x-tsType": "DisabledDateOptions | undefined"
     },
     "weekStartsOn": {
       "type": "integer",
@@ -104,7 +111,8 @@
     },
     "locale": {
       "type": "object",
-      "description": "date-fns Locale object for internationalization."
+      "description": "date-fns Locale object for internationalization.",
+      "x-tsType": "Locale | undefined"
     },
     "numberOfMonths": {
       "type": "number",
@@ -239,15 +247,18 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Error message."
+      "description": "React.ReactNode — Error message.",
+      "x-tsType": "ReactNode"
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Label above the trigger."
+      "description": "React.ReactNode — Label above the trigger.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Description text."
+      "description": "React.ReactNode — Description text.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -256,7 +267,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Success message."
+      "description": "React.ReactNode — Success message.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -289,39 +301,48 @@
     },
     "calendarIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom calendar icon."
+      "description": "React.ReactNode — Custom calendar icon.",
+      "x-tsType": "ReactNode"
     },
     "clearIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom clear icon."
+      "description": "React.ReactNode — Custom clear icon.",
+      "x-tsType": "ReactNode"
     },
     "prevMonthIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom previous month icon."
+      "description": "React.ReactNode — Custom previous month icon.",
+      "x-tsType": "ReactNode"
     },
     "nextMonthIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom next month icon."
+      "description": "React.ReactNode — Custom next month icon.",
+      "x-tsType": "ReactNode"
     },
     "prevYearIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom previous year icon."
+      "description": "React.ReactNode — Custom previous year icon.",
+      "x-tsType": "ReactNode"
     },
     "nextYearIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom next year icon."
+      "description": "React.ReactNode — Custom next year icon.",
+      "x-tsType": "ReactNode"
     },
     "todayIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom today button icon."
+      "description": "React.ReactNode — Custom today button icon.",
+      "x-tsType": "ReactNode"
     },
     "monthDropdownSelectedIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Icon for selected month in dropdown."
+      "description": "React.ReactNode — Icon for selected month in dropdown.",
+      "x-tsType": "ReactNode"
     },
     "yearDropdownSelectedIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Icon for selected year in dropdown."
+      "description": "React.ReactNode — Icon for selected year in dropdown.",
+      "x-tsType": "ReactNode"
     },
     "classes": {
       "type": "object",
@@ -408,7 +429,8 @@
         "subItem": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "DatePickerClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -417,7 +439,8 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null \u2014 Portal container for the calendar popup."
+      "description": "HTMLElement | null — Portal container for the calendar popup.",
+      "x-tsType": "HTMLElement | null | undefined"
     },
     "lockScroll": {
       "type": "boolean",

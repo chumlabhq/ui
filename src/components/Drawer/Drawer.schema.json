@@ -15,7 +15,8 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void — Callback when the drawer's open state changes."
+      "description": "(open: boolean) => void — Callback when the drawer's open state changes.",
+      "x-tsType": "((open: boolean) => void) | undefined"
     },
     "zIndex": {
       "type": "number",
@@ -24,7 +25,8 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter)."
+      "description": "React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter).",
+      "x-tsType": "ReactNode"
     },
     "direction": {
       "type": "string",
@@ -34,27 +36,33 @@
         "top",
         "bottom"
       ],
-      "description": "Direction from which the drawer slides in."
+      "description": "Direction from which the drawer slides in.",
+      "default": "left"
     },
     "size": {
       "type": "string",
-      "description": "CSS size value for the drawer panel (width for left/right, height for top/bottom)."
+      "description": "CSS size value for the drawer panel (width for left/right, height for top/bottom).",
+      "default": "300px"
     },
     "overlayColor": {
       "type": "string",
-      "description": "Background color of the overlay."
+      "description": "Background color of the overlay.",
+      "default": "black"
     },
     "overlayOpacity": {
       "type": "number",
-      "description": "Opacity of the overlay (0-1)."
+      "description": "Opacity of the overlay (0-1).",
+      "default": 0.32
     },
     "overlayBlur": {
       "type": "number",
-      "description": "Backdrop blur in pixels for the overlay."
+      "description": "Backdrop blur in pixels for the overlay.",
+      "default": 0
     },
     "duration": {
       "type": "number",
-      "description": "Animation duration in milliseconds."
+      "description": "Animation duration in milliseconds.",
+      "default": 300
     },
     "lockScroll": {
       "type": "boolean",
@@ -84,7 +92,8 @@
         "content": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "DrawerClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -115,15 +124,18 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null — Portal container for the drawer."
+      "description": "HTMLElement | null — Portal container for the drawer.",
+      "x-tsType": "HTMLElement | null | undefined"
     },
     "initialFocus": {
       "type": "object",
-      "description": "RefObject<HTMLElement> — Element to receive focus when the drawer opens."
+      "description": "RefObject<HTMLElement> — Element to receive focus when the drawer opens.",
+      "x-tsType": "RefObject<HTMLElement | null> | undefined"
     },
     "onTransitionEnd": {
       "type": "object",
-      "description": "(open: boolean) => void — Called when the open/close transition completes."
+      "description": "(open: boolean) => void — Called when the open/close transition completes.",
+      "x-tsType": "((open: boolean) => void) | undefined"
     },
     "keepMounted": {
       "type": "boolean",
@@ -142,7 +154,8 @@
     },
     "swipeThreshold": {
       "type": "number",
-      "description": "Minimum swipe distance in pixels to trigger close."
+      "description": "Minimum swipe distance in pixels to trigger close.",
+      "default": 0.4
     },
     "snapPoints": {
       "type": "array",
@@ -157,11 +170,13 @@
     },
     "defaultSnapPointIndex": {
       "type": "number",
-      "description": "Initial snap point index for uncontrolled usage."
+      "description": "Initial snap point index for uncontrolled usage.",
+      "default": 0
     },
     "onSnapPointIndexChange": {
       "type": "object",
-      "description": "(index: number) => void — Called when the active snap point changes."
+      "description": "(index: number) => void — Called when the active snap point changes.",
+      "x-tsType": "((index: number) => void) | undefined"
     }
   },
   "required": [],
@@ -170,7 +185,8 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         }
       }
     },
@@ -178,7 +194,8 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         }
       }
     },
@@ -186,7 +203,8 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         }
       }
     },
@@ -194,7 +212,8 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         }
       }
     }

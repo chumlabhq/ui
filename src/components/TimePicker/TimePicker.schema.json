@@ -20,11 +20,13 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(time: string | null, timeValue: TimeValue | null) => void \u2014 Called when the selected time changes."
+      "description": "(time: string | null, timeValue: TimeValue | null) => void — Called when the selected time changes.",
+      "x-tsType": "((time: string | null, timeValue: TimeValue | null) => void) | undefined"
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void \u2014 Called when the input loses focus."
+      "description": "() => void — Called when the input loses focus.",
+      "x-tsType": "(() => void) | undefined"
     },
     "format": {
       "type": "string",
@@ -68,11 +70,13 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Error message displayed below the input."
+      "description": "React.ReactNode — Error message displayed below the input.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Helper text displayed below the label."
+      "description": "React.ReactNode — Helper text displayed below the label.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -80,7 +84,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Success message text."
+      "description": "React.ReactNode — Success message text.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -88,7 +93,8 @@
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Label displayed above the input."
+      "description": "React.ReactNode — Label displayed above the input.",
+      "x-tsType": "ReactNode"
     },
     "required": {
       "type": "boolean",
@@ -102,7 +108,8 @@
     },
     "endIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom end icon element replacing the default chevron."
+      "description": "React.ReactNode — Custom end icon element replacing the default chevron.",
+      "x-tsType": "ReactNode"
     },
     "showSelectedIcon": {
       "type": "boolean",
@@ -111,11 +118,13 @@
     },
     "selectedIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom selected icon element."
+      "description": "React.ReactNode — Custom selected icon element.",
+      "x-tsType": "ReactNode"
     },
     "renderOptionContent": {
       "type": "object",
-      "description": "(time: string, isSelected: boolean) => ReactNode \u2014 Custom renderer for dropdown option content."
+      "description": "(time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content.",
+      "x-tsType": "((time: string, isSelected: boolean) => ReactNode) | undefined"
     },
     "fullWidth": {
       "type": "boolean",
@@ -138,7 +147,8 @@
     },
     "onClear": {
       "type": "object",
-      "description": "() => void \u2014 Called when the clear button is clicked."
+      "description": "() => void — Called when the clear button is clicked.",
+      "x-tsType": "(() => void) | undefined"
     },
     "open": {
       "type": "boolean",
@@ -151,7 +161,8 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void \u2014 Called when the open state changes."
+      "description": "(open: boolean) => void — Called when the open state changes.",
+      "x-tsType": "((open: boolean) => void) | undefined"
     },
     "lockScroll": {
       "type": "boolean",
@@ -189,7 +200,8 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null \u2014 Custom container element for the dropdown portal."
+      "description": "HTMLElement | null — Custom container element for the dropdown portal.",
+      "x-tsType": "HTMLElement | null | undefined"
     },
     "classes": {
       "type": "object",
@@ -285,7 +297,8 @@
         "periodButton": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "TimePickerClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -307,11 +320,13 @@
     },
     "onCancel": {
       "type": "object",
-      "description": "() => void \u2014 Called when the clock cancel button is pressed."
+      "description": "() => void — Called when the clock cancel button is pressed.",
+      "x-tsType": "(() => void) | undefined"
     },
     "onConfirm": {
       "type": "object",
-      "description": "() => void \u2014 Called when the clock confirm button is pressed."
+      "description": "() => void — Called when the clock confirm button is pressed.",
+      "x-tsType": "(() => void) | undefined"
     },
     "cancelText": {
       "type": "string",

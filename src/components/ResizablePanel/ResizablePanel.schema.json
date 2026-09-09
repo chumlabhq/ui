@@ -15,15 +15,18 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(value: number) => void — Callback fired when the panel size changes."
+      "description": "(value: number) => void — Callback fired when the panel size changes.",
+      "x-tsType": "((value: number) => void) | undefined"
     },
     "onResizeStart": {
       "type": "object",
-      "description": "(value: number) => void — Callback fired when a resize drag begins."
+      "description": "(value: number) => void — Callback fired when a resize drag begins.",
+      "x-tsType": "((value: number) => void) | undefined"
     },
     "onResizeEnd": {
       "type": "object",
-      "description": "(value: number) => void — Callback fired when a resize drag ends."
+      "description": "(value: number) => void — Callback fired when a resize drag ends.",
+      "x-tsType": "((value: number) => void) | undefined"
     },
     "minValue": {
       "type": "number",
@@ -78,11 +81,13 @@
         "handle": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "ResizablePanelClasses | undefined"
     },
     "handleContent": {
       "type": "object",
-      "description": "React.ReactNode — Custom content rendered inside the resize handle."
+      "description": "React.ReactNode — Custom content rendered inside the resize handle.",
+      "x-tsType": "ReactNode"
     },
     "unstyled": {
       "type": "boolean",

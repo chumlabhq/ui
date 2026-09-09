@@ -12,8 +12,8 @@ import { useEffect, useState, type ComponentType } from "react";
  *
  * Null on a server and on the first client render — the cache is empty and the
  * effect has not run — so the two trees agree and the subtree arrives on a
- * later render. That is ADR 003's rule applied to a chunk rather than a portal,
- * and the SSR record in the consumer matrix is what proves it.
+ * later render, which is the same rule a portal follows: nothing that differs
+ * between server and first client render may be in the first paint.
  *
  * Call sites carry an `eslint-disable` for `react-hooks/static-components`:
  * the rule sees a capitalised binding assigned during render and assumes a new

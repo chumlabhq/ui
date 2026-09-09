@@ -56,18 +56,22 @@ export interface DrawerProps
 }
 
 export interface DrawerHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  /** Content rendered inside this element. */
   children?: ReactNode;
 }
 
 export interface DrawerBodyProps extends HTMLAttributes<HTMLDivElement> {
+  /** Content rendered inside this element. */
   children?: ReactNode;
 }
 
 export interface DrawerFooterProps extends HTMLAttributes<HTMLDivElement> {
+  /** Content rendered inside this element. */
   children?: ReactNode;
 }
 
 export interface DrawerCloseButtonProps
   extends HTMLAttributes<HTMLButtonElement> {
+  /** Content rendered inside this element. */
   children?: ReactNode;
 }

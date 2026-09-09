@@ -272,7 +272,7 @@
     },
     {
       "component": "TabPanel",
-      "title": "Keyboard Navigation",
+      "title": "Try it: Keyboard Navigation",
       "reason": "page styling `c.tabs` could not be resolved"
     },
     {

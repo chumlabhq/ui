@@ -1,16 +1,15 @@
 /**
- * The structural / decorative split defined in docs/adr/001-unstyled-contract.md,
- * expressed as code so the contract test derives its expectations from the ADR
- * rather than restating them.
+ * The structural / decorative split that `unstyled` is defined by, expressed as
+ * code.
  *
  * Applied at module load, once per constants file, to derive each component's
  * UNSTYLED_*_CLASSES from its DEFAULT_*_CLASSES. Deriving rather than
- * hand-maintaining a second copy is what stops the two drifting — the failure
- * mode ADR 001 was written to end.
+ * hand-maintaining a second copy is what stops the two drifting.
  *
- * ADR rule: a utility is structural if removing it changes the box's
- * participation in layout — where it is positioned, what formatting context it
- * establishes or joins, whether it can overflow, and what size it takes.
+ * A utility is structural if removing it changes the box's participation in
+ * layout — where it is positioned, what formatting context it establishes or
+ * joins, whether it can overflow, and what size it takes. `unstyled` keeps the
+ * structural half and drops the rest.
  */
 
 const STRUCTURAL: RegExp[] = [
@@ -49,7 +48,7 @@ export const isStructural = (token: string): boolean => {
 
 export const isDecorative = (token: string): boolean => !isStructural(token);
 
-/** Splits a class string into its two ADR layers. */
+/** Splits a class string into its structural and decorative halves. */
 export const splitLayers = (classString: string) => {
   const tokens = classString.split(/\s+/).filter(Boolean);
   return {
@@ -64,14 +63,14 @@ export const splitLayers = (classString: string) => {
  * Every component's UNSTYLED_*_CLASSES is this applied to its DEFAULT_*_CLASSES,
  * so the two sets share one source of truth and cannot disagree.
  */
-/** A class bag: strings, or a nested child component's bag under R6. */
+/** A class bag: strings, or a nested child component's own bag. */
 export type ClassBag = { [key: string]: string | undefined | ClassBag };
 
 /**
  * Recurses into nested bags so `unstyled` reaches a child component by the same
- * path its classes do (ADR 002 R6). Without this an R6 key would keep its
- * decorative defaults under `unstyled`, because the value is an object and the
- * old implementation mapped every non-string to "".
+ * path its classes do. Without this a nested bag would keep its decorative
+ * defaults under `unstyled`, because the value is an object rather than a
+ * class string.
  */
 export const structuralOnly = <T extends object>(defaults: T): T =>
   Object.fromEntries(
@@ -88,7 +87,7 @@ export const structuralOnly = <T extends object>(defaults: T): T =>
 /**
  * Utilities that make something move.
  *
- * Narrower than the ADR's "Motion" group on purpose: `transform`, `scale-*`,
+ * Narrower than "anything that could move" on purpose: `transform`, `scale-*`,
  * `rotate-*` and `translate-*` are static geometry unless a transition drives
  * them, and stripping them would move a `-translate-y-1/2` centred element
  * rather than calm it. Only the utilities that animate come out.
@@ -144,7 +143,7 @@ export const motionSafeClasses = <T extends object>(
       key,
       typeof value === "string"
         ? motionSafe(value, true)
-        // R6: a nested child bag is calmed by the same path.
+        // A nested child bag is stripped by the same path.
         : value && typeof value === "object"
           ? motionSafeClasses(value as object, true)
           : value,

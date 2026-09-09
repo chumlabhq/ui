@@ -151,7 +151,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Prop | Type | Description |
 | --- | --- | --- |
 | `children` | `ReactNode` | Button elements to group together. |
-| `orientation` | `"horizontal" \| "vertical" \| undefined` | Stack direction. Default: `"horizontal"`. |
+| `orientation` | `"vertical" \| "horizontal" \| undefined` | Stack direction. Default: `"horizontal"`. |
 
 ---
 

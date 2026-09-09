@@ -29,7 +29,8 @@
     },
     "aspectRatio": {
       "type": "number",
-      "description": "Aspect ratio for the flag image."
+      "description": "Aspect ratio for the flag image.",
+      "default": 0.75
     },
     "alt": {
       "type": "string",
@@ -37,7 +38,8 @@
     },
     "fallback": {
       "type": "object",
-      "description": "React.ReactNode — Custom fallback content when the flag image fails to load."
+      "description": "React.ReactNode — Custom fallback content when the flag image fails to load.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -93,7 +95,8 @@
           ]
         }
       ],
-      "description": "Tooltip shown on hover. Pass a ReactNode or a config object."
+      "description": "Tooltip shown on hover. Pass a ReactNode or a config object.",
+      "x-tsType": "ReactNode | CountryFlagTooltipConfig"
     },
     "basePath": {
       "type": "string",
@@ -112,7 +115,8 @@
         "fallback": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "CountryFlagClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -134,11 +138,13 @@
     },
     "onLoad": {
       "type": "object",
-      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads."
+      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads.",
+      "x-tsType": "((event: SyntheticEvent<HTMLImageElement, Event>) => void) | undefined"
     },
     "onError": {
       "type": "object",
-      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load."
+      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load.",
+      "x-tsType": "((event: SyntheticEvent<HTMLImageElement, Event>) => void) | undefined"
     }
   },
   "required": [
@@ -149,28 +155,38 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "max": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "How many flags to show before the rest are collapsed into a surplus count."
         },
         "size": {
-          "type": "number | CountryFlagSize | undefined"
+          "type": "number | CountryFlagSize | undefined",
+          "description": "Flag size for every member of the group.",
+          "default": "md"
         },
         "showCountTooltip": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Shows a tooltip on the surplus count listing the hidden countries.",
+          "default": false
         },
         "countTooltip": {
-          "type": "Omit<CountryFlagTooltipConfig, \"content\"> | undefined"
+          "type": "Omit<CountryFlagTooltipConfig, \"content\"> | undefined",
+          "description": "Tooltip settings for the surplus count. Its content comes from `surplusTooltipContent`."
         },
         "surplusTooltipContent": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content for the surplus count's tooltip, replacing the generated country list."
         },
         "renderSurplus": {
-          "type": "((count: number) => ReactNode) | undefined"
+          "type": "((count: number) => ReactNode) | undefined",
+          "description": "Renders the surplus indicator yourself, given the number of hidden flags."
         },
         "classes": {
-          "type": "CountryFlagGroupClasses | undefined"
+          "type": "CountryFlagGroupClasses | undefined",
+          "description": "Class overrides for this component's slots."
         }
       }
     },
@@ -178,22 +194,33 @@
       "type": "object",
       "properties": {
         "classes": {
-          "type": "CountryFlagShimmerClasses | undefined"
+          "type": "CountryFlagShimmerClasses | undefined",
+          "description": "Class overrides for this component's slots."
         },
         "unstyled": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring.",
+          "default": false
         },
         "size": {
-          "type": "number | CountryFlagSize | undefined"
+          "type": "number | CountryFlagSize | undefined",
+          "description": "Matches the flag size the placeholder stands in for.",
+          "default": "md"
         },
         "aspectRatio": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "Width-to-height ratio of the placeholder, matching the flag it stands in for.",
+          "default": 0.75
         },
         "animate": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Whether the placeholder pulses. Set false for a still skeleton.",
+          "default": true
         },
         "reduceMotion": {
-          "type": "boolean | \"auto\" | undefined"
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Whether to stop the shimmer animation. `\"auto\"` follows the OS reduced-motion setting.",
+          "default": "auto"
         }
       }
     },
@@ -201,22 +228,34 @@
       "type": "object",
       "properties": {
         "count": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "How many placeholder flags to draw.",
+          "default": 3
         },
         "size": {
-          "type": "number | CountryFlagSize | undefined"
+          "type": "number | CountryFlagSize | undefined",
+          "description": "Matches the flag size the placeholder stands in for.",
+          "default": "md"
         },
         "aspectRatio": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "Width-to-height ratio of each placeholder.",
+          "default": 0.75
         },
         "animate": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Whether the placeholders pulse. Set false for a still skeleton.",
+          "default": true
         },
         "reduceMotion": {
-          "type": "boolean | \"auto\" | undefined"
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Whether to stop the shimmer animation. `\"auto\"` follows the OS reduced-motion setting.",
+          "default": "auto"
         },
         "showCount": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Also draws a placeholder for the surplus count.",
+          "default": false
         }
       }
     }

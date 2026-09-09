@@ -56,11 +56,13 @@
             "range": {
               "type": "string"
             }
-          }
+          },
+          "x-tsType": "CircularLoaderClasses | undefined"
         },
         "unstyled": {
           "type": "boolean",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     },
@@ -118,11 +120,13 @@
             "range": {
               "type": "string"
             }
-          }
+          },
+          "x-tsType": "LinearLoaderClasses | undefined"
         },
         "unstyled": {
           "type": "boolean",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     },
@@ -173,11 +177,13 @@
             "range": {
               "type": "string"
             }
-          }
+          },
+          "x-tsType": "DotLoaderClasses | undefined"
         },
         "unstyled": {
           "type": "boolean",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     },
@@ -223,11 +229,13 @@
             "range": {
               "type": "string"
             }
-          }
+          },
+          "x-tsType": "PulseLoaderClasses | undefined"
         },
         "unstyled": {
           "type": "boolean",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     }
@@ -238,15 +246,18 @@
       "properties": {
         "size": {
           "type": "number | undefined",
-          "description": "Width and height in pixels. Default: 20"
+          "description": "Width and height in pixels. Default: 20",
+          "default": 20
         },
         "thickness": {
           "type": "number | undefined",
-          "description": "Stroke width of track and arc. Default: 2"
+          "description": "Stroke width of track and arc. Default: 2",
+          "default": 2
         },
         "speed": {
           "type": "number | undefined",
-          "description": "Animation duration in seconds (lower = faster). Default: 0.75"
+          "description": "Animation duration in seconds (lower = faster). Default: 0.75",
+          "default": 0.75
         },
         "trackColor": {
           "type": "string | undefined",
@@ -262,7 +273,8 @@
         },
         "unstyled": {
           "type": "boolean | undefined",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     },
@@ -271,15 +283,18 @@
       "properties": {
         "height": {
           "type": "number | undefined",
-          "description": "Height of the bar in pixels. Default: 4"
+          "description": "Height of the bar in pixels. Default: 4",
+          "default": 4
         },
         "width": {
           "type": "string | number | undefined",
-          "description": "Width of the bar (CSS value). Default: \"100%\""
+          "description": "Width of the bar (CSS value). Default: \"100%\"",
+          "default": "100%"
         },
         "speed": {
           "type": "number | undefined",
-          "description": "Animation duration in seconds. Default: 1.5"
+          "description": "Animation duration in seconds. Default: 1.5",
+          "default": 1.5
         },
         "trackColor": {
           "type": "string | undefined",
@@ -287,7 +302,8 @@
         },
         "borderRadius": {
           "type": "number | undefined",
-          "description": "Border radius in pixels. Default: 9999 (pill)"
+          "description": "Border radius in pixels. Default: 9999 (pill)",
+          "default": 9999
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
@@ -299,7 +315,8 @@
         },
         "unstyled": {
           "type": "boolean | undefined",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     },
@@ -308,19 +325,23 @@
       "properties": {
         "dotSize": {
           "type": "number | undefined",
-          "description": "Diameter of each dot in pixels. Default: 8"
+          "description": "Diameter of each dot in pixels. Default: 8",
+          "default": 8
         },
         "gap": {
           "type": "number | undefined",
-          "description": "Gap between dots in pixels. Default: 4"
+          "description": "Gap between dots in pixels. Default: 4",
+          "default": 4
         },
         "count": {
           "type": "number | undefined",
-          "description": "Number of dots. Default: 3"
+          "description": "Number of dots. Default: 3",
+          "default": 3
         },
         "speed": {
           "type": "number | undefined",
-          "description": "Full animation cycle duration in seconds. Default: 1.4"
+          "description": "Full animation cycle duration in seconds. Default: 1.4",
+          "default": 1.4
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
@@ -332,7 +353,8 @@
         },
         "unstyled": {
           "type": "boolean | undefined",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     },
@@ -341,15 +363,18 @@
       "properties": {
         "size": {
           "type": "number | undefined",
-          "description": "Diameter of the circle in pixels. Default: 40"
+          "description": "Diameter of the circle in pixels. Default: 40",
+          "default": 40
         },
         "speed": {
           "type": "number | undefined",
-          "description": "Animation duration in seconds. Default: 1.5"
+          "description": "Animation duration in seconds. Default: 1.5",
+          "default": 1.5
         },
         "rings": {
           "type": "number | undefined",
-          "description": "Number of ripple rings. Default: 2"
+          "description": "Number of ripple rings. Default: 2",
+          "default": 2
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
@@ -361,7 +386,8 @@
         },
         "unstyled": {
           "type": "boolean | undefined",
-          "description": "Removes all default styling."
+          "description": "Removes all default styling.",
+          "default": false
         }
       }
     }

@@ -453,7 +453,7 @@ const CheckboxDemo = () => {
 
       {/* ─── Keyboard Navigation ──────────────────────────────────────── */}
       <Section
-        title="Keyboard Navigation"
+        title="Try it: Keyboard Navigation"
         description="Tab to focus, Space to toggle. Native <input> provides full keyboard support out-of-the-box."
         isDarkMode={dark}
       >
@@ -575,59 +575,6 @@ const CheckboxDemo = () => {
       <ComponentDocs name="Checkbox" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Native <input type="checkbox"> for full browser and screen reader support',
-              "Label auto-associated via wrapping <label> element",
-              'Required checkboxes set aria-required="true" with visual asterisk',
-              "Error state sets aria-invalid and connects error message via aria-describedby",
-              'Error messages use role="alert" for screen reader announcements',
-              "Description text linked via aria-describedby",
-              "Indeterminate state set via DOM property (input.indeterminate)",
-              "Provide `label` or `aria-label` / `aria-labelledby` for standalone checkboxes",
-              "Ref forwarding via callback ref pattern for programmatic focus",
-              "Supports all native input attributes (tabIndex, autoFocus, form, value, etc.)",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Move focus to/from checkbox"],
-              ["Space", "Toggle checked state"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

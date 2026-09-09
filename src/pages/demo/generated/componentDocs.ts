@@ -77,7 +77,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "\"ltr\" | \"rtl\"",
         "required": false,
         "default": "\"ltr\"",
-        "description": "Text direction for RTL-aware layouts."
+        "description": "Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror."
       },
       {
         "name": "disabled",
@@ -90,12 +90,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "loop",
         "type": "boolean",
         "required": false,
-        "default": null,
+        "default": "true",
         "description": "Whether keyboard navigation wraps from last to first item."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "AccordionClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for accordion sub-elements."
@@ -104,12 +104,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "headingLevel",
         "type": "1 | 2 | 3 | 4 | 5 | 6",
         "required": false,
-        "default": null,
+        "default": "3",
         "description": "HTML heading level for accordion item triggers."
       },
       {
         "name": "children",
-        "type": "object",
+        "type": "ReactNode",
         "required": true,
         "default": null,
         "description": "React.ReactNode — AccordionItem children."
@@ -146,7 +146,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "animationDuration",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "300",
         "description": "Duration in milliseconds for expand/collapse animation."
       },
       {
@@ -186,21 +186,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onExpandedChange",
-        "type": "object",
+        "type": "((event: AccordionExpandEvent) => void)",
         "required": false,
         "default": null,
         "description": "(event: AccordionExpandEvent) => void"
       },
       {
         "name": "onKeyDown",
-        "type": "object",
+        "type": "((event: KeyboardEvent<HTMLDivElement>, itemValue: string | null) => void)",
         "required": false,
         "default": null,
         "description": "(event: KeyboardEvent, itemValue: string | null) => void"
       },
       {
         "name": "preventClose",
-        "type": "object",
+        "type": "((value: string) => boolean | Promise<boolean>)",
         "required": false,
         "default": null,
         "description": "(value: string) => boolean | Promise<boolean>"
@@ -209,42 +209,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "preventCloseTimeout",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "10000",
         "description": "Timeout in ms for the preventClose callback."
       },
       {
         "name": "onFocusCapture",
-        "type": "object",
+        "type": "((event: FocusEvent<HTMLDivElement, Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: FocusEvent) => void"
       },
       {
         "name": "onBlurCapture",
-        "type": "object",
+        "type": "((event: FocusEvent<HTMLDivElement, Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: FocusEvent) => void"
       },
       {
-        "name": "aria-busy",
-        "type": "boolean",
-        "required": false,
-        "default": null,
-        "description": "ARIA busy state for async content."
-      },
-      {
-        "name": "aria-live",
-        "type": "\"off\" | \"polite\" | \"assertive\"",
-        "required": false,
-        "default": null,
-        "description": "ARIA live region behavior."
-      },
-      {
         "name": "announceExpanded",
         "type": "boolean",
         "required": false,
-        "default": null,
+        "default": "false",
         "description": "Announces expanded state changes to screen readers."
       }
     ],
@@ -257,42 +243,35 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Identifies this item. Matches the values passed to the accordion's `value` or `defaultValue`."
           },
           {
             "name": "disabled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Disables this item alone. It stays visible but cannot be toggled and leaves the tab order."
           },
           {
             "name": "children",
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props."
           },
           {
             "name": "onExpandedChange",
-            "type": "((isExpanded: boolean) => void) | undefined",
+            "type": "((isExpanded: boolean) => void)",
             "required": false,
             "default": null,
             "description": "Fires when the item's expanded state changes."
-          },
-          {
-            "name": "aria-describedby",
-            "type": "string | undefined",
-            "required": false,
-            "default": null,
-            "description": "Identifies the element (or elements) that describes the object."
           }
         ]
       },
@@ -304,70 +283,63 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "expandedIcon",
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Icon shown while the item is expanded. Replaces the default chevron."
           },
           {
             "name": "collapsedIcon",
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Icon shown while the item is collapsed. Replaces the default chevron."
           },
           {
             "name": "iconPosition",
-            "type": "\"left\" | \"right\" | \"none\" | undefined",
+            "type": "\"left\" | \"right\" | \"none\"",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"right\"",
+            "description": "Which side of the trigger the icon sits on, or `\"none\"` to drop it."
           },
           {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props."
           },
           {
             "name": "subtitle",
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Secondary line rendered under the trigger's label."
           },
           {
             "name": "iconAnimation",
-            "type": "\"none\" | \"rotate\" | \"switch\" | undefined",
+            "type": "\"none\" | \"rotate\" | \"switch\"",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"rotate\"",
+            "description": "How the icon changes on toggle: rotate the chevron, switch between the two icons, or neither."
           },
           {
             "name": "leftSlot",
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content placed before the label, inside the trigger."
           },
           {
             "name": "rightSlot",
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
-          },
-          {
-            "name": "aria-describedby",
-            "type": "string | undefined",
-            "required": false,
-            "default": null,
-            "description": "Identifies the element (or elements) that describes the object."
+            "description": "Content placed after the label and before the icon."
           }
         ]
       },
@@ -379,77 +351,77 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "forceMount",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Keeps the panel mounted while collapsed, so an exit animation or a measurement has a node to read."
           },
           {
             "name": "animationDuration",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Expand and collapse duration in milliseconds."
           },
           {
             "name": "animationEasing",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "CSS easing function for the expand and collapse transition."
           },
           {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props."
           },
           {
             "name": "lazyLoad",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Delays rendering the panel's children until it is first expanded."
           },
           {
             "name": "unmountOnClose",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Unmounts the panel's children again each time it collapses."
           },
           {
             "name": "onOpenStart",
-            "type": "(() => void) | undefined",
+            "type": "(() => void)",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Fires when the expand transition begins."
           },
           {
             "name": "onOpenEnd",
-            "type": "(() => void) | undefined",
+            "type": "(() => void)",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Fires when the expand transition finishes."
           },
           {
             "name": "onCloseStart",
-            "type": "(() => void) | undefined",
+            "type": "(() => void)",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Fires when the collapse transition begins."
           },
           {
             "name": "onCloseEnd",
-            "type": "(() => void) | undefined",
+            "type": "(() => void)",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Fires when the collapse transition finishes."
           }
         ]
       },
@@ -458,80 +430,80 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"auto\"",
+            "description": "Whether to stop the shimmer animation. `\"auto\"` follows the OS reduced-motion setting."
           },
           {
             "name": "classes",
-            "type": "AccordionShimmerClasses | undefined",
+            "type": "AccordionShimmerClasses",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Class overrides for this component's slots."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring."
           },
           {
             "name": "count",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "3",
+            "description": "How many placeholder items to draw."
           },
           {
             "name": "size",
-            "type": "AccordionSize | undefined",
+            "type": "AccordionSize",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"md\"",
+            "description": "Matches the accordion size the placeholder stands in for."
           },
           {
             "name": "variant",
-            "type": "AccordionVariant | undefined",
+            "type": "AccordionVariant",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"default\"",
+            "description": "Matches the accordion variant the placeholder stands in for."
           },
           {
             "name": "animate",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "true",
+            "description": "Whether the placeholder pulses. Set false for a still skeleton."
           },
           {
             "name": "className",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Additional classes for the root element."
           },
           {
             "name": "style",
-            "type": "CSSProperties | undefined",
+            "type": "CSSProperties",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Inline styles for the root element."
           },
           {
             "name": "showContent",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Also draws a placeholder for the expanded panel, not just the triggers."
           },
           {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props."
           }
         ]
       }
@@ -586,7 +558,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "itemIndicator",
             "type": "string",
             "required": false,
-            "description": "ADR 002 R2: the chevron glyph inside the `icon` slot. Both carried `icon`, so an override on the slot also hit the glyph — R9's ancestor clause. `itemIndicator` is already in R2's closed list, so no precedent is owed."
+            "description": "The chevron glyph itself, inside the `icon` slot. Style `icon` to reach the wrapper and this to reach the glyph alone."
           },
           {
             "name": "description",
@@ -645,7 +617,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "titleBar",
             "type": "string",
             "required": false,
-            "description": "The title placeholder bar. NOVEL: no peer ships a skeleton anatomy."
+            "description": "The title placeholder bar."
           },
           {
             "name": "descriptionBar",
@@ -803,25 +775,25 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "onOpenStart",
             "type": "() => void",
             "required": false,
-            "description": ""
+            "description": "Fires when the expand transition begins."
           },
           {
             "name": "onOpenEnd",
             "type": "() => void",
             "required": false,
-            "description": ""
+            "description": "Fires when the expand transition finishes."
           },
           {
             "name": "onCloseStart",
             "type": "() => void",
             "required": false,
-            "description": ""
+            "description": "Fires when the collapse transition begins."
           },
           {
             "name": "onCloseEnd",
             "type": "() => void",
             "required": false,
-            "description": ""
+            "description": "Fires when the collapse transition finishes."
           }
         ]
       },
@@ -919,10 +891,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to the next trigger in the tab order."
         },
@@ -996,7 +964,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "fallback",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom fallback content when no image or name is available."
@@ -1010,7 +978,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "colors",
-        "type": "object",
+        "type": "AvatarColors",
         "required": false,
         "default": null,
         "description": "Custom color palettes for auto-colored mode."
@@ -1031,21 +999,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "tooltip",
-        "type": "object",
+        "type": "ReactNode | AvatarTooltipConfig",
         "required": false,
         "default": null,
         "description": "Tooltip shown on hover. Pass a string/ReactNode or a config object."
       },
       {
         "name": "imageConfig",
-        "type": "object",
+        "type": "AvatarImageConfig",
         "required": false,
         "default": null,
         "description": "Advanced image loading configuration (srcSet, loading, decoding, CORS)."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "AvatarClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for avatar sub-elements."
@@ -1059,7 +1027,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "textStyle",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "CSSProperties — Inline styles for the initials text."
@@ -1080,14 +1048,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoad",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Fires when the avatar image finishes loading."
       },
       {
         "name": "onError",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Fires when the avatar image fails to load."
@@ -1113,107 +1081,107 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "max",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
             "default": null,
             "description": "Maximum visible avatars before showing a surplus count."
           },
           {
             "name": "size",
-            "type": "AvatarSize | undefined",
+            "type": "AvatarSize",
             "required": false,
-            "default": null,
+            "default": "\"md\"",
             "description": "Default size for all avatars in the group."
           },
           {
             "name": "shape",
-            "type": "AvatarShape | undefined",
+            "type": "AvatarShape",
             "required": false,
             "default": null,
             "description": "Default shape for all avatars in the group."
           },
           {
             "name": "bordered",
-            "type": "string | boolean | undefined",
+            "type": "string | boolean",
             "required": false,
             "default": null,
             "description": "Adds border rings to all avatars."
           },
           {
             "name": "spacing",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
             "default": null,
             "description": "Overlap spacing in pixels (negative for overlap)."
           },
           {
             "name": "ringColor",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
+            "default": "\"var(--cl-bg)\"",
             "description": "Border ring color for overlapping avatars."
           },
           {
             "name": "showTooltip",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Shows a tooltip with the avatar's name on hover."
           },
           {
             "name": "total",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
             "default": null,
             "description": "Total count for surplus calculation (when not all items are rendered)."
           },
           {
             "name": "variant",
-            "type": "GroupVariant | undefined",
+            "type": "GroupVariant",
             "required": false,
-            "default": null,
+            "default": "\"stack\"",
             "description": "Layout variant: stacked overlap, grid, or inline. Default: `\"stack\"`."
           },
           {
             "name": "reverseOrder",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Reverses the visual stacking order."
           },
           {
             "name": "renderSurplus",
-            "type": "((count: number) => ReactNode) | undefined",
+            "type": "((count: number) => ReactNode)",
             "required": false,
             "default": null,
             "description": "Custom render function for the surplus count indicator."
           },
           {
             "name": "onAvatarClick",
-            "type": "((info: { index: number; name?: string | undefined; }, event: MouseEvent<Element, MouseEvent>) => void) | undefined",
+            "type": "((info: { index: number; name?: string | undefined; }, event: MouseEvent<Element, MouseEvent>) => void)",
             "required": false,
             "default": null,
             "description": "Click handler for individual avatars within the group."
           },
           {
             "name": "dir",
-            "type": "Direction | undefined",
+            "type": "Direction",
             "required": false,
-            "default": null,
-            "description": "Text direction for RTL-aware layouts."
+            "default": "\"ltr\"",
+            "description": "Text direction. Sets `dir` on the group; the layout itself does not mirror."
           },
           {
             "name": "classes",
-            "type": "AvatarGroupClasses | undefined",
+            "type": "AvatarGroupClasses",
             "required": false,
-            "default": null,
+            "default": "{}",
             "description": "CSS class overrides for group sub-elements."
           },
           {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Merges group props onto the child element via Slot."
           }
         ]
@@ -1230,44 +1198,44 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "size",
-            "type": "AvatarSize | undefined",
+            "type": "AvatarSize",
             "required": false,
-            "default": null,
+            "default": "\"md\"",
             "description": "Size matching the group's avatar size."
           },
           {
             "name": "shape",
-            "type": "AvatarShape | undefined",
+            "type": "AvatarShape",
             "required": false,
-            "default": null,
+            "default": "\"circle\"",
             "description": "Shape matching the group's avatar shape."
           },
           {
             "name": "max",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
             "default": null,
             "description": "Maximum count before showing `max+`."
           },
           {
             "name": "showPlus",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "true",
             "description": "Whether to show a `+` prefix. Default: `true`."
           },
           {
             "name": "format",
-            "type": "((count: number) => string) | undefined",
+            "type": "((count: number) => string)",
             "required": false,
             "default": null,
             "description": "Custom format function for the count display."
           },
           {
             "name": "variant",
-            "type": "CountVariant | undefined",
+            "type": "CountVariant",
             "required": false,
-            "default": null,
+            "default": "\"solid\"",
             "description": "Visual style variant."
           },
           {
@@ -1279,37 +1247,30 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "bordered",
-            "type": "string | boolean | undefined",
+            "type": "string | boolean",
             "required": false,
             "default": null,
             "description": "Adds a border ring."
           },
           {
             "name": "textClassName",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
+            "default": "\"\"",
             "description": "CSS class for the count text."
           },
           {
             "name": "textStyle",
-            "type": "CSSProperties | undefined",
+            "type": "CSSProperties",
             "required": false,
             "default": null,
             "description": "Inline styles for the count text."
           },
           {
-            "name": "aria-live",
-            "type": "\"polite\" | \"assertive\" | \"off\" | undefined",
-            "required": false,
-            "default": null,
-            "description": "ARIA live region behavior for screen readers."
-          },
-          {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Merges count props onto the child element via Slot."
           },
           {
@@ -1326,100 +1287,93 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "count",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
             "default": null,
             "description": "Notification count displayed in the badge."
           },
           {
             "name": "max",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "99",
             "description": "Maximum count before showing `max+`."
           },
           {
             "name": "showZero",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Shows the badge even when count is zero. Default: `false`."
           },
           {
             "name": "dot",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Renders a small dot instead of a count."
           },
           {
             "name": "position",
-            "type": "CornerPosition | undefined",
+            "type": "CornerPosition",
             "required": false,
-            "default": null,
+            "default": "\"top-right\"",
             "description": "Corner position for the badge. Default: `\"top-right\"`."
           },
           {
             "name": "offset",
-            "type": "BadgeOffset | undefined",
+            "type": "BadgeOffset",
             "required": false,
             "default": null,
             "description": "Pixel offset from the default corner position."
           },
           {
             "name": "color",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
             "description": "Background color of the badge."
           },
           {
             "name": "size",
-            "type": "BadgeSize | undefined",
+            "type": "BadgeSize",
             "required": false,
-            "default": null,
+            "default": "\"md\"",
             "description": "Badge size preset. Default: `\"sm\"`."
           },
           {
             "name": "variant",
-            "type": "BadgeVariant | undefined",
+            "type": "BadgeVariant",
             "required": false,
-            "default": null,
+            "default": "\"solid\"",
             "description": "Visual style variant. Default: `\"solid\"`."
           },
           {
             "name": "overlap",
-            "type": "BadgeOverlap | undefined",
+            "type": "BadgeOverlap",
             "required": false,
-            "default": null,
+            "default": "\"circular\"",
             "description": "Shape of the element the badge overlaps."
           },
           {
             "name": "pulse",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Adds a pulsing animation to the badge."
           },
           {
             "name": "invisible",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Hides the badge while preserving its DOM presence."
           },
           {
-            "name": "aria-live",
-            "type": "\"polite\" | \"assertive\" | \"off\" | undefined",
-            "required": false,
-            "default": null,
-            "description": "ARIA live region behavior for screen readers."
-          },
-          {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Merges badge props onto the child element via Slot."
           }
         ]
@@ -1429,44 +1383,44 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "classes",
-            "type": "AvatarShimmerClasses | undefined",
+            "type": "AvatarShimmerClasses",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Class overrides for this component's slots."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring."
           },
           {
             "name": "size",
-            "type": "AvatarSize | undefined",
+            "type": "AvatarSize",
             "required": false,
-            "default": null,
+            "default": "\"md\"",
             "description": "Shimmer size matching the avatar size."
           },
           {
             "name": "shape",
-            "type": "AvatarShape | undefined",
+            "type": "AvatarShape",
             "required": false,
-            "default": null,
+            "default": "\"circle\"",
             "description": "Shimmer shape matching the avatar shape."
           },
           {
             "name": "animate",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "true",
             "description": "Enables the shimmer animation. Default: `true`."
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
+            "default": "\"auto\"",
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           }
         ]
@@ -1476,65 +1430,65 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "count",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "3",
             "description": "Number of shimmer placeholders to render. Default: `3`."
           },
           {
             "name": "size",
-            "type": "AvatarSize | undefined",
+            "type": "AvatarSize",
             "required": false,
-            "default": null,
+            "default": "\"md\"",
             "description": "Shimmer size matching the group's avatar size."
           },
           {
             "name": "shape",
-            "type": "AvatarShape | undefined",
+            "type": "AvatarShape",
             "required": false,
-            "default": null,
+            "default": "\"circle\"",
             "description": "Shimmer shape matching the group's avatar shape."
           },
           {
             "name": "spacing",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "-8",
             "description": "Overlap spacing in pixels."
           },
           {
             "name": "ringColor",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
+            "default": "\"var(--cl-bg)\"",
             "description": "Border ring color."
           },
           {
             "name": "animate",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "true",
             "description": "Enables the shimmer animation. Default: `true`."
           },
           {
             "name": "showCount",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Shows a shimmer placeholder for the surplus count."
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
+            "default": "\"auto\"",
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
             "name": "asChild",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Merges shimmer props onto the child element via Slot."
           }
         ]
@@ -1578,7 +1532,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "loading",
             "type": "AvatarShimmerClasses",
             "required": false,
-            "description": "R6: the skeleton's own bag. AvatarShimmer is a component, not a part."
+            "description": "The skeleton's own bag — `AvatarShimmer` is a component, not a part."
           }
         ]
       },
@@ -1855,10 +1809,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "Only an avatar with `onClick` is focusable; a plain one is an image and takes no keyboard input.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to a clickable avatar, and to the overflow count in an `AvatarGroup`."
         },
@@ -1896,28 +1846,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "separator",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom separator between breadcrumb items."
       },
       {
         "name": "onItemClick",
-        "type": "object",
+        "type": "((item: BreadcrumbItem) => void)",
         "required": false,
         "default": null,
         "description": "(item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked."
       },
       {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the breadcrumb nav element."
-      },
-      {
         "name": "classes",
-        "type": "object",
+        "type": "BreadcrumbClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for breadcrumb sub-elements."
@@ -1938,21 +1881,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "CSSProperties — Inline styles for the root element."
       },
       {
         "name": "separatorIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom separator icon component."
       },
       {
         "name": "ellipsisIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom ellipsis icon component."
@@ -1987,21 +1930,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "defaultTooltipProps",
-        "type": "object",
+        "type": "BreadcrumbTooltipProps",
         "required": false,
         "default": null,
         "description": "Default tooltip configuration for all items."
       },
       {
         "name": "ellipsisTooltip",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Tooltip content for the ellipsis button."
       },
       {
         "name": "ellipsisTooltipProps",
-        "type": "object",
+        "type": "BreadcrumbTooltipProps",
         "required": false,
         "default": null,
         "description": "Tooltip configuration for the ellipsis button."
@@ -2022,7 +1965,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null — Portal container for the dropdown."
@@ -2043,7 +1986,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onDropdownOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void — Called when the dropdown open state changes."
@@ -2241,10 +2184,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves through the crumbs, and to the ellipsis trigger when the trail is collapsed."
         },
@@ -2280,7 +2219,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "props": [
       {
         "name": "children",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Button content."
@@ -2315,14 +2254,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "startIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon rendered before the button label."
       },
       {
         "name": "endIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon rendered after the button label."
@@ -2336,7 +2275,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "loadingText",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Text displayed alongside the loading spinner."
@@ -2357,7 +2296,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "loader",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom loader element replacing the default spinner."
@@ -2371,7 +2310,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "ButtonClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for button sub-elements."
@@ -2413,14 +2352,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "tooltip",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Tooltip content shown on hover."
       },
       {
         "name": "tooltipProps",
-        "type": "object",
+        "type": "ButtonTooltipProps",
         "required": false,
         "default": null,
         "description": "Configuration for tooltip positioning and appearance."
@@ -2460,9 +2399,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "orientation",
-            "type": "\"horizontal\" | \"vertical\" | undefined",
+            "type": "\"vertical\" | \"horizontal\"",
             "required": false,
-            "default": null,
+            "default": "\"horizontal\"",
             "description": "Stack direction. Default: `\"horizontal\"`."
           }
         ]
@@ -2521,10 +2460,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to the button. `disabled` and `loading` both remove it from the tab order."
         },
@@ -2550,40 +2485,40 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "options",
         "type": "array",
         "required": true,
-        "default": null,
+        "default": "[]",
         "description": "Top-level options for the dropdown."
       },
       {
         "name": "value",
-        "type": "object",
+        "type": "CascadingValue",
         "required": false,
         "default": null,
         "description": "Controlled selection value as { [parentValue]: string | string[] }."
       },
       {
         "name": "defaultValue",
-        "type": "object",
+        "type": "CascadingValue",
         "required": false,
         "default": null,
         "description": "Initial selection value for uncontrolled usage."
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: CascadingValue, path: CascadingOption[]) => void)",
         "required": false,
         "default": null,
         "description": "(value: CascadingValue, path: CascadingOption[]) => void"
       },
       {
         "name": "onLoadChildren",
-        "type": "object",
+        "type": "((parent: CascadingOption) => Promise<CascadingOption[]>)",
         "required": false,
         "default": null,
         "description": "(parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader."
       },
       {
         "name": "onLoadError",
-        "type": "object",
+        "type": "((error: unknown) => void)",
         "required": false,
         "default": null,
         "description": "(error: unknown) => void — Called when async child loading fails."
@@ -2604,28 +2539,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void"
       },
       {
         "name": "onBlur",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void"
       },
       {
         "name": "onFocus",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void"
       },
       {
         "name": "onKeyDown",
-        "type": "object",
+        "type": "((event: KeyboardEvent<Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: React.KeyboardEvent) => void"
@@ -2646,7 +2581,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "placeholder",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Select an option\"",
         "description": "React.ReactNode — Placeholder content when no value is selected."
@@ -2667,21 +2602,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message."
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Label above the trigger."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Description text."
@@ -2695,7 +2630,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message."
@@ -2709,14 +2644,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "noResultsContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"No options found\"",
         "description": "React.ReactNode — Content shown when no results match."
       },
       {
         "name": "loadingText",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Loading...\"",
         "description": "React.ReactNode — Text shown during async loading."
@@ -2758,14 +2693,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "selectedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom icon for selected items."
       },
       {
         "name": "checkboxIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom checkbox icon for multi-select."
@@ -2800,7 +2735,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "CascadingDropdownClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for dropdown sub-elements."
@@ -2821,7 +2756,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null — Portal container for the dropdown."
@@ -2856,21 +2791,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "CSSProperties — Inline styles."
       },
       {
         "name": "ClearIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string }> — Custom clear icon component."
       },
       {
         "name": "renderTrigger",
-        "type": "object",
+        "type": "((props: CascadingDropdownTriggerRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function."
@@ -2905,14 +2840,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onMenuSearch",
-        "type": "object",
+        "type": "(query: string) => Promise<CascadingOption[]>",
         "required": false,
         "default": null,
         "description": "(query: string) => Promise<CascadingOption[]> — Async search for main menu."
       },
       {
         "name": "onSubmenuSearch",
-        "type": "object",
+        "type": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]>",
         "required": false,
         "default": null,
         "description": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu."
@@ -2926,7 +2861,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "SearchIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string }> — Custom search icon component."
@@ -2944,13 +2879,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "\"Search submenu\"",
         "description": "Accessible label for the submenu search input."
-      },
-      {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the dropdown."
       }
     ],
     "subComponents": [],
@@ -3252,10 +3180,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Enter`, `Space`",
           "description": "Opens the menu from the trigger, and selects the focused item."
         },
@@ -3299,14 +3223,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "props": [
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Text label rendered beside the checkbox."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Helper text rendered below the label."
@@ -3334,21 +3258,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((checked: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(checked: boolean) => void — Fires when the checked state changes."
       },
       {
         "name": "onFocus",
-        "type": "object",
+        "type": "((event: FocusEvent<HTMLInputElement, Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: FocusEvent) => void"
       },
       {
         "name": "onBlur",
-        "type": "object",
+        "type": "((event: FocusEvent<HTMLInputElement, Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: FocusEvent) => void"
@@ -3362,7 +3286,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message displayed below the checkbox."
@@ -3376,7 +3300,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message displayed below the checkbox."
@@ -3404,28 +3328,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "checkedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom icon for the checked state."
       },
       {
         "name": "uncheckedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom icon for the unchecked state."
       },
       {
         "name": "indeterminateIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom icon for the indeterminate state."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "CheckboxClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for checkbox sub-elements."
@@ -3595,7 +3519,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     ],
     "cssVariables": [],
     "accessibility": [
-      "Uses native `<input type=\"checkbox\">` — full browser keyboard/screen reader support",
+      "Uses native `<input type=\"checkbox\">`, so keyboard behaviour and accessibility-tree semantics come from the platform rather than from ARIA",
       "`<label>` wraps the input (implicit association)",
       "`aria-invalid` set when `error={true}`",
       "`aria-required` set when `required={true}`",
@@ -3607,10 +3531,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "keyboard": {
       "note": "A native `<input type=\"checkbox\">`, so the browser owns this — `Enter` deliberately does nothing, as it does not on any checkbox.",
       "rows": [
-        {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
         {
           "keys": "`Tab`",
           "description": "Moves focus to the checkbox."
@@ -3651,7 +3571,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "aspectRatio",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "0.75",
         "description": "Aspect ratio for the flag image."
       },
       {
@@ -3663,7 +3583,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "fallback",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom fallback content when the flag image fails to load."
@@ -3677,7 +3597,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "tooltip",
-        "type": "object",
+        "type": "ReactNode | CountryFlagTooltipConfig",
         "required": false,
         "default": null,
         "description": "Tooltip shown on hover. Pass a ReactNode or a config object."
@@ -3691,7 +3611,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "CountryFlagClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for flag sub-elements."
@@ -3712,14 +3632,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoad",
-        "type": "object",
+        "type": "((event: SyntheticEvent<HTMLImageElement, Event>) => void)",
         "required": false,
         "default": null,
         "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads."
       },
       {
         "name": "onError",
-        "type": "object",
+        "type": "((event: SyntheticEvent<HTMLImageElement, Event>) => void)",
         "required": false,
         "default": null,
         "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load."
@@ -3734,56 +3654,56 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "max",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "How many flags to show before the rest are collapsed into a surplus count."
           },
           {
             "name": "size",
-            "type": "number | CountryFlagSize | undefined",
+            "type": "number | CountryFlagSize",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"md\"",
+            "description": "Flag size for every member of the group."
           },
           {
             "name": "showCountTooltip",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Shows a tooltip on the surplus count listing the hidden countries."
           },
           {
             "name": "countTooltip",
-            "type": "Omit<CountryFlagTooltipConfig, \"content\"> | undefined",
+            "type": "Omit<CountryFlagTooltipConfig, \"content\">",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Tooltip settings for the surplus count. Its content comes from `surplusTooltipContent`."
           },
           {
             "name": "surplusTooltipContent",
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content for the surplus count's tooltip, replacing the generated country list."
           },
           {
             "name": "renderSurplus",
-            "type": "((count: number) => ReactNode) | undefined",
+            "type": "((count: number) => ReactNode)",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Renders the surplus indicator yourself, given the number of hidden flags."
           },
           {
             "name": "classes",
-            "type": "CountryFlagGroupClasses | undefined",
+            "type": "CountryFlagGroupClasses",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Class overrides for this component's slots."
           }
         ]
       },
@@ -3792,45 +3712,45 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "classes",
-            "type": "CountryFlagShimmerClasses | undefined",
+            "type": "CountryFlagShimmerClasses",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Class overrides for this component's slots."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring."
           },
           {
             "name": "size",
-            "type": "number | CountryFlagSize | undefined",
+            "type": "number | CountryFlagSize",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"md\"",
+            "description": "Matches the flag size the placeholder stands in for."
           },
           {
             "name": "aspectRatio",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "0.75",
+            "description": "Width-to-height ratio of the placeholder, matching the flag it stands in for."
           },
           {
             "name": "animate",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "true",
+            "description": "Whether the placeholder pulses. Set false for a still skeleton."
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"auto\"",
+            "description": "Whether to stop the shimmer animation. `\"auto\"` follows the OS reduced-motion setting."
           }
         ]
       },
@@ -3839,45 +3759,45 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "count",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "3",
+            "description": "How many placeholder flags to draw."
           },
           {
             "name": "size",
-            "type": "number | CountryFlagSize | undefined",
+            "type": "number | CountryFlagSize",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"md\"",
+            "description": "Matches the flag size the placeholder stands in for."
           },
           {
             "name": "aspectRatio",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "0.75",
+            "description": "Width-to-height ratio of each placeholder."
           },
           {
             "name": "animate",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "true",
+            "description": "Whether the placeholders pulse. Set false for a still skeleton."
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"auto\"",
+            "description": "Whether to stop the shimmer animation. `\"auto\"` follows the OS reduced-motion setting."
           },
           {
             "name": "showCount",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Also draws a placeholder for the surplus count."
           }
         ]
       }
@@ -3896,7 +3816,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "loading",
             "type": "CountryFlagShimmerClasses",
             "required": false,
-            "description": "R6: the skeleton's own bag. CountryFlagShimmer is a component, not a part."
+            "description": "The skeleton's own bag — `CountryFlagShimmer` is a component, not a part."
           },
           {
             "name": "image",
@@ -4072,21 +3992,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((dates: Date[] | null, dateValues: DateValue[] | null) => void)",
         "required": false,
         "default": null,
         "description": "Callback when the selected value changes. Signature depends on mode."
       },
       {
         "name": "onClear",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Called when the clear button is clicked."
       },
       {
         "name": "onMonthChange",
-        "type": "object",
+        "type": "((month: Date) => void)",
         "required": false,
         "default": null,
         "description": "(month: Date) => void — Called when the displayed month changes."
@@ -4107,28 +4027,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void"
       },
       {
         "name": "minDate",
-        "type": "object",
+        "type": "Date",
         "required": false,
         "default": null,
         "description": "Date — Earliest selectable date."
       },
       {
         "name": "maxDate",
-        "type": "object",
+        "type": "Date",
         "required": false,
         "default": null,
         "description": "Date — Latest selectable date."
       },
       {
         "name": "disabledDates",
-        "type": "object",
+        "type": "DisabledDateOptions",
         "required": false,
         "default": null,
         "description": "Configuration for disabling specific dates."
@@ -4142,7 +4062,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "locale",
-        "type": "object",
+        "type": "Locale",
         "required": false,
         "default": null,
         "description": "date-fns Locale object for internationalization."
@@ -4282,21 +4202,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message."
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Label above the trigger."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Description text."
@@ -4310,7 +4230,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message."
@@ -4359,70 +4279,70 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "calendarIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom calendar icon."
       },
       {
         "name": "clearIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom clear icon."
       },
       {
         "name": "prevMonthIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom previous month icon."
       },
       {
         "name": "nextMonthIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom next month icon."
       },
       {
         "name": "prevYearIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom previous year icon."
       },
       {
         "name": "nextYearIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom next year icon."
       },
       {
         "name": "todayIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom today button icon."
       },
       {
         "name": "monthDropdownSelectedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon for selected month in dropdown."
       },
       {
         "name": "yearDropdownSelectedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon for selected year in dropdown."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "DatePickerClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for date picker sub-elements."
@@ -4436,7 +4356,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null — Portal container for the calendar popup."
@@ -5007,10 +4927,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Enter`, `Space`",
           "description": "Opens the calendar from the trigger, and selects the focused day."
         },
@@ -5064,7 +4980,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void — Callback when the drawer's open state changes."
@@ -5078,7 +4994,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "children",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter)."
@@ -5087,42 +5003,42 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "direction",
         "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
         "required": false,
-        "default": null,
+        "default": "\"left\"",
         "description": "Direction from which the drawer slides in."
       },
       {
         "name": "size",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "\"300px\"",
         "description": "CSS size value for the drawer panel (width for left/right, height for top/bottom)."
       },
       {
         "name": "overlayColor",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "\"black\"",
         "description": "Background color of the overlay."
       },
       {
         "name": "overlayOpacity",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "0.32",
         "description": "Opacity of the overlay (0-1)."
       },
       {
         "name": "overlayBlur",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "0",
         "description": "Backdrop blur in pixels for the overlay."
       },
       {
         "name": "duration",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "300",
         "description": "Animation duration in milliseconds."
       },
       {
@@ -5148,7 +5064,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "DrawerClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for drawer sub-elements."
@@ -5183,21 +5099,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null — Portal container for the drawer."
       },
       {
         "name": "initialFocus",
-        "type": "object",
+        "type": "RefObject<HTMLElement | null>",
         "required": false,
         "default": null,
         "description": "RefObject<HTMLElement> — Element to receive focus when the drawer opens."
       },
       {
         "name": "onTransitionEnd",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void — Called when the open/close transition completes."
@@ -5227,7 +5143,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "swipeThreshold",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "0.4",
         "description": "Minimum swipe distance in pixels to trigger close."
       },
       {
@@ -5248,12 +5164,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "defaultSnapPointIndex",
         "type": "number",
         "required": false,
-        "default": null,
+        "default": "0",
         "description": "Initial snap point index for uncontrolled usage."
       },
       {
         "name": "onSnapPointIndexChange",
-        "type": "object",
+        "type": "((index: number) => void)",
         "required": false,
         "default": null,
         "description": "(index: number) => void — Called when the active snap point changes."
@@ -5268,7 +5184,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           }
         ]
       },
@@ -5280,7 +5196,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           }
         ]
       },
@@ -5292,7 +5208,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           }
         ]
       },
@@ -5304,7 +5220,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           }
         ]
       }
@@ -5394,10 +5310,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Escape`",
           "description": "Closes the drawer, unless `closeOnEscape={false}`."
         },
@@ -5423,7 +5335,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "options",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "[]",
         "description": "List of selectable options."
       },
       {
@@ -5442,7 +5354,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: string | null, option: DropdownOption | null) => void)",
         "required": false,
         "default": null,
         "description": "(value: string | null, option: DropdownOption | null) => void - Fires when the selected value changes."
@@ -5463,7 +5375,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void - Fires when the open state changes."
@@ -5484,7 +5396,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "placeholder",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Select an option\"",
         "description": "React.ReactNode - Content displayed when no option is selected."
@@ -5505,21 +5417,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Error message displayed below the dropdown."
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Label rendered above the dropdown."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Description text rendered below the label."
@@ -5533,7 +5445,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Success message displayed below the dropdown."
@@ -5554,7 +5466,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "noResultsContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"No options available\"",
         "description": "React.ReactNode - Content shown when no options are available."
@@ -5575,7 +5487,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "selectedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom icon for the selected option indicator."
@@ -5596,7 +5508,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoadOptions",
-        "type": "object",
+        "type": "() => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
         "description": "() => Promise<DropdownOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires."
@@ -5610,7 +5522,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoadError",
-        "type": "object",
+        "type": "((error: unknown) => void)",
         "required": false,
         "default": null,
         "description": "(error: unknown) => void - Called when async option loading fails."
@@ -5631,7 +5543,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "DropdownClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for dropdown sub-elements."
@@ -5645,7 +5557,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles for the root element."
@@ -5659,7 +5571,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null - Portal target for the dropdown popup."
@@ -5707,64 +5619,57 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Timeout in milliseconds for keyboard typeahead matching."
       },
       {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the dropdown."
-      },
-      {
         "name": "onBlur",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Fires when the dropdown loses focus."
       },
       {
         "name": "onFocus",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Fires when the dropdown receives focus."
       },
       {
         "name": "onKeyDown",
-        "type": "object",
+        "type": "((event: KeyboardEvent<Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: React.KeyboardEvent) => void - Fires on keydown events."
       },
       {
         "name": "renderTrigger",
-        "type": "object",
+        "type": "((props: DropdownTriggerRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: DropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element."
       },
       {
         "name": "ChevronIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
-        "default": null,
+        "default": "ChevronDownIcon",
         "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component."
       },
       {
         "name": "CheckIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom check icon component."
       },
       {
         "name": "ClearIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom clear icon component."
       },
       {
         "name": "loadingText",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Loading...\"",
         "description": "React.ReactNode - Text shown during async loading."
@@ -5994,10 +5899,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Enter`, `Space`",
           "description": "Opens the menu from the trigger, and selects the focused option."
         },
@@ -6041,14 +5942,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "props": [
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Label rendered above the input."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Helper text rendered below the label."
@@ -6062,7 +5963,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Error message displayed below the input."
@@ -6076,7 +5977,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Success message displayed below the input."
@@ -6090,42 +5991,42 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "prefix",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://')."
       },
       {
         "name": "suffix",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com')."
       },
       {
         "name": "startIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided."
       },
       {
         "name": "endIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided."
       },
       {
         "name": "onStartIconClick",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility."
       },
       {
         "name": "onEndIconClick",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility."
@@ -6146,7 +6047,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: string) => void)",
         "required": false,
         "default": null,
         "description": "(value: string) => void - Fires with the current string value when the value changes."
@@ -6160,7 +6061,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onClear",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Callback when the clear button is clicked."
@@ -6181,7 +6082,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "loader",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom loader element to replace the default spinner."
@@ -6209,7 +6110,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "InputClasses",
         "required": false,
         "default": null,
         "description": "Slot-based class overrides for internal elements."
@@ -6231,28 +6132,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "The label's content."
           },
           {
             "name": "required",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Marks the field required and draws the required indicator."
           },
           {
             "name": "htmlFor",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "The id of the control this labels. Set automatically when the label is rendered by the field."
           },
           {
             "name": "className",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Additional classes for the root element."
           }
         ]
       }
@@ -6367,10 +6268,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "A native `<input>`: the browser owns text entry, selection and the clear affordance.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to the field. `disabled` removes it from the tab order; `readOnly` does not."
         }
@@ -6390,28 +6287,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "props": [
       {
         "name": "value",
-        "type": "object",
+        "type": "PhoneNumberValue",
         "required": false,
         "default": null,
         "description": "PhoneNumberValue - Controlled phone value with countryCode and phoneNumber fields."
       },
       {
         "name": "defaultValue",
-        "type": "object",
+        "type": "PhoneNumberValue",
         "required": false,
         "default": null,
         "description": "PhoneNumberValue - Default phone value for uncontrolled usage."
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((data: PhoneNumberData) => void)",
         "required": false,
         "default": null,
         "description": "(data: PhoneNumberData) => void - Fires when the phone number changes, providing full validation data."
       },
       {
         "name": "onCountryChange",
-        "type": "object",
+        "type": "((country: CountryOption) => void)",
         "required": false,
         "default": null,
         "description": "(country: CountryOption) => void - Fires when the selected country changes."
@@ -6420,21 +6317,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "defaultCountry",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "\"us\"",
         "description": "ISO country code for the default selected country."
       },
       {
         "name": "countries",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "DEFAULT_COUNTRIES",
         "description": "Custom list of country options to display."
       },
       {
         "name": "preferredCountries",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "DEFAULT_PREFERRED_COUNTRIES",
         "description": "ISO country codes to show at the top of the country list."
       },
       {
@@ -6453,14 +6350,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Label rendered above the input."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Helper text displayed below the label."
@@ -6481,7 +6378,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onClear",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Called when the clear button is clicked."
@@ -6516,7 +6413,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Error message displayed below the input."
@@ -6530,7 +6427,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Success message displayed below the input."
@@ -6558,14 +6455,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "validationMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom validation message shown on blur validation."
       },
       {
         "name": "validate",
-        "type": "object",
+        "type": "((data: PhoneNumberData) => boolean | { valid: boolean; message?: string | undefined; })",
         "required": false,
         "default": null,
         "description": "(data: PhoneNumberData) => boolean | { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators."
@@ -6593,7 +6490,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onPasteDetected",
-        "type": "object",
+        "type": "((data: PasteDetectedData) => void)",
         "required": false,
         "default": null,
         "description": "(data: PasteDetectedData) => void - Fires when a phone number paste is detected."
@@ -6621,7 +6518,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "selectedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom icon for the selected country indicator."
@@ -6635,28 +6532,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderCountryOption",
-        "type": "object",
+        "type": "((props: CountryOptionRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: CountryOptionRenderProps) => ReactNode - Custom render function for country options."
       },
       {
         "name": "renderSelectedCountry",
-        "type": "object",
+        "type": "((country: CountryOption) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(country: CountryOption) => ReactNode - Custom render function for the selected country display."
       },
       {
         "name": "formatPatterns",
-        "type": "object",
+        "type": "Record<string, PhoneFormatPattern>",
         "required": false,
         "default": null,
         "description": "Record<string, PhoneFormatPattern> - Custom phone number formatting patterns by country."
       },
       {
         "name": "lengthRules",
-        "type": "object",
+        "type": "Record<string, PhoneLengthRule>",
         "required": false,
         "default": null,
         "description": "Record<string, PhoneLengthRule> - Custom phone number length validation rules by country."
@@ -6670,14 +6567,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles for the root element."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "InternationalPhoneInputClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -6719,7 +6616,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null - Portal target for the country dropdown."
@@ -6771,7 +6668,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "countrySelect",
             "type": "SearchableDropdownClasses",
             "required": false,
-            "description": "ADR 002 R6: the country picker is a SearchableDropdown, so its key takes that component's own classes object rather than a string. `unstyled` reaches it by the same path."
+            "description": "The country picker is a `SearchableDropdown`, so this takes that component's own classes object rather than a class string."
           },
           {
             "name": "itemRow",
@@ -7031,10 +6928,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "The number itself is a native `<input>`. The country selector is a listbox with its own keys.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves between the country trigger and the number field."
         },
@@ -7074,51 +6967,51 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "size",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "20",
             "description": "Width and height in pixels. Default: 20"
           },
           {
             "name": "thickness",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "2",
             "description": "Stroke width of track and arc. Default: 2"
           },
           {
             "name": "speed",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "0.75",
             "description": "Animation duration in seconds (lower = faster). Default: 0.75"
           },
           {
             "name": "trackColor",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
             "description": "Background track color. Default: currentColor at 20% opacity"
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
             "default": null,
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
             "name": "classes",
-            "type": "CircularLoaderClasses | undefined",
+            "type": "CircularLoaderClasses",
             "required": false,
             "default": null,
             "description": "CSS class overrides for sub-elements."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Removes all default styling."
           }
         ]
@@ -7128,58 +7021,58 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "height",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "4",
             "description": "Height of the bar in pixels. Default: 4"
           },
           {
             "name": "width",
-            "type": "string | number | undefined",
+            "type": "string | number",
             "required": false,
-            "default": null,
+            "default": "\"100%\"",
             "description": "Width of the bar (CSS value). Default: \"100%\""
           },
           {
             "name": "speed",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "1.5",
             "description": "Animation duration in seconds. Default: 1.5"
           },
           {
             "name": "trackColor",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
             "description": "Background track color"
           },
           {
             "name": "borderRadius",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "9999",
             "description": "Border radius in pixels. Default: 9999 (pill)"
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
             "default": null,
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
             "name": "classes",
-            "type": "LinearLoaderClasses | undefined",
+            "type": "LinearLoaderClasses",
             "required": false,
             "default": null,
             "description": "CSS class overrides for sub-elements."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Removes all default styling."
           }
         ]
@@ -7189,51 +7082,51 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "dotSize",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "8",
             "description": "Diameter of each dot in pixels. Default: 8"
           },
           {
             "name": "gap",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "4",
             "description": "Gap between dots in pixels. Default: 4"
           },
           {
             "name": "count",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "3",
             "description": "Number of dots. Default: 3"
           },
           {
             "name": "speed",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "1.4",
             "description": "Full animation cycle duration in seconds. Default: 1.4"
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
             "default": null,
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
             "name": "classes",
-            "type": "DotLoaderClasses | undefined",
+            "type": "DotLoaderClasses",
             "required": false,
             "default": null,
             "description": "CSS class overrides for sub-elements."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Removes all default styling."
           }
         ]
@@ -7243,44 +7136,44 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "size",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "40",
             "description": "Diameter of the circle in pixels. Default: 40"
           },
           {
             "name": "speed",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "1.5",
             "description": "Animation duration in seconds. Default: 1.5"
           },
           {
             "name": "rings",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
+            "default": "2",
             "description": "Number of ripple rings. Default: 2"
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
             "default": null,
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
             "name": "classes",
-            "type": "PulseLoaderClasses | undefined",
+            "type": "PulseLoaderClasses",
             "required": false,
             "default": null,
             "description": "CSS class overrides for sub-elements."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Removes all default styling."
           }
         ]
@@ -7412,7 +7305,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void - Callback when the modal's open state changes."
@@ -7426,28 +7319,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "children",
-        "type": "object",
+        "type": "ReactNode",
         "required": true,
         "default": null,
         "description": "React.ReactNode - Modal body content. Use ModalHeader, ModalBody, ModalFooter for structure."
       },
       {
         "name": "title",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Title rendered in the modal header."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Description rendered below the title in the header."
       },
       {
         "name": "icon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Icon rendered in the modal header."
@@ -7468,7 +7361,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "closeIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom close button icon."
@@ -7524,7 +7417,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "initialFocus",
-        "type": "object",
+        "type": "RefObject<HTMLElement | null>",
         "required": false,
         "default": null,
         "description": "RefObject<HTMLElement | null> - Element to focus when the modal opens."
@@ -7636,7 +7529,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "ModalClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for modal sub-elements."
@@ -7657,31 +7550,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "contentStyle",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles for the dialog content panel."
-      },
-      {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the modal dialog."
-      },
-      {
-        "name": "aria-labelledby",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "ID of the element that labels the modal dialog."
-      },
-      {
-        "name": "aria-describedby",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "ID of the element that describes the modal dialog."
       }
     ],
     "subComponents": [
@@ -7693,14 +7565,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "className",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"\"",
+            "description": "Additional classes for the root element."
           }
         ]
       },
@@ -7712,14 +7584,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "className",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"\"",
+            "description": "Additional classes for the root element."
           }
         ]
       },
@@ -7731,14 +7603,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "className",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"\"",
+            "description": "Additional classes for the root element."
           }
         ]
       }
@@ -7899,10 +7771,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Escape`",
           "description": "Closes the modal, unless `closeOnEscape={false}`. With nesting, only the topmost one closes."
         },
@@ -7928,7 +7796,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "options",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "[]",
         "description": "List of selectable options."
       },
       {
@@ -7947,7 +7815,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((values: string[], options: DropdownOption[]) => void)",
         "required": false,
         "default": null,
         "description": "(values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change."
@@ -7968,7 +7836,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "placeholder",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Select options...\"",
         "description": "React.ReactNode - Placeholder when nothing is selected."
@@ -7989,21 +7857,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Error message displayed below the dropdown."
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Label rendered above the dropdown."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Description text rendered below the label."
@@ -8017,7 +7885,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Success message displayed below the dropdown."
@@ -8031,7 +7899,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "noResultsContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"No options found\"",
         "description": "React.ReactNode - Content shown when no options are available."
@@ -8066,7 +7934,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoadOptions",
-        "type": "object",
+        "type": "() => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
         "description": "() => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires."
@@ -8080,7 +7948,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoadError",
-        "type": "object",
+        "type": "((error: unknown) => void)",
         "required": false,
         "default": null,
         "description": "(error: unknown) => void - Called when async option loading fails."
@@ -8108,7 +7976,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "checkboxIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom checkbox icon for options."
@@ -8129,7 +7997,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "MultiSelectDropdownClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for dropdown sub-elements."
@@ -8143,7 +8011,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles for the root element."
@@ -8164,7 +8032,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void - Fires when the open state changes."
@@ -8178,7 +8046,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null - Portal target for the dropdown popup."
@@ -8219,57 +8087,50 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Timeout in milliseconds for keyboard typeahead matching."
       },
       {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the dropdown."
-      },
-      {
         "name": "onBlur",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Fires when the dropdown loses focus."
       },
       {
         "name": "onFocus",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Fires when the dropdown receives focus."
       },
       {
         "name": "onKeyDown",
-        "type": "object",
+        "type": "((event: KeyboardEvent<Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: React.KeyboardEvent) => void - Fires on keydown events."
       },
       {
         "name": "ChevronIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component."
       },
       {
         "name": "loadingText",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Loading...\"",
         "description": "React.ReactNode - Text shown during async loading."
       },
       {
         "name": "ClearIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string }> - Custom clear icon component."
       },
       {
         "name": "renderTrigger",
-        "type": "object",
+        "type": "((props: MultiSelectDropdownTriggerRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element."
@@ -8398,7 +8259,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "loadingIcon",
             "type": "string",
             "required": false,
-            "description": "The two skeleton shapes inside a `loadingItem`. Their styling was a call-site literal in MultiSelectDropdownShimmer, which has no `classes` prop — routed through this bag rather than giving the sub-component a second way in. NOVEL: no peer library ships a skeleton anatomy."
+            "description": "The two skeleton shapes inside a `loadingItem`. Their styling was a call-site literal in MultiSelectDropdownShimmer, which has no `classes` prop — routed through this bag rather than giving the sub-component a second way in."
           },
           {
             "name": "loadingBar",
@@ -8498,10 +8359,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Enter`, `Space`",
           "description": "Opens the menu, and toggles the focused option without closing it."
         },
@@ -8539,7 +8396,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "options",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "[]",
         "description": "List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it."
       },
       {
@@ -8558,7 +8415,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((values: string[], options: MultiSelectOption[]) => void)",
         "required": false,
         "default": null,
         "description": "(values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change."
@@ -8579,7 +8436,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "placeholder",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Select options...\"",
         "description": "React.ReactNode - Placeholder when nothing is selected."
@@ -8600,21 +8457,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Error message displayed below the dropdown."
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Label rendered above the dropdown."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Description text rendered below the label."
@@ -8628,7 +8485,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Success message displayed below the dropdown."
@@ -8656,14 +8513,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "noResultsContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"No options found\"",
         "description": "React.ReactNode - Content shown when no options match the search."
       },
       {
         "name": "loadingText",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Loading...\"",
         "description": "React.ReactNode - Text shown during async loading."
@@ -8705,7 +8562,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onSearch",
-        "type": "object",
+        "type": "(query: string) => Promise<MultiSelectOption[]>",
         "required": false,
         "default": null,
         "description": "(query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`."
@@ -8721,12 +8578,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "initialOptions",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "[]",
         "description": "Options to display before any search is performed. Async branch only (`onSearch`)."
       },
       {
         "name": "onLoadInitialOptions",
-        "type": "object",
+        "type": "() => Promise<MultiSelectOption[]>",
         "required": false,
         "default": null,
         "description": "() => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`."
@@ -8740,7 +8597,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoadError",
-        "type": "object",
+        "type": "((error: unknown) => void)",
         "required": false,
         "default": null,
         "description": "(error: unknown) => void - Called when async loading or search fails."
@@ -8761,7 +8618,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "checkboxIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom checkbox icon for options."
@@ -8782,7 +8639,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "MultiSelectSearchableDropdownClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for dropdown sub-elements."
@@ -8796,7 +8653,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles for the root element."
@@ -8817,14 +8674,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void - Fires when the open state changes."
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null - Portal target for the dropdown popup."
@@ -8872,43 +8729,36 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Keeps the dropdown DOM mounted when closed."
       },
       {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the dropdown."
-      },
-      {
         "name": "onBlur",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Fires when the dropdown loses focus."
       },
       {
         "name": "onFocus",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void - Fires when the dropdown receives focus."
       },
       {
         "name": "onKeyDown",
-        "type": "object",
+        "type": "((event: KeyboardEvent<Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: React.KeyboardEvent) => void - Fires on keydown events."
       },
       {
         "name": "ClearIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<{ className?: string }> - Custom clear icon component."
       },
       {
         "name": "renderTrigger",
-        "type": "object",
+        "type": "((props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger."
@@ -9186,10 +9036,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Enter`, `Space`",
           "description": "Opens the menu, and toggles the focused option without closing it."
         },
@@ -9250,21 +9096,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: string) => void)",
         "required": false,
         "default": null,
         "description": "(value: string) => void - Fires when the OTP value changes."
       },
       {
         "name": "onComplete",
-        "type": "object",
+        "type": "((value: string) => void)",
         "required": false,
         "default": null,
         "description": "(value: string) => void - Fires when all fields are filled."
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Label rendered above the input."
@@ -9292,7 +9138,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Helper text rendered below the label."
@@ -9306,7 +9152,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Error message displayed below the input."
@@ -9320,7 +9166,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Success message displayed below the input."
@@ -9348,7 +9194,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "separator",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Content rendered between groups."
@@ -9397,21 +9243,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderInput",
-        "type": "object",
+        "type": "((props: OtpInputRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields."
       },
       {
         "name": "validate",
-        "type": "object",
+        "type": "((char: string) => boolean)",
         "required": false,
         "default": null,
         "description": "(char: string) => boolean - Custom validation function for each character."
       },
       {
         "name": "inputAriaLabel",
-        "type": "object",
+        "type": "((index: number, length: number) => string)",
         "required": false,
         "default": null,
         "description": "(index: number, length: number) => string - Function to generate aria-label for each input."
@@ -9425,7 +9271,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "OtpInputClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -9540,10 +9386,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus into the group; the boxes themselves are reached with the arrow keys."
         },
@@ -9618,7 +9460,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((page: number) => void)",
         "required": false,
         "default": null,
         "description": "(page: number) => void - Fires when the current page changes."
@@ -9639,7 +9481,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onRowsPerPageChange",
-        "type": "object",
+        "type": "((rows: number) => void)",
         "required": false,
         "default": null,
         "description": "(rows: number) => void - Fires when the rows-per-page value changes."
@@ -9695,35 +9537,35 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "dropdownIcon",
-        "type": "object",
+        "type": "ReactNode | ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the rows-per-page dropdown."
       },
       {
         "name": "prevIcon",
-        "type": "object",
+        "type": "ReactNode | ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the previous page button."
       },
       {
         "name": "nextIcon",
-        "type": "object",
+        "type": "ReactNode | ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the next page button."
       },
       {
         "name": "renderEllipsis",
-        "type": "object",
+        "type": "((props: EllipsisRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element."
       },
       {
         "name": "renderPageInfo",
-        "type": "object",
+        "type": "((props: PageInfoRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display."
@@ -9732,7 +9574,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "sectionOrder",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "DEFAULT_SECTION_ORDER",
         "description": "Order of pagination sections."
       },
       {
@@ -9744,7 +9586,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "PaginationClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for pagination sub-elements."
@@ -9758,7 +9600,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null - Portal target for the rows-per-page dropdown."
@@ -9793,7 +9635,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "pageAriaLabel",
-        "type": "object",
+        "type": "((page: number) => string)",
         "required": false,
         "default": null,
         "description": "(page: number) => string - Function to generate aria-label for each page button."
@@ -9844,7 +9686,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "rowsPerPage",
             "type": "{ root?: string; positioner?: string; trigger?: string; content?: string; item?: string; icon?: string; }",
             "required": false,
-            "description": "ADR 002 R6: the rows-per-page selector is a dropdown's anatomy, so its key carries that whole shape. Unlike InternationalPhoneInput's `countrySelect` this is not a rendered child component — Pagination builds the markup inline — so the object is namespaced here rather than imported from one."
+            "description": "The rows-per-page selector's own slots. Pagination builds this markup inline rather than rendering a Dropdown, so the slots are named here instead of being taken from that component's classes object."
           },
           {
             "name": "label",
@@ -9926,10 +9768,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves between the page buttons, the navigation arrows and the rows-per-page trigger."
         },
@@ -9972,14 +9810,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Text label rendered beside the radio."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Helper text rendered below the label."
@@ -10000,21 +9838,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "checkedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom icon for the checked state."
       },
       {
         "name": "uncheckedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode - Custom icon for the unchecked state."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "RadioButtonClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for radio sub-elements."
@@ -10033,35 +9871,35 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "props": [
           {
             "name": "value",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
             "description": "Currently selected value."
           },
           {
             "name": "defaultValue",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
+            "default": "\"\"",
             "description": "Initial selected value for uncontrolled usage."
           },
           {
             "name": "onValueChange",
-            "type": "((value: string) => void) | undefined",
+            "type": "((value: string) => void)",
             "required": false,
             "default": null,
             "description": "Fires when the selected value changes. Not `onChange`."
           },
           {
             "name": "onFocus",
-            "type": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined",
+            "type": "((event: FocusEvent<HTMLInputElement, Element>) => void)",
             "required": false,
             "default": null,
             "description": "Fires when a radio receives focus."
           },
           {
             "name": "onBlur",
-            "type": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined",
+            "type": "((event: FocusEvent<HTMLInputElement, Element>) => void)",
             "required": false,
             "default": null,
             "description": "Fires when a radio loses focus."
@@ -10082,30 +9920,30 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "name",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
             "description": "Field name for form submission."
           },
           {
             "name": "required",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Required field indicator."
           },
           {
             "name": "disabled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Disables all radio buttons in the group."
           },
           {
             "name": "error",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Displays the group in an error state."
           },
           {
@@ -10117,9 +9955,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "success",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Displays the group in a success state."
           },
           {
@@ -10131,42 +9969,42 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "loading",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Loading state."
           },
           {
             "name": "size",
-            "type": "RadioButtonSize | undefined",
+            "type": "RadioButtonSize",
             "required": false,
-            "default": null,
+            "default": "\"md\"",
             "description": "Size of all radio indicators."
           },
           {
             "name": "orientation",
-            "type": "\"horizontal\" | \"vertical\" | undefined",
+            "type": "\"vertical\" | \"horizontal\"",
             "required": false,
-            "default": null,
+            "default": "\"vertical\"",
             "description": "Layout orientation. Default: \"vertical\"."
           },
           {
             "name": "classes",
-            "type": "RadioGroupClasses | undefined",
+            "type": "RadioGroupClasses",
             "required": false,
             "default": null,
             "description": "CSS class overrides for group sub-elements."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
+            "default": "false",
             "description": "Removes all default styling."
           },
           {
             "name": "reduceMotion",
-            "type": "boolean | \"auto\" | undefined",
+            "type": "boolean | \"auto\"",
             "required": false,
             "default": null,
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
@@ -10316,10 +10154,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "Native `<input type=\"radio\">` elements in a group, so the browser owns the roving focus.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves into the group, landing on the checked radio — or the first one when none is checked."
         },
@@ -10361,21 +10195,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: number) => void)",
         "required": false,
         "default": null,
         "description": "(value: number) => void — Callback fired when the panel size changes."
       },
       {
         "name": "onResizeStart",
-        "type": "object",
+        "type": "((value: number) => void)",
         "required": false,
         "default": null,
         "description": "(value: number) => void — Callback fired when a resize drag begins."
       },
       {
         "name": "onResizeEnd",
-        "type": "object",
+        "type": "((value: number) => void)",
         "required": false,
         "default": null,
         "description": "(value: number) => void — Callback fired when a resize drag ends."
@@ -10424,14 +10258,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "ResizablePanelClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
       },
       {
         "name": "handleContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom content rendered inside the resize handle."
@@ -10504,10 +10338,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "The handle is `role=\"separator\"` and focusable, so resizing never requires a drag (SC 2.5.7).",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to the handle."
         },
@@ -10541,7 +10371,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "options",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "[]",
         "description": "Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it."
       },
       {
@@ -10560,7 +10390,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: string | null, option: DropdownOption | null) => void)",
         "required": false,
         "default": null,
         "description": "(value: string | null, option: SearchableDropdownOption | null) => void — Callback fired when the selected value changes."
@@ -10581,7 +10411,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void — Callback fired when the open state changes."
@@ -10602,7 +10432,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "placeholder",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Select an option\"",
         "description": "React.ReactNode — Placeholder content shown when no value is selected."
@@ -10623,21 +10453,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message displayed below the dropdown."
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Label displayed above the dropdown."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Description text displayed below the label."
@@ -10651,7 +10481,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message displayed below the dropdown."
@@ -10693,7 +10523,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "noResultsContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"No results found\"",
         "description": "React.ReactNode — Content shown when no search results are found."
@@ -10714,7 +10544,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "selectedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom icon for the selected option."
@@ -10735,7 +10565,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onSearch",
-        "type": "object",
+        "type": "(query: string) => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
         "description": "(query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`."
@@ -10751,12 +10581,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "initialOptions",
         "type": "array",
         "required": false,
-        "default": null,
+        "default": "[]",
         "description": "Initial options to display before any search is performed. Async branch only (`onSearch`)."
       },
       {
         "name": "onLoadInitialOptions",
-        "type": "object",
+        "type": "() => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
         "description": "() => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`."
@@ -10770,7 +10600,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoadError",
-        "type": "object",
+        "type": "((error: unknown) => void)",
         "required": false,
         "default": null,
         "description": "(error: unknown) => void — Callback when async loading fails."
@@ -10784,7 +10614,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "SearchableDropdownClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -10798,7 +10628,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the root element."
@@ -10812,7 +10642,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null — Custom container element for the dropdown portal."
@@ -10867,71 +10697,64 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Whether to lock body scroll when the dropdown is open."
       },
       {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the dropdown."
-      },
-      {
         "name": "onBlur",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Callback fired when the dropdown loses focus."
       },
       {
         "name": "onFocus",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Callback fired when the dropdown gains focus."
       },
       {
         "name": "onKeyDown",
-        "type": "object",
+        "type": "((event: KeyboardEvent<Element>) => void)",
         "required": false,
         "default": null,
         "description": "(event: React.KeyboardEvent) => void — Callback fired on keydown events."
       },
       {
         "name": "renderTrigger",
-        "type": "object",
+        "type": "((props: SearchableDropdownTriggerRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: SearchableDropdownTriggerRenderProps) => ReactNode — Custom trigger render function."
       },
       {
         "name": "ChevronIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
-        "default": null,
+        "default": "ChevronDownIcon",
         "description": "React.ComponentType — Custom chevron icon component."
       },
       {
         "name": "CheckIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom check icon component."
       },
       {
         "name": "ClearIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom clear icon component."
       },
       {
         "name": "SearchIcon",
-        "type": "object",
+        "type": "ComponentType<{ className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom search icon component."
       },
       {
         "name": "loadingText",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": "\"Loading...\"",
         "description": "React.ReactNode — Text shown during loading state."
@@ -11143,10 +10966,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Enter`, `Space`",
           "description": "Opens the menu, and selects the focused option."
         },
@@ -11204,14 +11023,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: SliderValue) => void)",
         "required": false,
         "default": null,
         "description": "(value: SliderValue) => void — Fires when the value changes."
       },
       {
         "name": "onValueCommit",
-        "type": "object",
+        "type": "((value: SliderValue) => void)",
         "required": false,
         "default": null,
         "description": "(value: SliderValue) => void — Fires when a drag interaction ends (commit)."
@@ -11274,9 +11093,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "formatTooltip",
-        "type": "object",
+        "type": "((value: number) => string)",
         "required": false,
-        "default": null,
+        "default": "String",
         "description": "(value: number) => string — Format the tooltip display value."
       },
       {
@@ -11295,14 +11114,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderThumb",
-        "type": "object",
+        "type": "((props: SliderThumbRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: SliderThumbRenderProps) => ReactNode — Custom thumb content renderer."
       },
       {
         "name": "renderMark",
-        "type": "object",
+        "type": "((props: SliderMarkRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: SliderMarkRenderProps) => ReactNode — Custom mark dot renderer."
@@ -11337,14 +11156,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Label displayed above the slider."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Description text."
@@ -11372,7 +11191,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message displayed below the slider."
@@ -11386,7 +11205,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message displayed below the slider."
@@ -11400,7 +11219,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "SliderClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -11411,27 +11230,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "false",
         "description": "When true, removes all default styling."
-      },
-      {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the slider."
-      },
-      {
-        "name": "aria-labelledby",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "ID of the element that labels the slider."
-      },
-      {
-        "name": "aria-valuetext",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Human-readable text alternative for the current value."
       }
     ],
     "subComponents": [],
@@ -11583,10 +11381,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to the thumb. A range slider has one thumb per value."
         },
@@ -11620,7 +11414,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "steps",
         "type": "array",
         "required": true,
-        "default": null,
+        "default": "[]",
         "description": "Array of step definitions."
       },
       {
@@ -11639,14 +11433,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((stepId: string | number) => void)",
         "required": false,
         "default": null,
         "description": "(stepId: string | number) => void — Callback fired when the active step changes."
       },
       {
         "name": "beforeStepChange",
-        "type": "object",
+        "type": "((nextStepId: string | number, currentStepId: string | number) => boolean)",
         "required": false,
         "default": null,
         "description": "(nextStepId: string | number, currentStepId: string | number) => boolean — Guard callback invoked before changing steps. Return false to prevent the change."
@@ -11674,14 +11468,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "isStepClickable",
-        "type": "object",
+        "type": "((stepId: string | number, status: StepStatus) => boolean)",
         "required": false,
         "default": null,
         "description": "(stepId: string | number, status: StepStatus) => boolean — Determines whether a step is clickable."
       },
       {
         "name": "getStepStatus",
-        "type": "object",
+        "type": "((stepId: string | number, index: number, activeIndex: number) => StepStatus)",
         "required": false,
         "default": null,
         "description": "(stepId: string | number, index: number, activeIndex: number) => StepStatus — Custom function to determine step status."
@@ -11716,14 +11510,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "completedIcon",
-        "type": "object",
+        "type": "ReactNode | ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType | React.ReactNode — Default icon for completed steps."
       },
       {
         "name": "errorIcon",
-        "type": "object",
+        "type": "ReactNode | ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType | React.ReactNode — Default icon for error steps."
@@ -11736,13 +11530,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Whether the stepper expands to fill its container."
       },
       {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the stepper."
-      },
-      {
         "name": "showTooltips",
         "type": "boolean",
         "required": false,
@@ -11751,9 +11538,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "tooltipDefaults",
-        "type": "object",
+        "type": "StepperTooltipDefaults",
         "required": false,
-        "default": null,
+        "default": "{}",
         "description": "Default tooltip configuration applied to all step tooltips."
       },
       {
@@ -11772,7 +11559,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "StepperClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -11793,7 +11580,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the root element."
@@ -11821,7 +11608,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderStep",
-        "type": "object",
+        "type": "((props: StepRenderProps, defaultElement: ReactElement<unknown, string | JSXElementConstructor<any>>) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: StepRenderProps, defaultElement: ReactElement) => ReactNode — Custom step render function."
@@ -12197,10 +11984,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus into the step list."
         },
@@ -12227,7 +12010,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
   "Switch": {
     "name": "Switch",
     "subpath": "@chumlab/ui/switch",
-    "summary": "A toggle switch for binary on/off states with labels, validation, loading, custom icons, and full WAI-ARIA support.",
+    "summary": "A toggle switch for binary on/off states with labels, validation, loading, custom icons, and WAI-ARIA switch semantics.",
     "anatomy": "<Switch />",
     "props": [
       {
@@ -12239,14 +12022,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Label displayed alongside the switch."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Description text below the label."
@@ -12267,7 +12050,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((checked: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(checked: boolean) => void — Fires when the checked state changes."
@@ -12316,7 +12099,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message displayed below the switch."
@@ -12330,7 +12113,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message displayed below the switch."
@@ -12344,7 +12127,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "loader",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom loader element."
@@ -12358,14 +12141,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "checkedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon displayed inside the thumb when checked."
       },
       {
         "name": "uncheckedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon displayed inside the thumb when unchecked."
@@ -12386,21 +12169,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderLabel",
-        "type": "object",
+        "type": "((props: SwitchRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: SwitchRenderProps) => ReactNode — Custom label render function."
       },
       {
         "name": "renderDescription",
-        "type": "object",
+        "type": "((props: SwitchRenderProps) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: SwitchRenderProps) => ReactNode — Custom description render function."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "SwitchClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -12414,7 +12197,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the root element."
@@ -12548,10 +12331,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "A `<button role=\"switch\">`, not a checkbox — which is why `Enter` activates it as well as `Space`.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to the switch."
         },
@@ -12610,7 +12389,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onPinColumn",
-        "type": "object",
+        "type": "((columnId: string, isPinned: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned."
@@ -12631,21 +12410,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onCursorPosition",
-        "type": "object",
+        "type": "((position: { x: number; y: number; } | null) => void)",
         "required": false,
         "default": null,
         "description": "(position: { x: number; y: number } | null) => void — Callback with cursor position over the table."
       },
       {
         "name": "onCursorOverHeader",
-        "type": "object",
+        "type": "((isOverHeader: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(isOverHeader: boolean) => void — Callback when cursor enters/leaves the header."
       },
       {
         "name": "emptyContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Content shown when the table has no data."
@@ -12666,7 +12445,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "getRowId",
-        "type": "object",
+        "type": "((row: TData) => string)",
         "required": false,
         "default": null,
         "description": "(row: TData) => string — Function to derive a unique row ID."
@@ -12680,21 +12459,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onRowClick",
-        "type": "object",
+        "type": "((rowData: TData) => void)",
         "required": false,
         "default": null,
         "description": "(rowData: TData) => void — Callback fired when a row is clicked."
       },
       {
         "name": "onRowHover",
-        "type": "object",
+        "type": "((rowIndex: number | null, rowRef?: RefObject<HTMLTableRowElement> | undefined) => void)",
         "required": false,
         "default": null,
         "description": "(rowIndex: number | null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered."
       },
       {
         "name": "floatingActions",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Floating action elements displayed on row hover."
@@ -12757,7 +12536,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "TableClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for table sub-elements."
@@ -12771,21 +12550,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the root container."
       },
       {
         "name": "PinIcon",
-        "type": "object",
+        "type": "ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom pin icon component (unpinned state)."
       },
       {
         "name": "PinnedIcon",
-        "type": "object",
+        "type": "ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom pin icon component (pinned state)."
@@ -12806,7 +12585,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "children",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Child elements."
@@ -12820,7 +12599,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onSortingChange",
-        "type": "object",
+        "type": "((sorting: SortingState) => void)",
         "required": false,
         "default": null,
         "description": "(sorting: SortingState) => void — Callback when sorting state changes."
@@ -12855,7 +12634,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onSelectionChange",
-        "type": "object",
+        "type": "((selectedIds: string[]) => void)",
         "required": false,
         "default": null,
         "description": "(selectedIds: string[]) => void — Callback when selection changes."
@@ -12876,7 +12655,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onGlobalFilterChange",
-        "type": "object",
+        "type": "((value: string) => void)",
         "required": false,
         "default": null,
         "description": "(value: string) => void — Callback when global filter changes."
@@ -12890,7 +12669,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onColumnFiltersChange",
-        "type": "object",
+        "type": "((filters: ColumnFiltersState) => void)",
         "required": false,
         "default": null,
         "description": "(filters: ColumnFiltersState) => void — Callback when column filters change."
@@ -12904,21 +12683,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "filterableColumns",
-        "type": "object",
+        "type": "Record<string, { options: { label: string; value: string; }[]; multi?: boolean | undefined; }>",
         "required": false,
         "default": null,
         "description": "Map of column ID to filter options configuration."
       },
       {
         "name": "FilterIcon",
-        "type": "object",
+        "type": "ComponentType<{ active: boolean; className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom filter icon component."
       },
       {
         "name": "renderColumnFilter",
-        "type": "object",
+        "type": "((columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer."
@@ -12939,21 +12718,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onExpandedChange",
-        "type": "object",
+        "type": "((expandedIds: string[]) => void)",
         "required": false,
         "default": null,
         "description": "(expandedIds: string[]) => void — Callback when expanded rows change."
       },
       {
         "name": "renderExpandedRow",
-        "type": "object",
+        "type": "((row: TData) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(row: TData) => ReactNode — Render function for expanded row content."
       },
       {
         "name": "ExpandIcon",
-        "type": "object",
+        "type": "ComponentType<{ expanded: boolean; className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom expand icon component."
@@ -12974,14 +12753,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "columnVisibility",
-        "type": "object",
+        "type": "Record<string, boolean>",
         "required": false,
         "default": null,
         "description": "Controlled column visibility map (column ID to boolean)."
       },
       {
         "name": "onColumnVisibilityChange",
-        "type": "object",
+        "type": "((visibility: Record<string, boolean>) => void)",
         "required": false,
         "default": null,
         "description": "(visibility: Record<string, boolean>) => void — Callback when column visibility changes."
@@ -13030,7 +12809,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onCellEdit",
-        "type": "object",
+        "type": "((rowId: string, columnId: string, value: unknown) => void)",
         "required": false,
         "default": null,
         "description": "(rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited."
@@ -13044,14 +12823,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "columnSizing",
-        "type": "object",
+        "type": "ColumnSizingState",
         "required": false,
         "default": null,
         "description": "Controlled column sizing state."
       },
       {
         "name": "onColumnSizingChange",
-        "type": "object",
+        "type": "((sizing: ColumnSizingState) => void)",
         "required": false,
         "default": null,
         "description": "(sizing: ColumnSizingState) => void — Callback when column sizing changes."
@@ -13079,7 +12858,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onColumnOrderChange",
-        "type": "object",
+        "type": "((order: string[]) => void)",
         "required": false,
         "default": null,
         "description": "(order: string[]) => void — Callback when column order changes."
@@ -13093,7 +12872,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onRowReorder",
-        "type": "object",
+        "type": "((fromIndex: number, toIndex: number) => void)",
         "required": false,
         "default": null,
         "description": "(fromIndex: number, toIndex: number) => void — Callback when a row is reordered."
@@ -13114,14 +12893,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "footerContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom footer content rendered inside <tfoot>."
       },
       {
         "name": "onContextMenu",
-        "type": "object",
+        "type": "((event: MouseEvent<Element, MouseEvent>, row: TData) => void)",
         "required": false,
         "default": null,
         "description": "(event: React.MouseEvent, row: TData) => void — Callback on right-click of a row."
@@ -13135,7 +12914,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onCellCopy",
-        "type": "object",
+        "type": "((value: string, rowId: string, columnId: string) => void)",
         "required": false,
         "default": null,
         "description": "(value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied."
@@ -13149,7 +12928,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoadMore",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Callback when user scrolls near the bottom."
@@ -13170,7 +12949,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "infiniteEndContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Content shown when all data is loaded."
@@ -13184,7 +12963,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderMobileCard",
-        "type": "object",
+        "type": "((row: TData) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(row: TData) => ReactNode — Render function for mobile card layout."
@@ -13198,7 +12977,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onGroupByChange",
-        "type": "object",
+        "type": "((groupBy: string[]) => void)",
         "required": false,
         "default": null,
         "description": "(groupBy: string[]) => void — Callback when group-by columns change."
@@ -13226,7 +13005,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "CheckboxIcon",
-        "type": "object",
+        "type": "ComponentType<{ checked: boolean; indeterminate?: boolean | undefined; className?: string | undefined; }>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom checkbox component for multi-row selection."
@@ -13240,28 +13019,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "DragHandleIcon",
-        "type": "object",
+        "type": "ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom drag handle icon component."
       },
       {
         "name": "SearchIcon",
-        "type": "object",
+        "type": "ComponentType<IconProps>",
         "required": false,
         "default": null,
         "description": "React.ComponentType — Custom search icon component."
       },
       {
         "name": "onSearchClear",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Callback when the search clear button is clicked."
       },
       {
         "name": "loadingMoreContent",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom content for the loading more indicator."
@@ -13294,7 +13073,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "headerRow",
             "type": "string",
             "required": false,
-            "description": "ADR 002 R9 ancestor clause: the <tr> inside `header`. Both read the same key, so an override on the <thead> also hit the row. Qualifier-first compound of `row`, an existing amendment term."
+            "description": "The `<tr>` inside `header`. Style `header` to reach the `<thead>` and this to reach the row alone."
           },
           {
             "name": "headerCell",
@@ -13414,7 +13193,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "filterHeader",
             "type": "string",
             "required": false,
-            "description": "The column-filter panel's parts. TanStack Table is headless and names data roles, not elements, so it is no peer here — these are qualifier-first compounds of R2 heads (header, label, clearTrigger, item, control), all NOVEL. Selection is `data-selected` (R4), not a second class set."
+            "description": "The column-filter panel's parts. A selected row carries `data-selected` rather than a second set of classes."
           },
           {
             "name": "filterLabel",
@@ -13486,7 +13265,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "searchIcon",
             "type": "string",
             "required": false,
-            "description": "R2 `searchIcon` and `clearTrigger`. Both search boxes — the desktop one and the mobile card one — render these; their styling was a call-site literal, so `unstyled` could not strip it and no consumer could reach it. Side placement is `data-side` on `searchControl` (R4), not two class sets."
+            "description": "The search box's icon and clear button. Both search boxes — the desktop one and the mobile card one — render these, and which side the control sits on is `data-side` on `searchControl` rather than a second set of classes."
           },
           {
             "name": "clearTrigger",
@@ -13522,7 +13301,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "resizeIndicator",
             "type": "string",
             "required": false,
-            "description": "ADR 002 R10: the bar inside `resizeHandle`. It had no key and carried decorative colour as a call-site literal, so `unstyled` could not strip it and no consumer could reach it. Head noun `indicator` (VERIFIED, Radix Checkbox.Indicator); the state it showed is now `data-resizing`."
+            "description": "The bar drawn inside `resizeHandle` while a column is being resized. Carries `data-resizing` for the duration of the drag."
           },
           {
             "name": "loadingFooter",
@@ -13701,10 +13480,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "Cell navigation is on the grid itself; the controls inside a cell keep their own behaviour.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves between the interactive elements — search, filter triggers, resize handles, the controls in a cell."
         },
@@ -13772,14 +13547,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((tabId: string) => void)",
         "required": false,
         "default": null,
         "description": "(tabId: string) => void — Callback fired when the active tab changes."
       },
       {
         "name": "children",
-        "type": "object",
+        "type": "ReactNode | ((tab: Tab) => ReactNode)",
         "required": false,
         "default": null,
         "description": "React.ReactNode | ((tab: Tab) => ReactNode) — Tab panel content, either static or a render function."
@@ -13870,28 +13645,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderTab",
-        "type": "object",
+        "type": "((props: TabRenderProps, defaultElement: ReactElement<unknown, string | JSXElementConstructor<any>>) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function."
       },
       {
-        "name": "aria-label",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Accessible label for the tab list."
-      },
-      {
-        "name": "aria-labelledby",
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "ID of the element that labels the tab list."
-      },
-      {
         "name": "classes",
-        "type": "object",
+        "type": "TabPanelClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -13905,7 +13666,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the root element."
@@ -14186,10 +13947,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves into the tab list, landing on the active tab, then out to the panel."
         },
@@ -14221,14 +13978,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "props": [
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Label displayed above the textarea."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Description text below the label."
@@ -14242,7 +13999,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message displayed below the textarea."
@@ -14256,7 +14013,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message displayed below the textarea."
@@ -14270,28 +14027,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "startIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon rendered before the textarea."
       },
       {
         "name": "endIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Icon rendered after the textarea."
       },
       {
         "name": "onStartIconClick",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Makes startIcon a clickable button."
       },
       {
         "name": "onEndIconClick",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Makes endIcon a clickable button."
@@ -14312,7 +14069,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((value: string) => void)",
         "required": false,
         "default": null,
         "description": "(value: string) => void — Fires with the current string value when the value changes."
@@ -14326,7 +14083,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onClear",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Callback when the clear button is clicked."
@@ -14354,7 +14111,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "loader",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom loader element."
@@ -14382,7 +14139,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "TextAreaClasses",
         "required": false,
         "default": null,
         "description": "Slot-based class overrides for internal elements."
@@ -14467,28 +14224,28 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "The label's content."
           },
           {
             "name": "required",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Marks the field required and draws the required indicator."
           },
           {
             "name": "htmlFor",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "The id of the control this labels. Set automatically when the label is rendered by the field."
           },
           {
             "name": "className",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Additional classes for the root element."
           }
         ]
       }
@@ -14596,10 +14353,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "A native `<textarea>`: the browser owns text entry and selection.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Tab`",
           "description": "Moves focus to the field, and out of it — it does not insert a tab character."
         }
@@ -14633,14 +14386,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onValueChange",
-        "type": "object",
+        "type": "((time: string | null, timeValue: TimeValue | null) => void)",
         "required": false,
         "default": null,
         "description": "(time: string | null, timeValue: TimeValue | null) => void — Called when the selected time changes."
       },
       {
         "name": "onBlur",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Called when the input loses focus."
@@ -14703,14 +14456,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "errorMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Error message displayed below the input."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Helper text displayed below the label."
@@ -14724,7 +14477,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "successMessage",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Success message text."
@@ -14738,7 +14491,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "label",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Label displayed above the input."
@@ -14759,7 +14512,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "endIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom end icon element replacing the default chevron."
@@ -14773,14 +14526,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "selectedIcon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom selected icon element."
       },
       {
         "name": "renderOptionContent",
-        "type": "object",
+        "type": "((time: string, isSelected: boolean) => ReactNode)",
         "required": false,
         "default": null,
         "description": "(time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content."
@@ -14808,7 +14561,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onClear",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Called when the clear button is clicked."
@@ -14829,7 +14582,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void — Called when the open state changes."
@@ -14878,14 +14631,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "HTMLElement | null",
         "required": false,
         "default": null,
         "description": "HTMLElement | null — Custom container element for the dropdown portal."
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "TimePickerClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for all sub-elements."
@@ -14906,14 +14659,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onCancel",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Called when the clock cancel button is pressed."
       },
       {
         "name": "onConfirm",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Called when the clock confirm button is pressed."
@@ -15295,10 +15048,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Enter`, `Space`",
           "description": "Opens the panel from the trigger, and picks the focused time."
         },
@@ -15356,21 +15105,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "message",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Primary message content."
       },
       {
         "name": "description",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Secondary description text."
       },
       {
         "name": "content",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom content that replaces message and description."
@@ -15398,7 +15147,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "icon",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom icon replacing the default type icon."
@@ -15412,7 +15161,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onDismiss",
-        "type": "object",
+        "type": "(() => void)",
         "required": false,
         "default": null,
         "description": "() => void — Fires when the toast is dismissed."
@@ -15426,7 +15175,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "style",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the toast element."
@@ -15447,7 +15196,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "ToastClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -15461,7 +15210,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onRemove",
-        "type": "object",
+        "type": "(id: string) => void",
         "required": true,
         "default": null,
         "description": "(id: string) => void — Internal callback to remove the toast from the provider."
@@ -15476,84 +15225,84 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "ReactNode",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Content rendered inside this element."
           },
           {
             "name": "position",
-            "type": "ToastPosition | undefined",
+            "type": "ToastPosition",
             "required": false,
-            "default": null,
+            "default": "\"bottom-right\"",
             "description": "Toast position on screen. Default: `\"bottom-right\"`."
           },
           {
             "name": "maxToasts",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "5",
+            "description": "How many toasts may be visible at once. Older ones leave as new ones arrive."
           },
           {
             "name": "containerClassName",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Additional classes for the toast container."
           },
           {
             "name": "defaultDuration",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "5000",
+            "description": "How long a toast stays up, in milliseconds, when it does not set its own."
           },
           {
             "name": "animationDuration",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "500",
+            "description": "Enter and exit transition duration in milliseconds."
           },
           {
             "name": "gap",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "12",
+            "description": "Space between stacked toasts, in pixels."
           },
           {
             "name": "zIndex",
-            "type": "number | undefined",
+            "type": "number",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "LAYERS.toast",
+            "description": "Stacking order for the toast container."
           },
           {
             "name": "dismissOnEscape",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "false",
+            "description": "Dismisses the newest toast when Escape is pressed."
           },
           {
             "name": "containerAriaLabel",
-            "type": "string | undefined",
+            "type": "string",
             "required": false,
-            "default": null,
-            "description": ""
+            "default": "\"Notifications\"",
+            "description": "Accessible name for the toast region."
           },
           {
             "name": "classes",
-            "type": "ToastClasses | undefined",
+            "type": "ToastClasses",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Class overrides for this component's slots."
           },
           {
             "name": "unstyled",
-            "type": "boolean | undefined",
+            "type": "boolean",
             "required": false,
             "default": null,
-            "description": ""
+            "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring."
           }
         ]
       }
@@ -15572,13 +15321,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "body",
             "type": "string",
             "required": false,
-            "description": "ADR 002 R2: the padded row inside `root`. It had no key and was reached by applying `root` to two different elements, so any override on `root` styled both the container and this."
+            "description": "The padded row inside `root` that holds the icon, the message and the close button. Style `root` for the toast's outer box and this for its contents."
           },
           {
             "name": "track",
             "type": "string",
             "required": false,
-            "description": "R2 `track`: the auto-dismiss progress groove that `indicator` fills."
+            "description": "The auto-dismiss progress groove that `indicator` fills."
           },
           {
             "name": "title",
@@ -15796,10 +15545,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "note": "A toast takes focus only when it has an action; otherwise it announces itself and stays out of the tab order.",
       "rows": [
         {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
-        {
           "keys": "`Escape`",
           "description": "Dismisses the toast when `dismissOnEscape` is set."
         },
@@ -15827,14 +15572,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "props": [
       {
         "name": "children",
-        "type": "object",
+        "type": "ReactNode",
         "required": true,
         "default": null,
         "description": "React.ReactNode — The trigger element that the tooltip is attached to."
       },
       {
         "name": "content",
-        "type": "object",
+        "type": "ReactNode",
         "required": false,
         "default": null,
         "description": "React.ReactNode — Content displayed inside the tooltip."
@@ -15918,7 +15663,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onOpenChange",
-        "type": "object",
+        "type": "((open: boolean) => void)",
         "required": false,
         "default": null,
         "description": "(open: boolean) => void — Callback when the open state changes."
@@ -15988,7 +15733,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "portalContainer",
-        "type": "object",
+        "type": "undefined",
         "required": false,
         "default": null,
         "description": "HTMLElement | null — Custom container element for the tooltip portal. Read only when `portal` is true; with `portal={false}` it chooses nothing."
@@ -16016,7 +15761,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "classes",
-        "type": "object",
+        "type": "TooltipClasses",
         "required": false,
         "default": null,
         "description": "CSS class overrides for sub-elements."
@@ -16030,21 +15775,21 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "contentStyle",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the tooltip content element."
       },
       {
         "name": "arrowStyle",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the tooltip arrow element."
       },
       {
         "name": "baseArrowStyle",
-        "type": "object",
+        "type": "CSSProperties",
         "required": false,
         "default": null,
         "description": "Inline styles applied to the base arrow element."
@@ -16089,10 +15834,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "keyboard": {
       "note": "",
       "rows": [
-        {
-          "keys": "Key",
-          "description": "Behaviour"
-        },
         {
           "keys": "`Tab`",
           "description": "Moves focus to the trigger, which shows the tooltip — hover is not the only way in."

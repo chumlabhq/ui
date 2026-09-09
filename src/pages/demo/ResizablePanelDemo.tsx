@@ -478,7 +478,7 @@ const ResizablePanelDemo = () => {
 
       {/* ─── Keyboard Navigation ──────────────────────────────────────── */}
       <Section
-        title="Keyboard Navigation"
+        title="Try it: Keyboard Navigation"
         description="Focus the resize handle (Tab to it) and use arrow keys to resize. Shift+Arrow moves by 5x the step. Home and End jump to min/max. Press Escape during a drag to cancel and restore the original size."
         isDarkMode={dark}
       >
@@ -943,76 +943,6 @@ const ResizablePanelDemo = () => {
       <ComponentDocs name="ResizablePanel" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Handle has role="separator" with aria-orientation set per the WAI-ARIA window splitter pattern',
-              "aria-controls on the separator references the panel's id, linking the handle to the element it controls",
-              "aria-valuenow, aria-valuemin, and aria-valuemax expose current and allowed size range to assistive technology",
-              'aria-valuetext provides a human-readable announcement (e.g. "300 pixels")',
-              "aria-label on the handle for screen reader identification (customizable via prop)",
-              "Full keyboard navigation: ArrowLeft/ArrowRight for horizontal, ArrowUp/ArrowDown for vertical, Home/End, Shift for large increments, Escape to cancel drag",
-              "Keyboard resizing fires onResizeStart and onResizeEnd per key press for consistent lifecycle hooks",
-              "Handle is focusable via tabIndex=0 (disabled handle gets tabIndex=-1)",
-              "aria-disabled on the handle when disabled",
-              "Pointer events (not mouse events) for cross-device support including touch, pen, and mouse",
-              "setPointerCapture ensures drag events are received even when pointer leaves the browser window",
-              "Handles pointercancel for interrupted touch gestures (e.g. incoming calls)",
-              "touch-none and select-none on the handle prevent browser scroll and text selection interference",
-              "motion-reduce:transition-none respects reduced-motion preferences",
-              "No opinionated focus ring styles — browser native focus indicator preserved",
-              "Deterministic IDs via useId() for SSR safety, overridable with the id prop",
-              "Only primary pointer button (button === 0) initiates drag",
-              "Body cursor and user-select overrides are saved and restored, preventing conflicts",
-              "CSS custom properties (--resizable-panel-size, --resizable-panel-min, --resizable-panel-max) for external CSS integrations",
-              "All standard HTML div attributes forwarded via rest props",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Focus the resize handle"],
-              ["\u2192", "Increase width (horizontal panels)"],
-              ["\u2190", "Decrease width (horizontal panels)"],
-              ["\u2193", "Increase height (vertical panels)"],
-              ["\u2191", "Decrease height (vertical panels)"],
-              ["Shift+Arrow", "Resize by 5\u00D7 step size"],
-              ["Home", "Jump to minimum size (minValue)"],
-              ["End", "Jump to maximum size (maxValue)"],
-              ["Escape", "Cancel active drag and restore original size"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

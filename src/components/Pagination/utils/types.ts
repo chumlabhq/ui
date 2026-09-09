@@ -28,10 +28,9 @@ export interface PaginationClasses {
   /** Ellipsis elements */
   ellipsis?: string;
   /**
-   * ADR 002 R6: the rows-per-page selector is a dropdown's anatomy, so its key
-   * carries that whole shape. Unlike InternationalPhoneInput's `countrySelect`
-   * this is not a rendered child component — Pagination builds the markup
-   * inline — so the object is namespaced here rather than imported from one.
+   * The rows-per-page selector's own slots. Pagination builds this markup
+   * inline rather than rendering a Dropdown, so the slots are named here
+   * instead of being taken from that component's classes object.
    */
   rowsPerPage?: {
     root?: string;

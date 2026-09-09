@@ -6,11 +6,13 @@
   "properties": {
     "children": {
       "type": "object",
-      "description": "React.ReactNode \u2014 The trigger element that the tooltip is attached to."
+      "description": "React.ReactNode — The trigger element that the tooltip is attached to.",
+      "x-tsType": "ReactNode"
     },
     "content": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Content displayed inside the tooltip."
+      "description": "React.ReactNode — Content displayed inside the tooltip.",
+      "x-tsType": "ReactNode"
     },
     "side": {
       "type": "string",
@@ -87,7 +89,8 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void \u2014 Callback when the open state changes."
+      "description": "(open: boolean) => void — Callback when the open state changes.",
+      "x-tsType": "((open: boolean) => void) | undefined"
     },
     "showArrow": {
       "type": "boolean",
@@ -136,7 +139,8 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null \u2014 Custom container element for the tooltip portal. Read only when `portal` is true; with `portal={false}` it chooses nothing."
+      "description": "HTMLElement | null — Custom container element for the tooltip portal. Read only when `portal` is true; with `portal={false}` it chooses nothing.",
+      "x-tsType": "undefined"
     },
     "asChild": {
       "type": "boolean",
@@ -165,7 +169,8 @@
         "arrow": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "TooltipClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -174,15 +179,18 @@
     },
     "contentStyle": {
       "type": "object",
-      "description": "Inline styles applied to the tooltip content element."
+      "description": "Inline styles applied to the tooltip content element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "arrowStyle": {
       "type": "object",
-      "description": "Inline styles applied to the tooltip arrow element."
+      "description": "Inline styles applied to the tooltip arrow element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "baseArrowStyle": {
       "type": "object",
-      "description": "Inline styles applied to the base arrow element."
+      "description": "Inline styles applied to the base arrow element.",
+      "x-tsType": "CSSProperties | undefined"
     }
   },
   "required": [

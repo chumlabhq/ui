@@ -1028,7 +1028,7 @@ const AccordionDemo = () => {
 
       {/* ─── Keyboard Navigation ────────────────────────────────────────── */}
       <Section
-        title="Keyboard Navigation"
+        title="Try it: Keyboard Navigation"
         description="Full WAI-ARIA keyboard support. Focus a trigger and try the keys below."
         isDarkMode={dark}
       >
@@ -1552,71 +1552,6 @@ const AccordionDemo = () => {
       <ComponentDocs name="Accordion" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="WAI-ARIA Accordion pattern compliance."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              "Triggers are native <button> elements inside heading elements (configurable level)",
-              "aria-expanded on triggers reflects open/closed state",
-              "aria-controls links each trigger to its content region",
-              'Content panels have role="region" with aria-labelledby pointing to trigger',
-              "aria-hidden on collapsed content prevents screen reader access",
-              "Disabled items use native disabled attribute (removed from tab order)",
-              "Live region announcer (opt-in) announces expand/collapse to screen readers",
-              "prefers-reduced-motion automatically disables animations",
-              "Full RTL support with reversed keyboard navigation",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Space / Enter", "Toggle the focused accordion item"],
-              [
-                "Arrow Down / Arrow Up",
-                "Move focus to next/previous trigger (vertical mode)",
-              ],
-              [
-                "Arrow Right / Arrow Left",
-                "Move focus to next/previous trigger (horizontal mode)",
-              ],
-              ["Home", "Move focus to the first trigger"],
-              ["End", "Move focus to the last trigger"],
-              [
-                "Tab",
-                "Move focus into/out of the accordion (standard tab order)",
-              ],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

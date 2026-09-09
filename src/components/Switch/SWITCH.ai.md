@@ -1,6 +1,6 @@
 # Switch
 
-> A toggle switch for binary on/off states with labels, validation, loading, custom icons, and full WAI-ARIA support.
+> A toggle switch for binary on/off states with labels, validation, loading, custom icons, and WAI-ARIA switch semantics.
 
 **Category:** Form
 **Keywords:** switch, toggle, on off, boolean, form toggle, binary, checkbox alternative

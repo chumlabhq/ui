@@ -1654,43 +1654,6 @@ const ModalDemo = () => {
         ]}
       />
 
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
-        <div className={c.card}>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              "role=\"dialog\" applied to the modal content",
-              "aria-modal=\"true\" to indicate a modal dialog",
-              "Focus trap keeps keyboard navigation within the modal",
-              "Focus restoration returns focus to the trigger on close",
-              "Supports aria-label, aria-labelledby, and aria-describedby",
-              "Nesting support with proper focus stack management",
-              "closeOnEscape allows dismissal via the Escape key",
-              "preventOutsideClick option to require explicit close action",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              ["Escape", "Close the modal"],
-              ["Tab", "Move focus to the next focusable element (trapped)"],
-              ["Shift+Tab", "Move focus to the previous focusable element (trapped)"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       {/* ─── The three things a Modal does besides render ─────────────────── */}
       <Section
         title="Turning off what a Modal does for you"

@@ -52,7 +52,8 @@
     },
     "fallback": {
       "type": "object",
-      "description": "React.ReactNode — Custom fallback content when no image or name is available."
+      "description": "React.ReactNode — Custom fallback content when no image or name is available.",
+      "x-tsType": "ReactNode"
     },
     "autoColor": {
       "type": "boolean",
@@ -81,7 +82,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "x-tsType": "AvatarColors | undefined"
     },
     "bordered": {
       "oneOf": [
@@ -190,7 +192,8 @@
           ]
         }
       ],
-      "description": "Tooltip shown on hover. Pass a string/ReactNode or a config object."
+      "description": "Tooltip shown on hover. Pass a string/ReactNode or a config object.",
+      "x-tsType": "ReactNode | AvatarTooltipConfig"
     },
     "imageConfig": {
       "type": "object",
@@ -234,7 +237,8 @@
         "className": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "AvatarImageConfig | undefined"
     },
     "classes": {
       "type": "object",
@@ -255,7 +259,8 @@
         "status": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "AvatarClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -264,7 +269,8 @@
     },
     "textStyle": {
       "type": "object",
-      "description": "CSSProperties — Inline styles for the initials text."
+      "description": "CSSProperties — Inline styles for the initials text.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "loading": {
       "type": "boolean",
@@ -286,11 +292,13 @@
     },
     "onLoad": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image finishes loading."
+      "description": "() => void — Fires when the avatar image finishes loading.",
+      "x-tsType": "(() => void) | undefined"
     },
     "onError": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image fails to load."
+      "description": "() => void — Fires when the avatar image fails to load.",
+      "x-tsType": "(() => void) | undefined"
     },
     "asChild": {
       "type": "boolean",
@@ -313,7 +321,8 @@
         },
         "size": {
           "type": "AvatarSize | undefined",
-          "description": "Default size for all avatars in the group."
+          "description": "Default size for all avatars in the group.",
+          "default": "md"
         },
         "shape": {
           "type": "AvatarShape | undefined",
@@ -329,11 +338,13 @@
         },
         "ringColor": {
           "type": "string | undefined",
-          "description": "Border ring color for overlapping avatars."
+          "description": "Border ring color for overlapping avatars.",
+          "default": "var(--cl-bg)"
         },
         "showTooltip": {
           "type": "boolean | undefined",
-          "description": "Shows a tooltip with the avatar's name on hover."
+          "description": "Shows a tooltip with the avatar's name on hover.",
+          "default": false
         },
         "total": {
           "type": "number | undefined",
@@ -341,11 +352,13 @@
         },
         "variant": {
           "type": "GroupVariant | undefined",
-          "description": "Layout variant: stacked overlap, grid, or inline. Default: `\"stack\"`."
+          "description": "Layout variant: stacked overlap, grid, or inline. Default: `\"stack\"`.",
+          "default": "stack"
         },
         "reverseOrder": {
           "type": "boolean | undefined",
-          "description": "Reverses the visual stacking order."
+          "description": "Reverses the visual stacking order.",
+          "default": false
         },
         "renderSurplus": {
           "type": "((count: number) => ReactNode) | undefined",
@@ -357,15 +370,18 @@
         },
         "dir": {
           "type": "Direction | undefined",
-          "description": "Text direction for RTL-aware layouts."
+          "description": "Text direction. Sets `dir` on the group; the layout itself does not mirror.",
+          "default": "ltr"
         },
         "classes": {
           "type": "AvatarGroupClasses | undefined",
-          "description": "CSS class overrides for group sub-elements."
+          "description": "CSS class overrides for group sub-elements.",
+          "default": {}
         },
         "asChild": {
           "type": "boolean | undefined",
-          "description": "Merges group props onto the child element via Slot."
+          "description": "Merges group props onto the child element via Slot.",
+          "default": false
         }
       }
     },
@@ -378,11 +394,13 @@
         },
         "size": {
           "type": "AvatarSize | undefined",
-          "description": "Size matching the group's avatar size."
+          "description": "Size matching the group's avatar size.",
+          "default": "md"
         },
         "shape": {
           "type": "AvatarShape | undefined",
-          "description": "Shape matching the group's avatar shape."
+          "description": "Shape matching the group's avatar shape.",
+          "default": "circle"
         },
         "max": {
           "type": "number | undefined",
@@ -390,7 +408,8 @@
         },
         "showPlus": {
           "type": "boolean | undefined",
-          "description": "Whether to show a `+` prefix. Default: `true`."
+          "description": "Whether to show a `+` prefix. Default: `true`.",
+          "default": true
         },
         "format": {
           "type": "((count: number) => string) | undefined",
@@ -398,7 +417,8 @@
         },
         "variant": {
           "type": "CountVariant | undefined",
-          "description": "Visual style variant."
+          "description": "Visual style variant.",
+          "default": "solid"
         },
         "tooltip": {
           "type": "ReactNode | AvatarTooltipConfig",
@@ -410,19 +430,21 @@
         },
         "textClassName": {
           "type": "string | undefined",
-          "description": "CSS class for the count text."
+          "description": "CSS class for the count text.",
+          "default": ""
         },
         "textStyle": {
           "type": "CSSProperties | undefined",
           "description": "Inline styles for the count text."
         },
         "aria-live": {
-          "type": "\"polite\" | \"assertive\" | \"off\" | undefined",
+          "type": "\"off\" | \"polite\" | \"assertive\" | undefined",
           "description": "ARIA live region behavior for screen readers."
         },
         "asChild": {
           "type": "boolean | undefined",
-          "description": "Merges count props onto the child element via Slot."
+          "description": "Merges count props onto the child element via Slot.",
+          "default": false
         },
         "children": {
           "type": "ReactNode",
@@ -439,19 +461,23 @@
         },
         "max": {
           "type": "number | undefined",
-          "description": "Maximum count before showing `max+`."
+          "description": "Maximum count before showing `max+`.",
+          "default": 99
         },
         "showZero": {
           "type": "boolean | undefined",
-          "description": "Shows the badge even when count is zero. Default: `false`."
+          "description": "Shows the badge even when count is zero. Default: `false`.",
+          "default": false
         },
         "dot": {
           "type": "boolean | undefined",
-          "description": "Renders a small dot instead of a count."
+          "description": "Renders a small dot instead of a count.",
+          "default": false
         },
         "position": {
           "type": "CornerPosition | undefined",
-          "description": "Corner position for the badge. Default: `\"top-right\"`."
+          "description": "Corner position for the badge. Default: `\"top-right\"`.",
+          "default": "top-right"
         },
         "offset": {
           "type": "BadgeOffset | undefined",
@@ -463,31 +489,37 @@
         },
         "size": {
           "type": "BadgeSize | undefined",
-          "description": "Badge size preset. Default: `\"sm\"`."
+          "description": "Badge size preset. Default: `\"sm\"`.",
+          "default": "md"
         },
         "variant": {
           "type": "BadgeVariant | undefined",
-          "description": "Visual style variant. Default: `\"solid\"`."
+          "description": "Visual style variant. Default: `\"solid\"`.",
+          "default": "solid"
         },
         "overlap": {
           "type": "BadgeOverlap | undefined",
-          "description": "Shape of the element the badge overlaps."
+          "description": "Shape of the element the badge overlaps.",
+          "default": "circular"
         },
         "pulse": {
           "type": "boolean | undefined",
-          "description": "Adds a pulsing animation to the badge."
+          "description": "Adds a pulsing animation to the badge.",
+          "default": false
         },
         "invisible": {
           "type": "boolean | undefined",
-          "description": "Hides the badge while preserving its DOM presence."
+          "description": "Hides the badge while preserving its DOM presence.",
+          "default": false
         },
         "aria-live": {
-          "type": "\"polite\" | \"assertive\" | \"off\" | undefined",
+          "type": "\"off\" | \"polite\" | \"assertive\" | undefined",
           "description": "ARIA live region behavior for screen readers."
         },
         "asChild": {
           "type": "boolean | undefined",
-          "description": "Merges badge props onto the child element via Slot."
+          "description": "Merges badge props onto the child element via Slot.",
+          "default": false
         }
       }
     },
@@ -495,26 +527,33 @@
       "type": "object",
       "properties": {
         "classes": {
-          "type": "AvatarShimmerClasses | undefined"
+          "type": "AvatarShimmerClasses | undefined",
+          "description": "Class overrides for this component's slots."
         },
         "unstyled": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring.",
+          "default": false
         },
         "size": {
           "type": "AvatarSize | undefined",
-          "description": "Shimmer size matching the avatar size."
+          "description": "Shimmer size matching the avatar size.",
+          "default": "md"
         },
         "shape": {
           "type": "AvatarShape | undefined",
-          "description": "Shimmer shape matching the avatar shape."
+          "description": "Shimmer shape matching the avatar shape.",
+          "default": "circle"
         },
         "animate": {
           "type": "boolean | undefined",
-          "description": "Enables the shimmer animation. Default: `true`."
+          "description": "Enables the shimmer animation. Default: `true`.",
+          "default": true
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
-          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting.",
+          "default": "auto"
         }
       }
     },
@@ -523,39 +562,48 @@
       "properties": {
         "count": {
           "type": "number | undefined",
-          "description": "Number of shimmer placeholders to render. Default: `3`."
+          "description": "Number of shimmer placeholders to render. Default: `3`.",
+          "default": 3
         },
         "size": {
           "type": "AvatarSize | undefined",
-          "description": "Shimmer size matching the group's avatar size."
+          "description": "Shimmer size matching the group's avatar size.",
+          "default": "md"
         },
         "shape": {
           "type": "AvatarShape | undefined",
-          "description": "Shimmer shape matching the group's avatar shape."
+          "description": "Shimmer shape matching the group's avatar shape.",
+          "default": "circle"
         },
         "spacing": {
           "type": "number | undefined",
-          "description": "Overlap spacing in pixels."
+          "description": "Overlap spacing in pixels.",
+          "default": -8
         },
         "ringColor": {
           "type": "string | undefined",
-          "description": "Border ring color."
+          "description": "Border ring color.",
+          "default": "var(--cl-bg)"
         },
         "animate": {
           "type": "boolean | undefined",
-          "description": "Enables the shimmer animation. Default: `true`."
+          "description": "Enables the shimmer animation. Default: `true`.",
+          "default": true
         },
         "showCount": {
           "type": "boolean | undefined",
-          "description": "Shows a shimmer placeholder for the surplus count."
+          "description": "Shows a shimmer placeholder for the surplus count.",
+          "default": false
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
-          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting.",
+          "default": "auto"
         },
         "asChild": {
           "type": "boolean | undefined",
-          "description": "Merges shimmer props onto the child element via Slot."
+          "description": "Merges shimmer props onto the child element via Slot.",
+          "default": false
         }
       }
     }

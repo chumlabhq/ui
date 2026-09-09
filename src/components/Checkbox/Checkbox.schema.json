@@ -6,11 +6,13 @@
   "properties": {
     "label": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Text label rendered beside the checkbox."
+      "description": "React.ReactNode — Text label rendered beside the checkbox.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Helper text rendered below the label."
+      "description": "React.ReactNode — Helper text rendered below the label.",
+      "x-tsType": "ReactNode"
     },
     "checked": {
       "type": "boolean",
@@ -28,15 +30,18 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(checked: boolean) => void \u2014 Fires when the checked state changes."
+      "description": "(checked: boolean) => void — Fires when the checked state changes.",
+      "x-tsType": "((checked: boolean) => void) | undefined"
     },
     "onFocus": {
       "type": "object",
-      "description": "(event: FocusEvent) => void"
+      "description": "(event: FocusEvent) => void",
+      "x-tsType": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined"
     },
     "onBlur": {
       "type": "object",
-      "description": "(event: FocusEvent) => void"
+      "description": "(event: FocusEvent) => void",
+      "x-tsType": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined"
     },
     "error": {
       "type": "boolean",
@@ -45,7 +50,8 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Error message displayed below the checkbox."
+      "description": "React.ReactNode — Error message displayed below the checkbox.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -54,7 +60,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Success message displayed below the checkbox."
+      "description": "React.ReactNode — Success message displayed below the checkbox.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -92,15 +99,18 @@
     },
     "checkedIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom icon for the checked state."
+      "description": "React.ReactNode — Custom icon for the checked state.",
+      "x-tsType": "ReactNode"
     },
     "uncheckedIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom icon for the unchecked state."
+      "description": "React.ReactNode — Custom icon for the unchecked state.",
+      "x-tsType": "ReactNode"
     },
     "indeterminateIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom icon for the indeterminate state."
+      "description": "React.ReactNode — Custom icon for the indeterminate state.",
+      "x-tsType": "ReactNode"
     },
     "classes": {
       "type": "object",
@@ -127,7 +137,8 @@
         "message": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "CheckboxClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",

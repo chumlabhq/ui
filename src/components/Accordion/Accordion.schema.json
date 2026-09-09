@@ -25,7 +25,8 @@
         },
         "onValueChange": {
           "type": "object",
-          "description": "(value: string | null) => void"
+          "description": "(value: string | null) => void",
+          "x-tsType": "((value: string[]) => void) | undefined"
         }
       },
       "required": [
@@ -59,7 +60,8 @@
         },
         "onValueChange": {
           "type": "object",
-          "description": "(value: string[]) => void"
+          "description": "(value: string[]) => void",
+          "x-tsType": "((value: string[]) => void) | undefined"
         }
       },
       "required": [
@@ -91,7 +93,7 @@
         "ltr",
         "rtl"
       ],
-      "description": "Text direction for RTL-aware layouts.",
+      "description": "Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror.",
       "default": "ltr"
     },
     "disabled": {
@@ -101,7 +103,8 @@
     },
     "loop": {
       "type": "boolean",
-      "description": "Whether keyboard navigation wraps from last to first item."
+      "description": "Whether keyboard navigation wraps from last to first item.",
+      "default": true
     },
     "classes": {
       "type": "object",
@@ -140,7 +143,8 @@
         "header": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "AccordionClasses | undefined"
     },
     "headingLevel": {
       "type": "integer",
@@ -152,11 +156,13 @@
         5,
         6
       ],
-      "description": "HTML heading level for accordion item triggers."
+      "description": "HTML heading level for accordion item triggers.",
+      "default": 3
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode — AccordionItem children."
+      "description": "React.ReactNode — AccordionItem children.",
+      "x-tsType": "ReactNode"
     },
     "asChild": {
       "type": "boolean",
@@ -191,7 +197,8 @@
     },
     "animationDuration": {
       "type": "number",
-      "description": "Duration in milliseconds for expand/collapse animation."
+      "description": "Duration in milliseconds for expand/collapse animation.",
+      "default": 300
     },
     "reduceMotion": {
       "oneOf": [
@@ -247,27 +254,33 @@
     },
     "onExpandedChange": {
       "type": "object",
-      "description": "(event: AccordionExpandEvent) => void"
+      "description": "(event: AccordionExpandEvent) => void",
+      "x-tsType": "((event: AccordionExpandEvent) => void) | undefined"
     },
     "onKeyDown": {
       "type": "object",
-      "description": "(event: KeyboardEvent, itemValue: string | null) => void"
+      "description": "(event: KeyboardEvent, itemValue: string | null) => void",
+      "x-tsType": "((event: KeyboardEvent<HTMLDivElement>, itemValue: string | null) => void) | undefined"
     },
     "preventClose": {
       "type": "object",
-      "description": "(value: string) => boolean | Promise<boolean>"
+      "description": "(value: string) => boolean | Promise<boolean>",
+      "x-tsType": "((value: string) => boolean | Promise<boolean>) | undefined"
     },
     "preventCloseTimeout": {
       "type": "number",
-      "description": "Timeout in ms for the preventClose callback."
+      "description": "Timeout in ms for the preventClose callback.",
+      "default": 10000
     },
     "onFocusCapture": {
       "type": "object",
-      "description": "(event: FocusEvent) => void"
+      "description": "(event: FocusEvent) => void",
+      "x-tsType": "((event: FocusEvent<HTMLDivElement, Element>) => void) | undefined"
     },
     "onBlurCapture": {
       "type": "object",
-      "description": "(event: FocusEvent) => void"
+      "description": "(event: FocusEvent) => void",
+      "x-tsType": "((event: FocusEvent<HTMLDivElement, Element>) => void) | undefined"
     },
     "aria-busy": {
       "type": "boolean",
@@ -284,7 +297,8 @@
     },
     "announceExpanded": {
       "type": "boolean",
-      "description": "Announces expanded state changes to screen readers."
+      "description": "Announces expanded state changes to screen readers.",
+      "default": false
     }
   },
   "required": [
@@ -296,16 +310,21 @@
       "type": "object",
       "properties": {
         "value": {
-          "type": "string"
+          "type": "string",
+          "description": "Identifies this item. Matches the values passed to the accordion's `value` or `defaultValue`."
         },
         "disabled": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Disables this item alone. It stays visible but cannot be toggled and leaves the tab order."
         },
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "asChild": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props.",
+          "default": false
         },
         "onExpandedChange": {
           "type": "((isExpanded: boolean) => void) | undefined",
@@ -321,31 +340,43 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "expandedIcon": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Icon shown while the item is expanded. Replaces the default chevron."
         },
         "collapsedIcon": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Icon shown while the item is collapsed. Replaces the default chevron."
         },
         "iconPosition": {
-          "type": "\"left\" | \"right\" | \"none\" | undefined"
+          "type": "\"left\" | \"right\" | \"none\" | undefined",
+          "description": "Which side of the trigger the icon sits on, or `\"none\"` to drop it.",
+          "default": "right"
         },
         "asChild": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props.",
+          "default": false
         },
         "subtitle": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Secondary line rendered under the trigger's label."
         },
         "iconAnimation": {
-          "type": "\"none\" | \"rotate\" | \"switch\" | undefined"
+          "type": "\"none\" | \"rotate\" | \"switch\" | undefined",
+          "description": "How the icon changes on toggle: rotate the chevron, switch between the two icons, or neither.",
+          "default": "rotate"
         },
         "leftSlot": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content placed before the label, inside the trigger."
         },
         "rightSlot": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content placed after the label and before the icon."
         },
         "aria-describedby": {
           "type": "string | undefined",
@@ -357,37 +388,52 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "forceMount": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Keeps the panel mounted while collapsed, so an exit animation or a measurement has a node to read.",
+          "default": false
         },
         "animationDuration": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "Expand and collapse duration in milliseconds."
         },
         "animationEasing": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "CSS easing function for the expand and collapse transition."
         },
         "asChild": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props.",
+          "default": false
         },
         "lazyLoad": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Delays rendering the panel's children until it is first expanded.",
+          "default": false
         },
         "unmountOnClose": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Unmounts the panel's children again each time it collapses.",
+          "default": false
         },
         "onOpenStart": {
-          "type": "(() => void) | undefined"
+          "type": "(() => void) | undefined",
+          "description": "Fires when the expand transition begins."
         },
         "onOpenEnd": {
-          "type": "(() => void) | undefined"
+          "type": "(() => void) | undefined",
+          "description": "Fires when the expand transition finishes."
         },
         "onCloseStart": {
-          "type": "(() => void) | undefined"
+          "type": "(() => void) | undefined",
+          "description": "Fires when the collapse transition begins."
         },
         "onCloseEnd": {
-          "type": "(() => void) | undefined"
+          "type": "(() => void) | undefined",
+          "description": "Fires when the collapse transition finishes."
         }
       }
     },
@@ -395,37 +441,56 @@
       "type": "object",
       "properties": {
         "reduceMotion": {
-          "type": "boolean | \"auto\" | undefined"
+          "type": "boolean | \"auto\" | undefined",
+          "description": "Whether to stop the shimmer animation. `\"auto\"` follows the OS reduced-motion setting.",
+          "default": "auto"
         },
         "classes": {
-          "type": "AccordionShimmerClasses | undefined"
+          "type": "AccordionShimmerClasses | undefined",
+          "description": "Class overrides for this component's slots."
         },
         "unstyled": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring.",
+          "default": false
         },
         "count": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "How many placeholder items to draw.",
+          "default": 3
         },
         "size": {
-          "type": "AccordionSize | undefined"
+          "type": "AccordionSize | undefined",
+          "description": "Matches the accordion size the placeholder stands in for.",
+          "default": "md"
         },
         "variant": {
-          "type": "AccordionVariant | undefined"
+          "type": "AccordionVariant | undefined",
+          "description": "Matches the accordion variant the placeholder stands in for.",
+          "default": "default"
         },
         "animate": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Whether the placeholder pulses. Set false for a still skeleton.",
+          "default": true
         },
         "className": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "Additional classes for the root element."
         },
         "style": {
-          "type": "CSSProperties | undefined"
+          "type": "CSSProperties | undefined",
+          "description": "Inline styles for the root element."
         },
         "showContent": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Also draws a placeholder for the expanded panel, not just the triggers.",
+          "default": false
         },
         "asChild": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Render the passed child instead of the default element, keeping behaviour, ARIA and props.",
+          "default": false
         }
       }
     }

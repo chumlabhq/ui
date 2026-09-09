@@ -21,15 +21,18 @@
     },
     "message": {
       "type": "object",
-      "description": "React.ReactNode — Primary message content."
+      "description": "React.ReactNode — Primary message content.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Secondary description text."
+      "description": "React.ReactNode — Secondary description text.",
+      "x-tsType": "ReactNode"
     },
     "content": {
       "type": "object",
-      "description": "React.ReactNode — Custom content that replaces message and description."
+      "description": "React.ReactNode — Custom content that replaces message and description.",
+      "x-tsType": "ReactNode"
     },
     "duration": {
       "type": "number",
@@ -47,7 +50,8 @@
     },
     "icon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon replacing the default type icon."
+      "description": "React.ReactNode — Custom icon replacing the default type icon.",
+      "x-tsType": "ReactNode"
     },
     "showCloseButton": {
       "type": "boolean",
@@ -56,7 +60,8 @@
     },
     "onDismiss": {
       "type": "object",
-      "description": "() => void — Fires when the toast is dismissed."
+      "description": "() => void — Fires when the toast is dismissed.",
+      "x-tsType": "(() => void) | undefined"
     },
     "role": {
       "type": "string",
@@ -68,7 +73,8 @@
     },
     "style": {
       "type": "object",
-      "description": "Inline styles applied to the toast element."
+      "description": "Inline styles applied to the toast element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "pauseOnHover": {
       "type": "boolean",
@@ -102,7 +108,8 @@
         "icon": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "ToastClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -111,7 +118,8 @@
     },
     "onRemove": {
       "type": "object",
-      "description": "(id: string) => void — Internal callback to remove the toast from the provider."
+      "description": "(id: string) => void — Internal callback to remove the toast from the provider.",
+      "x-tsType": "(id: string) => void"
     }
   },
   "required": [
@@ -123,41 +131,60 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "position": {
           "type": "ToastPosition | undefined",
-          "description": "Toast position on screen. Default: `\"bottom-right\"`."
+          "description": "Toast position on screen. Default: `\"bottom-right\"`.",
+          "default": "bottom-right"
         },
         "maxToasts": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "How many toasts may be visible at once. Older ones leave as new ones arrive.",
+          "default": 5
         },
         "containerClassName": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "Additional classes for the toast container."
         },
         "defaultDuration": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "How long a toast stays up, in milliseconds, when it does not set its own.",
+          "default": 5000
         },
         "animationDuration": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "Enter and exit transition duration in milliseconds.",
+          "default": 500
         },
         "gap": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "Space between stacked toasts, in pixels.",
+          "default": 12
         },
         "zIndex": {
-          "type": "number | undefined"
+          "type": "number | undefined",
+          "description": "Stacking order for the toast container.",
+          "x-defaultSource": "LAYERS.toast"
         },
         "dismissOnEscape": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Dismisses the newest toast when Escape is pressed.",
+          "default": false
         },
         "containerAriaLabel": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "Accessible name for the toast region.",
+          "default": "Notifications"
         },
         "classes": {
-          "type": "ToastClasses | undefined"
+          "type": "ToastClasses | undefined",
+          "description": "Class overrides for this component's slots."
         },
         "unstyled": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring."
         }
       }
     }

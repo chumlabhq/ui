@@ -519,7 +519,9 @@
     "verify:demo-snippets": "node scripts/build-demo-snippets.mjs --check",
     "verify:demo-snippets:typecheck": "node scripts/typecheck-demo-snippets.mjs",
     "verify:guide-claims": "node scripts/assert-guide-claims.mjs",
-    "verify:guide-claims:self-check": "node scripts/assert-guide-claims.mjs --self-check"
+    "verify:guide-claims:self-check": "node scripts/assert-guide-claims.mjs --self-check",
+    "verify:component-docs": "node scripts/build-component-docs.mjs --check",
+    "verify:component-docs:self-check": "node scripts/build-component-docs.mjs --self-check"
   },
   "peerDependencies": {
     "@tanstack/react-table": "^8.21.3",

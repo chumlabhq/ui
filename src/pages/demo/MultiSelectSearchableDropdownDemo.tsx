@@ -1338,66 +1338,6 @@ const MultiSelectSearchableDropdownDemo = () => {
       <ComponentDocs name="MultiSelectSearchableDropdown" />
 
       {/* ─── Accessibility ────────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Trigger uses role="combobox" with aria-expanded, aria-haspopup="listbox", aria-controls, and aria-activedescendant',
-              'Listbox uses role="listbox" with aria-multiselectable="true" and role="option" items',
-              "Full keyboard navigation: Enter/Space (toggle option), ArrowDown/Up, Home, End, Escape, Tab",
-              "Focus automatically restores to trigger on close via Escape or Tab",
-              'aria-live="polite" status region announces loading and selection count',
-              "Disabled options have aria-disabled and are skipped by keyboard navigation",
-              'Error messages use role="alert" linked via aria-describedby',
-              "Associated label linked via htmlFor and aria-labelledby",
-              'All decorative icons have aria-hidden="true"',
-              "Click-outside detection handles both mouse and touch events",
-              "Portal rendering prevents overflow clipping while maintaining ARIA relationships",
-              "Search input auto-focused when dropdown opens",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Move focus to/from the trigger button"],
-              ["Enter / Space", "Open dropdown or toggle focused option"],
-              ["\u2193", "Open dropdown or move to next option"],
-              ["\u2191", "Move to previous option"],
-              ["Home", "Move to first enabled option"],
-              ["End", "Move to last enabled option"],
-              ["Escape", "Close dropdown, restore focus to trigger"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

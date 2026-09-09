@@ -119,19 +119,25 @@ export interface ModalProps {
 
 /** Props for the ModalHeader compound component. */
 export interface ModalHeaderProps {
+  /** Content rendered inside this element. */
   children: ReactNode;
+  /** Additional classes for the root element. */
   className?: string;
 }
 
 /** Props for the ModalBody compound component. */
 export interface ModalBodyProps {
+  /** Content rendered inside this element. */
   children: ReactNode;
+  /** Additional classes for the root element. */
   className?: string;
 }
 
 /** Props for the ModalFooter compound component. */
 export interface ModalFooterProps {
+  /** Content rendered inside this element. */
   children: ReactNode;
+  /** Additional classes for the root element. */
   className?: string;
 }
 

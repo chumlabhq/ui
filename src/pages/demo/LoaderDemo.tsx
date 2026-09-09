@@ -563,37 +563,6 @@ const LoaderDemo = () => {
 
       <ComponentDocs name="Loader" />
 
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features across all loader variants."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'All variants render role="status" so screen readers announce them as live regions.',
-              'All include aria-label="Loading" by default — override via props for specific messages.',
-              "Uses currentColor so loaders inherit the surrounding text color automatically.",
-              "SVG/DOM elements are decorative and inherit accessible names from the parent.",
-              "Supports ref forwarding for programmatic focus management if needed.",
-              "Use aria-hidden on decorative loaders when adjacent text explains status.",
-              "Reduced motion support via CSS prefers-reduced-motion media query.",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       <DocControlledPattern
         isDarkMode={dark}
         summary="Loaders are presentational. Control visibility with parent loading state; there is no internal async state. Use CircularLoader for inline/button contexts, LinearLoader for page/section bars, DotLoader for chat/typing indicators, and PulseLoader for center-screen loading states."

@@ -6,11 +6,13 @@
   "properties": {
     "label": {
       "type": "object",
-      "description": "React.ReactNode - Label rendered above the input."
+      "description": "React.ReactNode - Label rendered above the input.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode - Helper text rendered below the label."
+      "description": "React.ReactNode - Helper text rendered below the label.",
+      "x-tsType": "ReactNode"
     },
     "error": {
       "type": "boolean",
@@ -19,7 +21,8 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode - Error message displayed below the input."
+      "description": "React.ReactNode - Error message displayed below the input.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -28,7 +31,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode - Success message displayed below the input."
+      "description": "React.ReactNode - Success message displayed below the input.",
+      "x-tsType": "ReactNode"
     },
     "size": {
       "type": "string",
@@ -41,27 +45,33 @@
     },
     "prefix": {
       "type": "object",
-      "description": "React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://')."
+      "description": "React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://').",
+      "x-tsType": "ReactNode"
     },
     "suffix": {
       "type": "object",
-      "description": "React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com')."
+      "description": "React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com').",
+      "x-tsType": "ReactNode"
     },
     "startIcon": {
       "type": "object",
-      "description": "React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided."
+      "description": "React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided.",
+      "x-tsType": "ReactNode"
     },
     "endIcon": {
       "type": "object",
-      "description": "React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided."
+      "description": "React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided.",
+      "x-tsType": "ReactNode"
     },
     "onStartIconClick": {
       "type": "object",
-      "description": "() => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility."
+      "description": "() => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility.",
+      "x-tsType": "(() => void) | undefined"
     },
     "onEndIconClick": {
       "type": "object",
-      "description": "() => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility."
+      "description": "() => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility.",
+      "x-tsType": "(() => void) | undefined"
     },
     "startIconLabel": {
       "type": "string",
@@ -73,7 +83,8 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(value: string) => void - Fires with the current string value when the value changes."
+      "description": "(value: string) => void - Fires with the current string value when the value changes.",
+      "x-tsType": "((value: string) => void) | undefined"
     },
     "clearable": {
       "type": "boolean",
@@ -82,7 +93,8 @@
     },
     "onClear": {
       "type": "object",
-      "description": "() => void - Callback when the clear button is clicked."
+      "description": "() => void - Callback when the clear button is clicked.",
+      "x-tsType": "(() => void) | undefined"
     },
     "showCount": {
       "type": "boolean",
@@ -96,7 +108,8 @@
     },
     "loader": {
       "type": "object",
-      "description": "React.ReactNode - Custom loader element to replace the default spinner."
+      "description": "React.ReactNode - Custom loader element to replace the default spinner.",
+      "x-tsType": "ReactNode"
     },
     "loaderSize": {
       "type": "number",
@@ -143,7 +156,8 @@
         "count": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "InputClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -157,16 +171,20 @@
       "type": "object",
       "properties": {
         "label": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "The label's content."
         },
         "required": {
-          "type": "boolean | undefined"
+          "type": "boolean | undefined",
+          "description": "Marks the field required and draws the required indicator."
         },
         "htmlFor": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "The id of the control this labels. Set automatically when the label is rendered by the field."
         },
         "className": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "Additional classes for the root element."
         }
       }
     }

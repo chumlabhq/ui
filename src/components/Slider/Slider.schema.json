@@ -38,11 +38,13 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(value: SliderValue) => void \u2014 Fires when the value changes."
+      "description": "(value: SliderValue) => void — Fires when the value changes.",
+      "x-tsType": "((value: SliderValue) => void) | undefined"
     },
     "onValueCommit": {
       "type": "object",
-      "description": "(value: SliderValue) => void \u2014 Fires when a drag interaction ends (commit)."
+      "description": "(value: SliderValue) => void — Fires when a drag interaction ends (commit).",
+      "x-tsType": "((value: SliderValue) => void) | undefined"
     },
     "min": {
       "type": "number",
@@ -90,7 +92,9 @@
     },
     "formatTooltip": {
       "type": "object",
-      "description": "(value: number) => string \u2014 Format the tooltip display value."
+      "description": "(value: number) => string — Format the tooltip display value.",
+      "x-tsType": "((value: number) => string) | undefined",
+      "x-defaultSource": "String"
     },
     "marks": {
       "type": "array",
@@ -118,11 +122,13 @@
     },
     "renderThumb": {
       "type": "object",
-      "description": "(props: SliderThumbRenderProps) => ReactNode \u2014 Custom thumb content renderer."
+      "description": "(props: SliderThumbRenderProps) => ReactNode — Custom thumb content renderer.",
+      "x-tsType": "((props: SliderThumbRenderProps) => ReactNode) | undefined"
     },
     "renderMark": {
       "type": "object",
-      "description": "(props: SliderMarkRenderProps) => ReactNode \u2014 Custom mark dot renderer."
+      "description": "(props: SliderMarkRenderProps) => ReactNode — Custom mark dot renderer.",
+      "x-tsType": "((props: SliderMarkRenderProps) => ReactNode) | undefined"
     },
     "markDotSize": {
       "type": "number",
@@ -144,11 +150,13 @@
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Label displayed above the slider."
+      "description": "React.ReactNode — Label displayed above the slider.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Description text."
+      "description": "React.ReactNode — Description text.",
+      "x-tsType": "ReactNode"
     },
     "disabled": {
       "type": "boolean",
@@ -167,7 +175,8 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Error message displayed below the slider."
+      "description": "React.ReactNode — Error message displayed below the slider.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -175,7 +184,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Success message displayed below the slider."
+      "description": "React.ReactNode — Success message displayed below the slider.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -215,7 +225,8 @@
         "message": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "SliderClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",

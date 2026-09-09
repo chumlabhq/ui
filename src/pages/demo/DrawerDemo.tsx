@@ -707,63 +707,6 @@ const DrawerDemo = () => {
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Drawer" />
 
-      <Section title="Accessibility" isDarkMode={dark}>
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'role="dialog" with aria-modal on the panel',
-              "aria-labelledby auto-wired from DrawerHeader via context",
-              "Supports aria-label, aria-labelledby, and aria-describedby",
-              "Focus trapped inside the drawer (Tab cycles, Shift+Tab reverse cycles)",
-              "Focus restored to trigger element on close",
-              "initialFocus ref or data-autofocus for custom initial focus",
-              "Escape key closes topmost drawer in stack",
-              "Scroll lock prevents background scrolling",
-              "inert attribute applied when keepMounted and closed",
-              "prefers-reduced-motion disables animations (or override with reduceMotion prop)",
-              "Stacked drawers: only topmost responds to Escape",
-              "Swipe gestures use touch-action to prevent browser conflicts",
-              "GPU-composited transform animations for smooth 60fps transitions",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Escape", "Close the drawer (topmost in stack)"],
-              ["Tab", "Cycle forward through focusable elements (trapped)"],
-              [
-                "Shift + Tab",
-                "Cycle backward through focusable elements (trapped)",
-              ],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       <DocControlledPattern
         isDarkMode={dark}
         summary="Use the `open` prop with `onOpenChange` for full control. For swipe and snap points, coordinate `activeSnapPointIndex` with `onSnapPointIndexChange` when you own that state."
@@ -789,43 +732,6 @@ const DrawerDemo = () => {
           "Do not disable Escape handling without an obvious close affordance.",
         ]}
       />
-
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
-        <div className={c.card}>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              "role=\"dialog\" applied to the drawer panel",
-              "aria-modal=\"true\" when rendered as a modal overlay",
-              "Focus trap with Tab / Shift+Tab keeps focus within the drawer",
-              "Focus restoration returns focus to the trigger on close",
-              "Supports aria-label, aria-labelledby, and aria-describedby",
-              "lockScroll prevents background scroll while open",
-              "closeOnEscape allows dismissal via the Escape key",
-              "Swipeable dismiss on touch devices",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              ["Escape", "Close the drawer"],
-              ["Tab", "Move focus to the next focusable element (trapped)"],
-              ["Shift+Tab", "Move focus to the previous focusable element (trapped)"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       {/* ─── The focus behaviours, and turning them off ───────────────────── */}
       <Section

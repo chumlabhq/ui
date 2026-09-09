@@ -12,7 +12,7 @@ export type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | number;
 /** Online presence status indicator. */
 export type AvatarStatus = "online" | "offline" | "away" | "busy";
 
-/** Text direction for RTL-aware layouts. */
+/** Text direction. Sets `dir`; the layout itself does not mirror. */
 export type Direction = "ltr" | "rtl";
 
 /** Corner placement for status indicators and badges. */
@@ -45,7 +45,7 @@ export interface AvatarClasses {
   fallback?: string;
   /** Status indicator dot. */
   status?: string;
-  /** R6: the skeleton's own bag. AvatarShimmer is a component, not a part. */
+  /** The skeleton's own bag — `AvatarShimmer` is a component, not a part. */
   loading?: AvatarShimmerClasses;
 }
 
@@ -200,7 +200,7 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   renderSurplus?: (count: number) => ReactNode;
   /** Click handler for individual avatars within the group. */
   onAvatarClick?: (info: { index: number; name?: string }, event: React.MouseEvent) => void;
-  /** Text direction for RTL-aware layouts. */
+  /** Text direction. Sets `dir` on the group; the layout itself does not mirror. */
   dir?: Direction;
   /** CSS class overrides for group sub-elements. */
   classes?: AvatarGroupClasses;
@@ -280,18 +280,18 @@ export interface AvatarBadgeProps extends HTMLAttributes<HTMLSpanElement> {
   asChild?: boolean;
 }
 
-/** Props for the avatar loading placeholder. */
 /**
- * ADR 002: AvatarShimmer is reachable from the package root and AvatarDemo
- * renders it standalone, so it is a component in its own right and needs its own
- * styling route — not a second route into Avatar's bag.
+ * Class slots for `AvatarShimmer`, which you render yourself while an avatar
+ * loads, so it carries its own bag rather than a second route into Avatar's.
  */
 export interface AvatarShimmerClasses {
   root?: string;
 }
 
 export interface AvatarShimmerProps extends HTMLAttributes<HTMLDivElement> {
+  /** Class overrides for this component's slots. */
   classes?: AvatarShimmerClasses;
+  /** Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. */
   unstyled?: boolean;
   /** Shimmer size matching the avatar size. */
   size?: AvatarSize;

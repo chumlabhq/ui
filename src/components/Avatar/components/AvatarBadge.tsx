@@ -8,11 +8,10 @@ import { cn } from "../../../utils/scopedCn.js";
  * The error token family, not Tailwind's red ramp.
  *
  * `bg-red-500 text-white` is 3.76:1 — under AA for the count, which is text —
- * and `text-red-500` on `bg-white` is the same pair inverted. Neither gate
- * could see it: `contrast.contract` reads the token scale and these were not
- * in it, and the painted sweep only measures what a fixture renders, which
- * nothing did. `--cl-error-bg` and `--cl-on-error` were minted for this, so all
- * three variants follow the theme and each pair is gated.
+ * and `text-red-500` on `bg-white` is the same pair inverted. Raw ramp colours
+ * sit outside the token scale, so nothing measuring the scale could see them.
+ * `--cl-error-bg` and `--cl-on-error` were minted for this, so all three
+ * variants follow the theme.
  */
 const variantStyles = {
   solid: {

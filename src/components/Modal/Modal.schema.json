@@ -10,7 +10,8 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void - Callback when the modal's open state changes."
+      "description": "(open: boolean) => void - Callback when the modal's open state changes.",
+      "x-tsType": "((open: boolean) => void) | undefined"
     },
     "defaultOpen": {
       "type": "boolean",
@@ -19,19 +20,23 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode - Modal body content. Use ModalHeader, ModalBody, ModalFooter for structure."
+      "description": "React.ReactNode - Modal body content. Use ModalHeader, ModalBody, ModalFooter for structure.",
+      "x-tsType": "ReactNode"
     },
     "title": {
       "type": "object",
-      "description": "React.ReactNode - Title rendered in the modal header."
+      "description": "React.ReactNode - Title rendered in the modal header.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode - Description rendered below the title in the header."
+      "description": "React.ReactNode - Description rendered below the title in the header.",
+      "x-tsType": "ReactNode"
     },
     "icon": {
       "type": "object",
-      "description": "React.ReactNode - Icon rendered in the modal header."
+      "description": "React.ReactNode - Icon rendered in the modal header.",
+      "x-tsType": "ReactNode"
     },
     "showIcon": {
       "type": "boolean",
@@ -45,7 +50,8 @@
     },
     "closeIcon": {
       "type": "object",
-      "description": "React.ReactNode - Custom close button icon."
+      "description": "React.ReactNode - Custom close button icon.",
+      "x-tsType": "ReactNode"
     },
     "showHeader": {
       "type": "boolean",
@@ -84,7 +90,8 @@
     },
     "initialFocus": {
       "type": "object",
-      "description": "RefObject<HTMLElement | null> - Element to focus when the modal opens."
+      "description": "RefObject<HTMLElement | null> - Element to focus when the modal opens.",
+      "x-tsType": "RefObject<HTMLElement | null> | undefined"
     },
     "keepMounted": {
       "type": "boolean",
@@ -207,7 +214,8 @@
         "body": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "ModalClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -221,7 +229,8 @@
     },
     "contentStyle": {
       "type": "object",
-      "description": "Inline styles for the dialog content panel."
+      "description": "Inline styles for the dialog content panel.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "aria-label": {
       "type": "string",
@@ -244,10 +253,13 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "className": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "Additional classes for the root element.",
+          "default": ""
         }
       }
     },
@@ -255,10 +267,13 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "className": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "Additional classes for the root element.",
+          "default": ""
         }
       }
     },
@@ -266,10 +281,13 @@
       "type": "object",
       "properties": {
         "children": {
-          "type": "ReactNode"
+          "type": "ReactNode",
+          "description": "Content rendered inside this element."
         },
         "className": {
-          "type": "string | undefined"
+          "type": "string | undefined",
+          "description": "Additional classes for the root element.",
+          "default": ""
         }
       }
     }

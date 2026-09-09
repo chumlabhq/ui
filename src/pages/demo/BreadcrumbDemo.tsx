@@ -753,65 +753,6 @@ const BreadcrumbDemo = () => {
       <ComponentDocs name="Breadcrumb" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="WAI-ARIA breadcrumb and menu pattern compliance."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              "Semantic <nav> element with aria-label for landmark navigation",
-              "Ordered list <ol> communicates hierarchy to assistive technologies",
-              'Current page marked with aria-current="page"',
-              'Separators hidden via aria-hidden="true" and role="presentation"',
-              'Icons wrapped with aria-hidden="true" (decorative)',
-              'Ellipsis button uses aria-expanded, aria-haspopup="menu", and aria-label',
-              'Dropdown implements role="menu" with role="menuitem" items',
-              "Disabled items receive aria-disabled and are skipped in keyboard navigation",
-              "Focus auto-moves to first enabled menu item when dropdown opens",
-              "Focus restores to ellipsis button when dropdown closes via Escape",
-              "Dropdown closes on focus leaving, scroll, click outside, and Escape (document level)",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Navigate between items and ellipsis button"],
-              ["Enter / Space", "Activate item or toggle dropdown"],
-              ["Arrow Down", "Open dropdown / move to next menu item"],
-              ["Arrow Up", "Move to previous menu item"],
-              ["Home", "Move to first menu item"],
-              ["End", "Move to last menu item"],
-              ["Escape", "Close dropdown, restore focus to trigger"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

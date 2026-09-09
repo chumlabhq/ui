@@ -1249,39 +1249,6 @@ const AvatarDemo = () => {
       <ComponentDocs name="Avatar" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Avatar uses role="img" with aria-label when showing initials or fallback',
-              "Image avatars use native <img> with alt text (empty alt for decorative)",
-              "Status indicators have aria-label describing the status type",
-              'AvatarBadge uses role="status" with aria-live="polite" for screen reader announcements',
-              'Badge auto-generates aria-label: "N notification(s)" or "New notification" for dots',
-              'AvatarGroup uses role="group" with auto-generated aria-label including member count',
-              'AvatarGroupCount provides aria-label: "N more member(s) not shown"',
-              'Images default to loading="lazy" and decoding="async" for performance',
-              "prefers-reduced-motion disables image fade-in and shimmer pulse (via reduceMotion prop)",
-              'Shimmer components use role="status" with descriptive aria-label',
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

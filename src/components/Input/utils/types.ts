@@ -1,9 +1,13 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 
 export interface InputLabelProps {
+  /** The label's content. */
   label: ReactNode;
+  /** Marks the field required and draws the required indicator. */
   required?: boolean;
+  /** The id of the control this labels. Set automatically when the label is rendered by the field. */
   htmlFor?: string;
+  /** Additional classes for the root element. */
   className?: string;
 }
 

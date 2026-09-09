@@ -1709,67 +1709,6 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
       <ComponentDocs name="DatePicker" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Calendar grid uses role="grid" with accessible row and cell structure',
-              "aria-label on each day cell announces the full date for screen readers",
-              "Month and year navigation buttons are labeled for assistive technology",
-              "Date range selection is announced with start and end dates",
-              "Disabled dates are marked with aria-disabled and excluded from tab order",
-              "Full keyboard navigation within the calendar grid",
-              "aria-invalid set on the trigger when error=true",
-              "aria-describedby links error and success messages to the trigger",
-              "label prop auto-associated with trigger via htmlFor",
-              "aria-expanded on trigger reflects calendar open state",
-              "Day cells announce selected, today, and disabled states",
-              "Markers accessible via tooltip on hover/focus",
-              "prefers-reduced-motion respected via reduceMotion prop",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Move focus to/from the trigger"],
-              ["Arrow Left / Right", "Move to previous/next day"],
-              ["Arrow Up / Down", "Move to previous/next week"],
-              ["Enter / Space", "Open calendar / select focused date"],
-              ["Escape", "Close calendar, restore focus to trigger"],
-              ["Page Up", "Go to previous month"],
-              ["Page Down", "Go to next month"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

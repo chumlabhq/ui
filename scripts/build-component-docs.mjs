@@ -32,6 +32,8 @@ import ts from "typescript";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CHECK = process.argv.includes("--check");
+const SELF_CHECK = process.argv.includes("--self-check");
+const RECORD_SECTIONS = process.argv.includes("--record-sections");
 const SRC = join(root, "src/components");
 const OUT_SITE = join(root, "src/pages/demo/generated/componentDocs.ts");
 const OUT_SNIPPETS = join(root, "scripts/consumers/_app/snippets");
@@ -163,7 +165,22 @@ function tagsOf(name) {
 
 /** ── the API reference, from the schema ───────────────────────────────── */
 
+/**
+ * `| undefined` is what the required column already says, and carrying it in
+ * the type made one prop render two ways: `unstyled` was `boolean` on a root
+ * and `boolean | undefined` on a sub-component, for no difference a reader
+ * could act on.
+ */
+const dropUndefined = (type) =>
+  type
+    .split("|")
+    .map((part) => part.trim())
+    .filter((part) => part !== "undefined")
+    .join(" | ") || type;
+
 function renderType(schema) {
+  // The types carry a name where JSON Schema only has "object".
+  if (schema["x-tsType"]) return dropUndefined(schema["x-tsType"]);
   if (!schema) return "—";
   if (schema.enum) return schema.enum.map((v) => JSON.stringify(v)).join(" | ");
   if (schema.const !== undefined) return JSON.stringify(schema.const);
@@ -175,13 +192,30 @@ function renderType(schema) {
   return schema.type ?? "—";
 }
 
+/**
+ * ARIA attributes are not rows.
+ *
+ * Six of them had rows — `aria-label`, `aria-live`, `aria-describedby`,
+ * `aria-labelledby`, `aria-busy`, `aria-valuetext` — purely because those
+ * components happened to declare them explicitly, while every component
+ * forwards the whole set. A table that lists six of fifty teaches a reader that
+ * `aria-label` is supported and `aria-pressed` is not, which is false. The
+ * forwarding is stated once per component instead.
+ */
+const isAriaAttribute = (prop) => /^aria-/.test(prop);
+
 function propsFrom(properties = {}, required = []) {
   const req = new Set(required);
-  return Object.entries(properties).map(([prop, value]) => ({
+  return Object.entries(properties)
+    .filter(([prop]) => !isAriaAttribute(prop))
+    .map(([prop, value]) => ({
     name: prop,
-    type: renderType(value),
+    type: dropUndefined(renderType(value)),
     required: req.has(prop),
-    default: value.default === undefined ? null : JSON.stringify(value.default),
+    default:
+      value.default !== undefined
+        ? JSON.stringify(value.default)
+        : (value["x-defaultSource"] ?? null),
     description: (value.description ?? "").replace(/\s*\n\s*/g, " ").trim(),
   }));
 }
@@ -200,9 +234,30 @@ function accessibilityOf(name) {
 function keyboardOf(name) {
   const body = section(readFileSync(aiPath(name), "utf8"), "Keyboard Interactions");
   if (!body) return null;
-  const rows = [...body.matchAll(/^\|\s*(?!Key\b)(?!-)([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*$/gm)]
-    .map((m) => ({ keys: m[1].trim(), description: m[2].trim() }))
-    .filter((r) => r.keys && !/^-+$/.test(r.keys));
+
+  // Cells first, then decide what each row is. The previous version tried to
+  // skip the `| Key | Behaviour |` header with a `(?!Key\b)` lookahead placed
+  // after `\s*`, and `\s*` backtracks to zero length — which moves the lookahead
+  // to the space BEFORE `Key`, where it passes. Every one of the 28 tables
+  // carried its own header as its first data row. The separator was dropped
+  // correctly, because there is no whitespace in front of `-` to backtrack
+  // through, so only the header survived. Judging a trimmed cell cannot fail
+  // that way.
+  const cells = (line) =>
+    line
+      .replace(/^\||\|\s*$/g, "")
+      .split(/(?<!\\)\|/)
+      .map((c) => c.replace(/\\\|/g, "|").trim());
+
+  const rows = body
+    .split("\n")
+    .filter((l) => /^\s*\|/.test(l))
+    .map((l) => cells(l.trim()))
+    .filter((c) => c.length === 2 && c[0])
+    .filter((c) => !c.every((x) => /^:?-{2,}:?$/.test(x)))
+    .filter((c) => !(/^keys?$/i.test(c[0]) && /^(behaviour|behavior|action|description)$/i.test(c[1])))
+    .map(([keys, description]) => ({ keys, description }));
+
   const note = body.split(/\n\|/)[0].trim();
   return { note: note.startsWith("|") ? "" : note, rows };
 }
@@ -615,6 +670,251 @@ if (!CHECK) {
       if (!snippetFiles.has(`${flavour}/${file}`)) rmSync(join(dir, file));
     }
   }
+}
+
+
+/** ── what `--check` asserts beyond "the output matches its source" ───────
+ *
+ * `--check` regenerated the file and diffed it, so every defect that lived in
+ * the source was reproduced faithfully and reported as being in step. It
+ * passed on all seven of these:
+ *
+ *   1  32 hand-written Accessibility sections beside the generated one
+ *   2  28 keyboard tables carrying their own header as row 1
+ *   3  markdown that reached the page as literal asterisks and backticks
+ *   4  internal rule numbers and ADR citations in the shipped types
+ *   5  158 props showing "-" for a default the source defines
+ *   6  one prop rendering two ways, and six of fifty ARIA attributes as rows
+ *   7  RTL claims days after RTL was recorded unsupported
+ *   8  (a section silently disappearing — a guard, not something observed)
+ */
+
+const SECTION_RECORD = join(root, "docs/adr/002-doc-sections.json");
+const GENERATED_SECTION_TITLES = [
+  "Anatomy", "API Reference", "Class overrides", "Data attributes", "Types",
+  "CSS custom properties", "Accessibility", "Keyboard Interactions",
+  "Copy and paste", "Setup",
+];
+const INTERNAL_VOCABULARY =
+  /\bADR\b|\bR\d+\b|precedent ledger|ancestor clause|migration table|part selector|waived key|\bNOVEL\b|\bVERIFIED\b|src\/__tests__|\.contract\b/;
+/** What `Inline` renders. Anything else is markdown the reader will see raw. */
+const RENDERED_MARKDOWN = /\*\*[^*]+\*\*|`[^`]+`/g;
+
+/** The section set each component is expected to carry. */
+const sectionsOf = (doc) => [
+  "Anatomy",
+  ...(doc.props.length || doc.subComponents.length ? ["API Reference"] : []),
+  ...(doc.classes.length ? ["Class overrides"] : []),
+  ...(doc.dataAttributes.length ? ["Data attributes"] : []),
+  ...(doc.shapes.length ? ["Types"] : []),
+  ...(doc.cssVariables.length ? ["CSS custom properties"] : []),
+  ...(doc.accessibility.length ? ["Accessibility"] : []),
+  ...(doc.keyboard ? ["Keyboard Interactions"] : []),
+];
+
+/** Every description a reader sees, labelled by where it is. */
+const everyText = (doc) => {
+  const out = [];
+  for (const p of doc.props) out.push([`prop ${p.name}`, p.description]);
+  for (const sc of doc.subComponents)
+    for (const p of sc.props) out.push([`${sc.name}.${p.name}`, p.description]);
+  for (const c of doc.classes)
+    for (const k of c.keys) out.push([`${c.map}.${k.name}`, k.description]);
+  for (const sh of doc.shapes) {
+    out.push([`shape ${sh.name}`, sh.description]);
+    for (const m of sh.members) out.push([`${sh.name}.${m.name}`, m.description]);
+  }
+  for (const a of doc.accessibility) out.push(["accessibility", a]);
+  if (doc.keyboard) {
+    out.push(["keyboard note", doc.keyboard.note]);
+    for (const r of doc.keyboard.rows) out.push([`keyboard ${r.keys}`, r.description]);
+  }
+  return out.filter(([, t]) => t);
+};
+
+/** Destructuring defaults inside the declaration named `tag`. */
+function sourceDefaults(tag, files) {
+  for (const file of files) {
+    const sf = parse(file);
+    let out = null;
+    const visit = (node) => {
+      const isTag =
+        (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.name.text === tag) ||
+        (ts.isFunctionDeclaration(node) && node.name?.text === tag);
+      if (isTag) {
+        const found = new Set();
+        const scan = (inner) => {
+          if (ts.isBindingElement(inner) && ts.isIdentifier(inner.name) && inner.initializer)
+            found.add(inner.name.text);
+          ts.forEachChild(inner, scan);
+        };
+        scan(node);
+        if (found.size) { out = found; return; }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+    if (out) return out;
+  }
+  return new Set();
+}
+
+function auditDocs(docs, opts = {}) {
+  const found = [];
+  const add = (n, where, msg) => found.push({ n, where, msg });
+  const pageTitles = opts.pageTitles ?? readPageTitles();
+  const rtlUnsupported = opts.rtlUnsupported ?? /RTL is not supported/i.test(
+    existsSync(join(root, "RELEASE-READINESS.md"))
+      ? readFileSync(join(root, "RELEASE-READINESS.md"), "utf8")
+      : "",
+  );
+  const record = opts.record ?? (existsSync(SECTION_RECORD)
+    ? JSON.parse(readFileSync(SECTION_RECORD, "utf8"))
+    : null);
+
+  for (const doc of docs) {
+    // 1. a page may not hand-write a section the generator emits
+    for (const title of pageTitles.get(doc.name) ?? [])
+      if (GENERATED_SECTION_TITLES.includes(title))
+        add(1, doc.name, `the demo page hand-writes a "${title}" section the generator already emits`);
+
+    // 2. a table row may not be its own header
+    for (const row of doc.keyboard?.rows ?? [])
+      if (/^keys?$/i.test(row.keys.trim()))
+        add(2, doc.name, `the keyboard table carries its header as a data row ("${row.keys} | ${row.description}")`);
+
+    for (const [where, text] of everyText(doc)) {
+      // 3. markdown the renderer does not render
+      const leftover = text.replace(RENDERED_MARKDOWN, "");
+      if (/\*\*|`/.test(leftover))
+        add(3, doc.name, `${where} carries markdown that will render literally: ${JSON.stringify(text.slice(0, 60))}`);
+
+      // 4. internal vocabulary in something a consumer reads
+      if (INTERNAL_VOCABULARY.test(text))
+        add(4, doc.name, `${where} cites internal vocabulary: ${JSON.stringify(text.slice(0, 60))}`);
+
+      // 7. a claim the release record contradicts
+      if (rtlUnsupported && /\bfull RTL\b|\bRTL support\b|RTL-aware/i.test(text))
+        add(7, doc.name, `${where} claims RTL support, which RELEASE-READINESS.md records as unsupported`);
+    }
+
+    // 5. "-" where the source defines a default
+    const dir = join(SRC, doc.name);
+    if (existsSync(dir)) {
+      const files = walkSource(dir);
+      const groups = [[doc.name, doc.props], ...doc.subComponents.map((sc) => [sc.name, sc.props])];
+      for (const [tag, props] of groups) {
+        const defaults = sourceDefaults(tag, files);
+        for (const p of props)
+          if (p.default === null && !p.required && defaults.has(p.name))
+            add(5, doc.name, `${tag}.${p.name} renders "-" but the source assigns it a default`);
+      }
+    }
+
+    // 6. one vocabulary for types, and no ARIA rows.
+    //
+    // Not "one rendering per prop name": two components may genuinely take
+    // different types for a `size`, and flagging that would be noise. What made
+    // one prop render two ways was a vocabulary split — root rows came from the
+    // JSON schema and said `object`, sub-component rows came from the types and
+    // said `ReactNode` — plus a `| undefined` the required column already
+    // carries. Both are objective and neither fires on a real difference.
+    const groups = [["", doc.props], ...doc.subComponents.map((sc) => [sc.name, sc.props])];
+    for (const [sub, props] of groups)
+      for (const p of props) {
+        const at = `${sub ? sub + "." : ""}${p.name}`;
+        if (/^aria-/.test(p.name)) add(6, doc.name, `${at} is documented as a prop row`);
+        if (p.type === "object")
+          add(6, doc.name, `${at} renders as "object" — a JSON-Schema word that names nothing a reader can import`);
+        // Only a top-level `| undefined`, which is what the renderer strips.
+        // A nested one inside a function or component type is part of that
+        // type's own shape and is not this rule's business.
+        if (dropUndefined(p.type) !== p.type)
+          add(6, doc.name, `${at} renders "${p.type}"; the required column already says it is optional`);
+      }
+
+    // 8. a section the record says this component carries has gone
+    if (record?.[doc.name]) {
+      const now = new Set(sectionsOf(doc));
+      for (const section of record[doc.name])
+        if (!now.has(section)) add(8, doc.name, `has lost its "${section}" section`);
+    }
+  }
+
+  return found;
+}
+
+/** Hand-written `<Section title="...">` titles, per demo page. */
+function readPageTitles() {
+  const titles = new Map();
+  const dir = join(root, "src/pages/demo");
+  if (!existsSync(dir)) return titles;
+  for (const file of readdirSync(dir)) {
+    const m = /^(.+)Demo\.tsx$/.exec(file);
+    if (!m) continue;
+    const text = readFileSync(join(dir, file), "utf8");
+    titles.set(m[1], [...text.matchAll(/title="([^"]+)"/g)].map((x) => x[1]));
+  }
+  return titles;
+}
+
+
+/**
+ * Each assertion, shown failing on a planted violation. A rule that stops
+ * matching reports nothing, which reads exactly like a clean run — and this
+ * whole audit exists because a check that only diffed its own output read
+ * exactly like a clean run for seven real defects.
+ */
+function auditSelfCheck() {
+  const base = {
+    name: "Planted", subpath: "@chumlab/ui/planted", summary: "", anatomy: "",
+    props: [], subComponents: [], classes: [], shapes: [], dataAttributes: [],
+    cssVariables: [], accessibility: [], keyboard: null, snippets: null,
+  };
+  const run = (doc, opts) =>
+    new Set(auditDocs([{ ...base, ...doc }], { pageTitles: new Map(), rtlUnsupported: true, record: null, ...opts }).map((f) => f.n));
+
+  const bit = new Set();
+  for (const n of run({}, { pageTitles: new Map([["Planted", ["Accessibility"]]]) })) bit.add(n);
+  for (const n of run({ keyboard: { note: "", rows: [{ keys: "Key", description: "Behaviour" }] } })) bit.add(n);
+  for (const n of run({ accessibility: ["a *lone* asterisk and an unclosed ` backtick"] })) bit.add(n);
+  for (const n of run({ accessibility: ["ADR 002 R9 ancestor clause"] })) bit.add(n);
+  for (const n of run({ props: [{ name: "aria-label", type: "string", required: false, default: null, description: "x" }] })) bit.add(n);
+  for (const n of run({ accessibility: ["Full RTL support with reversed keyboard navigation"] })) bit.add(n);
+  for (const n of run({}, { record: { Planted: ["Anatomy", "Keyboard Interactions"] } })) bit.add(n);
+  // 5 needs a real component: Accordion's own source assigns `loop`.
+  const five = auditDocs(
+    [{ ...base, name: "Accordion", props: [{ name: "loop", type: "boolean", required: false, default: null, description: "x" }] }],
+    { pageTitles: new Map(), rtlUnsupported: true, record: null },
+  ).map((f) => f.n);
+  for (const n of five) bit.add(n);
+
+  const missed = [1, 2, 3, 4, 5, 6, 7, 8].filter((n) => !bit.has(n));
+  if (missed.length) {
+    console.error(`✗ self-check: assertion(s) ${missed.join(", ")} did not fire on a planted violation`);
+    process.exit(1);
+  }
+  console.log("✓ self-check: all eight assertions bite");
+}
+
+if (RECORD_SECTIONS) {
+  const record = Object.fromEntries(docs.map((d) => [d.name, sectionsOf(d)]));
+  writeFileSync(SECTION_RECORD, `${JSON.stringify(record, null, 2)}\n`, "utf8");
+  console.log(`✓ recorded the section set for ${docs.length} component(s)`);
+}
+
+if (SELF_CHECK) auditSelfCheck();
+
+const audit = auditDocs(docs);
+if (audit.length) {
+  const byRule = new Map();
+  for (const f of audit) byRule.set(f.n, (byRule.get(f.n) ?? 0) + 1);
+  console.error(`✗ ${audit.length} documentation defect(s) the generated file reproduces faithfully:`);
+  for (const [n, count] of [...byRule.entries()].sort((a, b) => a[0] - b[0]))
+    console.error(`    assertion ${n}: ${count}`);
+  for (const f of audit.slice(0, 20)) console.error(`    [${f.n}] ${f.where}: ${f.msg}`);
+  if (audit.length > 20) console.error(`    … and ${audit.length - 20} more`);
+  process.exit(1);
 }
 
 if (problems.length) {

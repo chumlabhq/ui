@@ -1403,59 +1403,6 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Listbox pattern for time options with role="listbox" and role="option" on each time slot',
-              "aria-selected marks the currently selected time option for screen readers",
-              "aria-label on the trigger button describes the current time value",
-              'Clock variant face is accessible with role="slider" for hour/minute selection',
-              "aria-invalid set on the input when error=true",
-              "aria-describedby links error and success messages to the input",
-              "Label is associated with the input via htmlFor / id",
-              "Hidden input carries the committed value for native form submission when name is set",
-              "Escape closes the popover; Tab commits typed input and closes",
-              "reduceMotion disables chevron rotation and reduces motion on the clock face",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Move focus to/from the time picker"],
-              ["Arrow Up", "Move highlight to previous time option"],
-              ["Arrow Down", "Open list or move highlight to next time option"],
-              ["Enter", "Select the highlighted time option"],
-              ["Escape", "Close popover without committing"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="TimePicker" />
 

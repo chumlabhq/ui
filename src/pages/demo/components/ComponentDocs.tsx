@@ -1,6 +1,7 @@
 import { useState, type FC } from "react";
 import { Section, PropsTable, PropRow } from "./Section.js";
 import { preClass, scrollableCode } from "./codeBlock.js";
+import { Inline } from "./inlineMarkdown.js";
 import { NextIcon, ReactIcon } from "./Icons.js";
 import {
   COMPONENT_DOCS,
@@ -62,13 +63,18 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
 
       <Section
         title="API Reference"
-        description={`Generated from ${doc.name}.schema.json. Required props are marked with an asterisk.`}
+        description={`Generated from ${doc.name}.schema.json. Required props are marked with an asterisk. Standard HTML and ARIA attributes are forwarded to the underlying element and are not listed.`}
       >
-        <div className={cardClass}>
-          <PropsTable>{propRows(doc.props)}</PropsTable>
-        </div>
+        {/* Loader has no root props — all four loaders are sub-components — and
+            an empty table with headers and no rows reads as a documentation
+            gap rather than as a component that takes none. */}
+        {doc.props.length > 0 && (
+          <div className={cardClass}>
+            <PropsTable>{propRows(doc.props)}</PropsTable>
+          </div>
+        )}
         {doc.subComponents.map((sub) => (
-          <div key={sub.name} className="mt-6">
+          <div key={sub.name} className="mt-6 first:mt-0">
             <h3 className="font-mono text-[13px] text-fg mb-3">{sub.name}</h3>
             <div className={cardClass}>
               <PropsTable>{propRows(sub.props)}</PropsTable>
@@ -173,7 +179,9 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           <div className={cardClass}>
             <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-fg-secondary">
               {doc.accessibility.map((line) => (
-                <li key={line}>{line}</li>
+                <li key={line}>
+                  <Inline text={line} />
+                </li>
               ))}
             </ul>
           </div>
@@ -184,7 +192,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
         <Section title="Keyboard Interactions">
           {doc.keyboard.note && (
             <p className="text-sm leading-relaxed text-fg-secondary max-w-[680px]">
-              {doc.keyboard.note}
+              <Inline text={doc.keyboard.note} />
             </p>
           )}
           {doc.keyboard.rows.length > 0 && (
@@ -207,7 +215,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
                         {row.keys.replace(/`/g, "")}
                       </td>
                       <td className="px-4 py-2 text-[13px] align-top text-fg-secondary">
-                        {row.description.replace(/`/g, "")}
+                        <Inline text={row.description} />
                       </td>
                     </tr>
                   ))}

@@ -91,7 +91,7 @@ These props have dependencies — using them wrong causes silent bugs:
 |------|------|---------|-------------|
 | `type` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
 | `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
-| `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction for RTL-aware layouts. |
+| `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror. |
 | `disabled` | boolean | `false` | Disables all accordion items. |
 | `loop` | boolean | — | Whether keyboard navigation wraps from last to first item. |
 | `classes` | object | — | CSS class overrides for accordion sub-elements. |
@@ -148,10 +148,10 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `value` | `string` | — |
-| `disabled` | `boolean \| undefined` | — |
-| `children` | `ReactNode` | — |
-| `asChild` | `boolean \| undefined` | — |
+| `value` | `string` | Identifies this item. Matches the values passed to the accordion's `value` or `defaultValue`. |
+| `disabled` | `boolean \| undefined` | Disables this item alone. It stays visible but cannot be toggled and leaves the tab order. |
+| `children` | `ReactNode` | Content rendered inside this element. |
+| `asChild` | `boolean \| undefined` | Render the passed child instead of the default element, keeping behaviour, ARIA and props. |
 | `onExpandedChange` | `((isExpanded: boolean) => void) \| undefined` | Fires when the item's expanded state changes. |
 | `aria-describedby` | `string \| undefined` | Identifies the element (or elements) that describes the object. |
 
@@ -159,48 +159,48 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `children` | `ReactNode` | — |
-| `expandedIcon` | `ReactNode` | — |
-| `collapsedIcon` | `ReactNode` | — |
-| `iconPosition` | `"left" \| "right" \| "none" \| undefined` | — |
-| `asChild` | `boolean \| undefined` | — |
-| `subtitle` | `ReactNode` | — |
-| `iconAnimation` | `"none" \| "rotate" \| "switch" \| undefined` | — |
-| `leftSlot` | `ReactNode` | — |
-| `rightSlot` | `ReactNode` | — |
+| `children` | `ReactNode` | Content rendered inside this element. |
+| `expandedIcon` | `ReactNode` | Icon shown while the item is expanded. Replaces the default chevron. |
+| `collapsedIcon` | `ReactNode` | Icon shown while the item is collapsed. Replaces the default chevron. |
+| `iconPosition` | `"left" \| "right" \| "none" \| undefined` | Which side of the trigger the icon sits on, or `"none"` to drop it. |
+| `asChild` | `boolean \| undefined` | Render the passed child instead of the default element, keeping behaviour, ARIA and props. |
+| `subtitle` | `ReactNode` | Secondary line rendered under the trigger's label. |
+| `iconAnimation` | `"none" \| "rotate" \| "switch" \| undefined` | How the icon changes on toggle: rotate the chevron, switch between the two icons, or neither. |
+| `leftSlot` | `ReactNode` | Content placed before the label, inside the trigger. |
+| `rightSlot` | `ReactNode` | Content placed after the label and before the icon. |
 | `aria-describedby` | `string \| undefined` | Identifies the element (or elements) that describes the object. |
 
 ### AccordionContent
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `children` | `ReactNode` | — |
-| `forceMount` | `boolean \| undefined` | — |
-| `animationDuration` | `number \| undefined` | — |
-| `animationEasing` | `string \| undefined` | — |
-| `asChild` | `boolean \| undefined` | — |
-| `lazyLoad` | `boolean \| undefined` | — |
-| `unmountOnClose` | `boolean \| undefined` | — |
-| `onOpenStart` | `(() => void) \| undefined` | — |
-| `onOpenEnd` | `(() => void) \| undefined` | — |
-| `onCloseStart` | `(() => void) \| undefined` | — |
-| `onCloseEnd` | `(() => void) \| undefined` | — |
+| `children` | `ReactNode` | Content rendered inside this element. |
+| `forceMount` | `boolean \| undefined` | Keeps the panel mounted while collapsed, so an exit animation or a measurement has a node to read. |
+| `animationDuration` | `number \| undefined` | Expand and collapse duration in milliseconds. |
+| `animationEasing` | `string \| undefined` | CSS easing function for the expand and collapse transition. |
+| `asChild` | `boolean \| undefined` | Render the passed child instead of the default element, keeping behaviour, ARIA and props. |
+| `lazyLoad` | `boolean \| undefined` | Delays rendering the panel's children until it is first expanded. |
+| `unmountOnClose` | `boolean \| undefined` | Unmounts the panel's children again each time it collapses. |
+| `onOpenStart` | `(() => void) \| undefined` | Fires when the expand transition begins. |
+| `onOpenEnd` | `(() => void) \| undefined` | Fires when the expand transition finishes. |
+| `onCloseStart` | `(() => void) \| undefined` | Fires when the collapse transition begins. |
+| `onCloseEnd` | `(() => void) \| undefined` | Fires when the collapse transition finishes. |
 
 ### AccordionShimmer
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `reduceMotion` | `boolean \| "auto" \| undefined` | — |
-| `classes` | `AccordionShimmerClasses \| undefined` | — |
-| `unstyled` | `boolean \| undefined` | — |
-| `count` | `number \| undefined` | — |
-| `size` | `AccordionSize \| undefined` | — |
-| `variant` | `AccordionVariant \| undefined` | — |
-| `animate` | `boolean \| undefined` | — |
-| `className` | `string \| undefined` | — |
-| `style` | `CSSProperties \| undefined` | — |
-| `showContent` | `boolean \| undefined` | — |
-| `asChild` | `boolean \| undefined` | — |
+| `reduceMotion` | `boolean \| "auto" \| undefined` | Whether to stop the shimmer animation. `"auto"` follows the OS reduced-motion setting. |
+| `classes` | `AccordionShimmerClasses \| undefined` | Class overrides for this component's slots. |
+| `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |
+| `count` | `number \| undefined` | How many placeholder items to draw. |
+| `size` | `AccordionSize \| undefined` | Matches the accordion size the placeholder stands in for. |
+| `variant` | `AccordionVariant \| undefined` | Matches the accordion variant the placeholder stands in for. |
+| `animate` | `boolean \| undefined` | Whether the placeholder pulses. Set false for a still skeleton. |
+| `className` | `string \| undefined` | Additional classes for the root element. |
+| `style` | `CSSProperties \| undefined` | Inline styles for the root element. |
+| `showContent` | `boolean \| undefined` | Also draws a placeholder for the expanded panel, not just the triggers. |
+| `asChild` | `boolean \| undefined` | Render the passed child instead of the default element, keeping behaviour, ARIA and props. |
 
 ---
 

@@ -954,67 +954,6 @@ const TextAreaDemo = () => {
       <ComponentDocs name="TextArea" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              "Label auto-associated via htmlFor",
-              'Required textareas set aria-required="true"',
-              "Error state sets aria-invalid",
-              "Error connected via aria-describedby",
-              'Error messages use role="alert"',
-              'Success messages use role="status"',
-              'Loading state sets aria-busy="true"',
-              'Clear button has aria-label="Clear textarea"',
-              'Character count uses aria-live="polite"',
-              "Clickable icons are <button> with aria-label",
-              "Provide `label` or `aria-label` / `aria-labelledby` for an accessible name",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              [
-                "Tab",
-                "Move focus to/from textarea, icon buttons, and clear button",
-              ],
-              [
-                "Enter",
-                "Activate focused icon or clear button (newline in textarea)",
-              ],
-              ["Space", "Activate focused icon or clear button"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

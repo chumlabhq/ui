@@ -107,10 +107,10 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `label` | `ReactNode` | — |
-| `required` | `boolean \| undefined` | — |
-| `htmlFor` | `string \| undefined` | — |
-| `className` | `string \| undefined` | — |
+| `label` | `ReactNode` | The label's content. |
+| `required` | `boolean \| undefined` | Marks the field required and draws the required indicator. |
+| `htmlFor` | `string \| undefined` | The id of the control this labels. Set automatically when the label is rendered by the field. |
+| `className` | `string \| undefined` | Additional classes for the root element. |
 
 ---
 

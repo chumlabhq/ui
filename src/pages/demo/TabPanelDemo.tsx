@@ -768,7 +768,7 @@ const TabPanelDemo = () => {
 
       {/* ─── 15. Keyboard Navigation ─────────────────────────────────────── */}
       <Section
-        title="Keyboard Navigation"
+        title="Try it: Keyboard Navigation"
         description="Full WAI-ARIA keyboard support with RTL-aware arrow key direction. Click a tab and use arrow keys to navigate."
         isDarkMode={dark}
       >
@@ -1240,72 +1240,6 @@ const TabPanelDemo = () => {
       {/* ─── Tab Object Props ────────────────────────────────────────────── */}
 
       {/* ─── Accessibility ───────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Implements WAI-ARIA role="tablist", role="tab", and role="tabpanel" semantics',
-              "All panels rendered in the DOM (hidden attribute) so aria-controls always references valid DOM elements",
-              "RTL-aware keyboard navigation: arrow key direction reverses based on computed CSS direction",
-              "Roving tabindex: tabIndex=0 on tabbable tab, tabIndex=-1 on others",
-              "aria-selected reflects active state on each tab",
-              "aria-controls and aria-labelledby link tabs to their panels",
-              "aria-disabled on disabled tabs (preserving roving tabindex; not HTML disabled)",
-              "When labels are hidden (alwaysShowLabels=false), inactive tabs receive aria-label for screen reader accessibility",
-              'Icons wrapped with aria-hidden="true" as they are decorative',
-              "Count badges have aria-label for screen reader announcement",
-              "No focus stealing on mount -- focus managed only during keyboard interaction",
-              "Automatic fallback to first tab when the active tab is removed from the tabs array",
-              "Supports ref forwarding for programmatic focus management",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Move focus into/out of the tablist"],
-              [
-                "\u2192 / \u2193",
-                "Move to next tab (RTL-aware, orientation-aware)",
-              ],
-              [
-                "\u2190 / \u2191",
-                "Move to previous tab (RTL-aware, orientation-aware)",
-              ],
-              ["Home", "Move to first enabled tab"],
-              ["End", "Move to last enabled tab"],
-              ["Enter / Space", "Activate focused tab (manual mode only)"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

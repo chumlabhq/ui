@@ -7,8 +7,8 @@ import { useEffect, useRef, type ReactNode, type RefObject } from "react";
  * with it on this subtree exists only while a filter popup is open — after a
  * click, portalled to `document.body`, over the grid rather than in it. That
  * makes it the one part of Table that can arrive late without costing a
- * hydration mismatch or moving a single cell: ADR 003's two constraints are
- * both about the first paint, and this is not in it.
+ * hydration mismatch or moving a single cell, both of which are first-paint
+ * concerns and this is not in the first paint.
  *
  * The trigger button, the filter icon and the filter state stay in `Table`.
  * They render with the header on the first paint whenever `filterableColumns`

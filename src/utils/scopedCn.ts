@@ -7,8 +7,7 @@ import { cn as merge } from "./cn.js";
  * no rule behind it. The JSX runtime supplies it for elements the library
  * renders itself (src/jsx/mark.ts) — but `asChild` composes through
  * `cloneElement`, which never touches that runtime, so the marker has to travel
- * with the class string instead. Kept in sync with src/jsx/mark.ts by
- * src/__tests__/contracts/marker.contract.test.tsx.
+ * with the class string instead.
  */
 export const MARKER = "cl-s";
 
@@ -19,8 +18,7 @@ export const MARKER = "cl-s";
  * It is deliberately not exported from the package. The public `cn`
  * (src/utils/cn.ts) is the same merge without the marker, because a consumer
  * calling it on their own markup must not have the library's confined utilities
- * start matching their elements. src/__tests__/contracts/constants.contract.test.tsx
- * fails the build if anything under src/components imports the public one.
+ * start matching their elements.
  */
 export function cn(...inputs: ClassValue[]) {
   // Stripped AFTER the merge, not before: twMerge can neither drop nor reorder

@@ -20,7 +20,7 @@
           },
           "icon": {
             "type": "object",
-            "description": "React.ReactNode \u2014 Icon displayed in the tab."
+            "description": "React.ReactNode — Icon displayed in the tab."
           },
           "count": {
             "type": "number",
@@ -32,7 +32,7 @@
           },
           "tooltip": {
             "type": "object",
-            "description": "React.ReactNode \u2014 Tooltip content for the tab."
+            "description": "React.ReactNode — Tooltip content for the tab."
           }
         },
         "required": [
@@ -55,11 +55,13 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(tabId: string) => void \u2014 Callback fired when the active tab changes."
+      "description": "(tabId: string) => void — Callback fired when the active tab changes.",
+      "x-tsType": "((tabId: string) => void) | undefined"
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode | ((tab: Tab) => ReactNode) \u2014 Tab panel content, either static or a render function."
+      "description": "React.ReactNode | ((tab: Tab) => ReactNode) — Tab panel content, either static or a render function.",
+      "x-tsType": "ReactNode | ((tab: Tab) => ReactNode)"
     },
     "orientation": {
       "type": "string",
@@ -148,7 +150,8 @@
     },
     "renderTab": {
       "type": "object",
-      "description": "(props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode \u2014 Custom tab render function."
+      "description": "(props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function.",
+      "x-tsType": "((props: TabRenderProps, defaultElement: ReactElement<unknown, string | JSXElementConstructor<any>>) => ReactNode) | undefined"
     },
     "aria-label": {
       "type": "string",
@@ -186,7 +189,8 @@
         "content": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "TabPanelClasses | undefined"
     },
     "className": {
       "type": "string",
@@ -194,7 +198,8 @@
     },
     "style": {
       "type": "object",
-      "description": "Inline styles applied to the root element."
+      "description": "Inline styles applied to the root element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "forceMount": {
       "type": "boolean",

@@ -971,61 +971,6 @@ const PaginationDemo = () => {
       <ComponentDocs name="Pagination" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Rendered as <nav aria-label="Pagination"> landmark (overridable via paginationAriaLabel)',
-              'Active page marked with aria-current="page"',
-              "Prev/next buttons properly disabled at boundaries",
-              'Ellipsis elements marked aria-hidden="true"',
-              'Dropdown uses role="listbox" with aria-controls, aria-expanded, and aria-activedescendant',
-              "Instance-scoped IDs via useId() prevent collisions with multiple instances",
-              "All text labels customizable for i18n (showLabel, rowsPerPageLabel, dropdownAriaLabel, aria-label)",
-              "Supports ref forwarding for programmatic focus management",
-              "Extends native HTMLAttributes - accepts id, className, style, data-*, aria-*",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Move focus between pagination controls"],
-              ["Enter / Space", "Select page or open/select dropdown option"],
-              ["Arrow Up / Down", "Navigate dropdown options"],
-              ["Home / End", "Jump to first/last dropdown option"],
-              ["Escape", "Close dropdown and return focus to trigger"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

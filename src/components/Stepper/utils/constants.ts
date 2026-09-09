@@ -40,8 +40,8 @@ export const UNSTYLED_STEPPER_CLASSES: Required<StepperClasses> =
 
 /**
  * Per-variant indicator sizing. Lives here rather than in Stepper.tsx so it
- * takes the ADR 001 structural/decorative split with every other default —
- * `w-7 h-7` is layout and must survive `unstyled`, `text-xs font-medium` is not.
+ * takes the same structural/decorative split as every other default — `w-7 h-7`
+ * is layout and survives `unstyled`, `text-xs font-medium` is not and does not.
  */
 export const INDICATOR_SIZE: Record<string, string> = {
   dot: "w-2.5 h-2.5 sm:w-3 sm:h-3",

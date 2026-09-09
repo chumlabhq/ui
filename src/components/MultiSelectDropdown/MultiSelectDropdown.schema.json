@@ -35,7 +35,8 @@
           "value",
           "label"
         ]
-      }
+      },
+      "default": []
     },
     "value": {
       "type": "array",
@@ -53,7 +54,8 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change."
+      "description": "(values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change.",
+      "x-tsType": "((values: string[], options: DropdownOption[]) => void) | undefined"
     },
     "id": {
       "type": "string",
@@ -66,7 +68,8 @@
     "placeholder": {
       "type": "object",
       "description": "React.ReactNode - Placeholder when nothing is selected.",
-      "default": "Select options..."
+      "default": "Select options...",
+      "x-tsType": "ReactNode"
     },
     "disabled": {
       "type": "boolean",
@@ -80,15 +83,18 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode - Error message displayed below the dropdown."
+      "description": "React.ReactNode - Error message displayed below the dropdown.",
+      "x-tsType": "ReactNode"
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode - Label rendered above the dropdown."
+      "description": "React.ReactNode - Label rendered above the dropdown.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode - Description text rendered below the label."
+      "description": "React.ReactNode - Description text rendered below the label.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -97,7 +103,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode - Success message displayed below the dropdown."
+      "description": "React.ReactNode - Success message displayed below the dropdown.",
+      "x-tsType": "ReactNode"
     },
     "required": {
       "type": "boolean",
@@ -107,7 +114,8 @@
     "noResultsContent": {
       "type": "object",
       "description": "React.ReactNode - Content shown when no options are available.",
-      "default": "No options found"
+      "default": "No options found",
+      "x-tsType": "ReactNode"
     },
     "clearable": {
       "type": "boolean",
@@ -130,7 +138,8 @@
     },
     "onLoadOptions": {
       "type": "object",
-      "description": "() => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires."
+      "description": "() => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires.",
+      "x-tsType": "() => Promise<DropdownOption[]>"
     },
     "loadOnOpen": {
       "type": "boolean",
@@ -139,7 +148,8 @@
     },
     "onLoadError": {
       "type": "object",
-      "description": "(error: unknown) => void - Called when async option loading fails."
+      "description": "(error: unknown) => void - Called when async option loading fails.",
+      "x-tsType": "((error: unknown) => void) | undefined"
     },
     "shimmerCount": {
       "type": "number",
@@ -158,7 +168,8 @@
     },
     "checkboxIcon": {
       "type": "object",
-      "description": "React.ReactNode - Custom checkbox icon for options."
+      "description": "React.ReactNode - Custom checkbox icon for options.",
+      "x-tsType": "ReactNode"
     },
     "unstyled": {
       "type": "boolean",
@@ -231,7 +242,8 @@
         "count": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "MultiSelectDropdownClasses | undefined"
     },
     "className": {
       "type": "string",
@@ -239,7 +251,8 @@
     },
     "style": {
       "type": "object",
-      "description": "Inline styles for the root element."
+      "description": "Inline styles for the root element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "open": {
       "type": "boolean",
@@ -252,7 +265,8 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void - Fires when the open state changes."
+      "description": "(open: boolean) => void - Fires when the open state changes.",
+      "x-tsType": "((open: boolean) => void) | undefined"
     },
     "keepMounted": {
       "type": "boolean",
@@ -261,7 +275,8 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null - Portal target for the dropdown popup."
+      "description": "HTMLElement | null - Portal target for the dropdown popup.",
+      "x-tsType": "HTMLElement | null | undefined"
     },
     "dropdownPosition": {
       "type": "string",
@@ -298,32 +313,39 @@
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void - Fires when the dropdown loses focus."
+      "description": "() => void - Fires when the dropdown loses focus.",
+      "x-tsType": "(() => void) | undefined"
     },
     "onFocus": {
       "type": "object",
-      "description": "() => void - Fires when the dropdown receives focus."
+      "description": "() => void - Fires when the dropdown receives focus.",
+      "x-tsType": "(() => void) | undefined"
     },
     "onKeyDown": {
       "type": "object",
-      "description": "(event: React.KeyboardEvent) => void - Fires on keydown events."
+      "description": "(event: React.KeyboardEvent) => void - Fires on keydown events.",
+      "x-tsType": "((event: KeyboardEvent<Element>) => void) | undefined"
     },
     "ChevronIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component."
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component.",
+      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
     },
     "loadingText": {
       "type": "object",
       "description": "React.ReactNode - Text shown during async loading.",
-      "default": "Loading..."
+      "default": "Loading...",
+      "x-tsType": "ReactNode"
     },
     "ClearIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string }> - Custom clear icon component."
+      "description": "React.ComponentType<{ className?: string }> - Custom clear icon component.",
+      "x-tsType": "ComponentType<{ className?: string | undefined; }> | undefined"
     },
     "renderTrigger": {
       "type": "object",
-      "description": "(props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element."
+      "description": "(props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element.",
+      "x-tsType": "((props: MultiSelectDropdownTriggerRenderProps) => ReactNode) | undefined"
     }
   },
   "required": []

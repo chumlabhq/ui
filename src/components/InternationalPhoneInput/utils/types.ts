@@ -54,9 +54,8 @@ export interface InternationalPhoneInputClasses {
   input?: string;
   message?: string;
   /**
-   * ADR 002 R6: the country picker is a SearchableDropdown, so its key takes
-   * that component's own classes object rather than a string. `unstyled`
-   * reaches it by the same path.
+   * The country picker is a `SearchableDropdown`, so this takes that
+   * component's own classes object rather than a class string.
    */
   countrySelect?: SearchableDropdownClasses;
   /**

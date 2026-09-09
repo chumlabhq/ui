@@ -573,58 +573,6 @@ const OtpInputDemo = () => {
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="OtpInput" />
 
-      <Section title="Accessibility" isDarkMode={dark}>
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Each input has aria-label: "Digit N of M"',
-              'Wrapper uses role="group" with aria-label',
-              "aria-invalid and aria-required on each input",
-              'Error message uses role="alert"',
-              "Label auto-associated via htmlFor",
-              'autoComplete="one-time-code" on first input',
-              'inputMode="numeric" for mobile keyboards',
-              "Provide `label` or `aria-label` / `aria-labelledby` for the group",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["0-9 / A-Z", "Type character, auto-advance"],
-              ["Backspace", "Clear current, move to previous"],
-              ["Delete", "Clear current field"],
-              ["Arrow Left / Right", "Move between fields"],
-              ["Home / End", "First / last field"],
-              ["Ctrl+V", "Paste full OTP"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       <DocControlledPattern
         isDarkMode={dark}
         summary="Use `value` with `onValueChange` (and `onComplete`) for controlled OTP entry, or `defaultValue` for uncontrolled. Length is fixed by the `length` prop."

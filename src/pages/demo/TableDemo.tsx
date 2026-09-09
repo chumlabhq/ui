@@ -28,12 +28,6 @@ import {
   SetupNote,
 } from "./components/index.js";
 
-const getClasses = (_dark: boolean) => ({
- card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
- kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border-cl-border text-cl-text-secondary`,
-  label: `text-xs font-medium text-cl-text-tertiary`,
-});
-
 interface User {
   id: string;
   name: string;
@@ -1169,7 +1163,6 @@ function ServerApiDemo({
 
 const TableDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
   const s = getTableClasses(dark);
   const pClasses = getPaginationClasses(dark);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
@@ -7661,59 +7654,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       <ComponentDocs name="Table" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Table uses role="grid" with role="row", role="gridcell", and role="columnheader" for proper structure',
-              "aria-label on the table element provides an accessible name for the grid landmark",
-              "aria-sort on sortable column headers announces current sort direction",
-              "aria-selected on focused cells indicates the active cell to screen readers",
-              "aria-rowindex on each row for virtual scrolling context",
-              "Full keyboard grid navigation between cells, rows, and headers",
-              "Pin button includes aria-label describing the pin action and target column",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Arrow keys", "Navigate between cells in the grid"],
-              ["Escape", "Clear cell focus and exit grid navigation"],
-              ["Tab", "Exit the grid and move to next focusable element"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>
-                  {key}
-                </kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

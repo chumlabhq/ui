@@ -992,58 +992,6 @@ const ToastDemoContent = ({
       <ComponentDocs name="Toast" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Toast container uses role="alert" for screen reader announcements',
-              'Toast region uses aria-live="polite" for non-intrusive updates',
-              'Region labeled with aria-label="Notifications" (customizable)',
-              'Close button has aria-label="Close notification" (customizable via closeAriaLabel)',
-              "Focus is not forcibly moved to toasts (non-modal behavior)",
-              "Pause on hover allows users time to read content",
-              "Respects prefers-reduced-motion media query",
-              "Escape key dismissal supported via dismissOnEscape",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Navigate to close button within toast"],
-              ["Enter / Space", "Activate close button when focused"],
-              ["Escape", "Dismiss toast(s) when dismissOnEscape is enabled"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}
@@ -1071,36 +1019,6 @@ const ToastDemoContent = ({
         ]}
       />
 
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
-        <div className={c.card}>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              "role=\"alert\" or role=\"status\" based on toast type",
-              "aria-live regions for dynamic announcements",
-              "Close button includes aria-label for screen readers",
-              "Auto-dismiss with pauseOnHover to avoid dismissing while reading",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
-            {[
-              ["Escape", "Dismiss all toasts (via provider)"],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
     </div>
   );
 };

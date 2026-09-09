@@ -14,7 +14,8 @@
         "phoneNumber": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "PhoneNumberValue | undefined"
     },
     "defaultValue": {
       "type": "object",
@@ -26,19 +27,23 @@
         "phoneNumber": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "PhoneNumberValue | undefined"
     },
     "onValueChange": {
       "type": "object",
-      "description": "(data: PhoneNumberData) => void - Fires when the phone number changes, providing full validation data."
+      "description": "(data: PhoneNumberData) => void - Fires when the phone number changes, providing full validation data.",
+      "x-tsType": "((data: PhoneNumberData) => void) | undefined"
     },
     "onCountryChange": {
       "type": "object",
-      "description": "(country: CountryOption) => void - Fires when the selected country changes."
+      "description": "(country: CountryOption) => void - Fires when the selected country changes.",
+      "x-tsType": "((country: CountryOption) => void) | undefined"
     },
     "defaultCountry": {
       "type": "string",
-      "description": "ISO country code for the default selected country."
+      "description": "ISO country code for the default selected country.",
+      "default": "us"
     },
     "countries": {
       "type": "array",
@@ -69,14 +74,16 @@
           "dialCode",
           "name"
         ]
-      }
+      },
+      "x-defaultSource": "DEFAULT_COUNTRIES"
     },
     "preferredCountries": {
       "type": "array",
       "description": "ISO country codes to show at the top of the country list.",
       "items": {
         "type": "string"
-      }
+      },
+      "x-defaultSource": "DEFAULT_PREFERRED_COUNTRIES"
     },
     "id": {
       "type": "string",
@@ -88,11 +95,13 @@
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode - Label rendered above the input."
+      "description": "React.ReactNode - Label rendered above the input.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode - Helper text displayed below the label."
+      "description": "React.ReactNode - Helper text displayed below the label.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -106,7 +115,8 @@
     },
     "onClear": {
       "type": "object",
-      "description": "() => void - Called when the clear button is clicked."
+      "description": "() => void - Called when the clear button is clicked.",
+      "x-tsType": "(() => void) | undefined"
     },
     "required": {
       "type": "boolean",
@@ -130,7 +140,8 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode - Error message displayed below the input."
+      "description": "React.ReactNode - Error message displayed below the input.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -139,7 +150,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode - Success message displayed below the input."
+      "description": "React.ReactNode - Success message displayed below the input.",
+      "x-tsType": "ReactNode"
     },
     "placeholder": {
       "type": "string",
@@ -158,11 +170,13 @@
     },
     "validationMessage": {
       "type": "object",
-      "description": "React.ReactNode - Custom validation message shown on blur validation."
+      "description": "React.ReactNode - Custom validation message shown on blur validation.",
+      "x-tsType": "ReactNode"
     },
     "validate": {
       "type": "object",
-      "description": "(data: PhoneNumberData) => boolean | { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators."
+      "description": "(data: PhoneNumberData) => boolean | { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators.",
+      "x-tsType": "((data: PhoneNumberData) => boolean | { valid: boolean; message?: string | undefined; }) | undefined"
     },
     "autoComplete": {
       "type": "string",
@@ -185,7 +199,8 @@
     },
     "onPasteDetected": {
       "type": "object",
-      "description": "(data: PasteDetectedData) => void - Fires when a phone number paste is detected."
+      "description": "(data: PasteDetectedData) => void - Fires when a phone number paste is detected.",
+      "x-tsType": "((data: PasteDetectedData) => void) | undefined"
     },
     "countryDropdownPlaceholder": {
       "type": "string",
@@ -204,7 +219,8 @@
     },
     "selectedIcon": {
       "type": "object",
-      "description": "React.ReactNode - Custom icon for the selected country indicator."
+      "description": "React.ReactNode - Custom icon for the selected country indicator.",
+      "x-tsType": "ReactNode"
     },
     "flagSize": {
       "type": "number",
@@ -213,19 +229,23 @@
     },
     "renderCountryOption": {
       "type": "object",
-      "description": "(props: CountryOptionRenderProps) => ReactNode - Custom render function for country options."
+      "description": "(props: CountryOptionRenderProps) => ReactNode - Custom render function for country options.",
+      "x-tsType": "((props: CountryOptionRenderProps) => ReactNode) | undefined"
     },
     "renderSelectedCountry": {
       "type": "object",
-      "description": "(country: CountryOption) => ReactNode - Custom render function for the selected country display."
+      "description": "(country: CountryOption) => ReactNode - Custom render function for the selected country display.",
+      "x-tsType": "((country: CountryOption) => ReactNode) | undefined"
     },
     "formatPatterns": {
       "type": "object",
-      "description": "Record<string, PhoneFormatPattern> - Custom phone number formatting patterns by country."
+      "description": "Record<string, PhoneFormatPattern> - Custom phone number formatting patterns by country.",
+      "x-tsType": "Record<string, PhoneFormatPattern> | undefined"
     },
     "lengthRules": {
       "type": "object",
-      "description": "Record<string, PhoneLengthRule> - Custom phone number length validation rules by country."
+      "description": "Record<string, PhoneLengthRule> - Custom phone number length validation rules by country.",
+      "x-tsType": "Record<string, PhoneLengthRule> | undefined"
     },
     "className": {
       "type": "string",
@@ -233,7 +253,8 @@
     },
     "style": {
       "type": "object",
-      "description": "Inline styles for the root element."
+      "description": "Inline styles for the root element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "classes": {
       "type": "object",
@@ -292,7 +313,8 @@
         "description": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "InternationalPhoneInputClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -321,7 +343,8 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null - Portal target for the country dropdown."
+      "description": "HTMLElement | null - Portal target for the country dropdown.",
+      "x-tsType": "HTMLElement | null | undefined"
     },
     "lockScroll": {
       "type": "boolean",

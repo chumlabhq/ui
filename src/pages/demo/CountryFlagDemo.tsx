@@ -507,37 +507,6 @@ const CountryFlagDemo = () => {
       <ComponentDocs name="CountryFlag" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Flags use role="img" with auto-generated aria-label from code',
-              'Inner <img> has alt="" and aria-hidden (decorative)',
-              'Images default to loading="lazy" and decoding="async"',
-              'Group uses role="group" with auto-generated aria-label',
-              'Surplus count has aria-label: "N more flag(s) not shown"',
-              'Shimmer uses role="status" with descriptive aria-label',
-              "prefers-reduced-motion respected via reduceMotion prop",
-              "Cached images skip fade-in via img.complete check",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

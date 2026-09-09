@@ -13,12 +13,11 @@ export type ToastPosition =
 export interface ToastClasses {
   root?: string;
   /**
-   * ADR 002 R2: the padded row inside `root`. It had no key and was reached by
-   * applying `root` to two different elements, so any override on `root` styled
-   * both the container and this.
+   * The padded row inside `root` that holds the icon, the message and the close
+   * button. Style `root` for the toast's outer box and this for its contents.
    */
   body?: string;
-  /** R2 `track`: the auto-dismiss progress groove that `indicator` fills. */
+  /** The auto-dismiss progress groove that `indicator` fills. */
   track?: string;
   title?: string;
   /** Description text element */
@@ -70,18 +69,29 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
  * ```
  */
 export interface ToastProviderProps {
+  /** Content rendered inside this element. */
   children: ReactNode;
   /** Toast position on screen. Default: `"bottom-right"`. */
   position?: ToastPosition;
+  /** How many toasts may be visible at once. Older ones leave as new ones arrive. */
   maxToasts?: number;
+  /** Additional classes for the toast container. */
   containerClassName?: string;
+  /** How long a toast stays up, in milliseconds, when it does not set its own. */
   defaultDuration?: number;
+  /** Enter and exit transition duration in milliseconds. */
   animationDuration?: number;
+  /** Space between stacked toasts, in pixels. */
   gap?: number;
+  /** Stacking order for the toast container. */
   zIndex?: number;
+  /** Dismisses the newest toast when Escape is pressed. */
   dismissOnEscape?: boolean;
+  /** Accessible name for the toast region. */
   containerAriaLabel?: string;
+  /** Class overrides for this component's slots. */
   classes?: ToastClasses;
+  /** Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. */
   unstyled?: boolean;
 }
 

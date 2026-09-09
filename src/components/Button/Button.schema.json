@@ -6,7 +6,8 @@
   "properties": {
     "children": {
       "type": "object",
-      "description": "React.ReactNode — Button content."
+      "description": "React.ReactNode — Button content.",
+      "x-tsType": "ReactNode"
     },
     "as": {
       "type": "string",
@@ -38,11 +39,13 @@
     },
     "startIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon rendered before the button label."
+      "description": "React.ReactNode — Icon rendered before the button label.",
+      "x-tsType": "ReactNode"
     },
     "endIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon rendered after the button label."
+      "description": "React.ReactNode — Icon rendered after the button label.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -51,7 +54,8 @@
     },
     "loadingText": {
       "type": "object",
-      "description": "React.ReactNode — Text displayed alongside the loading spinner."
+      "description": "React.ReactNode — Text displayed alongside the loading spinner.",
+      "x-tsType": "ReactNode"
     },
     "loaderPosition": {
       "type": "string",
@@ -69,7 +73,8 @@
     },
     "loader": {
       "type": "object",
-      "description": "React.ReactNode — Custom loader element replacing the default spinner."
+      "description": "React.ReactNode — Custom loader element replacing the default spinner.",
+      "x-tsType": "ReactNode"
     },
     "fullWidth": {
       "type": "boolean",
@@ -92,7 +97,8 @@
         "loading": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "ButtonClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -144,7 +150,8 @@
     },
     "tooltip": {
       "type": "object",
-      "description": "React.ReactNode — Tooltip content shown on hover."
+      "description": "React.ReactNode — Tooltip content shown on hover.",
+      "x-tsType": "ReactNode"
     },
     "tooltipProps": {
       "type": "object",
@@ -193,7 +200,8 @@
           "type": "object",
           "description": "CSSProperties"
         }
-      }
+      },
+      "x-tsType": "ButtonTooltipProps | undefined"
     },
     "href": {
       "type": "string",
@@ -218,8 +226,9 @@
           "description": "Button elements to group together."
         },
         "orientation": {
-          "type": "\"horizontal\" | \"vertical\" | undefined",
-          "description": "Stack direction. Default: `\"horizontal\"`."
+          "type": "\"vertical\" | \"horizontal\" | undefined",
+          "description": "Stack direction. Default: `\"horizontal\"`.",
+          "default": "horizontal"
         }
       }
     }

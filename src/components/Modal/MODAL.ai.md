@@ -157,22 +157,22 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `children` | `ReactNode` | — |
-| `className` | `string \| undefined` | — |
+| `children` | `ReactNode` | Content rendered inside this element. |
+| `className` | `string \| undefined` | Additional classes for the root element. |
 
 ### ModalBody
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `children` | `ReactNode` | — |
-| `className` | `string \| undefined` | — |
+| `children` | `ReactNode` | Content rendered inside this element. |
+| `className` | `string \| undefined` | Additional classes for the root element. |
 
 ### ModalFooter
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `children` | `ReactNode` | — |
-| `className` | `string \| undefined` | — |
+| `children` | `ReactNode` | Content rendered inside this element. |
+| `className` | `string \| undefined` | Additional classes for the root element. |
 
 ---
 

@@ -93,20 +93,160 @@ function propsOfType(typeName, files) {
   return null;
 }
 
+/**
+ * `const NAME = <literal>` across a component, so a default written as
+ * `animationDuration = DEFAULT_ANIMATION_DURATION` resolves to 300 rather than
+ * to the identifier's name.
+ */
+function constantsOf(files) {
+  const consts = new Map();
+  for (const file of files) {
+    const sf = program.getSourceFile(file);
+    if (!sf) continue;
+    const visit = (node) => {
+      if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+        const value = literalOf(node.initializer);
+        if (value !== undefined) consts.set(node.name.text, value);
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return consts;
+}
+
+/** A literal's JS value, or undefined for anything that is not one. */
+function literalOf(node) {
+  if (ts.isAsExpression(node) || ts.isParenthesizedExpression(node)) return literalOf(node.expression);
+  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text;
+  if (ts.isNumericLiteral(node)) return Number(node.text);
+  if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
+  if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
+  if (node.kind === ts.SyntaxKind.NullKeyword) return null;
+  // `options = []` and `classes = {}` are real defaults worth showing; a
+  // non-empty literal is data rather than a default anyone should read here.
+  if (ts.isArrayLiteralExpression(node) && node.elements.length === 0) return [];
+  if (ts.isObjectLiteralExpression(node) && node.properties.length === 0) return {};
+  if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.MinusToken) {
+    const inner = literalOf(node.operand);
+    return typeof inner === "number" ? -inner : undefined;
+  }
+  return undefined;
+}
+
+/**
+ * The destructuring defaults in the declaration that renders `<Tag>`.
+ *
+ * The schemas carried no `default` for a sub-component prop at all, so all 198
+ * of them rendered "-" on the component pages — 120 of which do have one in the
+ * source. Read here rather than patched into the generated page, so the number
+ * cannot go back out of step the next time this runs.
+ */
+function defaultsOfTag(tag, files, consts) {
+  // A literal where there is one, otherwise the expression itself. `ChevronIcon
+  // = ChevronDownIcon` and `zIndex = LAYERS.toast` have defaults a reader wants
+  // to know about; rendering them as "-" says the prop has none.
+  const resolve = (node, sf) => {
+    const direct = literalOf(node);
+    if (direct !== undefined) return { value: direct };
+    if (ts.isIdentifier(node) && consts.has(node.text)) return { value: consts.get(node.text) };
+    const text = node.getText(sf).replace(/\s+/g, " ").trim();
+    if (!text || text.length > 32) return undefined;
+    return { source: text };
+  };
+  for (const file of files) {
+    const sf = program.getSourceFile(file);
+    if (!sf) continue;
+    let out = null;
+    const visit = (node) => {
+      const isTag =
+        (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.name.text === tag) ||
+        (ts.isFunctionDeclaration(node) && node.name?.text === tag);
+      if (isTag) {
+        const found = {};
+        const scan = (inner) => {
+          if (ts.isBindingElement(inner) && ts.isIdentifier(inner.name) && inner.initializer) {
+            const resolved = resolve(inner.initializer, sf);
+            if (resolved !== undefined) found[inner.name.text] = resolved;
+          }
+          ts.forEachChild(inner, scan);
+        };
+        scan(node);
+        if (Object.keys(found).length) { out = found; return; }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+    if (out) return out;
+  }
+  return {};
+}
+
+/** A literal goes in `default`; an expression goes in `x-defaultSource`. */
+function applyDefault(value, resolved) {
+  if (!resolved) return;
+  if (value.default !== undefined || value["x-defaultSource"] !== undefined) return;
+  if ("value" in resolved) value.default = resolved.value;
+  else value["x-defaultSource"] = resolved.source;
+}
+
 let changed = 0;
 const stale = [];
 for (const name of names) {
   const schemaPath = `${SRC}/${name}/${name}.schema.json`;
   if (!existsSync(schemaPath)) continue;
   const files = walk(`${SRC}/${name}`);
+  const consts = constantsOf(files);
   const subs = {};
   for (const tag of exportedTags(name)) {
     if (!new RegExp(`\\b${tag}\\b`).test(rootExports)) continue;
-    const props = propsOfType(`${tag}Props`, files);
-    subs[tag] = { type: "object", properties: props ?? {} };
+    const props = propsOfType(`${tag}Props`, files) ?? {};
+    const defaults = defaultsOfTag(tag, files, consts);
+    for (const [prop, value] of Object.entries(props)) applyDefault(value, defaults[prop]);
+    subs[tag] = { type: "object", properties: props };
   }
 
   const schema = JSON.parse(readFileSync(schemaPath, "utf8"));
+  // Snapshotted before the root defaults are filled in below. `schema` is
+  // mutated in place, so comparing it afterwards compares the new value with
+  // itself and every root-default fill is silently dropped.
+  const schemaBefore = JSON.stringify(schema);
+
+  // The root's own defaults, filled from the same source. A prop assigned from
+  // a named constant had no `default` in the hand-written schema and rendered
+  // "-", which reads as "this prop has no default" rather than "nobody wrote
+  // the number down".
+
+  // JSON Schema has one word for every shape that is not a string, a number or
+  // a boolean, so `classes` and `children` both rendered as "object" on the
+  // root while the sub-component tables — read from the types — said
+  // `AccordionClasses` and `ReactNode`. One of those tells a reader what to
+  // import. Recorded as an extension keyword so the schema stays valid, and
+  // only where the schema's own word carries nothing.
+  // A component whose schema is a discriminated union has no top-level
+  // `properties` at all — RadioButton's is a `oneOf` of RadioButton and
+  // RadioGroup — so its branches are treated as roots of their own.
+  const roots = [
+    [name, schema.properties],
+    ...(schema.oneOf ?? []).map((branch) => [branch.title ?? name, branch.properties]),
+  ].filter(([, properties]) => properties);
+
+  for (const [tag, properties] of roots) {
+  const rootTsProps = propsOfType(`${tag}Props`, files) ?? {};
+  for (const [prop, value] of Object.entries(properties)) {
+    // A `oneOf` of object branches renders as "object" too — `tooltip` is
+    // `ReactNode | TooltipConfig` and both branches carry the same one word.
+    const bare =
+      !value.enum &&
+      (value.type === "object" ||
+        (Array.isArray(value.oneOf) && value.oneOf.every((b) => b.type === "object" && !b.enum)));
+    const tsType = rootTsProps[prop]?.type;
+    if (bare && tsType) value["x-tsType"] = tsType;
+    else if (!bare && value["x-tsType"]) delete value["x-tsType"];
+  }
+  for (const [prop, value] of Object.entries(properties)) applyDefault(value, defaultsOfTag(tag, files, consts)[prop]);
+  }
+
   const next = Object.keys(subs).length ? { ...schema, subComponents: subs } : schema;
   // The same table in prose, because `llms-full.txt` is built from the .ai.md
   // files and the codegen product reads that, not the schemas.
@@ -139,7 +279,7 @@ for (const name of names) {
         : doc;
   }
 
-  const before = JSON.stringify(schema) + (doc ?? "");
+  const before = schemaBefore + (doc ?? "");
   const after = JSON.stringify(next) + (nextDoc ?? "");
   if (before === after) continue;
   if (check) { stale.push(name); continue; }

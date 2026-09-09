@@ -10,11 +10,13 @@
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Label displayed alongside the switch."
+      "description": "React.ReactNode — Label displayed alongside the switch.",
+      "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Description text below the label."
+      "description": "React.ReactNode — Description text below the label.",
+      "x-tsType": "ReactNode"
     },
     "checked": {
       "type": "boolean",
@@ -27,7 +29,8 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(checked: boolean) => void \u2014 Fires when the checked state changes."
+      "description": "(checked: boolean) => void — Fires when the checked state changes.",
+      "x-tsType": "((checked: boolean) => void) | undefined"
     },
     "name": {
       "type": "string",
@@ -59,7 +62,8 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Error message displayed below the switch."
+      "description": "React.ReactNode — Error message displayed below the switch.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -68,7 +72,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Success message displayed below the switch."
+      "description": "React.ReactNode — Success message displayed below the switch.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -77,7 +82,8 @@
     },
     "loader": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom loader element."
+      "description": "React.ReactNode — Custom loader element.",
+      "x-tsType": "ReactNode"
     },
     "loaderSize": {
       "type": "number",
@@ -86,11 +92,13 @@
     },
     "checkedIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Icon displayed inside the thumb when checked."
+      "description": "React.ReactNode — Icon displayed inside the thumb when checked.",
+      "x-tsType": "ReactNode"
     },
     "uncheckedIcon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Icon displayed inside the thumb when unchecked."
+      "description": "React.ReactNode — Icon displayed inside the thumb when unchecked.",
+      "x-tsType": "ReactNode"
     },
     "transitionDuration": {
       "type": "number",
@@ -102,11 +110,13 @@
     },
     "renderLabel": {
       "type": "object",
-      "description": "(props: SwitchRenderProps) => ReactNode \u2014 Custom label render function."
+      "description": "(props: SwitchRenderProps) => ReactNode — Custom label render function.",
+      "x-tsType": "((props: SwitchRenderProps) => ReactNode) | undefined"
     },
     "renderDescription": {
       "type": "object",
-      "description": "(props: SwitchRenderProps) => ReactNode \u2014 Custom description render function."
+      "description": "(props: SwitchRenderProps) => ReactNode — Custom description render function.",
+      "x-tsType": "((props: SwitchRenderProps) => ReactNode) | undefined"
     },
     "classes": {
       "type": "object",
@@ -139,7 +149,8 @@
         "loading": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "SwitchClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -148,7 +159,8 @@
     },
     "style": {
       "type": "object",
-      "description": "Inline styles applied to the root element."
+      "description": "Inline styles applied to the root element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "reduceMotion": {
       "oneOf": [

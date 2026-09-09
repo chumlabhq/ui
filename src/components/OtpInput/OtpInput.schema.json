@@ -19,15 +19,18 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(value: string) => void - Fires when the OTP value changes."
+      "description": "(value: string) => void - Fires when the OTP value changes.",
+      "x-tsType": "((value: string) => void) | undefined"
     },
     "onComplete": {
       "type": "object",
-      "description": "(value: string) => void - Fires when all fields are filled."
+      "description": "(value: string) => void - Fires when all fields are filled.",
+      "x-tsType": "((value: string) => void) | undefined"
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode - Label rendered above the input."
+      "description": "React.ReactNode - Label rendered above the input.",
+      "x-tsType": "ReactNode"
     },
     "id": {
       "type": "string",
@@ -44,7 +47,8 @@
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode - Helper text rendered below the label."
+      "description": "React.ReactNode - Helper text rendered below the label.",
+      "x-tsType": "ReactNode"
     },
     "error": {
       "type": "boolean",
@@ -53,7 +57,8 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode - Error message displayed below the input."
+      "description": "React.ReactNode - Error message displayed below the input.",
+      "x-tsType": "ReactNode"
     },
     "success": {
       "type": "boolean",
@@ -62,7 +67,8 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode - Success message displayed below the input."
+      "description": "React.ReactNode - Success message displayed below the input.",
+      "x-tsType": "ReactNode"
     },
     "loading": {
       "type": "boolean",
@@ -83,7 +89,8 @@
     },
     "separator": {
       "type": "object",
-      "description": "React.ReactNode - Content rendered between groups."
+      "description": "React.ReactNode - Content rendered between groups.",
+      "x-tsType": "ReactNode"
     },
     "allowPaste": {
       "type": "boolean",
@@ -124,15 +131,18 @@
     },
     "renderInput": {
       "type": "object",
-      "description": "(props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields."
+      "description": "(props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields.",
+      "x-tsType": "((props: OtpInputRenderProps) => ReactNode) | undefined"
     },
     "validate": {
       "type": "object",
-      "description": "(char: string) => boolean - Custom validation function for each character."
+      "description": "(char: string) => boolean - Custom validation function for each character.",
+      "x-tsType": "((char: string) => boolean) | undefined"
     },
     "inputAriaLabel": {
       "type": "object",
-      "description": "(index: number, length: number) => string - Function to generate aria-label for each input."
+      "description": "(index: number, length: number) => string - Function to generate aria-label for each input.",
+      "x-tsType": "((index: number, length: number) => string) | undefined"
     },
     "groupAriaLabel": {
       "type": "string",
@@ -167,7 +177,8 @@
         "description": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "OtpInputClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",

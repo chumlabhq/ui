@@ -31,7 +31,8 @@
     },
     "onPinColumn": {
       "type": "object",
-      "description": "(columnId: string, isPinned: boolean) => void \u2014 Callback when a column is pinned or unpinned."
+      "description": "(columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned.",
+      "x-tsType": "((columnId: string, isPinned: boolean) => void) | undefined"
     },
     "pinnableColumns": {
       "type": "array",
@@ -47,15 +48,18 @@
     },
     "onCursorPosition": {
       "type": "object",
-      "description": "(position: { x: number; y: number } | null) => void \u2014 Callback with cursor position over the table."
+      "description": "(position: { x: number; y: number } | null) => void — Callback with cursor position over the table.",
+      "x-tsType": "((position: { x: number; y: number; } | null) => void) | undefined"
     },
     "onCursorOverHeader": {
       "type": "object",
-      "description": "(isOverHeader: boolean) => void \u2014 Callback when cursor enters/leaves the header."
+      "description": "(isOverHeader: boolean) => void — Callback when cursor enters/leaves the header.",
+      "x-tsType": "((isOverHeader: boolean) => void) | undefined"
     },
     "emptyContent": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Content shown when the table has no data."
+      "description": "React.ReactNode — Content shown when the table has no data.",
+      "x-tsType": "ReactNode"
     },
     "ariaLabel": {
       "type": "string",
@@ -68,7 +72,8 @@
     },
     "getRowId": {
       "type": "object",
-      "description": "(row: TData) => string \u2014 Function to derive a unique row ID."
+      "description": "(row: TData) => string — Function to derive a unique row ID.",
+      "x-tsType": "((row: TData) => string) | undefined"
     },
     "selectedRowId": {
       "type": [
@@ -79,15 +84,18 @@
     },
     "onRowClick": {
       "type": "object",
-      "description": "(rowData: TData) => void \u2014 Callback fired when a row is clicked."
+      "description": "(rowData: TData) => void — Callback fired when a row is clicked.",
+      "x-tsType": "((rowData: TData) => void) | undefined"
     },
     "onRowHover": {
       "type": "object",
-      "description": "(rowIndex: number | null, rowRef?: React.RefObject) => void \u2014 Callback fired when a row is hovered."
+      "description": "(rowIndex: number | null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered.",
+      "x-tsType": "((rowIndex: number | null, rowRef?: RefObject<HTMLTableRowElement> | undefined) => void) | undefined"
     },
     "floatingActions": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Floating action elements displayed on row hover."
+      "description": "React.ReactNode — Floating action elements displayed on row hover.",
+      "x-tsType": "ReactNode"
     },
     "isFloatingActionsHovered": {
       "type": "boolean",
@@ -241,7 +249,8 @@
         "loadingFooter": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "TableClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -250,15 +259,18 @@
     },
     "style": {
       "type": "object",
-      "description": "Inline styles applied to the root container."
+      "description": "Inline styles applied to the root container.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "PinIcon": {
       "type": "object",
-      "description": "React.ComponentType \u2014 Custom pin icon component (unpinned state)."
+      "description": "React.ComponentType — Custom pin icon component (unpinned state).",
+      "x-tsType": "ComponentType<IconProps> | undefined"
     },
     "PinnedIcon": {
       "type": "object",
-      "description": "React.ComponentType \u2014 Custom pin icon component (pinned state)."
+      "description": "React.ComponentType — Custom pin icon component (pinned state).",
+      "x-tsType": "ComponentType<IconProps> | undefined"
     },
     "shimmerRowCount": {
       "type": "number",
@@ -271,7 +283,8 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Child elements."
+      "description": "React.ReactNode — Child elements.",
+      "x-tsType": "ReactNode"
     },
     "sortable": {
       "type": "boolean",
@@ -280,7 +293,8 @@
     },
     "onSortingChange": {
       "type": "object",
-      "description": "(sorting: SortingState) => void \u2014 Callback when sorting state changes."
+      "description": "(sorting: SortingState) => void — Callback when sorting state changes.",
+      "x-tsType": "((sorting: SortingState) => void) | undefined"
     },
     "sorting": {
       "type": "array",
@@ -310,7 +324,8 @@
     },
     "onSelectionChange": {
       "type": "object",
-      "description": "(selectedIds: string[]) => void \u2014 Callback when selection changes."
+      "description": "(selectedIds: string[]) => void — Callback when selection changes.",
+      "x-tsType": "((selectedIds: string[]) => void) | undefined"
     },
     "selectAllMode": {
       "type": "string",
@@ -327,7 +342,8 @@
     },
     "onGlobalFilterChange": {
       "type": "object",
-      "description": "(value: string) => void \u2014 Callback when global filter changes."
+      "description": "(value: string) => void — Callback when global filter changes.",
+      "x-tsType": "((value: string) => void) | undefined"
     },
     "columnFilters": {
       "type": "array",
@@ -335,7 +351,8 @@
     },
     "onColumnFiltersChange": {
       "type": "object",
-      "description": "(filters: ColumnFiltersState) => void \u2014 Callback when column filters change."
+      "description": "(filters: ColumnFiltersState) => void — Callback when column filters change.",
+      "x-tsType": "((filters: ColumnFiltersState) => void) | undefined"
     },
     "enableColumnFilters": {
       "type": "boolean",
@@ -344,15 +361,18 @@
     },
     "filterableColumns": {
       "type": "object",
-      "description": "Map of column ID to filter options configuration."
+      "description": "Map of column ID to filter options configuration.",
+      "x-tsType": "Record<string, { options: { label: string; value: string; }[]; multi?: boolean | undefined; }> | undefined"
     },
     "FilterIcon": {
       "type": "object",
-      "description": "React.ComponentType \u2014 Custom filter icon component."
+      "description": "React.ComponentType — Custom filter icon component.",
+      "x-tsType": "ComponentType<{ active: boolean; className?: string | undefined; }> | undefined"
     },
     "renderColumnFilter": {
       "type": "object",
-      "description": "(columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode \u2014 Custom filter dropdown renderer."
+      "description": "(columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer.",
+      "x-tsType": "((columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode) | undefined"
     },
     "expandable": {
       "type": "boolean",
@@ -368,15 +388,18 @@
     },
     "onExpandedChange": {
       "type": "object",
-      "description": "(expandedIds: string[]) => void \u2014 Callback when expanded rows change."
+      "description": "(expandedIds: string[]) => void — Callback when expanded rows change.",
+      "x-tsType": "((expandedIds: string[]) => void) | undefined"
     },
     "renderExpandedRow": {
       "type": "object",
-      "description": "(row: TData) => ReactNode \u2014 Render function for expanded row content."
+      "description": "(row: TData) => ReactNode — Render function for expanded row content.",
+      "x-tsType": "((row: TData) => ReactNode) | undefined"
     },
     "ExpandIcon": {
       "type": "object",
-      "description": "React.ComponentType \u2014 Custom expand icon component."
+      "description": "React.ComponentType — Custom expand icon component.",
+      "x-tsType": "ComponentType<{ expanded: boolean; className?: string | undefined; }> | undefined"
     },
     "expandColumnPosition": {
       "type": "string",
@@ -394,11 +417,13 @@
     },
     "columnVisibility": {
       "type": "object",
-      "description": "Controlled column visibility map (column ID to boolean)."
+      "description": "Controlled column visibility map (column ID to boolean).",
+      "x-tsType": "Record<string, boolean> | undefined"
     },
     "onColumnVisibilityChange": {
       "type": "object",
-      "description": "(visibility: Record<string, boolean>) => void \u2014 Callback when column visibility changes."
+      "description": "(visibility: Record<string, boolean>) => void — Callback when column visibility changes.",
+      "x-tsType": "((visibility: Record<string, boolean>) => void) | undefined"
     },
     "striped": {
       "type": "boolean",
@@ -440,7 +465,8 @@
     },
     "onCellEdit": {
       "type": "object",
-      "description": "(rowId: string, columnId: string, value: unknown) => void \u2014 Callback when a cell value is edited."
+      "description": "(rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited.",
+      "x-tsType": "((rowId: string, columnId: string, value: unknown) => void) | undefined"
     },
     "enableColumnResizing": {
       "type": "boolean",
@@ -449,11 +475,13 @@
     },
     "columnSizing": {
       "type": "object",
-      "description": "Controlled column sizing state."
+      "description": "Controlled column sizing state.",
+      "x-tsType": "ColumnSizingState | undefined"
     },
     "onColumnSizingChange": {
       "type": "object",
-      "description": "(sizing: ColumnSizingState) => void \u2014 Callback when column sizing changes."
+      "description": "(sizing: ColumnSizingState) => void — Callback when column sizing changes.",
+      "x-tsType": "((sizing: ColumnSizingState) => void) | undefined"
     },
     "manualPagination": {
       "type": "boolean",
@@ -474,7 +502,8 @@
     },
     "onColumnOrderChange": {
       "type": "object",
-      "description": "(order: string[]) => void \u2014 Callback when column order changes."
+      "description": "(order: string[]) => void — Callback when column order changes.",
+      "x-tsType": "((order: string[]) => void) | undefined"
     },
     "enableRowDragDrop": {
       "type": "boolean",
@@ -483,7 +512,8 @@
     },
     "onRowReorder": {
       "type": "object",
-      "description": "(fromIndex: number, toIndex: number) => void \u2014 Callback when a row is reordered."
+      "description": "(fromIndex: number, toIndex: number) => void — Callback when a row is reordered.",
+      "x-tsType": "((fromIndex: number, toIndex: number) => void) | undefined"
     },
     "dragColumnPosition": {
       "type": "string",
@@ -501,11 +531,13 @@
     },
     "footerContent": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom footer content rendered inside <tfoot>."
+      "description": "React.ReactNode — Custom footer content rendered inside <tfoot>.",
+      "x-tsType": "ReactNode"
     },
     "onContextMenu": {
       "type": "object",
-      "description": "(event: React.MouseEvent, row: TData) => void \u2014 Callback on right-click of a row."
+      "description": "(event: React.MouseEvent, row: TData) => void — Callback on right-click of a row.",
+      "x-tsType": "((event: MouseEvent<Element, MouseEvent>, row: TData) => void) | undefined"
     },
     "enableCopyOnClick": {
       "type": "boolean",
@@ -514,7 +546,8 @@
     },
     "onCellCopy": {
       "type": "object",
-      "description": "(value: string, rowId: string, columnId: string) => void \u2014 Callback after a cell value is copied."
+      "description": "(value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied.",
+      "x-tsType": "((value: string, rowId: string, columnId: string) => void) | undefined"
     },
     "enableInfiniteScroll": {
       "type": "boolean",
@@ -523,7 +556,8 @@
     },
     "onLoadMore": {
       "type": "object",
-      "description": "() => void \u2014 Callback when user scrolls near the bottom."
+      "description": "() => void — Callback when user scrolls near the bottom.",
+      "x-tsType": "(() => void) | undefined"
     },
     "hasMore": {
       "type": "boolean",
@@ -537,7 +571,8 @@
     },
     "infiniteEndContent": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Content shown when all data is loaded."
+      "description": "React.ReactNode — Content shown when all data is loaded.",
+      "x-tsType": "ReactNode"
     },
     "responsiveBreakpoint": {
       "type": "number",
@@ -545,7 +580,8 @@
     },
     "renderMobileCard": {
       "type": "object",
-      "description": "(row: TData) => ReactNode \u2014 Render function for mobile card layout."
+      "description": "(row: TData) => ReactNode — Render function for mobile card layout.",
+      "x-tsType": "((row: TData) => ReactNode) | undefined"
     },
     "groupBy": {
       "type": "array",
@@ -556,7 +592,8 @@
     },
     "onGroupByChange": {
       "type": "object",
-      "description": "(groupBy: string[]) => void \u2014 Callback when group-by columns change."
+      "description": "(groupBy: string[]) => void — Callback when group-by columns change.",
+      "x-tsType": "((groupBy: string[]) => void) | undefined"
     },
     "showSearch": {
       "type": "boolean",
@@ -580,7 +617,8 @@
     },
     "CheckboxIcon": {
       "type": "object",
-      "description": "React.ComponentType \u2014 Custom checkbox component for multi-row selection."
+      "description": "React.ComponentType — Custom checkbox component for multi-row selection.",
+      "x-tsType": "ComponentType<{ checked: boolean; indeterminate?: boolean | undefined; className?: string | undefined; }> | undefined"
     },
     "checkboxColor": {
       "type": "string",
@@ -588,19 +626,23 @@
     },
     "DragHandleIcon": {
       "type": "object",
-      "description": "React.ComponentType \u2014 Custom drag handle icon component."
+      "description": "React.ComponentType — Custom drag handle icon component.",
+      "x-tsType": "ComponentType<IconProps> | undefined"
     },
     "SearchIcon": {
       "type": "object",
-      "description": "React.ComponentType \u2014 Custom search icon component."
+      "description": "React.ComponentType — Custom search icon component.",
+      "x-tsType": "ComponentType<IconProps> | undefined"
     },
     "onSearchClear": {
       "type": "object",
-      "description": "() => void \u2014 Callback when the search clear button is clicked."
+      "description": "() => void — Callback when the search clear button is clicked.",
+      "x-tsType": "(() => void) | undefined"
     },
     "loadingMoreContent": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom content for the loading more indicator."
+      "description": "React.ReactNode — Custom content for the loading more indicator.",
+      "x-tsType": "ReactNode"
     }
   },
   "required": []

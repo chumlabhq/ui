@@ -24,11 +24,11 @@
           },
           "onClick": {
             "type": "object",
-            "description": "() => void \u2014 Click handler."
+            "description": "() => void — Click handler."
           },
           "icon": {
             "type": "object",
-            "description": "React.ReactNode \u2014 Icon rendered beside the label."
+            "description": "React.ReactNode — Icon rendered beside the label."
           },
           "iconPosition": {
             "type": "string",
@@ -45,11 +45,11 @@
           },
           "content": {
             "type": "object",
-            "description": "React.ReactNode \u2014 Custom content replacing the label."
+            "description": "React.ReactNode — Custom content replacing the label."
           },
           "tooltip": {
             "type": "object",
-            "description": "React.ReactNode \u2014 Tooltip content."
+            "description": "React.ReactNode — Tooltip content."
           },
           "tooltipProps": {
             "type": "object",
@@ -114,11 +114,13 @@
     },
     "separator": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom separator between breadcrumb items."
+      "description": "React.ReactNode — Custom separator between breadcrumb items.",
+      "x-tsType": "ReactNode"
     },
     "onItemClick": {
       "type": "object",
-      "description": "(item: BreadcrumbItem) => void \u2014 Called when a breadcrumb item is clicked."
+      "description": "(item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked.",
+      "x-tsType": "((item: BreadcrumbItem) => void) | undefined"
     },
     "aria-label": {
       "type": "string",
@@ -158,7 +160,8 @@
         "collapsedItem": {
           "type": "string"
         }
-      }
+      },
+      "x-tsType": "BreadcrumbClasses | undefined"
     },
     "unstyled": {
       "type": "boolean",
@@ -171,15 +174,18 @@
     },
     "style": {
       "type": "object",
-      "description": "CSSProperties \u2014 Inline styles for the root element."
+      "description": "CSSProperties — Inline styles for the root element.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "separatorIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> \u2014 Custom separator icon component."
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom separator icon component.",
+      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
     },
     "ellipsisIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> \u2014 Custom ellipsis icon component."
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom ellipsis icon component.",
+      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
     },
     "iconSize": {
       "oneOf": [
@@ -261,15 +267,18 @@
           "type": "object",
           "description": "CSSProperties"
         }
-      }
+      },
+      "x-tsType": "BreadcrumbTooltipProps | undefined"
     },
     "ellipsisTooltip": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Tooltip content for the ellipsis button."
+      "description": "React.ReactNode — Tooltip content for the ellipsis button.",
+      "x-tsType": "ReactNode"
     },
     "ellipsisTooltipProps": {
       "type": "object",
-      "description": "Tooltip configuration for the ellipsis button."
+      "description": "Tooltip configuration for the ellipsis button.",
+      "x-tsType": "BreadcrumbTooltipProps | undefined"
     },
     "dropdownPosition": {
       "type": "string",
@@ -289,7 +298,8 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null \u2014 Portal container for the dropdown."
+      "description": "HTMLElement | null — Portal container for the dropdown.",
+      "x-tsType": "HTMLElement | null | undefined"
     },
     "keepMounted": {
       "type": "boolean",
@@ -303,7 +313,8 @@
     },
     "onDropdownOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void \u2014 Called when the dropdown open state changes."
+      "description": "(open: boolean) => void — Called when the dropdown open state changes.",
+      "x-tsType": "((open: boolean) => void) | undefined"
     }
   },
   "required": [

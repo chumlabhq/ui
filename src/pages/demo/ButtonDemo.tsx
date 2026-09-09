@@ -986,62 +986,6 @@ const ButtonDemo = () => {
       <ComponentDocs name="Button" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section
-        title="Accessibility"
-        description="Built-in accessibility features."
-        isDarkMode={dark}
-      >
-        <div className={c.card}>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              'Default type="button" prevents accidental form submission',
-              "aria-busy set when loading",
-              "aria-disabled set when disabled or loading",
-              'Span buttons (as="span") include role="button" and Enter/Space keyboard support',
-              "Focus-visible ring for keyboard navigation",
-              'Loader has aria-hidden="true" (decorative)',
-              'ButtonGroup uses role="group" with aria-orientation',
-              "Icon-only buttons need `aria-label` or `aria-labelledby` from the app",
-              "prefers-reduced-motion respected via reduceMotion prop",
-              "Disabled anchor links remove href and set tabIndex=-1",
-            ].map((text) => (
-              <p key={text} className="flex items-start gap-2">
-                <span
-                  className={`mt-0.5 shrink-0 text-cl-success`}
-                >
-                  &#10003;
-                </span>
-                <span>{text}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className={`${c.card} mt-3`}>
-          <p
-            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
-          >
-            Keyboard Reference
-          </p>
-          <div
-            className={`space-y-2 text-sm text-cl-text-secondary`}
-          >
-            {[
-              ["Tab", "Move focus to/from button"],
-              [
-                "Enter / Space",
-                "Activate button (also works for span buttons)",
-              ],
-            ].map(([key, desc]) => (
-              <div key={key} className="flex items-center gap-3">
-                <kbd className={c.kbd}>{key}</kbd>
-                <span>{desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
 
       <DocControlledPattern
         isDarkMode={dark}

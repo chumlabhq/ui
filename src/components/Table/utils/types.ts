@@ -40,9 +40,8 @@ export interface TableClasses {
   /** The `<thead>` element. */
   header?: string;
   /**
-   * ADR 002 R9 ancestor clause: the <tr> inside `header`. Both read the same key,
-   * so an override on the <thead> also hit the row. Qualifier-first compound of
-   * `row`, an existing amendment term.
+   * The `<tr>` inside `header`. Style `header` to reach the `<thead>` and this
+   * to reach the row alone.
    */
   headerRow?: string;
   /** Individual `<th>` elements. */
@@ -85,10 +84,8 @@ export interface TableClasses {
   /** Filter dropdown container. */
   filterContent?: string;
   /**
-   * The column-filter panel's parts. TanStack Table is headless and names data
-   * roles, not elements, so it is no peer here — these are qualifier-first
-   * compounds of R2 heads (header, label, clearTrigger, item, control), all
-   * NOVEL. Selection is `data-selected` (R4), not a second class set.
+   * The column-filter panel's parts. A selected row carries `data-selected`
+   * rather than a second set of classes.
    */
   filterHeader?: string;
   filterLabel?: string;
@@ -115,10 +112,9 @@ export interface TableClasses {
    */
   searchControl?: string;
   /**
-   * R2 `searchIcon` and `clearTrigger`. Both search boxes — the desktop one and
-   * the mobile card one — render these; their styling was a call-site literal,
-   * so `unstyled` could not strip it and no consumer could reach it.
-   * Side placement is `data-side` on `searchControl` (R4), not two class sets.
+   * The search box's icon and clear button. Both search boxes — the desktop
+   * one and the mobile card one — render these, and which side the control sits
+   * on is `data-side` on `searchControl` rather than a second set of classes.
    */
   searchIcon?: string;
   clearTrigger?: string;
@@ -130,10 +126,8 @@ export interface TableClasses {
   /** Column resize handle. */
   resizeHandle?: string;
   /**
-   * ADR 002 R10: the bar inside `resizeHandle`. It had no key and carried
-   * decorative colour as a call-site literal, so `unstyled` could not strip it
-   * and no consumer could reach it. Head noun `indicator` (VERIFIED, Radix
-   * Checkbox.Indicator); the state it showed is now `data-resizing`.
+   * The bar drawn inside `resizeHandle` while a column is being resized. Carries
+   * `data-resizing` for the duration of the drag.
    */
   resizeIndicator?: string;
   /** Loading more indicator for infinite scroll. */
