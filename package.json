@@ -473,6 +473,8 @@
     "typecheck": "node scripts/assert-typecheck.mjs",
     "verify:dist-records": "node scripts/assert-dist-records.mjs",
     "verify:bundle-size": "node scripts/assert-bundle-size.mjs",
+    "verify:css-names": "node scripts/assert-css-names.mjs",
+    "verify:css-names:self-check": "node scripts/assert-css-names.mjs --self-check",
     "verify:packaging": "node scripts/assert-packaging.mjs",
     "verify:packaging:self-check": "node scripts/assert-packaging.mjs --self-check",
     "preview": "vite preview",

@@ -196,6 +196,20 @@ const LIBRARY_TOTAL_HISTORY = [
       "146.65 and split by building the tree twice: +1.82 KB the restored styling and " +
       "TabPanel's flex layout, +0.04 KB the 18 added cursor-pointer class tokens.",
   },
+  {
+    kb: 148.7,
+    commit: "(uncommitted)",
+    date: "2026-09-09",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.18 KB. The accordion keyframes now ship. They referenced " +
+      "`animation-name: cl-accordion-down` from the components while the " +
+      "@keyframes lived only in src/index.css, the docs site's own stylesheet — " +
+      "so the animation worked on the site and was dead for every consumer. " +
+      "Moving them into dist/styles.css is what the bytes are. `verify:css-names` " +
+      "now fails when a name the shipped JS references has no definition in the " +
+      "shipped CSS, so this cannot recur silently.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -249,7 +263,7 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 15.79,
+      kb: 15.81,
       why: "16.76 until the column-filter dialog moved into a chunk of its own " +
         "(FilterPanel), with the popup behaviour that reads its element — focus " +
         "in, reposition, close on an outside click. It is the only part of " +
