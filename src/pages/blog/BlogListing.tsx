@@ -296,23 +296,13 @@ export default function BlogListing() {
         <section ref={gridRef} className="max-w-[1280px] mx-auto px-5 sm:px-8 pb-8">
           {paginatedPosts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
-              {paginatedPosts.map((post, i) => {
-                // Top row (i = 0, 1, 2) staggers 60ms apart from 200ms.
-                // Cards 3+ render plain — at the original 1150ms delay
-                // they would have stayed invisible past the point a fast
-                // scroller has already reached the second row.
-                if (i >= 3) return <BlogCard key={post.id} post={post} />;
-                return (
-                  <Reveal
-                    key={post.id}
-                    delay={250 + i * 30}
-                    translateY={16}
-                    duration={200}
-                  >
-                    <BlogCard post={post} />
-                  </Reveal>
-                );
-              })}
+              {/* No reveal on the cards. They are what the page is for, so
+                  they paint with it: a scroll-triggered fade left the top row
+                  invisible on landing, and it served a crawler markup the
+                  reader could not see. */}
+              {paginatedPosts.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
             </div>
           ) : (
             <Reveal delay={150} translateY={12} duration={200}>

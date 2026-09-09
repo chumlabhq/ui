@@ -353,11 +353,10 @@ const Faq = () => {
           </Reveal>
         </section>
 
-        {/* Accordion list — paginated, FAQS_PER_PAGE per page. First 5
-            items stagger 50ms apart so the last visible item lands at
-            450ms; items 6+ render plain (the original 1300ms group delay
-            left them invisible past the point a fast scroller had moved
-            past). */}
+        {/* Accordion list — paginated, FAQS_PER_PAGE per page. No reveal on
+            the rows: they are what the page is for, so they paint with it.
+            The staggered version left every row below the fold invisible on
+            landing and served a crawler markup the reader could not see. */}
         <section
           ref={listRef}
           className="max-w-[1280px] mx-auto px-5 sm:px-8 pb-12"
@@ -389,40 +388,8 @@ const Faq = () => {
               {paginatedFaqs.map((faq, i) => {
                 const slug = faqAnchor(faq.question);
                 const absoluteIndex = (currentPage - 1) * FAQS_PER_PAGE + i;
-                // Items 6+ render plain — at the original 1300ms group
-                // delay they would have stayed hidden past the moment a
-                // fast scroller already scanned past them.
-                if (i >= 5) {
-                  return (
-                    <li
-                      key={slug}
-                      className="border-b border-border-faint group"
-                    >
-                      <FaqRow
-                        ref={(el) => {
-                          buttonRefs.current[i] = el;
-                        }}
-                        index={absoluteIndex}
-                        question={faq.question}
-                        answer={faq.answer}
-                        isOpen={openId === slug}
-                        onToggle={() => toggle(slug, faq.category, faq.question)}
-                        onKeyNav={(e) => handleKey(e, i, paginatedFaqs.length)}
-                        answerId={`faq-answer-${slug}`}
-                        rowId={`faq-row-${slug}`}
-                      />
-                    </li>
-                  );
-                }
                 return (
-                  <Reveal
-                    key={slug}
-                    as="li"
-                    delay={130 + i * 30}
-                    translateY={12}
-                    duration={200}
-                    className="border-b border-border-faint group"
-                  >
+                  <li key={slug} className="border-b border-border-faint group">
                     <FaqRow
                       ref={(el) => {
                         buttonRefs.current[i] = el;
@@ -436,7 +403,7 @@ const Faq = () => {
                       answerId={`faq-answer-${slug}`}
                       rowId={`faq-row-${slug}`}
                     />
-                  </Reveal>
+                  </li>
                 );
               })}
             </ul>
