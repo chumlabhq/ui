@@ -2,11 +2,15 @@ import { memo } from "react";
 import type { TableShimmerProps } from "./utils/types.js";
 
 const defaultContainerClass =
-  "w-full border border-gray-200 rounded-cl-md overflow-hidden";
-const defaultRowClass = "border-b border-gray-200";
+  "w-full border border-cl-border rounded-cl-md overflow-hidden";
+const defaultRowClass = "border-b border-cl-border";
 const defaultCellClass = "px-3 py-2 h-[52px]";
+// The same flat pulse every other skeleton uses. This was a left-to-right
+// gradient sweep, which was both the library's only sweeping shimmer and
+// unreachable: `Table` always passes `shimmerClassName` from its own `classes`
+// bag, and `TableShimmer` is not exported, so nothing could ever render it.
 const defaultShimmerClass =
-  "h-full w-full bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded animate-pulse";
+  "h-full w-full rounded animate-pulse bg-cl-bg-skeleton";
 
 const TableShimmer = memo(function TableShimmer({
   rowCount = 10,

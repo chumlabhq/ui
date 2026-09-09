@@ -41,7 +41,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     // The same shimmer the other three components use. Not `--fg`: that is the
     // marketing namespace, and `dist/styles.css` ships no rule for it, so a
     // class reaching for it paints nothing in a consumer's application.
-    "h-full w-full rounded animate-pulse bg-cl-bg-item-hover",
+    "h-full w-full rounded animate-pulse bg-cl-bg-skeleton",
   control: "",
   sortIcon: "shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
   filterButton:

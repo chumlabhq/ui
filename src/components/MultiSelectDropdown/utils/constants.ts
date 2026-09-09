@@ -30,11 +30,14 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
       "block text-sm font-medium mb-1 text-cl-text-chrome",
     message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
     description: "text-xs mb-1 text-cl-text-tertiary",
-    loading: "px-3 py-2 bg-cl-bg-hover animate-pulse",
+    // The pulse lives on the bars below, not here and not on the row: the
+    // three nested and compounded to 0.125 opacity at the trough, which the
+    // old opaque grey survived and a translucent skeleton does not.
+    loading: "px-3 py-2 bg-cl-bg-hover",
     loadingItem:
-      "px-3 py-2 bg-cl-bg-hover animate-pulse flex items-center gap-2",
-    loadingIcon: "w-4 h-4 bg-gray-200 rounded animate-pulse",
-    loadingBar: "flex-1 h-4 bg-gray-200 rounded animate-pulse",
+      "px-3 py-2 bg-cl-bg-hover flex items-center gap-2",
+    loadingIcon: "w-4 h-4 bg-cl-bg-skeleton rounded animate-pulse",
+    loadingBar: "flex-1 h-4 bg-cl-bg-skeleton rounded animate-pulse",
     count:
       "inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-item-hover text-cl-text-secondary",
   };

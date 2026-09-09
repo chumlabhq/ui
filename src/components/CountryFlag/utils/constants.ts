@@ -24,7 +24,7 @@ export const DEFAULT_COUNTRYFLAG_CLASSES: Required<CountryFlagClasses> = {
   // the border is barely-visible in dark mode and clearly defined in
   // light mode where the contrast issue actually exists.
   root: "inline-flex items-center justify-center shrink-0 overflow-hidden border border-cl-border",
-  loading: { root: "inline-flex shrink-0 overflow-hidden bg-gray-200 animate-pulse" },
+  loading: { root: "inline-flex shrink-0 overflow-hidden bg-cl-bg-skeleton animate-pulse" },
   image: "w-full h-full object-cover",
   fallback: "",
 };
@@ -44,7 +44,7 @@ export const UNSTYLED_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasse
 
 /** CountryFlagShimmer's own defaults, for the standalone render path. */
 export const DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES: Required<CountryFlagShimmerClasses> = {
-  root: "inline-flex shrink-0 overflow-hidden bg-gray-200 animate-pulse",
+  root: "inline-flex shrink-0 overflow-hidden bg-cl-bg-skeleton animate-pulse",
 };
 
 export const UNSTYLED_COUNTRY_FLAG_SHIMMER_CLASSES: Required<CountryFlagShimmerClasses> =

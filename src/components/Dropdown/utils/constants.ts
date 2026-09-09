@@ -25,7 +25,7 @@ export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
   description: "text-xs mb-1 text-cl-text-tertiary",
   loading: "",
   loadingItem:
-    "mx-2 my-1.5 h-4 rounded bg-cl-bg-hover animate-pulse",
+    "mx-2 my-1.5 h-4 rounded bg-cl-bg-skeleton animate-pulse",
 };
 
 export const UNSTYLED_DROPDOWN_CLASSES: Required<DropdownClasses> =

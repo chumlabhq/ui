@@ -393,7 +393,13 @@ describe("constants contract", () => {
     // fixture that renders it: `bg-gray-200` reaches the DOM through Avatar's
     // loading state and nowhere else, and Table's shimmer is reached by no
     // fixture at all. Ratchets DOWN only.
-    const DECLARED_RAW = 13;
+    // Zero. The 13 were all one decision — five skeletons painting a fixed
+    // grey, which measured 1.24 against the page in light and 16.37 in dark —
+    // deferred by the sweep that found them and settled by ADR 005's
+    // `--cl-bg-skeleton`. The five that still match this pattern are prose
+    // inside JSDoc (`bg-red-500` in a contrast note, `bg-blue-600` in an
+    // @example) and are not read by the scanner, which parses literals.
+    const DECLARED_RAW = 0;
     const found = Object.entries(sources)
       .filter(([path]) => !NOT_SHIPPED.test(path))
       .flatMap(([path]) =>

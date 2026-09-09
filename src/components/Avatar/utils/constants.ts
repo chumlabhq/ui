@@ -7,7 +7,7 @@ export const DEFAULT_SPACING = -8;
 
 export const DEFAULT_AVATAR_CLASSES: Required<AvatarClasses> = {
   root: "shrink-0 flex items-center justify-center font-medium select-none",
-  loading: { root: "shrink-0 bg-gray-200 animate-pulse" },
+  loading: { root: "shrink-0 bg-cl-bg-skeleton animate-pulse" },
   control: "absolute inset-0 overflow-hidden flex items-center justify-center",
   image: "w-full h-full object-cover",
   fallback: "",
@@ -146,7 +146,7 @@ export const DEFAULT_DARK_TEXT_COLORS = [
 
 /** AvatarShimmer's own defaults, for the standalone render path. */
 export const DEFAULT_AVATAR_SHIMMER_CLASSES: Required<AvatarShimmerClasses> = {
-  root: "shrink-0 bg-gray-200 animate-pulse",
+  root: "shrink-0 bg-cl-bg-skeleton animate-pulse",
 };
 
 export const UNSTYLED_AVATAR_SHIMMER_CLASSES: Required<AvatarShimmerClasses> =
@@ -161,5 +161,5 @@ export const UNSTYLED_AVATAR_SHIMMER_CLASSES: Required<AvatarShimmerClasses> =
 export const AVATAR_GROUP_SHIMMER_CLASSES = {
   root: "flex items-center",
   item: "shrink-0",
-  fill: "w-full h-full bg-gray-200",
+  fill: "w-full h-full bg-cl-bg-skeleton",
 } as const;

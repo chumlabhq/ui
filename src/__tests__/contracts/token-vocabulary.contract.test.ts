@@ -104,6 +104,13 @@ const ROLE_ONLY = [
   "--cl-bg-input",
   "--cl-bg-panel",
   "--cl-bg-item-hover",
+  // ADR 005. "skeleton" names a role — a loading placeholder — and claims no
+  // relation to another token, the same shape as `--cl-bg-panel` above. Its
+  // visibility comes from being a foreground overlay rather than from any
+  // relationship to `--cl-bg`, so there is no relational claim to gate: it
+  // composites above whatever surface it is laid on, including ones no token
+  // names.
+  "--cl-bg-skeleton",
   "--cl-border",
   "--cl-border-input",
   "--cl-text",

@@ -124,9 +124,9 @@ export const DEFAULT_ACCORDION_SHIMMER_CLASSES: Required<AccordionShimmerClasses
   item: "",
   trigger: "flex items-center justify-between",
   itemText: "flex-1 space-y-2",
-  titleBar: "h-4 rounded bg-cl-bg-item-hover animate-pulse",
-  descriptionBar: "h-3 rounded bg-cl-bg-item-hover animate-pulse",
-  icon: "rounded bg-cl-bg-item-hover shrink-0 ml-4 animate-pulse",
+  titleBar: "h-4 rounded bg-cl-bg-skeleton animate-pulse",
+  descriptionBar: "h-3 rounded bg-cl-bg-skeleton animate-pulse",
+  icon: "rounded bg-cl-bg-skeleton shrink-0 ml-4 animate-pulse",
   body: "space-y-2",
 };
 

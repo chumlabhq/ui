@@ -76,7 +76,7 @@ export const CountryFlagGroupShimmer = forwardRef<HTMLDivElement, CountryFlagGro
     const height = Math.round(pixelSize * aspectRatio);
     const effectiveReduceMotion = useReducedMotion(reduceMotion);
     const shouldAnimate = animate && !effectiveReduceMotion;
-    const itemClassName = cn("shrink-0 bg-gray-200", shouldAnimate && "animate-pulse");
+    const itemClassName = cn("shrink-0 bg-cl-bg-skeleton", shouldAnimate && "animate-pulse");
 
     return (
       <div

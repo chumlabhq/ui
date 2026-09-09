@@ -31,7 +31,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
     loading: "",
     loadingItem:
-      "mx-2 my-1.5 h-4 rounded bg-cl-bg-hover animate-pulse",
+      "mx-2 my-1.5 h-4 rounded bg-cl-bg-skeleton animate-pulse",
   };
 
 export const UNSTYLED_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClasses> =

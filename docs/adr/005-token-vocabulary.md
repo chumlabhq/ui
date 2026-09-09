@@ -98,6 +98,20 @@ It is not duplicated here.
 | --- | --- | --- |
 | `--cl-bg-panel` | **NOVEL** | Minted by ADR 004 for the panel role. Justified by T1 alone: the surface family is `--cl-bg`, `--cl-bg-elevated`, `--cl-bg-hover`, `--cl-bg-input`, and `--cl-bg-<role>` is its established form. Radix Themes' `--color-panel-*` and shadcn's `--popover` were recalled as peers while writing ADR 004 and are **not** cited here — recall is not a citation, and the internal convention carries the name without one. |
 
+| `--cl-bg-skeleton` | **NOVEL** | The loading-placeholder surface. Justified by T1 alone: the surface family is `--cl-bg`, `--cl-bg-elevated`, `--cl-bg-hover`, `--cl-bg-input`, `--cl-bg-panel`, and `--cl-bg-<role>` is its established form. A role name under T2, like `--cl-bg-panel`: it claims no relation to the base surface, and its visibility comes from being a foreground overlay rather than from any relationship to `--cl-bg`. Minted rather than reusing `--cl-border-strong`, which was the second time in one night a component reached for a border token because the scale had no neutral at this strength. |
+
+Both values are foreground overlays rather than fixed colours, chosen by
+measurement. `bg-gray-200` sat at 1.24 against the page in light and **16.37**
+in dark — more contrast than body text, which is what a skeleton must never be.
+An overlay composites against whatever it is laid on, so one value holds
+1.34–1.41 on the page, a panel, an elevated surface and a hovered row in both
+themes: a spread of 0.07, where the fixed grey spanned 1.14 to 16.37.
+
+MUI's Skeleton is recalled as using an alpha overlay of the foreground for what
+looks like this reason. That is **recall, not a citation**, and is deliberately
+not entered as `VERIFIED` — the marker above rests on T1 and the measurement,
+per T4.
+
 Every other token predates this ADR and is recorded as pre-existing rather than
 retro-justified. Marking 28 names `VERIFIED` on recall is exactly what ADR 002's
 ledger was built to stop.

@@ -81,6 +81,10 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   // photographed and had never worked.
   { component: "TabPanel", fixture: "icon-left" },
   { component: "Table", fixture: "default" },
+  // A loading state, because none of the other subjects is one: every skeleton
+  // in the library changed fill and not a single baseline moved, which is how a
+  // fixed grey went on painting 16:1 against a dark page unphotographed.
+  { component: "Table", fixture: "loading" },
   { component: "TextArea", fixture: "labelled" },
   { component: "TimePicker", fixture: "closed" },
   { component: "Toast", fixture: "default" },

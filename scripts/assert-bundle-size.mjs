@@ -210,6 +210,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "now fails when a name the shipped JS references has no definition in the " +
       "shipped CSS, so this cannot recur silently.",
   },
+  {
+    kb: 150.0,
+    commit: "(uncommitted)",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +1.30 KB, and only 0.08 KB of it belongs to this change. Split by " +
+      "building the tree twice: HEAD alone already measures 149.92 against the 148.7 " +
+      "recorded, so the record was stale before this slice touched anything — the " +
+      "window is the Avatar close-out landing (the fallback underlay, the surplus " +
+      "fixed-width and cap logic). This slice moves 149.92 to 150.00: the skeleton " +
+      "fill became `--cl-bg-skeleton` across 8 components, and `bg-cl-bg-skeleton` " +
+      "is a longer string than `bg-gray-200` at 13 sites. The token itself is CSS " +
+      "and this total is gzipped JS only, so it contributes nothing here. Table's " +
+      "dead gradient default and MultiSelectDropdown's two nested `animate-pulse` " +
+      "came out in the same pass, which is why 13 renames cost only 80 bytes.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

@@ -41,7 +41,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   loading:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   loadingItem:
-    "mx-2 my-1.5 h-4 rounded bg-cl-bg-hover animate-pulse",
+    "mx-2 my-1.5 h-4 rounded bg-cl-bg-skeleton animate-pulse",
   searchControl:
     "flex items-center gap-2 px-3 py-2 border-b border-cl-border",
   searchInput:
