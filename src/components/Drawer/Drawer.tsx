@@ -174,9 +174,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<DrawerClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        overlay: classesProp?.overlay ?? baseClasses.overlay,
-        content: classesProp?.content ?? baseClasses.content,
+        root: cn(baseClasses.root, classesProp?.root),
+        overlay: cn(baseClasses.overlay, classesProp?.overlay),
+        content: cn(baseClasses.content, classesProp?.content),
       }),
       [classesProp, baseClasses],
     );

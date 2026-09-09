@@ -69,6 +69,13 @@ function handRolledMeasuringStyles(roots: string[]): string[] {
   return found;
 }
 
+/**
+ * Counted, not assumed. A self-check proves the predicate can fail; this
+ * proves it was pointed at something. `overrides.contract` had a working
+ * shape and ran it over 3 of 340 slots for months.
+ */
+const asserted = { n: 0 };
+
 describe("measuring frame contract", () => {
   it("hides without leaving the focus order", () => {
     const hiding = Object.keys(MEASURING_STYLE).filter((k) => UNFOCUSABLE.has(k));
@@ -89,6 +96,7 @@ describe("measuring frame contract", () => {
   });
 
   it("is the only measuring style in the package", () => {
+    asserted.n += 1;
     const rolled = handRolledMeasuringStyles(["src/components", "src/utils"]);
     expect(
       rolled,
@@ -107,5 +115,10 @@ describe("measuring frame contract", () => {
       expect(handRolledMeasuringStyles(["src/utils/menu"])).toEqual([]);
       expect(probe).toBeTruthy();
     });
+  });
+
+  it("asserted on a real number of package-wide scans", () => {
+    console.log(`MEASURING_FRAME asserted on ${asserted.n} package-wide scans`);
+    expect(asserted.n, "this contract iterated nothing").toBeGreaterThan(0);
   });
 });

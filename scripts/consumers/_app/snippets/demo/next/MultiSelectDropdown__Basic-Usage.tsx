@@ -18,13 +18,12 @@ export default function MultiSelectDropdownExample() {
   const [basicValue, setBasicValue] = useState<string[]>([]);
   return (
     <div className="w-full sm:max-w-72">
-                {/* Basic usage — works out-of-the-box with built-in styles */}
-                <MultiSelectDropdown
-                  options={staticOptions}
-                  value={basicValue}
-                  onValueChange={(values) => setBasicValue(values)}
-                  placeholder="Select fruits..."
-                />
-              </div>
+      <MultiSelectDropdown
+        options={staticOptions}
+        value={basicValue}
+        onValueChange={(values) => setBasicValue(values)}
+        placeholder="Select fruits..."
+      />
+    </div>
   );
 }

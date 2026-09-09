@@ -71,6 +71,13 @@ beforeEach(() => {
 afterEach(() => spy.mockRestore());
 
 describe("hydration contract", () => {
+  // A run that iterates nothing reports nothing, which reads exactly like a
+  // pass. `overrides.contract` asserted on 3 of 340 slots for months on that
+  // basis, guarding the very bug it was written for.
+  it("iterates a non-empty set", () => {
+    expect(candidates.length, "the candidate set is empty — this contract asserts nothing").toBeGreaterThan(30);
+  });
+
   it("detection sees a real hydration mismatch", async () => {
     // Without this, a suite that never warns is indistinguishable from one
     // whose detection is broken — the failure mode this whole tier exists for.

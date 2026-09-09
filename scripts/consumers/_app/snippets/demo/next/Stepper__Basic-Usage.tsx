@@ -14,13 +14,12 @@ export default function StepperExample() {
   const [basicStep, setBasicStep] = useState<number>(2);
   return (
     <div className="w-full">
-                {}
-                <Stepper
-                  steps={basicSteps}
-                  value={basicStep}
-                  onValueChange={(id) => setBasicStep(id as number)}
-                  isStepClickable={() => true}
-                />
-              </div>
+      <Stepper
+        steps={basicSteps}
+        value={basicStep}
+        onValueChange={(id) => setBasicStep(id as number)}
+        isStepClickable={() => true}
+      />
+    </div>
   );
 }

@@ -643,7 +643,7 @@ const RadioButtonDemo = () => {
             {controlled}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
             onClick={() =>
               setControlled((prev) =>
                 prev === "option-a"

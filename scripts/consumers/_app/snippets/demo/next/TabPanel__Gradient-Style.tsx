@@ -70,20 +70,21 @@ export default function TabPanelExample() {
   const [gradientTab, setGradientTab] = useState("home");
   return (
     <TabPanel
-                tabs={tabsWithIcons}
-                value={gradientTab}
-                onValueChange={setGradientTab}
-                classes={{
-                  root: `w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20`,
-                  list: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60`,
-                  item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
-                  content: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`
-                }}
-              >
-                <div className={"text-sm leading-relaxed text-cl-text-secondary"}>
-                  Custom styled tabs with gradient background (notice the purple
-                  focus ring)
-                </div>
-              </TabPanel>
+      tabs={tabsWithIcons}
+      value={gradientTab}
+      onValueChange={setGradientTab}
+      classes={
+        {
+          root: "w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20",
+          list: "inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60",
+          item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+          content: "p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated"
+        }
+      }
+    >
+      <div className="text-sm leading-relaxed text-cl-text-secondary">
+        Custom styled tabs with gradient background (notice the purple focus ring)
+      </div>
+    </TabPanel>
   );
 }

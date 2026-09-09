@@ -161,7 +161,7 @@ const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
@@ -551,7 +551,7 @@ const SearchableDropdownDemo = () => {
                 <button
                   ref={ref as React.RefCallback<HTMLButtonElement>}
                   {...rest}
-                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? (dark ? "border-cl-border-input-focus bg-cl-bg-elevated text-white shadow-lg shadow-accent/20" : "border-cl-border-input-focus bg-white text-cl-text shadow-lg shadow-accent/20") : dark ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border" : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input"}`}
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? (dark ? "border-cl-border-input-focus bg-cl-bg-elevated text-white shadow-lg shadow-accent/20" : "border-cl-border-input-focus bg-white text-cl-text shadow-lg shadow-accent/20") : dark ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border" : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input"} cursor-pointer`}
                 >
                   <span
                     className={`text-xl ${selectedOption ? "" : "opacity-50"}`}

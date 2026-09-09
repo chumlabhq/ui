@@ -39,13 +39,12 @@ export default function CascadingDropdownExample() {
   const [basicValue, setBasicValue] = useState<CascadingValue>({});
   return (
     <div className="w-full sm:max-w-96">
-                {/* Basic usage — works out-of-the-box with built-in styles */}
-                <CascadingDropdown
-                  options={categoryOptions}
-                  value={basicValue}
-                  onValueChange={(val) => setBasicValue(val)}
-                  placeholder="Select a category..."
-                />
-              </div>
+      <CascadingDropdown
+        options={categoryOptions}
+        value={basicValue}
+        onValueChange={(val) => setBasicValue(val)}
+        placeholder="Select a category..."
+      />
+    </div>
   );
 }

@@ -33,155 +33,187 @@ const CheckCircleIcon = ({ className }: { className?: string }) => (
 export default function RadioButtonExample() {
   return (
     <div className="space-y-4">
-                <div>
-                  <span className={"text-xs font-medium text-cl-text-secondary"}>Checkmark icon</span>
-                  <RadioGroup
-                    name="icon-check"
-                    defaultValue="a"
-                    size="lg"
-                    classes={({
-        root: "",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-                  >
-                    <RadioButton
-                      value="a"
-                      label="Selected with checkmark"
-                      checkedIcon={<CheckCircleIcon className="w-3.5 h-3.5 text-white" />}
-                      uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-cl-text-tertiary" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-                    />
-                    <RadioButton
-                      value="b"
-                      label="Another option"
-                      checkedIcon={<CheckCircleIcon className="w-3.5 h-3.5 text-white" />}
-                      uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-cl-text-tertiary" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-                    />
-                  </RadioGroup>
-                </div>
-                <div>
-                  <span className={"text-xs font-medium text-cl-text-secondary"}>Heart icon with rose color</span>
-                  <RadioGroup
-                    name="icon-heart"
-                    defaultValue="a"
-                    size="lg"
-                    classes={({
-        root: "",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-                  >
-                    <RadioButton
-                      value="a"
-                      label="Favorite option"
-                      checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: ""
-      })}
-                    />
-                    <RadioButton
-                      value="b"
-                      label="Alternative"
-                      checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: ""
-      })}
-                    />
-                  </RadioGroup>
-                </div>
-                <div>
-                  <span className={"text-xs font-medium text-cl-text-secondary"}>Star icon with amber color</span>
-                  <RadioGroup
-                    name="icon-star"
-                    defaultValue="b"
-                    size="lg"
-                    classes={({
-        root: "",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-                  >
-                    <RadioButton
-                      value="a"
-                      label="Basic"
-                      checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: ""
-      })}
-                    />
-                    <RadioButton
-                      value="b"
-                      label="Premium"
-                      checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: ""
-      })}
-                    />
-                  </RadioGroup>
-                </div>
-                <div>
-                  <span className={"text-xs font-medium text-cl-text-secondary"}>Thumbs up icon with green color</span>
-                  <RadioGroup
-                    name="icon-thumb"
-                    defaultValue="yes"
-                    size="xl"
-                    classes={({
-        root: "",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-                    orientation="horizontal"
-                  >
-                    <RadioButton
-                      value="yes"
-                      label="Yes"
-                      checkedIcon={<ThumbsUpIcon className="w-4 h-4 text-white" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: ""
-      })}
-                    />
-                    <RadioButton
-                      value="maybe"
-                      label="Maybe"
-                      checkedIcon={<ThumbsUpIcon className="w-4 h-4 text-white" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: ""
-      })}
-                    />
-                    <RadioButton
-                      value="no"
-                      label="No"
-                      checkedIcon={<ThumbsUpIcon className="w-4 h-4 text-white rotate-180" />}
-                      classes={({
-        root: "flex items-center gap-2",
-        label: `text-sm font-medium text-cl-text`,
-        description: ""
-      })}
-                    />
-                  </RadioGroup>
-                </div>
-              </div>
+      <div>
+        <span className="text-xs font-medium text-cl-text-secondary">Checkmark icon</span>
+        <RadioGroup
+          name="icon-check"
+          defaultValue="a"
+          size="lg"
+          classes={
+            {
+              root: "",
+              label: "text-sm font-medium text-cl-text",
+              description: "text-xs text-cl-text-secondary"
+            }
+          }
+        >
+          <RadioButton
+            value="a"
+            label="Selected with checkmark"
+            checkedIcon={<CheckCircleIcon className="w-3.5 h-3.5 text-white" />}
+            uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-cl-text-tertiary" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: "text-xs text-cl-text-secondary"
+              }
+            }
+          />
+          <RadioButton
+            value="b"
+            label="Another option"
+            checkedIcon={<CheckCircleIcon className="w-3.5 h-3.5 text-white" />}
+            uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-cl-text-tertiary" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: "text-xs text-cl-text-secondary"
+              }
+            }
+          />
+        </RadioGroup>
+      </div>
+      <div>
+        <span className="text-xs font-medium text-cl-text-secondary">
+          Heart icon with rose color
+        </span>
+        <RadioGroup
+          name="icon-heart"
+          defaultValue="a"
+          size="lg"
+          classes={
+            {
+              root: "",
+              label: "text-sm font-medium text-cl-text",
+              description: "text-xs text-cl-text-secondary"
+            }
+          }
+        >
+          <RadioButton
+            value="a"
+            label="Favorite option"
+            checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: ""
+              }
+            }
+          />
+          <RadioButton
+            value="b"
+            label="Alternative"
+            checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: ""
+              }
+            }
+          />
+        </RadioGroup>
+      </div>
+      <div>
+        <span className="text-xs font-medium text-cl-text-secondary">
+          Star icon with amber color
+        </span>
+        <RadioGroup
+          name="icon-star"
+          defaultValue="b"
+          size="lg"
+          classes={
+            {
+              root: "",
+              label: "text-sm font-medium text-cl-text",
+              description: "text-xs text-cl-text-secondary"
+            }
+          }
+        >
+          <RadioButton
+            value="a"
+            label="Basic"
+            checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: ""
+              }
+            }
+          />
+          <RadioButton
+            value="b"
+            label="Premium"
+            checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: ""
+              }
+            }
+          />
+        </RadioGroup>
+      </div>
+      <div>
+        <span className="text-xs font-medium text-cl-text-secondary">
+          Thumbs up icon with green color
+        </span>
+        <RadioGroup
+          name="icon-thumb"
+          defaultValue="yes"
+          size="xl"
+          classes={
+            {
+              root: "",
+              label: "text-sm font-medium text-cl-text",
+              description: "text-xs text-cl-text-secondary"
+            }
+          }
+          orientation="horizontal"
+        >
+          <RadioButton
+            value="yes"
+            label="Yes"
+            checkedIcon={<ThumbsUpIcon className="w-4 h-4 text-white" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: ""
+              }
+            }
+          />
+          <RadioButton
+            value="maybe"
+            label="Maybe"
+            checkedIcon={<ThumbsUpIcon className="w-4 h-4 text-white" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: ""
+              }
+            }
+          />
+          <RadioButton
+            value="no"
+            label="No"
+            checkedIcon={<ThumbsUpIcon className="w-4 h-4 text-white rotate-180" />}
+            classes={
+              {
+                root: "flex items-center gap-2",
+                label: "text-sm font-medium text-cl-text",
+                description: ""
+              }
+            }
+          />
+        </RadioGroup>
+      </div>
+    </div>
   );
 }

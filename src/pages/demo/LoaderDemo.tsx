@@ -22,7 +22,7 @@ const getClasses = (_dark: boolean) => ({
   label: `text-xs font-medium text-cl-text-tertiary`,
   text: `text-sm text-cl-text-secondary`,
   textMuted: `text-xs text-cl-text-secondary`,
-  btn: `inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
+  btn: `inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`,
   btnDisabled: `inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md bg-cl-bg-hover text-cl-text-tertiary cursor-not-allowed dark:bg-cl-bg-elevated dark:text-cl-text-tertiary dark:cursor-not-allowed`,
  sectionCard: `rounded-cl-lg p-8 flex flex-col items-center justify-center gap-3 border border-cl-border bg-cl-bg-elevated`,
   inlineAlert: `flex items-center gap-2 rounded-cl-md px-3 py-2 text-sm bg-cl-warning/15 border border-cl-warning text-cl-warning dark:bg-cl-warning/20 dark:border dark:border-cl-warning/40 dark:text-cl-warning`,

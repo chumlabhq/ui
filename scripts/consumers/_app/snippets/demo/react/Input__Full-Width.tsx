@@ -21,38 +21,42 @@ const MailIcon = ({ className = "" }: { className?: string }) => (
 export default function InputExample() {
   return (
     <div className="w-full space-y-4">
-                  <Input
-                    aria-label="Full width"
-                    placeholder="Full width input"
-                    fullWidth
-                    classes={({
-        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
-        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-        prefix: `text-sm select-none text-cl-text-tertiary`,
-        suffix: `text-sm select-none text-cl-text-tertiary`,
-        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
-      })}
-                  />
-                  <Input
-                    label="Full width, all features"
-                    placeholder="Enter your message..."
-                    fullWidth
-                    startIcon={<MailIcon className={"text-cl-text-tertiary"} />}
-                    clearable
-                    maxLength={200}
-                    showCount
-                    classes={({
-        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
-        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-        prefix: `text-sm select-none text-cl-text-tertiary`,
-        suffix: `text-sm select-none text-cl-text-tertiary`,
-        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
-      })}
-                  />
-                </div>
+      <Input
+        aria-label="Full width"
+        placeholder="Full width input"
+        fullWidth
+        classes={
+          {
+            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+            prefix: "text-sm select-none text-cl-text-tertiary",
+            suffix: "text-sm select-none text-cl-text-tertiary",
+            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+          }
+        }
+      />
+      <Input
+        label="Full width, all features"
+        placeholder="Enter your message..."
+        fullWidth
+        startIcon={<MailIcon className="text-cl-text-tertiary" />}
+        clearable
+        maxLength={200}
+        showCount
+        classes={
+          {
+            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+            prefix: "text-sm select-none text-cl-text-tertiary",
+            suffix: "text-sm select-none text-cl-text-tertiary",
+            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+          }
+        }
+      />
+    </div>
   );
 }

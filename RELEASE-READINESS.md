@@ -68,6 +68,7 @@ past every gate above and were found by eye (§6.9), which is what these answer:
 | snippet floor + library-resolution guard | `build-demo-snippets` refuses to run against a missing library and fails on a collapsed count instead of rewriting its record downward (§1.6) |
 | `rm-owned-dir` | No script recursively removes a directory holding files it did not write (§1.6) |
 | failure persistence | Every non-pass writes its message to disk as it happens, beside Playwright's own artifacts, so a killed run leaves a reason and not just a screenshot (§1.7) |
+| snippet indentation | Every copy-paste snippet is printed from its own JSX tree at two spaces per level, and `--check` re-prints each one and requires identity. 403 of 626 had a line jumping six or more spaces past its parent, because depth used to be recovered from the demo page's own whitespace |
 
 The library build's own post-build asserts ran with it: the default phone entry is
 libphonenumber-free, 250 per-flag chunks are emitted in each module format with no inlined
@@ -210,6 +211,34 @@ does not run when the process is killed:
 `test:e2e:all:self-check` plants a failing test and a timing-out test and now requires four
 things, not two: that each is named with its spec, line and title, and that each left its
 message in both places.
+
+### 1.8 Regenerating the snippets costs a matrix run, and that is correct
+
+The fingerprint hashes every file under `src/` and `e2e/`. Four of those files are derived, and
+the largest is `src/pages/demo/generated/` — 4.0 MB of component docs and copy-paste snippets,
+rebuilt by two generators. Excluding it was considered and **rejected**: it has four runtime
+importers, it renders on the demo routes, and eight e2e specs load those routes (`/toast`,
+`/pagination`, `/input`, `/switch`, `/accordion`, `/button`, `/stepper`, `/tooltip`). Excluding
+it would mean a change to a page the matrix loads stops invalidating the matrix.
+
+The argument for excluding it was that nothing currently asserted reads the generated text —
+axe is scoped to `[data-fixture]`, the visual baselines photograph fixtures, and those eight
+specs assert component behaviour. That is true today, and it is the same reasoning that let a
+checked checkbox pass 404 visual baselines (§6.9). A gate that stops seeing a change it
+currently catches, to save thirty-five minutes, is the trade this branch keeps finding.
+
+So the tax is recorded rather than hidden: **regenerating the demo snippets or the component
+docs invalidates all seven projects.** The long-term fix is to stop the demo routes rendering
+generated content, which removes the coupling instead of ignoring it. That is post-0.1.0 work.
+
+**Other derived content inside the fingerprint**, named here so it is not discovered mid-run:
+
+| Path | Size | Status |
+| --- | --- | --- |
+| `src/pages/demo/generated/` | 4.0 MB, 3 files | Must stay hashed — see above |
+| `src/components/CountryFlag/flags/` | 1.7 MB, 251 files | Must stay hashed: 8 runtime importers and its own e2e spec |
+| `src/components/*/*.schema.json` | 277 KB, 32 files | Two runtime importers, **not yet checked**. If both turn out to be type-only, and so erased at build, the schemas could be excluded on the same terms. Post-0.1.0 |
+| `src/styles/tokens.css` | 1 file | Must stay hashed: it is the stylesheet |
 
 ## 2. What the package claims, and what proves it
 

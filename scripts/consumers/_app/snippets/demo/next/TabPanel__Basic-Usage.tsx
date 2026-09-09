@@ -9,7 +9,6 @@ const basicTabs: Tab[] = [
 export default function TabPanelExample() {
   return (
     <>
-      {/* Basic usage — works out-of-the-box with built-in styles */}
       <TabPanel tabs={basicTabs} defaultValue="home" />
     </>
   );

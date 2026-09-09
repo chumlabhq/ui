@@ -20,6 +20,7 @@ export type AnimationEasing =
   | "ease-in-out"
   | string;
 
+/** The four points in an expand or collapse a caller can hook. */
 export interface AnimationCallbacks {
   /** Fires when the expand transition begins. */
   onOpenStart?: () => void;
@@ -32,21 +33,32 @@ export interface AnimationCallbacks {
 }
 
 export interface AccordionClasses {
+  /** The accordion's outer element. */
   root?: string;
+  /** Each item's wrapper. Carries the variant's border treatment. */
   item?: string;
+  /** The `<button>` inside each item's heading. */
   trigger?: string;
+  /** The trigger's label text. */
   itemText?: string;
+  /** The padded region inside the panel that holds the content. */
   body?: string;
+  /** The animating panel. It is the grid whose row goes 0fr to 1fr. */
   content?: string;
+  /** The wrapper around the expand/collapse indicator. */
   icon?: string;
   /**
    * The chevron glyph itself, inside the `icon` slot. Style `icon` to reach the
    * wrapper and this to reach the glyph alone.
    */
   itemIndicator?: string;
+  /** The optional line under the trigger's label. */
   description?: string;
+  /** An icon rendered before the label, when one is passed. */
   itemIcon?: string;
+  /** The slot after the label for controls that are not the trigger itself. */
   triggerActions?: string;
+  /** The heading element the trigger sits inside. */
   header?: string;
 }
 
@@ -63,17 +75,27 @@ export interface AccordionRef {
   element: HTMLDivElement | null;
 }
 
+/** The payload passed to `onExpandedChange`. */
 export interface AccordionExpandEvent {
+  /** The item the event is about. */
   value: string;
+  /** Its state after the change. */
   isExpanded: boolean;
+  /** How many items are expanded once the change lands. */
   expandedCount: number;
+  /** How many items the accordion holds. */
   totalCount: number;
 }
 
+/** How an accordion persists which items are open. */
 export interface StorageConfig {
+  /** The storage key the expanded set is written under. */
   key: string;
+  /** Where to persist. Defaults to `localStorage` when one exists. */
   storage?: Storage;
+  /** Turns the expanded values into the stored string. */
   serialize?: (values: string[]) => string;
+  /** Reads the stored string back into expanded values. */
   deserialize?: (stored: string) => string[];
 }
 
@@ -238,23 +260,39 @@ export interface AccordionConfigValue {
   animationEasing: AnimationEasing;
 }
 
+/** What `Accordion` hands to the items beneath it. */
 export interface AccordionContextValue {
+  /** Whether one item or several may be expanded. */
   type: AccordionType;
+  /** Whether the last expanded item may be closed. */
   collapsible: boolean;
+  /** Whether arrow keys wrap past the first and last trigger. */
   loop: boolean;
+  /** How many items are registered, used for the announcement. */
   itemCount: number;
+  /** Whether expanding announces itself to a screen reader. */
   announceExpanded: boolean;
+  /** The ceiling on simultaneously expanded items in `multiple` mode. */
   maxExpanded?: number;
+  /** The item waiting on a `preventClose` guard to resolve. */
   pendingItem: string | null;
 }
 
+/** What each item hands to its own trigger and panel. */
 export interface AccordionItemContextValue {
+  /** This item's own value. */
   value: string;
+  /** Whether this item alone is disabled. */
   disabled: boolean;
+  /** Whether this item is currently open. */
   isExpanded: boolean;
+  /** The trigger's id, referenced by the panel's `aria-labelledby`. */
   triggerId: string;
+  /** The panel's id, referenced by the trigger's `aria-controls`. */
   contentId: string;
+  /** The description's id, referenced by `aria-describedby`. */
   descriptionId?: string;
+  /** Fires when this item's expanded state changes. */
   onToggle?: (isExpanded: boolean) => void;
 }
 
@@ -264,15 +302,21 @@ export interface AccordionItemContextValue {
  * Accordion's slots.
  */
 export interface AccordionShimmerClasses {
+  /** The placeholder's outer element. */
   root?: string;
+  /** Each placeholder row. */
   item?: string;
+  /** The bar standing in for a trigger. */
   trigger?: string;
+  /** The bar standing in for the label. */
   itemText?: string;
   /** The title placeholder bar. */
   titleBar?: string;
   /** The description placeholder bars, in the trigger and in the body. */
   descriptionBar?: string;
+  /** The block standing in for the indicator. */
   icon?: string;
+  /** The block standing in for an expanded panel, shown only when `showContent` is set. */
   body?: string;
 }
 

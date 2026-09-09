@@ -934,7 +934,7 @@ const InputDemo = () => {
                       } else if (lbl === "Get Value")
                         alert(`"${inputRef.current?.value}"`);
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6`}
+                    className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6 cursor-pointer`}
                   >
                     {lbl}
                   </button>
@@ -1119,14 +1119,14 @@ const InputDemo = () => {
                 </label>
                 <button
                   type="button"
-                  className={`text-sm font-medium text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent`}
+                  className={`text-sm font-medium text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent cursor-pointer`}
                 >
                   Forgot?
                 </button>
               </div>
               <button
                 type="submit"
-                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20`}
+                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer`}
               >
                 Sign In
               </button>
@@ -1224,7 +1224,7 @@ const InputDemo = () => {
               />
               <button
                 type="submit"
-                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20`}
+                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer`}
               >
                 Create Account
               </button>

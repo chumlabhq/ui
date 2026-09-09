@@ -4,32 +4,32 @@ import { ResizablePanel } from "@chumlab/ui/resizable-panel";
 const simpleContent = (color: string, label: string, size: number) => {
     const cl = {
       blue: {
-        text: false ? "text-cl-accent" : "text-cl-accent",
-        muted: false ? "text-cl-accent/60" : "text-cl-accent/60",
+        text: "text-cl-accent",
+        muted: "text-cl-accent/60",
       },
       green: {
-        text: false ? "text-cl-success" : "text-cl-success",
-        muted: false ? "text-cl-success/60" : "text-cl-success/60",
+        text: "text-cl-success",
+        muted: "text-cl-success/60",
       },
       amber: {
-        text: false ? "text-cl-warning" : "text-cl-warning",
-        muted: false ? "text-cl-warning/60" : "text-cl-warning/60",
+        text: "text-cl-warning",
+        muted: "text-cl-warning/60",
       },
       indigo: {
-        text: false ? "text-cl-accent" : "text-cl-accent",
-        muted: false ? "text-cl-accent/60" : "text-cl-accent/60",
+        text: "text-cl-accent",
+        muted: "text-cl-accent/60",
       },
       teal: {
-        text: false ? "text-cl-accent" : "text-cl-accent",
-        muted: false ? "text-cl-accent/60" : "text-cl-accent/60",
+        text: "text-cl-accent",
+        muted: "text-cl-accent/60",
       },
       purple: {
-        text: false ? "text-cl-accent" : "text-cl-accent",
-        muted: false ? "text-cl-accent/60" : "text-cl-accent/60",
+        text: "text-cl-accent",
+        muted: "text-cl-accent/60",
       },
     }[color] ?? {
-      text: false ? "text-cl-text-tertiary" : "text-cl-text-secondary",
-      muted: false ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
+      text: "text-cl-text-secondary",
+      muted: "text-cl-text-tertiary",
     };
     return (
       <div className="h-full p-4 flex flex-col justify-between">
@@ -67,41 +67,43 @@ export default function ResizablePanelExample() {
   const [controlledWidth, setControlledWidth] = useState(320);
   return (
     <div className="w-full space-y-4">
-                <div className="flex items-center gap-4">
-                  <label
-                    className={`text-sm font-medium whitespace-nowrap text-cl-text-secondary`}
-                  >
-                    Width: {controlledWidth}px
-                  </label>
-                  <input
-                    type="range"
-                    min={150}
-                    max={500}
-                    value={controlledWidth}
-                    onChange={(e) => setControlledWidth(Number(e.target.value))}
-                    className="flex-1"
-                    aria-label="Panel width"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setControlledWidth(320)}
-                    className={"px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90"}
-                  >
-                    Reset
-                  </button>
-                </div>
-                <ResizablePanel
-                  value={controlledWidth}
-                  onValueChange={setControlledWidth}
-                  minValue={150}
-                  maxValue={500}
-                  classes={{
-                    root: panelRootClass("blue"),
-                    handle: handleClass("blue")
-                  }}
-                >
-                  {simpleContent("blue", "Controlled", controlledWidth)}
-                </ResizablePanel>
-              </div>
+      <div className="flex items-center gap-4">
+        <label className="text-sm font-medium whitespace-nowrap text-cl-text-secondary">
+          Width:
+          {controlledWidth}
+          px
+        </label>
+        <input
+          type="range"
+          min={150}
+          max={500}
+          value={controlledWidth}
+          onChange={(e) => setControlledWidth(Number(e.target.value))}
+          className="flex-1"
+          aria-label="Panel width"
+        />
+        <button
+          type="button"
+          onClick={() => setControlledWidth(320)}
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90"
+        >
+          Reset
+        </button>
+      </div>
+      <ResizablePanel
+        value={controlledWidth}
+        onValueChange={setControlledWidth}
+        minValue={150}
+        maxValue={500}
+        classes={
+          {
+            root: panelRootClass("blue"),
+            handle: handleClass("blue")
+          }
+        }
+      >
+        {simpleContent("blue", "Controlled", controlledWidth)}
+      </ResizablePanel>
+    </div>
   );
 }

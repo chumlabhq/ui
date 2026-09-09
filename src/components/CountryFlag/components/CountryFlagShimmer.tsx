@@ -37,7 +37,7 @@ export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmer
     const base = unstyled
       ? UNSTYLED_COUNTRY_FLAG_SHIMMER_CLASSES
       : DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES;
-    const rootClass = classes?.root ?? base.root;
+    const rootClass = cn(base.root, classes?.root);
 
     return (
       <span

@@ -235,7 +235,7 @@ function FloatingActions<T>({
             </svg>
           </button>
           <button
-            className={`${buttonClassName} hover:!text-cl-error hover:!bg-cl-error/15`}
+            className={`${buttonClassName} hover:!text-cl-error hover:!bg-cl-error/15 cursor-pointer`}
             title="Delete"
             onClick={() => alert(`Delete: ${name}`)}
           >
@@ -1674,7 +1674,7 @@ const TableDemo = () => {
         header: "Actions",
         cell: () => (
           <button
-            className={`px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30`}
+            className={`px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer`}
             onClick={() => alert("Action clicked")}
           >
             Edit
@@ -2725,7 +2725,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
               {/* Action Buttons */}
               <div className="flex items-center gap-3">
-                <button className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors flex items-center gap-2 bg-cl-text text-cl-bg hover:opacity-90`}>
+                <button className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors flex items-center gap-2 bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`}>
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -2742,7 +2742,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   Add User
                 </button>
                 <button
- className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-white border-cl-border-input hover:bg-cl-bg-hover dark:text-cl-text dark:bg-cl-bg dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated`}
+ className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-white border-cl-border-input hover:bg-cl-bg-hover dark:text-cl-text dark:bg-cl-bg dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated cursor-pointer`}
                 >
                   Import CSV
                 </button>
@@ -5703,7 +5703,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 {contextMenuInfo}
                 <button
                   onClick={() => setContextMenuInfo(null)}
-                  className={`ml-3 underline text-xs text-cl-warning dark:text-cl-warning`}
+                  className={`ml-3 underline text-xs text-cl-warning dark:text-cl-warning cursor-pointer`}
                 >
                   Dismiss
                 </button>

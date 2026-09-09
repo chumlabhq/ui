@@ -516,43 +516,43 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The accordion's outer element."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Each item's wrapper. Carries the variant's border treatment."
           },
           {
             "name": "trigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The `<button>` inside each item's heading."
           },
           {
             "name": "itemText",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The trigger's label text."
           },
           {
             "name": "body",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The padded region inside the panel that holds the content."
           },
           {
             "name": "content",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The animating panel. It is the grid whose row goes 0fr to 1fr."
           },
           {
             "name": "icon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The wrapper around the expand/collapse indicator."
           },
           {
             "name": "itemIndicator",
@@ -564,25 +564,25 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The optional line under the trigger's label."
           },
           {
             "name": "itemIcon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "An icon rendered before the label, when one is passed."
           },
           {
             "name": "triggerActions",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The slot after the label for controls that are not the trigger itself."
           },
           {
             "name": "header",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The heading element the trigger sits inside."
           }
         ]
       },
@@ -593,25 +593,25 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The placeholder's outer element."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Each placeholder row."
           },
           {
             "name": "trigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The bar standing in for a trigger."
           },
           {
             "name": "itemText",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The bar standing in for the label."
           },
           {
             "name": "titleBar",
@@ -629,13 +629,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "icon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The block standing in for the indicator."
           },
           {
             "name": "body",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The block standing in for an expanded panel, shown only when `showContent` is set."
           }
         ]
       }
@@ -643,133 +643,133 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "AccordionContextValue",
-        "description": "",
+        "description": "What `Accordion` hands to the items beneath it.",
         "members": [
           {
             "name": "type",
             "type": "AccordionType",
             "required": true,
-            "description": ""
+            "description": "Whether one item or several may be expanded."
           },
           {
             "name": "collapsible",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Whether the last expanded item may be closed."
           },
           {
             "name": "loop",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Whether arrow keys wrap past the first and last trigger."
           },
           {
             "name": "itemCount",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "How many items are registered, used for the announcement."
           },
           {
             "name": "announceExpanded",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Whether expanding announces itself to a screen reader."
           },
           {
             "name": "maxExpanded",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "The ceiling on simultaneously expanded items in `multiple` mode."
           },
           {
             "name": "pendingItem",
             "type": "string | null",
             "required": true,
-            "description": ""
+            "description": "The item waiting on a `preventClose` guard to resolve."
           }
         ]
       },
       {
         "name": "AccordionExpandEvent",
-        "description": "",
+        "description": "The payload passed to `onExpandedChange`.",
         "members": [
           {
             "name": "value",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The item the event is about."
           },
           {
             "name": "isExpanded",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Its state after the change."
           },
           {
             "name": "expandedCount",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "How many items are expanded once the change lands."
           },
           {
             "name": "totalCount",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "How many items the accordion holds."
           }
         ]
       },
       {
         "name": "AccordionItemContextValue",
-        "description": "",
+        "description": "What each item hands to its own trigger and panel.",
         "members": [
           {
             "name": "value",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "This item's own value."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Whether this item alone is disabled."
           },
           {
             "name": "isExpanded",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Whether this item is currently open."
           },
           {
             "name": "triggerId",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The trigger's id, referenced by the panel's `aria-labelledby`."
           },
           {
             "name": "contentId",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The panel's id, referenced by the trigger's `aria-controls`."
           },
           {
             "name": "descriptionId",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The description's id, referenced by `aria-describedby`."
           },
           {
             "name": "onToggle",
             "type": "(isExpanded: boolean) => void",
             "required": false,
-            "description": ""
+            "description": "Fires when this item's expanded state changes."
           }
         ]
       },
       {
         "name": "AnimationCallbacks",
-        "description": "",
+        "description": "The four points in an expand or collapse a caller can hook.",
         "members": [
           {
             "name": "onOpenStart",
@@ -799,31 +799,31 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "StorageConfig",
-        "description": "",
+        "description": "How an accordion persists which items are open.",
         "members": [
           {
             "name": "key",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The storage key the expanded set is written under."
           },
           {
             "name": "storage",
             "type": "Storage",
             "required": false,
-            "description": ""
+            "description": "Where to persist. Defaults to `localStorage` when one exists."
           },
           {
             "name": "serialize",
             "type": "(values: string[]) => string",
             "required": false,
-            "description": ""
+            "description": "Turns the expanded values into the stored string."
           },
           {
             "name": "deserialize",
             "type": "(stored: string) => string[]",
             "required": false,
-            "description": ""
+            "description": "Reads the stored string back into expanded values."
           }
         ]
       }

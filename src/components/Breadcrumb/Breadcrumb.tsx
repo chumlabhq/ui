@@ -279,18 +279,31 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_BREADCRUMB_CLASSES : DEFAULT_BREADCRUMB_CLASSES;
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
-    const mergedClasses: Required<BreadcrumbClasses> = useMemo(
+    // `linkAndItem` is internal: the anchor's combined class, not a slot a
+    // consumer can name.
+    const mergedClasses: Required<BreadcrumbClasses> & { linkAndItem: string } = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        list: classesProp?.list ?? baseClasses.list,
-        item: classesProp?.item ?? baseClasses.item,
-        link: classesProp?.link ?? baseClasses.link,
-        separator: classesProp?.separator ?? baseClasses.separator,
-        itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
-        ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
-        ellipsisTrigger: classesProp?.ellipsisTrigger ?? baseClasses.ellipsisTrigger,
-        content: classesProp?.content ?? baseClasses.content,
-        collapsedItem: classesProp?.collapsedItem ?? baseClasses.collapsedItem,
+        root: cn(baseClasses.root, classesProp?.root),
+        list: cn(baseClasses.list, classesProp?.list),
+        item: cn(baseClasses.item, classesProp?.item),
+        link: cn(baseClasses.link, classesProp?.link),
+        // The anchor paints from `link` AND `item`. Composing each slot on its
+        // own and joining them applied the library's `item` after the
+        // consumer's `link` override and beat it — both carry `rounded`. Library
+        // halves first, then consumer halves, so the consumer stays last however
+        // many slots land on one element.
+        linkAndItem: cn(
+          baseClasses.link,
+          baseClasses.item,
+          classesProp?.link,
+          classesProp?.item,
+        ),
+        separator: cn(baseClasses.separator, classesProp?.separator),
+        itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
+        ellipsis: cn(baseClasses.ellipsis, classesProp?.ellipsis),
+        ellipsisTrigger: cn(baseClasses.ellipsisTrigger, classesProp?.ellipsisTrigger),
+        content: cn(baseClasses.content, classesProp?.content),
+        collapsedItem: cn(baseClasses.collapsedItem, classesProp?.collapsedItem),
       }),
       [classesProp, baseClasses],
     );
@@ -523,7 +536,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           return wrapWithTooltip(
             <a
               href={item.href}
-              className={cn(mergedClasses.link, mergedClasses.item) || undefined}
+              className={mergedClasses.linkAndItem || undefined}
               onClick={(e) => {
                 if (item.onClick || onItemClick) {
                   e.preventDefault();

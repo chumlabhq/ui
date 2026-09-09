@@ -58,5 +58,23 @@ const fixtures: Fixtures<typeof Accordion> = [
     children: items,
     note: "Adds a live region that announces the expanded panel; nothing rendered it before.",
   },
+  {
+    name: "classes-override",
+    props: {
+      type: "single",
+      collapsible: true,
+      defaultValue: "one",
+      // A consumer restyling one slot, written the way the demo pages write it:
+      // spacing and colour, and no cursor or focus ring of its own. `classes`
+      // used to REPLACE the slot, so this rendered a trigger with no pointer
+      // cursor and no focus indicator — a WCAG 2.4.7 failure on any override.
+      // No fixture passed a `classes` value at all, so the cursor and
+      // focus-ring gates rendered only un-overridden markup and reported green
+      // while every demo page was wrong.
+      classes: { trigger: "px-6 py-3 bg-cl-bg-elevated" },
+    },
+    children: items,
+    note: "The only fixture that overrides a slot; without it the cursor and focus-ring gates never see the case the defect lived in.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

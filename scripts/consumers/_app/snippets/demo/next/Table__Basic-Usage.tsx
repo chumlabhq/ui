@@ -21,13 +21,7 @@ const StatusBadge = ({
   status: User["status"];
   dark?: boolean;
 }) => {
-  const styles = false
-    ? {
-        active: "bg-cl-success/15 text-cl-success",
-        inactive: "bg-cl-text/15 text-cl-text-tertiary",
-        pending: "bg-cl-warning/15 text-cl-warning",
-      }
-    : {
+  const styles = {
         active: "bg-cl-success/15 text-cl-success",
         inactive: "bg-cl-bg-hover text-cl-text",
         pending: "bg-cl-warning/15 text-cl-warning",

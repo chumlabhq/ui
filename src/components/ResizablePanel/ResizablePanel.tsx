@@ -62,8 +62,8 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo(() => ({
-      root: classesProp?.root ?? baseClasses.root,
-      handle: classesProp?.handle ?? baseClasses.handle,
+      root: cn(baseClasses.root, classesProp?.root),
+      handle: cn(baseClasses.handle, classesProp?.handle),
     }), [classesProp, baseClasses]);
 
     const generatedId = useId();

@@ -64,14 +64,14 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const isUnstyled = unstyled || providerUnstyled;
   const baseClasses = isUnstyled ? UNSTYLED_TOAST_CLASSES : DEFAULT_TOAST_CLASSES;
   const mergedClasses: Required<ToastClasses> = useMemo(() => ({
-    root: classesProp?.root ?? providerClasses?.root ?? baseClasses.root,
-    body: classesProp?.body ?? providerClasses?.body ?? baseClasses.body,
-    track: classesProp?.track ?? providerClasses?.track ?? baseClasses.track,
-    title: classesProp?.title ?? providerClasses?.title ?? baseClasses.title,
-    description: classesProp?.description ?? providerClasses?.description ?? baseClasses.description,
-    indicator: classesProp?.indicator ?? providerClasses?.indicator ?? baseClasses.indicator,
-    closeTrigger: classesProp?.closeTrigger ?? providerClasses?.closeTrigger ?? baseClasses.closeTrigger,
-    icon: classesProp?.icon ?? providerClasses?.icon ?? baseClasses.icon,
+    root: cn(baseClasses.root, classesProp?.root ?? providerClasses?.root),
+    body: cn(baseClasses.body, classesProp?.body ?? providerClasses?.body),
+    track: cn(baseClasses.track, classesProp?.track ?? providerClasses?.track),
+    title: cn(baseClasses.title, classesProp?.title ?? providerClasses?.title),
+    description: cn(baseClasses.description, classesProp?.description ?? providerClasses?.description),
+    indicator: cn(baseClasses.indicator, classesProp?.indicator ?? providerClasses?.indicator),
+    closeTrigger: cn(baseClasses.closeTrigger, classesProp?.closeTrigger ?? providerClasses?.closeTrigger),
+    icon: cn(baseClasses.icon, classesProp?.icon ?? providerClasses?.icon),
   }), [classesProp, providerClasses, baseClasses]);
 
   const defaultIcon = getDefaultIcon(type);

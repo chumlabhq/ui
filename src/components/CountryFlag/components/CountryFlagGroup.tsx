@@ -36,9 +36,9 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
 
     const mergedClasses: Required<CountryFlagGroupClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? DEFAULT_COUNTRYFLAG_GROUP_CLASSES.root,
-        item: classesProp?.item ?? DEFAULT_COUNTRYFLAG_GROUP_CLASSES.item,
-        count: classesProp?.count ?? DEFAULT_COUNTRYFLAG_GROUP_CLASSES.count,
+        root: cn(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.root, classesProp?.root),
+        item: cn(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.item, classesProp?.item),
+        count: cn(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.count, classesProp?.count),
       }),
       [classesProp],
     );

@@ -5,17 +5,19 @@ export default function CheckboxExample() {
   const [indeterminate, setIndeterminate] = useState(true);
   return (
     <Checkbox
-                label="Select all items"
-                indeterminate={indeterminate}
-                checked={false}
-                onValueChange={() => setIndeterminate(!indeterminate)}
-                size="md"
-                shape="rounded"
-                classes={({
-        root: "",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-              />
+      label="Select all items"
+      indeterminate={indeterminate}
+      checked={false}
+      onValueChange={() => setIndeterminate(!indeterminate)}
+      size="md"
+      shape="rounded"
+      classes={
+        {
+          root: "",
+          label: "text-sm font-medium text-cl-text",
+          description: "text-xs text-cl-text-secondary"
+        }
+      }
+    />
   );
 }

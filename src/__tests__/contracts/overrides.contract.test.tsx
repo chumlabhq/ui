@@ -36,35 +36,18 @@ beforeEach(() => setReducedMotion(false));
 
 const candidates = COMPONENTS.filter((c) => c.supports.classes && c.defaults);
 
+/**
+ * Coverage is counted across the suite, not per component: plenty of components
+ * have no slot carrying a cursor, radius or padding utility, and that is not a
+ * defect. What would be a defect is the whole set collapsing to nothing, which
+ * is how the version this replaced came to assert on 3 slots out of 340.
+ */
+const exercised = { composed: 0, conflicts: 0 };
+
 const tokensOf = (value: unknown) =>
   typeof value === "string"
     ? [...new Set(value.split(/\s+/).filter(Boolean))]
     : [];
-
-/**
- * Tokens that identify a key uniquely within its own component. A key whose
- * every token is shared with another slot cannot be told apart from outside the
- * component, so it is skipped rather than asserted-and-excused.
- */
-const identifyingTokens = (
-  defaults: Record<string, string>,
-  counts: Map<string, number>,
-) => {
-  const out = new Map<string, string[]>();
-  for (const [key, value] of Object.entries(defaults)) {
-    const unique = tokensOf(value).filter((t) => counts.get(t) === 1);
-    if (unique.length) out.set(key, unique);
-  }
-  return out;
-};
-
-const elementsWithAll = (root: Element, tokens: string[]) =>
-  [root, ...Array.from(root.querySelectorAll("*"))].filter((el) => {
-    const cls = el.getAttribute("class");
-    if (!cls) return false;
-    const set = new Set(cls.split(/\s+/).filter(Boolean));
-    return tokens.every((t) => set.has(t));
-  });
 
 describe("classes override contract", () => {
   it("the index reports components with a classes prop and default classes", () => {
@@ -73,48 +56,36 @@ describe("classes override contract", () => {
 
   describe.each(candidates)(
     "$name",
-    ({ name, Component, props, defaults, allTokenCounts }) => {
-      const identifying = identifyingTokens(defaults!, allTokenCounts);
+    ({ name, Component, props, defaults }) => {
       const fixtures = fixturesFor(name).filter((f) => !f.render);
 
-        it("a consumer value displaces the default for every slot it renders", async () => {
-        const ignored: string[] = [];
+      /**
+       * Located by the override, not by a token unique to the slot.
+       *
+       * The previous pair asserted ABSENCE — that a slot's identifying tokens
+       * were gone after an override — and identifying tokens were those unique
+       * across every default map the component has. Almost none are: a token
+       * shared with a size, variant or shimmer map is disqualified, so the
+       * filter emptied and the loops asserted nothing. It covered 3 of 340
+       * slots, 35 of 38 components had nothing checked at all, and it was green
+       * for the whole time the library was discarding focus rings on 386 sites.
+       *
+       * An absence assertion passes trivially when the matcher finds nothing.
+       * These assert PRESENCE: find the element carrying the consumer's own
+       * sentinel — unambiguous, and its absence is itself a failure — and then
+       * check what else is on it.
+       */
+      const SENTINEL = "ovr-sentinel";
 
-        for (const [key, tokens] of identifying) {
-          for (const f of fixtures) {
-            const element = (
-              <Component {...props} {...f.props} classes={{ [key]: `ovr-${key}` }}>
-                {f.children as React.ReactNode}
-              </Component>
-            );
-            const { container } = render(
-              (f.wrap ? f.wrap(element) : element) as React.ReactElement,
-            );
-            await applyAct(f, container);
+      const slotsWithDefaults = Object.entries(defaults!).filter(
+        ([, v]) => typeof v === "string" && v.trim(),
+      );
 
-            // The slot's identifying tokens must not survive its own override,
-            // whether the component ignored the value outright or merged with it.
-            if (elementsWithAll(document.body, tokens).length > 0) {
-              ignored.push(`${key} in "${f.name}" (kept ${tokens.join(" ")})`);
-            }
-            cleanup();
-          }
-        }
-
-        expect(
-          ignored,
-          `classes values did not displace their defaults: ${ignored.join("; ")}`,
-        ).toEqual([]);
-      });
-
-      it("no slot renders its default once every key is overridden", async () => {
-        const overrides = Object.fromEntries(
-          [...identifying.keys()].map((key) => [key, `ovr-${key}`]),
-        );
-        const leftover = new Set<string>();
+      const renderWithOverride = async (key: string) => {
+        const seen: { cls: Set<string> }[] = [];
         for (const f of fixtures) {
           const element = (
-            <Component {...props} {...f.props} classes={overrides}>
+            <Component {...props} {...f.props} classes={{ [key]: SENTINEL }}>
               {f.children as React.ReactNode}
             </Component>
           );
@@ -122,16 +93,136 @@ describe("classes override contract", () => {
             (f.wrap ? f.wrap(element) : element) as React.ReactElement,
           );
           await applyAct(f, container);
-          for (const [key, tokens] of identifying)
-            if (elementsWithAll(document.body, tokens).length > 0) leftover.add(key);
+          for (const el of document.body.querySelectorAll(`.${SENTINEL}`)) {
+            seen.push({ cls: new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean)) });
+          }
           cleanup();
         }
+        return seen;
+      };
 
+      it("a slot keeps its default classes when a consumer overrides it", async () => {
+        const notComposed: string[] = [];
+        let covered = 0;
+
+        for (const [key, value] of slotsWithDefaults) {
+          const tokens = tokensOf(value);
+          const rendered = await renderWithOverride(key);
+          if (rendered.length === 0) continue; // the slot never rendered in any fixture
+          covered += 1;
+          // At least one default token must still be on the element the
+          // consumer's value landed on. Composition, stated positively.
+          const composed = rendered.some((r) => tokens.some((t) => r.cls.has(t)));
+          if (!composed) notComposed.push(`${key} (kept none of ${tokens.length} default tokens)`);
+        }
+
+        exercised.composed += covered;
         expect(
-          [...leftover],
-          `slots still rendering their defaults after a full override: ${[...leftover].join(", ")}`,
+          notComposed,
+          `${name}: a consumer override replaced the library default instead of composing with it: ${notComposed.join("; ")}`,
+        ).toEqual([]);
+      });
+
+      it("a conflicting consumer class beats the library's", async () => {
+        // Families where tailwind-merge resolves to whichever comes last, so
+        // the consumer's member must win. Cursor and ring are here because they
+        // are what the library was silently taking away.
+        // Two candidates per family, so the value chosen always differs from
+        // the library's own — `p-0` against a default of `p-0` asserts both
+        // that it is present and that it is absent.
+        const CONFLICTS: [RegExp, string[]][] = [
+          [/^cursor-/, ["cursor-default", "cursor-help"]],
+          [/^rounded(-|$)/, ["rounded-full", "rounded-none"]],
+          [/^p-\d/, ["p-8", "p-0"]],
+        ];
+        const lost: string[] = [];
+        let covered = 0;
+
+        for (const [key, value] of slotsWithDefaults) {
+          const tokens = tokensOf(value);
+          const pair = CONFLICTS.map(([re, options]) => {
+            const theirs = tokens.find((t) => re.test(t));
+            return theirs ? ([theirs, options.find((o) => o !== theirs)] as const) : null;
+          }).find((x): x is readonly [string, string] => Boolean(x && x[1]));
+          if (!pair) continue;
+          const [theirs, mine] = pair;
+
+          for (const f of fixtures) {
+            const element = (
+              <Component {...props} {...f.props} classes={{ [key]: `${SENTINEL} ${mine}` }}>
+                {f.children as React.ReactNode}
+              </Component>
+            );
+            const { container } = render(
+              (f.wrap ? f.wrap(element) : element) as React.ReactElement,
+            );
+            await applyAct(f, container);
+            for (const el of document.body.querySelectorAll(`.${SENTINEL}`)) {
+              const cls = new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean));
+              covered += 1;
+              if (!cls.has(mine) || cls.has(theirs!)) {
+                lost.push(`${key}: wanted ${mine} to beat ${theirs}`);
+              }
+            }
+            cleanup();
+          }
+        }
+
+        exercised.conflicts += covered;
+        expect(
+          [...new Set(lost)],
+          `${name}: the library's class survived a conflicting consumer class: ${[...new Set(lost)].join("; ")}`,
         ).toEqual([]);
       });
     },
   );
+
+  /**
+   * The check, shown discriminating.
+   *
+   * The version this replaced was green for months while asserting on 3 slots
+   * of 340 — it could not have failed, and nobody could tell. So the predicate
+   * is run against two components built to differ only in the thing being
+   * tested: one that composes and one that replaces, the shape every component
+   * had before this change. It has to accept the first and name the second.
+   */
+  describe("the composition check itself", () => {
+    const DEFAULTS = "lib-alpha lib-beta";
+
+    /** How every component behaved before this change. */
+    const Replacing = ({ classes }: { classes?: { root?: string } }) => (
+      <div data-testid="probe" className={classes?.root ?? DEFAULTS} />
+    );
+    /** How they behave now. */
+    const Composing = ({ classes }: { classes?: { root?: string } }) => (
+      <div data-testid="probe" className={`${DEFAULTS} ${classes?.root ?? ""}`.trim()} />
+    );
+
+    const composesUnderOverride = (C: typeof Replacing) => {
+      const { container } = render(<C classes={{ root: "ovr-sentinel" }} />);
+      const el = container.querySelector(".ovr-sentinel");
+      if (!el) return null; // the override never reached the DOM
+      const cls = new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean));
+      const composed = DEFAULTS.split(" ").some((t) => cls.has(t));
+      cleanup();
+      return composed;
+    };
+
+    it("accepts a component that composes", () => {
+      expect(composesUnderOverride(Composing)).toBe(true);
+    });
+
+    it("names a component that replaces", () => {
+      expect(
+        composesUnderOverride(Replacing),
+        "the check passed a component that discarded its defaults — it cannot fail",
+      ).toBe(false);
+    });
+  });
+
+  it("asserted on a real number of slots, across the suite", () => {
+    // The figures this replaced: 3 slots of 340, 35 of 38 components silent.
+    expect(exercised.composed, "no slot anywhere composed an override").toBeGreaterThan(200);
+    expect(exercised.conflicts, "no conflicting override was exercised anywhere").toBeGreaterThan(20);
+  });
 });

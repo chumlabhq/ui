@@ -5,20 +5,13 @@ export default function SwitchExample() {
   const [basicSwitch, setBasicSwitch] = useState(false);
   return (
     <div className="flex flex-col gap-4">
-                {}
-                <Switch
-                  label="Email notifications"
-                  checked={basicSwitch}
-                  onValueChange={setBasicSwitch}
-                />
-                <Switch
-                  label="Dark mode"
-                  defaultChecked
-                />
-                <Switch
-                  label="Maintenance mode"
-                  disabled
-                />
-              </div>
+      <Switch
+        label="Email notifications"
+        checked={basicSwitch}
+        onValueChange={setBasicSwitch}
+      />
+      <Switch label="Dark mode" defaultChecked />
+      <Switch label="Maintenance mode" disabled />
+    </div>
   );
 }

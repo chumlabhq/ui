@@ -16,15 +16,15 @@ interface User {
 
 function getTableClasses(_dark: boolean) {
   return {
-    container: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
+    container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: `px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary bg-cl-bg-elevated border-cl-border dark:text-cl-text-tertiary dark:bg-cl-bg-elevated dark:border-cl-text/[0.06]`,
+    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary bg-cl-bg-elevated border-cl-border dark:text-cl-text-tertiary dark:bg-cl-bg-elevated dark:border-cl-text/[0.06]",
     body: "",
-    row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover`,
-    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15`,
-    cell: `px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text`,
-    empty: `flex items-center justify-center py-12 text-cl-text-secondary`,
+    row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover",
+    selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15",
+    cell: "px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text",
+    empty: "flex items-center justify-center py-12 text-cl-text-secondary",
     pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
     pinnedTable: "border-collapse",
     unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
@@ -37,14 +37,14 @@ function getTableClasses(_dark: boolean) {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated`,
+    pinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
     pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
-    shimmer: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
-    shimmerRow: `border-b border-cl-border dark:border-cl-text/[0.04]`,
+    shimmer: "w-full border rounded-cl-md overflow-hidden border-cl-border",
+    shimmerRow: "border-b border-cl-border dark:border-cl-text/[0.04]",
     shimmerCell: "px-4 py-2 h-14",
-    shimmerBar: `h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.04] via-gray-300 to-fg/[0.04] dark:from-bg-elevated dark:via-gray-600 dark:to-bg-elevated`,
+    shimmerBar: "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.04] via-gray-300 to-fg/[0.04] dark:from-bg-elevated dark:via-gray-600 dark:to-bg-elevated",
   };
 }
 
@@ -55,13 +55,7 @@ const StatusBadge = ({
   status: User["status"];
   dark?: boolean;
 }) => {
-  const styles = false
-    ? {
-        active: "bg-cl-success/15 text-cl-success",
-        inactive: "bg-cl-text/15 text-cl-text-tertiary",
-        pending: "bg-cl-warning/15 text-cl-warning",
-      }
-    : {
+  const styles = {
         active: "bg-cl-success/15 text-cl-success",
         inactive: "bg-cl-bg-hover text-cl-text",
         pending: "bg-cl-warning/15 text-cl-warning",
@@ -181,26 +175,25 @@ export default function TableExample() {
   return (
     <>
       <Table
-                  columns={sortableColumns}
-                  data={sampleData.slice(0, 6)}
-                  sortable
-                  sorting={sortingState}
-                  onSortingChange={setSortingState}
-                  getRowId={(row) => row.id}
-                  classes={s}
-                />
-      <p
-                  className={`mt-3 text-sm text-cl-text-secondary`}
-                >
-                  Click any column header to sort. Current sorting state:{" "}
-                  <code
-                    className={`px-1 rounded bg-cl-bg-elevated`}
-                  >
-                    {sortingState.length > 0
-                      ? `${sortingState[0].id} (${sortingState[0].desc ? "desc" : "asc"})`
-                      : "none"}
-                  </code>
-                </p>
+        columns={sortableColumns}
+        data={sampleData.slice(0, 6)}
+        sortable
+        sorting={sortingState}
+        onSortingChange={setSortingState}
+        getRowId={(row) => row.id}
+        classes={s}
+      />
+      <p className="mt-3 text-sm text-cl-text-secondary">
+        Click any column header to sort. Current sorting state:
+        {" "}
+        <code className="px-1 rounded bg-cl-bg-elevated">
+          {
+            sortingState.length > 0
+            ? `${sortingState[0].id} (${sortingState[0].desc ? "desc" : "asc"})`
+            : "none"
+          }
+        </code>
+      </p>
     </>
   );
 }

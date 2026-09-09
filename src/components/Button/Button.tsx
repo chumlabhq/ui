@@ -81,10 +81,10 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
   const mergedClasses: Required<ButtonClasses> = useMemo(
     () => ({
-      root: classesProp?.root ?? baseClasses.root,
-      itemText: classesProp?.itemText ?? baseClasses.itemText,
-      icon: classesProp?.icon ?? baseClasses.icon,
-      loading: classesProp?.loading ?? baseClasses.loading,
+      root: cn(baseClasses.root, classesProp?.root),
+      itemText: cn(baseClasses.itemText, classesProp?.itemText),
+      icon: cn(baseClasses.icon, classesProp?.icon),
+      loading: cn(baseClasses.loading, classesProp?.loading),
     }),
     [classesProp, baseClasses],
   );

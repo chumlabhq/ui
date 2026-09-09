@@ -433,7 +433,7 @@ const CheckboxDemo = () => {
             {String(controlled)}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
             onClick={() => setControlled(!controlled)}
           >
             Toggle Externally
@@ -488,13 +488,13 @@ const CheckboxDemo = () => {
       >
         <div className={`mb-3 flex gap-2`}>
           <button
-            className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
+            className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
             onClick={() => checkboxRef.current?.focus()}
           >
             Focus Checkbox
           </button>
           <button
-            className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
+            className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
             onClick={() => checkboxRef.current?.click()}
           >
             Toggle via ref.click()

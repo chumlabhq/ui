@@ -11,7 +11,7 @@ import { usePackagedFlag } from "./utils/packagedFlags.js";
 import { useCountryFlagGroupContext } from "./utils/context.js";
 import { CountryFlagShimmer } from "./components/CountryFlagShimmer.js";
 import { Tooltip } from "../Tooltip/index.js";
-import { cn } from "../../utils/scopedCn.js";
+import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -87,10 +87,10 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses: Required<CountryFlagClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        loading: { ...baseClasses.loading, ...classesProp?.loading },
-        image: classesProp?.image ?? baseClasses.image,
-        fallback: classesProp?.fallback ?? baseClasses.fallback,
+        root: cn(baseClasses.root, classesProp?.root),
+        loading: composeClasses(baseClasses.loading, classesProp?.loading),
+        image: cn(baseClasses.image, classesProp?.image),
+        fallback: cn(baseClasses.fallback, classesProp?.fallback),
       }),
       [classesProp, baseClasses],
     );

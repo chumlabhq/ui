@@ -60,6 +60,13 @@ const tokensFrom = async (
 const candidates = COMPONENTS.filter((c) => c.supports.classes && c.defaults);
 
 describe("fixtures contract", () => {
+  // A run that iterates nothing reports nothing, which reads exactly like a
+  // pass. `overrides.contract` asserted on 3 of 340 slots for months on that
+  // basis, guarding the very bug it was written for.
+  it("iterates a non-empty set", () => {
+    expect(candidates.length, "the candidate set is empty — this contract asserts nothing").toBeGreaterThan(30);
+  });
+
   it("every component with a classes prop has fixtures", () => {
     const missing = candidates
       .filter((c) => fixturesFor(c.name).length === 0)

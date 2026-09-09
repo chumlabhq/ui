@@ -17,18 +17,25 @@ export default function DrawerExample() {
   const [transitionLog, setTransitionLog] = useState<string[]>([]);
   return (
     <>
-      <button className={"inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"} onClick={transitionCb.onOpen}>
-                  Open (check log)
-                </button>
-      {transitionLog.length > 0 && (
-                  <div
-                    className={`mt-3 text-xs font-mono space-y-1 text-cl-text-secondary`}
-                  >
-                    {transitionLog.map((log, i) => (
-                      <div key={i}>{log}</div>
-                    ))}
-                  </div>
-                )}
+      <button
+        className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
+        onClick={transitionCb.onOpen}
+      >
+        Open (check log)
+      </button>
+      {
+        transitionLog.length > 0 && (
+          <div className="mt-3 text-xs font-mono space-y-1 text-cl-text-secondary">
+            {
+              transitionLog.map((log, i) => (
+                <div key={i}>
+                  {log}
+                </div>
+              ))
+            }
+          </div>
+        )
+      }
     </>
   );
 }

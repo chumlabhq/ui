@@ -267,6 +267,12 @@ const files = [...walk("src/components"), ...walk("src/utils")];
 const findings = scanColours(files);
 const key = (f: Finding) => `${f.file.replace("src/components/", "").replace("src/utils/", "utils/")}:${f.where.replace(/.*`(.+)`.*/, "$1")}`;
 
+/**
+ * Counted, not assumed. A self-check proves the predicate can fail; this
+ * proves it was pointed at something.
+ */
+const asserted = { n: 0 };
+
 describe("inline colour contract", () => {
   describe("self-check", () => {
     it("reads a named colour, a hex and a functional notation as colours", () => {
@@ -326,6 +332,7 @@ describe("inline colour contract", () => {
   });
 
   it("finds no raw colour outside the declared list", () => {
+    asserted.n += 1;
     const undeclared = findings
       .filter((f) => !DECLARED.has(key(f)))
       .map((f) => `${f.file}:${f.line} ${f.where} = ${JSON.stringify(f.value)} (${f.colour})`);
@@ -339,5 +346,10 @@ describe("inline colour contract", () => {
     const seen = new Set(findings.map(key));
     const stale = [...DECLARED.keys()].filter((k) => !seen.has(k));
     expect(stale, "these no longer exist — remove them").toEqual([]);
+  });
+
+  it("asserted on a real number of package-wide scans", () => {
+    console.log(`INLINE_COLOUR asserted on ${asserted.n} package-wide scans`);
+    expect(asserted.n, "this contract iterated nothing").toBeGreaterThan(0);
   });
 });

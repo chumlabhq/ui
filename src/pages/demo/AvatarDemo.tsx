@@ -49,7 +49,7 @@ const getClasses = (dark: boolean) => ({
     text: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"],
   },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
   btnPrimary:
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -1101,7 +1101,7 @@ const AvatarDemo = () => {
           </button>
           <button
             onClick={() => alert("Profile opened!")}
-            className={`flex items-center gap-3 px-3 py-2 rounded-cl-md transition-colors focus:outline-none focus:ring-2 focus:ring-cl-accent hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated/50`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-cl-md transition-colors focus:outline-none focus:ring-2 focus:ring-cl-accent hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated/50 cursor-pointer`}
           >
             <Avatar
               name="Jane Doe"

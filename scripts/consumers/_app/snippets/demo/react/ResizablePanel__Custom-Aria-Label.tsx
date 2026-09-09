@@ -21,27 +21,23 @@ const panelRootClass = (color: string) => {
 export default function ResizablePanelExample() {
   return (
     <ResizablePanel
-                defaultValue={280}
-                minValue={150}
-                maxValue={450}
-                aria-label="Resize sidebar navigation"
-                classes={{
-                  root: panelRootClass("blue"),
-                  handle: handleClass("blue")
-                }}
-              >
-                <div className="p-4">
-                  <p
-                    className="font-medium text-cl-text"
-                  >
-                    Custom Aria Label
-                  </p>
-                  <p
-                    className="text-sm mt-2 text-cl-text-tertiary"
-                  >
-                    aria-label=&quot;Resize sidebar navigation&quot;
-                  </p>
-                </div>
-              </ResizablePanel>
+      defaultValue={280}
+      minValue={150}
+      maxValue={450}
+      aria-label="Resize sidebar navigation"
+      classes={
+        {
+          root: panelRootClass("blue"),
+          handle: handleClass("blue")
+        }
+      }
+    >
+      <div className="p-4">
+        <p className="font-medium text-cl-text">Custom Aria Label</p>
+        <p className="text-sm mt-2 text-cl-text-tertiary">
+          aria-label=&quot;Resize sidebar navigation&quot;
+        </p>
+      </div>
+    </ResizablePanel>
   );
 }

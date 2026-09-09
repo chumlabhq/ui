@@ -2,16 +2,16 @@ import { useState } from "react";
 import { TimePicker, TimePickerClasses } from "@chumlab/ui/time-picker";
 
 const getMinimalTheme = (): TimePickerClasses => ({
-  root: `inline-flex flex-col gap-1 text-cl-text`,
+  root: "inline-flex flex-col gap-1 text-cl-text",
   control: "relative",
-  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text border border-cl-border-input text-cl-text hover:border-cl-border focus-within:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus-within:border-cl-text`,
-  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text dark:placeholder:text-cl-text-tertiary dark:text-white`,
-  icon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary`,
-  content: `rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text border border-cl-border-input text-cl-text hover:border-cl-border focus-within:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus-within:border-cl-text",
+  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text dark:placeholder:text-cl-text-tertiary dark:text-white",
+  icon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
+  content: "rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
   list: "max-h-60 overflow-y-auto",
-  item: `flex items-center justify-between px-3 py-2 cursor-pointer text-sm transition-colors text-cl-text hover:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-elevated`,
-  itemIndicator: `w-4 h-4 shrink-0 text-cl-text-secondary`,
-  empty: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
+  item: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm transition-colors text-cl-text hover:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-elevated",
+  itemIndicator: "w-4 h-4 shrink-0 text-cl-text-secondary",
+  empty: "px-3 py-4 text-sm text-center text-cl-text-tertiary",
 });
 
 const coolTheme: TimePickerClasses = {
@@ -61,47 +61,55 @@ export default function TimePickerExample() {
   const [minimalThemeVal, setMinimalThemeVal] = useState<string | null>(null);
   return (
     <div className="flex flex-wrap gap-6">
-                <div>
-                  
-                  <TimePicker
-                    value={darkThemeVal}
-                    onValueChange={(v) => setDarkThemeVal(v)}
-                    placeholder="Select time..."
-                    classes={darkTheme}
-                  />
-                  <span className={`text-xs mt-1 block ${"text-cl-text-secondary"}`}>Selected: {darkThemeVal ?? "none"}</span>
-                </div>
-                <div>
-                  
-                  <TimePicker
-                    value={warmThemeVal}
-                    onValueChange={(v) => setWarmThemeVal(v)}
-                    placeholder="Select time..."
-                    classes={warmTheme}
-                  />
-                  <span className={`text-xs mt-1 block ${"text-cl-text-secondary"}`}>Selected: {warmThemeVal ?? "none"}</span>
-                </div>
-                <div>
-                  
-                  <TimePicker
-                    value={coolThemeVal}
-                    onValueChange={(v) => setCoolThemeVal(v)}
-                    placeholder="Select time..."
-                    classes={coolTheme}
-                  />
-                  <span className={`text-xs mt-1 block ${"text-cl-text-secondary"}`}>Selected: {coolThemeVal ?? "none"}</span>
-                </div>
-                <div>
-                  
-                  <TimePicker
-                    value={minimalThemeVal}
-                    onValueChange={(v) => setMinimalThemeVal(v)}
-                    placeholder="Select time..."
-                    showSelectedIcon={false}
-                    classes={getMinimalTheme()}
-                  />
-                  <span className={`text-xs mt-1 block ${"text-cl-text-secondary"}`}>Selected: {minimalThemeVal ?? "none"}</span>
-                </div>
-              </div>
+      <div>
+        <TimePicker
+          value={darkThemeVal}
+          onValueChange={(v) => setDarkThemeVal(v)}
+          placeholder="Select time..."
+          classes={darkTheme}
+        />
+        <span className="text-xs mt-1 block text-cl-text-secondary">
+          Selected:
+          {darkThemeVal ?? "none"}
+        </span>
+      </div>
+      <div>
+        <TimePicker
+          value={warmThemeVal}
+          onValueChange={(v) => setWarmThemeVal(v)}
+          placeholder="Select time..."
+          classes={warmTheme}
+        />
+        <span className="text-xs mt-1 block text-cl-text-secondary">
+          Selected:
+          {warmThemeVal ?? "none"}
+        </span>
+      </div>
+      <div>
+        <TimePicker
+          value={coolThemeVal}
+          onValueChange={(v) => setCoolThemeVal(v)}
+          placeholder="Select time..."
+          classes={coolTheme}
+        />
+        <span className="text-xs mt-1 block text-cl-text-secondary">
+          Selected:
+          {coolThemeVal ?? "none"}
+        </span>
+      </div>
+      <div>
+        <TimePicker
+          value={minimalThemeVal}
+          onValueChange={(v) => setMinimalThemeVal(v)}
+          placeholder="Select time..."
+          showSelectedIcon={false}
+          classes={getMinimalTheme()}
+        />
+        <span className="text-xs mt-1 block text-cl-text-secondary">
+          Selected:
+          {minimalThemeVal ?? "none"}
+        </span>
+      </div>
+    </div>
   );
 }

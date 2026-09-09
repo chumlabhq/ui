@@ -122,66 +122,70 @@ const MailIcon = ({ className = "" }: { className?: string }) => (
 export default function InputExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-                  {(
-                    [
-                      ["Text", "text", "Enter text", undefined],
-                      [
-                        "Email",
-                        "email",
-                        "you@example.com",
-                        <MailIcon className={"text-cl-text-tertiary"} />
-                      ],
-                      [
-                        "Password",
-                        "password",
-                        "Enter password",
-                        <LockIcon className={"text-cl-text-tertiary"} />
-                      ],
-                      ["Number", "number", "0", <HashIcon className={"text-cl-text-tertiary"} />],
-                      [
-                        "Phone",
-                        "tel",
-                        "+1 (555) 000-0000",
-                        <PhoneIcon className={"text-cl-text-tertiary"} />
-                      ],
-                      [
-                        "URL",
-                        "url",
-                        "https://example.com",
-                        <LinkIcon className={"text-cl-text-tertiary"} />
-                      ],
-                      [
-                        "Date",
-                        "date",
-                        undefined,
-                        <CalendarIcon className={"text-cl-text-tertiary"} />
-                      ],
-                      ["Time", "time", undefined, undefined],
-                      [
-                        "Search",
-                        "search",
-                        "Search...",
-                        <SearchIcon className={"text-cl-text-tertiary"} />
-                      ]
-                    ] as const
-                  ).map(([label, type, ph, icon]) => (
-                    <Input
-                      key={String(label)}
-                      label={String(label)}
-                      type={type as string}
-                      placeholder={ph as string | undefined}
-                      startIcon={icon}
-                      classes={({
-        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
-        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-        prefix: `text-sm select-none text-cl-text-tertiary`,
-        suffix: `text-sm select-none text-cl-text-tertiary`,
-        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
-      })}
-                    />
-                  ))}
-                </div>
+      {
+        (
+          [
+            ["Text", "text", "Enter text", undefined],
+            [
+              "Email",
+              "email",
+              "you@example.com",
+              <MailIcon className={"text-cl-text-tertiary"} />
+            ],
+            [
+              "Password",
+              "password",
+              "Enter password",
+              <LockIcon className={"text-cl-text-tertiary"} />
+            ],
+            ["Number", "number", "0", <HashIcon className={"text-cl-text-tertiary"} />],
+            [
+              "Phone",
+              "tel",
+              "+1 (555) 000-0000",
+              <PhoneIcon className={"text-cl-text-tertiary"} />
+            ],
+            [
+              "URL",
+              "url",
+              "https://example.com",
+              <LinkIcon className={"text-cl-text-tertiary"} />
+            ],
+            [
+              "Date",
+              "date",
+              undefined,
+              <CalendarIcon className={"text-cl-text-tertiary"} />
+            ],
+            ["Time", "time", undefined, undefined],
+            [
+              "Search",
+              "search",
+              "Search...",
+              <SearchIcon className={"text-cl-text-tertiary"} />
+            ]
+          ] as const
+        ).map(([label, type, ph, icon]) => (
+          <Input
+            key={String(label)}
+            label={String(label)}
+            type={type as string}
+            placeholder={ph as string | undefined}
+            startIcon={icon}
+            classes={
+              {
+                root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+                input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+                label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+                description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+                prefix: "text-sm select-none text-cl-text-tertiary",
+                suffix: "text-sm select-none text-cl-text-tertiary",
+                count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+              }
+            }
+          />
+        ))
+      }
+    </div>
   );
 }

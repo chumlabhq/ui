@@ -150,6 +150,16 @@ export function unnamed(container: HTMLElement): string[] {
   return found;
 }
 
+/**
+ * Counted, not assumed.
+ *
+ * `overrides.contract` was green for months while asserting on 3 of 340
+ * slots: its inner filter emptied and the loops ran over nothing, which
+ * reads exactly like a pass. A self-check proves the predicate works; this
+ * proves it was pointed at something.
+ */
+const asserted = { n: 0 };
+
 describe("accessible name contract", () => {
   describe("self-check", () => {
     const host = () => {
@@ -206,6 +216,7 @@ describe("accessible name contract", () => {
           String(call[0]).includes("no accessible name"),
         );
         if (!warned) {
+          asserted.n += 1;
           for (const element of unnamed(container)) missing.push(`${fixture.name}: ${element}`);
         }
         warn.mockRestore();
@@ -217,4 +228,9 @@ describe("accessible name contract", () => {
       ).toEqual([]);
     });
   }
+
+  it("asserted on a real number of rendered fixtures", () => {
+    console.log(`ACCESSIBLE_NAME asserted on ${asserted.n} rendered fixture(s)`);
+    expect(asserted.n, "this contract iterated nothing").toBeGreaterThan(20);
+  });
 });

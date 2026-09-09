@@ -19,7 +19,7 @@ import {
 const getClasses = (dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary:
-    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer",
   text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   label: `text-xs font-medium text-cl-text-tertiary`,

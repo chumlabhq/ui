@@ -168,7 +168,7 @@ const KeepMountedExample = () => {
       </div>
       <button
         type="button"
-        className="mt-6 text-[13px] text-accent underline underline-offset-4"
+        className="mt-6 text-[13px] text-accent underline underline-offset-4 cursor-pointer"
         onClick={() =>
           setCount(document.querySelectorAll("[role='listbox']").length)
         }

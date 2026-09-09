@@ -789,7 +789,7 @@ const TextAreaDemo = () => {
                       } else if (lbl === "Get Value")
                         alert(`"${textAreaRef.current?.value}"`);
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6`}
+                    className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6 cursor-pointer`}
                   >
                     {lbl}
                   </button>
@@ -941,7 +941,7 @@ const TextAreaDemo = () => {
               />
               <button
                 type="submit"
-                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20`}
+                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer`}
               >
                 Send Message
               </button>

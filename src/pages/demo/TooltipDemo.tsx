@@ -273,7 +273,7 @@ const TooltipDemo = () => {
             {controlled ? "Open" : "Closed"}
           </span>
           <button
-            className={`ml-auto ${c.btn}`}
+            className={`ml-auto ${c.btn} cursor-pointer`}
             onClick={() => setControlled(!controlled)}
           >
             Toggle: {controlled ? "Open" : "Closed"}

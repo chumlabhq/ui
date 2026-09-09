@@ -17,6 +17,7 @@ import TabButton from "./components/TabButton.js";
 import { Tooltip } from "../Tooltip/index.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
+import { cn } from "../../utils/scopedCn.js";
 /**
  * Component: TabPanel
  *
@@ -237,14 +238,14 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const resolvedClasses: ResolvedClasses = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        list: classesProp?.list ?? baseClasses.list,
-        item: classesProp?.item ?? baseClasses.item,
-        itemText: classesProp?.itemText ?? baseClasses.itemText,
-        itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
-        count: classesProp?.count ?? baseClasses.count,
-        indicator: classesProp?.indicator ?? baseClasses.indicator,
-        content: classesProp?.content ?? baseClasses.content,
+        root: cn(baseClasses.root, classesProp?.root),
+        list: cn(baseClasses.list, classesProp?.list),
+        item: cn(baseClasses.item, classesProp?.item),
+        itemText: cn(baseClasses.itemText, classesProp?.itemText),
+        itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
+        count: cn(baseClasses.count, classesProp?.count),
+        indicator: cn(baseClasses.indicator, classesProp?.indicator),
+        content: cn(baseClasses.content, classesProp?.content),
       }),
       [classesProp, baseClasses],
     );

@@ -16,15 +16,15 @@ interface User {
 
 function getTableClasses(_dark: boolean) {
   return {
-    container: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
+    container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: `px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary bg-cl-bg-elevated border-cl-border dark:text-cl-text-tertiary dark:bg-cl-bg-elevated dark:border-cl-text/[0.06]`,
+    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary bg-cl-bg-elevated border-cl-border dark:text-cl-text-tertiary dark:bg-cl-bg-elevated dark:border-cl-text/[0.06]",
     body: "",
-    row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover`,
-    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15`,
-    cell: `px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text`,
-    empty: `flex items-center justify-center py-12 text-cl-text-secondary`,
+    row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover",
+    selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15",
+    cell: "px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text",
+    empty: "flex items-center justify-center py-12 text-cl-text-secondary",
     pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
     pinnedTable: "border-collapse",
     unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
@@ -37,14 +37,14 @@ function getTableClasses(_dark: boolean) {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated`,
+    pinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
     pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
-    shimmer: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
-    shimmerRow: `border-b border-cl-border dark:border-cl-text/[0.04]`,
+    shimmer: "w-full border rounded-cl-md overflow-hidden border-cl-border",
+    shimmerRow: "border-b border-cl-border dark:border-cl-text/[0.04]",
     shimmerCell: "px-4 py-2 h-14",
-    shimmerBar: `h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.04] via-gray-300 to-fg/[0.04] dark:from-bg-elevated dark:via-gray-600 dark:to-bg-elevated`,
+    shimmerBar: "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.04] via-gray-300 to-fg/[0.04] dark:from-bg-elevated dark:via-gray-600 dark:to-bg-elevated",
   };
 }
 
@@ -144,7 +144,7 @@ export default function TableExample() {
         header: "Actions",
         cell: () => (
           <button
-            className={`px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30`}
+            className={"px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer"}
             onClick={() => alert("Action clicked")}
           >
             Edit
@@ -157,30 +157,30 @@ export default function TableExample() {
   return (
     <>
       <Table
-                  columns={rightPinColumns}
-                  data={sampleData.slice(0, 5)}
-                  pinnedRightColumns={["actions"]}
-                  getRowId={(row) => row.id}
-                  maxWidth={600}
-                  classes={{
-                    ...s,
-                    ...s,
-                    root: `border rounded-cl-md border-cl-border`,
-                    list: "w-max border-collapse",
-                    pinnedRightRegion: `shrink-0 sticky right-0 z-20 border-l-2 border-cl-border-input-focus bg-cl-bg-elevated`
-                  }}
-                />
-      <p
-                  className={`mt-3 text-sm text-cl-text-secondary`}
-                >
-                  The "Actions" column is pinned to the right using{" "}
-                  <code
-                    className={`px-1 rounded bg-cl-bg-elevated`}
-                  >
-                    pinnedRightColumns={'{["actions"]}'}
-                  </code>
-                  . Scroll horizontally to see it stay fixed.
-                </p>
+        columns={rightPinColumns}
+        data={sampleData.slice(0, 5)}
+        pinnedRightColumns={["actions"]}
+        getRowId={(row) => row.id}
+        maxWidth={600}
+        classes={
+          {
+            ...s,
+            ...s,
+            root: "border rounded-cl-md border-cl-border",
+            list: "w-max border-collapse",
+            pinnedRightRegion: "shrink-0 sticky right-0 z-20 border-l-2 border-cl-border-input-focus bg-cl-bg-elevated"
+          }
+        }
+      />
+      <p className="mt-3 text-sm text-cl-text-secondary">
+        The "Actions" column is pinned to the right using
+        {" "}
+        <code className="px-1 rounded bg-cl-bg-elevated">
+          pinnedRightColumns=
+          {'{["actions"]}'}
+        </code>
+        . Scroll horizontally to see it stay fixed.
+      </p>
     </>
   );
 }

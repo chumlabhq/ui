@@ -15,7 +15,7 @@ import type { PaginationProps, PaginationClasses, IconProps, SectionName } from 
 import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "./utils/constants.js";
 import { getVisiblePages } from "./utils/helpers.js";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons.js";
-import { cn } from "../../utils/scopedCn.js";
+import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { isBrowser } from "../../utils/isBrowser.js";
@@ -230,16 +230,16 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
-      root: classesProp?.root ?? baseClasses.root,
-      row: classesProp?.row ?? baseClasses.row,
-      list: classesProp?.list ?? baseClasses.list,
-      item: classesProp?.item ?? baseClasses.item,
-      navButton: classesProp?.navButton ?? baseClasses.navButton,
-      ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
-      rowsPerPage: { ...baseClasses.rowsPerPage, ...classesProp?.rowsPerPage },
-      label: classesProp?.label ?? baseClasses.label,
-      navIcon: classesProp?.navIcon ?? baseClasses.navIcon,
-      pageInfo: classesProp?.pageInfo ?? baseClasses.pageInfo,
+      root: cn(baseClasses.root, classesProp?.root),
+      row: cn(baseClasses.row, classesProp?.row),
+      list: cn(baseClasses.list, classesProp?.list),
+      item: cn(baseClasses.item, classesProp?.item),
+      navButton: cn(baseClasses.navButton, classesProp?.navButton),
+      ellipsis: cn(baseClasses.ellipsis, classesProp?.ellipsis),
+      rowsPerPage: composeClasses(baseClasses.rowsPerPage, classesProp?.rowsPerPage),
+      label: cn(baseClasses.label, classesProp?.label),
+      navIcon: cn(baseClasses.navIcon, classesProp?.navIcon),
+      pageInfo: cn(baseClasses.pageInfo, classesProp?.pageInfo),
     }), [classesProp, baseClasses]);
 
     const resolvedRowOptions = useMemo(

@@ -83,83 +83,81 @@ export default function PaginationExample() {
   const [doubleArrowPage, setDoubleArrowPage] = useState(1);
   return (
     <div className="space-y-8">
-                <div className="space-y-3">
-                  
-                  <Pagination
-                    value={customIconsPage}
-                    totalPages={Math.ceil(100 / customIconsRowsPerPage)}
-                    rowsPerPage={customIconsRowsPerPage}
-                    onValueChange={setCustomIconsPage}
-                    onRowsPerPageChange={(rows) => {
-                      setCustomIconsRowsPerPage(rows);
-                      setCustomIconsPage(1);
-                    }}
-                    showRowsPerPage
-                    prevIcon={ArrowLeftIcon}
-                    nextIcon={ArrowRightIcon}
-                    dropdownIcon={CaretDownIcon}
-                    classes={{
-                      ...({
-        root: "flex flex-wrap items-center gap-2",
-        navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-        ellipsis: `px-2 select-none text-cl-text-tertiary`,
-        rowsPerPage: {
-          trigger: `flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10`,
-          content: `rounded-cl-md shadow-lg py-1 min-w-[64px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
-          icon: `w-4 h-4 transition-transform text-cl-text-secondary`,
-          positioner: "",
-          item: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-text/10 dark:data-[selected]:bg-cl-accent/60 dark:data-[selected]:text-cl-accent dark:data-[highlighted]:bg-cl-text/10`
-        },
-        label: `text-sm text-cl-text-secondary`,
-        pageInfo: "flex items-center"
-      }),
-                      root: "flex flex-wrap items-center justify-between gap-4",
-                      navButton: `p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border-input-focus bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/30 dark:hover:bg-cl-accent/50 dark:text-cl-accent`,
-                      navIcon: "w-5 h-5 text-cl-accent"
-                    }}
-                  />
-                </div>
-                <div
-                  className="border-t pt-8 border-cl-border"
-                >
-                  <div className="space-y-3">
-                    
-                    <div className="flex justify-center">
-                      <Pagination
-                        value={doubleArrowPage}
-                        totalPages={20}
-                        onValueChange={setDoubleArrowPage}
-                        prevIcon={
-                          <DoubleArrowLeftIcon
-                            className={`w-5 h-5 text-cl-success dark:text-cl-success`}
-                          />
-                        }
-                        nextIcon={
-                          <DoubleArrowRightIcon
-                            className={`w-5 h-5 text-cl-success dark:text-cl-success`}
-                          />
-                        }
-                        classes={{
-                          ...({
-        root: "flex flex-wrap items-center gap-2",
-        navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-        ellipsis: `px-2 select-none text-cl-text-tertiary`,
-        rowsPerPage: {
-          trigger: `flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10`,
-          content: `rounded-cl-md shadow-lg py-1 min-w-[64px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
-          icon: `w-4 h-4 transition-transform text-cl-text-secondary`,
-          positioner: "",
-          item: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-text/10 dark:data-[selected]:bg-cl-accent/60 dark:data-[selected]:text-cl-accent dark:data-[highlighted]:bg-cl-text/10`
-        },
-        label: `text-sm text-cl-text-secondary`,
-        pageInfo: "flex items-center"
-      }),
-                          navButton: `p-2 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-success bg-cl-success/15 hover:bg-cl-success/15 dark:border dark:border-cl-success dark:bg-cl-success/30 dark:hover:bg-cl-success/50`
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div className="space-y-3">
+        <Pagination
+          value={customIconsPage}
+          totalPages={Math.ceil(100 / customIconsRowsPerPage)}
+          rowsPerPage={customIconsRowsPerPage}
+          onValueChange={setCustomIconsPage}
+          onRowsPerPageChange={
+            (rows) => {
+              setCustomIconsRowsPerPage(rows);
+              setCustomIconsPage(1);
+            }
+          }
+          showRowsPerPage
+          prevIcon={ArrowLeftIcon}
+          nextIcon={ArrowRightIcon}
+          dropdownIcon={CaretDownIcon}
+          classes={
+            {
+                            ...({
+              root: "flex flex-wrap items-center gap-2",
+              navButton: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary",
+              ellipsis: "px-2 select-none text-cl-text-tertiary",
+              rowsPerPage: {
+                trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10",
+                content: "rounded-cl-md shadow-lg py-1 min-w-[64px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
+                icon: "w-4 h-4 transition-transform text-cl-text-secondary",
+                positioner: "",
+                item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-text/10 dark:data-[selected]:bg-cl-accent/60 dark:data-[selected]:text-cl-accent dark:data-[highlighted]:bg-cl-text/10"
+              },
+              label: "text-sm text-cl-text-secondary",
+              pageInfo: "flex items-center"
+            }),
+                            root: "flex flex-wrap items-center justify-between gap-4",
+                            navButton: "p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border-input-focus bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/30 dark:hover:bg-cl-accent/50 dark:text-cl-accent",
+                            navIcon: "w-5 h-5 text-cl-accent"
+                          }
+          }
+        />
+      </div>
+      <div className="border-t pt-8 border-cl-border">
+        <div className="space-y-3">
+          <div className="flex justify-center">
+            <Pagination
+              value={doubleArrowPage}
+              totalPages={20}
+              onValueChange={setDoubleArrowPage}
+              prevIcon={<DoubleArrowLeftIcon className="w-5 h-5 text-cl-success dark:text-cl-success" />}
+              nextIcon={
+                <DoubleArrowRightIcon
+                  className="w-5 h-5 text-cl-success dark:text-cl-success"
+                />
+              }
+              classes={
+                {
+                                    ...({
+                  root: "flex flex-wrap items-center gap-2",
+                  navButton: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary",
+                  ellipsis: "px-2 select-none text-cl-text-tertiary",
+                  rowsPerPage: {
+                    trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10",
+                    content: "rounded-cl-md shadow-lg py-1 min-w-[64px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
+                    icon: "w-4 h-4 transition-transform text-cl-text-secondary",
+                    positioner: "",
+                    item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-text/10 dark:data-[selected]:bg-cl-accent/60 dark:data-[selected]:text-cl-accent dark:data-[highlighted]:bg-cl-text/10"
+                  },
+                  label: "text-sm text-cl-text-secondary",
+                  pageInfo: "flex items-center"
+                }),
+                                    navButton: "p-2 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-success bg-cl-success/15 hover:bg-cl-success/15 dark:border dark:border-cl-success dark:bg-cl-success/30 dark:hover:bg-cl-success/50"
+                                  }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

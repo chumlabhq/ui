@@ -490,10 +490,10 @@ const ToastDemoContent = ({
                           Version 2.0 is now available.
                         </p>
                         <div className="flex gap-2 mt-1">
-                          <button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90">
+                          <button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90 cursor-pointer">
                             Update Now
                           </button>
-                          <button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30">
+                          <button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30 cursor-pointer">
                             Later
                           </button>
                         </div>

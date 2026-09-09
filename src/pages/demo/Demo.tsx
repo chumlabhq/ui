@@ -331,7 +331,7 @@ const Demo = () => {
           type="button"
           onClick={() => setSidebarOpen(true)}
           aria-label="Open documentation menu"
-          className="lg:hidden fixed bottom-5 left-5 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-fg text-bg-base font-medium text-[13px] shadow-lg border border-border-faint"
+          className="lg:hidden fixed bottom-5 left-5 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-fg text-bg-base font-medium text-[13px] shadow-lg border border-border-faint cursor-pointer"
           data-track-event="docs_mobile_menu_open"
         >
           <svg

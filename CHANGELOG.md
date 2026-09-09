@@ -28,6 +28,26 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- **`classes` now composes with a component's own defaults instead of replacing them.**
+  Passing `classes={{ trigger: "px-6" }}` used to discard everything the library had put on
+  that slot — including `cursor-pointer` and the focus ring, so any overridden interactive
+  slot silently lost its visible focus indicator and with it WCAG 2.4.7. The library's
+  classes are applied first and yours last, so a conflicting value of yours still wins
+  through tailwind-merge: `classes={{ trigger: "cursor-default" }}` genuinely computes
+  `cursor-default`, and `focus-visible:ring-4` genuinely replaces the library's `ring-2`.
+  This matches how `className` has always behaved, and it applied at 386 sites across all
+  30 components, so **any override you already have may now render additional classes it
+  did not before** — most visibly a cursor, a focus ring and a transition.
+
+  To get the old behaviour — no library styling on a slot at all — use `unstyled`, which
+  strips the decorative defaults and keeps the structural ones, then add your own:
+
+  ```tsx
+  <Accordion unstyled classes={{ trigger: "px-6 py-3 my-own-styles" }} />
+  ```
+
+  Nothing about `unstyled` changed.
+
 - `InternationalPhoneInput` carries its 193 countries as a packed string unpacked at module
   load rather than as an array of object literals — 2.16 KB less gzipped, with the same data:
   the decoded array is identical row for row. `DEFAULT_COUNTRIES` is unchanged as an export

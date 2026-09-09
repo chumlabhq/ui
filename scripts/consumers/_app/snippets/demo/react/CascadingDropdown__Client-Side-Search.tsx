@@ -86,16 +86,16 @@ export default function CascadingDropdownExample() {
   const [syncSearchValue, setSyncSearchValue] = useState<CascadingValue>({});
   return (
     <div className="w-full sm:max-w-96">
-                <CascadingDropdown
-                  options={searchableCategoryOptions}
-                  value={syncSearchValue}
-                  onValueChange={(val) => setSyncSearchValue(val)}
-                  placeholder="Search categories & items..."
-                  showMenuSearch
-                  showSubmenuSearch
-                  menuSearchPlaceholder="Filter categories..."
-                  submenuSearchPlaceholder="Filter items..."
-                />
-              </div>
+      <CascadingDropdown
+        options={searchableCategoryOptions}
+        value={syncSearchValue}
+        onValueChange={(val) => setSyncSearchValue(val)}
+        placeholder="Search categories & items..."
+        showMenuSearch
+        showSubmenuSearch
+        menuSearchPlaceholder="Filter categories..."
+        submenuSearchPlaceholder="Filter items..."
+      />
+    </div>
   );
 }

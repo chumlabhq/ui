@@ -80,15 +80,15 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<SwitchClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        row: classesProp?.row ?? baseClasses.row,
-        labelGroup: classesProp?.labelGroup ?? baseClasses.labelGroup,
-        label: classesProp?.label ?? baseClasses.label,
-        description: classesProp?.description ?? baseClasses.description,
-        control: classesProp?.control ?? baseClasses.control,
-        thumb: classesProp?.thumb ?? baseClasses.thumb,
-        message: classesProp?.message ?? baseClasses.message,
-        loading: classesProp?.loading ?? baseClasses.loading,
+        root: cn(baseClasses.root, classesProp?.root),
+        row: cn(baseClasses.row, classesProp?.row),
+        labelGroup: cn(baseClasses.labelGroup, classesProp?.labelGroup),
+        label: cn(baseClasses.label, classesProp?.label),
+        description: cn(baseClasses.description, classesProp?.description),
+        control: cn(baseClasses.control, classesProp?.control),
+        thumb: cn(baseClasses.thumb, classesProp?.thumb),
+        message: cn(baseClasses.message, classesProp?.message),
+        loading: cn(baseClasses.loading, classesProp?.loading),
       }),
       [classesProp, baseClasses],
     );

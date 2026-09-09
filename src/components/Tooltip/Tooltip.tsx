@@ -103,10 +103,10 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses = useMemo(() => ({
-      trigger: classesProp?.trigger ?? baseClasses.trigger,
-      content: classesProp?.content ?? baseClasses.content,
-      arrow: classesProp?.arrow ?? baseClasses.arrow,
-      baseArrow: classesProp?.arrow ?? baseClasses.arrow,
+      trigger: cn(baseClasses.trigger, classesProp?.trigger),
+      content: cn(baseClasses.content, classesProp?.content),
+      arrow: cn(baseClasses.arrow, classesProp?.arrow),
+      baseArrow: cn(baseClasses.arrow, classesProp?.arrow),
     }), [classesProp, baseClasses]);
 
     const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);

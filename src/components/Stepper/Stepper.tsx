@@ -545,19 +545,19 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
 
     const mergedClasses: Required<StepperClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        list: classesProp?.list ?? baseClasses.list,
-        item: classesProp?.item ?? baseClasses.item,
-        trigger: classesProp?.trigger ?? baseClasses.trigger,
-        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+        root: cn(baseClasses.root, classesProp?.root),
+        list: cn(baseClasses.list, classesProp?.list),
+        item: cn(baseClasses.item, classesProp?.item),
+        trigger: cn(baseClasses.trigger, classesProp?.trigger),
+        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
         indicatorTrigger:
-          classesProp?.indicatorTrigger ?? baseClasses.indicatorTrigger,
+          cn(baseClasses.indicatorTrigger, classesProp?.indicatorTrigger),
         itemIcon:
-          classesProp?.itemIcon ?? baseClasses.itemIcon,
-        row: classesProp?.row ?? baseClasses.row,
-        itemText: classesProp?.itemText ?? baseClasses.itemText,
-        description: classesProp?.description ?? baseClasses.description,
-        separator: classesProp?.separator ?? baseClasses.separator,
+          cn(baseClasses.itemIcon, classesProp?.itemIcon),
+        row: cn(baseClasses.row, classesProp?.row),
+        itemText: cn(baseClasses.itemText, classesProp?.itemText),
+        description: cn(baseClasses.description, classesProp?.description),
+        separator: cn(baseClasses.separator, classesProp?.separator),
       }),
       [classesProp, baseClasses],
     );

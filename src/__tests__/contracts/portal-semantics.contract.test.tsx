@@ -68,6 +68,13 @@ const portalRoots = (container: HTMLElement) =>
 const candidates = COMPONENTS;
 
 describe("portal semantics contract", () => {
+  // A run that iterates nothing reports nothing, which reads exactly like a
+  // pass. `overrides.contract` asserted on 3 of 340 slots for months on that
+  // basis, guarding the very bug it was written for.
+  it("iterates a non-empty set", () => {
+    expect(candidates.length, "the candidate set is empty — this contract asserts nothing").toBeGreaterThan(30);
+  });
+
   describe("self-check", () => {
     it("catches a portalled group of buttons with no role", () => {
       const silent = document.createElement("div");

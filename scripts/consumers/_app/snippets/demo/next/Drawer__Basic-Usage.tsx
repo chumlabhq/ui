@@ -16,10 +16,12 @@ export default function DrawerExample() {
   const basic = useDrawerState();
   return (
     <>
-      {/* Basic usage — open/close via controlled state */}
-      <button className={"inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"} onClick={basic.onOpen}>
-                  Open Drawer
-                </button>
+      <button
+        className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
+        onClick={basic.onOpen}
+      >
+        Open Drawer
+      </button>
     </>
   );
 }

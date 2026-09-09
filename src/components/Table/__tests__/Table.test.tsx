@@ -48,13 +48,26 @@ describe("Table", () => {
       expect(th?.className).toContain("border-cl-border");
     });
 
-    it("replaces only the overridden slot, keeping other defaults", () => {
+    it("composes an override with the slot's default, and the override wins on conflict", () => {
       const { container } = render(
-        <Table columns={columns} data={data} classes={{ headerCell: "MINE" }} />,
+        <Table
+          columns={columns}
+          data={data}
+          classes={{ headerCell: "MINE bg-fuchsia-500" }}
+        />,
       );
-      expect(container.querySelector("th")?.className).toContain("MINE");
-      expect(container.querySelector("th")?.className).not.toContain("bg-cl-bg-elevated");
-      // An unspecified slot still gets its default.
+      const th = container.querySelector("th")?.className ?? "";
+
+      // The consumer's own classes arrive.
+      expect(th).toContain("MINE");
+      // And the library's default is still there rather than discarded. This
+      // used to assert the opposite: `classes` replaced the slot outright, so a
+      // consumer overriding one slot silently lost the focus ring with it.
+      expect(th).toContain("border-b");
+      // Where the two collide, the consumer's value is ordered last and wins.
+      expect(th).toContain("bg-fuchsia-500");
+      expect(th).not.toContain("bg-cl-bg-elevated");
+      // An unspecified slot still gets its default, untouched.
       expect(container.querySelector("tbody td")?.className).toContain("text-cl-text");
     });
 

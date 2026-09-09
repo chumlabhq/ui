@@ -37,7 +37,7 @@ import { SearchableDropdown } from "../SearchableDropdown/index.js";
 import type { SearchableDropdownOption } from "../SearchableDropdown/index.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
-import { cn } from "../../utils/scopedCn.js";
+import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
@@ -170,19 +170,19 @@ const InternationalPhoneInput = forwardRef<
 
     const mergedClasses: Required<InternationalPhoneInputClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        label: classesProp?.label ?? baseClasses.label,
-        description: classesProp?.description ?? baseClasses.description,
-        control: classesProp?.control ?? baseClasses.control,
-        input: classesProp?.input ?? baseClasses.input,
-        message: classesProp?.message ?? baseClasses.message,
-        countrySelect: { ...baseClasses.countrySelect, ...classesProp?.countrySelect },
-        itemRow: classesProp?.itemRow ?? baseClasses.itemRow,
-        itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
-        itemText: classesProp?.itemText ?? baseClasses.itemText,
-        triggerRow: classesProp?.triggerRow ?? baseClasses.triggerRow,
-        flag: classesProp?.flag ?? baseClasses.flag,
-        value: classesProp?.value ?? baseClasses.value,
+        root: cn(baseClasses.root, classesProp?.root),
+        label: cn(baseClasses.label, classesProp?.label),
+        description: cn(baseClasses.description, classesProp?.description),
+        control: cn(baseClasses.control, classesProp?.control),
+        input: cn(baseClasses.input, classesProp?.input),
+        message: cn(baseClasses.message, classesProp?.message),
+        countrySelect: composeClasses(baseClasses.countrySelect, classesProp?.countrySelect),
+        itemRow: cn(baseClasses.itemRow, classesProp?.itemRow),
+        itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
+        itemText: cn(baseClasses.itemText, classesProp?.itemText),
+        triggerRow: cn(baseClasses.triggerRow, classesProp?.triggerRow),
+        flag: cn(baseClasses.flag, classesProp?.flag),
+        value: cn(baseClasses.value, classesProp?.value),
       }),
       [classesProp, baseClasses],
     );

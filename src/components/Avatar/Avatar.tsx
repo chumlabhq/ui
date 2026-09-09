@@ -26,7 +26,7 @@ import {
 } from "./utils/helpers.js";
 import { useAvatarGroupContext } from "./utils/context.js";
 import { AvatarShimmer } from "./components/AvatarShimmer.js";
-import { cn } from "../../utils/scopedCn.js";
+import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { injectStyles } from "../../utils/injectStyles.js";
 import { isTooltipConfig } from "../../utils/isTooltipConfig.js";
 
@@ -133,12 +133,12 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
     const mergedClasses: Required<AvatarClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        loading: { ...baseClasses.loading, ...classesProp?.loading },
-        control: classesProp?.control ?? baseClasses.control,
-        image: classesProp?.image ?? baseClasses.image,
-        fallback: classesProp?.fallback ?? baseClasses.fallback,
-        status: classesProp?.status ?? baseClasses.status,
+        root: cn(baseClasses.root, classesProp?.root),
+        loading: composeClasses(baseClasses.loading, classesProp?.loading),
+        control: cn(baseClasses.control, classesProp?.control),
+        image: cn(baseClasses.image, classesProp?.image),
+        fallback: cn(baseClasses.fallback, classesProp?.fallback),
+        status: cn(baseClasses.status, classesProp?.status),
       }),
       [classesProp, baseClasses],
     );

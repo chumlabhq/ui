@@ -61,13 +61,13 @@ export default function CascadingDropdownExample() {
   const [darkThemeValue, setDarkThemeValue] = useState<CascadingValue>({});
   return (
     <div className="w-full sm:max-w-72">
-                <CascadingDropdown
-                  options={categoryOptions}
-                  value={darkThemeValue}
-                  onValueChange={(val) => setDarkThemeValue(val)}
-                  placeholder="Select category..."
-                  classes={darkOnlyClasses}
-                />
-              </div>
+      <CascadingDropdown
+        options={categoryOptions}
+        value={darkThemeValue}
+        onValueChange={(val) => setDarkThemeValue(val)}
+        placeholder="Select category..."
+        classes={darkOnlyClasses}
+      />
+    </div>
   );
 }

@@ -102,7 +102,11 @@ export default class ReconcileReporter implements Reporter {
   ): void {
     // The stack already opens with the message, and Playwright colours both.
     // Neither is useful in a file read six hours later on a different machine.
-    const plain = (text: string) => text.replace(/\u001B\[[0-9;]*m/g, "");
+    // Built rather than written as a literal: ESLint's no-control-regex fails
+    // on an ESC byte inside a regex literal, and disabling the rule to keep one
+    // would be the wrong trade for a string this easy to construct.
+    const ANSI = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, "g");
+    const plain = (text: string) => text.replace(ANSI, "");
     const errors = (result.errors?.length ? result.errors : result.error ? [result.error] : [])
       .map((e) => plain(e.stack ?? e.message ?? "").trim())
       .filter(Boolean);

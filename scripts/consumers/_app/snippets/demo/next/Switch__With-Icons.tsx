@@ -60,37 +60,39 @@ export default function SwitchExample() {
   const [themeSwitch, setThemeSwitch] = useState(false);
   return (
     <div className="space-y-4">
-                <Switch
-                  label="Feature enabled"
-                  checked={iconSwitch}
-                  onValueChange={setIconSwitch}
-                  checkedIcon={<CheckIcon />}
-                  uncheckedIcon={<CrossIcon />}
-                  classes={({
-        label: `text-sm font-medium text-cl-text cursor-pointer`,
-        description: `text-xs text-cl-text-secondary`,
-        thumb:
-          "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none"
-      })}
-                />
-                <Switch
-                  label="Theme"
-                  description={
-                    themeSwitch ? "Dark mode enabled" : "Light mode enabled"
-                  }
-                  checked={themeSwitch}
-                  onValueChange={setThemeSwitch}
-                  checkedIcon={<MoonIcon />}
-                  uncheckedIcon={<SunIcon />}
-                  classes={{
-                    ...({
-        label: `text-sm font-medium text-cl-text cursor-pointer`,
-        description: `text-xs text-cl-text-secondary`,
-        thumb:
-          "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none"
-      })
-                  }}
-                />
-              </div>
+      <Switch
+        label="Feature enabled"
+        checked={iconSwitch}
+        onValueChange={setIconSwitch}
+        checkedIcon={<CheckIcon />}
+        uncheckedIcon={<CrossIcon />}
+        classes={
+          {
+            label: "text-sm font-medium text-cl-text cursor-pointer",
+            description: "text-xs text-cl-text-secondary",
+            thumb:
+              "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none"
+          }
+        }
+      />
+      <Switch
+        label="Theme"
+        description={themeSwitch ? "Dark mode enabled" : "Light mode enabled"}
+        checked={themeSwitch}
+        onValueChange={setThemeSwitch}
+        checkedIcon={<MoonIcon />}
+        uncheckedIcon={<SunIcon />}
+        classes={
+          {
+                        ...({
+            label: "text-sm font-medium text-cl-text cursor-pointer",
+            description: "text-xs text-cl-text-secondary",
+            thumb:
+              "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none"
+          })
+                      }
+        }
+      />
+    </div>
   );
 }

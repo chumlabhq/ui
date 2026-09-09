@@ -70,21 +70,26 @@ export default function TabPanelExample() {
   const [verticalTab, setVerticalTab] = useState("home");
   return (
     <TabPanel
-                tabs={tabsWithIcons}
-                value={verticalTab}
-                onValueChange={setVerticalTab}
-                orientation="vertical"
-                classes={{
-                  root: "flex gap-0 w-full",
-                  list: `flex flex-col gap-1 pr-0 min-w-[160px] border-r border-cl-border`,
-                  item: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
-                  content: "flex-1 p-4"
-                }}
-              >
-                <div className={"text-sm leading-relaxed text-cl-text-secondary"}>
-                  Vertical tab content for{" "}
-                  <strong className={"font-medium text-cl-text"}>{verticalTab}</strong>
-                </div>
-              </TabPanel>
+      tabs={tabsWithIcons}
+      value={verticalTab}
+      onValueChange={setVerticalTab}
+      orientation="vertical"
+      classes={
+        {
+          root: "flex gap-0 w-full",
+          list: "flex flex-col gap-1 pr-0 min-w-[160px] border-r border-cl-border",
+          item: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
+          content: "flex-1 p-4"
+        }
+      }
+    >
+      <div className="text-sm leading-relaxed text-cl-text-secondary">
+        Vertical tab content for
+        {" "}
+        <strong className="font-medium text-cl-text">
+          {verticalTab}
+        </strong>
+      </div>
+    </TabPanel>
   );
 }

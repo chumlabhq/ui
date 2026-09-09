@@ -9,7 +9,7 @@ import {
   UNSTYLED_ACCORDION_SHIMMER_CLASSES,
 } from "../utils/constants.js";
 import { Slot } from "../../../utils/Slot.js";
-import { cn } from "../../../utils/scopedCn.js";
+import { cn, composeClasses } from "../../../utils/scopedCn.js";
 
 const TITLE_WIDTHS = [75, 68, 82, 70, 78];
 const SUBTITLE_WIDTHS = [55, 62, 48, 58, 52];
@@ -48,7 +48,7 @@ const AccordionShimmer = forwardRef<HTMLDivElement, AccordionShimmerProps>(
     // Both the prop and the OS preference switch it off; reduced-motion is not
     // something an `animate` default gets to override.
     const c = motionSafeClasses(
-      { ...base, ...classes },
+      composeClasses(base, classes),
       !animate || effectiveReduceMotion,
     );
 

@@ -35,3 +35,33 @@ export function cn(...inputs: ClassValue[]) {
   // here would make every `className={cn(...) || undefined}` guard truthy.
   return merged ? `${merged} ${MARKER}` : "";
 }
+
+/**
+ * INTERNAL. A consumer's `classes` bag composed over the library's defaults.
+ *
+ * A spread — `{ ...base, ...classes }` — replaces per key, which is the same
+ * defect the top-level slots had: a consumer overriding one nested key lost
+ * everything the library had put there, focus ring included. Composing per key
+ * keeps the default and lets the consumer's value win through tailwind-merge,
+ * because their string is ordered last.
+ */
+export function composeClasses<T extends object>(
+  base: T,
+  override: Partial<Record<keyof T, unknown>> | undefined,
+): T {
+  if (!override) return base;
+  const out: Record<string, unknown> = { ...(base as Record<string, unknown>) };
+  for (const key of new Set([...Object.keys(base), ...Object.keys(override)])) {
+    const b = (base as Record<string, unknown>)[key];
+    const o = (override as Record<string, unknown>)[key];
+    if (o === undefined) continue;
+    if (typeof b === "string" || b === undefined) {
+      out[key] = typeof o === "string" ? cn(b as string | undefined, o) : o;
+    } else if (b && typeof b === "object" && o && typeof o === "object") {
+      out[key] = composeClasses(b as Record<string, unknown>, o as Record<string, unknown>);
+    } else {
+      out[key] = o;
+    }
+  }
+  return out as T;
+}

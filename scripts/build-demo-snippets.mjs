@@ -33,6 +33,7 @@ import ts from "typescript";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CHECK = process.argv.includes("--check");
+const SELF_CHECK = process.argv.includes("--self-check");
 const DEMOS = join(root, "src/pages/demo");
 const OUT_SITE = join(root, "src/pages/demo/generated/demoSnippets.ts");
 const OUT_SNIPPETS = join(root, "scripts/consumers/_app/snippets/demo");
@@ -385,6 +386,74 @@ function classTable(sf) {
  * So it is done on the tree: identifiers only, never a JSX attribute name,
  * never anything inside a string.
  */
+/**
+ * `false ? a : b` is `b`.
+ *
+ * `dark` becomes the literal `false` on the way into a snippet, which leaves
+ * 192 dead ternaries across 58 files — `className={false ? "text-cl-accent" :
+ * "text-cl-accent"}` in pasteable code. Folded here rather than in the printer
+ * because it also has to reach the inlined helper declarations, which are not
+ * JSX and never pass through it.
+ */
+function foldConstantConditionals(text) {
+  for (let pass = 0; pass < 5; pass += 1) {
+    const sf = ts.createSourceFile("fold.tsx", text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const cuts = [];
+    const walk = (n) => {
+      if (ts.isConditionalExpression(n)) {
+        const kind = n.condition.kind;
+        const taken =
+          kind === ts.SyntaxKind.FalseKeyword ? n.whenFalse
+          : kind === ts.SyntaxKind.TrueKeyword ? n.whenTrue
+          : null;
+        if (taken) {
+          cuts.push({ start: n.getStart(sf), end: n.getEnd(), text: taken.getText(sf) });
+          return;
+        }
+      }
+      ts.forEachChild(n, walk);
+    };
+    walk(sf);
+    if (!cuts.length) return text;
+    for (const c of cuts.sort((a, b) => b.start - a.start)) {
+      text = text.slice(0, c.start) + c.text + text.slice(c.end);
+    }
+  }
+  return text;
+}
+
+/**
+ * A backtick with nothing to substitute is a string.
+ *
+ * The demo pages write their class strings as template literals because most of
+ * them interpolate a theme value; once `dark` is resolved away, 4520 of them
+ * across 422 snippets hold nothing but text. Same shape as the wrapped literals
+ * already folded, and the same reason: a reader is meant to paste this.
+ *
+ * Single-line only. A multi-line template would come back with `\n` escapes in
+ * it, which is worse to read than the backticks.
+ */
+function foldConstantTemplates(text) {
+  const sf = ts.createSourceFile("tpl.tsx", text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const cuts = [];
+  const walk = (n) => {
+    if (
+      ts.isNoSubstitutionTemplateLiteral(n) &&
+      !n.text.includes("\n") &&
+      !ts.isTaggedTemplateExpression(n.parent)
+    ) {
+      cuts.push({ start: n.getStart(sf), end: n.getEnd(), text: JSON.stringify(n.text) });
+      return;
+    }
+    ts.forEachChild(n, walk);
+  };
+  walk(sf);
+  for (const c of cuts.sort((a, b) => b.start - a.start)) {
+    text = text.slice(0, c.start) + c.text + text.slice(c.end);
+  }
+  return text;
+}
+
 function replaceDarkIdentifier(text) {
   // Parsed as-is, not wrapped in a fragment: this runs over inlined `const`
   // declarations as well as JSX bodies, and wrapping a declaration in `<>…</>`
@@ -432,6 +501,288 @@ function replaceDarkIdentifier(text) {
     out = out.slice(0, cut.start) + "false" + out.slice(cut.end);
   }
   return out;
+}
+
+
+/** ── printing JSX from its own tree ───────────────────────────────────── */
+/**
+ * A snippet has to agree with its own tree.
+ *
+ * `printBody` decides every line's depth from nesting, so re-reading an emitted
+ * snippet and printing it again must produce the same text. Anything else means
+ * the file on disk was not printed from its tree — hand-edited, or emitted by a
+ * generator that computed depth some other way, which is the defect this
+ * replaced. Checked as a fixpoint rather than by re-deriving a rule, so the
+ * assertion cannot drift from the printer.
+ */
+function indentationDrift(code) {
+  const sf = ts.createSourceFile("check.tsx", code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  // The exported component's return, not the first one in the file. A snippet
+  // may inline a helper that itself returns JSX, and that helper's JSX sits at
+  // its own depth inside its own function, not at the component's.
+  const exported = sf.statements.find(
+    (st) =>
+      ts.isFunctionDeclaration(st) &&
+      st.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword),
+  );
+  if (!exported?.body) return null;
+  let ret = null;
+  const find = (n) => {
+    if (ret) return;
+    if (ts.isReturnStatement(n) && n.expression) { ret = n.expression; return; }
+    // Not into a nested function: its returns are not the component's.
+    if (ts.isFunctionDeclaration(n) || ts.isFunctionExpression(n) || ts.isArrowFunction(n)) return;
+    ts.forEachChild(n, find);
+  };
+  exported.body.statements.forEach(find);
+  if (!ret) return null;
+
+  const body = unwrap(ret);
+  // Only a JSX body has a tree to be indented against.
+  if (!ts.isJsxElement(body) && !ts.isJsxFragment(body) && !ts.isJsxSelfClosingElement(body)) return null;
+  // Printed at the depth it occupies in the file, so the comparison is against
+  // the bytes on disk rather than against a normalised version of them.
+  const printed = printJsxNode(body, sf, 2).join("\n").replace(/\n{3,}/g, "\n\n");
+
+  // From the start of the line the expression opens on, so its own indent is
+  // included rather than skipped by `getStart`.
+  const lineStart = code.lastIndexOf("\n", body.getStart(sf)) + 1;
+  const onDisk = code.slice(lineStart, body.getEnd());
+
+  const tidy = (t) => t.split("\n").map((l) => l.replace(/\s+$/, "")).join("\n").trimEnd();
+  return tidy(onDisk) === tidy(printed) ? null : { printed: tidy(printed), onDisk: tidy(onDisk) };
+}
+
+
+/**
+ * Emit JSX at two spaces per level of nesting, taken from the tree.
+ *
+ * What this replaces derived depth from text: it took `node.getText()` out of
+ * the demo page, then stripped the smallest indent any line happened to have.
+ * That is only correct when every line kept the depth it had on the page — and
+ * the extractor rewrites lines, so a parent that had been re-based to column 6
+ * kept a child sitting at column 20, fourteen further in than its own opener.
+ * 403 of 626 snippets had a jump of that shape.
+ *
+ * Depth here is the distance from the root of the tree being printed, so there
+ * is nothing computed after the fact that can disagree with the structure.
+ * `assertIndentation` re-reads the emitted text and checks it against the same
+ * rule, so a snippet that drifts from its own tree fails `--check`.
+ */
+const PRINT_WIDTH = 96;
+const pad = (depth) => "  ".repeat(depth);
+
+/** A template literal whose every substitution is itself constant is a string. */
+function foldConstantTemplate(expr) {
+  if (ts.isStringLiteral(expr) || ts.isNoSubstitutionTemplateLiteral(expr)) return expr.text;
+  if (!ts.isTemplateExpression(expr)) return null;
+  let out = expr.head.text;
+  for (const span of expr.templateSpans) {
+    let inner = span.expression;
+    while (ts.isParenthesizedExpression(inner)) inner = inner.expression;
+    const folded = foldConstantTemplate(inner);
+    if (folded === null) return null;
+    out += folded + span.literal.text;
+  }
+  return out;
+}
+
+/** The expression a container holds, with parentheses and folding applied. */
+function unwrap(expr) {
+  let e = expr;
+  while (ts.isParenthesizedExpression(e)) e = e.expression;
+  return e;
+}
+
+/**
+ * One attribute, at its own depth, absolutely padded.
+ *
+ * Every line this returns is final: the caller appends them verbatim. Returning
+ * a mix of padded and unpadded lines is what put a `colors={` object two levels
+ * deeper than its own attribute.
+ */
+function printAttribute(attr, sfx, depth) {
+  const P = pad(depth);
+  if (ts.isJsxSpreadAttribute(attr)) return [`${P}{...${attr.expression.getText(sfx)}}`];
+  const name = attr.name.getText(sfx);
+  if (!attr.initializer) return [P + name];
+  // The source's own quoting, not a re-encoding of it: `.text` hands back
+  // `\\u00e9` as five characters, and JSON.stringify then escapes the backslash.
+  if (ts.isStringLiteral(attr.initializer)) return [`${P}${name}=${attr.initializer.getText(sfx)}`];
+  if (!ts.isJsxExpression(attr.initializer)) return [`${P}${name}=${attr.initializer.getText(sfx)}`];
+
+  const inner = unwrap(attr.initializer.expression);
+  if (!inner) return [P + name];
+
+  // `className={(`${("a b c")}`)}` is a string that survived three wrappers on
+  // its way through the substitution pass. A reader is meant to paste this.
+  if (ts.isStringLiteral(inner)) return [`${P}${name}=${inner.getText(sfx)}`];
+  const folded = foldConstantTemplate(inner);
+  if (folded !== null) return [`${P}${name}=${JSON.stringify(folded)}`];
+
+  if (containsJsx(inner)) {
+    const lines = printExpression(inner, sfx, depth + 1);
+    if (lines.length === 1) return [`${P}${name}={${lines[0].trim()}}`];
+    return [`${P}${name}={`, ...lines, `${P}}`];
+  }
+  const text = inner.getText(sfx);
+  if (!text.includes("\n")) return [`${P}${name}={${text}}`];
+  return [`${P}${name}={`, ...reindentBlock(text, depth + 1), `${P}}`];
+}
+
+/** True when a node has JSX anywhere inside it. */
+function containsJsx(node) {
+  let found = false;
+  const walk = (n) => {
+    if (found) return;
+    if (ts.isJsxElement(n) || ts.isJsxSelfClosingElement(n) || ts.isJsxFragment(n)) { found = true; return; }
+    ts.forEachChild(n, walk);
+  };
+  walk(node);
+  return found;
+}
+
+/**
+ * A pure-JavaScript block, moved to `depth` while keeping its own internal
+ * shape. Its relative indentation is its own and is already consistent — it
+ * came from one contiguous region of one file — so only the base moves.
+ */
+function reindentBlock(text, depth) {
+  const lines = text.replace(/\t/g, "  ").split("\n");
+  const rest = lines.slice(1).filter((l) => l.trim());
+  const base = rest.length ? Math.min(...rest.map((l) => l.match(/^ */)[0].length)) : 0;
+  return lines.map((l, i) => (i === 0 ? pad(depth) + l.trim() : l.trim() ? pad(depth) + l.slice(base) : ""));
+}
+
+function printOpening(el, sfx, depth, selfClosing) {
+  const tag = el.tagName.getText(sfx);
+  const attrs = el.attributes.properties.map((a) => printAttribute(a, sfx, depth + 1));
+  const flat = attrs.map((a) => a.map((l) => l.trim()).join(" "));
+  const oneLine = `<${tag}${flat.length ? " " + flat.join(" ") : ""}${selfClosing ? " />" : ">"}`;
+  if (!attrs.some((a) => a.length > 1) && pad(depth).length + oneLine.length <= PRINT_WIDTH) {
+    return [pad(depth) + oneLine];
+  }
+  const out = [pad(depth) + `<${tag}`];
+  for (const attr of attrs) out.push(...attr);
+  out.push(pad(depth) + (selfClosing ? "/>" : ">"));
+  return out;
+}
+
+/** An expression inside `{ … }`, printed so nested JSX keeps structural depth. */
+function printExpression(expr, sfx, depth) {
+  const e = unwrap(expr);
+
+  if (ts.isJsxElement(e) || ts.isJsxSelfClosingElement(e) || ts.isJsxFragment(e)) {
+    return printJsxNode(e, sfx, depth);
+  }
+
+  // `items.map((item) => ( <X/> ))` — the callback's JSX is the part whose
+  // depth matters, so it is printed rather than carried as text.
+  if (ts.isCallExpression(e) && e.arguments.length === 1) {
+    const [arg] = e.arguments;
+    if (ts.isArrowFunction(arg) && containsJsx(arg.body)) {
+      // The callee can be an inline array literal spanning lines, and its own
+      // indentation is the demo page's. Re-based like any other JS block.
+      const calleeText = e.expression.getText(sfx);
+      const head = calleeText.includes("\n")
+        ? reindentBlock(calleeText, depth)
+        : [pad(depth) + calleeText];
+      const params = arg.parameters.map((p) => p.getText(sfx)).join(", ");
+      const inner = printExpression(unwrap(arg.body), sfx, depth + 1);
+      head[head.length - 1] += `((${params}) => (`;
+      return [...head, ...inner, `${pad(depth)}))`];
+    }
+  }
+
+  if (ts.isConditionalExpression(e) && containsJsx(e)) {
+    const cond = e.condition.getText(sfx);
+    return [
+      `${pad(depth)}${cond} ? (`,
+      ...printExpression(e.whenTrue, sfx, depth + 1),
+      `${pad(depth)}) : (`,
+      ...printExpression(e.whenFalse, sfx, depth + 1),
+      `${pad(depth)})`,
+    ];
+  }
+
+  if (ts.isBinaryExpression(e) && e.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken && containsJsx(e.right)) {
+    return [
+      `${pad(depth)}${e.left.getText(sfx)} && (`,
+      ...printExpression(e.right, sfx, depth + 1),
+      `${pad(depth)})`,
+    ];
+  }
+
+  const text = e.getText(sfx);
+  return text.includes("\n") ? reindentBlock(text, depth) : [pad(depth) + text];
+}
+
+function printJsxNode(node, sfx, depth) {
+  if (ts.isJsxSelfClosingElement(node)) return printOpening(node, sfx, depth, true);
+
+  if (ts.isJsxText(node)) {
+    const text = node.text.replace(/\s+/g, " ").trim();
+    return text ? [pad(depth) + text] : [];
+  }
+
+  if (ts.isJsxExpression(node)) {
+    if (!node.expression) return [];
+    const inner = printExpression(node.expression, sfx, depth + 1);
+    if (inner.length === 1) return [pad(depth) + `{${inner[0].trim()}}`];
+    return [pad(depth) + "{", ...inner, pad(depth) + "}"];
+  }
+
+  // Anything that is not JSX is carried as its own text rather than guessed at.
+  if (!ts.isJsxElement(node) && !ts.isJsxFragment(node)) {
+    const text = node.getText(sfx);
+    return text.includes("\n") ? reindentBlock(text, depth) : [pad(depth) + text];
+  }
+
+  const isFragment = ts.isJsxFragment(node);
+  const open = isFragment
+    ? [pad(depth) + "<>"]
+    : printOpening(node.openingElement, sfx, depth, false);
+  const close = isFragment
+    ? pad(depth) + "</>"
+    : pad(depth) + `</${node.closingElement.tagName.getText(sfx)}>`;
+
+  const children = node.children.flatMap((c) => printJsxNode(c, sfx, depth + 1));
+
+  // `<Tag>text</Tag>` stays on one line when it all fits and holds one string.
+  if (
+    children.length === 1 &&
+    open.length === 1 &&
+    !children[0].trimStart().startsWith("<") &&
+    !children[0].trimStart().startsWith("{") &&
+    open[0].length + children[0].trim().length + close.trim().length <= PRINT_WIDTH
+  ) {
+    return [open[0] + children[0].trim() + close.trim()];
+  }
+  return [...open, ...children, close];
+}
+
+/**
+ * The whole body, printed from the tree it was parsed into, at the depth it
+ * will finally occupy.
+ *
+ * Not at depth 0 with the caller shifting afterwards: every decision about
+ * whether a line fits is made against its real column, and a uniform shift
+ * applied later moves lines past the width they were measured at. That made the
+ * printer non-idempotent — re-printing an emitted snippet broke lines the first
+ * pass had kept whole.
+ */
+function printBody(code, baseDepth) {
+  const wrapped = ts.createSourceFile("snippet.tsx", `<>\n${code}\n</>`, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let fragment = null;
+  const find = (n) => {
+    if (fragment) return;
+    if (ts.isJsxFragment(n)) { fragment = n; return; }
+    ts.forEachChild(n, find);
+  };
+  find(wrapped);
+  if (!fragment) return code;
+  const lines = fragment.children.flatMap((c) => printJsxNode(c, wrapped, baseDepth));
+  return lines.join("\n").replace(/\n{3,}/g, "\n\n").replace(/\s+$/, "");
 }
 
 /** Strip the common indent so a pasted snippet is not stair-stepped. */
@@ -667,7 +1018,7 @@ function build(section, sf, symbols, classes, componentName) {
       if (!entry) { missingKey = key; return _m; }
       return "literal" in entry ? JSON.stringify(entry.literal) : `(${entry.expression})`;
     });
-    return replaceDarkIdentifier(out);
+    return foldConstantTemplates(foldConstantConditionals(replaceDarkIdentifier(out)));
   };
 
   let code = resolvePageScope(dedent(bodyText));
@@ -676,6 +1027,12 @@ function build(section, sf, symbols, classes, componentName) {
   if (missingKey) return { reason: `page styling \`c.${missingKey}\` could not be resolved` };
 
   code = stripUnknownClassesKeys(code, componentName);
+
+  // Last: re-read what every earlier pass produced and print it from its own
+  // tree. Everything above edits text — label cuts by offset, `c.foo`
+  // substitution, dead `classes` keys removed — and text edits do not keep
+  // indentation true to structure. This is the only place depth is decided.
+  const rawBody = code;
 
   const importLines = [...importsUsed.entries()]
     .sort(([a], [b]) => (a === "react" ? -1 : b === "react" ? 1 : a.localeCompare(b)))
@@ -696,8 +1053,12 @@ function build(section, sf, symbols, classes, componentName) {
   const single =
     section.body.length === 1 &&
     (ts.isJsxElement(section.body[0]) || ts.isJsxSelfClosingElement(section.body[0]));
-  const inner = single ? code : `<>\n${code.split("\n").map((l) => (l ? `  ${l}` : l)).join("\n")}\n</>`;
-  const bodyLines = [...hoisted.map((h) => `  const ${h};`), `  return (`, ...inner.split("\n").map((l) => `    ${l}`), `  );`];
+  // Printed straight into its final column: the root sits at depth 2, and a
+  // fragment puts its children at depth 3.
+  const inner = single
+    ? printBody(rawBody, 2)
+    : `${pad(2)}<>\n${printBody(rawBody, 3)}\n${pad(2)}</>`;
+  const bodyLines = [...hoisted.map((h) => `  const ${h};`), `  return (`, ...inner.split("\n"), `  );`];
   parts.push(`export default function ${componentName}Example() {\n${bodyLines.join("\n")}\n}`);
 
   return { code: `${parts.join("\n\n")}\n`, needsClient };
@@ -884,6 +1245,41 @@ function failingSnippets(entries) {
 }
 
 
+if (SELF_CHECK) {
+  // A snippet that is correct, and the same snippet with one child pushed in
+  // four spaces. The first must pass and the second must fail: a check that
+  // only ever sees well-formed input is not shown to be checking anything.
+  const good = [
+    'export default function Example() {',
+    '  return (',
+    '    <div className="wrap">',
+    '      <span>ok</span>',
+    '    </div>',
+    '  );',
+    '}',
+  ].join("\n");
+  const planted = good.replace('      <span>ok</span>', '          <span>ok</span>');
+
+  const goodDrift = indentationDrift(good);
+  const plantedDrift = indentationDrift(planted);
+
+  process.stdout.write("\n── snippet indentation self-check ──────────────────────────────\n");
+  process.stdout.write(`  well-formed snippet: ${goodDrift ? "REPORTED AS DRIFTED" : "accepted"}\n`);
+  process.stdout.write(`  child pushed in 4:   ${plantedDrift ? "caught" : "PASSED — the check is blind"}\n`);
+  if (plantedDrift) {
+    process.stdout.write(`      on disk: ${JSON.stringify(plantedDrift.onDisk.split("\n")[1] ?? "")}\n`);
+    process.stdout.write(`      printed: ${JSON.stringify(plantedDrift.printed.split("\n")[1] ?? "")}\n`);
+  }
+  const ok = !goodDrift && Boolean(plantedDrift);
+  process.stdout.write(
+    ok
+      ? "  RESULT: the check accepts a tree-indented snippet and refuses a mis-indented one\n"
+      : "  RESULT: FAILED\n",
+  );
+  process.stdout.write("════════════════════════════════════════════════════════════════\n");
+  process.exit(ok ? 0 : 1);
+}
+
 if (CHECK) {
   const drifted = [];
   if (!compare(OUT_SITE, siteFile)) drifted.push(OUT_SITE);
@@ -892,7 +1288,36 @@ if (CHECK) {
     process.stderr.write(`✗ demo snippets drifted from the pages (${drifted.length} file(s)). Run: node scripts/build-demo-snippets.mjs\n`);
     process.exit(1);
   }
-  process.stdout.write(`✓ demo snippets in step: ${emitted} of ${considered} sections\n`);
+  // Drift from the pages is one failure; drift from its own tree is another.
+  // A snippet can match what the generator last wrote and still be indented
+  // wrongly, which is exactly the state 403 of these were in.
+  const misindented = [];
+  for (const [rel, content] of files) {
+    const drift = indentationDrift(content);
+    if (drift) misindented.push({ rel, drift });
+  }
+  if (misindented.length) {
+    process.stderr.write(
+      `✗ ${misindented.length} snippet(s) are not indented to their own tree:\n`,
+    );
+    for (const { rel, drift } of misindented.slice(0, 5)) {
+      process.stderr.write(`    ${rel}\n`);
+      const a = drift.onDisk.split("\n");
+      const b = drift.printed.split("\n");
+      for (let i = 0; i < Math.max(a.length, b.length); i += 1) {
+        if (a[i] === b[i]) continue;
+        process.stderr.write(`      on disk: ${JSON.stringify(a[i] ?? "")}\n`);
+        process.stderr.write(`      printed: ${JSON.stringify(b[i] ?? "")}\n`);
+        break;
+      }
+    }
+    if (misindented.length > 5) process.stderr.write(`    … and ${misindented.length - 5} more\n`);
+    process.exit(1);
+  }
+
+  process.stdout.write(
+    `✓ demo snippets in step: ${emitted} of ${considered} sections, each indented to its own tree\n`,
+  );
   process.exit(0);
 }
 

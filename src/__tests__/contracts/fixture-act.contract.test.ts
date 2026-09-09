@@ -58,6 +58,13 @@ const offending = (text: string, file: string) =>
     NOT_IN_A_BROWSER.some((pattern) => pattern.test(specifier)),
   );
 
+/**
+ * Counted, not assumed. A self-check proves the predicate can fail; this
+ * proves it was pointed at something. `overrides.contract` had a working
+ * shape and ran it over 3 of 340 slots for months.
+ */
+const asserted = { n: 0 };
+
 describe("fixture act contract", () => {
   it.each(fixtureModules())("%s imports nothing a browser cannot load", (file) => {
     const text = readFileSync(join(FIXTURES, file), "utf8");
@@ -78,6 +85,7 @@ describe("fixture act contract", () => {
     const withAct = fixtureModules().filter((file) => file.endsWith(".fixtures.tsx"));
     const missing: string[] = [];
     for (const file of withAct) {
+      asserted.n += 1;
       const text = readFileSync(join(FIXTURES, file), "utf8");
       const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
       const visit = (node: ts.Node) => {
@@ -94,5 +102,10 @@ describe("fixture act contract", () => {
       visit(source);
     }
     expect(missing).toEqual([]);
+  });
+
+  it("asserted on a real number of fixture modules", () => {
+    console.log(`FIXTURE_ACT asserted on ${asserted.n} fixture modules`);
+    expect(asserted.n, "this contract iterated nothing").toBeGreaterThan(20);
   });
 });

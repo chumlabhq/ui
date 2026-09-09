@@ -28,17 +28,19 @@ export default function ResizablePanelExample() {
   const [bottomHeight, setBottomHeight] = useState(200);
   return (
     <ResizablePanel
-                defaultValue={bottomHeight}
-                minValue={100}
-                maxValue={400}
-                resizeDirection="bottom"
-                onValueChange={setBottomHeight}
-                classes={{
-                  root: "w-full bg-cl-bg-elevated rounded-cl-md border border-cl-border",
-                  handle: handleClass("blue")
-                }}
-              >
-                {editorContent(bottomHeight)}
-              </ResizablePanel>
+      defaultValue={bottomHeight}
+      minValue={100}
+      maxValue={400}
+      resizeDirection="bottom"
+      onValueChange={setBottomHeight}
+      classes={
+        {
+          root: "w-full bg-cl-bg-elevated rounded-cl-md border border-cl-border",
+          handle: handleClass("blue")
+        }
+      }
+    >
+      {editorContent(bottomHeight)}
+    </ResizablePanel>
   );
 }

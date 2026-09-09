@@ -45,10 +45,10 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
     );
     const mergedClasses: Required<CircularLoaderClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        control: classesProp?.control ?? baseClasses.control,
-        track: classesProp?.track ?? baseClasses.track,
-        range: classesProp?.range ?? baseClasses.range,
+        root: cn(baseClasses.root, classesProp?.root),
+        control: cn(baseClasses.control, classesProp?.control),
+        track: cn(baseClasses.track, classesProp?.track),
+        range: cn(baseClasses.range, classesProp?.range),
       }),
       [classesProp, baseClasses],
     );

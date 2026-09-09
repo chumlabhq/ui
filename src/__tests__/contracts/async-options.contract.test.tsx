@@ -52,6 +52,12 @@ const CASES = [
   { name: "MultiSelectSearchableDropdown", Component: MultiSelectSearchableDropdown },
 ] as const;
 
+/**
+ * Counted, not assumed. A self-check proves the predicate can fail; this
+ * proves it was pointed at something.
+ */
+const asserted = { n: 0 };
+
 describe("async options contract", () => {
   describe("self-check", () => {
     it("catches a menu resolved from a source the branch ignores", async () => {
@@ -84,6 +90,7 @@ describe("async options contract", () => {
       };
 
       it("renders its options on the sync branch", () => {
+        asserted.n += 1;
         const fixture = byName("open");
         render(
           <Component
@@ -175,6 +182,7 @@ describe("load-on-open branch", () => {
   for (const { name, Component } of CASES) {
     describe(name, () => {
       it("fetches nothing until the menu is opened", async () => {
+        asserted.n += 1;
         await drive(Component as never, name, "async-load-initial");
         expect(menuIsMounted()).toBe(false);
       });
@@ -228,6 +236,7 @@ describe("initial-load branch", () => {
   for (const { name, Component } of CASES) {
     describe(name, () => {
       it("mounts an empty menu while the prefetch is in flight", async () => {
+        asserted.n += 1;
         await drive(Component as never, name, "async-initial-load-pending");
         expect(menuIsMounted()).toBe(true);
         expect(renderedOptions()).toEqual([]);
@@ -315,5 +324,15 @@ describe("cascading async branches", () => {
   it("fetches nothing before a lazy parent is hovered", async () => {
     await drive(CascadingDropdown as never, "CascadingDropdown", "async-children-initial");
     expect(renderedMenuItems()).toEqual(["Fruit", "Veg"]);
+  });
+
+  it("asserted on a real number of component branches", () => {
+    console.log(`ASYNC_OPTIONS asserted on ${asserted.n} component branches`);
+    // Every async-capable component is covered, each in the branch that
+    // applies to it: the two searchable dropdowns here and in `initial-load
+    // branch`, `Dropdown` and `MultiSelectDropdown` in `load-on-open branch`,
+    // `CascadingDropdown` in its own. The count spans all of them — reading one
+    // describe in isolation says 2 and looks like half the list is missing.
+    expect(asserted.n, "this contract iterated nothing").toBeGreaterThan(4);
   });
 });

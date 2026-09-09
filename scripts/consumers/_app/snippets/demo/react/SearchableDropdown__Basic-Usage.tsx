@@ -18,13 +18,12 @@ export default function SearchableDropdownExample() {
   const [basicValue, setBasicValue] = useState<string | null>(null);
   return (
     <div className="w-full sm:max-w-64">
-                {/* Basic usage — works out-of-the-box with built-in styles */}
-                <SearchableDropdown
-                  options={fruitOptions}
-                  value={basicValue}
-                  onValueChange={(value) => setBasicValue(value)}
-                  placeholder="Search fruits..."
-                />
-              </div>
+      <SearchableDropdown
+        options={fruitOptions}
+        value={basicValue}
+        onValueChange={(value) => setBasicValue(value)}
+        placeholder="Search fruits..."
+      />
+    </div>
   );
 }

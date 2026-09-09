@@ -204,24 +204,23 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const mergedClasses: AccordionClasses = useMemo(
     () => ({
       root:
-        classesProp?.root ?? cn(baseClasses.root, variantClasses.root),
-      item: classesProp?.item ?? variantClasses.item,
+        cn(baseClasses.root, variantClasses.root, classesProp?.root),
+      item: cn(variantClasses.item, classesProp?.item),
       trigger:
-        classesProp?.trigger ??
-        cn(baseClasses.trigger, sizeClasses.trigger, variantClasses.trigger),
-      itemText: classesProp?.itemText ?? baseClasses.itemText,
+        cn(baseClasses.trigger, sizeClasses.trigger, variantClasses.trigger, classesProp?.trigger),
+      itemText: cn(baseClasses.itemText, classesProp?.itemText),
       body:
-        classesProp?.body ?? cn(baseClasses.body, sizeClasses.content),
-      content: classesProp?.content ?? baseClasses.content,
+        cn(baseClasses.body, sizeClasses.content, classesProp?.body),
+      content: cn(baseClasses.content, classesProp?.content),
       icon:
-        classesProp?.icon ?? cn(baseClasses.icon, sizeClasses.icon),
+        cn(baseClasses.icon, sizeClasses.icon, classesProp?.icon),
       itemIndicator:
-        classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+        cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
       description:
-        classesProp?.description ?? cn(baseClasses.description, sizeClasses.subtitle),
-      itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
-      triggerActions: classesProp?.triggerActions ?? baseClasses.triggerActions,
-      header: classesProp?.header ?? baseClasses.header,
+        cn(baseClasses.description, sizeClasses.subtitle, classesProp?.description),
+      itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
+      triggerActions: cn(baseClasses.triggerActions, classesProp?.triggerActions),
+      header: cn(baseClasses.header, classesProp?.header),
     }),
     [classesProp, sizeClasses, variantClasses, baseClasses, unstyled],
   );

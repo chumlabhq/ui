@@ -29,12 +29,12 @@ const baseBtn =
   "inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
 
 const getClasses = (dark: boolean) => ({
-  btn: `${baseBtn} bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated`,
-  btnPrimary: `${baseBtn} bg-cl-text text-cl-bg hover:opacity-90`,
-  btnAccent: `${baseBtn} bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`,
-  btnDanger: `${baseBtn} bg-cl-error text-cl-bg hover:bg-cl-error/90`,
-  btnSuccess: `${baseBtn} bg-cl-success text-cl-bg hover:bg-cl-success/90`,
-  btnWarning: `${baseBtn} bg-cl-warning text-cl-bg hover:bg-cl-warning/90`,
+  btn: `${baseBtn} bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated cursor-pointer`,
+  btnPrimary: `${baseBtn} bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`,
+  btnAccent: `${baseBtn} bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer`,
+  btnDanger: `${baseBtn} bg-cl-error text-cl-bg hover:bg-cl-error/90 cursor-pointer`,
+  btnSuccess: `${baseBtn} bg-cl-success text-cl-bg hover:bg-cl-success/90 cursor-pointer`,
+  btnWarning: `${baseBtn} bg-cl-warning text-cl-bg hover:bg-cl-warning/90 cursor-pointer`,
   btnGhost: `${baseBtn} text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover`,
   text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
   card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -66,7 +66,7 @@ const ModalChildWithHook = () => {
       </div>
       <button
         onClick={close}
-        className="px-4 py-2 bg-cl-accent text-cl-on-accent rounded-cl-md hover:bg-cl-accent/90 transition-colors"
+        className="px-4 py-2 bg-cl-accent text-cl-on-accent rounded-cl-md hover:bg-cl-accent/90 transition-colors cursor-pointer"
       >
         Close via useModal().close()
       </button>
@@ -428,7 +428,7 @@ const ModalDemo = () => {
         </p>
         <div className="flex justify-end gap-3 mt-5">
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90 cursor-pointer`}
             onClick={() => setUnstyledOpen(false)}
           >
             Got it
@@ -753,13 +753,13 @@ const ModalDemo = () => {
         </p>
         <div className="flex justify-end gap-3 mt-6">
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
             onClick={() => setBasicOpen(false)}
           >
             Cancel
           </button>
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`}
             onClick={() => setBasicOpen(false)}
           >
             Continue
@@ -970,9 +970,9 @@ const ModalDemo = () => {
           </div>
 
           <div className="flex w-full gap-3">
-            <button className={`flex-1 ${c.btn}`} onClick={() => setConfirmDeleteOpen(false)}>Keep Project</button>
+            <button className={`flex-1 ${c.btn} cursor-pointer`} onClick={() => setConfirmDeleteOpen(false)}>Keep Project</button>
             <button
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:bg-cl-error dark:hover:bg-cl-error/30`}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:bg-cl-error dark:hover:bg-cl-error/30 cursor-pointer`}
               onClick={() => setConfirmDeleteOpen(false)}
             >
               Yes, Delete
@@ -1018,9 +1018,9 @@ const ModalDemo = () => {
           </div>
 
           <div className="flex w-full gap-3">
-            <button className={`flex-1 ${c.btn}`} onClick={() => setSuccessOpen(false)}>View Order</button>
+            <button className={`flex-1 ${c.btn} cursor-pointer`} onClick={() => setSuccessOpen(false)}>View Order</button>
             <button
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:bg-cl-success dark:hover:bg-cl-success/30`}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:bg-cl-success dark:hover:bg-cl-success/30 cursor-pointer`}
               onClick={() => setSuccessOpen(false)}
             >
               Continue Shopping
@@ -1075,13 +1075,13 @@ const ModalDemo = () => {
           </div>
           <button
             onClick={() => setUpgradeOpen(false)}
-            className="w-full py-3 bg-cl-text text-cl-bg rounded-cl-md hover:opacity-90 transition-all font-semibold"
+            className="w-full py-3 bg-cl-text text-cl-bg rounded-cl-md hover:opacity-90 transition-all font-semibold cursor-pointer"
           >
             Upgrade Now
           </button>
           <button
             onClick={() => setUpgradeOpen(false)}
-            className={`w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text`}
+            className={`w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text cursor-pointer`}
           >
             Maybe later
           </button>
@@ -1098,7 +1098,7 @@ const ModalDemo = () => {
         <div className="relative">
           <button
             onClick={() => setImagePreviewOpen(false)}
-            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(0,0,0,0.55)] text-white hover:bg-[rgba(0,0,0,0.75)] transition-colors"
+            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(0,0,0,0.55)] text-white hover:bg-[rgba(0,0,0,0.75)] transition-colors cursor-pointer"
           >
             <svg
               className="h-5 w-5"
@@ -1137,7 +1137,7 @@ const ModalDemo = () => {
               <p className="font-medium truncate">Sunset at Malibu Beach</p>
               <p className="text-sm text-cl-text-tertiary truncate">4032 × 3024 • 3.2 MB</p>
             </div>
-            <button className="flex items-center gap-2 px-3 py-2 text-sm text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated rounded-cl-md transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated rounded-cl-md transition-colors cursor-pointer">
               <svg
                 className="h-4 w-4"
                 fill="none"
@@ -1211,7 +1211,7 @@ const ModalDemo = () => {
             <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <button
                 onClick={() => setFullScreenOpen(false)}
-                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors shrink-0"
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors shrink-0 cursor-pointer"
               >
                 <svg
                   className="w-5 h-5 text-cl-text-secondary"
@@ -1235,7 +1235,7 @@ const ModalDemo = () => {
               </div>
             </div>
             <div className="flex items-center gap-2 ml-auto">
-              <button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2">
+              <button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1251,7 +1251,7 @@ const ModalDemo = () => {
                 </svg>
                 <span className="hidden sm:inline">Download</span>
               </button>
-              <button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2">
+              <button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1267,7 +1267,7 @@ const ModalDemo = () => {
                 </svg>
                 <span className="hidden sm:inline">Print</span>
               </button>
-              <button className="px-3 py-2 text-sm bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2">
+              <button className="px-3 py-2 text-sm bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1372,7 +1372,7 @@ const ModalDemo = () => {
           <footer className="bg-cl-bg-elevated border-t border-cl-border px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-4">
               <button
-                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50"
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer"
                 disabled
               >
                 <svg
@@ -1390,7 +1390,7 @@ const ModalDemo = () => {
                 </svg>
               </button>
               <span className="text-sm text-cl-text-secondary">Page 1 of 12</span>
-              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors">
+              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
                 <svg
                   className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
@@ -1407,7 +1407,7 @@ const ModalDemo = () => {
               </button>
             </div>
             <div className="flex items-center gap-2">
-              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors">
+              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
                 <svg
                   className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
@@ -1422,7 +1422,7 @@ const ModalDemo = () => {
                   />
                 </svg>
               </button>
-              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors">
+              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
                 <svg
                   className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
@@ -1534,7 +1534,7 @@ const ModalDemo = () => {
                 <p className={`text-sm text-cl-accent`}>5 members with access</p>
               </div>
               <button
-                className={`px-3 py-1.5 text-cl-on-accent text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90`}
+                className={`px-3 py-1.5 text-cl-on-accent text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90 cursor-pointer`}
                 onClick={() => setNestedLevel2Open(true)}
               >
                 Manage
@@ -1548,7 +1548,7 @@ const ModalDemo = () => {
             </div>
             <button
               type="button"
-              className="relative inline-flex h-6 w-11 items-center rounded-full bg-cl-accent transition-colors"
+              className="relative inline-flex h-6 w-11 items-center rounded-full bg-cl-accent transition-colors cursor-pointer"
             >
               <span className="inline-block h-4 w-4 transform rounded-full bg-cl-bg-elevated translate-x-6 transition-transform" />
             </button>
@@ -1597,7 +1597,7 @@ const ModalDemo = () => {
               </div>
             ))}
           </div>
-          <button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border dark:border-cl-border dark:text-cl-text-tertiary dark:hover:border-cl-border-input-focus dark:hover:text-cl-accent`}>
+          <button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border dark:border-cl-border dark:text-cl-text-tertiary dark:hover:border-cl-border-input-focus dark:hover:text-cl-accent cursor-pointer`}>
             <svg
               className="h-5 w-5"
               fill="none"

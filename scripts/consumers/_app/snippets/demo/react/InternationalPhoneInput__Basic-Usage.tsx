@@ -5,13 +5,12 @@ export default function InternationalPhoneInputExample() {
   const [basicValue, setBasicValue] = useState<PhoneNumberData | undefined>();
   return (
     <div className="w-full sm:max-w-md">
-                  {/* Basic usage — works out-of-the-box with built-in styles */}
-                  <InternationalPhoneInput
-                    aria-label="Phone number"
-                    value={basicValue}
-                    onValueChange={setBasicValue}
-                    placeholder="Enter phone number"
-                  />
-                </div>
+      <InternationalPhoneInput
+        aria-label="Phone number"
+        value={basicValue}
+        onValueChange={setBasicValue}
+        placeholder="Enter phone number"
+      />
+    </div>
   );
 }

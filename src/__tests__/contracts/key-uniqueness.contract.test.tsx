@@ -64,6 +64,13 @@ const nestedCarriers = (root: HTMLElement, token: string) => {
 };
 
 describe("key uniqueness contract", () => {
+  // A run that iterates nothing reports nothing, which reads exactly like a
+  // pass. `overrides.contract` asserted on 3 of 340 slots for months on that
+  // basis, guarding the very bug it was written for.
+  it("iterates a non-empty set", () => {
+    expect(candidates.length, "the candidate set is empty — this contract asserts nothing").toBeGreaterThan(30);
+  });
+
   describe("self-check", () => {
     it("catches a key on an element and its own ancestor", () => {
       const host = document.createElement("div");

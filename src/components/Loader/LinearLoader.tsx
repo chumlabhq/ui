@@ -39,8 +39,8 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
     );
     const mergedClasses: Required<LinearLoaderClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        range: classesProp?.range ?? baseClasses.range,
+        root: cn(baseClasses.root, classesProp?.root),
+        range: cn(baseClasses.range, classesProp?.range),
       }),
       [classesProp, baseClasses],
     );

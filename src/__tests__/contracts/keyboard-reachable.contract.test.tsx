@@ -210,6 +210,13 @@ const withoutCursor = (): string[] => {
 };
 
 describe("keyboard reachability contract", () => {
+  // A run that iterates nothing reports nothing, which reads exactly like a
+  // pass. `overrides.contract` asserted on 3 of 340 slots for months on that
+  // basis, guarding the very bug it was written for.
+  it("iterates a non-empty set", () => {
+    expect(withFixtures.length, "the candidate set is empty — this contract asserts nothing").toBeGreaterThan(30);
+  });
+
   describe("self-check", () => {
     it("catches a control that cannot take focus", () => {
       const host = document.createElement("div");

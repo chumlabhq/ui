@@ -34,7 +34,7 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
     const base = unstyled
       ? UNSTYLED_AVATAR_SHIMMER_CLASSES
       : DEFAULT_AVATAR_SHIMMER_CLASSES;
-    const rootClass = classes?.root ?? base.root;
+    const rootClass = cn(base.root, classes?.root);
 
     return (
       <div

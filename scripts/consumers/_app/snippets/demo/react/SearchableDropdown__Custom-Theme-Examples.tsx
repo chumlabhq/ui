@@ -65,26 +65,24 @@ export default function SearchableDropdownExample() {
   const [warmThemeValue, setWarmThemeValue] = useState<string | null>(null);
   return (
     <div className="flex flex-wrap gap-8">
-                <div className="w-full sm:max-w-64">
-                  
-                  <SearchableDropdown
-                    options={fruitOptions}
-                    value={darkThemeValue}
-                    onValueChange={(v) => setDarkThemeValue(v)}
-                    placeholder="Search fruits..."
-                    classes={darkTheme}
-                  />
-                </div>
-                <div className="w-full sm:max-w-64">
-                  
-                  <SearchableDropdown
-                    options={fruitOptions}
-                    value={warmThemeValue}
-                    onValueChange={(v) => setWarmThemeValue(v)}
-                    placeholder="Search fruits..."
-                    classes={warmTheme}
-                  />
-                </div>
-              </div>
+      <div className="w-full sm:max-w-64">
+        <SearchableDropdown
+          options={fruitOptions}
+          value={darkThemeValue}
+          onValueChange={(v) => setDarkThemeValue(v)}
+          placeholder="Search fruits..."
+          classes={darkTheme}
+        />
+      </div>
+      <div className="w-full sm:max-w-64">
+        <SearchableDropdown
+          options={fruitOptions}
+          value={warmThemeValue}
+          onValueChange={(v) => setWarmThemeValue(v)}
+          placeholder="Search fruits..."
+          classes={warmTheme}
+        />
+      </div>
+    </div>
   );
 }

@@ -64,14 +64,14 @@ export default function CascadingDropdownExample() {
     useState<CascadingValue>({});
   return (
     <div className="w-full sm:max-w-72">
-                <CascadingDropdown
-                  options={filterOptions}
-                  value={darkThemeMultiValue}
-                  onValueChange={(val) => setDarkThemeMultiValue(val)}
-                  placeholder="Select filters..."
-                  closeOnSelect={false}
-                  classes={darkOnlyClasses}
-                />
-              </div>
+      <CascadingDropdown
+        options={filterOptions}
+        value={darkThemeMultiValue}
+        onValueChange={(val) => setDarkThemeMultiValue(val)}
+        placeholder="Select filters..."
+        closeOnSelect={false}
+        classes={darkOnlyClasses}
+      />
+    </div>
   );
 }

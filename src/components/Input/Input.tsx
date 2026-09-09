@@ -119,15 +119,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<InputClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        control: classesProp?.control ?? baseClasses.control,
-        label: classesProp?.label ?? baseClasses.label,
-        description: classesProp?.description ?? baseClasses.description,
-        input: classesProp?.input ?? baseClasses.input,
-        prefix: classesProp?.prefix ?? baseClasses.prefix,
-        suffix: classesProp?.suffix ?? baseClasses.suffix,
-        message: classesProp?.message ?? baseClasses.message,
-        count: classesProp?.count ?? baseClasses.count,
+        root: cn(baseClasses.root, classesProp?.root),
+        control: cn(baseClasses.control, classesProp?.control),
+        label: cn(baseClasses.label, classesProp?.label),
+        description: cn(baseClasses.description, classesProp?.description),
+        input: cn(baseClasses.input, classesProp?.input),
+        prefix: cn(baseClasses.prefix, classesProp?.prefix),
+        suffix: cn(baseClasses.suffix, classesProp?.suffix),
+        message: cn(baseClasses.message, classesProp?.message),
+        count: cn(baseClasses.count, classesProp?.count),
       }),
       [classesProp, baseClasses],
     );

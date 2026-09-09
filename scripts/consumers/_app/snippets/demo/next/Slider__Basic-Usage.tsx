@@ -7,17 +7,8 @@ export default function SliderExample() {
   const [basic, setBasic] = useState(50);
   return (
     <div className="flex flex-col gap-6 w-full sm:max-w-sm">
-                {}
-                <Slider
-                  label="Volume"
-                  value={basic}
-                  onValueChange={(v) => setBasic(v as number)}
-                />
-                <Slider
-                  label="Brightness"
-                  defaultValue={75}
-                  description="Adjust screen brightness"
-                />
-              </div>
+      <Slider label="Volume" value={basic} onValueChange={(v) => setBasic(v as number)} />
+      <Slider label="Brightness" defaultValue={75} description="Adjust screen brightness" />
+    </div>
   );
 }

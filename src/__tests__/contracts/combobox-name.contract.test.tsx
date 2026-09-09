@@ -80,6 +80,13 @@ const renderFixture = async (
 const withFixtures = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 
 describe("combobox name contract", () => {
+  // A run that iterates nothing reports nothing, which reads exactly like a
+  // pass. `overrides.contract` asserted on 3 of 340 slots for months on that
+  // basis, guarding the very bug it was written for.
+  it("iterates a non-empty set", () => {
+    expect(withFixtures.length, "the candidate set is empty — this contract asserts nothing").toBeGreaterThan(30);
+  });
+
   describe("self-check", () => {
     it("reports an empty name when the reference resolves to nothing", () => {
       const host = document.createElement("div");

@@ -28,7 +28,7 @@ const getClasses = (_dark: boolean) => ({
   label: `text-xs font-medium text-cl-text-tertiary`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary:
-    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer",
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
@@ -213,7 +213,7 @@ const OtpInputDemo = () => {
             &quot;{controlled}&quot;
           </span>
           <button
-            className={`ml-auto ${c.btn}`}
+            className={`ml-auto ${c.btn} cursor-pointer`}
             onClick={() => setControlled("")}
           >
             Clear
@@ -475,7 +475,7 @@ const OtpInputDemo = () => {
             }}
           >
             <OtpInput name="otp" label="Enter OTP" classes={c.otp} />
-            <button type="submit" className={`mt-3 ${c.btnPrimary}`}>
+            <button type="submit" className={`mt-3 ${c.btnPrimary} cursor-pointer`}>
               Submit
             </button>
           </form>

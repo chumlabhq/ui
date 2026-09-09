@@ -21,66 +21,68 @@ const LockIcon = ({ className = "" }: { className?: string }) => (
 export default function InputExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-                  <Input
-                    label="Disabled"
-                    value="Cannot edit"
-                    disabled
-                    startIcon={
-                      <LockIcon
-                        className={false ? "text-cl-text-secondary" : "text-cl-text-secondary"}
-                      />
-                    }
-                    classes={{
-                      ...({
-        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
-        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-        prefix: `text-sm select-none text-cl-text-tertiary`,
-        suffix: `text-sm select-none text-cl-text-tertiary`,
-        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
-      }),
-                      input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled",
-                      control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
-                    }}
-                  />
-                  <Input
-                    label="Disabled empty"
-                    placeholder="Disabled placeholder"
-                    disabled
-                    classes={{
-                      ...({
-        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
-        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-        prefix: `text-sm select-none text-cl-text-tertiary`,
-        suffix: `text-sm select-none text-cl-text-tertiary`,
-        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
-      }),
-                      input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled",
-                      control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
-                    }}
-                  />
-                  <Input
-                    label="Read-only"
-                    value="Read-only value"
-                    readOnly
-                    classes={{
-                      ...({
-        root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-        input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
-        label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-        description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-        prefix: `text-sm select-none text-cl-text-tertiary`,
-        suffix: `text-sm select-none text-cl-text-tertiary`,
-        count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`
-      }),
-                      control: `${({
-        wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`
-      }).wrapper} cursor-default`
-                    }}
-                  />
-                </div>
+      <Input
+        label="Disabled"
+        value="Cannot edit"
+        disabled
+        startIcon={<LockIcon className="text-cl-text-secondary" />}
+        classes={
+          {
+                          ...({
+            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+            prefix: "text-sm select-none text-cl-text-tertiary",
+            suffix: "text-sm select-none text-cl-text-tertiary",
+            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+          }),
+                          input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled",
+                          control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
+                        }
+        }
+      />
+      <Input
+        label="Disabled empty"
+        placeholder="Disabled placeholder"
+        disabled
+        classes={
+          {
+                          ...({
+            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+            prefix: "text-sm select-none text-cl-text-tertiary",
+            suffix: "text-sm select-none text-cl-text-tertiary",
+            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+          }),
+                          input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled",
+                          control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
+                        }
+        }
+      />
+      <Input
+        label="Read-only"
+        value="Read-only value"
+        readOnly
+        classes={
+          {
+                          ...({
+            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+            prefix: "text-sm select-none text-cl-text-tertiary",
+            suffix: "text-sm select-none text-cl-text-tertiary",
+            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+          }),
+                          control: `${({
+            wrapper: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50"
+          }).wrapper} cursor-default`
+                        }
+        }
+      />
+    </div>
   );
 }

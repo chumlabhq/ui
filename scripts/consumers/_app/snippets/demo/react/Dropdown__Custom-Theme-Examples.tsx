@@ -3,17 +3,17 @@ import { Dropdown, DropdownOption } from "@chumlab/ui/dropdown";
 
 const getMinimalTheme = (dark: boolean) => ({
   wrapper: "relative",
-  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border focus:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus:border-cl-text`,
+  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border focus:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus:border-cl-text",
   triggerText: "flex-1 truncate",
-  content: `rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+  content: "rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
   optionList: "max-h-60 overflow-y-auto",
-  option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
+  option: "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10",
   optionSelected: "font-medium",
-  optionFocused: false ? "bg-white/10" : "bg-black/5",
+  optionFocused: "bg-black/5",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-  chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary`,
-  checkIcon: `w-4 h-4 shrink-0 text-cl-text-secondary`,
-  noResults: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
+  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
+  checkIcon: "w-4 h-4 shrink-0 text-cl-text-secondary",
+  noResults: "px-3 py-4 text-sm text-center text-cl-text-tertiary",
 });
 
 const minimalTheme = getMinimalTheme(false);
@@ -94,47 +94,43 @@ export default function DropdownExample() {
   );
   return (
     <div className="w-full flex flex-wrap gap-8">
-                <div className="w-full sm:max-w-64">
-                  
-                  <Dropdown
-                    options={fruitOptions}
-                    value={darkThemeValue}
-                    onValueChange={(v) => setDarkThemeValue(v)}
-                    placeholder="Select a fruit..."
-                    classes={darkTheme}
-                  />
-                </div>
-                <div className="w-full sm:max-w-64">
-                  
-                  <Dropdown
-                    options={fruitOptions}
-                    value={warmThemeValue}
-                    onValueChange={(v) => setWarmThemeValue(v)}
-                    placeholder="Select a fruit..."
-                    classes={warmTheme}
-                  />
-                </div>
-                <div className="w-full sm:max-w-64">
-                  
-                  <Dropdown
-                    options={fruitOptions}
-                    value={coolThemeValue}
-                    onValueChange={(v) => setCoolThemeValue(v)}
-                    placeholder="Select a fruit..."
-                    classes={coolTheme}
-                  />
-                </div>
-                <div className="w-full sm:max-w-64">
-                  
-                  <Dropdown
-                    options={fruitOptions}
-                    value={minimalThemeValue}
-                    onValueChange={(v) => setMinimalThemeValue(v)}
-                    placeholder="Select a fruit..."
-                    showSelectedIcon={false}
-                    classes={minimalTheme}
-                  />
-                </div>
-              </div>
+      <div className="w-full sm:max-w-64">
+        <Dropdown
+          options={fruitOptions}
+          value={darkThemeValue}
+          onValueChange={(v) => setDarkThemeValue(v)}
+          placeholder="Select a fruit..."
+          classes={darkTheme}
+        />
+      </div>
+      <div className="w-full sm:max-w-64">
+        <Dropdown
+          options={fruitOptions}
+          value={warmThemeValue}
+          onValueChange={(v) => setWarmThemeValue(v)}
+          placeholder="Select a fruit..."
+          classes={warmTheme}
+        />
+      </div>
+      <div className="w-full sm:max-w-64">
+        <Dropdown
+          options={fruitOptions}
+          value={coolThemeValue}
+          onValueChange={(v) => setCoolThemeValue(v)}
+          placeholder="Select a fruit..."
+          classes={coolTheme}
+        />
+      </div>
+      <div className="w-full sm:max-w-64">
+        <Dropdown
+          options={fruitOptions}
+          value={minimalThemeValue}
+          onValueChange={(v) => setMinimalThemeValue(v)}
+          placeholder="Select a fruit..."
+          showSelectedIcon={false}
+          classes={minimalTheme}
+        />
+      </div>
+    </div>
   );
 }

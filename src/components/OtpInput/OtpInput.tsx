@@ -101,14 +101,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<OtpInputClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        control: classesProp?.control ?? baseClasses.control,
-        group: classesProp?.group ?? baseClasses.group,
-        input: classesProp?.input ?? baseClasses.input,
-        label: classesProp?.label ?? baseClasses.label,
-        message: classesProp?.message ?? baseClasses.message,
-        separator: classesProp?.separator ?? baseClasses.separator,
-        description: classesProp?.description ?? baseClasses.description,
+        root: cn(baseClasses.root, classesProp?.root),
+        control: cn(baseClasses.control, classesProp?.control),
+        group: cn(baseClasses.group, classesProp?.group),
+        input: cn(baseClasses.input, classesProp?.input),
+        label: cn(baseClasses.label, classesProp?.label),
+        message: cn(baseClasses.message, classesProp?.message),
+        separator: cn(baseClasses.separator, classesProp?.separator),
+        description: cn(baseClasses.description, classesProp?.description),
       }),
       [classesProp, baseClasses],
     );

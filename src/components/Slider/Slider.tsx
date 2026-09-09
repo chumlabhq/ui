@@ -283,16 +283,16 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mc: Required<SliderClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        label: classesProp?.label ?? baseClasses.label,
-        description: classesProp?.description ?? baseClasses.description,
-        control: classesProp?.control ?? baseClasses.control,
-        track: classesProp?.track ?? baseClasses.track,
-        range: classesProp?.range ?? baseClasses.range,
-        thumb: classesProp?.thumb ?? baseClasses.thumb,
-        valueText: classesProp?.valueText ?? baseClasses.valueText,
-        marker: classesProp?.marker ?? baseClasses.marker,
-        message: classesProp?.message ?? baseClasses.message,
+        root: cn(baseClasses.root, classesProp?.root),
+        label: cn(baseClasses.label, classesProp?.label),
+        description: cn(baseClasses.description, classesProp?.description),
+        control: cn(baseClasses.control, classesProp?.control),
+        track: cn(baseClasses.track, classesProp?.track),
+        range: cn(baseClasses.range, classesProp?.range),
+        thumb: cn(baseClasses.thumb, classesProp?.thumb),
+        valueText: cn(baseClasses.valueText, classesProp?.valueText),
+        marker: cn(baseClasses.marker, classesProp?.marker),
+        message: cn(baseClasses.message, classesProp?.message),
       }),
       [classesProp, baseClasses],
     );

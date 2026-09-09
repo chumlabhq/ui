@@ -33,6 +33,7 @@ import {
 import { pushModal, popModal, isTopModal } from "./utils/helpers.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
+import { cn } from "../../utils/scopedCn.js";
 // ADR: one scale, so a modal and a dropdown inside it cannot disagree.
 const BASE_Z_INDEX = LAYERS.overlay;
 const Z_INDEX_INCREMENT = LAYER_STEP;
@@ -125,17 +126,17 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses = useMemo<Required<ModalClasses>>(() => ({
-      root: classesProp?.root ?? baseClasses.root,
-      overlay: classesProp?.overlay ?? baseClasses.overlay,
-      positioner: classesProp?.positioner ?? baseClasses.positioner,
-      content: classesProp?.content ?? baseClasses.content,
-      header: classesProp?.header ?? baseClasses.header,
-      title: classesProp?.title ?? baseClasses.title,
-      description: classesProp?.description ?? baseClasses.description,
-      icon: classesProp?.icon ?? baseClasses.icon,
-      closeTrigger: classesProp?.closeTrigger ?? baseClasses.closeTrigger,
-      closeIcon: classesProp?.closeIcon ?? baseClasses.closeIcon,
-      body: classesProp?.body ?? baseClasses.body,
+      root: cn(baseClasses.root, classesProp?.root),
+      overlay: cn(baseClasses.overlay, classesProp?.overlay),
+      positioner: cn(baseClasses.positioner, classesProp?.positioner),
+      content: cn(baseClasses.content, classesProp?.content),
+      header: cn(baseClasses.header, classesProp?.header),
+      title: cn(baseClasses.title, classesProp?.title),
+      description: cn(baseClasses.description, classesProp?.description),
+      icon: cn(baseClasses.icon, classesProp?.icon),
+      closeTrigger: cn(baseClasses.closeTrigger, classesProp?.closeTrigger),
+      closeIcon: cn(baseClasses.closeIcon, classesProp?.closeIcon),
+      body: cn(baseClasses.body, classesProp?.body),
     }), [classesProp, baseClasses]);
 
     const parentContext = useContext(ModalContext);

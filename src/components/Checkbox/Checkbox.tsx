@@ -104,13 +104,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<CheckboxClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        labelGroup: classesProp?.labelGroup ?? baseClasses.labelGroup,
-        label: classesProp?.label ?? baseClasses.label,
-        description: classesProp?.description ?? baseClasses.description,
-        control: classesProp?.control ?? baseClasses.control,
-        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
-        message: classesProp?.message ?? baseClasses.message,
+        root: cn(baseClasses.root, classesProp?.root),
+        labelGroup: cn(baseClasses.labelGroup, classesProp?.labelGroup),
+        label: cn(baseClasses.label, classesProp?.label),
+        description: cn(baseClasses.description, classesProp?.description),
+        control: cn(baseClasses.control, classesProp?.control),
+        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
+        message: cn(baseClasses.message, classesProp?.message),
       }),
       [classesProp, baseClasses],
     );

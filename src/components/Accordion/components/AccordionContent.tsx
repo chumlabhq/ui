@@ -36,7 +36,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
     const [hasBeenOpened, setHasBeenOpened] = useState(item.isExpanded);
     const [prevIsExpanded, setPrevIsExpanded] = useState(item.isExpanded);
     const [isClosing, setIsClosing] = useState(false);
-    const [measuredHeight, setMeasuredHeight] = useState<number>(0);
     const rafRef = useRef<number | null>(null);
 
     if (item.isExpanded !== prevIsExpanded) {
@@ -52,15 +51,9 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
 
     const contentNodeRef = useRef<HTMLDivElement>(null);
 
-    const measureHeight = () => {
-      if (contentNodeRef.current) {
-        setMeasuredHeight(contentNodeRef.current.scrollHeight);
-      }
-    };
 
     useEffect(() => {
       if (item.isExpanded) {
-        measureHeight();
         rafRef.current = requestAnimationFrame(() => {
           setShowExpanded(true);
         });
@@ -73,25 +66,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       };
     }, [item.isExpanded]);
 
-    useEffect(() => {
-      if (!item.isExpanded || !contentNodeRef.current) return;
-      if (typeof ResizeObserver === "undefined") return;
-
-      let rafId: number | null = null;
-      const observer = new ResizeObserver(() => {
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() => {
-          if (item.isExpanded && contentNodeRef.current) {
-            setMeasuredHeight(contentNodeRef.current.scrollHeight);
-          }
-        });
-      });
-      observer.observe(contentNodeRef.current);
-      return () => {
-        observer.disconnect();
-        if (rafId) cancelAnimationFrame(rafId);
-      };
-    }, [item.isExpanded]);
 
     const endFiredRef = useRef(false);
     useEffect(() => {
@@ -164,12 +138,26 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
 
     const wrapperClassName = cn(config.classes.content, className);
 
+    // A grid row that animates from 0fr to 1fr, not a measured max-height.
+    //
+    // The old path read `scrollHeight` on every open. On the FIRST open that
+    // read happens against content that has never been laid out — it is
+    // `visibility: hidden` inside a `max-height: 0` box — so the height came
+    // back wrong, the transition ran to the wrong target, and a ResizeObserver
+    // corrected it a frame later. That is the jitter, and it is why only the
+    // first open of an item stutters. Closing had the mirror problem: the panel
+    // held its measured height until the measurement caught up.
+    //
+    // The browser can interpolate a grid track without being told the height,
+    // so there is nothing to measure and nothing to correct. This is also what
+    // the Animation guide has always claimed the component does.
     const contentStyle: React.CSSProperties = {
-      maxHeight: showExpanded ? measuredHeight : 0,
+      display: "grid",
+      gridTemplateRows: showExpanded ? "1fr" : "0fr",
       opacity: showExpanded ? 1 : 0,
       visibility: showExpanded ? "visible" : "hidden",
-      overflow: showExpanded ? undefined : "hidden",
       pointerEvents: showExpanded ? undefined : "none",
+      transitionProperty: "grid-template-rows, opacity, visibility",
       transitionDuration: `${effectiveDuration}ms`,
       transitionTimingFunction: animationEasing,
     };
@@ -194,12 +182,11 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
           children
         ) : (
           <div
-            className={
-              cn(
-                config.classes.body,
-                config.classes.body,
-              ) || undefined
-            }
+            // The grid row itself. `min-height: 0` lets it shrink below its
+            // content's intrinsic height, which is what makes 0fr collapse at
+            // all; `overflow: hidden` keeps the content clipped on the way.
+            style={{ minHeight: 0, overflow: "hidden" }}
+            className={cn(config.classes.body) || undefined}
           >
             {children}
           </div>

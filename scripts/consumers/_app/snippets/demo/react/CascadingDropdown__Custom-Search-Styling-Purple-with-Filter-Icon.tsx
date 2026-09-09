@@ -86,33 +86,37 @@ export default function CascadingDropdownExample() {
   const [styledSearchValue2, setStyledSearchValue2] = useState<CascadingValue>({});
   return (
     <div className="w-full sm:max-w-96">
-                <CascadingDropdown
-                  options={searchableCategoryOptions}
-                  value={styledSearchValue2}
-                  onValueChange={(val) => setStyledSearchValue2(val)}
-                  placeholder="Purple search theme..."
-                  showMenuSearch
-                  showSubmenuSearch
-                  menuSearchPlaceholder="Search categories..."
-                  submenuSearchPlaceholder="Filter items..."
-                  SearchIcon={({ className }) => (
-                    <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
-                      <path
-                        fillRule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
-                  classes={{
-                    searchControl: `flex items-center gap-2 px-3 py-2.5 bg-cl-accent/10 border-b border-cl-border-input-focus dark:bg-cl-accent/30 dark:border-b dark:border dark:border-cl-border-input-focus/30`,
-                    searchInput: `flex-1 bg-transparent text-sm focus:outline-none text-cl-accent placeholder-purple-400 dark:text-cl-accent dark:placeholder-purple-400/60`,
-                    searchIcon: `w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent`,
-                    subSearchControl: `flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30`,
-                    subSearchInput: `flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-purple-400/70 dark:text-cl-accent dark:placeholder-purple-400/50`,
-                    subSearchIcon: `w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/60`
-                  }}
-                />
-              </div>
+      <CascadingDropdown
+        options={searchableCategoryOptions}
+        value={styledSearchValue2}
+        onValueChange={(val) => setStyledSearchValue2(val)}
+        placeholder="Purple search theme..."
+        showMenuSearch
+        showSubmenuSearch
+        menuSearchPlaceholder="Search categories..."
+        submenuSearchPlaceholder="Filter items..."
+        SearchIcon={
+          ({ className }) => (
+            <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+              <path
+                fillRule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clipRule="evenodd"
+              />
+            </svg>
+          )
+        }
+        classes={
+          {
+            searchControl: "flex items-center gap-2 px-3 py-2.5 bg-cl-accent/10 border-b border-cl-border-input-focus dark:bg-cl-accent/30 dark:border-b dark:border dark:border-cl-border-input-focus/30",
+            searchInput: "flex-1 bg-transparent text-sm focus:outline-none text-cl-accent placeholder-purple-400 dark:text-cl-accent dark:placeholder-purple-400/60",
+            searchIcon: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
+            subSearchControl: "flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30",
+            subSearchInput: "flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-purple-400/70 dark:text-cl-accent dark:placeholder-purple-400/50",
+            subSearchIcon: "w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/60"
+          }
+        }
+      />
+    </div>
   );
 }

@@ -418,7 +418,7 @@ const DrawerDemo = () => {
               {[0, 1, 2].map((i) => (
                 <button
                   key={i}
-                  className={`${snapIndex === i ? c.btnPrimary : c.btn} text-xs`}
+                  className={`${snapIndex === i ? c.btnPrimary : c.btn} text-xs cursor-pointer`}
                   onClick={() => setSnapIndex(i)}
                 >
                   {Math.round([0.3, 0.6, 1][i] * 100)}%

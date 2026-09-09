@@ -42,36 +42,40 @@ export default function CheckboxExample() {
   return (
     <>
       <Checkbox
-                  label="Add to favorites"
-                  checked={customHeart}
-                  onValueChange={setCustomHeart}
-                  checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
-                  uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-cl-text-tertiary" />}
-                  size="md"
-                  shape="rounded"
-                  classes={{
-                    ...({
-          root: "",
-          label: `text-sm font-medium text-cl-text`,
-          description: `text-xs text-cl-text-secondary`
-        })
-                  }}
-                />
+        label="Add to favorites"
+        checked={customHeart}
+        onValueChange={setCustomHeart}
+        checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
+        uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-cl-text-tertiary" />}
+        size="md"
+        shape="rounded"
+        classes={
+          {
+                      ...({
+            root: "",
+            label: "text-sm font-medium text-cl-text",
+            description: "text-xs text-cl-text-secondary"
+          })
+                    }
+        }
+      />
       <Checkbox
-                  label="Star this item"
-                  checked={customStar}
-                  onValueChange={setCustomStar}
-                  checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
-                  size="md"
-                  shape="rounded"
-                  classes={{
-                    ...({
-          root: "",
-          label: `text-sm font-medium text-cl-text`,
-          description: `text-xs text-cl-text-secondary`
-        })
-                  }}
-                />
+        label="Star this item"
+        checked={customStar}
+        onValueChange={setCustomStar}
+        checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
+        size="md"
+        shape="rounded"
+        classes={
+          {
+                      ...({
+            root: "",
+            label: "text-sm font-medium text-cl-text",
+            description: "text-xs text-cl-text-secondary"
+          })
+                    }
+        }
+      />
     </>
   );
 }

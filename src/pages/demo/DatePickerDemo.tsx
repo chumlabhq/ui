@@ -882,13 +882,13 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             {controlledDate?.toLocaleDateString() ?? "null"}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
             onClick={() => setControlledDate(null)}
           >
             Clear
           </button>
           <button
-            className={`px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`}
+            className={`px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer`}
             onClick={() => setControlledDate(new Date())}
           >
             Set Today
@@ -925,7 +925,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <button
-              className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 shrink-0`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 shrink-0 cursor-pointer`}
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setCalendarOpen((o) => !o)}
             >

@@ -121,8 +121,8 @@ const getClasses = (dark: boolean) => ({
   code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent/10 text-cl-accent ring-1 ring-inset ring-cl-accent/10 dark:bg-cl-accent/10 dark:text-cl-accent dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer`,
   stateDisplay: `text-sm font-mono text-cl-text-secondary`,
   divider: `border-t border-cl-border`,
 });
@@ -604,105 +604,7 @@ const AccordionDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Variants ───────────────────────────────────────────────────── */}
-      <Section
-        title="Variants"
-        description="Four visual variants: default, bordered, separated, and flush."
-        isDarkMode={dark}
-      >
-        <div className="space-y-4">
-          <div>
-            <p
-              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
-            >
-              default
-            </p>
-            <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
-                <AccordionItem value="v-1">
-                  <AccordionTrigger>Default Variant</AccordionTrigger>
-                  <AccordionContent>Standard look.</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="v-2">
-                  <AccordionTrigger>Second Item</AccordionTrigger>
-                  <AccordionContent>Content.</AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </DemoWrapper>
-          </div>
-          <div>
-            <p
-              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
-            >
-              bordered
-            </p>
-            <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion
-                type="single"
-                collapsible
-                classes={{ ...c.accordion, ...c.accordionBordered }}
-              >
-                <AccordionItem value="vb-1">
-                  <AccordionTrigger>Bordered Variant</AccordionTrigger>
-                  <AccordionContent>Wrapped in a border.</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="vb-2">
-                  <AccordionTrigger>Second Item</AccordionTrigger>
-                  <AccordionContent>Content.</AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </DemoWrapper>
-          </div>
-          <div>
-            <p
-              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
-            >
-              separated
-            </p>
-            <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion
-                type="single"
-                collapsible
-                classes={{ ...c.accordion, ...c.accordionSeparated }}
-              >
-                <AccordionItem value="vs-1">
-                  <AccordionTrigger>Separated Variant</AccordionTrigger>
-                  <AccordionContent>
-                    Each item is its own card.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="vs-2">
-                  <AccordionTrigger>Second Item</AccordionTrigger>
-                  <AccordionContent>Content.</AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </DemoWrapper>
-          </div>
-          <div>
-            <p
-              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
-            >
-              flush
-            </p>
-            <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion
-                type="single"
-                collapsible
-                classes={{ ...c.accordion, ...c.accordionFlush }}
-              >
-                <AccordionItem value="vf-1">
-                  <AccordionTrigger>Flush Variant</AccordionTrigger>
-                  <AccordionContent>Minimal borders.</AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="vf-2">
-                  <AccordionTrigger>Second Item</AccordionTrigger>
-                  <AccordionContent>Content.</AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </DemoWrapper>
-          </div>
-        </div>
-      </Section>
+
 
       {/* ─── Disabled ───────────────────────────────────────────────────── */}
       <Section

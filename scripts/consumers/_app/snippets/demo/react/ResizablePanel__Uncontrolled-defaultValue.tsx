@@ -21,26 +21,22 @@ const panelRootClass = (color: string) => {
 export default function ResizablePanelExample() {
   return (
     <ResizablePanel
-                defaultValue={280}
-                minValue={150}
-                maxValue={450}
-                classes={{
-                  root: panelRootClass("blue"),
-                  handle: handleClass("blue")
-                }}
-              >
-                <div className="p-4">
-                  <p
-                    className="font-medium text-cl-text"
-                  >
-                    Uncontrolled Panel
-                  </p>
-                  <p
-                    className="text-sm mt-2 text-cl-text-tertiary"
-                  >
-                    Started at 280px (no external state)
-                  </p>
-                </div>
-              </ResizablePanel>
+      defaultValue={280}
+      minValue={150}
+      maxValue={450}
+      classes={
+        {
+          root: panelRootClass("blue"),
+          handle: handleClass("blue")
+        }
+      }
+    >
+      <div className="p-4">
+        <p className="font-medium text-cl-text">Uncontrolled Panel</p>
+        <p className="text-sm mt-2 text-cl-text-tertiary">
+          Started at 280px (no external state)
+        </p>
+      </div>
+    </ResizablePanel>
   );
 }

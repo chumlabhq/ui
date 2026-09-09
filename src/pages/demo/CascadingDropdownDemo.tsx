@@ -765,7 +765,7 @@ const CascadingDropdownDemo = () => {
                   e.stopPropagation();
                   resetLoadOnOpenDemo();
                 }}
-                className={`text-xs underline text-cl-accent hover:text-cl-text`}
+                className={`text-xs underline text-cl-accent hover:text-cl-text cursor-pointer`}
               >
                 Reset
               </button>

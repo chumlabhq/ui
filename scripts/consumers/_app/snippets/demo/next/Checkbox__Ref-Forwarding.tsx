@@ -7,15 +7,17 @@ export default function CheckboxExample() {
   const checkboxRef = useRef<HTMLInputElement>(null);
   return (
     <Checkbox
-                ref={checkboxRef}
-                label="Controlled via ref"
-                size="md"
-                shape="rounded"
-                classes={({
-        root: "",
-        label: `text-sm font-medium text-cl-text`,
-        description: `text-xs text-cl-text-secondary`
-      })}
-              />
+      ref={checkboxRef}
+      label="Controlled via ref"
+      size="md"
+      shape="rounded"
+      classes={
+        {
+          root: "",
+          label: "text-sm font-medium text-cl-text",
+          description: "text-xs text-cl-text-secondary"
+        }
+      }
+    />
   );
 }

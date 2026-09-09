@@ -42,19 +42,21 @@ export default function ResizablePanelExample() {
   const [leftWidth, setLeftWidth] = useState(350);
   return (
     <div className="flex justify-end w-full">
-                <ResizablePanel
-                  defaultValue={leftWidth}
-                  minValue={200}
-                  maxValue={600}
-                  onValueChange={setLeftWidth}
-                  resizeDirection="left"
-                  classes={{
-                    root: panelRootClass("green"),
-                    handle: handleClass("green")
-                  }}
-                >
-                  {previewContent(leftWidth)}
-                </ResizablePanel>
-              </div>
+      <ResizablePanel
+        defaultValue={leftWidth}
+        minValue={200}
+        maxValue={600}
+        onValueChange={setLeftWidth}
+        resizeDirection="left"
+        classes={
+          {
+            root: panelRootClass("green"),
+            handle: handleClass("green")
+          }
+        }
+      >
+        {previewContent(leftWidth)}
+      </ResizablePanel>
+    </div>
   );
 }

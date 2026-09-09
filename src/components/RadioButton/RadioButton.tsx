@@ -120,10 +120,10 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<RadioGroupClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        label: classesProp?.label ?? baseClasses.label,
-        description: classesProp?.description ?? baseClasses.description,
-        message: classesProp?.message ?? baseClasses.message,
+        root: cn(baseClasses.root, classesProp?.root),
+        label: cn(baseClasses.label, classesProp?.label),
+        description: cn(baseClasses.description, classesProp?.description),
+        message: cn(baseClasses.message, classesProp?.message),
       }),
       [classesProp, baseClasses],
     );
@@ -243,11 +243,11 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
     );
     const mergedClasses: Required<RadioButtonClasses> = useMemo(
       () => ({
-        root: classesProp?.root ?? baseClasses.root,
-        label: classesProp?.label ?? baseClasses.label,
-        description: classesProp?.description ?? baseClasses.description,
-        control: classesProp?.control ?? baseClasses.control,
-        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+        root: cn(baseClasses.root, classesProp?.root),
+        label: cn(baseClasses.label, classesProp?.label),
+        description: cn(baseClasses.description, classesProp?.description),
+        control: cn(baseClasses.control, classesProp?.control),
+        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
       }),
       [classesProp, baseClasses],
     );
