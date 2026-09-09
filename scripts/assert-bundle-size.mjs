@@ -211,21 +211,81 @@ const LIBRARY_TOTAL_HISTORY = [
       "shipped CSS, so this cannot recur silently.",
   },
   {
-    kb: 150.0,
-    commit: "(uncommitted)",
+    kb: 148.71,
+    commit: "678837c",
     date: "2026-09-10",
     attribution: "attributed",
     reason:
-      "INCREASE, +1.30 KB, and only 0.08 KB of it belongs to this change. Split by " +
-      "building the tree twice: HEAD alone already measures 149.92 against the 148.7 " +
-      "recorded, so the record was stale before this slice touched anything — the " +
-      "window is the Avatar close-out landing (the fallback underlay, the surplus " +
-      "fixed-width and cap logic). This slice moves 149.92 to 150.00: the skeleton " +
+      "INCREASE, +0.01 KB. Accordion's controlled value accepts `null`, so the " +
+      "state manager gained a branch. Backfilled — see the 150.00 row for why " +
+      "these eight rows were established after the fact rather than as they landed.",
+  },
+  {
+    kb: 148.89,
+    commit: "6ea7eea",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.18 KB. `useControlledSwitchWarning` called from " +
+      "`useControllableState`, which 22 components share. The message strings are " +
+      "behind `import.meta.env.DEV` and dist ships none of them — checked, the " +
+      "text appears only in .d.ts comments — so this is the plumbing, not the " +
+      "prose: two refs and an effect in a module every one of those components " +
+      "pulls in.",
+  },
+  {
+    kb: 149.19,
+    commit: "36d270d",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.30 KB. AvatarBadge's `tone` doubled its class table — six " +
+      "variant strings became twelve, one set per token family — and " +
+      "AvatarGroupShimmer went to two elements per placeholder so the ring stops " +
+      "inheriting the pulse. Class strings are most of it.",
+  },
+  {
+    kb: 149.93,
+    commit: "a3c6059",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.74 KB, the largest single move in the window and the one " +
+      "worth reading. AvatarGroupCount gained 119 lines: the cap, the glyph-fit " +
+      "arithmetic that sizes the count to the circle, the overlap padding, and " +
+      "the group-only style branch. Comments strip; the arithmetic does not. " +
+      "Three rounds of geometry fixes on one sub-component cost half the window.",
+  },
+  {
+    kb: 149.92,
+    commit: "76c8ea0",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.01 KB. Avatar's close-out. The fallback-during-load underlay " +
+      "adds JSX and the constants extraction removes duplicated literals; they " +
+      "net out.",
+  },
+  {
+    kb: 150.0,
+    commit: "ad0b666",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.08 KB over 149.92. The skeleton " +
       "fill became `--cl-bg-skeleton` across 8 components, and `bg-cl-bg-skeleton` " +
       "is a longer string than `bg-gray-200` at 13 sites. The token itself is CSS " +
       "and this total is gzipped JS only, so it contributes nothing here. Table's " +
       "dead gradient default and MultiSelectDropdown's two nested `animate-pulse` " +
-      "came out in the same pass, which is why 13 renames cost only 80 bytes.",
+      "came out in the same pass, which is why 13 renames cost only 80 bytes.\n\n" +
+      "The five rows above this one were backfilled on 2026-09-10 by building each " +
+      "commit in a worktree and measuring with this same script. They should have " +
+      "been recorded as they landed; they were not, because those slices were " +
+      "scoped to typecheck and a site build and never ran this gate. 148.70 stood " +
+      "while the real figure walked to 149.92 — a ratchet nobody pulls is a number, " +
+      "not a gate. CLAUDE.md now requires this gate on any slice touching " +
+      "src/components. Two commits in the window changed no component and moved it " +
+      "0.00 KB, which is the control that says the ladder measures what it claims.",
   },
 ];
 
