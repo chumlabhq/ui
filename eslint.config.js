@@ -7,7 +7,7 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   // scripts/consumers holds another project's source: it imports the packed
   // package, which is not installed here, and follows each framework's idioms.
-  { ignores: ["dist", "coverage", "scripts/consumers"] },
+  { ignores: ["dist", "dist-site", "coverage", "scripts/consumers"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

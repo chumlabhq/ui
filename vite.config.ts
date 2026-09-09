@@ -158,6 +158,13 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tailwindcss()],
     build: {
+      // Not `dist`. Both builds defaulted there, so `npm run build` deleted the
+      // library `npm run build:lib` had just produced — and every gate that
+      // reads dist/ then measured the site instead. The snippet typechecker was
+      // the one that showed it: with no library types to resolve, all but 35 of
+      // 626 snippets failed to compile and it silently rewrote itself down to
+      // the survivors, reporting success.
+      outDir: "dist-site",
       sourcemap: false,
     },
     server: {

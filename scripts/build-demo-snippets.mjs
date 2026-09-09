@@ -814,14 +814,28 @@ function compare(path, content) {
  * together.
  */
 function failingSnippets(entries) {
-  if (!existsSync(join(root, "dist"))) {
-    process.stderr.write("✗ dist/ is missing — run `npm run build:lib` first.\n");
-    process.exit(1);
-  }
   const paths = {};
   for (const [key, target] of Object.entries(pkg.exports)) {
     const types = typeof target === "string" ? null : target.import?.types ?? target.types ?? null;
     if (types) paths[key.replace(/^\./, "@chumlab/ui")] = [types];
+  }
+
+  // Not `existsSync("dist")`. `npm run build` used to write the site there too,
+  // so the directory existed, every subpath resolved to nothing, all but 35 of
+  // 626 snippets failed to compile, and this script dutifully pruned them and
+  // reported success. The site has its own outDir now; this checks the thing
+  // that actually matters anyway — that the declarations are really there.
+  const missing = Object.entries(paths)
+    .filter(([, [types]]) => !existsSync(resolve(root, types)))
+    .map(([subpath]) => subpath);
+  if (missing.length) {
+    process.stderr.write(
+      `✗ the built library is not in dist/: ${missing.length} of ${Object.keys(paths).length} ` +
+        `subpath(s) resolve to no declaration file (${missing.slice(0, 3).join(", ")}…).\n` +
+        "  Run `npm run build:lib`. Typechecking snippets against a missing library " +
+        "fails every one of them and would silently empty this set.\n",
+    );
+    process.exit(1);
   }
 
   // Written where they will finally live, and checked there. Checking copies
@@ -882,6 +896,34 @@ writeFileSync(OUT_SITE, siteFile, "utf8");
 rmSync(OUT_SNIPPETS, { recursive: true, force: true });
 for (const flavour of ["react", "next"]) mkdirSync(join(OUT_SNIPPETS, flavour), { recursive: true });
 for (const [rel, content] of files) writeFileSync(join(OUT_SNIPPETS, rel), content, "utf8");
+
+/**
+ * A collapsed set is a failure, not a pass.
+ *
+ * Everything above prunes: a section without a button, a snippet that will not
+ * compile. Pruning is normal, and pruning EVERYTHING is the failure this gate
+ * exists to catch — it has no floor of its own, so a run that emitted 35 of 626
+ * rewrote the record down to 35 and printed a tick. The floor is a fraction of
+ * the recorded count rather than the count itself, so ordinary churn passes and
+ * a collapse cannot.
+ */
+const SNIPPET_FLOOR = 590;
+if (emitted < SNIPPET_FLOOR) {
+  process.stderr.write(
+    `✗ only ${emitted} snippet(s) survived, against a floor of ${SNIPPET_FLOOR}.\n` +
+      `  ${skipped.length} section(s) were dropped. A drop this size is a broken input, not churn —\n` +
+      "  check that dist/ holds the library build and not the site.\n",
+  );
+  const byReason = new Map();
+  for (const s of skipped) {
+    const key = s.reason.replace(/`[^`]+`/g, "`…`");
+    byReason.set(key, (byReason.get(key) ?? 0) + 1);
+  }
+  for (const [reason, n] of [...byReason.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)) {
+    process.stderr.write(`    ${String(n).padStart(4)}  ${reason}\n`);
+  }
+  process.exit(1);
+}
 
 process.stdout.write(`✓ ${emitted} snippet(s) from ${considered} demo section(s) across ${pages.length} pages\n`);
 process.stdout.write(`  ${skipped.length} section(s) carry no copy button\n`);
