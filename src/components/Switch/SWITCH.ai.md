@@ -111,7 +111,7 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `description` | object | — | React.ReactNode — Description text below the label. |
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
-| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. Reports the new `checked` state, not the `value` prop — the name follows the library-wide change-handler convention. |
 | `name` | string | — | Form field name attribute. |
 | `value` | string | `"on"` | Value attribute for the hidden input element. |
 | `required` | boolean | `false` | Whether the field is required. |
@@ -133,7 +133,7 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `style` | object | — | Inline styles applied to the root element. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
 
 ## Styling Guide
 

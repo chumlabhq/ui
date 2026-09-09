@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect.js";
+import { useControlledSwitchWarning } from "../../../utils/useControlledSwitchWarning.js";
 import { createExpandedStore } from "../utils/context.js";
 import type { AccordionExpandEvent, AccordionType } from "../utils/types.js";
 
@@ -58,6 +59,7 @@ export function useAccordionStateManager(
   } = options;
 
   const isControlled = controlledValue !== undefined;
+  useControlledSwitchWarning(isControlled, "Accordion");
 
   const onValueChangeRef = useRef(onValueChange);
   const onExpandedChangeRef = useRef(onExpandedChange);

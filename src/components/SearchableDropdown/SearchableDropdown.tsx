@@ -35,6 +35,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
+import { useControlledSwitchWarning } from "../../utils/useControlledSwitchWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 const DefaultClearIcon = () => (
   <svg
@@ -381,6 +382,7 @@ const SearchableDropdown = forwardRef<
 
   const loading = externalLoading || isSearching || isLoadingInitial;
   const currentValue = value !== undefined ? value : internalValue;
+  useControlledSwitchWarning(value !== undefined, "SearchableDropdown");
 
   const activeDescendantId =
     isOpen && focusedIndex >= 0

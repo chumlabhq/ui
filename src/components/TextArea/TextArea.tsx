@@ -115,6 +115,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       value: value !== undefined ? String(value) : undefined,
       defaultValue: (defaultValue as string) ?? "",
       onChange: onValueChange,
+      component: "TextArea",
     });
 
     const internalRef = useRef<HTMLTextAreaElement | null>(null);

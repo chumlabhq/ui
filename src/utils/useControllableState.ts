@@ -1,17 +1,28 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useControlledSwitchWarning } from "./useControlledSwitchWarning.js";
 
 interface UseControllableStateOptions<T> {
   value?: T;
   defaultValue: T;
   onChange?: (value: T) => void;
+  /**
+   * The component, for the controlled-to-uncontrolled warning. The warning is
+   * off without it — see `useControlledSwitchWarning` for why it is opt-in.
+   */
+  component?: string;
+  /** The prop's name, when it is not `value`. */
+  prop?: string;
 }
 
 export function useControllableState<T>({
   value: controlledValue,
   defaultValue,
   onChange,
+  component,
+  prop,
 }: UseControllableStateOptions<T>): [T, (value: T | ((prev: T) => T)) => void] {
   const isControlled = controlledValue !== undefined;
+  useControlledSwitchWarning(isControlled, component, prop);
 
   const [internalValue, setInternalValue] = useState<T>(defaultValue);
   const value = isControlled ? controlledValue : internalValue;

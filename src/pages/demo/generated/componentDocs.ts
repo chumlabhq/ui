@@ -12055,7 +12055,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((checked: boolean) => void)",
         "required": false,
         "default": null,
-        "description": "(checked: boolean) => void — Fires when the checked state changes."
+        "description": "(checked: boolean) => void — Fires when the checked state changes. Reports the new `checked` state, not the `value` prop — the name follows the library-wide change-handler convention."
       },
       {
         "name": "name",

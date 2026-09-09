@@ -571,6 +571,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       value: valueProp,
       defaultValue: defaultValue ?? steps[0]?.id ?? "",
       onChange: onValueChange,
+      component: "Stepper",
     });
 
     const activeStepExists = steps.some((s) => s.id === activeValue);

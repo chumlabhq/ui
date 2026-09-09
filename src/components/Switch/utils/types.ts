@@ -44,7 +44,11 @@ export interface SwitchProps
   description?: ReactNode;
   checked?: boolean;
   defaultChecked?: boolean;
-  /** Fires when the checked state changes. */
+  /**
+   * Fires when the checked state changes. Named for the library-wide
+   * change-handler convention, so it hands back the new `checked` state rather
+   * than the `value` prop below, which it never reports.
+   */
   onValueChange?: (checked: boolean) => void;
   name?: string;
   value?: string;

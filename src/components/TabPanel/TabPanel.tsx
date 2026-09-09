@@ -64,6 +64,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       value: valueProp,
       defaultValue: defaultValue ?? tabs[0]?.id ?? "",
       onChange: onValueChange,
+      component: "TabPanel",
     });
 
     const activeTabExists = tabs.some((t) => t.id === activeValue);

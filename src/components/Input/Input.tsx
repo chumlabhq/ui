@@ -99,6 +99,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       value: value !== undefined ? String(value) : undefined,
       defaultValue: (defaultValue as string) ?? "",
       onChange: onValueChange,
+      component: "Input",
     });
 
     const internalRef = useRef<HTMLInputElement | null>(null);

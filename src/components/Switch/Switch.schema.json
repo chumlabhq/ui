@@ -29,7 +29,7 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(checked: boolean) => void — Fires when the checked state changes.",
+      "description": "(checked: boolean) => void — Fires when the checked state changes. Reports the new `checked` state, not the `value` prop — the name follows the library-wide change-handler convention.",
       "x-tsType": "((checked: boolean) => void) | undefined"
     },
     "name": {
