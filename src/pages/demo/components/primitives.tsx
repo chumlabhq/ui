@@ -296,7 +296,7 @@ export const CodeFenced: React.FC<CodeFencedProps> = ({
         </button>
       </div>
       {/* Scrolls, so it needs a tab stop — axe's scrollable-region-focusable. */}
-      <pre tabIndex={0} className="px-4 py-3 font-mono text-[12px] leading-[1.65] text-cl-code-text overflow-x-auto">
+      <pre tabIndex={0} className="code-scroll px-4 py-3 font-mono text-[12px] leading-[1.65] text-cl-code-text overflow-x-auto">
         <code>{code}</code>
       </pre>
     </div>

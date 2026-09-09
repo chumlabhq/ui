@@ -104,7 +104,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           title="Data attributes"
           description="What the component puts on the DOM, for your own CSS and your own tests. Read off the JSX, so it is what ships rather than what was written down."
         >
-          <div className="overflow-x-auto w-full min-w-0">
+          <div className="code-scroll overflow-x-auto w-full min-w-0">
             <table className="w-full table-fixed text-left min-w-[560px]">
               <colgroup>
                 <col className="w-[34%]" />
@@ -196,7 +196,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
             </p>
           )}
           {doc.keyboard.rows.length > 0 && (
-            <div className="overflow-x-auto w-full min-w-0">
+            <div className="code-scroll overflow-x-auto w-full min-w-0">
               <table className="w-full table-fixed text-left min-w-[520px]">
                 <colgroup>
                   <col className="w-[30%]" />

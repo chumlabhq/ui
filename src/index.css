@@ -606,6 +606,50 @@ body {
   height: 0;
 }
 
+/* Code blocks — a scrollbar in the site's own vocabulary rather than the
+   platform's. The default macOS overlay bar is a grey slab that ignores the
+   theme and sits hard against the block's rounded corner; on a dark code
+   surface it reads as a scratch across the bottom of the panel.
+
+   Tokens, not fixed colours, so it follows light and dark with everything
+   else. The thumb is drawn with `background-clip: content-box` behind a
+   transparent border, which insets it from the edge — a slab flush to the
+   border is what made the default look bolted on. Track stays transparent so
+   the block's own background shows through.
+
+   `scrollbar-width`/`scrollbar-color` cover Firefox; the ::-webkit- pseudos
+   cover Chromium and Safari. `.sidebar-scroll` above hides its bar entirely,
+   which is right there and wrong here: a code block that scrolls has to say
+   so, or the right-hand side of a long line is undiscoverable. */
+.code-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cl-border-strong) transparent;
+}
+
+.code-scroll::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+.code-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--cl-border-strong);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.code-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cl-text-tertiary);
+}
+
+.code-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 /* prefers-reduced-motion respect: kill the cosmetic animations. */
 @media (prefers-reduced-motion: reduce) {
   .animate-cursor,

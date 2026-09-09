@@ -1,6 +1,6 @@
 /** Shared by every code block on a component page. */
 export const preClass =
-  "rounded-cl-lg border border-cl-border bg-cl-code-bg text-cl-code-text font-mono text-[12px] leading-[1.65] px-4 py-3 overflow-x-auto";
+  "rounded-cl-lg border border-cl-border bg-cl-code-bg text-cl-code-text font-mono text-[12px] leading-[1.65] px-4 py-3 overflow-x-auto code-scroll";
 
 /**
  * A block that scrolls has to be reachable by keyboard, or the only way to read
