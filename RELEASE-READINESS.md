@@ -1,6 +1,6 @@
 # Release readiness — `@chumlab/ui` 0.1.0
 
-**Measured 2026-09-08.** Every number below was produced by a gate run on that date against
+**Measured 2026-09-09.** Every number below was produced by a gate run on that date against
 the tree at `refactor/v1-hardening`. Where a number was not re-measured, the text says so and
 says why. Nothing here is carried forward on trust.
 
@@ -8,9 +8,16 @@ This is written for someone who has not followed the work and has to decide whet
 the package. It says what is claimed and what proves each claim, what is knowingly untrue or
 ungated, what has never been tested at all, and what publishing commits us to.
 
-**Every gate passes.** The browser matrix is green in all seven projects, and each carries the
-machine it ran on, so a later red one can be read without a second measurement. §1.2 has the
-figures and what it took to get them.
+**Not ready to publish.** Every gate in §1.1 passes, but **the browser matrix does not**: its
+last run recorded three green projects, went red in firefox, and was killed before the
+remaining three ran — on a machine 16 GB into swap against 8 GB of RAM. Even those three no
+longer count, because `src/` changed afterwards and any change there moves the fingerprint
+they were measured against. §1.2 has the figures. The matrix has to be run in one sitting, on
+a free machine, against a still tree before this ships.
+
+Read §6.9 as well. Five visible defects — a checked checkbox, a selected radio, a switch
+track, TabPanel's icon, and the pointer cursor everywhere — passed every gate in §1.1 and were
+found by looking at the page.
 
 ---
 
@@ -20,37 +27,93 @@ figures and what it took to get them.
 
 | Gate | Verdict | Evidence |
 | --- | --- | --- |
-| `lint` | pass | 0 errors, 7 warnings — the standing baseline, unchanged |
+| `lint` | pass | 0 errors, 8 warnings — the standing baseline. The eighth is a duplicate hook dependency in `ClockFace.tsx`, present before this branch |
 | `typecheck` | pass | Both configs clean, each after rejecting its own planted error. `focusVisible` is declared in a local augmentation in `wcag-layout.spec.ts` rather than cast away at the call site: it is in the HTML standard and shipped in every engine here, and TypeScript's DOM lib simply has not caught up |
-| `test:run` | pass | 92 files, 4749 collected, 4749 executed, 4681 passed, 68 skipped. Contracts 1577, unit 3172 |
+| `test:run` | pass | 92 files, 4754 collected, 4754 executed, 4686 passed, 68 skipped. Contracts 1582, unit 3172. Includes the cursor assertion in `keyboard-reachable.contract` and the duplicate-token check in `constants.contract` |
 | `test:coverage` | pass | 92.04% statements, 87.39% branch, 94.71% functions, 93.95% lines |
 | `test:e2e:all` (7 projects) | pass | 2512 collected, 2512 executed, 2441 passed, 71 skipped, no non-passes. No project is waived (§3.6), so all seven passed on merit. Each project's load average, free memory and free swap are recorded with it (§1.2) |
 | `verify:consumers` | pass | 9 apps, 2 React majors, 4 frameworks, production builds; plus `publint` and `attw` as their own rows |
 | `verify:consumers:self-check` | pass | 3 plants caught: a subpath export pointing at a missing file, `"use client"` stripped from 154 chunks, the token layer unwrapped |
 | `verify:packaging` | pass | `publint --strict` clean; `attw` clean across node10, node16 and bundler over 32 entrypoints; 8 relative links across 4 shipped documents resolve inside the tarball |
 | `verify:packaging:self-check` | pass | 4 plants caught |
-| `verify:bundle-size` | pass **after a ratchet** | 30 entries, 4 declared breaches, library total 146.65 KB across 80 files. The gate failed first and named its own fix (§1.3) |
-| `assert-bundle-size --self-check` | pass | 2 plants: shape derivation, and a 25.48 KB entry breaching a 6 KB ceiling |
+| `verify:bundle-size` | pass **after a declared increase** | 30 entries, 4 declared breaches, library total 148.51 KB across 80 files against a record of 148.52. The record rose from 146.65 for the first time in its history — the restored state styling (+1.82 KB) and 18 `cursor-pointer` tokens (+0.04 KB), measured by building the tree twice |
+| `assert-bundle-size --self-check` | pass | 3 plants: shape derivation, a 25.47 KB entry breaching a 6 KB ceiling, and the move ledger refusing a reasonless move, a still move, a duplicate first record and an unattributed drop that answers no question |
 | `verify:ssr-record` | pass | Every component's `ssr` verdict is what the consumer matrix measured, across `next-app`, `next-pages` and `react-router7`; 30 components, all safe |
 | `verify:ssr-record:self-check` | pass | 4 plants caught |
-| `verify:playground-removed` | pass | 0 hits for `/playground|chumlab\.ai/i` across the built site, no preview artefacts, and `/playground` and `/oauth/google` both answer the 404 page |
+| `verify:playground-removed` | pass | 0 hits for `/playground|chumlab\.ai/i` across the built site, no preview artefacts, and `/playground` and `/oauth/google` both answer the 404 page. Reads `dist-site/` now (§1.6) |
 | `verify:playground-removed:self-check` | pass | 3 plants caught, against a synthetic tree the site build is not needed for |
 | `build-tokens --check` | pass | `tokens.css` matches `src/index.css`, 35 dark and 35 light |
 | `audit-demo-coverage --check` | pass | 1136 props, 0 tier-A gaps |
-| `audit-fixture-gap --check` | pass | 151 props render unfixtured markup, of 648 with no fixture |
-| `build-component-docs --check` | pass | 30 components, 60 snippets. Reads `oneOf` schemas now: `RadioButton`'s own nine props, `classes` among them, were documented in the schema and shown nowhere |
+| `audit-fixture-gap --check` | pass | 151 props render unfixtured markup, of 647 with no fixture — two TabPanel icon fixtures were added |
+| `build-component-docs --check` | pass | 30 components, 60 snippets, and eight assertions beyond "the output matches its source" (see below) |
+| `build-component-docs --self-check` | pass | All eight assertions bite on a planted violation |
 | `build-demo-snippets --check` | pass | 626 of 708 demo sections carry a copy button, extracted from the pages' own JSX |
 | `typecheck-demo-snippets` | pass | 1252 snippet files compiled against `dist/`. The generator prunes to a fixpoint, so a snippet that does not compile never gets a button |
 | `verify:dist-records` | pass **after re-measurement** | Four records describing `dist/` were re-measured and the fingerprint re-stamped (§1.4) |
 | `npm publish --dry-run` | pass | 1661 files, 2.2 MB packed, 7.0 MB unpacked |
+| `verify:guide-claims` | pass | 33 claims on the seven guide pages checked against their source: component names against the real exports, subpaths against `package.json`, prop names against every `types.ts`, the WCAG level against `ACCESSIBILITY.md`, component counts against the export list |
+| `verify:guide-claims:self-check` | pass | 5 plants caught, one per rule |
+| `verify:demo-snippets:typecheck` | pass | Every snippet compiles against `dist/` |
 | `npm audit` (production tree) | pass | 0 vulnerabilities across the 3 production dependencies and their tree. The dev tree reports 12 (9 high, 1 moderate, 2 low); none of it ships |
+
+**New gates on this branch, and what each exists because of.** Five visible defects shipped
+past every gate above and were found by eye (§6.9), which is what these answer:
+
+| Gate | Answers |
+| --- | --- |
+| `default-state` (in `a11y-full`) | A state the component reports has to be a state it shows. Driven by the migration table, so it cannot cover fewer cases than it claims; self-checks by flipping `data-state` in the browser and requiring the paint to follow. Found two defects nobody had reported — Stepper's indicator and TabPanel's tab colours |
+| cursor assertion (in `keyboard-reachable.contract`) | Every keyboard-reachable control the library renders paints `cursor: pointer`. Verified by computed style over all 431 fixtures: 479 interactive, 386 pointer, 93 classified and 0 unexplained |
+| duplicate-token check (in `constants.contract`) | No class token appears twice in one string. Added after an automated pass wrote `cursor-pointer cursor-pointer` into six components |
+| `build-component-docs` × 8 | Hand-written sections may not duplicate generated ones; a table row may not be its own header; no unrendered markdown; no internal vocabulary; no `-` where the source assigns a default; one type vocabulary and no ARIA rows; no claim the release record contradicts; no component silently loses a section |
+| `verify:guide-claims` | The seven guide pages describe the library that exists |
+| `LIBRARY_TOTAL_HISTORY` (in `assert-bundle-size`) | Every move of the library total carries a stated reason, in either direction, and an unattributed drop must answer a question rather than pass. A down-only ratchet cannot tell a library that got leaner from one that stopped working |
+| snippet floor + library-resolution guard | `build-demo-snippets` refuses to run against a missing library and fails on a collapsed count instead of rewriting its record downward (§1.6) |
+| `rm-owned-dir` | No script recursively removes a directory holding files it did not write (§1.6) |
 
 The library build's own post-build asserts ran with it: the default phone entry is
 libphonenumber-free, 250 per-flag chunks are emitted in each module format with no inlined
 SVG, `styles.css` carries 484 rules with 471 utility selectors confined to the `cl-s` marker
 and no preflight, and 1161 built files carry no fixture-harness code.
 
-### 1.2 The browser matrix
+### 1.2 The browser matrix — NOT GREEN against the current tree
+
+**Read this before publishing.** The seven-project matrix has not completed against the tree
+as it now stands. The last attempt, on 2026-09-09, recorded three projects and then went red
+in the fourth:
+
+```
+  project        verdict  collected  executed  note
+  a11y-full      pass     8          8         354s   (now includes default-state)
+  visual         pass     271        271       163s
+  chromium       pass     450        450       287s   (440 passed, 10 skipped)
+  firefox        RED      —          —         23 failures in Pagination and ResizablePanel,
+                                               then the run was killed with no verdict recorded
+  webkit         not run
+  Mobile Chrome  not run
+  Mobile Safari  not run
+
+  machine at each project's start:
+    a11y-full      load 4.49, free 167MB of 8192MB,  swap used 15779MB, swap free 605MB
+    visual         load 7.59, free 1363MB of 8192MB, swap used 16101MB, swap free 1307MB
+    chromium       load 9.05, free 1718MB of 8192MB, swap used 16193MB, swap free 1215MB
+    firefox        not recorded — the run died before writing its entry
+```
+
+**The machine was 15.8-16.2 GB into swap against 8 GB of RAM for the whole run, with free
+memory as low as 167 MB.** By this document's own rule (§6.4) that is a machine reading, not a
+finding: the same Pagination and ResizablePanel tests passed in chromium minutes earlier, and
+no error text survived to say otherwise — Playwright wrote screenshots and video, and the
+messages went to the runner's stdout, which died with it.
+
+**Even the three passing projects no longer count.** They were measured against fingerprint
+`0f322f2ba0684796…`, and `src/` changed afterwards when a build manifest was written into
+`src/components/CountryFlag/flags` and then moved out to `scripts/` (§1.6). Any file under
+`src/` moves the fingerprint. There is currently no valid matrix result for this tree.
+
+What has to happen before publishing: free the machine, then run all seven in one sitting
+against a still tree. A red on a quiet machine is a finding and must be read as one.
+
+The last full green run, for reference, was taken on the previous fingerprint:
 
 ```
   project        verdict  collected  executed  note
@@ -74,7 +137,10 @@ and no preflight, and 1161 built files carry no fixture-harness code.
     Mobile Safari  load 4.35,  free 702MB of 8192MB,  swap free 1171MB
 ```
 
-Green in all seven, no project waived (§3.6), so each passed on merit.
+Green in all seven, no project waived (§3.6), so each passed on merit — **on the tree as it
+stood then**. `src/` has changed substantially since: component constants across five
+components, `types.ts` in thirteen files, two new fixtures, and the schema extractors' output.
+That run does not carry forward.
 
 **Assembled from more than one sitting, which the fingerprint is what makes legitimate.** The
 first four were measured together; the last three were run one at a time afterwards, each on a
@@ -153,6 +219,34 @@ to, so both were lowered to what this run measured. No ceiling moved and no comp
 
 ---
 
+### 1.6 Two builds shared one output directory, and a gate reported success on nothing
+
+`npm run build` and `npm run build:lib` both defaulted to `dist/`, and `prebuild` runs
+`build:lib` first — so every site build deleted the library it had just produced. Nothing said
+so. `build-demo-snippets` typechecks each snippet against `dist/` and prunes the ones that do
+not compile; with the library gone every subpath resolved to nothing, **591 of 626 snippets
+failed and it rewrote its own record down to 35 and printed a tick.** Its only guard was
+`existsSync("dist")`, and the directory did exist — full of the site.
+
+Three fixes, all on this branch:
+
+- The site builds to `dist-site/`. Both artefacts now survive a full `npm run build`.
+- `build-demo-snippets` checks that the declarations its `exports` map points at are really
+  there — 32 of 32 subpaths — and fails on a collapsed count against a floor of 590, rather
+  than pruning to whatever survives.
+- `rm-owned-dir` refuses to recursively remove a directory containing files the calling script
+  did not write, with ownership recorded in a manifest under `scripts/` rather than inferred
+  from file shape. `build-demo-snippets` was safe only because its path ends in `/demo`; its
+  sibling writes 31 files into the parent.
+
+Every other `dist`-reading gate was tested against a site build placed in `dist/`: all seven
+assert scripts and `typecheck-demo-snippets` fail loudly. `assert-ssr-record` passes, but it
+reads `src/` and two JSON records and never touches `dist/`.
+
+`assert-playground-removed` read the built site from `dist/` and broke when the site moved; it
+reads `dist-site/` now, and its self-check still catches all three plants. That regression was
+introduced and caught inside this slice.
+
 ## 2. What the package claims, and what proves it
 
 | Claim | Proved by |
@@ -201,19 +295,21 @@ would be fitting the code to the number. Accordion is `composed` because it ship
 sub-components the root re-exports; it was previously measured against a `control` ceiling by
 elimination, and the shape rule was fixed rather than its number moved.
 
-### 3.2 Six remaining `dark:` variants
+### 3.2 Seven remaining `dark:` variants
 
-From 361 in source and 76 after the first pass. The six that remain are enumerated with a
+From 361 in source and 76 after the first pass. The seven that remain are enumerated with a
 reason each in `dark-variants.contract` rather than held under a ceiling, so adding one fails
 and retiring one fails until the list is updated: Breadcrumb's separator and TimePicker's
 hover both step *up* in dark (the only two sites that do), `dark:shadow-none` on Input and
 TextArea (no token expresses a shadow in one theme and none in the other), Modal's scrim
-(a token was considered and declined in ADR 006), and Slider's thumb (near-white in both
-themes, which no token holds, with exactly one caller).
+(a token was considered and declined in ADR 006), Slider's thumb (near-white in both
+themes, which no token holds, with exactly one caller), and the Switch's off-track, added
+with the restored state styling — the unchecked grey differs between themes and no token
+holds a value used only as a track.
 
 ### 3.3 The 151-entry fixture gap
 
-648 of 1136 props have no fixture; 151 of those render markup no gate has seen — 49 slots,
+647 of 1136 props have no fixture; 151 of those render markup no gate has seen — 49 slots,
 46 props that decide whether the component renders at all, 17 class keys and 39 smaller
 differences. `audit-fixture-gap.mjs` classifies them from the AST rather than from their
 names, and the count is a ratchet: it may fall, a rise fails. The record carries the
@@ -444,19 +540,45 @@ What should be said out loud to whoever presses publish.
    that. If it is ever skipped to save forty minutes, this comes back.
 8. **`npm publish` is a one-way door.** 0.1.0 can never be republished, and the package name
    is claimed permanently on first publish.
+9. **Five visible defects shipped past every gate in §1.1 and were found by eye.** A checked
+   checkbox painted a transparent box, a selected radio the same, a switch track had no colour
+   at all, TabPanel stacked its icon above the label, and no clickable element anywhere showed
+   a pointer cursor. Four of the five trace to one commit that deleted 104 state `classes` keys
+   *and the default styling with them* — authorised by a contract that proved a consumer could
+   still style those states, which is a different claim and said so in its own docblock. The
+   deletion then sat green for six days: the visual baselines photograph resting subjects only
+   and were re-recorded two days after the deletion, so they became pictures of the regression;
+   axe does not read colour; and the painted-contrast sweep measures what *is* painted rather
+   than asking whether anything should be. The gates added since (§1.1) close this specific
+   hole and found two more defects nobody had reported. The lesson is the general one: every
+   gate here proves a property someone thought to name, and a whole component rendering
+   invisibly was not one of them. **Look at the built site before publishing.**
+10. **The bundle ratchet ran down-only for its whole history, and that is how the deletion was
+   absorbed.** The library total fell 155.76 → 146.65 across six re-records; the state-styling
+   loss went into one of them, a 43-commit window where no single cause had to be named. Moves
+   now carry a stated reason and an unattributed drop must answer a question, but the two
+   historical unattributed drops are still in the ledger, marked as such.
 
 ---
 
 ## 7. What remains
 
-Nothing in the gate list. Every gate in §1.1 passes, the matrix is green in all seven projects
-with no waiver, and `dist/` has been rebuilt and shown to fingerprint identically
-(`sha256:0b75e3e0…:1163`) to the artifact the packaging, consumer, bundle-size and ssr-record
-gates measured.
+**Two things, and the first is work, not judgement.**
 
-What is left is judgement, not work: the version decision in §5 and the risks in §6 — above
-all that nine templates are not a user, that no assistive technology has touched this, and that
-`npm publish` is a one-way door.
+1. **Run the browser matrix to completion** against this tree, in one sitting, on a machine
+   that is not in swap. Nothing else in the gate list is outstanding: every gate in §1.1
+   passes, including the eight new ones. But §1.2 is not green and the three projects that did
+   pass were measured against a fingerprint the tree has since moved past. Until that run
+   exists, this document cannot say the package was tested in seven engines.
+2. **Re-measure the four `dist/` records and re-stamp the fingerprint.** `build:lib`'s
+   post-build step invalidates them on every rebuild by design, so `verify:dist-records`
+   currently reports them unverified. That is the expected state after a build, not a defect —
+   but it has to be closed before publishing (§1.4).
+
+Then what is left is judgement: the version decision in §5 and the risks in §6 — above all
+that nine templates are not a user, that no assistive technology has touched this, that five
+visible defects passed every gate and were caught by eye, and that `npm publish` is a one-way
+door.
 
 **One operational note for whoever re-runs the matrix.** This machine has 8GB and has produced
 three red matrices for memory, twice from macOS background daemons rather than anything in the

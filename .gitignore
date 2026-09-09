@@ -11,6 +11,9 @@ node_modules
 dist
 dist-site
 dist-ssr
+
+# Ownership manifests for rm-owned-dir: derived, per-machine, never reviewed.
+scripts/.owned
 *.local
 
 # Environment variables

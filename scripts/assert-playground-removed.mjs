@@ -7,7 +7,7 @@
 //   2. no preview-iframe artefacts in the output
 //   3. /playground and /oauth/google answer the 404 page rather than rendering
 //
-// Usage: node scripts/assert-playground-removed.mjs [--dir dist] [--self-check]
+// Usage: node scripts/assert-playground-removed.mjs [--dir dist-site] [--self-check]
 //        [--no-route]  (skips 3, which needs a browser)
 //
 // --self-check plants each of the three defects in a scratch copy of the build
@@ -35,7 +35,11 @@ const arg = (name, fallback) => {
 };
 const SELF_CHECK = args.includes("--self-check");
 const WITH_ROUTES = !args.includes("--no-route");
-const DIR = path.resolve(root, arg("--dir", "dist"));
+// `dist-site`, not `dist`: the site build moved to its own output directory so
+// it would stop deleting the library `build:lib` writes to `dist`. This gate
+// reads the built SITE — pointed at `dist` it now opens the library's tree and
+// dies on a missing index.html.
+const DIR = path.resolve(root, arg("--dir", "dist-site"));
 
 const FORBIDDEN = /playground|chumlab\.ai/gi;
 

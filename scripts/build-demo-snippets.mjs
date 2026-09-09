@@ -27,6 +27,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, readdirSync
 import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { resolve, dirname, join } from "node:path";
+import { rmOwnedDir, writeOwnedManifest } from "./rm-owned-dir.mjs";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
@@ -842,9 +843,13 @@ function failingSnippets(entries) {
   // under flattened names in a temp directory meant the compiler's paths did
   // not match the ones being pruned, so 78 failing snippets survived the filter
   // and only the standalone gate saw them.
-  rmSync(OUT_SNIPPETS, { recursive: true, force: true });
+  rmOwnedDir(OUT_SNIPPETS, {
+    owner: "build-demo-snippets",
+    owns: entries.map(([rel]) => rel),
+  });
   for (const flavour of ["react", "next"]) mkdirSync(join(OUT_SNIPPETS, flavour), { recursive: true });
   for (const [rel, content] of entries) writeFileSync(join(OUT_SNIPPETS, rel), content, "utf8");
+  writeOwnedManifest(OUT_SNIPPETS, "build-demo-snippets", entries.map(([rel]) => rel));
 
   const dir = mkdtempSync(join(tmpdir(), "demo-snippets-build-"));
   const configPath = join(dir, "tsconfig.json");
@@ -893,9 +898,10 @@ if (CHECK) {
 
 mkdirSync(dirname(OUT_SITE), { recursive: true });
 writeFileSync(OUT_SITE, siteFile, "utf8");
-rmSync(OUT_SNIPPETS, { recursive: true, force: true });
+rmOwnedDir(OUT_SNIPPETS, { owner: "build-demo-snippets", owns: files.map(([rel]) => rel) });
 for (const flavour of ["react", "next"]) mkdirSync(join(OUT_SNIPPETS, flavour), { recursive: true });
 for (const [rel, content] of files) writeFileSync(join(OUT_SNIPPETS, rel), content, "utf8");
+writeOwnedManifest(OUT_SNIPPETS, "build-demo-snippets", files.map(([rel]) => rel));
 
 /**
  * A collapsed set is a failure, not a pass.

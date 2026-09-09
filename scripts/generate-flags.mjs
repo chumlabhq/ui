@@ -10,6 +10,7 @@
 //   node scripts/generate-flags.mjs
 
 import { mkdirSync, writeFileSync, rmSync } from "fs";
+import { rmOwnedDir, writeOwnedManifest } from "./rm-owned-dir.mjs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { optimize } from "svgo";
@@ -64,10 +65,15 @@ async function main() {
     throw new Error(`no flag asset for: ${missing.sort().join(", ")}`);
   }
 
-  rmSync(outDir, { recursive: true, force: true });
-  mkdirSync(outDir, { recursive: true });
-
   const sorted = [...flags.keys()].sort();
+
+  // `src/components/CountryFlag/flags` is a source directory, so a stray file
+  // here is someone's work rather than stale output.
+  rmOwnedDir(outDir, {
+    owner: "generate-flags",
+    owns: [...sorted.map((code) => `${code}.ts`), "index.ts"],
+  });
+  mkdirSync(outDir, { recursive: true });
   for (const code of sorted) {
     writeFileSync(
       resolve(outDir, `${code}.ts`),
@@ -84,6 +90,11 @@ async function main() {
       `export const FLAG_MODULES: Record<string, () => Promise<{ default: string }>> = {\n` +
       `${entries}\n};\n`
   );
+
+  writeOwnedManifest(outDir, "generate-flags", [
+    ...sorted.map((code) => `${code}.ts`),
+    "index.ts",
+  ]);
 
   console.log(
     `[generate-flags] ${sorted.length} flags | ` +

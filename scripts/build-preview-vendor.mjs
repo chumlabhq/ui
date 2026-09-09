@@ -15,11 +15,13 @@
 // @chumlab/ui is unpublished, so no CDN can resolve it - the iframe's import
 // map must point every allowlisted specifier at these local files.
 import { build } from "esbuild";
+import { rmOwnedDir, writeOwnedManifest } from "./rm-owned-dir.mjs";
 import {
   copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
+  readdirSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -101,7 +103,10 @@ for (const [key, value] of Object.entries(pkg.exports)) {
   importMap[specifier] = `/preview-vendor/${out}.js`;
 }
 
-rmSync(outDir, { recursive: true, force: true });
+// esbuild names its own split chunks, so the manifest from the last run is the
+// only record of what belongs here. `public/preview-vendor` is this script's
+// alone; a file it did not write is a person's.
+rmOwnedDir(outDir, { owner: "build-preview-vendor", owns: [] });
 
 await build({
   entryPoints,
@@ -198,6 +203,13 @@ copyFileSync(
   path.join(repoRoot, "public", "preview-bridge.js")
 );
 rmSync(shimDir, { recursive: true, force: true });
+
+// Whatever landed, chunks included, so the next run knows what it may clear.
+writeOwnedManifest(
+  outDir,
+  "build-preview-vendor",
+  readdirSync(outDir),
+);
 
 console.log(
   `preview vendor built: ${entryPoints.length} entries, import map with ${Object.keys(importMap).length} specifiers`
