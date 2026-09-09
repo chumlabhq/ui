@@ -15,6 +15,8 @@ export interface AvatarGroupContextValue {
   bordered?: boolean | string;
   /** Ring drawn around each member, in the colour of the surface behind the group, so overlapping members get a clean edge. */
   ringColor: string;
+  /** Overlap between members in pixels, negative when they stack. The surplus count needs it to keep its text out from under the member before it. */
+  spacing: number;
 }
 
 export const AvatarGroupContext =

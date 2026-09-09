@@ -6,7 +6,7 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle.js";
 import { useJsonLd, useCanonical } from "../hooks/useJsonLd.js";
 import {
@@ -109,7 +109,8 @@ const Faq = () => {
   useJsonLd("faq-page-jsonld", faqJsonLd);
   useJsonLd("faq-breadcrumb-jsonld", FAQ_BREADCRUMB_JSON_LD);
 
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState(() => params.get("q") ?? "");
   const [activeCategory, setActiveCategory] = useState<FaqCategory | null>(() =>
@@ -128,7 +129,15 @@ const Faq = () => {
     if (activeCategory) next.set("cat", categorySlug(activeCategory));
     if (currentPage > 1) next.set("page", String(currentPage));
     if (next.toString() !== params.toString()) {
-      setParams(next, { replace: true });
+      // Navigate rather than setSearchParams, which rewrites the URL without a
+      // fragment: the deep-link effect sets the page the linked question is on,
+      // that counts as a filter change, and the rewrite dropped the `#slug`
+      // from the address bar. The question still opened, but the URL no longer
+      // said which one — so reloading a shared link landed on a plain page.
+      navigate(
+        { search: next.toString(), hash: window.location.hash },
+        { replace: true },
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, activeCategory, currentPage]);
@@ -183,15 +192,21 @@ const Faq = () => {
     return () => window.clearTimeout(t);
   }, []);
 
-  // Smooth-scroll to the top of the FAQ list on page change. Skip the
-  // initial mount so we don't hijack the hash deep-link's scroll target.
+  // Smooth-scroll to the top of the FAQ list on page change, and close whatever
+  // was open — but only when the READER turned the page.
+  //
+  // This used to skip on a "first render" ref instead, which the deep-link
+  // effect ran straight into: it sets the page so the linked question is on the
+  // visible one, that counted as a page change, and the effect closed the
+  // question the link had just opened. StrictMode's double-invoke defeated the
+  // ref as well, so even a question already on page 1 came back closed. The
+  // page change now carries its own intent rather than being inferred from when
+  // it happened.
   const listRef = useRef<HTMLDivElement>(null);
-  const isFirstPageRender = useRef(true);
+  const readerTurnedPage = useRef(false);
   useEffect(() => {
-    if (isFirstPageRender.current) {
-      isFirstPageRender.current = false;
-      return;
-    }
+    if (!readerTurnedPage.current) return;
+    readerTurnedPage.current = false;
     setOpenId(null);
     if (listRef.current) {
       const y =
@@ -416,7 +431,10 @@ const Faq = () => {
               <Pagination
                 value={currentPage}
                 totalPages={totalPages}
-                onValueChange={setCurrentPage}
+                onValueChange={(page) => {
+                  readerTurnedPage.current = true;
+                  setCurrentPage(page);
+                }}
                 classes={{
                   root: "",
                   row: "flex items-center gap-2",

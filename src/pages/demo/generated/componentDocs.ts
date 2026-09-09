@@ -1232,7 +1232,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "number",
             "required": false,
             "default": null,
-            "description": "Maximum count before showing `max+`."
+            "description": "Maximum count before showing `max+`. Inside an AvatarGroup this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one."
           },
           {
             "name": "showPlus",
@@ -1647,6 +1647,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "string",
             "required": true,
             "description": "Ring drawn around each member, in the colour of the surface behind the group, so overlapping members get a clean edge."
+          },
+          {
+            "name": "spacing",
+            "type": "number",
+            "required": true,
+            "description": "Overlap between members in pixels, negative when they stack. The surplus count needs it to keep its text out from under the member before it."
           }
         ]
       },

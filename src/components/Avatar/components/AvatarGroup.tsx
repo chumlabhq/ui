@@ -104,8 +104,9 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
         shape: effectiveShape,
         bordered,
         ringColor,
+        spacing: effectiveSpacing,
       }),
-      [size, effectiveShape, bordered, ringColor],
+      [size, effectiveShape, bordered, ringColor, effectiveSpacing],
     );
 
     const itemClassName = classes.item ?? "shrink-0";
@@ -169,23 +170,28 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
               </div>
             );
           })}
-          {remainingCount > 0 && (
-            // The same wrapper the avatars get, so the surplus overlaps on the
-            // same negative margin instead of sitting after the stack as a
-            // caption. zIndex 0 puts it under the last avatar, continuing the
-            // descending order rather than restarting it.
-            <div
-              className={itemClassName || undefined}
-              style={{
-                marginInlineStart:
-                  visibleChildren.length === 0 ? 0 : effectiveSpacing,
-                zIndex: 0,
-                position: "relative",
-              }}
-            >
-              {renderSurplus ? (
-                renderSurplus(remainingCount)
-              ) : (
+          {remainingCount > 0 &&
+            // Only the default surplus joins the stack. `renderSurplus` hands
+            // the slot to the caller, whose element is not necessarily an
+            // avatar at all — the overlap wrapper dragged a plain "and 2 more"
+            // caption under the last avatar and overrode the margin it set for
+            // itself.
+            (renderSurplus ? (
+              renderSurplus(remainingCount)
+            ) : (
+              // The same wrapper the avatars get, so the surplus overlaps on
+              // the same negative margin instead of sitting after the stack as
+              // a caption. zIndex 0 puts it under the last avatar, continuing
+              // the descending order rather than restarting it.
+              <div
+                className={itemClassName || undefined}
+                style={{
+                  marginInlineStart:
+                    visibleChildren.length === 0 ? 0 : effectiveSpacing,
+                  zIndex: 0,
+                  position: "relative",
+                }}
+              >
                 <AvatarGroupCount
                   count={remainingCount}
                   size={size}
@@ -193,9 +199,8 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                   bordered={bordered}
                   tooltip={tooltipContent}
                 />
-              )}
-            </div>
-          )}
+              </div>
+            ))}
         </Comp>
       </AvatarGroupContext.Provider>
     );

@@ -219,7 +219,11 @@ export interface AvatarGroupCountProps extends HTMLAttributes<HTMLDivElement> {
   size?: AvatarSize;
   /** Shape matching the group's avatar shape. */
   shape?: AvatarShape;
-  /** Maximum count before showing `max+`. */
+  /**
+   * Maximum count before showing `max+`. Inside an `AvatarGroup` this defaults
+   * to 99 and renders as `+99`, because three digits do not fit an
+   * avatar-sized circle; standalone there is no ceiling unless you set one.
+   */
   max?: number;
   /** Whether to show a `+` prefix. Default: `true`. */
   showPlus?: boolean;

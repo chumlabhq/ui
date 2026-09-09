@@ -406,7 +406,7 @@
         },
         "max": {
           "type": "number | undefined",
-          "description": "Maximum count before showing `max+`."
+          "description": "Maximum count before showing `max+`. Inside an AvatarGroup this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one."
         },
         "showPlus": {
           "type": "boolean | undefined",

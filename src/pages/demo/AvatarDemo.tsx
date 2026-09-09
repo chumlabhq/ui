@@ -1,5 +1,4 @@
-import {
-  useState } from "react";
+import { useState, type CSSProperties } from "react";
 import {
   Avatar,
   AvatarGroup,
@@ -20,6 +19,48 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+
+/**
+ * Four tones for the rows that demonstrate the badge, cycled by position.
+ *
+ * The row should read as composed: `autoColor` hashing the label gave seven
+ * unrelated hues and buried the variant under the colour, and pinning it to one
+ * entry made the whole row the same indigo. Four is enough to look deliberate
+ * and few enough that the eye stops reading it as data.
+ *
+ * They are four adjacent cool hues — indigo, violet, cyan, emerald — at
+ * matching lightness and low saturation, so no single avatar steps forward and
+ * the badge stays the thing that changes. Taken from the library's own default
+ * ramps rather than invented, so each background/text pair is already a
+ * contrast-checked pair, and light and dark walk the same hue order: switching
+ * theme re-lights the row instead of repainting it in a different palette.
+ *
+ * Set directly rather than through `autoColor`, which offers no way to choose:
+ * it derives the index from a hash of the name, and its dark colours come from
+ * its own array at that index, so a curated light palette would have been
+ * paired with whatever dark tone the hash happened to land on.
+ */
+const BADGE_TONES = [
+  { bg: "#e0e7ff", text: "#4f46e5", darkBg: "#312e81", darkText: "#a5b4fc" },
+  { bg: "#ede9fe", text: "#7c3aed", darkBg: "#3b0764", darkText: "#c4b5fd" },
+  { bg: "#cffafe", text: "#0891b2", darkBg: "#164e63", darkText: "#67e8f9" },
+  { bg: "#d1fae5", text: "#059669", darkBg: "#064e3b", darkText: "#6ee7b7" },
+];
+
+/**
+ * `--avatar-dark-*` is how Avatar carries its dark values: it injects a rule
+ * keyed on those properties being present, so the pair below survives a theme
+ * switch without this page knowing which theme is on.
+ */
+const badgeToneStyle = (i: number) => {
+  const t = BADGE_TONES[i % BADGE_TONES.length];
+  return {
+    backgroundColor: t.bg,
+    color: t.text,
+    "--avatar-dark-bg": t.darkBg,
+    "--avatar-dark-text": t.darkText,
+  } as CSSProperties;
+};
 
 const getClasses = (dark: boolean) => ({
   subtleColors: {
@@ -48,17 +89,7 @@ const getClasses = (dark: boolean) => ({
     backgrounds: ["#1e40af", "#7c3aed", "#0e7490", "#b91c1c"],
     text: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"],
   },
-  // A one-entry palette: autoColor hashes the name into an index, so a single
-  // colour makes every avatar in a row identical. Rows that demonstrate the
-  // badge use it, so the badge is the only thing changing along the row.
-  // All three pools have to be pinned — the index is taken modulo the LONGEST
-  // pool, and an omitted one falls back to the 12-colour default, which leaves
-  // the dark-theme background varying across the row while light looks fixed.
-  fixedColors: {
-    backgrounds: ["#e0e7ff"],
-    borders: ["#a5b4fc"],
-    text: ["#4f46e5"],
-  },
+
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
   btnPrimary:
@@ -67,7 +98,13 @@ const getClasses = (dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   fallbackBg: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
   stateDisplay: `text-sm font-mono text-cl-text-secondary`,
-  ringSurface: `p-4 rounded-cl-md bg-cl-accent`,
+  // The ring demo needs a surface that is plainly not the page background in
+  // both themes, and the token scale has none: `bg-cl-elevated` is a hair off
+  // white (#f8f9fb on #ffffff), and everything with more separation is
+  // translucent, which a solid ring colour cannot match. So an opaque neutral
+  // pair, kept next to the colour it has to equal so the two cannot drift.
+  ringSurface: dark ? "p-4 rounded-cl-md bg-[#171a21]" : "p-4 rounded-cl-md bg-[#eceef2]",
+  ringSurfaceColor: dark ? "#171a21" : "#eceef2",
 });
 
 const AvatarDemo = () => {
@@ -472,10 +509,10 @@ const AvatarDemo = () => {
                   props: { count: 7, variant: "soft" as const },
                 },
                 { label: "showZero", props: { count: 0, showZero: true } },
-              ].map(({ label, props }) => (
+              ].map(({ label, props }, i) => (
                 <div key={label} className="text-center pt-2 pb-1">
                   <div className="relative inline-flex">
-                    <Avatar name={label} autoColor colors={c.fixedColors} />
+                    <Avatar name={label} style={badgeToneStyle(i)} />
                     <AvatarBadge {...props} />
                   </div>
                   <p className={`text-xs mt-3 ${c.label}`}>{label}</p>
@@ -486,10 +523,10 @@ const AvatarDemo = () => {
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>Sizes</p>
             <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
-              {(["xs", "sm", "md", "lg"] as const).map((s) => (
+              {(["xs", "sm", "md", "lg"] as const).map((s, i) => (
                 <div key={s} className="text-center pt-2 pb-1">
                   <div className="relative inline-flex">
-                    <Avatar name={s} autoColor colors={c.fixedColors} />
+                    <Avatar name={s} style={badgeToneStyle(i)} />
                     <AvatarBadge count={3} size={s} />
                   </div>
                   <p className={`text-xs mt-3 ${c.label}`}>{s}</p>
@@ -674,7 +711,7 @@ const AvatarDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Ring color on a colored surface (compare default vs matched)
+              Ring color on a raised surface (compare default vs matched)
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -695,7 +732,7 @@ const AvatarDemo = () => {
                 <div>
                   <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (surface color)</p>
                   <div className={c.ringSurface}>
-                    <AvatarGroup ringColor="var(--cl-accent)">
+                    <AvatarGroup ringColor={c.ringSurfaceColor}>
                       <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                       <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
                       <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
@@ -958,7 +995,7 @@ const AvatarDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Ring color on a colored surface
+              Ring color on a raised surface
             </p>
             <DemoWrapper isDarkMode={dark} layout="inline">
               <div className="flex items-center gap-6">
@@ -971,7 +1008,7 @@ const AvatarDemo = () => {
                 <div>
                   <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (surface color)</p>
                   <div className={c.ringSurface}>
-                    <AvatarGroupShimmer count={3} ringColor="var(--cl-accent)" />
+                    <AvatarGroupShimmer count={3} ringColor={c.ringSurfaceColor} />
                   </div>
                 </div>
               </div>
