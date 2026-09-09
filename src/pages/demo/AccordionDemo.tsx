@@ -483,7 +483,7 @@ const AccordionDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
             type="single"
-            value={singleValue ?? undefined}
+            value={singleValue}
             onValueChange={setSingleValue}
             collapsible
             classes={c.accordion}

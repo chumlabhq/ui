@@ -7,7 +7,7 @@ export interface UseAccordionStateManagerOptions {
   type: AccordionType;
   collapsible: boolean;
   maxExpanded: number | undefined;
-  controlledValue: string | string[] | undefined;
+  controlledValue: string | string[] | null | undefined;
   defaultValue: string | string[] | undefined;
   onValueChange: ((value: string | null) => void) | ((value: string[]) => void) | undefined;
   onExpandedChange: ((event: AccordionExpandEvent) => void) | undefined;
@@ -99,6 +99,11 @@ export function useAccordionStateManager(
   const expandedValues = useMemo(() => {
     if (isControlled) {
       if (Array.isArray(controlledValue)) return new Set(controlledValue);
+      // `null` means nothing is expanded. It used to build `new Set([null])`,
+      // which happened to behave because no item's value is null — but the
+      // intent is an empty set, and saying so keeps `null` from leaking into
+      // anything that iterates this.
+      if (controlledValue == null) return new Set<string>();
       return new Set([controlledValue]);
     }
     return internalValue;

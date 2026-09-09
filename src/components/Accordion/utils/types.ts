@@ -146,8 +146,18 @@ export interface AccordionSingleProps extends AccordionBaseProps {
   type: "single";
   /** Allow collapsing the active item. */
   collapsible?: boolean;
-  /** Expanded item value. Not `activeItem` or `expandedItem`. */
-  value?: string;
+  /**
+   * Expanded item value, or `null` for none. Not `activeItem` or
+   * `expandedItem`.
+   *
+   * `null` is accepted because `onValueChange` hands you `null` when the last
+   * item closes. When the type was `string | undefined` a consumer holding
+   * `useState<string | null>` could not pass its own state back — TypeScript
+   * forced `value={v ?? undefined}`, and `undefined` means UNCONTROLLED, so the
+   * component silently fell back to its internal state and stopped closing.
+   * Use `undefined` to opt out of control; use `null` to say nothing is open.
+   */
+  value?: string | null;
   /** Initial expanded item value for uncontrolled usage. */
   defaultValue?: string;
   /** Fires when the expanded item changes. Not `onChange`. */
@@ -348,7 +358,7 @@ export interface AccordionShimmerProps {
 export interface UseAccordionStateOptions {
   type: AccordionType;
   defaultValue?: string | string[];
-  value?: string | string[];
+  value?: string | string[] | null;
   onValueChange?:
     | ((value: string | null) => void)
     | ((value: string[]) => void);
