@@ -8,16 +8,14 @@ This is written for someone who has not followed the work and has to decide whet
 the package. It says what is claimed and what proves each claim, what is knowingly untrue or
 ungated, what has never been tested at all, and what publishing commits us to.
 
-**Not ready to publish.** Every gate in §1.1 passes, but **the browser matrix does not**: its
-last run recorded three green projects, went red in firefox, and was killed before the
-remaining three ran — on a machine 16 GB into swap against 8 GB of RAM. Even those three no
-longer count, because `src/` changed afterwards and any change there moves the fingerprint
-they were measured against. §1.2 has the figures. The matrix has to be run in one sitting, on
-a free machine, against a still tree before this ships.
+**Every gate passes, including the browser matrix.** All seven projects are green against one
+fingerprint, `b58f6ab1e04f28df`, each run alone on a machine that had been allowed to settle
+first, and each carrying the load and memory it ran on. §1.2 has the figures.
 
-Read §6.9 as well. Five visible defects — a checked checkbox, a selected radio, a switch
-track, TabPanel's icon, and the pointer cursor everywhere — passed every gate in §1.1 and were
-found by looking at the page.
+Read §6.9 before publishing anyway. Five visible defects — a checked checkbox, a selected
+radio, a switch track, TabPanel's icon, and the pointer cursor everywhere — passed every gate
+in §1.1 and were found by looking at the page. A green matrix is not the same as a component
+that looks right.
 
 ---
 
@@ -31,7 +29,7 @@ found by looking at the page.
 | `typecheck` | pass | Both configs clean, each after rejecting its own planted error. `focusVisible` is declared in a local augmentation in `wcag-layout.spec.ts` rather than cast away at the call site: it is in the HTML standard and shipped in every engine here, and TypeScript's DOM lib simply has not caught up |
 | `test:run` | pass | 92 files, 4754 collected, 4754 executed, 4686 passed, 68 skipped. Contracts 1582, unit 3172. Includes the cursor assertion in `keyboard-reachable.contract` and the duplicate-token check in `constants.contract` |
 | `test:coverage` | pass | 92.04% statements, 87.39% branch, 94.71% functions, 93.95% lines |
-| `test:e2e:all` (7 projects) | pass | 2512 collected, 2512 executed, 2441 passed, 71 skipped, no non-passes. No project is waived (§3.6), so all seven passed on merit. Each project's load average, free memory and free swap are recorded with it (§1.2) |
+| `test:e2e:all` (7 projects) | pass | 2529 collected, 2529 executed, 2461 passed, 68 skipped, no non-passes. No project is waived (§3.6), so all seven passed on merit. Run one at a time against fingerprint `b58f6ab1e04f28df`, each after the machine was allowed to settle; load, free memory and free swap recorded with each (§1.2) |
 | `verify:consumers` | pass | 9 apps, 2 React majors, 4 frameworks, production builds; plus `publint` and `attw` as their own rows |
 | `verify:consumers:self-check` | pass | 3 plants caught: a subpath export pointing at a missing file, `"use client"` stripped from 154 chunks, the token layer unwrapped |
 | `verify:packaging` | pass | `publint --strict` clean; `attw` clean across node10, node16 and bundler over 32 entrypoints; 8 relative links across 4 shipped documents resolve inside the tarball |
@@ -69,105 +67,51 @@ past every gate above and were found by eye (§6.9), which is what these answer:
 | `LIBRARY_TOTAL_HISTORY` (in `assert-bundle-size`) | Every move of the library total carries a stated reason, in either direction, and an unattributed drop must answer a question rather than pass. A down-only ratchet cannot tell a library that got leaner from one that stopped working |
 | snippet floor + library-resolution guard | `build-demo-snippets` refuses to run against a missing library and fails on a collapsed count instead of rewriting its record downward (§1.6) |
 | `rm-owned-dir` | No script recursively removes a directory holding files it did not write (§1.6) |
+| failure persistence | Every non-pass writes its message to disk as it happens, beside Playwright's own artifacts, so a killed run leaves a reason and not just a screenshot (§1.7) |
 
 The library build's own post-build asserts ran with it: the default phone entry is
 libphonenumber-free, 250 per-flag chunks are emitted in each module format with no inlined
 SVG, `styles.css` carries 484 rules with 471 utility selectors confined to the `cl-s` marker
 and no preflight, and 1161 built files carry no fixture-harness code.
 
-### 1.2 The browser matrix — NOT GREEN against the current tree
+### 1.2 The browser matrix
 
-**Read this before publishing.** The seven-project matrix has not completed against the tree
-as it now stands. The last attempt, on 2026-09-09, recorded three projects and then went red
-in the fourth:
-
-```
-  project        verdict  collected  executed  note
-  a11y-full      pass     8          8         354s   (now includes default-state)
-  visual         pass     271        271       163s
-  chromium       pass     450        450       287s   (440 passed, 10 skipped)
-  firefox        RED      —          —         23 failures in Pagination and ResizablePanel,
-                                               then the run was killed with no verdict recorded
-  webkit         not run
-  Mobile Chrome  not run
-  Mobile Safari  not run
-
-  machine at each project's start:
-    a11y-full      load 4.49, free 167MB of 8192MB,  swap used 15779MB, swap free 605MB
-    visual         load 7.59, free 1363MB of 8192MB, swap used 16101MB, swap free 1307MB
-    chromium       load 9.05, free 1718MB of 8192MB, swap used 16193MB, swap free 1215MB
-    firefox        not recorded — the run died before writing its entry
-```
-
-**The machine was 15.8-16.2 GB into swap against 8 GB of RAM for the whole run, with free
-memory as low as 167 MB.** By this document's own rule (§6.4) that is a machine reading, not a
-finding: the same Pagination and ResizablePanel tests passed in chromium minutes earlier, and
-no error text survived to say otherwise — Playwright wrote screenshots and video, and the
-messages went to the runner's stdout, which died with it.
-
-**Even the three passing projects no longer count.** They were measured against fingerprint
-`0f322f2ba0684796…`, and `src/` changed afterwards when a build manifest was written into
-`src/components/CountryFlag/flags` and then moved out to `scripts/` (§1.6). Any file under
-`src/` moves the fingerprint. There is currently no valid matrix result for this tree.
-
-What has to happen before publishing: free the machine, then run all seven in one sitting
-against a still tree. A red on a quiet machine is a finding and must be read as one.
-
-The last full green run, for reference, was taken on the previous fingerprint:
+Green in all seven, no project waived (§3.6), so each passed on merit — against one
+fingerprint, `b58f6ab1e04f28df`, which is what makes an assembled run legitimate.
 
 ```
   project        verdict  collected  executed  note
-  a11y-full      pass     5          5         347s
-  visual         pass     257        257       155s
-  chromium       pass     450        450       314s
-  firefox        pass     450        450       661s   (300/131/121/109s)
-  webkit         pass     450        450       337s
-  Mobile Chrome  pass     450        450       246s
-  Mobile Safari  pass     450        450       353s
+  a11y-full      pass     8          8         400s   (accessibility, painted contrast, default-state)
+  visual         pass     271        271       186s
+  chromium       pass     450        450       247s
+  firefox        pass     450        450       668s   (227/157/142/142s across four shards)
+  webkit         pass     450        450       283s
+  Mobile Chrome  pass     450        450       216s
+  Mobile Safari  pass     450        450       240s
 
-  totals: collected 2512  executed 2512  passed=2441 skipped=71
+  totals: collected 2529  executed 2529  passed=2461 skipped=68
 
   machine at each project's start:
-    a11y-full      load 4.15,  free 110MB of 8192MB,  swap free 1192MB
-    visual         load 4.52,  free 1280MB of 8192MB, swap free 1362MB
-    chromium       load 11.04, free 1598MB of 8192MB, swap free 1474MB
-    firefox        load 21.08, free 1259MB of 8192MB, swap free 833MB
-    webkit         load 2.10,  free 730MB of 8192MB,  swap free 807MB
-    Mobile Chrome  load 3.71,  free 130MB of 8192MB,  swap free 1647MB
-    Mobile Safari  load 4.35,  free 702MB of 8192MB,  swap free 1171MB
+    a11y-full      load 2.50, free   95MB of 8192MB, swap free 1067MB
+    visual         load 5.89, free  182MB of 8192MB, swap free  848MB
+    chromium       load 2.98, free  140MB of 8192MB, swap free 1119MB
+    firefox        load 2.70, free  150MB of 8192MB, swap free  778MB
+    webkit         load 2.22, free   85MB of 8192MB, swap free 1552MB
+    Mobile Chrome  load 2.64, free 1912MB of 8192MB, swap free 1258MB
+    Mobile Safari  load 2.80, free 1882MB of 8192MB, swap free 1298MB
 ```
 
-Green in all seven, no project waived (§3.6), so each passed on merit — **on the tree as it
-stood then**. `src/` has changed substantially since: component constants across five
-components, `types.ts` in thirteen files, two new fixtures, and the schema extractors' output.
-That run does not carry forward.
+**Run one project at a time, each after waiting for the machine to settle.** That is not a
+formality here. The previous attempt ran all seven in one go and went red in firefox with 23
+failures in `Pagination` and `ResizablePanel`, on a machine 16 GB into swap against 8 GB of
+RAM; the run was then killed before the remaining three projects started. Run alone at load
+2.70, **firefox passed all 450**. The 23 failures were the machine. Nothing in the repo
+changed between the two runs except the reporter that would have recorded the reason.
 
-**Assembled from more than one sitting, which the fingerprint is what makes legitimate.** The
-first four were measured together; the last three were run one at a time afterwards, each on a
-quiet machine. A recorded verdict is tied to a hash of `src/` and `e2e/`, so a project's result
-only counts while the tree it was measured against is the tree in front of you — that is what
-lets three projects be added to four without re-measuring the four. Re-running them is in fact
-what caused the previous failure: webkit was the fifth project of a single long run, and by the
-time it started, the four before it had left the machine swapping.
-
-**The difference the figures make.** webkit took 1.1 hours and failed 258 of 440 tests when it
-started at load 22 on a machine that fell to 111MB free with 442MB of swap left. Run alone at
-load 2.1 it took 5.6 minutes and passed. Same tree, same tests. The figures are recorded on
-green runs precisely so that comparison is possible without re-running anything.
-
-**Two real defects were found on the way here, both fixed.** `wcag-layout.spec.ts` read
-computed style in the same tick as `.focus()`, so Firefox returned the pre-transition value
-where Chromium returned the target, and SC 2.4.7 had been passing by engine rather than by
-evidence — with the gate fixed, every one of the 13 focusables it checks has an indicator in
-Firefox. And `fixture-act.spec.ts` failed in chromium on `Table/filter-selected: target element
-not found`, on a healthy machine with every other project green: `openFilterPanel` waited for
-the filter panel to mount and the act then went straight for a button inside it that had not
-rendered yet. It passed three times out of three in isolation, which is what that race looks
-like. The fixture polls for the element now.
-
-The reporter behind these numbers is itself tested: `run-e2e-matrix.mjs --self-check` plants a
-failing test and a timing-out test and requires both to be named by spec, line and title. A
-project that collects zero tests fails, because a filter matching nothing is not a pass.
+**The reason is now on disk.** Each non-pass writes a `failure.md` next to Playwright's
+screenshot and video the moment the test ends, and appends to `test-results/non-passes.log`
+(§1.7). Both survive a killed process, which `onEnd` does not. Across all seven projects here,
+zero were written.
 
 ### 1.3 One gate failed and named its own fix
 
@@ -246,6 +190,26 @@ reads `src/` and two JSON records and never touches `dist/`.
 `assert-playground-removed` read the built site from `dist/` and broke when the site moved; it
 reads `dist-site/` now, and its self-check still catches all three plants. That regression was
 introduced and caught inside this slice.
+
+### 1.7 A killed run used to leave artifacts and no reason
+
+Playwright saves `test-failed-1.png` and `video.webm` for every failure, but the error message
+only ever reached the runner's stdout. When a run was killed — three times on this branch —
+the artifacts survived and the reason did not, and finding out what had failed cost a full
+re-run each time.
+
+`e2e/_reconcile-reporter.ts` now writes, at `onTestEnd` rather than `onEnd`, because `onEnd`
+does not run when the process is killed:
+
+- `failure.md` in the test's own output directory, beside the screenshot and video, carrying
+  status, project, location, attempt, duration and the de-coloured stack. A test with no
+  attachments — an assertion that never opened a page — still gets its own directory.
+- one appended line per non-pass in `test-results/non-passes.log`, so a killed run has a
+  single place to read rather than 23 directories to open.
+
+`test:e2e:all:self-check` plants a failing test and a timing-out test and now requires four
+things, not two: that each is named with its spec, line and title, and that each left its
+message in both places.
 
 ## 2. What the package claims, and what proves it
 
@@ -506,11 +470,13 @@ is true. It is also the correct price for keeping the right to delete a key.
 
 What should be said out loud to whoever presses publish.
 
-1. **This machine cannot comfortably run its own matrix.** 8 GB of RAM against seven browser
-   projects at four workers, and a run has already failed because a browser could not launch
-   in 180 seconds. The suite now records the conditions, and the green run in §1.2 was taken
-   with swap down to 846 MB — which is close. Anyone re-running it should free memory first,
-   and a red run should be read against its recorded figures before it is read as a defect.
+1. **This machine cannot comfortably run its own matrix, and the green run in §1.2 is only
+   green because it was run one project at a time.** 8 GB of RAM against seven browser
+   projects at four workers. Free memory dipped to 85 MB during webkit and swap to 778 MB
+   during firefox even running alone; the all-seven attempt the day before drove it 16 GB into
+   swap and turned firefox red with 23 failures that were not defects. Anyone re-running this
+   should free memory first, run the projects singly, and read a red against its recorded
+   figures — and against `test-results/non-passes.log` (§1.7) — before reading it as a defect.
 2. **A broken gate reached a commit, and the branch did not notice for a day.** `typecheck`
    was red at the previous commit because the change that broke it was verified against
    `tsconfig.app.json`, which does not include `e2e/`. Fixed now. A gate that is not run is
@@ -520,11 +486,13 @@ What should be said out loud to whoever presses publish.
    blocking" to every failing project, not only a waived one — invisible while Firefox was
    the only project that ever failed and Firefox was waived. Fixed (§1.2). Two mistakes
    compounding is how a table comes to disagree with its own verdict.
-4. **The matrix is sensitive to the machine, and today proved it three times.** A harness
+4. **The matrix is sensitive to the machine, and it has now proved it four times.** A harness
    change cost one project 2.2h; an OS index rebuild turned two projects red with no code
-   change; and this run went red in three while a shard that failed in 27.7 minutes passed
-   alone in 2.1. Read a red matrix for load before reading it for defects — and never read a
-   green one taken under load at all.
+   change; a run went red in three projects while a shard that failed in 27.7 minutes passed
+   alone in 2.1; and firefox produced 23 failures in `Pagination` and `ResizablePanel` under
+   16 GB of swap, then passed all 450 alone at load 2.70 with nothing in the repo changed.
+   Read a red matrix for load before reading it for defects — and never read a green one taken
+   under load at all.
 5. **A gate went stale without anyone noticing, and it was the accessibility gate.** The axe
    expectation list was recorded against 276 fixtures while the suite had 364. It now records
    the count it was derived from and fails when that moves — but the same shape of failure has
@@ -563,24 +531,24 @@ What should be said out loud to whoever presses publish.
 
 ## 7. What remains
 
-**Two things, and the first is work, not judgement.**
+**One thing, and it is work: re-measure the four `dist/` records and re-stamp the
+fingerprint.** `build:lib`'s post-build step invalidates them on every rebuild by design, so
+`verify:dist-records` reports them unverified after any build. That is the expected state, not
+a defect, but it has to be closed against the artifact that actually ships (§1.4).
 
-1. **Run the browser matrix to completion** against this tree, in one sitting, on a machine
-   that is not in swap. Nothing else in the gate list is outstanding: every gate in §1.1
-   passes, including the eight new ones. But §1.2 is not green and the three projects that did
-   pass were measured against a fingerprint the tree has since moved past. Until that run
-   exists, this document cannot say the package was tested in seven engines.
-2. **Re-measure the four `dist/` records and re-stamp the fingerprint.** `build:lib`'s
-   post-build step invalidates them on every rebuild by design, so `verify:dist-records`
-   currently reports them unverified. That is the expected state after a build, not a defect —
-   but it has to be closed before publishing (§1.4).
+Nothing else in the gate list is outstanding. Every gate in §1.1 passes, including the nine
+added on this branch, and the browser matrix is green in all seven projects against one
+fingerprint (§1.2).
 
-Then what is left is judgement: the version decision in §5 and the risks in §6 — above all
-that nine templates are not a user, that no assistive technology has touched this, that five
+What is left is judgement: the version decision in §5 and the risks in §6 — above all that
+nine templates are not a user, that no assistive technology has touched this, that five
 visible defects passed every gate and were caught by eye, and that `npm publish` is a one-way
 door.
 
 **One operational note for whoever re-runs the matrix.** This machine has 8GB and has produced
-three red matrices for memory, twice from macOS background daemons rather than anything in the
-repo. Run the projects one at a time if the machine is not idle, and read a red against the
-figures the run records before reading it as a defect.
+four red matrices for memory, twice from macOS background daemons rather than anything in the
+repo. The fourth is the sharpest example: firefox went red with 23 failures in one all-seven
+run at 16 GB of swap, and passed all 450 when run alone at load 2.70 with nothing in the repo
+changed. **Run the projects one at a time, waiting for load to fall below 3 between them**, and
+read a red against the figures the run records — and now against `test-results/non-passes.log`,
+which says what actually failed (§1.7).

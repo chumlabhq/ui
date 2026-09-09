@@ -1,4 +1,5 @@
-import { writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import type {
   FullConfig,
   FullResult,
@@ -60,12 +61,16 @@ export default class ReconcileReporter implements Reporter {
   onTestEnd(test: TestCase, result: TestResult): void {
     const project = test.parent.project()?.name ?? "?";
     const file = test.location.file.replace(`${process.cwd()}/`, "");
+    const where = `${file}:${test.location.line}`;
     this.seen.set(ReconcileReporter.id(test), {
       title: test.title,
       project,
       status: result.status,
-      where: `${file}:${test.location.line}`,
+      where,
     });
+    if (NOT_PASSED.has(result.status)) {
+      this.persistFailure(test, result, project, where);
+    }
     this.byStatus.set(result.status, (this.byStatus.get(result.status) ?? 0) + 1);
 
     // `test.skip()` with no argument, and a `skip` annotation with no
@@ -77,6 +82,73 @@ export default class ReconcileReporter implements Reporter {
       if (!reason?.trim()) {
         this.unexplainedSkips.push(`${project} › ${ReconcileReporter.id(test)}`);
       }
+    }
+  }
+
+  /**
+   * Write the reason next to the screenshot, the moment the test ends.
+   *
+   * Playwright already saves `test-failed-1.png` and `video.webm` per failure,
+   * but the message only ever reached the runner's stdout — so a killed matrix
+   * left a directory full of artifacts and nothing saying what went wrong. That
+   * has now cost three re-runs on this branch. `onEnd` is too late: it does not
+   * run when the process is killed. This writes per test, as each one finishes.
+   */
+  private persistFailure(
+    test: TestCase,
+    result: TestResult,
+    project: string,
+    where: string,
+  ): void {
+    // The stack already opens with the message, and Playwright colours both.
+    // Neither is useful in a file read six hours later on a different machine.
+    const plain = (text: string) => text.replace(/\u001B\[[0-9;]*m/g, "");
+    const errors = (result.errors?.length ? result.errors : result.error ? [result.error] : [])
+      .map((e) => plain(e.stack ?? e.message ?? "").trim())
+      .filter(Boolean);
+
+    const body = [
+      `# ${result.status}: ${test.title}`,
+      "",
+      `- project: ${project}`,
+      `- location: ${where}`,
+      `- attempt: ${result.retry + 1}`,
+      `- duration: ${result.duration}ms`,
+      "",
+      errors.length ? errors.join("\n\n---\n\n") : "(no error attached — a timeout or a crash)",
+      "",
+    ].join("\n");
+
+    // Beside the artifacts when there are any; Playwright puts them all in the
+    // test's own output directory. When there are none — an assertion that
+    // never opened a page, a crash before the first screenshot — it still gets
+    // its own directory, because "somewhere findable" is the whole point.
+    const artifact = result.attachments.find((a) => a.path)?.path;
+    const slug = `${project}-${where}-${test.title}`
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 120);
+    const dir = artifact ? dirname(artifact) : join(process.cwd(), "test-results", slug);
+    try {
+      mkdirSync(dir, { recursive: true });
+      writeFileSync(join(dir, "failure.md"), body, "utf8");
+    } catch {
+      // A directory we cannot write is not worth failing the run over.
+    }
+
+    // And one append-only log, so a killed run has a single place to read
+    // rather than 23 directories to open.
+    try {
+      const log = join(process.cwd(), "test-results", "non-passes.log");
+      mkdirSync(dirname(log), { recursive: true });
+      appendFileSync(
+        log,
+        `${new Date().toISOString()} ${project} ${result.status} ${where} ${test.title}\n` +
+          (errors.length ? `${errors[0].split("\n").slice(0, 4).map((l) => `    ${l}`).join("\n")}\n` : ""),
+        "utf8",
+      );
+    } catch {
+      // Same.
     }
   }
 

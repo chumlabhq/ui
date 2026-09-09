@@ -483,8 +483,32 @@ function selfCheck() {
         ),
       },
     ];
+
+    // The message has to survive the process, not just reach stdout. A killed
+    // matrix left 23 failure directories and no reason, three times.
+    const log = join(ROOT, "test-results", "non-passes.log");
+    const logged = existsSync(log) ? readFileSync(log, "utf8") : "";
+    outcomes.push({
+      plant: "the failure's message on disk",
+      caught: /planted/.test(logged) && /planted failure/.test(logged),
+    });
+    const failureFiles = existsSync(join(ROOT, "test-results"))
+      ? readdirSync(join(ROOT, "test-results"))
+          .filter((d) => /planted/.test(d))
+          .map((d) => join(ROOT, "test-results", d, "failure.md"))
+          .filter((f) => existsSync(f))
+      : [];
+    outcomes.push({
+      plant: "a failure.md beside the artifacts",
+      caught: failureFiles.some((f) => /planted/.test(readFileSync(f, "utf8"))),
+    });
+
     process.stdout.write("\n══ reconciliation self-check ═══════════════════════════════════\n");
     for (const outcome of outcomes) {
+      if (outcome.plant.startsWith("the failure's") || outcome.plant.startsWith("a failure.md")) {
+        process.stdout.write(`  ${outcome.caught ? "written" : "MISSING  "}  ${outcome.plant}\n`);
+        continue;
+      }
       const row = named.find((t) => t.title.includes(outcome.plant.includes("failing") ? "failure" : "timeout"));
       process.stdout.write(
         `  ${outcome.caught ? "named " : "NOT NAMED"}  ${outcome.plant}` +
@@ -495,7 +519,7 @@ function selfCheck() {
     const ok = outcomes.every((o) => o.caught);
     process.stdout.write(
       ok
-        ? "  RESULT: every non-pass named its spec, line and title\n"
+        ? "  RESULT: every non-pass named its spec, line and title, and left its message on disk\n"
         : "  RESULT: FAILED — a non-pass was reported without naming it\n",
     );
     process.stdout.write("════════════════════════════════════════════════════════════════\n");
