@@ -52,7 +52,7 @@
     },
     "fallback": {
       "type": "object",
-      "description": "React.ReactNode — Custom fallback content when no image or name is available.",
+      "description": "React.ReactNode \u2014 Custom fallback content when no image or name is available.",
       "x-tsType": "ReactNode"
     },
     "autoColor": {
@@ -269,7 +269,7 @@
     },
     "textStyle": {
       "type": "object",
-      "description": "CSSProperties — Inline styles for the initials text.",
+      "description": "CSSProperties \u2014 Inline styles for the initials text.",
       "x-tsType": "CSSProperties | undefined"
     },
     "loading": {
@@ -292,12 +292,12 @@
     },
     "onLoad": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image finishes loading.",
+      "description": "() => void \u2014 Fires when the avatar image finishes loading.",
       "x-tsType": "(() => void) | undefined"
     },
     "onError": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image fails to load.",
+      "description": "() => void \u2014 Fires when the avatar image fails to load.",
       "x-tsType": "(() => void) | undefined"
     },
     "asChild": {
@@ -326,7 +326,8 @@
         },
         "shape": {
           "type": "AvatarShape | undefined",
-          "description": "Default shape for all avatars in the group."
+          "description": "Default shape for all avatars in the group.",
+          "default": "circle"
         },
         "bordered": {
           "type": "string | boolean | undefined",
@@ -334,7 +335,8 @@
         },
         "spacing": {
           "type": "number | undefined",
-          "description": "Overlap spacing in pixels (negative for overlap)."
+          "description": "Overlap spacing in pixels (negative for overlap).",
+          "default": -8
         },
         "ringColor": {
           "type": "string | undefined",
@@ -496,6 +498,15 @@
           "type": "BadgeVariant | undefined",
           "description": "Visual style variant. Default: `\"solid\"`.",
           "default": "solid"
+        },
+        "tone": {
+          "type": "BadgeTone | undefined",
+          "description": "Token family the badge draws from. A count is a notification, not a fault; use `error` for a badge that reports one.",
+          "enum": [
+            "accent",
+            "error"
+          ],
+          "default": "accent"
         },
         "overlap": {
           "type": "BadgeOverlap | undefined",

@@ -302,9 +302,10 @@ describe("AvatarBadge", () => {
       render(<AvatarBadge count={5} />);
 
       const badge = screen.getByRole("status");
-      // The error token, not Tailwind's red: `bg-red-500` under `text-white` is
-      // 3.76:1, and a fixed red cannot follow the theme.
-      expect(badge).toHaveClass("bg-cl-error");
+      // Accent, not error: a count is how many things are waiting, not a fault.
+      // A token either way — `bg-red-500` under `text-white` is 3.76:1, and a
+      // fixed ramp colour cannot follow the theme.
+      expect(badge).toHaveClass("bg-cl-accent");
     });
 
     it("applies outline variant", () => {
@@ -318,7 +319,24 @@ describe("AvatarBadge", () => {
       render(<AvatarBadge count={5} variant="soft" />);
 
       const badge = screen.getByRole("status");
-      expect(badge).toHaveClass("bg-cl-error-bg");
+      expect(badge).toHaveClass("bg-cl-accent-bg");
+    });
+  });
+
+  describe("Tone", () => {
+    it("draws from the error family when the badge reports a fault", () => {
+      render(<AvatarBadge count={5} tone="error" />);
+
+      expect(screen.getByRole("status")).toHaveClass("bg-cl-error");
+    });
+
+    it("crosses tone with variant", () => {
+      // The two axes are independent: the tone picks the family, the variant
+      // picks the treatment. Asserting only the solid pair would let a soft
+      // error fall back to accent unnoticed.
+      render(<AvatarBadge count={5} tone="error" variant="soft" />);
+
+      expect(screen.getByRole("status")).toHaveClass("bg-cl-error-bg");
     });
   });
 

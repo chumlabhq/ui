@@ -48,6 +48,17 @@ const getClasses = (dark: boolean) => ({
     backgrounds: ["#1e40af", "#7c3aed", "#0e7490", "#b91c1c"],
     text: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"],
   },
+  // A one-entry palette: autoColor hashes the name into an index, so a single
+  // colour makes every avatar in a row identical. Rows that demonstrate the
+  // badge use it, so the badge is the only thing changing along the row.
+  // All three pools have to be pinned — the index is taken modulo the LONGEST
+  // pool, and an omitted one falls back to the 12-colour default, which leaves
+  // the dark-theme background varying across the row while light looks fixed.
+  fixedColors: {
+    backgrounds: ["#e0e7ff"],
+    borders: ["#a5b4fc"],
+    text: ["#4f46e5"],
+  },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
   btnPrimary:
@@ -56,7 +67,7 @@ const getClasses = (dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   fallbackBg: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
   stateDisplay: `text-sm font-mono text-cl-text-secondary`,
-  darkBg: `p-4 rounded-cl-md bg-cl-bg-elevated dark:bg-cl-bg`,
+  ringSurface: `p-4 rounded-cl-md bg-cl-accent`,
 });
 
 const AvatarDemo = () => {
@@ -464,7 +475,7 @@ const AvatarDemo = () => {
               ].map(({ label, props }) => (
                 <div key={label} className="text-center pt-2 pb-1">
                   <div className="relative inline-flex">
-                    <Avatar name={label} autoColor colors={c.subtleColors} />
+                    <Avatar name={label} autoColor colors={c.fixedColors} />
                     <AvatarBadge {...props} />
                   </div>
                   <p className={`text-xs mt-3 ${c.label}`}>{label}</p>
@@ -478,7 +489,7 @@ const AvatarDemo = () => {
               {(["xs", "sm", "md", "lg"] as const).map((s) => (
                 <div key={s} className="text-center pt-2 pb-1">
                   <div className="relative inline-flex">
-                    <Avatar name={s} autoColor colors={c.subtleColors} />
+                    <Avatar name={s} autoColor colors={c.fixedColors} />
                     <AvatarBadge count={3} size={s} />
                   </div>
                   <p className={`text-xs mt-3 ${c.label}`}>{s}</p>
@@ -663,7 +674,7 @@ const AvatarDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Ring color on dark background (compare default vs matched)
+              Ring color on a colored surface (compare default vs matched)
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -672,8 +683,8 @@ const AvatarDemo = () => {
             >
               <div className="flex items-center gap-6">
                 <div>
-                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Default (white ring)</p>
-                  <div className={c.darkBg}>
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Default (page-colored ring)</p>
+                  <div className={c.ringSurface}>
                     <AvatarGroup>
                       <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                       <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
@@ -682,9 +693,9 @@ const AvatarDemo = () => {
                   </div>
                 </div>
                 <div>
-                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (#111827)</p>
-                  <div className={c.darkBg}>
-                    <AvatarGroup ringColor="#111827">
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (surface color)</p>
+                  <div className={c.ringSurface}>
+                    <AvatarGroup ringColor="var(--cl-accent)">
                       <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                       <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
                       <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
@@ -947,20 +958,20 @@ const AvatarDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Ring color on dark background
+              Ring color on a colored surface
             </p>
             <DemoWrapper isDarkMode={dark} layout="inline">
               <div className="flex items-center gap-6">
                 <div>
-                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Default (white ring)</p>
-                  <div className={c.darkBg}>
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Default (page-colored ring)</p>
+                  <div className={c.ringSurface}>
                     <AvatarGroupShimmer count={3} />
                   </div>
                 </div>
                 <div>
-                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (#111827)</p>
-                  <div className={c.darkBg}>
-                    <AvatarGroupShimmer count={3} ringColor="#111827" />
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (surface color)</p>
+                  <div className={c.ringSurface}>
+                    <AvatarGroupShimmer count={3} ringColor="var(--cl-accent)" />
                   </div>
                 </div>
               </div>

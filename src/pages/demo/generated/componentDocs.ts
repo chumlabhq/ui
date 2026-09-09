@@ -841,7 +841,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-orientation",
-        "values": [],
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
         "when": "always"
       },
       {
@@ -851,7 +854,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-size",
-        "values": [],
+        "values": [
+          "lg",
+          "md",
+          "sm"
+        ],
         "when": "always"
       },
       {
@@ -866,7 +873,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-type",
-        "values": [],
+        "values": [
+          "multiple",
+          "single"
+        ],
         "when": "always"
       },
       {
@@ -876,7 +886,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-variant",
-        "values": [],
+        "values": [
+          "bordered",
+          "default",
+          "flush",
+          "separated"
+        ],
         "when": "always"
       }
     ],
@@ -1099,7 +1114,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "shape",
             "type": "AvatarShape",
             "required": false,
-            "default": null,
+            "default": "\"circle\"",
             "description": "Default shape for all avatars in the group."
           },
           {
@@ -1113,7 +1128,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "spacing",
             "type": "number",
             "required": false,
-            "default": null,
+            "default": "-8",
             "description": "Overlap spacing in pixels (negative for overlap)."
           },
           {
@@ -1351,6 +1366,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Visual style variant. Default: `\"solid\"`."
           },
           {
+            "name": "tone",
+            "type": "\"accent\" | \"error\"",
+            "required": false,
+            "default": "\"accent\"",
+            "description": "Token family the badge draws from. A count is a notification, not a fault; use `error` for a badge that reports one."
+          },
+          {
             "name": "overlap",
             "type": "BadgeOverlap",
             "required": false,
@@ -1568,7 +1590,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The placeholder element itself, which carries the size, shape and pulse."
           }
         ]
       }
@@ -1600,31 +1622,31 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "AvatarGroupContextValue",
-        "description": "",
+        "description": "What an `AvatarGroup` hands down to the avatars and the surplus count inside it, so a member picks up the group's sizing and ring without repeating them. A member's own prop wins where it sets one.",
         "members": [
           {
             "name": "size",
             "type": "AvatarSize",
             "required": true,
-            "description": ""
+            "description": "Size every member falls back to."
           },
           {
             "name": "shape",
             "type": "AvatarShape",
             "required": true,
-            "description": ""
+            "description": "Shape every member falls back to."
           },
           {
             "name": "bordered",
             "type": "boolean | string",
             "required": false,
-            "description": ""
+            "description": "Border every member falls back to, as a boolean or a CSS border shorthand."
           },
           {
             "name": "ringColor",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Ring drawn around each member, in the colour of the surface behind the group, so overlapping members get a clean edge."
           }
         ]
       },
@@ -1787,7 +1809,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-shape",
-        "values": [],
+        "values": [
+          "circle",
+          "rounded",
+          "square"
+        ],
         "when": "always"
       }
     ],
@@ -3500,7 +3526,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-shape",
-        "values": [],
+        "values": [
+          "circle",
+          "rounded",
+          "square"
+        ],
         "when": "when shape"
       },
       {
@@ -5256,7 +5286,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "dataAttributes": [
       {
         "name": "data-direction",
-        "values": [],
+        "values": [
+          "bottom",
+          "left",
+          "right",
+          "top"
+        ],
         "when": "always"
       },
       {
@@ -6240,7 +6275,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-size",
-        "values": [],
+        "values": [
+          "lg",
+          "md",
+          "sm"
+        ],
         "when": "when size"
       },
       {
@@ -11355,7 +11394,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-orientation",
-        "values": [],
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
         "when": "always"
       },
       {
@@ -11945,7 +11987,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-orientation",
-        "values": [],
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
         "when": "always"
       },
       {
@@ -11960,7 +12005,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-variant",
-        "values": [],
+        "values": [
+          "dot",
+          "icon",
+          "numbered"
+        ],
         "when": "always"
       }
     ],
@@ -13333,7 +13382,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-density",
-        "values": [],
+        "values": [
+          "comfortable",
+          "compact",
+          "spacious"
+        ],
         "when": "always"
       },
       {
@@ -13915,7 +13968,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-orientation",
-        "values": [],
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
         "when": "always"
       },
       {
@@ -14325,7 +14381,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-size",
-        "values": [],
+        "values": [
+          "lg",
+          "md",
+          "sm"
+        ],
         "when": "when size"
       },
       {

@@ -24,6 +24,9 @@ export type BadgeSize = "xs" | "sm" | "md" | "lg";
 /** Visual style variant for badges. */
 export type BadgeVariant = "solid" | "outline" | "soft";
 
+/** Token family a badge draws from. */
+export type BadgeTone = "accent" | "error";
+
 /** Shape of the element the badge overlaps. */
 export type BadgeOverlap = "rectangular" | "circular";
 
@@ -268,6 +271,11 @@ export interface AvatarBadgeProps extends HTMLAttributes<HTMLSpanElement> {
   size?: BadgeSize;
   /** Visual style variant. Default: `"solid"`. */
   variant?: BadgeVariant;
+  /**
+   * Token family the badge draws from. Default: `"accent"` — a count is a
+   * notification, not a fault. Use `"error"` for a badge that reports one.
+   */
+  tone?: BadgeTone;
   /** Shape of the element the badge overlaps. */
   overlap?: BadgeOverlap;
   /** Adds a pulsing animation to the badge. */
@@ -285,6 +293,7 @@ export interface AvatarBadgeProps extends HTMLAttributes<HTMLSpanElement> {
  * loads, so it carries its own bag rather than a second route into Avatar's.
  */
 export interface AvatarShimmerClasses {
+  /** The placeholder element itself, which carries the size, shape and pulse. */
   root?: string;
 }
 

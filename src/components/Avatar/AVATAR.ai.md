@@ -124,7 +124,7 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
 | `onError` | object | — | () => void — Fires when the avatar image fails to load. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |

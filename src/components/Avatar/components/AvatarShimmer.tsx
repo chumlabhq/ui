@@ -85,8 +85,25 @@ export const AvatarGroupShimmer = forwardRef<
     const effectiveReduceMotion = useReducedMotion(reduceMotion);
     const shouldAnimate = animate && !effectiveReduceMotion;
     const Comp = asChild ? Slot : "div";
-    const itemClassName = cn(
-      "shrink-0 bg-gray-200",
+
+    /**
+     * Two elements per placeholder, because `animate-pulse` is an opacity
+     * animation: with the ring on the pulsing element it went translucent along
+     * with the fill, the shapes showed through each other and the stack read as
+     * one grey blob. The ring and an opaque page-coloured fill sit on the
+     * wrapper, which never animates, so the edge stays as clean as a real
+     * avatar's; only the grey inside it pulses.
+     */
+    const ringStyle = {
+      width: numericSize,
+      height: numericSize,
+      borderRadius,
+      backgroundColor: ringColor,
+      boxShadow: `0 0 0 2px ${ringColor}`,
+      position: "relative" as const,
+    };
+    const fillClassName = cn(
+      "w-full h-full bg-gray-200",
       shouldAnimate && "animate-pulse",
     );
 
@@ -101,29 +118,23 @@ export const AvatarGroupShimmer = forwardRef<
         {Array.from({ length: count }).map((_, index) => (
           <div
             key={index}
-            className={itemClassName}
+            className="shrink-0"
             style={{
-              width: numericSize,
-              height: numericSize,
-              borderRadius,
+              ...ringStyle,
               marginInlineStart: index === 0 ? 0 : spacing,
               zIndex: count - index,
-              boxShadow: `0 0 0 2px ${ringColor}`,
             }}
-          />
+          >
+            <div className={fillClassName} style={{ borderRadius }} />
+          </div>
         ))}
         {showCount && (
           <div
-            className={itemClassName}
-            style={{
-              minWidth: numericSize,
-              height: numericSize,
-              borderRadius,
-              marginInlineStart: spacing,
-              zIndex: 0,
-              boxShadow: `0 0 0 2px ${ringColor}`,
-            }}
-          />
+            className="shrink-0"
+            style={{ ...ringStyle, marginInlineStart: spacing, zIndex: 0 }}
+          >
+            <div className={fillClassName} style={{ borderRadius }} />
+          </div>
         )}
       </Comp>
     );

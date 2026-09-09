@@ -430,7 +430,23 @@ function shapesOf(name) {
  * while `x` holds, and a ternary of two literals is an enumerated value — and
  * anything else reports as always present rather than being guessed at.
  */
-function dataAttributesOf(name) {
+/**
+ * `schema` supplies the values the syntax cannot reach. The walk below only
+ * resolves a string literal or a two-branch ternary, so `data-shape={shape}` —
+ * an identifier whose type is a union of literals — recorded no values and the
+ * table printed an em dash for a prop with a fixed set. Where a data attribute
+ * is named after a prop that the schema enumerates, those are its values.
+ */
+function dataAttributesOf(name, schema) {
+  const enums = new Map();
+  for (const props of [
+    schema?.properties,
+    ...Object.values(schema?.subComponents ?? {}).map((sc) => sc?.properties),
+  ]) {
+    for (const [prop, def] of Object.entries(props ?? {})) {
+      if (Array.isArray(def?.enum) && def.enum.length) enums.set(prop, def.enum);
+    }
+  }
   const found = new Map();
   for (const file of walkSource(join(SRC, name))) {
     if (!/\.tsx$/.test(file)) continue;
@@ -458,6 +474,9 @@ function dataAttributesOf(name) {
           }
         } else if (init && ts.isStringLiteral(init)) {
           values = [init.text];
+        }
+        if (values.length === 0) {
+          values = enums.get(attribute.replace(/^data-/, "")) ?? [];
         }
         const existing = found.get(attribute);
         const merged = {
@@ -552,7 +571,7 @@ for (const name of COMPONENTS) {
     subComponents,
     classes: classesOf(name),
     shapes: shapesOf(name),
-    dataAttributes: dataAttributesOf(name),
+    dataAttributes: dataAttributesOf(name, schema),
     cssVariables: cssVariablesOf(name),
     accessibility: accessibilityOf(name),
     keyboard,

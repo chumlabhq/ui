@@ -11,6 +11,7 @@ import {
 } from "../utils/helpers.js";
 import { cn } from "../../../utils/scopedCn.js";
 import { isTooltipConfig } from "../../../utils/isTooltipConfig.js";
+import { useAvatarGroupContext } from "../utils/context.js";
 
 const variantClassNames = {
   solid:
@@ -47,6 +48,10 @@ export const AvatarGroupCount = forwardRef<
     },
     ref,
   ) => {
+    // Inside a group the surplus is the last avatar in the stack, not a caption
+    // after it: the ring comes from the same context the avatars read, so it
+    // punches the same clean edge where the one before it overlaps.
+    const groupCtx = useAvatarGroupContext();
     const numericSize = getNumericSize(size);
     const fontSize = getFontSize(size);
     const borderRadius = getBorderRadius(shape);
@@ -82,8 +87,15 @@ export const AvatarGroupCount = forwardRef<
           height: numericSize,
           borderRadius,
           fontSize,
-          paddingInline: Math.round(numericSize * 0.25),
+          // A group member is a fixed circle, so it matches the avatars beside
+          // it; standalone it keeps the pill that lets a long count breathe.
+          ...(groupCtx
+            ? { width: numericSize, paddingInline: 0 }
+            : { paddingInline: Math.round(numericSize * 0.25) }),
           border: parseBorder(bordered),
+          ...(groupCtx
+            ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` }
+            : {}),
           ...style,
         }}
         aria-label={ariaLabel}
