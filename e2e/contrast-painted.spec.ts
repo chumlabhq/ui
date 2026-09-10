@@ -444,7 +444,13 @@ const MEASURE_NONTEXT = `(() => {
     }
   }
   const active = document.activeElement;
-  for (const el of focusable.slice(0, 8)) {
+  // Every focusable element, not the first eight. The cap made the empty
+  // unindicated list a claim about at most 8 elements per fixture, and the
+  // truncation fell entirely on DatePicker: of 433 fixtures only 18 hold more
+  // than 8 focusable elements, all of them open calendars with 39-54 day
+  // cells — exactly where a missing indicator would hide, and exactly what was
+  // never looked at. Measured cost of lifting it is in the slice report.
+  for (const el of focusable) {
     // Blurred first, so "before" is a genuinely unfocused baseline. Several of
     // these are already focused when their fixture opens — a combobox with its
     // panel open, a slider thumb the fixture's act pointer-downed — and the ring

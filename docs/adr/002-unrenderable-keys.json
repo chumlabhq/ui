@@ -68,7 +68,6 @@
         "Checkbox/reduce-motion-forced",
         "Checkbox/reduce-motion-refused",
         "Input/default",
-        "Input/disabled",
         "Input/loading",
         "Input/with-adornments",
         "Input/with-affixes",
@@ -83,10 +82,7 @@
     },
     "label-title-only": {
       "reason": "The same defect as `label`, reported under a different rule: `showCount` adds `aria-describedby`, and axe faults a described-but-unnamed control here. Neither Input nor TextArea sets a `title` attribute — verified — and nothing in the docs or .ai.md files proposes `title` as a labelling mechanism. Covered by the same dev warning, which calls out `title` explicitly.",
-      "fixtures": [
-        "Input/with-counter",
-        "TextArea/with-counter"
-      ]
+      "fixtures": []
     },
     "button-name": {
       "reason": "3 nodes, all Switch's role=switch button in the fixtures that pass no label — the same case as `label` above: a bare control is a legitimate thing to render and the consumer supplies the name. Was 66 across seven components. The other 63 were the role=combobox trigger in DatePicker, Dropdown, MultiSelectDropdown, SearchableDropdown, MultiSelectSearchableDropdown and InternationalPhoneInput: `combobox` is not a name-from-content role, so a trigger whose only text was the selected value or the placeholder had no accessible name at all. Retired by the ADR 003 combobox slice, which names the trigger from the element already showing that text. Not waived — fixed, and the entries are gone rather than green.",
@@ -111,6 +107,7 @@
       "Accordion.AccordionShimmer/with-content",
       "Accordion/announced",
       "Accordion/bordered",
+      "Accordion/classes-override",
       "Accordion/disabled",
       "Accordion/flush",
       "Accordion/focusable-slot",
@@ -138,6 +135,7 @@
       "Avatar.AvatarShimmer/square",
       "Avatar.AvatarShimmer/static",
       "Avatar/fallback",
+      "Avatar/group-surplus",
       "Avatar/image",
       "Avatar/image-decodable",
       "Avatar/in-group",
@@ -535,7 +533,7 @@
       "Tooltip/portal-container",
       "Tooltip/portalled"
     ],
-    "recordedOn": "2026-09-08"
+    "recordedOn": "2026-09-10"
   },
   "$comment_painted": "Companion record to e2e/contrast-painted.spec.ts. Text that the browser paints under WCAG AA's 4.5:1 (3:1 for large text), measured over every fixture in both themes. Distinct from contrast.contract, which checks the --cl-* scale rather than what a component actually writes: these are the sites where a component writes a colour the scale does not own. Ratchets down only; re-derive with CONTRAST_RERECORD=1 npx playwright test --project=a11y-full contrast-painted.",
   "paintedContrastExpectations": {
@@ -980,12 +978,9 @@
   "$comment_nontext": "SC 1.4.11 expectations for the non-text pass in e2e/contrast-painted.spec.ts, added by ADR 007. A finding here is a focus indicator or an accent-painted graphical object under 3:1 that is recorded with a reason rather than fixed. Same rule as the painted-contrast record above: an entry that stops reporting is stale and fails the gate.",
   "nonTextContrastExpectations": {
     "recordedOn": "2026-09-07",
-    "findings": [
-      "Toast/with-content dark: button (focus)",
-      "Toast/with-content light: button (focus)"
-    ],
+    "findings": [],
     "reason": "The fixture's own `<button>Undo</button>`, passed through Toast's `content` prop — the library styles the toast, not the arbitrary nodes a consumer puts inside it, so this is Chromium's default focus ring at 1.75:1 on the toast surface. Recorded rather than fixed because styling it would be the fixture pretending to be the library. It is a real thing a consumer can do: a bare button inside a toast gets the UA ring.",
     "unindicated": [],
-    "unindicatedReason": "Empty, and that is the finding: every focusable element in every fixture shows a focus indicator in both themes. The 757 this pass first reported were rings it could not read — a transparent placeholder layer taken for the ring colour, a baseline snapshotted while the element was already focused, an indicator drawn by focus-within on an ancestor, and oklab() colours, which Tailwind v4 emits for its own palette. Five library elements did genuinely have none and were given the standard ring; see ADR 007."
+    "unindicatedReason": "Empty, and as of 2026-09-10 that is a claim about EVERY focusable element in every fixture, in both themes — 2608 measured. It was not before: the walk took `focusable.slice(0, 8)`, so the list was a claim about at most eight elements per fixture. The truncation fell entirely on DatePicker — of 433 fixtures only 18 hold more than 8 focusable elements, all open calendars with 39-54 day cells, which is exactly where a missing indicator would hide. Lifting the cap took the count from 1330 to 2608 and the run from ~200s to 196s, so it cost nothing measurable. Empty, and that is the finding: every focusable element in every fixture shows a focus indicator in both themes. The 757 this pass first reported were rings it could not read — a transparent placeholder layer taken for the ring colour, a baseline snapshotted while the element was already focused, an indicator drawn by focus-within on an ancestor, and oklab() colours, which Tailwind v4 emits for its own palette. Five library elements did genuinely have none and were given the standard ring; see ADR 007."
   }
 }

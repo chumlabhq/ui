@@ -17,7 +17,7 @@ export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   root: "flex flex-col",
   row: "flex items-center gap-3",
   labelGroup: "flex flex-col",
-  label: "text-sm font-medium text-cl-text cursor-pointer",
+  label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",
   description: "text-xs text-cl-text-tertiary",
   // The track's colours and the thumb's travel, on `data-state` — the
   // replacement ADR 002 specified for `checkedTracker`, `uncheckedTracker` and
@@ -32,7 +32,7 @@ export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   // palette is a surface or a low-alpha overlay, so there is nothing to point
   // at. `dark-variants.contract` carries it as a declared exception.
   control:
-    "relative inline-flex items-center h-[var(--switch-tracker-height,1.25rem)] w-[var(--switch-tracker-width,2.25rem)] rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--switch-focus-ring,var(--cl-accent))] cursor-pointer data-[state=checked]:bg-[var(--switch-tracker-checked-bg,var(--cl-accent))] data-[state=unchecked]:bg-[var(--switch-tracker-unchecked-bg,#d1d5db)] dark:data-[state=unchecked]:bg-[var(--switch-tracker-unchecked-bg,#4b5563)] data-[disabled]:opacity-50 data-[loading]:opacity-50 data-[loading]:pointer-events-none",
+    "relative inline-flex items-center h-[var(--switch-tracker-height,1.25rem)] w-[var(--switch-tracker-width,2.25rem)] rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--switch-focus-ring,var(--cl-accent))] cursor-pointer data-[state=checked]:bg-[var(--switch-tracker-checked-bg,var(--cl-accent))] data-[state=unchecked]:bg-[var(--switch-tracker-unchecked-bg,#d1d5db)] dark:data-[state=unchecked]:bg-[var(--switch-tracker-unchecked-bg,#4b5563)] data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   thumb:
     "inline-flex items-center justify-center transform h-[var(--switch-thumb-size,1rem)] w-[var(--switch-thumb-size,1rem)] rounded-full bg-[var(--switch-thumb-bg,white)] shadow-md transition-transform duration-200 motion-reduce:transition-none data-[state=checked]:translate-x-[1.125rem]",
   message: "text-sm data-[invalid]:text-cl-error mt-2 data-[valid]:text-cl-success",

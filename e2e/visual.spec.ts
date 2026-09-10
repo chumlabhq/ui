@@ -50,7 +50,11 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   // count's circle, ring or overlap. Its geometry regressed three times.
   { component: "Avatar", fixture: "group-surplus" },
   { component: "Breadcrumb", fixture: "default" },
-  { component: "Button", fixture: "with-icons" },
+  // DELETED — Button/with-icons. Button ships no colour of its own: it has a
+  // `size` prop and no `variant`, and every painted button in this repo is
+  // painted by the consumer's `className`. The baseline was the words "L Save
+  // R" in the page's own type, and no plant could fail it — emptying the icon
+  // slot changed nothing. A picture of it is a picture of the consumer's CSS.
   { component: "CascadingDropdown", fixture: "closed" },
   { component: "Checkbox", fixture: "labelled" },
   // The checked state, for the same reason as RadioButton above.
@@ -71,7 +75,11 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   // when 6dd1925 deleted the checked fill this baseline did not move and could
   // not have. A selected radio had never been in a picture.
   { component: "RadioButton", fixture: "with-value" },
-  { component: "ResizablePanel", fixture: "default" },
+  // DELETED — ResizablePanel/default. Its root is `relative` and its handle is
+  // absolutely positioned and transparent until interacted with, so the resting
+  // baseline was the word "Panel" and nothing else. Removing the handle's
+  // positioning moved zero pixels. The component's paint is a focus ring, which
+  // `contrast-painted` measures.
   { component: "SearchableDropdown", fixture: "closed" },
   { component: "Slider", fixture: "default" },
   { component: "Stepper", fixture: "horizontal-numbered" },
@@ -228,6 +236,87 @@ async function freeze(page: import("@playwright/test").Page) {
   await page.evaluate(() => document.fonts?.ready);
 }
 
+/**
+ * Focused, not resting.
+ *
+ * `contrast-painted` already measures focus indicators against 3:1 and has
+ * caught two regressions. What it cannot see is whether the ring reaches the
+ * screen: it reads computed colour before and after focus, so a ring clipped by
+ * an ancestor's `overflow`, drawn under a sibling, or offset onto its
+ * neighbour all change the same computed values and all pass. Demonstrated —
+ * adding `overflow-hidden` to Input's root clips the ring away entirely and the
+ * gate still reports `findings=0`.
+ *
+ * One subject per failure mode, not one per focusable component.
+ */
+const FOCUS_SUBJECTS: Array<{
+  component: string;
+  fixture: string;
+  target: string;
+  /** A key to press after focusing, for a control that moves a highlight rather than focus. */
+  drive?: string;
+  catches: string;
+}> = [
+  {
+    component: "Input",
+    fixture: "labelled",
+    target: "input",
+    catches: "a ring clipped by an ancestor's overflow",
+  },
+  // WITHDRAWN — Dropdown's active option. It could not be made to fail: with
+  // `data-[highlighted]:bg-cl-bg-hover` deleted the DOM measures transparent,
+  // but the screenshot is unchanged, so something between driving the highlight
+  // and capturing it loses the state. A subject that cannot fail reads as
+  // coverage and is worse than none, so it is not shipped. The defect it found
+  // on the way in — five dropdowns emitting `data-highlighted` and styling it
+  // nowhere — is fixed and covered by measurement, not by this picture.
+  {
+    component: "OtpInput",
+    fixture: "default",
+    target: "input",
+    catches: "a ring offset onto the box beside it",
+  },
+];
+
+test.describe("focus baselines", () => {
+  for (const width of WIDTHS) {
+    test.describe(`${width}px`, () => {
+      for (const { component, fixture, target, drive } of FOCUS_SUBJECTS) {
+        test(`${component}/${fixture} focused renders as recorded`, async ({ page }) => {
+          await page.setViewportSize({ width, height: 900 });
+          await gotoFixture(page, component, fixture);
+          await page.locator("[data-fixture]").waitFor({ state: "attached" });
+          await freeze(page);
+
+          const el = page.locator(target).first();
+          await el.waitFor({ state: "visible" });
+
+          for (const theme of ["light", "dark"] as const) {
+            // Theme first, then focus. `setTheme` re-renders through the theme
+            // context, and a component holding its highlight in state loses it
+            // — Dropdown's `data-highlighted` survived the keypress and was
+            // gone by the screenshot, so the subject photographed an open panel
+            // with nothing active and its plant could not fail.
+            await setTheme(page, theme);
+            // `.focus()`, not a click: a click on an option closes the panel,
+            // and a pointer focus does not raise `:focus-visible` in Chromium,
+            // which is the state every ring in this library is keyed on.
+            await el.evaluate((node: HTMLElement) => node.focus());
+            if (drive) {
+              await page.keyboard.press(drive);
+              await page.waitForTimeout(120);
+            }
+            await expect(page).toHaveScreenshot(
+              `focus-${component}-${fixture}-${theme}-${width}.png`,
+              { animations: "disabled", maxDiffPixels: 30, threshold: 0.05 },
+            );
+          }
+        });
+      }
+    });
+  }
+});
+
 test.describe("visual baselines", () => {
   for (const width of WIDTHS) {
     test.describe(`${width}px`, () => {
@@ -262,6 +351,13 @@ test.describe("visual baselines", () => {
                 // corner on a button, which is what a planted radius change
                 // proved. Thirty pixels absorbs antialiasing and nothing else.
                 maxDiffPixels: 30,
+                // Playwright's default per-pixel tolerance is 0.2 YIQ, which is
+                // wider than the whole skeleton fill: removing `bg-cl-bg-skeleton`
+                // outright — every bar in Table/loading losing its paint — moved
+                // zero *counted* pixels, so three loading subjects could not
+                // fail for the state they exist to capture. A fill deliberately
+                // kept at 1.35:1 needs a tolerance under it.
+                threshold: 0.05,
               },
             );
           }
@@ -295,12 +391,14 @@ test.describe("visual baselines", () => {
     const pngs = readdirSync(dir).filter((f) => f.endsWith(".png"));
     const resting = SUBJECTS.length * WIDTHS.length * 2;
     const open = OPEN_SUBJECTS.length * OPEN_WIDTHS.length * 2;
+    const focus = FOCUS_SUBJECTS.length * WIDTHS.length * 2;
     expect(
       pngs.length,
-      `expected ${resting + open} baselines — ${SUBJECTS.length} resting subjects x ` +
+      `expected ${resting + open + focus} baselines — ${SUBJECTS.length} resting subjects x ` +
         `${WIDTHS.length} widths x 2 themes, plus ${OPEN_SUBJECTS.length} open surfaces x ` +
-        `${OPEN_WIDTHS.length} widths x 2 themes`,
-    ).toBe(resting + open);
+        `${OPEN_WIDTHS.length} widths x 2 themes, plus ${FOCUS_SUBJECTS.length} focus subjects x ` +
+        `${WIDTHS.length} widths x 2 themes`,
+    ).toBe(resting + open + focus);
   });
 
   /**
@@ -625,7 +723,11 @@ test.describe("open surfaces", () => {
             await setTheme(page, theme);
             await expect(page).toHaveScreenshot(
               `open-${component}-${fixture}-${theme}-${width}.png`,
-              { animations: "disabled", maxDiffPixels: 30 },
+              // Same basis as the resting comparison above, stated again rather
+              // than inherited: this call site kept Playwright's 0.2 default
+              // for a slice after the other one was tightened, so the fourteen
+              // open surfaces were still comparing on the tool's number.
+              { animations: "disabled", maxDiffPixels: 30, threshold: 0.05 },
             );
           }
         });

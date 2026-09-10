@@ -6,7 +6,7 @@ export const DEFAULT_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
   control: "flex items-center gap-2 data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   group: "flex items-center gap-2",
   input:
-    "w-10 h-10 sm:w-12 sm:h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input text-cl-text focus-visible:border-cl-border-input-focus focus-visible:ring-2 focus-visible:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed",
+    "w-10 h-10 sm:w-12 sm:h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input data-[error]:border-cl-error text-cl-text focus-visible:border-cl-border-input-focus data-[error]:focus-visible:border-cl-border-input-focus focus-visible:ring-2 focus-visible:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed",
   label:
     "block text-sm font-medium mb-2 text-cl-text-chrome",
   message: "text-xs mt-2 data-[invalid]:text-cl-error text-sm data-[valid]:text-cl-success",

@@ -7,7 +7,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "block text-sm font-medium mb-1 text-cl-text-chrome",
   control: "relative",
   trigger:
-    "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-cl-md transition-colors cursor-text border-cl-border-input bg-cl-bg-panel hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-transparent cursor-pointer",
+    "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-cl-md transition-colors cursor-text border-cl-border-input bg-cl-bg-panel hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-transparent cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error",
   input:
     "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text",
   icon:

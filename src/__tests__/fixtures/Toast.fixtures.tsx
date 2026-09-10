@@ -5,7 +5,25 @@ import type { Fixtures } from "./types.js";
 const fixtures: Fixtures<typeof Toast> = [
   { name: "default", props: { id: "t1", onRemove: () => {}, message: "Saved" } },
   { name: "with-description", props: { id: "t2", onRemove: () => {}, message: "Saved", description: "Your changes are live." } },
-  { name: "with-content", props: { id: "t3", onRemove: () => {}, message: "Saved", content: <button>Undo</button> }, note: "There is no `action` prop; extra nodes go through `content`." },
+  {
+    name: "with-content",
+    props: {
+      id: "t3",
+      onRemove: () => {},
+      message: "Saved",
+      // Not a control. A bare `<button>` here fell back to the browser's focus
+      // ring — `rgb(0, 95, 204)` in Chrome — which measures 1.75:1 on the
+      // toast's surface; `contrast-painted` reported it from 2026-09-06 and it
+      // was recorded as an accepted finding on 09-07. It was never a Toast
+      // defect: the close button beside it rings correctly. Giving it a ring
+      // here is worse — `unstyled.contract` then sees decorative utilities the
+      // library cannot strip, because they are not the library's. The slot
+      // takes arbitrary nodes, so the fixture models an arbitrary node;
+      // interactive content inside a Toast is the consumer's to style.
+      content: <span>Undo</span>,
+    },
+    note: "There is no `action` prop; extra nodes go through `content`.",
+  },
   { name: "success", props: { id: "t4", onRemove: () => {}, message: "Saved", type: "success", showProgress: true }, note: "The prop is `type`, not `variant`." },
   {
     name: "dismissable",

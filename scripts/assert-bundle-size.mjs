@@ -310,6 +310,34 @@ const LIBRARY_TOTAL_HISTORY = [
       "verbatim. Trimmed to one line; the reasoning lives in the ADR instead. " +
       "This is what corrected the a3c6059 row above.",
   },
+  {
+    kb: 150.38,
+    commit: "(uncommitted)",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.31 KB, spread across 19 components rather than concentrated. " +
+      "Two conformance fixes, both class strings in constants files:\n" +
+      "  * disabled affordances. An absolute audit of every component with a " +
+      "`disabled` fixture found 11 that marked an element `data-disabled` and " +
+      "painted it no differently, and 11 that kept `cursor: pointer` while " +
+      "disabled. `data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed` " +
+      "on the bordered slot of each.\n" +
+      "  * error on the field, not only the message. 11 components coloured the " +
+      "message and left the field neutral; they now carry " +
+      "`data-[error]:border-cl-error` (plus the `has-[[data-error]]` form where " +
+      "the attribute sits on an input inside the bordered control).\n" +
+      "Measured at 150.36 with a DatePicker focus guard that was then reverted; " +
+      "the tree now measures 150.34, and the record is left at 150.36 rather " +
+      "than lowered, because a ratchet that tracks every 0.02 KB stops being " +
+      "read. The next move down should re-record it." +
+      "\n\n2026-09-10, still 150.36 and now measured at 150.37: the five " +
+      "dropdowns gained `data-[highlighted]:bg-cl-bg-hover` on their option " +
+      "slot. They emitted `data-highlighted` on the active option and styled it " +
+      "nowhere, so arrowing through any dropdown moved a highlight that painted " +
+      "nothing — SC 2.4.7 for the aria-activedescendant pattern. One class " +
+      "token across five files, inside the 0.01 KB this record already carries.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -401,7 +429,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.03,
+      kb: 12.07,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -409,7 +437,10 @@ const DECLARED_BREACHES = new Map([
         "consumer's bundler strips. Week numbers were the third candidate and " +
         "are not one: the rendering is fourteen lines interleaved in the day " +
         "grid, and a column that arrives with a chunk would reflow the grid " +
-        "after paint.",
+        "after paint.\n\n" +
+        "12.03 -> 12.07 on 2026-09-10: the trigger gained the disabled and error " +
+        "variants the library-wide audit added everywhere. A conformance fix, " +
+        "not a feature.",
     },
   ],
   [

@@ -17,6 +17,33 @@ import type { ActTools } from "./_act.js";
  */
 type WithoutChildren<T> = T extends unknown ? Omit<T, "children"> : never;
 
+/**
+ * SCAFFOLDING THE GATES MEASURE — recorded 2026-09-10.
+ *
+ * Nineteen raw, unstyled interactive elements live in these fixtures as
+ * scaffolding: Tooltip 9 triggers, Checkbox 2 and Drawer 2, TextArea 1, and one
+ * each in the `renderTrigger` fixtures of the five dropdowns. None is painted by
+ * the library — a Tooltip does not style its trigger, and `renderTrigger` exists
+ * precisely to prove `triggerProps` reach an element the caller supplies.
+ *
+ * The browser gates cannot tell the difference. `contrast-painted` focuses them
+ * and measures whatever ring appears, `keyboard-reachable` asks them for a
+ * cursor, and `unstyled.contract` reads any class they carry. On the page
+ * background that is harmless: Chrome's default focus ring clears 3:1 there, so
+ * all nineteen pass.
+ *
+ * They pass by luck of backdrop, not by design. Toast proved it: one bare
+ * `<button>` in `with-content` sat on a coloured toast surface, Chrome's ring
+ * measured 1.75:1 against it, and the finding stood for four days and was
+ * formally waived for three before anyone read it as a fixture problem rather
+ * than a Toast defect. It was neither fixed nor a library bug — it was our own
+ * scaffolding being measured as if the library had painted it.
+ *
+ * So: if you move any of these onto a coloured surface, or add a new one there,
+ * the finding you get is about Chrome's focus ring and not about us. Model an
+ * arbitrary node instead — `Toast/with-content` now passes a `<span>` — unless
+ * the element genuinely has to be interactive for the fixture to mean anything.
+ */
 export interface Fixture<P = Record<string, unknown>> {
   /** Distinguishes states in failure output: "open", "loading", "error". */
   name: string;

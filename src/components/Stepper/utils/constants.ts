@@ -5,7 +5,7 @@ export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   root: "",
   list: "list-none m-0 p-0",
   item: "shrink-0 flex flex-col items-center",
-  trigger: "flex items-center gap-1.5 sm:gap-2 transition-colors motion-reduce:transition-none cursor-pointer",
+  trigger: "flex items-center gap-1.5 sm:gap-2 transition-colors motion-reduce:transition-none cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   // Every step's status, folded onto the surviving keys as `data-state`
   // variants — the replacement ADR 002 specified for `indicatorActive`,
   // `labelActive`, `descriptionPending`, `connectorCompleted` and the rest.
@@ -21,7 +21,7 @@ export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   itemIndicator:
     "shrink-0 rounded-full flex items-center justify-center transition-colors motion-reduce:transition-none data-[state=active]:bg-cl-accent data-[state=active]:text-cl-on-accent data-[state=completed]:bg-cl-accent data-[state=completed]:text-cl-on-accent data-[state=inactive]:bg-cl-bg-hover data-[state=inactive]:text-cl-text-secondary data-[invalid]:bg-cl-error",
   indicatorTrigger:
-    "cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2",
+    "cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   itemIcon: "",
   row: "flex flex-col",
   itemText:

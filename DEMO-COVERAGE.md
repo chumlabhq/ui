@@ -12,7 +12,7 @@ recorded there because they belong next to the code that implements them.
 | --- | --- |
 | Components audited | 58 |
 | Library-authored props across the public surface | 1137 |
-| With no demo | 282 (25%) |
+| With no demo | 283 (25%) |
 | With no fixture | 649 (57%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
@@ -91,7 +91,7 @@ listed here with no demo anywhere fails the generator.
 | CountryFlagGroup | 8 | 279 | 3 | 4 | 0 | — |
 | CountryFlagGroupShimmer | 6 | 280 | 3 | 6 | 0 | `reduceMotion` |
 | CountryFlagShimmer | 6 | 280 | 4 | 2 | 0 | `unstyled` |
-| DatePicker | 63 | 276 | 12 | 33 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
+| DatePicker | 63 | 276 | 13 | 33 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
 | DotLoader | 7 | 280 | 4 | 3 | 0 | `reduceMotion`, `unstyled` |
 | Drawer | 30 | 278 | 7 | 20 | 0 | `unstyled`, `portalContainer` |
 | DrawerBody | 1 | 279 | 1 | 1 | 0 | — |

@@ -8,7 +8,11 @@ const fixtures: Fixtures<typeof Input> = [
   { name: "success", props: { label: "Email", success: true, successMessage: "Looks good" } },
   { name: "with-value-clearable", props: { defaultValue: "ada@example.test", clearable: true } },
   { name: "loading", props: { loading: true } },
-  { name: "disabled", props: { disabled: true } },
+  // Label and value, not a bare disabled field: `disabled` paints by dimming,
+  // and an empty near-white box on a near-white page has nothing to dim —
+  // the baseline passed with the whole affordance removed. Ink is what
+  // makes the state photographable.
+  { name: "disabled", props: { disabled: true, label: "Email", defaultValue: "ada@example.com" } },
   { name: "with-adornments", props: { startIcon: <span>@</span>, endIcon: <span>x</span> } },
   { name: "with-affixes", props: { prefix: "https://", suffix: ".com" } },
   { name: "with-counter", props: { maxLength: 40, showCount: true, defaultValue: "hi" } },

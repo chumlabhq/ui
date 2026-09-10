@@ -74,6 +74,19 @@ const DatePickerDemo = () => {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [openControlDate, setOpenControlDate] = useState<Date | null>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
+  // One state per section. Twelve pickers shared three variables, so picking
+  // a date in Basic Usage moved Date Markers, Events Calendar, Custom Presets
+  // and Event Callbacks with it, and no section showed what it is captioned
+  // with once the reader touched any of them.
+  const [markersDate, setMarkersDate] = useState<Date | null>(null);
+  const [eventsDate, setEventsDate] = useState<Date | null>(null);
+  const [singlePresetDate, setSinglePresetDate] = useState<Date | null>(null);
+  const [callbackDate, setCallbackDate] = useState<Date | null>(null);
+  const [presetRange, setPresetRange] = useState<DateRange | null>(null);
+  const [multiMonthRange, setMultiMonthRange] = useState<DateRange | null>(null);
+  const [customPresetRange, setCustomPresetRange] = useState<DateRange | null>(null);
+  const [classesRange, setClassesRange] = useState<DateRange | null>(null);
+  const [formatDate, setFormatDate] = useState<Date | null>(new Date());
   const [successDate, setSuccessDate] = useState<Date | null>(new Date());
   const [clearableDate, setClearableDate] = useState<Date | null>(new Date());
   const [forceBotDate, setForceBotDate] = useState<Date | null>(null);
@@ -422,8 +435,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           <div className="w-full sm:max-w-xs">
             <DatePicker
               mode="range"
-              value={rangeValue}
-              onValueChange={(range) => setRangeValue(range)}
+              value={presetRange}
+              onValueChange={(range) => setPresetRange(range)}
               label="Date range with presets"
               placeholder="Select range..."
               showPresets
@@ -452,8 +465,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  value={singleDate}
-                  onValueChange={(date) => setSingleDate(date)}
+                  value={markersDate}
+                  onValueChange={(date) => setMarkersDate(date)}
                   label="Calendar with markers"
                   placeholder="Pick a date..."
                   markers={markers}
@@ -609,8 +622,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           <div className="w-full sm:max-w-md">
             <DatePicker
               mode="range"
-              value={rangeValue}
-              onValueChange={(range) => setRangeValue(range)}
+              value={multiMonthRange}
+              onValueChange={(range) => setMultiMonthRange(range)}
               label="Two-month range picker"
               placeholder="Select range..."
               numberOfMonths={2}
@@ -951,27 +964,6 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         </DemoWrapper>
       </Section>
 
-      {/* ─── Default Open ─────────────────────────────────────────────────── */}
-      <Section
-        title="Default Open"
-        description="Start with the calendar open using defaultOpen."
-        isDarkMode={dark}
-      >
-        <DemoWrapper
-          isDarkMode={dark}
-          layout="block"
-          className="overflow-visible"
-        >
-          <div className="w-full sm:max-w-xs">
-            <DatePicker
-              defaultOpen
-              placeholder="Starts open..."
-              classes={c.datepicker}
-            />
-          </div>
-        </DemoWrapper>
-      </Section>
-
       {/* ─── Full Width ─────────────────────────────────────────────────── */}
       <Section
         title="Full Width"
@@ -1037,8 +1029,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              value={singleDate}
-              onValueChange={(date) => setSingleDate(date)}
+              value={eventsDate}
+              onValueChange={(date) => setEventsDate(date)}
               label="Team Calendar"
               placeholder="Pick a date..."
               markers={eventMarkers}
@@ -1093,8 +1085,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              value={singleDate}
-              onValueChange={(date) => setSingleDate(date)}
+              value={singlePresetDate}
+              onValueChange={(date) => setSinglePresetDate(date)}
               label="Custom presets"
               placeholder="Pick a date..."
               showPresets
@@ -1120,8 +1112,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           <div className="w-full sm:max-w-xs">
             <DatePicker
               mode="range"
-              value={rangeValue}
-              onValueChange={(range) => setRangeValue(range)}
+              value={customPresetRange}
+              onValueChange={(range) => setCustomPresetRange(range)}
               label="Analytics period"
               placeholder="Select range..."
               showPresets
@@ -1199,8 +1191,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               >
                 <div className="w-full sm:max-w-xs">
                   <DatePicker
-                    value={controlledDate}
-                    onValueChange={setControlledDate}
+                    value={formatDate}
+                    onValueChange={setFormatDate}
                     dateFormat={fmt}
                     showClearButton
                     classes={c.datepicker}
@@ -1359,10 +1351,10 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               }
               onClear={() => log("onClear fired")}
               onValueChange={(date) => {
-                setSingleDate(date);
+                setCallbackDate(date);
                 if (date) log(`onValueChange: ${date.toLocaleDateString()}`);
               }}
-              value={singleDate}
+              value={callbackDate}
               classes={c.datepicker}
             />
           </div>
@@ -1501,8 +1493,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
-                  value={rangeValue}
-                  onValueChange={(range) => setRangeValue(range)}
+                  value={classesRange}
+                  onValueChange={(range) => setClassesRange(range)}
                   placeholder="Styled presets"
                   showPresets
                   showClearButton

@@ -6,10 +6,10 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   label: "text-sm font-medium text-cl-text",
   description: "text-xs text-cl-text-tertiary",
   control: "relative select-none touch-none",
-  track: "rounded-full bg-cl-bg-hover",
+  track: "rounded-full bg-cl-bg-hover data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   range: "rounded-full bg-cl-accent",
   thumb:
-    "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab",
+    "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   valueText:
     // `text-cl-text`, not `text-white`: the panel token is white in the light
     // theme, so a white label on it is a 1:1 tooltip.

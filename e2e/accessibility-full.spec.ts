@@ -53,6 +53,33 @@ const RERECORD = process.env.A11Y_RERECORD === "1";
  */
 
 /** Impacts that count. `minor` is recorded but does not fail the gate. */
+/**
+ * The conformance level this library claims, stated rather than inherited.
+ *
+ * `getViolations` with no options runs axe's default rule set, which is a
+ * decision the tool made — every other number in this repo is set to WCAG 2.2
+ * AA and this was the one standing in for it. `best-practice` is deliberately
+ * NOT here: those are axe's own opinions, not success criteria, and mixing them
+ * into a conformance claim makes the claim unreadable.
+ */
+const AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+/**
+ * `target-size` — SC 2.5.8, new in 2.2 — is the one rule the level adds that
+ * this library does not pass. It reports 17 times: the chip remove buttons in
+ * MultiSelectDropdown and MultiSelectSearchableDropdown, and row-level controls
+ * in Table. All are under the 24x24 CSS px minimum.
+ *
+ * Disabled here rather than waived per fixture, because it is one decision and
+ * not seventeen: passing it means resizing chips and table row controls, which
+ * is a design change with a visual-baseline cost, not a fix. Awaiting a per-rule
+ * call — see the slice report of 2026-09-10. Deleting this line re-enables it.
+ */
+const AXE_RULES = { "target-size": { enabled: false } };
+const AXE_OPTIONS = {
+  runOnly: { type: "tag" as const, values: AXE_TAGS },
+  rules: AXE_RULES,
+};
+
 const FATAL = new Set(["critical", "serious", "moderate"]);
 
 /**
@@ -176,7 +203,7 @@ test.describe("accessibility (full sweep)", () => {
       const include = [["[data-fixture]"], ...(portals > 0 ? [[`[${PORTAL_MARK}]`]] : [])];
       // Conditional because axe throws on an `include` selector that matches
       // nothing, and most fixtures portal nothing.
-      const violations = await getViolations(page, { include });
+      const violations = await getViolations(page, { include }, AXE_OPTIONS);
       audited += 1;
       auditedFixtures.push(path.replace("/__fixtures/", ""));
 

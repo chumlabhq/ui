@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
-import { gotoFixtureIndex } from "./_nav";
+import { gotoFixture, gotoFixtureIndex } from "./_nav";
 
 /**
  * A state the component reports has to be a state the component shows.
@@ -55,7 +55,11 @@ const SPEC = read<{ requirements: Requirement[] }>("docs/adr/002-state-attribute
 /**
  * The states worth comparing: an attribute with at least two values, so there
  * is a resting value to compare against. A bare `data-disabled` has nothing to
- * contrast with inside one fixture and is left to the visual baselines.
+ * contrast with inside one fixture and is left to the visual baselines — see
+ * `disabled shows itself` below, which closes exactly that gap. The baselines
+ * did not catch it: `Input/disabled` is an empty near-white field on a
+ * near-white page, so halving its opacity moves fewer pixels than the diff
+ * budget, and the picture passed while the state painted nothing.
  */
 const CASES = [
   ...new Map(
@@ -194,5 +198,170 @@ test("every reported state is a visible state", async ({ page }) => {
   expect(
     [...new Set(invisible)],
     "these states report themselves in the DOM and paint exactly like their resting state",
+  ).toEqual([]);
+});
+
+/**
+ * A disabled control has to look disabled.
+ *
+ * A conformance check, not a comparison: it asks whether the element the
+ * component itself marks disabled carries any of the three affordances the
+ * library uses — reduced opacity, `not-allowed`, or `pointer-events: none` —
+ * rather than diffing a disabled fixture against an enabled one. That matters.
+ * The comparison version of this, run over five components, found two; asked
+ * absolutely across all of them it found **eleven** painting nothing and
+ * **eleven** keeping `cursor: pointer` while disabled, which tells a pointer
+ * user the control is live. Diffing two fixtures conflates "this state paints
+ * nothing" with "these two fixtures differ for other reasons": `Dropdown` read
+ * zero differing properties against `closed` and six against `labelled`, and
+ * only one of those numbers was about being disabled.
+ *
+ * In a browser for the same reason the rest of this file is: jsdom applies no
+ * stylesheet, so every `data-[disabled]:opacity-50` in the library resolves to
+ * nothing there and a computed-style check passes for everyone.
+ */
+const DISABLED_EXEMPT: Record<string, string> = {
+  "CascadingDropdown/disabled-top-level":
+    "Disables a menu ITEM, not the trigger, and items do not exist until the " +
+    "menu opens. Nothing is marked in the closed fixture this walk sees. The " +
+    "open case belongs to cascading-submenu.spec.ts.",
+  "Tooltip/disabled":
+    "`disabled` suppresses the tooltip rather than styling anything — there is " +
+    "no disabled surface to paint, and the trigger stays fully interactive.",
+};
+
+test("disabled shows itself", async ({ page }) => {
+  test.setTimeout(600_000);
+  await gotoFixtureIndex(page);
+  const paths = await page.locator("[data-fixture-index] li a").evaluateAll((els) =>
+    els.map((e) => new URL((e as HTMLAnchorElement).href).pathname),
+  );
+
+  const seen: string[] = [];
+  const unpainted: string[] = [];
+  const lying: string[] = [];
+
+  for (const path of paths) {
+    const [, , component, fixture] = path.split("/");
+    if (!/disabled/i.test(fixture ?? "")) continue;
+    const key = `${component.replace(".", "/")}/${fixture}`;
+    if (key in DISABLED_EXEMPT) continue;
+
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
+
+    const r = await page.evaluate(() => {
+      const marked = [...document.querySelectorAll<HTMLElement>("[data-fixture] *")].filter(
+        (e) =>
+          e.hasAttribute("data-disabled") ||
+          e.hasAttribute("disabled") ||
+          e.getAttribute("aria-disabled") === "true",
+      );
+      const sub = (m: HTMLElement) => [m, ...m.querySelectorAll<HTMLElement>("*")];
+      const affords = (e: HTMLElement) => {
+        const c = getComputedStyle(e);
+        return parseFloat(c.opacity) < 1 || c.cursor === "not-allowed" || c.pointerEvents === "none";
+      };
+      // A cursor under `pointer-events: none` never reaches a user, so it is
+      // not a lie — Pagination dims the whole nav that way.
+      const reachable = (e: HTMLElement) => {
+        let n: HTMLElement | null = e;
+        while (n) { if (getComputedStyle(n).pointerEvents === "none") return false; n = n.parentElement; }
+        return true;
+      };
+      return {
+        marked: marked.length,
+        affordance: marked.some((m) => sub(m).some(affords)),
+        lies: marked.some((m) => sub(m).some((e) => getComputedStyle(e).cursor === "pointer" && reachable(e))),
+      };
+    });
+
+    if (r.marked === 0) continue;
+    seen.push(key);
+    if (!r.affordance) unpainted.push(key);
+    if (r.lies) lying.push(`${key} (cursor: pointer)`);
+  }
+
+  console.log(`DISABLED_STATE checked=${seen.length} unpainted=${unpainted.length} lying=${lying.length}`);
+
+  // A walk that matched nothing is not a pass.
+  expect(seen.length, "no disabled fixture was found to check").toBeGreaterThan(15);
+  expect(
+    unpainted,
+    "these mark an element disabled and paint it no differently — reduced opacity, " +
+      "`not-allowed` or `pointer-events: none`, any one of them",
+  ).toEqual([]);
+  expect(
+    lying,
+    "these keep `cursor: pointer` on something they have marked disabled, which " +
+      "tells a pointer user the control is live",
+  ).toEqual([]);
+});
+
+/**
+ * A highlighted option has to look highlighted.
+ *
+ * The five dropdowns emitted `data-highlighted` on the active option and styled
+ * it in none of their `item` slots, so arrowing through any of them moved a
+ * highlight that painted nothing — SC 2.4.7 for the `aria-activedescendant`
+ * pattern, where DOM focus never leaves the control and the attribute IS the
+ * indicator. It shipped that way from 2026-09-02, when the attribute was
+ * converged onto `data-highlighted`, to 2026-09-10: eight days.
+ *
+ * Found by planting against a visual subject that was then withdrawn for being
+ * unable to fail, which is exactly why this is a conformance check and not a
+ * picture. Same reason it is in e2e as the rest of this file: jsdom applies no
+ * stylesheet, so `data-[highlighted]:bg-cl-bg-hover` resolves to nothing there.
+ */
+const HIGHLIGHT_COMPONENTS = [
+  "Dropdown",
+  "SearchableDropdown",
+  "MultiSelectDropdown",
+  "MultiSelectSearchableDropdown",
+  "CascadingDropdown",
+];
+
+test("a highlighted option paints differently from its siblings", async ({ page }) => {
+  test.setTimeout(300_000);
+  const unpainted: string[] = [];
+  const checked: string[] = [];
+
+  for (const component of HIGHLIGHT_COMPONENTS) {
+    const fixture = component === "CascadingDropdown" ? "open-submenu" : "open";
+    await gotoFixture(page, component, fixture);
+    await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
+
+    const control = page.locator("[role='listbox'],[role='combobox'],[role='menu']").first();
+    await control.waitFor({ state: "visible", timeout: 15000 }).catch(() => {});
+    await control.evaluate((n: HTMLElement) => n.focus());
+    await page.keyboard.press("ArrowDown");
+    await page.waitForTimeout(150);
+
+    const r = await page.evaluate(() => {
+      const opts = [...document.querySelectorAll<HTMLElement>("[role='option'],[role='menuitem']")];
+      const hot = opts.find((o) => o.hasAttribute("data-highlighted"));
+      if (!hot) return { marked: false, same: false };
+      const paint = (e: HTMLElement) => {
+        const c = getComputedStyle(e);
+        return [c.backgroundColor, c.color, c.borderTopColor, c.outlineColor, c.textDecorationLine].join("~");
+      };
+      // Against a sibling that is NOT highlighted, so this cannot pass because
+      // every option happens to share one colour.
+      const cold = opts.find((o) => o !== hot && !o.hasAttribute("data-highlighted") && !o.hasAttribute("data-disabled"));
+      return { marked: true, same: cold ? paint(hot) === paint(cold) : false, hadSibling: Boolean(cold) };
+    });
+
+    if (!r.marked) continue;
+    checked.push(component);
+    if (r.same) unpainted.push(component);
+  }
+
+  console.log(`HIGHLIGHT_STATE checked=${checked.length} unpainted=${unpainted.length}`);
+  expect(checked.length, "no dropdown reported a highlighted option").toBeGreaterThan(3);
+  expect(
+    unpainted,
+    "these mark an option `data-highlighted` and paint it exactly like an " +
+      "unhighlighted sibling — with activedescendant, the attribute is the only " +
+      "indicator a keyboard user gets",
   ).toEqual([]);
 });

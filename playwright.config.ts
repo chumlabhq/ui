@@ -15,6 +15,25 @@ export default defineConfig({
     ["list"],
     ["./e2e/_reconcile-reporter.ts"],
   ],
+  // Stated, not inherited. Without this block every assertion carried
+  // Playwright's own 5s expect timeout and every screenshot its own comparison
+  // defaults — numbers nobody on this project chose, in gates whose whole
+  // purpose is to hold a chosen number still.
+  expect: {
+    // Long enough for an anchored surface to settle on a cold dev server,
+    // short enough that a genuinely stuck locator fails the run rather than
+    // hanging it.
+    timeout: 10_000,
+    toHaveScreenshot: {
+      // The per-call sites in visual.spec.ts restate both of these. Repeated
+      // here so a NEW screenshot assertion written anywhere in e2e/ inherits a
+      // number this project picked rather than Playwright's 0.2, which was
+      // wide enough to hide an entire skeleton fill going transparent.
+      maxDiffPixels: 30,
+      threshold: 0.05,
+      animations: "disabled",
+    },
+  },
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5173",
     trace: "on-first-retry",

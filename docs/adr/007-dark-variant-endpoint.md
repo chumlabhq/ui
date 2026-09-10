@@ -43,6 +43,27 @@ an accent tint cannot clear AA at any alpha the tint can take. Pagination had
 already solved it by deepening the text to `--cl-accent-hover` in the compound
 state (**5.28:1**), and DatePicker's today button now does the same.
 
+### `--cl-accent-hover` is the readable step on an accent tint
+
+Recorded as a precedent rather than left to be re-derived, because it has now
+been reached for three times independently: Pagination's selected row, this
+ADR's DatePicker today button, and — on 2026-09-10 — `AvatarBadge`'s soft accent
+count, which `contrast-painted` caught at **4.31:1** after the badge's default
+tone changed from error to accent.
+
+**The rule: accent text on an accent tint does not clear AA at any alpha the
+tint can take. Use `--cl-accent-hover` for the text.** The error family needs no
+equivalent only because `--cl-error` is dark enough on `--cl-error-bg` already.
+
+This is not a licence to use a hover token for resting state generally. It is
+narrow and checkable: the surface is an accent tint, the text is the accent, and
+the pair fails AA. ADR 005 T2 is not violated — `--cl-accent-hover`'s claim is
+about its value relative to `--cl-accent`, which still holds; only the reading
+of the call site is loose, which is the cost of not minting a fourth token for
+one relationship.
+
+A fourth caller is the point at which to mint `--cl-on-accent-bg` instead.
+
 ## The decisions
 
 **1. Three tokens minted.**
