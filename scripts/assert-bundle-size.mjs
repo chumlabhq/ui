@@ -253,8 +253,14 @@ const LIBRARY_TOTAL_HISTORY = [
       "INCREASE, +0.74 KB, the largest single move in the window and the one " +
       "worth reading. AvatarGroupCount gained 119 lines: the cap, the glyph-fit " +
       "arithmetic that sizes the count to the circle, the overlap padding, and " +
-      "the group-only style branch. Comments strip; the arithmetic does not. " +
-      "Three rounds of geometry fixes on one sub-component cost half the window.",
+      "the group-only style branch. Three rounds of geometry fixes on one " +
+      "sub-component cost half the window.\n\n" +
+      "CORRECTED 2026-09-10: this row first read \"comments strip; the arithmetic " +
+      "does not\". That is false — `build:lib` ships comments into dist. Measured " +
+      "directly: `dist/shared/AvatarBadge-*.js` is 9% comment lines, and cutting " +
+      "one five-line comment to one line moved the library total 150.22 to " +
+      "150.05. So a large share of this +0.74 KB is the prose added alongside " +
+      "the logic, not the logic. Prose in `src/components` is shipped bytes.",
   },
   {
     kb: 149.92,
@@ -286,6 +292,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "not a gate. CLAUDE.md now requires this gate on any slice touching " +
       "src/components. Two commits in the window changed no component and moved it " +
       "0.00 KB, which is the control that says the ladder measures what it claims.",
+  },
+  {
+    kb: 150.05,
+    commit: "(uncommitted)",
+    date: "2026-09-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.05 KB. AvatarBadge's soft accent count moved from " +
+      "`text-cl-accent` to `text-cl-accent-hover`: the first measured 4.31:1 on " +
+      "`--cl-accent-bg` in light, under AA at 11px, which `contrast-painted` " +
+      "caught the first time this slice ran it. The 15 new visual subjects cost " +
+      "nothing — baselines are not shipped — and neither does the fixture-wrap " +
+      "fix, which is in the fixture route.\n\n" +
+      "The first measurement of this change read +0.22 KB. 0.17 of that was a " +
+      "five-line comment explaining the contrast maths, which `build:lib` ships " +
+      "verbatim. Trimmed to one line; the reasoning lives in the ADR instead. " +
+      "This is what corrected the a3c6059 row above.",
   },
 ];
 

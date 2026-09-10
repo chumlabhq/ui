@@ -89,6 +89,51 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "TimePicker", fixture: "closed" },
   { component: "Toast", fixture: "default" },
   { component: "Tooltip", fixture: "open" },
+
+  /**
+   * Non-resting states. Everything above this line is a component sitting
+   * still, which is why a checked checkbox painted white for six days and why
+   * every skeleton in the library changed fill with 94 tests passing unchanged:
+   * `disabled`, `error` and `focused` had zero subjects across 23, 17 and 7
+   * components respectively.
+   *
+   * Five representatives per state rather than one per component. The styling
+   * is shared through tokens, so the same defect surfaces in all of them at
+   * once; photographing each would cost 180 baselines to catch it a second
+   * time. These are picked for distinct anatomy, not for symmetry.
+   */
+
+  // Already broken once. Both were among the 104 state keys 6dd1925 deleted,
+  // and a checked switch was pixel-identical to an unchecked one for six days.
+  { component: "Switch", fixture: "checked" },
+  { component: "RadioButton/RadioButton", fixture: "checked" },
+  // The shimmer whose ring vanished under the pulse. A circular skeleton, which
+  // `Table/loading` does not cover.
+  { component: "Avatar", fixture: "loading" },
+  // The canonical surfaces of the two token families with no coverage at all.
+  { component: "Input", fixture: "error" },
+  { component: "Input", fixture: "disabled" },
+
+  // Distinct anatomies of the same states.
+  { component: "Checkbox", fixture: "disabled" },   // disabled that must still show its check
+  { component: "Button", fixture: "disabled" },     // the opacity + pointer-events idiom
+  { component: "OtpInput", fixture: "error" },      // error across sibling boxes, not one field
+  { component: "MultiSelectDropdown", fixture: "loading" }, // three nested pulses, un-nested
+  { component: "Dropdown", fixture: "disabled" },   // a trigger surface, not a form field
+
+  // Never photographed at all.
+  { component: "Avatar/AvatarBadge", fixture: "count-solid" }, // the palette that just changed default
+  { component: "Slider", fixture: "disabled" },     // a two-part track and thumb
+  { component: "Pagination", fixture: "disabled" }, // disabled arrows, a common real state
+  // Toast/default was already a subject. `success` is not, and neither is any
+  // other picture of `--cl-success` — the status family has the same total
+  // absence of coverage that `--cl-error` had.
+  { component: "Toast", fixture: "success" },
+  // `all-statuses`, not `with-error`: the latter sets `status` on the step
+  // object, which is not the route — `getStepStatus` is, as that fixture's own
+  // note says. `with-error` renders no error at all, and this one paints
+  // completed, error and pending together.
+  { component: "Stepper", fixture: "all-statuses" },
 ];
 
 /**

@@ -113,7 +113,8 @@ describe("hydration contract", () => {
           </Component>
         );
         const tree = (
-          wrap ? wrap(element) : fixture.wrap ? fixture.wrap(element) : element
+          // Fixture wrap first; the registry's is the fallback. See FixtureRoute.
+          fixture.wrap ? fixture.wrap(element) : wrap ? wrap(element) : element
         ) as React.ReactElement;
 
         let html = "";

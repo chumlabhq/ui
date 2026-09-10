@@ -243,12 +243,18 @@ export default function FixtureRoute() {
       {fixture.children as ReactNode}
     </Component>
   );
+  // The fixture's own wrap wins. The registry wrapper is a FALLBACK for
+  // fixtures that bring none — `RadioButton` throws outside a `RadioGroup`, so
+  // one has to exist — and taking it first silently discarded any state a
+  // fixture set up in its own: `RadioButton/RadioButton/checked` wraps in a
+  // group with `defaultValue`, got the registry's bare group instead, and
+  // rendered `data-state="unchecked"`, identical to `default`.
   const tree = fixture.render
     ? element
-    : wrap
-      ? wrap(element)
-      : fixture.wrap
-        ? fixture.wrap(element)
+    : fixture.wrap
+      ? fixture.wrap(element)
+      : wrap
+        ? wrap(element)
         : element;
 
   return (

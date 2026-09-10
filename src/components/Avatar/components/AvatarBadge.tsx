@@ -31,7 +31,8 @@ const toneStyles: Record<BadgeTone, Record<BadgeVariant, { dot: string; count: s
     },
     soft: {
       dot: "bg-cl-accent-bg rounded-full",
-      count: "font-medium bg-cl-accent-bg text-cl-accent rounded-full px-1.5",
+      // Not `text-cl-accent`: 4.31:1 on this tint, under AA at 11px.
+      count: "font-medium bg-cl-accent-bg text-cl-accent-hover rounded-full px-1.5",
     },
   },
   error: {
