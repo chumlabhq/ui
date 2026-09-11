@@ -20,6 +20,7 @@ import { CircularLoader } from "../Loader/index.js";
 import { Tooltip } from "../Tooltip/index.js";
 import { Slot } from "../../utils/Slot.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
 import { motionSafeClasses, structuralOnly } from "../../utils/classLayers.js";
@@ -93,10 +94,10 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       // `px-6` loses to their `px-8`, `text-base` to their `text-lg`. Written
       // as `data-[size=lg]:px-6` it would have survived their class and won at
       // paint time, which is how `border-none` beat a consumer's `border`.
-      root: cn(baseClasses.root, sizeClasses.root, classesProp?.root),
-      itemText: cn(baseClasses.itemText, sizeClasses.itemText, classesProp?.itemText),
-      icon: cn(baseClasses.icon, sizeClasses.icon, classesProp?.icon),
-      loading: cn(baseClasses.loading, classesProp?.loading),
+      root: mergeSlot(cn(baseClasses.root, sizeClasses.root), classesProp?.root),
+      itemText: mergeSlot(cn(baseClasses.itemText, sizeClasses.itemText), classesProp?.itemText),
+      icon: mergeSlot(cn(baseClasses.icon, sizeClasses.icon), classesProp?.icon),
+      loading: mergeSlot(baseClasses.loading, classesProp?.loading),
     }),
     [classesProp, baseClasses, sizeClasses],
   );

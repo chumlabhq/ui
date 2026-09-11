@@ -9,6 +9,7 @@ import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelect
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown.js";
 import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDefault } from "./utils/icons.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
@@ -272,29 +273,29 @@ const MultiSelectSearchableDropdown = forwardRef<
 
     const mergedClasses: Required<MultiSelectSearchableDropdownClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        control: cn(baseClasses.control, classesProp?.control),
-        trigger: cn(baseClasses.trigger, classesProp?.trigger),
-        value: cn(baseClasses.value, classesProp?.value),
-        content: cn(baseClasses.content, classesProp?.content),
-        list: cn(baseClasses.list, classesProp?.list),
-        item: cn(baseClasses.item, classesProp?.item),
-        icon: cn(baseClasses.icon, classesProp?.icon),
-        itemControl: cn(baseClasses.itemControl, classesProp?.itemControl),
-        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
-        chip: cn(baseClasses.chip, classesProp?.chip),
-        chipRemove: cn(baseClasses.chipRemove, classesProp?.chipRemove),
-        empty: cn(baseClasses.empty, classesProp?.empty),
-        clearTrigger: cn(baseClasses.clearTrigger, classesProp?.clearTrigger),
-        loading: cn(baseClasses.loading, classesProp?.loading),
-        loadingItem: cn(baseClasses.loadingItem, classesProp?.loadingItem),
-        label: cn(baseClasses.label, classesProp?.label),
-        message: cn(baseClasses.message, classesProp?.message),
-        description: cn(baseClasses.description, classesProp?.description),
-        searchControl: cn(baseClasses.searchControl, classesProp?.searchControl),
-        searchInput: cn(baseClasses.searchInput, classesProp?.searchInput),
-        searchIcon: cn(baseClasses.searchIcon, classesProp?.searchIcon),
-        count: cn(baseClasses.count, classesProp?.count),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        trigger: mergeSlot(baseClasses.trigger, classesProp?.trigger),
+        value: mergeSlot(baseClasses.value, classesProp?.value),
+        content: mergeSlot(baseClasses.content, classesProp?.content),
+        list: mergeSlot(baseClasses.list, classesProp?.list),
+        item: mergeSlot(baseClasses.item, classesProp?.item),
+        icon: mergeSlot(baseClasses.icon, classesProp?.icon),
+        itemControl: mergeSlot(baseClasses.itemControl, classesProp?.itemControl),
+        itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
+        chip: mergeSlot(baseClasses.chip, classesProp?.chip),
+        chipRemove: mergeSlot(baseClasses.chipRemove, classesProp?.chipRemove),
+        empty: mergeSlot(baseClasses.empty, classesProp?.empty),
+        clearTrigger: mergeSlot(baseClasses.clearTrigger, classesProp?.clearTrigger),
+        loading: mergeSlot(baseClasses.loading, classesProp?.loading),
+        loadingItem: mergeSlot(baseClasses.loadingItem, classesProp?.loadingItem),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        searchControl: mergeSlot(baseClasses.searchControl, classesProp?.searchControl),
+        searchInput: mergeSlot(baseClasses.searchInput, classesProp?.searchInput),
+        searchIcon: mergeSlot(baseClasses.searchIcon, classesProp?.searchIcon),
+        count: mergeSlot(baseClasses.count, classesProp?.count),
       }),
       [classesProp, baseClasses],
     );

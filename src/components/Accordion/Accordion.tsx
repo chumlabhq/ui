@@ -36,6 +36,7 @@ import type {
   AccordionRef,
 } from "./utils/types.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccordionFocus } from "./hooks/useAccordionFocus.js";
 import { useAccordionStorage, useStorageSync } from "./hooks/useAccordionStorage.js";
 import { useAccordionStateManager } from "./hooks/useAccordionStateManager.js";
@@ -204,23 +205,23 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const mergedClasses: AccordionClasses = useMemo(
     () => ({
       root:
-        cn(baseClasses.root, variantClasses.root, classesProp?.root),
-      item: cn(variantClasses.item, classesProp?.item),
+        mergeSlot(cn(baseClasses.root, variantClasses.root), classesProp?.root),
+      item: mergeSlot(variantClasses.item, classesProp?.item),
       trigger:
-        cn(baseClasses.trigger, sizeClasses.trigger, variantClasses.trigger, classesProp?.trigger),
-      itemText: cn(baseClasses.itemText, classesProp?.itemText),
+        mergeSlot(cn(baseClasses.trigger, sizeClasses.trigger, variantClasses.trigger), classesProp?.trigger),
+      itemText: mergeSlot(baseClasses.itemText, classesProp?.itemText),
       body:
-        cn(baseClasses.body, sizeClasses.content, classesProp?.body),
-      content: cn(baseClasses.content, classesProp?.content),
+        mergeSlot(cn(baseClasses.body, sizeClasses.content), classesProp?.body),
+      content: mergeSlot(baseClasses.content, classesProp?.content),
       icon:
-        cn(baseClasses.icon, sizeClasses.icon, classesProp?.icon),
+        mergeSlot(cn(baseClasses.icon, sizeClasses.icon), classesProp?.icon),
       itemIndicator:
-        cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
+        mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
       description:
-        cn(baseClasses.description, sizeClasses.subtitle, classesProp?.description),
-      itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
-      triggerActions: cn(baseClasses.triggerActions, classesProp?.triggerActions),
-      header: cn(baseClasses.header, classesProp?.header),
+        mergeSlot(cn(baseClasses.description, sizeClasses.subtitle), classesProp?.description),
+      itemIcon: mergeSlot(baseClasses.itemIcon, classesProp?.itemIcon),
+      triggerActions: mergeSlot(baseClasses.triggerActions, classesProp?.triggerActions),
+      header: mergeSlot(baseClasses.header, classesProp?.header),
     }),
     [classesProp, sizeClasses, variantClasses, baseClasses, unstyled],
   );

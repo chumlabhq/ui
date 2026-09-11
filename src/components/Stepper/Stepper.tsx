@@ -26,6 +26,7 @@ import type {
 import { CheckIcon, ErrorIcon, DotIcon } from "./utils/icons.js";
 import { Tooltip } from "../Tooltip/index.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { isTooltipConfig } from "../../utils/isTooltipConfig.js";
@@ -545,19 +546,19 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
 
     const mergedClasses: Required<StepperClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        list: cn(baseClasses.list, classesProp?.list),
-        item: cn(baseClasses.item, classesProp?.item),
-        trigger: cn(baseClasses.trigger, classesProp?.trigger),
-        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        list: mergeSlot(baseClasses.list, classesProp?.list),
+        item: mergeSlot(baseClasses.item, classesProp?.item),
+        trigger: mergeSlot(baseClasses.trigger, classesProp?.trigger),
+        itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
         indicatorTrigger:
-          cn(baseClasses.indicatorTrigger, classesProp?.indicatorTrigger),
+          mergeSlot(baseClasses.indicatorTrigger, classesProp?.indicatorTrigger),
         itemIcon:
-          cn(baseClasses.itemIcon, classesProp?.itemIcon),
-        row: cn(baseClasses.row, classesProp?.row),
-        itemText: cn(baseClasses.itemText, classesProp?.itemText),
-        description: cn(baseClasses.description, classesProp?.description),
-        separator: cn(baseClasses.separator, classesProp?.separator),
+          mergeSlot(baseClasses.itemIcon, classesProp?.itemIcon),
+        row: mergeSlot(baseClasses.row, classesProp?.row),
+        itemText: mergeSlot(baseClasses.itemText, classesProp?.itemText),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        separator: mergeSlot(baseClasses.separator, classesProp?.separator),
       }),
       [classesProp, baseClasses],
     );

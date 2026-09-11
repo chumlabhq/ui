@@ -15,6 +15,7 @@ import {
   UNSTYLED_RESIZABLEPANEL_CLASSES,
 } from "./utils/constants.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
@@ -62,8 +63,8 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo(() => ({
-      root: cn(baseClasses.root, classesProp?.root),
-      handle: cn(baseClasses.handle, classesProp?.handle),
+      root: mergeSlot(baseClasses.root, classesProp?.root),
+      handle: mergeSlot(baseClasses.handle, classesProp?.handle),
     }), [classesProp, baseClasses]);
 
     const generatedId = useId();

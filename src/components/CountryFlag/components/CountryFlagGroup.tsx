@@ -11,6 +11,7 @@ import {
 } from "../utils/constants.js";
 import { Tooltip } from "../../Tooltip/index.js";
 import { cn } from "../../../utils/scopedCn.js";
+import { mergeSlot } from "../../../utils/mergeSlot.js";
 import { getPixelSize, isTooltipConfig } from "../utils/helpers.js";
 import { CountryFlagGroupContext } from "../utils/context.js";
 
@@ -36,9 +37,9 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
 
     const mergedClasses: Required<CountryFlagGroupClasses> = useMemo(
       () => ({
-        root: cn(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.root, classesProp?.root),
-        item: cn(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.item, classesProp?.item),
-        count: cn(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.count, classesProp?.count),
+        root: mergeSlot(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.root, classesProp?.root),
+        item: mergeSlot(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.item, classesProp?.item),
+        count: mergeSlot(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.count, classesProp?.count),
       }),
       [classesProp],
     );

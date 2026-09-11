@@ -17,6 +17,7 @@ import {
 import { FieldLabel } from "../../utils/FieldLabel.js";
 import { FieldWrapper } from "../../utils/FieldWrapper.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
@@ -110,15 +111,15 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const sizeClasses = unstyled ? structuralOnly(sizeClassesRaw) : sizeClassesRaw;
     const mergedClasses: Required<TextAreaClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
         // Size ahead of the consumer's classes and in the same merge groups, so
         // `px-5` loses to their `px-8` instead of sitting beside it.
-        control: cn(baseClasses.control, sizeClasses.control, classesProp?.control),
-        label: cn(baseClasses.label, classesProp?.label),
-        description: cn(baseClasses.description, classesProp?.description),
-        input: cn(baseClasses.input, sizeClasses.input, classesProp?.input),
-        message: cn(baseClasses.message, classesProp?.message),
-        count: cn(baseClasses.count, classesProp?.count),
+        control: mergeSlot(cn(baseClasses.control, sizeClasses.control), classesProp?.control),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        input: mergeSlot(cn(baseClasses.input, sizeClasses.input), classesProp?.input),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
+        count: mergeSlot(baseClasses.count, classesProp?.count),
       }),
       [classesProp, baseClasses, sizeClasses],
     );

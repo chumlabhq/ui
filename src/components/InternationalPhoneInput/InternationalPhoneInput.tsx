@@ -44,6 +44,7 @@ import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 function resolveInitialCountry(
   value: PhoneNumberValue | undefined,
   defaultValue: PhoneNumberValue | undefined,
@@ -170,19 +171,19 @@ const InternationalPhoneInput = forwardRef<
 
     const mergedClasses: Required<InternationalPhoneInputClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        label: cn(baseClasses.label, classesProp?.label),
-        description: cn(baseClasses.description, classesProp?.description),
-        control: cn(baseClasses.control, classesProp?.control),
-        input: cn(baseClasses.input, classesProp?.input),
-        message: cn(baseClasses.message, classesProp?.message),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        input: mergeSlot(baseClasses.input, classesProp?.input),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
         countrySelect: composeClasses(baseClasses.countrySelect, classesProp?.countrySelect),
-        itemRow: cn(baseClasses.itemRow, classesProp?.itemRow),
-        itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
-        itemText: cn(baseClasses.itemText, classesProp?.itemText),
-        triggerRow: cn(baseClasses.triggerRow, classesProp?.triggerRow),
-        flag: cn(baseClasses.flag, classesProp?.flag),
-        value: cn(baseClasses.value, classesProp?.value),
+        itemRow: mergeSlot(baseClasses.itemRow, classesProp?.itemRow),
+        itemIcon: mergeSlot(baseClasses.itemIcon, classesProp?.itemIcon),
+        itemText: mergeSlot(baseClasses.itemText, classesProp?.itemText),
+        triggerRow: mergeSlot(baseClasses.triggerRow, classesProp?.triggerRow),
+        flag: mergeSlot(baseClasses.flag, classesProp?.flag),
+        value: mergeSlot(baseClasses.value, classesProp?.value),
       }),
       [classesProp, baseClasses],
     );

@@ -26,6 +26,7 @@ import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 
 function renderIcon(
   icon: React.ComponentType<IconProps> | React.ReactNode | undefined,
@@ -230,16 +231,16 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
-      root: cn(baseClasses.root, classesProp?.root),
-      row: cn(baseClasses.row, classesProp?.row),
-      list: cn(baseClasses.list, classesProp?.list),
-      item: cn(baseClasses.item, classesProp?.item),
-      navButton: cn(baseClasses.navButton, classesProp?.navButton),
-      ellipsis: cn(baseClasses.ellipsis, classesProp?.ellipsis),
+      root: mergeSlot(baseClasses.root, classesProp?.root),
+      row: mergeSlot(baseClasses.row, classesProp?.row),
+      list: mergeSlot(baseClasses.list, classesProp?.list),
+      item: mergeSlot(baseClasses.item, classesProp?.item),
+      navButton: mergeSlot(baseClasses.navButton, classesProp?.navButton),
+      ellipsis: mergeSlot(baseClasses.ellipsis, classesProp?.ellipsis),
       rowsPerPage: composeClasses(baseClasses.rowsPerPage, classesProp?.rowsPerPage),
-      label: cn(baseClasses.label, classesProp?.label),
-      navIcon: cn(baseClasses.navIcon, classesProp?.navIcon),
-      pageInfo: cn(baseClasses.pageInfo, classesProp?.pageInfo),
+      label: mergeSlot(baseClasses.label, classesProp?.label),
+      navIcon: mergeSlot(baseClasses.navIcon, classesProp?.navIcon),
+      pageInfo: mergeSlot(baseClasses.pageInfo, classesProp?.pageInfo),
     }), [classesProp, baseClasses]);
 
     const resolvedRowOptions = useMemo(

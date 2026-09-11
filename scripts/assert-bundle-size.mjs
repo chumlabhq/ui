@@ -453,6 +453,28 @@ const LIBRARY_TOTAL_HISTORY = [
       "cancelling that overlap, so it grew with its count and sat outside the " +
       "stack. The bytes are the fit arithmetic and the cap.",
   },
+  {
+    kb: 152.05,
+    commit: "(uncommitted)",
+    date: "2026-09-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.45 KB, and it buys a consumer-facing contract rather than " +
+      "a look: `src/utils/mergeSlot.ts`, plus routing all 33 components' slot " +
+      "merges through it. A library default written as `data-[state=checked]:" +
+      "bg-cl-accent` and a consumer's `bg-green-500` are different " +
+      "tailwind-merge keys, so both survived and the variant won at paint time " +
+      "— the consumer's class in the DOM, doing nothing. Found by eye three " +
+      "times and fixed three times as an instance; the sweep then found 99 more " +
+      "reachable sites across 20 components, which is what a shared merge " +
+      "boundary costs 0.45 KB to close.\n\n" +
+      "It is one function rather than 99 edits because the rendered result is " +
+      "identical either way — the visual suite did not move a single baseline — " +
+      "and 99 hand-plumbed state resolutions would have been 99 chances to get " +
+      "one wrong. The cost is bounded: `twMerge` is 0.6us per token pair " +
+      "measured, and the work only happens when a consumer actually passes " +
+      "`classes`.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

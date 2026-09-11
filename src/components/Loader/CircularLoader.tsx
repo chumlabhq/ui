@@ -5,6 +5,7 @@ import {
   UNSTYLED_CIRCULAR_LOADER_CLASSES,
 } from "./utils/constants.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -45,10 +46,10 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
     );
     const mergedClasses: Required<CircularLoaderClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        control: cn(baseClasses.control, classesProp?.control),
-        track: cn(baseClasses.track, classesProp?.track),
-        range: cn(baseClasses.range, classesProp?.range),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        track: mergeSlot(baseClasses.track, classesProp?.track),
+        range: mergeSlot(baseClasses.range, classesProp?.range),
       }),
       [classesProp, baseClasses],
     );

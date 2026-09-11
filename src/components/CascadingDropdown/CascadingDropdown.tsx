@@ -5,6 +5,7 @@ import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses 
 import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -403,32 +404,32 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
     const mergedClasses: Required<CascadingDropdownClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        control: cn(baseClasses.control, classesProp?.control),
-        trigger: cn(baseClasses.trigger, classesProp?.trigger),
-        value: cn(baseClasses.value, classesProp?.value),
-        content: cn(baseClasses.content, classesProp?.content),
-        item: cn(baseClasses.item, classesProp?.item),
-        subContent: cn(baseClasses.subContent, classesProp?.subContent),
-        subPositioner: cn(baseClasses.subPositioner, classesProp?.subPositioner),
-        subItem: cn(baseClasses.subItem, classesProp?.subItem),
-        label: cn(baseClasses.label, classesProp?.label),
-        message: cn(baseClasses.message, classesProp?.message),
-        description: cn(baseClasses.description, classesProp?.description),
-        icon: cn(baseClasses.icon, classesProp?.icon),
-        itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
-        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
-        itemControl: cn(baseClasses.itemControl, classesProp?.itemControl),
-        empty: cn(baseClasses.empty, classesProp?.empty),
-        clearTrigger: cn(baseClasses.clearTrigger, classesProp?.clearTrigger),
-        loading: cn(baseClasses.loading, classesProp?.loading),
-        loadingItem: cn(baseClasses.loadingItem, classesProp?.loadingItem),
-        searchControl: cn(baseClasses.searchControl, classesProp?.searchControl),
-        searchInput: cn(baseClasses.searchInput, classesProp?.searchInput),
-        searchIcon: cn(baseClasses.searchIcon, classesProp?.searchIcon),
-        subSearchControl: cn((baseClasses.subSearchControl || baseClasses.searchControl), classesProp?.subSearchControl ?? classesProp?.searchControl),
-        subSearchInput: cn((baseClasses.subSearchInput || baseClasses.searchInput), classesProp?.subSearchInput ?? classesProp?.searchInput),
-        subSearchIcon: cn((baseClasses.subSearchIcon || baseClasses.searchIcon), classesProp?.subSearchIcon ?? classesProp?.searchIcon),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        trigger: mergeSlot(baseClasses.trigger, classesProp?.trigger),
+        value: mergeSlot(baseClasses.value, classesProp?.value),
+        content: mergeSlot(baseClasses.content, classesProp?.content),
+        item: mergeSlot(baseClasses.item, classesProp?.item),
+        subContent: mergeSlot(baseClasses.subContent, classesProp?.subContent),
+        subPositioner: mergeSlot(baseClasses.subPositioner, classesProp?.subPositioner),
+        subItem: mergeSlot(baseClasses.subItem, classesProp?.subItem),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        icon: mergeSlot(baseClasses.icon, classesProp?.icon),
+        itemIcon: mergeSlot(baseClasses.itemIcon, classesProp?.itemIcon),
+        itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
+        itemControl: mergeSlot(baseClasses.itemControl, classesProp?.itemControl),
+        empty: mergeSlot(baseClasses.empty, classesProp?.empty),
+        clearTrigger: mergeSlot(baseClasses.clearTrigger, classesProp?.clearTrigger),
+        loading: mergeSlot(baseClasses.loading, classesProp?.loading),
+        loadingItem: mergeSlot(baseClasses.loadingItem, classesProp?.loadingItem),
+        searchControl: mergeSlot(baseClasses.searchControl, classesProp?.searchControl),
+        searchInput: mergeSlot(baseClasses.searchInput, classesProp?.searchInput),
+        searchIcon: mergeSlot(baseClasses.searchIcon, classesProp?.searchIcon),
+        subSearchControl: mergeSlot(baseClasses.subSearchControl || baseClasses.searchControl, classesProp?.subSearchControl ?? classesProp?.searchControl),
+        subSearchInput: mergeSlot(baseClasses.subSearchInput || baseClasses.searchInput, classesProp?.subSearchInput ?? classesProp?.searchInput),
+        subSearchIcon: mergeSlot(baseClasses.subSearchIcon || baseClasses.searchIcon, classesProp?.subSearchIcon ?? classesProp?.searchIcon),
       }),
       [classesProp, baseClasses],
     );

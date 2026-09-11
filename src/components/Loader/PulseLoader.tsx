@@ -5,6 +5,7 @@ import {
   UNSTYLED_PULSE_LOADER_CLASSES,
 } from "./utils/constants.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -47,8 +48,8 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
     );
     const mergedClasses: Required<PulseLoaderClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        range: cn(baseClasses.range, classesProp?.range),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        range: mergeSlot(baseClasses.range, classesProp?.range),
       }),
       [classesProp, baseClasses],
     );

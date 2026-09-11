@@ -42,6 +42,7 @@ import {
 import { DrawerContext } from "./utils/context.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 
 import { useHydrated } from "../../utils/useHydrated.js";
@@ -174,9 +175,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<DrawerClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        overlay: cn(baseClasses.overlay, classesProp?.overlay),
-        content: cn(baseClasses.content, classesProp?.content),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        overlay: mergeSlot(baseClasses.overlay, classesProp?.overlay),
+        content: mergeSlot(baseClasses.content, classesProp?.content),
       }),
       [classesProp, baseClasses],
     );

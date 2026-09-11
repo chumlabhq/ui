@@ -28,6 +28,7 @@ import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
 import { applyAct } from "../fixtures/_act.contract.js";
 
+import { twMerge } from "tailwind-merge";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { setReducedMotion } from "../../test/matchMedia.js";
@@ -76,7 +77,7 @@ const candidates = COMPONENTS.filter((c) => c.supports.classes && c.defaults);
  * defect. What would be a defect is the whole set collapsing to nothing, which
  * is how the version this replaced came to assert on 3 slots out of 340.
  */
-const exercised = { composed: 0, conflicts: 0 };
+const exercised = { composed: 0, conflicts: 0, variants: 0 };
 
 const tokensOf = (value: unknown) =>
   typeof value === "string"
@@ -274,6 +275,109 @@ describe("classes override contract", () => {
    * default is a property of the class string, and a fixture that never passes
    * a border would not show it.
    */
+  describe.each(candidates)("$name variant defaults", ({ name, Component, props, defaults }) => {
+    const fixtures = fixturesFor(name).filter((f) => !f.render);
+    const SENTINEL = "var-sentinel";
+
+    /**
+     * A consumer's plain utility beats the library's VARIANT-scoped one in the
+     * same property group.
+     *
+     * The other conflict test above probes cursor, radius and padding — plain
+     * against plain, which tailwind-merge resolves correctly on its own. This
+     * is the case it cannot: `data-[state=checked]:bg-cl-accent` and a
+     * consumer's `bg-green-500` are different merge KEYS, so both survive and
+     * the variant wins at paint time on its own element. Three components
+     * shipped that way and each was found by eye — `border-none` beating a
+     * consumer's `border`, Button's `size`, Checkbox's checked fill — before a
+     * sweep found 99 more across 20 components.
+     *
+     * Not "does a variant exist": 317 interaction-scoped defaults are
+     * legitimate and untouched here. The question is only whether the
+     * consumer's own token displaces the library's when they share a group,
+     * and it is asked of the real fixtures through the real render path.
+     *
+     * Planted by reducing `mergeSlot` to a plain `cn`, which is the state the
+     * library shipped in. 26 of the 33 components go red and the failures name
+     * the sites: `chipRemove: \`hover:text-cl-accent-hover\` survives a
+     * consumer's \`text-[rgb(1,2,3)]\``, `clearTrigger:
+     * \`dark:hover:text-cl-text\` survives a consumer's \`text-[rgb(1,2,3)]\``,
+     * and so on — the slot, the library token that won, and the consumer token
+     * it beat.
+     */
+    const PROBES = [
+      "bg-[rgb(1,2,3)]",
+      "text-[rgb(1,2,3)]",
+      "border-[rgb(1,2,3)]",
+      "ring-[rgb(1,2,3)]",
+      "shadow-[0_0_0_1px_black]",
+      "rounded-[3px]",
+      "p-[7px]",
+      "opacity-[0.33]",
+      "w-[7px]",
+      "h-[7px]",
+      "font-[700]",
+      "text-[13px]",
+    ];
+
+    const bare = (token: string) => {
+      let depth = 0;
+      let last = 0;
+      for (let i = 0; i < token.length; i += 1) {
+        const ch = token[i];
+        if (ch === "[") depth += 1;
+        else if (ch === "]") depth -= 1;
+        else if (ch === ":" && depth === 0) last = i + 1;
+      }
+      return token.slice(last);
+    };
+    const collides = (utility: string, probe: string) => twMerge(utility, probe) === probe;
+
+    it("lets a consumer's plain utility beat a variant-scoped default", async () => {
+      const defeated: string[] = [];
+      let covered = 0;
+
+      for (const [key, value] of Object.entries(defaults!)) {
+        if (typeof value !== "string" || !value.trim()) continue;
+        const variants = [...new Set(value.split(/\s+/).filter(Boolean))].filter(
+          (t) => bare(t) !== t,
+        );
+        for (const token of variants) {
+          const probe = PROBES.find((candidate) => collides(bare(token), candidate));
+          if (!probe) continue; // no plausible consumer utility shares this group
+          covered += 1;
+          for (const f of fixtures) {
+            const element = (
+              <Component {...props} {...f.props} classes={{ [key]: `${SENTINEL} ${probe}` }}>
+                {f.children as React.ReactNode}
+              </Component>
+            );
+            const { container } = render(
+              (f.wrap ? f.wrap(element) : element) as React.ReactElement,
+            );
+            await applyAct(f, container);
+            for (const el of document.body.querySelectorAll(`.${SENTINEL}`)) {
+              const onElement = (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
+              if (onElement.includes(token)) {
+                defeated.push(`${key}: \`${token}\` survives a consumer's \`${probe}\``);
+              }
+            }
+            cleanup();
+          }
+        }
+      }
+
+      exercised.variants += covered;
+      expect(
+        [...new Set(defeated)].sort(),
+        `${name}: a variant-scoped default survived a consumer's plain utility in the same ` +
+          "property group. Both are in the DOM and the variant paints in its state, so the " +
+          "consumer's class is present and inert. Merge the slot with `mergeSlot`, which drops " +
+          "the library token instead of letting tailwind-merge keep both",
+      ).toEqual([]);
+    });
+  });
+
   it("uses no reset a consumer's class cannot beat", () => {
     const offenders: string[] = [];
     const dir = "src/components";

@@ -12,6 +12,7 @@ import type { ReactElement, Ref } from "react";
 import { createPortal } from "react-dom";
 import { LAYERS } from "../../utils/layers.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import type { TooltipProps } from "./utils/types.js";
@@ -103,10 +104,10 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses = useMemo(() => ({
-      trigger: cn(baseClasses.trigger, classesProp?.trigger),
-      content: cn(baseClasses.content, classesProp?.content),
-      arrow: cn(baseClasses.arrow, classesProp?.arrow),
-      baseArrow: cn(baseClasses.arrow, classesProp?.arrow),
+      trigger: mergeSlot(baseClasses.trigger, classesProp?.trigger),
+      content: mergeSlot(baseClasses.content, classesProp?.content),
+      arrow: mergeSlot(baseClasses.arrow, classesProp?.arrow),
+      baseArrow: mergeSlot(baseClasses.arrow, classesProp?.arrow),
     }), [classesProp, baseClasses]);
 
     const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);

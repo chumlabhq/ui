@@ -17,6 +17,7 @@ import { isBrowser } from "../../utils/isBrowser.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -283,16 +284,16 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mc: Required<SliderClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        label: cn(baseClasses.label, classesProp?.label),
-        description: cn(baseClasses.description, classesProp?.description),
-        control: cn(baseClasses.control, classesProp?.control),
-        track: cn(baseClasses.track, classesProp?.track),
-        range: cn(baseClasses.range, classesProp?.range),
-        thumb: cn(baseClasses.thumb, classesProp?.thumb),
-        valueText: cn(baseClasses.valueText, classesProp?.valueText),
-        marker: cn(baseClasses.marker, classesProp?.marker),
-        message: cn(baseClasses.message, classesProp?.message),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        track: mergeSlot(baseClasses.track, classesProp?.track),
+        range: mergeSlot(baseClasses.range, classesProp?.range),
+        thumb: mergeSlot(baseClasses.thumb, classesProp?.thumb),
+        valueText: mergeSlot(baseClasses.valueText, classesProp?.valueText),
+        marker: mergeSlot(baseClasses.marker, classesProp?.marker),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
       }),
       [classesProp, baseClasses],
     );

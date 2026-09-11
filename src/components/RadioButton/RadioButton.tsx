@@ -18,6 +18,7 @@ import {
 } from "./utils/constants.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -120,10 +121,10 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<RadioGroupClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        label: cn(baseClasses.label, classesProp?.label),
-        description: cn(baseClasses.description, classesProp?.description),
-        message: cn(baseClasses.message, classesProp?.message),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
       }),
       [classesProp, baseClasses],
     );
@@ -243,11 +244,11 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
     );
     const mergedClasses: Required<RadioButtonClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        label: cn(baseClasses.label, classesProp?.label),
-        description: cn(baseClasses.description, classesProp?.description),
-        control: cn(baseClasses.control, classesProp?.control),
-        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
       }),
       [classesProp, baseClasses],
     );

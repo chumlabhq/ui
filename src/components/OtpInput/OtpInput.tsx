@@ -9,6 +9,7 @@ import type { OtpInputProps, OtpInputClasses } from "./utils/types.js";
 import { DEFAULT_OTPINPUT_CLASSES, UNSTYLED_OTPINPUT_CLASSES } from "./utils/constants.js";
 import { OtpInputLabel } from "./components/OtpInputLabel.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 
@@ -101,14 +102,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<OtpInputClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        control: cn(baseClasses.control, classesProp?.control),
-        group: cn(baseClasses.group, classesProp?.group),
-        input: cn(baseClasses.input, classesProp?.input),
-        label: cn(baseClasses.label, classesProp?.label),
-        message: cn(baseClasses.message, classesProp?.message),
-        separator: cn(baseClasses.separator, classesProp?.separator),
-        description: cn(baseClasses.description, classesProp?.description),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        group: mergeSlot(baseClasses.group, classesProp?.group),
+        input: mergeSlot(baseClasses.input, classesProp?.input),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
+        separator: mergeSlot(baseClasses.separator, classesProp?.separator),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
       }),
       [classesProp, baseClasses],
     );

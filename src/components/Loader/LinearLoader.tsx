@@ -5,6 +5,7 @@ import {
   UNSTYLED_LINEAR_LOADER_CLASSES,
 } from "./utils/constants.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -39,8 +40,8 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
     );
     const mergedClasses: Required<LinearLoaderClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        range: cn(baseClasses.range, classesProp?.range),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        range: mergeSlot(baseClasses.range, classesProp?.range),
       }),
       [classesProp, baseClasses],
     );

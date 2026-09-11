@@ -1,4 +1,5 @@
 import { forwardRef, useState, useCallback, useMemo, useEffect } from "react";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import type {
   AvatarProps,
   AvatarTooltipConfig,
@@ -133,12 +134,12 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
     const mergedClasses: Required<AvatarClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
         loading: composeClasses(baseClasses.loading, classesProp?.loading),
-        control: cn(baseClasses.control, classesProp?.control),
-        image: cn(baseClasses.image, classesProp?.image),
-        fallback: cn(baseClasses.fallback, classesProp?.fallback),
-        status: cn(baseClasses.status, classesProp?.status),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        image: mergeSlot(baseClasses.image, classesProp?.image),
+        fallback: mergeSlot(baseClasses.fallback, classesProp?.fallback),
+        status: mergeSlot(baseClasses.status, classesProp?.status),
       }),
       [classesProp, baseClasses],
     );

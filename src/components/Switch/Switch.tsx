@@ -4,6 +4,7 @@ import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constan
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
@@ -80,15 +81,15 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<SwitchClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        row: cn(baseClasses.row, classesProp?.row),
-        labelGroup: cn(baseClasses.labelGroup, classesProp?.labelGroup),
-        label: cn(baseClasses.label, classesProp?.label),
-        description: cn(baseClasses.description, classesProp?.description),
-        control: cn(baseClasses.control, classesProp?.control),
-        thumb: cn(baseClasses.thumb, classesProp?.thumb),
-        message: cn(baseClasses.message, classesProp?.message),
-        loading: cn(baseClasses.loading, classesProp?.loading),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        row: mergeSlot(baseClasses.row, classesProp?.row),
+        labelGroup: mergeSlot(baseClasses.labelGroup, classesProp?.labelGroup),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        control: mergeSlot(baseClasses.control, classesProp?.control),
+        thumb: mergeSlot(baseClasses.thumb, classesProp?.thumb),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
+        loading: mergeSlot(baseClasses.loading, classesProp?.loading),
       }),
       [classesProp, baseClasses],
     );

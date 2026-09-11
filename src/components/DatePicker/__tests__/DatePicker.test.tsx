@@ -254,6 +254,13 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
       await user.click(screen.getByRole("button", { name: "Today" }));
+      // Settle the frames the selection queues before asserting. Without this
+      // the test read the trigger between the click and the re-render and
+      // failed on three of about twenty full runs — a fake-timer race, not a
+      // component defect: it passed in isolation every time, which is what
+      // kept it in KNOWN-FLAKES.md for two observations before the third made
+      // it a defect in the test by that file's own rule.
+      await flushPositionFrames();
 
       expect(screen.queryByText("Pick a date")).not.toBeInTheDocument();
       expect(screen.getByText(String(new Date().getFullYear()), { exact: false }))

@@ -25,6 +25,7 @@ import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep }
 import { isBrowser } from "../../utils/isBrowser.js";
 
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
@@ -173,36 +174,36 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
     const mergedClasses = useMemo<Required<TimePickerClasses>>(() => ({
-      root: cn(baseClasses.root, classesProp?.root),
-      label: cn(baseClasses.label, classesProp?.label),
-      control: cn(baseClasses.control, classesProp?.control),
-      trigger: cn(baseClasses.trigger, classesProp?.trigger),
-      input: cn(baseClasses.input, classesProp?.input),
-      icon: cn(baseClasses.icon, classesProp?.icon),
-      clearTrigger: cn(baseClasses.clearTrigger, classesProp?.clearTrigger),
-      content: cn(baseClasses.content, classesProp?.content),
-      list: cn(baseClasses.list, classesProp?.list),
-      item: cn(baseClasses.item, classesProp?.item),
-      itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
-      empty: cn(baseClasses.empty, classesProp?.empty),
-      message: cn(baseClasses.message, classesProp?.message),
-      description: cn(baseClasses.description, classesProp?.description),
-      clockContent: cn(baseClasses.clockContent, classesProp?.clockContent),
-      clockDisplay: cn(baseClasses.clockDisplay, classesProp?.clockDisplay),
-      clockHours: cn(baseClasses.clockHours, classesProp?.clockHours),
-      clockMinutes: cn(baseClasses.clockMinutes, classesProp?.clockMinutes),
-      clockSeparator: cn(baseClasses.clockSeparator, classesProp?.clockSeparator),
-      clockFace: cn(baseClasses.clockFace, classesProp?.clockFace),
-      clockHand: cn(baseClasses.clockHand, classesProp?.clockHand),
-      clockHandLine: cn(baseClasses.clockHandLine, classesProp?.clockHandLine),
-      clockHandDot: cn(baseClasses.clockHandDot, classesProp?.clockHandDot),
-      clockNumber: cn(baseClasses.clockNumber, classesProp?.clockNumber),
-      clockCenter: cn(baseClasses.clockCenter, classesProp?.clockCenter),
-      footer: cn(baseClasses.footer, classesProp?.footer),
-      cancelButton: cn(baseClasses.cancelButton, classesProp?.cancelButton),
-      confirmButton: cn(baseClasses.confirmButton, classesProp?.confirmButton),
-      row: cn(baseClasses.row, classesProp?.row),
-      periodButton: cn(baseClasses.periodButton, classesProp?.periodButton),
+      root: mergeSlot(baseClasses.root, classesProp?.root),
+      label: mergeSlot(baseClasses.label, classesProp?.label),
+      control: mergeSlot(baseClasses.control, classesProp?.control),
+      trigger: mergeSlot(baseClasses.trigger, classesProp?.trigger),
+      input: mergeSlot(baseClasses.input, classesProp?.input),
+      icon: mergeSlot(baseClasses.icon, classesProp?.icon),
+      clearTrigger: mergeSlot(baseClasses.clearTrigger, classesProp?.clearTrigger),
+      content: mergeSlot(baseClasses.content, classesProp?.content),
+      list: mergeSlot(baseClasses.list, classesProp?.list),
+      item: mergeSlot(baseClasses.item, classesProp?.item),
+      itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
+      empty: mergeSlot(baseClasses.empty, classesProp?.empty),
+      message: mergeSlot(baseClasses.message, classesProp?.message),
+      description: mergeSlot(baseClasses.description, classesProp?.description),
+      clockContent: mergeSlot(baseClasses.clockContent, classesProp?.clockContent),
+      clockDisplay: mergeSlot(baseClasses.clockDisplay, classesProp?.clockDisplay),
+      clockHours: mergeSlot(baseClasses.clockHours, classesProp?.clockHours),
+      clockMinutes: mergeSlot(baseClasses.clockMinutes, classesProp?.clockMinutes),
+      clockSeparator: mergeSlot(baseClasses.clockSeparator, classesProp?.clockSeparator),
+      clockFace: mergeSlot(baseClasses.clockFace, classesProp?.clockFace),
+      clockHand: mergeSlot(baseClasses.clockHand, classesProp?.clockHand),
+      clockHandLine: mergeSlot(baseClasses.clockHandLine, classesProp?.clockHandLine),
+      clockHandDot: mergeSlot(baseClasses.clockHandDot, classesProp?.clockHandDot),
+      clockNumber: mergeSlot(baseClasses.clockNumber, classesProp?.clockNumber),
+      clockCenter: mergeSlot(baseClasses.clockCenter, classesProp?.clockCenter),
+      footer: mergeSlot(baseClasses.footer, classesProp?.footer),
+      cancelButton: mergeSlot(baseClasses.cancelButton, classesProp?.cancelButton),
+      confirmButton: mergeSlot(baseClasses.confirmButton, classesProp?.confirmButton),
+      row: mergeSlot(baseClasses.row, classesProp?.row),
+      periodButton: mergeSlot(baseClasses.periodButton, classesProp?.periodButton),
     }), [classesProp, baseClasses]);
 
     // Fetched at mount when the clock variant is asked for, and null until it

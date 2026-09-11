@@ -48,6 +48,7 @@ import {
   isSameDay,
 } from "./utils.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 import { useHydrated } from "../../utils/useHydrated.js";
 import { useLazyComponent } from "../../utils/useLazyComponent.js";
@@ -525,34 +526,34 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
     const mergedClasses = useMemo<Required<DatePickerClasses>>(() => ({
-      root: cn(baseClasses.root, classesProp?.root),
-      trigger: cn(baseClasses.trigger, classesProp?.trigger),
-      input: cn(baseClasses.input, classesProp?.input),
-      triggerActions: cn(baseClasses.triggerActions, classesProp?.triggerActions),
-      icon: cn(baseClasses.icon, classesProp?.icon),
-      clearTrigger: cn(baseClasses.clearTrigger, classesProp?.clearTrigger),
-      label: cn(baseClasses.label, classesProp?.label),
-      message: cn(baseClasses.message, classesProp?.message),
-      description: cn(baseClasses.description, classesProp?.description),
-      content: cn(baseClasses.content, classesProp?.content),
-      header: cn(baseClasses.header, classesProp?.header),
-      row: cn(baseClasses.row, classesProp?.row),
-      navButton: cn(baseClasses.navButton, classesProp?.navButton),
-      listRow: cn(baseClasses.listRow, classesProp?.listRow),
-      list: cn(baseClasses.list, classesProp?.list),
-      listHeader: cn(baseClasses.listHeader, classesProp?.listHeader),
-      weekday: cn(baseClasses.weekday, classesProp?.weekday),
-      item: cn(baseClasses.item, classesProp?.item),
-      weekNumber: cn(baseClasses.weekNumber, classesProp?.weekNumber),
-      presetGroup: cn(baseClasses.presetGroup, classesProp?.presetGroup),
-      presetTrigger: cn(baseClasses.presetTrigger, classesProp?.presetTrigger),
-      footer: cn(baseClasses.footer, classesProp?.footer),
-      todayTrigger: cn(baseClasses.todayTrigger, classesProp?.todayTrigger),
-      markerIndicator: cn(baseClasses.markerIndicator, classesProp?.markerIndicator),
-      monthSelect: cn(baseClasses.monthSelect, classesProp?.monthSelect),
-      yearSelect: cn(baseClasses.yearSelect, classesProp?.yearSelect),
-      subContent: cn(baseClasses.subContent, classesProp?.subContent),
-      subItem: cn(baseClasses.subItem, classesProp?.subItem),
+      root: mergeSlot(baseClasses.root, classesProp?.root),
+      trigger: mergeSlot(baseClasses.trigger, classesProp?.trigger),
+      input: mergeSlot(baseClasses.input, classesProp?.input),
+      triggerActions: mergeSlot(baseClasses.triggerActions, classesProp?.triggerActions),
+      icon: mergeSlot(baseClasses.icon, classesProp?.icon),
+      clearTrigger: mergeSlot(baseClasses.clearTrigger, classesProp?.clearTrigger),
+      label: mergeSlot(baseClasses.label, classesProp?.label),
+      message: mergeSlot(baseClasses.message, classesProp?.message),
+      description: mergeSlot(baseClasses.description, classesProp?.description),
+      content: mergeSlot(baseClasses.content, classesProp?.content),
+      header: mergeSlot(baseClasses.header, classesProp?.header),
+      row: mergeSlot(baseClasses.row, classesProp?.row),
+      navButton: mergeSlot(baseClasses.navButton, classesProp?.navButton),
+      listRow: mergeSlot(baseClasses.listRow, classesProp?.listRow),
+      list: mergeSlot(baseClasses.list, classesProp?.list),
+      listHeader: mergeSlot(baseClasses.listHeader, classesProp?.listHeader),
+      weekday: mergeSlot(baseClasses.weekday, classesProp?.weekday),
+      item: mergeSlot(baseClasses.item, classesProp?.item),
+      weekNumber: mergeSlot(baseClasses.weekNumber, classesProp?.weekNumber),
+      presetGroup: mergeSlot(baseClasses.presetGroup, classesProp?.presetGroup),
+      presetTrigger: mergeSlot(baseClasses.presetTrigger, classesProp?.presetTrigger),
+      footer: mergeSlot(baseClasses.footer, classesProp?.footer),
+      todayTrigger: mergeSlot(baseClasses.todayTrigger, classesProp?.todayTrigger),
+      markerIndicator: mergeSlot(baseClasses.markerIndicator, classesProp?.markerIndicator),
+      monthSelect: mergeSlot(baseClasses.monthSelect, classesProp?.monthSelect),
+      yearSelect: mergeSlot(baseClasses.yearSelect, classesProp?.yearSelect),
+      subContent: mergeSlot(baseClasses.subContent, classesProp?.subContent),
+      subItem: mergeSlot(baseClasses.subItem, classesProp?.subItem),
     }), [classesProp, baseClasses]);
 
     useReducedMotion(reduceMotion);

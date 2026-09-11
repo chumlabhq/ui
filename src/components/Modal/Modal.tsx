@@ -33,7 +33,7 @@ import {
 import { pushModal, popModal, isTopModal } from "./utils/helpers.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
-import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 // ADR: one scale, so a modal and a dropdown inside it cannot disagree.
 const BASE_Z_INDEX = LAYERS.overlay;
 const Z_INDEX_INCREMENT = LAYER_STEP;
@@ -126,17 +126,17 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses = useMemo<Required<ModalClasses>>(() => ({
-      root: cn(baseClasses.root, classesProp?.root),
-      overlay: cn(baseClasses.overlay, classesProp?.overlay),
-      positioner: cn(baseClasses.positioner, classesProp?.positioner),
-      content: cn(baseClasses.content, classesProp?.content),
-      header: cn(baseClasses.header, classesProp?.header),
-      title: cn(baseClasses.title, classesProp?.title),
-      description: cn(baseClasses.description, classesProp?.description),
-      icon: cn(baseClasses.icon, classesProp?.icon),
-      closeTrigger: cn(baseClasses.closeTrigger, classesProp?.closeTrigger),
-      closeIcon: cn(baseClasses.closeIcon, classesProp?.closeIcon),
-      body: cn(baseClasses.body, classesProp?.body),
+      root: mergeSlot(baseClasses.root, classesProp?.root),
+      overlay: mergeSlot(baseClasses.overlay, classesProp?.overlay),
+      positioner: mergeSlot(baseClasses.positioner, classesProp?.positioner),
+      content: mergeSlot(baseClasses.content, classesProp?.content),
+      header: mergeSlot(baseClasses.header, classesProp?.header),
+      title: mergeSlot(baseClasses.title, classesProp?.title),
+      description: mergeSlot(baseClasses.description, classesProp?.description),
+      icon: mergeSlot(baseClasses.icon, classesProp?.icon),
+      closeTrigger: mergeSlot(baseClasses.closeTrigger, classesProp?.closeTrigger),
+      closeIcon: mergeSlot(baseClasses.closeIcon, classesProp?.closeIcon),
+      body: mergeSlot(baseClasses.body, classesProp?.body),
     }), [classesProp, baseClasses]);
 
     const parentContext = useContext(ModalContext);

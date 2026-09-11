@@ -21,6 +21,7 @@ import { ChevronRightIcon, EllipsisIcon as DefaultEllipsisIcon } from "./icons.j
 import BreadcrumbItemContent from "./components/BreadcrumbItemContent.js";
 import Tooltip from "../Tooltip/Tooltip.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -272,27 +273,25 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     // consumer can name.
     const mergedClasses: Required<BreadcrumbClasses> & { linkAndItem: string } = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        list: cn(baseClasses.list, classesProp?.list),
-        item: cn(baseClasses.item, classesProp?.item),
-        link: cn(baseClasses.link, classesProp?.link),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        list: mergeSlot(baseClasses.list, classesProp?.list),
+        item: mergeSlot(baseClasses.item, classesProp?.item),
+        link: mergeSlot(baseClasses.link, classesProp?.link),
         // The anchor paints from `link` AND `item`. Composing each slot on its
         // own and joining them applied the library's `item` after the
         // consumer's `link` override and beat it — both carry `rounded`. Library
         // halves first, then consumer halves, so the consumer stays last however
         // many slots land on one element.
-        linkAndItem: cn(
-          baseClasses.link,
-          baseClasses.item,
-          classesProp?.link,
-          classesProp?.item,
+        linkAndItem: mergeSlot(
+          cn(baseClasses.link, baseClasses.item),
+          cn(classesProp?.link, classesProp?.item),
         ),
-        separator: cn(baseClasses.separator, classesProp?.separator),
-        itemIcon: cn(baseClasses.itemIcon, classesProp?.itemIcon),
-        ellipsis: cn(baseClasses.ellipsis, classesProp?.ellipsis),
-        ellipsisTrigger: cn(baseClasses.ellipsisTrigger, classesProp?.ellipsisTrigger),
-        content: cn(baseClasses.content, classesProp?.content),
-        collapsedItem: cn(baseClasses.collapsedItem, classesProp?.collapsedItem),
+        separator: mergeSlot(baseClasses.separator, classesProp?.separator),
+        itemIcon: mergeSlot(baseClasses.itemIcon, classesProp?.itemIcon),
+        ellipsis: mergeSlot(baseClasses.ellipsis, classesProp?.ellipsis),
+        ellipsisTrigger: mergeSlot(baseClasses.ellipsisTrigger, classesProp?.ellipsisTrigger),
+        content: mergeSlot(baseClasses.content, classesProp?.content),
+        collapsedItem: mergeSlot(baseClasses.collapsedItem, classesProp?.collapsedItem),
       }),
       [classesProp, baseClasses],
     );

@@ -1,4 +1,5 @@
 import { forwardRef, useState, useCallback, useMemo } from "react";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import type { SyntheticEvent } from "react";
 import type { CountryFlagProps, CountryFlagClasses, CountryFlagTooltipConfig } from "./utils/types.js";
 import {
@@ -87,10 +88,10 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses: Required<CountryFlagClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
         loading: composeClasses(baseClasses.loading, classesProp?.loading),
-        image: cn(baseClasses.image, classesProp?.image),
-        fallback: cn(baseClasses.fallback, classesProp?.fallback),
+        image: mergeSlot(baseClasses.image, classesProp?.image),
+        fallback: mergeSlot(baseClasses.fallback, classesProp?.fallback),
       }),
       [classesProp, baseClasses],
     );

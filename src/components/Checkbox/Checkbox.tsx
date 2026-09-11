@@ -12,6 +12,7 @@ import {
 import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 
@@ -121,13 +122,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<CheckboxClasses> = useMemo(
       () => ({
-        root: cn(baseClasses.root, classesProp?.root),
-        labelGroup: cn(baseClasses.labelGroup, classesProp?.labelGroup),
-        label: cn(baseClasses.label, classesProp?.label),
-        description: cn(baseClasses.description, classesProp?.description),
-        control: cn(baseClasses.control, stateClassName, classesProp?.control),
-        itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
-        message: cn(baseClasses.message, classesProp?.message),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        labelGroup: mergeSlot(baseClasses.labelGroup, classesProp?.labelGroup),
+        label: mergeSlot(baseClasses.label, classesProp?.label),
+        description: mergeSlot(baseClasses.description, classesProp?.description),
+        control: mergeSlot(cn(baseClasses.control, stateClassName), classesProp?.control),
+        itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
+        message: mergeSlot(baseClasses.message, classesProp?.message),
       }),
       [classesProp, baseClasses, stateClassName],
     );

@@ -4,6 +4,7 @@ import { CloseIcon } from "./utils/icons.js";
 import { getDefaultIcon } from "./utils/getDefaultIcon.js";
 import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants.js";
 import { cn } from "../../utils/scopedCn.js";
+import { mergeSlot } from "../../utils/mergeSlot.js";
 
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 /**
@@ -64,14 +65,14 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const isUnstyled = unstyled || providerUnstyled;
   const baseClasses = isUnstyled ? UNSTYLED_TOAST_CLASSES : DEFAULT_TOAST_CLASSES;
   const mergedClasses: Required<ToastClasses> = useMemo(() => ({
-    root: cn(baseClasses.root, classesProp?.root ?? providerClasses?.root),
-    body: cn(baseClasses.body, classesProp?.body ?? providerClasses?.body),
-    track: cn(baseClasses.track, classesProp?.track ?? providerClasses?.track),
-    title: cn(baseClasses.title, classesProp?.title ?? providerClasses?.title),
-    description: cn(baseClasses.description, classesProp?.description ?? providerClasses?.description),
-    indicator: cn(baseClasses.indicator, classesProp?.indicator ?? providerClasses?.indicator),
-    closeTrigger: cn(baseClasses.closeTrigger, classesProp?.closeTrigger ?? providerClasses?.closeTrigger),
-    icon: cn(baseClasses.icon, classesProp?.icon ?? providerClasses?.icon),
+    root: mergeSlot(baseClasses.root, classesProp?.root ?? providerClasses?.root),
+    body: mergeSlot(baseClasses.body, classesProp?.body ?? providerClasses?.body),
+    track: mergeSlot(baseClasses.track, classesProp?.track ?? providerClasses?.track),
+    title: mergeSlot(baseClasses.title, classesProp?.title ?? providerClasses?.title),
+    description: mergeSlot(baseClasses.description, classesProp?.description ?? providerClasses?.description),
+    indicator: mergeSlot(baseClasses.indicator, classesProp?.indicator ?? providerClasses?.indicator),
+    closeTrigger: mergeSlot(baseClasses.closeTrigger, classesProp?.closeTrigger ?? providerClasses?.closeTrigger),
+    icon: mergeSlot(baseClasses.icon, classesProp?.icon ?? providerClasses?.icon),
   }), [classesProp, providerClasses, baseClasses]);
 
   const defaultIcon = getDefaultIcon(type);
