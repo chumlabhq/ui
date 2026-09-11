@@ -22,7 +22,7 @@
  * is exactly the defect. No reachability inference is needed, so there is
  * nothing left to get wrong.
  */
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
@@ -35,6 +35,38 @@ import { setReducedMotion } from "../../test/matchMedia.js";
 // Fixtures render motion-aware components; the stub answers nothing
 // until asked. reduced-motion.contract is where the true branch is tested.
 beforeEach(() => setReducedMotion(false));
+
+/**
+ * 90 seconds for this file, against the project's 30.
+ *
+ * DERIVED, not picked. This suite renders every fixture of every component and
+ * overrides every slot, so it owns the heaviest trees in the repo, and the
+ * project-level 30s was cutting into the real distribution rather than sitting
+ * above it: `overrides.contract > 'DatePicker'` failed two of five full runs —
+ * a rate, not a flake — and a gate that fails two in five teaches you to re-run
+ * it instead of reading it.
+ *
+ * Measured with the timeout lifted to 300s so the tail was uncensored, over
+ * three full `vitest run` invocations:
+ *
+ *   run 1   CascadingDropdown 14.4s   DatePicker 13.3s
+ *   run 2   DatePicker        16.3s   CascadingDropdown 12.2s
+ *   run 3   DatePicker        32.8s   InternationalPhoneInput 30.1s
+ *
+ * So the worst case is 32.8s and the SAME case ran in 13.3s on a quiet run: a
+ * load factor of 2.5 on identical work. A limit has to clear the worst
+ * observation by about that factor again or the next busy machine reproduces
+ * today's failure — 32.8 x 2.5 is 82s, rounded up to 90.
+ *
+ * It is per-file because the measurement says the problem is: across all 96
+ * files, this is the ONLY one with a case over 20s. The next heaviest is
+ * `doc-truth.contract` at 12.0s, and every other file peaks at 4.2s, which the
+ * project's 30s clears seven times over. Raising it globally would slow the
+ * detection of a genuinely hung test in 95 files to fix one.
+ *
+ * Nothing here asserts anything different. A timeout is not an assertion.
+ */
+vi.setConfig({ testTimeout: 90_000 });
 
 const candidates = COMPONENTS.filter((c) => c.supports.classes && c.defaults);
 

@@ -46,6 +46,10 @@ const CountryFlagDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
   const [isLoading, setIsLoading] = useState(true);
+  // Re-mounts the two flags below so the fade-in plays again. Without it the
+  // section showed three motionless boxes: the transition had already finished
+  // and the other two cases are motion turned OFF.
+  const [motionRun, setMotionRun] = useState(0);
 
   return (
     <div className="space-y-10">
@@ -442,22 +446,39 @@ const CountryFlagDemo = () => {
       {/* ─── Reduce Motion ──────────────────────────────────────────────── */}
       <Section
         title="Reduce Motion"
-        description="Disable fade-in transition and shimmer pulse."
+        description="Both halves, side by side: the fade-in and the shimmer pulse, each with reduceMotion off and on. Replay re-mounts the flags, since a fade-in you have already missed looks exactly like one that never ran."
         isDarkMode={dark}
       >
+        <button
+          type="button"
+          onClick={() => setMotionRun((n) => n + 1)}
+          className={`mb-3 px-2.5 py-1 rounded-md border text-[12px] cursor-pointer ${c.label} border-cl-border hover:border-cl-border-input`}
+        >
+          Replay fade-in
+        </button>
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
-            <CountryFlag code="us" size={48} className={c.flag} />
+            <CountryFlag
+              key={`auto-${motionRun}`}
+              code="us"
+              size={48}
+              className={c.flag}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>default (auto)</p>
           </div>
           <div className="text-center">
             <CountryFlag
+              key={`reduced-${motionRun}`}
               code="gb"
               size={48}
               reduceMotion={true}
               className={c.flag}
             />
             <p className={`text-xs mt-2 ${c.label}`}>no transition</p>
+          </div>
+          <div className="text-center">
+            <CountryFlagShimmer size={48} className="rounded-[3px]" />
+            <p className={`text-xs mt-2 ${c.label}`}>pulse (default)</p>
           </div>
           <div className="text-center">
             <CountryFlagShimmer

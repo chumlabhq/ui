@@ -340,7 +340,7 @@ const ButtonDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="inline">
               <Button
                 as="a"
-                href="https://example.com"
+                href="https://chumlab.com"
                 target="_blank"
                 rel="noreferrer"
                 className={c.link}
@@ -349,7 +349,7 @@ const ButtonDemo = () => {
               </Button>
               <Button
                 as="a"
-                href="https://example.com"
+                href="https://chumlab.com"
                 target="_blank"
                 rel="noreferrer"
                 className={c.link}
@@ -360,7 +360,7 @@ const ButtonDemo = () => {
               </Button>
               <Button
                 as="a"
-                href="https://example.com"
+                href="https://chumlab.com"
                 target="_blank"
                 rel="noreferrer"
                 className={c.primary}
@@ -825,12 +825,12 @@ const ButtonDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary} asChild>
-            <a href="https://example.com" target="_blank" rel="noreferrer">
+            <a href="https://chumlab.com" target="_blank" rel="noreferrer">
               Link as Button
             </a>
           </Button>
           <Button className={c.primary} asChild disabled>
-            <a href="https://example.com" target="_blank" rel="noreferrer">
+            <a href="https://chumlab.com" target="_blank" rel="noreferrer">
               Disabled asChild
             </a>
           </Button>

@@ -49,6 +49,13 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   // in no baseline: `in-group` has no `max`, so nothing ever photographed the
   // count's circle, ring or overlap. Its geometry regressed three times.
   { component: "Avatar", fixture: "group-surplus" },
+  // The flag surplus, for the reason the avatar one is here: its geometry is
+  // the thing that regresses. It grew with its count and sat outside the row's
+  // overlap until this slice, which is the defect AvatarGroup's surplus had
+  // three times — and nothing photographed the flag version, so the fix landed
+  // against no picture at all. Planted by restoring the break-out geometry:
+  // 122 pixels against a budget of 1, at every width.
+  { component: "CountryFlag/CountryFlagGroup", fixture: "capped" },
   { component: "Breadcrumb", fixture: "default" },
   // DELETED — Button/with-icons. Button ships no colour of its own: it has a
   // `size` prop and no `variant`, and every painted button in this repo is

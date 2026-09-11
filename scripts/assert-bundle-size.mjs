@@ -429,6 +429,30 @@ const LIBRARY_TOTAL_HISTORY = [
       "padding landed on the wrapper. `e2e/target-size.spec.ts` failed it at " +
       "1206x16 against the 24px floor before the scale shipped.",
   },
+  {
+    kb: 151.60,
+    commit: "(uncommitted)",
+    date: "2026-09-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.41 KB, across two components fixing defects found by eye on " +
+      "the demo pages.\n\n" +
+      "Checkbox (+0.10 exclusive, 2.92 to 3.02): the checked, indeterminate, " +
+      "error and success fills left the default class string and became a " +
+      "resolved record merged ahead of the consumer's classes. As " +
+      "`data-[state=checked]:bg-cl-accent` they beat " +
+      "`classes={{ control: 'bg-green-500' }}` outright — measured on the " +
+      "checked fixture, the consumer's class present in the DOM and the box " +
+      "still rgb(91,155,255) — which is the `border-none` defect in its third " +
+      "and most visible place. Success is new paint rather than moved paint: " +
+      "the message went green and the box stayed accent, so a validated field " +
+      "disagreed with itself.\n\n" +
+      "CountryFlag (+0.31 closure): the flag surplus now occupies exactly one " +
+      "flag's tile inside the row's own overlap, the way AvatarGroup's has " +
+      "since 36d270d. It was `minWidth` plus padding with a `marginLeft: 8` " +
+      "cancelling that overlap, so it grew with its count and sat outside the " +
+      "stack. The bytes are the fit arithmetic and the cap.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

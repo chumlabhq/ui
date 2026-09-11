@@ -122,6 +122,20 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
   },
 );
 
+/**
+ * The row's own overlap, from `-space-x-1.5` on the group root. Written here
+ * because the surplus has to centre its type in the part of the tile that is
+ * actually visible, and a tile that disagrees with the class would put the
+ * count under its neighbour.
+ */
+const STACK_OVERLAP = 6;
+
+/** `+99` and no further: three glyphs is what an flag-sized tile can hold. */
+const MAX_COUNT = 99;
+const WIDEST_COUNT_GLYPHS = 3;
+const GLYPH_WIDTH_RATIO = 0.62;
+const MIN_COUNT_FONT_SIZE = 7;
+
 export const CountryFlagGroupCount = forwardRef<HTMLDivElement, CountryFlagGroupCountProps>(
   ({ count, size = "md", tooltip, className, style, ...rest }, ref) => {
     const pixelSize = getPixelSize(size);
@@ -133,36 +147,48 @@ export const CountryFlagGroupCount = forwardRef<HTMLDivElement, CountryFlagGroup
       return { content: tooltip };
     }, [tooltip]);
 
-    // The chip's outer bounding box matches the flag tile's bounding box
-    // (height = flag height) so it visually sits in the stack as just
-    // another flag-shaped element. Width grows with content via the
-    // tabular-num + paddingInline.
-    // The chip's outer bounding box matches the flag tile's bounding box
-    // (height = flag height) so it visually sits in the stack as just
-    // another flag-shaped element. Width grows with content via the
-    // tabular-num + paddingInline.
+    // The surplus is the last TILE in the stack, not a chip beside it — the
+    // decision AvatarGroup's surplus already landed on, and the reason is the
+    // same: a count that breaks out of the overlap reads as a separate control,
+    // and a count that grows with its content moves every flag before it. This
+    // was both. `marginLeft: 8` cancelled the row's own -6px overlap so the
+    // chip sat apart, and `minWidth` let `+2` and `+47` render at different
+    // widths.
     //
-    // marginLeft: 8 — breaks the chip out of the parent's -space-x-1.5
-    // overlap so the bordered chip sits cleanly next to the last flag
-    // instead of overlapping it (which made the previous flag bleed
-    // through the chip's left edge). Inline style wins specificity over
-    // the parent's space-x cascade rule.
+    // So: exactly the tile a flag occupies, fixed, inside the same overlap. The
+    // type is what gives — sized to fit the widest count the cap allows, in the
+    // part of the tile the neighbour does not cover. `AvatarGroupCount` carries
+    // the full reasoning for the glyph-width and floor numbers below.
+    const visible = Math.max(pixelSize - STACK_OVERLAP, Math.floor(pixelSize / 2));
+    const fontSize = Math.max(
+      MIN_COUNT_FONT_SIZE,
+      Math.min(
+        Math.round(height * 0.45),
+        Math.floor(visible / (WIDEST_COUNT_GLYPHS * GLYPH_WIDTH_RATIO)),
+      ),
+    );
     const countElement = (
       <div
         ref={ref}
         className={cn("shrink-0 inline-flex items-center justify-center", className) || undefined}
         style={{
-          minWidth: height,
+          width: pixelSize,
+          minWidth: pixelSize,
+          maxWidth: pixelSize,
           height,
-          paddingInline: Math.max(4, Math.round(height * 0.25)),
-          marginLeft: 8,
+          boxSizing: "border-box",
+          // The start padding is the flag before it: text centred in the whole
+          // tile begins under the overlap.
+          paddingInlineStart: STACK_OVERLAP,
+          paddingInlineEnd: 0,
+          fontSize,
           ...style,
         }}
         role="img"
         aria-label={`${count} more flag${count !== 1 ? "s" : ""} not shown`}
         {...rest}
       >
-        +{count}
+        +{Math.min(count, MAX_COUNT)}
       </div>
     );
 

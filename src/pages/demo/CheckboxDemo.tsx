@@ -72,6 +72,7 @@ const CheckboxDemo = () => {
   const [indeterminate, setIndeterminate] = useState(true);
   const [customHeart, setCustomHeart] = useState(false);
   const [customStar, setCustomStar] = useState(true);
+  const [customBookmark, setCustomBookmark] = useState(false);
   const [errorDemo, setErrorDemo] = useState(false);
   const [successDemo, setSuccessDemo] = useState(true);
   const [onValueChangeDemo, setOnValueChangeDemo] = useState(false);
@@ -273,7 +274,6 @@ const CheckboxDemo = () => {
             checked={customHeart}
             onValueChange={setCustomHeart}
             checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
-            uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-cl-text-tertiary" />}
             size="md"
             shape="rounded"
             classes={{
@@ -285,6 +285,21 @@ const CheckboxDemo = () => {
             checked={customStar}
             onValueChange={setCustomStar}
             checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
+            size="md"
+            shape="rounded"
+            classes={{
+              ...c.checkbox,
+            }}
+          />
+          {/* `uncheckedIcon` is the odd one out — an icon in the EMPTY box — so
+              it says so in its label. Unlabelled beside two that paint only
+              when checked, it reads as one of them being broken. */}
+          <Checkbox
+            label="Bookmark (outline when off)"
+            checked={customBookmark}
+            onValueChange={setCustomBookmark}
+            checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
+            uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-cl-text-tertiary" />}
             size="md"
             shape="rounded"
             classes={{
@@ -553,17 +568,19 @@ const CheckboxDemo = () => {
             checked
             classes={{
               ...c.checkbox,
+              control: `inline-flex items-center justify-center border-2 transition-colors cursor-pointer bg-cl-success border-cl-success text-cl-on-accent`,
               label: `text-sm font-medium text-cl-success`,
             }}
             size="md"
             shape="rounded"
           />
           <Checkbox
-            label="Pink theme"
+            label="Accent theme"
             checked
             classes={{
               ...c.checkbox,
-              label: `text-sm font-medium text-cl-accent dark:text-cl-accent`,
+              control: `inline-flex items-center justify-center border-2 transition-colors cursor-pointer bg-cl-accent-bg border-cl-accent text-cl-accent`,
+              label: `text-sm font-medium text-cl-accent`,
             }}
             size="md"
             shape="circle"

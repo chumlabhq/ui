@@ -419,12 +419,34 @@ describe("CountryFlagGroupCount", () => {
     );
   });
 
-  it("accepts size as a named preset", () => {
+  it("accepts size as a named preset, and occupies exactly one flag's tile", () => {
     render(<CountryFlagGroupCount count={2} size="xl" />);
 
     const el = screen.getByRole("img");
-    // xl = 32px width, height = 32 * 0.75 = 24px, minWidth = height = 24px
-    expect(el).toHaveStyle({ minWidth: "24px", height: "24px" });
+    // xl = 32px wide, 32 * 0.75 = 24px tall — the tile a flag occupies, fixed.
+    // It used to be `minWidth: height` with padding, so the box was narrower
+    // than a flag and grew with the count; `+2` and `+47` disagreed and the
+    // row moved under them.
+    expect(el).toHaveStyle({ width: "32px", minWidth: "32px", maxWidth: "32px", height: "24px" });
+  });
+
+  it("renders the same box whatever the count, and stays in the stack", () => {
+    const { rerender } = render(<CountryFlagGroupCount count={2} size="xl" />);
+    const small = screen.getByRole("img").getAttribute("style");
+    rerender(<CountryFlagGroupCount count={47} size="xl" />);
+    const large = screen.getByRole("img").getAttribute("style");
+    // Same geometry for both, and no margin cancelling the row's overlap —
+    // AvatarGroup's surplus settled this and the flag one had not followed.
+    expect(large).toBe(small);
+    expect(small).not.toMatch(/margin-left/);
+  });
+
+  it("caps the count it displays", () => {
+    render(<CountryFlagGroupCount count={250} size="xl" />);
+    // Three glyphs is what a flag-sized tile holds; the full number stays in
+    // the accessible name.
+    expect(screen.getByRole("img")).toHaveTextContent("+99");
+    expect(screen.getByRole("img")).toHaveAttribute("aria-label", "250 more flags not shown");
   });
 
   it("forwards ref", () => {

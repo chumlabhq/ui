@@ -13,6 +13,7 @@ export default function CheckboxExample() {
             label: "text-sm font-medium text-cl-text",
             description: "text-xs text-cl-text-secondary"
           }),
+                      control: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer bg-cl-success border-cl-success text-cl-on-accent",
                       label: "text-sm font-medium text-cl-success"
                     }
         }
@@ -20,7 +21,7 @@ export default function CheckboxExample() {
         shape="rounded"
       />
       <Checkbox
-        label="Pink theme"
+        label="Accent theme"
         checked
         classes={
           {
@@ -29,7 +30,8 @@ export default function CheckboxExample() {
             label: "text-sm font-medium text-cl-text",
             description: "text-xs text-cl-text-secondary"
           }),
-                      label: "text-sm font-medium text-cl-accent dark:text-cl-accent"
+                      control: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer bg-cl-accent-bg border-cl-accent text-cl-accent",
+                      label: "text-sm font-medium text-cl-accent"
                     }
         }
         size="md"

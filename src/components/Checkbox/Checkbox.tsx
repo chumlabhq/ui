@@ -7,6 +7,7 @@ import {
   SHAPE_CLASS_MAP,
   DEFAULT_CHECKBOX_CLASSES,
   UNSTYLED_CHECKBOX_CLASSES,
+  CHECKBOX_STATE_CLASSES,
 } from "./utils/constants.js";
 import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons.js";
 import { useControllableState } from "../../utils/useControllableState.js";
@@ -100,6 +101,22 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
     }, [indeterminate]);
 
+    /**
+     * The state paint, as plain utilities merged ahead of the consumer's
+     * classes. As `data-[state=checked]:` variants inside the default string
+     * they beat a consumer's `classes.control` — different merge groups, both
+     * survive, the variant wins — which is why the demo's "Green theme" and
+     * "Pink theme" both rendered blue. `data-state` is still on the element for
+     * anyone targeting it in CSS.
+     */
+    const isFilled = isChecked || indeterminate;
+    const isValid = !error && success;
+    const stateClassName = cn(
+      isFilled && (isValid ? CHECKBOX_STATE_CLASSES.filledSuccess : CHECKBOX_STATE_CLASSES.filled),
+      !isFilled && isValid && CHECKBOX_STATE_CLASSES.success,
+      error && CHECKBOX_STATE_CLASSES.error,
+    );
+
     const baseClassesRaw = unstyled ? UNSTYLED_CHECKBOX_CLASSES : DEFAULT_CHECKBOX_CLASSES;
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<CheckboxClasses> = useMemo(
@@ -108,11 +125,11 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         labelGroup: cn(baseClasses.labelGroup, classesProp?.labelGroup),
         label: cn(baseClasses.label, classesProp?.label),
         description: cn(baseClasses.description, classesProp?.description),
-        control: cn(baseClasses.control, classesProp?.control),
+        control: cn(baseClasses.control, stateClassName, classesProp?.control),
         itemIndicator: cn(baseClasses.itemIndicator, classesProp?.itemIndicator),
         message: cn(baseClasses.message, classesProp?.message),
       }),
-      [classesProp, baseClasses],
+      [classesProp, baseClasses, stateClassName],
     );
 
     const { boxSize, iconSize } = useMemo(() => {
@@ -129,7 +146,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       return { width: boxSize, height: boxSize };
     }, [boxSize]);
 
-    const stateClassName = undefined;
 
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,13 +193,14 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       >
         <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span
-            className={cn(mergedClasses.control, stateClassName, shapeClass) || undefined}
+            className={cn(mergedClasses.control, shapeClass) || undefined}
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}
             data-state={indeterminate ? "indeterminate" : isChecked ? "checked" : "unchecked"}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
+            data-valid={isValid || undefined}
           >
             <input
               ref={mergedRef}
