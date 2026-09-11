@@ -95,7 +95,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `indeterminateIcon` | object | — | React.ReactNode — Custom icon for the indeterminate state. |
 | `classes` | object | — | CSS class overrides for checkbox sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
 | `disabled` | boolean | `false` | Disables the checkbox. |
 | `name` | string | — | Form field name. |
 | `value` | string | — | Form field value. |
@@ -103,6 +103,13 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `required` | boolean | `false` | Marks the checkbox as required. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

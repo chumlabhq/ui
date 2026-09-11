@@ -3,7 +3,7 @@ import {
   useRef } from "react";
 import { ToastProvider,
   useToast } from "../../components/Toast/index.js";
-import type { ToastPosition } from "../../components/Toast/utils/types.js";
+import type { ToastPosition } from "../../components/Toast/index.js";
 import {
   DocsHero,
   Section,
@@ -21,7 +21,12 @@ const getClasses = (_dark: boolean) => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  /* Outlined, not filled. This was `bg-cl-bg-elevated` — the same token as
+     the card it sits on — so 29 of the page's 58 triggers measured 1.00:1
+     against their own surface and read as unclickable text. The border is
+     what separates it now; the fill stays the surface so the painted
+     variants beside it keep their emphasis. */
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-text text-cl-bg hover:opacity-90`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   btnSuccess: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success`,
@@ -29,6 +34,47 @@ const getClasses = (_dark: boolean) => ({
   btnError: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-white hover:bg-cl-error/90`,
   btnInfo: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90`,
 });
+
+/**
+ * A section that owns its own `ToastProvider`.
+ *
+ * `animationDuration` and `containerAriaLabel` are provider props, and the page
+ * mounts one provider around everything — so the two sections below had no way
+ * to demonstrate their own prop and were a sentence of prose each. React
+ * context resolves to the nearest provider, so a local one inside the section
+ * works, and the toast it fires is the one configured here.
+ */
+const LocalProviderDemo = ({
+  buttonClassName,
+  label,
+  message,
+  ...providerProps
+}: Omit<React.ComponentProps<typeof ToastProvider>, "children"> & {
+  buttonClassName: string;
+  label: string;
+  message: string;
+}) => (
+  <ToastProvider {...providerProps}>
+    <LocalProviderTrigger className={buttonClassName} label={label} message={message} />
+  </ToastProvider>
+);
+
+const LocalProviderTrigger = ({
+  className,
+  label,
+  message,
+}: {
+  className: string;
+  label: string;
+  message: string;
+}) => {
+  const { info } = useToast();
+  return (
+    <button className={className} onClick={() => info(message)}>
+      {label}
+    </button>
+  );
+};
 
 const ToastDemoContent = ({
   position,
@@ -244,7 +290,7 @@ const ToastDemoContent = ({
                 description: "Using classes.progress prop",
                 classes: {
                   indicator:
-                    "bg-linear-to-r from-cl-accent/30 via-cl-accent/30 to-cl-accent/40",
+                    "bg-linear-to-r from-cl-accent via-cl-warning to-cl-error",
                 },
               })
             }
@@ -880,7 +926,7 @@ const ToastDemoContent = ({
               </strong>
             </p>
             <button
-              className={c.btnInfo}
+              className={`${c.btnInfo} self-start`}
               onClick={() =>
                 toast.info(`Toast at ${position}`, {
                   description: "See the position in action!",
@@ -959,16 +1005,30 @@ const ToastDemoContent = ({
       {/* ─── Animation Duration ───────────────────────────────────────── */}
       <Section
         title="Animation Duration"
-        description="Control the speed of toast enter/exit animations via animationDuration on the ToastProvider (in milliseconds). Default is 200ms."
+        description="Control the speed of toast enter and exit animations with animationDuration on the ToastProvider, in milliseconds. The default is 500."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <p
-            className={`text-xs text-cl-text-secondary`}
-          >
-            This page uses the default 200ms animation. To customize, set
-            animationDuration on the ToastProvider.
-          </p>
+          <LocalProviderDemo
+            animationDuration={1600}
+            containerAriaLabel="Slow animation example"
+            buttonClassName={c.btn}
+            label="Slow (1600ms)"
+            message="Slid in over 1.6 seconds"
+          />
+          <LocalProviderDemo
+            animationDuration={60}
+            containerAriaLabel="Fast animation example"
+            buttonClassName={c.btn}
+            label="Fast (60ms)"
+            message="Snapped in over 60ms"
+          />
+          <LocalProviderDemo
+            containerAriaLabel="Default animation example"
+            buttonClassName={c.btnInfo}
+            label="Default (500ms)"
+            message="The provider default"
+          />
         </DemoWrapper>
       </Section>
 
@@ -979,13 +1039,18 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <p
-            className={`text-xs text-cl-text-secondary`}
-          >
-            The toast container has{" "}
-            <code className="font-mono">role=&quot;region&quot;</code> with an{" "}
-            <code className="font-mono">aria-label</code> for screen readers.
-          </p>
+          <LocalProviderDemo
+            containerAriaLabel="Order updates"
+            buttonClassName={c.btn}
+            label={'containerAriaLabel="Order updates"'}
+            message="This one lands in a region named Order updates"
+          />
+          <LocalProviderDemo
+            containerAriaLabel="Notifications (default)"
+            buttonClassName={c.btnInfo}
+            label={'Default ("Notifications")'}
+            message="This one lands in the default region"
+          />
         </DemoWrapper>
       </Section>
 

@@ -45,9 +45,9 @@ export default function Example() {
 | `thickness` | number | `2` | Stroke width of track and arc. |
 | `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
 | `trackColor` | string | — | Background track color. Default: currentColor at 20% opacity. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 ### LinearLoader
 
@@ -56,11 +56,11 @@ export default function Example() {
 | `height` | number | `4` | Height of the bar in pixels. |
 | `width` | string \| number | `"100%"` | Width of the bar (CSS value). |
 | `speed` | number | `1.5` | Animation duration in seconds. |
-| `trackColor` | string | — | Background track color. |
+| `trackColor` | string | `"currentColor"` | Background track color. |
 | `borderRadius` | number | `9999` | Border radius in pixels. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 ### DotLoader
 
@@ -70,9 +70,9 @@ export default function Example() {
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
 | `speed` | number | `1.4` | Full animation cycle duration in seconds. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 ### PulseLoader
 
@@ -81,9 +81,9 @@ export default function Example() {
 | `size` | number | `40` | Diameter of the circle in pixels. |
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `rings` | number | `2` | Number of ripple rings. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 ## Sub-component Props
 
@@ -140,6 +140,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ---
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 Each variant has its own class slots. Circular: `root`, `control`, `track`, `range`. Linear: `root`, `range`. Dot: `root`, `range`. Pulse: `root`, `range`.
 

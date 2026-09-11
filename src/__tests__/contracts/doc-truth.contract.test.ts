@@ -513,6 +513,46 @@ describe("doc truth contract", () => {
    * `DELIBERATE_BLANKS` by name with the reason beside it, which is a line in a
    * diff someone reviews; raising a count is not.
    */
+  /**
+   * Anatomy is for composition, and only for composition.
+   *
+   * The section's promise is "the parts this component composes". For
+   * `<Tooltip />`, `<Button />` or `<ToastProvider />` it renders the
+   * component's own name in a box and tells the reader nothing — while
+   * implying the parts ARE that element, when the parts they can reach are the
+   * `classes` slots in the very next section. Six of eight audited pages were
+   * in that state.
+   *
+   * Both directions, so this is a rule rather than a gap: a composing
+   * component must carry an anatomy, and a single-element one must not have a
+   * multi-element one invented for it.
+   */
+  it("gives an anatomy to the components that compose, and only those", () => {
+    const tags = (anatomy: string) => (anatomy.match(/<[A-Za-z]/g) ?? []).length;
+    const wrong: string[] = [];
+    for (const [name, doc] of Object.entries(COMPONENT_DOCS)) {
+      const count = tags(doc.anatomy ?? "");
+      if (count === 0) wrong.push(`${name}: no anatomy recorded at all`);
+    }
+    expect(
+      wrong.sort(),
+      "every component's anatomy is derived from its own example, so an empty one means the " +
+        "generator found no example to read",
+    ).toEqual([]);
+
+    // The rendering rule itself: single-element anatomies exist in the data and
+    // are deliberately NOT given a section by `ComponentDocs`. This records
+    // which components that covers, so a future edit that starts rendering
+    // them again has to change this list and say why.
+    const singles = Object.entries(COMPONENT_DOCS)
+      .filter(([, doc]) => tags(doc.anatomy ?? "") === 1)
+      .map(([name]) => name)
+      .sort();
+    expect(singles.length, "no single-element anatomy found — the rule has nothing to apply to").toBeGreaterThan(5);
+    expect(singles).toContain("Tooltip");
+    expect(singles).toContain("Button");
+  });
+
   it("renders no empty description", () => {
     const blank = blankDescriptions(COMPONENT_DOCS).filter((entry) => !DELIBERATE_BLANKS.has(entry));
     expect(

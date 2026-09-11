@@ -118,6 +118,13 @@ const navRef = useRef<HTMLElement>(null);
 
 ## Styling Guide
 
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
 ### How class merging works
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_BREADCRUMB_CLASSES` with dark mode support.

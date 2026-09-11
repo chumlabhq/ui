@@ -11,6 +11,15 @@ const fixtures: Fixtures<typeof Tooltip> = [
     props: { content: "Tip", open: true, showArrow: true },
     children: <button>Trigger</button>,
   },
+  {
+    // A ROTATED side, with the arrow on. `open-with-arrow` above is top-placed,
+    // and the arrow's offset is computed differently once the SVG is rotated —
+    // that is where it sat 3px inside the bubble with both stroked edges
+    // showing, and no picture covered it.
+    name: "open-right-with-arrow",
+    props: { content: "Tip", open: true, showArrow: true, side: "right" as const },
+    children: <button>Trigger</button>,
+  },
   { name: "disabled", props: { content: "Tip", disabled: true }, children: <button>Trigger</button> },
   {
     name: "bottom",

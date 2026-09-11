@@ -23,7 +23,7 @@ export default function ToastExample() {
           Create Tracked Toast
         </button>
         <button
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
           onClick={
             () => {
               if (toastIdRef.current) {

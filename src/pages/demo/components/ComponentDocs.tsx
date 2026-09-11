@@ -50,16 +50,35 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
   const doc: ComponentDoc | undefined = COMPONENT_DOCS[name];
   if (!doc) return null;
 
+  /**
+   * Anatomy is for COMPOSITION, so a component that composes nothing does not
+   * get one.
+   *
+   * Six of the eight pages audited rendered `<Tooltip />`, `<Button />`,
+   * `<ToastProvider />` — the component's own name, in a box, under a heading
+   * promising to show its parts. That is worse than absent: it implies the
+   * parts are the element, when the parts a consumer can reach are the
+   * `classes` slots, which have their own section directly below. Accordion
+   * and Avatar keep theirs, because they have a real tree to show.
+   *
+   * `doc-truth.contract` holds both halves of this — a composing component
+   * must have one, a single-element one must not — so it stays a rule rather
+   * than a gap someone fills in later.
+   */
+  const composes = (doc.anatomy.match(/<[A-Za-z]/g) ?? []).length > 1;
+
   return (
     <>
-      <Section
-        title="Anatomy"
-        description="The parts this component composes, taken from its own example — so it cannot describe a composition the code does not use."
-      >
-        <pre className={preClass} {...scrollableCode}>
-          <code>{doc.anatomy}</code>
-        </pre>
-      </Section>
+      {composes && (
+        <Section
+          title="Anatomy"
+          description="The parts this component composes, taken from its own example — so it cannot describe a composition the code does not use."
+        >
+          <pre className={preClass} {...scrollableCode}>
+            <code>{doc.anatomy}</code>
+          </pre>
+        </Section>
+      )}
 
       <Section
         title="API Reference"

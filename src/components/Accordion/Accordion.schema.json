@@ -161,7 +161,7 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode — AccordionItem children.",
+      "description": "React.ReactNode \u2014 AccordionItem children.",
       "x-tsType": "ReactNode"
     },
     "asChild": {

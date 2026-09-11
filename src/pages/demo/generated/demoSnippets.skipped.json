@@ -769,11 +769,6 @@
       "component": "Table",
       "title": "Global Search (Basic)",
       "reason": "does not typecheck: TS2686 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead."
-    },
-    {
-      "component": "Toast",
-      "title": "Position",
-      "reason": "does not typecheck: TS2304 Cannot find name 'ToastPosition'."
     }
   ],
   "droppedClassesKeys": []

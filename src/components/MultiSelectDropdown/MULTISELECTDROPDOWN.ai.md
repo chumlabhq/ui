@@ -94,7 +94,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | List of selectable options. |
+| `options` | array | `[]` | List of selectable options. |
 | `value` | array | — | Controlled selected values. |
 | `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
 | `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
@@ -118,7 +118,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
-| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
 | `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -146,6 +146,13 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `renderTrigger` | object | — | (props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

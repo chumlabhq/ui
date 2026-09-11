@@ -147,6 +147,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ## Styling Guide
 
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
 Toast supports CSS custom variables for theming:
 - `--toast-success-bg`, `--toast-success-border`, `--toast-success-text`
 - Same pattern for warning, error, info, default

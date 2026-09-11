@@ -119,7 +119,7 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `overlayOpacity` | number | `0.32` | Overlay background opacity (0-1). |
 | `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
 | `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
 | `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
 | `zIndex` | number | — | CSS z-index for the modal layer. |
@@ -177,6 +177,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ---
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

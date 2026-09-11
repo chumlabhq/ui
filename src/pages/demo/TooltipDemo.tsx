@@ -368,7 +368,7 @@ const TooltipDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="Dark theme tooltip"
-            classes={{ content: contentClassNameDark, arrow: "fill-fg" }}
+            classes={{ content: contentClassNameDark, arrow: "fill-cl-bg" }}
           >
             <button className={c.trigger}>Dark</button>
           </Tooltip>
@@ -446,7 +446,7 @@ const TooltipDemo = () => {
       {/* ─── Gradient Backgrounds ─────────────────────────────────────── */}
       <Section
         title="Gradient Backgrounds"
-        description="Use contentStyle for gradient backgrounds and arrowColor to match the arrow."
+        description="contentStyle carries the gradient. The arrow is a flat fill — arrowColor can only take one of the gradient's stops, so it matches at the end it is named after and not along the seam. A gradient surface and an arrow do not compose; the last example turns the arrow off instead."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
@@ -688,7 +688,7 @@ const TooltipDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Tooltip content="This trigger is display: block" triggerDisplay="block">
-              <div className={`w-full px-4 py-3 rounded text-sm text-center bg-cl-bg-hover text-cl-text dark:bg-cl-bg-elevated dark:text-cl-bg`}>
+              <div className={`w-full px-4 py-3 rounded text-sm text-center bg-cl-bg-elevated border border-cl-border text-cl-text`}>
                 Block display — stretches full width
               </div>
             </Tooltip>

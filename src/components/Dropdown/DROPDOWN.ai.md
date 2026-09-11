@@ -97,7 +97,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | List of selectable options. |
+| `options` | array | `[]` | List of selectable options. |
 | `value` | string \| null | — | Controlled selected value. |
 | `defaultValue` | string | — | Initial selected value for uncontrolled usage. |
 | `onValueChange` | object | — | (value: string \| null, option: DropdownOption \| null) => void - Fires when the selected value changes. |
@@ -149,6 +149,13 @@ export default function Example() {
 | `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

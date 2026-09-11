@@ -102,7 +102,7 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` **(required)** | array | — | Top-level options for the dropdown. |
+| `options` **(required)** | array | `[]` | Top-level options for the dropdown. |
 | `value` | object | — | Controlled selection value as { [parentValue]: string \| string[] }. |
 | `defaultValue` | object | — | Initial selection value for uncontrolled usage. |
 | `onValueChange` | object | — | (value: CascadingValue, path: CascadingOption[]) => void |
@@ -162,6 +162,13 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `aria-label` | string | — | Accessible label for the dropdown. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

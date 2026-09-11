@@ -5,7 +5,7 @@ export default function TooltipExample() {
     <div className="space-y-4">
       <Tooltip content="This trigger is display: block" triggerDisplay="block">
         <div
-          className="w-full px-4 py-3 rounded text-sm text-center bg-cl-bg-hover text-cl-text dark:bg-cl-bg-elevated dark:text-cl-bg"
+          className="w-full px-4 py-3 rounded text-sm text-center bg-cl-bg-elevated border border-cl-border text-cl-text"
         >
           Block display — stretches full width
         </div>

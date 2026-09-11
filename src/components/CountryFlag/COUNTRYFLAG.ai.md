@@ -94,7 +94,7 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 |------|------|---------|-------------|
 | `code` **(required)** | string | — | ISO 3166-1 alpha-2 country code (e.g. 'US', 'GB'). |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| `"2xl"` \| number | — | Flag size as a preset or numeric pixel value. |
-| `aspectRatio` | number | — | Aspect ratio for the flag image. |
+| `aspectRatio` | number | `0.75` | Aspect ratio for the flag image. |
 | `alt` | string | — | Alt text for the flag image. |
 | `fallback` | object | — | React.ReactNode — Custom fallback content when the flag image fails to load. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
@@ -102,7 +102,7 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 | `basePath` | string | — | Where to load the flag SVG from. Omit to use the flags packaged with the library (no network request). Set it to fetch `${basePath}/${code}.svg` from a CDN or self-hosted directory instead. |
 | `classes` | object | — | CSS class overrides for flag sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
 | `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
@@ -148,6 +148,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ---
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

@@ -73,18 +73,18 @@ export default function Example() {
 | `onOpenChange` | object | — | (open: boolean) => void — Callback when the drawer's open state changes. |
 | `zIndex` | number | `9999` | Z-index of the drawer overlay and panel. |
 | `children` | object | — | React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter). |
-| `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | — | Direction from which the drawer slides in. |
-| `size` | string | — | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
-| `overlayColor` | string | — | Background color of the overlay. |
-| `overlayOpacity` | number | — | Opacity of the overlay (0-1). |
-| `overlayBlur` | number | — | Backdrop blur in pixels for the overlay. |
-| `duration` | number | — | Animation duration in milliseconds. |
+| `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | Direction from which the drawer slides in. |
+| `size` | string | `"300px"` | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
+| `overlayColor` | string | `"black"` | Background color of the overlay. |
+| `overlayOpacity` | number | `0.32` | Opacity of the overlay (0-1). |
+| `overlayBlur` | number | `0` | Backdrop blur in pixels for the overlay. |
+| `duration` | number | `300` | Animation duration in milliseconds. |
 | `lockScroll` | boolean | `true` | Locks body scroll when the drawer is open. |
 | `closeOnOverlayClick` | boolean | `true` | Closes the drawer when the overlay is clicked. |
 | `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
 | `classes` | object | — | CSS class overrides for drawer sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
 | `trapFocus` | boolean | `true` | Traps keyboard focus within the drawer. |
 | `restoreFocus` | boolean | `true` | Restores focus to the previously focused element when the drawer closes. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the drawer. |
@@ -93,10 +93,10 @@ export default function Example() {
 | `keepMounted` | boolean | `false` | Keep the drawer DOM mounted when closed. |
 | `modal` | boolean | `true` | Whether the drawer behaves as a modal dialog. |
 | `swipeable` | boolean | `false` | Enables swipe-to-close gesture. |
-| `swipeThreshold` | number | — | Minimum swipe distance in pixels to trigger close. |
+| `swipeThreshold` | number | `0.4` | Minimum swipe distance in pixels to trigger close. |
 | `snapPoints` | array | — | Array of snap point positions (0-1) for the drawer panel. |
 | `activeSnapPointIndex` | number | — | Controlled active snap point index. |
-| `defaultSnapPointIndex` | number | — | Initial snap point index for uncontrolled usage. |
+| `defaultSnapPointIndex` | number | `0` | Initial snap point index for uncontrolled usage. |
 | `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
 
 ## Keyboard Interactions

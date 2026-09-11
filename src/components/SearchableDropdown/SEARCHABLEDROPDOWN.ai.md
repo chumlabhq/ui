@@ -94,7 +94,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it. |
 | `value` | string \| null | — | Controlled selected value. |
 | `defaultValue` | string | — | Default uncontrolled selected value. |
 | `onValueChange` | object | — | (value: string \| null, option: SearchableDropdownOption \| null) => void — Callback fired when the selected value changes. |
@@ -124,7 +124,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loading` | boolean | — | Whether the dropdown is in a loading state. |
 | `onSearch` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | — | Initial options to display before any search is performed. Async branch only (`onSearch`). |
+| `initialOptions` | array | `[]` | Initial options to display before any search is performed. Async branch only (`onSearch`). |
 | `onLoadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
 | `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void — Callback when async loading fails. |
@@ -153,6 +153,13 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loadingText` | object | `"Loading..."` | React.ReactNode — Text shown during loading state. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

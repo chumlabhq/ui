@@ -108,7 +108,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `children` | object | — | React.ReactNode — Button content. |
 | `as` | `"button"` \| `"a"` \| `"span"` | `"button"` | HTML element to render as. |
 | `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Sets padding, type size, gap, icon box and loader together: 28, 40 and 52px tall. Also emits data-size on the root, so CSS can target it; the attribute is a hook, not the mechanism. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets padding, type size, gap, icon box and loader together: 28, 40 and 52px tall. Also emits data-size on the root, so CSS can target it; the attribute is a hook, not the mechanism. |
 | `disabled` | boolean | — | Disables interaction and applies disabled styling. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
@@ -123,7 +123,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
 | `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
 | `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `tooltip` | object | — | React.ReactNode — Tooltip content shown on hover. |
 | `tooltipProps` | object | — | Configuration for tooltip positioning and appearance. |
 | `href` | string | — | Link destination (required when as='a'). |
@@ -156,6 +156,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ---
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### Slot → visual mapping
 

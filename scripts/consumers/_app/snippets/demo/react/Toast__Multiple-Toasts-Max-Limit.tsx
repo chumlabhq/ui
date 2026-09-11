@@ -18,7 +18,7 @@ export default function ToastExample() {
         Trigger 4 Toasts
       </button>
       <button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
         onClick={
           () => {
             for (let i = 1; i <= 10; i++) {

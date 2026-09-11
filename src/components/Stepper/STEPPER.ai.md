@@ -94,7 +94,7 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` **(required)** | array | — | Array of step definitions. |
+| `steps` **(required)** | array | `[]` | Array of step definitions. |
 | `value` | string \| number | — | Controlled active step ID. |
 | `defaultValue` | string \| number | — | Default uncontrolled active step ID. |
 | `onValueChange` | object | — | (stepId: string \| number) => void — Callback fired when the active step changes. |
@@ -113,9 +113,9 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
 | `aria-label` | string | — | Accessible label for the stepper. |
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
-| `tooltipDefaults` | object | — | Default tooltip configuration applied to all step tooltips. |
+| `tooltipDefaults` | object | `{}` | Default tooltip configuration applied to all step tooltips. |
 | `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `className` | string | — | CSS class for the root element. |
@@ -126,6 +126,13 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `renderStep` | object | — | (props: StepRenderProps, defaultElement: ReactElement) => ReactNode — Custom step render function. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

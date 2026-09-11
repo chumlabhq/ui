@@ -93,16 +93,16 @@ These props have dependencies — using them wrong causes silent bugs:
 | `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
 | `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror. |
 | `disabled` | boolean | `false` | Disables all accordion items. |
-| `loop` | boolean | — | Whether keyboard navigation wraps from last to first item. |
+| `loop` | boolean | `true` | Whether keyboard navigation wraps from last to first item. |
 | `classes` | object | — | CSS class overrides for accordion sub-elements. |
-| `headingLevel` | `1` \| `2` \| `3` \| `4` \| `5` \| `6` | — | HTML heading level for accordion item triggers. |
+| `headingLevel` | `1` \| `2` \| `3` \| `4` \| `5` \| `6` | `3` | HTML heading level for accordion item triggers. |
 | `children` **(required)** | object | — | React.ReactNode — AccordionItem children. |
 | `asChild` | boolean | `false` | Merges accordion props onto a child element via Slot. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Preset size variant. |
 | `variant` | `"default"` \| `"bordered"` \| `"separated"` \| `"flush"` | `"default"` | Visual style variant. |
 | `animationEasing` | string | `"ease-in-out"` | CSS easing function for expand/collapse animation. |
-| `animationDuration` | number | — | Duration in milliseconds for expand/collapse animation. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `animationDuration` | number | `300` | Duration in milliseconds for expand/collapse animation. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
 | `expandOnPrint` | boolean | `false` | Expands all items when printing. |
@@ -110,12 +110,12 @@ These props have dependencies — using them wrong causes silent bugs:
 | `onExpandedChange` | object | — | (event: AccordionExpandEvent) => void |
 | `onKeyDown` | object | — | (event: KeyboardEvent, itemValue: string \| null) => void |
 | `preventClose` | object | — | (value: string) => boolean \| Promise<boolean> |
-| `preventCloseTimeout` | number | — | Timeout in ms for the preventClose callback. |
+| `preventCloseTimeout` | number | `10000` | Timeout in ms for the preventClose callback. |
 | `onFocusCapture` | object | — | (event: FocusEvent) => void |
 | `onBlurCapture` | object | — | (event: FocusEvent) => void |
 | `aria-busy` | boolean | — | ARIA busy state for async content. |
 | `aria-live` | `"off"` \| `"polite"` \| `"assertive"` | — | ARIA live region behavior. |
-| `announceExpanded` | boolean | — | Announces expanded state changes to screen readers. |
+| `announceExpanded` | boolean | `false` | Announces expanded state changes to screen readers. |
 
 ## Ref API (AccordionRef)
 
@@ -205,6 +205,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ---
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

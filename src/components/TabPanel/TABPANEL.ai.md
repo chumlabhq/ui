@@ -93,7 +93,7 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
 | `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
 | `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |
@@ -105,6 +105,13 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `keepMounted` | boolean | `false` | Keep previously mounted tab panels in the DOM. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

@@ -90,7 +90,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it. |
 | `value` | array | — | Controlled selected values. |
 | `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
 | `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
@@ -116,11 +116,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loading` | boolean | — | Shows a loading state. |
 | `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | — | Options to display before any search is performed. Async branch only (`onSearch`). |
+| `initialOptions` | array | `[]` | Options to display before any search is performed. Async branch only (`onSearch`). |
 | `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
 | `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
-| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
 | `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -147,6 +147,13 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `searchInputAriaLabel` | string | `"Search options"` | Accessible label for the search input. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

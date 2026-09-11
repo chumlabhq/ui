@@ -104,6 +104,12 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "TimePicker", fixture: "closed" },
   { component: "Toast", fixture: "default" },
   { component: "Tooltip", fixture: "open" },
+  // The arrow on a rotated side. `open` is top-placed, so the left/right
+  // geometry — which is the half that was wrong, the arrow landing 3px onto
+  // the bubble with its outline showing — was in no baseline at all. Planted by
+  // restoring the un-inset offset: 26 pixels against a budget of 1, at every
+  // width.
+  { component: "Tooltip", fixture: "open-right-with-arrow" },
 
   /**
    * Non-resting states. Everything above this line is a component sitting

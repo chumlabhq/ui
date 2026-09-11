@@ -409,6 +409,24 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const svgWidth = arrowSizeProp * 2;
     const svgHeight = arrowSizeProp;
 
+    /**
+     * The rotation moves the arrow's footprint, so the rotated sides need it
+     * back.
+     *
+     * The SVG's layout box is `svgWidth x svgHeight` (12x6 at the default
+     * size) whatever the side, and `rotate(90deg)` spins it about its own
+     * centre: the painted triangle ends up 6 wide and 12 tall, but the box the
+     * offsets are measured from did not change. On `left` and `right` that put
+     * only about 3px of the 6px arrow outside the bubble and left the other 3
+     * lying ON it — where both stroked edges are visible against the card, so
+     * the arrow read as a closed diamond overlapping the bubble instead of a
+     * point growing out of it. Measured before this: a right-placed arrow sat
+     * at dx -2 where top/bottom sit 5 to 6px clear.
+     *
+     * Half the difference between the two dimensions is exactly the shift.
+     */
+    const rotationInset = (svgWidth - svgHeight) / 2;
+
     const getArrowPosition = (): React.CSSProperties => {
       const style: React.CSSProperties = {
         position: "absolute",
@@ -435,7 +453,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             style.transform += " translateX(-50%)";
           break;
         case "left":
-          style.right = -svgHeight;
+          style.right = -svgHeight - rotationInset;
           style.top =
             position.arrowTop !== undefined
               ? position.arrowTop - svgHeight
@@ -444,7 +462,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             style.transform += " translateY(-50%)";
           break;
         case "right":
-          style.left = -svgHeight;
+          style.left = -svgHeight - rotationInset;
           style.top =
             position.arrowTop !== undefined
               ? position.arrowTop - svgHeight

@@ -475,6 +475,21 @@ const LIBRARY_TOTAL_HISTORY = [
       "measured, and the work only happens when a consumer actually passes " +
       "`classes`.",
   },
+  {
+    kb: 152.10,
+    commit: "(uncommitted)",
+    date: "2026-09-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.05 KB, all of it Tooltip: the arrow's offset on the rotated " +
+      "sides. `rotate(90deg)` spins the SVG about its own centre, so the box the " +
+      "offsets are measured from does not change and only about half the arrow " +
+      "cleared the bubble — the rest lay ON it with both stroked edges showing, " +
+      "which is why a right-placed arrow read as a diamond overlapping the card " +
+      "rather than a point growing out of it. Measured at dx -2 before and dx -5 " +
+      "after, matching top and bottom exactly. The bytes are one derived " +
+      "constant and the comment that says why it exists.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

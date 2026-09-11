@@ -112,13 +112,20 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
 | `classes` | object | — | CSS class overrides for all sub-elements. |
 | `unstyled` | boolean | `false` | Omits built-in layout helpers so layout comes entirely from classes. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `false` | Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting. |
 | `onCancel` | object | — | () => void — Called when the clock cancel button is pressed. |
 | `onConfirm` | object | — | () => void — Called when the clock confirm button is pressed. |
 | `cancelText` | string | `"Cancel"` | Text for the clock cancel button. |
 | `okText` | string | `"OK"` | Text for the clock OK button. |
 
 ## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 ### How class merging works
 

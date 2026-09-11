@@ -70,6 +70,24 @@ const StylingDemo = () => {
           prop with named slots. The TypeScript types tell you what slots
           are available — IDE autocompletion does the rest.
         </p>
+        <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
+          <strong className="text-fg">A plain utility you pass replaces the
+          library&apos;s for that property, in every state.</strong>{" "}
+          Passing{" "}
+          <code className="font-mono text-[12px] text-accent">text-red-500</code>{" "}
+          to a slot drops the library&apos;s{" "}
+          <code className="font-mono text-[12px] text-accent">hover:text-…</code>{" "}
+          and{" "}
+          <code className="font-mono text-[12px] text-accent">data-[state=checked]:text-…</code>{" "}
+          for that slot too — otherwise they would sit beside your class and win
+          in their own state, which is the shape where your override is in the
+          DOM and does nothing. If you want a hover of your own, pass it:{" "}
+          <code className="font-mono text-[12px] text-accent">
+            &quot;text-red-500 hover:text-red-400&quot;
+          </code>
+          . A variant you pass is never dropped — only the library&apos;s, and
+          only where it collides with a plain utility of yours.
+        </p>
       </Section>
 
       <Section
