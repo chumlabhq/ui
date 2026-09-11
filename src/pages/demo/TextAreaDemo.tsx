@@ -140,7 +140,7 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 const getClasses = (dark: boolean) => ({
   textarea: {
     control: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
-    input: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-disabled`,
+    input: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary`,
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
     description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
     message: "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
@@ -150,19 +150,19 @@ const getClasses = (dark: boolean) => ({
   wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:text-cl-text-secondary dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
   wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:text-cl-text-secondary dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
   wrapperDisabled: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
-  disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled`,
+  disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary`,
 
   container: "flex flex-col",
   icon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
   iconHover: dark
     ? "text-cl-text-tertiary hover:text-cl-text-secondary"
     : "text-cl-text-tertiary hover:text-cl-text-secondary",
-  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled`,
+  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
   propName: `font-mono text-xs text-cl-accent`,
   propType: `font-mono text-[11px] text-cl-text-tertiary`,
-  propDefault: `font-mono text-[11px] text-cl-text-disabled`,
+  propDefault: `font-mono text-[11px] text-cl-text-tertiary`,
   propDesc: `text-xs text-cl-text-secondary`,
   code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,

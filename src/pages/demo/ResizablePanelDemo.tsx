@@ -112,27 +112,27 @@ const ResizablePanelDemo = () => {
     const cl = {
       blue: {
         text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
+        muted: dark ? "text-cl-accent" : "text-cl-accent",
       },
       green: {
         text: dark ? "text-cl-success" : "text-cl-success",
-        muted: dark ? "text-cl-success/60" : "text-cl-success/60",
+        muted: dark ? "text-cl-success" : "text-cl-success",
       },
       amber: {
         text: dark ? "text-cl-warning" : "text-cl-warning",
-        muted: dark ? "text-cl-warning/60" : "text-cl-warning/60",
+        muted: dark ? "text-cl-warning" : "text-cl-warning",
       },
       indigo: {
         text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
+        muted: dark ? "text-cl-accent" : "text-cl-accent",
       },
       teal: {
         text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
+        muted: dark ? "text-cl-accent" : "text-cl-accent",
       },
       purple: {
         text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
+        muted: dark ? "text-cl-accent" : "text-cl-accent",
       },
     }[color] ?? {
       text: dark ? "text-cl-text-tertiary" : "text-cl-text-secondary",

@@ -586,7 +586,7 @@ function getPaginationClasses(_dark: boolean) {
     selectorDropdown: `absolute bottom-full mb-1 left-0 z-50 border rounded shadow-lg min-w-[60px] bg-white border-cl-border dark:bg-cl-bg dark:border-cl-text/[0.06]`,
     selectorOption: `w-full px-2 py-1 text-left text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium dark:hover:bg-cl-bg-hover dark:data-[selected]:bg-cl-accent/10 dark:data-[selected]:font-medium`,
     pageButton: `px-2 py-1 text-sm text-cl-text-tertiary hover:text-cl-text`,
-    activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-accent bg-cl-accent/10 border-cl-border-input-focus dark:text-cl-accent dark:bg-cl-accent/10 dark:border dark:border-cl-border-input-focus/30`,
+    activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-text bg-cl-accent/10 border-cl-border-input-focus dark:text-cl-accent dark:bg-cl-accent/10 dark:border dark:border-cl-border-input-focus/30`,
     navButton: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-tertiary hover:text-cl-text`,
     ellipsis: "px-2 text-cl-text-tertiary",
     label: `text-sm text-cl-text-secondary`,
@@ -620,14 +620,14 @@ const StatusBadge = ({
 }) => {
   const styles = dark
     ? {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-text/15 text-cl-text-tertiary",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       }
     : {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       };
 
   return (
@@ -648,16 +648,16 @@ const PerformanceBadge = ({
 }) => {
   const styles = dark
     ? {
-        excellent: "bg-cl-success/15 text-cl-success",
-        good: "bg-cl-accent/15 text-cl-accent",
-        average: "bg-cl-warning/15 text-cl-warning",
-        poor: "bg-cl-error/15 text-cl-error",
+        excellent: "bg-cl-success/15 text-cl-text",
+        good: "bg-cl-accent/15 text-cl-text",
+        average: "bg-cl-warning/15 text-cl-text",
+        poor: "bg-cl-error/15 text-cl-text",
       }
     : {
-        excellent: "bg-cl-success/15 text-cl-success",
-        good: "bg-cl-accent/10 text-cl-accent",
-        average: "bg-cl-warning/15 text-cl-warning",
-        poor: "bg-cl-error/15 text-cl-error",
+        excellent: "bg-cl-success/15 text-cl-text",
+        good: "bg-cl-accent/10 text-cl-text",
+        average: "bg-cl-warning/15 text-cl-text",
+        poor: "bg-cl-error/15 text-cl-text",
       };
 
   return (
@@ -995,15 +995,15 @@ function ServerApiDemo({
               className={`text-xs px-2 py-1 rounded-full whitespace-nowrap font-medium ${
                 isOut
                   ? dark
-                    ? "bg-cl-error/15 text-cl-error"
-                    : "bg-cl-error/15 text-cl-error"
+                    ? "bg-cl-error/15 text-cl-text"
+                    : "bg-cl-error/15 text-cl-text"
                   : isLow
                     ? dark
-                      ? "bg-cl-warning/15 text-cl-warning"
-                      : "bg-cl-warning/15 text-cl-warning"
+                      ? "bg-cl-warning/15 text-cl-text"
+                      : "bg-cl-warning/15 text-cl-text"
                     : dark
-                      ? "bg-cl-success/15 text-cl-success"
-                      : "bg-cl-success/15 text-cl-success"
+                      ? "bg-cl-success/15 text-cl-text"
+                      : "bg-cl-success/15 text-cl-text"
               }`}
             >
               {status}
@@ -1048,7 +1048,7 @@ function ServerApiDemo({
         {(selectedCategory || selectedStatuses.length > 0) && (
           <div className="flex items-center gap-2 flex-wrap">
             {selectedCategory && (
-              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/15 dark:text-cl-accent`}>
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/15 dark:text-cl-accent`}>
                 {selectedCategory}
                 <button onClick={() => { setSelectedCategory(""); setPage(1); setColumnFilters((prev) => prev.filter((f) => f.id !== "category")); }} className="cursor-pointer hover:opacity-70">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
@@ -1056,7 +1056,7 @@ function ServerApiDemo({
               </span>
             )}
             {selectedStatuses.map((st) => (
-              <span key={st} className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/15 dark:text-cl-success`}>
+              <span key={st} className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/15 dark:text-cl-success`}>
                 {st}
                 <button onClick={() => {
                   const remaining = selectedStatuses.filter((s2) => s2 !== st);
@@ -1674,7 +1674,7 @@ const TableDemo = () => {
         header: "Actions",
         cell: () => (
           <button
-            className={`px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer`}
+            className={`px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer`}
             onClick={() => alert("Action clicked")}
           >
             Edit
@@ -2103,7 +2103,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           </svg>
                         </button>
                         <button
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-warning hover:bg-cl-warning/15 dark:text-cl-warning dark:hover:bg-cl-warning/15`}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-text hover:bg-cl-warning/15 dark:text-cl-warning dark:hover:bg-cl-warning/15`}
                           title="Share"
                           onClick={() => alert(`Share link copied for ${name}`)}
                         >
@@ -2905,7 +2905,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   {customSelectedIds.length > 0 && (
                     <button
                       onClick={() => setCustomSelectedIds([])}
-                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-success bg-cl-success/15 hover:bg-cl-success/15 dark:text-cl-success dark:bg-cl-success/15 dark:hover:bg-cl-success/25`}
+                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-success/15 hover:bg-cl-success/15 dark:text-cl-success dark:bg-cl-success/15 dark:hover:bg-cl-success/25`}
                     >
                       Clear Selection
                     </button>
@@ -2990,7 +2990,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 className="cursor-pointer p-0.5 transition-transform hover:scale-110"
               >
                 <svg
-                  className={`w-5 h-5 transition-colors ${checked ? "text-cl-warning fill-cl-warning" : dark ? "text-cl-text-secondary fill-none hover:text-cl-warning/50" : "text-cl-text-secondary fill-none hover:text-cl-warning/50"}`}
+                  className={`w-5 h-5 transition-colors ${checked ? "text-cl-warning fill-cl-warning" : dark ? "text-cl-text-secondary fill-none hover:text-cl-warning" : "text-cl-text-secondary fill-none hover:text-cl-warning"}`}
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   strokeWidth={1.5}
@@ -3015,7 +3015,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   {starredIds.length > 0 && (
                     <button
                       onClick={() => setStarredIds([])}
-                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-warning bg-cl-warning/15 hover:bg-cl-warning/15 dark:text-cl-warning dark:bg-cl-warning/15 dark:hover:bg-cl-warning/25`}
+                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-warning/15 hover:bg-cl-warning/15 dark:text-cl-text dark:bg-cl-warning/15 dark:hover:bg-cl-warning/25`}
                     >
                       Clear All Stars
                     </button>
@@ -3390,7 +3390,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     )}
                   </div>
                   <span
-                    className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${filter ? (dark ? "bg-cl-accent/15 text-cl-accent" : "bg-cl-accent/10 text-cl-accent") : dark ? "bg-cl-bg-hover text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
+                    className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${filter ? (dark ? "bg-cl-accent/15 text-cl-text" : "bg-cl-accent/10 text-cl-text") : dark ? "bg-cl-bg-hover text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
                   >
                     {matchCount} {matchCount === 1 ? "result" : "results"}
                   </span>
@@ -3685,7 +3685,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   >
                     <div className="flex items-start gap-4">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent`}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent/10 text-cl-text dark:bg-cl-accent/20 dark:text-cl-accent`}
                       >
                         {row.name
                           .split(" ")
@@ -3759,7 +3759,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div
-                          className={`w-12 h-12 rounded-cl-lg flex items-center justify-center text-lg font-bold bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent`}
+                          className={`w-12 h-12 rounded-cl-lg flex items-center justify-center text-lg font-bold bg-cl-accent/10 text-cl-text dark:bg-cl-accent/20 dark:text-cl-accent`}
                         >
                           {row.name[0]}
                         </div>
@@ -3778,7 +3778,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       </div>
                       <div className="flex items-center gap-2">
                         <button
-                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
                           onClick={() => alert(`View profile: ${row.name}`)}
                         >
                           View Profile
@@ -4020,8 +4020,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all cursor-pointer ${
                         vis[col]
                           ? dark
-                            ? "bg-cl-accent/15 text-cl-accent border-cl-border-input-focus/30"
-                            : "bg-cl-accent/10 text-cl-accent border-cl-border-input-focus"
+                            ? "bg-cl-accent/15 text-cl-text border-cl-border-input-focus/30"
+                            : "bg-cl-accent/10 text-cl-text border-cl-border-input-focus"
                           : dark
                             ? "bg-cl-text/[0.03] text-cl-text-secondary border border-cl-text/[0.06] line-through"
                             : "bg-cl-bg-hover text-cl-text-tertiary border-cl-border line-through"
@@ -4124,7 +4124,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       </svg>
                       Columns
                       <span
-                        className={`text-xs px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/15 dark:text-cl-accent`}
+                        className={`text-xs px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/15 dark:text-cl-accent`}
                       >
                         {visibleCount}
                       </span>
@@ -4300,8 +4300,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         className={`flex items-center justify-between gap-2 px-3 py-2 rounded-cl-md text-sm transition-all cursor-pointer ${
                           vis[col]
                             ? dark
-                              ? "bg-cl-accent/10 text-cl-accent"
-                              : "bg-cl-accent/10 text-cl-accent"
+                              ? "bg-cl-accent/10 text-cl-text"
+                              : "bg-cl-accent/10 text-cl-text"
                             : dark
                               ? "bg-cl-text/[0.02] text-cl-text-tertiary"
                               : "bg-white text-cl-text-tertiary"
@@ -5069,7 +5069,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             const NumberHandle = ({ className }: { className?: string }) => {
               return (
                 <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${className} bg-cl-accent/10 text-cl-accent border-cl-border-input-focus dark:bg-cl-accent/20 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/30`}
+                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${className} bg-cl-accent/10 text-cl-text border-cl-border-input-focus dark:bg-cl-accent/20 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/30`}
                 >
                   ≡
                 </div>
@@ -5119,7 +5119,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       {history.map((h, i) => (
                         <span
                           key={i}
-                          className={`text-xs px-2 py-1 rounded-cl-md bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/10 dark:text-cl-accent`}
+                          className={`text-xs px-2 py-1 rounded-cl-md bg-cl-accent/10 text-cl-text dark:bg-cl-accent/10 dark:text-cl-accent`}
                         >
                           {h}
                         </span>
@@ -5199,7 +5199,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   header: () => <span>#</span>,
                   cell: ({ row }) => (
                     <span
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-cl-warning/15 text-cl-warning dark:bg-cl-warning/15 dark:text-cl-warning`}
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-cl-warning/15 text-cl-text dark:bg-cl-warning/15 dark:text-cl-text`}
                     >
                       {row.index + 1}
                     </span>
@@ -5630,7 +5630,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       Inactive
                     </span>
                     <span
-                      className={`flex items-center gap-1.5 text-cl-warning dark:text-cl-warning`}
+                      className={`flex items-center gap-1.5 text-cl-text dark:text-cl-warning`}
                     >
                       <span className={`w-2 h-2 rounded-full bg-cl-warning dark:bg-cl-warning/30`} />
                       {
@@ -5646,7 +5646,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               <tr className={dark ? "bg-cl-text/[0.02]" : "bg-cl-bg-hover"}>
                 <td
                   colSpan={100}
-                  className={`px-4 py-2 text-[11px] text-cl-text-disabled`}
+                  className={`px-4 py-2 text-[11px] text-cl-text-tertiary`}
                 >
                   Last updated:{" "}
                   {new Date().toLocaleDateString("en-US", {
@@ -5698,12 +5698,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             />
             {contextMenuInfo && (
               <div
-                className={`p-3 rounded-cl-md text-sm bg-cl-warning/15 text-cl-warning border border-cl-warning dark:bg-cl-warning/10 dark:text-cl-warning dark:border dark:border-cl-warning/20`}
+                className={`p-3 rounded-cl-md text-sm bg-cl-warning/15 text-cl-text border border-cl-warning dark:bg-cl-warning/10 dark:text-cl-text dark:border dark:border-cl-warning/20`}
               >
                 {contextMenuInfo}
                 <button
                   onClick={() => setContextMenuInfo(null)}
-                  className={`ml-3 underline text-xs text-cl-warning dark:text-cl-warning cursor-pointer`}
+                  className={`ml-3 underline text-xs text-cl-text dark:text-cl-warning cursor-pointer`}
                 >
                   Dismiss
                 </button>
@@ -5742,7 +5742,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             />
             {lastCopied && (
               <div
-                className={`p-3 rounded-cl-md text-sm bg-cl-success/15 text-cl-success border border-cl-success dark:bg-cl-success/10 dark:text-cl-success dark:border dark:border-cl-success/20`}
+                className={`p-3 rounded-cl-md text-sm bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/10 dark:text-cl-success dark:border dark:border-cl-success/20`}
               >
                 Copied: {lastCopied}
               </div>
@@ -6404,7 +6404,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     {filters.map((f) => (
                       <span
                         key={f.id}
-                        className={`text-xs px-2 py-1 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/15 dark:text-cl-accent`}
+                        className={`text-xs px-2 py-1 rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/15 dark:text-cl-accent`}
                       >
                         {f.id}:{" "}
                         {Array.isArray(f.value)
@@ -6557,8 +6557,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           label: "Active",
                           value: "active",
                           color: dark
-                            ? "text-cl-success bg-cl-success/10"
-                            : "text-cl-success bg-cl-success/15",
+                            ? "text-cl-text bg-cl-success/10"
+                            : "text-cl-text bg-cl-success/15",
                         },
                         {
                           label: "Inactive",
@@ -6571,8 +6571,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           label: "Pending",
                           value: "pending",
                           color: dark
-                            ? "text-cl-warning bg-cl-warning/10"
-                            : "text-cl-warning bg-cl-warning/15",
+                            ? "text-cl-text bg-cl-warning/10"
+                            : "text-cl-text bg-cl-warning/15",
                         },
                       ].map((opt) => {
                         const selected = currentValues.includes(opt.value);
@@ -6819,8 +6819,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-cl-md text-sm cursor-pointer transition-all mb-0.5 ${
                             selected
                               ? dark
-                                ? "bg-cl-accent/15 text-cl-accent"
-                                : "bg-cl-accent/10 text-cl-accent"
+                                ? "bg-cl-accent/15 text-cl-text"
+                                : "bg-cl-accent/10 text-cl-text"
                               : dark
                                 ? "text-cl-text-secondary hover:bg-cl-bg-hover"
                                 : "text-cl-text hover:bg-cl-bg-hover"
@@ -6852,7 +6852,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     })}
                     {currentValues.length > 0 && (
                       <div
-                        className={`mt-1 px-2 py-1 text-[11px] text-cl-text-disabled`}
+                        className={`mt-1 px-2 py-1 text-[11px] text-cl-text-tertiary`}
                       >
                         {currentValues.length} selected
                       </div>
@@ -6965,8 +6965,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all ${
                                   selected
                                     ? dark
-                                      ? "bg-cl-accent/20 text-cl-accent border-cl-border-input-focus/40"
-                                      : "bg-cl-accent/10 text-cl-accent border-cl-border-input-focus"
+                                      ? "bg-cl-accent/20 text-cl-text border-cl-border-input-focus/40"
+                                      : "bg-cl-accent/10 text-cl-text border-cl-border-input-focus"
                                     : dark
                                       ? "bg-cl-bg-hover text-cl-text-tertiary border border-cl-text/[0.08] hover:border-cl-border-input-focus/30"
                                       : "bg-cl-bg-hover text-cl-text-secondary border-cl-border hover:border-cl-border-input-focus"
@@ -6980,7 +6980,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         {currentValues.length > 0 && (
                           <button
                             onClick={() => setValues([])}
-                            className={`mt-2 text-xs cursor-pointer text-cl-text-disabled hover:text-cl-text-secondary`}
+                            className={`mt-2 text-xs cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary`}
                           >
                             Clear
                           </button>
@@ -6994,7 +6994,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke={
-                        active ? (dark ? "#22d3ee" : "#0891b2") : "currentColor"
+                        active ? (dark ? "#22d3ee" : "#0e7490") : "currentColor"
                       }
                       strokeWidth="2"
                       strokeLinecap="round"
@@ -7019,7 +7019,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     {filters.map((f) => (
                       <span
                         key={f.id}
-                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-cl-accent/10 text-cl-accent border-cl-border-input-focus dark:bg-cl-accent/10 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/20`}
+                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-cl-accent/10 text-cl-text border-cl-border-input-focus dark:bg-cl-accent/10 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/20`}
                       >
                         {f.id}:{" "}
                         {Array.isArray(f.value)
@@ -7049,7 +7049,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     ))}
                     <button
                       onClick={() => setFilters([])}
-                      className={`text-xs cursor-pointer text-cl-text-disabled hover:text-cl-text-secondary`}
+                      className={`text-xs cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary`}
                     >
                       Clear all
                     </button>
@@ -7361,7 +7361,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     <button
                       key={col}
                       onClick={() => toggleGroup(col)}
-                      className={`px-2.5 py-1 rounded-cl-md text-xs cursor-pointer transition-colors ${groupCols.includes(col) ? (dark ? "bg-cl-accent/20 text-cl-accent" : "bg-cl-accent/10 text-cl-accent") : dark ? "bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover" : "bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover"}`}
+                      className={`px-2.5 py-1 rounded-cl-md text-xs cursor-pointer transition-colors ${groupCols.includes(col) ? (dark ? "bg-cl-accent/20 text-cl-text" : "bg-cl-accent/10 text-cl-text") : dark ? "bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover" : "bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover"}`}
                     >
                       <span className="capitalize">{col}</span>
                     </button>
@@ -7436,7 +7436,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           {row.name}
                         </span>
                         <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${row.status === "active" ? (dark ? "bg-cl-success/15 text-cl-success" : "bg-cl-success/15 text-cl-success") : row.status === "pending" ? (dark ? "bg-cl-warning/15 text-cl-warning" : "bg-cl-warning/15 text-cl-warning") : dark ? "bg-cl-text/15 text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-secondary"}`}
+                          className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${row.status === "active" ? (dark ? "bg-cl-success/15 text-cl-text" : "bg-cl-success/15 text-cl-text") : row.status === "pending" ? (dark ? "bg-cl-warning/15 text-cl-text" : "bg-cl-warning/15 text-cl-text") : dark ? "bg-cl-text/15 text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-secondary"}`}
                         >
                           {row.status}
                         </span>
@@ -7580,7 +7580,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         },
                       ])
                     }
-                    className={`px-3 py-1.5 text-xs rounded-cl-md cursor-pointer transition-colors bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30`}
+                    className={`px-3 py-1.5 text-xs rounded-cl-md cursor-pointer transition-colors bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30`}
                   >
                     Save current view
                   </button>

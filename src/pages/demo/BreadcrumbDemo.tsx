@@ -167,7 +167,7 @@ const getClasses = (dark: boolean) => ({
      keys — Breadcrumb has no such slots, and passing them there styled
      nothing. */
   coloredExtra: {
-    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:hover:bg-cl-accent/20 dark:text-cl-accent`,
+    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-text dark:bg-cl-accent/20 dark:hover:bg-cl-accent/20 dark:text-cl-accent`,
     dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-white border border-cl-border-input-focus dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus`,
     dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/20`,
   },
@@ -349,7 +349,7 @@ const BreadcrumbDemo = () => {
                   <span className="flex items-center gap-1.5">
                     Status{" "}
                     <span
-                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-success/15 text-cl-success dark:bg-cl-success/20 dark:text-cl-success`}
+                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-success/15 text-cl-text dark:bg-cl-success/20 dark:text-cl-success`}
                     >
                       Active
                     </span>
@@ -363,7 +363,7 @@ const BreadcrumbDemo = () => {
                   <span className="flex items-center gap-1.5">
                     Details{" "}
                     <span
-                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent`}
+                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-accent/10 text-cl-text dark:bg-cl-accent/20 dark:text-cl-accent`}
                     >
                       New
                     </span>

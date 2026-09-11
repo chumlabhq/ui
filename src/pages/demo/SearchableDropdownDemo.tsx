@@ -191,7 +191,7 @@ const darkTheme = {
 const warmTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-warning hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
   triggerText: "flex-1 truncate",
   content:
     "rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border border-cl-warning",
@@ -562,7 +562,7 @@ const SearchableDropdownDemo = () => {
                     {selectedOption?.label ?? ph}
                   </span>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded-full ${isOpen ? (dark ? "bg-cl-accent/20 text-cl-accent" : "bg-cl-accent/10 text-cl-accent") : dark ? "bg-cl-bg-elevated text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
+                    className={`text-xs px-2 py-0.5 rounded-full ${isOpen ? (dark ? "bg-cl-accent/20 text-cl-text" : "bg-cl-accent/10 text-cl-text") : dark ? "bg-cl-bg-elevated text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
                   >
                     {isOpen ? "Open" : "Closed"}
                   </span>
@@ -722,7 +722,7 @@ const SearchableDropdownDemo = () => {
                 placeholder="Search with star..."
                 selectedIcon={
                   <StarIcon
-                    className={`w-4 h-4 shrink-0 text-cl-warning`}
+                    className={`w-4 h-4 shrink-0 text-cl-text`}
                   />
                 }
                 classes={c.dropdown}

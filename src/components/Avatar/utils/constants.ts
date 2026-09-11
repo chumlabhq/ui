@@ -114,19 +114,35 @@ export const DEFAULT_DARK_BORDER_COLORS = [
   "#38bdf8",
 ];
 
+/**
+ * The light-mode text colour for each generated avatar, paired by index with
+ * `DEFAULT_BACKGROUND_COLORS`.
+ *
+ * Nine of the twelve pairs used to fail AA against their own background — from
+ * 2.64:1 (yellow) to 3.95:1 (red) — while all twelve dark pairs passed at 5.28
+ * and up. Initials are TEXT, so 4.5 is the floor, and each failing entry was
+ * stepped down the Tailwind ramp to the first shade that clears it: cyan 4.79,
+ * emerald 4.84, yellow 6.15 (700 was still 4.42), red 5.30, pink 5.14, teal
+ * 4.86, orange 4.52, lime 4.60, sky 5.17.
+ *
+ * The fixture sweep could not have found this and did not: `autoColor` picks
+ * the index from a hash of the NAME, so the handful of names in the fixtures
+ * only ever landed on a few entries. It took a demo page rendering many names
+ * and `e2e/demo-contrast.spec.ts` pointed at it.
+ */
 export const DEFAULT_TEXT_COLORS = [
   "#4f46e5",
   "#7c3aed",
-  "#0891b2",
-  "#059669",
-  "#ca8a04",
-  "#dc2626",
-  "#db2777",
+  "#0e7490",
+  "#047857",
+  "#854d0e",
+  "#b91c1c",
+  "#be185d",
   "#4f46e5",
-  "#0d9488",
-  "#ea580c",
-  "#65a30d",
-  "#0284c7",
+  "#0f766e",
+  "#c2410c",
+  "#4d7c0f",
+  "#0369a1",
 ];
 
 export const DEFAULT_DARK_TEXT_COLORS = [

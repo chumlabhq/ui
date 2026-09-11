@@ -31,7 +31,10 @@ const getClasses = (_dark: boolean) => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   btnSuccess: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success`,
   btnWarning: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning`,
-  btnError: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-white hover:bg-cl-error/90`,
+  /* `text-cl-bg`, not `text-white`: white on the light-mode error fill
+     measures 3.41:1, under AA for a 12px label. The dark foreground on
+     the same fill clears it, and matches btnSuccess and btnWarning. */
+  btnError: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-cl-bg hover:bg-cl-error/90`,
   btnInfo: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90`,
 });
 

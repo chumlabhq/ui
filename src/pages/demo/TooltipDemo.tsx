@@ -501,7 +501,7 @@ const TooltipDemo = () => {
           </Tooltip>
           <Tooltip
             content="Emerald arrow"
-            arrowColor={dark ? "#34d399" : "#059669"}
+            arrowColor={dark ? "#34d399" : "#047857"}
             classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-bg bg-cl-success dark:bg-cl-success` }}
           >
             <button className={c.trigger}>Emerald</button>

@@ -30,10 +30,19 @@ import {
  *
  * They are four adjacent cool hues — indigo, violet, cyan, emerald — at
  * matching lightness and low saturation, so no single avatar steps forward and
- * the badge stays the thing that changes. Taken from the library's own default
- * ramps rather than invented, so each background/text pair is already a
- * contrast-checked pair, and light and dark walk the same hue order: switching
- * theme re-lights the row instead of repainting it in a different palette.
+ * the badge stays the thing that changes. Light and dark walk the same hue
+ * order, so switching theme re-lights the row instead of repainting it in a
+ * different palette.
+ *
+ * MEASURED, not assumed. This comment used to say the pairs were "already a
+ * contrast-checked pair" because they came from the library's ramps, and two of
+ * the four were not: cyan sat at 3.29:1 and emerald at 3.32:1 against their own
+ * backgrounds, under the 4.5 an avatar's initials need. Indigo (5.10) and
+ * violet (4.80) were fine. The two were stepped down one shade — cyan to
+ * #155e75 for 6.49, emerald to #047857 for 4.84 — and the dark pairs all clear
+ * it already, at 5.73 to 8.12. `e2e/demo-contrast.spec.ts` is what measures it
+ * now; the fixture sweep never could, because `autoColor` hashes the NAME and
+ * the fixtures only ever land on a few entries.
  *
  * Set directly rather than through `autoColor`, which offers no way to choose:
  * it derives the index from a hash of the name, and its dark colours come from
@@ -43,8 +52,8 @@ import {
 const BADGE_TONES = [
   { bg: "#e0e7ff", text: "#4f46e5", darkBg: "#312e81", darkText: "#a5b4fc" },
   { bg: "#ede9fe", text: "#7c3aed", darkBg: "#3b0764", darkText: "#c4b5fd" },
-  { bg: "#cffafe", text: "#0891b2", darkBg: "#164e63", darkText: "#67e8f9" },
-  { bg: "#d1fae5", text: "#059669", darkBg: "#064e3b", darkText: "#6ee7b7" },
+  { bg: "#cffafe", text: "#155e75", darkBg: "#164e63", darkText: "#67e8f9" },
+  { bg: "#d1fae5", text: "#047857", darkBg: "#064e3b", darkText: "#6ee7b7" },
 ];
 
 /**
@@ -76,12 +85,12 @@ const getClasses = (dark: boolean) => ({
     ],
     text: [
       "#4f46e5",
-      "#2563eb",
-      "#059669",
-      "#ca8a04",
-      "#db2777",
+      "#1d4ed8",
+      "#047857",
+      "#854d0e",
+      "#be185d",
       "#7c3aed",
-      "#0891b2",
+      "#0e7490",
       "#ef4444",
     ],
   },

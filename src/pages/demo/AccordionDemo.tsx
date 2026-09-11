@@ -115,12 +115,12 @@ const getClasses = (dark: boolean) => ({
     item: "",
     trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-cl-text hover:text-cl-accent focus-visible:ring-cl-accent dark:text-cl-text dark:hover:text-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
   },
-  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled`,
+  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
   code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
-  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent/10 text-cl-accent ring-1 ring-inset ring-cl-accent/10 dark:bg-cl-accent/10 dark:text-cl-accent dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
+  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent/10 text-cl-text ring-1 ring-inset ring-cl-accent/10 dark:bg-cl-accent/10 dark:text-cl-accent dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer`,
   stateDisplay: `text-sm font-mono text-cl-text-secondary`,
@@ -855,7 +855,7 @@ const AccordionDemo = () => {
                 subtitle="Learn about our performance features"
                 leftSlot={
                   <BoltIcon
-                    className={`w-4 h-4 text-cl-warning`}
+                    className={`w-4 h-4 text-cl-text`}
                   />
                 }
               >
@@ -875,7 +875,7 @@ const AccordionDemo = () => {
                 }
                 rightSlot={
                   <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/10 dark:text-cl-success`}
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/10 dark:text-cl-success`}
                   >
                     New
                   </span>

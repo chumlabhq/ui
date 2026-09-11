@@ -413,7 +413,7 @@ const getClasses = () => ({
 });
 
 const getBlueClasses = (_dark: boolean): CascadingDropdownClasses => ({
-  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent border-cl-accent bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/15`,
+  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent border-cl-accent bg-cl-accent/10 text-cl-text hover:bg-cl-accent/15`,
   content: `rounded-cl-md shadow-cl-md bg-cl-bg-elevated border border-cl-accent`,
   item: `flex items-center justify-between px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
   subContent: `min-w-[180px] rounded-cl-md shadow-cl-md ml-1 max-h-[320px] overflow-y-auto bg-cl-bg-elevated border border-cl-accent`,
@@ -1194,7 +1194,7 @@ const CascadingDropdownDemo = () => {
                 searchIcon: `w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent`,
                 subSearchControl: `flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30`,
                 subSearchInput: `flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-purple-400/70 dark:text-cl-accent dark:placeholder-purple-400/50`,
-                subSearchIcon: `w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/60`,
+                subSearchIcon: `w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent`,
               }}
             />
           </div>
@@ -1658,7 +1658,7 @@ const CascadingDropdownDemo = () => {
                     <span className="w-2 h-2 rounded-full bg-cl-accent" />
                     <span>Design</span>
                     <span
-                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent`}
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/40 dark:text-cl-accent`}
                     >
                       3 items
                     </span>
@@ -1679,7 +1679,7 @@ const CascadingDropdownDemo = () => {
                     <span className="w-2 h-2 rounded-full bg-cl-accent" />
                     <span>Engineering</span>
                     <span
-                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent`}
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/40 dark:text-cl-accent`}
                     >
                       4 items
                     </span>
@@ -1701,7 +1701,7 @@ const CascadingDropdownDemo = () => {
                     <span className="w-2 h-2 rounded-full bg-cl-success" />
                     <span>Marketing</span>
                     <span
-                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/40 dark:text-cl-success`}
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/40 dark:text-cl-success`}
                     >
                       2 items
                     </span>

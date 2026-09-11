@@ -256,8 +256,8 @@ const getClasses = (dark: boolean) => ({
       iconInactive: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
       count: "px-2 py-0.5 text-xs font-semibold rounded-full",
       countActive: dark
-        ? "bg-cl-accent/20 text-cl-accent"
-        : "bg-cl-accent/10 text-cl-accent",
+        ? "bg-cl-accent/20 text-cl-text"
+        : "bg-cl-accent/10 text-cl-text",
       countInactive: dark
         ? "bg-cl-bg-elevated text-cl-text-secondary"
         : "bg-cl-bg-hover text-cl-text-secondary",
@@ -886,7 +886,7 @@ const TabPanelDemo = () => {
                     <button
                       type="button"
                       onClick={() => removeDynamicTab(tab.id)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors bg-cl-error/15 hover:bg-cl-error/25 text-cl-error border border-cl-error/30 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors bg-cl-error/15 hover:bg-cl-error/25 text-cl-text border border-cl-error/30 cursor-pointer"
                     >
                       <TrashIcon className="w-4 h-4" />
                       Remove this tab

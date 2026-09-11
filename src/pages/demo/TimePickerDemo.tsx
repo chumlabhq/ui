@@ -74,7 +74,7 @@ const darkTheme: TimePickerClasses = {
 const warmTheme: TimePickerClasses = {
   root: "inline-flex flex-col gap-1 text-cl-warning",
   control: "relative",
-  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-warning hover:bg-cl-warning/15 focus-within:ring-2 focus-within:ring-cl-warning cursor-text",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus-within:ring-2 focus-within:ring-cl-warning cursor-text",
   input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-warning text-cl-warning",
   icon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-warning",
   content: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border-cl-warning",
@@ -87,7 +87,7 @@ const warmTheme: TimePickerClasses = {
 const coolTheme: TimePickerClasses = {
   root: "inline-flex flex-col gap-1 text-cl-accent",
   control: "relative",
-  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 focus-within:ring-2 focus-within:ring-cl-accent cursor-text",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 focus-within:ring-2 focus-within:ring-cl-accent cursor-text",
   input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-accent text-cl-accent",
   icon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent",
   content: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border-cl-border-input-focus",
@@ -610,7 +610,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={customCheckVal}
                 onValueChange={(v) => setCustomCheckVal(v)}
-                selectedIcon={<StarCheckIcon className={`w-4 h-4 shrink-0 text-cl-warning`} />}
+                selectedIcon={<StarCheckIcon className={`w-4 h-4 shrink-0 text-cl-text`} />}
                 classes={{
                   ...c.timepicker,
                   itemIndicator: `w-4 h-4 shrink-0 text-cl-warning`,

@@ -305,7 +305,7 @@ For grouped avatars, match `ringColor` to your background:
   autoColor
   colors={{
     backgrounds: ["#ede9fe", "#dbeafe", "#d1fae5", "#fef9c3"],
-    text: ["#7c3aed", "#2563eb", "#059669", "#ca8a04"],
+    text: ["#7c3aed", "#1d4ed8", "#047857", "#854d0e"],
   }}
 />
 ```
