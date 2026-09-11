@@ -1,5 +1,5 @@
 import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import type {
   FullConfig,
   FullResult,
@@ -127,7 +127,15 @@ export default class ReconcileReporter implements Reporter {
     // test's own output directory. When there are none — an assertion that
     // never opened a page, a crash before the first screenshot — it still gets
     // its own directory, because "somewhere findable" is the whole point.
-    const artifact = result.attachments.find((a) => a.path)?.path;
+    // Only artifacts under `test-results`. A screenshot failure attaches the
+    // EXPECTED baseline too, which lives in `<spec>.spec.ts-snapshots/` — and
+    // a `failure.md` written there is collected as a test file by the same
+    // `testMatch` that collects the spec, so the next run dies at collection
+    // with "Unexpected token" on its own report.
+    const outputRoot = join(process.cwd(), "test-results");
+    const artifact = result.attachments.find(
+      (a) => a.path && resolve(a.path).startsWith(outputRoot),
+    )?.path;
     const slug = `${project}-${where}-${test.title}`
       .replace(/[^a-zA-Z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "")

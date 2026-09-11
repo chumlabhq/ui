@@ -325,3 +325,17 @@ const [values, setValues] = useState<string[]>([]);
 | `components/SelectedChip.tsx` | Chip with remove button |
 | `components/MultiSelectDropdownShimmer.tsx` | Loading shimmer |
 | `index.ts` | Public exports |
+
+## Selected-chip strip
+
+The strip **wraps**; it does not clip. `maxDisplayedChips` (default 3) caps how
+many chips render and the rest collapse into a count, so the strip cannot
+overflow its trigger and there is nothing for a clip to protect against.
+
+This is recorded because it was not decided once. `MultiSelectDropdown` shipped
+`overflow: hidden` with `flex-wrap: nowrap` while `MultiSelectSearchableDropdown`
+shipped `flex-wrap`, both introduced in the same commit — one titled for
+unrelated Accordion work — and nothing in either component, schema or document
+said which was intended. The clip also cost hit area: the remove control is 24px
+via a negative margin inside a 20px row, so the clip took 4px out of the target a
+pointer can reach while `target-size` still read 24x24 from the rect.

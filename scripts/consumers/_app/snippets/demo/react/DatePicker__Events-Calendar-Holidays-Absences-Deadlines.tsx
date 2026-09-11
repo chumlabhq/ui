@@ -62,12 +62,12 @@ const eventMarkers: DateMarker[] = [
   ];
 
 export default function DatePickerExample() {
-  const [singleDate, setSingleDate] = useState<Date | null>(null);
+  const [eventsDate, setEventsDate] = useState<Date | null>(null);
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        value={singleDate}
-        onValueChange={(date) => setSingleDate(date)}
+        value={eventsDate}
+        onValueChange={(date) => setEventsDate(date)}
         label="Team Calendar"
         placeholder="Pick a date..."
         markers={eventMarkers}

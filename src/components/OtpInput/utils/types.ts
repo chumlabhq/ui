@@ -8,13 +8,21 @@ export interface OtpInputLabelProps {
 }
 
 export interface OtpInputClasses {
+  /** The field and everything labelling it. */
   root?: string;
+  /** The row of boxes. */
   control?: string;
+  /** One run of boxes when `groups` splits the code up. */
   group?: string;
+  /** A single character box. */
   input?: string;
+  /** The label above the row. */
   label?: string;
+  /** The error or hint line under the row. */
   message?: string;
+  /** What is drawn between two groups. */
   separator?: string;
+  /** The helper line under the label. */
   description?: string;
 }
 

@@ -11,6 +11,7 @@ export type ToastPosition =
   | "bottom-center";
 
 export interface ToastClasses {
+  /** The toast surface — the coloured card the whole notice sits on. */
   root?: string;
   /**
    * The padded row inside `root` that holds the icon, the message and the close
@@ -19,33 +20,55 @@ export interface ToastClasses {
   body?: string;
   /** The auto-dismiss progress groove that `indicator` fills. */
   track?: string;
+  /** The message line, which is the toast's accessible name. */
   title?: string;
   /** Description text element */
   description?: string;
+  /** The status glyph at the leading edge, which is what distinguishes the types apart from colour. */
   indicator?: string;
+  /** The dismiss button. */
   closeTrigger?: string;
   /** Icon wrapper element */
   icon?: string;
 }
 
+/**
+ * Everything one toast can be told. `useToast()`'s methods take this minus the fields they fill in themselves.
+ */
 export interface ToastConfig {
+  /** Identifies the toast so it can be dismissed by name later; generated when omitted. */
   id: string;
+  /** Which status this is, choosing the colour and the indicator glyph. */
   type?: ToastType;
+  /** The main line, and the toast's accessible name. */
   message?: ReactNode;
+  /** A second line under the message. */
   description?: ReactNode;
+  /** Arbitrary nodes below the text. Interactive content here is the caller's to style — the library paints nothing inside it. */
   content?: ReactNode;
+  /** Milliseconds before it dismisses itself. `Infinity` keeps it until dismissed. */
   duration?: number;
+  /** Draws a bar counting the duration down. */
   showProgress?: boolean;
+  /** Overrides that bar's colour. */
   progressColor?: string;
+  /** Replaces the type's default indicator glyph. */
   icon?: ReactNode;
+  /** Renders the dismiss button. */
   showCloseButton?: boolean;
   /** Fires when the toast is dismissed. */
   onDismiss?: () => void;
+  /** `alert` interrupts a screen reader, `status` waits for a pause. Errors want the first, confirmations the second. */
   role?: "alert" | "status";
+  /** Inline styles for the toast surface. */
   style?: React.CSSProperties;
+  /** Holds the countdown while a pointer rests on the toast, so it cannot vanish mid-read. */
   pauseOnHover?: boolean;
+  /** Accessible name for the dismiss button, for translating it. */
   closeAriaLabel?: string;
+  /** Class overrides for this toast's slots. */
   classes?: ToastClasses;
+  /** Drops the decorative defaults and keeps the structural ones. */
   unstyled?: boolean;
 }
 
@@ -95,12 +118,22 @@ export interface ToastProviderProps {
   unstyled?: boolean;
 }
 
+/**
+ * What `useToast()` returns: one method per status, plus the two dismissals.
+ */
 export interface ToastContextValue {
+  /** Shows a toast and returns its id. The other methods are this with `type` filled in. */
   toast: (config: Omit<ToastConfig, "id"> | string) => string;
+  /** Shows a success toast. */
   success: (message: ReactNode, options?: Partial<ToastConfig>) => string;
+  /** Shows a warning toast. */
   warning: (message: ReactNode, options?: Partial<ToastConfig>) => string;
+  /** Shows an error toast, which announces immediately. */
   error: (message: ReactNode, options?: Partial<ToastConfig>) => string;
+  /** Shows an informational toast. */
   info: (message: ReactNode, options?: Partial<ToastConfig>) => string;
+  /** Dismisses one toast by the id `toast` returned. */
   dismiss: (id: string) => void;
+  /** Dismisses everything currently on screen. */
   dismissAll: () => void;
 }

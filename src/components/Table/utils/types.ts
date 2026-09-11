@@ -88,9 +88,13 @@ export interface TableClasses {
    * rather than a second set of classes.
    */
   filterHeader?: string;
+  /** The heading naming the column being filtered. */
   filterLabel?: string;
+  /** The button dropping that column's filter. */
   filterClearTrigger?: string;
+  /** One value row in the filter panel. */
   filterItem?: string;
+  /** The checkbox on that row. */
   filterItemControl?: string;
   /** Expand/collapse icon button. */
   expandButton?: string;
@@ -117,7 +121,9 @@ export interface TableClasses {
    * on is `data-side` on `searchControl` rather than a second set of classes.
    */
   searchIcon?: string;
+  /** The button emptying the search field. */
   clearTrigger?: string;
+  /** The search field itself. */
   searchInput?: string;
   /** Mobile card layout wrapper. */
   mobileCard?: string;

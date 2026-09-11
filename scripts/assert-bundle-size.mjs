@@ -338,6 +338,97 @@ const LIBRARY_TOTAL_HISTORY = [
       "nothing — SC 2.4.7 for the aria-activedescendant pattern. One class " +
       "token across five files, inside the 0.01 KB this record already carries.",
   },
+  {
+    kb: 150.50,
+    commit: "(uncommitted)",
+    date: "2026-09-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.07 KB. WCAG 2.2 AA is now claimed whole with no rule " +
+      "disabled, which meant fixing `target-size` rather than waiving it: 17 " +
+      "controls under 24x24 across both multiselects and Table. The bytes are " +
+      "the hit-area class strings plus two glyph sizes — the chip icons filled " +
+      "their box with `w-full h-full`, so a 24px box would have drawn a 24px X.",
+  },
+  {
+    kb: 150.61,
+    commit: "(uncommitted)",
+    date: "2026-09-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.11 KB, and all of it prose. MultiSelectDropdown's chip strip " +
+      "dropped `overflow: hidden` and wraps instead, which is what finally made " +
+      "the chip remove button 24x24 in fact rather than on paper — the clip was " +
+      "taking its negative margin back out of the hit area, 24x20 effective " +
+      "against a 24x24 rect, which `target-size` cannot see because it reads the " +
+      "rect. Measured three ways: 150.73 with the six-line comment that change " +
+      "arrived with, 150.61 with it cut to three lines, 150.49 with no comment " +
+      "at all. So the class strings are free — the wrap replaces the clip — and " +
+      "the 0.12 KB is the comment, kept because it is the one thing standing " +
+      "between the next reader and re-adding `overflow: hidden`. The long form " +
+      "lives in the schema and MULTISELECTDROPDOWN.ai.md, which ship as data " +
+      "rather than as JS.\n\n" +
+      "The 345 descriptions written this slice cost nothing here: they are in " +
+      "`utils/types.ts` files, which emit to `.d.ts` and erase from the JS.",
+  },
+  {
+    kb: 150.53,
+    commit: "(uncommitted)",
+    date: "2026-09-11",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.08 KB, recorded rather than left standing: a record held " +
+      "above the real figure is the hole the a8c7a15 row above documents, and " +
+      "a drop nobody attributes is how 1.8 KB of deleted state styling went " +
+      "unnoticed for six days. Breadcrumb's collapsed dropdown stopped wrapping " +
+      "each item in a Tooltip, which takes the Tooltip import out of the " +
+      "Breadcrumb chunk's closure — the menu focuses its first item on open, so " +
+      "the tooltip opened with no pointer near it and landed on the row below, " +
+      "and the label it repeats is already fully visible in a menu. Against " +
+      "that: `border-none` became `border-0` in four components (same reset, " +
+      "and the consumer's `border` can beat it), the Button loader takes " +
+      "`text-current`, and three comments explaining all of it. Net -0.08.",
+  },
+  {
+    kb: 150.79,
+    commit: "(uncommitted)",
+    date: "2026-09-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.26 KB. Button's `size` paints for v1: three class strings " +
+      "(padding, type, gap, icon box) plus a three-entry loader map, and the " +
+      "merge that applies them ahead of the consumer's classes. The prop " +
+      "emitted `data-size` and painted nothing before, with the schema calling " +
+      "that a decision — sm, md and lg rendered at one height. Button's own " +
+      "exclusive chunk carries 0.31 of it, 2.23 to 2.54 KB.\n\n" +
+      "Measured with and without the 18-line docblock above the scale: 150.79 " +
+      "either way. That refines what the a3c6059 and 150.61 rows found — a " +
+      "comment ABOVE an exported declaration becomes JSDoc on the `.d.ts` and " +
+      "is stripped from the JS, while a comment INSIDE a value has no " +
+      "declaration to attach to and ships verbatim, which is why " +
+      "MultiSelectDropdown's mid-object comment cost 0.12 KB and this one costs " +
+      "nothing. Position decides, not prose.",
+  },
+  {
+    kb: 151.19,
+    commit: "(uncommitted)",
+    date: "2026-09-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.40 KB. Input and TextArea took Button's size scale for v1, " +
+      "closing the last two places where `size` emitted `data-size` and painted " +
+      "nothing — the same schema sentence in three components, and the one that " +
+      "had already been read as a decision once. Each carries a three-entry " +
+      "record (control padding, input padding and type, and for Input the " +
+      "prefix/suffix type) plus the merge that applies it ahead of the " +
+      "consumer's classes: Input 2.23 to 2.37 KB exclusive, TextArea 2.27 to " +
+      "2.41.\n\n" +
+      "The vertical padding moved from the control onto the input itself, which " +
+      "costs nothing here and was not cosmetic: with it on the control, `sm` " +
+      "rendered a 16px-tall `<input>` inside a 30px box and a click in the " +
+      "padding landed on the wrapper. `e2e/target-size.spec.ts` failed it at " +
+      "1206x16 against the 24px floor before the scale shipped.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -391,8 +482,8 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 15.81,
-      why: "16.76 until the column-filter dialog moved into a chunk of its own " +
+      kb: 15.85,
+      why: "15.81 -> 15.85 on 2026-09-11: row select, expand, group toggle and drag handle were brought to the 24x24 target-size floor (SC 2.5.8), which is class strings on four controls, hoisted into constants.ts after the call-site literal ratchet caught them (48 -> 46 there). 16.76 until the column-filter dialog moved into a chunk of its own " +
         "(FilterPanel), with the popup behaviour that reads its element — focus " +
         "in, reposition, close on an outside click. It is the only part of " +
         "Table that exists after an interaction rather than at the first paint, " +
@@ -485,6 +576,25 @@ const closure = (entry) => {
 const gz = (files) =>
   gzipSync(Buffer.concat(files.map((f) => readFileSync(f)))).length / 1024;
 
+/**
+ * What this gate weighs, and what it does not.
+ *
+ * EVERY FIGURE IN THIS FILE IS GZIPPED `.js`. Types are excluded — `.d.ts` and
+ * `.d.cts` are not counted at any point, by any check — and so is
+ * `dist/styles.css`, which the CSS build owns. That exclusion is load-bearing
+ * twice over: it is why 345 JSDoc descriptions written across `utils/types.ts`
+ * files moved the total by 0.00 KB, and why a comment ABOVE an exported
+ * declaration is free while the same prose INSIDE a value ships (the 150.61
+ * and 150.79 rows below measure both). A consumer downloads the `.js`; their
+ * editor reads the `.d.ts` and their bundler never sees it.
+ *
+ * The population is therefore: every directory under `dist/components` that
+ * has an `index.js`, plus the shared chunks those entries reach. A component
+ * whose build emitted no `index.js` is not "0 KB", it is ABSENT — and the
+ * ledger's history would show the total dropping with no attribution, which is
+ * the one thing the ledger refuses. It has not happened; this note exists so
+ * that if it ever does, the reading is written down in advance.
+ */
 const components = () => {
   const dir = join(DIST, "components");
   if (!existsSync(dir)) return [];

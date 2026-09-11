@@ -13,8 +13,8 @@ function useDrawerState(initial = false) {
 }
 
 export default function DrawerExample() {
-  const snapPoints = useDrawerState();
   const [snapIndex, setSnapIndex] = useState(1);
+  const snapPoints = useDrawerState();
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
       <button

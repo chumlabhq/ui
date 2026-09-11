@@ -255,11 +255,15 @@ const InputDemo = () => {
 
   const [showPw, setShowPw] = useState(false);
   const [search, setSearch] = useState("");
+  const [search2, setSearch2] = useState("");
+  const [search22, setSearch22] = useState("");
   // An alert() here blocks the page and every automated check with it.
   const [lastAction, setLastAction] = useState("");
   const [bio, setBio] = useState("");
   const [email, setEmail] = useState("");
+  const [email2, setEmail2] = useState("");
   const [username, setUsername] = useState("");
+  const [username2, setUsername2] = useState("");
   const [url, setUrl] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -491,10 +495,10 @@ const InputDemo = () => {
               <Input
                 label="Controlled"
                 placeholder="Type something..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={search2}
+                onChange={(e) => setSearch2(e.target.value)}
                 clearable
-                onClear={() => setSearch("")}
+                onClear={() => setSearch2("")}
                 startIcon={<SearchIcon className={c.icon} />}
                 classes={c.input}
               />
@@ -659,10 +663,10 @@ const InputDemo = () => {
               <Input
                 label="Type anything"
                 placeholder="Watch the value below..."
-                value={search}
-                onValueChange={setSearch}
+                value={search22}
+                onValueChange={setSearch22}
                 clearable
-                onClear={() => setSearch("")}
+                onClear={() => setSearch22("")}
                 classes={c.input}
               />
               <div
@@ -1170,9 +1174,9 @@ const InputDemo = () => {
                 clearable
                 maxLength={20}
                 showCount
-                onClear={() => setUsername("")}
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onClear={() => setUsername2("")}
+                value={username2}
+                onChange={(e) => setUsername2(e.target.value)}
                 success={userOk}
                 successMessage={
                   <>
@@ -1190,9 +1194,9 @@ const InputDemo = () => {
                 required
                 startIcon={<MailIcon className={c.icon} />}
                 clearable
-                onClear={() => setEmail("")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onClear={() => setEmail2("")}
+                value={email2}
+                onChange={(e) => setEmail2(e.target.value)}
                 success={emailOk}
                 successMessage={
                   <>

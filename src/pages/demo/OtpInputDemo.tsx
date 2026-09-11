@@ -37,6 +37,8 @@ const OtpInputDemo = () => {
   const c = getClasses(dark);
   const otpRef = useRef<HTMLInputElement>(null);
 
+  const [showAutoFocus, setShowAutoFocus] = useState(false);
+
   const [basic, setBasic] = useState("");
   const [controlled, setControlled] = useState("123");
   const [completed, setCompleted] = useState<string | null>(null);
@@ -345,7 +347,22 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput autoFocusFirst label="Auto-focused" classes={c.otp} />
+          {/* Mounted on demand. `autoFocusFirst` focuses on mount, and this
+              section sits 5,500px down the page — so on load the browser
+              scrolled the reader to it, the same shape as DatePicker's
+              `defaultOpen`. Behind a button the prop still demonstrates itself,
+              at the moment a reader asks for it. */}
+          {showAutoFocus ? (
+            <OtpInput autoFocusFirst label="Auto-focused" classes={c.otp} />
+          ) : (
+            <button
+              type="button"
+              className={c.btn}
+              onClick={() => setShowAutoFocus(true)}
+            >
+              Mount an auto-focused OtpInput
+            </button>
+          )}
         </DemoWrapper>
       </Section>
 

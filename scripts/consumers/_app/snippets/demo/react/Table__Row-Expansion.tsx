@@ -146,6 +146,7 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [expandedRowIds, setExpandedRowIds] = useState<string[]>([]);
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -192,7 +193,6 @@ export default function TableExample() {
     ],
     [false],
   );
-  const [expandedRowIds, setExpandedRowIds] = useState<string[]>([]);
   return (
     <>
       <Table

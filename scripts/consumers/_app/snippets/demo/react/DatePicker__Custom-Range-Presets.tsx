@@ -34,13 +34,13 @@ const rangePresets = [
   ];
 
 export default function DatePickerExample() {
-  const [rangeValue, setRangeValue] = useState<DateRange | null>(null);
+  const [customPresetRange, setCustomPresetRange] = useState<DateRange | null>(null);
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
         mode="range"
-        value={rangeValue}
-        onValueChange={(range) => setRangeValue(range)}
+        value={customPresetRange}
+        onValueChange={(range) => setCustomPresetRange(range)}
         label="Analytics period"
         placeholder="Select range..."
         showPresets

@@ -12,7 +12,6 @@ import type {
   BreadcrumbItem,
   BreadcrumbProps,
   BreadcrumbClasses,
-  BreadcrumbTooltipProps,
 } from "./utils/types.js";
 import {
   DEFAULT_BREADCRUMB_CLASSES,
@@ -38,10 +37,6 @@ function CollapsedDropdownItem({
   onKeyDown,
   setRef,
   index,
-  showTooltips,
-  tooltipPosition,
-  tooltipOffset,
-  defaultTooltipProps,
 }: {
   item: BreadcrumbItem;
   itemClassName?: string;
@@ -51,18 +46,12 @@ function CollapsedDropdownItem({
   onKeyDown: (e: React.KeyboardEvent, index: number) => void;
   setRef: (index: number, el: HTMLButtonElement | null) => void;
   index: number;
-  showTooltips: boolean;
-  tooltipPosition: BreadcrumbTooltipProps["side"];
-  tooltipOffset: number;
-  defaultTooltipProps?: BreadcrumbTooltipProps;
 }) {
   const isDisabled = !!item.disabled;
 
   const handleClick = () => {
     if (!isDisabled) onClick(item);
   };
-
-  const mergedTooltipProps = { ...defaultTooltipProps, ...item.tooltipProps };
 
   const button = (
     <button
@@ -81,21 +70,16 @@ function CollapsedDropdownItem({
     </button>
   );
 
-  if (showTooltips && item.tooltip) {
-    return (
-      <Tooltip
-        content={item.tooltip}
-        side={mergedTooltipProps.side ?? tooltipPosition}
-        sideOffset={mergedTooltipProps.sideOffset ?? tooltipOffset}
-        maxWidth={mergedTooltipProps.maxWidth}
-        delayDuration={mergedTooltipProps.delayDuration}
-        showArrow={mergedTooltipProps.showArrow}
-      >
-        {button}
-      </Tooltip>
-    );
-  }
-
+  /**
+   * No tooltip in here, unlike the trail.
+   *
+   * A tooltip on a trail item earns its place: the label may be truncated and
+   * the trail is one line. In the dropdown the full label is already on screen,
+   * so the tooltip repeats it — and the menu focuses its first item on open, so
+   * it opens with no pointer anywhere near it and lands on the row BELOW. With
+   * the default `side="bottom"` and 36px rows, `View all projects` covered
+   * `Web Development` the moment the menu opened.
+   */
   return button;
 }
 
@@ -116,10 +100,6 @@ function DropdownPortal({
   onMenuKeyDown,
   setMenuItemRef,
   menuItemRefs,
-  showTooltips,
-  tooltipPosition,
-  tooltipOffset,
-  defaultTooltipProps,
   portalContainer,
   keepMounted,
   ellipsisAriaLabel,
@@ -140,10 +120,6 @@ function DropdownPortal({
   onMenuKeyDown: (e: React.KeyboardEvent, index: number) => void;
   setMenuItemRef: (index: number, el: HTMLButtonElement | null) => void;
   menuItemRefs: React.RefObject<(HTMLButtonElement | null)[]>;
-  showTooltips: boolean;
-  tooltipPosition: BreadcrumbTooltipProps["side"];
-  tooltipOffset: number;
-  defaultTooltipProps?: BreadcrumbTooltipProps;
   portalContainer?: HTMLElement | null;
   keepMounted?: boolean;
 }) {
@@ -188,10 +164,6 @@ function DropdownPortal({
           onClick={onItemClick}
           onKeyDown={onMenuKeyDown}
           setRef={setMenuItemRef}
-          showTooltips={showTooltips}
-          tooltipPosition={tooltipPosition}
-          tooltipOffset={tooltipOffset}
-          defaultTooltipProps={defaultTooltipProps}
         />
       ))}
     </MenuSurface>
@@ -266,15 +238,32 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     // rather than floating away from it. 4 px felt visually closer to 20 px
     // once the dropdown's own py-1 padding stacked on top.
     const dropdownGap = 0;
-    const mountedRef = useRef(false);
 
-    useEffect(() => {
-      if (!mountedRef.current) {
-        mountedRef.current = true;
-        return;
-      }
-      onDropdownOpenChange?.(isDropdownOpen);
-    }, [isDropdownOpen, onDropdownOpenChange]);
+    /**
+     * Every path that changes the dropdown's state reports it, rather than an
+     * effect watching the state.
+     *
+     * The effect was guarded by a `mountedRef` so it would not fire on mount,
+     * and StrictMode's double invoke walks straight through that: the first
+     * pass sets the ref, the cleanup runs, the second pass sees a mounted ref
+     * and calls back with `false`. The demo page's `onDropdownOpenChange`
+     * example printed "Dropdown closed" on arrival, before anything had opened.
+     * A callback that reports a change is called BY the change.
+     */
+    const openRef = useRef(false);
+    const setDropdownOpen = useCallback(
+      (next: boolean) => {
+        // The guard reads a ref rather than the state: several of the callers
+        // are document listeners that close over the value they were bound
+        // with. Outside the updater, too — React may run an updater twice, so
+        // a callback fired inside one is fired twice.
+        if (openRef.current === next) return;
+        openRef.current = next;
+        setIsDropdownOpen(next);
+        onDropdownOpenChange?.(next);
+      },
+      [onDropdownOpenChange],
+    );
 
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_BREADCRUMB_CLASSES : DEFAULT_BREADCRUMB_CLASSES;
@@ -320,9 +309,9 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           `[data-breadcrumb-dropdown-id="${dropdownId}"]`,
         );
         if (portalDropdown) return;
-        setIsDropdownOpen(false);
+        setDropdownOpen(false);
       },
-      [dropdownId],
+      [dropdownId, setDropdownOpen],
     );
 
     useEffect(() => {
@@ -337,22 +326,22 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 
     useEffect(() => {
       if (!isDropdownOpen || !isBrowser) return;
-      const handleScroll = () => setIsDropdownOpen(false);
+      const handleScroll = () => setDropdownOpen(false);
       window.addEventListener("scroll", handleScroll, true);
       return () => window.removeEventListener("scroll", handleScroll, true);
-    }, [isDropdownOpen]);
+    }, [isDropdownOpen, setDropdownOpen]);
 
     useEffect(() => {
       if (!isDropdownOpen || !isBrowser) return;
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
-          setIsDropdownOpen(false);
+          setDropdownOpen(false);
           ellipsisButtonRef.current?.focus();
         }
       };
       document.addEventListener("keydown", handleEscape);
       return () => document.removeEventListener("keydown", handleEscape);
-    }, [isDropdownOpen]);
+    }, [isDropdownOpen, setDropdownOpen]);
 
     useEffect(() => {
       if (!isDropdownOpen || !isBrowser) return;
@@ -367,35 +356,35 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           `[data-breadcrumb-dropdown-id="${dropdownId}"]`,
         );
         if (portalDropdown) return;
-        setIsDropdownOpen(false);
+        setDropdownOpen(false);
       };
       document.addEventListener("focusout", handleFocusOut);
       return () => document.removeEventListener("focusout", handleFocusOut);
-    }, [isDropdownOpen, dropdownId]);
+    }, [isDropdownOpen, dropdownId, setDropdownOpen]);
 
     const handleItemClick = useCallback(
       (item: BreadcrumbItem) => {
         if (item.disabled) return;
         item.onClick?.();
         onItemClick?.(item);
-        setIsDropdownOpen(false);
+        setDropdownOpen(false);
       },
-      [onItemClick],
+      [onItemClick, setDropdownOpen],
     );
 
     const handleEllipsisClick = useCallback(() => {
-      setIsDropdownOpen((prev) => !prev);
-    }, []);
+      setDropdownOpen(!openRef.current);
+    }, [setDropdownOpen]);
 
     const handleEllipsisKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
         // Enter/Space handled natively by <button> — only add non-native keys
         if (e.key === "ArrowDown" && !isDropdownOpen) {
           e.preventDefault();
-          setIsDropdownOpen(true);
+          setDropdownOpen(true);
         }
       },
-      [isDropdownOpen],
+      [isDropdownOpen, setDropdownOpen],
     );
 
     const setMenuItemRef = useCallback(
@@ -447,7 +436,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       isDisabled: (item) => !!item.disabled,
       onSelect: handleItemClick,
       onClose: (reason) => {
-        setIsDropdownOpen(false);
+        setDropdownOpen(false);
         // Escape returns to the trigger; Tab is already leaving.
         if (reason === "escape") shouldRestoreFocusRef.current = true;
       },
@@ -647,10 +636,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               onMenuKeyDown={handleMenuKeyDown}
               setMenuItemRef={setMenuItemRef}
               menuItemRefs={menuItemRefs}
-              showTooltips={showTooltips}
-              tooltipPosition={tooltipPosition}
-              tooltipOffset={tooltipOffset}
-              defaultTooltipProps={defaultTooltipProps}
               portalContainer={portalContainer}
               keepMounted={keepMounted}
               ellipsisAriaLabel={ellipsisAriaLabel}

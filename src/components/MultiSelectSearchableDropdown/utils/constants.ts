@@ -22,10 +22,10 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
     chip:
       "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-bg text-cl-accent",
     chipRemove:
-      "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent-hover rounded-cl-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
+      "inline-flex items-center justify-center min-w-6 min-h-6 -my-1 -mr-1 shrink-0 cursor-pointer hover:text-cl-accent-hover rounded-cl-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
     empty:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
-    clearTrigger: "",
+    clearTrigger: "inline-flex items-center justify-center min-w-6 min-h-6 shrink-0 cursor-pointer",
     loading:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     loadingItem:

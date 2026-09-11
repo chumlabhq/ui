@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Slider, SliderValue } from "@chumlab/ui/slider";
 
 export default function SliderExample() {
-  const [basic, setBasic] = useState(50);
+  const [basic2, setBasic2] = useState(50);
   const [opacity, setOpacity] = useState(80);
   const [price, setPrice] = useState<SliderValue>([200, 800]);
   return (
@@ -12,8 +12,8 @@ export default function SliderExample() {
       <div className="space-y-1">
         <span className="text-xs font-medium text-cl-text-tertiary">On hover/drag</span>
         <Slider
-          value={basic}
-          onValueChange={(v) => setBasic(v as number)}
+          value={basic2}
+          onValueChange={(v) => setBasic2(v as number)}
           showTooltip
           classes={
             {

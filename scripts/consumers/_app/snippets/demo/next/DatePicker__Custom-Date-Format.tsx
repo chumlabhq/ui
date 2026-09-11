@@ -1,11 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import { DatePicker } from "@chumlab/ui/date-picker";
 
+const fmt = "MMM d, yyyy";
+
 export default function DatePickerExample() {
+  const [formatDate, setFormatDate] = useState<Date | null>(new Date());
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        defaultOpen
-        placeholder="Starts open..."
+        value={formatDate}
+        onValueChange={setFormatDate}
+        dateFormat={fmt}
+        showClearButton
         classes={
           {
             root: "",

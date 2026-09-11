@@ -34,7 +34,7 @@ export const SelectedChip = memo(function SelectedChip({
           }
         }}
       >
-        <XIcon className="w-full h-full" />
+        <XIcon className="w-3.5 h-3.5" />
       </span>
     </span>
   );

@@ -29,7 +29,13 @@ export default defineConfig({
       // here so a NEW screenshot assertion written anywhere in e2e/ inherits a
       // number this project picked rather than Playwright's 0.2, which was
       // wide enough to hide an entire skeleton fill going transparent.
-      maxDiffPixels: 30,
+      //
+      // One, not 30. The whole suite at `maxDiffPixels: 0` differs by exactly
+      // zero pixels on 437 of 437 comparisons, so 30 was pure slack — enough
+      // to hide a 14x14 check glyph (8 px), a 16x16 chevron (6) or a 20px
+      // loader recoloured into its own background. `visual.spec.ts` carries
+      // the full measurement and the four subjects this still cannot reach.
+      maxDiffPixels: 1,
       threshold: 0.05,
       animations: "disabled",
     },

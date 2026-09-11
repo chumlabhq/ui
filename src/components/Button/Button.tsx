@@ -12,6 +12,9 @@ import {
   UNSTYLED_BUTTON_CLASSES,
   HOVER_ANIMATION_MAP,
   CONTINUOUS_ANIMATION_MAP,
+  BUTTON_SIZE_CLASSES,
+  BUTTON_LOADER_SIZE,
+  DEFAULT_BUTTON_SIZE,
 } from "./utils/constants.js";
 import { CircularLoader } from "../Loader/index.js";
 import { Tooltip } from "../Tooltip/index.js";
@@ -19,7 +22,7 @@ import { Slot } from "../../utils/Slot.js";
 import { cn } from "../../utils/scopedCn.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 
-import { motionSafeClasses } from "../../utils/classLayers.js";
+import { motionSafeClasses, structuralOnly } from "../../utils/classLayers.js";
 /**
  * Component: Button
  *
@@ -52,7 +55,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     loading = false,
     loadingText,
     loaderPosition = "right",
-    loaderSize = 16,
+    loaderSize,
     loader,
     fullWidth = false,
     asChild = false,
@@ -79,18 +82,38 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
 
   const baseClassesRaw = unstyled ? UNSTYLED_BUTTON_CLASSES : DEFAULT_BUTTON_CLASSES;
   const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
+  // Resolved even when `size` is absent, so an unset prop paints `md` — which
+  // is the button as it was. `data-size` below stays absent in that case: the
+  // attribute reports what the consumer asked for, not what was rendered.
+  const sizeClassesRaw = BUTTON_SIZE_CLASSES[size ?? DEFAULT_BUTTON_SIZE];
+  const sizeClasses = unstyled ? structuralOnly(sizeClassesRaw) : sizeClassesRaw;
   const mergedClasses: Required<ButtonClasses> = useMemo(
     () => ({
-      root: cn(baseClasses.root, classesProp?.root),
-      itemText: cn(baseClasses.itemText, classesProp?.itemText),
-      icon: cn(baseClasses.icon, classesProp?.icon),
+      // Size BEFORE the consumer's classes, in the same tailwind-merge groups:
+      // `px-6` loses to their `px-8`, `text-base` to their `text-lg`. Written
+      // as `data-[size=lg]:px-6` it would have survived their class and won at
+      // paint time, which is how `border-none` beat a consumer's `border`.
+      root: cn(baseClasses.root, sizeClasses.root, classesProp?.root),
+      itemText: cn(baseClasses.itemText, sizeClasses.itemText, classesProp?.itemText),
+      icon: cn(baseClasses.icon, sizeClasses.icon, classesProp?.icon),
       loading: cn(baseClasses.loading, classesProp?.loading),
     }),
-    [classesProp, baseClasses],
+    [classesProp, baseClasses, sizeClasses],
   );
+  const resolvedLoaderSize = loaderSize ?? BUTTON_LOADER_SIZE[size ?? DEFAULT_BUTTON_SIZE];
 
+  // The loader takes the button's own text colour, not the accent it paints
+  // standalone. On a primary button the two were the same value — the spinner
+  // measured rgb(91,155,255) on a rgb(91,155,255) background, 1.00:1 — so the
+  // two captions that exist to demonstrate `loaderPosition` were the only two
+  // with no visible loader. A caller passing `loader` keeps whatever it paints.
   const loaderElement = loader ?? (
-    <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
+    <CircularLoader
+      size={resolvedLoaderSize}
+      thickness={2}
+      classes={{ root: "text-current" }}
+      aria-hidden="true"
+    />
   );
 
   const loadingAnnouncement = loading ? (

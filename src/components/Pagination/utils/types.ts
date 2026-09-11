@@ -20,8 +20,11 @@ export type SectionName = "selector" | "pageInfo" | "nav";
 export interface PaginationClasses {
   /** Outer nav container */
   root?: string;
+  /** The line holding the page list, the rows-per-page selector and the page info. */
   row?: string;
+  /** The `<ul>` of page numbers. */
   list?: string;
+  /** One page-number button. */
   item?: string;
   /** Prev/next buttons */
   navButton?: string;
@@ -40,7 +43,9 @@ export interface PaginationClasses {
     item?: string;
     icon?: string;
   };
+  /** The text beside the rows-per-page selector. */
   label?: string;
+  /** The chevron inside a prev or next button. */
   navIcon?: string;
   /** Page info section wrapper */
   pageInfo?: string;

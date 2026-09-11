@@ -121,7 +121,6 @@ const itemsWithTooltips: BreadcrumbItem[] = [
     tooltip: "Currently viewing",
     tooltipProps: { side: "bottom" },
     icon: <DocumentIcon className="w-4 h-4" />,
-    iconPosition: "right",
   },
 ];
 
@@ -151,13 +150,12 @@ const getClasses = (dark: boolean) => ({
   },
   pill: {
     list: "flex flex-wrap items-center gap-2",
- item: `flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all cursor-pointer bg-transparent text-cl-text-secondary hover:text-cl-text bg-white hover:bg-cl-bg-hover border border-cl-border hover:shadow-sm dark:text-cl-text-tertiary dark:hover:text-cl-text dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:border dark:border-cl-border`,
-    itemActive: `flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full border border-none cursor-default shadow-md bg-cl-text text-cl-bg dark:bg-cl-text dark:text-cl-bg`,
-    separator: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
- ellipsisButton: `flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-white hover:bg-cl-bg-hover text-cl-text-secondary border border-cl-border hover:shadow-sm dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary dark:border dark:border-cl-border`,
- dropdown: `flex flex-col min-w-40 rounded-cl-lg shadow-lg py-2 bg-cl-bg-elevated border border-cl-border`,
-    dropdownItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
-  },
+    item: `flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all cursor-pointer text-cl-text hover:text-cl-text bg-cl-bg-panel hover:bg-cl-bg-hover border border-cl-border hover:shadow-sm`,
+    separator: "text-cl-text-secondary",
+    ellipsisTrigger: `flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text-secondary border border-cl-border hover:shadow-sm`,
+    content: `flex flex-col min-w-40 rounded-cl-lg shadow-lg py-2 bg-cl-bg-elevated border border-cl-border`,
+    collapsedItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent text-cl-text-secondary hover:bg-cl-bg-hover`,
+  } satisfies BreadcrumbClasses,
   colored: {
     root: `p-4 rounded-cl-md bg-cl-accent/10 dark:bg-cl-accent/20`,
     list: "flex flex-wrap items-center gap-1",
@@ -183,6 +181,10 @@ const BreadcrumbDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
   const [clickedItem, setClickedItem] = useState<string | null>(null);
+  // Its own state: `onDropdownOpenChange` wrote into `clickedItem`, so opening
+  // the ellipsis anywhere on the page put "Dropdown closed" under the Per-Item
+  // Click Handlers example, which reports what was clicked.
+  const [dropdownState, setDropdownState] = useState<string | null>(null);
 
   const handleItemClick = useCallback((item: BreadcrumbItem) => {
     setClickedItem(item.label);
@@ -414,7 +416,9 @@ const BreadcrumbDemo = () => {
               { id: "phones", label: "Phones" },
             ]}
             classes={c.breadcrumb}
-            onItemClick={handleItemClick}
+            onItemClick={(item) =>
+              setClickedItem(`${item.label} (onItemClick)`)
+            }
           />
         </DemoWrapper>
         {clickedItem && (
@@ -593,8 +597,8 @@ const BreadcrumbDemo = () => {
 
       {/* ─── Icon Size ──────────────────────────────────────────────────── */}
       <Section
-        title="Icon Size"
-        description="Control separator and ellipsis icon size via iconSize prop."
+        title="Separator & Ellipsis Icon Size"
+        description="iconSize controls the chevrons and the ellipsis glyph. An item's own icon is a node you pass, so it keeps the size you gave it."
         isDarkMode={dark}
       >
         <div className="space-y-4">
@@ -625,7 +629,7 @@ const BreadcrumbDemo = () => {
       {/* ─── Pill Style ─────────────────────────────────────────────────── */}
       <Section
         title="Pill Style"
-        description="Pill-shaped breadcrumb items with gradient active state using the classes prop."
+        description="Pill-shaped items, a round ellipsis trigger and a matching menu, all through the classes prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -735,16 +739,16 @@ const BreadcrumbDemo = () => {
             }}
             onItemClick={handleItemClick}
             onDropdownOpenChange={(open) => {
-              setClickedItem(open ? "Dropdown opened" : "Dropdown closed");
-              setTimeout(() => setClickedItem(null), 2000);
+              setDropdownState(open ? "Dropdown opened" : "Dropdown closed");
+              setTimeout(() => setDropdownState(null), 2000);
             }}
           />
         </DemoWrapper>
-        {clickedItem && (
+        {dropdownState && (
           <p
             className={`text-sm mt-2 text-cl-accent`}
           >
-            {clickedItem}
+            {dropdownState}
           </p>
         )}
       </Section>

@@ -3,6 +3,7 @@ import type { ReactNode, ComponentPropsWithoutRef } from "react";
 export interface ResizablePanelClasses {
   /** Root container div that wraps children and the handle */
   root?: string;
+  /** The drag handle. It is also the keyboard target, so shrinking it here shrinks the hit area. */
   handle?: string;
 }
 

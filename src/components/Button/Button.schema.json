@@ -31,7 +31,7 @@
         "md",
         "lg"
       ],
-      "description": "Emits data-size attribute for CSS targeting. No built-in sizing."
+      "description": "Sets padding, type size, gap, icon box and loader together: 28, 40 and 52px tall. Also emits data-size on the root, so CSS can target it; the attribute is a hook, not the mechanism."
     },
     "disabled": {
       "type": "boolean",

@@ -146,6 +146,7 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [builtInSearchFilter, setBuiltInSearchFilter] = useState("");
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -192,7 +193,6 @@ export default function TableExample() {
     ],
     [false],
   );
-  const [builtInSearchFilter, setBuiltInSearchFilter] = useState("");
   return (
     <>
       <Table

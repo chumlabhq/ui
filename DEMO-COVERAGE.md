@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 58 |
 | Library-authored props across the public surface | 1137 |
 | With no demo | 283 (25%) |
-| With no fixture | 649 (57%) |
+| With no fixture | 645 (57%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 51 |
@@ -82,7 +82,7 @@ listed here with no demo anywhere fails the generator.
 | AvatarGroupShimmer | 9 | 280 | 2 | 8 | 0 | `reduceMotion`, `asChild` |
 | AvatarShimmer | 6 | 280 | 2 | 1 | 0 | `unstyled` |
 | Breadcrumb | 24 | 277 | 10 | 18 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
-| Button | 24 | 292 | 1 | 14 | 0 | — |
+| Button | 24 | 292 | 1 | 12 | 0 | — |
 | ButtonGroup | 2 | 279 | 1 | 0 | 0 | — |
 | CascadingDropdown | 58 | 2 | 24 | 29 | 0 | `dropdownPosition`, `unstyled`, `portalContainer`, `keepMounted` |
 | Checkbox | 21 | 303 | 2 | 10 | 0 | `reduceMotion` |
@@ -99,7 +99,7 @@ listed here with no demo anywhere fails the generator.
 | DrawerFooter | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerHeader | 1 | 279 | 1 | 1 | 0 | — |
 | Dropdown | 50 | 2 | 4 | 28 | 0 | `unstyled` |
-| Input | 26 | 307 | 2 | 11 | 0 | `unstyled` |
+| Input | 26 | 307 | 2 | 10 | 0 | `unstyled` |
 | InputLabel | 4 | 0 | 0 | 4 | 0 | — |
 | InternationalPhoneInput | 48 | 296 | 9 | 33 | 0 | `unstyled`, `portalContainer` |
 | LinearLoader | 8 | 280 | 3 | 4 | 0 | `reduceMotion`, `unstyled` |
@@ -122,7 +122,7 @@ listed here with no demo anywhere fails the generator.
 | Stepper | 30 | 2 | 5 | 17 | 0 | `reduceMotion`, `unstyled` |
 | Switch | 28 | 277 | 6 | 11 | 0 | `reduceMotion` |
 | TabPanel | 26 | 2 | 6 | 16 | 0 | `reduceMotion`, `unstyled` |
-| TextArea | 25 | 293 | 1 | 7 | 0 | `unstyled` |
+| TextArea | 25 | 293 | 1 | 6 | 0 | `unstyled` |
 | TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
 | TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |
 | Toast | 21 | 2 | 21 | 10 | 0 | `type`, `unstyled` |

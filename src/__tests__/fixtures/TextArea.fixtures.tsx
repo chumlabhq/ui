@@ -2,6 +2,12 @@ import { TextArea } from "../../components/TextArea/index.js";
 import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof TextArea> = [
+  // One per size. `size` paints dimensions as of v1 — it emitted `data-size`
+  // and nothing else before — and the smallest is the one that has to clear the
+  // 24px target floor: sm is 30px tall including its border.
+  { name: "size-sm", props: { size: "sm" as const, label: "Email" } },
+  { name: "size-md", props: { size: "md" as const, label: "Email" } },
+  { name: "size-lg", props: { size: "lg" as const, label: "Email" } },
   { name: "default", props: {} },
   { name: "labelled", props: { label: "Bio", description: "Keep it short." } },
   { name: "error", props: { label: "Bio", error: true, errorMessage: "Too long" } },

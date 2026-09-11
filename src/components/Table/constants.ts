@@ -6,6 +6,16 @@ export {
   DEFAULT_VISIBLE_PAGE_COUNT,
 } from "../Pagination/index.js";
 
+/**
+ * The 24x24 floor SC 2.5.8 asks for, shared by the row controls that had none:
+ * select, expand, group toggle and drag handle. Here rather than at the call
+ * sites, which is where the four of them were written first.
+ */
+export const TABLE_HIT_AREA = "inline-flex items-center justify-center min-w-6 min-h-6";
+export const TABLE_DRAG_HANDLE = `${TABLE_HIT_AREA} cursor-grab select-none`;
+export const TABLE_SELECT_CONTROL = `${TABLE_HIT_AREA} cursor-pointer`;
+export const TABLE_CHECKBOX_SIZE = "w-6 h-6";
+
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   root:
     "w-full border rounded-cl-md overflow-hidden bg-cl-bg border-cl-border",
@@ -69,7 +79,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   searchIcon:
     "w-4 h-4 absolute top-1/2 -translate-y-1/2 text-cl-text-tertiary pointer-events-none group-data-[side=start]/search:left-3 group-data-[side=end]/search:right-3",
   clearTrigger:
-    "absolute top-1/2 -translate-y-1/2 right-2.5 p-0.5 rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover cursor-pointer group-data-[side=end]/search:right-9",
+    "absolute top-1/2 -translate-y-1/2 right-2.5 inline-flex items-center justify-center min-w-6 min-h-6 rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover cursor-pointer group-data-[side=end]/search:right-9",
   searchInput: "",
   mobileCard: "",
   groupLabel: "",

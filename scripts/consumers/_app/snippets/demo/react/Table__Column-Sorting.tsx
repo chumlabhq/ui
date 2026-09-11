@@ -146,6 +146,7 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [sortingState, setSortingState] = useState<SortingState>([]);
   const sortableColumns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -169,7 +170,6 @@ export default function TableExample() {
     ],
     [false],
   );
-  const [sortingState, setSortingState] = useState<SortingState>([]);
   return (
     <>
       <Table

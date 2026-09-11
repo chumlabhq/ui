@@ -38,13 +38,13 @@ const categoryOptions: CascadingOption[] = [
 ];
 
 export default function CascadingDropdownExample() {
-  const [basicValue, setBasicValue] = useState<CascadingValue>({});
+  const [basicValue2, setBasicValue2] = useState<CascadingValue>({});
   return (
     <div className="w-full sm:max-w-72">
       <CascadingDropdown
         options={categoryOptions}
-        value={basicValue}
-        onValueChange={(val) => setBasicValue(val)}
+        value={basicValue2}
+        onValueChange={(val) => setBasicValue2(val)}
         placeholder="Select category..."
         classes={
           {

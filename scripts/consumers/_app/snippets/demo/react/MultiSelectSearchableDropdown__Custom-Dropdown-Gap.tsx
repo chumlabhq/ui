@@ -14,6 +14,7 @@ const staticOptions: MultiSelectOption[] = [
 
 export default function MultiSelectSearchableDropdownExample() {
   const [gapValue, setGapValue] = useState<string[]>([]);
+  const [gapValue2, setGapValue2] = useState<string[]>([]);
   return (
     <div className="flex items-start gap-6">
       <div>
@@ -47,8 +48,8 @@ export default function MultiSelectSearchableDropdownExample() {
         <div className="w-56">
           <MultiSelectSearchableDropdown
             options={staticOptions}
-            value={gapValue}
-            onValueChange={(values) => setGapValue(values)}
+            value={gapValue2}
+            onValueChange={(values) => setGapValue2(values)}
             dropdownGap={16}
             placeholder="Gap: 16px..."
             maxDisplayedChips={1}

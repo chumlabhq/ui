@@ -6,28 +6,39 @@ export type MultiSelectOption = DropdownOption;
 export interface MultiSelectDropdownClasses {
   /** Root container element */
   root?: string;
+  /** The trigger box holding the chips. */
   control?: string;
   /** Trigger button */
   trigger?: string;
+  /** The chip strip inside the trigger. It wraps rather than clipping, so a chip's remove button keeps its full 24px hit area. */
   value?: string;
   /** Dropdown menu container */
   content?: string;
+  /** The scrolling list inside the menu. */
   list?: string;
+  /** One option row. */
   item?: string;
+  /** The chevron on the trigger. */
   icon?: string;
+  /** The checkbox drawn on each row. */
   itemControl?: string;
+  /** The check inside that checkbox when the row is selected. */
   itemIndicator?: string;
   /** Selected chip styling */
   chip?: string;
   /** Chip remove button */
   chipRemove?: string;
+  /** The message shown when there are no options. */
   empty?: string;
   /** Label element */
   label?: string;
+  /** The error or hint line under the control. */
   message?: string;
   /** Description/helper text */
   description?: string;
+  /** The button clearing every selection at once. */
   clearTrigger?: string;
+  /** The container holding the skeleton rows while options load. */
   loading?: string;
   /** One row of the skeleton. It shared `loading` with the container above it. */
   loadingItem?: string;
@@ -38,7 +49,9 @@ export interface MultiSelectDropdownClasses {
    * second way in.
    */
   loadingIcon?: string;
+  /** The wider of the two shapes in a skeleton row, standing in for the label. */
   loadingBar?: string;
+  /** The `+N` chip standing in for selections past `maxDisplayedChips`. */
   count?: string;
 }
 

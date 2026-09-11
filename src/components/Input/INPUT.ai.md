@@ -46,7 +46,7 @@ export default function Example() {
 | `onStartIconClick` | Requires `startIconLabel` for accessibility |
 | `onEndIconClick` | Requires `endIconLabel` for accessibility |
 | `showCount` | Requires `maxLength` to be set |
-| `size` | Does NOT apply built-in styles — emits `data-size` for CSS targeting |
+| `size` | Sets the control's padding and type: 28/40/52px fields, 30/42/54 with the border. Emits `data-size` as well, for CSS that wants it |
 | `prefix` / `suffix` | For static text/elements. Use `startIcon`/`endIcon` for icons |
 | `clearable` | Only shows clear button when input has a value |
 
@@ -78,7 +78,7 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
 | `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself. |
 | `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
 | `suffix` | object | — | React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com'). |
 | `startIcon` | object | — | React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided. |

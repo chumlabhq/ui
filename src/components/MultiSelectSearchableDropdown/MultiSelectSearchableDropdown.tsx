@@ -169,7 +169,7 @@ const SelectedChip = memo(function SelectedChip({
         className={classes.chipRemove || undefined}
         aria-label={`Remove ${option.label}`}
       >
-        <XIcon className="w-full h-full" />
+        <XIcon className="w-3 h-3" />
       </span>
     </span>
   );

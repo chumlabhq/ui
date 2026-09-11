@@ -146,6 +146,14 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [colVisibility, setColVisibility] = useState<Record<string, boolean>>({
+    name: true,
+    email: true,
+    role: true,
+    status: true,
+    department: true,
+    joinDate: true,
+  });
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -192,14 +200,6 @@ export default function TableExample() {
     ],
     [false],
   );
-  const [colVisibility, setColVisibility] = useState<Record<string, boolean>>({
-    name: true,
-    email: true,
-    role: true,
-    status: true,
-    department: true,
-    joinDate: true,
-  });
   return (
     <>
       <div className="space-y-3">

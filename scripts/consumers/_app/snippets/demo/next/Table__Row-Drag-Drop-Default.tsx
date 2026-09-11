@@ -148,6 +148,9 @@ const StatusBadge = ({
 const s = getTableClasses(false);
 
 export default function TableExample() {
+  const [dragDropData, setDragDropData] = useState<User[]>(() =>
+    sampleData.slice(0, 6),
+  );
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -193,9 +196,6 @@ export default function TableExample() {
       },
     ],
     [false],
-  );
-  const [dragDropData, setDragDropData] = useState<User[]>(() =>
-    sampleData.slice(0, 6),
   );
   return (
     <>

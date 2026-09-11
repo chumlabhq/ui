@@ -2,27 +2,43 @@ import type { HTMLAttributes, ReactNode, SyntheticEvent } from "react";
 
 export type CountryFlagSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
+/**
+ * Tooltip settings for a flag. Passing this is how a flag gets a name, which is the difference between decoration and information.
+ */
 export interface CountryFlagTooltipConfig {
+  /** What the tooltip says. Usually the country's name, since the flag alone does not read as one. */
   content: ReactNode;
+  /** Which side of the flag it opens on, before collision flipping. */
   side?: "top" | "right" | "bottom" | "left";
+  /** How it lines up along that side. */
   align?: "start" | "center" | "end";
+  /** Gap in pixels between the flag and the tooltip. */
   sideOffset?: number;
+  /** Milliseconds of hover before it opens. */
   delayDuration?: number;
+  /** Classes for the tooltip surface. */
   className?: string;
+  /** Draws the arrow pointing back at the flag. */
   showArrow?: boolean;
 }
 
 export interface CountryFlagClasses {
+  /** The element the flag sits in, which is what carries the size. */
   root?: string;
   /** The skeleton's own bag — `CountryFlagShimmer` is a component, not a part. */
   loading?: CountryFlagShimmerClasses;
+  /** The flag graphic itself. */
   image?: string;
+  /** What is shown instead when the code has no flag or the image fails. */
   fallback?: string;
 }
 
 export interface CountryFlagGroupClasses {
+  /** The overlapping row of flags. */
   root?: string;
+  /** Each flag in that row, which is where the stack margin lives. */
   item?: string;
+  /** The `+N` disc closing the row when there are more flags than `max`. */
   count?: string;
 }
 
@@ -88,6 +104,7 @@ export interface CountryFlagGroupCountProps
  * yourself rather than a part of `CountryFlag`, so it carries its own bag.
  */
 export interface CountryFlagShimmerClasses {
+  /** The placeholder disc shown in a flag's place while it loads. */
   root?: string;
 }
 

@@ -1,7 +1,12 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+/**
+ * One tick on the track.
+ */
 export interface SliderMark {
+  /** Where on the track the mark sits, in the slider's own units. */
   value: number;
+  /** What is drawn under it. Omit for a tick with no text. */
   label?: ReactNode;
 }
 

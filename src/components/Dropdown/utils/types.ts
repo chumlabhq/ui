@@ -1,33 +1,53 @@
 import type { ReactNode, CSSProperties, ComponentType } from "react";
 
+/**
+ * One selectable option.
+ */
 export interface DropdownOption {
+  /** Identifies the option; this is what the value carries, not the label. */
   value: string;
+  /** The option's text, and its accessible name. */
   label: string;
+  /** Replaces the label in the menu row when it needs more than text. */
   content?: ReactNode;
+  /** Replaces the label in the TRIGGER once chosen, for when the row's form is too long to show there. */
   selectedContent?: ReactNode;
+  /** Renders the row but refuses selection. */
   disabled?: boolean;
 }
 
 export interface DropdownClasses {
   /** Root container element */
   root?: string;
+  /** The trigger box showing the current selection. */
   control?: string;
   /** Trigger button (combobox) */
   trigger?: string;
+  /** The selected option's text inside the trigger, or the placeholder. */
   value?: string;
   /** Dropdown popup container (portal) */
   content?: string;
+  /** The scrolling list inside the popup. */
   list?: string;
+  /** One option row. */
   item?: string;
+  /** The chevron on the trigger. */
   icon?: string;
+  /** The check shown on the selected row. */
   itemIndicator?: string;
+  /** The button clearing the selection. */
   clearTrigger?: string;
+  /** The message shown when there are no options. */
   empty?: string;
   /** Label element */
   label?: string;
+  /** The error or hint line under the control. */
   message?: string;
+  /** The helper line under the label. */
   description?: string;
+  /** The container holding the skeleton rows while options load. */
   loading?: string;
+  /** One of those skeleton rows. */
   loadingItem?: string;
 }
 

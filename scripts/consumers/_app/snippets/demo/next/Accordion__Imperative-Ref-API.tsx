@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionRef, AccordionTrigger } from "@chumlab/ui/accordion";
 
 export default function AccordionExample() {
-  const accordionRef = useRef<AccordionRef>(null);
   const [toggleLog, setToggleLog] = useState<string[]>([]);
+  const accordionRef = useRef<AccordionRef>(null);
   return (
     <Accordion
       type="multiple"

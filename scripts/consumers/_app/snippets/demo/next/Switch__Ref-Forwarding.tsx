@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { Switch } from "@chumlab/ui/switch";
 
 export default function SwitchExample() {
-  const switchRef = useRef<HTMLButtonElement>(null);
   const [refSwitch, setRefSwitch] = useState(false);
+  const switchRef = useRef<HTMLButtonElement>(null);
   return (
     <div className="space-y-4">
       <Switch

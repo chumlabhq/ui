@@ -148,6 +148,9 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [density, setDensity] = useState<
+    "compact" | "comfortable" | "spacious"
+  >("comfortable");
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -194,9 +197,6 @@ export default function TableExample() {
     ],
     [false],
   );
-  const [density, setDensity] = useState<
-    "compact" | "comfortable" | "spacious"
-  >("comfortable");
   return (
     <>
       <div className="space-y-3">

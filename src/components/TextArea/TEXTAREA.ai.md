@@ -50,7 +50,7 @@ export default function Example() {
 |------|-----------|
 | `showCount` | Requires `maxLength` to be set |
 | `autoResize` | Overrides manual `resize` CSS. Sets `overflow: hidden` and `resize: none`. |
-| `size` | Does NOT apply built-in styles — emits `data-size` for CSS targeting |
+| `size` | Sets the control's padding and type: 28/40/52px fields, 30/42/54 with the border. Emits `data-size` as well, for CSS that wants it |
 | `onStartIconClick` | Requires `startIconLabel` for accessibility |
 | `onEndIconClick` | Requires `endIconLabel` for accessibility |
 
@@ -82,7 +82,7 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
 | `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the textarea. |
 | `onStartIconClick` | object | — | () => void — Makes startIcon a clickable button. |

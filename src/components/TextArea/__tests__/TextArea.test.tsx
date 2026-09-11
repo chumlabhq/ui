@@ -590,4 +590,54 @@ describe("TextAreaLabel", () => {
     render(<TextAreaLabel label="Message" htmlFor="msg" className="custom-label" />);
     expect(screen.getByText("Message")).toHaveClass("custom-label");
   });
+  describe("Size", () => {
+    const classesOf = (el: Element | null) =>
+      new Set((el?.getAttribute("class") ?? "").split(/\s+/).filter(Boolean));
+
+    it("paints each size, and md is what an unset prop renders", () => {
+      const { container, rerender } = render(<TextArea label="Email" size="sm" />);
+      for (const [size, pad, text] of [
+        ["sm", "py-1.5", "text-xs"],
+        ["md", "py-2.5", "text-sm"],
+        ["lg", "py-3.5", "text-base"],
+      ] as const) {
+        rerender(<TextArea label="Email" size={size} />);
+        const cls = classesOf(container.querySelector("textarea"));
+        expect(cls.has(pad), `${size} lost ${pad}`).toBe(true);
+        expect(cls.has(text), `${size} lost ${text}`).toBe(true);
+      }
+      rerender(<TextArea label="Email" />);
+      const unset = classesOf(container.querySelector("textarea"));
+      expect(unset.has("py-2.5")).toBe(true);
+      expect(unset.has("text-sm")).toBe(true);
+    });
+
+    it("emits data-size only when the consumer asked for one", () => {
+      const { container, rerender } = render(<TextArea label="Email" size="lg" />);
+      expect(container.querySelector("[data-size]")).not.toBeNull();
+      rerender(<TextArea label="Email" />);
+      expect(container.querySelector("[data-size]")).toBeNull();
+    });
+
+    it("lets a consumer's classes beat the size", () => {
+      /**
+       * Variants stripped before the comparison: `data-[size=lg]:py-3.5` is not
+       * the token `py-3.5`, so a check for the bare name passes against exactly
+       * the form that defeats a consumer — which is how `border-none` beat a
+       * consumer's `border` one layer down.
+       */
+      const { container } = render(
+        <TextArea label="Email" size="lg" classes={{ input: "py-1 text-lg" }} />,
+      );
+      const base = new Set(
+        [...classesOf(container.querySelector("textarea"))].map((c) =>
+          c.slice(c.lastIndexOf(":") + 1),
+        ),
+      );
+      expect(base.has("py-1")).toBe(true);
+      expect(base.has("py-3.5"), "the size's padding survived the consumer's").toBe(false);
+      expect(base.has("text-lg")).toBe(true);
+      expect(base.has("text-base"), "the size's type survived").toBe(false);
+    });
+  });
 });

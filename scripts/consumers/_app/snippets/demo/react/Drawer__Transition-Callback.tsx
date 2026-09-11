@@ -11,8 +11,8 @@ function useDrawerState(initial = false) {
 }
 
 export default function DrawerExample() {
-  const transitionCb = useDrawerState();
   const [transitionLog, setTransitionLog] = useState<string[]>([]);
+  const transitionCb = useDrawerState();
   return (
     <>
       <button

@@ -46,6 +46,10 @@ import type { FilterPanelProps } from "./FilterPanel.js";
 import {
   DEFAULT_TABLE_CLASSES,
   UNSTYLED_TABLE_CLASSES,
+  TABLE_HIT_AREA,
+  TABLE_DRAG_HANDLE,
+  TABLE_SELECT_CONTROL,
+  TABLE_CHECKBOX_SIZE,
 } from "./constants.js";
 import {
   PinIcon,
@@ -460,7 +464,7 @@ function TableInner<TData>(
           cell: ({ row }) => (
             <button
               type="button"
-              className={`cursor-grab select-none ${dragHandleClassName}`}
+              className={`${TABLE_DRAG_HANDLE} ${dragHandleClassName}`}
               data-drag-handle
               aria-label={`Reorder row ${row.index + 1}. Use the arrow keys to move it.`}
               onKeyDown={(e) => {
@@ -509,7 +513,7 @@ function TableInner<TData>(
                 <CustomCheckboxIcon
                   checked={checked}
                   indeterminate={indeterminate}
-                  className={checkboxClassName}
+                  className={`${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
                 />
               </span>
             );
@@ -517,7 +521,7 @@ function TableInner<TData>(
           return (
             <input
               type="checkbox"
-              className={checkboxClassName}
+              className={`${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
               style={checkboxColor ? { accentColor: checkboxColor } : undefined}
               checked={checked}
               ref={(el) => {
@@ -539,7 +543,7 @@ function TableInner<TData>(
                 role="checkbox"
                 aria-checked={checked}
                 aria-label={`Select row ${row.id}`}
-                className="cursor-pointer"
+                className={TABLE_SELECT_CONTROL}
               >
                 <CustomCheckboxIcon
                   checked={checked}
@@ -551,7 +555,7 @@ function TableInner<TData>(
           return (
             <input
               type="checkbox"
-              className={checkboxClassName}
+              className={`${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
               style={checkboxColor ? { accentColor: checkboxColor } : undefined}
               checked={checked}
               disabled={!row.getCanSelect()}
@@ -582,7 +586,7 @@ function TableInner<TData>(
                   e.stopPropagation();
                   row.toggleExpanded();
                 }}
-                className={`shrink-0 transition-transform cursor-pointer ${expandIconClassName}`}
+                className={`${TABLE_HIT_AREA} shrink-0 transition-transform cursor-pointer ${expandIconClassName}`}
                 aria-label={isExpanded ? "Collapse row" : "Expand row"}
                 data-expanded={isExpanded || undefined}
               >
@@ -1467,7 +1471,7 @@ function TableInner<TData>(
             e.stopPropagation();
             cell.row.toggleExpanded();
           }}
-          className="flex items-center gap-1 cursor-pointer"
+          className="flex items-center gap-1 cursor-pointer min-h-6"
         >
           {cell.row.getIsExpanded() ? (
             <CollapseIcon className="w-4 h-4" />

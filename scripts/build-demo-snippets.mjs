@@ -812,7 +812,13 @@ function stripUnknownClassesKeys(code, componentName) {
       while (ts.isParenthesizedExpression(expr)) expr = expr.expression;
       const owner = node.parent.parent;
       const tag = ts.isJsxSelfClosingElement(owner) ? owner.tagName.getText(sf) : owner.tagName?.getText(sf);
-      const valid = CLASSES_KEYS.get(componentName) ?? CLASSES_KEYS.get(tag);
+      // The TAG's own slots, never the page's component: `<CountryFlagGroup
+      // classes={{ item, count }} />` on the CountryFlag page was judged
+      // against CountryFlag's three slots and had both of its real keys cut
+      // out of the snippet. A sub-component whose schema records no `classes`
+      // properties is not checked at all — nothing known is not the same as
+      // known to have none.
+      const valid = tag && tag !== componentName ? CLASSES_KEYS.get(tag) : CLASSES_KEYS.get(componentName);
       if (valid && ts.isObjectLiteralExpression(expr)) {
         for (const prop of expr.properties) {
           if (!ts.isPropertyAssignment(prop) || ts.isComputedPropertyName(prop.name)) continue;
@@ -839,6 +845,22 @@ function stripUnknownClassesKeys(code, componentName) {
 
 /** ── extraction ───────────────────────────────────────────────────────── */
 
+/**
+ * Every titled `<Section>` on a page, with the demo wrappers inside it.
+ *
+ * The wrappers are found at any depth, not as direct children. A section that
+ * shows several cases groups them — `<div className="space-y-4">` with a
+ * caption and a wrapper per case — and reading only the direct children missed
+ * every one of those: 44 sections across eight component pages, including all
+ * of Avatar's groups, Accordion's sizes and Button's loading states, which is
+ * why those pages carried a copy button on some sections and not others with no
+ * pattern a reader could see.
+ *
+ * Worse than the missing button: a section found here but not built is recorded
+ * in `demoSnippets.skipped.json` with its reason, and a section never found was
+ * in no count at all. The caller records the ones with no wrapper too, so
+ * "sections with no copy button" is now the whole of what it says.
+ */
 function sectionsOf(sf) {
   const out = [];
   const visit = (node) => {
@@ -850,10 +872,84 @@ function sectionsOf(sf) {
         titleAttr && titleAttr.initializer && ts.isStringLiteral(titleAttr.initializer)
           ? titleAttr.initializer.text
           : null;
-      const wrapper = node.children.find(
-        (ch) => ts.isJsxElement(ch) && /^Demo(Wrapper|Block)$/.test(ch.openingElement.tagName.getText(sf)),
-      );
-      if (title && wrapper) out.push({ title, body: wrapper.children.filter((c) => !ts.isJsxText(c) || c.getText(sf).trim()) });
+      const wrappers = [];
+      /**
+       * Bindings a wrapper is standing inside, from `.map()` over a literal.
+       *
+       * Seven sections render their cases as
+       * `{(["sm","md","lg"] as const).map((size) => …<DemoWrapper>…))}`, and
+       * lifting the wrapper's children out of that callback leaves `size`
+       * unbound — they were rejected as "`size` is not declared on the page",
+       * which is true and useless. The first element is bound as a const
+       * instead, so the snippet is one concrete case: the section's heading
+       * already says which values it iterates, and a copy-paste example is one
+       * example.
+       */
+      const bindings = [];
+      const findWrappers = (n) => {
+        if (ts.isJsxElement(n) && /^Demo(Wrapper|Block)$/.test(n.openingElement.tagName.getText(sf))) {
+          // Nested wrappers would emit their contents twice.
+          wrappers.push(n);
+          return;
+        }
+        if (
+          (ts.isArrowFunction(n) || ts.isFunctionExpression(n)) &&
+          n.parent &&
+          ts.isCallExpression(n.parent) &&
+          ts.isPropertyAccessExpression(n.parent.expression) &&
+          n.parent.expression.name.getText(sf) === "map"
+        ) {
+          let source = n.parent.expression.expression;
+          // `([2, 3, 4] as const).map(…)` and `(["a"] as const).map(…)`.
+          while (ts.isParenthesizedExpression(source) || ts.isAsExpression(source)) {
+            source = ts.isAsExpression(source) ? source.expression : source.expression;
+          }
+          const param = n.parameters[0];
+          const first = ts.isArrayLiteralExpression(source) ? source.elements[0] : undefined;
+          if (first && param && ts.isIdentifier(param.name)) {
+            bindings.push({ name: param.name.text, value: first.getText(sf) });
+          } else if (first && param && ts.isObjectBindingPattern(param.name)) {
+            // `.map(({ label, duration }) => …)` over an array of objects: one
+            // const per destructured name, from the first element. Accordion's
+            // Animation Customization is the only one, and leaving it as the
+            // last member of a "remaining" bucket is how buckets survive.
+            const unwrap = (node) => {
+              let inner = node;
+              while (ts.isAsExpression(inner) || ts.isParenthesizedExpression(inner)) inner = inner.expression;
+              return inner;
+            };
+            const objects = source.elements.map(unwrap).filter(ts.isObjectLiteralExpression);
+            for (const element of param.name.elements) {
+              if (!ts.isIdentifier(element.name)) continue;
+              const wanted = (element.propertyName ?? element.name).getText(sf).replace(/["']/g, "");
+              // The first element that HAS the key, not the first element: these
+              // arrays are heterogeneous — Accordion's four animation cases set
+              // `reduceMotion` on one of them only, so binding from element zero
+              // left it unbound and the section skipped for a name it does
+              // define. Each bound value is still a value the page wrote.
+              let found = null;
+              for (const object of objects) {
+                const prop = object.properties.find(
+                  (candidate) =>
+                    ts.isPropertyAssignment(candidate) &&
+                    !ts.isComputedPropertyName(candidate.name) &&
+                    candidate.name.getText(sf).replace(/["']/g, "") === wanted,
+                );
+                if (prop) { found = prop.initializer.getText(sf); break; }
+              }
+              if (found !== null) bindings.push({ name: element.name.text, value: found });
+            }
+          }
+        }
+        ts.forEachChild(n, findWrappers);
+      };
+      for (const child of node.children) findWrappers(child);
+      if (title) {
+        const body = wrappers.flatMap((w) =>
+          w.children.filter((c) => !ts.isJsxText(c) || c.getText(sf).trim()),
+        );
+        out.push({ title, body, hasWrapper: wrappers.length > 0, bindings });
+      }
     }
     ts.forEachChild(node, visit);
   };
@@ -920,7 +1016,8 @@ function build(section, sf, symbols, classes, componentName) {
   // their own annotations to the set as they are pulled in.
   const importsUsed = new Map();     // spec → Set(names)
   const inlined = [];                // declaration text, in dependency order
-  const hoisted = [];                // useState lines
+  const hoistedState = [];           // useState lines
+  const hoistedHooks = [];           // in-component declarations that call a hook
   const seen = new Set();
   const queue = [...needed];
 
@@ -941,8 +1038,8 @@ function build(section, sf, symbols, classes, componentName) {
 
     if (stateOf.has(id)) {
       const st = stateOf.get(id);
-      if (!hoisted.includes(st.text)) {
-        hoisted.push(st.text);
+      if (!hoistedState.includes(st.text)) {
+        hoistedState.push(st.text);
         // The annotation counts too: `useState<CascadingValue[]>([])` names a
         // library type the snippet has to import.
         const stateTypes = new Set();
@@ -960,10 +1057,6 @@ function build(section, sf, symbols, classes, componentName) {
       const declTypes = new Set();
       const deps = freeIdentifiers([d.node], sf, declTypes);
       declTypes.forEach((t) => typeNames.add(t));
-      // A declaration that closes over state or a hook is page machinery, not
-      // an example fixture — inlining it would paste a broken reference.
-      if (deps.some((x) => stateOf.has(x))) return { reason: `\`${id}\` closes over page state` };
-      deps.forEach((x) => queue.push(x));
       // `const basic = useDrawerState()` cannot sit at module scope — a hook
       // call only runs inside a component. Whole function declarations go out
       // to module scope; everything else follows the page's own placement.
@@ -971,11 +1064,29 @@ function build(section, sf, symbols, classes, componentName) {
         d.node.initializer &&
         ts.isCallExpression(d.node.initializer) &&
         /^use[A-Z]/.test(d.node.initializer.expression.getText(sf));
+      // A declaration that closes over page state is page machinery UNLESS it
+      // is hoisted into the snippet's own component, where the state it writes
+      // is hoisted too. `handleItemClick` — a `useCallback` that sets a result
+      // line — is the whole of Breadcrumb: twelve of its seventeen sections
+      // were rejected for depending on it, which is every section that wires
+      // `onItemClick`, which is every section that does anything. Emitted after
+      // the state lines, because a `const` cannot read one declared below it.
+      if (deps.some((x) => stateOf.has(x)) && !callsHook) {
+        return { reason: `\`${id}\` closes over page state` };
+      }
+      deps.forEach((x) => queue.push(x));
       if (callsHook) {
-        if (!hoisted.includes(d.text)) hoisted.unshift(d.text);
+        if (!hoistedHooks.includes(d.text)) hoistedHooks.unshift(d.text);
         continue;
       }
       const text = d.whole ? d.text : `const ${d.text};`;
+      if (!inlined.includes(text)) inlined.unshift(text);
+      continue;
+    }
+
+    const bound = (section.bindings ?? []).find((b) => b.name === id);
+    if (bound) {
+      const text = `const ${bound.name} = ${bound.value};`;
       if (!inlined.includes(text)) inlined.unshift(text);
       continue;
     }
@@ -1012,18 +1123,46 @@ function build(section, sf, symbols, classes, componentName) {
    * dropped for it.
    */
   let missingKey = null;
+  /**
+   * One property out of an object-literal expression, by name.
+   *
+   * `c.accordion.root` used to substitute the whole of `c.accordion` and leave
+   * the `.root` hanging off it, so a page writing seven slots that way emitted
+   * the entire styling object seven times — DatePicker's Classes System snippet
+   * was 18.5 KB of the same object repeated. It compiled, which is why nothing
+   * caught it: this is teaching material, and the failure mode is unreadable
+   * rather than broken.
+   */
+  const pickProperty = (expression, key) => {
+    const parsed = ts.createSourceFile("_pick.ts", `const _ = ${expression};`, ts.ScriptTarget.Latest, true);
+    const init = parsed.statements[0]?.declarationList?.declarations?.[0]?.initializer;
+    if (!init || !ts.isObjectLiteralExpression(init)) return null;
+    for (const prop of init.properties) {
+      if (!ts.isPropertyAssignment(prop) || ts.isComputedPropertyName(prop.name)) continue;
+      if (prop.name.getText(parsed).replace(/["']/g, "") === key) return prop.initializer.getText(parsed);
+    }
+    return null;
+  };
+
   const resolvePageScope = (text) => {
-    let out = text.replace(/\bc\.([A-Za-z0-9_]+)/g, (_m, key) => {
+    let out = text.replace(/\bc\.([A-Za-z0-9_]+)(?:\.([A-Za-z0-9_]+))?/g, (_m, key, subKey) => {
       const entry = classes.get(key);
       if (!entry) { missingKey = key; return _m; }
-      return "literal" in entry ? JSON.stringify(entry.literal) : `(${entry.expression})`;
+      const whole = "literal" in entry ? JSON.stringify(entry.literal) : `(${entry.expression})`;
+      if (!subKey) return whole;
+      if ("expression" in entry) {
+        const picked = pickProperty(entry.expression, subKey);
+        if (picked !== null) return picked;
+      }
+      return `${whole}.${subKey}`;
     });
     return foldConstantTemplates(foldConstantConditionals(replaceDarkIdentifier(out)));
   };
 
   let code = resolvePageScope(dedent(bodyText));
   for (let i = 0; i < inlined.length; i += 1) inlined[i] = resolvePageScope(inlined[i]);
-  for (let i = 0; i < hoisted.length; i += 1) hoisted[i] = resolvePageScope(hoisted[i]);
+  for (let i = 0; i < hoistedState.length; i += 1) hoistedState[i] = resolvePageScope(hoistedState[i]);
+  for (let i = 0; i < hoistedHooks.length; i += 1) hoistedHooks[i] = resolvePageScope(hoistedHooks[i]);
   if (missingKey) return { reason: `page styling \`c.${missingKey}\` could not be resolved` };
 
   code = stripUnknownClassesKeys(code, componentName);
@@ -1041,7 +1180,8 @@ function build(section, sf, symbols, classes, componentName) {
   // A snippet needs a client boundary in Next when it holds state or wires a
   // handler — derived from this snippet, not from the component.
   const needsClient =
-    hoisted.length > 0 ||
+    hoistedState.length > 0 ||
+    hoistedHooks.length > 0 ||
     /\bon[A-Z][A-Za-z]*\s*=\s*\{/.test(code) ||
     /\buse[A-Z][A-Za-z]*\s*\(/.test(code);
 
@@ -1058,7 +1198,12 @@ function build(section, sf, symbols, classes, componentName) {
   const inner = single
     ? printBody(rawBody, 2)
     : `${pad(2)}<>\n${printBody(rawBody, 3)}\n${pad(2)}</>`;
-  const bodyLines = [...hoisted.map((h) => `  const ${h};`), `  return (`, ...inner.split("\n"), `  );`];
+  const bodyLines = [
+    ...[...hoistedState, ...hoistedHooks].map((h) => `  const ${h};`),
+    `  return (`,
+    ...inner.split("\n"),
+    `  );`,
+  ];
   parts.push(`export default function ${componentName}Example() {\n${bodyLines.join("\n")}\n}`);
 
   return { code: `${parts.join("\n\n")}\n`, needsClient };
@@ -1080,6 +1225,10 @@ for (const file of pages) {
 
   for (const section of sectionsOf(sf)) {
     considered += 1;
+    if (!section.hasWrapper) {
+      skipped.push({ component: componentName, title: section.title, reason: "no demo wrapper in the section" });
+      continue;
+    }
     const built = build(section, sf, symbols, classes, componentName);
     if (built.reason) {
       skipped.push({ component: componentName, title: section.title, reason: built.reason });

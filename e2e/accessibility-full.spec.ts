@@ -64,21 +64,15 @@ const RERECORD = process.env.A11Y_RERECORD === "1";
  */
 const AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 /**
- * `target-size` — SC 2.5.8, new in 2.2 — is the one rule the level adds that
- * this library does not pass. It reports 17 times: the chip remove buttons in
- * MultiSelectDropdown and MultiSelectSearchableDropdown, and row-level controls
- * in Table. All are under the 24x24 CSS px minimum.
- *
- * Disabled here rather than waived per fixture, because it is one decision and
- * not seventeen: passing it means resizing chips and table row controls, which
- * is a design change with a visual-baseline cost, not a fix. Awaiting a per-rule
- * call — see the slice report of 2026-09-10. Deleting this line re-enables it.
+ * No rule is disabled. `target-size` (SC 2.5.8, new in 2.2) reported 17 times
+ * when the tag set was first authored — chip remove controls in both
+ * multiselects, and Table's row select, expand, group-toggle, drag handle and
+ * search clear, all under the 24x24 minimum. They were brought to the floor
+ * rather than waived; where 24px would have distorted a chip, the hit area
+ * exceeds the visual box by a negative margin. If a rule is ever turned off
+ * here it needs the reason beside it, not just the line.
  */
-const AXE_RULES = { "target-size": { enabled: false } };
-const AXE_OPTIONS = {
-  runOnly: { type: "tag" as const, values: AXE_TAGS },
-  rules: AXE_RULES,
-};
+const AXE_OPTIONS = { runOnly: { type: "tag" as const, values: AXE_TAGS } };
 
 const FATAL = new Set(["critical", "serious", "moderate"]);
 

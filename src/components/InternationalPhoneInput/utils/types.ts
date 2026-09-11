@@ -1,31 +1,57 @@
 import type { SearchableDropdownClasses } from "../../SearchableDropdown/utils/types.js";
 import type { ReactNode, InputHTMLAttributes, CSSProperties } from "react";
 
+/**
+ * One country in the picker, and what the component reports when it is selected.
+ */
 export interface CountryOption {
+  /** ISO 3166-1 alpha-2 code, which is what `value.countryCode` carries. */
   value: string;
+  /** The country's display name in the list. */
   label: string;
+  /** The flag emoji or asset for this country. */
   flag: string;
+  /** International dialling prefix, with its leading plus. */
   dialCode: string;
+  /** The searchable name, which may differ from `label` where the list shows a short form. */
   name: string;
 }
 
+/**
+ * The controlled value: which country, and the national number typed under it.
+ */
 export interface PhoneNumberValue {
+  /** ISO code of the selected country. */
   countryCode: string;
+  /** The national number as typed, without the dial code. */
   phoneNumber: string;
 }
 
+/**
+ * The parsed number in every form a caller is likely to need, so none has to be derived twice.
+ */
 export interface PhoneNumberData extends PhoneNumberValue {
+  /** Dial code and national number joined, which is what most APIs want. */
   fullNumber: string;
+  /** Whether the number satisfies its country's length rule. */
   isValid: boolean;
+  /** Digits without the dial code. */
   nationalNumber?: string;
+  /** E.164-style form, grouped for reading. */
   internationalNumber?: string;
 }
 
 export type CopyFormat = "e164" | "international" | "national";
 
+/**
+ * What a paste was understood to be, handed to `onPasteDetected` so a caller can accept or override the inference.
+ */
 export interface PasteDetectedData {
+  /** Exactly what was pasted, before any parsing. */
   rawValue: string;
+  /** The country inferred from the pasted prefix, or null when nothing matched. */
   detectedCountry: CountryOption | null;
+  /** The national part left after the detected prefix was removed. */
   phoneNumber: string;
 }
 
@@ -34,13 +60,23 @@ export interface CountryOptionRenderProps {
   isSelected: boolean;
 }
 
+/**
+ * The national-digit count a country accepts, which is what validity is judged against.
+ */
 export interface PhoneLengthRule {
+  /** Fewest national digits a valid number may have. */
   min: number;
+  /** Most it may have. */
   max: number;
 }
 
+/**
+ * A grouping rule for one set of countries, so a bare digit string prints the way that country writes it.
+ */
 export interface PhoneFormatPattern {
+  /** Formats a bare digit string into the country's grouping. */
   pattern: (digits: string) => string;
+  /** The ISO codes this pattern applies to. */
   countries: readonly string[];
 }
 
@@ -49,9 +85,11 @@ export interface InternationalPhoneInputClasses {
   root?: string;
   /** Label element */
   label?: string;
+  /** The bordered box holding the country trigger and the number field. */
   control?: string;
   /** Phone number input element */
   input?: string;
+  /** The error or hint line under the control. */
   message?: string;
   /**
    * The country picker is a `SearchableDropdown`, so this takes that
@@ -64,13 +102,18 @@ export interface InternationalPhoneInputClasses {
    * itemText, and adding them would grow that component's API for one caller.
    */
   itemRow?: string;
+  /** The flag inside one row of the country list. */
   itemIcon?: string;
+  /** Country name and dial code inside one row. */
   itemText?: string;
   /** A row inside the country list: flag + name + dial code. */
   /** The selected country shown on the trigger. */
   triggerRow?: string;
+  /** The flag shown in the control itself, for the selected country. */
   flag?: string;
+  /** The typed number inside the control. */
   value?: string;
+  /** The helper line under the label, above the control. */
   description?: string;
 }
 

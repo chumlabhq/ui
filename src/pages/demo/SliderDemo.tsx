@@ -60,19 +60,28 @@ const SliderDemo = () => {
   const c = getClasses(dark);
 
   const [basic, setBasic] = useState(50);
+
+  const [basic2, setBasic2] = useState(50);
+
+  const [basic22, setBasic22] = useState(50);
+
   const [range, setRange] = useState<SliderValue>([25, 75]);
   const [stepped, setStepped] = useState(50);
   const [controlled, setControlled] = useState(30);
   const [volume, setVolume] = useState(65);
+  const [volume2, setVolume2] = useState(65);
   const [price, setPrice] = useState<SliderValue>([200, 800]);
+  const [price2, setPrice2] = useState<SliderValue>([200, 800]);
   const [temp, setTemp] = useState(22);
   const [opacity, setOpacity] = useState(80);
+  const [opacity2, setOpacity2] = useState(80);
   const [animFast, setAnimFast] = useState(3);
   const [animDefault, setAnimDefault] = useState(3);
   const [animSlow, setAnimSlow] = useState(3);
   const [animOff, setAnimOff] = useState(3);
   const [custom1, setCustom1] = useState(50);
   const [custom2, setCustom2] = useState(3);
+  const [custom22, setCustom22] = useState(3);
   const [vertical, setVertical] = useState(40);
   const [invertedVal, setInvertedVal] = useState(70);
   const [minDist, setMinDist] = useState<SliderValue>([20, 80]);
@@ -363,7 +372,7 @@ const SliderDemo = () => {
           <div className="flex flex-col gap-10 w-full sm:max-w-sm">
             <div className="space-y-1">
               <span className={c.label}>On hover/drag</span>
-              <Slider value={basic} onValueChange={(v) => setBasic(v as number)} showTooltip classes={c.slider} />
+              <Slider value={basic2} onValueChange={(v) => setBasic2(v as number)} showTooltip classes={c.slider} />
             </div>
             <div className="space-y-1">
               <span className={c.label}>Always visible</span>
@@ -408,8 +417,8 @@ const SliderDemo = () => {
             <div className="space-y-1">
               <span className={c.label}>Star rating</span>
               <Slider
-                value={custom2}
-                onValueChange={(v) => setCustom2(v as number)}
+                value={custom22}
+                onValueChange={(v) => setCustom22(v as number)}
                 min={1}
                 max={5}
                 step={1}
@@ -428,8 +437,8 @@ const SliderDemo = () => {
             <div className="space-y-1">
               <span className={c.label}>Volume icon</span>
               <Slider
-                value={volume}
-                onValueChange={(v) => setVolume(v as number)}
+                value={volume2}
+                onValueChange={(v) => setVolume2(v as number)}
                 renderThumb={() => (
                   <div className={`flex items-center justify-center w-full h-full text-cl-accent`}>
                     <VolumeIcon />
@@ -443,8 +452,8 @@ const SliderDemo = () => {
             <div className="space-y-1">
               <span className={c.label}>Emoji thumb</span>
               <Slider
-                value={basic}
-                onValueChange={(v) => setBasic(v as number)}
+                value={basic22}
+                onValueChange={(v) => setBasic22(v as number)}
                 renderThumb={({ value: v }) => (
                   <div className="flex items-center justify-center w-full h-full text-xs">
                     {v < 30 ? "\u{1F61E}" : v < 70 ? "\u{1F610}" : "\u{1F60A}"}
@@ -646,8 +655,8 @@ const SliderDemo = () => {
             <Slider
               name="brightness"
               label="Brightness"
-              value={opacity}
-              onValueChange={(v) => setOpacity(v as number)}
+              value={opacity2}
+              onValueChange={(v) => setOpacity2(v as number)}
               required
               classes={c.slider}
               showTooltip
@@ -664,8 +673,8 @@ const SliderDemo = () => {
           <div className="w-full sm:max-w-md space-y-4">
             <Slider
               label="Price Range"
-              value={price}
-              onValueChange={setPrice}
+              value={price2}
+              onValueChange={setPrice2}
               min={0}
               max={1000}
               step={10}

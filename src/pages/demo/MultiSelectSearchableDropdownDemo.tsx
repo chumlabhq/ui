@@ -117,6 +117,7 @@ const MultiSelectSearchableDropdownDemo = () => {
   const [portalValue, setPortalValue] = useState<string[]>([]);
   const [portalEl, setPortalEl] = useState<HTMLDivElement | null>(null);
   const [gapValue, setGapValue] = useState<string[]>([]);
+  const [gapValue2, setGapValue2] = useState<string[]>([]);
   const [zIndexValue, setZIndexValue] = useState<string[]>([]);
   const [fullWidthValue, setFullWidthValue] = useState<string[]>([]);
   const [combinedValue, setCombinedValue] = useState<string[]>([]);
@@ -1177,8 +1178,8 @@ const MultiSelectSearchableDropdownDemo = () => {
               <div className="w-56">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
-                  value={gapValue}
-                  onValueChange={(values) => setGapValue(values)}
+                  value={gapValue2}
+                  onValueChange={(values) => setGapValue2(values)}
                   dropdownGap={16}
                   placeholder="Gap: 16px..."
                   maxDisplayedChips={1}

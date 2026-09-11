@@ -6,28 +6,41 @@ export type SearchableDropdownOption = DropdownOption;
 export interface SearchableDropdownClasses {
   /** Root container element */
   root?: string;
+  /** The trigger box showing the current selection. */
   control?: string;
   /** Trigger button (combobox) */
   trigger?: string;
+  /** The selected option's text inside the trigger, or the placeholder. */
   value?: string;
   /** Dropdown popup container (portal) */
   content?: string;
+  /** The scrolling list inside the popup. */
   list?: string;
+  /** One option row. */
   item?: string;
+  /** The chevron on the trigger. */
   icon?: string;
+  /** The check shown on the selected row. */
   itemIndicator?: string;
+  /** The button clearing the selection. */
   clearTrigger?: string;
+  /** The message shown when the search matches nothing. */
   empty?: string;
   /** Label element */
   label?: string;
+  /** The error or hint line under the control. */
   message?: string;
+  /** The helper line under the label. */
   description?: string;
+  /** The search field's row inside the popup, holding the input and its icon. */
   searchControl?: string;
   /** Search input area wrapper */
   searchInput?: string;
   /** Search icon element */
   searchIcon?: string;
+  /** The container holding the skeleton rows while options load. */
   loading?: string;
+  /** One of those skeleton rows. */
   loadingItem?: string;
 }
 

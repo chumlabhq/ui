@@ -1,32 +1,49 @@
 import type { CSSProperties, MutableRefObject, ReactNode } from "react";
 
+/**
+ * One selectable option. The same shape `MultiSelectDropdown` uses, minus the search.
+ */
 export interface MultiSelectOption {
+  /** Identifies the option; this is what the value carries, not the label. */
   value: string;
+  /** The option's text, and its accessible name. */
   label: string;
+  /** Replaces the label in the menu row when it needs more than text. */
   content?: ReactNode;
+  /** Replaces the label in the TRIGGER once chosen, for when the row's form is too long to show there. */
   selectedContent?: ReactNode;
+  /** Renders the row but refuses selection. */
   disabled?: boolean;
 }
 
 export interface MultiSelectSearchableDropdownClasses {
   /** Root container element */
   root?: string;
+  /** The trigger box holding the chips. */
   control?: string;
   /** Trigger button */
   trigger?: string;
+  /** The chip strip inside the trigger. It wraps rather than clipping, so a chip's remove button keeps its full 24px hit area. */
   value?: string;
   /** Dropdown content (portaled, background, border, shadow) */
   content?: string;
+  /** The scrolling list inside the popup. */
   list?: string;
+  /** One option row. */
   item?: string;
+  /** The chevron on the trigger. */
   icon?: string;
+  /** The checkbox drawn on each row. */
   itemControl?: string;
+  /** The check inside that checkbox when the row is selected. */
   itemIndicator?: string;
   /** Selected chip */
   chip?: string;
   /** Chip remove button */
   chipRemove?: string;
+  /** The message shown when the search matches nothing. */
   empty?: string;
+  /** The button clearing every selection at once. */
   clearTrigger?: string;
   /** Loading message */
   loading?: string;
@@ -34,13 +51,17 @@ export interface MultiSelectSearchableDropdownClasses {
   loadingItem?: string;
   /** Label element */
   label?: string;
+  /** The error or hint line under the control. */
   message?: string;
+  /** The helper line under the label. */
   description?: string;
+  /** The search field's row inside the popup, holding the input and its icon. */
   searchControl?: string;
   /** Search input wrapper */
   searchInput?: string;
   /** Search icon */
   searchIcon?: string;
+  /** The `+N` chip standing in for selections past `maxDisplayedChips`. */
   count?: string;
 }
 

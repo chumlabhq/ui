@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -415,6 +416,26 @@ describe("Breadcrumb", () => {
 
       await user.click(ellipsisButton);
       expect(onDropdownOpenChange).toHaveBeenCalledWith(false);
+      expect(onDropdownOpenChange).toHaveBeenCalledTimes(2);
+    });
+
+    it("does not call onDropdownOpenChange on mount", () => {
+      // It did, under StrictMode: the callback lived in an effect guarded by a
+      // `mountedRef`, and the double invoke sets the ref on the first pass and
+      // walks past the guard on the second. The demo page printed "Dropdown
+      // closed" on arrival, with nothing opened. StrictMode here, because
+      // without it this passes against the very shape it exists to catch.
+      const onDropdownOpenChange = vi.fn();
+      render(
+        <StrictMode>
+          <Breadcrumb
+            items={manyItems}
+            maxVisibleItems={3}
+            onDropdownOpenChange={onDropdownOpenChange}
+          />
+        </StrictMode>,
+      );
+      expect(onDropdownOpenChange).not.toHaveBeenCalled();
     });
 
     it("sets data-dropdown-open on nav when dropdown is open", async () => {

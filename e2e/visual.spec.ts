@@ -125,6 +125,37 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   // Distinct anatomies of the same states.
   { component: "Checkbox", fixture: "disabled" },   // disabled that must still show its check
   { component: "Button", fixture: "disabled" },     // the opacity + pointer-events idiom
+  // The loader ON a filled button. `Button/loading` sits on the page, where an
+  // accent spinner reads fine; the defect only exists where the button is
+  // painted, and the library never paints one. The spinner measured 1.00:1
+  // against a consumer's accent background — the same value, exactly — so the
+  // two demo captions that exist to show `loaderPosition` were the only two
+  // with no visible loader. Not a 1.4.11 failure (the state is announced in
+  // text by the `role=status` span, which exempts the graphic), so no contrast
+  // gate can hold it: it is a picture or it is nothing.
+  { component: "Button", fixture: "loading-on-accent" },
+  // The size scale, which is public API as of v1 and was a prop that painted
+  // nothing before it. Both ends, not one: the two failure modes are a step
+  // that stops stepping and a step that moves, and a single subject at `lg`
+  // would photograph the second only. `md` is deliberately absent — it is what
+  // `Button/default` and `Button/disabled` already photograph.
+  //
+  // Planted by collapsing the scale so all three render `md`: both fail on the
+  // image DIMENSIONS (28 and 52 against 40) before the pixel budget is
+  // consulted at all, and 204 and 212 pixels differ against a budget of 30.
+  // The one subject in this list that could not fail at its natural size is
+  // `loading-on-accent` above, and it says why.
+  { component: "Button", fixture: "size-sm" },
+  { component: "Button", fixture: "size-lg" },
+  // Input and TextArea took the same scale in the same slice, for the same
+  // reason — `size` emitted `data-size` and painted nothing in all three. Ends
+  // only, again: `md` is what `Input/labelled` and `TextArea/labelled` already
+  // photograph, and they render identically to `size-md` because an unset prop
+  // paints `md`.
+  { component: "Input", fixture: "size-sm" },
+  { component: "Input", fixture: "size-lg" },
+  { component: "TextArea", fixture: "size-sm" },
+  { component: "TextArea", fixture: "size-lg" },
   { component: "OtpInput", fixture: "error" },      // error across sibling boxes, not one field
   { component: "MultiSelectDropdown", fixture: "loading" }, // three nested pulses, un-nested
   { component: "Dropdown", fixture: "disabled" },   // a trigger surface, not a form field
@@ -142,6 +173,18 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   // note says. `with-error` renders no error at all, and this one paints
   // completed, error and pending together.
   { component: "Stepper", fixture: "all-statuses" },
+
+  /**
+   * The four control families the target-size fix changed the geometry of.
+   * They already fed the a11y sweep, the contrast gate and the classes
+   * contracts — what none of those can see is a glyph that grew: axe does not
+   * call a 300x300 icon a violation, and `MultiSelectSearchableDropdown`'s did
+   * exactly that when its parent changed. These are the pictures.
+   */
+  { component: "MultiSelectDropdown", fixture: "multi-value" },        // chip remove + clear-all
+  { component: "Table", fixture: "selectable" },                       // row select
+  { component: "Table", fixture: "expandable" },                       // row expand
+  { component: "Table", fixture: "draggable" },                        // drag handle
 ];
 
 /**
@@ -308,7 +351,7 @@ test.describe("focus baselines", () => {
             }
             await expect(page).toHaveScreenshot(
               `focus-${component}-${fixture}-${theme}-${width}.png`,
-              { animations: "disabled", maxDiffPixels: 30, threshold: 0.05 },
+              { animations: "disabled", maxDiffPixels: 1, threshold: 0.05 },
             );
           }
         });
@@ -349,8 +392,41 @@ test.describe("visual baselines", () => {
                 // scales with the screenshot, so on a wide capture it allowed
                 // ~2000 differing pixels — enough to swallow every rounded
                 // corner on a button, which is what a planted radius change
-                // proved. Thirty pixels absorbs antialiasing and nothing else.
-                maxDiffPixels: 30,
+                // proved.
+                //
+                // One, measured rather than chosen. The whole suite run at
+                // `maxDiffPixels: 0` reported 437 of 437 comparisons differing
+                // by exactly zero — the apparent exception,
+                // `InternationalPhoneInput/default` at 6 pixels, was a STALE
+                // BASELINE rather than noise and passed twice at zero once
+                // re-recorded. So the floor is 0, and 1 is the whole of the
+                // insurance this suite needs.
+                //
+                // It replaced 30, which was slack wide enough to hide a whole
+                // subject: 37 subjects photograph something whose smallest
+                // painted element is 400px² or less — a 14x14 check glyph, a
+                // 10x10 radio dot, a 16x16 chevron — and a 20px loader
+                // recoloured against its own background moved fewer than 30
+                // pixels, so that subject passed its own plant. All 37 were
+                // re-planted at 1 by hiding their smallest painted element
+                // with a stylesheet rule: 33 fail, from 2 pixels
+                // (`Table/expandable`) to 843 (`Stepper/horizontal-numbered`).
+                //
+                // FOUR STILL CANNOT FAIL, and the reason is the comparator
+                // rather than this number: `MultiSelectDropdown/closed`,
+                // `MultiSelectSearchableDropdown/closed`, `TimePicker/closed`
+                // and `MultiSelectDropdown/loading`. All four photograph a
+                // 16x16 chevron stroked in a mid-grey, and pixelmatch excludes
+                // antialiased pixels by design — decoding the two PNGs and
+                // comparing them byte by byte counts 28 differing pixels where
+                // Playwright counts 1. No budget reaches that; only a
+                // different comparator does. `ssim-cie94` sees all four (26-52
+                // px) and is not a drop-in: on a clean run it failed
+                // `Slider/disabled` and `CascadingDropdown/open-submenu` at
+                // 1110 to 29918 pixels, so adopting it means recording all 437
+                // baselines again and calibrating a budget in a different
+                // space. That is its own slice, not a number change here.
+                maxDiffPixels: 1,
                 // Playwright's default per-pixel tolerance is 0.2 YIQ, which is
                 // wider than the whole skeleton fill: removing `bg-cl-bg-skeleton`
                 // outright — every bar in Table/loading losing its paint — moved
@@ -529,6 +605,50 @@ async function settle(read: () => Promise<string>, unsettled: string): Promise<s
  * the DatePicker subject at `open` again fails exactly those two and nothing
  * else.
  */
+/**
+ * The budget, shown to fail.
+ *
+ * `maxDiffPixels` is the one number in this file that decides whether every
+ * other assertion means anything, and it was 30 for months — wide enough that
+ * a 20px loader could be recoloured into its own background and pass. A number
+ * that has never been shown to bite is a number nobody has tested.
+ *
+ * `Checkbox/checked` is the case to hold it against: its check glyph is 14x14,
+ * the state `6dd1925` deleted library-wide, and hiding it moves 8 pixels.
+ * Eight is over 1 and under 30, so this test passes today and would have
+ * failed at the old budget — which is exactly the regression it guards. It
+ * also guards the comparator: if a Playwright upgrade makes pixelmatch blinder
+ * to thin glyphs, this goes red rather than the suite going quietly weak.
+ */
+test("the budget is tight enough to see a 14x14 glyph disappear", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await gotoFixture(page, "Checkbox", "checked");
+  await freeze(page);
+  await setTheme(page, "light");
+  const subject = page.locator("[data-fixture]");
+  // A stylesheet rule, not an inline style: several fixtures re-render after
+  // the mutation and React restores the element, which reported seven subjects
+  // as unfailable when this was first measured.
+  await page.addStyleTag({ content: "[data-fixture] svg{visibility:hidden!important}" });
+  let failed = false;
+  try {
+    await expect(subject).toHaveScreenshot("Checkbox-checked-light-1024.png", {
+      animations: "disabled",
+      maxDiffPixels: 1,
+      threshold: 0.05,
+      timeout: 5000,
+    });
+  } catch {
+    failed = true;
+  }
+  expect(
+    failed,
+    "hiding the check glyph did not fail the baseline — the budget or the comparator " +
+      "has stopped seeing changes this size, and every small-subject baseline in this " +
+      "file is weaker than it reads",
+  ).toBe(true);
+});
+
 test.describe("baseline determinism", () => {
   const FIXED = new Date("2026-03-11T14:07:00Z");
   const LATER = new Date(FIXED.getTime() + 26 * 60 * 60 * 1000);
@@ -727,7 +847,7 @@ test.describe("open surfaces", () => {
               // than inherited: this call site kept Playwright's 0.2 default
               // for a slice after the other one was tightened, so the fourteen
               // open surfaces were still comparing on the tool's number.
-              { animations: "disabled", maxDiffPixels: 30, threshold: 0.05 },
+              { animations: "disabled", maxDiffPixels: 1, threshold: 0.05 },
             );
           }
         });

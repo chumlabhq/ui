@@ -16,12 +16,15 @@ export type TextAreaSize = "sm" | "md" | "lg";
 export interface TextAreaClasses {
   /** Outermost container (same element as className) */
   root?: string;
+  /** The box around the textarea, which is where the border and focus ring live. */
   control?: string;
   /** Label element */
   label?: string;
   /** Helper/description text */
   description?: string;
+  /** The `<textarea>` itself. */
   input?: string;
+  /** The error or hint line under the field. */
   message?: string;
   /** Character count display */
   count?: string;
@@ -47,8 +50,10 @@ export interface TextAreaProps
   success?: boolean;
   successMessage?: ReactNode;
   /**
-   * Visual size variant. Emits `data-size` on the root container for CSS targeting.
-   * Does NOT apply built-in styles — target with `[data-size="lg"]` in your CSS.
+   * Size variant: the control's padding and type size together, at 28, 40 and 52px
+   * for the field itself and 30, 42 and 54 with its border. Unset paints `md`, which
+   * is the field as it has always been. Also emits `data-size` on the root — a hook
+   * for CSS, which is all this prop used to be.
    */
   size?: TextAreaSize;
   /** Icon rendered before the textarea. Becomes a button when `onStartIconClick` is provided. */

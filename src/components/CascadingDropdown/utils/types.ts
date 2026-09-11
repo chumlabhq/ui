@@ -3,14 +3,25 @@ import type { ReactNode } from "react";
 
 export type SelectionMode = "single" | "multi";
 
+/**
+ * One row of a cascading menu. An option with `children` opens the next level rather than selecting.
+ */
 export interface CascadingOption {
+  /** Identifies the option within its level; this is what the value array carries. */
   value: string;
+  /** The option's text, and its accessible name. */
   label: string;
+  /** Replaces the label in the menu row when it needs more than text. */
   content?: ReactNode;
+  /** Replaces the label in the TRIGGER once chosen, for when the row's form is too long to show there. */
   selectedContent?: ReactNode;
+  /** Renders the row but refuses selection. */
   disabled?: boolean;
+  /** The next level. An option with children opens a submenu instead of selecting. */
   children?: CascadingOption[];
+  /** Whether this option's children take one selection or several — set per level, not per component. */
   selectionMode?: SelectionMode;
+  /** Declares that children exist before they are loaded, so the row shows its submenu arrow while still fetching. */
   hasChildren?: boolean;
 }
 
@@ -21,28 +32,43 @@ export interface CascadingValue {
 export interface CascadingDropdownClasses {
   /** Root container div */
   root?: string;
+  /** The trigger box showing the current selection. */
   control?: string;
   /** Trigger button */
   trigger?: string;
   /** The trigger\'s value/placeholder text. */
   value?: string;
+  /** The first-level menu surface. */
   content?: string;
+  /** One row in the first-level menu. */
   item?: string;
+  /** A submenu surface. */
   subContent?: string;
+  /** The wrapper that anchors a submenu beside its parent row, and flips it when there is no room. */
   subPositioner?: string;
+  /** One row inside a submenu. */
   subItem?: string;
   /** Label element */
   label?: string;
+  /** The error or hint line under the control. */
   message?: string;
+  /** The helper line under the label. */
   description?: string;
+  /** The chevron on the trigger. */
   icon?: string;
+  /** An icon inside a menu row. */
   itemIcon?: string;
+  /** The check shown on a selected row. */
   itemIndicator?: string;
+  /** The checkbox drawn on a row when the level allows multiple selection. */
   itemControl?: string;
+  /** The message shown when a level has no options. */
   empty?: string;
   /** Loading message */
   loading?: string;
+  /** The button clearing the whole selection. */
   clearTrigger?: string;
+  /** One placeholder row while a level's options load. */
   loadingItem?: string;
   /** Search input wrapper in the main menu (contains icon + input). */
   searchControl?: string;

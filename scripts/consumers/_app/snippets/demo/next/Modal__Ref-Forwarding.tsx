@@ -3,8 +3,8 @@
 import { useRef, useState } from "react";
 
 export default function ModalExample() {
-  const modalRef = useRef<HTMLDivElement>(null);
   const [refForwardOpen, setRefForwardOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
   return (
     <div className="flex flex-wrap gap-2">
       <button

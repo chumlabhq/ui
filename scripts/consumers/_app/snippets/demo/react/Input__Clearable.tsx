@@ -20,16 +20,16 @@ const SearchIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function InputExample() {
-  const [search, setSearch] = useState("");
+  const [search2, setSearch2] = useState("");
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
       <Input
         label="Controlled"
         placeholder="Type something..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        value={search2}
+        onChange={(e) => setSearch2(e.target.value)}
         clearable
-        onClear={() => setSearch("")}
+        onClear={() => setSearch2("")}
         startIcon={<SearchIcon className="text-cl-text-tertiary" />}
         classes={
           {

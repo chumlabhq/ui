@@ -180,8 +180,11 @@ const TextAreaDemo = () => {
   // An alert() here blocks the page and every automated check with it.
   const [lastAction, setLastAction] = useState("");
   const [bio, setBio] = useState("");
+  const [bio2, setBio2] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [feedback2, setFeedback2] = useState("");
   const [notes, setNotes] = useState("");
+  const [notes2, setNotes2] = useState("");
 
   const bioOk = bio.length >= 10;
   const bioBad = bio.length > 0 && bio.length < 10;
@@ -490,9 +493,9 @@ const TextAreaDemo = () => {
                 maxLength={100}
                 showCount
                 clearable
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                onClear={() => setNotes("")}
+                value={notes2}
+                onChange={(e) => setNotes2(e.target.value)}
+                onClear={() => setNotes2("")}
                 classes={c.textarea}
                 className={c.container}
               />
@@ -556,9 +559,9 @@ const TextAreaDemo = () => {
                 maxLength={200}
                 showCount
                 clearable
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                onClear={() => setBio("")}
+                value={bio2}
+                onChange={(e) => setBio2(e.target.value)}
+                onClear={() => setBio2("")}
                 error={bioBad}
                 errorMessage={
                   <>
@@ -932,9 +935,9 @@ const TextAreaDemo = () => {
                 maxLength={500}
                 showCount
                 clearable
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                onClear={() => setFeedback("")}
+                value={feedback2}
+                onChange={(e) => setFeedback2(e.target.value)}
+                onClear={() => setFeedback2("")}
                 startIcon={<MailIcon className={c.icon} />}
                 classes={c.textarea}
                 className={c.container}

@@ -41,7 +41,7 @@
         "md",
         "lg"
       ],
-      "description": "Visual size variant. Emits data-size on the root container for CSS targeting."
+      "description": "Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself."
     },
     "prefix": {
       "type": "object",

@@ -12,12 +12,12 @@ const customPresets = [
   ];
 
 export default function DatePickerExample() {
-  const [singleDate, setSingleDate] = useState<Date | null>(null);
+  const [singlePresetDate, setSinglePresetDate] = useState<Date | null>(null);
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        value={singleDate}
-        onValueChange={(date) => setSingleDate(date)}
+        value={singlePresetDate}
+        onValueChange={(date) => setSinglePresetDate(date)}
         label="Custom presets"
         placeholder="Pick a date..."
         showPresets

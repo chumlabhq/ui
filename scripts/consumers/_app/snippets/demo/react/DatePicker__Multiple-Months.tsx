@@ -2,13 +2,13 @@ import { useState } from "react";
 import { DatePicker, DateRange } from "@chumlab/ui/date-picker";
 
 export default function DatePickerExample() {
-  const [rangeValue, setRangeValue] = useState<DateRange | null>(null);
+  const [multiMonthRange, setMultiMonthRange] = useState<DateRange | null>(null);
   return (
     <div className="w-full sm:max-w-md">
       <DatePicker
         mode="range"
-        value={rangeValue}
-        onValueChange={(range) => setRangeValue(range)}
+        value={multiMonthRange}
+        onValueChange={(range) => setMultiMonthRange(range)}
         label="Two-month range picker"
         placeholder="Select range..."
         numberOfMonths={2}

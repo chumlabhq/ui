@@ -2,13 +2,13 @@ import { useState } from "react";
 import { DatePicker, DateRange } from "@chumlab/ui/date-picker";
 
 export default function DatePickerExample() {
-  const [rangeValue, setRangeValue] = useState<DateRange | null>(null);
+  const [presetRange, setPresetRange] = useState<DateRange | null>(null);
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
         mode="range"
-        value={rangeValue}
-        onValueChange={(range) => setRangeValue(range)}
+        value={presetRange}
+        onValueChange={(range) => setPresetRange(range)}
         label="Date range with presets"
         placeholder="Select range..."
         showPresets

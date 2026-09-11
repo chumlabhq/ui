@@ -7,8 +7,10 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
     control: "relative",
     trigger:
       "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error",
-    value:
-      "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
+    // Wraps rather than clipping: the clip took the remove button's negative
+    // margin out of the hit area, 24x20 against a 24x24 rect, which
+    // `target-size` cannot see because it reads the rect.
+    value: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
     content:
       "rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border",
     list: "max-h-60 overflow-y-auto",
@@ -22,10 +24,10 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
     chip:
       "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-bg text-cl-accent",
     chipRemove:
-      "w-4 h-4 p-0.5 shrink-0 cursor-pointer hover:text-cl-accent-hover appearance-none border-none bg-transparent rounded-cl-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
+      "inline-flex items-center justify-center min-w-6 min-h-6 -my-1 -mr-1 shrink-0 cursor-pointer hover:text-cl-accent-hover appearance-none border-0 bg-transparent rounded-cl-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
     empty:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
-    clearTrigger: "",
+    clearTrigger: "inline-flex items-center justify-center min-w-6 min-h-6 shrink-0 cursor-pointer",
     label:
       "block text-sm font-medium mb-1 text-cl-text-chrome",
     message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",

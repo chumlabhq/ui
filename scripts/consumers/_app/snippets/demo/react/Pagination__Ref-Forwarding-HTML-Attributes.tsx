@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { Pagination } from "@chumlab/ui/pagination";
 
 export default function PaginationExample() {
-  const paginationRef = useRef<HTMLElement>(null);
   const [refPage, setRefPage] = useState(1);
+  const paginationRef = useRef<HTMLElement>(null);
   return (
     <Pagination
       ref={paginationRef}

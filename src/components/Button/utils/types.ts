@@ -62,7 +62,12 @@ export interface ButtonClasses {
 interface ButtonSharedProps {
   /** Button content. */
   children?: ReactNode;
-  /** Size variant. Emits `data-size` on the root element. Default: `"md"`. */
+  /**
+   * Size variant: padding, type size, gap, icon box and loader together, at 28,
+   * 40 and 52px tall. Unset paints `md`, which is the button as it has always
+   * been. Also emits `data-size` on the root for CSS to hang off — a hook
+   * beside the sizing, not the sizing itself, which is what it used to be.
+   */
   size?: ButtonSize;
   /** Disables interaction and applies disabled styling. */
   disabled?: boolean;

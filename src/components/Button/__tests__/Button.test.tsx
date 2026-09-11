@@ -687,4 +687,94 @@ describe("ButtonGroup", () => {
       expect(group).toHaveAttribute("id", "button-group");
     });
   });
+  describe("Size", () => {
+    const classesOf = (el: HTMLElement) => new Set((el.getAttribute("class") ?? "").split(/\s+/));
+
+    it("paints each size, and md is what an unset prop renders", () => {
+      const { rerender } = render(<Button size="sm">Save</Button>);
+      for (const [size, pad, text] of [
+        ["sm", "px-3", "text-xs"],
+        ["md", "px-4", "text-sm"],
+        ["lg", "px-6", "text-base"],
+      ] as const) {
+        rerender(<Button size={size}>Save</Button>);
+        const cls = classesOf(screen.getByRole("button"));
+        expect(cls.has(pad), `${size} lost ${pad}`).toBe(true);
+        expect(cls.has(text), `${size} lost ${text}`).toBe(true);
+      }
+      rerender(<Button>Save</Button>);
+      const unset = classesOf(screen.getByRole("button"));
+      expect(unset.has("px-4")).toBe(true);
+      expect(unset.has("text-sm")).toBe(true);
+    });
+
+    it("emits data-size only when the consumer asked for one", () => {
+      // The attribute reports the prop, not the paint: it stays a targeting
+      // hook, and an unset prop rendering `md` does not start claiming one.
+      const { rerender } = render(<Button size="lg">Save</Button>);
+      expect(screen.getByRole("button")).toHaveAttribute("data-size", "lg");
+      rerender(<Button>Save</Button>);
+      expect(screen.getByRole("button")).not.toHaveAttribute("data-size");
+    });
+
+    it("lets a consumer's className beat the size", () => {
+      /**
+       * The requirement this component already failed one layer down:
+       * `border-none` in a default kept a consumer's `border` company instead
+       * of yielding to it, because the two are in different tailwind-merge
+       * groups. Every size token is in the same group as the utility a
+       * consumer reaches for, so the consumer's replaces it outright — and the
+       * library's is GONE from the class list, not merely outranked.
+       */
+      render(
+        <Button size="lg" className="px-8 py-1 text-lg gap-4">
+          Save
+        </Button>,
+      );
+      const cls = classesOf(screen.getByRole("button"));
+      // Variants stripped before the comparison. `data-[size=lg]:px-6` is not
+      // the token `px-6`, so a check for the bare name passes against exactly
+      // the form that defeats the consumer — it did, when this was planted.
+      const base = new Set([...cls].map((c) => c.slice(c.lastIndexOf(":") + 1)));
+      expect(base.has("px-8")).toBe(true);
+      expect(base.has("px-6"), "the size's padding survived the consumer's").toBe(false);
+      expect(base.has("py-1")).toBe(true);
+      expect(base.has("py-3.5"), "the size's vertical padding survived").toBe(false);
+      expect(base.has("text-lg")).toBe(true);
+      expect(base.has("text-base"), "the size's type survived").toBe(false);
+    });
+
+    it("scales the loader with the size, and an explicit loaderSize still wins", () => {
+      const { container, rerender } = render(
+        <Button size="sm" loading>
+          Save
+        </Button>,
+      );
+      const loaderBox = () => container.querySelector<HTMLElement>("[style*='--loader-size']");
+      expect(loaderBox()?.style.getPropertyValue("--loader-size")).toBe("12px");
+      rerender(
+        <Button size="lg" loading>
+          Save
+        </Button>,
+      );
+      expect(loaderBox()?.style.getPropertyValue("--loader-size")).toBe("20px");
+      rerender(
+        <Button size="lg" loading loaderSize={9}>
+          Save
+        </Button>,
+      );
+      expect(loaderBox()?.style.getPropertyValue("--loader-size")).toBe("9px");
+    });
+
+    it("drops the size's decoration under unstyled and keeps its structure", () => {
+      render(
+        <Button size="lg" unstyled>
+          Save
+        </Button>,
+      );
+      const cls = classesOf(screen.getByRole("button"));
+      expect(cls.has("px-6"), "unstyled kept decorative padding").toBe(false);
+      expect(cls.has("text-base"), "unstyled kept a type size").toBe(false);
+    });
+  });
 });

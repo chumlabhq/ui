@@ -108,7 +108,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `children` | object | — | React.ReactNode — Button content. |
 | `as` | `"button"` \| `"a"` \| `"span"` | `"button"` | HTML element to render as. |
 | `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Sets padding, type size, gap, icon box and loader together: 28, 40 and 52px tall. Also emits data-size on the root, so CSS can target it; the attribute is a hook, not the mechanism. |
 | `disabled` | boolean | — | Disables interaction and applies disabled styling. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
@@ -377,7 +377,7 @@ const [saving, setSaving] = useState(false);
 - **Always provide `className`** — Button has no built-in colors. Without it, you get a transparent, unstyled button.
 - **Use `as="a"` for navigation**, `as="button"` for actions. Never use `as="span"` unless the element must be non-focusable-by-default.
 - **Always add `aria-label`** to icon-only buttons.
-- **`size` doesn't change dimensions** — it only emits `data-size`. Use `className` for sizing or target `[data-size="sm"]` in CSS.
+- **`size` sets dimensions now** — sm/md/lg are 28/40/52px tall, with padding, type, gap, icon box and loader moving together. It did not until v1: the prop emitted `data-size` and painted nothing, and this line used to say so. A `className` still wins over any of it — the size tokens are plain utilities in the same merge groups, so `px-8` replaces the size's padding rather than sitting beside it.
 - **Safe defaults:** `<Button className="bg-blue-600 text-white hover:bg-blue-700 ...">Label</Button>`.
 - **Use `loading` + `loadingText`** for async actions. The button auto-disables during loading.
 - **`disabled` vs `loading`:** both disable interaction, but `loading` shows a spinner and sets `aria-busy`.

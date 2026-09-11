@@ -1,69 +1,79 @@
 {
   "sections": [
     {
+      "component": "Accessibility",
+      "title": "Keyboard navigation",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Accessibility",
+      "title": "ARIA & semantics",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Accessibility",
+      "title": "Reduced motion",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Accessibility",
+      "title": "Color & contrast",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Accessibility",
+      "title": "Testing",
+      "reason": "no demo wrapper in the section"
+    },
+    {
       "component": "Accordion",
       "title": "Dynamic Items",
       "reason": "`removeItem` closes over page state"
     },
     {
-      "component": "Breadcrumb",
-      "title": "Basic Usage",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "Accordion",
+      "title": "Your own open and close animation",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "With Icons",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "AiLlm",
+      "title": "LLM-friendly APIs",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "Icons + Truncation",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "AiLlm",
+      "title": "Streaming UIs",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "Custom Content",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "AiLlm",
+      "title": "Token-by-token streaming",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "With Links",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "AiLlm",
+      "title": "Provider-agnostic",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "Per-Item Click Handlers",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "Animation",
+      "title": "Defaults",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "Tooltips",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "Animation",
+      "title": "Reduced motion",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "Ellipsis Tooltip",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "Animation",
+      "title": "Bring your own motion",
+      "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Breadcrumb",
-      "title": "Pill Style",
-      "reason": "`handleItemClick` closes over page state"
-    },
-    {
-      "component": "Breadcrumb",
-      "title": "Colored Theme",
-      "reason": "`handleItemClick` closes over page state"
-    },
-    {
-      "component": "Breadcrumb",
-      "title": "Combined: Tooltips + Icons + Truncation",
-      "reason": "`handleItemClick` closes over page state"
-    },
-    {
-      "component": "Breadcrumb",
-      "title": "onDropdownOpenChange",
-      "reason": "`handleItemClick` closes over page state"
+      "component": "Animation",
+      "title": "Keeping the node for an exit",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "Button",
@@ -88,12 +98,17 @@
     {
       "component": "CascadingDropdown",
       "title": "Fully Async - Load on Open",
-      "reason": "`resetLoadOnOpenDemo` closes over page state"
+      "reason": "`fetchCountriesByRegion` is not declared on the page"
     },
     {
       "component": "CascadingDropdown",
       "title": "Async Server-Side Search (Debounced)",
       "reason": "`fetchCountriesByRegion` is not declared on the page"
+    },
+    {
+      "component": "DatePicker",
+      "title": "Locale Support",
+      "reason": "`fr` is not declared on the page"
     },
     {
       "component": "DatePicker",
@@ -114,6 +129,21 @@
       "component": "Dropdown",
       "title": "Native Form Participation",
       "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "GettingStarted",
+      "title": "Prerequisites",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "GettingStarted",
+      "title": "Quick example",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "GettingStarted",
+      "title": "What's included",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "Input",
@@ -144,6 +174,21 @@
       "component": "InternationalPhoneInput",
       "title": "Form Semantics",
       "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "Introduction",
+      "title": "What's inside",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Introduction",
+      "title": "Design principles",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Introduction",
+      "title": "Who it's for",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "MultiSelectDropdown",
@@ -204,6 +249,26 @@
       "component": "Slider",
       "title": "Custom Thumb",
       "reason": "`value` is not declared on the page"
+    },
+    {
+      "component": "Styling",
+      "title": "1. className",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Styling",
+      "title": "2. The classes prop",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Styling",
+      "title": "3. CSS variables",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Styling",
+      "title": "Where floating content renders",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "Switch",
@@ -342,6 +407,31 @@
     },
     {
       "component": "Table",
+      "title": "With Row Selection",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "With Floating Actions",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Actions Column + Floating 3-Dot Menu",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Floating Actions with Custom Triggers",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "With Pinned Columns (Interactive)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
       "title": "Custom Pin Icon (Star)",
       "reason": "`handleStarPinColumn` closes over page state"
     },
@@ -352,33 +442,283 @@
     },
     {
       "component": "Table",
+      "title": "With Pagination",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Dark/Modern Pagination Style",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Horizontal Scroll (Many Columns)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Vertical Scroll (Fixed Height)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Sticky Header",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Both Scrollbars (Fixed Height + Many Columns)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Hidden Vertical Scrollbar",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Hidden Scrollbars (Both Directions)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Comprehensive Demo (All Features)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Loading State",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Empty State (Fully Customizable)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Custom Checkbox Selection",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Star Selection (Favorites)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Checkbox with Star Icon Inside",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Global Search (Custom Colors & Focus)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Global Search (Minimal, No Icon)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Global Search (Pill Shape with Badge)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Row Expansion (Custom Chevron Icons)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Row Expansion (Plus/Minus Icons)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Row Expansion (Right Side, Arrow Icon)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Row Expansion (Styled Expanded Content)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Row Expansion (Click Anywhere on Row)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Visibility (Pill Toggles)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Visibility (Dropdown Menu)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Visibility (Switch Toggles)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Striped Rows (Custom Colors)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Resizing (Custom Handle Style)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Resizing (Controlled with Size Display)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Resizing (With Initial Sizes)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
       "title": "Inline Cell Editing",
       "reason": "page styling `c.value` could not be resolved"
     },
     {
       "component": "Table",
-      "title": "Infinite Scroll",
-      "reason": "`handleLoadMore` closes over page state"
+      "title": "Row Drag & Drop (Custom Arrow Icons)",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "Table",
-      "title": "Infinite Scroll (Skeleton Loader)",
-      "reason": "`handleLoadMore2` closes over page state"
+      "title": "Row Drag & Drop (Number Handle with Reorder History)",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "Table",
-      "title": "Infinite Scroll (Progress Bar Loader)",
-      "reason": "`handleLoadMore3` closes over page state"
+      "title": "Row Drag & Drop (Styled Drag State)",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "Table",
-      "title": "Infinite Scroll (No Loading UI, Silent Load)",
-      "reason": "`handleLoadMore4` closes over page state"
+      "title": "Row Drag & Drop (With Row Numbers)",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "Table",
-      "title": "Server-Side Mode",
-      "reason": "`handleServerSortingChange` closes over page state"
+      "title": "Row Drag & Drop (Handle on Right)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Footer (Column-Aligned Totals)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Footer (Styled Summary Card)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Footer (Sticky Footer)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Footer (Multi-Row with Styling)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Built-in Search (Rose Theme)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Built-in Search (Icon on Right)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Built-in Search (No Icon)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Built-in Search (Emerald Underline Style)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Built-in Search (Custom Filter Icon on Right)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Header Filters (Default)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Header Filters (Custom Icon)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Header Filters (Custom Dropdown Content)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Filters + Sorting Combined",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Filters (Styled Dropdown)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Filters (Chip Tags Style)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Server-Side (Real API: dummyjson.com)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Column Reordering",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Row Grouping",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Mobile Card Layout",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Select All Mode (Page vs All)",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Table",
+      "title": "Save View (Presets)",
+      "reason": "no demo wrapper in the section"
     },
     {
       "component": "TextArea",
@@ -391,9 +731,34 @@
       "reason": "`bioBad` closes over page state"
     },
     {
+      "component": "Theming",
+      "title": "Getting the tokens",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Theming",
+      "title": "Light & dark out of the box",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Theming",
+      "title": "Token reference",
+      "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Theming",
+      "title": "Custom palettes",
+      "reason": "no demo wrapper in the section"
+    },
+    {
       "component": "TimePicker",
       "title": "Clearable",
       "reason": "`log` closes over page state"
+    },
+    {
+      "component": "TimePicker",
+      "title": "Native Form Field & Lifecycle Callbacks",
+      "reason": "`FormData` is not declared on the page"
     },
     {
       "component": "Table",

@@ -3,8 +3,11 @@ import type { HTMLAttributes, ReactNode, RefObject } from "react";
 export type DrawerDirection = "left" | "right" | "top" | "bottom";
 
 export interface DrawerClasses {
+  /** The fixed layer the panel and its scrim share. */
   root?: string;
+  /** The scrim over the page behind. */
   overlay?: string;
+  /** The panel itself, which is the element the `direction` slides. */
   content?: string;
 }
 

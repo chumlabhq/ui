@@ -432,6 +432,11 @@ const CascadingDropdownDemo = () => {
   const c = getClasses();
 
   const [basicValue, setBasicValue] = useState<CascadingValue>({});
+
+  const [basicValue2, setBasicValue2] = useState<CascadingValue>({});
+
+  const [basicValue22, setBasicValue22] = useState<CascadingValue>({});
+
   const [multiValue, setMultiValue] = useState<CascadingValue>({});
   const [mixedValue, setMixedValue] = useState<CascadingValue>({});
   const [simpleValue, setSimpleValue] = useState<CascadingValue>({});
@@ -792,8 +797,8 @@ const CascadingDropdownDemo = () => {
           <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
-              value={basicValue}
-              onValueChange={(val) => setBasicValue(val)}
+              value={basicValue2}
+              onValueChange={(val) => setBasicValue2(val)}
               placeholder="Select category..."
               classes={c.cascading}
             />
@@ -1403,8 +1408,8 @@ const CascadingDropdownDemo = () => {
           <div className="w-full">
             <CascadingDropdown
               options={categoryOptions}
-              value={basicValue}
-              onValueChange={(val) => setBasicValue(val)}
+              value={basicValue22}
+              onValueChange={(val) => setBasicValue22(val)}
               fullWidth
               placeholder="Select category..."
               classes={c.cascading}

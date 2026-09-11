@@ -16,6 +16,7 @@ export type InputSize = "sm" | "md" | "lg";
 export interface InputClasses {
   /** Root container (label + input row + error/success) */
   root?: string;
+  /** The box around the input and its addons, which is where the border and focus ring live. */
   control?: string;
   /** Label element */
   label?: string;
@@ -27,6 +28,7 @@ export interface InputClasses {
   prefix?: string;
   /** Suffix addon */
   suffix?: string;
+  /** The error or hint line under the field. */
   message?: string;
   /** Character count display */
   count?: string;
@@ -52,8 +54,10 @@ export interface InputProps
   success?: boolean;
   successMessage?: ReactNode;
   /**
-   * Visual size variant. Emits `data-size` on the root container for CSS targeting.
-   * Does NOT apply built-in styles — target with `[data-size="lg"]` in your CSS.
+   * Size variant: the control's padding and type size together, at 28, 40 and 52px
+   * for the field itself and 30, 42 and 54 with its border. Unset paints `md`, which
+   * is the field as it has always been. Also emits `data-size` on the root — a hook
+   * for CSS, which is all this prop used to be.
    */
   size?: InputSize;
   /**

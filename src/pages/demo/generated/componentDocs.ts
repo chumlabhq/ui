@@ -2065,7 +2065,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "itemIcon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "An item's icon."
           },
           {
             "name": "ellipsis",
@@ -2077,19 +2077,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "ellipsisTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button standing in for the items that did not fit."
           },
           {
             "name": "content",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The menu those collapsed items open into."
           },
           {
             "name": "collapsedItem",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One item inside that menu."
           }
         ]
       }
@@ -2097,67 +2097,67 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "BreadcrumbItem",
-        "description": "",
+        "description": "One step in the trail. Whether it renders as a link, a button or plain text follows from which of `href` and `onClick` are set.",
         "members": [
           {
             "name": "id",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Identifies the item. Callbacks carry this, not the index, so reordering the trail does not change what a click means."
           },
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The item's text, and its accessible name."
           },
           {
             "name": "href",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Renders the item as a link. Without it the item is a button, or plain text if it has no `onClick` either."
           },
           {
             "name": "onClick",
             "type": "() => void",
             "required": false,
-            "description": ""
+            "description": "Called when the item is activated. Combined with `href`, this runs and the navigation still happens."
           },
           {
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "An icon beside the label, placed by `iconPosition`."
           },
           {
             "name": "iconPosition",
             "type": "IconPosition",
             "required": false,
-            "description": ""
+            "description": "Which side of the label the icon sits on. Falls back to the component's setting."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Renders the item but refuses activation."
           },
           {
             "name": "content",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the label and icon entirely."
           },
           {
             "name": "tooltip",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Text shown on hover or focus, for a label the trail had to truncate."
           },
           {
             "name": "tooltipProps",
             "type": "BreadcrumbTooltipProps",
             "required": false,
-            "description": ""
+            "description": "Placement and timing for that tooltip."
           }
         ]
       }
@@ -2277,7 +2277,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "\"sm\" | \"md\" | \"lg\"",
         "required": false,
         "default": null,
-        "description": "Emits data-size attribute for CSS targeting. No built-in sizing."
+        "description": "Sets padding, type size, gap, icon box and loader together: 28, 40 and 52px tall. Also emits data-size on the root, so CSS can target it; the attribute is a hook, not the mechanism."
       },
       {
         "name": "disabled",
@@ -2930,7 +2930,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The trigger box showing the current selection."
           },
           {
             "name": "trigger",
@@ -2948,31 +2948,31 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "content",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The first-level menu surface."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One row in the first-level menu."
           },
           {
             "name": "subContent",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "A submenu surface."
           },
           {
             "name": "subPositioner",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The wrapper that anchors a submenu beside its parent row, and flips it when there is no room."
           },
           {
             "name": "subItem",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One row inside a submenu."
           },
           {
             "name": "label",
@@ -2984,43 +2984,43 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the control."
           },
           {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The helper line under the label."
           },
           {
             "name": "icon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chevron on the trigger."
           },
           {
             "name": "itemIcon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "An icon inside a menu row."
           },
           {
             "name": "itemIndicator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The check shown on a selected row."
           },
           {
             "name": "itemControl",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The checkbox drawn on a row when the level allows multiple selection."
           },
           {
             "name": "empty",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The message shown when a level has no options."
           },
           {
             "name": "loading",
@@ -3032,13 +3032,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "clearTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button clearing the whole selection."
           },
           {
             "name": "loadingItem",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One placeholder row while a level's options load."
           },
           {
             "name": "searchControl",
@@ -3082,55 +3082,55 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "CascadingOption",
-        "description": "",
+        "description": "One row of a cascading menu. An option with `children` opens the next level rather than selecting.",
         "members": [
           {
             "name": "value",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Identifies the option within its level; this is what the value array carries."
           },
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The option's text, and its accessible name."
           },
           {
             "name": "content",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the label in the menu row when it needs more than text."
           },
           {
             "name": "selectedContent",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the label in the TRIGGER once chosen, for when the row's form is too long to show there."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Renders the row but refuses selection."
           },
           {
             "name": "children",
             "type": "CascadingOption[]",
             "required": false,
-            "description": ""
+            "description": "The next level. An option with children opens a submenu instead of selecting."
           },
           {
             "name": "selectionMode",
             "type": "SelectionMode",
             "required": false,
-            "description": ""
+            "description": "Whether this option's children take one selection or several — set per level, not per component."
           },
           {
             "name": "hasChildren",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Declares that children exist before they are loaded, so the row shows its submenu arrow while still fetching."
           }
         ]
       }
@@ -3848,7 +3848,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The element the flag sits in, which is what carries the size."
           },
           {
             "name": "loading",
@@ -3860,13 +3860,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "image",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The flag graphic itself."
           },
           {
             "name": "fallback",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "What is shown instead when the code has no flag or the image fails."
           }
         ]
       },
@@ -3877,19 +3877,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The overlapping row of flags."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Each flag in that row, which is where the stack margin lives."
           },
           {
             "name": "count",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The `+N` disc closing the row when there are more flags than `max`."
           }
         ]
       },
@@ -3900,7 +3900,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The placeholder disc shown in a flag's place while it loads."
           }
         ]
       }
@@ -3908,67 +3908,67 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "CountryFlagGroupContextValue",
-        "description": "",
+        "description": "What `CountryFlagGroup` imposes on the flags inside it, so a row cannot end up with mismatched sizes.",
         "members": [
           {
             "name": "itemClassName",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The group's per-flag classes, applied by each child rather than by the row."
           },
           {
             "name": "size",
             "type": "CountryFlagSize | number",
             "required": false,
-            "description": ""
+            "description": "The size the group imposes, so the flags in a row cannot disagree."
           }
         ]
       },
       {
         "name": "CountryFlagTooltipConfig",
-        "description": "",
+        "description": "Tooltip settings for a flag. Passing this is how a flag gets a name, which is the difference between decoration and information.",
         "members": [
           {
             "name": "content",
             "type": "ReactNode",
             "required": true,
-            "description": ""
+            "description": "What the tooltip says. Usually the country's name, since the flag alone does not read as one."
           },
           {
             "name": "side",
             "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
             "required": false,
-            "description": ""
+            "description": "Which side of the flag it opens on, before collision flipping."
           },
           {
             "name": "align",
             "type": "\"start\" | \"center\" | \"end\"",
             "required": false,
-            "description": ""
+            "description": "How it lines up along that side."
           },
           {
             "name": "sideOffset",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "Gap in pixels between the flag and the tooltip."
           },
           {
             "name": "delayDuration",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "Milliseconds of hover before it opens."
           },
           {
             "name": "className",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Classes for the tooltip surface."
           },
           {
             "name": "showArrow",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Draws the arrow pointing back at the flag."
           }
         ]
       }
@@ -4628,235 +4628,235 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "CalendarDay",
-        "description": "",
+        "description": "One cell of the month grid, with every flag a renderer needs already resolved so a custom day renderer does no date maths.",
         "members": [
           {
             "name": "date",
             "type": "Date",
             "required": true,
-            "description": ""
+            "description": "The day this cell stands for, at local midnight."
           },
           {
             "name": "dayOfMonth",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "The number printed in the cell, 1-31."
           },
           {
             "name": "isToday",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True for the system's current date, which the calendar rings rather than selects."
           },
           {
             "name": "isSelected",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True when this exact day is the value, or an endpoint of a range value."
           },
           {
             "name": "isDisabled",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True when `disabledDates` rules it out; it renders but does not respond."
           },
           {
             "name": "isOutside",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True for a day belonging to the neighbouring month that fills the grid's first or last row."
           },
           {
             "name": "isRangeStart",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True for the earlier endpoint of a range, drawn with a half-rounded edge."
           },
           {
             "name": "isRangeEnd",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True for the later endpoint of a range."
           },
           {
             "name": "isInRange",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True for a day strictly between the endpoints — tinted, but not an endpoint."
           },
           {
             "name": "isMarked",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "True when a `DateMarker` matches this day."
           },
           {
             "name": "marker",
             "type": "DateMarker",
             "required": false,
-            "description": ""
+            "description": "The marker that matched, so a custom renderer reads its label and colour without searching again."
           },
           {
             "name": "weekNumber",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "ISO week this day falls in, present only when `showWeekNumbers` is on."
           }
         ]
       },
       {
         "name": "DateMarker",
-        "description": "",
+        "description": "A note attached to a day — a holiday, a deadline — drawn as a dot under the number.",
         "members": [
           {
             "name": "date",
             "type": "Date",
             "required": true,
-            "description": ""
+            "description": "The day to mark."
           },
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Short text for the marker, used as its accessible name and tooltip title."
           },
           {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Longer text shown under the label in the marker's tooltip."
           },
           {
             "name": "type",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "A caller-defined category, so several markers can be styled as a group."
           },
           {
             "name": "color",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Overrides the dot's colour for this marker."
           }
         ]
       },
       {
         "name": "DatePreset",
-        "description": "",
+        "description": "A shortcut button beside the calendar that sets the value without navigating to it.",
         "members": [
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The button's text in the preset column, such as \"Last 7 days\"."
           },
           {
             "name": "getValue",
             "type": "() => Date | DateRange | Date[]",
             "required": true,
-            "description": ""
+            "description": "Computes the value when the preset is chosen, so \"today\" resolves at click time rather than at render."
           }
         ]
       },
       {
         "name": "DateRange",
-        "description": "",
+        "description": "A start and end day. `end` is null between the two clicks of a range selection.",
         "members": [
           {
             "name": "start",
             "type": "Date | null",
             "required": true,
-            "description": ""
+            "description": "The earlier endpoint, or null while a range is half-picked."
           },
           {
             "name": "end",
             "type": "Date | null",
             "required": true,
-            "description": ""
+            "description": "The later endpoint, null until the second click."
           }
         ]
       },
       {
         "name": "DateRangeValue",
-        "description": "",
+        "description": "A range in the richer form `onValueChange` reports, each endpoint carrying its formatted string.",
         "members": [
           {
             "name": "start",
             "type": "DateValue | null",
             "required": true,
-            "description": ""
+            "description": "The earlier endpoint, as both a Date and its formatted string."
           },
           {
             "name": "end",
             "type": "DateValue | null",
             "required": true,
-            "description": ""
+            "description": "The later endpoint, in the same pair."
           }
         ]
       },
       {
         "name": "DateValue",
-        "description": "",
+        "description": "A selected day together with the string the trigger shows for it.",
         "members": [
           {
             "name": "date",
             "type": "Date",
             "required": true,
-            "description": ""
+            "description": "The selected day as a Date."
           },
           {
             "name": "dateString",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The same day already formatted by `dateFormat`, so a consumer does not reimplement the format to display it."
           }
         ]
       },
       {
         "name": "DisabledDateOptions",
-        "description": "",
+        "description": "Rules for which days cannot be chosen. Fields combine: a day is disabled if any rule matches.",
         "members": [
           {
             "name": "before",
             "type": "Date",
             "required": false,
-            "description": ""
+            "description": "Disables every day earlier than this one."
           },
           {
             "name": "after",
             "type": "Date",
             "required": false,
-            "description": ""
+            "description": "Disables every day later than this one."
           },
           {
             "name": "disablePast",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Disables every day before today, recomputed per render rather than pinned at mount."
           },
           {
             "name": "disableFuture",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Disables every day after today."
           },
           {
             "name": "dates",
             "type": "Date[]",
             "required": false,
-            "description": ""
+            "description": "Specific days to disable, matched by calendar day rather than by timestamp."
           },
           {
             "name": "daysOfWeek",
             "type": "number[]",
             "required": false,
-            "description": ""
+            "description": "Weekdays to disable everywhere, 0 being Sunday — for closed days."
           },
           {
             "name": "custom",
             "type": "(date: Date) => boolean",
             "required": false,
-            "description": ""
+            "description": "A predicate for rules the fields above cannot express; it runs for every rendered day, so keep it cheap."
           }
         ]
       }
@@ -5271,19 +5271,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The fixed layer the panel and its scrim share."
           },
           {
             "name": "overlay",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The scrim over the page behind."
           },
           {
             "name": "content",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The panel itself, which is the element the `direction` slides."
           }
         ]
       }
@@ -5733,7 +5733,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The trigger box showing the current selection."
           },
           {
             "name": "trigger",
@@ -5745,7 +5745,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "value",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The selected option's text inside the trigger, or the placeholder."
           },
           {
             "name": "content",
@@ -5757,37 +5757,37 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "list",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The scrolling list inside the popup."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One option row."
           },
           {
             "name": "icon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chevron on the trigger."
           },
           {
             "name": "itemIndicator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The check shown on the selected row."
           },
           {
             "name": "clearTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button clearing the selection."
           },
           {
             "name": "empty",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The message shown when there are no options."
           },
           {
             "name": "label",
@@ -5799,25 +5799,25 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the control."
           },
           {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The helper line under the label."
           },
           {
             "name": "loading",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The container holding the skeleton rows while options load."
           },
           {
             "name": "loadingItem",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One of those skeleton rows."
           }
         ]
       }
@@ -5825,37 +5825,37 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "DropdownOption",
-        "description": "",
+        "description": "One selectable option.",
         "members": [
           {
             "name": "value",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Identifies the option; this is what the value carries, not the label."
           },
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The option's text, and its accessible name."
           },
           {
             "name": "content",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the label in the menu row when it needs more than text."
           },
           {
             "name": "selectedContent",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the label in the TRIGGER once chosen, for when the row's form is too long to show there."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Renders the row but refuses selection."
           }
         ]
       }
@@ -6030,7 +6030,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "\"sm\" | \"md\" | \"lg\"",
         "required": false,
         "default": null,
-        "description": "Visual size variant. Emits data-size on the root container for CSS targeting."
+        "description": "Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself."
       },
       {
         "name": "prefix",
@@ -6215,7 +6215,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The box around the input and its addons, which is where the border and focus ring live."
           },
           {
             "name": "label",
@@ -6251,7 +6251,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the field."
           },
           {
             "name": "count",
@@ -6697,7 +6697,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The bordered box holding the country trigger and the number field."
           },
           {
             "name": "input",
@@ -6709,7 +6709,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the control."
           },
           {
             "name": "countrySelect",
@@ -6727,13 +6727,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "itemIcon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The flag inside one row of the country list."
           },
           {
             "name": "itemText",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Country name and dial code inside one row."
           },
           {
             "name": "triggerRow",
@@ -6745,19 +6745,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "flag",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The flag shown in the control itself, for the selected country."
           },
           {
             "name": "value",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The typed number inside the control."
           },
           {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The helper line under the label, above the control."
           }
         ]
       }
@@ -6765,145 +6765,145 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "CountryOption",
-        "description": "",
+        "description": "One country in the picker, and what the component reports when it is selected.",
         "members": [
           {
             "name": "value",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "ISO 3166-1 alpha-2 code, which is what `value.countryCode` carries."
           },
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The country's display name in the list."
           },
           {
             "name": "flag",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The flag emoji or asset for this country."
           },
           {
             "name": "dialCode",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "International dialling prefix, with its leading plus."
           },
           {
             "name": "name",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The searchable name, which may differ from `label` where the list shows a short form."
           }
         ]
       },
       {
         "name": "PasteDetectedData",
-        "description": "",
+        "description": "What a paste was understood to be, handed to `onPasteDetected` so a caller can accept or override the inference.",
         "members": [
           {
             "name": "rawValue",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Exactly what was pasted, before any parsing."
           },
           {
             "name": "detectedCountry",
             "type": "CountryOption | null",
             "required": true,
-            "description": ""
+            "description": "The country inferred from the pasted prefix, or null when nothing matched."
           },
           {
             "name": "phoneNumber",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The national part left after the detected prefix was removed."
           }
         ]
       },
       {
         "name": "PhoneFormatPattern",
-        "description": "",
+        "description": "A grouping rule for one set of countries, so a bare digit string prints the way that country writes it.",
         "members": [
           {
             "name": "pattern",
             "type": "(digits: string) => string",
             "required": true,
-            "description": ""
+            "description": "Formats a bare digit string into the country's grouping."
           },
           {
             "name": "countries",
             "type": "readonly string[]",
             "required": true,
-            "description": ""
+            "description": "The ISO codes this pattern applies to."
           }
         ]
       },
       {
         "name": "PhoneLengthRule",
-        "description": "",
+        "description": "The national-digit count a country accepts, which is what validity is judged against.",
         "members": [
           {
             "name": "min",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "Fewest national digits a valid number may have."
           },
           {
             "name": "max",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "Most it may have."
           }
         ]
       },
       {
         "name": "PhoneNumberData",
-        "description": "",
+        "description": "The parsed number in every form a caller is likely to need, so none has to be derived twice.",
         "members": [
           {
             "name": "fullNumber",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Dial code and national number joined, which is what most APIs want."
           },
           {
             "name": "isValid",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Whether the number satisfies its country's length rule."
           },
           {
             "name": "nationalNumber",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Digits without the dial code."
           },
           {
             "name": "internationalNumber",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "E.164-style form, grouped for reading."
           }
         ]
       },
       {
         "name": "PhoneNumberValue",
-        "description": "",
+        "description": "The controlled value: which country, and the national number typed under it.",
         "members": [
           {
             "name": "countryCode",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "ISO code of the selected country."
           },
           {
             "name": "phoneNumber",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The national number as typed, without the dial code."
           }
         ]
       }
@@ -8012,7 +8012,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": "3",
-        "description": "Maximum number of selected chips displayed before showing a count."
+        "description": "Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that."
       },
       {
         "name": "showSelectedChips",
@@ -8198,7 +8198,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The trigger box holding the chips."
           },
           {
             "name": "trigger",
@@ -8210,7 +8210,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "value",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chip strip inside the trigger. It wraps rather than clipping, so a chip's remove button keeps its full 24px hit area."
           },
           {
             "name": "content",
@@ -8222,31 +8222,31 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "list",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The scrolling list inside the menu."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One option row."
           },
           {
             "name": "icon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chevron on the trigger."
           },
           {
             "name": "itemControl",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The checkbox drawn on each row."
           },
           {
             "name": "itemIndicator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The check inside that checkbox when the row is selected."
           },
           {
             "name": "chip",
@@ -8264,7 +8264,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "empty",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The message shown when there are no options."
           },
           {
             "name": "label",
@@ -8276,7 +8276,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the control."
           },
           {
             "name": "description",
@@ -8288,13 +8288,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "clearTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button clearing every selection at once."
           },
           {
             "name": "loading",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The container holding the skeleton rows while options load."
           },
           {
             "name": "loadingItem",
@@ -8312,13 +8312,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "loadingBar",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The wider of the two shapes in a skeleton row, standing in for the label."
           },
           {
             "name": "count",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The `+N` chip standing in for selections past `maxDisplayedChips`."
           }
         ]
       }
@@ -8654,7 +8654,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": "3",
-        "description": "Maximum number of selected chips displayed before showing a count."
+        "description": "Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that."
       },
       {
         "name": "showSelectedChips",
@@ -8833,7 +8833,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The trigger box holding the chips."
           },
           {
             "name": "trigger",
@@ -8845,7 +8845,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "value",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chip strip inside the trigger. It wraps rather than clipping, so a chip's remove button keeps its full 24px hit area."
           },
           {
             "name": "content",
@@ -8857,31 +8857,31 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "list",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The scrolling list inside the popup."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One option row."
           },
           {
             "name": "icon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chevron on the trigger."
           },
           {
             "name": "itemControl",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The checkbox drawn on each row."
           },
           {
             "name": "itemIndicator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The check inside that checkbox when the row is selected."
           },
           {
             "name": "chip",
@@ -8899,13 +8899,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "empty",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The message shown when the search matches nothing."
           },
           {
             "name": "clearTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button clearing every selection at once."
           },
           {
             "name": "loading",
@@ -8929,19 +8929,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the control."
           },
           {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The helper line under the label."
           },
           {
             "name": "searchControl",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The search field's row inside the popup, holding the input and its icon."
           },
           {
             "name": "searchInput",
@@ -8959,7 +8959,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "count",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The `+N` chip standing in for selections past `maxDisplayedChips`."
           }
         ]
       }
@@ -8967,37 +8967,37 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "MultiSelectOption",
-        "description": "",
+        "description": "One selectable option. The same shape `MultiSelectDropdown` uses, minus the search.",
         "members": [
           {
             "name": "value",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Identifies the option; this is what the value carries, not the label."
           },
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The option's text, and its accessible name."
           },
           {
             "name": "content",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the label in the menu row when it needs more than text."
           },
           {
             "name": "selectedContent",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the label in the TRIGGER once chosen, for when the row's form is too long to show there."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Renders the row but refuses selection."
           }
         ]
       }
@@ -9340,49 +9340,49 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The field and everything labelling it."
           },
           {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The row of boxes."
           },
           {
             "name": "group",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One run of boxes when `groups` splits the code up."
           },
           {
             "name": "input",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "A single character box."
           },
           {
             "name": "label",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The label above the row."
           },
           {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the row."
           },
           {
             "name": "separator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "What is drawn between two groups."
           },
           {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The helper line under the label."
           }
         ]
       }
@@ -9703,19 +9703,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "row",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The line holding the page list, the rows-per-page selector and the page info."
           },
           {
             "name": "list",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The `<ul>` of page numbers."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One page-number button."
           },
           {
             "name": "navButton",
@@ -9739,13 +9739,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "label",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The text beside the rows-per-page selector."
           },
           {
             "name": "navIcon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chevron inside a prev or next button."
           },
           {
             "name": "pageInfo",
@@ -10340,7 +10340,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "handle",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The drag handle. It is also the keyboard target, so shrinking it here shrinks the hit area."
           }
         ]
       }
@@ -10822,7 +10822,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The trigger box showing the current selection."
           },
           {
             "name": "trigger",
@@ -10834,7 +10834,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "value",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The selected option's text inside the trigger, or the placeholder."
           },
           {
             "name": "content",
@@ -10846,37 +10846,37 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "list",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The scrolling list inside the popup."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One option row."
           },
           {
             "name": "icon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The chevron on the trigger."
           },
           {
             "name": "itemIndicator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The check shown on the selected row."
           },
           {
             "name": "clearTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button clearing the selection."
           },
           {
             "name": "empty",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The message shown when the search matches nothing."
           },
           {
             "name": "label",
@@ -10888,19 +10888,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the control."
           },
           {
             "name": "description",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The helper line under the label."
           },
           {
             "name": "searchControl",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The search field's row inside the popup, holding the input and its icon."
           },
           {
             "name": "searchInput",
@@ -10918,13 +10918,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "loading",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The container holding the skeleton rows while options load."
           },
           {
             "name": "loadingItem",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One of those skeleton rows."
           }
         ]
       }
@@ -11350,19 +11350,19 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "SliderMark",
-        "description": "",
+        "description": "One tick on the track.",
         "members": [
           {
             "name": "value",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "Where on the track the mark sits, in the slider's own units."
           },
           {
             "name": "label",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "What is drawn under it. Omit for a tick with no text."
           }
         ]
       }
@@ -11685,43 +11685,43 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The `<li>` wrapping one step: indicator, text and the separator that follows it."
           },
           {
             "name": "trigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The clickable region of a step — indicator and text together — when the step is navigable."
           },
           {
             "name": "itemIndicator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The numbered or icon-bearing circle."
           },
           {
             "name": "indicatorTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The indicator when it is its own button, which is the `dot` and `icon` variants."
           },
           {
             "name": "itemIcon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The icon inside the indicator, when one replaces the number."
           },
           {
             "name": "row",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The flex row holding the indicator beside its text, for the horizontal orientations."
           },
           {
             "name": "itemText",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Label and description together, so they can be aligned as one block."
           },
           {
             "name": "description",
@@ -11733,7 +11733,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "separator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The connector drawn between one step and the next."
           }
         ]
       }
@@ -11741,229 +11741,229 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "Step",
-        "description": "",
+        "description": "One step in the sequence. Steps are addressed by `id`, so reordering the array does not change which step `value` refers to.",
         "members": [
           {
             "name": "id",
             "type": "string | number",
             "required": true,
-            "description": ""
+            "description": "Identifies the step. `value` and `onValueChange` carry this, not the index."
           },
           {
             "name": "label",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "The step's name, shown beside or beneath its indicator."
           },
           {
             "name": "description",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "A second line under the label, for detail that does not fit the name."
           },
           {
             "name": "icon",
             "type": "ComponentType<IconProps> | ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the number in the indicator while the step is pending or active."
           },
           {
             "name": "completedIcon",
             "type": "ComponentType<IconProps> | ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the default check once the step is complete."
           },
           {
             "name": "errorIcon",
             "type": "ComponentType<IconProps> | ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the indicator's content when the step reports an error."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Blocks navigation to this step and drops it from the tab order."
           },
           {
             "name": "tooltip",
             "type": "ReactNode | StepTooltipConfig",
             "required": false,
-            "description": ""
+            "description": "Text, or a config, shown when the step's indicator is hovered or focused."
           }
         ]
       },
       {
         "name": "StepTooltipConfig",
-        "description": "",
+        "description": "Per-step tooltip options, for when a step needs more than the text a bare `tooltip` string gives.",
         "members": [
           {
             "name": "content",
             "type": "ReactNode",
             "required": true,
-            "description": ""
+            "description": "What the tooltip says. Omitting it renders no tooltip at all."
           },
           {
             "name": "side",
             "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
             "required": false,
-            "description": ""
+            "description": "Which side of the anchor to prefer. Flips to the opposite side when there is not room."
           },
           {
             "name": "align",
             "type": "\"start\" | \"center\" | \"end\"",
             "required": false,
-            "description": ""
+            "description": "Where along that side the tooltip lines up with the anchor."
           },
           {
             "name": "sideOffset",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "Gap in pixels between the anchor and the tooltip, along the side axis."
           },
           {
             "name": "alignOffset",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "Shift in pixels along the alignment axis, for nudging off a corner."
           },
           {
             "name": "maxWidth",
             "type": "string | number",
             "required": false,
-            "description": ""
+            "description": "Width at which the tooltip wraps rather than growing along the row."
           },
           {
             "name": "delayDuration",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "How long a pointer must rest before the tooltip opens, in milliseconds. Keyboard focus opens it immediately."
           },
           {
             "name": "showArrow",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Draws the arrow pointing at the anchor."
           },
           {
             "name": "arrowColor",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Overrides the arrow's fill when the content background is not the default."
           },
           {
             "name": "shadow",
             "type": "TooltipShadow",
             "required": false,
-            "description": ""
+            "description": "Elevation preset for the tooltip surface."
           },
           {
             "name": "contentClassName",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Classes for the tooltip surface."
           },
           {
             "name": "contentStyle",
             "type": "CSSProperties",
             "required": false,
-            "description": ""
+            "description": "Inline styles for the tooltip surface."
           },
           {
             "name": "arrowClassName",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Classes for the arrow."
           },
           {
             "name": "arrowStyle",
             "type": "CSSProperties",
             "required": false,
-            "description": ""
+            "description": "Inline styles for the arrow."
           }
         ]
       },
       {
         "name": "StepperTooltipDefaults",
-        "description": "",
+        "description": "Tooltip options applied to every step that does not set its own, so a Stepper can place all its tooltips once.",
         "members": [
           {
             "name": "side",
             "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
             "required": false,
-            "description": ""
+            "description": "Which side of the anchor to prefer. Flips to the opposite side when there is not room."
           },
           {
             "name": "align",
             "type": "\"start\" | \"center\" | \"end\"",
             "required": false,
-            "description": ""
+            "description": "Where along that side the tooltip lines up with the anchor."
           },
           {
             "name": "sideOffset",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "Gap in pixels between the anchor and the tooltip, along the side axis."
           },
           {
             "name": "alignOffset",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "Shift in pixels along the alignment axis, for nudging off a corner."
           },
           {
             "name": "maxWidth",
             "type": "string | number",
             "required": false,
-            "description": ""
+            "description": "Width at which the tooltip wraps rather than growing along the row."
           },
           {
             "name": "delayDuration",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "How long a pointer must rest before the tooltip opens, in milliseconds. Keyboard focus opens it immediately."
           },
           {
             "name": "showArrow",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Draws the arrow pointing at the anchor."
           },
           {
             "name": "arrowColor",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Overrides the arrow's fill when the content background is not the default."
           },
           {
             "name": "shadow",
             "type": "TooltipShadow",
             "required": false,
-            "description": ""
+            "description": "Elevation preset for the tooltip surface."
           },
           {
             "name": "contentClassName",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Classes for the tooltip surface."
           },
           {
             "name": "contentStyle",
             "type": "CSSProperties",
             "required": false,
-            "description": ""
+            "description": "Inline styles for the tooltip surface."
           },
           {
             "name": "arrowClassName",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Classes for the arrow."
           },
           {
             "name": "arrowStyle",
             "type": "CSSProperties",
             "required": false,
-            "description": ""
+            "description": "Inline styles for the arrow."
           }
         ]
       }
@@ -12282,13 +12282,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "row",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The line holding the label group and the track, which is what `labelPosition` reorders."
           },
           {
             "name": "labelGroup",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The label and description stacked together, so they move as one."
           },
           {
             "name": "label",
@@ -12306,7 +12306,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The track the thumb slides along."
           },
           {
             "name": "thumb",
@@ -12318,13 +12318,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the row."
           },
           {
             "name": "loading",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The spinner shown on the thumb while the change is in flight."
           }
         ]
       }
@@ -13256,25 +13256,25 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "filterLabel",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The heading naming the column being filtered."
           },
           {
             "name": "filterClearTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button dropping that column's filter."
           },
           {
             "name": "filterItem",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One value row in the filter panel."
           },
           {
             "name": "filterItemControl",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The checkbox on that row."
           },
           {
             "name": "expandButton",
@@ -13328,13 +13328,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "clearTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The button emptying the search field."
           },
           {
             "name": "searchInput",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The search field itself."
           },
           {
             "name": "mobileCard",
@@ -13762,25 +13762,25 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "list",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The tablist strip holding every tab button."
           },
           {
             "name": "item",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "One tab button."
           },
           {
             "name": "itemText",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The tab's label text, so it can be hidden at narrow widths without hiding the icon."
           },
           {
             "name": "itemIcon",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The icon inside a tab."
           },
           {
             "name": "count",
@@ -13798,7 +13798,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "content",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The panel below the strip, showing the active tab's children."
           }
         ]
       },
@@ -13815,25 +13815,25 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "list",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The tablist strip holding every tab button."
           },
           {
             "name": "item",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "One tab button."
           },
           {
             "name": "itemText",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The tab's label text, so it can be hidden at narrow widths without hiding the icon."
           },
           {
             "name": "itemIcon",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The icon inside a tab."
           },
           {
             "name": "count",
@@ -13851,7 +13851,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "content",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The panel below the strip, showing the active tab's children."
           }
         ]
       }
@@ -13859,109 +13859,109 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "Tab",
-        "description": "",
+        "description": "One tab and its panel. Tabs are addressed by `id`, so reordering the array does not change which one is selected.",
         "members": [
           {
             "name": "id",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Identifies the tab. `value` and `onValueChange` carry this, not the index."
           },
           {
             "name": "label",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "The tab's text."
           },
           {
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "An icon beside the label, placed by `iconPosition`."
           },
           {
             "name": "count",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "A badge on the tab. Hidden at zero unless `showZeroCount` is set."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Blocks selection and drops the tab from arrow-key navigation."
           },
           {
             "name": "tooltip",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Text shown on hover or focus, for a label the strip had to truncate."
           }
         ]
       },
       {
         "name": "TabPanelContextValue",
-        "description": "",
+        "description": "What the strip shares with each tab: the resolved classes, the roving-focus handler, and the settings a tab would otherwise take as repeated props.",
         "members": [
           {
             "name": "tabListId",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Base id the tabs and panels derive their `aria-controls` and `aria-labelledby` from."
           },
           {
             "name": "iconPosition",
             "type": "IconPosition",
             "required": true,
-            "description": ""
+            "description": "Where each tab's icon sits relative to its label."
           },
           {
             "name": "showZeroCount",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Whether a count of zero still renders its badge."
           },
           {
             "name": "alwaysShowLabels",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Keeps labels visible at widths where the strip would otherwise show icons alone."
           },
           {
             "name": "disabled",
             "type": "boolean",
             "required": true,
-            "description": ""
+            "description": "Disables every tab at once, rather than one at a time."
           },
           {
             "name": "orientation",
             "type": "Orientation",
             "required": true,
-            "description": ""
+            "description": "Horizontal or vertical, which decides both the layout and which arrow keys move between tabs."
           },
           {
             "name": "activationMode",
             "type": "ActivationMode",
             "required": true,
-            "description": ""
+            "description": "Whether arrowing to a tab selects it, or only moves focus until Enter."
           },
           {
             "name": "classNames",
             "type": "ResolvedClasses",
             "required": true,
-            "description": ""
+            "description": "The resolved class for each slot, so a tab does not recompute the merge per render."
           },
           {
             "name": "onSelect",
             "type": "(tabId: string) => void",
             "required": true,
-            "description": ""
+            "description": "Called by a tab when it is chosen."
           },
           {
             "name": "onKeyDown",
             "type": "(e: KeyboardEvent<HTMLButtonElement>, index: number) => void",
             "required": true,
-            "description": ""
+            "description": "Shared roving-focus handler, so every tab answers the arrow keys identically."
           }
         ]
       }
@@ -14087,7 +14087,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "\"sm\" | \"md\" | \"lg\"",
         "required": false,
         "default": null,
-        "description": "Visual size variant. Emits data-size on the root container for CSS targeting."
+        "description": "Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself."
       },
       {
         "name": "startIcon",
@@ -14328,7 +14328,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The box around the textarea, which is where the border and focus ring live."
           },
           {
             "name": "label",
@@ -14346,13 +14346,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "input",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The `<textarea>` itself."
           },
           {
             "name": "message",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The error or hint line under the field."
           },
           {
             "name": "count",
@@ -14945,97 +14945,97 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "TimeValue",
-        "description": "",
+        "description": "A time as its parts. `onValueChange` gets this alongside the formatted string so a caller need not re-parse it.",
         "members": [
           {
             "name": "hours",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "The hour. 1-12 when a period is set, 0-23 otherwise."
           },
           {
             "name": "minutes",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "The minute, 0-59."
           },
           {
             "name": "period",
             "type": "\"AM\" | \"PM\"",
             "required": false,
-            "description": ""
+            "description": "AM or PM. Present only in 12-hour format; the hours field means different things with and without it."
           }
         ]
       },
       {
         "name": "UseTimePickerReturn",
-        "description": "",
+        "description": "What `useTimePicker` hands back: the field's state and the handlers the trigger and list wire to.",
         "members": [
           {
             "name": "inputValue",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "What the field currently shows, which is not yet a committed time while the user is typing."
           },
           {
             "name": "focusedIndex",
             "type": "number",
             "required": true,
-            "description": ""
+            "description": "Which option the arrow keys are on, as an index into `displayOptions`."
           },
           {
             "name": "displayOptions",
             "type": "string[]",
             "required": true,
-            "description": ""
+            "description": "The times offered, already stepped and formatted."
           },
           {
             "name": "setFocusedIndex",
             "type": "React.Dispatch<React.SetStateAction<number>>",
             "required": true,
-            "description": ""
+            "description": "Moves the arrow-key focus, for a row that takes it on hover."
           },
           {
             "name": "handleToggle",
             "type": "() => void",
             "required": true,
-            "description": ""
+            "description": "Opens or closes the list from the trigger."
           },
           {
             "name": "handleClose",
             "type": "() => void",
             "required": true,
-            "description": ""
+            "description": "Closes the list."
           },
           {
             "name": "handleOpen",
             "type": "() => void",
             "required": true,
-            "description": ""
+            "description": "Opens the list."
           },
           {
             "name": "handleInputChange",
             "type": "(value: string) => void",
             "required": true,
-            "description": ""
+            "description": "Takes each keystroke, parsing it only when it forms a time."
           },
           {
             "name": "handleOptionSelect",
             "type": "(time: string) => void",
             "required": true,
-            "description": ""
+            "description": "Commits one option from the list."
           },
           {
             "name": "handleKeyDown",
             "type": "(event: React.KeyboardEvent) => void",
             "required": true,
-            "description": ""
+            "description": "Arrow, Enter and Escape handling for both the field and the list."
           },
           {
             "name": "handleBlur",
             "type": "() => void",
             "required": true,
-            "description": ""
+            "description": "Commits or reverts what was typed once focus leaves."
           }
         ]
       }
@@ -15383,7 +15383,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The toast surface — the coloured card the whole notice sits on."
           },
           {
             "name": "body",
@@ -15401,7 +15401,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "title",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The message line, which is the toast's accessible name."
           },
           {
             "name": "description",
@@ -15413,13 +15413,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "indicator",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The status glyph at the leading edge, which is what distinguishes the types apart from colour."
           },
           {
             "name": "closeTrigger",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "The dismiss button."
           },
           {
             "name": "icon",
@@ -15433,67 +15433,67 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [
       {
         "name": "ToastConfig",
-        "description": "",
+        "description": "Everything one toast can be told. `useToast()`'s methods take this minus the fields they fill in themselves.",
         "members": [
           {
             "name": "id",
             "type": "string",
             "required": true,
-            "description": ""
+            "description": "Identifies the toast so it can be dismissed by name later; generated when omitted."
           },
           {
             "name": "type",
             "type": "ToastType",
             "required": false,
-            "description": ""
+            "description": "Which status this is, choosing the colour and the indicator glyph."
           },
           {
             "name": "message",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "The main line, and the toast's accessible name."
           },
           {
             "name": "description",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "A second line under the message."
           },
           {
             "name": "content",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Arbitrary nodes below the text. Interactive content here is the caller's to style — the library paints nothing inside it."
           },
           {
             "name": "duration",
             "type": "number",
             "required": false,
-            "description": ""
+            "description": "Milliseconds before it dismisses itself. `Infinity` keeps it until dismissed."
           },
           {
             "name": "showProgress",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Draws a bar counting the duration down."
           },
           {
             "name": "progressColor",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Overrides that bar's colour."
           },
           {
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Replaces the type's default indicator glyph."
           },
           {
             "name": "showCloseButton",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Renders the dismiss button."
           },
           {
             "name": "onDismiss",
@@ -15505,85 +15505,85 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "role",
             "type": "\"alert\" | \"status\"",
             "required": false,
-            "description": ""
+            "description": "`alert` interrupts a screen reader, `status` waits for a pause. Errors want the first, confirmations the second."
           },
           {
             "name": "style",
             "type": "React.CSSProperties",
             "required": false,
-            "description": ""
+            "description": "Inline styles for the toast surface."
           },
           {
             "name": "pauseOnHover",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Holds the countdown while a pointer rests on the toast, so it cannot vanish mid-read."
           },
           {
             "name": "closeAriaLabel",
             "type": "string",
             "required": false,
-            "description": ""
+            "description": "Accessible name for the dismiss button, for translating it."
           },
           {
             "name": "classes",
             "type": "ToastClasses",
             "required": false,
-            "description": ""
+            "description": "Class overrides for this toast's slots."
           },
           {
             "name": "unstyled",
             "type": "boolean",
             "required": false,
-            "description": ""
+            "description": "Drops the decorative defaults and keeps the structural ones."
           }
         ]
       },
       {
         "name": "ToastContextValue",
-        "description": "",
+        "description": "What `useToast()` returns: one method per status, plus the two dismissals.",
         "members": [
           {
             "name": "toast",
             "type": "(config: Omit<ToastConfig, \"id\"> | string) => string",
             "required": true,
-            "description": ""
+            "description": "Shows a toast and returns its id. The other methods are this with `type` filled in."
           },
           {
             "name": "success",
             "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
             "required": true,
-            "description": ""
+            "description": "Shows a success toast."
           },
           {
             "name": "warning",
             "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
             "required": true,
-            "description": ""
+            "description": "Shows a warning toast."
           },
           {
             "name": "error",
             "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
             "required": true,
-            "description": ""
+            "description": "Shows an error toast, which announces immediately."
           },
           {
             "name": "info",
             "type": "(message: ReactNode, options?: Partial<ToastConfig>) => string",
             "required": true,
-            "description": ""
+            "description": "Shows an informational toast."
           },
           {
             "name": "dismiss",
             "type": "(id: string) => void",
             "required": true,
-            "description": ""
+            "description": "Dismisses one toast by the id `toast` returned."
           },
           {
             "name": "dismissAll",
             "type": "() => void",
             "required": true,
-            "description": ""
+            "description": "Dismisses everything currently on screen."
           }
         ]
       }

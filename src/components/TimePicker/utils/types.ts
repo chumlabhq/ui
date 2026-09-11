@@ -4,9 +4,15 @@ export type TimeFormat = "12h" | "24h";
 export type TimePickerVariant = "dropdown" | "clock";
 export type ClockSelectionMode = "hours" | "minutes";
 
+/**
+ * A time as its parts. `onValueChange` gets this alongside the formatted string so a caller need not re-parse it.
+ */
 export interface TimeValue {
+  /** The hour. 1-12 when a period is set, 0-23 otherwise. */
   hours: number;
+  /** The minute, 0-59. */
   minutes: number;
+  /** AM or PM. Present only in 12-hour format; the hours field means different things with and without it. */
   period?: "AM" | "PM";
 }
 
@@ -269,16 +275,30 @@ export interface UseTimePickerProps {
   onValueChange: (time: string | null, timeValue: TimeValue | null) => void;
 }
 
+/**
+ * What `useTimePicker` hands back: the field's state and the handlers the trigger and list wire to.
+ */
 export interface UseTimePickerReturn {
+  /** What the field currently shows, which is not yet a committed time while the user is typing. */
   inputValue: string;
+  /** Which option the arrow keys are on, as an index into `displayOptions`. */
   focusedIndex: number;
+  /** The times offered, already stepped and formatted. */
   displayOptions: string[];
+  /** Moves the arrow-key focus, for a row that takes it on hover. */
   setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
+  /** Opens or closes the list from the trigger. */
   handleToggle: () => void;
+  /** Closes the list. */
   handleClose: () => void;
+  /** Opens the list. */
   handleOpen: () => void;
+  /** Takes each keystroke, parsing it only when it forms a time. */
   handleInputChange: (value: string) => void;
+  /** Commits one option from the list. */
   handleOptionSelect: (time: string) => void;
+  /** Arrow, Enter and Escape handling for both the field and the list. */
   handleKeyDown: (event: React.KeyboardEvent) => void;
+  /** Commits or reverts what was typed once focus leaves. */
   handleBlur: () => void;
 }

@@ -5,41 +5,79 @@ export type { Locale };
 
 export type DatePickerMode = "single" | "range" | "multiple";
 
+/**
+ * A selected day together with the string the trigger shows for it.
+ */
 export interface DateValue {
+  /** The selected day as a Date. */
   date: Date;
+  /** The same day already formatted by `dateFormat`, so a consumer does not reimplement the format to display it. */
   dateString: string;
 }
 
+/**
+ * A start and end day. `end` is null between the two clicks of a range selection.
+ */
 export interface DateRange {
+  /** The earlier endpoint, or null while a range is half-picked. */
   start: Date | null;
+  /** The later endpoint, null until the second click. */
   end: Date | null;
 }
 
+/**
+ * A range in the richer form `onValueChange` reports, each endpoint carrying its formatted string.
+ */
 export interface DateRangeValue {
+  /** The earlier endpoint, as both a Date and its formatted string. */
   start: DateValue | null;
+  /** The later endpoint, in the same pair. */
   end: DateValue | null;
 }
 
+/**
+ * A shortcut button beside the calendar that sets the value without navigating to it.
+ */
 export interface DatePreset {
+  /** The button's text in the preset column, such as "Last 7 days". */
   label: string;
+  /** Computes the value when the preset is chosen, so "today" resolves at click time rather than at render. */
   getValue: () => Date | DateRange | Date[];
 }
 
+/**
+ * A note attached to a day — a holiday, a deadline — drawn as a dot under the number.
+ */
 export interface DateMarker {
+  /** The day to mark. */
   date: Date;
+  /** Short text for the marker, used as its accessible name and tooltip title. */
   label: string;
+  /** Longer text shown under the label in the marker's tooltip. */
   description?: string;
+  /** A caller-defined category, so several markers can be styled as a group. */
   type?: string;
+  /** Overrides the dot's colour for this marker. */
   color?: string;
 }
 
+/**
+ * Rules for which days cannot be chosen. Fields combine: a day is disabled if any rule matches.
+ */
 export interface DisabledDateOptions {
+  /** Disables every day earlier than this one. */
   before?: Date;
+  /** Disables every day later than this one. */
   after?: Date;
+  /** Disables every day before today, recomputed per render rather than pinned at mount. */
   disablePast?: boolean;
+  /** Disables every day after today. */
   disableFuture?: boolean;
+  /** Specific days to disable, matched by calendar day rather than by timestamp. */
   dates?: Date[];
+  /** Weekdays to disable everywhere, 0 being Sunday — for closed days. */
   daysOfWeek?: number[];
+  /** A predicate for rules the fields above cannot express; it runs for every rendered day, so keep it cheap. */
   custom?: (date: Date) => boolean;
 }
 
@@ -290,18 +328,33 @@ export type UseDatePickerProps =
   | RangeUseDatePickerProps
   | MultipleUseDatePickerProps;
 
+/**
+ * One cell of the month grid, with every flag a renderer needs already resolved so a custom day renderer does no date maths.
+ */
 export interface CalendarDay {
+  /** The day this cell stands for, at local midnight. */
   date: Date;
+  /** The number printed in the cell, 1-31. */
   dayOfMonth: number;
+  /** True for the system's current date, which the calendar rings rather than selects. */
   isToday: boolean;
+  /** True when this exact day is the value, or an endpoint of a range value. */
   isSelected: boolean;
+  /** True when `disabledDates` rules it out; it renders but does not respond. */
   isDisabled: boolean;
+  /** True for a day belonging to the neighbouring month that fills the grid's first or last row. */
   isOutside: boolean;
+  /** True for the earlier endpoint of a range, drawn with a half-rounded edge. */
   isRangeStart: boolean;
+  /** True for the later endpoint of a range. */
   isRangeEnd: boolean;
+  /** True for a day strictly between the endpoints — tinted, but not an endpoint. */
   isInRange: boolean;
+  /** True when a `DateMarker` matches this day. */
   isMarked: boolean;
+  /** The marker that matched, so a custom renderer reads its label and colour without searching again. */
   marker?: DateMarker;
+  /** ISO week this day falls in, present only when `showWeekNumbers` is on. */
   weekNumber?: number;
 }
 

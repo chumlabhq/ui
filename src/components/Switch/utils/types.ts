@@ -13,16 +13,21 @@ export interface SwitchRenderProps {
 export interface SwitchClasses {
   /** Outer container div */
   root?: string;
+  /** The line holding the label group and the track, which is what `labelPosition` reorders. */
   row?: string;
+  /** The label and description stacked together, so they move as one. */
   labelGroup?: string;
   /** Label element */
   label?: string;
   /** Description span element */
   description?: string;
+  /** The track the thumb slides along. */
   control?: string;
   /** Thumb (handle) span element */
   thumb?: string;
+  /** The error or hint line under the row. */
   message?: string;
+  /** The spinner shown on the thumb while the change is in flight. */
   loading?: string;
 }
 

@@ -4,14 +4,15 @@ import { useState } from "react";
 import { Slider } from "@chumlab/ui/slider";
 
 export default function SliderExample() {
+  const [opacity2, setOpacity2] = useState(80);
   const [opacity, setOpacity] = useState(80);
   return (
     <div className="w-full sm:max-w-sm space-y-3">
       <Slider
         name="brightness"
         label="Brightness"
-        value={opacity}
-        onValueChange={(v) => setOpacity(v as number)}
+        value={opacity2}
+        onValueChange={(v) => setOpacity2(v as number)}
         required
         classes={
           {

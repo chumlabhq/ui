@@ -7,7 +7,12 @@ import {
   type ChangeEvent,
 } from "react";
 import type { InputProps, InputClasses } from "./utils/types.js";
-import { DEFAULT_INPUT_CLASSES, UNSTYLED_INPUT_CLASSES } from "./utils/constants.js";
+import {
+  DEFAULT_INPUT_CLASSES,
+  UNSTYLED_INPUT_CLASSES,
+  INPUT_SIZE_CLASSES,
+  DEFAULT_INPUT_SIZE,
+} from "./utils/constants.js";
 import { FieldLabel } from "../../utils/FieldLabel.js";
 import { FieldWrapper } from "../../utils/FieldWrapper.js";
 import { cn } from "../../utils/scopedCn.js";
@@ -15,7 +20,7 @@ import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.j
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 
-import { motionSafeClasses } from "../../utils/classLayers.js";
+import { motionSafeClasses, structuralOnly } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 export const InputLabel = FieldLabel;
 
@@ -118,19 +123,26 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_INPUT_CLASSES : DEFAULT_INPUT_CLASSES;
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
+    // Resolved even when `size` is absent, so an unset prop paints `md` — the
+    // field as it was. `data-size` still reports what the consumer asked for
+    // rather than what was rendered.
+    const sizeClassesRaw = INPUT_SIZE_CLASSES[size ?? DEFAULT_INPUT_SIZE];
+    const sizeClasses = unstyled ? structuralOnly(sizeClassesRaw) : sizeClassesRaw;
     const mergedClasses: Required<InputClasses> = useMemo(
       () => ({
         root: cn(baseClasses.root, classesProp?.root),
-        control: cn(baseClasses.control, classesProp?.control),
+        // Size ahead of the consumer's classes and in the same merge groups, so
+        // `px-5` loses to their `px-8` instead of sitting beside it.
+        control: cn(baseClasses.control, sizeClasses.control, classesProp?.control),
         label: cn(baseClasses.label, classesProp?.label),
         description: cn(baseClasses.description, classesProp?.description),
-        input: cn(baseClasses.input, classesProp?.input),
-        prefix: cn(baseClasses.prefix, classesProp?.prefix),
-        suffix: cn(baseClasses.suffix, classesProp?.suffix),
+        input: cn(baseClasses.input, sizeClasses.input, classesProp?.input),
+        prefix: cn(baseClasses.prefix, sizeClasses.prefix, classesProp?.prefix),
+        suffix: cn(baseClasses.suffix, sizeClasses.suffix, classesProp?.suffix),
         message: cn(baseClasses.message, classesProp?.message),
         count: cn(baseClasses.count, classesProp?.count),
       }),
-      [classesProp, baseClasses],
+      [classesProp, baseClasses, sizeClasses],
     );
 
     const handleChange = useCallback(

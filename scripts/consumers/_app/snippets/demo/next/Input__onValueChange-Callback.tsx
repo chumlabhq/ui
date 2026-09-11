@@ -4,16 +4,17 @@ import { useState } from "react";
 import { Input } from "@chumlab/ui/input";
 
 export default function InputExample() {
+  const [search22, setSearch22] = useState("");
   const [search, setSearch] = useState("");
   return (
     <div className="w-full sm:max-w-sm space-y-3">
       <Input
         label="Type anything"
         placeholder="Watch the value below..."
-        value={search}
-        onValueChange={setSearch}
+        value={search22}
+        onValueChange={setSearch22}
         clearable
-        onClear={() => setSearch("")}
+        onClear={() => setSearch22("")}
         classes={
           {
             root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",

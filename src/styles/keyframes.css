@@ -23,3 +23,42 @@
   from { height: var(--cl-accordion-content-height, auto); }
   to { height: 0; }
 }
+
+/* The four continuous icon slides `CONTINUOUS_ANIMATION_MAP` names.
+ *
+ * Nothing defined them. `animateOnHover={false}` with `iconAnimation="slideRight"`
+ * put `animate-slide-right` on the icon, no keyframes of that name existed in
+ * either stylesheet, and `animation-name` computed to `none` — the icon simply
+ * stood still while `spin` and `pulse` beside it ran, because those two are
+ * Tailwind's own. Registered in `@theme` rather than as hand-written classes so
+ * they are real `animate-*` utilities and the map keeps the names it already had.
+ *
+ * They travel the same 4px the hover variant translates, and return: a
+ * continuous animation that ends somewhere else would walk the icon out of the
+ * button. */
+@theme {
+  --animate-slide-right: cl-slide-right 1s ease-in-out infinite;
+  --animate-slide-left: cl-slide-left 1s ease-in-out infinite;
+  --animate-slide-up: cl-slide-up 1s ease-in-out infinite;
+  --animate-slide-down: cl-slide-down 1s ease-in-out infinite;
+}
+
+@keyframes cl-slide-right {
+  0%, 100% { translate: 0; }
+  50% { translate: 4px; }
+}
+
+@keyframes cl-slide-left {
+  0%, 100% { translate: 0; }
+  50% { translate: -4px; }
+}
+
+@keyframes cl-slide-up {
+  0%, 100% { translate: 0; }
+  50% { translate: 0 -4px; }
+}
+
+@keyframes cl-slide-down {
+  0%, 100% { translate: 0; }
+  50% { translate: 0 4px; }
+}

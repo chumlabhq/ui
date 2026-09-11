@@ -28,8 +28,8 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   markerIndicator: "w-1 h-1 rounded-full bg-cl-accent absolute bottom-1 left-1/2 -translate-x-1/2",
   // Same defect as Slider's value tooltip: white text on the panel token, which
   // is white in the light theme.
-  monthSelect: "flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border-none cursor-pointer text-cl-text hover:bg-cl-bg-hover rounded-cl-md transition-colors",
-  yearSelect: "flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border-none cursor-pointer text-cl-text hover:bg-cl-bg-hover rounded-cl-md transition-colors",
+  monthSelect: "flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border-0 cursor-pointer text-cl-text hover:bg-cl-bg-hover rounded-cl-md transition-colors",
+  yearSelect: "flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border-0 cursor-pointer text-cl-text hover:bg-cl-bg-hover rounded-cl-md transition-colors",
   subContent: "absolute z-[60] mt-1 max-h-60 overflow-auto rounded-cl-md bg-cl-bg-panel shadow-lg border border-cl-border py-1 min-w-[120px] sm:min-w-[140px]",
   subItem: "flex items-center justify-between w-full px-3 py-2 text-sm text-left text-cl-text hover:bg-cl-bg-hover cursor-pointer",
 };

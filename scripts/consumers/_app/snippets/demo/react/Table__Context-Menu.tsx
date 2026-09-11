@@ -146,6 +146,7 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [contextMenuInfo, setContextMenuInfo] = useState<string | null>(null);
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -192,7 +193,6 @@ export default function TableExample() {
     ],
     [false],
   );
-  const [contextMenuInfo, setContextMenuInfo] = useState<string | null>(null);
   return (
     <>
       <div className="space-y-3">

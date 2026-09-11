@@ -22,6 +22,8 @@ export default function CountryFlagExample() {
           </>
         )
       }
+      <CountryFlag code="us" loading size={48} className="rounded-[3px]" />
+      <CountryFlag code="gb" loading size={48} className="rounded-[3px]" />
     </>
   );
 }

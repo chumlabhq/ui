@@ -28,6 +28,8 @@ import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
 import { applyAct } from "../fixtures/_act.contract.js";
 
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { setReducedMotion } from "../../test/matchMedia.js";
 
 // Fixtures render motion-aware components; the stub answers nothing
@@ -218,6 +220,51 @@ describe("classes override contract", () => {
         "the check passed a component that discarded its defaults — it cannot fail",
       ).toBe(false);
     });
+  });
+
+  /**
+   * A reset that a consumer's class cannot beat.
+   *
+   * `border-none` sets border-STYLE, and `border` sets border-WIDTH, so
+   * tailwind-merge keeps both — `cn("border-none", "border border-cl-border")`
+   * returns all three tokens — and style:none wins in the browser. A consumer
+   * asking for a border gets width and colour and no border, silently, with
+   * their class present in the DOM.
+   *
+   * Found on the Breadcrumb demo's Pill Style, which asks for
+   * `border border-cl-border` on the item and rendered flat: measured
+   * border-width 0px with the class applied. Six occurrences across four
+   * components had the same hole. `border-0` is the same reset — Preflight
+   * already sets `border-style: solid` — and it IS in the width group, so a
+   * consumer's `border` replaces it.
+   *
+   * Read from the constants files rather than the rendered DOM: an unbeatable
+   * default is a property of the class string, and a fixture that never passes
+   * a border would not show it.
+   */
+  it("uses no reset a consumer's class cannot beat", () => {
+    const offenders: string[] = [];
+    const dir = "src/components";
+    const walk = (d: string): string[] =>
+      readdirSync(d, { withFileTypes: true }).flatMap((e) => {
+        const path = join(d, e.name);
+        if (e.isDirectory()) return e.name === "__tests__" ? [] : walk(path);
+        return /constants\.ts$/.test(e.name) ? [path] : [];
+      });
+    for (const file of walk(dir)) {
+      const source = readFileSync(file, "utf8");
+      source.split("\n").forEach((line, i) => {
+        // Inside a class string, not in the prose above one.
+        if (/^\s*(\/\/|\*|\/\*)/.test(line)) return;
+        if (/\bborder-none\b/.test(line)) offenders.push(`${file}:${i + 1}`);
+      });
+    }
+    expect(
+      offenders,
+      "`border-none` in a library default. It sets border-style, a consumer's " +
+        "`border` sets border-width, tailwind-merge keeps both and style:none wins — " +
+        "so the consumer's border never paints. Use `border-0`",
+    ).toEqual([]);
   });
 
   it("asserted on a real number of slots, across the suite", () => {

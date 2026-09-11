@@ -28,6 +28,7 @@ import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { execFileSync } from "node:child_process";
 import index from "../../../ai/component-index.json";
+import { COMPONENT_DOCS, type ComponentDoc } from "../../pages/demo/generated/componentDocs";
 
 const SRC = "src/components";
 const COMPONENTS = (index as { components: { name: string }[] }).components.map((c) => c.name);
@@ -262,6 +263,54 @@ function keysDocumentedBy(name: string): Set<string> {
 }
 
 const SHELL_OUT_TIMEOUT = 120_000;
+/**
+ * Slots and shape members the site renders with an empty description column.
+ *
+ * Counted off the generated file rather than the sources, because that is what
+ * the pages and `llms-full.txt` read: a description that exists in a
+ * `utils/types.ts` the generator does not reach is not documentation.
+ */
+function blankDescriptions(docs: Record<string, ComponentDoc>): string[] {
+  const blank: string[] = [];
+  for (const [name, doc] of Object.entries(docs)) {
+    for (const map of doc.classes) {
+      for (const key of map.keys) if (!key.description) blank.push(`${name}: ${map.map}.${key.name}`);
+    }
+    for (const shape of doc.shapes) {
+      if (!shape.description) blank.push(`${name}: ${shape.name}`);
+      for (const member of shape.members) {
+        if (!member.description) blank.push(`${name}: ${shape.name}.${member.name}`);
+      }
+    }
+  }
+  return blank.sort();
+}
+
+/**
+ * Members left blank on purpose, by name. Nothing qualifies today — the sweep
+ * that brought the count to zero found no member it could not describe — and
+ * the list exists so that a future one is an argued exception rather than a
+ * number quietly going up.
+ *
+ * Three numbers were in circulation for the size of that sweep and only one of
+ * them is reproducible, so: 345 is what this gate counted at c5790e4 — 139
+ * class slots, 177 shape members and 29 shape interfaces with an empty
+ * `description` in `componentDocs.ts`, across 22 components — and it is the
+ * figure the ceiling is set from, because `componentDocs.ts` is what the pages
+ * and `llms-full.txt` actually read. 351 came from a working list that counted
+ * blanks per SOURCE declaration, so a `classes` bag documented once and used by
+ * two shapes was counted twice, and 29 was its count of components rather than
+ * of interfaces. 395 came from a hand audit before this branch and cannot be
+ * re-derived at all: the generated file had a different shape then, and every
+ * version before c5790e4 fails to parse against the counter, so there is no
+ * commit at which 395 can be confirmed or refuted. Neither is reconstructed
+ * here — an unreproducible figure is written down as unreproducible, not
+ * reverse-engineered into agreement. The defaults audit cost a slice to unpick
+ * precisely because two numbers disagreed and nobody had recorded which one the
+ * gate used.
+ */
+const DELIBERATE_BLANKS = new Set<string>([]);
+
 
 describe("doc truth contract", () => {
   describe("self-check", () => {
@@ -448,5 +497,52 @@ describe("doc truth contract", () => {
         "`subComponents` in the component's schema, or stop exporting it — ADR 002's " +
         "closeout un-exported MultiSelectDropdownShimmer rather than documenting it",
     ).toEqual([]);
+  });
+
+  /**
+   * The description column, as a ratchet at zero.
+   *
+   * 345 slots and shape members across 22 components rendered an empty cell —
+   * 139 class slots, 177 shape members, 29 shape interfaces — which on the site
+   * is a row that says a name and nothing else, and in `llms-full.txt` is a
+   * slot the product will target with no idea what it is for. Stepper alone had
+   * 46. They are all written now, so the ceiling is 0 rather than a figure to
+   * work down from: a blank arriving is a new one, not a leftover.
+   *
+   * Down-only. A member that genuinely cannot be described goes in
+   * `DELIBERATE_BLANKS` by name with the reason beside it, which is a line in a
+   * diff someone reviews; raising a count is not.
+   */
+  it("renders no empty description", () => {
+    const blank = blankDescriptions(COMPONENT_DOCS).filter((entry) => !DELIBERATE_BLANKS.has(entry));
+    expect(
+      blank,
+      "documented with a name and nothing else. The site renders this as an empty cell and " +
+        "the codegen product reads it as a slot with no purpose. Describe what the slot is " +
+        "FOR — restating the name (`root` as \"the root element\") is worse than blank, because " +
+        "blank is at least honest. If it cannot be described, add it to DELIBERATE_BLANKS " +
+        "with the reason",
+    ).toEqual([]);
+  });
+
+  it("reads descriptions at all", () => {
+    // Without this the assertion above passes on a shape it failed to walk —
+    // the counter reporting zero because it found nothing, not because nothing
+    // is blank.
+    const planted: Record<string, ComponentDoc> = {
+      Planted: {
+        ...COMPONENT_DOCS.Switch,
+        classes: [{ map: "PlantedClasses", keys: [{ name: "root", type: "string", required: false, description: "" }] }],
+        shapes: [
+          { name: "PlantedShape", description: "", members: [{ name: "value", type: "string", required: true, description: "" }] },
+        ],
+      },
+    };
+    expect(blankDescriptions(planted)).toEqual([
+      "Planted: PlantedClasses.root",
+      "Planted: PlantedShape",
+      "Planted: PlantedShape.value",
+    ]);
+    expect(blankDescriptions({ Switch: COMPONENT_DOCS.Switch })).toEqual([]);
   });
 });
