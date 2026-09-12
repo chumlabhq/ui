@@ -83,7 +83,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       closeOnEscape = true,
       classes: classesProp,
       unstyled = false,
-      reduceMotion: reduceMotionProp,
+      reduceMotion: reduceMotionProp = "auto",
       trapFocus = true,
       restoreFocus = true,
       portalContainer,
@@ -247,6 +247,14 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       }
     }, [isOpen, restoreFocus, modal]);
 
+    /**
+     * `mounted` is in the deps because the panel is portalled by a LATER
+     * effect: on the commit where `isOpen` flips, `panelRef.current` is still
+     * null and this returned early, so a drawer opened from closed left focus
+     * on the trigger — `initialFocus` and `data-autofocus` both dead. The unit
+     * tests could not see it; they render with `open` already true, which is
+     * the one path where the portal exists on the first run.
+     */
     useEffect(() => {
       if (isOpen && modal) {
         const panel = panelRef.current;
@@ -276,7 +284,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
         return () => cancelAnimationFrame(timer);
       }
-    }, [isOpen, modal, initialFocus]);
+    }, [isOpen, modal, initialFocus, mounted]);
 
     useEffect(() => {
       if (isOpen) {

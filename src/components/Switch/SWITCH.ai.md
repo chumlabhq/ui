@@ -133,7 +133,7 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `style` | object | — | Inline styles applied to the root element. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 
 ## Styling Guide
 

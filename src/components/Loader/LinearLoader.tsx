@@ -17,7 +17,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
       speed = 1.5,
       trackColor,
       borderRadius = 9999,
-      reduceMotion,
+      reduceMotion = "auto",
       classes: classesProp,
       unstyled = false,
       className = "",

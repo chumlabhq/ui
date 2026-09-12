@@ -23,7 +23,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
       thickness = 2,
       speed = 0.75,
       trackColor,
-      reduceMotion,
+      reduceMotion = "auto",
       classes: classesProp,
       unstyled = false,
       className = "",
@@ -54,10 +54,16 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
       [classesProp, baseClasses],
     );
 
+    // Hoisted rather than inlined into the style object so the schema
+    // generator can see the default: it reads `x ?? literal` from a variable
+    // declaration, which is why LinearLoader's `trackColor` recorded
+    // "currentColor" and this one recorded nothing.
+    const trackBg = trackColor ?? "currentColor";
+
     const loaderStyle: CSSProperties = {
       "--loader-size": `${size}px`,
       "--loader-speed": `${speed}s`,
-      "--loader-track": trackColor ?? "currentColor",
+      "--loader-track": trackBg,
       ...style,
     } as CSSProperties;
 

@@ -51,7 +51,7 @@ export default function DropdownExample() {
               <svg
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                className="w-4 h-4 shrink-0 text-cl-warning"
+                className="w-4 h-4 shrink-0 text-cl-text"
                 aria-hidden="true"
               >
                 <path

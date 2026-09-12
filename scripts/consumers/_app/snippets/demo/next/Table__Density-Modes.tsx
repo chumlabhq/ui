@@ -56,9 +56,9 @@ const StatusBadge = ({
   dark?: boolean;
 }) => {
   const styles = {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       };
 
   return (
@@ -210,7 +210,7 @@ export default function TableExample() {
                   `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer ${
                     density === d
                       ? "bg-cl-accent text-cl-on-accent"
-                      : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover"
+                      : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-elevated"
                   }`
                 }
               >

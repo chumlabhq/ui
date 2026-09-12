@@ -7,7 +7,7 @@ export default function InternationalPhoneInputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
       <div>
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Spanish
         </span>
@@ -42,7 +42,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div>
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           ReactNode message
         </span>

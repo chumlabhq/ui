@@ -74,7 +74,7 @@ export default function InputExample() {
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
-          }), control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25" }
+          }), control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25" }
         }
       />
       <Input
@@ -96,7 +96,7 @@ export default function InputExample() {
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
-          }), control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25" }
+          }), control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25" }
         }
       />
     </div>

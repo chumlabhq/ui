@@ -13,8 +13,8 @@ function useDrawerState(initial = false) {
 }
 
 export default function DrawerExample() {
-  const blurOverlay = useDrawerState();
   const overlay = useDrawerState();
+  const blurOverlay = useDrawerState();
   return (
     <>
       <button

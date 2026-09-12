@@ -90,7 +90,6 @@ const findSharing = (): Sharing[] => {
 const SHARED_ACROSS_SECTIONS = new Set([
   "ButtonDemo.tsx:loading",
   "DrawerDemo.tsx:open",
-  "InputDemo.tsx:search",
   "InputDemo.tsx:showPw",
   "PaginationDemo.tsx:value",
   "PaginationDemo.tsx:rowsPerPage",

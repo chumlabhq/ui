@@ -95,7 +95,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `indeterminateIcon` | object | — | React.ReactNode — Custom icon for the indeterminate state. |
 | `classes` | object | — | CSS class overrides for checkbox sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `disabled` | boolean | `false` | Disables the checkbox. |
 | `name` | string | — | Form field name. |
 | `value` | string | — | Form field value. |

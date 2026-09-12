@@ -1,23 +1,7 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
+import { Input } from "@chumlab/ui/input";
 import { TextArea } from "@chumlab/ui/textarea";
-
-const MailIcon = ({ className = "" }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <rect width="20" height="16" x="2" y="4" rx="2" />
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-  </svg>
-);
 
 export default function TextAreaExample() {
   const [feedback2, setFeedback2] = useState("");
@@ -36,35 +20,31 @@ export default function TextAreaExample() {
         <p className="text-sm text-cl-text-tertiary">We'd love to hear from you</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex flex-col">
-          <label
-            htmlFor="contact-name"
-            className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary"
-          >
-            Name
-          </label>
-          <input
-            id="contact-name"
-            placeholder="John Doe"
-            required
-            className="px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label
-            htmlFor="contact-email"
-            className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary"
-          >
-            Email
-          </label>
-          <input
-            id="contact-email"
-            type="email"
-            placeholder="you@example.com"
-            required
-            className="px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30"
-          />
-        </div>
+        <Input
+          label="Name"
+          id="contact-name"
+          placeholder="John Doe"
+          required
+          classes={
+            {
+              root: "flex flex-col",
+              label: "block text-[13px] font-medium mb-1.5 text-cl-text-chrome"
+            }
+          }
+        />
+        <Input
+          label="Email"
+          id="contact-email"
+          type="email"
+          placeholder="you@example.com"
+          required
+          classes={
+            {
+              root: "flex flex-col",
+              label: "block text-[13px] font-medium mb-1.5 text-cl-text-chrome"
+            }
+          }
+        />
       </div>
       <TextArea
         label="Message"
@@ -77,25 +57,25 @@ export default function TextAreaExample() {
         value={feedback2}
         onChange={(e) => setFeedback2(e.target.value)}
         onClear={() => setFeedback2("")}
-        startIcon={<MailIcon className="text-cl-text-tertiary" />}
         classes={
           {
-            control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
-            input: "w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-disabled",
+            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+            input: "w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary",
             label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-            message: "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
+            /* No colour here on purpose. The library paints this slot
+               `data-[invalid]:text-cl-error data-[valid]:text-cl-success`; a plain
+               colour token drops both variants and then only the last one survives,
+               which is how every error message on this page rendered green. */
+            message: "text-xs mt-1.5 flex items-center gap-1.5",
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
           }
         }
         className="flex flex-col"
       />
-      <button
-        type="submit"
-        className="w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer"
-      >
+      <Button type="submit" fullWidth className="bg-cl-text text-cl-bg hover:opacity-90">
         Send Message
-      </button>
+      </Button>
     </form>
   );
 }

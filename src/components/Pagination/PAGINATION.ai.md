@@ -97,7 +97,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for pagination sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the rows-per-page dropdown. |

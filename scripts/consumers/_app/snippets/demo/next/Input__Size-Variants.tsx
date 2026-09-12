@@ -5,7 +5,7 @@ export default function InputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Small
         </span>
@@ -28,7 +28,7 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Medium (default)
         </span>
@@ -51,7 +51,7 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Large
         </span>

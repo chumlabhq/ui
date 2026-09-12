@@ -67,7 +67,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       indeterminateIcon,
       classes: classesProp,
       unstyled = false,
-      reduceMotion,
+      reduceMotion = "auto",
       className,
       ...rest
     },

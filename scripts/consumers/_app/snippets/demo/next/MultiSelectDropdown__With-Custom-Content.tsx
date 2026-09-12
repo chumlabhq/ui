@@ -1,25 +1,90 @@
 "use client";
 
 import { useState } from "react";
+import { CountryFlag } from "@chumlab/ui/country-flag";
 import { MultiSelectDropdown, MultiSelectOption } from "@chumlab/ui/multi-select-dropdown";
 
 const countryOptions: MultiSelectOption[] = [
   {
     value: "us",
     label: "United States",
-    content: <span>🇺🇸 United States</span>,
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="US" size="md" className="rounded-cl-sm" />
+        United States
+      </span>
+    ),
   },
   {
     value: "gb",
     label: "United Kingdom",
-    content: <span>🇬🇧 United Kingdom</span>,
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="GB" size="md" className="rounded-cl-sm" />
+        United Kingdom
+      </span>
+    ),
   },
-  { value: "ca", label: "Canada", content: <span>🇨🇦 Canada</span> },
-  { value: "au", label: "Australia", content: <span>🇦🇺 Australia</span> },
-  { value: "de", label: "Germany", content: <span>🇩🇪 Germany</span> },
-  { value: "fr", label: "France", content: <span>🇫🇷 France</span> },
-  { value: "jp", label: "Japan", content: <span>🇯🇵 Japan</span> },
-  { value: "in", label: "India", content: <span>🇮🇳 India</span> },
+  {
+    value: "ca",
+    label: "Canada",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="CA" size="md" className="rounded-cl-sm" />
+        Canada
+      </span>
+    ),
+  },
+  {
+    value: "au",
+    label: "Australia",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="AU" size="md" className="rounded-cl-sm" />
+        Australia
+      </span>
+    ),
+  },
+  {
+    value: "de",
+    label: "Germany",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="DE" size="md" className="rounded-cl-sm" />
+        Germany
+      </span>
+    ),
+  },
+  {
+    value: "fr",
+    label: "France",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="FR" size="md" className="rounded-cl-sm" />
+        France
+      </span>
+    ),
+  },
+  {
+    value: "jp",
+    label: "Japan",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="JP" size="md" className="rounded-cl-sm" />
+        Japan
+      </span>
+    ),
+  },
+  {
+    value: "in",
+    label: "India",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="IN" size="md" className="rounded-cl-sm" />
+        India
+      </span>
+    ),
+  },
 ];
 
 export default function MultiSelectDropdownExample() {
@@ -38,7 +103,7 @@ export default function MultiSelectDropdownExample() {
             content: "rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
             label: "block text-sm font-medium mb-1 text-cl-text-secondary",
             description: "text-xs mb-1 text-cl-text-secondary",
-            chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-text/10 dark:text-cl-text",
+            chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-text dark:bg-cl-text/10 dark:text-cl-text",
             chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-text-secondary"
           }
         }

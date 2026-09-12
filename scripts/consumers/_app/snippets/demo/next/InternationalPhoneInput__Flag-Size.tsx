@@ -5,7 +5,7 @@ export default function InternationalPhoneInputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Small (16px)
         </span>
@@ -36,7 +36,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Default (22px)
         </span>
@@ -66,7 +66,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Large (32px)
         </span>

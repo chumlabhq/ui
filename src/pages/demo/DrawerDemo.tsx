@@ -8,6 +8,9 @@ import {
   DrawerFooter,
   DrawerCloseButton,
   } from "../../components/Drawer/index.js";
+import { Input } from "../../components/Input/index.js";
+import { TextArea } from "../../components/TextArea/index.js";
+import { Dropdown } from "../../components/Dropdown/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -36,6 +39,12 @@ const CloseIcon = () => (
     />
   </svg>
 );
+
+const categoryOptions = [
+  { value: "general", label: "General" },
+  { value: "design", label: "Design" },
+  { value: "engineering", label: "Engineering" },
+];
 
 const getClasses = (_dark: boolean) => ({
   // Drawer panel surface. bg-cl-bg uses the page background colour so the
@@ -651,45 +660,20 @@ const DrawerDemo = () => {
                   formDrawer.onClose();
                 }}
               >
-                <div>
-                  <label
-                    className={`block text-sm font-medium mb-1 text-cl-text-secondary`}
-                  >
-                    Name
-                  </label>
-                  <input
-                    data-autofocus
-                    type="text"
-                    placeholder="Item name"
- className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
-                  />
-                </div>
-                <div>
-                  <label
-                    className={`block text-sm font-medium mb-1 text-cl-text-secondary`}
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder="Optional description"
- className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
-                  />
-                </div>
-                <div>
-                  <label
-                    className={`block text-sm font-medium mb-1 text-cl-text-secondary`}
-                  >
-                    Category
-                  </label>
-                  <select
- className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
-                  >
-                    <option>General</option>
-                    <option>Design</option>
-                    <option>Engineering</option>
-                  </select>
-                </div>
+                {/* `data-autofocus` reaches the native input through the
+                    rest props, which is what Drawer's initial-focus scan
+                    looks for. */}
+                <Input data-autofocus label="Name" placeholder="Item name" />
+                <TextArea
+                  label="Description"
+                  rows={3}
+                  placeholder="Optional description"
+                />
+                <Dropdown
+                  label="Category"
+                  options={categoryOptions}
+                  placeholder="Select a category..."
+                />
               </form>
             </DrawerBody>
             <DrawerFooter className={c.footer}>

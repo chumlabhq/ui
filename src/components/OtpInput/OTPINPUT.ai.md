@@ -54,6 +54,25 @@ export default function Example() {
 
 ---
 
+## Data Attributes (for CSS selectors and testing)
+
+Every one of these is written or absent, never `"false"`, so the bare attribute
+selector is the one to use: `[data-error]`, not `[data-error="true"]`.
+
+- `data-error="true"` on the root and on each input — when `error={true}`
+- `data-disabled="true"` on the root and on each input — when disabled
+- `data-loading="true"` on the root — when `loading={true}`
+- `data-valid="true"` on the root in the success state, and on the success message
+- `data-invalid="true"` on the error message
+- `data-index` on each input — its zero-based position, always present
+- `data-filled="true"` on an input holding a character
+- `data-group` on each group wrapper — the group's zero-based index, only when
+  `groups` is set
+
+DOM nesting: `root > label + description + control > (group > input…) + separator + message`
+
+---
+
 ## All Props
 
 <!-- generated from OtpInput.schema.json — edit the schema, not this table -->
@@ -81,7 +100,7 @@ export default function Example() {
 | `allowPaste` | boolean | `true` | Enables pasting OTP values. |
 | `autoFocusFirst` | boolean | `false` | Automatically focuses the first input on mount. |
 | `inputType` | `"text"` \| `"password"` \| `"tel"` | `"text"` | HTML input type for each field. |
-| `inputPattern` | string | `"\\\\d*"` | HTML pattern attribute for input validation. |
+| `inputPattern` | string | `"\\d*"` | HTML pattern attribute for input validation. |
 | `inputClassNames` | array | — | Per-input CSS class overrides. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
 | `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
@@ -90,6 +109,54 @@ export default function Example() {
 | `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
+
+## Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
+### Slot → visual mapping
+
+| Slot | Element |
+|------|---------|
+| `root` | The field and everything labelling it. |
+| `label` | The label above the row. |
+| `description` | The helper line under the label. |
+| `control` | The row of boxes. |
+| `group` | One run of boxes when `groups` splits the code up. |
+| `input` | A single character box. |
+| `separator` | What is drawn between two groups. |
+| `message` | The error or hint line under the row. |
+
+### The `input` slot carries the error and focus states
+
+The box is painted by one class string holding four variants:
+`data-[error]:border-cl-error` for the error state,
+`focus-visible:border-cl-border-input-focus` for focus, and
+`data-[error]:focus-visible:border-cl-border-input-focus` for **both at once**.
+That third one is not redundant. Without it, a focused box in an error state
+kept the error border and the focus ring landed on it at **1.30:1** — measured,
+and below the 3:1 a focus indicator has to clear.
+
+A plain utility of the same property drops all three, so
+`classes={{ input: "border-gray-300" }}` leaves a field with no error border and
+no focus indicator. Pass the states you want to keep:
+
+```tsx
+<OtpInput
+  error
+  classes={{
+    input:
+      "border-gray-300 data-[error]:border-red-600 focus-visible:border-blue-600 data-[error]:focus-visible:border-blue-600",
+  }}
+/>
+```
+
+---
 
 ## Changed behaviour
 
@@ -117,10 +184,10 @@ filter is now derived from the same pattern, so all four agree.
 
 | Key | Behaviour |
 |-----|-----------|
-| `Tab` | Moves focus into the group; the boxes themselves are reached with the arrow keys. |
+| `Tab` | Moves to the next box. Every box is in the tab order — there is no roving tabindex, so tabbing out of the field takes as many presses as it has boxes. |
 | `ArrowLeft`, `ArrowRight` | Moves between boxes. |
 | `Home`, `End` | Jumps to the first or last box. |
-| `Backspace` | Clears the current box, or steps back and clears the previous one when it is already empty. |
+| `Backspace` | Clears the current box and steps back. On a box that is already empty it steps back and clears that one instead. |
 | `Delete` | Clears the current box without moving. |
 | Printable characters | Fills the box and advances. A paste of the full code fills every box at once. |
 
@@ -128,11 +195,13 @@ filter is now derived from the same pattern, so all four agree.
 
 ## Accessibility
 
-- Each input has proper `aria-label` ("Digit 1 of 6")
+- Each input has an `aria-label`: "Digit N of M" when `inputPattern` accepts
+  only digits, "Character N of M" otherwise. `inputAriaLabel` replaces it.
 - Label associated via `id` / `htmlFor`
 - `aria-invalid` set on error state
 - `aria-describedby` links error/description
-- Full keyboard navigation: Arrow keys, Backspace, Delete, Home, End
+- Full keyboard navigation: Arrow keys, Backspace, Delete, Home, End. Tab also
+  steps box to box — every box is focusable, not just the first.
 - Paste support fills all fields at once
 
 ---

@@ -2,32 +2,33 @@
 
 import { useState } from "react";
 import { ResizablePanel } from "@chumlab/ui/resizable-panel";
+import { Slider } from "@chumlab/ui/slider";
 
 const simpleContent = (color: string, label: string, size: number) => {
     const cl = {
       blue: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
       green: {
         text: "text-cl-success",
-        muted: "text-cl-success/60",
+        muted: "text-cl-success",
       },
       amber: {
         text: "text-cl-warning",
-        muted: "text-cl-warning/60",
+        muted: "text-cl-warning",
       },
       indigo: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
       teal: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
       purple: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
     }[color] ?? {
       text: "text-cl-text-secondary",
@@ -75,12 +76,11 @@ export default function ResizablePanelExample() {
           {controlledWidth}
           px
         </label>
-        <input
-          type="range"
+        <Slider
           min={150}
           max={500}
           value={controlledWidth}
-          onChange={(e) => setControlledWidth(Number(e.target.value))}
+          onValueChange={(v) => setControlledWidth(v as number)}
           className="flex-1"
           aria-label="Panel width"
         />

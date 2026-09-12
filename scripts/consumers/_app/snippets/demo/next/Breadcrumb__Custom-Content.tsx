@@ -21,7 +21,7 @@ export default function BreadcrumbExample() {
               <span className="flex items-center gap-1.5">
                 Status{" "}
                 <span
-                  className={"inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-success/15 text-cl-success dark:bg-cl-success/20 dark:text-cl-success"}
+                  className={"inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-success/15 text-cl-text dark:bg-cl-success/20 dark:text-cl-success"}
                 >
                   Active
                 </span>
@@ -35,7 +35,7 @@ export default function BreadcrumbExample() {
               <span className="flex items-center gap-1.5">
                 Details{" "}
                 <span
-                  className={"inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent"}
+                  className={"inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-accent/10 text-cl-text dark:bg-cl-accent/20 dark:text-cl-accent"}
                 >
                   New
                 </span>

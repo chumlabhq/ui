@@ -115,7 +115,7 @@ export default function CascadingDropdownExample() {
             searchIcon: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
             subSearchControl: "flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30",
             subSearchInput: "flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-purple-400/70 dark:text-cl-accent dark:placeholder-purple-400/50",
-            subSearchIcon: "w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/60"
+            subSearchIcon: "w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent"
           }
         }
       />

@@ -26,6 +26,13 @@ import { structuralOnly } from "../../../utils/classLayers.js";
  * control the grip sat inset from the visible border with nothing under it.
  * `TextArea/labelled` moved 20 pixels and was re-recorded.
  *
+ * The RIGHT padding does the same thing on the other axis, and it can only
+ * move when nothing follows the textarea: a clear button or an end icon is a
+ * sibling after it, and the corner belongs to them. So the control releases
+ * `pr` exactly when the textarea is its last child and the textarea takes the
+ * padding back in the same case. Measured before: the grip sat 15px in from
+ * the border with the field's own background under it.
+ *
  * Plain utilities, never `min-h-*`: height here is padding plus line-height so
  * that every token is in the same tailwind-merge group as the utility a
  * consumer would reach for, and theirs REPLACES it. A `min-h-10` would sit in a
@@ -33,9 +40,18 @@ import { structuralOnly } from "../../../utils/classLayers.js";
  * `border-none` defect one layer up.
  */
 export const TEXTAREA_SIZE_CLASSES: Record<TextAreaSize, { control: string; input: string }> = {
-  sm: { control: "px-3", input: "py-1.5 text-xs" },
-  md: { control: "px-3.5", input: "py-2.5 text-sm" },
-  lg: { control: "px-5", input: "py-3.5 text-base" },
+  sm: {
+    control: "px-3 [&:has(>textarea:last-child)]:pr-0",
+    input: "py-1.5 text-xs last:pr-3",
+  },
+  md: {
+    control: "px-3.5 [&:has(>textarea:last-child)]:pr-0",
+    input: "py-2.5 text-sm last:pr-3.5",
+  },
+  lg: {
+    control: "px-5 [&:has(>textarea:last-child)]:pr-0",
+    input: "py-3.5 text-base last:pr-5",
+  },
 };
 
 export const DEFAULT_TEXTAREA_SIZE: TextAreaSize = "md";

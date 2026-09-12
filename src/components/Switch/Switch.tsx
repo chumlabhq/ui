@@ -51,7 +51,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       renderLabel,
       renderDescription,
       style,
-      reduceMotion,
+      reduceMotion = "auto",
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       ...buttonProps

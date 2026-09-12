@@ -521,7 +521,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       id: idProp,
       disabled = false,
       loop = false,
-      reduceMotion,
+      reduceMotion = "auto",
       renderStep,
       beforeStepChange,
     },

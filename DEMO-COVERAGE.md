@@ -12,7 +12,7 @@ recorded there because they belong next to the code that implements them.
 | --- | --- |
 | Components audited | 58 |
 | Library-authored props across the public surface | 1137 |
-| With no demo | 283 (25%) |
+| With no demo | 282 (25%) |
 | With no fixture | 645 (57%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
@@ -117,7 +117,7 @@ listed here with no demo anywhere fails the generator.
 | RadioGroup | 21 | 275 | 5 | 5 | 0 | `unstyled`, `reduceMotion` |
 | ResizablePanel | 14 | 279 | 2 | 11 | 0 | `reduceMotion`, `unstyled` |
 | SearchableDropdown | 57 | 2 | 6 | 33 | 0 | `unstyled` |
-| Slider | 35 | 274 | 5 | 18 | 0 | `unstyled` |
+| Slider | 35 | 274 | 4 | 18 | 0 | `unstyled` |
 | Slot | 1 | 279 | 1 | 1 | 0 | — |
 | Stepper | 30 | 2 | 5 | 17 | 0 | `reduceMotion`, `unstyled` |
 | Switch | 28 | 277 | 6 | 11 | 0 | `reduceMotion` |

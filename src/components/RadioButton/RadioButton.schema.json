@@ -144,7 +144,8 @@
             true,
             false,
             "auto"
-          ]
+          ],
+          "default": "auto"
         },
         "children": {
           "type": "object",
@@ -338,7 +339,8 @@
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
-          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting.",
+          "default": "auto"
         },
         "children": {
           "type": "ReactNode",

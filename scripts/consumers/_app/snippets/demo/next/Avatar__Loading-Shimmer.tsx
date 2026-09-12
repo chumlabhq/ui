@@ -37,12 +37,12 @@ export default function AvatarExample() {
                   ],
                   text: [
                     "#4f46e5",
-                    "#2563eb",
-                    "#059669",
-                    "#ca8a04",
-                    "#db2777",
+                    "#1d4ed8",
+                    "#047857",
+                    "#854d0e",
+                    "#be185d",
                     "#7c3aed",
-                    "#0891b2",
+                    "#0e7490",
                     "#ef4444"
                   ]
                 }
@@ -65,12 +65,12 @@ export default function AvatarExample() {
                   ],
                   text: [
                     "#4f46e5",
-                    "#2563eb",
-                    "#059669",
-                    "#ca8a04",
-                    "#db2777",
+                    "#1d4ed8",
+                    "#047857",
+                    "#854d0e",
+                    "#be185d",
                     "#7c3aed",
-                    "#0891b2",
+                    "#0e7490",
                     "#ef4444"
                   ]
                 }
@@ -94,12 +94,12 @@ export default function AvatarExample() {
                   ],
                   text: [
                     "#4f46e5",
-                    "#2563eb",
-                    "#059669",
-                    "#ca8a04",
-                    "#db2777",
+                    "#1d4ed8",
+                    "#047857",
+                    "#854d0e",
+                    "#be185d",
                     "#7c3aed",
-                    "#0891b2",
+                    "#0e7490",
                     "#ef4444"
                   ]
                 }
@@ -123,12 +123,12 @@ export default function AvatarExample() {
                   ],
                   text: [
                     "#4f46e5",
-                    "#2563eb",
-                    "#059669",
-                    "#ca8a04",
-                    "#db2777",
+                    "#1d4ed8",
+                    "#047857",
+                    "#854d0e",
+                    "#be185d",
                     "#7c3aed",
-                    "#0891b2",
+                    "#0e7490",
                     "#ef4444"
                   ]
                 }
@@ -152,12 +152,12 @@ export default function AvatarExample() {
                   ],
                   text: [
                     "#4f46e5",
-                    "#2563eb",
-                    "#059669",
-                    "#ca8a04",
-                    "#db2777",
+                    "#1d4ed8",
+                    "#047857",
+                    "#854d0e",
+                    "#be185d",
                     "#7c3aed",
-                    "#0891b2",
+                    "#0e7490",
                     "#ef4444"
                   ]
                 }
@@ -180,12 +180,12 @@ export default function AvatarExample() {
                   ],
                   text: [
                     "#4f46e5",
-                    "#2563eb",
-                    "#059669",
-                    "#ca8a04",
-                    "#db2777",
+                    "#1d4ed8",
+                    "#047857",
+                    "#854d0e",
+                    "#be185d",
                     "#7c3aed",
-                    "#0891b2",
+                    "#0e7490",
                     "#ef4444"
                   ]
                 }

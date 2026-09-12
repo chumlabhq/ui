@@ -452,6 +452,41 @@ function dataAttributesOf(name, schema) {
     if (!/\.tsx$/.test(file)) continue;
     const sf = parse(file);
     const visit = (node) => {
+      /**
+       * A `data-` key written as a quoted property in an object literal that is
+       * later spread onto an element counts: it reaches the DOM exactly like a
+       * JSX attribute does. Reading JSX attributes alone missed `data-index`
+       * and `data-filled` on every OtpInput box — present in the rendered DOM,
+       * absent from this list, and invisible to `doc-truth` because it checks
+       * the docs against this same extraction.
+       */
+      if (
+        ts.isPropertyAssignment(node) &&
+        ts.isStringLiteral(node.name) &&
+        /^data-/.test(node.name.text)
+      ) {
+        const attribute = node.name.text;
+        const expr = node.initializer;
+        let when = "always";
+        if (
+          ts.isBinaryExpression(expr) &&
+          expr.operatorToken.kind === ts.SyntaxKind.BarBarToken &&
+          expr.right.getText(sf) === "undefined"
+        ) {
+          when = `when ${expr.left.getText(sf)}`;
+        } else if (
+          ts.isConditionalExpression(expr) &&
+          expr.whenFalse.getText(sf) === "undefined"
+        ) {
+          when = `when ${expr.condition.getText(sf)}`;
+        }
+        const existing = found.get(attribute);
+        found.set(attribute, {
+          name: attribute,
+          values: existing?.values ?? [],
+          when: existing && existing.when !== when ? "varies" : when,
+        });
+      }
       if (ts.isJsxAttribute(node) && /^data-/.test(node.name.getText(sf))) {
         const attribute = node.name.getText(sf);
         const init = node.initializer;

@@ -16,7 +16,7 @@ export default function TooltipExample() {
       </Tooltip>
       <Tooltip
         content="Emerald arrow"
-        arrowColor="#059669"
+        arrowColor="#047857"
         classes={{ content: "rounded-cl-md px-3 py-2 text-sm text-cl-bg bg-cl-success dark:bg-cl-success" }}
       >
         <button

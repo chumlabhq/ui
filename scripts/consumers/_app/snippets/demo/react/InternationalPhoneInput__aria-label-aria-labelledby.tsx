@@ -5,7 +5,7 @@ export default function InternationalPhoneInputExample() {
     <div className="space-y-6 w-full sm:max-w-md">
       <div>
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           aria-label
         </span>
@@ -37,7 +37,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div>
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           aria-labelledby
         </span>

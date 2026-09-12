@@ -1,6 +1,8 @@
 import {
   useState,
   useRef } from "react";
+import { Input } from "../../components/Input/index.js";
+import { Button } from "../../components/Button/index.js";
 import { TextArea,
   TextAreaLabel } from "../../components/TextArea/index.js";
 import type { TextAreaClasses } from "../../components/TextArea/index.js";
@@ -67,23 +69,6 @@ const FileIcon = ({ className = "" }: { className?: string }) => (
     <path d="M14 2v4a2 2 0 0 0 2 2h4" />
   </svg>
 );
-const MailIcon = ({ className = "" }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <rect width="20" height="16" x="2" y="4" rx="2" />
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-  </svg>
-);
 const LockIcon = ({ className = "" }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -139,17 +124,29 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 
 const getClasses = (dark: boolean) => ({
   textarea: {
-    control: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+    control: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
     input: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary`,
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
     description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-    message: "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
+    /* No colour here on purpose. The library paints this slot
+       `data-[invalid]:text-cl-error data-[valid]:text-cl-success`; a plain
+       colour token drops both variants and then only the last one survives,
+       which is how every error message on this page rendered green. */
+    message: "text-xs mt-1.5 flex items-center gap-1.5",
     count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`,
   } satisfies TextAreaClasses,
 
-  wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:text-cl-text-secondary dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
-  wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:text-cl-text-secondary dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
-  wrapperDisabled: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
+  /* The one native field this page renders, for the TextAreaLabel section
+     where pairing with a non-Chumlab control is the point. Written once so it
+     cannot drift from the component's own look. */
+  nativeField: `w-full px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm resize-y transition-all duration-150 bg-cl-bg-input border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 focus:border-cl-border-input-focus`,
+  input: {
+    root: "flex flex-col",
+    label: `block text-[13px] font-medium mb-1.5 text-cl-text-chrome`,
+  },
+  wrapperError: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:text-cl-text-secondary dark:border dark:border-cl-error/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
+  wrapperSuccess: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:text-cl-text-secondary dark:border dark:border-cl-success/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
+  wrapperDisabled: `rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
   disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary`,
 
   container: "flex flex-col",
@@ -809,32 +806,38 @@ const TextAreaDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="space-y-4 w-full max-w-md">
-              <div>
+            <div className="space-y-4 w-full max-w-xl">
+              {/* Beside the field, not above it: `TextArea`'s own `label` prop
+                  stacks, so a row is the arrangement that needs the label
+                  standalone. Paired with a native textarea on purpose — with
+                  `TextArea` you would pass `label` and never reach for this. */}
+              <div className="flex items-start gap-3">
                 <TextAreaLabel
                   label="Custom Layout"
                   htmlFor="custom-ta"
-                  className={c.textarea.label}
+                  className={`${c.textarea.label} mb-0 mt-2 shrink-0 w-32`}
                 />
                 <textarea
                   id="custom-ta"
-                  placeholder="Native textarea with TextAreaLabel"
+                  placeholder="Label sits beside this field"
                   rows={3}
-                  className={`w-full px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm resize-y transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 focus:border-cl-border-input-focus dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50`}
+                  className={c.nativeField}
                 />
               </div>
-              <div>
+              <div className="flex items-start gap-3">
                 <TextAreaLabel
                   label="Required Field"
                   htmlFor="req-ta"
                   required
-                  className={c.textarea.label}
+                  className={`${c.textarea.label} mb-0 mt-2 shrink-0 w-32`}
                 />
-                <p
-                  className={`text-xs text-cl-text-tertiary`}
-                >
-                  Required indicator (*) is automatically added
-                </p>
+                <textarea
+                  id="req-ta"
+                  required
+                  rows={3}
+                  placeholder="The * comes from `required`"
+                  className={c.nativeField}
+                />
               </div>
             </div>
           </DemoWrapper>
@@ -856,7 +859,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    control: `px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 border border-cl-border focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
+                    control: `px-0 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:border-cl-border-input-focus dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
                   }}
                 />
               </div>
@@ -868,7 +871,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    control: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-border-input-focus/30 dark:bg-cl-accent/[0.10] dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25`,
+                    control: `rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-border-input-focus/30 dark:bg-cl-accent/[0.10] dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25`,
                   }}
                 />
               </div>
@@ -882,7 +885,7 @@ const TextAreaDemo = () => {
           description="Real-world composition with multiple features."
           isDarkMode={dark}
         >
-          <DemoWrapper isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark} className="sm:w-fit">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -903,29 +906,21 @@ const TextAreaDemo = () => {
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className={c.container}>
-                  <label htmlFor="contact-name" className={c.textarea.label}>
-                    Name
-                  </label>
-                  <input
-                    id="contact-name"
-                    placeholder="John Doe"
-                    required
-                    className={`px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30`}
-                  />
-                </div>
-                <div className={c.container}>
-                  <label htmlFor="contact-email" className={c.textarea.label}>
-                    Email
-                  </label>
-                  <input
-                    id="contact-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    required
-                    className={`px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30`}
-                  />
-                </div>
+                <Input
+                  label="Name"
+                  id="contact-name"
+                  placeholder="John Doe"
+                  required
+                  classes={c.input}
+                />
+                <Input
+                  label="Email"
+                  id="contact-email"
+                  type="email"
+                  placeholder="you@example.com"
+                  required
+                  classes={c.input}
+                />
               </div>
               <TextArea
                 label="Message"
@@ -938,16 +933,16 @@ const TextAreaDemo = () => {
                 value={feedback2}
                 onChange={(e) => setFeedback2(e.target.value)}
                 onClear={() => setFeedback2("")}
-                startIcon={<MailIcon className={c.icon} />}
                 classes={c.textarea}
                 className={c.container}
               />
-              <button
+              <Button
                 type="submit"
-                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer`}
+                fullWidth
+                className="bg-cl-text text-cl-bg hover:opacity-90"
               >
                 Send Message
-              </button>
+              </Button>
             </form>
           </DemoWrapper>
         </Section>

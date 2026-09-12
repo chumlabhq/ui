@@ -131,9 +131,9 @@ const StatusBadge = ({
   dark?: boolean;
 }) => {
   const styles = {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       };
 
   return (
@@ -153,31 +153,6 @@ export default function TableExample() {
   );
   const [inf2HasMore, setInf2HasMore] = useState(true);
   const [inf2Loading, setInf2Loading] = useState(false);
-  const allInfiniteData = useMemo(() => {
-    const data: User[] = [];
-    for (let i = 0; i < 50; i++) {
-      const base = sampleData[i % sampleData.length];
-      data.push({
-        ...base,
-        id: `inf-${i}`,
-        name: `${base.name} ${Math.floor(i / sampleData.length) + 1}`,
-      });
-    }
-    return data;
-  }, []);
-  const handleLoadMore2 = useCallback(() => {
-    if (inf2Loading || !inf2HasMore) return;
-    setInf2Loading(true);
-    setTimeout(() => {
-      setInf2Data((prev) => {
-        const more = allInfiniteData.slice(prev.length, prev.length + 10);
-        const updated = [...prev, ...more];
-        if (updated.length >= allInfiniteData.length) setInf2HasMore(false);
-        return updated;
-      });
-      setInf2Loading(false);
-    }, 1500);
-  }, [inf2Loading, inf2HasMore, allInfiniteData]);
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -224,7 +199,32 @@ export default function TableExample() {
     ],
     [false],
   );
+  const allInfiniteData = useMemo(() => {
+    const data: User[] = [];
+    for (let i = 0; i < 50; i++) {
+      const base = sampleData[i % sampleData.length];
+      data.push({
+        ...base,
+        id: `inf-${i}`,
+        name: `${base.name} ${Math.floor(i / sampleData.length) + 1}`,
+      });
+    }
+    return data;
+  }, []);
   const inf2Ref = useRef<HTMLDivElement>(null);
+  const handleLoadMore2 = useCallback(() => {
+    if (inf2Loading || !inf2HasMore) return;
+    setInf2Loading(true);
+    setTimeout(() => {
+      setInf2Data((prev) => {
+        const more = allInfiniteData.slice(prev.length, prev.length + 10);
+        const updated = [...prev, ...more];
+        if (updated.length >= allInfiniteData.length) setInf2HasMore(false);
+        return updated;
+      });
+      setInf2Loading(false);
+    }, 1500);
+  }, [inf2Loading, inf2HasMore, allInfiniteData]);
   return (
     <>
       <Table

@@ -199,7 +199,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       renderEllipsis,
       renderPageInfo,
       sectionOrder = DEFAULT_SECTION_ORDER,
-      reduceMotion,
+      reduceMotion = "auto",
       classes: classesProp,
       unstyled = false,
       portalContainer,

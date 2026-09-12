@@ -1064,19 +1064,23 @@ function build(section, sf, symbols, classes, componentName) {
         d.node.initializer &&
         ts.isCallExpression(d.node.initializer) &&
         /^use[A-Z]/.test(d.node.initializer.expression.getText(sf));
-      // A declaration that closes over page state is page machinery UNLESS it
-      // is hoisted into the snippet's own component, where the state it writes
-      // is hoisted too. `handleItemClick` — a `useCallback` that sets a result
-      // line — is the whole of Breadcrumb: twelve of its seventeen sections
-      // were rejected for depending on it, which is every section that wires
-      // `onItemClick`, which is every section that does anything. Emitted after
-      // the state lines, because a `const` cannot read one declared below it.
-      if (deps.some((x) => stateOf.has(x)) && !callsHook) {
-        return { reason: `\`${id}\` closes over page state` };
-      }
+      // A declaration that closes over page state goes INTO the snippet's
+      // component, below the state it reads — it cannot go to module scope,
+      // which is the only reason it was ever rejected.
+      //
+      // `useCallback` handlers were allowed through first, for Breadcrumb,
+      // where twelve of seventeen sections wired one. Plain derived consts were
+      // not, and they are the same thing one step simpler: `const userOk =
+      // username.length >= 3` is what Input's Character Count, Live Validation
+      // and Registration Form each hung on. Ordered by where the page declares
+      // them, so a derived value that reads another still reads it.
+      const closesOverState = deps.some((x) => stateOf.has(x));
       deps.forEach((x) => queue.push(x));
-      if (callsHook) {
-        if (!hoistedHooks.includes(d.text)) hoistedHooks.unshift(d.text);
+      if (callsHook || closesOverState) {
+        const text = d.whole ? d.text : `const ${d.text};`;
+        if (!hoistedHooks.some((h) => h.text === text)) {
+          hoistedHooks.push({ text, at: d.node.getStart(sf) });
+        }
         continue;
       }
       const text = d.whole ? d.text : `const ${d.text};`;
@@ -1162,7 +1166,10 @@ function build(section, sf, symbols, classes, componentName) {
   let code = resolvePageScope(dedent(bodyText));
   for (let i = 0; i < inlined.length; i += 1) inlined[i] = resolvePageScope(inlined[i]);
   for (let i = 0; i < hoistedState.length; i += 1) hoistedState[i] = resolvePageScope(hoistedState[i]);
-  for (let i = 0; i < hoistedHooks.length; i += 1) hoistedHooks[i] = resolvePageScope(hoistedHooks[i]);
+  hoistedHooks.sort((a, b) => a.at - b.at);
+  for (let i = 0; i < hoistedHooks.length; i += 1) {
+    hoistedHooks[i] = { ...hoistedHooks[i], text: resolvePageScope(hoistedHooks[i].text) };
+  }
   if (missingKey) return { reason: `page styling \`c.${missingKey}\` could not be resolved` };
 
   code = stripUnknownClassesKeys(code, componentName);
@@ -1199,7 +1206,8 @@ function build(section, sf, symbols, classes, componentName) {
     ? printBody(rawBody, 2)
     : `${pad(2)}<>\n${printBody(rawBody, 3)}\n${pad(2)}</>`;
   const bodyLines = [
-    ...[...hoistedState, ...hoistedHooks].map((h) => `  const ${h};`),
+    ...hoistedState.map((h) => `  const ${h};`),
+    ...hoistedHooks.map((h) => `  ${h.text.startsWith("const ") ? h.text : `const ${h.text}`}`),
     `  return (`,
     ...inner.split("\n"),
     `  );`,

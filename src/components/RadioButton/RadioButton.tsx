@@ -76,7 +76,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       orientation = "vertical",
       classes: classesProp,
       unstyled = false,
-      reduceMotion,
+      reduceMotion = "auto",
       children,
       className,
       ...rest

@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect } from "react";
 import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
+import { CountryFlag } from "../../components/CountryFlag/index.js";
 import type {
   CascadingOption,
   CascadingValue,
@@ -99,10 +100,11 @@ const loadCountriesForRegion = async (
               flag for Afghanistan and various other reskinned flags
               for other politically-contested codes — using our bucket
               keeps the flag set consistent with the rest of the UI. */}
-          <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+          <CountryFlag
+            code={country.code}
+            size="md"
             alt={`${country.name} flag`}
-            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
+            className="rounded-cl-sm"
           />
           <span className="truncate">{country.name}</span>
         </span>
@@ -370,10 +372,11 @@ const asyncSearchCountries = async (
               flag for Afghanistan and various other reskinned flags
               for other politically-contested codes — using our bucket
               keeps the flag set consistent with the rest of the UI. */}
-          <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+          <CountryFlag
+            code={country.code}
+            size="md"
             alt={`${country.name} flag`}
-            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
+            className="rounded-cl-sm"
           />
           <span className="truncate">{country.name}</span>
         </span>
@@ -403,7 +406,7 @@ const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   valueBox: `mt-3 p-3 rounded-cl-md w-full bg-cl-bg-hover dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
   valueLabel: `text-xs font-medium mb-1 text-cl-text-secondary`,

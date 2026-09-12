@@ -34,9 +34,9 @@ export default function SwitchExample() {
       <div
         style={
           {
-            ["--switch-tracker-checked-bg" as string]: "#059669",
+            ["--switch-tracker-checked-bg" as string]: "#047857",
             ["--switch-tracker-unchecked-bg" as string]: "#d1fae5",
-            ["--switch-focus-ring" as string]: "#059669"
+            ["--switch-focus-ring" as string]: "#047857"
           }
         }
       >

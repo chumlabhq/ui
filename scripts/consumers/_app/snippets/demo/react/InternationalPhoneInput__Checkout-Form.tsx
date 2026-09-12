@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
+import { Input } from "@chumlab/ui/input";
 import { InternationalPhoneInput, PhoneNumberData } from "@chumlab/ui/international-phone-input";
 
 export default function InternationalPhoneInputExample() {
@@ -17,40 +19,39 @@ export default function InternationalPhoneInputExample() {
         }
       }
     >
-      <div>
-        <label
-          htmlFor="checkout-name"
-          className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary"
-        >
-          Full Name
-        </label>
-        <input
-          id="checkout-name"
-          type="text"
-          required
-          value={checkoutName}
-          onChange={(e) => setCheckoutName(e.target.value)}
-          placeholder="John Doe"
-          className="flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]"
-        />
-      </div>
-      <div>
-        <label
-          htmlFor="checkout-email"
-          className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary"
-        >
-          Email
-        </label>
-        <input
-          id="checkout-email"
-          type="email"
-          required
-          value={checkoutEmail}
-          onChange={(e) => setCheckoutEmail(e.target.value)}
-          placeholder="john@example.com"
-          className="flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]"
-        />
-      </div>
+      <Input
+        id="checkout-name"
+        label="Full Name"
+        required
+        value={checkoutName}
+        onValueChange={setCheckoutName}
+        placeholder="John Doe"
+        classes={
+          {
+            root: "flex flex-col gap-1",
+            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+            control: "h-10 px-3 rounded-cl-md border bg-transparent transition-all duration-150 border-cl-border-input bg-white focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+            input: "text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary"
+          }
+        }
+      />
+      <Input
+        id="checkout-email"
+        type="email"
+        label="Email"
+        required
+        value={checkoutEmail}
+        onValueChange={setCheckoutEmail}
+        placeholder="john@example.com"
+        classes={
+          {
+            root: "flex flex-col gap-1",
+            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+            control: "h-10 px-3 rounded-cl-md border bg-transparent transition-all duration-150 border-cl-border-input bg-white focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+            input: "text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary"
+          }
+        }
+      />
       <InternationalPhoneInput
         name="checkout_phone"
         label="Phone Number"
@@ -78,12 +79,13 @@ export default function InternationalPhoneInputExample() {
           }
         }
       />
-      <button
+      <Button
         type="submit"
-        className="w-full py-2.5 px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer cursor-pointer"
+        fullWidth
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
       >
         Complete Checkout
-      </button>
+      </Button>
     </form>
   );
 }

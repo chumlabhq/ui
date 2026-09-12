@@ -43,7 +43,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       resizeDirection = "right",
       step = 10,
       disabled = false,
-      reduceMotion,
+      reduceMotion = "auto",
       unstyled = false,
       "aria-label": ariaLabel = "Resize panel",
       classes: classesProp,

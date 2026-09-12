@@ -15,7 +15,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
       size = 40,
       speed = 1.5,
       rings = 2,
-      reduceMotion,
+      reduceMotion = "auto",
       classes: classesProp,
       unstyled = false,
       className = "",

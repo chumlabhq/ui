@@ -11,7 +11,7 @@ export default function InternationalPhoneInputExample() {
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-md">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Purple theme
         </span>
@@ -52,7 +52,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Green theme
         </span>
@@ -93,7 +93,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Orange theme
         </span>

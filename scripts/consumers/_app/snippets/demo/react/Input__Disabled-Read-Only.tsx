@@ -37,7 +37,7 @@ export default function InputExample() {
             suffix: "text-sm select-none text-cl-text-tertiary",
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
           }),
-                          input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled",
+                          input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
                           control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
                         }
         }
@@ -57,7 +57,7 @@ export default function InputExample() {
             suffix: "text-sm select-none text-cl-text-tertiary",
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
           }),
-                          input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled",
+                          input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
                           control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
                         }
         }

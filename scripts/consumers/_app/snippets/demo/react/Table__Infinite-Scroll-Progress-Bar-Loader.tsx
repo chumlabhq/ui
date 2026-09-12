@@ -129,9 +129,9 @@ const StatusBadge = ({
   dark?: boolean;
 }) => {
   const styles = {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       };
 
   return (
@@ -151,31 +151,6 @@ export default function TableExample() {
   );
   const [inf3HasMore, setInf3HasMore] = useState(true);
   const [inf3Loading, setInf3Loading] = useState(false);
-  const allInfiniteData = useMemo(() => {
-    const data: User[] = [];
-    for (let i = 0; i < 50; i++) {
-      const base = sampleData[i % sampleData.length];
-      data.push({
-        ...base,
-        id: `inf-${i}`,
-        name: `${base.name} ${Math.floor(i / sampleData.length) + 1}`,
-      });
-    }
-    return data;
-  }, []);
-  const handleLoadMore3 = useCallback(() => {
-    if (inf3Loading || !inf3HasMore) return;
-    setInf3Loading(true);
-    setTimeout(() => {
-      setInf3Data((prev) => {
-        const more = allInfiniteData.slice(prev.length, prev.length + 10);
-        const updated = [...prev, ...more];
-        if (updated.length >= allInfiniteData.length) setInf3HasMore(false);
-        return updated;
-      });
-      setInf3Loading(false);
-    }, 800);
-  }, [inf3Loading, inf3HasMore, allInfiniteData]);
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -222,7 +197,32 @@ export default function TableExample() {
     ],
     [false],
   );
+  const allInfiniteData = useMemo(() => {
+    const data: User[] = [];
+    for (let i = 0; i < 50; i++) {
+      const base = sampleData[i % sampleData.length];
+      data.push({
+        ...base,
+        id: `inf-${i}`,
+        name: `${base.name} ${Math.floor(i / sampleData.length) + 1}`,
+      });
+    }
+    return data;
+  }, []);
   const inf3Ref = useRef<HTMLDivElement>(null);
+  const handleLoadMore3 = useCallback(() => {
+    if (inf3Loading || !inf3HasMore) return;
+    setInf3Loading(true);
+    setTimeout(() => {
+      setInf3Data((prev) => {
+        const more = allInfiniteData.slice(prev.length, prev.length + 10);
+        const updated = [...prev, ...more];
+        if (updated.length >= allInfiniteData.length) setInf3HasMore(false);
+        return updated;
+      });
+      setInf3Loading(false);
+    }, 800);
+  }, [inf3Loading, inf3HasMore, allInfiniteData]);
   return (
     <>
       <Table

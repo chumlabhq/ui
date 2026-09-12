@@ -155,7 +155,8 @@
           "const": "auto"
         }
       ],
-      "description": "Controls motion preferences. 'auto' respects OS setting."
+      "description": "Controls motion preferences. 'auto' respects OS setting.",
+      "default": "auto"
     },
     "disabled": {
       "type": "boolean",

@@ -54,9 +54,9 @@ const StatusBadge = ({
   dark?: boolean;
 }) => {
   const styles = {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       };
 
   return (
@@ -214,7 +214,7 @@ export default function TableExample() {
         {
           lastCopied && (
             <div
-              className="p-3 rounded-cl-md text-sm bg-cl-success/15 text-cl-success border border-cl-success dark:bg-cl-success/10 dark:text-cl-success dark:border dark:border-cl-success/20"
+              className="p-3 rounded-cl-md text-sm bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/10 dark:text-cl-success dark:border dark:border-cl-success/20"
             >
               Copied:
               {lastCopied}

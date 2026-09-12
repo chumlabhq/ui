@@ -12,6 +12,8 @@ import {
   } from "../../components/InternationalPhoneInput/index.js";
 import { createLibphonenumberValidator } from "../../components/InternationalPhoneInput/validators/index.js";
 import { CountryFlag } from "../../components/CountryFlag/index.js";
+import { Input } from "../../components/Input/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -135,8 +137,18 @@ const getClasses = () => ({
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`,
+
+  /* The checkout form's own fields, matched to the phone input standing
+     beside them so the row reads as one form rather than two component
+     styles. */
+  checkoutField: {
+    root: "flex flex-col gap-1",
+    label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
+    control: `h-10 px-3 rounded-cl-md border bg-transparent transition-all duration-150 border-cl-border-input bg-white focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+    input: `text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary`,
+  },
   resultBox: `rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
@@ -1289,40 +1301,25 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 );
               }}
             >
-              <div>
-                <label
-                  htmlFor="checkout-name"
-                  className={`text-[13px] font-medium mb-1.5 block text-cl-text-secondary`}
-                >
-                  Full Name
-                </label>
-                <input
-                  id="checkout-name"
-                  type="text"
-                  required
-                  value={checkoutName}
-                  onChange={(e) => setCheckoutName(e.target.value)}
-                  placeholder="John Doe"
-                  className={c.phone.input}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="checkout-email"
-                  className={`text-[13px] font-medium mb-1.5 block text-cl-text-secondary`}
-                >
-                  Email
-                </label>
-                <input
-                  id="checkout-email"
-                  type="email"
-                  required
-                  value={checkoutEmail}
-                  onChange={(e) => setCheckoutEmail(e.target.value)}
-                  placeholder="john@example.com"
-                  className={c.phone.input}
-                />
-              </div>
+              <Input
+                id="checkout-name"
+                label="Full Name"
+                required
+                value={checkoutName}
+                onValueChange={setCheckoutName}
+                placeholder="John Doe"
+                classes={c.checkoutField}
+              />
+              <Input
+                id="checkout-email"
+                type="email"
+                label="Email"
+                required
+                value={checkoutEmail}
+                onValueChange={setCheckoutEmail}
+                placeholder="john@example.com"
+                classes={c.checkoutField}
+              />
               <InternationalPhoneInput
                 name="checkout_phone"
                 label="Phone Number"
@@ -1332,9 +1329,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 enablePasteDetection
                 classes={c.phone}
               />
-              <button type="submit" className={`w-full py-2.5 ${c.btnPrimary} cursor-pointer`}>
+              <Button type="submit" fullWidth className={c.btnPrimary}>
                 Complete Checkout
-              </button>
+              </Button>
             </form>
           </DemoWrapper>
         </Section>

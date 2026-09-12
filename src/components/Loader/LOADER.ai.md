@@ -33,6 +33,15 @@ export default function Example() {
 
 ---
 
+## Data Attributes (for CSS selectors and testing)
+
+- `data-reduce-motion="true"` on the root of all four variants — present only
+  while reduced motion is in force, whether that comes from the OS setting or
+  from `reduceMotion={true}`. Absent otherwise, so `[data-reduce-motion]`
+  selects it.
+
+---
+
 ## All Props
 
 <!-- generated from Loader.schema.json — edit the schema, not this table -->
@@ -44,8 +53,8 @@ export default function Example() {
 | `size` | number | `20` | Width and height in pixels. |
 | `thickness` | number | `2` | Stroke width of track and arc. |
 | `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
-| `trackColor` | string | — | Background track color. Default: currentColor at 20% opacity. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `trackColor` | string | `"currentColor"` | Background track color, painted at 20% opacity by the `track` slot. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 
@@ -58,7 +67,7 @@ export default function Example() {
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `trackColor` | string | `"currentColor"` | Background track color. |
 | `borderRadius` | number | `9999` | Border radius in pixels. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 
@@ -70,7 +79,7 @@ export default function Example() {
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
 | `speed` | number | `1.4` | Full animation cycle duration in seconds. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 
@@ -81,7 +90,7 @@ export default function Example() {
 | `size` | number | `40` | Diameter of the circle in pixels. |
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `rings` | number | `2` | Number of ripple rings. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 
@@ -149,6 +158,28 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 > A variant YOU pass is never dropped.
 
 Each variant has its own class slots. Circular: `root`, `control`, `track`, `range`. Linear: `root`, `range`. Dot: `root`, `range`. Pulse: `root`, `range`.
+
+### CSS custom properties
+
+`CircularLoader` sets three on its root, and its own classes read them, so a
+consumer can retune it from a stylesheet without passing props:
+
+| Variable | Set from | Used by |
+|----------|----------|---------|
+| `--loader-size` | `size` | the root's width and height |
+| `--loader-speed` | `speed` | the spin's `animation-duration` |
+| `--loader-track` | `trackColor` | the track circle's stroke |
+
+### `size` is a raw pixel number, and the spin is wider than it
+
+There is no size scale and no maximum: `size` is whatever number you pass, 20
+by default. One thing it does not tell you — the SVG carries `animate-spin`, so
+its **bounding box sweeps out the square's diagonal** while it turns. At
+`size={48}` the measured box reaches 67px against a 48px parent, about 41%
+wider. The painted circle stays inside `size`; it is layout measurement and hit
+testing that see the larger box. `e2e/icon-bounds.spec.ts` names `Loader/sized`
+as its one exemption for exactly this reason.
+
 
 ---
 

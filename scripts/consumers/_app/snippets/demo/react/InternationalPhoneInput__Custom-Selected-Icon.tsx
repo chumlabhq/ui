@@ -31,7 +31,7 @@ export default function InternationalPhoneInputExample() {
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-md">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Star icon
         </span>
@@ -66,7 +66,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Circle check icon
         </span>
@@ -101,7 +101,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Dot indicator
         </span>

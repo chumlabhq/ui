@@ -40,7 +40,7 @@ export default function SearchableDropdownExample() {
           value={customSelectedValue}
           onValueChange={(v) => setCustomSelectedValue(v)}
           placeholder="Search with star..."
-          selectedIcon={<StarIcon className="w-4 h-4 shrink-0 text-cl-warning" />}
+          selectedIcon={<StarIcon className="w-4 h-4 shrink-0 text-cl-text" />}
           classes={
             {
               trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent",

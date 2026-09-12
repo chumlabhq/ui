@@ -66,7 +66,7 @@ export default function Example() {
 | `orientation` | `"horizontal"` \| `"vertical"` | `"vertical"` | Layout orientation. |
 | `classes` | object | — | CSS class overrides for group sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `children` **(required)** | object | — | React.ReactNode - RadioButton children. |
 | `className` | string | — | Additional class names applied to the group root. |
 

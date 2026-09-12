@@ -32,6 +32,12 @@ import { MEASURE_DOCUMENT } from "./_contrast-measure";
  * honest run, taken to 47 by six class idioms and one library palette. Planted
  * by restoring one of those idioms — `bg-cl-success/15 text-cl-success` on the
  * Table page — it reports 390 and names them at 4.09:1.
+ *
+ * The denominator moves between runs — 41289 and 41429 on two runs of the same
+ * tree — because the dropdown pages load their country lists over the network
+ * and the rows exist only once that lands. Findings are what this asserts on;
+ * `measured` is asserted only against a floor, for the case where the scan
+ * walks nothing at all.
  */
 const ROUTES = (readFileSync("src/App.tsx", "utf8").match(/<Route path="([^"*:]+)"/g) ?? [])
   .map((m) => m.slice(13, -1))
@@ -41,10 +47,10 @@ const ROUTES = (readFileSync("src/App.tsx", "utf8").match(/<Route path="([^"*:]+
  * Measured, recorded, not yet fixed — down only.
  *
  * The scan opened at 746 findings across 15 pages. Six class idioms and one
- * library palette accounted for 699 of them; these 21 selectors are the tail,
+ * library palette accounted for 699 of them; these 19 selectors are the tail,
  * and they are all real by the same rule the fixture sweep applies. They are
  * listed so the number cannot grow while they are worked through, and so that
- * "47 remaining" is a set someone can read rather than a total.
+ * "43 remaining" is a set someone can read rather than a total.
  *
  * Roughly: nine are `::placeholder` at 2.29-4.41 (the fixture gate counts
  * placeholders and fails them too, and every fixture placeholder passes, so
@@ -57,8 +63,6 @@ const RECORDED: ReadonlySet<string> = new Set([
   "avatar dark span",
   "avatar light span",
   "breadcrumb light span",
-  "input dark input.flex-1.min-w-0::placeholder",
-  "input light input.flex-1.min-w-0::placeholder",
   "loader light div.flex.items-center",
   "resizable-panel light div.text-[10px].font-mono",
   "resizable-panel light div.text-xs.font-semibold",

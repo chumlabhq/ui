@@ -86,7 +86,7 @@ export default function InputExample() {
         ).map(([label, leading, trailing, ph]) => (
           <div key={String(label)} className="space-y-1.5">
             <span
-              className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+              className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
             >
               {label}
             </span>
@@ -112,12 +112,12 @@ export default function InputExample() {
       }
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Clickable icons
         </span>
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
           data-demo-action
         >
           {lastAction}

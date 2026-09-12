@@ -458,6 +458,47 @@ describe("Drawer", () => {
       });
     });
 
+    /**
+     * Opened from CLOSED, which every other case in this block skips by
+     * rendering with `open` already true. The panel is portalled by a later
+     * effect, so on that first path `panelRef.current` was null, the focus
+     * effect returned early and never re-ran: focus stayed on the trigger.
+     * Measured on the demo page before the fix — `initialFocus` and
+     * `data-autofocus` were both dead there while these tests stayed green.
+     */
+    it("focuses data-autofocus when the drawer opens from closed", async () => {
+      const user = userEvent.setup();
+
+      function TestWrapper() {
+        const [open, setOpen] = useState(false);
+        return (
+          <>
+            <button data-testid="trigger" onClick={() => setOpen(true)}>
+              Open
+            </button>
+            <Drawer
+              open={open}
+              onOpenChange={setOpen}
+              aria-label="Open from closed"
+              duration={0}
+            >
+              <DrawerBody>
+                <button>First</button>
+                <input data-autofocus data-testid="target-input" />
+              </DrawerBody>
+            </Drawer>
+          </>
+        );
+      }
+
+      render(<TestWrapper />);
+      await user.click(screen.getByTestId("trigger"));
+
+      await waitFor(() => {
+        expect(document.activeElement).toBe(screen.getByTestId("target-input"));
+      });
+    });
+
     it("does not trap focus in non-modal mode", async () => {
       const user = userEvent.setup();
 

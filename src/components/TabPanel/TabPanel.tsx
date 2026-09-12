@@ -45,7 +45,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       tooltipPosition = "bottom",
       tooltipOffset = 4,
       disabled = false,
-      reduceMotion,
+      reduceMotion = "auto",
       unstyled = false,
       renderTab: renderTabProp,
       "aria-label": ariaLabel = "Tabs",

@@ -129,9 +129,9 @@ const StatusBadge = ({
   dark?: boolean;
 }) => {
   const styles = {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       };
 
   return (
@@ -151,34 +151,6 @@ export default function TableExample() {
   );
   const [infiniteHasMore, setInfiniteHasMore] = useState(true);
   const [infiniteLoading, setInfiniteLoading] = useState(false);
-  const allInfiniteData = useMemo(() => {
-    const data: User[] = [];
-    for (let i = 0; i < 50; i++) {
-      const base = sampleData[i % sampleData.length];
-      data.push({
-        ...base,
-        id: `inf-${i}`,
-        name: `${base.name} ${Math.floor(i / sampleData.length) + 1}`,
-      });
-    }
-    return data;
-  }, []);
-  const handleLoadMore = useCallback(() => {
-    if (infiniteLoading || !infiniteHasMore) return;
-    setInfiniteLoading(true);
-    setTimeout(() => {
-      setInfiniteData((prev) => {
-        const nextIndex = prev.length;
-        const more = allInfiniteData.slice(nextIndex, nextIndex + 10);
-        const updated = [...prev, ...more];
-        if (updated.length >= allInfiniteData.length) {
-          setInfiniteHasMore(false);
-        }
-        return updated;
-      });
-      setInfiniteLoading(false);
-    }, 1000);
-  }, [infiniteLoading, infiniteHasMore, allInfiniteData]);
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -226,6 +198,34 @@ export default function TableExample() {
     [false],
   );
   const infiniteScrollTableRef = useRef<HTMLDivElement>(null);
+  const allInfiniteData = useMemo(() => {
+    const data: User[] = [];
+    for (let i = 0; i < 50; i++) {
+      const base = sampleData[i % sampleData.length];
+      data.push({
+        ...base,
+        id: `inf-${i}`,
+        name: `${base.name} ${Math.floor(i / sampleData.length) + 1}`,
+      });
+    }
+    return data;
+  }, []);
+  const handleLoadMore = useCallback(() => {
+    if (infiniteLoading || !infiniteHasMore) return;
+    setInfiniteLoading(true);
+    setTimeout(() => {
+      setInfiniteData((prev) => {
+        const nextIndex = prev.length;
+        const more = allInfiniteData.slice(nextIndex, nextIndex + 10);
+        const updated = [...prev, ...more];
+        if (updated.length >= allInfiniteData.length) {
+          setInfiniteHasMore(false);
+        }
+        return updated;
+      });
+      setInfiniteLoading(false);
+    }, 1000);
+  }, [infiniteLoading, infiniteHasMore, allInfiniteData]);
   return (
     <>
       <Table

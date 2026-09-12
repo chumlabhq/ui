@@ -16,7 +16,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
       gap = 4,
       count = 3,
       speed = 1.4,
-      reduceMotion,
+      reduceMotion = "auto",
       classes: classesProp,
       unstyled = false,
       className = "",

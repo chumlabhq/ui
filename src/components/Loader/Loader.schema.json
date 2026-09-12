@@ -26,7 +26,8 @@
         },
         "trackColor": {
           "type": "string",
-          "description": "Background track color. Default: currentColor at 20% opacity."
+          "description": "Background track color, painted at 20% opacity by the `track` slot.",
+          "default": "currentColor"
         },
         "reduceMotion": {
           "type": [
@@ -38,7 +39,8 @@
             true,
             false,
             "auto"
-          ]
+          ],
+          "default": "auto"
         },
         "classes": {
           "type": "object",
@@ -109,7 +111,8 @@
             true,
             false,
             "auto"
-          ]
+          ],
+          "default": "auto"
         },
         "classes": {
           "type": "object",
@@ -166,7 +169,8 @@
             true,
             false,
             "auto"
-          ]
+          ],
+          "default": "auto"
         },
         "classes": {
           "type": "object",
@@ -218,7 +222,8 @@
             true,
             false,
             "auto"
-          ]
+          ],
+          "default": "auto"
         },
         "classes": {
           "type": "object",
@@ -262,11 +267,13 @@
         },
         "trackColor": {
           "type": "string | undefined",
-          "description": "Background track color. Default: currentColor at 20% opacity"
+          "description": "Background track color. Default: currentColor at 20% opacity",
+          "default": "currentColor"
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
-          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting.",
+          "default": "auto"
         },
         "classes": {
           "type": "CircularLoaderClasses | undefined",
@@ -309,7 +316,8 @@
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
-          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting.",
+          "default": "auto"
         },
         "classes": {
           "type": "LinearLoaderClasses | undefined",
@@ -347,7 +355,8 @@
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
-          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting.",
+          "default": "auto"
         },
         "classes": {
           "type": "DotLoaderClasses | undefined",
@@ -380,7 +389,8 @@
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
-          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
+          "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting.",
+          "default": "auto"
         },
         "classes": {
           "type": "PulseLoaderClasses | undefined",

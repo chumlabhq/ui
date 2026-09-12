@@ -4,6 +4,8 @@ import {
   useRef } from "react";
 import { Input,
   InputLabel } from "../../components/Input/index.js";
+import { Checkbox } from "../../components/Checkbox/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -225,8 +227,12 @@ const getClasses = (dark: boolean) => ({
   inputExtra: {
     wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
   },
-  wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
-  wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
+  /* The one native field this page renders, for the InputLabel section where
+     pairing with a non-Chumlab control is the point. Written once rather than
+     inline, so it cannot drift from the component's own look. */
+  nativeField: `w-full px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-cl-bg-input border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 focus:border-cl-border-input-focus`,
+  wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
+  wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
   wrapperDisabled: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
   disabledInput: `w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary`,
   icon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
@@ -255,8 +261,9 @@ const InputDemo = () => {
 
   const [showPw, setShowPw] = useState(false);
   const [search, setSearch] = useState("");
+  const [callbackValue, setCallbackValue] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [search2, setSearch2] = useState("");
-  const [search22, setSearch22] = useState("");
   // An alert() here blocks the page and every automated check with it.
   const [lastAction, setLastAction] = useState("");
   const [bio, setBio] = useState("");
@@ -663,16 +670,16 @@ const InputDemo = () => {
               <Input
                 label="Type anything"
                 placeholder="Watch the value below..."
-                value={search22}
-                onValueChange={setSearch22}
+                value={callbackValue}
+                onValueChange={setCallbackValue}
                 clearable
-                onClear={() => setSearch22("")}
+                onClear={() => setCallbackValue("")}
                 classes={c.input}
               />
               <div
                 className={`rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary`}
               >
-                value: {JSON.stringify(search)}
+                value: {JSON.stringify(callbackValue)}
               </div>
             </div>
           </DemoWrapper>
@@ -955,32 +962,39 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="space-y-4 w-full sm:max-w-sm">
-              <div>
+            <div className="space-y-4 w-full sm:max-w-md">
+              {/* Beside the field, not above it: `Input`'s own `label` prop
+                  stacks, so a row is the arrangement that needs the label
+                  standalone. Paired with a native input on purpose — with
+                  `Input` you would pass `label` and not reach for this at
+                  all. */}
+              <div className="flex items-center gap-3">
                 <InputLabel
                   label="Custom Layout"
                   htmlFor="custom-input"
-                  className={c.input.label}
+                  className={`${c.input.label} mb-0 shrink-0 w-32`}
                 />
                 <input
                   id="custom-input"
                   type="text"
-                  placeholder="Native input with InputLabel"
-                  className={`w-full px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 focus:border-cl-border-input-focus dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50`}
+                  placeholder="Label sits beside this field"
+                  className={c.nativeField}
                 />
               </div>
-              <div>
+              <div className="flex items-center gap-3">
                 <InputLabel
                   label="Required Field"
                   htmlFor="req"
                   required
-                  className={c.input.label}
+                  className={`${c.input.label} mb-0 shrink-0 w-32`}
                 />
-                <p
-                  className={`text-xs text-cl-text-tertiary`}
-                >
-                  Required indicator (*) is automatically added
-                </p>
+                <input
+                  id="req"
+                  type="text"
+                  required
+                  placeholder="The * comes from `required`"
+                  className={c.nativeField}
+                />
               </div>
             </div>
           </DemoWrapper>
@@ -1004,13 +1018,13 @@ const InputDemo = () => {
                   ],
                   [
                     "Underline",
-                    `px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 border border-cl-border focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
+                    `px-0 py-2.5 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:border-cl-border-input-focus`,
                     "Enter text...",
                     undefined,
                   ],
                   [
                     "Purple accent",
-                    `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/30 shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:bg-cl-accent/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25 dark:focus-within:border-cl-border-input-focus`,
+                    `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25 dark:focus-within:border-cl-border-input-focus`,
                     "Purple theme...",
                     undefined,
                   ],
@@ -1022,7 +1036,7 @@ const InputDemo = () => {
                   ],
                   [
                     "Green money",
-                    `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success bg-cl-success/30 shadow-sm focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/30 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
+                    `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success shadow-sm focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/30 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
                     "0.00",
                     <Icon
                       d="M12 2v20|M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
@@ -1066,7 +1080,7 @@ const InputDemo = () => {
           description="Real-world composition with multiple features."
           isDarkMode={dark}
         >
-          <DemoWrapper isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark} className="sm:w-fit">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -1112,28 +1126,27 @@ const InputDemo = () => {
                 classes={c.input}
               />
               <div className="flex items-center justify-between">
-                <label
-                  className={`flex items-center gap-2 text-sm cursor-pointer text-cl-text-secondary`}
-                >
-                  <input
-                    type="checkbox"
-                    className={`rounded accent-accent border border-cl-border-input dark:border dark:border-cl-border dark:bg-cl-bg-elevated`}
-                  />{" "}
-                  Remember me
-                </label>
-                <button
+                <Checkbox
+                  label="Remember me"
+                  checked={rememberMe}
+                  onValueChange={setRememberMe}
+                  size="sm"
+                />
+                <Button
                   type="button"
-                  className={`text-sm font-medium text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent cursor-pointer`}
+                  size="sm"
+                  className="bg-transparent text-cl-accent hover:bg-cl-accent-bg"
                 >
                   Forgot?
-                </button>
+                </Button>
               </div>
-              <button
+              <Button
                 type="submit"
-                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer`}
+                fullWidth
+                className="bg-cl-text text-cl-bg hover:opacity-90"
               >
                 Sign In
-              </button>
+              </Button>
             </form>
           </DemoWrapper>
         </Section>
@@ -1144,7 +1157,7 @@ const InputDemo = () => {
           description="Combines prefix, suffix, clearable, showCount, and live validation."
           isDarkMode={dark}
         >
-          <DemoWrapper isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark} className="sm:w-fit">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -1226,12 +1239,13 @@ const InputDemo = () => {
                 suffix=".com"
                 classes={c.input}
               />
-              <button
+              <Button
                 type="submit"
-                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer`}
+                fullWidth
+                className="bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20"
               >
                 Create Account
-              </button>
+              </Button>
             </form>
           </DemoWrapper>
         </Section>

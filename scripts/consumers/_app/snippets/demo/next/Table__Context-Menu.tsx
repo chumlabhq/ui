@@ -56,9 +56,9 @@ const StatusBadge = ({
   dark?: boolean;
 }) => {
   const styles = {
-        active: "bg-cl-success/15 text-cl-success",
+        active: "bg-cl-success/15 text-cl-text",
         inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-warning",
+        pending: "bg-cl-warning/15 text-cl-text",
       };
 
   return (
@@ -213,12 +213,12 @@ export default function TableExample() {
         {
           contextMenuInfo && (
             <div
-              className="p-3 rounded-cl-md text-sm bg-cl-warning/15 text-cl-warning border border-cl-warning dark:bg-cl-warning/10 dark:text-cl-warning dark:border dark:border-cl-warning/20"
+              className="p-3 rounded-cl-md text-sm bg-cl-warning/15 text-cl-text border border-cl-warning dark:bg-cl-warning/10 dark:text-cl-text dark:border dark:border-cl-warning/20"
             >
               {contextMenuInfo}
               <button
                 onClick={() => setContextMenuInfo(null)}
-                className="ml-3 underline text-xs text-cl-warning dark:text-cl-warning cursor-pointer"
+                className="ml-3 underline text-xs text-cl-text dark:text-cl-warning cursor-pointer"
               >
                 Dismiss
               </button>

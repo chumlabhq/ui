@@ -13,8 +13,8 @@ function useDrawerState(initial = false) {
 }
 
 export default function DrawerExample() {
-  const noEscClose = useDrawerState();
   const noOverlayClose = useDrawerState();
+  const noEscClose = useDrawerState();
   return (
     <>
       <button

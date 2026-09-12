@@ -93,7 +93,7 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
 | `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
 | `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |

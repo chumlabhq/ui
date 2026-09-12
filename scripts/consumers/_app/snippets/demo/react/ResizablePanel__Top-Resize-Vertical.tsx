@@ -5,27 +5,27 @@ const simpleContent = (color: string, label: string, size: number) => {
     const cl = {
       blue: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
       green: {
         text: "text-cl-success",
-        muted: "text-cl-success/60",
+        muted: "text-cl-success",
       },
       amber: {
         text: "text-cl-warning",
-        muted: "text-cl-warning/60",
+        muted: "text-cl-warning",
       },
       indigo: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
       teal: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
       purple: {
         text: "text-cl-accent",
-        muted: "text-cl-accent/60",
+        muted: "text-cl-accent",
       },
     }[color] ?? {
       text: "text-cl-text-secondary",

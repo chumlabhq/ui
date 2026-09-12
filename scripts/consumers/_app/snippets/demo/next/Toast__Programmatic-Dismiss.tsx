@@ -36,7 +36,7 @@ export default function ToastExample() {
           Dismiss by ID
         </button>
         <button
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-white hover:bg-cl-error/90"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-cl-bg hover:bg-cl-error/90"
           onClick={() => toast.dismissAll()}
         >
           Dismiss All

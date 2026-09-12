@@ -115,7 +115,7 @@
     "inputPattern": {
       "type": "string",
       "description": "HTML pattern attribute for input validation.",
-      "default": "\\\\d*"
+      "default": "\\d*"
     },
     "inputClassNames": {
       "type": "array",

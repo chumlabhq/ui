@@ -47,7 +47,7 @@ export default function InternationalPhoneInputExample() {
                     alert(`"${inputRef.current?.value}"`);
                 }
               }
-              className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer"
+              className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
             >
               {lbl}
             </button>

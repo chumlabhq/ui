@@ -172,7 +172,8 @@
           "const": "auto"
         }
       ],
-      "description": "Controls motion preferences. 'auto' respects the user's OS setting."
+      "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+      "default": "auto"
     }
   },
   "required": []

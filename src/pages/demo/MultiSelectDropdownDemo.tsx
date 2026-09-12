@@ -3,6 +3,7 @@ import {
   useState,
   useCallback } from "react";
 import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
+import { CountryFlag } from "../../components/CountryFlag/index.js";
 import type { MultiSelectOption } from "../../components/MultiSelectDropdown/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
@@ -34,19 +35,83 @@ const countryOptions: MultiSelectOption[] = [
   {
     value: "us",
     label: "United States",
-    content: <span>🇺🇸 United States</span>,
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="US" size="md" className="rounded-cl-sm" />
+        United States
+      </span>
+    ),
   },
   {
     value: "gb",
     label: "United Kingdom",
-    content: <span>🇬🇧 United Kingdom</span>,
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="GB" size="md" className="rounded-cl-sm" />
+        United Kingdom
+      </span>
+    ),
   },
-  { value: "ca", label: "Canada", content: <span>🇨🇦 Canada</span> },
-  { value: "au", label: "Australia", content: <span>🇦🇺 Australia</span> },
-  { value: "de", label: "Germany", content: <span>🇩🇪 Germany</span> },
-  { value: "fr", label: "France", content: <span>🇫🇷 France</span> },
-  { value: "jp", label: "Japan", content: <span>🇯🇵 Japan</span> },
-  { value: "in", label: "India", content: <span>🇮🇳 India</span> },
+  {
+    value: "ca",
+    label: "Canada",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="CA" size="md" className="rounded-cl-sm" />
+        Canada
+      </span>
+    ),
+  },
+  {
+    value: "au",
+    label: "Australia",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="AU" size="md" className="rounded-cl-sm" />
+        Australia
+      </span>
+    ),
+  },
+  {
+    value: "de",
+    label: "Germany",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="DE" size="md" className="rounded-cl-sm" />
+        Germany
+      </span>
+    ),
+  },
+  {
+    value: "fr",
+    label: "France",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="FR" size="md" className="rounded-cl-sm" />
+        France
+      </span>
+    ),
+  },
+  {
+    value: "jp",
+    label: "Japan",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="JP" size="md" className="rounded-cl-sm" />
+        Japan
+      </span>
+    ),
+  },
+  {
+    value: "in",
+    label: "India",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="IN" size="md" className="rounded-cl-sm" />
+        India
+      </span>
+    ),
+  },
 ];
 
 const statusOptions: MultiSelectOption[] = [
@@ -144,7 +209,7 @@ const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
@@ -223,10 +288,11 @@ const MultiSelectDropdownDemo = () => {
       label: country.name,
       content: (
         <div className="flex items-center gap-2">
-          <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+          <CountryFlag
+            code={country.code}
+            size="md"
             alt={`${country.name} flag`}
-            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
+            className="rounded-cl-sm"
           />
           <div className="flex flex-col">
             <span className="text-sm">{country.name}</span>

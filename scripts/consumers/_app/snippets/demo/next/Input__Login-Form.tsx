@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
+import { Checkbox } from "@chumlab/ui/checkbox";
 import { Input } from "@chumlab/ui/input";
 
 const EyeIcon = ({ className = "" }: { className?: string }) => (
@@ -79,6 +81,7 @@ const MailIcon = ({ className = "" }: { className?: string }) => (
 
 export default function InputExample() {
   const [showPw, setShowPw] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   return (
     <form
       onSubmit={
@@ -139,29 +142,23 @@ export default function InputExample() {
         }
       />
       <div className="flex items-center justify-between">
-        <label
-          className="flex items-center gap-2 text-sm cursor-pointer text-cl-text-secondary"
-        >
-          <input
-            type="checkbox"
-            className="rounded accent-accent border border-cl-border-input dark:border dark:border-cl-border dark:bg-cl-bg-elevated"
-          />
-          {" "}
-          Remember me
-        </label>
-        <button
+        <Checkbox
+          label="Remember me"
+          checked={rememberMe}
+          onValueChange={setRememberMe}
+          size="sm"
+        />
+        <Button
           type="button"
-          className="text-sm font-medium text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent cursor-pointer"
+          size="sm"
+          className="bg-transparent text-cl-accent hover:bg-cl-accent-bg"
         >
           Forgot?
-        </button>
+        </Button>
       </div>
-      <button
-        type="submit"
-        className="w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20 cursor-pointer"
-      >
+      <Button type="submit" fullWidth className="bg-cl-text text-cl-bg hover:opacity-90">
         Sign In
-      </button>
+      </Button>
     </form>
   );
 }

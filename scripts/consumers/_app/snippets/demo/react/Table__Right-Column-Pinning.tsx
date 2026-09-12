@@ -142,7 +142,7 @@ export default function TableExample() {
         header: "Actions",
         cell: () => (
           <button
-            className={"px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer"}
+            className={"px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer"}
             onClick={() => alert("Action clicked")}
           >
             Edit

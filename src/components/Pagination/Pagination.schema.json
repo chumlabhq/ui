@@ -134,7 +134,8 @@
         true,
         false,
         "auto"
-      ]
+      ],
+      "default": "auto"
     },
     "classes": {
       "type": "object",

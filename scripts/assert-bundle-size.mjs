@@ -490,6 +490,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "after, matching top and bottom exactly. The bytes are one derived " +
       "constant and the comment that says why it exists.",
   },
+  {
+    kb: 152.12,
+    commit: "(uncommitted)",
+    date: "2026-09-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.02 KB, all of it TextArea's size table: the control now " +
+      "releases its right padding when the textarea is its last child, and the " +
+      "textarea takes that padding back in the same case. The browser draws a " +
+      "resize grip at the TEXTAREA's border-box corner, so the control's " +
+      "padding held it 15px inside the visible border with the field's own " +
+      "background under it — the vertical half of this was fixed when the size " +
+      "scale landed and the horizontal half was left. Measured 15px before and " +
+      "1px (the border) after; the visual suite moved 19 pixels on " +
+      "`TextArea/labelled` and they are all the grip. The bytes are one " +
+      "arbitrary variant and one `last:` per size.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

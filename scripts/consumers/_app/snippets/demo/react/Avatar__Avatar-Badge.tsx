@@ -4,8 +4,8 @@ import { Avatar, AvatarBadge } from "@chumlab/ui/avatar";
 const BADGE_TONES = [
   { bg: "#e0e7ff", text: "#4f46e5", darkBg: "#312e81", darkText: "#a5b4fc" },
   { bg: "#ede9fe", text: "#7c3aed", darkBg: "#3b0764", darkText: "#c4b5fd" },
-  { bg: "#cffafe", text: "#0891b2", darkBg: "#164e63", darkText: "#67e8f9" },
-  { bg: "#d1fae5", text: "#059669", darkBg: "#064e3b", darkText: "#6ee7b7" },
+  { bg: "#cffafe", text: "#155e75", darkBg: "#164e63", darkText: "#67e8f9" },
+  { bg: "#d1fae5", text: "#047857", darkBg: "#064e3b", darkText: "#6ee7b7" },
 ];
 
 const badgeToneStyle = (i: number) => {
@@ -112,12 +112,12 @@ export default function AvatarExample() {
                     ],
                     text: [
                       "#4f46e5",
-                      "#2563eb",
-                      "#059669",
-                      "#ca8a04",
-                      "#db2777",
+                      "#1d4ed8",
+                      "#047857",
+                      "#854d0e",
+                      "#be185d",
                       "#7c3aed",
-                      "#0891b2",
+                      "#0e7490",
                       "#ef4444"
                     ]
                   }
@@ -150,12 +150,12 @@ export default function AvatarExample() {
                 ],
                 text: [
                   "#4f46e5",
-                  "#2563eb",
-                  "#059669",
-                  "#ca8a04",
-                  "#db2777",
+                  "#1d4ed8",
+                  "#047857",
+                  "#854d0e",
+                  "#be185d",
                   "#7c3aed",
-                  "#0891b2",
+                  "#0e7490",
                   "#ef4444"
                 ]
               }
@@ -185,12 +185,12 @@ export default function AvatarExample() {
                 ],
                 text: [
                   "#4f46e5",
-                  "#2563eb",
-                  "#059669",
-                  "#ca8a04",
-                  "#db2777",
+                  "#1d4ed8",
+                  "#047857",
+                  "#854d0e",
+                  "#be185d",
                   "#7c3aed",
-                  "#0891b2",
+                  "#0e7490",
                   "#ef4444"
                 ]
               }
@@ -219,12 +219,12 @@ export default function AvatarExample() {
                 ],
                 text: [
                   "#4f46e5",
-                  "#2563eb",
-                  "#059669",
-                  "#ca8a04",
-                  "#db2777",
+                  "#1d4ed8",
+                  "#047857",
+                  "#854d0e",
+                  "#be185d",
                   "#7c3aed",
-                  "#0891b2",
+                  "#0e7490",
                   "#ef4444"
                 ]
               }

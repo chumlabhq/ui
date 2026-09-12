@@ -23,7 +23,7 @@ export default function InputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 w-full">
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Default
         </span>
@@ -46,7 +46,7 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           With icon
         </span>
@@ -70,7 +70,7 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Custom loader
         </span>
@@ -98,7 +98,7 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
-          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled"
+          className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Custom loader size
         </span>

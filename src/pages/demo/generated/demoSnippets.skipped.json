@@ -27,11 +27,6 @@
     },
     {
       "component": "Accordion",
-      "title": "Dynamic Items",
-      "reason": "`removeItem` closes over page state"
-    },
-    {
-      "component": "Accordion",
       "title": "Your own open and close animation",
       "reason": "no demo wrapper in the section"
     },
@@ -76,11 +71,6 @@
       "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Button",
-      "title": "Interactive Loading",
-      "reason": "`simulateLoading` closes over page state"
-    },
-    {
       "component": "CascadingDropdown",
       "title": "Async Single-Select (Countries API)",
       "reason": "`fetchCountriesByRegion` is not declared on the page"
@@ -111,11 +101,6 @@
       "reason": "`fr` is not declared on the page"
     },
     {
-      "component": "DatePicker",
-      "title": "Event Callbacks",
-      "reason": "`log` closes over page state"
-    },
-    {
       "component": "Dropdown",
       "title": "Custom Trigger (renderTrigger)",
       "reason": "`placeholder` is not declared on the page"
@@ -144,26 +129,6 @@
       "component": "GettingStarted",
       "title": "What's included",
       "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Input",
-      "title": "Character Count",
-      "reason": "`userOk` closes over page state"
-    },
-    {
-      "component": "Input",
-      "title": "Live Validation",
-      "reason": "`emailBad` closes over page state"
-    },
-    {
-      "component": "Input",
-      "title": "Registration Form",
-      "reason": "`userOk` closes over page state"
-    },
-    {
-      "component": "InternationalPhoneInput",
-      "title": "Validation States",
-      "reason": "`successOk` closes over page state"
     },
     {
       "component": "InternationalPhoneInput",
@@ -214,11 +179,6 @@
       "component": "OtpInput",
       "title": "Form Integration",
       "reason": "`FormData` is not declared on the page"
-    },
-    {
-      "component": "ResizablePanel",
-      "title": "Resize Callbacks",
-      "reason": "`addLog` closes over page state"
     },
     {
       "component": "SearchableDropdown",
@@ -348,7 +308,7 @@
     {
       "component": "TabPanel",
       "title": "Dynamic Tabs (Add / Remove)",
-      "reason": "`addDynamicTab` closes over page state"
+      "reason": "page styling `c.tabs` could not be resolved"
     },
     {
       "component": "TabPanel",
@@ -429,16 +389,6 @@
       "component": "Table",
       "title": "With Pinned Columns (Interactive)",
       "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Custom Pin Icon (Star)",
-      "reason": "`handleStarPinColumn` closes over page state"
-    },
-    {
-      "component": "Table",
-      "title": "Custom Pin Separator Styling",
-      "reason": "`handleSepPinColumn` closes over page state"
     },
     {
       "component": "Table",
@@ -721,16 +671,6 @@
       "reason": "no demo wrapper in the section"
     },
     {
-      "component": "TextArea",
-      "title": "Character Count",
-      "reason": "`bioOk` closes over page state"
-    },
-    {
-      "component": "TextArea",
-      "title": "Live Validation",
-      "reason": "`bioBad` closes over page state"
-    },
-    {
       "component": "Theming",
       "title": "Getting the tokens",
       "reason": "no demo wrapper in the section"
@@ -752,13 +692,18 @@
     },
     {
       "component": "TimePicker",
-      "title": "Clearable",
-      "reason": "`log` closes over page state"
-    },
-    {
-      "component": "TimePicker",
       "title": "Native Form Field & Lifecycle Callbacks",
       "reason": "`FormData` is not declared on the page"
+    },
+    {
+      "component": "Table",
+      "title": "Custom Pin Icon (Star)",
+      "reason": "does not typecheck: TS2724 '\"react\"' has no exported member named 'React'. Did you mean 'act'?"
+    },
+    {
+      "component": "Table",
+      "title": "Custom Pin Separator Styling",
+      "reason": "does not typecheck: TS2724 '\"react\"' has no exported member named 'React'. Did you mean 'act'?"
     },
     {
       "component": "Table",

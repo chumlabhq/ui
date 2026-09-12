@@ -753,7 +753,7 @@ const ModalDemo = () => {
         </p>
         <div className="flex justify-end gap-3 mt-6">
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`}
             onClick={() => setBasicOpen(false)}
           >
             Cancel

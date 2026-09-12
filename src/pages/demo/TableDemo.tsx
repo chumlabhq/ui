@@ -893,7 +893,7 @@ function ServerApiDemo({
           const disc = row.original.discountPercentage ?? 0;
           return (
             <span
-              className={`text-sm whitespace-nowrap ${disc > 10 ? (dark ? "text-cl-warning" : "text-cl-warning") : dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}`}
+              className={`text-sm whitespace-nowrap ${disc > 10 ? (dark ? "text-cl-warning" : "text-cl-text") : "text-cl-text-tertiary"}`}
             >
               {disc.toFixed(1)}%
             </span>
@@ -1128,7 +1128,7 @@ function ServerApiDemo({
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className={`px-3 py-1.5 text-sm rounded-cl-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated`}
+            className={`px-3 py-1.5 text-sm rounded-cl-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-cl-bg-elevated text-cl-text-secondary border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover`}
           >
             Previous
           </button>
@@ -1151,7 +1151,7 @@ function ServerApiDemo({
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className={`px-3 py-1.5 text-sm rounded-cl-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated`}
+            className={`px-3 py-1.5 text-sm rounded-cl-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-cl-bg-elevated text-cl-text-secondary border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover`}
           >
             Next
           </button>
@@ -3784,7 +3784,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           View Profile
                         </button>
                         <button
-                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated`}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-bg-elevated text-cl-text-secondary border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover`}
                           onClick={() => alert(`Send email to: ${row.email}`)}
                         >
                           Send Email
@@ -4549,8 +4549,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     density === d
                       ? "bg-cl-accent text-cl-on-accent"
                       : dark
-                        ? "bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated"
-                        : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover"
+                        ? "bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-hover"
+                        : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-elevated"
                   }`}
                 >
                   {d.charAt(0).toUpperCase() + d.slice(1)}

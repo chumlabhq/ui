@@ -2475,9 +2475,29 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "shapes": [],
     "dataAttributes": [
       {
+        "name": "data-disabled",
+        "values": [],
+        "when": "when isDisabled"
+      },
+      {
+        "name": "data-full-width",
+        "values": [],
+        "when": "when fullWidth"
+      },
+      {
+        "name": "data-loading",
+        "values": [],
+        "when": "when loading"
+      },
+      {
         "name": "data-orientation",
         "values": [],
         "when": "always"
+      },
+      {
+        "name": "data-size",
+        "values": [],
+        "when": "when size"
       }
     ],
     "cssVariables": [],
@@ -3156,7 +3176,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-error",
         "values": [],
-        "when": "when error"
+        "when": "varies"
       },
       {
         "name": "data-full-width",
@@ -3181,7 +3201,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-open",
         "values": [],
-        "when": "when isOpen"
+        "when": "varies"
       },
       {
         "name": "data-selected",
@@ -3399,7 +3419,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "reduceMotion",
         "type": "boolean | \"auto\"",
         "required": false,
-        "default": null,
+        "default": "\"auto\"",
         "description": "Controls motion preferences. 'auto' respects OS setting."
       },
       {
@@ -5118,7 +5138,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "reduceMotion",
         "type": "boolean | \"auto\"",
         "required": false,
-        "default": null,
+        "default": "\"auto\"",
         "description": "Controls motion preferences. 'auto' respects OS setting."
       },
       {
@@ -5874,7 +5894,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-error",
         "values": [],
-        "when": "when error"
+        "when": "varies"
       },
       {
         "name": "data-full-width",
@@ -5894,7 +5914,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-open",
         "values": [],
-        "when": "when isOpen"
+        "when": "varies"
+      },
+      {
+        "name": "data-placeholder",
+        "values": [],
+        "when": "always"
       },
       {
         "name": "data-position",
@@ -7037,14 +7062,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "trackColor",
             "type": "string",
             "required": false,
-            "default": null,
+            "default": "\"currentColor\"",
             "description": "Background track color. Default: currentColor at 20% opacity"
           },
           {
             "name": "reduceMotion",
             "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
+            "default": "\"auto\"",
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
@@ -7105,7 +7130,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "reduceMotion",
             "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
+            "default": "\"auto\"",
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
@@ -7159,7 +7184,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "reduceMotion",
             "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
+            "default": "\"auto\"",
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
@@ -7206,7 +7231,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "reduceMotion",
             "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
+            "default": "\"auto\"",
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
@@ -8343,7 +8368,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-error",
         "values": [],
-        "when": "when error"
+        "when": "varies"
       },
       {
         "name": "data-full-width",
@@ -8363,7 +8388,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-open",
         "values": [],
-        "when": "when isOpen"
+        "when": "varies"
       },
       {
         "name": "data-position",
@@ -9021,7 +9046,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-error",
         "values": [],
-        "when": "when error"
+        "when": "varies"
       },
       {
         "name": "data-full-width",
@@ -9041,7 +9066,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-open",
         "values": [],
-        "when": "when isOpen"
+        "when": "varies"
       },
       {
         "name": "data-position",
@@ -9271,7 +9296,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "inputPattern",
         "type": "string",
         "required": false,
-        "default": "\"\\\\\\\\d*\"",
+        "default": "\"\\\\d*\"",
         "description": "HTML pattern attribute for input validation."
       },
       {
@@ -9400,7 +9425,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "when error"
       },
       {
+        "name": "data-filled",
+        "values": [],
+        "when": "when valueArray[index]"
+      },
+      {
         "name": "data-group",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-index",
         "values": [],
         "when": "always"
       },
@@ -9422,11 +9457,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     ],
     "cssVariables": [],
     "accessibility": [
-      "Each input has proper `aria-label` (\"Digit 1 of 6\")",
+      "Each input has an `aria-label`: \"Digit N of M\" when `inputPattern` accepts only digits, \"Character N of M\" otherwise. `inputAriaLabel` replaces it.",
       "Label associated via `id` / `htmlFor`",
       "`aria-invalid` set on error state",
       "`aria-describedby` links error/description",
-      "Full keyboard navigation: Arrow keys, Backspace, Delete, Home, End",
+      "Full keyboard navigation: Arrow keys, Backspace, Delete, Home, End. Tab also steps box to box — every box is focusable, not just the first.",
       "Paste support fills all fields at once"
     ],
     "keyboard": {
@@ -9434,7 +9469,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "rows": [
         {
           "keys": "`Tab`",
-          "description": "Moves focus into the group; the boxes themselves are reached with the arrow keys."
+          "description": "Moves to the next box. Every box is in the tab order — there is no roving tabindex, so tabbing out of the field takes as many presses as it has boxes."
         },
         {
           "keys": "`ArrowLeft`, `ArrowRight`",
@@ -9446,7 +9481,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Backspace`",
-          "description": "Clears the current box, or steps back and clears the previous one when it is already empty."
+          "description": "Clears the current box and steps back. On a box that is already empty it steps back and clears that one instead."
         },
         {
           "keys": "`Delete`",
@@ -9628,7 +9663,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "reduceMotion",
         "type": "true | false | \"auto\"",
         "required": false,
-        "default": null,
+        "default": "\"auto\"",
         "description": "Controls motion preferences. 'auto' respects the user's OS setting."
       },
       {
@@ -10053,7 +10088,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "reduceMotion",
             "type": "boolean | \"auto\"",
             "required": false,
-            "default": null,
+            "default": "\"auto\"",
             "description": "Controls motion preferences. `\"auto\"` respects the user's OS setting."
           },
           {
@@ -10300,7 +10335,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "reduceMotion",
         "type": "boolean | \"auto\"",
         "required": false,
-        "default": null,
+        "default": "\"auto\"",
         "description": "Controls motion preferences. 'auto' respects the user's OS setting."
       },
       {
@@ -10944,7 +10979,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-error",
         "values": [],
-        "when": "when error"
+        "when": "varies"
       },
       {
         "name": "data-full-width",
@@ -10964,7 +10999,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-open",
         "values": [],
-        "when": "when isOpen"
+        "when": "varies"
+      },
+      {
+        "name": "data-placeholder",
+        "values": [],
+        "when": "always"
       },
       {
         "name": "data-position",
@@ -11604,7 +11644,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "reduceMotion",
         "type": "boolean | \"auto\"",
         "required": false,
-        "default": null,
+        "default": "\"auto\"",
         "description": "Controls motion preferences. 'auto' respects the user's OS setting."
       },
       {
@@ -11987,6 +12027,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "varies"
       },
       {
+        "name": "data-invalid",
+        "values": [],
+        "when": "when status === \"error\""
+      },
+      {
         "name": "data-next-status",
         "values": [],
         "when": "always"
@@ -12003,6 +12048,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "data-reduce-motion",
         "values": [],
         "when": "when prefersReducedMotion"
+      },
+      {
+        "name": "data-state",
+        "values": [],
+        "when": "always"
       },
       {
         "name": "data-status",
@@ -12263,7 +12313,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "reduceMotion",
         "type": "boolean | \"auto\"",
         "required": false,
-        "default": null,
+        "default": "\"auto\"",
         "description": "Controls motion preferences. 'auto' respects the user's OS setting."
       }
     ],
@@ -13694,7 +13744,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "reduceMotion",
         "type": "boolean | \"auto\"",
         "required": false,
-        "default": null,
+        "default": "\"auto\"",
         "description": "Controls motion preferences. 'auto' respects the user's OS setting."
       },
       {
@@ -15080,6 +15130,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "data-open",
         "values": [],
         "when": "when isOpen"
+      },
+      {
+        "name": "data-position",
+        "values": [],
+        "when": "always"
       },
       {
         "name": "data-selected",

@@ -155,15 +155,21 @@ test.describe("ResizablePanel Component", () => {
   });
 
   test.describe("Controlled State", () => {
+    // Driven by keyboard, not `fill`: the external control is a Chumlab
+    // Slider, whose thumb is a div with role="slider" and has no value to
+    // fill. End is the whole travel in one press, so the assertion is an
+    // exact number rather than a direction.
     test("slider and panel stay in sync", async ({ page }) => {
       const controlledSection = page.locator("section").filter({ hasText: "Controlled State" });
       const slider = controlledSection.getByRole("slider", { name: "Panel width" });
       const separator = controlledSection.getByRole("separator");
 
-      await slider.fill("400");
+      await slider.focus();
+      await page.keyboard.press("End");
 
-      const panelValue = Number(await separator.getAttribute("aria-valuenow"));
-      expect(panelValue).toBe(400);
+      await expect
+        .poll(async () => Number(await separator.getAttribute("aria-valuenow")))
+        .toBe(500);
     });
 
     test("reset button restores default value", async ({ page }) => {
@@ -340,10 +346,15 @@ test.describe("ResizablePanel - Full User Flow", () => {
     const slider = controlledSection.getByRole("slider", { name: "Panel width" });
     const separator = controlledSection.getByRole("separator");
 
-    await slider.fill("200");
-    expect(Number(await separator.getAttribute("aria-valuenow"))).toBe(200);
+    await slider.focus();
+    await page.keyboard.press("Home");
+    await expect
+      .poll(async () => Number(await separator.getAttribute("aria-valuenow")))
+      .toBe(150);
 
-    await slider.fill("450");
-    expect(Number(await separator.getAttribute("aria-valuenow"))).toBe(450);
+    await page.keyboard.press("End");
+    await expect
+      .poll(async () => Number(await separator.getAttribute("aria-valuenow")))
+      .toBe(500);
   });
 });

@@ -70,7 +70,7 @@ export default function AccordionExample() {
       <AccordionItem value="slot-1">
         <AccordionTrigger
           subtitle="Learn about our performance features"
-          leftSlot={<BoltIcon className="w-4 h-4 text-cl-warning" />}
+          leftSlot={<BoltIcon className="w-4 h-4 text-cl-text" />}
         >
           Performance
         </AccordionTrigger>
@@ -82,7 +82,7 @@ export default function AccordionExample() {
           leftSlot={<ShieldIcon className="w-4 h-4 text-cl-success dark:text-cl-success" />}
           rightSlot={
             <span
-              className="text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/10 dark:text-cl-success"
+              className="text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/10 dark:text-cl-success"
             >
               New
             </span>

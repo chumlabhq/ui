@@ -15,7 +15,7 @@ export default function CascadingDropdownExample() {
                 <span className="w-2 h-2 rounded-full bg-cl-accent" />
                 <span>Design</span>
                 <span
-                  className={"ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent"}
+                  className={"ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/40 dark:text-cl-accent"}
                 >
                   3 items
                 </span>
@@ -36,7 +36,7 @@ export default function CascadingDropdownExample() {
                 <span className="w-2 h-2 rounded-full bg-cl-accent" />
                 <span>Engineering</span>
                 <span
-                  className={"ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent"}
+                  className={"ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/40 dark:text-cl-accent"}
                 >
                   4 items
                 </span>
@@ -58,7 +58,7 @@ export default function CascadingDropdownExample() {
                 <span className="w-2 h-2 rounded-full bg-cl-success" />
                 <span>Marketing</span>
                 <span
-                  className={"ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/40 dark:text-cl-success"}
+                  className={"ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/40 dark:text-cl-success"}
                 >
                   2 items
                 </span>

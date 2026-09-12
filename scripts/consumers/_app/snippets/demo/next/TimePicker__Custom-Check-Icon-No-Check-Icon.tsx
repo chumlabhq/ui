@@ -18,7 +18,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={customCheckVal}
           onValueChange={(v) => setCustomCheckVal(v)}
-          selectedIcon={<StarCheckIcon className="w-4 h-4 shrink-0 text-cl-warning" />}
+          selectedIcon={<StarCheckIcon className="w-4 h-4 shrink-0 text-cl-text" />}
           classes={
             {
                              ...({

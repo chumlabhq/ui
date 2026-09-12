@@ -84,7 +84,7 @@ export default function Example() {
 | `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
 | `classes` | object | — | CSS class overrides for drawer sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `trapFocus` | boolean | `true` | Traps keyboard focus within the drawer. |
 | `restoreFocus` | boolean | `true` | Restores focus to the previously focused element when the drawer closes. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the drawer. |

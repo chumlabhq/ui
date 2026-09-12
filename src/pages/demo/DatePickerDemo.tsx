@@ -895,7 +895,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             {controlledDate?.toLocaleDateString() ?? "null"}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated cursor-pointer`}
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`}
             onClick={() => setControlledDate(null)}
           >
             Clear
