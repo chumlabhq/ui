@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Step, Stepper } from "@chumlab/ui/stepper";
 
 const basicSteps: Step[] = [
@@ -11,14 +11,16 @@ const basicSteps: Step[] = [
 ];
 
 export default function StepperExample() {
+  const [refStep, setRefStep] = useState<number>(2);
   const stepperRef = useRef<HTMLDivElement>(null);
   return (
     <div className="w-full space-y-4">
       <Stepper
         ref={stepperRef}
         steps={basicSteps}
-        value={2}
-        onValueChange={() => {}}
+        value={refStep}
+        onValueChange={(id) => setRefStep(id as number)}
+        isStepClickable={() => true}
         classes={
           {
             trigger:

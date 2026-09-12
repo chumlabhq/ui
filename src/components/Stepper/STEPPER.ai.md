@@ -84,6 +84,31 @@ export default function Example() {
 - `data-status` — status of the step before
 - `data-next-status` — status of the step after
 
+**Also emitted, and not listed here before:**
+- `data-state` — on the indicator and the trigger, mirroring `data-status` so a
+  slot can be selected the same way the rest of the library selects state
+- `data-clickable="true"` — on a step that is navigable. Only `completed` and
+  `active` steps are by default, and only those render as `<button>`; the rest
+  are `<div role="group">`. Pass `isStepClickable` to widen it.
+- `data-align` — on the row, from `labelPosition`
+- `data-invalid="true"` — on a step in the `error` status
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The `<nav>` container. |
+| `list` | The `<ol>` wrapping all steps. |
+| `item` | The `<li>` for one step: indicator, text, and the separator that follows it. |
+| `trigger` | The clickable region — indicator and text together — when the step is navigable. |
+| `itemIndicator` | The numbered or icon-bearing circle. |
+| `indicatorTrigger` | The indicator when it is its own button, which is the `dot` and `icon` variants. |
+| `itemIcon` | The icon inside the indicator, when one replaces the number. |
+| `row` | The flex row holding the indicator beside its text, in the horizontal orientations. |
+| `itemText` | Label and description together, so they align as one block. |
+| `description` | The step's description text. |
+| `separator` | The connector drawn between one step and the next. |
+
 DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indicator + labelWrapper(label + description) + connector`
 
 ---

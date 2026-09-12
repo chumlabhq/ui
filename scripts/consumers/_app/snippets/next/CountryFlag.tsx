@@ -1,12 +1,15 @@
-import { CountryFlag } from "@chumlab/ui/country-flag";
+import { CountryFlag, CountryFlagGroup } from "@chumlab/ui/country-flag";
 
 export default function Example() {
   return (
-    <div style={{ display: "flex", gap: 8 }}>
+    <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
       <CountryFlag code="us" size="lg" />
-      <CountryFlag code="gb" size="lg" />
-      <CountryFlag code="jp" size="lg" />
-      <CountryFlag code="de" size="lg" />
+      <CountryFlagGroup max={3} size="lg">
+        <CountryFlag code="gb" />
+        <CountryFlag code="jp" />
+        <CountryFlag code="de" />
+        <CountryFlag code="fr" />
+      </CountryFlagGroup>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Step, Stepper } from "@chumlab/ui/stepper";
 
 const basicSteps: Step[] = [
@@ -10,13 +11,15 @@ const basicSteps: Step[] = [
 ];
 
 export default function StepperExample() {
+  const [customIdStep, setCustomIdStep] = useState<number>(2);
   return (
     <div className="w-full space-y-2">
       <Stepper
         id="checkout-stepper"
         steps={basicSteps}
-        value={2}
-        onValueChange={() => {}}
+        value={customIdStep}
+        onValueChange={(id) => setCustomIdStep(id as number)}
+        isStepClickable={() => true}
         classes={
           {
             trigger:

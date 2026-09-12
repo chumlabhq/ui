@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Step, Stepper } from "@chumlab/ui/stepper";
 
 const basicSteps: Step[] = [
@@ -8,12 +9,13 @@ const basicSteps: Step[] = [
 ];
 
 export default function StepperExample() {
+  const [nonLinearStep, setNonLinearStep] = useState<number>(2);
   return (
     <div className="w-full space-y-2">
       <Stepper
         steps={basicSteps}
-        value={2}
-        onValueChange={() => {}}
+        value={nonLinearStep}
+        onValueChange={(id) => setNonLinearStep(id as number)}
         isStepClickable={() => true}
         classes={
           {

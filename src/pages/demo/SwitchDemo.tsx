@@ -107,6 +107,12 @@ const SwitchDemo = () => {
   const [requiredSwitch, setRequiredSwitch] = useState(false);
   const [refSwitch, setRefSwitch] = useState(false);
   const [successSwitch, setSuccessSwitch] = useState(true);
+  /* Controlled with no handler before, so neither could be toggled: a switch
+     in a section about validation that does not switch. The error state is
+     unconditional here — it is what the section shows — and the control is
+     live underneath it. */
+  const [termsSwitch, setTermsSwitch] = useState(false);
+  const [notifySwitch, setNotifySwitch] = useState(true);
   const [callbackSwitch, setCallbackSwitch] = useState(false);
 
   return (
@@ -271,7 +277,8 @@ const SwitchDemo = () => {
           <div className="space-y-4">
             <Switch
               label="Accept terms of service"
-              checked={false}
+              checked={termsSwitch}
+              onValueChange={setTermsSwitch}
               error
               errorMessage="You must accept the terms to continue"
               classes={{
@@ -281,7 +288,8 @@ const SwitchDemo = () => {
             />
             <Switch
               label="Enable notifications"
-              checked={true}
+              checked={notifySwitch}
+              onValueChange={setNotifySwitch}
               error
               errorMessage="Notification service is currently unavailable"
               classes={c.switch}

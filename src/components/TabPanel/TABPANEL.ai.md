@@ -66,8 +66,29 @@ export default function Example() {
 - `data-state="active"` / `data-state="inactive"` — on tab buttons
 - `data-disabled` — on disabled tabs
 - `data-orientation` — on tablist and root
+- `data-reduce-motion="true"` — on the root, while reduced motion is in force
+- `data-state` is also on the label, the icon and the count badge inside each
+  tab, not only on the button — which is what makes
+  `classes={{ count: "data-[state=active]:bg-cl-accent/10" }}` work
 
-DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > panel(role="tabpanel")`
+DOM nesting: `root > list(role="tablist") > item(role="tab") + indicator > content(role="tabpanel")`
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The outer container. |
+| `list` | The tablist strip holding every tab button. |
+| `item` | One tab button. Carries `data-state` and `data-disabled`. |
+| `itemText` | The tab's label text, so it can be hidden at narrow widths without hiding the icon. |
+| `itemIcon` | The icon inside a tab. |
+| `count` | The count badge. Ships with shape only — no fill — so a filled badge is a `classes` override. |
+| `indicator` | The active-tab indicator. |
+| `content` | The panel below the strip. |
+
+There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
+`tabDisabled`, `iconActive`, `iconInactive`, `countActive`, `countInactive` or
+`panel` slot. State is a variant on a slot, not a slot of its own.
 
 ---
 

@@ -507,6 +507,21 @@ const LIBRARY_TOTAL_HISTORY = [
       "`TextArea/labelled` and they are all the grip. The bytes are one " +
       "arbitrary variant and one `last:` per size.",
   },
+  {
+    kb: 152.16,
+    commit: "(uncommitted)",
+    date: "2026-09-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.04 KB, all of it Switch: `aria-invalid` on the control in " +
+      "the error state, plus the comment that says why. Input, OtpInput and " +
+      "Checkbox all expose it; Switch linked `errorMessage` through " +
+      "`aria-describedby` and stopped there, so a screen reader read the error " +
+      "out while the control it belongs to was still announced as valid. " +
+      "Switch has no border to colour, so this attribute and the message are " +
+      "the whole of its error state — which is also why nothing had noticed. " +
+      "Planted by removing the attribute: the new ARIA case fails alone.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

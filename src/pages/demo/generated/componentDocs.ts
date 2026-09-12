@@ -2249,7 +2249,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "name": "Button",
     "subpath": "@chumlab/ui/button",
     "summary": "A polymorphic, accessible button that renders as `<button>`, `<a>`, or `<span>`. Provides structural defaults (padding, focus ring, disabled state) — visual theme is applied via `className`. Supports icons with animations, loading states, tooltips, and grouping.",
-    "anatomy": "<Button />",
+    "anatomy": "<ButtonGroup>\n  <Button />\n</ButtonGroup>",
     "props": [
       {
         "name": "children",
@@ -2524,8 +2524,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       ]
     },
     "snippets": {
-      "react": "import { Button } from \"@chumlab/ui/button\";\n\nexport default function Actions() {\n  return (\n    <div className=\"flex gap-3\">\n      <Button\n        className=\"bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-500 dark:hover:bg-indigo-400 shadow-md\"\n        onClick={() => console.log(\"clicked\")}\n      >\n        Save Changes\n      </Button>\n      <Button\n        className=\"border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800\"\n      >\n        Cancel\n      </Button>\n    </div>\n  );\n}",
-      "next": "\"use client\";\n\nimport { Button } from \"@chumlab/ui/button\";\n\nexport default function Actions() {\n  return (\n    <div className=\"flex gap-3\">\n      <Button\n        className=\"bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-500 dark:hover:bg-indigo-400 shadow-md\"\n        onClick={() => console.log(\"clicked\")}\n      >\n        Save Changes\n      </Button>\n      <Button\n        className=\"border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800\"\n      >\n        Cancel\n      </Button>\n    </div>\n  );\n}",
+      "react": "import { Button, ButtonGroup } from \"@chumlab/ui/button\";\n\nexport default function Actions() {\n  return (\n    <ButtonGroup>\n      <Button\n        className=\"bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-500 dark:hover:bg-indigo-400 shadow-md\"\n        onClick={() => console.log(\"clicked\")}\n      >\n        Save Changes\n      </Button>\n      <Button\n        className=\"border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800\"\n      >\n        Cancel\n      </Button>\n    </ButtonGroup>\n  );\n}",
+      "next": "\"use client\";\n\nimport { Button, ButtonGroup } from \"@chumlab/ui/button\";\n\nexport default function Actions() {\n  return (\n    <ButtonGroup>\n      <Button\n        className=\"bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-500 dark:hover:bg-indigo-400 shadow-md\"\n        onClick={() => console.log(\"clicked\")}\n      >\n        Save Changes\n      </Button>\n      <Button\n        className=\"border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800\"\n      >\n        Cancel\n      </Button>\n    </ButtonGroup>\n  );\n}",
       "needsClientBoundary": true
     }
   },
@@ -3609,7 +3609,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "name": "CountryFlag",
     "subpath": "@chumlab/ui/country-flag",
     "summary": "Renders a country flag image from a two-letter ISO country code. Supports sizes, tooltips, grouping, shimmer loading, and error fallback.",
-    "anatomy": "<CountryFlag />",
+    "anatomy": "<CountryFlag />\n<CountryFlagGroup>\n  <CountryFlag />\n</CountryFlagGroup>",
     "props": [
       {
         "name": "code",
@@ -4023,8 +4023,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "rows": []
     },
     "snippets": {
-      "react": "import { CountryFlag } from \"@chumlab/ui/country-flag\";\n\nexport default function Example() {\n  return (\n    <div style={{ display: \"flex\", gap: 8 }}>\n      <CountryFlag code=\"us\" size=\"lg\" />\n      <CountryFlag code=\"gb\" size=\"lg\" />\n      <CountryFlag code=\"jp\" size=\"lg\" />\n      <CountryFlag code=\"de\" size=\"lg\" />\n    </div>\n  );\n}",
-      "next": "import { CountryFlag } from \"@chumlab/ui/country-flag\";\n\nexport default function Example() {\n  return (\n    <div style={{ display: \"flex\", gap: 8 }}>\n      <CountryFlag code=\"us\" size=\"lg\" />\n      <CountryFlag code=\"gb\" size=\"lg\" />\n      <CountryFlag code=\"jp\" size=\"lg\" />\n      <CountryFlag code=\"de\" size=\"lg\" />\n    </div>\n  );\n}",
+      "react": "import { CountryFlag, CountryFlagGroup } from \"@chumlab/ui/country-flag\";\n\nexport default function Example() {\n  return (\n    <div style={{ display: \"flex\", gap: 16, alignItems: \"center\" }}>\n      <CountryFlag code=\"us\" size=\"lg\" />\n      <CountryFlagGroup max={3} size=\"lg\">\n        <CountryFlag code=\"gb\" />\n        <CountryFlag code=\"jp\" />\n        <CountryFlag code=\"de\" />\n        <CountryFlag code=\"fr\" />\n      </CountryFlagGroup>\n    </div>\n  );\n}",
+      "next": "import { CountryFlag, CountryFlagGroup } from \"@chumlab/ui/country-flag\";\n\nexport default function Example() {\n  return (\n    <div style={{ display: \"flex\", gap: 16, alignItems: \"center\" }}>\n      <CountryFlag code=\"us\" size=\"lg\" />\n      <CountryFlagGroup max={3} size=\"lg\">\n        <CountryFlag code=\"gb\" />\n        <CountryFlag code=\"jp\" />\n        <CountryFlag code=\"de\" />\n        <CountryFlag code=\"fr\" />\n      </CountryFlagGroup>\n    </div>\n  );\n}",
       "needsClientBoundary": false
     }
   },
@@ -7366,7 +7366,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "name": "Modal",
     "subpath": "@chumlab/ui/modal",
     "summary": "Accessible dialog overlay with focus trapping, scroll lock, nested modals, animations, and full keyboard navigation.",
-    "anatomy": "<Modal />",
+    "anatomy": "<Modal>\n  <ModalHeader />\n  <ModalBody />\n  <ModalFooter />\n</Modal>",
     "props": [
       {
         "name": "open",
@@ -7853,8 +7853,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       ]
     },
     "snippets": {
-      "react": "import { useState } from \"react\";\nimport { Modal } from \"@chumlab/ui/modal\";\n\nexport default function Example() {\n  const [open, setOpen] = useState(false);\n  return (\n    <>\n      <button onClick={() => setOpen(true)}>Open Modal</button>\n      <Modal open={open} onOpenChange={setOpen} title=\"Welcome Back\">\n        <p>Your session has been restored.</p>\n        <div style={{ display: \"flex\", justifyContent: \"flex-end\", gap: 8, marginTop: 16 }}>\n          <button onClick={() => setOpen(false)}>Cancel</button>\n          <button onClick={() => setOpen(false)}>Continue</button>\n        </div>\n      </Modal>\n    </>\n  );\n}",
-      "next": "\"use client\";\n\nimport { useState } from \"react\";\nimport { Modal } from \"@chumlab/ui/modal\";\n\nexport default function Example() {\n  const [open, setOpen] = useState(false);\n  return (\n    <>\n      <button onClick={() => setOpen(true)}>Open Modal</button>\n      <Modal open={open} onOpenChange={setOpen} title=\"Welcome Back\">\n        <p>Your session has been restored.</p>\n        <div style={{ display: \"flex\", justifyContent: \"flex-end\", gap: 8, marginTop: 16 }}>\n          <button onClick={() => setOpen(false)}>Cancel</button>\n          <button onClick={() => setOpen(false)}>Continue</button>\n        </div>\n      </Modal>\n    </>\n  );\n}",
+      "react": "import { useState } from \"react\";\nimport { Modal, ModalHeader, ModalBody, ModalFooter } from \"@chumlab/ui/modal\";\nimport { Button } from \"@chumlab/ui/button\";\n\nexport default function Example() {\n  const [open, setOpen] = useState(false);\n  return (\n    <>\n      <Button onClick={() => setOpen(true)}>Open Modal</Button>\n      <Modal open={open} onOpenChange={setOpen}>\n        <ModalHeader>Welcome Back</ModalHeader>\n        <ModalBody>\n          <p>Your session has been restored.</p>\n        </ModalBody>\n        <ModalFooter>\n          <Button onClick={() => setOpen(false)}>Cancel</Button>\n          <Button onClick={() => setOpen(false)}>Continue</Button>\n        </ModalFooter>\n      </Modal>\n    </>\n  );\n}",
+      "next": "\"use client\";\n\nimport { useState } from \"react\";\nimport { Modal, ModalHeader, ModalBody, ModalFooter } from \"@chumlab/ui/modal\";\nimport { Button } from \"@chumlab/ui/button\";\n\nexport default function Example() {\n  const [open, setOpen] = useState(false);\n  return (\n    <>\n      <Button onClick={() => setOpen(true)}>Open Modal</Button>\n      <Modal open={open} onOpenChange={setOpen}>\n        <ModalHeader>Welcome Back</ModalHeader>\n        <ModalBody>\n          <p>Your session has been restored.</p>\n        </ModalBody>\n        <ModalFooter>\n          <Button onClick={() => setOpen(false)}>Cancel</Button>\n          <Button onClick={() => setOpen(false)}>Continue</Button>\n        </ModalFooter>\n      </Modal>\n    </>\n  );\n}",
       "needsClientBoundary": true
     }
   },
@@ -12425,7 +12425,15 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "varies"
       }
     ],
-    "cssVariables": [],
+    "cssVariables": [
+      "--switch-focus-ring",
+      "--switch-thumb-bg",
+      "--switch-thumb-size",
+      "--switch-tracker-checked-bg",
+      "--switch-tracker-height",
+      "--switch-tracker-unchecked-bg",
+      "--switch-tracker-width"
+    ],
     "accessibility": [
       "`<button role=\"switch\" aria-checked>` — native ARIA switch pattern",
       "Label associated via `htmlFor` / `id` pairing",

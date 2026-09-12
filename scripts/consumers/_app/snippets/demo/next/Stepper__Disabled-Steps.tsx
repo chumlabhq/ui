@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Stepper } from "@chumlab/ui/stepper";
 
 export default function StepperExample() {
+  const [disabledStepsStep, setDisabledStepsStep] = useState<number>(2);
   return (
     <Stepper
       steps={
@@ -13,8 +15,8 @@ export default function StepperExample() {
           { id: 4, label: "Step 4" }
         ]
       }
-      value={2}
-      onValueChange={() => {}}
+      value={disabledStepsStep}
+      onValueChange={(id) => setDisabledStepsStep(id as number)}
       isStepClickable={() => true}
       classes={
         {

@@ -52,7 +52,58 @@ export default function Example() {
 
 ---
 
+## Data Attributes (for CSS selectors and testing)
+
+Each is written or absent, never `"false"`, so the bare attribute selector is
+the one to use: `[data-error]`, not `[data-error="true"]`. All of them sit on
+the root.
+
+- `data-state="checked" | "unchecked"` — always present
+- `data-checked="true"` — only while checked, for a selector that wants presence
+- `data-disabled="true"` — when disabled
+- `data-loading="true"` — while a change is in flight
+- `data-error="true"` — when `error`
+- `data-valid="true"` — when `success` and not `error`
+- `data-reduce-motion="true"` — while reduced motion is in force
+- `data-invalid="true"` — on the message element, when it is the error message
+
+### The error state has no control paint
+
+Every other field in the library colours a border in its error state. A switch
+has no border to colour, so `error` does three things and none of them touch
+the track: it sets `data-error` on the root, links `errorMessage` through
+`aria-describedby`, sets `aria-invalid` on the control, and paints the message
+`text-cl-error`.
+
+If you want the track itself to react, the attribute is the hook:
+
+```tsx
+<Switch
+  error
+  errorMessage="You must accept the terms"
+  classes={{ control: "bg-cl-bg-hover data-[state=checked]:bg-cl-accent" }}
+  className="data-[error]:ring-2 data-[error]:ring-cl-error/40"
+/>
+```
+
+---
+
 ## Class overrides
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | Outer container. Carries every data attribute above. |
+| `row` | The line holding the label group and the track, which is what `labelPosition` reorders. |
+| `labelGroup` | The label and description stacked together, so they move as one. |
+| `label` | The label element. |
+| `description` | The description under the label. |
+| `control` | The track the thumb slides along. |
+| `thumb` | The handle that slides. |
+| `message` | The error or hint line under the row. |
+| `loading` | The spinner shown on the thumb while a change is in flight. |
+
 
 **A slot that carries states is replaced as a whole.** Several slots absorbed what were
 separate per-state keys, so overriding one replaces its base styling *and* every state

@@ -166,6 +166,11 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             id={switchId}
             role="switch"
             aria-checked={isChecked}
+            aria-invalid={error || undefined}
+            // Input, OtpInput and Checkbox all expose this in their error
+            // state; Switch linked the message with `aria-describedby` and
+            // stopped there, so the message was read out while the control
+            // itself was still announced as valid.
             // `disabled` alone is not exposed on a custom role in every AT, and
             // the ARIA switch pattern expects the state explicitly.
             aria-disabled={disabled || loading || undefined}

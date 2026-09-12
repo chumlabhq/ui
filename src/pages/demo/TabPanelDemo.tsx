@@ -211,58 +211,50 @@ const rtlTabs: Tab[] = [
 // it straight back on every instance the page renders, which is what made the
 // old whole-page axe audit report 77 contrast nodes (E2E-TRIAGE.md Appendix D).
 const getClasses = (dark: boolean) => ({
+  /**
+   * TabPanel's slots are `root`, `list`, `item`, `itemText`, `itemIcon`,
+   * `count`, `indicator` and `content`, and it expresses state as variants on
+   * a slot — `data-[state=active]:…` on `item` — rather than as separate
+   * active/inactive slots.
+   *
+   * This page used to write `tabList`, `tab`, `tabActive`, `tabInactive`,
+   * `tabFocus`, `tabDisabled`, `iconActive`, `iconInactive`, `countActive`,
+   * `countInactive` and `panel`. None of them exist: every styled section on
+   * the page was rendering the library's defaults, which is why the count
+   * badges appeared as bare numbers. The snippet builder had been counting
+   * them for a while — 11 dead keys over 22 and 14 sections.
+   */
   tabs: {
     underline: {
       root: "w-full",
-      tabList: `flex items-center gap-6 border-b border-cl-border`,
-      tab: "relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
-      tabActive: dark ? "text-cl-accent" : "text-cl-accent",
-      tabInactive: dark
-        ? "text-cl-text-secondary hover:text-cl-text"
-        : "text-cl-text-secondary hover:text-cl-text",
-      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
+      list: `flex items-center gap-6 border-b border-cl-border`,
+      item: `relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:text-cl-accent data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`,
       indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
-      panel: "p-4",
+      content: "p-4",
     },
     pill: {
       root: "w-full",
       // Track uses a subtle wash (instead of bg-cl-bg-elevated) so the
-      // active pill — which now uses bg-cl-bg-elevated in dark — has a
-      // distinct surface to stand out against.
-      tabList: `inline-flex items-center gap-1 p-1 rounded-cl-md bg-black/[0.04] dark:bg-white/[0.06]`,
-      tab: "px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
-      tabActive: dark
-        ? "bg-cl-bg-elevated text-white shadow-sm"
-        : "bg-white text-cl-text shadow-sm",
-      tabInactive: dark
-        ? "text-cl-text-secondary hover:text-cl-text"
-        : "text-cl-text-secondary hover:text-cl-text",
-      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
-      panel: "p-4 mt-2",
+      // active pill — which now uses bg-cl-bg-elevated in the dark theme —
+      // has a distinct surface to stand out against.
+      list: `inline-flex items-center gap-1 p-1 rounded-cl-md bg-black/[0.04] dark:bg-white/[0.06]`,
+      item: dark
+        ? `px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`
+        : `px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-white data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`,
+      content: "p-4 mt-2",
     },
     icon: {
       root: "w-full",
-      tabList: `flex items-center gap-1 border-b border-cl-border`,
-      tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
-      tabActive: dark ? "text-cl-accent" : "text-cl-accent",
-      tabInactive: dark
-        ? "text-cl-text-secondary hover:text-cl-text"
-        : "text-cl-text-secondary hover:text-cl-text",
-      tabDisabled: dark
-        ? "opacity-40 cursor-not-allowed hover:text-cl-text-secondary"
-        : "opacity-40 cursor-not-allowed hover:text-cl-text-secondary",
-      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
-      iconActive: dark ? "text-cl-accent" : "text-cl-accent",
-      iconInactive: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
-      count: "px-2 py-0.5 text-xs font-semibold rounded-full",
-      countActive: dark
-        ? "bg-cl-accent/20 text-cl-text"
-        : "bg-cl-accent/10 text-cl-text",
-      countInactive: dark
-        ? "bg-cl-bg-elevated text-cl-text-secondary"
-        : "bg-cl-bg-hover text-cl-text-secondary",
+      list: `flex items-center gap-1 border-b border-cl-border`,
+      item: `relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:text-cl-accent data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed`,
+      itemIcon: `data-[state=active]:text-cl-accent data-[state=inactive]:text-cl-text-secondary`,
+      /* The inactive fill is a wash, not a surface token: in the dark theme
+         `--cl-bg-elevated` and `--cl-bg-hover` are both #0a0d12, the same
+         colour as the card these tabs sit on, so either one rendered the
+         badge as a bare number. Same idiom as the pill track above. */
+      count: `px-2 py-0.5 text-xs font-semibold rounded-full data-[state=active]:bg-cl-accent/10 dark:data-[state=active]:bg-cl-accent/20 data-[state=active]:text-cl-text data-[state=inactive]:bg-black/[0.06] dark:data-[state=inactive]:bg-white/[0.08] data-[state=inactive]:text-cl-text-secondary`,
       indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
-      panel: "p-4",
+      content: "p-4",
     },
   },
   content: `text-sm leading-relaxed text-cl-text-secondary`,
@@ -530,7 +522,7 @@ const TabPanelDemo = () => {
             iconPosition="right"
             classes={{
               ...c.tabs.pill,
-              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
           >
             <div className={c.content}>
@@ -726,7 +718,7 @@ const TabPanelDemo = () => {
             classes={{
               root: `w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20`,
               list: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60`,
-              item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
               content: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`,
             }}
           >
@@ -1012,7 +1004,7 @@ const TabPanelDemo = () => {
             onValueChange={setRenderFnTab}
             classes={{
               ...c.tabs.pill,
-              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
           >
             {(tab) => (
@@ -1043,7 +1035,7 @@ const TabPanelDemo = () => {
             onValueChange={setRenderTabTab}
             classes={{
               ...c.tabs.pill,
-              item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
             renderTab={(props, defaultElement) => (
               <div key={props.tab.id} className="relative">

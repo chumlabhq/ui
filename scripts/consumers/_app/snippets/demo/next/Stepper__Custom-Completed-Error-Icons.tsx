@@ -8,7 +8,7 @@ const errorGetStatus = (
     index: number,
     activeIndex: number,
   ): StepStatus => {
-    if (index === 1) return "error";
+    if (index === 1 && index >= activeIndex) return "error";
     if (index < activeIndex) return "completed";
     if (index === activeIndex) return "active";
     return "pending";

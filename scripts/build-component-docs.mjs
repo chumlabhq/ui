@@ -539,6 +539,12 @@ function cssVariablesOf(name) {
     // sets its content height that way, so the variable that is now the whole
     // animation contract was documented nowhere a consumer would look.
     for (const m of text.matchAll(/setProperty\(\s*["'](--[a-z][a-z0-9-]*)["']/g)) found.add(m[1]);
+    // …and a name held in a constant map: `CSS_VARS = { thumbBg: "--switch-thumb-bg" }`.
+    // Switch declares all seven of its variables that way and applies them
+    // through that map, so neither pattern above saw them and its page showed
+    // no CSS custom properties at all — while its own demo page has a section
+    // theming the component with them.
+    for (const m of text.matchAll(/:\s*["'](--[a-z][a-z0-9-]*)["']/g)) found.add(m[1]);
   }
   return [...found].sort();
 }

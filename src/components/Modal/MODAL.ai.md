@@ -26,19 +26,23 @@ import type { ModalProps, ModalClasses } from "@chumlab/ui/modal";
 
 ```tsx
 import { useState } from "react";
-import { Modal } from "@chumlab/ui/modal";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@chumlab/ui/modal";
+import { Button } from "@chumlab/ui/button";
 
 export default function Example() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button onClick={() => setOpen(true)}>Open Modal</button>
-      <Modal open={open} onOpenChange={setOpen} title="Welcome Back">
-        <p>Your session has been restored.</p>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
-          <button onClick={() => setOpen(false)}>Cancel</button>
-          <button onClick={() => setOpen(false)}>Continue</button>
-        </div>
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+      <Modal open={open} onOpenChange={setOpen}>
+        <ModalHeader>Welcome Back</ModalHeader>
+        <ModalBody>
+          <p>Your session has been restored.</p>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>Continue</Button>
+        </ModalFooter>
       </Modal>
     </>
   );

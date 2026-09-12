@@ -209,25 +209,34 @@ const StepperDemo = () => {
   const [loopStep, setLoopStep] = useState<number>(2);
   const [autoStep, setAutoStep] = useState<number>(2);
   const [preventStep, setPreventStep] = useState<number>(1);
+  /* Sections that used to pass `value={2}` with a no-op handler. Their steps
+     render as real buttons — the library only makes completed and active steps
+     interactive — so they invited a click and then did nothing. Each drives
+     its own state now, whatever else the section is demonstrating. */
+  const [connectorStep, setConnectorStep] = useState<number>(2);
+  const [disabledStepsStep, setDisabledStepsStep] = useState<number>(2);
+  const [nonLinearStep, setNonLinearStep] = useState<number>(2);
+  const [fullWidthStep, setFullWidthStep] = useState<number>(2);
+  const [customIdStep, setCustomIdStep] = useState<number>(2);
+  const [refStep, setRefStep] = useState<number>(2);
+  const [ariaLabelStep, setAriaLabelStep] = useState<number>(2);
+  const [renderStepStep, setRenderStepStep] = useState<number>(2);
   const stepperRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * Step 2 errors until you move past it, then completes like any other.
+   *
+   * `if (index === 1) return "error"` came first and had no exit, so the step
+   * was pinned to error for every value the stepper could hold: it could not
+   * reach `completed`, which is the state the icon-override sections exist to
+   * show. Advancing now resolves it, and stepping back re-raises it.
+   */
   const errorGetStatus = (
     _stepId: string | number,
     index: number,
     activeIndex: number,
   ): StepStatus => {
-    if (index === 1) return "error";
-    if (index < activeIndex) return "completed";
-    if (index === activeIndex) return "active";
-    return "pending";
-  };
-
-  const perStepErrorGetStatus = (
-    _stepId: string | number,
-    index: number,
-    activeIndex: number,
-  ): StepStatus => {
-    if (index === 1) return "error";
+    if (index === 1 && index >= activeIndex) return "error";
     if (index < activeIndex) return "completed";
     if (index === activeIndex) return "active";
     return "pending";
@@ -349,8 +358,9 @@ const StepperDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <Stepper
             steps={basicSteps}
-            value={2}
-            onValueChange={() => {}}
+            value={connectorStep}
+            onValueChange={(id) => setConnectorStep(id as number)}
+            isStepClickable={() => true}
             showConnectors={false}
             classes={{
               ...c.stepper,
@@ -394,8 +404,8 @@ const StepperDemo = () => {
               { id: 3, label: "Step 3", disabled: true },
               { id: 4, label: "Step 4" },
             ]}
-            value={2}
-            onValueChange={() => {}}
+            value={disabledStepsStep}
+            onValueChange={(id) => setDisabledStepsStep(id as number)}
             isStepClickable={() => true}
             classes={c.stepper}
           />
@@ -434,8 +444,8 @@ const StepperDemo = () => {
           <div className="w-full space-y-2">
             <Stepper
               steps={basicSteps}
-              value={2}
-              onValueChange={() => {}}
+              value={nonLinearStep}
+              onValueChange={(id) => setNonLinearStep(id as number)}
               isStepClickable={() => true}
               classes={c.stepper}
             />
@@ -565,7 +575,7 @@ const StepperDemo = () => {
             steps={perStepIconSteps}
             value={perStepIconStep}
             onValueChange={(id) => setPerStepIconStep(id as number)}
-            getStepStatus={perStepErrorGetStatus}
+            getStepStatus={errorGetStatus}
             isStepClickable={() => true}
             classes={c.stepper}
           />
@@ -606,8 +616,9 @@ const StepperDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <Stepper
             steps={basicSteps}
-            value={2}
-            onValueChange={() => {}}
+            value={fullWidthStep}
+            onValueChange={(id) => setFullWidthStep(id as number)}
+            isStepClickable={() => true}
             fullWidth
             classes={c.stepper}
           />
@@ -624,8 +635,9 @@ const StepperDemo = () => {
             <Stepper
               id="checkout-stepper"
               steps={basicSteps}
-              value={2}
-              onValueChange={() => {}}
+              value={customIdStep}
+              onValueChange={(id) => setCustomIdStep(id as number)}
+              isStepClickable={() => true}
               classes={c.stepper}
             />
             <p
@@ -652,8 +664,9 @@ const StepperDemo = () => {
             <Stepper
               ref={stepperRef}
               steps={basicSteps}
-              value={2}
-              onValueChange={() => {}}
+              value={refStep}
+              onValueChange={(id) => setRefStep(id as number)}
+              isStepClickable={() => true}
               classes={c.stepper}
             />
             <button
@@ -677,8 +690,9 @@ const StepperDemo = () => {
           <div className="w-full space-y-2">
             <Stepper
               steps={basicSteps}
-              value={2}
-              onValueChange={() => {}}
+              value={ariaLabelStep}
+              onValueChange={(id) => setAriaLabelStep(id as number)}
+              isStepClickable={() => true}
               aria-label="Checkout Progress"
               classes={c.stepper}
             />
@@ -763,8 +777,8 @@ const StepperDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <Stepper
             steps={basicSteps}
-            value={2}
-            onValueChange={() => {}}
+            value={renderStepStep}
+            onValueChange={(id) => setRenderStepStep(id as number)}
             isStepClickable={() => true}
             classes={c.stepper}
             renderStep={(props, defaultElement) => {

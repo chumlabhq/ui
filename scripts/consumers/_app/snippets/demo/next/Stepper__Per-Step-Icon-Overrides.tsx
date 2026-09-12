@@ -19,12 +19,12 @@ const ThumbsUpIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const perStepErrorGetStatus = (
+const errorGetStatus = (
     _stepId: string | number,
     index: number,
     activeIndex: number,
   ): StepStatus => {
-    if (index === 1) return "error";
+    if (index === 1 && index >= activeIndex) return "error";
     if (index < activeIndex) return "completed";
     if (index === activeIndex) return "active";
     return "pending";
@@ -43,7 +43,7 @@ export default function StepperExample() {
       steps={perStepIconSteps}
       value={perStepIconStep}
       onValueChange={(id) => setPerStepIconStep(id as number)}
-      getStepStatus={perStepErrorGetStatus}
+      getStepStatus={errorGetStatus}
       isStepClickable={() => true}
       classes={
         {

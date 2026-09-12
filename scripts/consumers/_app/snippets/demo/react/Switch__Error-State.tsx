@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Switch } from "@chumlab/ui/switch";
 
 export default function SwitchExample() {
+  const [termsSwitch, setTermsSwitch] = useState(false);
+  const [notifySwitch, setNotifySwitch] = useState(true);
   return (
     <div className="space-y-4">
       <Switch
         label="Accept terms of service"
-        checked={false}
+        checked={termsSwitch}
+        onValueChange={setTermsSwitch}
         error
         errorMessage="You must accept the terms to continue"
         classes={
@@ -22,7 +26,8 @@ export default function SwitchExample() {
       />
       <Switch
         label="Enable notifications"
-        checked={true}
+        checked={notifySwitch}
+        onValueChange={setNotifySwitch}
         error
         errorMessage="Notification service is currently unavailable"
         classes={

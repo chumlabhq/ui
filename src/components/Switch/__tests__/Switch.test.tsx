@@ -203,6 +203,20 @@ describe("Switch Component", () => {
       expect(screen.getByRole("switch")).toBeInTheDocument();
     });
 
+    /**
+     * Input, OtpInput and Checkbox all expose this; Switch linked its message
+     * through `aria-describedby` and stopped there, so the message was read
+     * out while the control itself was still announced as valid. Nothing
+     * asserted it either way until this case.
+     */
+    it("sets aria-invalid in the error state and not otherwise", () => {
+      const { rerender } = render(<Switch aria-label="Toggle" />);
+      expect(screen.getByRole("switch")).not.toHaveAttribute("aria-invalid");
+
+      rerender(<Switch aria-label="Toggle" error errorMessage="Required" />);
+      expect(screen.getByRole("switch")).toHaveAttribute("aria-invalid", "true");
+    });
+
     it("sets aria-checked based on checked prop", () => {
       const { rerender } = render(<Switch checked={false} aria-label="Toggle" />);
       expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "false");

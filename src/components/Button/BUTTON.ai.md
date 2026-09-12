@@ -24,11 +24,11 @@ import { Button, ButtonGroup } from "@chumlab/ui/button";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { Button } from "@chumlab/ui/button";
+import { Button, ButtonGroup } from "@chumlab/ui/button";
 
 export default function Actions() {
   return (
-    <div className="flex gap-3">
+    <ButtonGroup>
       <Button
         className="bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-500 dark:hover:bg-indigo-400 shadow-md"
         onClick={() => console.log("clicked")}
@@ -40,7 +40,7 @@ export default function Actions() {
       >
         Cancel
       </Button>
-    </div>
+    </ButtonGroup>
   );
 }
 ```

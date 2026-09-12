@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Step, Stepper } from "@chumlab/ui/stepper";
 
 const basicSteps: Step[] = [
@@ -8,11 +9,13 @@ const basicSteps: Step[] = [
 ];
 
 export default function StepperExample() {
+  const [fullWidthStep, setFullWidthStep] = useState<number>(2);
   return (
     <Stepper
       steps={basicSteps}
-      value={2}
-      onValueChange={() => {}}
+      value={fullWidthStep}
+      onValueChange={(id) => setFullWidthStep(id as number)}
+      isStepClickable={() => true}
       fullWidth
       classes={
         {

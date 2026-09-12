@@ -290,7 +290,17 @@ function classTable(sf) {
     }
     return referencesDarkText(text) ? null : text;
   };
-  const referencesDarkText = (text) => /(^|[^\w.:-])dark($|[^\w:-])/.test(text);
+  /**
+   * Comments first. This reads a node's own text, which carries the comments
+   * written inside the object, and a class bag whose prose said "…in dark…"
+   * was judged to reference the page's flag — dropping the whole entry and, on
+   * TabPanel, 26 of its 27 sections' snippets. Same shape as the three scans
+   * the tolerance rule already names: a number too big, argued over, and wrong.
+   */
+  const referencesDarkText = (text) =>
+    /(^|[^\w.:-])dark($|[^\w:-])/.test(
+      text.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/(^|[^:])\/\/.*$/gm, "$1 "),
+    );
   const fromObject = (obj) => {
     obj.properties.forEach((p) => {
       if (!ts.isPropertyAssignment(p) || ts.isComputedPropertyName(p.name)) return;
@@ -1149,6 +1159,14 @@ function build(section, sf, symbols, classes, componentName) {
   };
 
   const resolvePageScope = (text) => {
+    /**
+     * `c` is the page's styling object everywhere except where the section
+     * binds its own. Table's Inline Cell Editing maps `(c, i) => … c.value …`
+     * over edited cells, and substituting there reported a missing styling key
+     * and dropped an otherwise-good snippet. A section that binds `c` is
+     * talking about its own value, not the page's.
+     */
+    if (/(?:\(|,\s*)c\s*(?:[,:)]|=>)|\bconst\s+c\b/.test(text)) return text;
     let out = text.replace(/\bc\.([A-Za-z0-9_]+)(?:\.([A-Za-z0-9_]+))?/g, (_m, key, subKey) => {
       const entry = classes.get(key);
       if (!entry) { missingKey = key; return _m; }
@@ -1469,6 +1487,31 @@ if (CHECK) {
       }
     }
     if (misindented.length > 5) process.stderr.write(`    … and ${misindented.length - 5} more\n`);
+    process.exit(1);
+  }
+
+  /**
+   * A tally nobody acts on is a number, not a gate.
+   *
+   * This stood at 11 — `tabList`, `tab`, `tabActive`, `tabInactive`,
+   * `tabFocus`, `tabDisabled`, `iconActive`, `iconInactive`, `countActive`,
+   * `countInactive` and `panel` on the TabPanel page, over 22 and 14 sections
+   * — and it was printed on every build for months. Every styled section on
+   * that page rendered library defaults instead of what the page wrote, which
+   * is how the count badges shipped as bare numbers. It is zero now, so it
+   * fails at one.
+   */
+  if (droppedKeys.length) {
+    const tally = new Map();
+    droppedKeys.forEach((k) => tally.set(k, (tally.get(k) ?? 0) + 1));
+    process.stderr.write(
+      `✗ ${tally.size} dead \`classes\` key(s) on the demo pages, ${droppedKeys.length} use(s). ` +
+        "A key the component does not have styles nothing — use the real slot, or the state " +
+        "variant on it:\n",
+    );
+    for (const [k, n] of [...tally.entries()].sort((a, b) => b[1] - a[1])) {
+      process.stderr.write(`    ${String(n).padStart(4)}  ${k}\n`);
+    }
     process.exit(1);
   }
 

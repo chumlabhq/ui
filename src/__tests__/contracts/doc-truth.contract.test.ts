@@ -550,7 +550,22 @@ describe("doc truth contract", () => {
       .sort();
     expect(singles.length, "no single-element anatomy found — the rule has nothing to apply to").toBeGreaterThan(5);
     expect(singles).toContain("Tooltip");
-    expect(singles).toContain("Button");
+    /**
+     * `Button` was pinned here and should not have been: the package exports
+     * `ButtonGroup`, which takes `Button` children, so it composes and its
+     * example simply never said so. Same for `Modal` (ModalHeader/Body/Footer,
+     * where the example used raw `<button>`s and inline styles) and
+     * `CountryFlag` (CountryFlagGroup, Avatar's exact shape). All three now
+     * derive a real tree because their Basic Usage shows the composition.
+     *
+     * `Slider` replaces `Button` as the second named single: it exports one
+     * component and its parts are `classes` slots, which is what this rule is
+     * about.
+     */
+    expect(singles).toContain("Slider");
+    expect(singles).not.toContain("Button");
+    expect(singles).not.toContain("Modal");
+    expect(singles).not.toContain("CountryFlag");
   });
 
   it("renders no empty description", () => {
