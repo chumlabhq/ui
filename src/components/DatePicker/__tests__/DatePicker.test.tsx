@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DatePicker } from "../index.js";
+import { formatDate } from "../utils.js";
 
 import { setReducedMotion } from "../../../test/matchMedia.js";
 
@@ -253,18 +254,40 @@ describe("DatePicker", () => {
       render(<DatePicker showPresets placeholder="Pick a date" />);
 
       await openCalendar(user);
-      await user.click(screen.getByRole("button", { name: "Today" }));
-      // Settle the frames the selection queues before asserting. Without this
-      // the test read the trigger between the click and the re-render and
-      // failed on three of about twenty full runs — a fake-timer race, not a
-      // component defect: it passed in isolation every time, which is what
-      // kept it in KNOWN-FLAKES.md for two observations before the third made
-      // it a defect in the test by that file's own rule.
+      /**
+       * `findByRole`, not `getByRole`, and that is the whole of the eight
+       * failures filed against this case.
+       *
+       * `getByRole` does not retry: using it here asserted that the 32ms
+       * `flushPositionFrames` advances is always enough for the presets to
+       * mount, which is a tolerance nobody chose. Under a loaded parallel run
+       * it is not, and the query threw — every recorded failure is at this
+       * line, not at an assertion below it, so nothing about the selection was
+       * ever in doubt. `findByRole` waits for the condition instead of
+       * asserting a frame count.
+       */
+      await user.click(await screen.findByRole("button", { name: "Today" }));
       await flushPositionFrames();
 
+      /**
+       * Read the TRIGGER, not the document.
+       *
+       * This asserted `getByText(String(new Date().getFullYear()), { exact:
+       * false })` — the current year appearing anywhere on screen — and the
+       * calendar this test has just opened paints that year in its own header.
+       * Measured with no preset clicked at all: that assertion already matches
+       * one `<span>`. Paired with the placeholder check above it did catch a
+       * preset that applied nothing, and one that applied another year, since
+       * selecting navigates the calendar. What it could not see is a preset
+       * applying the wrong DAY: planted with "Today" returning the 1st, the
+       * old pair passed and this one fails. A test named for the selection
+       * should read the selection.
+       */
+      const today = new Date();
       expect(screen.queryByText("Pick a date")).not.toBeInTheDocument();
-      expect(screen.getByText(String(new Date().getFullYear()), { exact: false }))
-        .toBeInTheDocument();
+      expect(screen.getByRole("combobox")).toHaveTextContent(
+        formatDate(today, "MMM d, yyyy", undefined),
+      );
     });
 
     it("applies a range preset when uncontrolled", async () => {
@@ -272,7 +295,9 @@ describe("DatePicker", () => {
       render(<DatePicker mode="range" showPresets placeholder="Pick a range" />);
 
       await openCalendar(user);
-      await user.click(screen.getByRole("button", { name: "Last 7 Days" }));
+      // findByRole for the reason given above: the presets mount a frame after
+      // the calendar, and a non-retrying query asserts a frame count nobody chose.
+      await user.click(await screen.findByRole("button", { name: "Last 7 Days" }));
 
       expect(screen.queryByText("Pick a range")).not.toBeInTheDocument();
       // formatDateRange joins the two dates, so a separator proves both landed.
@@ -292,7 +317,9 @@ describe("DatePicker", () => {
       );
 
       await openCalendar(user);
-      await user.click(screen.getByRole("button", { name: "Today" }));
+      // findByRole for the reason given above: the presets mount a frame after
+      // the calendar, and a non-retrying query asserts a frame count nobody chose.
+      await user.click(await screen.findByRole("button", { name: "Today" }));
 
       expect(onValueChange).toHaveBeenCalledTimes(1);
       expect(screen.getByText("Stays empty")).toBeInTheDocument();

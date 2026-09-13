@@ -253,6 +253,33 @@ The measurement now lives in `e2e/_clip.ts`, the walk and the plant both call
 it, and each of the three fixes was reverted in turn to confirm the plant goes
 red for it.
 
+## A non-retrying query is a tolerance nobody chose
+
+`getByRole` throws immediately; `findByRole` waits. Placing the first one after
+a helper that advances a fixed number of frames asserts that the frame count is
+always enough — which is the same shape as an unconfigured threshold, and just
+as invisible while green. `DatePicker`'s preset case carried eight observations
+across five slices on exactly that: `flushPositionFrames()` advances 32ms for
+the calendar's position hook, the presets mount a frame later, and every
+recorded failure is at the QUERY rather than at any assertion below it. Five
+attempted fixes all worked on the click and the frames after the query and the
+best of them only reduced the rate, because the thing that was wrong came first.
+
+Two lessons, and the second is the one that generalises further:
+
+- **Read where a failure actually landed before theorising about it.** "Fails
+  under load, passes alone, therefore timing" is a conclusion, and it was wrong
+  here and in `focus-not-obscured` — two cases, five wasted fixes between them.
+  A query that throws and an assertion that fails are different events and the
+  line number distinguishes them for free.
+- **A test named for a value must read that value.** The same case asserted the
+  current year appeared *anywhere on screen* while the calendar it had just
+  opened painted that year in its own header. Planted with the preset returning
+  the 1st of the month instead of today, the old assertions passed. It was named
+  `applies a preset to its own selection` and never read the selection. When a
+  check can be satisfied by scenery, the name is the only thing still claiming
+  it works.
+
 ## Definition of done (every task)
 
 Compiles and typechecks; matches existing conventions; no narration comments; no
