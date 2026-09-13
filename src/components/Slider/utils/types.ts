@@ -29,6 +29,8 @@ export interface SliderClasses {
   valueText?: string;
   /** Mark tick container */
   marker?: string;
+  /** The text under a mark's dot, when `showMarkLabels` is set. */
+  markLabel?: string;
   /** Error message */
   message?: string;
 }

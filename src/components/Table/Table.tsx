@@ -1584,11 +1584,18 @@ function TableInner<TData>(
           }
         : {};
 
+      const rowIsActionable = Boolean(onRowClick) || Boolean(expandOnRowClick && expandable);
+
       return (
         <React.Fragment key={row.id}>
           <tr
-            className={`${rowClassName} ${isStriped ? stripedClassNameProp || "bg-cl-bg-item-hover" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${expandOnRowClick && expandable ? "cursor-pointer" : ""}`}
-            onClick={(e) => handleRowClick(row, e)}
+            className={`${rowClassName} ${isStriped ? stripedClassNameProp || "bg-cl-bg-item-hover" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${rowIsActionable ? "cursor-pointer" : ""}`}
+            // Bound only when the row actually does something. It used to be
+            // bound always and early-return inside, so every row in every table
+            // looked clickable to anything reading handlers — and the rows that
+            // WERE clickable via `onRowClick` still showed the default cursor,
+            // because only the expand case carried one.
+            onClick={rowIsActionable ? (e) => handleRowClick(row, e) : undefined}
             onMouseEnter={(e) =>
               handleRowHover(rowIndex, { current: e.currentTarget })
             }

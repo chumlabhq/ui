@@ -16,6 +16,7 @@ export default function ModalExample() {
         </Button>
         <Button
           className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated cursor-pointer"
+          disabled={!refForwardOpen}
           onClick={() => modalRef.current?.focus()}
         >
           Focus Modal via Ref

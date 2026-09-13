@@ -11396,6 +11396,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Mark tick container"
           },
           {
+            "name": "markLabel",
+            "type": "string",
+            "required": false,
+            "description": "The text under a mark's dot, when `showMarkLabels` is set."
+          },
+          {
             "name": "message",
             "type": "string",
             "required": false,

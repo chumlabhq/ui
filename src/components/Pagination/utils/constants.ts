@@ -9,8 +9,23 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
   root: "flex flex-wrap items-center gap-2 data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
   row: "flex items-center gap-2",
   list: "flex flex-wrap items-center gap-2",
+  /**
+   * The selected page, which the component announced three ways and painted
+   * none of.
+   *
+   * `aria-current="page"`, `data-state="active"` and `data-active` were all
+   * emitted and no default styled any of them, so no section of the demo could
+   * show which page you were on — and ADR 007 had already established
+   * `--cl-accent-hover` as the readable step on an accent tint BECAUSE this
+   * row needed it. A recorded decision for a state nothing rendered.
+   *
+   * `--cl-accent-bg` under `text-cl-accent` is the pair the rows-per-page
+   * option below already uses, measured 4.50:1 light and 6.04:1 dark; hover on
+   * a selected page deepens the text to `--cl-accent-hover` rather than
+   * repainting the background, which is the same rule as that option.
+   */
   item:
-    "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-chrome focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-chrome data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border-cl-accent data-[active]:hover:bg-cl-accent-bg data-[active]:hover:text-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
   navButton:
     "p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
   ellipsis: "px-2 select-none text-cl-text-tertiary",

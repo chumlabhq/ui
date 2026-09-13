@@ -27,7 +27,7 @@ export default function PaginationExample() {
           }),
                         root: "flex items-center gap-0.5",
                         navButton: "p-1 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary",
-                        item: "px-2 py-0.5 text-sm rounded transition-colors cursor-pointer hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary",
+                        item: "px-2 py-0.5 text-sm rounded transition-colors cursor-pointer hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover",
                         list: "flex items-center gap-0.5",
                         ellipsis: "px-1 text-sm text-cl-text-tertiary",
                         navIcon: "w-3.5 h-3.5"

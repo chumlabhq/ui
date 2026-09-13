@@ -6,6 +6,7 @@ import {
 import { Modal,
   useModal } from "../../components/Modal/index.js";
 import { Button } from "../../components/Button/index.js";
+import { Switch } from "../../components/Switch/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -851,12 +852,7 @@ const ModalDemo = () => {
                 <p className={`font-medium text-cl-text`}>Notifications</p>
                 <p className={`text-sm text-cl-text-secondary`}>Email & push notifications</p>
               </div>
-              <Button
-                type="button"
-                className="relative inline-flex h-6 w-11 items-center rounded-full bg-cl-accent transition-colors cursor-pointer"
-              >
-                <span className="inline-block h-4 w-4 transform rounded-full bg-cl-bg-elevated translate-x-6 transition-transform" />
-              </Button>
+              <Switch defaultChecked aria-label="Notifications" />
             </div>
           </div>
           <div className={`flex justify-end gap-3 mt-6 pt-4 border-t border-cl-border`}>
@@ -1121,7 +1117,7 @@ const ModalDemo = () => {
       {/* ─── Initial Focus ───────────────────────────────────────────────── */}
       <Section
         title="Initial Focus"
-        description="Direct focus to a specific element when the modal opens."
+        description="Direct focus to a specific element when the modal opens. Focus lands on Email, the second field, precisely because the first is where it would have gone on its own — a demo that focused Name would look identical with the prop removed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -1233,18 +1229,21 @@ const ModalDemo = () => {
           title="Custom Close Icon"
           description="This modal uses a custom close icon."
           closeIcon={
+            // A chevron, not another X. The previous icon was a plus rotated
+            // 45 degrees, which is an X — a real `closeIcon` passing a node
+            // indistinguishable from the default, so the section demonstrated
+            // nothing a reader could see.
             <svg
               className="w-5 h-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={2.5}
-        >
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M12 4v16m8-8H4"
-                transform="rotate(45 12 12)"
+                d="M19 9l-7 7-7-7"
               />
             </svg>
           }
@@ -1371,7 +1370,14 @@ const ModalDemo = () => {
             <Button className={c.btnPrimary} onClick={() => setRefForwardOpen(true)}>
               Modal with Ref
             </Button>
-            <Button className={c.btn} onClick={() => modalRef.current?.focus()}>
+            <Button
+              className={c.btn}
+              // You cannot focus a modal that is not mounted: closed, the ref
+              // is null and the button silently did nothing. Disabled says so
+              // before the click rather than after it.
+              disabled={!refForwardOpen}
+              onClick={() => modalRef.current?.focus()}
+            >
               Focus Modal via Ref
             </Button>
           </div>

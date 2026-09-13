@@ -118,6 +118,12 @@
      `--cl-bg-item-hover`, which is meant to be felt and not seen, and far under
      anything that could be mistaken for content. */
   --cl-bg-skeleton: rgba(237, 239, 244, 0.14);
+  /* A groove: it has to differ from whatever surface it is drawn ON, and a
+     slider is usually inside a panel rather than on the page. Sliders used
+     --cl-bg-hover, which in dark is #0a0d12 — the same value as
+     --cl-bg-panel and --cl-bg-elevated — so the unfilled track vanished on
+     every card. A translucent step reads on all three. */
+  --cl-bg-track: rgba(237, 239, 244, 0.12);
   /* 4% ink rather than the page colour it used to be. An input painted
      #050608 on a #050608 page is invisible except for its border, which is
      why six call sites overrode it with this exact wash — ADR 007 §2. */
@@ -258,6 +264,7 @@
   --cl-bg-panel: #ffffff;
   --cl-bg-item-hover: rgba(15, 18, 24, 0.04);
   --cl-bg-skeleton: rgba(15, 18, 24, 0.14);
+  --cl-bg-track: rgba(15, 18, 24, 0.10);
   --cl-bg-input: #ffffff;
   --cl-bg-recessed: rgba(15, 18, 24, 0.04);
 
@@ -379,6 +386,7 @@
   --color-cl-bg-item-hover: var(--cl-bg-item-hover);
   --color-cl-bg-skeleton: var(--cl-bg-skeleton);
   --color-cl-bg-hover: var(--cl-bg-hover);
+  --color-cl-bg-track: var(--cl-bg-track);
   --color-cl-bg-input: var(--cl-bg-input);
   --color-cl-bg-recessed: var(--cl-bg-recessed);
 

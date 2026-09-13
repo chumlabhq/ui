@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@chumlab/ui/button";
 import { Modal } from "@chumlab/ui/modal";
+import { Switch } from "@chumlab/ui/switch";
 
 export default function ModalExample() {
   const [nestedLevel1Open, setNestedLevel1Open] = useState(false);
@@ -44,14 +45,7 @@ export default function ModalExample() {
               <p className="font-medium text-cl-text">Notifications</p>
               <p className="text-sm text-cl-text-secondary">Email & push notifications</p>
             </div>
-            <Button
-              type="button"
-              className="relative inline-flex h-6 w-11 items-center rounded-full bg-cl-accent transition-colors cursor-pointer"
-            >
-              <span
-                className="inline-block h-4 w-4 transform rounded-full bg-cl-bg-elevated translate-x-6 transition-transform"
-              />
-            </Button>
+            <Switch defaultChecked aria-label="Notifications" />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-cl-border">

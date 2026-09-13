@@ -196,6 +196,8 @@ const PaginationDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
   const paginationRef = useRef<HTMLElement>(null);
+  const [refNote, setRefNote] = useState("");
+  const [valueLog, setValueLog] = useState<number[]>([]);
 
   // Each demo section gets its own independent state
   const [basicPage, setBasicPage] = useState(1);
@@ -366,7 +368,7 @@ const PaginationDemo = () => {
                     ...c.pagination,
                     root: "flex flex-wrap items-center gap-1",
  navButton: `p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text-secondary`,
- item: `w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
+ item: `w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
                     list: "flex items-center gap-1",
                     navIcon: "w-4 h-4 text-cl-text-secondary",
                   }}
@@ -395,7 +397,7 @@ const PaginationDemo = () => {
                     ...c.pagination,
                     root: "flex items-center",
                     navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-                    item: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
+                    item: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
                     list: "flex items-center gap-0.5",
                     navIcon: "w-4 h-4",
                   }}
@@ -730,7 +732,7 @@ const PaginationDemo = () => {
               root: `flex flex-wrap items-center justify-between gap-4 sm:gap-6 p-4 rounded-cl-lg bg-cl-bg-hover dark:bg-cl-bg-elevated/40`,
               row: "flex items-center gap-1",
  navButton: `p-2 rounded-full shadow-sm hover:shadow transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text-secondary`,
- item: `w-10 h-10 rounded-full shadow-sm hover:shadow transition-shadow flex items-center justify-center cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
+ item: `w-10 h-10 rounded-full shadow-sm hover:shadow transition-shadow flex items-center justify-center cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
               list: "flex items-center gap-1",
               rowsPerPage: {
                 trigger: `flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
@@ -782,7 +784,7 @@ const PaginationDemo = () => {
                 ...c.pagination,
                 root: "flex items-center",
                 navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-                item: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
+                item: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
                 ellipsis: `px-1 text-cl-text-tertiary`,
                 list: "flex items-center gap-0.5",
                 navIcon: "w-4 h-4",
@@ -808,7 +810,7 @@ const PaginationDemo = () => {
                 ...c.pagination,
                 root: "flex items-center gap-0.5",
                 navButton: `p-1 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-                item: `px-2 py-0.5 text-sm rounded transition-colors cursor-pointer hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
+                item: `px-2 py-0.5 text-sm rounded transition-colors cursor-pointer hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
                 list: "flex items-center gap-0.5",
                 ellipsis: `px-1 text-sm text-cl-text-tertiary`,
                 navIcon: "w-3.5 h-3.5",
@@ -873,7 +875,18 @@ const PaginationDemo = () => {
         <div className="mb-3 flex gap-2">
           <button
             className={c.btn}
-            onClick={() => paginationRef.current?.focus()}
+            onClick={() => {
+              paginationRef.current?.focus();
+              // The ref always landed and always worked; a nav with
+              // tabIndex={-1} taking programmatic focus simply paints nothing,
+              // so the section read as broken. Say what got focused.
+              const el = document.activeElement as HTMLElement | null;
+              setRefNote(
+                el === paginationRef.current
+                  ? `focus is on <${el?.tagName.toLowerCase()} id="${el?.id}">`
+                  : "focus did not move",
+              );
+            }}
           >
             Focus pagination via ref
           </button>
@@ -881,19 +894,30 @@ const PaginationDemo = () => {
             className={c.btn}
             onClick={() => {
               const el = document.getElementById("ref-demo-pagination");
-              if (el) {
-                el.style.outline = "2px solid var(--cl-accent)";
-                el.style.outlineOffset = "2px";
-                el.style.borderRadius = "8px";
-                setTimeout(() => {
-                  el.style.outline = "none";
-                }, 1500);
+              if (!el) {
+                setRefNote("no element with that id");
+                return;
               }
+              // Was `el.style.outline = "2px solid var(--cl-accent)"`, and it
+              // painted nothing: a custom property that does not resolve makes
+              // the whole shorthand invalid at computed-value time, so
+              // outline-style fell back to `none` and the computed width to
+              // 0px. Measured exactly that. A compiled class cannot fail that
+              // way, and the point of the section is that the id reached the
+              // DOM, which this shows just as well.
+              el.classList.add("ring-2", "ring-cl-accent", "ring-offset-2", "rounded-cl-md");
+              setRefNote("found by id, highlighted for 1.5s");
+              setTimeout(() => {
+                el.classList.remove("ring-2", "ring-cl-accent", "ring-offset-2", "rounded-cl-md");
+              }, 1500);
             }}
           >
             Highlight via id
           </button>
         </div>
+        <p className="mb-3 text-sm text-cl-text-secondary" role="status" aria-live="polite">
+          {refNote || "Nothing yet — press a button above."}
+        </p>
         <DemoWrapper isDarkMode={dark} layout="block">
           <Pagination
             ref={paginationRef}
@@ -962,9 +986,20 @@ const PaginationDemo = () => {
           <Pagination
             value={valuePage}
             totalPages={10}
-            onValueChange={setValuePage}
+            onValueChange={(page) => {
+              setValuePage(page);
+              setValueLog((prev) => [...prev.slice(-4), page]);
+            }}
             classes={c.pagination}
           />
+          {/* A callback section with nothing rendering what the callback got
+              cannot fail visibly: the handler could be dropped entirely and the
+              section would look the same. */}
+          <p className="mt-3 text-sm text-cl-text-secondary" role="status" aria-live="polite">
+            {valueLog.length
+              ? `onValueChange received: ${valueLog.join(" → ")}`
+              : "onValueChange has not fired yet — pick a page."}
+          </p>
         </DemoWrapper>
       </Section>
 

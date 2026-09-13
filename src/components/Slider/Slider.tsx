@@ -293,6 +293,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         thumb: mergeSlot(baseClasses.thumb, classesProp?.thumb),
         valueText: mergeSlot(baseClasses.valueText, classesProp?.valueText),
         marker: mergeSlot(baseClasses.marker, classesProp?.marker),
+        markLabel: mergeSlot(baseClasses.markLabel, classesProp?.markLabel),
         message: mergeSlot(baseClasses.message, classesProp?.message),
       }),
       [classesProp, baseClasses],
@@ -624,12 +625,35 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 )}
                 {showMarkLabels && mark.label && (
                   <span
-                    className={mc.marker || undefined}
+                    className={mc.markLabel || undefined}
                     style={{
                       position: "absolute",
                       whiteSpace: "nowrap",
                       ...(isHorizontal
-                        ? { left: `${markPos}%`, top: "100%", transform: "translateX(-50%)", marginTop: "8px" }
+                        ? {
+                            left: `${markPos}%`,
+                            top: "100%",
+                            /**
+                             * The end labels align to their end, not to their
+                             * middle.
+                             *
+                             * Centring every label puts half of the first one
+                             * left of 0% and half of the last one right of
+                             * 100%, so `1` and `0` hung off the left of the
+                             * track and `5` and `100` off the right. Only the
+                             * two ends have anything to hang off, so only the
+                             * two ends change: the first reads from the track's
+                             * start, the last back from its end, and every
+                             * label in between stays centred on its tick.
+                             */
+                            transform:
+                              markPos <= 0
+                                ? "translateX(0)"
+                                : markPos >= 100
+                                  ? "translateX(-100%)"
+                                  : "translateX(-50%)",
+                            marginTop: "8px",
+                          }
                         : { bottom: `${markPos}%`, left: "100%", transform: "translateY(50%)", marginLeft: "8px" }),
                     }}
                   >

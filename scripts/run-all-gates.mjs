@@ -127,6 +127,8 @@ const GATES = [
     claims: { spec: ["visual.spec.ts"] }, pop: /collected (\d+)/ },
   { id: "e2e:icon-bounds", slow: true, cmd: pw("e2e/icon-bounds.spec.ts --project=chromium"),
     claims: { spec: ["icon-bounds.spec.ts"] }, pop: /ICON_BOUNDS measured=(\d+)/ },
+  { id: "e2e:pointer-affordance", slow: true, cmd: pw("e2e/pointer-affordance.spec.ts --project=chromium"),
+    claims: { spec: ["pointer-affordance.spec.ts"] }, pop: /POINTER_AFFORDANCE checked=(\d+)/ },
   { id: "e2e:demo-contrast", slow: true, cmd: pw("e2e/demo-contrast.spec.ts --project=chromium"),
     claims: { spec: ["demo-contrast.spec.ts"] },
     /**
@@ -290,6 +292,35 @@ function gateLog(id) {
 const failedSoFar = () => results.some((r) => r.status === "FAIL");
 
 /** ── populations: a fall is the failure that looks like a pass ────────── */
+/**
+ * The pressure check: a gate running far over its recorded time.
+ *
+ * Two full runs were killed by the OS for memory, and both times the FIRST
+ * symptom was not the kill — it was gates running three to nine times their
+ * recorded wall-clock and then failing on timeouts that looked like real
+ * regressions. One killed run reported six failures and every one was green on
+ * the next. That signal was sitting in the timing column and nobody read it,
+ * three separate runs in a row, so the runner reads it.
+ *
+ * The multiple is derived in the record's `$secondsNote`, not picked: the
+ * widest healthy spread measured for a single gate is 1.69, the mildest
+ * pressure 2.17, and 2.0 is the only round number between them. It warns and
+ * does not fail — a slow green gate is still a green gate, and the thing worth
+ * saying is that the run's failures may not be about the code.
+ */
+const SLOWDOWN_FACTOR = 2.0;
+const SLOWDOWN_FLOOR_S = 10;
+const slow = [];
+for (const r of results) {
+  if (r.status === "skipped") continue;
+  const was = record.seconds?.[r.id];
+  const now = r.ms / 1000;
+  if (typeof was !== "number" || was < SLOWDOWN_FLOOR_S) continue;
+  if (now > was * SLOWDOWN_FACTOR) {
+    slow.push(`${r.id}: ${Math.round(now)}s against a recorded ${was}s (${(now / was).toFixed(1)}x)`);
+  }
+}
+
 const fell = [];
 for (const r of results) {
   if (r.pop === null || r.status === "skipped") continue;
@@ -298,7 +329,14 @@ for (const r of results) {
 }
 if (RECORD) {
   const next = { ...record.populations };
+  const nextSeconds = { ...(record.seconds ?? {}) };
   for (const r of results) if (r.pop !== null && r.status === "pass") next[r.id] = r.pop;
+  // Times only from gates that passed, and only when the run was not itself
+  // under pressure — recording a pressured number as the baseline is how the
+  // check above stops being able to fire.
+  if (!slow.length) {
+    for (const r of results) if (r.status === "pass") nextSeconds[r.id] = Math.round(r.ms / 1000);
+  }
   /**
    * Provenance with the numbers.
    *
@@ -318,10 +356,12 @@ if (RECORD) {
     // which is the same class of hole as the record they annotate.
     $units: record.$units ?? {},
     $basisChanges: record.$basisChanges ?? [],
+    $secondsNote: record.$secondsNote ?? "",
     $runWas: failedSoFar() ? "NOT green — some gates failed and were not recorded" : "green",
     recordedOn: new Date().toISOString().slice(0, 10),
     tookMinutes: Number(((Date.now() - started) / 60000).toFixed(1)),
     populations: next,
+    seconds: nextSeconds,
   }, null, 2)}\n`);
   process.stdout.write(`\nrecorded ${Object.keys(next).length} populations\n`);
 }
@@ -335,6 +375,14 @@ if (fell.length) {
   process.stderr.write(`\n✗ ${fell.length} population(s) fell — the gate looked at less than last time:\n` +
     fell.map((f) => `    ${f}\n`).join("") +
     "  Re-record with --record only when the drop is intended.\n");
+}
+if (slow.length) {
+  process.stderr.write(
+    `\n! ${slow.length} gate(s) ran over ${SLOWDOWN_FACTOR}x their recorded time — the machine was under pressure:\n` +
+      slow.map((l) => `    ${l}\n`).join("") +
+      "  Failures in this run are suspect. Re-run before diagnosing any of them,\n" +
+      "  and see the memory notes at the top of this file.\n",
+  );
 }
 if (failed.length) {
   process.stderr.write(`\n✗ ${failed.length} gate(s) failed: ${failed.map((f) => f.id).join(", ")}\n`);

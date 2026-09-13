@@ -408,12 +408,6 @@ const DrawerDemo = () => {
           <div
             className={`flex flex-col h-full bg-cl-bg text-cl-text rounded-t-cl-lg`}
           >
-            {/* Drag handle */}
-            <div className="flex justify-center py-3">
-              <div
-                className={`w-10 h-1.5 rounded-full bg-cl-bg-hover dark:bg-cl-text/10`}
-              />
-            </div>
             <DrawerHeader
               className={`px-5 pb-3 border-b border-cl-border`}
             >

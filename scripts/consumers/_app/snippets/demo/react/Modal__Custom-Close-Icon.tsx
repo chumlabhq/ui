@@ -25,12 +25,7 @@ export default function ModalExample() {
             stroke="currentColor"
             strokeWidth={2.5}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4v16m8-8H4"
-              transform="rotate(45 12 12)"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         }
         classes={

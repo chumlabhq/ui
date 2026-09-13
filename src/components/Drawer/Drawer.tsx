@@ -335,17 +335,59 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       }
     }, [isOpen, handleKeyDown]);
 
-    const dragRef = useRef({
+    const dragRef = useRef<{
+      startX: number;
+      startY: number;
+      startTime: number;
+      isDragging: boolean;
+      hasMoved: boolean;
+      frame: number;
+      pending: { closingDelta: number; panelSize: number; baseFraction: number } | null;
+    }>({
       startX: 0,
       startY: 0,
       startTime: 0,
       isDragging: false,
       hasMoved: false,
+      frame: 0,
+      pending: null,
     });
+
+    /** Put the panel back and forget the drag. The one way out of a drag. */
+    const endDrag = useCallback(() => {
+      if (dragRef.current.frame !== 0) {
+        cancelAnimationFrame(dragRef.current.frame);
+        dragRef.current.frame = 0;
+      }
+      dragRef.current.pending = null;
+      dragRef.current.isDragging = false;
+      dragRef.current.hasMoved = false;
+      const panel = panelRef.current;
+      if (panel) {
+        panel.style.transition = "";
+        panel.style.transform = "";
+      }
+    }, []);
 
     const handlePanelPointerDown = useCallback(
       (e: React.PointerEvent) => {
         if (!swipeable || !isOpen) return;
+        // Secondary and middle buttons do not drag anything.
+        if (e.button !== 0) return;
+        /**
+         * A mouse drags from the handle; a finger drags from anywhere.
+         *
+         * Swipe-to-dismiss is a touch gesture and the whole panel is the
+         * target for it. A mouse is different: the panel is full of text, and
+         * a press-and-move on text means select, not drag. The handle exists
+         * to say where the mouse can grab, and gating on it is what makes that
+         * promise true rather than decorative. `swipeable` is not gated to
+         * coarse pointers because that would leave the handle rendered on a
+         * desktop where nothing it advertises works.
+         */
+        if (e.pointerType === "mouse" && !(e.target as Element).closest?.("[data-drawer-handle]")) {
+          return;
+        }
 
         dragRef.current = {
           startX: e.clientX,
@@ -353,7 +395,15 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           startTime: Date.now(),
           isDragging: true,
           hasMoved: false,
+          frame: dragRef.current.frame,
+          pending: null,
         };
+        // Captured here, not after the deadzone. Capture is what guarantees
+        // the matching pointerup arrives on this element; without it a release
+        // outside the panel never reached the handler below, `isDragging`
+        // stayed true, and the next bare cursor move dragged the panel with no
+        // button held.
+        (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
       },
       [swipeable, isOpen],
     );
@@ -361,6 +411,17 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const handlePanelPointerMove = useCallback(
       (e: React.PointerEvent) => {
         if (!dragRef.current.isDragging) return;
+        /**
+         * No button held means no drag, whatever the latch says.
+         *
+         * `buttons` is a bitmask of what is currently pressed, so this is the
+         * authoritative answer rather than a remembered one, and it ends the
+         * drag rather than merely skipping the frame.
+         */
+        if (e.buttons === 0) {
+          endDrag();
+          return;
+        }
 
         const deltaX = e.clientX - dragRef.current.startX;
         const deltaY = e.clientY - dragRef.current.startY;
@@ -371,30 +432,41 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           const totalDelta = Math.abs(deltaX) + Math.abs(deltaY);
           if (totalDelta < SWIPE_DEADZONE) return;
           dragRef.current.hasMoved = true;
-          panel.setPointerCapture(e.pointerId);
         }
 
         const closingDelta = getClosingDelta(direction, deltaX, deltaY);
-
-        if (closingDelta <= 0) {
-          panel.style.transform = "";
-          panel.style.transition = "";
-          return;
-        }
-
         const horizontal = isHorizontalDirection(direction);
         const panelSize = horizontal ? panel.offsetWidth : panel.offsetHeight;
-        const baseFraction = hasSnapPoints
-          ? snapPoints![clampedSnapIndex]
-          : 1;
-        const dragFraction = closingDelta / panelSize;
-        const newFraction = Math.max(0, baseFraction - dragFraction);
-        const closedPercent = (1 - newFraction) * 100;
+        const baseFraction = hasSnapPoints ? snapPoints![clampedSnapIndex] : 1;
 
-        panel.style.transition = "none";
-        panel.style.transform = getTransformString(direction, closedPercent);
+        /**
+         * One write per frame, not one per event.
+         *
+         * A pointermove stream runs well ahead of the compositor, and this set
+         * `transform` on every event — so a fast drag queued dozens of style
+         * writes and layout reads between two painted frames, which is the lag
+         * reported on desktop. The latest position is the only one worth
+         * painting, so the frame keeps that and drops the rest.
+         */
+        dragRef.current.pending = { closingDelta, panelSize, baseFraction };
+        if (dragRef.current.frame !== 0) return;
+        dragRef.current.frame = requestAnimationFrame(() => {
+          dragRef.current.frame = 0;
+          const next = dragRef.current.pending;
+          const el = panelRef.current;
+          if (!next || !el) return;
+          if (next.closingDelta <= 0) {
+            el.style.transform = "";
+            el.style.transition = "";
+            return;
+          }
+          const dragFraction = next.closingDelta / next.panelSize;
+          const newFraction = Math.max(0, next.baseFraction - dragFraction);
+          el.style.transition = "none";
+          el.style.transform = getTransformString(direction, (1 - newFraction) * 100);
+        });
       },
-      [direction, hasSnapPoints, snapPoints, clampedSnapIndex],
+      [direction, hasSnapPoints, snapPoints, clampedSnapIndex, endDrag],
     );
 
     const handlePanelPointerUp = useCallback(
@@ -402,6 +474,11 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         if (!dragRef.current.isDragging) return;
 
         const { startX, startY, startTime, hasMoved } = dragRef.current;
+        if (dragRef.current.frame !== 0) {
+          cancelAnimationFrame(dragRef.current.frame);
+          dragRef.current.frame = 0;
+        }
+        dragRef.current.pending = null;
         dragRef.current.isDragging = false;
         dragRef.current.hasMoved = false;
 
@@ -483,18 +560,6 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       ],
     );
 
-    const handlePanelPointerCancel = useCallback(() => {
-      if (dragRef.current.isDragging || dragRef.current.hasMoved) {
-        dragRef.current.isDragging = false;
-        dragRef.current.hasMoved = false;
-        const panel = panelRef.current;
-        if (panel) {
-          panel.style.transition = "";
-          panel.style.transform = "";
-        }
-      }
-    }, []);
-
     const contextValue = useMemo(
       () => ({ onClose: handleClose, titleId, registerTitle: setHasTitle }),
       [handleClose, titleId, setHasTitle],
@@ -542,8 +607,26 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                   ) || undefined
                 }
                 style={{
-                  backgroundColor: overlayColor,
-                  opacity: visualOpen ? overlayOpacity : 0,
+                  /**
+                   * The tint is the background's alpha, not the element's
+                   * opacity, and that is what makes `overlayBlur` visible.
+                   *
+                   * `opacity` composites the element AND its filtered backdrop
+                   * back against the UNFILTERED backdrop, so at the default
+                   * 0.3 seven tenths of the sharp page came through and the
+                   * blur read as "not working". It was working: measured as
+                   * edge energy over the region behind the panel, removing the
+                   * filter moved it 1.274 -> 1.790, so the filter was painting
+                   * about a quarter of the detail away. Moving the tint to the
+                   * background and leaving the element opaque takes the same
+                   * region to 0.052 — a 24x collapse, which is what blur(8px)
+                   * should look like.
+                   *
+                   * Opacity still runs the fade, 0 to 1, because that is a
+                   * transition and not a resting state.
+                   */
+                  backgroundColor: `color-mix(in srgb, ${overlayColor} ${overlayOpacity * 100}%, transparent)`,
+                  opacity: visualOpen ? 1 : 0,
                   transitionDuration: `${effectiveDuration}ms`,
                   ...(overlayBlur > 0 && visualOpen
                     ? {
@@ -595,9 +678,12 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               onPointerDown={swipeable ? handlePanelPointerDown : undefined}
               onPointerMove={swipeable ? handlePanelPointerMove : undefined}
               onPointerUp={swipeable ? handlePanelPointerUp : undefined}
-              onPointerCancel={
-                swipeable ? handlePanelPointerCancel : undefined
-              }
+              // A cancelled pointer never sends pointerup, so without this the
+              // drag latched exactly the way a release outside the panel did.
+              // Cancel was already handled; what it did not do was drop the
+              // frame this drag had queued, so a cancelled drag could still be
+              // repainted one more time from a stale position.
+              onPointerCancel={swipeable ? endDrag : undefined}
             >
               {/* Pointer-only. Escape and the close button already cover the
                   keyboard, and the handle is not focusable because it offers

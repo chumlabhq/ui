@@ -33,8 +33,9 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
   clockSeparator:
     "text-2xl font-semibold text-cl-text-tertiary",
+  /** You pick an hour by clicking the face, so the face says so. */
   clockFace:
-    "relative w-44 h-44 sm:w-52 sm:h-52 mx-auto rounded-full bg-cl-bg-hover",
+    "relative w-44 h-44 sm:w-52 sm:h-52 mx-auto rounded-full bg-cl-bg-hover cursor-pointer",
   clockHand: "absolute inset-0",
   clockHandLine: "stroke-cl-accent",
   clockHandDot:

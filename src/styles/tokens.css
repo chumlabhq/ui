@@ -45,6 +45,7 @@
     --cl-bg-panel: #0a0d12;
     --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
     --cl-bg-skeleton: rgba(237, 239, 244, 0.14);
+    --cl-bg-track: rgba(237, 239, 244, 0.12);
     --cl-bg-input: rgba(237, 239, 244, 0.04);
     --cl-bg-recessed: #050608;
     --cl-text: #edeff4;
@@ -85,6 +86,7 @@
     --cl-bg-panel: #ffffff;
     --cl-bg-item-hover: rgba(15, 18, 24, 0.04);
     --cl-bg-skeleton: rgba(15, 18, 24, 0.14);
+    --cl-bg-track: rgba(15, 18, 24, 0.10);
     --cl-bg-input: #ffffff;
     --cl-bg-recessed: rgba(15, 18, 24, 0.04);
     --cl-text: #0f1218;
@@ -127,6 +129,7 @@
   --color-cl-bg-item-hover: var(--cl-bg-item-hover);
   --color-cl-bg-skeleton: var(--cl-bg-skeleton);
   --color-cl-bg-hover: var(--cl-bg-hover);
+  --color-cl-bg-track: var(--cl-bg-track);
   --color-cl-bg-input: var(--cl-bg-input);
   --color-cl-bg-recessed: var(--cl-bg-recessed);
   --color-cl-text: var(--cl-text);
