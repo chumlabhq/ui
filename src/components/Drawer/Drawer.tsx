@@ -177,6 +177,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       () => ({
         root: mergeSlot(baseClasses.root, classesProp?.root),
         overlay: mergeSlot(baseClasses.overlay, classesProp?.overlay),
+        handle: mergeSlot(baseClasses.handle, classesProp?.handle),
+      handleBar: mergeSlot(baseClasses.handleBar, classesProp?.handleBar),
         content: mergeSlot(baseClasses.content, classesProp?.content),
       }),
       [classesProp, baseClasses],
@@ -597,6 +599,19 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                 swipeable ? handlePanelPointerCancel : undefined
               }
             >
+              {/* Pointer-only. Escape and the close button already cover the
+                  keyboard, and the handle is not focusable because it offers
+                  nothing a keyboard user cannot already do — announcing it
+                  would be a stop with no action behind it. */}
+              {swipeable && (
+                <div
+                  className={mergedClasses.handle || undefined}
+                  data-drawer-handle
+                  aria-hidden="true"
+                >
+                  <span className={mergedClasses.handleBar || undefined} />
+                </div>
+              )}
               {children}
             </div>
           </div>,

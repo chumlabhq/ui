@@ -8,6 +8,7 @@ import {
   DrawerFooter,
   DrawerCloseButton,
   } from "../../components/Drawer/index.js";
+import { Button } from "../../components/Button/index.js";
 import { Input } from "../../components/Input/index.js";
 import { TextArea } from "../../components/TextArea/index.js";
 import { Dropdown } from "../../components/Dropdown/index.js";
@@ -131,12 +132,12 @@ const DrawerDemo = () => {
         </p>
       </DrawerBody>
       <DrawerFooter className={c.footer}>
-        <button className={c.btn} onClick={onClose}>
+        <Button className={c.btn} onClick={onClose}>
           Cancel
-        </button>
-        <button className={c.btnPrimary} onClick={onClose}>
+        </Button>
+        <Button className={c.btnPrimary} onClick={onClose}>
           Confirm
-        </button>
+        </Button>
       </DrawerFooter>
     </div>
   );
@@ -161,9 +162,9 @@ const DrawerDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           {/* Basic usage — open/close via controlled state */}
-          <button className={c.btnPrimary} onClick={basic.onOpen}>
+          <Button className={c.btnPrimary} onClick={basic.onOpen}>
             Open Drawer
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer open={basic.open} onOpenChange={basic.onOpenChange}>
           {renderDrawerContent("Basic Drawer", basic.onClose)}
@@ -210,9 +211,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={sized.onOpen}>
+          <Button className={c.btnPrimary} onClick={sized.onOpen}>
             Open 500px Drawer
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer open={sized.open} onOpenChange={sized.onOpenChange} size="500px">
           {renderDrawerContent("500px Wide Drawer", sized.onClose)}
@@ -226,12 +227,12 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button className={c.btn} onClick={overlay.onOpen}>
+          <Button className={c.btn} onClick={overlay.onOpen}>
             Custom Opacity (0.45)
-          </button>
-          <button className={c.btn} onClick={blurOverlay.onOpen}>
+          </Button>
+          <Button className={c.btn} onClick={blurOverlay.onOpen}>
             Blur Overlay
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={overlay.open}
@@ -257,12 +258,12 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button className={c.btn} onClick={noOverlayClose.onOpen}>
+          <Button className={c.btn} onClick={noOverlayClose.onOpen}>
             No Overlay Close
-          </button>
-          <button className={c.btn} onClick={noEscClose.onOpen}>
+          </Button>
+          <Button className={c.btn} onClick={noEscClose.onOpen}>
             No Escape Close
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={noOverlayClose.open}
@@ -290,9 +291,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={keepMounted.onOpen}>
+          <Button className={c.btnPrimary} onClick={keepMounted.onOpen}>
             Open (keepMounted)
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={keepMounted.open}
@@ -314,9 +315,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={nonModal.onOpen}>
+          <Button className={c.btnPrimary} onClick={nonModal.onOpen}>
             Open Non-Modal
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={nonModal.open}
@@ -340,9 +341,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={customDuration.onOpen}>
+          <Button className={c.btnPrimary} onClick={customDuration.onOpen}>
             Open (600ms)
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={customDuration.open}
@@ -360,9 +361,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={swipeable.onOpen}>
+          <Button className={c.btnPrimary} onClick={swipeable.onOpen}>
             Open Swipeable
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={swipeable.open}
@@ -383,9 +384,9 @@ const DrawerDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <button className={c.btnPrimary} onClick={snapPoints.onOpen}>
+            <Button className={c.btnPrimary} onClick={snapPoints.onOpen}>
               Open Bottom Sheet
-            </button>
+            </Button>
             <span
               className={`text-xs font-mono text-cl-text-secondary`}
             >
@@ -455,9 +456,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={stacked1.onOpen}>
+          <Button className={c.btnPrimary} onClick={stacked1.onOpen}>
             Open First
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer open={stacked1.open} onOpenChange={stacked1.onOpenChange}>
           <div className={c.panel}>
@@ -471,9 +472,9 @@ const DrawerDemo = () => {
               <p className={`text-sm mb-4 ${c.text}`}>
                 This is the first drawer.
               </p>
-              <button className={c.btnPrimary} onClick={stacked2.onOpen}>
+              <Button className={c.btnPrimary} onClick={stacked2.onOpen}>
                 Open Second
-              </button>
+              </Button>
             </DrawerBody>
           </div>
         </Drawer>
@@ -493,9 +494,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={initialFocus.onOpen}>
+          <Button className={c.btnPrimary} onClick={initialFocus.onOpen}>
             Open (focus on input)
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={initialFocus.open}
@@ -529,9 +530,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={transitionCb.onOpen}>
+          <Button className={c.btnPrimary} onClick={transitionCb.onOpen}>
             Open (check log)
-          </button>
+          </Button>
           {transitionLog.length > 0 && (
             <div
               className={`mt-3 text-xs font-mono space-y-1 text-cl-text-secondary`}
@@ -562,9 +563,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={classesDemo.onOpen}>
+          <Button className={c.btnPrimary} onClick={classesDemo.onOpen}>
             Custom Styled Drawer
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={classesDemo.open}
@@ -611,9 +612,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={reduceMotionDemo.onOpen}>
+          <Button className={c.btnPrimary} onClick={reduceMotionDemo.onOpen}>
             Open (no animation)
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={reduceMotionDemo.open}
@@ -635,9 +636,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={formDrawer.onOpen}>
+          <Button className={c.btnPrimary} onClick={formDrawer.onOpen}>
             Create New Item
-          </button>
+          </Button>
         </DemoWrapper>
         <Drawer
           open={formDrawer.open}
@@ -677,12 +678,12 @@ const DrawerDemo = () => {
               </form>
             </DrawerBody>
             <DrawerFooter className={c.footer}>
-              <button className={c.btn} onClick={formDrawer.onClose}>
+              <Button className={c.btn} onClick={formDrawer.onClose}>
                 Cancel
-              </button>
-              <button className={c.btnPrimary} onClick={formDrawer.onClose}>
+              </Button>
+              <Button className={c.btnPrimary} onClick={formDrawer.onClose}>
                 Create
-              </button>
+              </Button>
             </DrawerFooter>
           </div>
         </Drawer>
@@ -724,9 +725,9 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={untrapped.onOpen}>
+          <Button className={c.btnPrimary} onClick={untrapped.onOpen}>
             Open without focus trap or restore
-          </button>
+          </Button>
           <p className="mt-3 text-sm text-cl-text-secondary">
             Tab out of it — the focus ring walks into the page behind, which it
             cannot do in the drawer above. Close it and focus does not come back

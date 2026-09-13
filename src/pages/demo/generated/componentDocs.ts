@@ -5304,6 +5304,18 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "string",
             "required": false,
             "description": "The panel itself, which is the element the `direction` slides."
+          },
+          {
+            "name": "handle",
+            "type": "string",
+            "required": false,
+            "description": "The drag handle's hit area at the panel's leading edge. Rendered only when `swipeable`."
+          },
+          {
+            "name": "handleBar",
+            "type": "string",
+            "required": false,
+            "description": "The bar drawn inside the handle, which is the part a pointer user sees."
           }
         ]
       }
@@ -5332,6 +5344,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "data-drawer-footer",
+        "values": [],
+        "when": "always"
+      },
+      {
+        "name": "data-drawer-handle",
         "values": [],
         "when": "always"
       },

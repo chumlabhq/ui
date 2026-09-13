@@ -15,6 +15,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 
 const getClasses = (_dark: boolean) => ({
@@ -110,32 +111,32 @@ const ToastDemoContent = ({
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Basic usage — call toast methods to show notifications */}
-          <button
+          <Button
             className={c.btnSuccess}
             onClick={() => toast.success("Operation completed successfully!")}
           >
             Success
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnWarning}
             onClick={() => toast.warning("Please review before proceeding.")}
           >
             Warning
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnError}
             onClick={() =>
               toast.error("Something went wrong. Please try again.")
             }
           >
             Error
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnInfo}
             onClick={() => toast.info("Here's some useful information.")}
           >
             Info
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -145,7 +146,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnSuccess}
             onClick={() =>
               toast.success("File uploaded", {
@@ -155,8 +156,8 @@ const ToastDemoContent = ({
             }
           >
             Success with Description
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnError}
             onClick={() =>
               toast.error("Upload failed", {
@@ -166,8 +167,8 @@ const ToastDemoContent = ({
             }
           >
             Error with Description
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnWarning}
             onClick={() =>
               toast.warning("Session expiring", {
@@ -177,7 +178,7 @@ const ToastDemoContent = ({
             }
           >
             Warning with Description
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -187,7 +188,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Quick notification", {
@@ -197,8 +198,8 @@ const ToastDemoContent = ({
             }
           >
             2 Seconds
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Standard notification", {
@@ -208,8 +209,8 @@ const ToastDemoContent = ({
             }
           >
             5 Seconds (default)
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Long notification", {
@@ -219,8 +220,8 @@ const ToastDemoContent = ({
             }
           >
             10 Seconds
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.info("Persistent notification", {
@@ -230,7 +231,7 @@ const ToastDemoContent = ({
             }
           >
             Persistent (Infinity)
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -240,7 +241,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("With progress bar", {
@@ -250,8 +251,8 @@ const ToastDemoContent = ({
             }
           >
             With Progress (default)
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.info("No progress indicator", {
@@ -261,7 +262,7 @@ const ToastDemoContent = ({
             }
           >
             Without Progress
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -271,7 +272,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -283,8 +284,8 @@ const ToastDemoContent = ({
             }
           >
             Purple (progressColor)
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -299,8 +300,8 @@ const ToastDemoContent = ({
             }
           >
             Gradient (classes.progress)
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -312,7 +313,7 @@ const ToastDemoContent = ({
             }
           >
             Green Progress
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -322,7 +323,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("With close button", {
@@ -332,8 +333,8 @@ const ToastDemoContent = ({
             }
           >
             With Close Button (default)
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.info("Auto-dismiss only", {
@@ -344,7 +345,7 @@ const ToastDemoContent = ({
             }
           >
             Without Close Button
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -354,7 +355,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Hover to pause", {
@@ -365,8 +366,8 @@ const ToastDemoContent = ({
             }
           >
             Pause on Hover (default)
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.info("No pause on hover", {
@@ -377,7 +378,7 @@ const ToastDemoContent = ({
             }
           >
             No Pause
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -387,7 +388,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Press Escape to dismiss", {
@@ -398,8 +399,8 @@ const ToastDemoContent = ({
             }
           >
             With Escape Dismissal
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.info("Standard toast", {
@@ -409,7 +410,7 @@ const ToastDemoContent = ({
             }
           >
             Without Escape Dismissal
-          </button>
+          </Button>
         </DemoWrapper>
         <div className={c.note}>
           <strong>Tip:</strong> Set{" "}
@@ -424,7 +425,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.toast({
@@ -436,8 +437,8 @@ const ToastDemoContent = ({
             }
           >
             Rocket Icon
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnSuccess}
             onClick={() =>
               toast.success("Celebration!", {
@@ -446,8 +447,8 @@ const ToastDemoContent = ({
             }
           >
             Party Icon
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnWarning}
             onClick={() =>
               toast.warning("Heads up!", {
@@ -456,8 +457,8 @@ const ToastDemoContent = ({
             }
           >
             Eyes Icon
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -477,7 +478,7 @@ const ToastDemoContent = ({
             }
           >
             Star Icon
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -487,7 +488,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -500,8 +501,8 @@ const ToastDemoContent = ({
             }
           >
             Rounded Icon Background
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -513,7 +514,7 @@ const ToastDemoContent = ({
             }
           >
             Large Default Icon
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -525,7 +526,7 @@ const ToastDemoContent = ({
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-wrap gap-4">
-              <button
+              <Button
                 className={c.btnInfo}
                 onClick={() =>
                   toast.toast({
@@ -539,12 +540,12 @@ const ToastDemoContent = ({
                           Version 2.0 is now available.
                         </p>
                         <div className="flex gap-2 mt-1">
-                          <button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90 cursor-pointer">
+                          <Button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90 cursor-pointer">
                             Update Now
-                          </button>
-                          <button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30 cursor-pointer">
+                          </Button>
+                          <Button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30 cursor-pointer">
                             Later
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     ),
@@ -553,8 +554,8 @@ const ToastDemoContent = ({
                 }
               >
                 With Action Buttons
-              </button>
-              <button
+              </Button>
+              <Button
                 className={c.btnSuccess}
                 onClick={() =>
                   toast.toast({
@@ -577,8 +578,8 @@ const ToastDemoContent = ({
                 }
               >
                 Custom Layout
-              </button>
-              <button
+              </Button>
+              <Button
                 className={c.btn}
                 onClick={() =>
                   toast.toast({
@@ -600,7 +601,7 @@ const ToastDemoContent = ({
                 }
               >
                 Progress Content
-              </button>
+              </Button>
             </div>
             <div className={c.note}>
               <strong>Note:</strong> When using{" "}
@@ -618,7 +619,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -639,8 +640,8 @@ const ToastDemoContent = ({
             }
           >
             Light Theme
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -654,8 +655,8 @@ const ToastDemoContent = ({
             }
           >
             Rounded Full
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -670,8 +671,8 @@ const ToastDemoContent = ({
             }
           >
             Custom Text Styles
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -685,7 +686,7 @@ const ToastDemoContent = ({
             }
           >
             Custom Content Wrapper
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -695,7 +696,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -709,8 +710,8 @@ const ToastDemoContent = ({
             }
           >
             Custom Shadow
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -724,8 +725,8 @@ const ToastDemoContent = ({
             }
           >
             Custom Width
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -741,7 +742,7 @@ const ToastDemoContent = ({
             }
           >
             Gradient Background
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -751,7 +752,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnSuccess}
             onClick={() =>
               toast.success("Themed success", {
@@ -760,8 +761,8 @@ const ToastDemoContent = ({
             }
           >
             Success (Themed)
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnError}
             onClick={() =>
               toast.error("Themed error", {
@@ -770,7 +771,7 @@ const ToastDemoContent = ({
             }
           >
             Error (Themed)
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -780,7 +781,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Toast with callback", {
@@ -790,8 +791,8 @@ const ToastDemoContent = ({
             }
           >
             With onDismiss Callback
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.success("Action completed", {
@@ -801,7 +802,7 @@ const ToastDemoContent = ({
             }
           >
             Alert on Dismiss
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -813,7 +814,7 @@ const ToastDemoContent = ({
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-wrap gap-3">
-              <button
+              <Button
                 className={c.btnInfo}
                 onClick={() => {
                   toastIdRef.current = toast.info("Persistent toast", {
@@ -823,8 +824,8 @@ const ToastDemoContent = ({
                 }}
               >
                 Create Tracked Toast
-              </button>
-              <button
+              </Button>
+              <Button
                 className={c.btn}
                 onClick={() => {
                   if (toastIdRef.current) {
@@ -834,13 +835,13 @@ const ToastDemoContent = ({
                 }}
               >
                 Dismiss by ID
-              </button>
-              <button
+              </Button>
+              <Button
                 className={c.btnError}
                 onClick={() => toast.dismissAll()}
               >
                 Dismiss All
-              </button>
+              </Button>
             </div>
             <p
               className={`text-xs text-cl-text-secondary`}
@@ -859,7 +860,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() => {
               toast.success("First toast");
@@ -869,8 +870,8 @@ const ToastDemoContent = ({
             }}
           >
             Trigger 4 Toasts
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() => {
               for (let i = 1; i <= 10; i++) {
@@ -883,7 +884,7 @@ const ToastDemoContent = ({
             }}
           >
             Trigger 10 Toasts (Max 5 visible)
-          </button>
+          </Button>
         </DemoWrapper>
         <div className={c.note}>
           <strong>Tip:</strong> Configure{" "}
@@ -928,7 +929,7 @@ const ToastDemoContent = ({
                 {position}
               </strong>
             </p>
-            <button
+            <Button
               className={`${c.btnInfo} self-start`}
               onClick={() =>
                 toast.info(`Toast at ${position}`, {
@@ -937,7 +938,7 @@ const ToastDemoContent = ({
               }
             >
               Show Toast at Current Position
-            </button>
+            </Button>
           </div>
         </DemoWrapper>
       </Section>
@@ -949,13 +950,13 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btn}
             onClick={() => toast.toast("Simple string message")}
           >
             String Shorthand
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btn}
             onClick={() =>
               toast.toast({
@@ -968,7 +969,7 @@ const ToastDemoContent = ({
             }
           >
             Object Config
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 
@@ -979,7 +980,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Localized close label", {
@@ -989,8 +990,8 @@ const ToastDemoContent = ({
             }
           >
             Custom closeAriaLabel
-          </button>
-          <button
+          </Button>
+          <Button
             className={c.btnInfo}
             onClick={() =>
               toast.info("Spanish label", {
@@ -1001,7 +1002,7 @@ const ToastDemoContent = ({
             }
           >
             i18n Example (Spanish)
-          </button>
+          </Button>
         </DemoWrapper>
       </Section>
 

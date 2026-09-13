@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerHeader } from "@chumlab/ui/drawer";
 
 function useDrawerState(initial = false) {
@@ -32,12 +33,12 @@ export default function DrawerExample() {
   const initialFocus = useDrawerState();
   return (
     <>
-      <button
+      <Button
         className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
         onClick={initialFocus.onOpen}
       >
         Open (focus on input)
-      </button>
+      </Button>
       <Drawer
         open={initialFocus.open}
         onOpenChange={initialFocus.onOpenChange}

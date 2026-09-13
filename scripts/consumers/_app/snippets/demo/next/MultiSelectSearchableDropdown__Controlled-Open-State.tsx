@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { MultiSelectOption, MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";
 
 const staticOptions: MultiSelectOption[] = [
@@ -44,24 +45,24 @@ export default function MultiSelectSearchableDropdownExample() {
           aria-label="Controlled dropdown"
         />
       </div>
-      <button
+      <Button
         type="button"
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={() => setControlledOpen((o) => !o)}
       >
         {controlledOpen ? "Close" : "Open"}
-      </button>
+      </Button>
       {
         controlledValue.length > 0 && (
-          <button
+          <Button
             type="button"
             className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={() => setControlledValue([])}
           >
             Clear
-          </button>
+          </Button>
         )
       }
     </div>

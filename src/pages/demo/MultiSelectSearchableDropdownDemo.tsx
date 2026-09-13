@@ -5,6 +5,7 @@ import {
 import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
 import { CountryFlag } from "../../components/CountryFlag/index.js";
 import type { MultiSelectOption } from "../../components/MultiSelectSearchableDropdown/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -478,23 +479,23 @@ const MultiSelectSearchableDropdownDemo = () => {
                 aria-label="Controlled dropdown"
               />
             </div>
-            <button
+            <Button
               type="button"
               className={c.btn}
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setControlledOpen((o) => !o)}
             >
               {controlledOpen ? "Close" : "Open"}
-            </button>
+            </Button>
             {controlledValue.length > 0 && (
-              <button
+              <Button
                 type="button"
                 className={c.btn}
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => setControlledValue([])}
               >
                 Clear
-              </button>
+              </Button>
             )}
           </div>
         </DemoWrapper>
@@ -980,13 +981,13 @@ const MultiSelectSearchableDropdownDemo = () => {
                 {event}
               </p>
             ))}
-            <button
+            <Button
               type="button"
               className={c.btn}
               onClick={() => setFormEvents([])}
             >
               Clear log
-            </button>
+            </Button>
           </div>
         )}
       </Section>
@@ -1026,13 +1027,13 @@ const MultiSelectSearchableDropdownDemo = () => {
                 {entry}
               </p>
             ))}
-            <button
+            <Button
               type="button"
               className={c.btn}
               onClick={() => setKeyDownLog([])}
             >
               Clear log
-            </button>
+            </Button>
           </div>
         )}
       </Section>

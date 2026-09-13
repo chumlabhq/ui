@@ -215,6 +215,44 @@ default" cannot see a default that was never declared.
 
 ---
 
+## A selector list behind one prefix is scoped only in its first clause
+
+`focus-not-obscured` selected its targets with `` `[data-fixture] ${SEL}` ``,
+where `SEL` was the usual comma-separated focusable list. CSS splits a selector
+list on its top-level commas before anything else, so that string means
+`[data-fixture] a[href]`, then `button:not([disabled])`, then
+`input:not([disabled])`, and so on — one scoped clause and five that match the
+whole document. The gate had been walking the index nav, the page chrome and
+every portal on the page for the life of the branch, and its published
+population of 104 fixtures was a number over a set nobody had chosen.
+
+It surfaced as an intermittent failure, which is the part worth keeping. The
+out-of-scope element it found was a Drawer close button in a portal, and the
+walk then climbed to `document.body` — which an open Drawer gives
+`overflow: hidden` to lock scroll, and which is about 48px tall on a fixture
+page — and called that the clipping ancestor of a `position: fixed` panel CSS
+does not clip. Mid-transition the panel's rect is outside that box and the gate
+reports; settled, it is inside and the gate passes. So the same defect looked
+like load sensitivity, was filed as a flake twice, and was re-run rather than
+read. **A gate that fails only under load is not thereby a timing problem — it
+is a gate whose inputs move under load, and the first question is what it is
+actually looking at.**
+
+Both fixes were available all along and neither was: interpolate the scope into
+every clause, and include portal roots through the `markPortalRoots` helper that
+already exists for exactly this. The corrected population is 78 fixtures and 129
+children — *lower* than the wrong one, because the harness left the count.
+
+The reason it survived three failures is the general rule. The spec had a
+self-check, and it was a real one: it built a `clip` strip and a `hidden` strip
+and proved the `hidden`-scrolls-on-focus distinction the gate turns on. But it
+built its own DOM and compared rects by hand, so it exercised the MEASUREMENT
+and never the SELECTION or the ancestor walk — the two parts that were wrong.
+**A plant that reimplements the thing it is planting on tests the reimplementation.**
+The measurement now lives in `e2e/_clip.ts`, the walk and the plant both call
+it, and each of the three fixes was reverted in turn to confirm the plant goes
+red for it.
+
 ## Definition of done (every task)
 
 Compiles and typechecks; matches existing conventions; no narration comments; no

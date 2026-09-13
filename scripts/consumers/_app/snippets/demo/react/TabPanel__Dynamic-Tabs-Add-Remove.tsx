@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Tab, TabPanel } from "@chumlab/ui/tab-panel";
 
 const SettingsIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -107,7 +108,7 @@ export default function TabPanelExample() {
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center gap-2">
-        <button
+        <Button
           type="button"
           onClick={addDynamicTab}
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
@@ -116,7 +117,7 @@ export default function TabPanelExample() {
             <PlusIcon className="w-4 h-4" />
             Add Tab
           </span>
-        </button>
+        </Button>
         <span className="text-sm text-cl-text-secondary">
           {dynamicTabs.length}
           tab

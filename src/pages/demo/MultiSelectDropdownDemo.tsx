@@ -5,6 +5,7 @@ import {
 import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
 import { CountryFlag } from "../../components/CountryFlag/index.js";
 import type { MultiSelectOption } from "../../components/MultiSelectDropdown/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -566,23 +567,23 @@ const MultiSelectDropdownDemo = () => {
                 classes={c.dropdown}
               />
             </div>
-            <button
+            <Button
               type="button"
               className={c.btn}
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setControlledOpen((o) => !o)}
             >
               {controlledOpen ? "Close" : "Open"}
-            </button>
+            </Button>
             {controlledValue.length > 0 && (
-              <button
+              <Button
                 type="button"
                 className={c.btn}
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => setControlledValue([])}
               >
                 Clear
-              </button>
+              </Button>
             )}
           </div>
         </DemoWrapper>
@@ -737,9 +738,9 @@ const MultiSelectDropdownDemo = () => {
                 classes={c.dropdown}
               />
             </div>
-            <button type="submit" className={c.btn}>
+            <Button type="submit" className={c.btn}>
               Submit
-            </button>
+            </Button>
           </form>
         </DemoWrapper>
       </Section>

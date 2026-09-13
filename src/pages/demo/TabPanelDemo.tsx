@@ -3,6 +3,7 @@ import {
   useRef } from "react";
 import { TabPanel } from "../../components/TabPanel/index.js";
 import type { Tab } from "../../components/TabPanel/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -846,7 +847,7 @@ const TabPanelDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full space-y-4">
             <div className="flex items-center gap-2">
-              <button
+              <Button
                 type="button"
                 onClick={addDynamicTab}
                 className={c.btnPrimary}
@@ -855,7 +856,7 @@ const TabPanelDemo = () => {
                   <PlusIcon className="w-4 h-4" />
                   Add Tab
                 </span>
-              </button>
+              </Button>
               <span
                 className={`text-sm text-cl-text-secondary`}
               >

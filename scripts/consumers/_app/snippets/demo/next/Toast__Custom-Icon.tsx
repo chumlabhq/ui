@@ -1,12 +1,13 @@
 "use client";
 
-import { useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const toast = useToast();
   return (
     <>
-      <button
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
         onClick={
           () =>
@@ -19,8 +20,8 @@ export default function ToastExample() {
         }
       >
         Rocket Icon
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success"
         onClick={
           () =>
@@ -30,8 +31,8 @@ export default function ToastExample() {
         }
       >
         Party Icon
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning"
         onClick={
           () =>
@@ -41,8 +42,8 @@ export default function ToastExample() {
         }
       >
         Eyes Icon
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
         onClick={
           () =>
@@ -63,7 +64,15 @@ export default function ToastExample() {
         }
       >
         Star Icon
-      </button>
+      </Button>
     </>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

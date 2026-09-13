@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { InternationalPhoneInput, PhoneNumberData } from "@chumlab/ui/international-phone-input";
 
 export default function InternationalPhoneInputExample() {
@@ -32,14 +33,14 @@ export default function InternationalPhoneInputExample() {
         }
       />
       <div className="flex gap-2 flex-wrap">
-        <button
+        <Button
           type="button"
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
           onClick={() => setControlledResetValue(undefined)}
         >
           Clear
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
           onClick={
@@ -53,8 +54,8 @@ export default function InternationalPhoneInputExample() {
           }
         >
           Set US Number
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
           onClick={
@@ -68,7 +69,7 @@ export default function InternationalPhoneInputExample() {
           }
         >
           Set UK Number
-        </button>
+        </Button>
       </div>
       {
         controlledResetValue && (

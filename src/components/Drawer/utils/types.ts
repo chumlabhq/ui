@@ -9,6 +9,10 @@ export interface DrawerClasses {
   overlay?: string;
   /** The panel itself, which is the element the `direction` slides. */
   content?: string;
+  /** The drag handle's hit area at the panel's leading edge. Rendered only when `swipeable`. */
+  handle?: string;
+  /** The bar drawn inside the handle, which is the part a pointer user sees. */
+  handleBar?: string;
 }
 
 /**

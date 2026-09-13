@@ -1,30 +1,31 @@
+import { Button } from "@chumlab/ui/button";
 import { CircularLoader, DotLoader, LinearLoader } from "@chumlab/ui/loader";
 
 export default function LoaderExample() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4 flex-wrap">
-        <button
+        <Button
           type="button"
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md bg-cl-bg-hover text-cl-text-tertiary cursor-not-allowed dark:bg-cl-bg-elevated dark:text-cl-text-tertiary dark:cursor-not-allowed"
           disabled
         >
           <CircularLoader size={16} className="text-cl-accent" />
           Saving...
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
         >
           <CircularLoader size={16} className="text-cl-accent" />
           Processing
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
         >
           <DotLoader dotSize={5} gap={3} className="text-cl-accent" />
-        </button>
+        </Button>
       </div>
       <div
         className="rounded-cl-lg p-8 flex flex-col items-center justify-center gap-3 border border-cl-border bg-cl-bg-elevated"

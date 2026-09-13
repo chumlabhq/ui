@@ -69,6 +69,16 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "CountryFlag", fixture: "resolved" },
   { component: "DatePicker", fixture: "closed" },
   { component: "Drawer", fixture: "open" },
+  /**
+   * The only swipeable subject, and it exists for the grab handle.
+   *
+   * `Drawer/open` is not swipeable, so the handle rendered in no picture at
+   * all: its paint could have been removed and nothing would have counted a
+   * pixel. Plant margin measured on the way in: removing the bar's fill
+   * (`bg-cl-border-input`) moves 132 pixels against a `maxDiffPixels: 1`
+   * budget, at every width.
+   */
+  { component: "Drawer", fixture: "swipeable-bottom" },
   { component: "Dropdown", fixture: "closed" },
   { component: "Input", fixture: "labelled" },
   { component: "InternationalPhoneInput", fixture: "default" },

@@ -49,6 +49,18 @@
  *     on all 30 components, when `unstyled.contract` is one of the strongest
  *     gates in the repo.
  *
+ * A LIMIT THIS CANNOT SEE, recorded because nothing else will:
+ *
+ *     A section counts as covering a prop because the JSX EXISTS, not because a
+ *     reader can reach it. `ModalDemo` carried four `<Modal>`s bound to state
+ *     nothing ever set true — no trigger anywhere on the page — and they counted
+ *     as four demonstrated features for as long as they were there. Deleting
+ *     them moved `Modal.unstyled` from demoed to undemoed and the total from
+ *     282 to 283, which is the honest figure: the prop was never demonstrable.
+ *     A source scan cannot tell a rendered demo from an unreachable one; only a
+ *     runtime check could, and none exists. So a number here is an upper bound
+ *     on what a reader can actually see.
+ *
  * And one rule that is not a fault but a decision: every prop NAME tiers
  * identically on every component that declares it. That is asserted below, not
  * assumed — a prop that tiers two ways is a bug in this script.

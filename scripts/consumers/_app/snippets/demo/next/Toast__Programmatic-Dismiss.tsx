@@ -1,15 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const toast = useToast();
   const toastIdRef = useRef<string | null>(null);
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-wrap gap-3">
-        <button
+        <Button
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
           onClick={
             () => {
@@ -21,8 +22,8 @@ export default function ToastExample() {
           }
         >
           Create Tracked Toast
-        </button>
-        <button
+        </Button>
+        <Button
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
           onClick={
             () => {
@@ -34,13 +35,13 @@ export default function ToastExample() {
           }
         >
           Dismiss by ID
-        </button>
-        <button
+        </Button>
+        <Button
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-cl-bg hover:bg-cl-error/90"
           onClick={() => toast.dismissAll()}
         >
           Dismiss All
-        </button>
+        </Button>
       </div>
       <p className="text-xs text-cl-text-secondary">
         The
@@ -51,5 +52,13 @@ export default function ToastExample() {
         .
       </p>
     </div>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

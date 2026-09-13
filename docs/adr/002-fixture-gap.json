@@ -6,16 +6,17 @@
     "94 props land in `logic-only` and 115 in `passes-through`; both buckets can contain props that do reach markup by a route this does not follow. `passes-through` means 'handed to a child component' and does not decide whether the child's markup changes.",
     "So the recorded count is a FLOOR, not a total. The error is toward under-reporting.",
     "Identifier matching is by name within the component's own directory, so a local variable that shares a prop's name in another function in that directory can be read as a reference to it.",
-    "Prop coverage is read from each fixture's `props` object, so a fixture that must use `render` cannot register one. `AvatarGroup.renderSurplus` is the case: `Avatar/group-render-surplus` renders that exact branch and photographs it, and the audit still counts the prop as unfixtured because the group needs children and so cannot be expressed as a props bag. The 2026-09-12 rise from 17 to 18 is that, plus the wiring of `AvatarGroup.classes.surplus` \u2014 a slot that was in the public type and read nowhere, so a consumer could set it and it painted nothing."
+    "Prop coverage is read from each fixture's `props` object, so a fixture that must use `render` cannot register one. `AvatarGroup.renderSurplus` is the case: `Avatar/group-render-surplus` renders that exact branch and photographs it, and the audit still counts the prop as unfixtured because the group needs children and so cannot be expressed as a props bag. The 2026-09-12 rise from 17 to 18 is that, plus the wiring of `AvatarGroup.classes.surplus` — a slot that was in the public type and read nowhere, so a consumer could set it and it painted nothing.",
+    "2026-09-13: `Drawer.swipeable` was in that bucket for one day for the same reason and has left it. `Drawer/swipeable-bottom` renders the swipeable panel and photographs its grab handle, but it must use `render` to supply the Toggle and children, so its `props` bag is empty and this audit could not see the prop at all. The fix was a second fixture, `Drawer/open-swipeable`, that expresses the same prop as a props bag — which is also what `fixtures.contract` needs, since it instantiates from `props` and had failed on the unreachable `handle` classes key. One fixture for the photograph, one for the two audits that read `props`. That is the 151 → 150 fall."
   ],
-  "recordedOn": "2026-09-12",
+  "recordedOn": "2026-09-13",
   "fixtures": 414,
-  "propsWithoutFixture": 644,
-  "rendersMarkup": 151,
+  "propsWithoutFixture": 643,
+  "rendersMarkup": 150,
   "byRank": {
     "a slot the fixtures never fill": 49,
     "a classes key": 18,
     "markup with none of the above": 38,
-    "the component itself, present or absent": 46
+    "the component itself, present or absent": 45
   }
 }

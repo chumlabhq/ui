@@ -1,12 +1,13 @@
 "use client";
 
-import { useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const toast = useToast();
   return (
     <>
-      <button
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
         onClick={
           () =>
@@ -17,8 +18,8 @@ export default function ToastExample() {
         }
       >
         Custom closeAriaLabel
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
         onClick={
           () =>
@@ -30,7 +31,15 @@ export default function ToastExample() {
         }
       >
         i18n Example (Spanish)
-      </button>
+      </Button>
     </>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

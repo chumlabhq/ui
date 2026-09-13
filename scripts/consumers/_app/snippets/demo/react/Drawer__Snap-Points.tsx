@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Drawer, DrawerBody, DrawerHeader } from "@chumlab/ui/drawer";
 
 function useDrawerState(initial = false) {
@@ -17,12 +18,12 @@ export default function DrawerExample() {
   return (
     <>
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <button
+        <Button
           className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
           onClick={snapPoints.onOpen}
         >
           Open Bottom Sheet
-        </button>
+        </Button>
         <span className="text-xs font-mono text-cl-text-secondary">
           snap:
           {Math.round([0.3, 0.6, 1][snapIndex] * 100)}

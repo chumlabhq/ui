@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerHeader } from "@chumlab/ui/drawer";
 
 function useDrawerState(initial = false) {
@@ -31,12 +32,12 @@ export default function DrawerExample() {
   const classesDemo = useDrawerState();
   return (
     <>
-      <button
+      <Button
         className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
         onClick={classesDemo.onOpen}
       >
         Custom Styled Drawer
-      </button>
+      </Button>
       <Drawer
         open={classesDemo.open}
         onOpenChange={classesDemo.onOpenChange}

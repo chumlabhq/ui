@@ -1,12 +1,13 @@
 "use client";
 
-import { useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const toast = useToast();
   return (
     <>
-      <button
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success"
         onClick={
           () =>
@@ -17,8 +18,8 @@ export default function ToastExample() {
         }
       >
         Success with Description
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-cl-bg hover:bg-cl-error/90"
         onClick={
           () =>
@@ -29,8 +30,8 @@ export default function ToastExample() {
         }
       >
         Error with Description
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning"
         onClick={
           () =>
@@ -41,7 +42,15 @@ export default function ToastExample() {
         }
       >
         Warning with Description
-      </button>
+      </Button>
     </>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

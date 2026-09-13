@@ -3,6 +3,7 @@ import {
   useState,
   useRef } from "react";
 import { OtpInput } from "../../components/OtpInput/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -220,12 +221,12 @@ const OtpInputDemo = () => {
           >
             Clear
           </button>
-          <button
+          <Button
             className={c.btnPrimary}
             onClick={() => setControlled("123456")}
           >
             Set 123456
-          </button>
+          </Button>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <OtpInput
@@ -355,13 +356,13 @@ const OtpInputDemo = () => {
           {showAutoFocus ? (
             <OtpInput autoFocusFirst label="Auto-focused" classes={c.otp} />
           ) : (
-            <button
+            <Button
               type="button"
               className={c.btn}
               onClick={() => setShowAutoFocus(true)}
             >
               Mount an auto-focused OtpInput
-            </button>
+            </Button>
           )}
         </DemoWrapper>
       </Section>
@@ -384,12 +385,12 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <div className="mb-3">
-          <button
+          <Button
             className={c.btnPrimary}
             onClick={() => otpRef.current?.focus()}
           >
             Focus First Input
-          </button>
+          </Button>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <OtpInput ref={otpRef} label="Ref demo" classes={c.otp} />

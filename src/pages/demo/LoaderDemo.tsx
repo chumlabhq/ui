@@ -15,6 +15,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 
 const getClasses = (_dark: boolean) => ({
@@ -505,20 +506,20 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-4 flex-wrap">
-              <button type="button" className={c.btnDisabled} disabled>
+              <Button type="button" className={c.btnDisabled} disabled>
                 <CircularLoader
                   size={16}
                   className="text-cl-accent"
                 />
                 Saving...
-              </button>
-              <button type="button" className={c.btn}>
+              </Button>
+              <Button type="button" className={c.btn}>
                 <CircularLoader size={16} className="text-cl-accent" />
                 Processing
-              </button>
-              <button type="button" className={c.btn}>
+              </Button>
+              <Button type="button" className={c.btn}>
                 <DotLoader dotSize={5} gap={3} className="text-cl-accent" />
-              </button>
+              </Button>
             </div>
 
             <div className={c.sectionCard}>

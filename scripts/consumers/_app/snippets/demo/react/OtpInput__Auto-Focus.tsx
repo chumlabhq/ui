@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { OtpInput } from "@chumlab/ui/otp-input";
 
 export default function OtpInputExample() {
@@ -20,13 +21,13 @@ export default function OtpInputExample() {
             }
           />
         ) : (
-          <button
+          <Button
             type="button"
             className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:bg-cl-bg-hover hover:border-cl-border-input-hover cursor-pointer"
             onClick={() => setShowAutoFocus(true)}
           >
             Mount an auto-focused OtpInput
-          </button>
+          </Button>
         )
       }
     </>

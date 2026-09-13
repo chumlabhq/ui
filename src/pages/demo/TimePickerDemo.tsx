@@ -2,6 +2,7 @@ import {
   useState } from "react";
 import { TimePicker } from "../../components/TimePicker/index.js";
 import type { TimePickerClasses } from "../../components/TimePicker/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -544,13 +545,13 @@ const TimePickerDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
-            <button
+            <Button
               className={c.btnPrimary}
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setControlledOpen((o) => !o)}
             >
               {controlledOpen ? "Close" : "Open"} Dropdown
-            </button>
+            </Button>
             <TimePicker
               value={controlled}
               onValueChange={(v) => setControlled(v)}
@@ -1182,9 +1183,9 @@ const TimePickerDemo = () => {
                   onValueChange={(v) => setFormTime(v)}
                   classes={c.timepicker}
                 />
-                <button type="submit" className={c.btnPrimary}>
+                <Button type="submit" className={c.btnPrimary}>
                   Log to event list
-                </button>
+                </Button>
               </form>
             </DemoWrapper>
           </div>

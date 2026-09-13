@@ -1,21 +1,39 @@
 {
   "$comment": "How much each gate looked at, last time it passed. A FALL fails `run-all-gates`: a walk that covers fewer subjects than before is the failure that prints a tick. Re-record with --record when the drop is intended and say why in the commit.",
-  "$measuredBy": "a full run of every gate; `e2e:demo-contrast` counts PAGES walked, not rows measured \u2014 the row count moves with network timing and is not a coverage figure",
-  "$runWas": "green",
+  "$measuredBy": "A full run of every gate. Read `$units` before comparing any number here to a new one: fall-detection compares integers and cannot see that a gate has changed WHAT it counts, so a basis change looks exactly like a regression or, worse, like nothing at all.",
+  "$units": {
+    "doc-truth": "assertions in doc-truth.contract.test.ts",
+    "snippet-shape": "demo snippets checked",
+    "demo-coverage": "library-authored props across the public surface",
+    "fixture-gap": "props rendering markup no fixture produces (a FLOOR, not a total; see 002-fixture-gap.json)",
+    "component-docs": "components with a generated page",
+    "library-build+bundle": "modules in the built library",
+    "unit+contracts": "tests collected by vitest across all projects",
+    "e2e:a11y-full": "axe rule-sets run",
+    "e2e:visual": "visual subjects photographed (subject x theme x width)",
+    "e2e:icon-bounds": "SVGs measured",
+    "e2e:demo-contrast": "demo PAGES walked, NOT colour pairs measured. It was keyed to rows until 2026-09-12 and read 41289/41429/41445/41461/41585 on consecutive green runs, because the dropdown pages fetch country lists and the row count moves with network timing. Pages is the coverage figure; rows never were one. Do not compare any number here to a row count.",
+    "e2e:rest": "tests collected across the 32 specs no other gate claims"
+  },
+  "$basisChanges": [
+    "2026-09-12, `e2e:demo-contrast`: rows to pages. See `$units`.",
+    "2026-09-13, `e2e/focus-not-obscured.spec.ts`: its internal population of fixtures holding a focusable child inside a clipping ancestor went 104 to 77-78. That is a basis change, not a regression — five of the six focusable clauses had never been scoped to the fixture, so the old figure counted the index nav and the page chrome. It is deliberately NOT an entry here: it varies by one between runs as a fixture whose overlay is still opening contributes no focusable child, so a ratchet on it would fail on the variance. The spec asserts a floor of 50 instead, and the basis is written beside that assertion."
+  ],
+  "$runWas": "green, but across two invocations: the OS killed the full run twice for low memory, the second time during `e2e:rest` with the other seventeen green, and `e2e:rest` was then run directly on the unchanged tree. See the header of scripts/run-all-gates.mjs.",
   "recordedOn": "2026-09-13",
-  "tookMinutes": 34.8,
+  "tookMinutes": 30.0,
   "populations": {
     "doc-truth": 15,
     "snippet-shape": 721,
     "demo-coverage": 1137,
-    "fixture-gap": 151,
+    "fixture-gap": 150,
     "component-docs": 30,
     "library-build+bundle": 1163,
-    "unit+contracts": 4853,
+    "unit+contracts": 4855,
     "e2e:a11y-full": 10,
-    "e2e:visual": 480,
+    "e2e:visual": 487,
     "e2e:icon-bounds": 308,
     "e2e:demo-contrast": 33,
-    "e2e:rest": 457
+    "e2e:rest": 458
   }
 }

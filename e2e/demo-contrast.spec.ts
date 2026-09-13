@@ -78,7 +78,10 @@ const RECORDED: ReadonlySet<string> = new Set([
   "table light td.px-4.py-2",
   "time-picker light input.flex-1.min-w-0::placeholder",
   "time-picker light input.min-w-0.bg-transparent::placeholder",
-  "toast light button.px-3.py-1.5",
+  // Same pair, renamed: white on the warning amber at 3.19:1. It was
+  // `button.px-3.py-1.5` until the demo's triggers became `<Button>`, which puts
+  // the label in the component's `itemText` span. The colours did not move.
+  "toast light span.inline-flex.items-center",
 ]);
 
 /**

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ToastPosition, useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastPosition, ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const [position, setPosition] = useState<ToastPosition>("bottom-right");
   const toast = useToast();
   return (
@@ -37,7 +38,7 @@ export default function ToastExample() {
           {position}
         </strong>
       </p>
-      <button
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90 self-start"
         onClick={
           () =>
@@ -47,7 +48,15 @@ export default function ToastExample() {
         }
       >
         Show Toast at Current Position
-      </button>
+      </Button>
     </div>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

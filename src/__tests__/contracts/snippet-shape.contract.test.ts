@@ -49,6 +49,20 @@ const slotsByTag = (): Map<string, Set<string>> => {
 };
 
 const SLOTS = slotsByTag();
+/** Every value a component's entry exports — what its snippet may legitimately name. */
+function exportedTagsOf(component: string): Set<string> {
+  const file = join("src/components", component, "index.ts");
+  const tags = new Set([component]);
+  if (!existsSync(file)) return tags;
+  for (const m of readFileSync(file, "utf8").matchAll(/export\s*\{([^}]*)\}/g)) {
+    for (const part of m[1].split(",")) {
+      const name = (part.split(" as ").pop() ?? "").trim();
+      if (/^[A-Z][A-Za-z]*$/.test(name) && !/^[A-Z0-9_]+$/.test(name)) tags.add(name);
+    }
+  }
+  return tags;
+}
+
 const every = Object.entries(DEMO_SNIPPETS).flatMap(([component, sections]) =>
   Object.entries(sections).map(([title, snippet]) => ({ component, title, code: snippet.react })),
 );
@@ -187,6 +201,102 @@ describe("snippet shape contract", () => {
       oversize.sort(),
       `a snippet over ${CEILING} characters. Something is being inlined that should be ` +
         "referenced, or a section is rendering more examples than one copy-paste block can carry",
+    ).toEqual([]);
+  });
+
+  /**
+   * A snippet has to name the component its page documents.
+   *
+   * Trigger-driven components are written as two siblings — the button in the
+   * `DemoWrapper`, the surface after it — and reading the wrapper alone gave 55
+   * snippets that were a styled button and nothing else. Drawer's Form Drawer
+   * taught a reader to build a button and stopped: no Drawer, no fields, no
+   * sign of where the panel came from. That reads as complete, which is worse
+   * than having no snippet.
+   */
+  it("names the component the page documents", () => {
+    /**
+     * Recorded by name, and the two kinds are NOT the same:
+     *   EXEMPT — the snippet is right as it is, for a stated reason.
+     *   UNPARSED — nobody decided; the tool could not read the page.
+     */
+    const EXEMPT_MISSING = new Map([
+      [
+        "Drawer/Directions",
+        "The drawer is inside a second `.map()`. Lifting it out of the callback " +
+          "leaves its loop parameter undeclared, and a copy-paste example is one " +
+          "example, so the repetition is not what the snippet should carry.",
+      ],
+    ]);
+
+    const missing: string[] = [];
+    for (const { component, title, code } of every) {
+      const tags = exportedTagsOf(component);
+      if ([...tags].some((t) => new RegExp(`<${t}[\\s/>]`).test(code))) continue;
+      const key = `${component}/${title}`;
+      if (EXEMPT_MISSING.has(key)) continue;
+      missing.push(key);
+    }
+    expect(
+      missing.sort(),
+      "the snippet under this section never names the component whose page it is on. A reader " +
+        "copies it and gets the trigger without the thing the trigger opens",
+    ).toEqual([]);
+  });
+
+  /**
+   * A snippet may not hand-class an element the library provides.
+   *
+   * The demo pages keep ~300 raw `<button>`s as page harness, and that rule is
+   * right for the page and wrong here: in a snippet nothing is harness, every
+   * line is being shown as the way to do it. A `<button>` classed
+   * `bg-cl-accent text-cl-on-accent` teaches a reader to rebuild `Button`.
+   */
+  it("hand-classes no element the library provides", () => {
+    /** The raw element is the lesson. Each with the reason it is. */
+    const EXEMPT_RAW = new Map([
+      ["Drawer/Directions", "The `.map()` exclusion above; the button is the trigger inside it."],
+      ["Input/InputLabel Standalone", "The section exists to pair `InputLabel` with a NATIVE field — with `Input` you pass `label` and never reach for it. The raw input is the lesson."],
+      ["TextArea/TextAreaLabel Standalone", "As Input's, for `TextAreaLabel`."],
+      ["Modal/Focus Trap", "Raw inputs as focus-order fodder. Borderline: `Input` is focusable too and would teach better, so this is a decision to revisit, not a principle."],
+      ["Modal/Initial Focus", "As Focus Trap's."],
+      ["Toast/Custom Content (content prop)", "A deliberately branded button inside a toast body, demonstrating that the content slot takes anything. Its colours are not ours."],
+      ["DatePicker/Controlled Open", "The trigger is not written through the page's class bag, so the conversion tool had nothing to key on. Left pending a decision, not decided."],
+      ["Drawer/Initial Focus", "A native `<input data-autofocus>`: the attribute on a plain field IS the mechanism the section demonstrates, and an `Input` would hide it behind a component."],
+    ]);
+
+    /**
+     * NOT exempt — UNPARSED. The balanced-tag converter reported unmatched
+     * openers on these two pages and was not run on them. They are unconverted
+     * because the tool could not read them, and if that reads as "decided" the
+     * next person will leave them alone for the wrong reason.
+     */
+    const UNPARSED = new Map([
+      ["Dropdown/Controlled Open State", "TooltipDemo-style converter reported `unbalanced 2` on DropdownDemo.tsx."],
+      ["SearchableDropdown/Controlled Open State", "Converter reported `unbalanced 2` on SearchableDropdownDemo.tsx."],
+    ]);
+
+    const TOKEN = /\b(?:bg-cl-|text-cl-|border-cl-|rounded-cl-)/;
+    const PROVIDED: Array<[RegExp, string]> = [
+      [/<button\b[^>]*className="[^"]*"/gs, "button"],
+      [/<input\b(?![^>]*type="(?:checkbox|radio|range|file)")[^>]*className="[^"]*"/gs, "input"],
+      [/<textarea\b[^>]*className="[^"]*"/gs, "textarea"],
+    ];
+
+    const handClassed: string[] = [];
+    for (const { component, title, code } of every) {
+      const key = `${component}/${title}`;
+      if (EXEMPT_RAW.has(key) || UNPARSED.has(key)) continue;
+      for (const [re, tag] of PROVIDED) {
+        for (const m of code.matchAll(re)) {
+          if (TOKEN.test(m[0])) { handClassed.push(`${key} (<${tag}>)`); break; }
+        }
+      }
+    }
+    expect(
+      [...new Set(handClassed)].sort(),
+      "a snippet dresses a raw element in the library's own tokens. In a snippet nothing is " +
+        "harness — every line is being shown as the way to do it",
     ).toEqual([]);
   });
 });

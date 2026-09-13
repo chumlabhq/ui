@@ -522,6 +522,30 @@ const LIBRARY_TOTAL_HISTORY = [
       "the whole of its error state — which is also why nothing had noticed. " +
       "Planted by removing the attribute: the new ARIA case fails alone.",
   },
+  {
+    kb: 152.61,
+    commit: "(uncommitted)",
+    date: "2026-09-13",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.45 KB, and all of it Drawer's grab handle: two slots in " +
+      "the type — `handle` for the hit row and `handleBar` for the bar drawn " +
+      "inside it — their default classes, and the element rendered when " +
+      "`swipeable` is set. It measured 152.50 with the bar's classes written " +
+      "inline; `constants.contract` counts a literal className at a call site " +
+      "and that was the ninth in Drawer.tsx against a baseline of eight, so " +
+      "the bar became a slot of its own. Two keys rather than one because they " +
+      "are two promises: restyling the bar should not shrink the target, and " +
+      "widening the target should not redraw the bar. Swipe was pointer-invisible before it — the panel " +
+      "took `onPointerDown` and nothing on screen said so, and a drag begun on " +
+      "body text selected the text instead. The handle is a 36x4 bar in a " +
+      "full-width 20px hit row, `cursor: grab`, `select-none`, `aria-hidden` " +
+      "because Escape and the close button already cover the keyboard. " +
+      "Rendered only when `swipeable`, so a drawer that cannot be dragged does " +
+      "not advertise that it can. Photographed by a new subject, " +
+      "`Drawer/swipeable-bottom`, whose plant margin is 132 pixels against a " +
+      "budget of 1 at every width — removing the bar's fill.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

@@ -1,22 +1,23 @@
-import { useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const toast = useToast();
   return (
     <>
-      <button
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success"
         onClick={() => toast.success("Operation completed successfully!")}
       >
         Success
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning"
         onClick={() => toast.warning("Please review before proceeding.")}
       >
         Warning
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-cl-bg hover:bg-cl-error/90"
         onClick={
           () =>
@@ -24,13 +25,21 @@ export default function ToastExample() {
         }
       >
         Error
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
         onClick={() => toast.info("Here's some useful information.")}
       >
         Info
-      </button>
+      </Button>
     </>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

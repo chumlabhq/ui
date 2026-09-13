@@ -1258,6 +1258,20 @@ function build(section, sf, symbols, classes, componentName) {
   // indentation true to structure. This is the only place depth is decided.
   const rawBody = code;
 
+  /**
+   * The provider a `useToast()` snippet is wrapped in, added before the import
+   * list is built. It is not in the section's own JSX — the page mounts one
+   * above every section — so nothing else would have added it.
+   */
+  const wantsToastProvider =
+    imports.has("ToastProvider") &&
+    [...hoistedHooks.map((h) => h.text), ...hoistedState, code].join("\n").includes("useToast(");
+  if (wantsToastProvider) {
+    const spec = imports.get("ToastProvider");
+    if (!importsUsed.has(spec)) importsUsed.set(spec, new Set());
+    importsUsed.get(spec).add("ToastProvider");
+  }
+
   const importLines = [...importsUsed.entries()]
     .sort(([a], [b]) => (a === "react" ? -1 : b === "react" ? 1 : a.localeCompare(b)))
     .map(([spec, names]) => `import { ${[...names].sort().join(", ")} } from "${spec}";`);
@@ -1290,7 +1304,34 @@ function build(section, sf, symbols, classes, componentName) {
     ...inner.split("\n"),
     `  );`,
   ];
-  parts.push(`export default function ${componentName}Example() {\n${bodyLines.join("\n")}\n}`);
+  /**
+   * A snippet whose body calls `useToast()` needs the provider above it.
+   *
+   * `toast.success(...)` from `useToast()` is the right teaching and nobody
+   * renders a `<Toast>` — but `useToast` THROWS outside a `ToastProvider`, so
+   * all 20 of Toast's snippets were code that fails on paste with
+   * "useToast must be used within a ToastProvider". The page mounts one
+   * provider above every section, which is exactly why no section's own JSX
+   * contained it.
+   *
+   * Emitted as two components because that is the shape the contract requires:
+   * the hook has to run BELOW the provider, not beside it. `TOAST.ai.md`'s
+   * Setup section shows the same two-component split, so the snippet and the
+   * prose teach one thing.
+   */
+  if (wantsToastProvider) {
+    parts.push(
+      `function ${componentName}Trigger() {\n${bodyLines.join("\n")}\n}\n\n` +
+        `export default function ${componentName}Example() {\n` +
+        `  return (\n` +
+        `    <ToastProvider>\n` +
+        `      <${componentName}Trigger />\n` +
+        `    </ToastProvider>\n` +
+        `  );\n}`,
+    );
+  } else {
+    parts.push(`export default function ${componentName}Example() {\n${bodyLines.join("\n")}\n}`);
+  }
 
   return { code: `${parts.join("\n\n")}\n`, needsClient };
 }

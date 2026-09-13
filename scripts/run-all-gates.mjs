@@ -31,10 +31,46 @@
 //
 // Populations are printed and recorded because a gate that walks fewer subjects
 // than last time is the failure that looks like a pass: 307 where 308 is right
-// is the whole of the finding above.
+// is the whole of the finding above. Each one carries its UNIT in the record's
+// `$units`, because fall-detection compares integers and cannot see that a gate
+// has changed what it counts: `e2e:demo-contrast` moved from colour pairs to
+// pages walked and went 41585 to 33, which is a basis change wearing the shape
+// of a catastrophic regression. A population with no unit beside it is a number
+// two people will read differently.
+//
+// WHAT THE FULL RUN NEEDS TO COMPLETE, which is a real constraint and not a
+// footnote. The browser half runs three playwright projects over ~445 fixtures
+// and the consumer matrix builds ten real apps; the peak is `e2e:visual` and
+// `e2e:icon-bounds`, each holding a browser plus its screenshot buffers. On
+// 2026-09-13 the OS killed this command TWICE in one sitting for low memory —
+// once at the summary, once inside `e2e:rest` with the other seventeen gates
+// green. The kill is not the first symptom. Under pressure the gates run 3-8x
+// their recorded times (`e2e:visual` 296s to 926s, `e2e:demo-contrast` 70s to
+// 624s) and START FAILING on timeouts that look like real regressions: that
+// first killed run reported six failures and every one of them was green on the
+// next run. So:
+//
+//   - Watch swap, not free pages. Free memory sits near zero on a healthy macOS
+//     box and tells you nothing; sustained swap-out during the e2e half is the
+//     number that predicts the kill. `vm_stat 5` in another shell, or
+//     `sysctl vm.swapusage`.
+//   - Before starting, close the browser and the editor's language server —
+//     between them they are typically 1-2 GB, which is the margin. A dev server
+//     on 5173 can stay: the gates start their own preview.
+//   - If it is killed anyway, the failures in that run are not evidence.
+//     Re-run before diagnosing anything, and compare the timings above first.
+//   - The fallback is series, not a smaller suite: run `npm run gates:fast`,
+//     then each browser gate on its own (`--project=visual`, then
+//     `e2e/icon-bounds.spec.ts`, then `e2e/demo-contrast.spec.ts`, then the
+//     `e2e:rest` list). Same coverage, one browser resident at a time. Say in
+//     the commit that it was run in pieces, because a run split across
+//     invocations is not the same evidence as one that completed.
+//
+// A 35-minute command that gets killed twice is a command people stop running,
+// which is why this is here rather than in someone's memory.
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
-import { resolve, dirname, join } from "node:path";
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "node:fs";
+import { resolve, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -188,6 +224,30 @@ const restSpecs = specs.filter((s) => !claimed.spec.has(s));
 
 /** ── run ──────────────────────────────────────────────────────────────── */
 const record = existsSync(POPULATIONS) ? JSON.parse(readFileSync(POPULATIONS, "utf8")) : { populations: {} };
+
+/**
+ * Every recorded population states what it counts, and the two cannot drift.
+ *
+ * A unit map that is allowed to fall behind is worse than none: it reads as
+ * authoritative for the entries it still covers and is silent about the one
+ * that changed, which is the case it exists for. Checked here rather than in a
+ * contract because this is the only thing that reads the file.
+ */
+{
+  const pops = Object.keys(record.populations ?? {});
+  const units = Object.keys(record.$units ?? {});
+  const missing = pops.filter((k) => !units.includes(k));
+  const orphaned = units.filter((k) => !pops.includes(k));
+  if (missing.length || orphaned.length) {
+    process.stderr.write(
+      `✗ ${relative(root, POPULATIONS)}: $units and populations disagree\n` +
+        missing.map((k) => `    population with no unit: ${k}\n`).join("") +
+        orphaned.map((k) => `    unit for no population: ${k}\n`).join("") +
+        "  A population is an integer until something says what it counts.\n",
+    );
+    process.exit(1);
+  }
+}
 const results = [];
 const started = Date.now();
 
@@ -210,7 +270,21 @@ for (const g of GATES) {
   results.push({ id: g.id, status, ms, pop, out });
   const mark = status === "pass" ? "✓" : "✗";
   process.stdout.write(`${mark} ${g.id.padEnd(24)} ${String(Math.round(ms / 1000)).padStart(4)}s  population ${pop ?? "—"}\n`);
-  if (status === "FAIL") process.stdout.write(`   └─ ${typeof g.cmd === "function" ? g.cmd() : g.cmd}\n`);
+  if (status === "FAIL") {
+    // Written here, not in the summary. A 30-minute run that the OS kills for
+    // memory never reaches the summary, and the first attempt at this wrote the
+    // logs there — so the one run that most needed reading left nothing at all.
+    writeFileSync(gateLog(g.id), out);
+    process.stdout.write(`   └─ ${typeof g.cmd === "function" ? g.cmd() : g.cmd}\n`);
+    process.stdout.write(`   └─ full output: ${relative(root, gateLog(g.id))}\n`);
+  }
+}
+
+/** Where a failing gate's whole output goes, so it outlives the run. */
+function gateLog(id) {
+  const dir = join(root, "test-results");
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  return join(dir, `gate-${id.replace(/[^a-z0-9]+/gi, "-")}.log`);
 }
 
 const failedSoFar = () => results.some((r) => r.status === "FAIL");
@@ -235,9 +309,15 @@ if (RECORD) {
   const skipped = results.filter((r) => r.status === "skipped").length;
   writeFileSync(POPULATIONS, `${JSON.stringify({
     $comment: "How much each gate looked at, last time it passed. A FALL fails `run-all-gates`: a walk that covers fewer subjects than before is the failure that prints a tick. Re-record with `npm run gates:record` when the drop is intended, and say why in the commit.",
-    $measuredBy: skipped
+    $measuredBy: (skipped
       ? `a --fast run, ${skipped} gate(s) skipped — partial, and the skipped gates keep whatever they were recorded at`
-      : "a full run of every gate",
+      : "a full run of every gate") +
+      ". Read `$units` before comparing any number here to a new one: fall-detection compares integers and cannot see that a gate has changed WHAT it counts.",
+    // Carried, not regenerated. These are written by a person and a writer that
+    // rebuilt this object from scratch would delete them on the next --record —
+    // which is the same class of hole as the record they annotate.
+    $units: record.$units ?? {},
+    $basisChanges: record.$basisChanges ?? [],
     $runWas: failedSoFar() ? "NOT green — some gates failed and were not recorded" : "green",
     recordedOn: new Date().toISOString().slice(0, 10),
     tookMinutes: Number(((Date.now() - started) / 60000).toFixed(1)),
@@ -258,8 +338,17 @@ if (fell.length) {
 }
 if (failed.length) {
   process.stderr.write(`\n✗ ${failed.length} gate(s) failed: ${failed.map((f) => f.id).join(", ")}\n`);
+  /**
+   * The excerpt is a reading convenience; the file is the record.
+   *
+   * This printed the last 25 lines and dropped the rest, which is how
+   * `focus-not-obscured` failed three times without once being diagnosed: the
+   * spec routes its findings to stdout precisely so they outlive playwright's
+   * `test-results/`, and they were captured here and discarded a line later.
+   * A gate whose failure cannot be read after the fact gets re-run instead.
+   */
   for (const f of failed) {
-    process.stderr.write(`\n── ${f.id} ──\n${f.out.split("\n").slice(-25).join("\n")}\n`);
+    process.stderr.write(`\n── ${f.id} ──\n${f.out.split("\n").slice(-25).join("\n")}\n  full output: ${relative(root, gateLog(f.id))}\n`);
   }
 }
 process.exit(failed.length || fell.length ? 1 : 0);

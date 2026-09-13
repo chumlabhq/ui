@@ -176,6 +176,25 @@ none is a bug fix that happened to move behaviour.
 
 ### Removed
 
+- `TabButton`, exported from `@chumlab/ui/tab-panel`. It could not be called: its props
+  interface was never exported, and it needs `index`, `isActive`, `isTabbable` and
+  `setTabRef` from `TabPanel`'s own roving-focus state plus the context `TabPanel`
+  provides. Nobody could construct one, but it autocompleted, and a name you can reach
+  and cannot use costs a reader more than it gives. `TabPanel` imports it by path;
+  nothing else depended on the export. For custom tab rendering use the `renderTab`
+  prop, which hands you the default element already wired.
+
+- `MultiSelectDropdownOption`, exported from `@chumlab/ui/multi-select-dropdown`. Same
+  reason: it requires `isSelected`, `isFocused`, `dropdownId`, `index`, `onToggle` and
+  `onHover` — all owned by the parent — and `classes: Required<MultiSelectDropdownClasses>`,
+  which asks a consumer to supply every slot. Options are passed through the `options`
+  prop; rendering one yourself was never the API.
+
+- `SelectedChip`, exported from `@chumlab/ui/multi-select-dropdown`. Needs `onRemove` and
+  the same `Required<…>` classes bag. The library's own unit test was importing it through
+  the public entry, which is how an unusable name kept looking usable; it imports by path
+  now.
+
 - `classes.markerTooltip` on `DatePicker`. The key was threaded through three hops and then
   dropped: `useMarkerTooltip` writes a literal class string and never read it, so a consumer
   setting it saw nothing. The tooltip itself is unchanged. `e2e/waived-keys.spec.ts` asserts

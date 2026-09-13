@@ -88,13 +88,13 @@ const TooltipDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Basic usage — wrap any element to show a tooltip on hover */}
           <Tooltip content="Save your changes">
-            <button className={c.trigger}>Hover me</button>
+            <Button className={c.trigger}>Hover me</Button>
           </Tooltip>
           <Tooltip content="Edit profile settings" side="bottom">
-            <button className={c.trigger}>Bottom tooltip</button>
+            <Button className={c.trigger}>Bottom tooltip</Button>
           </Tooltip>
           <Tooltip content="This action cannot be undone" side="right">
-            <button className={c.trigger}>Right tooltip</button>
+            <Button className={c.trigger}>Right tooltip</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -106,16 +106,16 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Top tooltip" side="top">
-            <button className={c.trigger}>Top</button>
+            <Button className={c.trigger}>Top</Button>
           </Tooltip>
           <Tooltip content="Right tooltip" side="right">
-            <button className={c.trigger}>Right</button>
+            <Button className={c.trigger}>Right</Button>
           </Tooltip>
           <Tooltip content="Bottom tooltip" side="bottom">
-            <button className={c.trigger}>Bottom</button>
+            <Button className={c.trigger}>Bottom</Button>
           </Tooltip>
           <Tooltip content="Left tooltip" side="left">
-            <button className={c.trigger}>Left</button>
+            <Button className={c.trigger}>Left</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -127,13 +127,13 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Start aligned tooltip" side="bottom" align="start">
-            <button className={c.trigger}>Start</button>
+            <Button className={c.trigger}>Start</Button>
           </Tooltip>
           <Tooltip content="Center aligned tooltip" side="bottom" align="center">
-            <button className={c.trigger}>Center</button>
+            <Button className={c.trigger}>Center</Button>
           </Tooltip>
           <Tooltip content="End aligned tooltip" side="bottom" align="end">
-            <button className={c.trigger}>End</button>
+            <Button className={c.trigger}>End</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -145,16 +145,16 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Default offset (6px)" side="top">
-            <button className={c.trigger}>Default</button>
+            <Button className={c.trigger}>Default</Button>
           </Tooltip>
           <Tooltip content="Large offset (16px)" side="top" sideOffset={16}>
-            <button className={c.trigger}>Large Offset</button>
+            <Button className={c.trigger}>Large Offset</Button>
           </Tooltip>
           <Tooltip content="No offset (0px)" side="top" sideOffset={0}>
-            <button className={c.trigger}>No Offset</button>
+            <Button className={c.trigger}>No Offset</Button>
           </Tooltip>
           <Tooltip content="Align offset (20px)" side="bottom" align="start" alignOffset={20}>
-            <button className={c.trigger}>Align Offset</button>
+            <Button className={c.trigger}>Align Offset</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -166,10 +166,10 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Arrow visible on this tooltip" showArrow={true}>
-            <button className={c.trigger}>With Arrow</button>
+            <Button className={c.trigger}>With Arrow</Button>
           </Tooltip>
           <Tooltip content="No arrow on this tooltip" showArrow={false}>
-            <button className={c.trigger}>No Arrow</button>
+            <Button className={c.trigger}>No Arrow</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -181,16 +181,16 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Instant appearance (0ms)" delayDuration={0}>
-            <button className={c.trigger}>Instant</button>
+            <Button className={c.trigger}>Instant</Button>
           </Tooltip>
           <Tooltip content="Fast appearance (100ms)" delayDuration={100}>
-            <button className={c.trigger}>Fast (100ms)</button>
+            <Button className={c.trigger}>Fast (100ms)</Button>
           </Tooltip>
           <Tooltip content="Default (200ms)" delayDuration={200}>
-            <button className={c.trigger}>Default (200ms)</button>
+            <Button className={c.trigger}>Default (200ms)</Button>
           </Tooltip>
           <Tooltip content="Slow appearance (1000ms)" delayDuration={1000}>
-            <button className={c.trigger}>Slow (1s)</button>
+            <Button className={c.trigger}>Slow (1s)</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -205,16 +205,16 @@ const TooltipDemo = () => {
             content="This is a tooltip with a very narrow max width that will wrap text quickly"
             maxWidth={150}
           >
-            <button className={c.trigger}>Narrow (150px)</button>
+            <Button className={c.trigger}>Narrow (150px)</Button>
           </Tooltip>
           <Tooltip content="Default max width (300px)" maxWidth={300}>
-            <button className={c.trigger}>Default (300px)</button>
+            <Button className={c.trigger}>Default (300px)</Button>
           </Tooltip>
           <Tooltip
             content="This tooltip has a wider max width so more content can fit on a single line without wrapping"
             maxWidth={400}
           >
-            <button className={c.trigger}>Wide (400px)</button>
+            <Button className={c.trigger}>Wide (400px)</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -230,21 +230,21 @@ const TooltipDemo = () => {
             maxWidth={200}
             wordWrap="break-word"
           >
-            <button className={c.trigger}>Break Word (default)</button>
+            <Button className={c.trigger}>Break Word (default)</Button>
           </Tooltip>
           <Tooltip
             content="This is a tooltip with normal word wrapping that respects word boundaries"
             maxWidth={200}
             wordWrap="normal"
           >
-            <button className={c.trigger}>Normal Wrap</button>
+            <Button className={c.trigger}>Normal Wrap</Button>
           </Tooltip>
           <Tooltip
             content="This tooltip content will not wrap and may overflow"
             maxWidth={400}
             wordWrap="nowrap"
           >
-            <button className={c.trigger}>No Wrap</button>
+            <Button className={c.trigger}>No Wrap</Button>
           </Tooltip>
         </DemoWrapper>
         <div className={c.note}>
@@ -285,7 +285,7 @@ const TooltipDemo = () => {
             open={controlled}
             onOpenChange={setControlled}
           >
-            <button className={c.trigger}>Controlled</button>
+            <Button className={c.trigger}>Controlled</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -301,7 +301,7 @@ const TooltipDemo = () => {
             <Button className={c.trigger}>asChild Button</Button>
           </Tooltip>
           <Tooltip content="Default mode wraps in a span">
-            <button className={c.trigger}>Default (wrapped)</button>
+            <Button className={c.trigger}>Default (wrapped)</Button>
           </Tooltip>
         </DemoWrapper>
         <div className={c.note}>
@@ -319,10 +319,10 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="This won't show" disabled>
-            <button className={c.trigger}>Disabled Tooltip</button>
+            <Button className={c.trigger}>Disabled Tooltip</Button>
           </Tooltip>
           <Tooltip content="This tooltip is enabled" disabled={false}>
-            <button className={c.trigger}>Enabled Tooltip</button>
+            <Button className={c.trigger}>Enabled Tooltip</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -335,10 +335,10 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Move mouse to tooltip - it stays open" disableHoverableContent={false}>
-            <button className={c.trigger}>Hoverable (default)</button>
+            <Button className={c.trigger}>Hoverable (default)</Button>
           </Tooltip>
           <Tooltip content="Tooltip closes when leaving trigger" disableHoverableContent={true}>
-            <button className={c.trigger}>Not Hoverable</button>
+            <Button className={c.trigger}>Not Hoverable</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -351,10 +351,10 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content={richContentProTip} maxWidth={280}>
-            <button className={c.trigger}>Rich Content</button>
+            <Button className={c.trigger}>Rich Content</Button>
           </Tooltip>
           <Tooltip content={richContentStatus}>
-            <button className={c.trigger}>Status Tooltip</button>
+            <Button className={c.trigger}>Status Tooltip</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -370,25 +370,25 @@ const TooltipDemo = () => {
             content="Dark theme tooltip"
             classes={{ content: contentClassNameDark, arrow: "fill-cl-bg" }}
           >
-            <button className={c.trigger}>Dark</button>
+            <Button className={c.trigger}>Dark</Button>
           </Tooltip>
           <Tooltip
             content="Success styled tooltip"
             classes={{ content: contentClassNameSuccess, arrow: "fill-cl-success" }}
           >
-            <button className={c.trigger}>Success</button>
+            <Button className={c.trigger}>Success</Button>
           </Tooltip>
           <Tooltip
             content="Warning styled tooltip"
             classes={{ content: contentClassNameWarning, arrow: "fill-cl-warning" }}
           >
-            <button className={c.trigger}>Warning</button>
+            <Button className={c.trigger}>Warning</Button>
           </Tooltip>
           <Tooltip
             content="Error styled tooltip"
             classes={{ content: contentClassNameError, arrow: "fill-cl-error" }}
           >
-            <button className={c.trigger}>Error</button>
+            <Button className={c.trigger}>Error</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -401,22 +401,22 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="No shadow" shadow="none">
-            <button className={c.trigger}>None</button>
+            <Button className={c.trigger}>None</Button>
           </Tooltip>
           <Tooltip content="Small shadow" shadow="sm">
-            <button className={c.trigger}>Small</button>
+            <Button className={c.trigger}>Small</Button>
           </Tooltip>
           <Tooltip content="Medium shadow" shadow="md">
-            <button className={c.trigger}>Medium</button>
+            <Button className={c.trigger}>Medium</Button>
           </Tooltip>
           <Tooltip content="Large shadow (default)" shadow="lg">
-            <button className={c.trigger}>Large</button>
+            <Button className={c.trigger}>Large</Button>
           </Tooltip>
           <Tooltip content="Extra large shadow" shadow="xl">
-            <button className={c.trigger}>XL</button>
+            <Button className={c.trigger}>XL</Button>
           </Tooltip>
           <Tooltip content="2XL shadow" shadow="2xl">
-            <button className={c.trigger}>2XL</button>
+            <Button className={c.trigger}>2XL</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -429,16 +429,16 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Custom blue glow shadow" shadow={shadowBlueGlow}>
-            <button className={c.trigger}>Blue Glow</button>
+            <Button className={c.trigger}>Blue Glow</Button>
           </Tooltip>
           <Tooltip content="Custom purple glow shadow" shadow={shadowPurpleGlow}>
-            <button className={c.trigger}>Purple Glow</button>
+            <Button className={c.trigger}>Purple Glow</Button>
           </Tooltip>
           <Tooltip content="Soft elevated shadow" shadow={shadowSoftElevated}>
-            <button className={c.trigger}>Soft Elevated</button>
+            <Button className={c.trigger}>Soft Elevated</Button>
           </Tooltip>
           <Tooltip content="Sharp drop shadow" shadow={shadowSharpDrop}>
-            <button className={c.trigger}>Sharp Drop</button>
+            <Button className={c.trigger}>Sharp Drop</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -456,7 +456,7 @@ const TooltipDemo = () => {
             contentStyle={gradientPurple}
             arrowColor="#764ba2"
           >
-            <button className={c.trigger}>Purple Gradient</button>
+            <Button className={c.trigger}>Purple Gradient</Button>
           </Tooltip>
           <Tooltip
             content="Ocean breeze gradient"
@@ -464,7 +464,7 @@ const TooltipDemo = () => {
             contentStyle={gradientGreen}
             arrowColor="#38ef7d"
           >
-            <button className={c.trigger}>Green Gradient</button>
+            <Button className={c.trigger}>Green Gradient</Button>
           </Tooltip>
           <Tooltip
             content="Sunset gradient tooltip"
@@ -472,7 +472,7 @@ const TooltipDemo = () => {
             contentStyle={gradientPink}
             arrowColor="#f5576c"
           >
-            <button className={c.trigger}>Pink Gradient</button>
+            <Button className={c.trigger}>Pink Gradient</Button>
           </Tooltip>
           <Tooltip
             content="Without arrow"
@@ -480,7 +480,7 @@ const TooltipDemo = () => {
             contentStyle={gradientBlue}
             showArrow={false}
           >
-            <button className={c.trigger}>No Arrow</button>
+            <Button className={c.trigger}>No Arrow</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -497,27 +497,27 @@ const TooltipDemo = () => {
             arrowColor={dark ? "#818cf8" : "#4f46e5"}
             classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent dark:bg-cl-accent` }}
           >
-            <button className={c.trigger}>Indigo</button>
+            <Button className={c.trigger}>Indigo</Button>
           </Tooltip>
           <Tooltip
             content="Emerald arrow"
             arrowColor={dark ? "#34d399" : "#047857"}
             classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-bg bg-cl-success dark:bg-cl-success` }}
           >
-            <button className={c.trigger}>Emerald</button>
+            <Button className={c.trigger}>Emerald</Button>
           </Tooltip>
           <Tooltip
             content="Rose arrow"
             arrowColor={dark ? "#fb7185" : "#e11d48"}
             classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent dark:bg-cl-accent` }}
           >
-            <button className={c.trigger}>Rose</button>
+            <Button className={c.trigger}>Rose</Button>
           </Tooltip>
           <Tooltip
             content="Default content, colored arrow only"
             arrowColor={dark ? "#818cf8" : "#4f46e5"}
           >
-            <button className={c.trigger}>Arrow Only</button>
+            <Button className={c.trigger}>Arrow Only</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -530,13 +530,13 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Default z-index (9999)" zIndex={9999}>
-            <button className={c.trigger}>Default</button>
+            <Button className={c.trigger}>Default</Button>
           </Tooltip>
           <Tooltip content="Lower z-index (100)" zIndex={100}>
-            <button className={c.trigger}>z-index: 100</button>
+            <Button className={c.trigger}>z-index: 100</Button>
           </Tooltip>
           <Tooltip content="Higher z-index (99999)" zIndex={99999}>
-            <button className={c.trigger}>z-index: 99999</button>
+            <Button className={c.trigger}>z-index: 99999</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>
@@ -672,7 +672,7 @@ const TooltipDemo = () => {
           <div className="flex items-center gap-6 flex-wrap">
             {[4, 6, 10].map((size) => (
               <Tooltip key={size} content={`Arrow size: ${size}px`} arrowSize={size}>
-                <button className={c.trigger}>{size}px arrow</button>
+                <Button className={c.trigger}>{size}px arrow</Button>
               </Tooltip>
             ))}
           </div>
@@ -710,7 +710,7 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Inspect me to see aria-describedby">
-            <button className={c.trigger}>Inspect trigger</button>
+            <Button className={c.trigger}>Inspect trigger</Button>
           </Tooltip>
         </DemoWrapper>
       </Section>

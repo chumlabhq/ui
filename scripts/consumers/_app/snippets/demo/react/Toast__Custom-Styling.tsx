@@ -1,10 +1,11 @@
-import { useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const toast = useToast();
   return (
     <>
-      <button
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
         onClick={
           () =>
@@ -26,8 +27,8 @@ export default function ToastExample() {
         }
       >
         Light Theme
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
         onClick={
           () =>
@@ -42,8 +43,8 @@ export default function ToastExample() {
         }
       >
         Rounded Full
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
         onClick={
           () =>
@@ -59,8 +60,8 @@ export default function ToastExample() {
         }
       >
         Custom Text Styles
-      </button>
-      <button
+      </Button>
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
         onClick={
           () =>
@@ -75,7 +76,15 @@ export default function ToastExample() {
         }
       >
         Custom Content Wrapper
-      </button>
+      </Button>
     </>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

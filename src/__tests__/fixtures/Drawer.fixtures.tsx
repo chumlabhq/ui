@@ -92,6 +92,19 @@ const fixtures: Fixtures<typeof Drawer> = [
     // nothing to look at and could not fail for the defect it was written for.
     children: <><DrawerHeader title="Drawer" /><DrawerCloseButton />Body</>,
   },
+  /**
+   * Props-only, so the contract tier can reach it.
+   *
+   * `swipeable-bottom` is the visual subject for the grab handle, but it needs
+   * `render` for its Toggle and children — and `fixtures.contract` instantiates
+   * from the `props` bag, so `classes.handle` was documented and rendered by no
+   * fixture the contract could see. This is the one that renders it.
+   */
+  {
+    name: "open-swipeable",
+    props: { open: true, swipeable: true },
+    children: <><DrawerHeader title="Drawer" /><DrawerCloseButton />Body</>,
+  },
   { name: "open-left", props: { open: true, direction: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader title="Drawer" />Body</> },
   {

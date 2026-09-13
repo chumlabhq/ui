@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerFooter, DrawerHeader } from "@chumlab/ui/drawer";
 
 const CloseIcon = () => (
@@ -46,12 +47,12 @@ const renderDrawerContent = (
         </p>
       </DrawerBody>
       <DrawerFooter className={"flex items-center justify-end gap-3 px-6 py-4 border-t border-cl-border bg-cl-bg-elevated"}>
-        <button className={"inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"} onClick={onClose}>
+        <Button className={"inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"} onClick={onClose}>
           Cancel
-        </button>
-        <button className={"inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"} onClick={onClose}>
+        </Button>
+        <Button className={"inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"} onClick={onClose}>
           Confirm
-        </button>
+        </Button>
       </DrawerFooter>
     </div>
   );
@@ -60,12 +61,12 @@ export default function DrawerExample() {
   const keepMounted = useDrawerState();
   return (
     <>
-      <button
+      <Button
         className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
         onClick={keepMounted.onOpen}
       >
         Open (keepMounted)
-      </button>
+      </Button>
       <Drawer open={keepMounted.open} onOpenChange={keepMounted.onOpenChange} keepMounted>
         {
           renderDrawerContent(

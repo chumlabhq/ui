@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerFooter, DrawerHeader } from "@chumlab/ui/drawer";
 import { Dropdown } from "@chumlab/ui/dropdown";
 import { Input } from "@chumlab/ui/input";
@@ -40,12 +41,12 @@ export default function DrawerExample() {
   const formDrawer = useDrawerState();
   return (
     <>
-      <button
+      <Button
         className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
         onClick={formDrawer.onOpen}
       >
         Create New Item
-      </button>
+      </Button>
       <Drawer
         open={formDrawer.open}
         onOpenChange={formDrawer.onOpenChange}
@@ -89,18 +90,18 @@ export default function DrawerExample() {
           <DrawerFooter
             className="flex items-center justify-end gap-3 px-6 py-4 border-t border-cl-border bg-cl-bg-elevated"
           >
-            <button
+            <Button
               className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
               onClick={formDrawer.onClose}
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"
               onClick={formDrawer.onClose}
             >
               Create
-            </button>
+            </Button>
           </DrawerFooter>
         </div>
       </Drawer>

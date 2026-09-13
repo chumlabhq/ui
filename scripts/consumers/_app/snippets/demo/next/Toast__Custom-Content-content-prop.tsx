@@ -1,13 +1,14 @@
 "use client";
 
-import { useToast } from "@chumlab/ui/toast";
+import { Button } from "@chumlab/ui/button";
+import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
-export default function ToastExample() {
+function ToastTrigger() {
   const toast = useToast();
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-wrap gap-4">
-        <button
+        <Button
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
           onClick={
             () =>
@@ -22,12 +23,12 @@ export default function ToastExample() {
                     Version 2.0 is now available.
                   </p>
                   <div className="flex gap-2 mt-1">
-                    <button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90 cursor-pointer">
+                    <Button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90 cursor-pointer">
                       Update Now
-                    </button>
-                    <button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30 cursor-pointer">
+                    </Button>
+                    <Button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30 cursor-pointer">
                       Later
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ),
@@ -36,8 +37,8 @@ export default function ToastExample() {
           }
         >
           With Action Buttons
-        </button>
-        <button
+        </Button>
+        <Button
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success"
           onClick={
             () =>
@@ -61,8 +62,8 @@ export default function ToastExample() {
           }
         >
           Custom Layout
-        </button>
-        <button
+        </Button>
+        <Button
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
           onClick={
             () =>
@@ -85,7 +86,7 @@ export default function ToastExample() {
           }
         >
           Progress Content
-        </button>
+        </Button>
       </div>
       <div
         className="mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent"
@@ -103,5 +104,13 @@ export default function ToastExample() {
         props are ignored.
       </div>
     </div>
+  );
+}
+
+export default function ToastExample() {
+  return (
+    <ToastProvider>
+      <ToastTrigger />
+    </ToastProvider>
   );
 }

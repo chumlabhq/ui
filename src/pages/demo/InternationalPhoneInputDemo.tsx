@@ -823,9 +823,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 onValueChange={setFormValue}
                 classes={c.phone}
               />
-              <button type="submit" className={c.btnPrimary}>
+              <Button type="submit" className={c.btnPrimary}>
                 Submit Form
-              </button>
+              </Button>
             </form>
           </DemoWrapper>
         </Section>
@@ -1184,14 +1184,14 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 classes={c.phone}
               />
               <div className="flex gap-2 flex-wrap">
-                <button
+                <Button
                   type="button"
                   className={c.btn}
                   onClick={() => setControlledResetValue(undefined)}
                 >
                   Clear
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   className={c.btn}
                   onClick={() =>
@@ -1204,8 +1204,8 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                   }
                 >
                   Set US Number
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   className={c.btn}
                   onClick={() =>
@@ -1218,7 +1218,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                   }
                 >
                   Set UK Number
-                </button>
+                </Button>
               </div>
               {controlledResetValue && (
                 <div className={c.resultBox}>

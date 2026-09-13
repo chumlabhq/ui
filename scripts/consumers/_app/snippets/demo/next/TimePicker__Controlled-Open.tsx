@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { TimePicker } from "@chumlab/ui/time-picker";
 
 export default function TimePickerExample() {
@@ -8,14 +9,14 @@ export default function TimePickerExample() {
   const [controlled, setControlled] = useState<string | null>(null);
   return (
     <div className="flex items-center gap-4">
-      <button
+      <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer"
         onMouseDown={(e) => e.stopPropagation()}
         onClick={() => setControlledOpen((o) => !o)}
       >
         {controlledOpen ? "Close" : "Open"}
         Dropdown
-      </button>
+      </Button>
       <TimePicker
         value={controlled}
         onValueChange={(v) => setControlled(v)}
