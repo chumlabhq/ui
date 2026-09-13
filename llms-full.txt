@@ -161,6 +161,12 @@ These props have dependencies — using them wrong causes silent bugs:
 - `data-orientation="vertical|horizontal"` — on root
 - `data-value` — item's unique value string
 - `data-type="single|multiple"`, `data-size`, `data-variant` — on root
+- `data-accordion-expand-print="true"` — on root when `expandOnPrint` is set. The
+  print stylesheet the component ships keys off it: `[data-accordion-expand-print="true"]`
+  forces every `data-state="closed"` panel open for print and unhides its
+  `aria-hidden` content.
+- `data-accordion-print-styles` — marks the injected print stylesheet itself, so
+  a second accordion on the page does not inject a second copy.
 
 **DOM nesting:** root `<div>` → item `<div>` → heading `<h3>` → trigger `<button>` + content `<div role="region">`
 
@@ -176,16 +182,16 @@ These props have dependencies — using them wrong causes silent bugs:
 | `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
 | `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror. |
 | `disabled` | boolean | `false` | Disables all accordion items. |
-| `loop` | boolean | — | Whether keyboard navigation wraps from last to first item. |
+| `loop` | boolean | `true` | Whether keyboard navigation wraps from last to first item. |
 | `classes` | object | — | CSS class overrides for accordion sub-elements. |
-| `headingLevel` | `1` \| `2` \| `3` \| `4` \| `5` \| `6` | — | HTML heading level for accordion item triggers. |
+| `headingLevel` | `1` \| `2` \| `3` \| `4` \| `5` \| `6` | `3` | HTML heading level for accordion item triggers. |
 | `children` **(required)** | object | — | React.ReactNode — AccordionItem children. |
 | `asChild` | boolean | `false` | Merges accordion props onto a child element via Slot. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Preset size variant. |
 | `variant` | `"default"` \| `"bordered"` \| `"separated"` \| `"flush"` | `"default"` | Visual style variant. |
 | `animationEasing` | string | `"ease-in-out"` | CSS easing function for expand/collapse animation. |
-| `animationDuration` | number | — | Duration in milliseconds for expand/collapse animation. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `animationDuration` | number | `300` | Duration in milliseconds for expand/collapse animation. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
 | `expandOnPrint` | boolean | `false` | Expands all items when printing. |
@@ -193,12 +199,12 @@ These props have dependencies — using them wrong causes silent bugs:
 | `onExpandedChange` | object | — | (event: AccordionExpandEvent) => void |
 | `onKeyDown` | object | — | (event: KeyboardEvent, itemValue: string \| null) => void |
 | `preventClose` | object | — | (value: string) => boolean \| Promise<boolean> |
-| `preventCloseTimeout` | number | — | Timeout in ms for the preventClose callback. |
+| `preventCloseTimeout` | number | `10000` | Timeout in ms for the preventClose callback. |
 | `onFocusCapture` | object | — | (event: FocusEvent) => void |
 | `onBlurCapture` | object | — | (event: FocusEvent) => void |
 | `aria-busy` | boolean | — | ARIA busy state for async content. |
 | `aria-live` | `"off"` \| `"polite"` \| `"assertive"` | — | ARIA live region behavior. |
-| `announceExpanded` | boolean | — | Announces expanded state changes to screen readers. |
+| `announceExpanded` | boolean | `false` | Announces expanded state changes to screen readers. |
 
 ### Ref API (AccordionRef)
 
@@ -289,6 +295,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ### Styling Guide
 
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
 #### How class merging works
 
 The component has three styling modes:
@@ -310,6 +323,37 @@ override silently drops the rest.
 // The other slots (item, body, icon, etc.) still use their defaults.
 // To ADD to defaults, you must include the default classes yourself.
 ```
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The accordion's outer element. |
+| `item` | Each item's wrapper. Carries the variant's border treatment. |
+| `header` | The heading element the trigger sits inside. |
+| `trigger` | The `<button>` inside each item's heading. |
+| `itemIcon` | An icon rendered before the label, when one is passed. |
+| `itemText` | The trigger's label text. |
+| `description` | The optional line under the trigger's label. |
+| `triggerActions` | The slot after the label for controls that are not the trigger itself. |
+| `icon` | The wrapper around the expand/collapse indicator. |
+| `itemIndicator` | The chevron glyph itself, inside the `icon` slot. |
+| `content` | The animating panel — the grid whose row goes `0fr` to `1fr`. |
+| `body` | The padded region inside the panel that holds the content. |
+
+`AccordionShimmer` has its own map: `root`, `item`, `trigger`, `itemText`,
+`titleBar`, `descriptionBar`, `icon`, `body` — `titleBar` and `descriptionBar`
+are the placeholder bars standing in for the label and its description.
+
+#### CSS custom properties
+
+| Variable | Set by | Controls | Default |
+|----------|--------|----------|---------|
+| `--cl-accordion-content-height` | the component, on each panel element | The panel's open height, measured and written by `AccordionContent` before it animates. The `max-height` of an opening panel reads `var(--cl-accordion-content-height, auto)`, so the fallback is what renders if the keyframes are missing. | none — written per panel at runtime |
+
+You do not set this one; it is listed because it is the whole animation
+contract. It shipped once with its keyframes absent from `dist`, and a consumer
+had no way to know the variable existed or why the panel would not animate.
 
 #### Slot → visual mapping
 
@@ -717,7 +761,7 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
 | `onError` | object | — | () => void — Fires when the avatar image fails to load. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
@@ -754,7 +798,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `count` | `number` | Number of additional (hidden) avatars. |
 | `size` | `AvatarSize \| undefined` | Size matching the group's avatar size. |
 | `shape` | `AvatarShape \| undefined` | Shape matching the group's avatar shape. |
-| `max` | `number \| undefined` | Maximum count before showing `max+`. |
+| `max` | `number \| undefined` | Maximum count before showing `max+`. Inside an `AvatarGroup` this defaults to 99 and renders as `+99`, because three digits do not fit an avatar-sized circle; standalone there is no ceiling unless you set one. |
 | `showPlus` | `boolean \| undefined` | Whether to show a `+` prefix. Default: `true`. |
 | `format` | `((count: number) => string) \| undefined` | Custom format function for the count display. |
 | `variant` | `CountVariant \| undefined` | Visual style variant. |
@@ -779,6 +823,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `color` | `string \| undefined` | Background color of the badge. |
 | `size` | `BadgeSize \| undefined` | Badge size preset. Default: `"sm"`. |
 | `variant` | `BadgeVariant \| undefined` | Visual style variant. Default: `"solid"`. |
+| `tone` | `BadgeTone \| undefined` | Token family the badge draws from. Default: `"accent"` — a count is a notification, not a fault. Use `"error"` for a badge that reports one. |
 | `overlap` | `BadgeOverlap \| undefined` | Shape of the element the badge overlaps. |
 | `pulse` | `boolean \| undefined` | Adds a pulsing animation to the badge. |
 | `invisible` | `boolean \| undefined` | Hides the badge while preserving its DOM presence. |
@@ -812,7 +857,56 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ---
 
+### Class overrides
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The avatar's outer element, which carries size and shape. |
+| `control` | Inner wrapper around the image, initials or fallback. |
+| `image` | The `<img>` element. |
+| `fallback` | The initials text element. |
+| `status` | The status indicator dot. |
+| `loading` | The skeleton's bag — `AvatarShimmer` is a component, and this is what it paints. |
+
+`AvatarGroup` has its own map: `root` (the overlapping row), `item` (each
+avatar's wrapper, where the stack margin lives) and `surplus` (the `+N` disc).
+`AvatarShimmer` has `root`.
+
+**`surplus` sets the fill and the text, not the ring.** The ring around the
+surplus disc is an inline `box-shadow`, cut against the page ground so the disc
+sits in the stack the way the avatars beside it do. An inline style beats any
+class, so `classes={{ surplus: "ring-2 ring-cl-accent" }}` will not change it —
+use `surplus` for background, colour, weight and radius, and take the ring as
+given. This is a v1 limitation, stated rather than worked around.
+
+#### CSS custom properties
+
+Set on the avatar's own element by the auto-colour logic, and read by its
+classes. You do not normally write them — they are listed because a consumer
+overriding `classes.root` with a plain background will find these underneath.
+
+| Variable | Controls | Default |
+|----------|----------|---------|
+| `--avatar-bg` | The generated background in the light theme. | derived from the name's hash |
+| `--avatar-text` | The initials colour in the light theme. | derived with the background |
+| `--avatar-border` | The ring colour in the light theme. | derived with the background |
+| `--avatar-dark-bg` | The generated background in the dark theme. | derived from the name's hash |
+| `--avatar-dark-text` | The initials colour in the dark theme. | derived with the background |
+| `--avatar-dark-border` | The ring colour in the dark theme. | derived with the background |
+| `--cl-bg` | Read, not set: the page ground the group's rings are cut against. | the theme's background token |
+
+---
+
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -890,7 +984,7 @@ For grouped avatars, match `ringColor` to your background:
   autoColor
   colors={{
     backgrounds: ["#ede9fe", "#dbeafe", "#d1fae5", "#fef9c3"],
-    text: ["#7c3aed", "#2563eb", "#059669", "#ca8a04"],
+    text: ["#7c3aed", "#1d4ed8", "#047857", "#854d0e"],
   }}
 />
 ```
@@ -1089,6 +1183,8 @@ This renders correctly with no additional props, classes, or setup. The last ite
 - `data-truncated="true"` — on root `<nav>` when items are truncated
 - `data-dropdown-open="true"` — on root `<nav>` when ellipsis dropdown is open
 - `data-state="active|inactive"` — on each item (last item is "active")
+- `data-position` — on the collapsed-items menu, the side it resolved to
+- `data-breadcrumb-dropdown-id` — on that menu, tying it to the trigger that owns it
 - `data-disabled="true"` — on disabled items
 - `data-clickable="true"` — on interactive (non-active, non-disabled) items
 - `aria-current="page"` — on the last (active) item
@@ -1140,7 +1236,36 @@ const navRef = useRef<HTMLElement>(null);
 
 ---
 
+### Class overrides
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The `<nav>` container. |
+| `list` | The `<ol>`. |
+| `item` | A non-active item. |
+| `link` | An item rendered as an anchor, when it has `href`. |
+| `itemIcon` | An item's icon. |
+| `separator` | The separator between items. |
+| `ellipsis` | The `<li>` standing in for collapsed items. |
+| `ellipsisTrigger` | The button inside it. |
+| `content` | The menu those collapsed items open into. |
+| `collapsedItem` | One item inside that menu. |
+
+There is no `linkAndItem` slot. The anchor's combined class is composed
+internally from `item` and `link`; override those two.
+
+---
+
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -1345,11 +1470,11 @@ import { Button, ButtonGroup } from "@chumlab/ui/button";
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { Button } from "@chumlab/ui/button";
+import { Button, ButtonGroup } from "@chumlab/ui/button";
 
 export default function Actions() {
   return (
-    <div className="flex gap-3">
+    <ButtonGroup>
       <Button
         className="bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-500 dark:hover:bg-indigo-400 shadow-md"
         onClick={() => console.log("clicked")}
@@ -1361,7 +1486,7 @@ export default function Actions() {
       >
         Cancel
       </Button>
-    </div>
+    </ButtonGroup>
   );
 }
 ```
@@ -1412,6 +1537,7 @@ To override structural defaults (e.g., different padding), include the override 
 - `data-loading="true"` — when loading
 - `data-disabled="true"` — when disabled or loading
 - `data-full-width="true"` — when fullWidth
+- `data-orientation="horizontal" | "vertical"` — on `ButtonGroup`, from its `orientation` prop
 - `data-size="sm|md|lg"` — size prop value
 - `aria-busy="true"` — when loading
 - `aria-disabled="true"` — when disabled or loading
@@ -1429,7 +1555,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `children` | object | — | React.ReactNode — Button content. |
 | `as` | `"button"` \| `"a"` \| `"span"` | `"button"` | HTML element to render as. |
 | `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets padding, type size, gap, icon box and loader together: 28, 40 and 52px tall. Also emits data-size on the root, so CSS can target it; the attribute is a hook, not the mechanism. |
 | `disabled` | boolean | — | Disables interaction and applies disabled styling. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
@@ -1444,7 +1570,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
 | `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
 | `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `tooltip` | object | — | React.ReactNode — Tooltip content shown on hover. |
 | `tooltipProps` | object | — | Configuration for tooltip positioning and appearance. |
 | `href` | string | — | Link destination (required when as='a'). |
@@ -1476,7 +1602,27 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ---
 
+### Class overrides
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The `<button>`, `<a>` or `<span>` the button renders as. |
+| `itemText` | The inner content wrapper around the label. |
+| `icon` | The leading or trailing icon wrapper. |
+| `loading` | The spinner wrapper shown while `loading`. |
+
+---
+
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### Slot → visual mapping
 
@@ -1668,7 +1814,7 @@ const [saving, setSaving] = useState(false);
 - **Always provide `className`** — Button has no built-in colors. Without it, you get a transparent, unstyled button.
 - **Use `as="a"` for navigation**, `as="button"` for actions. Never use `as="span"` unless the element must be non-focusable-by-default.
 - **Always add `aria-label`** to icon-only buttons.
-- **`size` doesn't change dimensions** — it only emits `data-size`. Use `className` for sizing or target `[data-size="sm"]` in CSS.
+- **`size` sets dimensions now** — sm/md/lg are 28/40/52px tall, with padding, type, gap, icon box and loader moving together. It did not until v1: the prop emitted `data-size` and painted nothing, and this line used to say so. A `className` still wins over any of it — the size tokens are plain utilities in the same merge groups, so `px-8` replaces the size's padding rather than sitting beside it.
 - **Safe defaults:** `<Button className="bg-blue-600 text-white hover:bg-blue-700 ...">Label</Button>`.
 - **Use `loading` + `loadingText`** for async actions. The button auto-disables during loading.
 - **`disabled` vs `loading`:** both disable interaction, but `loading` shows a spinner and sets `aria-busy`.
@@ -1773,7 +1919,7 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` **(required)** | array | — | Top-level options for the dropdown. |
+| `options` **(required)** | array | `[]` | Top-level options for the dropdown. |
 | `value` | object | — | Controlled selection value as { [parentValue]: string \| string[] }. |
 | `defaultValue` | object | — | Initial selection value for uncontrolled usage. |
 | `onValueChange` | object | — | (value: CascadingValue, path: CascadingOption[]) => void |
@@ -1833,6 +1979,13 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `aria-label` | string | — | Accessible label for the dropdown. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -2097,6 +2250,10 @@ This renders correctly with no additional props, classes, or setup.
 ### Data Attributes (for CSS selectors and testing)
 
 - `data-checked` on root and checkbox span — when checked
+- `data-state="checked" | "unchecked" | "indeterminate"` on the box — always
+  present, and the one to target; `data-checked` is the presence-only companion
+- `data-readonly="true"` on the box — when `readOnly`
+- `data-invalid="true"` on the message — when it is the error message
 - `data-indeterminate` on root and checkbox span — when indeterminate
 - `data-disabled` on checkbox span — when disabled
 - `data-error` on checkbox span — when `error={true}`
@@ -2136,14 +2293,37 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `indeterminateIcon` | object | — | React.ReactNode — Custom icon for the indeterminate state. |
 | `classes` | object | — | CSS class overrides for checkbox sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `disabled` | boolean | `false` | Disables the checkbox. |
 | `name` | string | — | Form field name. |
 | `value` | string | — | Form field value. |
 | `id` | string | — | HTML id attribute. |
 | `required` | boolean | `false` | Marks the checkbox as required. |
 
+### Class overrides
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The container wrapping the box and its label. Carries every data attribute. |
+| `labelGroup` | The label and description stacked together. |
+| `label` | The label text. |
+| `description` | The description under the label. |
+| `control` | The indicator box itself. |
+| `itemIndicator` | The check or indeterminate glyph inside the box. |
+| `message` | The error or success line. |
+
+---
+
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -2325,15 +2505,18 @@ import { CountryFlag, CountryFlagGroup, CountryFlagShimmer } from "@chumlab/ui/c
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { CountryFlag } from "@chumlab/ui/country-flag";
+import { CountryFlag, CountryFlagGroup } from "@chumlab/ui/country-flag";
 
 export default function Example() {
   return (
-    <div style={{ display: "flex", gap: 8 }}>
+    <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
       <CountryFlag code="us" size="lg" />
-      <CountryFlag code="gb" size="lg" />
-      <CountryFlag code="jp" size="lg" />
-      <CountryFlag code="de" size="lg" />
+      <CountryFlagGroup max={3} size="lg">
+        <CountryFlag code="gb" />
+        <CountryFlag code="jp" />
+        <CountryFlag code="de" />
+        <CountryFlag code="fr" />
+      </CountryFlagGroup>
     </div>
   );
 }
@@ -2354,10 +2537,13 @@ export default function Example() {
 
 ### Data Attributes
 
-- `data-country` on root — the ISO country code
-- `data-size` on root — preset size name (not set for numeric)
-- `data-loaded` on root — when image has loaded
-- `data-error` on root — when image failed to load
+- `data-code` on root — the normalised alpha-2 code the flag resolved to, so a
+  stylesheet can reach one country. (Named `data-country` here until it was
+  checked against the component; there is no `data-country`.)
+- `data-loading="true"` on root — while the image has not resolved and no
+  fallback is showing. (There is no `data-loaded`: the attribute names the state
+  it is in, and is absent once loaded.)
+- `data-error="true"` on root — when the image failed to load
 - `role="img"` on root — with `aria-label` set to alt or code
 
 DOM nesting: `root(span) > img + fallback`
@@ -2395,7 +2581,7 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 |------|------|---------|-------------|
 | `code` **(required)** | string | — | ISO 3166-1 alpha-2 country code (e.g. 'US', 'GB'). |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| `"2xl"` \| number | — | Flag size as a preset or numeric pixel value. |
-| `aspectRatio` | number | — | Aspect ratio for the flag image. |
+| `aspectRatio` | number | `0.75` | Aspect ratio for the flag image. |
 | `alt` | string | — | Alt text for the flag image. |
 | `fallback` | object | — | React.ReactNode — Custom fallback content when the flag image fails to load. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
@@ -2403,7 +2589,7 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 | `basePath` | string | — | Where to load the flag SVG from. Omit to use the flags packaged with the library (no network request). Set it to fetch `${basePath}/${code}.svg` from a CDN or self-hosted directory instead. |
 | `classes` | object | — | CSS class overrides for flag sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
 | `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
@@ -2448,7 +2634,31 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ---
 
+### Class overrides
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The element the flag sits in, which carries the size and the hairline border. |
+| `image` | The flag graphic. |
+| `fallback` | What is shown when the code has no flag, or the image fails. |
+| `loading` | The skeleton's bag — `CountryFlagShimmer` is a component, and this is what it paints. |
+
+`CountryFlagGroup` has its own map: `root` (the overlapping row), `item` (each
+flag, where the stack margin lives) and `count` (the `+N` disc closing the row).
+`CountryFlagShimmer` has `root`.
+
+---
+
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -2663,9 +2873,16 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `forceDropdownPosition` | boolean | `false` | Locks the calendar to the specified dropdownPosition without auto-flipping. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and calendar popup. |
 | `keepMounted` | boolean | `false` | Keep the calendar DOM mounted when closed. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -2957,18 +3174,18 @@ export default function Example() {
 | `onOpenChange` | object | — | (open: boolean) => void — Callback when the drawer's open state changes. |
 | `zIndex` | number | `9999` | Z-index of the drawer overlay and panel. |
 | `children` | object | — | React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter). |
-| `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | — | Direction from which the drawer slides in. |
-| `size` | string | — | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
-| `overlayColor` | string | — | Background color of the overlay. |
-| `overlayOpacity` | number | — | Opacity of the overlay (0-1). |
-| `overlayBlur` | number | — | Backdrop blur in pixels for the overlay. |
-| `duration` | number | — | Animation duration in milliseconds. |
+| `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | Direction from which the drawer slides in. |
+| `size` | string | `"300px"` | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
+| `overlayColor` | string | `"black"` | Background color of the overlay. |
+| `overlayOpacity` | number | `0.32` | Opacity of the overlay (0-1). |
+| `overlayBlur` | number | `0` | Backdrop blur in pixels for the overlay. |
+| `duration` | number | `300` | Animation duration in milliseconds. |
 | `lockScroll` | boolean | `true` | Locks body scroll when the drawer is open. |
 | `closeOnOverlayClick` | boolean | `true` | Closes the drawer when the overlay is clicked. |
 | `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
 | `classes` | object | — | CSS class overrides for drawer sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `trapFocus` | boolean | `true` | Traps keyboard focus within the drawer. |
 | `restoreFocus` | boolean | `true` | Restores focus to the previously focused element when the drawer closes. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the drawer. |
@@ -2977,10 +3194,10 @@ export default function Example() {
 | `keepMounted` | boolean | `false` | Keep the drawer DOM mounted when closed. |
 | `modal` | boolean | `true` | Whether the drawer behaves as a modal dialog. |
 | `swipeable` | boolean | `false` | Enables swipe-to-close gesture. |
-| `swipeThreshold` | number | — | Minimum swipe distance in pixels to trigger close. |
+| `swipeThreshold` | number | `0.4` | Minimum swipe distance in pixels to trigger close. |
 | `snapPoints` | array | — | Array of snap point positions (0-1) for the drawer panel. |
 | `activeSnapPointIndex` | number | — | Controlled active snap point index. |
-| `defaultSnapPointIndex` | number | — | Initial snap point index for uncontrolled usage. |
+| `defaultSnapPointIndex` | number | `0` | Initial snap point index for uncontrolled usage. |
 | `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
 
 ### Keyboard Interactions
@@ -3085,7 +3302,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | List of selectable options. |
+| `options` | array | `[]` | List of selectable options. |
 | `value` | string \| null | — | Controlled selected value. |
 | `defaultValue` | string | — | Initial selected value for uncontrolled usage. |
 | `onValueChange` | object | — | (value: string \| null, option: DropdownOption \| null) => void - Fires when the selected value changes. |
@@ -3137,6 +3354,13 @@ export default function Example() {
 | `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -3358,7 +3582,7 @@ export default function Example() {
 | `onStartIconClick` | Requires `startIconLabel` for accessibility |
 | `onEndIconClick` | Requires `endIconLabel` for accessibility |
 | `showCount` | Requires `maxLength` to be set |
-| `size` | Does NOT apply built-in styles — emits `data-size` for CSS targeting |
+| `size` | Sets the control's padding and type: 28/40/52px fields, 30/42/54 with the border. Emits `data-size` as well, for CSS that wants it |
 | `prefix` / `suffix` | For static text/elements. Use `startIcon`/`endIcon` for icons |
 | `clearable` | Only shows clear button when input has a value |
 
@@ -3390,7 +3614,7 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
 | `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself. |
 | `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
 | `suffix` | object | — | React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com'). |
 | `startIcon` | object | — | React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided. |
@@ -3428,6 +3652,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ### Styling Guide
 
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_INPUT_CLASSES` with dark mode, focus ring, rounded corners
@@ -3464,6 +3695,8 @@ root (flex flex-col)
 | Input text | `input` | Font, color, placeholder |
 | Label style | `label` | Font weight, size, color |
 | Error text | `message` | Color, icon |
+| The whole field and its labelling | `root` | The outer wrapper; `fullWidth` adds `w-full` here |
+| The character counter | `count` | Shown under the field when `showCount` is set |
 
 #### Dark mode
 
@@ -3605,7 +3838,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `defaultValue` | object | — | PhoneNumberValue - Default phone value for uncontrolled usage. |
 | `onValueChange` | object | — | (data: PhoneNumberData) => void - Fires when the phone number changes, providing full validation data. |
 | `onCountryChange` | object | — | (country: CountryOption) => void - Fires when the selected country changes. |
-| `defaultCountry` | string | — | ISO country code for the default selected country. |
+| `defaultCountry` | string | `"us"` | ISO country code for the default selected country. |
 | `countries` | array | — | Custom list of country options to display. |
 | `preferredCountries` | array | — | ISO country codes to show at the top of the country list. |
 | `id` | string | — | HTML id attribute. |
@@ -3674,6 +3907,13 @@ console.log(inputRef.current?.value);
 ---
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -3875,6 +4115,15 @@ export default function Example() {
 
 ---
 
+### Data Attributes (for CSS selectors and testing)
+
+- `data-reduce-motion="true"` on the root of all four variants — present only
+  while reduced motion is in force, whether that comes from the OS setting or
+  from `reduceMotion={true}`. Absent otherwise, so `[data-reduce-motion]`
+  selects it.
+
+---
+
 ### All Props
 
 <!-- generated from Loader.schema.json — edit the schema, not this table -->
@@ -3886,10 +4135,10 @@ export default function Example() {
 | `size` | number | `20` | Width and height in pixels. |
 | `thickness` | number | `2` | Stroke width of track and arc. |
 | `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
-| `trackColor` | string | — | Background track color. Default: currentColor at 20% opacity. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `trackColor` | string | `"currentColor"` | Background track color, painted at 20% opacity by the `track` slot. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 #### LinearLoader
 
@@ -3898,11 +4147,11 @@ export default function Example() {
 | `height` | number | `4` | Height of the bar in pixels. |
 | `width` | string \| number | `"100%"` | Width of the bar (CSS value). |
 | `speed` | number | `1.5` | Animation duration in seconds. |
-| `trackColor` | string | — | Background track color. |
+| `trackColor` | string | `"currentColor"` | Background track color. |
 | `borderRadius` | number | `9999` | Border radius in pixels. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 #### DotLoader
 
@@ -3912,9 +4161,9 @@ export default function Example() {
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
 | `speed` | number | `1.4` | Full animation cycle duration in seconds. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 #### PulseLoader
 
@@ -3923,9 +4172,9 @@ export default function Example() {
 | `size` | number | `40` | Diameter of the circle in pixels. |
 | `speed` | number | `1.5` | Animation duration in seconds. |
 | `rings` | number | `2` | Number of ripple rings. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 ### Sub-component Props
 
@@ -3983,7 +4232,35 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ### Styling Guide
 
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
 Each variant has its own class slots. Circular: `root`, `control`, `track`, `range`. Linear: `root`, `range`. Dot: `root`, `range`. Pulse: `root`, `range`.
+
+#### CSS custom properties
+
+`CircularLoader` sets three on its root, and its own classes read them, so a
+consumer can retune it from a stylesheet without passing props:
+
+| Variable | Set from | Used by |
+|----------|----------|---------|
+| `--loader-size` | `size` | the root's width and height |
+| `--loader-speed` | `speed` | the spin's `animation-duration` |
+| `--loader-track` | `trackColor` | the track circle's stroke |
+
+#### `size` is a raw pixel number, and the spin is wider than it
+
+There is no size scale and no maximum: `size` is whatever number you pass, 20
+by default. One thing it does not tell you — the SVG carries `animate-spin`, so
+its **bounding box sweeps out the square's diagonal** while it turns. At
+`size={48}` the measured box reaches 67px against a 48px parent, about 41%
+wider. The painted circle stays inside `size`; it is layout measurement and hit
+testing that see the larger box. `e2e/icon-bounds.spec.ts` names `Loader/sized`
+as its one exemption for exactly this reason.
 
 ---
 
@@ -4015,19 +4292,23 @@ import type { ModalProps, ModalClasses } from "@chumlab/ui/modal";
 
 ```tsx
 import { useState } from "react";
-import { Modal } from "@chumlab/ui/modal";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@chumlab/ui/modal";
+import { Button } from "@chumlab/ui/button";
 
 export default function Example() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button onClick={() => setOpen(true)}>Open Modal</button>
-      <Modal open={open} onOpenChange={setOpen} title="Welcome Back">
-        <p>Your session has been restored.</p>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
-          <button onClick={() => setOpen(false)}>Cancel</button>
-          <button onClick={() => setOpen(false)}>Continue</button>
-        </div>
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+      <Modal open={open} onOpenChange={setOpen}>
+        <ModalHeader>Welcome Back</ModalHeader>
+        <ModalBody>
+          <p>Your session has been restored.</p>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>Continue</Button>
+        </ModalFooter>
       </Modal>
     </>
   );
@@ -4108,7 +4389,7 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `overlayOpacity` | number | `0.32` | Overlay background opacity (0-1). |
 | `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
 | `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
 | `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
 | `zIndex` | number | — | CSS z-index for the modal layer. |
@@ -4166,6 +4447,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ---
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -4407,7 +4695,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | List of selectable options. |
+| `options` | array | `[]` | List of selectable options. |
 | `value` | array | — | Controlled selected values. |
 | `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
 | `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
@@ -4431,7 +4719,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
-| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
 | `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -4459,6 +4747,13 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `renderTrigger` | object | — | (props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -4571,6 +4866,20 @@ const [values, setValues] = useState<string[]>([]);
 
 ---
 
+### Selected-chip strip
+
+The strip **wraps**; it does not clip. `maxDisplayedChips` (default 3) caps how
+many chips render and the rest collapse into a count, so the strip cannot
+overflow its trigger and there is nothing for a clip to protect against.
+
+This is recorded because it was not decided once. `MultiSelectDropdown` shipped
+`overflow: hidden` with `flex-wrap: nowrap` while `MultiSelectSearchableDropdown`
+shipped `flex-wrap`, both introduced in the same commit — one titled for
+unrelated Accordion work — and nothing in either component, schema or document
+said which was intended. The clip also cost hit area: the remove control is 24px
+via a negative margin inside a 20px row, so the clip took 4px out of the target a
+pointer can reach while `target-size` still read 24x24 from the rect.
+
 ---
 
 ## MultiSelectSearchableDropdown
@@ -4657,7 +4966,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it. |
 | `value` | array | — | Controlled selected values. |
 | `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
 | `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
@@ -4683,11 +4992,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loading` | boolean | — | Shows a loading state. |
 | `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | — | Options to display before any search is performed. Async branch only (`onSearch`). |
+| `initialOptions` | array | `[]` | Options to display before any search is performed. Async branch only (`onSearch`). |
 | `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
 | `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
-| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
 | `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -4714,6 +5023,13 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `searchInputAriaLabel` | string | `"Search options"` | Accessible label for the search input. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -4826,6 +5142,20 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ---
 
+### Selected-chip strip
+
+The strip **wraps**; it does not clip. `maxDisplayedChips` (default 3) caps how
+many chips render and the rest collapse into a count, so the strip cannot
+overflow its trigger and there is nothing for a clip to protect against.
+
+This is recorded because it was not decided once. `MultiSelectDropdown` shipped
+`overflow: hidden` with `flex-wrap: nowrap` while `MultiSelectSearchableDropdown`
+shipped `flex-wrap`, both introduced in the same commit — one titled for
+unrelated Accordion work — and nothing in either component, schema or document
+said which was intended. The clip also cost hit area: the remove control is 24px
+via a negative margin inside a 20px row, so the clip took 4px out of the target a
+pointer can reach while `target-size` still read 24x24 from the rect.
+
 ---
 
 ## OtpInput
@@ -4876,6 +5206,25 @@ export default function Example() {
 
 ---
 
+### Data Attributes (for CSS selectors and testing)
+
+Every one of these is written or absent, never `"false"`, so the bare attribute
+selector is the one to use: `[data-error]`, not `[data-error="true"]`.
+
+- `data-error="true"` on the root and on each input — when `error={true}`
+- `data-disabled="true"` on the root and on each input — when disabled
+- `data-loading="true"` on the root — when `loading={true}`
+- `data-valid="true"` on the root in the success state, and on the success message
+- `data-invalid="true"` on the error message
+- `data-index` on each input — its zero-based position, always present
+- `data-filled="true"` on an input holding a character
+- `data-group` on each group wrapper — the group's zero-based index, only when
+  `groups` is set
+
+DOM nesting: `root > label + description + control > (group > input…) + separator + message`
+
+---
+
 ### All Props
 
 <!-- generated from OtpInput.schema.json — edit the schema, not this table -->
@@ -4903,7 +5252,7 @@ export default function Example() {
 | `allowPaste` | boolean | `true` | Enables pasting OTP values. |
 | `autoFocusFirst` | boolean | `false` | Automatically focuses the first input on mount. |
 | `inputType` | `"text"` \| `"password"` \| `"tel"` | `"text"` | HTML input type for each field. |
-| `inputPattern` | string | `"\\\\d*"` | HTML pattern attribute for input validation. |
+| `inputPattern` | string | `"\\d*"` | HTML pattern attribute for input validation. |
 | `inputClassNames` | array | — | Per-input CSS class overrides. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
 | `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
@@ -4912,6 +5261,54 @@ export default function Example() {
 | `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
+
+### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
+#### Slot → visual mapping
+
+| Slot | Element |
+|------|---------|
+| `root` | The field and everything labelling it. |
+| `label` | The label above the row. |
+| `description` | The helper line under the label. |
+| `control` | The row of boxes. |
+| `group` | One run of boxes when `groups` splits the code up. |
+| `input` | A single character box. |
+| `separator` | What is drawn between two groups. |
+| `message` | The error or hint line under the row. |
+
+#### The `input` slot carries the error and focus states
+
+The box is painted by one class string holding four variants:
+`data-[error]:border-cl-error` for the error state,
+`focus-visible:border-cl-border-input-focus` for focus, and
+`data-[error]:focus-visible:border-cl-border-input-focus` for **both at once**.
+That third one is not redundant. Without it, a focused box in an error state
+kept the error border and the focus ring landed on it at **1.30:1** — measured,
+and below the 3:1 a focus indicator has to clear.
+
+A plain utility of the same property drops all three, so
+`classes={{ input: "border-gray-300" }}` leaves a field with no error border and
+no focus indicator. Pass the states you want to keep:
+
+```tsx
+<OtpInput
+  error
+  classes={{
+    input:
+      "border-gray-300 data-[error]:border-red-600 focus-visible:border-blue-600 data-[error]:focus-visible:border-blue-600",
+  }}
+/>
+```
+
+---
 
 ### Changed behaviour
 
@@ -4939,10 +5336,10 @@ filter is now derived from the same pattern, so all four agree.
 
 | Key | Behaviour |
 |-----|-----------|
-| `Tab` | Moves focus into the group; the boxes themselves are reached with the arrow keys. |
+| `Tab` | Moves to the next box. Every box is in the tab order — there is no roving tabindex, so tabbing out of the field takes as many presses as it has boxes. |
 | `ArrowLeft`, `ArrowRight` | Moves between boxes. |
 | `Home`, `End` | Jumps to the first or last box. |
-| `Backspace` | Clears the current box, or steps back and clears the previous one when it is already empty. |
+| `Backspace` | Clears the current box and steps back. On a box that is already empty it steps back and clears that one instead. |
 | `Delete` | Clears the current box without moving. |
 | Printable characters | Fills the box and advances. A paste of the full code fills every box at once. |
 
@@ -5041,7 +5438,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for pagination sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the rows-per-page dropdown. |
@@ -5068,6 +5465,13 @@ paginationRef.current?.focus();
 ---
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -5277,7 +5681,7 @@ export default function Example() {
 | `orientation` | `"horizontal"` \| `"vertical"` | `"vertical"` | Layout orientation. |
 | `classes` | object | — | CSS class overrides for group sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `children` **(required)** | object | — | React.ReactNode - RadioButton children. |
 | `className` | string | — | Additional class names applied to the group root. |
 
@@ -5373,7 +5777,7 @@ export default function Example() {
 | `resizeDirection` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"right"` | Direction from which the panel can be resized. |
 | `step` | number | `10` | Step increment for resize value changes. |
 | `disabled` | boolean | `false` | Whether the resize handle is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `handleContent` | object | — | React.ReactNode — Custom content rendered inside the resize handle. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
@@ -5481,7 +5885,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it. |
 | `value` | string \| null | — | Controlled selected value. |
 | `defaultValue` | string | — | Default uncontrolled selected value. |
 | `onValueChange` | object | — | (value: string \| null, option: SearchableDropdownOption \| null) => void — Callback fired when the selected value changes. |
@@ -5511,7 +5915,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loading` | boolean | — | Whether the dropdown is in a loading state. |
 | `onSearch` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | — | Initial options to display before any search is performed. Async branch only (`onSearch`). |
+| `initialOptions` | array | `[]` | Initial options to display before any search is performed. Async branch only (`onSearch`). |
 | `onLoadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
 | `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void — Callback when async loading fails. |
@@ -5540,6 +5944,13 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loadingText` | object | `"Loading..."` | React.ReactNode — Text shown during loading state. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -5880,6 +6291,31 @@ export default function Example() {
 - `data-status` — status of the step before
 - `data-next-status` — status of the step after
 
+**Also emitted, and not listed here before:**
+- `data-state` — on the indicator and the trigger, mirroring `data-status` so a
+  slot can be selected the same way the rest of the library selects state
+- `data-clickable="true"` — on a step that is navigable. Only `completed` and
+  `active` steps are by default, and only those render as `<button>`; the rest
+  are `<div role="group">`. Pass `isStepClickable` to widen it.
+- `data-align` — on the row, from `labelPosition`
+- `data-invalid="true"` — on a step in the `error` status
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The `<nav>` container. |
+| `list` | The `<ol>` wrapping all steps. |
+| `item` | The `<li>` for one step: indicator, text, and the separator that follows it. |
+| `trigger` | The clickable region — indicator and text together — when the step is navigable. |
+| `itemIndicator` | The numbered or icon-bearing circle. |
+| `indicatorTrigger` | The indicator when it is its own button, which is the `dot` and `icon` variants. |
+| `itemIcon` | The icon inside the indicator, when one replaces the number. |
+| `row` | The flex row holding the indicator beside its text, in the horizontal orientations. |
+| `itemText` | Label and description together, so they align as one block. |
+| `description` | The step's description text. |
+| `separator` | The connector drawn between one step and the next. |
+
 DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indicator + labelWrapper(label + description) + connector`
 
 ---
@@ -5890,7 +6326,7 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` **(required)** | array | — | Array of step definitions. |
+| `steps` **(required)** | array | `[]` | Array of step definitions. |
 | `value` | string \| number | — | Controlled active step ID. |
 | `defaultValue` | string \| number | — | Default uncontrolled active step ID. |
 | `onValueChange` | object | — | (stepId: string \| number) => void — Callback fired when the active step changes. |
@@ -5909,9 +6345,9 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
 | `aria-label` | string | — | Accessible label for the stepper. |
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
-| `tooltipDefaults` | object | — | Default tooltip configuration applied to all step tooltips. |
+| `tooltipDefaults` | object | `{}` | Default tooltip configuration applied to all step tooltips. |
 | `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `className` | string | — | CSS class for the root element. |
@@ -5922,6 +6358,13 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `renderStep` | object | — | (props: StepRenderProps, defaultElement: ReactElement) => ReactNode — Custom step render function. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -6104,7 +6547,57 @@ export default function Example() {
 
 ---
 
+### Data Attributes (for CSS selectors and testing)
+
+Each is written or absent, never `"false"`, so the bare attribute selector is
+the one to use: `[data-error]`, not `[data-error="true"]`. All of them sit on
+the root.
+
+- `data-state="checked" | "unchecked"` — always present
+- `data-checked="true"` — only while checked, for a selector that wants presence
+- `data-disabled="true"` — when disabled
+- `data-loading="true"` — while a change is in flight
+- `data-error="true"` — when `error`
+- `data-valid="true"` — when `success` and not `error`
+- `data-reduce-motion="true"` — while reduced motion is in force
+- `data-invalid="true"` — on the message element, when it is the error message
+
+#### The error state has no control paint
+
+Every other field in the library colours a border in its error state. A switch
+has no border to colour, so `error` does three things and none of them touch
+the track: it sets `data-error` on the root, links `errorMessage` through
+`aria-describedby`, sets `aria-invalid` on the control, and paints the message
+`text-cl-error`.
+
+If you want the track itself to react, the attribute is the hook:
+
+```tsx
+<Switch
+  error
+  errorMessage="You must accept the terms"
+  classes={{ control: "bg-cl-bg-hover data-[state=checked]:bg-cl-accent" }}
+  className="data-[error]:ring-2 data-[error]:ring-cl-error/40"
+/>
+```
+
+---
+
 ### Class overrides
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | Outer container. Carries every data attribute above. |
+| `row` | The line holding the label group and the track, which is what `labelPosition` reorders. |
+| `labelGroup` | The label and description stacked together, so they move as one. |
+| `label` | The label element. |
+| `description` | The description under the label. |
+| `control` | The track the thumb slides along. |
+| `thumb` | The handle that slides. |
+| `message` | The error or hint line under the row. |
+| `loading` | The spinner shown on the thumb while a change is in flight. |
 
 **A slot that carries states is replaced as a whole.** Several slots absorbed what were
 separate per-state keys, so overriding one replaces its base styling *and* every state
@@ -6149,7 +6642,7 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `description` | object | — | React.ReactNode — Description text below the label. |
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
-| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. Reports the new `checked` state, not the `value` prop — the name follows the library-wide change-handler convention. |
 | `name` | string | — | Form field name attribute. |
 | `value` | string | `"on"` | Value attribute for the hidden input element. |
 | `required` | boolean | `false` | Whether the field is required. |
@@ -6171,9 +6664,16 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `style` | object | — | Inline styles applied to the root element. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 Switch supports CSS custom properties for easy theming:
 - `--switch-tracker-width`, `--switch-tracker-height` — track dimensions
@@ -6181,6 +6681,8 @@ Switch supports CSS custom properties for easy theming:
 - `--switch-thumb-bg` — thumb color
 - `--switch-tracker-checked-bg`, `--switch-tracker-unchecked-bg` — track colors
 - `--switch-focus-ring` — focus ring color
+- `--cl-accent` — read, not set: the theme token the default checked track and
+  focus ring fall back to when the variables above are unset
 
 Or use the `classes` prop with 14 slots for full control.
 
@@ -6369,6 +6871,13 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 
 ### Styling Guide
 
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_TABLE_CLASSES`
@@ -6510,8 +7019,29 @@ export default function Example() {
 - `data-state="active"` / `data-state="inactive"` — on tab buttons
 - `data-disabled` — on disabled tabs
 - `data-orientation` — on tablist and root
+- `data-reduce-motion="true"` — on the root, while reduced motion is in force
+- `data-state` is also on the label, the icon and the count badge inside each
+  tab, not only on the button — which is what makes
+  `classes={{ count: "data-[state=active]:bg-cl-accent/10" }}` work
 
-DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > panel(role="tabpanel")`
+DOM nesting: `root > list(role="tablist") > item(role="tab") + indicator > content(role="tabpanel")`
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The outer container. |
+| `list` | The tablist strip holding every tab button. |
+| `item` | One tab button. Carries `data-state` and `data-disabled`. |
+| `itemText` | The tab's label text, so it can be hidden at narrow widths without hiding the icon. |
+| `itemIcon` | The icon inside a tab. |
+| `count` | The count badge. Ships with shape only — no fill — so a filled badge is a `classes` override. |
+| `indicator` | The active-tab indicator. |
+| `content` | The panel below the strip. |
+
+There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
+`tabDisabled`, `iconActive`, `iconInactive`, `countActive`, `countInactive` or
+`panel` slot. State is a variant on a slot, not a slot of its own.
 
 ---
 
@@ -6537,7 +7067,7 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
 | `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
 | `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |
@@ -6549,6 +7079,13 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `keepMounted` | boolean | `false` | Keep previously mounted tab panels in the DOM. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -6702,13 +7239,15 @@ export default function Example() {
 |------|-----------|
 | `showCount` | Requires `maxLength` to be set |
 | `autoResize` | Overrides manual `resize` CSS. Sets `overflow: hidden` and `resize: none`. |
-| `size` | Does NOT apply built-in styles — emits `data-size` for CSS targeting |
+| `size` | Sets the control's padding and type: 28/40/52px fields, 30/42/54 with the border. Emits `data-size` as well, for CSS that wants it |
 | `onStartIconClick` | Requires `startIconLabel` for accessibility |
 | `onEndIconClick` | Requires `endIconLabel` for accessibility |
 
 ---
 
 ### Data Attributes
+
+- `data-auto-resize="true"` — on the control when `autoResize` is set
 
 - `data-size` on root — "sm", "md", "lg"
 - `data-disabled` on root — when disabled
@@ -6734,7 +7273,7 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
 | `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
-| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the textarea. |
 | `onStartIconClick` | object | — | () => void — Makes startIcon a clickable button. |
@@ -6780,6 +7319,13 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ### Styling Guide
 
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
+
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_TEXTAREA_CLASSES` with dark mode, focus ring
@@ -6814,6 +7360,8 @@ root (flex flex-col)
 | Textarea text | `input` | Font, color, placeholder, resize |
 | Label style | `label` | Font weight, size, color |
 | Error text | `message` | Color, icon |
+| The whole field and its labelling | `root` | The outer wrapper; `fullWidth` adds `w-full` here |
+| The character counter | `count` | Shown under the field when `showCount` is set |
 
 #### Dark mode
 
@@ -6968,13 +7516,20 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
 | `classes` | object | — | CSS class overrides for all sub-elements. |
 | `unstyled` | boolean | `false` | Omits built-in layout helpers so layout comes entirely from classes. |
-| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Motion override. `"auto"` follows the OS `prefers-reduced-motion` setting; `true` always reduces; `false` always animates, including for a user who asked for less. |
+| `reduceMotion` | boolean \| `"auto"` | `false` | Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting. |
 | `onCancel` | object | — | () => void — Called when the clock cancel button is pressed. |
 | `onConfirm` | object | — | () => void — Called when the clock confirm button is pressed. |
 | `cancelText` | string | `"Cancel"` | Text for the clock cancel button. |
 | `okText` | string | `"OK"` | Text for the clock OK button. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### How class merging works
 
@@ -7113,6 +7668,49 @@ import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
 ---
 
+### Setup
+
+Toast is the one component in the library with a structural requirement: it is
+not something you place where you want it. `ToastProvider` wraps your tree once,
+high enough that every caller is inside it, and toasts are created by calling a
+function rather than rendering an element.
+
+```tsx
+// app root — once, around everything
+import { ToastProvider } from "@chumlab/ui/toast";
+
+export default function App({ children }) {
+  return <ToastProvider position="top-right">{children}</ToastProvider>;
+}
+```
+
+```tsx
+// any child — no element, no state of your own
+import { useToast } from "@chumlab/ui/toast";
+
+function SaveButton() {
+  const toast = useToast();
+  return <button onClick={() => toast.success("Saved")}>Save</button>;
+}
+```
+
+Three things that follow from that, and are the ones missed first:
+
+- **`useToast()` throws outside the provider.** If you get that error, the
+  component calling it is mounted above the wrap, or in a different React tree —
+  a separate `createRoot`, or a portal rendered outside the provider's subtree.
+- **One provider, not one per page.** Position, duration and `maxToasts` are the
+  provider's props, so a second one gives you two independent stacks that do not
+  know about each other's limits.
+- **You never render `<Toast>` yourself.** It is exported for typing; the
+  provider renders it, and its `id` and `onRemove` come from there.
+
+There is no Anatomy section for this, deliberately: the thing nested inside
+`ToastProvider` is your tree, not another Toast part, and a diagram naming one
+element would say less than the two snippets above.
+
+---
+
 ### Basic Usage (copy-paste ready)
 
 ```tsx
@@ -7226,7 +7824,52 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ---
 
+### Data Attributes (for CSS selectors and testing)
+
+- `data-toast-id` — on each toast, the id the API returns from `toast.success(...)`
+- `data-toast-type="default" | "success" | "error" | "warning" | "info"` — the variant
+
+---
+
+### Class overrides
+
+#### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The toast surface — the coloured card the whole notice sits on. |
+| `body` | The padded row inside `root` holding the icon, the message and the close button. |
+| `indicator` | The status glyph at the leading edge, which is what distinguishes the variants. |
+| `icon` | The icon wrapper. |
+| `title` | The message line, which is the toast's accessible name. |
+| `description` | The description under it. |
+| `track` | The auto-dismiss progress groove. |
+| `closeTrigger` | The dismiss button. |
+
+#### CSS custom properties
+
+Each variant reads three, written as Tailwind arbitrary values with the
+library's colour as the fallback — `bg-[var(--toast-default-bg,#374151)]`. Set
+them on any ancestor to retheme toasts without touching `classes`.
+
+| Variable | Controls | Default |
+|----------|----------|---------|
+| `--toast-default-bg` / `--toast-default-border` / `--toast-default-text` | the neutral toast | `#374151` / `#374151` / `white` |
+| `--toast-success-bg` / `--toast-success-border` / `--toast-success-text` | the success variant | the library's success palette |
+| `--toast-error-bg` / `--toast-error-border` / `--toast-error-text` | the error variant | the library's error palette |
+| `--toast-warning-bg` / `--toast-warning-border` / `--toast-warning-text` | the warning variant | the library's warning palette |
+| `--toast-info-bg` / `--toast-info-border` / `--toast-info-text` | the info variant | the library's info palette |
+
+---
+
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 Toast supports CSS custom variables for theming:
 - `--toast-success-bg`, `--toast-success-border`, `--toast-success-text`
@@ -7323,6 +7966,13 @@ export default function Example() {
 | `baseArrowStyle` | object | — | Inline styles applied to the base arrow element. |
 
 ### Styling Guide
+
+> **A plain utility replaces the library's for that property, in every state.**
+> `classes={{ slot: "text-red-500" }}` drops the library's `hover:text-…` and
+> `data-[state=…]:text-…` on that slot as well — otherwise they would sit beside
+> your class and win in their own state, leaving your override in the DOM and
+> inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
+> A variant YOU pass is never dropped.
 
 #### Slots
 

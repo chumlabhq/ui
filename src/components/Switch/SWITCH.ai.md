@@ -201,6 +201,8 @@ Switch supports CSS custom properties for easy theming:
 - `--switch-thumb-bg` — thumb color
 - `--switch-tracker-checked-bg`, `--switch-tracker-unchecked-bg` — track colors
 - `--switch-focus-ring` — focus ring color
+- `--cl-accent` — read, not set: the theme token the default checked track and
+  focus ring fall back to when the variables above are unset
 
 Or use the `classes` prop with 14 slots for full control.
 

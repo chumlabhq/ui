@@ -78,6 +78,12 @@ These props have dependencies — using them wrong causes silent bugs:
 - `data-orientation="vertical|horizontal"` — on root
 - `data-value` — item's unique value string
 - `data-type="single|multiple"`, `data-size`, `data-variant` — on root
+- `data-accordion-expand-print="true"` — on root when `expandOnPrint` is set. The
+  print stylesheet the component ships keys off it: `[data-accordion-expand-print="true"]`
+  forces every `data-state="closed"` panel open for print and unhides its
+  `aria-hidden` content.
+- `data-accordion-print-styles` — marks the injected print stylesheet itself, so
+  a second accordion on the page does not inject a second copy.
 
 **DOM nesting:** root `<div>` → item `<div>` → heading `<h3>` → trigger `<button>` + content `<div role="region">`
 
@@ -234,6 +240,37 @@ override silently drops the rest.
 // The other slots (item, body, icon, etc.) still use their defaults.
 // To ADD to defaults, you must include the default classes yourself.
 ```
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The accordion's outer element. |
+| `item` | Each item's wrapper. Carries the variant's border treatment. |
+| `header` | The heading element the trigger sits inside. |
+| `trigger` | The `<button>` inside each item's heading. |
+| `itemIcon` | An icon rendered before the label, when one is passed. |
+| `itemText` | The trigger's label text. |
+| `description` | The optional line under the trigger's label. |
+| `triggerActions` | The slot after the label for controls that are not the trigger itself. |
+| `icon` | The wrapper around the expand/collapse indicator. |
+| `itemIndicator` | The chevron glyph itself, inside the `icon` slot. |
+| `content` | The animating panel — the grid whose row goes `0fr` to `1fr`. |
+| `body` | The padded region inside the panel that holds the content. |
+
+`AccordionShimmer` has its own map: `root`, `item`, `trigger`, `itemText`,
+`titleBar`, `descriptionBar`, `icon`, `body` — `titleBar` and `descriptionBar`
+are the placeholder bars standing in for the label and its description.
+
+### CSS custom properties
+
+| Variable | Set by | Controls | Default |
+|----------|--------|----------|---------|
+| `--cl-accordion-content-height` | the component, on each panel element | The panel's open height, measured and written by `AccordionContent` before it animates. The `max-height` of an opening panel reads `var(--cl-accordion-content-height, auto)`, so the fallback is what renders if the keyframes are missing. | none — written per panel at runtime |
+
+You do not set this one; it is listed because it is the whole animation
+contract. It shipped once with its keyframes absent from `dist`, and a consumer
+had no way to know the variable existed or why the panel would not animate.
 
 ### Slot → visual mapping
 

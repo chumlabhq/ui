@@ -1,8 +1,8 @@
 {
   "$comment": "Derived from `npm run verify:consumers`. Every component is rendered on its own route in three server-rendered frameworks and hydrated with React 19's onRecoverableError read directly; `ssr` is what that measured, not a claim. `ai/component-index.json` must agree — see scripts/assert-ssr-record.mjs. A `__case` route is the same component in the state that makes the question askable, such as a Modal open at first paint.",
-  "generatedAt": "2026-09-08",
+  "generatedAt": "2026-09-12",
   "package": "0.1.0",
-  "sourceFingerprint": "sha256:c9b57a02facfab00f1ca922b205ebdc8:505",
+  "sourceFingerprint": "sha256:8bec2d8dcc704f4a485c55ddc18ced5d:507",
   "templates": [
     "next-app",
     "next-pages",

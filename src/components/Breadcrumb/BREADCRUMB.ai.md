@@ -65,6 +65,8 @@ This renders correctly with no additional props, classes, or setup. The last ite
 - `data-truncated="true"` — on root `<nav>` when items are truncated
 - `data-dropdown-open="true"` — on root `<nav>` when ellipsis dropdown is open
 - `data-state="active|inactive"` — on each item (last item is "active")
+- `data-position` — on the collapsed-items menu, the side it resolved to
+- `data-breadcrumb-dropdown-id` — on that menu, tying it to the trigger that owns it
 - `data-disabled="true"` — on disabled items
 - `data-clickable="true"` — on interactive (non-active, non-disabled) items
 - `aria-current="page"` — on the last (active) item
@@ -115,6 +117,29 @@ const navRef = useRef<HTMLElement>(null);
 ```
 
 ---
+
+## Class overrides
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The `<nav>` container. |
+| `list` | The `<ol>`. |
+| `item` | A non-active item. |
+| `link` | An item rendered as an anchor, when it has `href`. |
+| `itemIcon` | An item's icon. |
+| `separator` | The separator between items. |
+| `ellipsis` | The `<li>` standing in for collapsed items. |
+| `ellipsisTrigger` | The button inside it. |
+| `content` | The menu those collapsed items open into. |
+| `collapsedItem` | One item inside that menu. |
+
+There is no `linkAndItem` slot. The anchor's combined class is composed
+internally from `item` and `link`; override those two.
+
+---
+
 
 ## Styling Guide
 

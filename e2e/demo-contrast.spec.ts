@@ -81,6 +81,44 @@ const RECORDED: ReadonlySet<string> = new Set([
   "toast light button.px-3.py-1.5",
 ]);
 
+/**
+ * The plant, in the suite rather than in a docblock.
+ *
+ * This scan's first version had `[data-fixture]` baked into its roots, walked
+ * nothing on a demo page and reported a clean sweep over zero rows. That was
+ * caught by a planted 1.5:1 paragraph run by hand. Running it here means the
+ * next time the roots, the theme setup or `MEASURE_DOCUMENT` stops reaching
+ * the page, the gate says so instead of printing a tick. One page, ~3s.
+ */
+test("the scan notices text under AA", async ({ page }) => {
+  await page.goto("/button", { waitUntil: "networkidle" });
+
+  const findings = async () => {
+    const rows = (await page.evaluate(MEASURE_DOCUMENT)) as Array<{
+      key: string; ratio: number; floor?: number; detail: string; unmeasurable?: boolean;
+    }>;
+    return rows.filter((r) => !r.unmeasurable && r.ratio < (r.floor ?? 4.5));
+  };
+
+  const before = await findings();
+
+  await page.evaluate(() => {
+    const p = document.createElement("p");
+    p.textContent = "planted, deliberately illegible";
+    p.style.color = "#8a8a8a";
+    p.style.background = "#7a7a7a";
+    p.style.fontSize = "14px";
+    p.id = "planted-low-contrast";
+    document.body.appendChild(p);
+  });
+
+  const after = await findings();
+  expect(
+    after.length,
+    "a paragraph planted at roughly 1.1:1 was not reported, so this scan is walking nothing",
+  ).toBeGreaterThan(before.length);
+});
+
 test("every demo page clears AA on the text it paints", async ({ page }) => {
   test.setTimeout(600_000);
   await page.setViewportSize({ width: 1280, height: 1200 });

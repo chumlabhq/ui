@@ -873,6 +873,32 @@ function stripUnknownClassesKeys(code, componentName) {
  */
 function sectionsOf(sf) {
   const out = [];
+  /**
+   * The library tags this page imports, so a surface rendered BESIDE the demo
+   * wrapper can be recognised and kept.
+   *
+   * A trigger-driven component is written as two siblings inside one `Section`:
+   * the button in the `DemoWrapper`, and the `<Drawer>` / `<Modal>` after it,
+   * because the panel portals out and has no place in the wrapper's layout.
+   * Reading the wrapper alone gave 33 snippets that were a styled button and
+   * nothing else — Drawer's Form Drawer taught a reader to build a button and
+   * stopped, with no Drawer, no fields and no sign of where the panel came
+   * from. A snippet that omits the component the page documents reads as
+   * complete, which is worse than having none.
+   */
+  const libraryTags = new Set();
+  for (const st of sf.statements) {
+    if (!ts.isImportDeclaration(st) || !st.moduleSpecifier) continue;
+    if (!/components\//.test(st.moduleSpecifier.text ?? "")) continue;
+    const clause = st.importClause;
+    if (!clause || clause.isTypeOnly) continue;
+    if (clause.name) libraryTags.add(clause.name.text);
+    if (clause.namedBindings && ts.isNamedImports(clause.namedBindings)) {
+      for (const el of clause.namedBindings.elements) {
+        if (!el.isTypeOnly) libraryTags.add(el.name.text);
+      }
+    }
+  }
   const visit = (node) => {
     if (ts.isJsxElement(node) && node.openingElement.tagName.getText(sf) === "Section") {
       const titleAttr = node.openingElement.attributes.properties.find(
@@ -899,8 +925,34 @@ function sectionsOf(sf) {
       const findWrappers = (n) => {
         if (ts.isJsxElement(n) && /^Demo(Wrapper|Block)$/.test(n.openingElement.tagName.getText(sf))) {
           // Nested wrappers would emit their contents twice.
-          wrappers.push(n);
+          wrappers.push({ node: n, children: true });
           return;
+        }
+        // A library surface standing beside the wrapper rather than inside it.
+        const tag = ts.isJsxElement(n)
+          ? n.openingElement.tagName.getText(sf)
+          : ts.isJsxSelfClosingElement(n)
+            ? n.tagName.getText(sf)
+            : null;
+        if (tag && libraryTags.has(tag)) {
+          // Not one rendered inside a `.map()`: lifting it out of the callback
+          // leaves its loop parameter undeclared, which is how `Drawer`'s
+          // Directions section stopped compiling. The repetition is the point
+          // there, and a copy-paste example is one example.
+          let inMap = false;
+          for (let up = n.parent; up; up = up.parent) {
+            if (
+              (ts.isArrowFunction(up) || ts.isFunctionExpression(up)) &&
+              up.parent &&
+              ts.isCallExpression(up.parent) &&
+              ts.isPropertyAccessExpression(up.parent.expression) &&
+              up.parent.expression.name.getText(sf) === "map"
+            ) { inMap = true; break; }
+          }
+          if (!inMap) {
+            wrappers.push({ node: n, children: false });
+            return;
+          }
         }
         if (
           (ts.isArrowFunction(n) || ts.isFunctionExpression(n)) &&
@@ -954,11 +1006,19 @@ function sectionsOf(sf) {
         ts.forEachChild(n, findWrappers);
       };
       for (const child of node.children) findWrappers(child);
+
       if (title) {
         const body = wrappers.flatMap((w) =>
-          w.children.filter((c) => !ts.isJsxText(c) || c.getText(sf).trim()),
+          w.children
+            ? w.node.children.filter((c) => !ts.isJsxText(c) || c.getText(sf).trim())
+            : [w.node],
         );
-        out.push({ title, body, hasWrapper: wrappers.length > 0, bindings });
+        out.push({
+          title,
+          body,
+          hasWrapper: wrappers.some((w) => w.children),
+          bindings,
+        });
       }
     }
     ts.forEachChild(node, visit);

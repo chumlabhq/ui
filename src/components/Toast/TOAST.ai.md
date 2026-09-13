@@ -21,6 +21,49 @@ import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
 ---
 
+## Setup
+
+Toast is the one component in the library with a structural requirement: it is
+not something you place where you want it. `ToastProvider` wraps your tree once,
+high enough that every caller is inside it, and toasts are created by calling a
+function rather than rendering an element.
+
+```tsx
+// app root — once, around everything
+import { ToastProvider } from "@chumlab/ui/toast";
+
+export default function App({ children }) {
+  return <ToastProvider position="top-right">{children}</ToastProvider>;
+}
+```
+
+```tsx
+// any child — no element, no state of your own
+import { useToast } from "@chumlab/ui/toast";
+
+function SaveButton() {
+  const toast = useToast();
+  return <button onClick={() => toast.success("Saved")}>Save</button>;
+}
+```
+
+Three things that follow from that, and are the ones missed first:
+
+- **`useToast()` throws outside the provider.** If you get that error, the
+  component calling it is mounted above the wrap, or in a different React tree —
+  a separate `createRoot`, or a portal rendered outside the provider's subtree.
+- **One provider, not one per page.** Position, duration and `maxToasts` are the
+  provider's props, so a second one gives you two independent stacks that do not
+  know about each other's limits.
+- **You never render `<Toast>` yourself.** It is exported for typing; the
+  provider renders it, and its `id` and `onRemove` come from there.
+
+There is no Anatomy section for this, deliberately: the thing nested inside
+`ToastProvider` is your tree, not another Toast part, and a diagram naming one
+element would say less than the two snippets above.
+
+---
+
 ## Basic Usage (copy-paste ready)
 
 ```tsx
@@ -144,6 +187,45 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |
 
 ---
+
+## Data Attributes (for CSS selectors and testing)
+
+- `data-toast-id` — on each toast, the id the API returns from `toast.success(...)`
+- `data-toast-type="default" | "success" | "error" | "warning" | "info"` — the variant
+
+---
+
+## Class overrides
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The toast surface — the coloured card the whole notice sits on. |
+| `body` | The padded row inside `root` holding the icon, the message and the close button. |
+| `indicator` | The status glyph at the leading edge, which is what distinguishes the variants. |
+| `icon` | The icon wrapper. |
+| `title` | The message line, which is the toast's accessible name. |
+| `description` | The description under it. |
+| `track` | The auto-dismiss progress groove. |
+| `closeTrigger` | The dismiss button. |
+
+### CSS custom properties
+
+Each variant reads three, written as Tailwind arbitrary values with the
+library's colour as the fallback — `bg-[var(--toast-default-bg,#374151)]`. Set
+them on any ancestor to retheme toasts without touching `classes`.
+
+| Variable | Controls | Default |
+|----------|----------|---------|
+| `--toast-default-bg` / `--toast-default-border` / `--toast-default-text` | the neutral toast | `#374151` / `#374151` / `white` |
+| `--toast-success-bg` / `--toast-success-border` / `--toast-success-text` | the success variant | the library's success palette |
+| `--toast-error-bg` / `--toast-error-border` / `--toast-error-text` | the error variant | the library's error palette |
+| `--toast-warning-bg` / `--toast-warning-border` / `--toast-warning-text` | the warning variant | the library's warning palette |
+| `--toast-info-bg` / `--toast-info-border` / `--toast-info-text` | the info variant | the library's info palette |
+
+---
+
 
 ## Styling Guide
 

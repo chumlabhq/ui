@@ -1,7 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MultiSelectDropdown, SelectedChip } from "../index.js";
+import { MultiSelectDropdown } from "../index.js";
+// By path, not through the entry: `SelectedChip` is internal — it needs
+// `Required<MultiSelectDropdownClasses>` and the parent's `onRemove`, so it
+// is not a name the package offers. Testing it is still right; importing it
+// the way a consumer cannot is what was wrong.
+import { SelectedChip } from "../components/SelectedChip.js";
 // internal now: imported from its module rather than the public barrel
 import MultiSelectDropdownShimmer from "../components/MultiSelectDropdownShimmer.js";
 import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types.js";

@@ -56,10 +56,13 @@ export default function Example() {
 
 ## Data Attributes
 
-- `data-country` on root — the ISO country code
-- `data-size` on root — preset size name (not set for numeric)
-- `data-loaded` on root — when image has loaded
-- `data-error` on root — when image failed to load
+- `data-code` on root — the normalised alpha-2 code the flag resolved to, so a
+  stylesheet can reach one country. (Named `data-country` here until it was
+  checked against the component; there is no `data-country`.)
+- `data-loading="true"` on root — while the image has not resolved and no
+  fallback is showing. (There is no `data-loaded`: the attribute names the state
+  it is in, and is absent once loaded.)
+- `data-error="true"` on root — when the image failed to load
 - `role="img"` on root — with `aria-label` set to alt or code
 
 DOM nesting: `root(span) > img + fallback`
@@ -149,6 +152,24 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `showCount` | `boolean \| undefined` | Also draws a placeholder for the surplus count. |
 
 ---
+
+## Class overrides
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The element the flag sits in, which carries the size and the hairline border. |
+| `image` | The flag graphic. |
+| `fallback` | What is shown when the code has no flag, or the image fails. |
+| `loading` | The skeleton's bag — `CountryFlagShimmer` is a component, and this is what it paints. |
+
+`CountryFlagGroup` has its own map: `root` (the overlapping row), `item` (each
+flag, where the stack margin lives) and `count` (the `+N` disc closing the row).
+`CountryFlagShimmer` has `root`.
+
+---
+
 
 ## Styling Guide
 

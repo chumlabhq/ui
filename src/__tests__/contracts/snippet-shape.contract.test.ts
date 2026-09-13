@@ -141,7 +141,12 @@ describe("snippet shape contract", () => {
       // `({ root: "…", item: "…" }).root` — the whole bag inlined for one slot.
       // `({ root: "…", item: "…" }).root` and its bracket form: the whole bag
       // inlined so one member can be read off it.
-      if (/\}\s*\)\s*[.[]/.test(code)) {
+      // The braces have to hold a STRING-valued member, which is what a class
+      // bag is. `\}\s*\)\s*[.[]` alone also matched
+      // `Array.from({ length: 20 }).map(…)` — an ordinary loop, and a false
+      // positive that only surfaced when Drawer's body started reaching the
+      // snippets. The pattern was never about the punctuation.
+      if (/\{[^{}]*:\s*"[^"]*"[^{}]*\}\s*\)\s*[.[]/.test(code)) {
         serialised.push(`${component}/${title}: an object literal read for one member`);
       }
       // One rule, not two. A "the same long class string appears three times"

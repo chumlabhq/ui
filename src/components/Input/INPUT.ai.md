@@ -159,6 +159,8 @@ root (flex flex-col)
 | Input text | `input` | Font, color, placeholder |
 | Label style | `label` | Font weight, size, color |
 | Error text | `message` | Color, icon |
+| The whole field and its labelling | `root` | The outer wrapper; `fullWidth` adds `w-full` here |
+| The character counter | `count` | Shown under the field when `showCount` is set |
 
 ### Dark mode
 

@@ -1,6 +1,12 @@
 export { default as MultiSelectDropdown } from "./MultiSelectDropdown.js";
-export { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption.js";
-export { SelectedChip } from "./components/SelectedChip.js";
+/**
+ * `MultiSelectDropdownOption` and `SelectedChip` are deliberately NOT exported,
+ * for the reason `TabButton` is not: both require props only the parent has.
+ * The option needs `isSelected`, `isFocused`, `dropdownId`, `index`, `onToggle`
+ * and `onHover`; both need `classes: Required<MultiSelectDropdownClasses>`,
+ * which asks a consumer to supply every slot. Public names nobody can
+ * construct cost a reader more than they give.
+ */
 // MultiSelectDropdownShimmer is INTERNAL: it is never rendered without
 // MultiSelectDropdown, nothing imports it standalone, and its styling arrives
 // through the parent's `loadingIcon` / `loadingBar` keys. Un-exported rather

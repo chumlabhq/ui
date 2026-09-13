@@ -56,6 +56,10 @@ This renders correctly with no additional props, classes, or setup.
 ## Data Attributes (for CSS selectors and testing)
 
 - `data-checked` on root and checkbox span — when checked
+- `data-state="checked" | "unchecked" | "indeterminate"` on the box — always
+  present, and the one to target; `data-checked` is the presence-only companion
+- `data-readonly="true"` on the box — when `readOnly`
+- `data-invalid="true"` on the message — when it is the error message
 - `data-indeterminate` on root and checkbox span — when indeterminate
 - `data-disabled` on checkbox span — when disabled
 - `data-error` on checkbox span — when `error={true}`
@@ -101,6 +105,23 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `value` | string | — | Form field value. |
 | `id` | string | — | HTML id attribute. |
 | `required` | boolean | `false` | Marks the checkbox as required. |
+
+## Class overrides
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The container wrapping the box and its label. Carries every data attribute. |
+| `labelGroup` | The label and description stacked together. |
+| `label` | The label text. |
+| `description` | The description under the label. |
+| `control` | The indicator box itself. |
+| `itemIndicator` | The check or indeterminate glyph inside the box. |
+| `message` | The error or success line. |
+
+---
+
 
 ## Styling Guide
 

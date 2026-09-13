@@ -78,37 +78,52 @@ test("the migration table still has states to check", () => {
 });
 
 test("the comparison notices a state that stops painting", async ({ page }) => {
-  // Re-deletes what 6dd1925 deleted, in the browser: strip the `data-[state=…]`
-  // variants off the checkbox's control and require the comparison to call the
-  // two states identical again. Without this the gate could be measuring
-  // nothing and reporting nothing, which is the same output as passing.
+  /**
+   * Re-deletes what 6dd1925 deleted, in the browser, and requires the paint to
+   * follow.
+   *
+   * This used to flip `data-state` from `checked` to `unchecked` on the
+   * element. That stopped proving anything when the cause-5 sweep moved
+   * Checkbox's checked, indeterminate, error and success fills OUT of the
+   * class string and into a record resolved in JS and merged ahead of the
+   * consumer's classes — so `bg-cl-accent` is now on the element unconditionally
+   * and flipping the attribute correctly changes nothing. The self-check failed
+   * for six runs saying "the paint did not follow the state attribute", which
+   * was true and no longer the question.
+   *
+   * Removing the paint classes from the element asks it the right way round,
+   * and works whichever way the state is resolved: if the library still paints
+   * `checked`, the classes that do it are on the element, and taking them off
+   * has to change what it renders.
+   */
   await page.goto("/__fixtures/Checkbox/checked", { waitUntil: "domcontentloaded" });
   await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 });
 
-  const paint = (sel: string) =>
-    page.evaluate((s) => {
-      const el = [...document.querySelectorAll<HTMLElement>(`[data-fixture] ${s}`)]
-        .find((e) => parseFloat(getComputedStyle(e).borderTopWidth) > 0);
+  const CONTROL = "[data-fixture] [data-state]";
+  const paint = () =>
+    page.evaluate((sel) => {
+      const el = [...document.querySelectorAll<HTMLElement>(sel)]
+        .find((e) => parseFloat(getComputedStyle(e).borderTopWidth) > 0 || getComputedStyle(e).backgroundColor !== "rgba(0, 0, 0, 0)");
       if (!el) return "none";
       const c = getComputedStyle(el);
       return [c.backgroundColor, c.borderTopColor, c.color].join("~");
-    }, sel);
+    }, CONTROL);
 
-  const before = await paint('[data-state="checked"]');
+  const before = await paint();
   expect(before, "the checked control paints nothing to begin with").not.toBe("none");
 
-  // Flip the attribute rather than strip the class: React owns `className` and
-  // puts it straight back, so a class edit measures nothing. Moving the element
-  // out of the state is the same question asked from the other side — if the
-  // library still paints `checked`, the paint has to follow the attribute.
-  await page.evaluate(() => {
-    for (const el of document.querySelectorAll('[data-fixture] [data-state="checked"]')) {
-      el.setAttribute("data-state", "unchecked");
-    }
-  });
+  const removed = await page.evaluate((sel) => {
+    const el = [...document.querySelectorAll<HTMLElement>(sel)]
+      .find((e) => parseFloat(getComputedStyle(e).borderTopWidth) > 0);
+    if (!el) return [];
+    const gone = [...el.classList].filter((x) => /(^|:)(bg|border)-/.test(x));
+    gone.forEach((x) => el.classList.remove(x));
+    return gone;
+  }, CONTROL);
+  expect(removed.length, "no paint classes found on the control to remove").toBeGreaterThan(0);
 
   // The control carries `transition-colors`, so the value read in the tick the
-  // attribute changes is still the old one animating away. Waited on the
+  // classes change is still the old one animating away. Waited on the
   // transitions themselves rather than slept — the same mistake SC 2.4.7's gate
   // made, where reading in the same tick as `.focus()` had it passing by engine
   // rather than by evidence.
@@ -121,8 +136,8 @@ test("the comparison notices a state that stops painting", async ({ page }) => {
     await Promise.race([Promise.all(finite), new Promise((r) => setTimeout(r, 1000))]);
   });
 
-  const after = await paint('[data-state="unchecked"]');
-  expect(after, "the paint did not follow the state attribute, so the gate is measuring nothing").not.toBe(before);
+  const after = await paint();
+  expect(after, "the paint did not follow the classes, so the gate is measuring nothing").not.toBe(before);
 });
 
 test("every reported state is a visible state", async ({ page }) => {

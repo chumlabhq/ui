@@ -1,0 +1,21 @@
+{
+  "$comment": "How much each gate looked at, last time it passed. A FALL fails `run-all-gates`: a walk that covers fewer subjects than before is the failure that prints a tick. Re-record with --record when the drop is intended and say why in the commit.",
+  "$measuredBy": "a full run of every gate; `e2e:demo-contrast` counts PAGES walked, not rows measured \u2014 the row count moves with network timing and is not a coverage figure",
+  "$runWas": "green",
+  "recordedOn": "2026-09-13",
+  "tookMinutes": 34.8,
+  "populations": {
+    "doc-truth": 15,
+    "snippet-shape": 721,
+    "demo-coverage": 1137,
+    "fixture-gap": 151,
+    "component-docs": 30,
+    "library-build+bundle": 1163,
+    "unit+contracts": 4853,
+    "e2e:a11y-full": 10,
+    "e2e:visual": 480,
+    "e2e:icon-bounds": 308,
+    "e2e:demo-contrast": 33,
+    "e2e:rest": 457
+  }
+}

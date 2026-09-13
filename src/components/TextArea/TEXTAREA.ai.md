@@ -58,6 +58,8 @@ export default function Example() {
 
 ## Data Attributes
 
+- `data-auto-resize="true"` — on the control when `autoResize` is set
+
 - `data-size` on root — "sm", "md", "lg"
 - `data-disabled` on root — when disabled
 - `data-error` on root — when error state
@@ -169,6 +171,8 @@ root (flex flex-col)
 | Textarea text | `input` | Font, color, placeholder, resize |
 | Label style | `label` | Font weight, size, color |
 | Error text | `message` | Color, icon |
+| The whole field and its labelling | `root` | The outer wrapper; `fullWidth` adds `w-full` here |
+| The character counter | `count` | Shown under the field when `showCount` is set |
 
 ### Dark mode
 

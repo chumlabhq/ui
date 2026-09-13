@@ -37,7 +37,82 @@ const CEILING = 32;
  * and "it grew" look identical from the outside, and the difference is whether
  * anyone chose the number.
  */
-const SIZED_ON_PURPOSE = new Set(["Loader/sized"]);
+const SIZED_ON_PURPOSE = new Set([
+  "Loader/sized",
+  /**
+   * `<Button loading loaderSize={40}>` — the fixture chooses 40 to photograph
+   * the loader on an accent ground, which is the test SIZED_ON_PURPOSE applies:
+   * someone chose the number.
+   *
+   * It was red from the commit that created it, 082a9fb on 2026-09-11, and was
+   * never once reported, because the gate's only runs in that slice happened
+   * before the fixture was written: every green run measured 307 SVGs and this
+   * one is the 308th. No gate list since named this spec, so nothing measured
+   * it again until the delivery audit.
+   */
+  "Button/loading-on-accent",
+]);
+
+/**
+ * The plant, in the suite rather than in a docblock.
+ *
+ * This gate shipped measuring `getBoundingClientRect`, which is the rect AFTER
+ * transforms, and a spinning 40px loader swept a 57px diagonal. Nobody noticed
+ * for a day because the only thing that would have noticed was a person
+ * running it and reading the number. A plant that runs by hand is the same as
+ * no plant: `Button/loading-on-accent` was red from the commit that created it
+ * and named by nothing until someone went looking.
+ *
+ * One page, one injected icon, ~2s — it does not re-walk the 444 fixtures.
+ */
+test("the measurement notices an icon that takes its size from an ancestor", async ({ page }) => {
+  await page.goto("/__fixtures/Button/default", { waitUntil: "domcontentloaded" });
+  await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 });
+
+  const measure = (ceiling: number) =>
+    page.evaluate((c) => {
+      const out: string[] = [];
+      for (const svg of document.querySelectorAll<SVGElement>("[data-fixture] svg")) {
+        const cs = getComputedStyle(svg);
+        const w = parseFloat(cs.width);
+        const h = parseFloat(cs.height);
+        const rect = svg.getBoundingClientRect();
+        const width = Number.isFinite(w) ? w : rect.width;
+        const height = Number.isFinite(h) ? h : rect.height;
+        if (width === 0 && height === 0) continue;
+        if (width > c || height > c) out.push(`${Math.round(width)}x${Math.round(height)}`);
+      }
+      return out;
+    }, ceiling);
+
+  expect(await measure(CEILING), "the page starts with an oversize icon").toEqual([]);
+
+  // An icon with no size of its own, stretched by its parent — the exact shape
+  // the ceiling exists to find.
+  await page.evaluate(() => {
+    const host = document.querySelector("[data-fixture]");
+    const wrap = document.createElement("div");
+    wrap.style.width = "200px";
+    wrap.style.height = "200px";
+    wrap.innerHTML = '<svg style="width:100%;height:100%" viewBox="0 0 24 24"><path d="M0 0h24v24H0z"/></svg>';
+    host?.appendChild(wrap);
+  });
+
+  expect(
+    await measure(CEILING),
+    "a 200px icon did not register, so this gate is measuring nothing",
+  ).toEqual(["200x200"]);
+
+  // And the transform must NOT register: a rotation is not a size.
+  await page.evaluate(() => {
+    const svg = document.querySelector<SVGElement>("[data-fixture] div > svg");
+    if (svg) { (svg as unknown as HTMLElement).style.width = "30px"; (svg as unknown as HTMLElement).style.height = "30px"; (svg as unknown as HTMLElement).style.transform = "rotate(45deg)"; }
+  });
+  expect(
+    await measure(CEILING),
+    "a rotated 30px icon registered as oversize — the gate is reading the transformed rect again",
+  ).toEqual([]);
+});
 
 test("no icon renders unbounded", async ({ page }) => {
   test.setTimeout(900_000);
@@ -56,7 +131,29 @@ test("no icon renders unbounded", async ({ page }) => {
       const out: string[] = [];
       let n = 0;
       for (const svg of document.querySelectorAll<SVGElement>("[data-fixture] svg")) {
-        const r = svg.getBoundingClientRect();
+        /**
+         * The UNTRANSFORMED box, in painted pixels.
+         *
+         * `getBoundingClientRect` returns the rect after transforms, and a
+         * spinning loader is a square rotating about its centre: its rect
+         * sweeps the diagonal, size x 1.414, whenever the animation is caught
+         * off a right angle. `Button/loading-on-accent` reported 57x57 for a
+         * loader the fixture sizes at 40.
+         *
+         * `getBBox` is NOT the fix and was briefly used as one: it returns the
+         * SVG's own user units, so a 24-unit viewBox painted at 200px reports
+         * 24 and the gate could never fail again. The used width and height
+         * from the computed style are painted pixels and ignore the transform,
+         * which is the measurement this gate has always meant.
+         */
+        const cs = getComputedStyle(svg);
+        const usedW = parseFloat(cs.width);
+        const usedH = parseFloat(cs.height);
+        const rect = svg.getBoundingClientRect();
+        const r = {
+          width: Number.isFinite(usedW) ? usedW : rect.width,
+          height: Number.isFinite(usedH) ? usedH : rect.height,
+        };
         if (r.width === 0 && r.height === 0) continue;
         n += 1;
         // A decorative illustration would set its own size; an icon that has

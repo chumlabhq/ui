@@ -193,6 +193,10 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                 }}
               >
                 <AvatarGroupCount
+                  // `classes.surplus` is in the public type and was read
+                  // nowhere: a consumer could pass it, the type accepted it,
+                  // and it painted nothing.
+                  className={classes.surplus}
                   count={remainingCount}
                   size={size}
                   shape={effectiveShape}

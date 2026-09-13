@@ -82,7 +82,16 @@ const fixtures: Fixtures<typeof Drawer> = [
       </IndexPicker>
     ),
   },
-  { name: "open", props: { open: true }, children: <><DrawerHeader title="Drawer" />Body</> },
+  {
+    name: "open",
+    props: { open: true },
+    // The close button is here because it is the only Drawer part rendered in
+    // an OPEN drawer that a gate can measure, and it shipped with no default
+    // classes at all — not even `cursor-pointer`. Every other fixture that
+    // carries one starts closed, so `an enabled control affords a pointer` had
+    // nothing to look at and could not fail for the defect it was written for.
+    children: <><DrawerHeader title="Drawer" /><DrawerCloseButton />Body</>,
+  },
   { name: "open-left", props: { open: true, direction: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader title="Drawer" />Body</> },
   {

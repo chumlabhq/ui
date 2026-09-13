@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import type { DrawerCloseButtonProps } from "../utils/types.js";
 import { useDrawerContext } from "../utils/context.js";
 import { cn } from "../../../utils/scopedCn.js";
+import { DRAWER_CLOSE_BUTTON_CLASS } from "../utils/constants.js";
 
 const DrawerCloseButton = forwardRef<HTMLButtonElement, DrawerCloseButtonProps>(
   ({ children, className, onClick, ...rest }, ref) => {
@@ -19,7 +20,11 @@ const DrawerCloseButton = forwardRef<HTMLButtonElement, DrawerCloseButtonProps>(
         ref={ref}
         type="button"
         onClick={handleClick}
-        className={cn(className) || undefined}
+        // A default, not decoration: this shipped with no default classes at
+        // all, so an unstyled drawer's close button was the only close button
+        // in the library a pointer user could not tell was one. Modal's has
+        // carried the same since it was written.
+        className={cn(DRAWER_CLOSE_BUTTON_CLASS, className) || undefined}
         aria-label="Close"
         data-drawer-close
         {...rest}

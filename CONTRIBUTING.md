@@ -83,6 +83,17 @@ The `## All Props` table in each component's `.ai.md` is **generated** from its
 
 All components must have unit tests. Target 90%+ coverage.
 
+- **Every gate at once**: `npm run gates` (~30 min, before a commit) or
+  `npm run gates:fast` (~2 min, per change). The full run is the list — if a
+  gate is not in it, it does not exist, and the command fails when the repo has
+  one nothing runs.
+
+**Before changing a gate or adding one, read [`docs/GATE-RULES.md`](docs/GATE-RULES.md).**
+It records what each rule exists for, with the incident that produced it: a
+bundle ratchet that walked 148.70 → 149.92 while its ledger stayed still, an AA
+failure of 4.31:1 that shipped through two slices, a pixel tolerance wide enough
+to delete a component's paint without one pixel counting as different.
+
 ### Accessibility
 
 All components must meet WCAG 2.1 AA standards:

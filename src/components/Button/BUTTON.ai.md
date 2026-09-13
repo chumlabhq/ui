@@ -91,6 +91,7 @@ To override structural defaults (e.g., different padding), include the override 
 - `data-loading="true"` — when loading
 - `data-disabled="true"` — when disabled or loading
 - `data-full-width="true"` — when fullWidth
+- `data-orientation="horizontal" | "vertical"` — on `ButtonGroup`, from its `orientation` prop
 - `data-size="sm|md|lg"` — size prop value
 - `aria-busy="true"` — when loading
 - `aria-disabled="true"` — when disabled or loading
@@ -154,6 +155,20 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `orientation` | `"vertical" \| "horizontal" \| undefined` | Stack direction. Default: `"horizontal"`. |
 
 ---
+
+## Class overrides
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The `<button>`, `<a>` or `<span>` the button renders as. |
+| `itemText` | The inner content wrapper around the label. |
+| `icon` | The leading or trailing icon wrapper. |
+| `loading` | The spinner wrapper shown while `loading`. |
+
+---
+
 
 ## Styling Guide
 

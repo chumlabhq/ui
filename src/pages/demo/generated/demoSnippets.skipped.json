@@ -227,6 +227,16 @@
     },
     {
       "component": "Styling",
+      "title": "4. Unstyled mode",
+      "reason": "`CodeBlock` is not declared on the page"
+    },
+    {
+      "component": "Styling",
+      "title": "Render as your own element",
+      "reason": "`CodeBlock` is not declared on the page"
+    },
+    {
+      "component": "Styling",
       "title": "Where floating content renders",
       "reason": "no demo wrapper in the section"
     },

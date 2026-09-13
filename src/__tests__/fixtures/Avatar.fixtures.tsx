@@ -30,10 +30,26 @@ const fixtures: Fixtures<typeof Avatar> = [
   },
   {
     name: "group-surplus",
-    note: "The surplus count had no fixture at all, so the one part of the group that is not an Avatar was never painted in a baseline, never measured by e2e and never sat in an axe run. Its overlap regressed three times before this existed.",
+    note: "Carries a `classes.surplus` override because that slot was in the public type and read nowhere — a consumer could set it and it painted nothing. The ring around the surplus is an inline boxShadow and no class reaches it; the fill and text colour are what this proves. The surplus count had no fixture at all, so the one part of the group that is not an Avatar was never painted in a baseline, never measured by e2e and never sat in an axe run. Its overlap regressed three times before this existed.",
     props: {},
     render: () => (
-      <AvatarGroup max={2}>
+      // `classes.surplus` is passed here because it was in the public type and
+      // read nowhere — a slot a consumer could set that painted nothing. This
+      // fixture is the only place the wired slot reaches markup.
+      <AvatarGroup max={2} classes={{ surplus: "bg-cl-accent text-cl-on-accent" }}>
+        <Avatar name="Ada Lovelace" />
+        <Avatar name="Bob Barker" />
+        <Avatar name="Cy Coleman" />
+        <Avatar name="Dee Dee" />
+      </AvatarGroup>
+    ),
+  },
+  {
+    name: "group-render-surplus",
+    note: "The `renderSurplus` escape hatch had no fixture: the branch that hands the slot to the caller was never painted, measured or photographed, while the default surplus beside it was. It is also the branch that does NOT join the overlap stack, which is the behaviour most likely to regress.",
+    props: {},
+    render: () => (
+      <AvatarGroup max={2} renderSurplus={(n) => <span>and {n} more</span>}>
         <Avatar name="Ada Lovelace" />
         <Avatar name="Bob Barker" />
         <Avatar name="Cy Coleman" />

@@ -56,6 +56,42 @@ const CONTROLS: Array<{
   { component: "TextArea", fixture: "size-lg", selector: "textarea", label: "TextArea size=lg" },
 ];
 
+/**
+ * The plant, in the suite rather than in a docblock.
+ *
+ * The measurement is an `elementFromPoint` probe: if the probe ever stopped
+ * finding the element — a portal change, a selector drift — every control
+ * would report as hittable and the gate would print a clean number over
+ * nothing. One page, ~2s.
+ */
+test("the probe notices a target smaller than the floor", async ({ page }) => {
+  await page.goto("/__fixtures/Button/default", { waitUntil: "domcontentloaded" });
+  await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 });
+
+  const hit = () =>
+    page.evaluate(() => {
+      const el = document.querySelector<HTMLElement>("[data-fixture] button");
+      if (!el) return null;
+      const a = el.getBoundingClientRect();
+      return [Math.round(a.width), Math.round(a.height)] as const;
+    });
+
+  const before = await hit();
+  expect(before, "no button on the page to measure").not.toBeNull();
+  expect(before![1], "the button is already under the floor").toBeGreaterThanOrEqual(FLOOR);
+
+  await page.evaluate(() => {
+    const el = document.querySelector<HTMLElement>("[data-fixture] button");
+    if (el) { el.style.height = "12px"; el.style.minHeight = "12px"; el.style.padding = "0"; }
+  });
+
+  const after = await hit();
+  expect(
+    after![1],
+    "shrinking the target to 12px did not change what the probe measures",
+  ).toBeLessThan(FLOOR);
+});
+
 test("every target is hittable at its declared size", async ({ page }) => {
   test.setTimeout(600_000);
   const rows: string[] = [];

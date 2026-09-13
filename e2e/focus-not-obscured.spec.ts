@@ -67,6 +67,17 @@ test("focus is never entirely obscured by a clipping ancestor", async ({ page })
   }
 
   console.log(`FOCUS_OBSCURED fixturesWithClipper=${withClipper} focused=${focused} obscured=${obscured.length}`);
+  /**
+   * The findings go to stdout, not only into the assertion's diff.
+   *
+   * This failed twice under full parallel load and passed three times alone,
+   * and both times the only thing that survived was the test name and a line
+   * number: playwright's `test-results/` artefacts — the screenshot, the video,
+   * the error context naming the element — were deleted by the next run before
+   * anyone read them. A gate whose failure cannot be read after the fact is a
+   * gate that gets re-run instead of diagnosed.
+   */
+  for (const o of [...new Set(obscured)]) console.log(`FOCUS_OBSCURED_FINDING ${o}`);
   // A walk that found no clipping ancestors is not a pass.
   expect(withClipper, "no fixture had a focusable child inside a clipping ancestor").toBeGreaterThan(50);
   expect(

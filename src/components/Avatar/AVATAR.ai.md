@@ -220,6 +220,49 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 ---
 
+## Class overrides
+
+### Slot → element
+
+| Slot | Element |
+|------|---------|
+| `root` | The avatar's outer element, which carries size and shape. |
+| `control` | Inner wrapper around the image, initials or fallback. |
+| `image` | The `<img>` element. |
+| `fallback` | The initials text element. |
+| `status` | The status indicator dot. |
+| `loading` | The skeleton's bag — `AvatarShimmer` is a component, and this is what it paints. |
+
+`AvatarGroup` has its own map: `root` (the overlapping row), `item` (each
+avatar's wrapper, where the stack margin lives) and `surplus` (the `+N` disc).
+`AvatarShimmer` has `root`.
+
+**`surplus` sets the fill and the text, not the ring.** The ring around the
+surplus disc is an inline `box-shadow`, cut against the page ground so the disc
+sits in the stack the way the avatars beside it do. An inline style beats any
+class, so `classes={{ surplus: "ring-2 ring-cl-accent" }}` will not change it —
+use `surplus` for background, colour, weight and radius, and take the ring as
+given. This is a v1 limitation, stated rather than worked around.
+
+### CSS custom properties
+
+Set on the avatar's own element by the auto-colour logic, and read by its
+classes. You do not normally write them — they are listed because a consumer
+overriding `classes.root` with a plain background will find these underneath.
+
+| Variable | Controls | Default |
+|----------|----------|---------|
+| `--avatar-bg` | The generated background in the light theme. | derived from the name's hash |
+| `--avatar-text` | The initials colour in the light theme. | derived with the background |
+| `--avatar-border` | The ring colour in the light theme. | derived with the background |
+| `--avatar-dark-bg` | The generated background in the dark theme. | derived from the name's hash |
+| `--avatar-dark-text` | The initials colour in the dark theme. | derived with the background |
+| `--avatar-dark-border` | The ring colour in the dark theme. | derived with the background |
+| `--cl-bg` | Read, not set: the page ground the group's rings are cut against. | the theme's background token |
+
+---
+
+
 ## Styling Guide
 
 > **A plain utility replaces the library's for that property, in every state.**

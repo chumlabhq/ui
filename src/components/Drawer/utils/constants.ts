@@ -20,5 +20,13 @@ export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
   content: "fixed z-999999",
 };
 
+/**
+ * `DrawerCloseButton` has no `classes` slot of its own — it takes `className`
+ * directly — so its one default lives here rather than inline at the call site,
+ * which is what `constants.contract` requires and where `Modal`'s equivalent
+ * already is.
+ */
+export const DRAWER_CLOSE_BUTTON_CLASS = "cursor-pointer";
+
 export const UNSTYLED_DRAWER_CLASSES: Required<DrawerClasses> =
   structuralOnly(DEFAULT_DRAWER_CLASSES);
