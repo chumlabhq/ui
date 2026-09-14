@@ -176,6 +176,8 @@ const TextAreaDemo = () => {
   const [message, setMessage] = useState("");
   // An alert() here blocks the page and every automated check with it.
   const [lastAction, setLastAction] = useState("");
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
+  const [contactSubmit, setContactSubmit] = useState("not fired yet");
   const [bio, setBio] = useState("");
   const [bio2, setBio2] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -598,6 +600,7 @@ const TextAreaDemo = () => {
               />
               <div
                 className={`rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary`}
+                data-demo-action
               >
                 value: {JSON.stringify(feedback)}
               </div>
@@ -787,13 +790,16 @@ const TextAreaDemo = () => {
                         textAreaRef.current?.focus();
                         textAreaRef.current?.select();
                       } else if (lbl === "Get Value")
-                        alert(`"${textAreaRef.current?.value}"`);
+                        setRefReadValue(JSON.stringify(textAreaRef.current?.value));
                     }}
                     className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6 cursor-pointer`}
                   >
                     {lbl}
                   </button>
                 ))}
+              </div>
+              <div className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+                ref.current.value: {refReadValue}
               </div>
             </div>
           </DemoWrapper>
@@ -889,7 +895,7 @@ const TextAreaDemo = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                alert("Message sent!");
+                setContactSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
               }}
               className="w-full max-w-md space-y-4"
             >
@@ -907,6 +913,7 @@ const TextAreaDemo = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
+                  name="name"
                   label="Name"
                   id="contact-name"
                   placeholder="John Doe"
@@ -914,6 +921,7 @@ const TextAreaDemo = () => {
                   classes={c.input}
                 />
                 <Input
+                  name="email"
                   label="Email"
                   id="contact-email"
                   type="email"
@@ -923,6 +931,7 @@ const TextAreaDemo = () => {
                 />
               </div>
               <TextArea
+                name="message"
                 label="Message"
                 placeholder="How can we help?"
                 required
@@ -944,6 +953,9 @@ const TextAreaDemo = () => {
                 Send Message
               </Button>
             </form>
+            <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onSubmit: {contactSubmit}
+            </div>
           </DemoWrapper>
         </Section>
       </div>

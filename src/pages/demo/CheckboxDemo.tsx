@@ -421,6 +421,7 @@ const CheckboxDemo = () => {
             />
             <p
               className={`text-sm text-cl-text-secondary`}
+              data-demo-action
             >
               Checked: {String(onValueChangeDemo)}
             </p>

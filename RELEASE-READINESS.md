@@ -422,6 +422,27 @@ Gestures, 2.5.2 Pointer Cancellation, 3.2.1 On Focus, 3.2.2 On Input.
 Anyone who needs a conformance statement should read `ACCESSIBILITY.md` per criterion, not
 this summary. It records which engines each gate ran in.
 
+### 3.10 Two deploy requirements no gate can check, and no checklist to hold them
+
+**There is no deploy checklist for the site.** This document is the package's release
+readiness report. `.github/workflows/release-gates.yml` states that it deliberately has no
+publish step. Nothing in the repo describes deploying `dist-site/`, and the production
+response headers do not live here either. Both items below were found on 2026-09-14 when the
+site's fonts moved from Google to self-hosting, and until a deploy checklist exists this
+section is their only home. A missing deploy checklist, with publish coming, is itself a gap.
+
+- **The production Content-Security-Policy must allow `font-src 'self'`.** The fonts are now
+  served from `/fonts/` (`public/fonts/fonts.css` and 18 `.woff2` files). The dev server's
+  policy in `vite.config.ts` was changed to `font-src 'self'` and no longer lists
+  `fonts.googleapis.com` or `fonts.gstatic.com`. Whatever serves production sets its own
+  headers, and if they still say `font-src https://fonts.gstatic.com`, every page loads with
+  fallback fonts and no gate will notice: the gates run against the dev server.
+- **`scripts/build-og-image.mjs` still loads Google Fonts.** It renders the social-share image
+  from an HTML template linking `fonts.googleapis.com`, and no gate runs it. It works while
+  Google answers. If it is ever run where the network is blocked or slow, the OG image
+  renders in a fallback font and nothing reports it. Pointing it at `/fonts/fonts.css` is the
+  fix; it was left alone because it is outside this slice.
+
 ---
 
 ## 4. What has never been tested

@@ -564,6 +564,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           onPointerDown={handleTrackPointerDown}
           aria-describedby={ariaDescribedBy}
           data-orientation={orientation}
+          data-disabled={disabled || undefined}
         >
           {/* Track background */}
           <div
@@ -613,6 +614,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                   <div
                     className={mc.marker || undefined}
                     data-state={inRange ? "active" : undefined}
+                    data-disabled={disabled || undefined}
                     style={{
                       position: "absolute",
                       width: `${markDotSize}px`,

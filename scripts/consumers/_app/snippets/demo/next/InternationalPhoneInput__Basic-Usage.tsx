@@ -13,6 +13,13 @@ export default function InternationalPhoneInputExample() {
         onValueChange={setBasicValue}
         placeholder="Enter phone number"
       />
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        onValueChange:
+        {basicValue ? JSON.stringify(basicValue) : "not fired yet"}
+      </div>
     </div>
   );
 }

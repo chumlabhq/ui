@@ -226,6 +226,7 @@ const TimePickerDemo = () => {
   const [zIndexVal, setZIndexVal] = useState<string | null>(null);
   const [formTime, setFormTime] = useState<string | null>("14:30");
   const [eventLog, setEventLog] = useState<string[]>([]);
+  const [clearableClearCount, setClearableClearCount] = useState(0);
   const [eventsTime, setEventsTime] = useState<string | null>(null);
 
   const [darkThemeVal, setDarkThemeVal] = useState<string | null>(null);
@@ -397,12 +398,18 @@ const TimePickerDemo = () => {
               value={clearableVal}
               onValueChange={(v) => setClearableVal(v)}
               clearable
-              onClear={() => log("onClear fired")}
+              onClear={() => setClearableClearCount((n) => n + 1)}
               classes={c.timepicker}
             />
             <span className={`text-sm ${c.text}`}>
               Selected: {clearableVal ?? "none"}
             </span>
+          </div>
+          <div
+            className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            onClear: {clearableClearCount ? `fired ${clearableClearCount}×` : "not fired yet"}
           </div>
         </DemoWrapper>
       </Section>
@@ -1237,7 +1244,7 @@ const TimePickerDemo = () => {
             </span>
           </div>
           {focusMessage && (
-            <p className={`text-sm mt-2 text-cl-accent`}>
+            <p className={`text-sm mt-2 text-cl-accent`} data-demo-action>
               {focusMessage}
             </p>
           )}

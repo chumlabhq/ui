@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { AvatarGroupCount } from "@chumlab/ui/avatar";
 
 export default function AvatarExample() {
+  const [groupCountClicks, setGroupCountClicks] = useState(0);
   return (
     <>
       {
@@ -34,8 +36,15 @@ export default function AvatarExample() {
       <AvatarGroupCount
         count={8}
         tooltip="View all 8 members"
-        onClick={() => alert("View all clicked!")}
+        onClick={() => setGroupCountClicks((n) => n + 1)}
       />
+      <div
+        className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        onClick:
+        {groupCountClicks ? `fired ${groupCountClicks}×` : "not fired yet"}
+      </div>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { InternationalPhoneInput, PhoneNumberData } from "@chumlab/ui/internatio
 
 export default function InternationalPhoneInputExample() {
   const [refValue, setRefValue] = useState<PhoneNumberData | undefined>();
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-4 w-full sm:max-w-md">
@@ -46,7 +47,7 @@ export default function InternationalPhoneInputExample() {
                     inputRef.current?.focus();
                     inputRef.current?.select();
                   } else if (lbl === "Get Value")
-                    alert(`"${inputRef.current?.value}"`);
+                    setRefReadValue(JSON.stringify(inputRef.current?.value));
                 }
               }
               className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
@@ -55,6 +56,13 @@ export default function InternationalPhoneInputExample() {
             </button>
           ))
         }
+      </div>
+      <div
+        className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        ref.current.value:
+        {refReadValue}
       </div>
     </div>
   );

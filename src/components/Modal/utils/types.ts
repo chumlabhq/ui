@@ -87,7 +87,11 @@ export interface ModalProps {
   centered?: boolean;
   /** Custom overlay background color. */
   overlayColor?: string;
-  /** Overlay background opacity (0–1). */
+  /**
+   * How strongly `overlayColor` tints the page (0–1), applied as the
+   * background's alpha. The overlay element itself stays opaque, so the
+   * default backdrop blur is not diluted by the sharp page behind it.
+   */
   overlayOpacity?: number;
   /** Open/close animation duration in ms. */
   animationDuration?: number;

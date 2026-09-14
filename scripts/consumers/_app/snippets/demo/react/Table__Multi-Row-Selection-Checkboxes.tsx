@@ -147,6 +147,7 @@ const sampleData: User[] = [
 
 export default function TableExample() {
   const [multiSelectedIds, setMultiSelectedIds] = useState<string[]>([]);
+  const [multiDeleteAction, setMultiDeleteAction] = useState("not fired yet");
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -207,7 +208,9 @@ export default function TableExample() {
               <button
                 onClick={
                   () => {
-                    alert(`Deleting rows: ${multiSelectedIds.join(", ")}`);
+                    setMultiDeleteAction(
+                      JSON.stringify({ action: "Delete Selected", ids: multiSelectedIds }),
+                    );
                     setMultiSelectedIds([]);
                   }
                 }
@@ -228,6 +231,13 @@ export default function TableExample() {
           checkboxColor="#4f46e5"
           classes={s}
         />
+        <div
+          className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+          data-demo-action
+        >
+          action:
+          {multiDeleteAction}
+        </div>
       </div>
       <p className="mt-3 text-sm text-cl-text-secondary">
         Use

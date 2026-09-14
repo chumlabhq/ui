@@ -14,6 +14,7 @@ import {
   ChevronUpIcon,
   } from "../../components/Accordion/index.js";
 import type { AccordionRef } from "../../components/Accordion/index.js";
+import { Switch } from "../../components/Switch/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -151,6 +152,14 @@ const AccordionDemo = () => {
   const [nextId, setNextId] = useState(3);
 
   const [toggleLog, setToggleLog] = useState<string[]>([]);
+  const [openStartCount, setOpenStartCount] = useState(0);
+  const [openEndCount, setOpenEndCount] = useState(0);
+  const [closeStartCount, setCloseStartCount] = useState(0);
+  const [closeEndCount, setCloseEndCount] = useState(0);
+  const [itemOneExpanded, setItemOneExpanded] = useState("not fired yet");
+  const [itemTwoExpanded, setItemTwoExpanded] = useState("not fired yet");
+  const [guardUnsaved, setGuardUnsaved] = useState(true);
+  const [guardDecision, setGuardDecision] = useState("not fired yet");
 
   const addItem = () => {
     setDynamicItems((prev) => [
@@ -1345,25 +1354,29 @@ const AccordionDemo = () => {
       {/* ─── Prevent Close ──────────────────────────────────────────────── */}
       <Section
         title="Prevent Close Guard"
-        description="Use preventClose to confirm before collapsing. Supports sync and async (Promise) guards."
+        description="Use preventClose to guard collapsing: return true to keep the item open. Supports sync and async (Promise) guards."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
+          <Switch
+            label="Unsaved changes"
+            checked={guardUnsaved}
+            onValueChange={setGuardUnsaved}
+          />
           <Accordion
             type="single"
             collapsible
             defaultValue="pc-1"
             classes={c.accordion}
             preventClose={(value) => {
-              return !window.confirm(
-                `Close "${value}"? You have unsaved changes.`,
-              );
+              setGuardDecision(JSON.stringify({ value, prevented: guardUnsaved }));
+              return guardUnsaved;
             }}
           >
             <AccordionItem value="pc-1">
               <AccordionTrigger>Try closing me</AccordionTrigger>
               <AccordionContent>
-                A confirmation dialog will appear before this closes.
+                While "Unsaved changes" is on, the guard keeps this open.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="pc-2">
@@ -1373,6 +1386,9 @@ const AccordionDemo = () => {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            preventClose: {guardDecision}
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -1430,19 +1446,26 @@ const AccordionDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion type="single" collapsible classes={c.accordion}>
             <AccordionItem value="cb-1">
-              <AccordionTrigger>Toggle and check console</AccordionTrigger>
+              <AccordionTrigger>Toggle to fire the callbacks</AccordionTrigger>
               <AccordionContent
-                onOpenStart={() =>
-                  console.log("[onOpenStart] Animation starting")
-                }
-                onOpenEnd={() => console.log("[onOpenEnd] Animation complete")}
-                onCloseStart={() => {}}
-                onCloseEnd={() => console.log("[onCloseEnd] Closed")}
+                onOpenStart={() => setOpenStartCount((n) => n + 1)}
+                onOpenEnd={() => setOpenEndCount((n) => n + 1)}
+                onCloseStart={() => setCloseStartCount((n) => n + 1)}
+                onCloseEnd={() => setCloseEndCount((n) => n + 1)}
               >
-                Open your browser console to see animation lifecycle events.
+                Each lifecycle callback is counted in the readout below.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          <div
+            className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            <div>onOpenStart: {openStartCount ? `fired ${openStartCount}×` : "not fired yet"}</div>
+            <div>onOpenEnd: {openEndCount ? `fired ${openEndCount}×` : "not fired yet"}</div>
+            <div>onCloseStart: {closeStartCount ? `fired ${closeStartCount}×` : "not fired yet"}</div>
+            <div>onCloseEnd: {closeEndCount ? `fired ${closeEndCount}×` : "not fired yet"}</div>
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -1457,10 +1480,10 @@ const AccordionDemo = () => {
             <AccordionItem
               value="tog-1"
               onExpandedChange={(expanded) =>
-                console.log(`Item 1: ${expanded ? "opened" : "closed"}`)
+                setItemOneExpanded(JSON.stringify(expanded))
               }
             >
-              <AccordionTrigger>Item 1 (check console)</AccordionTrigger>
+              <AccordionTrigger>Item 1</AccordionTrigger>
               <AccordionContent>
                 onExpandedChange fires with the new expanded state.
               </AccordionContent>
@@ -1468,15 +1491,22 @@ const AccordionDemo = () => {
             <AccordionItem
               value="tog-2"
               onExpandedChange={(expanded) =>
-                console.log(`Item 2: ${expanded ? "opened" : "closed"}`)
+                setItemTwoExpanded(JSON.stringify(expanded))
               }
             >
-              <AccordionTrigger>Item 2 (check console)</AccordionTrigger>
+              <AccordionTrigger>Item 2</AccordionTrigger>
               <AccordionContent>
                 Each item can have its own expanded change callback.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          <div
+            className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            <div>Item 1 onExpandedChange: {itemOneExpanded}</div>
+            <div>Item 2 onExpandedChange: {itemTwoExpanded}</div>
+          </div>
         </DemoWrapper>
       </Section>
 

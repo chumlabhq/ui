@@ -5,7 +5,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   root: "flex flex-col gap-2",
   label: "text-sm font-medium text-cl-text",
   description: "text-xs text-cl-text-tertiary",
-  control: "relative select-none touch-none cursor-pointer",
+  control: "relative select-none touch-none cursor-pointer data-[disabled]:cursor-not-allowed",
   /**
    * The unfilled track needs to differ from the page, not from nothing.
    *
@@ -27,7 +27,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
    * The dot. It is clickable — the control jumps to a mark when you hit one —
    * so it says so.
    */
-  marker: "rounded-full bg-cl-bg-panel border-2 border-cl-border-input cursor-pointer",
+  marker: "rounded-full bg-cl-bg-panel border-2 border-cl-border-input cursor-pointer data-[disabled]:cursor-not-allowed",
   /**
    * The label under the dot, which used to render with `marker`.
    *

@@ -19,13 +19,17 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
    * `--cl-accent-hover` as the readable step on an accent tint BECAUSE this
    * row needed it. A recorded decision for a state nothing rendered.
    *
-   * `--cl-accent-bg` under `text-cl-accent` is the pair the rows-per-page
-   * option below already uses, measured 4.50:1 light and 6.04:1 dark; hover on
-   * a selected page deepens the text to `--cl-accent-hover` rather than
-   * repainting the background, which is the same rule as that option.
+   * The text is `--cl-accent-hover`, not `--cl-accent`. `text-cl-accent` on
+   * this tint was reported as 4.50:1 and painted 4.31:1 in light — measured by
+   * `contrast-painted` on nine Pagination fixtures, and 3.97:1 on a demo
+   * page's tinted surface — so the selected page failed AA in the state it
+   * exists to show. `--cl-accent-hover` is the step ADR 007 names for text on
+   * an accent tint. Hover on a selected page deepens the tint to
+   * `--cl-accent-bg-hover` instead, since the text is already on its darker
+   * step.
    */
   item:
-    "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-chrome data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border-cl-accent data-[active]:hover:bg-cl-accent-bg data-[active]:hover:text-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-chrome data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border-cl-accent data-[active]:hover:bg-cl-accent-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
   navButton:
     "p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
   ellipsis: "px-2 select-none text-cl-text-tertiary",
@@ -35,22 +39,27 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
     content: "rounded-cl-md shadow-lg py-1 border min-w-[64px] bg-cl-bg-panel border-cl-border",
     positioner: "relative",
     /**
-     * Selected owns the background; highlight does not repaint it.
+     * Selected owns the background and the text colour; highlight deepens the
+     * tint.
      *
      * The selected tint was `bg-cl-accent/15` with a `dark:` override at
      * `/60` — the accent itself, at 60%, under `text-cl-accent`. axe measured
      * the pair at 2.2:1. An alpha of the foreground colour is a background the
      * token contract cannot see, which is how it shipped.
      *
-     * It is `--cl-accent-bg` in both themes now (4.50:1 light, 6.04:1 dark),
-     * and the compound variants are deliberate: `data-[selected]` and
-     * `data-[highlighted]` are the same specificity, so which one painted the
-     * background was decided by emission order rather than by intent, and the
-     * transient state was winning over the durable one. A highlighted selected
-     * option keeps its accent tint and deepens its text to `--cl-accent-hover`
-     * (5.83:1 / 7.66:1) — the cursor stays visible without a second background.
+     * It is `--cl-accent-bg` now, and the text on it is `--cl-accent-hover`.
+     * `text-cl-accent` on this tint painted 4.4999:1 in light — under AA,
+     * which WCAG does not round — and was reported as 4.50 because every
+     * contrast gate compared a two-decimal value, and because opening the menu
+     * highlights the selected option, so no fixture had ever rendered the plain
+     * selected state (`rows-per-page-open-unhighlighted` does now). With the
+     * text already on the deeper step, a highlighted or hovered selected option
+     * deepens the tint to `--cl-accent-bg-hover` instead, as the page buttons
+     * do. The compound variants stay deliberate: `data-[selected]` and
+     * `data-[highlighted]` are the same specificity, so emission order, not
+     * intent, decided which painted the background.
      */
-    item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-item-hover data-[highlighted]:bg-cl-bg-item-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent data-[selected]:hover:bg-cl-accent-bg data-[selected]:data-[highlighted]:bg-cl-accent-bg data-[selected]:data-[highlighted]:text-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-item-hover data-[highlighted]:bg-cl-bg-item-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[selected]:hover:bg-cl-accent-bg-hover data-[selected]:data-[highlighted]:bg-cl-accent-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     icon: "w-4 h-4 transition-transform text-cl-text-tertiary",
   },
   label: "text-sm text-cl-text-chrome-quiet",

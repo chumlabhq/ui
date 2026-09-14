@@ -185,6 +185,7 @@ const BreadcrumbDemo = () => {
   // the ellipsis anywhere on the page put "Dropdown closed" under the Per-Item
   // Click Handlers example, which reports what was clicked.
   const [dropdownState, setDropdownState] = useState<string | null>(null);
+  const [linkItemClicked, setLinkItemClicked] = useState("not fired yet");
 
   const handleItemClick = useCallback((item: BreadcrumbItem) => {
     setClickedItem(item.label);
@@ -388,8 +389,14 @@ const BreadcrumbDemo = () => {
           <Breadcrumb
             items={itemsWithLinks}
             classes={{ ...c.breadcrumb, link: c.breadcrumb.link }}
-            onItemClick={handleItemClick}
+            onItemClick={(item) => setLinkItemClicked(JSON.stringify(item))}
           />
+          <div
+            className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            onItemClick: {linkItemClicked}
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -747,6 +754,7 @@ const BreadcrumbDemo = () => {
         {dropdownState && (
           <p
             className={`text-sm mt-2 text-cl-accent`}
+            data-demo-action
           >
             {dropdownState}
           </p>

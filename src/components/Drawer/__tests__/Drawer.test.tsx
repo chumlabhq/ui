@@ -854,6 +854,13 @@ describe("Drawer", () => {
   });
 
   describe("Swipe Gesture Simulation", () => {
+    /**
+     * A finger in contact, as the browser reports it.
+     *
+     * `buttons` is 1 while the contact is down and 0 on the release — the drag
+     * ends on any move that reports nothing pressed, so an event built without
+     * it describes a pointer no real input produces mid-drag.
+     */
     function createPointerEvent(
       type: string,
       clientX: number,
@@ -865,6 +872,9 @@ describe("Drawer", () => {
         clientX,
         clientY,
         pointerId,
+        pointerType: "touch",
+        button: 0,
+        buttons: type === "pointerup" ? 0 : 1,
       });
     }
 
@@ -932,13 +942,15 @@ describe("Drawer", () => {
       expect(overlay).toHaveAttribute("aria-hidden", "true");
     });
 
-    it("overlay opacity is set when drawer is visualOpen", async () => {
+    it("overlayOpacity tints the background and leaves the open overlay opaque", async () => {
       renderDrawer({ overlayOpacity: 0.7 });
       await act(async () => {
         await new Promise((r) => setTimeout(r, 50));
       });
       const overlay = document.querySelector("[data-drawer-overlay]") as HTMLElement;
-      expect(overlay.style.opacity).toBe("0.7");
+      // Element opacity would composite overlayBlur back against the sharp page.
+      expect(overlay.style.opacity).toBe("1");
+      expect(overlay.getAttribute("style")).toContain("70%");
     });
   });
 

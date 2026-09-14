@@ -522,7 +522,7 @@ const SliderDemo = () => {
             />
             <div className={c.text}>
               Live: <span className={c.badge}>{commitVal}</span>{" "}
-              Committed: <span className={c.badge}>{lastCommit}</span>
+              Committed: <span className={c.badge} data-demo-action>{lastCommit}</span>
             </div>
           </div>
         </DemoWrapper>

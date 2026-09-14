@@ -168,6 +168,17 @@ none is a bug fix that happened to move behaviour.
 - **`reduceMotion={false}` animates even when the OS asks for reduced motion.** The prop
   used to be a floor that `prefers-reduced-motion` could override; it is now an explicit
   instruction in both directions. Omit the prop — the default — to keep following the OS.
+- **`overlayOpacity` on `Modal` and `Drawer` is the tint's strength, not the overlay's
+  opacity.** It used to be applied as the overlay element's CSS `opacity`, which composites
+  the element's backdrop blur back against the unblurred page — at the default 0.32, two
+  thirds of the sharp page showed through, and the blur (Modal's default `backdrop-blur-sm`,
+  Drawer's `overlayBlur`) read as not working. It is now the alpha of `overlayColor` on the
+  overlay's background, and the element stays fully opaque once open. Measured as detail
+  remaining behind a default Modal: 1.414 before, 0.082 after, against 2.999 with no overlay.
+  The same number gives the same tint over a plain background, so most overlays look
+  unchanged; over detailed content the page is now actually blurred. If you read the
+  overlay's `style.opacity` to find the prop's value, read its `background-color` alpha
+  instead.
 
 - `getDefaultStorageConfig()` (exported from `@chumlab/ui/accordion`) no longer returns a
   `storage` handle. It ran inside a `useMemo`, so reaching for `window.localStorage` there was
@@ -210,6 +221,16 @@ none is a bug fix that happened to move behaviour.
 
 ### Fixed
 
+- **Accent text on an accent tint clears AA.** Four sites wrote `--cl-accent` on
+  `--cl-accent-bg`: `Pagination`'s selected page and its selected rows-per-page option, the
+  chips in `MultiSelectDropdown` and `MultiSelectSearchableDropdown`, and `Table`'s selected
+  filter item. Measured as painted in light, the page button was 4.31:1 and the other three
+  4.4999:1 — under AA, which does not round. The last three passed every gate because each
+  compared a ratio rounded to two decimals, and the selected rows-per-page option was never
+  rendered by a fixture at all. The text is `--cl-accent-hover` now: 5.59:1 light / 8.17:1
+  dark on the page button, and 5.83:1 / 7.66:1 on the option, the chips and the filter item.
+  A highlighted or hovered selected option, and a chip's remove control on hover, deepen
+  the tint to `--cl-accent-bg-hover` (5.43:1 / 6.91:1) rather than changing text colour.
 - **Five controls had no focus indicator at all** — `outline-none` with nothing in its place:
   `InternationalPhoneInput`'s country trigger, and the search inputs of `CascadingDropdown`,
   `SearchableDropdown`, `MultiSelectSearchableDropdown` and `InternationalPhoneInput`. All

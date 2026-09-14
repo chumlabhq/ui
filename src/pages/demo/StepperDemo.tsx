@@ -205,6 +205,7 @@ const StepperDemo = () => {
   const [tooltipStep, setTooltipStep] = useState<number>(2);
   const [tooltipConfigStep, setTooltipConfigStep] = useState<number>(2);
   const [customIconStep, setCustomIconStep] = useState<number>(2);
+  const [uncontrolledStepChange, setUncontrolledStepChange] = useState("not fired yet");
   const [perStepIconStep, setPerStepIconStep] = useState<number>(2);
   const [loopStep, setLoopStep] = useState<number>(2);
   const [autoStep, setAutoStep] = useState<number>(2);
@@ -281,10 +282,16 @@ const StepperDemo = () => {
           <Stepper
             steps={basicSteps}
             defaultValue={2}
-            onValueChange={(id) => console.log("Step changed:", id)}
+            onValueChange={(id) => setUncontrolledStepChange(JSON.stringify(id))}
             isStepClickable={() => true}
             classes={c.stepper}
           />
+          <div
+            className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            onValueChange: {uncontrolledStepChange}
+          </div>
         </DemoWrapper>
       </Section>
 

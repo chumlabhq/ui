@@ -122,6 +122,9 @@ const AvatarDemo = () => {
   const [imageError, setImageError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [clickLog, setClickLog] = useState<string[]>([]);
+  const [groupCountClicks, setGroupCountClicks] = useState(0);
+  const [avatarButtonClicks, setAvatarButtonClicks] = useState(0);
+  const [profileButtonClicks, setProfileButtonClicks] = useState(0);
 
   return (
     <div className="space-y-10">
@@ -937,8 +940,14 @@ const AvatarDemo = () => {
               <AvatarGroupCount
                 count={8}
                 tooltip="View all 8 members"
-                onClick={() => alert("View all clicked!")}
+                onClick={() => setGroupCountClicks((n) => n + 1)}
               />
+              <div
+                className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+                data-demo-action
+              >
+                onClick: {groupCountClicks ? `fired ${groupCountClicks}×` : "not fired yet"}
+              </div>
             </DemoWrapper>
           </div>
         </div>
@@ -1172,7 +1181,7 @@ const AvatarDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <button
-            onClick={() => alert("Avatar clicked!")}
+            onClick={() => setAvatarButtonClicks((n) => n + 1)}
             className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-2 rounded-full"
           >
             <Avatar
@@ -1183,7 +1192,7 @@ const AvatarDemo = () => {
             />
           </button>
           <button
-            onClick={() => alert("Profile opened!")}
+            onClick={() => setProfileButtonClicks((n) => n + 1)}
             className={`flex items-center gap-3 px-3 py-2 rounded-cl-md transition-colors focus:outline-none focus:ring-2 focus:ring-cl-accent hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated/50 cursor-pointer`}
           >
             <Avatar
@@ -1198,6 +1207,13 @@ const AvatarDemo = () => {
               Jane Doe
             </span>
           </button>
+          <div
+            className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            <div>avatar onClick: {avatarButtonClicks ? `fired ${avatarButtonClicks}×` : "not fired yet"}</div>
+            <div>profile onClick: {profileButtonClicks ? `fired ${profileButtonClicks}×` : "not fired yet"}</div>
+          </div>
         </DemoWrapper>
       </Section>
 

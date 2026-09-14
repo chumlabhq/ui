@@ -33,6 +33,7 @@ export default function SliderExample() {
         Committed:
         <span
           className="inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:border dark:border-cl-text/10"
+          data-demo-action
         >
           {lastCommit}
         </span>

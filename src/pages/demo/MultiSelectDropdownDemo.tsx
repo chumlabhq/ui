@@ -251,6 +251,7 @@ const MultiSelectDropdownDemo = () => {
   const [formIntegrationValue, setFormIntegrationValue] = useState<string[]>(
     [],
   );
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [noChevronValue, setNoChevronValue] = useState<string[]>([]);
   const [fullWidthValue, setFullWidthValue] = useState<string[]>([]);
   const [posTopValue, setPosTopValue] = useState<string[]>([]);
@@ -721,8 +722,7 @@ const MultiSelectDropdownDemo = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              alert(`FormData: fruits = ${fd.get("fruits")}`);
+              setFormSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
             }}
             className="flex items-end gap-4"
           >
@@ -742,6 +742,9 @@ const MultiSelectDropdownDemo = () => {
               Submit
             </Button>
           </form>
+          <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            onSubmit: {formSubmit}
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -1154,6 +1157,7 @@ const MultiSelectDropdownDemo = () => {
         {focusMessage && (
           <p
             className={`text-sm mt-2 text-cl-accent`}
+            data-demo-action
           >
             {focusMessage}
           </p>

@@ -5,6 +5,7 @@ import {
 import { Dropdown } from "../../components/Dropdown/index.js";
 import { CountryFlag } from "../../components/CountryFlag/index.js";
 import type { DropdownOption } from "../../components/Dropdown/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -289,6 +290,8 @@ const DropdownDemo = () => {
   const [asyncCountryValue, setAsyncCountryValue] = useState<string | null>(
     null,
   );
+  const [asyncLoadError, setAsyncLoadError] = useState("no error");
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [statusValue, setStatusValue] = useState<string | null>(null);
   const [customSelectedValue, setCustomSelectedValue] = useState<string | null>(
     null,
@@ -695,9 +698,12 @@ const DropdownDemo = () => {
               onLoadOptions={handleLoadCountries}
               loadOnOpen
               shimmerCount={5}
-              onLoadError={(err) => console.error("Load failed:", err)}
+              onLoadError={(err) => setAsyncLoadError(err instanceof Error ? err.message : String(err))}
               classes={c.dropdown}
             />
+            <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onLoadError: {asyncLoadError}
+            </div>
           </div>
         </DemoWrapper>
         <p
@@ -965,8 +971,7 @@ const DropdownDemo = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              alert(`FormData: fruit = ${fd.get("fruit")}`);
+              setFormSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
             }}
             className="w-full flex flex-col sm:flex-row sm:items-end gap-4"
           >
@@ -979,10 +984,13 @@ const DropdownDemo = () => {
                 classes={c.dropdown}
               />
             </div>
-            <button type="submit" className={c.btn}>
+            <Button type="submit" className={c.btn}>
               Submit
-            </button>
+            </Button>
           </form>
+          <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            onSubmit: {formSubmit}
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -1590,6 +1598,7 @@ const DropdownDemo = () => {
         {focusMessage && (
           <p
             className={`text-sm mt-2 text-cl-accent`}
+            data-demo-action
           >
             {focusMessage}
           </p>

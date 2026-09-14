@@ -111,11 +111,6 @@
       "reason": "`fetchCountries` is not declared on the page"
     },
     {
-      "component": "Dropdown",
-      "title": "Native Form Participation",
-      "reason": "`FormData` is not declared on the page"
-    },
-    {
       "component": "GettingStarted",
       "title": "Prerequisites",
       "reason": "no demo wrapper in the section"
@@ -134,11 +129,6 @@
       "component": "InternationalPhoneInput",
       "title": "Real Validation (libphonenumber)",
       "reason": "`createLibphonenumberValidator` is not declared on the page"
-    },
-    {
-      "component": "InternationalPhoneInput",
-      "title": "Form Semantics",
-      "reason": "`FormData` is not declared on the page"
     },
     {
       "component": "Introduction",
@@ -161,11 +151,6 @@
       "reason": "`fetchCountries` is not declared on the page"
     },
     {
-      "component": "MultiSelectDropdown",
-      "title": "Native Form Participation",
-      "reason": "`FormData` is not declared on the page"
-    },
-    {
       "component": "MultiSelectSearchableDropdown",
       "title": "Async Search (Real API)",
       "reason": "`searchCountries` is not declared on the page"
@@ -174,11 +159,6 @@
       "component": "MultiSelectSearchableDropdown",
       "title": "Async with Dynamic Prefetch",
       "reason": "`searchCountries` is not declared on the page"
-    },
-    {
-      "component": "OtpInput",
-      "title": "Form Integration",
-      "reason": "`FormData` is not declared on the page"
     },
     {
       "component": "SearchableDropdown",
@@ -199,11 +179,6 @@
       "component": "SearchableDropdown",
       "title": "Async with Dynamic Prefetch",
       "reason": "`searchCountries` is not declared on the page"
-    },
-    {
-      "component": "SearchableDropdown",
-      "title": "Native Form Participation",
-      "reason": "`FormData` is not declared on the page"
     },
     {
       "component": "Slider",
@@ -239,11 +214,6 @@
       "component": "Styling",
       "title": "Where floating content renders",
       "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Switch",
-      "title": "Form Semantics",
-      "reason": "`FormData` is not declared on the page"
     },
     {
       "component": "Table",
@@ -564,11 +534,6 @@
       "component": "Theming",
       "title": "Custom palettes",
       "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "TimePicker",
-      "title": "Native Form Field & Lifecycle Callbacks",
-      "reason": "`FormData` is not declared on the page"
     },
     {
       "component": "Table",

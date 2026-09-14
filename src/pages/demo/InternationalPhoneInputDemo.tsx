@@ -194,6 +194,9 @@ const InternationalPhoneInputDemo = () => {
   const [refValue, setRefValue] = useState<PhoneNumberData | undefined>();
 
   const [customSelectedValue, setCustomSelectedValue] = useState<PhoneNumberData | undefined>();
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
+  const [checkoutSubmit, setCheckoutSubmit] = useState("not fired yet");
   const [customIconValue, setCustomIconValue] = useState<PhoneNumberData | undefined>();
   const [circleCheckIconValue, setCircleCheckIconValue] = useState<PhoneNumberData | undefined>();
   const [noIconValue, setNoIconValue] = useState<PhoneNumberData | undefined>();
@@ -272,6 +275,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 onValueChange={setBasicValue}
                 placeholder="Enter phone number"
               />
+              <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+                onValueChange: {basicValue ? JSON.stringify(basicValue) : "not fired yet"}
+              </div>
             </div>
           </DemoWrapper>
         </Section>
@@ -809,10 +815,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
               className="w-full sm:max-w-md space-y-4"
               onSubmit={(e) => {
                 e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                alert(
-                  `phone=${formData.get("phone")}\nphone_country=${formData.get("phone_country")}`,
-                );
+                setFormSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
               }}
             >
               <InternationalPhoneInput
@@ -827,6 +830,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 Submit Form
               </Button>
             </form>
+            <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onSubmit: {formSubmit}
+            </div>
           </DemoWrapper>
         </Section>
 
@@ -856,7 +862,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                           inputRef.current?.focus();
                           inputRef.current?.select();
                         } else if (lbl === "Get Value")
-                          alert(`"${inputRef.current?.value}"`);
+                          setRefReadValue(JSON.stringify(inputRef.current?.value));
                       }}
                       className={c.btn}
                     >
@@ -864,6 +870,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                     </button>
                   ),
                 )}
+              </div>
+              <div className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+                ref.current.value: {refReadValue}
               </div>
             </div>
           </DemoWrapper>
@@ -1296,13 +1305,12 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
               className="w-full sm:max-w-md space-y-4"
               onSubmit={(e) => {
                 e.preventDefault();
-                alert(
-                  `Name: ${checkoutName}\nEmail: ${checkoutEmail}\nPhone: ${checkoutPhone?.fullNumber || "—"}\nValid: ${checkoutPhone?.isValid ? "Yes" : "No"}`,
-                );
+                setCheckoutSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
               }}
             >
               <Input
                 id="checkout-name"
+                name="checkout_name"
                 label="Full Name"
                 required
                 value={checkoutName}
@@ -1312,6 +1320,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
               />
               <Input
                 id="checkout-email"
+                name="checkout_email"
                 type="email"
                 label="Email"
                 required
@@ -1333,6 +1342,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 Complete Checkout
               </Button>
             </form>
+            <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onSubmit: {checkoutSubmit}
+            </div>
           </DemoWrapper>
         </Section>
 

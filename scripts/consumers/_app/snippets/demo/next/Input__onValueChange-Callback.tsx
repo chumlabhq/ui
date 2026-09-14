@@ -28,6 +28,7 @@ export default function InputExample() {
       />
       <div
         className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
       >
         value:
         {JSON.stringify(callbackValue)}

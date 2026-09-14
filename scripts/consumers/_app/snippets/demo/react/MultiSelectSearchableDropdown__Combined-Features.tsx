@@ -18,6 +18,9 @@ const countryOptions: MultiSelectOption[] = [
 
 export default function MultiSelectSearchableDropdownExample() {
   const [combinedValue, setCombinedValue] = useState<string[]>([]);
+  const [combinedFocusCount, setCombinedFocusCount] = useState(0);
+  const [combinedBlurCount, setCombinedBlurCount] = useState(0);
+  const [combinedKey, setCombinedKey] = useState("not fired yet");
   return (
     <div className="w-full sm:max-w-80">
       <MultiSelectSearchableDropdown
@@ -39,9 +42,9 @@ export default function MultiSelectSearchableDropdownExample() {
         dropdownGap={8}
         dropdownZIndex={100}
         searchPlaceholder="Filter countries..."
-        onFocus={() => console.log("Combined: focus")}
-        onBlur={() => console.log("Combined: blur")}
-        onKeyDown={(e) => console.log("Combined keydown:", e.key)}
+        onFocus={() => setCombinedFocusCount((n) => n + 1)}
+        onBlur={() => setCombinedBlurCount((n) => n + 1)}
+        onKeyDown={(e) => setCombinedKey(JSON.stringify(e.key))}
         classes={
           {
                         ...({
@@ -63,6 +66,23 @@ export default function MultiSelectSearchableDropdownExample() {
                       }
         }
       />
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        <div>
+          onFocus:
+          {combinedFocusCount ? `fired ${combinedFocusCount}×` : "not fired yet"}
+        </div>
+        <div>
+          onBlur:
+          {combinedBlurCount ? `fired ${combinedBlurCount}×` : "not fired yet"}
+        </div>
+        <div>
+          onKeyDown:
+          {combinedKey}
+        </div>
+      </div>
     </div>
   );
 }

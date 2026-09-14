@@ -149,7 +149,7 @@ export default function PaginationExample() {
                }),
                                  root: "flex flex-wrap items-center gap-1",
               navButton: "p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text-secondary",
-              item: "w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover",
+              item: "w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover",
                                  list: "flex items-center gap-1",
                                  navIcon: "w-4 h-4 text-cl-text-secondary"
                                }
@@ -190,7 +190,7 @@ export default function PaginationExample() {
               }),
                                 root: "flex items-center",
                                 navButton: "p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary",
-                                item: "min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover",
+                                item: "min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover",
                                 list: "flex items-center gap-0.5",
                                 navIcon: "w-4 h-4"
                               }

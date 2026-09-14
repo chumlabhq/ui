@@ -109,6 +109,10 @@ const MultiSelectSearchableDropdownDemo = () => {
   const [variantBottomValue, setVariantBottomValue] = useState<string[]>([]);
   const [variantGhostValue, setVariantGhostValue] = useState<string[]>([]);
   const [variantPillValue, setVariantPillValue] = useState<string[]>([]);
+  const [uncontrolledChange, setUncontrolledChange] = useState("not fired yet");
+  const [combinedFocusCount, setCombinedFocusCount] = useState(0);
+  const [combinedBlurCount, setCombinedBlurCount] = useState(0);
+  const [combinedKey, setCombinedKey] = useState("not fired yet");
   const [formValue, setFormValue] = useState<string[]>([]);
   const [formEvents, setFormEvents] = useState<string[]>([]);
   const [keyDownValue, setKeyDownValue] = useState<string[]>([]);
@@ -923,14 +927,20 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               defaultValue={["apple", "cherry"]}
-              onValueChange={(values) =>
-                console.log("Uncontrolled change:", values)
+              onValueChange={(values, options) =>
+                setUncontrolledChange(JSON.stringify({ values, options }))
               }
               placeholder="Select fruits..."
               maxDisplayedChips={3}
               classes={c.dropdown}
               aria-label="Uncontrolled fruits"
             />
+            <div
+              className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+              data-demo-action
+            >
+              onValueChange: {uncontrolledChange}
+            </div>
           </div>
         </DemoWrapper>
         <div className={c.note}>
@@ -1315,9 +1325,9 @@ const MultiSelectSearchableDropdownDemo = () => {
               dropdownGap={8}
               dropdownZIndex={100}
               searchPlaceholder="Filter countries..."
-              onFocus={() => console.log("Combined: focus")}
-              onBlur={() => console.log("Combined: blur")}
-              onKeyDown={(e) => console.log("Combined keydown:", e.key)}
+              onFocus={() => setCombinedFocusCount((n) => n + 1)}
+              onBlur={() => setCombinedBlurCount((n) => n + 1)}
+              onKeyDown={(e) => setCombinedKey(JSON.stringify(e.key))}
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus focus:outline-none focus:ring-2 focus:ring-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/40 dark:text-cl-accent dark:hover:border-cl-border-input-focus dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
@@ -1327,6 +1337,14 @@ const MultiSelectSearchableDropdownDemo = () => {
                 chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-text dark:bg-cl-accent/60 dark:text-cl-accent`,
               }}
             />
+            <div
+              className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+              data-demo-action
+            >
+              <div>onFocus: {combinedFocusCount ? `fired ${combinedFocusCount}×` : "not fired yet"}</div>
+              <div>onBlur: {combinedBlurCount ? `fired ${combinedBlurCount}×` : "not fired yet"}</div>
+              <div>onKeyDown: {combinedKey}</div>
+            </div>
           </div>
         </DemoWrapper>
         {combinedValue.length > 0 && (

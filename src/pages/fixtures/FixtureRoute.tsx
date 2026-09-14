@@ -138,6 +138,7 @@ export default function FixtureRoute() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [actStatus, setActStatus] = useState("none");
+  const [stillStatus, setStillStatus] = useState("pending");
 
   const [state, setState] = useState<{
     resolved: Resolved | null;
@@ -159,6 +160,7 @@ export default function FixtureRoute() {
       // never reports the terminal "none" on its way to running one — the
       // browser suites wait on this attribute to know the page is finished.
       setActStatus(found?.act ? "pending" : "none");
+      setStillStatus("pending");
       setState({
         resolved,
         fixture: found,
@@ -200,6 +202,30 @@ export default function FixtureRoute() {
       cancelled = true;
     };
   }, [state.fixture]);
+
+  /**
+   * Whether the page has finished becoming the fixture — for every fixture,
+   * not only the ones with an act.
+   *
+   * `data-fixture-act` is terminal the moment a fixture without an act mounts,
+   * so a spec that waited on it read `TimePicker/open-clock` (`defaultOpen`, no
+   * act) before its surface had finished rendering: 6 clickable elements on a
+   * warm dev server, 1 on a cold one. The question "has the document stopped
+   * changing and stopped fetching its own code" already has an answer here, so
+   * it is asked once more after the act (or at mount when there is none) and
+   * published, rather than re-derived in each spec that needs it.
+   */
+  useEffect(() => {
+    if (!state.ready || actStatus === "pending") return;
+    let cancelled = false;
+    void (async () => {
+      const held = await documentHoldsStill();
+      if (!cancelled) setStillStatus(held ? "still" : "unsettled");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [state.ready, actStatus]);
 
   if (!state.ready) return null;
 
@@ -258,7 +284,7 @@ export default function FixtureRoute() {
         : element;
 
   return (
-    <main style={{ padding: 24 }} data-fixture-act={actStatus}>
+    <main style={{ padding: 24 }} data-fixture-act={actStatus} data-fixture-still={stillStatus}>
       {/* Outside the marked element on purpose: a page with no h1 trips axe's
           document-level rules, and a component audit scoped to [data-fixture]
           should not then inherit this heading's level.

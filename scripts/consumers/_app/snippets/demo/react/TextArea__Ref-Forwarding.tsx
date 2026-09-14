@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { TextArea } from "@chumlab/ui/textarea";
 
 export default function TextAreaExample() {
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   return (
     <div className="space-y-4 w-full max-w-md">
@@ -36,7 +37,7 @@ export default function TextAreaExample() {
                     textAreaRef.current?.focus();
                     textAreaRef.current?.select();
                   } else if (lbl === "Get Value")
-                    alert(`"${textAreaRef.current?.value}"`);
+                    setRefReadValue(JSON.stringify(textAreaRef.current?.value));
                 }
               }
               className="px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6 cursor-pointer"
@@ -45,6 +46,13 @@ export default function TextAreaExample() {
             </button>
           ))
         }
+      </div>
+      <div
+        className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        ref.current.value:
+        {refReadValue}
       </div>
     </div>
   );

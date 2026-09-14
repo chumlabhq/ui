@@ -153,7 +153,15 @@ const SURFACES = [
  * `--cl-bg-panel` as well as `--cl-bg`.
  */
 const ACCENT_PAIRS: Array<[string, string]> = [
-  ["--cl-accent", "--cl-accent-bg"],
+  // NOT listed, on purpose: `--cl-accent` on `--cl-accent-bg`. It FAILS AA in
+  // light at 4.4999:1 over both `--cl-bg` and `--cl-bg-panel`, and was only
+  // ever listed here because this contract compared `ratio.toFixed(2)` and read
+  // it as 4.50. Nothing in the library paints it any more — Pagination's
+  // selected option, both multi-select chips and Table's selected filter item
+  // moved their text to `--cl-accent-hover` — and a pair nothing paints is not
+  // one this contract can assert. The note is the guard: accent text on the
+  // accent tint is a combination to deepen, not to add back to this list.
+  // ADR 007 records the same.
   ["--cl-accent-hover", "--cl-accent-bg"],
   // The hovered tint, and why the text deepens on it: `--cl-accent` on
   // `--cl-accent-bg-hover` is 4.20:1 in light — the value DatePicker's today
@@ -181,6 +189,12 @@ const AA_TEXT = 4.5;
  */
 const AA_NON_TEXT = 3;
 
+/**
+ * A floor is met by the unrounded ratio. WCAG does not round a ratio up to its
+ * threshold, and a rounded comparison is a tolerance nobody chose.
+ */
+const meetsFloor = (ratio: number, floor: number) => ratio >= floor;
+
 const NON_TEXT_TOKENS = ["--cl-accent", "--cl-border-input-focus"];
 
 /** The surfaces those paints sit on. Not `--cl-bg-item-hover`: nothing paints
@@ -203,6 +217,32 @@ describe("contrast contract", () => {
     expect(THEMES.dark["--cl-bg"]).not.toBe(THEMES.light["--cl-bg"]);
   });
 
+  /**
+   * The floor is met by the ratio, not by the ratio rounded.
+   *
+   * Every assertion here compared `Number(ratio.toFixed(2))`, so a pair at
+   * 4.4999:1 read as 4.50 and passed a floor WCAG does not let rounding meet —
+   * the shape that let `--cl-accent` on `--cl-accent-bg` through at exactly that
+   * ratio. Planted both ways with pairs that each round to the floor: the lower
+   * must fail, and the upper must pass so the fix cannot over-correct.
+   */
+  it("decides each floor on the unrounded ratio, both directions", () => {
+    const white: RGB = [255, 255, 255];
+    const tint = composite(parseColor("rgba(37, 99, 235, 0.1)"), white);
+    const textBelow = contrast(composite(parseColor("#2563eb"), tint), tint);
+    const textAbove = contrast(composite(parseColor("#2e62eb"), tint), tint);
+    const nonTextBelow = contrast(composite(parseColor("#9e938b"), white), white);
+    const nonTextAbove = contrast(composite(parseColor("#849a8f"), white), white);
+
+    for (const r of [textBelow, textAbove]) expect(Number(r.toFixed(2)), "a text plant that does not round to 4.50 tests nothing").toBe(AA_TEXT);
+    for (const r of [nonTextBelow, nonTextAbove]) expect(Number(r.toFixed(2)), "a non-text plant that does not round to 3.00 tests nothing").toBe(AA_NON_TEXT);
+
+    expect(meetsFloor(textBelow, AA_TEXT), `${textBelow}:1 must not meet ${AA_TEXT}`).toBe(false);
+    expect(meetsFloor(textAbove, AA_TEXT), `${textAbove}:1 must meet ${AA_TEXT}`).toBe(true);
+    expect(meetsFloor(nonTextBelow, AA_NON_TEXT), `${nonTextBelow}:1 must not meet ${AA_NON_TEXT}`).toBe(false);
+    expect(meetsFloor(nonTextAbove, AA_NON_TEXT), `${nonTextAbove}:1 must meet ${AA_NON_TEXT}`).toBe(true);
+  });
+
   describe.each(Object.entries(THEMES))("%s", (_themeName, theme) => {
     describe.each(TEXT_TOKENS)("%s", (textToken) => {
       it.each(SURFACES)("clears 4.5:1 on %s", (surfaceToken) => {
@@ -210,9 +250,9 @@ describe("contrast contract", () => {
         const text = composite(parseColor(theme[textToken]), surface);
         const ratio = contrast(text, surface);
         expect(
-          Number(ratio.toFixed(2)),
-          `${textToken} on ${surfaceToken} is ${ratio.toFixed(2)}:1, under WCAG AA's ${AA_TEXT}:1 for text`,
-        ).toBeGreaterThanOrEqual(AA_TEXT);
+          meetsFloor(ratio, AA_TEXT),
+          `${textToken} on ${surfaceToken} is ${ratio.toFixed(4)}:1, under WCAG AA's ${AA_TEXT}:1 for text`,
+        ).toBe(true);
       });
     });
   });
@@ -225,9 +265,9 @@ describe("contrast contract", () => {
         const text = composite(parseColor(theme[textToken]), surface);
         const ratio = contrast(text, surface);
         expect(
-          Number(ratio.toFixed(2)),
-          `${textToken} on ${tintToken} over ${baseToken} is ${ratio.toFixed(2)}:1, under WCAG AA's ${AA_TEXT}:1 for text`,
-        ).toBeGreaterThanOrEqual(AA_TEXT);
+          meetsFloor(ratio, AA_TEXT),
+          `${textToken} on ${tintToken} over ${baseToken} is ${ratio.toFixed(4)}:1, under WCAG AA's ${AA_TEXT}:1 for text`,
+        ).toBe(true);
       });
     }
   });
@@ -248,10 +288,10 @@ describe("contrast contract", () => {
         const paint = composite(parseColor(theme[token]), surface);
         const ratio = contrast(paint, surface);
         expect(
-          Number(ratio.toFixed(2)),
-          `${token} on ${surfaceToken} is ${ratio.toFixed(2)}:1, under WCAG AA's ${AA_NON_TEXT}:1 ` +
+          meetsFloor(ratio, AA_NON_TEXT),
+          `${token} on ${surfaceToken} is ${ratio.toFixed(4)}:1, under WCAG AA's ${AA_NON_TEXT}:1 ` +
             `for a focus indicator or a graphical object`,
-        ).toBeGreaterThanOrEqual(AA_NON_TEXT);
+        ).toBe(true);
       });
     }
   });

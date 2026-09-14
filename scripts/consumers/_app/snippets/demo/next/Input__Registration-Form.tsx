@@ -81,6 +81,7 @@ const CheckIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function InputExample() {
+  const [registrationSubmit, setRegistrationSubmit] = useState("not fired yet");
   const [username2, setUsername2] = useState("");
   const [email2, setEmail2] = useState("");
   const [username, setUsername] = useState("");
@@ -90,159 +91,173 @@ export default function InputExample() {
   const userOk = username.length >= 3;
   const userBad = username.length > 0 && username.length < 3;
   return (
-    <form
-      onSubmit={
-        (e) => {
-          e.preventDefault();
-          alert("Created!");
-        }
-      }
-      className="w-full sm:max-w-md space-y-5"
-    >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Input
-          label="First name"
-          placeholder="John"
-          required
-          classes={
-            {
-              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-              prefix: "text-sm select-none text-cl-text-tertiary",
-              suffix: "text-sm select-none text-cl-text-tertiary",
-              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
-            }
-          }
-        />
-        <Input
-          label="Last name"
-          placeholder="Doe"
-          required
-          classes={
-            {
-              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-              prefix: "text-sm select-none text-cl-text-tertiary",
-              suffix: "text-sm select-none text-cl-text-tertiary",
-              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
-            }
-          }
-        />
-      </div>
-      <Input
-        label="Username"
-        placeholder="johndoe"
-        required
-        prefix="@"
-        clearable
-        maxLength={20}
-        showCount
-        onClear={() => setUsername2("")}
-        value={username2}
-        onChange={(e) => setUsername2(e.target.value)}
-        success={userOk}
-        successMessage={
-          <>
-            <CheckIcon />
-            Available
-          </>
-        }
-        error={userBad}
-        errorMessage="Min 3 characters"
-        classes={
-          { ...({
-            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-            prefix: "text-sm select-none text-cl-text-tertiary",
-            suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
-          }), control: wrapperFor(userBad, userOk) }
-        }
-      />
-      <Input
-        label="Email"
-        type="email"
-        placeholder="you@example.com"
-        required
-        startIcon={<MailIcon className="text-cl-text-tertiary" />}
-        clearable
-        onClear={() => setEmail2("")}
-        value={email2}
-        onChange={(e) => setEmail2(e.target.value)}
-        success={emailOk}
-        successMessage={
-          <>
-            <CheckIcon />
-            Valid
-          </>
-        }
-        error={emailBad}
-        errorMessage={
-          <>
-            <AlertIcon />
-            Invalid format
-          </>
-        }
-        classes={
-          { ...({
-            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-            prefix: "text-sm select-none text-cl-text-tertiary",
-            suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
-          }), control: wrapperFor(emailBad, emailOk) }
-        }
-      />
-      <Input
-        label="Password"
-        type="password"
-        placeholder="Min 8 characters"
-        required
-        startIcon={<LockIcon className="text-cl-text-tertiary" />}
-        classes={
-          {
-            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-            prefix: "text-sm select-none text-cl-text-tertiary",
-            suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+    <>
+      <form
+        onSubmit={
+          (e) => {
+            e.preventDefault();
+            setRegistrationSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
           }
         }
-      />
-      <Input
-        label="Website"
-        placeholder="yoursite"
-        prefix="https://"
-        suffix=".com"
-        classes={
-          {
-            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-            prefix: "text-sm select-none text-cl-text-tertiary",
-            suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
-          }
-        }
-      />
-      <Button
-        type="submit"
-        fullWidth
-        className="bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20"
+        className="w-full sm:max-w-md space-y-5"
       >
-        Create Account
-      </Button>
-    </form>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Input
+            name="firstName"
+            label="First name"
+            placeholder="John"
+            required
+            classes={
+              {
+                root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+                input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+                label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+                description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+                prefix: "text-sm select-none text-cl-text-tertiary",
+                suffix: "text-sm select-none text-cl-text-tertiary",
+                count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+              }
+            }
+          />
+          <Input
+            name="lastName"
+            label="Last name"
+            placeholder="Doe"
+            required
+            classes={
+              {
+                root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+                input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+                label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+                description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+                prefix: "text-sm select-none text-cl-text-tertiary",
+                suffix: "text-sm select-none text-cl-text-tertiary",
+                count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+              }
+            }
+          />
+        </div>
+        <Input
+          label="Username"
+          placeholder="johndoe"
+          required
+          prefix="@"
+          clearable
+          maxLength={20}
+          showCount
+          name="username"
+          onClear={() => setUsername2("")}
+          value={username2}
+          onChange={(e) => setUsername2(e.target.value)}
+          success={userOk}
+          successMessage={
+            <>
+              <CheckIcon />
+              Available
+            </>
+          }
+          error={userBad}
+          errorMessage="Min 3 characters"
+          classes={
+            { ...({
+              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+              prefix: "text-sm select-none text-cl-text-tertiary",
+              suffix: "text-sm select-none text-cl-text-tertiary",
+              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            }), control: wrapperFor(userBad, userOk) }
+          }
+        />
+        <Input
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          required
+          startIcon={<MailIcon className="text-cl-text-tertiary" />}
+          clearable
+          name="email"
+          onClear={() => setEmail2("")}
+          value={email2}
+          onChange={(e) => setEmail2(e.target.value)}
+          success={emailOk}
+          successMessage={
+            <>
+              <CheckIcon />
+              Valid
+            </>
+          }
+          error={emailBad}
+          errorMessage={
+            <>
+              <AlertIcon />
+              Invalid format
+            </>
+          }
+          classes={
+            { ...({
+              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+              prefix: "text-sm select-none text-cl-text-tertiary",
+              suffix: "text-sm select-none text-cl-text-tertiary",
+              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            }), control: wrapperFor(emailBad, emailOk) }
+          }
+        />
+        <Input
+          label="Password"
+          type="password"
+          placeholder="Min 8 characters"
+          required
+          startIcon={<LockIcon className="text-cl-text-tertiary" />}
+          classes={
+            {
+              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+              prefix: "text-sm select-none text-cl-text-tertiary",
+              suffix: "text-sm select-none text-cl-text-tertiary",
+              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            }
+          }
+        />
+        <Input
+          name="website"
+          label="Website"
+          placeholder="yoursite"
+          prefix="https://"
+          suffix=".com"
+          classes={
+            {
+              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+              prefix: "text-sm select-none text-cl-text-tertiary",
+              suffix: "text-sm select-none text-cl-text-tertiary",
+              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            }
+          }
+        />
+        <Button
+          type="submit"
+          fullWidth
+          className="bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20"
+        >
+          Create Account
+        </Button>
+      </form>
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        onSubmit:
+        {registrationSubmit}
+      </div>
+    </>
   );
 }

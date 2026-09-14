@@ -546,6 +546,63 @@ const LIBRARY_TOTAL_HISTORY = [
       "`Drawer/swipeable-bottom`, whose plant margin is 132 pixels against a " +
       "budget of 1 at every width — removing the bar's fill.",
   },
+  {
+    kb: 154.3,
+    commit: "eae3cf5",
+    date: "2026-09-14",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +1.69 KB, recorded after the fact: eae3cf5 was committed with " +
+      "this gate red and the failure was read as machine load, although the " +
+      "gate ran at its normal 11s. Measured per entry by building afa8d4a and " +
+      "eae3cf5 from clean worktrees. Slider +0.74 closure: `markLabel` split " +
+      "from `marker` so labels stop wearing the dot's chip classes, the end " +
+      "labels aligned to the track, `--cl-bg-track`, and the cursor classes. " +
+      "Drawer +0.63: the drag rewrite — pointer capture on press, a drag that " +
+      "ends when `buttons` reports nothing held, secondary buttons ignored, a " +
+      "mouse dragging only from the handle, one transform write per frame — " +
+      "and the comments saying why. Pagination +0.31: default classes for the " +
+      "selected page, which was announced three ways and painted none. " +
+      "TimePicker +0.05: `cursor-pointer` on the clock face, found by the " +
+      "pointer-affordance gate. The closure deltas sum to 1.73 because shared " +
+      "chunks count under more than one entry.",
+  },
+  {
+    kb: 154.56,
+    commit: "(uncommitted)",
+    date: "2026-09-14",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.26 KB. Modal +0.12 closure: `overlayOpacity` moves from the " +
+      "overlay's CSS opacity to the alpha of its background, as Drawer's did, " +
+      "so the default backdrop blur actually paints — edge energy behind the " +
+      "overlay 1.414 before, 0.082 after; the comment is three lines pointing " +
+      "at Drawer's rather than a second copy, which is 0.33 KB less than the " +
+      "first draft measured. Pagination +0.11: the selected page's text moves " +
+      "to `--cl-accent-hover`, because `text-cl-accent` on its tint painted " +
+      "4.31:1 in light where 4.50 had been reported, and hover deepens the " +
+      "tint instead; the comment records the wrong figure. Slider +0.01: " +
+      "`data-disabled` on the control and each mark dot with " +
+      "`cursor-not-allowed`, so a disabled slider stops offering a pointer. " +
+      "The remaining 0.02 is spread across the shared chunks those three import.",
+  },
+  {
+    kb: 154.63,
+    commit: "(uncommitted)",
+    date: "2026-09-14",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.07 KB, all of it Pagination (+0.08 closure). The selected " +
+      "rows-per-page option's text moves from `--cl-accent` to " +
+      "`--cl-accent-hover`, because `text-cl-accent` on `--cl-accent-bg` " +
+      "painted 4.4999:1 in light and passed only because every contrast gate " +
+      "compared a two-decimal ratio; a highlighted or hovered selected option " +
+      "now deepens the tint to `--cl-accent-bg-hover` instead of the text. " +
+      "Most of the bytes are the rewritten comment that records the measured " +
+      "figure and why no fixture had rendered the state. The same text change " +
+      "on both multi-select chips and Table's selected filter item swaps one " +
+      "class name for another of the same length and measures no change.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

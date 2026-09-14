@@ -89,7 +89,7 @@ interface Finding {
  *  - a background image or gradient has no single colour to measure, so it is
  *    reported as unmeasurable rather than guessed at.
  */
-import { MEASURE } from "./_contrast-measure";
+import { MEASURE, underFloor } from "./_contrast-measure";
 
 
 /**
@@ -274,7 +274,8 @@ const MEASURE_NONTEXT = `(() => {
         const behind = el.parentElement ? backgroundOf(el.parentElement) : null;
         const painted = behind ? over(own, behind) : null;
         if (behind && painted && isAccentAtAnyAlpha(painted, behind)) {
-          out.push({ kind: "fill", key: selectorFor(el), ratio: Math.round(ratio(painted, behind) * 100) / 100,
+          const value = ratio(painted, behind);
+          out.push({ kind: "fill", key: selectorFor(el), ratio: Math.round(value * 100) / 100, exact: value,
                      detail: getComputedStyle(el).backgroundColor + " over rgb(" + behind.map(Math.round).join(", ") + ")" });
         }
       }
@@ -339,7 +340,7 @@ const MEASURE_NONTEXT = `(() => {
       const value = ratio(painted, behind);
       if (!best || value > best.value) best = { value, painted };
     }
-    out.push({ kind: "focus", key: selectorFor(el), ratio: Math.round(best.value * 100) / 100,
+    out.push({ kind: "focus", key: selectorFor(el), ratio: Math.round(best.value * 100) / 100, exact: best.value,
                detail: drawnOn + ", " + colours.length + " layer(s), best rgb(" +
                  best.painted.map(Math.round).join(", ") + ") on rgb(" + behind.map(Math.round).join(", ") + ")" });
   }
@@ -372,33 +373,52 @@ test.describe("painted contrast", () => {
 
     for (const path of paths) {
       const [, , component, fixture] = path.split("/");
-      await page.goto(path, { waitUntil: "domcontentloaded" });
-      await page
-        .waitForFunction(
-          () => {
-            const reported = document
-              .querySelector("main[data-fixture-act]")
-              ?.getAttribute("data-fixture-act");
-            return reported && reported !== "pending" ? reported : null;
-          },
-          undefined,
-          { timeout: 20000 },
-        )
-        .catch(() => null);
-
-      // Transitions off before anything is read. `transition-colors` is on
-      // every option row in the package, so a colour sampled just after a theme
-      // flip is a frame of the animation between the two themes — which is how
-      // an earlier attempt at this measured the dark palette and called it
-      // light.
-      await page.addStyleTag({
-        content: "*,*::before,*::after{transition:none!important;animation:none!important}",
-      });
-      await markPortalRoots(page);
       audited += 1;
       auditedFixtures.push(path.replace("/__fixtures/", ""));
 
+      /**
+       * Each theme is measured on its own fresh load of the fixture.
+       *
+       * Both themes used to share one load, and the non-text pass between them
+       * focuses every focusable element in turn, which changed the page under
+       * the light pass. The three `Pagination/rows-per-page-open*` fixtures
+       * had their menu closed by it — six options measured in dark, none in
+       * light — and six tooltip fixtures, `Tooltip/closed` among them, had a
+       * tooltip opened by focus that their named state does not have. Light
+       * was measured on a page the fixture is not, which is how the selected
+       * rows-per-page option, under AA only in light at 4.4999:1, stayed
+       * unseen even after a fixture rendered it.
+       */
       for (const theme of ["dark", "light"] as const) {
+        await page.goto(path, { waitUntil: "domcontentloaded" });
+        // The act, and then the harness's holds-still answer, as the
+        // pointer-affordance sweep waits: a fixture with no act reports a
+        // terminal act status at mount, before its surface has finished
+        // rendering. 30s is the 20s act wait plus the harness's 1.5s quiet cap
+        // and 3s holds-still deadline, with margin.
+        await page
+          .waitForFunction(
+            () => {
+              const main = document.querySelector("main[data-fixture-act]");
+              const act = main?.getAttribute("data-fixture-act");
+              const still = main?.getAttribute("data-fixture-still");
+              return act && act !== "pending" && still && still !== "pending" ? act : null;
+            },
+            undefined,
+            { timeout: 30000 },
+          )
+          .catch(() => null);
+
+        // Transitions off before anything is read. `transition-colors` is on
+        // every option row in the package, so a colour sampled just after a theme
+        // flip is a frame of the animation between the two themes — which is how
+        // an earlier attempt at this measured the dark palette and called it
+        // light.
+        await page.addStyleTag({
+          content: "*,*::before,*::after{transition:none!important;animation:none!important}",
+        });
+        await markPortalRoots(page);
+
         await page.evaluate((next) => {
           const html = document.documentElement;
           html.setAttribute("data-theme", next);
@@ -408,6 +428,7 @@ test.describe("painted contrast", () => {
         const measured = (await page.evaluate(MEASURE)) as Array<{
           key: string;
           ratio: number;
+          exact?: number;
           floor?: number;
           detail: string;
           unmeasurable?: boolean;
@@ -416,6 +437,7 @@ test.describe("painted contrast", () => {
           kind: string;
           key: string;
           ratio: number | null;
+          exact?: number;
           detail: string;
         }>;
         for (const m of nonText) {
@@ -425,7 +447,7 @@ test.describe("painted contrast", () => {
           }
           if (m.kind === "fill") fills += 1;
           else indicators += 1;
-          if (m.ratio !== null && m.ratio < AA_NON_TEXT) {
+          if (m.ratio !== null && underFloor(m, AA_NON_TEXT)) {
             nonTextFindings.push({
               fixture: `${component}/${fixture}`,
               theme,
@@ -442,7 +464,7 @@ test.describe("painted contrast", () => {
             unmeasurable.push(`${component}/${fixture} ${theme}: ${m.key}`);
             continue;
           }
-          if (m.ratio >= (m.floor ?? AA_TEXT)) continue;
+          if (!underFloor(m, m.floor ?? AA_TEXT)) continue;
           findings.push({
             fixture: `${component}/${fixture}`,
             theme,
@@ -565,6 +587,37 @@ test.describe("painted contrast", () => {
    * surface and requires the painted check to report it — which is the whole
    * difference between the two gates.
    */
+  /**
+   * The floor is decided on the unrounded ratio, in both directions.
+   *
+   * Two focus rings either side of 3:1, both of which round to 3.00. Under the
+   * old comparison the lower one passed; a fix that over-corrected — comparing
+   * with `>` or on a truncated value — would fail the upper one. The colours
+   * were chosen by computation to sit there; whether they do is this spec's own
+   * MEASURE_NONTEXT's answer, not the computation's.
+   */
+  test("decides the non-text floor on the unrounded ratio, both directions", async ({ page }) => {
+    await page.setContent(`
+      <style>
+        button { border: 0; background: transparent; outline: none; font: 16px sans-serif; }
+        .nt-below:focus-visible { outline: 2px solid rgb(158, 147, 139); }
+        .nt-above:focus-visible { outline: 2px solid rgb(132, 154, 143); }
+      </style>
+      <div data-fixture="plant/non-text-floor">
+        <button class="nt-below">below</button>
+        <button class="nt-above">above</button>
+      </div>`);
+    const rows = (await page.evaluate(MEASURE_NONTEXT)) as Array<{
+      kind: string; key: string; ratio: number | null; exact?: number;
+    }>;
+    const below = rows.find((r) => r.kind === "focus" && r.key.startsWith("button.nt-below"));
+    const above = rows.find((r) => r.kind === "focus" && r.key.startsWith("button.nt-above"));
+    expect(below?.ratio, "the lower ring should round to the floor, or it tests nothing").toBe(3);
+    expect(above?.ratio, "the upper ring should round to the floor, or it tests nothing").toBe(3);
+    expect(below && underFloor(below, AA_NON_TEXT), `2.9999:1 must fail: ${JSON.stringify(below)}`).toBe(true);
+    expect(above && underFloor(above, AA_NON_TEXT), `3.0000:1 must pass: ${JSON.stringify(above)}`).toBe(false);
+  });
+
   test("catches a raw-palette grey the token gate cannot see", async ({ page }) => {
     await page.goto("/__fixtures/Button/default", { waitUntil: "domcontentloaded" });
     await page.locator("[data-fixture]").waitFor({ state: "attached" });

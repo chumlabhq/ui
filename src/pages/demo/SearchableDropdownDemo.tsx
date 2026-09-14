@@ -5,6 +5,7 @@ import {
 import { SearchableDropdown } from "../../components/SearchableDropdown/index.js";
 import { CountryFlag } from "../../components/CountryFlag/index.js";
 import type { SearchableDropdownOption } from "../../components/SearchableDropdown/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -289,6 +290,8 @@ const SearchableDropdownDemo = () => {
   const [asyncPrefetchValue, setAsyncPrefetchValue] = useState<string | null>(
     null,
   );
+  const [asyncLoadError, setAsyncLoadError] = useState("no error");
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [customSelectedValue, setCustomSelectedValue] = useState<string | null>(
     null,
   );
@@ -732,9 +735,12 @@ const SearchableDropdownDemo = () => {
               loadInitialOnOpen
               searchDebounceMs={300}
               noResultsContent="No countries found"
-              onLoadError={(err) => console.error("Load failed:", err)}
+              onLoadError={(err) => setAsyncLoadError(err instanceof Error ? err.message : String(err))}
               classes={c.dropdown}
             />
+            <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onLoadError: {asyncLoadError}
+            </div>
           </div>
         </DemoWrapper>
         <p
@@ -917,8 +923,7 @@ const SearchableDropdownDemo = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              alert(`FormData: fruit = ${fd.get("fruit")}`);
+              setFormSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
             }}
             className="flex items-end gap-4"
           >
@@ -933,10 +938,13 @@ const SearchableDropdownDemo = () => {
                 classes={c.dropdown}
               />
             </div>
-            <button type="submit" className={c.btn}>
+            <Button type="submit" className={c.btn}>
               Submit
-            </button>
+            </Button>
           </form>
+          <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            onSubmit: {formSubmit}
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -1446,6 +1454,7 @@ const SearchableDropdownDemo = () => {
         {focusMessage && (
           <p
             className={`text-sm mt-2 text-cl-accent`}
+            data-demo-action
           >
             {focusMessage}
           </p>

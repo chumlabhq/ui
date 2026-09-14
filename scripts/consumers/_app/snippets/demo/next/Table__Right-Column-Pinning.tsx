@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Table } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -126,6 +126,7 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [rightPinAction, setRightPinAction] = useState("not fired yet");
   const rightPinColumns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -142,10 +143,14 @@ export default function TableExample() {
         id: "actions",
         accessorKey: "actions",
         header: "Actions",
-        cell: () => (
+        cell: ({ row }) => (
           <button
             className={"px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer"}
-            onClick={() => alert("Action clicked")}
+            onClick={() =>
+              setRightPinAction(
+                JSON.stringify({ action: "Edit", name: row.original.name }),
+              )
+            }
           >
             Edit
           </button>
@@ -172,6 +177,13 @@ export default function TableExample() {
           }
         }
       />
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        action:
+        {rightPinAction}
+      </div>
       <p className="mt-3 text-sm text-cl-text-secondary">
         The "Actions" column is pinned to the right using
         {" "}

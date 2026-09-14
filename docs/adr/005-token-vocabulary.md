@@ -100,7 +100,9 @@ It is not duplicated here.
 
 | `--cl-bg-skeleton` | **NOVEL** | The loading-placeholder surface. Justified by T1 alone: the surface family is `--cl-bg`, `--cl-bg-elevated`, `--cl-bg-hover`, `--cl-bg-input`, `--cl-bg-panel`, and `--cl-bg-<role>` is its established form. A role name under T2, like `--cl-bg-panel`: it claims no relation to the base surface, and its visibility comes from being a foreground overlay rather than from any relationship to `--cl-bg`. Minted rather than reusing `--cl-border-strong`, which was the second time in one night a component reached for a border token because the scale had no neutral at this strength. |
 
-Both values are foreground overlays rather than fixed colours, chosen by
+| `--cl-bg-track` | **NOVEL** | The unfilled part of a range track (Slider). Justified by T1 alone: `--cl-bg-<role>` in the surface family. A role name under T2, like `--cl-bg-skeleton`: it claims no relation to a surface token and is a foreground overlay (`rgba(237, 239, 244, 0.12)` dark, `rgba(15, 18, 24, 0.10)` light). Minted because the track used `--cl-bg-hover`, which in dark is exactly `--cl-bg-panel` (`#0a0d12`) — the track was painted in the colour of the panel it sat on and did not exist. |
+
+The skeleton and track values are foreground overlays rather than fixed colours, chosen by
 measurement. `bg-gray-200` sat at 1.24 against the page in light and **16.37**
 in dark — more contrast than body text, which is what a skeleton must never be.
 An overlay composites against whatever it is laid on, so one value holds

@@ -120,7 +120,7 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `fullScreen` | boolean | `false` | Expands the modal to fill the viewport. |
 | `centered` | boolean | `true` | Vertically centers the modal in the viewport. |
 | `overlayColor` | string | `"black"` | Custom overlay background color. |
-| `overlayOpacity` | number | `0.32` | Overlay background opacity (0-1). |
+| `overlayOpacity` | number | `0.32` | How strongly `overlayColor` tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so its blur is not diluted. |
 | `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
 | `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
 | `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |

@@ -11,8 +11,29 @@ ADR 006 closed at 78 variants: 33 deliberately retained, 29 blocked on a token,
 — 33 / **27** / 16. Two of the blocked ones had already been retired by
 `29bd7ea`, and how they were retired is the whole argument of this document:
 
-- `Pagination.item` was `data-[selected]:bg-cl-accent/15 dark:…/60`; it is
-  `data-[selected]:bg-cl-accent-bg`, recorded at 4.50:1 light / 6.04:1 dark.
+- `Pagination.item` (the rows-per-page option, `rowsPerPage.item` today) was
+  `data-[selected]:bg-cl-accent/15 dark:…/60`; it is
+  `data-[selected]:bg-cl-accent-bg`. **Measured as painted on 2026-09-14:
+  4.4999:1 light, 6.04:1 dark** — `contrast-painted`'s own `MEASURE`,
+  unrounded, on the selected option with the highlight on another row.
+  Light is **under AA**: WCAG does not round a ratio up to its threshold.
+
+  *Correction.* This line used to read "recorded at 4.50:1 light". That
+  figure was never rendered. A candidate script composited the tint over
+  `#ffffff` with its channels rounded to integers and printed 4.49, and it
+  was written down as 4.50. It was then quoted for Pagination's page button,
+  which sits on a different surface and painted 4.31:1. The painted gate did
+  not catch this pair either, for two reasons. It rounds each ratio to two
+  decimals before comparing it with the floor, so 4.4999 reads as 4.50. And
+  no fixture renders this state: `rows-per-page-open` highlights the selected
+  option, which paints `--cl-accent-hover` at 5.83:1 / 7.66:1. The reasoning
+  below stands, and the measurement strengthens it. Accent text on an accent
+  tint does not clear AA even at the base alpha.
+
+  *Consequence, 2026-09-14.* `--cl-accent` on `--cl-accent-bg` is painted
+  nowhere in the library, and `contrast.contract` no longer lists it, with a
+  note saying it fails at 4.4999:1. Text on the accent tint is
+  `--cl-accent-hover`, and a hover or highlight on it deepens the tint.
 - Table's filter panel was `border-gray-200 dark:border-white/[0.08]`; it is
   `border-cl-border`.
 

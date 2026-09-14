@@ -878,7 +878,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
       {/* ─── Controlled ─────────────────────────────────────────────────── */}
       <Section
         title="Controlled Mode"
-        description="External state control via value + onChange."
+        description="External state control via value + onValueChange."
         isDarkMode={dark}
       >
         <div

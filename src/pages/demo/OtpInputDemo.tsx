@@ -43,6 +43,7 @@ const OtpInputDemo = () => {
   const [basic, setBasic] = useState("");
   const [controlled, setControlled] = useState("123");
   const [completed, setCompleted] = useState<string | null>(null);
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [grouped, setGrouped] = useState("");
   const [errorVal, setErrorVal] = useState("");
   const [custom, setCustom] = useState("");
@@ -189,6 +190,7 @@ const OtpInputDemo = () => {
           {completed && (
             <div
               className={`mt-3 px-3 py-2 rounded-cl-md text-sm font-mono bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/30 dark:text-cl-success dark:border dark:border-cl-success`}
+              data-demo-action
             >
               Completed: {completed}
             </div>
@@ -488,15 +490,17 @@ const OtpInputDemo = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              alert(`OTP: ${fd.get("otp")}`);
+              setFormSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
             }}
           >
             <OtpInput name="otp" label="Enter OTP" classes={c.otp} />
-            <button type="submit" className={`mt-3 ${c.btnPrimary} cursor-pointer`}>
+            <Button type="submit" className={`mt-3 ${c.btnPrimary}`}>
               Submit
-            </button>
+            </Button>
           </form>
+          <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            onSubmit: {formSubmit}
+          </div>
         </DemoWrapper>
         <div className={c.note}>
           A hidden{" "}

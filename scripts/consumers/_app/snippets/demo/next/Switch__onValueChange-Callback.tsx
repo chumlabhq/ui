@@ -20,7 +20,7 @@ export default function SwitchExample() {
           }
         }
       />
-      <p className="text-sm text-cl-text-secondary dark:text-cl-text-tertiary">
+      <p className="text-sm text-cl-text-secondary dark:text-cl-text-tertiary" data-demo-action>
         Value:
         {String(callbackSwitch)}
       </p>

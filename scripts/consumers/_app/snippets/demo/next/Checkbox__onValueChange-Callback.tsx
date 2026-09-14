@@ -21,7 +21,7 @@ export default function CheckboxExample() {
           }
         }
       />
-      <p className="text-sm text-cl-text-secondary">
+      <p className="text-sm text-cl-text-secondary" data-demo-action>
         Checked:
         {String(onValueChangeDemo)}
       </p>

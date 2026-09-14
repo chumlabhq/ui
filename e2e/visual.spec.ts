@@ -435,6 +435,22 @@ test.describe("visual baselines", () => {
                 // with a stylesheet rule: 33 fail, from 2 pixels
                 // (`Table/expandable`) to 843 (`Stepper/horizontal-numbered`).
                 //
+                // THE OTHER AXIS OF THE SAME BLIND SPOT: a change too small
+                // per pixel, rather than too small in area, is invisible to
+                // any budget, because no pixel is counted in the first place.
+                // Pagination's open rows-per-page menu (`Pagination
+                // rows-per-page-open`) had its highlighted row's tint deepen
+                // from rgb(233, 239, 253) to rgb(223, 232, 252) in light:
+                // 2,161 pixels, ΔE76 about 4, visible side by side. The picture
+                // PASSED before it was re-recorded, because each pixel's YIQ
+                // delta was 0.0295 in light and 0.0316 in dark, against the
+                // 0.05 `threshold` below. Zero pixels counted, so
+                // `maxDiffPixels: 1` never came into it. The note above covers
+                // what the budget cannot see; this is what the threshold
+                // cannot: a tint step under 0.05 per pixel, over any area.
+                // Measured 2026-09-14 by decoding both PNGs and applying
+                // pixelmatch's own YIQ formula.
+                //
                 // FOUR STILL CANNOT FAIL, and the reason is the comparator
                 // rather than this number: `MultiSelectDropdown/closed`,
                 // `MultiSelectSearchableDropdown/closed`, `TimePicker/closed`
@@ -785,7 +801,11 @@ test.describe("baseline determinism", () => {
  * in the document flow and reflow with it.
  */
 test.describe("anchored surfaces settle after a late font", () => {
-  const FONT_FILES = /fonts\.gstatic\.com/;
+  // The site's own font files. They were fonts.gstatic.com until the fonts were
+  // self-hosted under /fonts/, and a pattern left pointing there would match
+  // nothing, hold nothing, and compare warm against warm — so the test below
+  // also counts what it held.
+  const FONT_FILES = /\/fonts\/[^/?]+\.woff2(\?|$)/;
 
   const markup = async (page: import("@playwright/test").Page, path: string) => {
     await page.goto(path);
@@ -817,11 +837,14 @@ test.describe("anchored surfaces settle after a late font", () => {
       // Cold first, and slowly enough that the surface is already open when the
       // font lands. 900ms is the measured margin: the fixture page waits for
       // 120ms of quiet before it runs the act at all.
+      let held = 0;
       await page.route(FONT_FILES, async (route) => {
+        held += 1;
         await new Promise((resolve) => setTimeout(resolve, 900));
         await route.continue();
       });
       const cold = await markup(page, path);
+      expect(held, `${path}: no font file was held, so this compared a warm render with a warm render`).toBeGreaterThan(0);
 
       await page.unroute(FONT_FILES);
       const warm = await markup(page, path);

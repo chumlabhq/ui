@@ -38,6 +38,11 @@ export interface DrawerProps
   direction?: DrawerDirection;
   size?: string;
   overlayColor?: string;
+  /**
+   * How strongly `overlayColor` tints the page (0–1), applied as the
+   * background's alpha. The overlay element itself stays opaque, so
+   * `overlayBlur` is not diluted by the sharp page behind it.
+   */
   overlayOpacity?: number;
   overlayBlur?: number;
   duration?: number;

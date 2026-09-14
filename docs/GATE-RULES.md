@@ -147,6 +147,15 @@ controller — it lives in `ai/prompts/`.
   the failure mode is always the same shape — a number that is too big, argued
   over, and wrong.
 
+  **A number is reported as measured only if it was read off the rendered
+  result, on the surface it ships on; a computed one is labelled computed and
+  is never rounded across the threshold it is compared with.** Pagination's
+  selected page went in as "measured 4.50:1": a script had composited the 10%
+  accent tint over `#ffffff` and printed 4.49, and the button's tint actually
+  sits on `--cl-bg-elevated` and the fixture's off-white, where
+  `contrast-painted` read 4.31:1 across nine fixtures. It is the target-size
+  table again, where rect arithmetic was reported as measured hit areas.
+
 - **A new visual subject lands with its plant margin recorded.** Remove the
   painting the subject exists to capture, run that baseline alone, and record
   the pixel margin against the threshold. `Input/disabled` shipped as one of

@@ -23,6 +23,16 @@ const fixtures: Fixtures<typeof Pagination> = [
     props: { defaultValue: 1, totalPages: 5, showRowsPerPage: true, rowsPerPage: 10 },
     act: (c, ui) => ui.click(c.querySelector("[aria-haspopup='listbox']")),
   },
+  {
+    name: "rows-per-page-open-unhighlighted",
+    props: { defaultValue: 1, totalPages: 5, showRowsPerPage: true, rowsPerPage: 10 },
+    act: async (c, ui) => {
+      ui.click(c.querySelector("[aria-haspopup='listbox']"));
+      await ui.settle();
+      ui.keyDown(document.querySelector("[role='listbox']"), "ArrowDown");
+    },
+    note: "Selected and not highlighted. Opening highlights the selected option, so `rows-per-page-open` only ever painted the highlighted pair, and the plain selected text on its tint — 4.4999:1 in light, under AA — was never rendered by any fixture and so never measured.",
+  },
   { name: "with-page-info", props: { defaultValue: 1, totalPages: 5, renderPageInfo: () => "1 of 5" }, note: "pageInfo has no boolean flag; it exists only via renderPageInfo." },
   { name: "disabled", props: { defaultValue: 1, totalPages: 5, disabled: true } },
   {

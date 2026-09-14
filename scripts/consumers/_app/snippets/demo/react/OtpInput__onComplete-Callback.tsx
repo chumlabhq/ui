@@ -20,6 +20,7 @@ export default function OtpInputExample() {
         completed && (
           <div
             className="mt-3 px-3 py-2 rounded-cl-md text-sm font-mono bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/30 dark:text-cl-success dark:border dark:border-cl-success"
+            data-demo-action
           >
             Completed:
             {completed}

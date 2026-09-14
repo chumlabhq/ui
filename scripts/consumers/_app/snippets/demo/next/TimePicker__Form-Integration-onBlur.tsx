@@ -55,7 +55,7 @@ export default function TimePickerExample() {
       </div>
       {
         focusMessage && (
-          <p className="text-sm mt-2 text-cl-accent">
+          <p className="text-sm mt-2 text-cl-accent" data-demo-action>
             {focusMessage}
           </p>
         )

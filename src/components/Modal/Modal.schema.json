@@ -143,7 +143,7 @@
     },
     "overlayOpacity": {
       "type": "number",
-      "description": "Overlay background opacity (0-1).",
+      "description": "How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so its blur is not diluted.",
       "default": 0.32
     },
     "animationDuration": {

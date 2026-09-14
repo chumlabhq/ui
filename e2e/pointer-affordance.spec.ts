@@ -85,9 +85,44 @@ test("everything clickable declares a cursor", async ({ page }) => {
   let handlerBound = 0;
   let checked = 0;
 
+  const actFailures: string[] = [];
+
   for (const path of paths) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
-    await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
+    /**
+     * Swept once the page has finished becoming the fixture, not when its
+     * element attaches.
+     *
+     * This read the page the moment `[data-fixture]` attached, with that wait's
+     * timeout swallowed, and the population read 1517, 1515, 1512 and 1502 for
+     * one source tree — a number that moved with how fast Vite answered.
+     * Waiting on the act fixed `Dropdown/async-load-resolved` (2 warm, 0 cold)
+     * and not `TimePicker/open-clock` (6 warm, 1 cold), which has no act and so
+     * reports a terminal act status at mount. `data-fixture-still` is the
+     * harness's own holds-still answer, published after the act for every
+     * fixture. 30s: the accessibility-full audit's 20s for the act, plus the
+     * harness's 1.5s quiet cap and 3s holds-still deadline, with margin.
+     */
+    await expect(page.locator("[data-fixture]")).toBeAttached({ timeout: 15000 });
+    const settled = await page
+      .waitForFunction(
+        () => {
+          const main = document.querySelector("main[data-fixture-act]");
+          const act = main?.getAttribute("data-fixture-act");
+          const still = main?.getAttribute("data-fixture-still");
+          return act && act !== "pending" && still && still !== "pending" ? `${act}|${still}` : null;
+        },
+        undefined,
+        { timeout: 30000 },
+      )
+      .then((handle) => handle.jsonValue() as Promise<string>)
+      .catch(() => "never settled|never settled");
+    const [actStatus, stillStatus] = settled.split("|");
+    const fixtureName = path.replace("/__fixtures/", "");
+    if (actStatus.startsWith("error") || actStatus === "never settled") {
+      actFailures.push(`${fixtureName}: act ${actStatus}`);
+    }
+    if (stillStatus !== "still") actFailures.push(`${fixtureName}: page ${stillStatus === "unsettled" ? "never held still" : stillStatus}`);
     const portals = await markPortalRoots(page);
     const roots = ["[data-fixture]", ...(portals > 0 ? [`[${PORTAL_MARK}]`] : [])];
 
@@ -145,6 +180,11 @@ test("everything clickable declares a cursor", async ({ page }) => {
 
   console.log(`POINTER_AFFORDANCE checked=${checked} withReactHandler=${handlerBound} findings=${findings.length}`);
   for (const f of findings) console.log(`POINTER_AFFORDANCE_FINDING ${f.fixture}: ${f.detail}`);
+
+  // A fixture whose act never landed, or whose page never held still, was
+  // swept in some other state than the one it is named for, so its count is
+  // not evidence of anything.
+  expect(actFailures, "these fixtures were swept before the page finished becoming the fixture").toEqual([]);
 
   // A sweep that found nothing to check is not a pass. Both halves are floored
   // separately: the role half would still be met if reading React's props broke

@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Button } from "@chumlab/ui/button";
 import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
 function ToastTrigger() {
+  const [infoDismissCount, setInfoDismissCount] = useState(0);
+  const [successDismissCount, setSuccessDismissCount] = useState(0);
   const toast = useToast();
   return (
     <>
@@ -10,8 +13,8 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.info("Toast with callback", {
-            description: "Check console when this closes",
-            onDismiss: () => console.log("Toast was dismissed!")
+            description: "The readout below counts this dismissal",
+            onDismiss: () => setInfoDismissCount((n) => n + 1)
           })
         }
       >
@@ -22,13 +25,26 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.success("Action completed", {
-            description: "Alert will show when dismissed",
-            onDismiss: () => alert("Toast dismissed! Performing cleanup...")
+            description: "The readout below counts this dismissal",
+            onDismiss: () => setSuccessDismissCount((n) => n + 1)
           })
         }
       >
-        Alert on Dismiss
+        Success with onDismiss
       </Button>
+      <div
+        className="w-full rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        <div>
+          info onDismiss:
+          {infoDismissCount ? `fired ${infoDismissCount}×` : "not fired yet"}
+        </div>
+        <div>
+          success onDismiss:
+          {successDismissCount ? `fired ${successDismissCount}×` : "not fired yet"}
+        </div>
+      </div>
     </>
   );
 }

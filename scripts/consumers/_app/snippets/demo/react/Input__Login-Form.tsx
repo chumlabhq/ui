@@ -78,85 +78,96 @@ const MailIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function InputExample() {
+  const [loginSubmit, setLoginSubmit] = useState("not fired yet");
   const [showPw, setShowPw] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   return (
-    <form
-      onSubmit={
-        (e) => {
-          e.preventDefault();
-          alert("Signed in!");
-        }
-      }
-      className="w-full sm:max-w-sm space-y-5"
-    >
-      <div className="text-center space-y-1 mb-8">
-        <h3 className="text-xl font-semibold tracking-tight text-cl-text">Welcome back</h3>
-        <p className="text-sm text-cl-text-tertiary">Sign in to continue</p>
-      </div>
-      <Input
-        label="Email"
-        type="email"
-        placeholder="you@example.com"
-        required
-        startIcon={<MailIcon className="text-cl-text-tertiary" />}
-        classes={
-          {
-            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-            prefix: "text-sm select-none text-cl-text-tertiary",
-            suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+    <>
+      <form
+        onSubmit={
+          (e) => {
+            e.preventDefault();
+            setLoginSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
           }
         }
-      />
-      <Input
-        label="Password"
-        type={showPw ? "text" : "password"}
-        placeholder="Enter password"
-        required
-        startIcon={<LockIcon className="text-cl-text-tertiary" />}
-        endIcon={
-          showPw ? (
-            <EyeOffIcon className="text-cl-text-tertiary hover:text-cl-text-secondary" />
-          ) : (
-            <EyeIcon className="text-cl-text-tertiary hover:text-cl-text-secondary" />
-          )
-        }
-        onEndIconClick={() => setShowPw(!showPw)}
-        endIconLabel={showPw ? "Hide" : "Show"}
-        classes={
-          {
-            root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
-            label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-            description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
-            prefix: "text-sm select-none text-cl-text-tertiary",
-            suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+        className="w-full sm:max-w-sm space-y-5"
+      >
+        <div className="text-center space-y-1 mb-8">
+          <h3 className="text-xl font-semibold tracking-tight text-cl-text">Welcome back</h3>
+          <p className="text-sm text-cl-text-tertiary">Sign in to continue</p>
+        </div>
+        <Input
+          name="email"
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          required
+          startIcon={<MailIcon className="text-cl-text-tertiary" />}
+          classes={
+            {
+              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+              prefix: "text-sm select-none text-cl-text-tertiary",
+              suffix: "text-sm select-none text-cl-text-tertiary",
+              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            }
           }
-        }
-      />
-      <div className="flex items-center justify-between">
-        <Checkbox
-          label="Remember me"
-          checked={rememberMe}
-          onValueChange={setRememberMe}
-          size="sm"
         />
-        <Button
-          type="button"
-          size="sm"
-          className="bg-transparent text-cl-accent hover:bg-cl-accent-bg"
-        >
-          Forgot?
+        <Input
+          label="Password"
+          type={showPw ? "text" : "password"}
+          placeholder="Enter password"
+          required
+          startIcon={<LockIcon className="text-cl-text-tertiary" />}
+          endIcon={
+            showPw ? (
+              <EyeOffIcon className="text-cl-text-tertiary hover:text-cl-text-secondary" />
+            ) : (
+              <EyeIcon className="text-cl-text-tertiary hover:text-cl-text-secondary" />
+            )
+          }
+          onEndIconClick={() => setShowPw(!showPw)}
+          endIconLabel={showPw ? "Hide" : "Show"}
+          classes={
+            {
+              root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+              input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+              label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
+              description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
+              prefix: "text-sm select-none text-cl-text-tertiary",
+              suffix: "text-sm select-none text-cl-text-tertiary",
+              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            }
+          }
+        />
+        <div className="flex items-center justify-between">
+          <Checkbox
+            label="Remember me"
+            checked={rememberMe}
+            onValueChange={setRememberMe}
+            size="sm"
+          />
+          <Button
+            type="button"
+            size="sm"
+            className="bg-transparent text-cl-accent hover:bg-cl-accent-bg hover:text-cl-accent-hover"
+          >
+            Forgot?
+          </Button>
+        </div>
+        <Button type="submit" fullWidth className="bg-cl-text text-cl-bg hover:opacity-90">
+          Sign In
         </Button>
+      </form>
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        onSubmit:
+        {loginSubmit}
       </div>
-      <Button type="submit" fullWidth className="bg-cl-text text-cl-bg hover:opacity-90">
-        Sign In
-      </Button>
-    </form>
+    </>
   );
 }

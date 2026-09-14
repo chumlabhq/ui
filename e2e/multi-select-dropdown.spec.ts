@@ -399,24 +399,12 @@ test.describe("MultiSelectDropdown Component - Cross-Browser Tests", () => {
       await page.keyboard.press("Escape");
       await expect(trigger).toHaveAttribute("aria-expanded", "false");
 
-      const dialogPromise = page.waitForEvent("dialog");
-      // page.evaluate() must NOT be awaited when the form's onSubmit calls alert():
-      // alert() suspends the page's JS thread, which would prevent the evaluate from
-      // ever resolving. Fire-and-forget lets Playwright handle the dialog event separately.
-      page.evaluate(() => {
-        const sections = Array.from(document.querySelectorAll("section"));
-        const sec = sections.find((s) => {
-          const h2 = s.querySelector("h2");
-          return h2?.textContent?.trim() === "Native Form Participation";
-        });
-        const form = sec?.querySelector("form");
-        if (form) (form as HTMLFormElement).requestSubmit();
-      });
-      const dialog = await dialogPromise;
+      await section.locator("form").evaluate((form) => (form as HTMLFormElement).requestSubmit());
 
-      expect(dialog.message()).toContain("fruits");
-      expect(dialog.message()).toContain("apple");
-      await dialog.dismiss();
+      // The demo renders the submitted FormData entries rather than alerting them.
+      const readout = section.locator("[data-demo-action]");
+      await expect(readout).toContainText('"fruits"');
+      await expect(readout).toContainText('"apple"');
     });
   });
 });

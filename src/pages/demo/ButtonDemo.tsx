@@ -200,6 +200,8 @@ const ButtonDemo = () => {
   // The caption below claims span buttons support Enter/Space. Without an
   // onClick there was nothing to observe, so the claim went unverified.
   const [spanActivations, setSpanActivations] = useState(0);
+  const [polymorphicClick, setPolymorphicClick] = useState("not fired yet");
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
 
   const simulateLoading = () => {
     setLoading(true);
@@ -327,11 +329,14 @@ const ButtonDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="inline">
               <Button
                 className={c.primary}
-                onClick={() => alert("Button clicked!")}
+                onClick={(e) => setPolymorphicClick(JSON.stringify(e.currentTarget.tagName))}
               >
                 Button Element
               </Button>
             </DemoWrapper>
+            <div className="mt-2 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onClick: {polymorphicClick}
+            </div>
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
@@ -982,7 +987,7 @@ const ButtonDemo = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              alert("Form submitted!");
+              setFormSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
             }}
             className="flex flex-wrap items-center gap-3"
           >
@@ -994,6 +999,9 @@ const ButtonDemo = () => {
             </Button>
             <Button className={c.ghost}>Button (default type=button)</Button>
           </form>
+          <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            onSubmit: {formSubmit}
+          </div>
         </DemoWrapper>
       </Section>
 

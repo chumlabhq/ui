@@ -266,6 +266,9 @@ const InputDemo = () => {
   const [search2, setSearch2] = useState("");
   // An alert() here blocks the page and every automated check with it.
   const [lastAction, setLastAction] = useState("");
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
+  const [loginSubmit, setLoginSubmit] = useState("not fired yet");
+  const [registrationSubmit, setRegistrationSubmit] = useState("not fired yet");
   const [bio, setBio] = useState("");
   const [email, setEmail] = useState("");
   const [email2, setEmail2] = useState("");
@@ -678,6 +681,7 @@ const InputDemo = () => {
               />
               <div
                 className={`rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary`}
+                data-demo-action
               >
                 value: {JSON.stringify(callbackValue)}
               </div>
@@ -943,13 +947,16 @@ const InputDemo = () => {
                         inputRef.current?.focus();
                         inputRef.current?.select();
                       } else if (lbl === "Get Value")
-                        alert(`"${inputRef.current?.value}"`);
+                        setRefReadValue(JSON.stringify(inputRef.current?.value));
                     }}
                     className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6 cursor-pointer`}
                   >
                     {lbl}
                   </button>
                 ))}
+              </div>
+              <div className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+                ref.current.value: {refReadValue}
               </div>
             </div>
           </DemoWrapper>
@@ -1084,7 +1091,7 @@ const InputDemo = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                alert("Signed in!");
+                setLoginSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
               }}
               className="w-full sm:max-w-sm space-y-5"
             >
@@ -1101,6 +1108,7 @@ const InputDemo = () => {
                 </p>
               </div>
               <Input
+                name="email"
                 label="Email"
                 type="email"
                 placeholder="you@example.com"
@@ -1135,7 +1143,7 @@ const InputDemo = () => {
                 <Button
                   type="button"
                   size="sm"
-                  className="bg-transparent text-cl-accent hover:bg-cl-accent-bg"
+                  className="bg-transparent text-cl-accent hover:bg-cl-accent-bg hover:text-cl-accent-hover"
                 >
                   Forgot?
                 </Button>
@@ -1148,6 +1156,9 @@ const InputDemo = () => {
                 Sign In
               </Button>
             </form>
+            <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onSubmit: {loginSubmit}
+            </div>
           </DemoWrapper>
         </Section>
 
@@ -1161,18 +1172,20 @@ const InputDemo = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                alert("Created!");
+                setRegistrationSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
               }}
               className="w-full sm:max-w-md space-y-5"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
+                  name="firstName"
                   label="First name"
                   placeholder="John"
                   required
                   classes={c.input}
                 />
                 <Input
+                  name="lastName"
                   label="Last name"
                   placeholder="Doe"
                   required
@@ -1187,6 +1200,7 @@ const InputDemo = () => {
                 clearable
                 maxLength={20}
                 showCount
+                name="username"
                 onClear={() => setUsername2("")}
                 value={username2}
                 onChange={(e) => setUsername2(e.target.value)}
@@ -1207,6 +1221,7 @@ const InputDemo = () => {
                 required
                 startIcon={<MailIcon className={c.icon} />}
                 clearable
+                name="email"
                 onClear={() => setEmail2("")}
                 value={email2}
                 onChange={(e) => setEmail2(e.target.value)}
@@ -1233,6 +1248,7 @@ const InputDemo = () => {
                 classes={c.input}
               />
               <Input
+                name="website"
                 label="Website"
                 placeholder="yoursite"
                 prefix="https://"
@@ -1247,6 +1263,9 @@ const InputDemo = () => {
                 Create Account
               </Button>
             </form>
+            <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onSubmit: {registrationSubmit}
+            </div>
           </DemoWrapper>
         </Section>
       </div>

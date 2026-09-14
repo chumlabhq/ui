@@ -32,7 +32,12 @@ export default function PaginationExample() {
           }
         }
       />
-      <p className="mt-3 text-sm text-cl-text-secondary" role="status" aria-live="polite">
+      <p
+        className="mt-3 text-sm text-cl-text-secondary"
+        role="status"
+        aria-live="polite"
+        data-demo-action
+      >
         {
           valueLog.length
           ? `onValueChange received: ${valueLog.join(" → ")}`

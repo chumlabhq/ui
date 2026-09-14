@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
-import { MEASURE_DOCUMENT } from "./_contrast-measure";
+import { MEASURE_DOCUMENT, underFloor } from "./_contrast-measure";
 
 /**
  * Contrast as painted, over the demo PAGES.
@@ -98,9 +98,9 @@ test("the scan notices text under AA", async ({ page }) => {
 
   const findings = async () => {
     const rows = (await page.evaluate(MEASURE_DOCUMENT)) as Array<{
-      key: string; ratio: number; floor?: number; detail: string; unmeasurable?: boolean;
+      key: string; ratio: number; exact?: number; floor?: number; detail: string; unmeasurable?: boolean;
     }>;
-    return rows.filter((r) => !r.unmeasurable && r.ratio < (r.floor ?? 4.5));
+    return rows.filter((r) => !r.unmeasurable && underFloor(r, r.floor ?? 4.5));
   };
 
   const before = await findings();
@@ -120,6 +120,31 @@ test("the scan notices text under AA", async ({ page }) => {
     after.length,
     "a paragraph planted at roughly 1.1:1 was not reported, so this scan is walking nothing",
   ).toBeGreaterThan(before.length);
+});
+
+/**
+ * The floor is decided on the unrounded ratio, in both directions.
+ *
+ * The lower pair is the one that shipped: `--cl-accent` text on `--cl-accent-bg`
+ * over white, 4.4999:1, which every caller passed because it compared the
+ * two-decimal `ratio` (4.50). The upper pair also rounds to 4.50 and sits just
+ * over the floor, so a fix that over-corrected would fail it. Colours chosen by
+ * computation; which side of the floor they fall on is MEASURE's answer.
+ */
+test("decides the text floor on the unrounded ratio, both directions", async ({ page }) => {
+  await page.setContent(`
+    <style>p { font: 16px sans-serif; background: rgba(37, 99, 235, 0.1); margin: 8px; }</style>
+    <p class="plant-below" style="color: rgb(37, 99, 235)">below</p>
+    <p class="plant-above" style="color: rgb(46, 98, 235)">above</p>`);
+  const rows = (await page.evaluate(MEASURE_DOCUMENT)) as Array<{
+    key: string; ratio: number; exact?: number; floor?: number; unmeasurable?: boolean;
+  }>;
+  const below = rows.find((r) => r.key === "p.plant-below");
+  const above = rows.find((r) => r.key === "p.plant-above");
+  expect(below?.ratio, "the lower pair should round to the floor, or it tests nothing").toBe(4.5);
+  expect(above?.ratio, "the upper pair should round to the floor, or it tests nothing").toBe(4.5);
+  expect(below && underFloor(below, 4.5), `4.4999:1 must fail: ${JSON.stringify(below)}`).toBe(true);
+  expect(above && underFloor(above, 4.5), `4.5001:1 must pass: ${JSON.stringify(above)}`).toBe(false);
 });
 
 test("every demo page clears AA on the text it paints", async ({ page }) => {
@@ -150,6 +175,7 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
       const rows = (await page.evaluate(MEASURE_DOCUMENT)) as Array<{
         key: string;
         ratio: number;
+        exact?: number;
         floor?: number;
         detail: string;
         unmeasurable?: boolean;
@@ -157,7 +183,7 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
       for (const row of rows) {
         if (row.unmeasurable) continue;
         measured += 1;
-        if (row.ratio < (row.floor ?? 4.5)) findings.push({ route, theme, ...row });
+        if (underFloor(row, row.floor ?? 4.5)) findings.push({ route, theme, ...row });
       }
     }
   }

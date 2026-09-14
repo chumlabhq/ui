@@ -69,7 +69,7 @@
 // A 35-minute command that gets killed twice is a command people stop running,
 // which is why this is here rather than in someone's memory.
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync } from "node:fs";
 import { resolve, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -77,6 +77,12 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const FAST = process.argv.includes("--fast");
 const RECORD = process.argv.includes("--record");
 const POPULATIONS = join(root, "docs/adr/002-gate-populations.json");
+/**
+ * Failing gates' full output. Not `test-results/`: Playwright owns that
+ * directory and empties it at the start of every run, so a log written there
+ * lasted only until the next browser gate began.
+ */
+const LOG_DIR = join(root, "gate-logs");
 
 const pw = (args) => `PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test ${args}`;
 
@@ -91,8 +97,6 @@ const GATES = [
   { id: "doc-truth", claims: { vitest: "contracts" },
     cmd: "npx vitest run --project=contracts src/__tests__/contracts/doc-truth.contract.test.ts",
     pop: /collected (\d+)/ },
-  { id: "snippet-shape", cmd: "node scripts/build-demo-snippets.mjs --check",
-    claims: { script: "build-demo-snippets.mjs" }, pop: /(\d+) of \d+ sections/ },
   { id: "demo-coverage", cmd: "node scripts/audit-demo-coverage.mjs --check",
     claims: { script: "audit-demo-coverage.mjs" }, pop: /\((\d+) props/ },
   { id: "fixture-gap", cmd: "node scripts/audit-fixture-gap.mjs --check",
@@ -103,14 +107,28 @@ const GATES = [
     claims: { script: "build-subcomponent-schemas.mjs" } },
   { id: "guide-claims", cmd: "npm run verify:guide-claims",
     claims: { script: "assert-guide-claims.mjs" } },
-  { id: "playground-removed", cmd: "npm run verify:playground-removed",
-    claims: { script: "assert-playground-removed.mjs" } },
   { id: "ssr-record", cmd: "npm run verify:ssr-record",
     claims: { script: "assert-ssr-record.mjs" } },
-  { id: "site-build", cmd: "npm run build", claims: {} },
+  /**
+   * `npm run build` runs `prebuild` (`npm run build:lib`) before the site, so
+   * this is the gate that puts a CURRENT `dist/` and `dist-site/` on disk.
+   *
+   * The two gates after it read those directories, and both used to run above
+   * it. On a fresh checkout they failed; in a working tree they passed by
+   * reading whatever build an earlier run had left behind — green because of
+   * local state, which is the failure this command exists to stop. `needs` and
+   * `provides` are checked against this list before anything runs, so moving
+   * one of them back above its build fails there rather than passing on a
+   * stale directory.
+   */
+  { id: "site-build", cmd: "npm run build", claims: {}, provides: ["dist", "dist-site"] },
+  { id: "snippet-shape", cmd: "node scripts/build-demo-snippets.mjs --check", needs: ["dist"],
+    claims: { script: "build-demo-snippets.mjs" }, pop: /(\d+) of \d+ sections/ },
+  { id: "playground-removed", cmd: "npm run verify:playground-removed", needs: ["dist-site"],
+    claims: { script: "assert-playground-removed.mjs" } },
 
   // ── medium ────────────────────────────────────────────────────────────
-  { id: "library-build+bundle", slow: true,
+  { id: "library-build+bundle", slow: true, provides: ["dist"],
     cmd: "npm run build:lib && node scripts/assert-bundle-size.mjs",
     claims: { script: ["assert-bundle-size.mjs", "assert-css-names.mjs", "assert-dist-records.mjs",
       "assert-fixture-bundle.mjs", "assert-flag-bundle.mjs", "assert-packaging.mjs",
@@ -224,6 +242,32 @@ if (unclaimed.length) {
 /** The specs `e2e:rest` is responsible for, named so the report can show them. */
 const restSpecs = specs.filter((s) => !claimed.spec.has(s));
 
+/**
+ * A gate that reads a build runs after the gate that makes it, in this run.
+ *
+ * Checked in the mode being run, because `--fast` drops slow gates and a
+ * dependency that holds in the full list can be missing from the fast one.
+ */
+{
+  const built = new Set();
+  const misordered = [];
+  for (const g of GATES) {
+    if (FAST && g.slow) continue;
+    for (const need of g.needs ?? []) {
+      if (!built.has(need)) misordered.push(`${g.id} reads ${need}/, and no gate before it in this run builds it`);
+    }
+    for (const made of g.provides ?? []) built.add(made);
+  }
+  if (misordered.length) {
+    process.stderr.write(
+      `✗ ${misordered.length} gate(s) would read a build this run did not make:\n` +
+        misordered.map((m) => `    ${m}\n`).join("") +
+        "  A gate that reads a leftover build passes or fails on local state. Move it below the gate that provides it.\n",
+    );
+    process.exit(1);
+  }
+}
+
 /** ── run ──────────────────────────────────────────────────────────────── */
 const record = existsSync(POPULATIONS) ? JSON.parse(readFileSync(POPULATIONS, "utf8")) : { populations: {} };
 
@@ -252,6 +296,9 @@ const record = existsSync(POPULATIONS) ? JSON.parse(readFileSync(POPULATIONS, "u
 }
 const results = [];
 const started = Date.now();
+// Logs describe this run only. One left from an earlier run names a gate that
+// may pass now, next to a summary that says otherwise.
+rmSync(LOG_DIR, { recursive: true, force: true });
 
 for (const g of GATES) {
   if (FAST && g.slow) { results.push({ id: g.id, status: "skipped", ms: 0, pop: null }); continue; }
@@ -276,6 +323,9 @@ for (const g of GATES) {
     // Written here, not in the summary. A 30-minute run that the OS kills for
     // memory never reaches the summary, and the first attempt at this wrote the
     // logs there — so the one run that most needed reading left nothing at all.
+    // The second attempt fixed the timing and kept the location: the logs went
+    // to test-results/, which Playwright empties when each browser gate starts,
+    // so every failure before e2e:a11y-full was deleted by it. See LOG_DIR.
     writeFileSync(gateLog(g.id), out);
     process.stdout.write(`   └─ ${typeof g.cmd === "function" ? g.cmd() : g.cmd}\n`);
     process.stdout.write(`   └─ full output: ${relative(root, gateLog(g.id))}\n`);
@@ -284,9 +334,8 @@ for (const g of GATES) {
 
 /** Where a failing gate's whole output goes, so it outlives the run. */
 function gateLog(id) {
-  const dir = join(root, "test-results");
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  return join(dir, `gate-${id.replace(/[^a-z0-9]+/gi, "-")}.log`);
+  if (!existsSync(LOG_DIR)) mkdirSync(LOG_DIR, { recursive: true });
+  return join(LOG_DIR, `gate-${id.replace(/[^a-z0-9]+/gi, "-")}.log`);
 }
 
 const failedSoFar = () => results.some((r) => r.status === "FAIL");

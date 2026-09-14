@@ -96,6 +96,7 @@ const GLOBALS = new Set([
   "String", "Number", "Boolean", "Set", "Map", "WeakMap", "Promise", "Error", "RegExp",
   "setTimeout", "clearTimeout", "setInterval", "clearInterval", "requestAnimationFrame",
   "undefined", "NaN", "Infinity", "React", "Fragment", "isNaN", "parseInt", "parseFloat", "alert", "prompt", "confirm",
+  "FormData",
 ]);
 
 /** React hooks a snippet can carry itself. Anything else is page machinery. */

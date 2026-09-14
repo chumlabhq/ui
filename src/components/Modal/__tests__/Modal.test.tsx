@@ -348,6 +348,19 @@ describe("Modal", () => {
       await user.click(screen.getByText("Content"));
       expect(onOpenChange).not.toHaveBeenCalled();
     });
+
+    it("overlayOpacity tints the background and leaves the open overlay opaque", () => {
+      render(
+        <Modal open onOpenChange={() => {}} overlayOpacity={0.7}>
+          <p>Content</p>
+        </Modal>
+      );
+
+      const overlay = document.querySelector("[data-modal-overlay]") as HTMLElement;
+      // Element opacity would composite the default backdrop blur back against the sharp page.
+      expect(overlay.style.opacity).toBe("1");
+      expect(overlay.getAttribute("style")).toContain("70%");
+    });
   });
 
   describe("ARIA Attributes", () => {

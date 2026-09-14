@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { MultiSelectOption, MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";
 
 const staticOptions: MultiSelectOption[] = [
@@ -14,14 +15,15 @@ const staticOptions: MultiSelectOption[] = [
 ];
 
 export default function MultiSelectSearchableDropdownExample() {
+  const [uncontrolledChange, setUncontrolledChange] = useState("not fired yet");
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectSearchableDropdown
         options={staticOptions}
         defaultValue={["apple", "cherry"]}
         onValueChange={
-          (values) =>
-          console.log("Uncontrolled change:", values)
+          (values, options) =>
+          setUncontrolledChange(JSON.stringify({ values, options }))
         }
         placeholder="Select fruits..."
         maxDisplayedChips={3}
@@ -40,6 +42,13 @@ export default function MultiSelectSearchableDropdownExample() {
         }
         aria-label="Uncontrolled fruits"
       />
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        onValueChange:
+        {uncontrolledChange}
+      </div>
     </div>
   );
 }

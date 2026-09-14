@@ -3,6 +3,7 @@ import {
   useState,
   useRef } from "react";
 import { Switch } from "../../components/Switch/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -104,6 +105,7 @@ const SwitchDemo = () => {
   const [focusBlurSwitch, setFocusBlurSwitch] = useState(false);
   const [focusLog, setFocusLog] = useState<string[]>([]);
   const [formSwitch, setFormSwitch] = useState(false);
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [requiredSwitch, setRequiredSwitch] = useState(false);
   const [refSwitch, setRefSwitch] = useState(false);
   const [successSwitch, setSuccessSwitch] = useState(true);
@@ -336,7 +338,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-2">
             <Switch label="Using onValueChange" onValueChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
-            <p className={`text-sm text-cl-text-secondary dark:text-cl-text-tertiary`}>Value: {String(callbackSwitch)}</p>
+            <p className={`text-sm text-cl-text-secondary dark:text-cl-text-tertiary`} data-demo-action>Value: {String(callbackSwitch)}</p>
           </div>
         </DemoWrapper>
       </Section>
@@ -569,10 +571,7 @@ const SwitchDemo = () => {
             className="space-y-4"
             onSubmit={(e) => {
               e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              alert(
-                `Form data: notifications=${formData.get("notifications")}`,
-              );
+              setFormSubmit(JSON.stringify([...new FormData(e.currentTarget).entries()]));
             }}
           >
             <Switch
@@ -583,9 +582,12 @@ const SwitchDemo = () => {
               onValueChange={setFormSwitch}
               classes={c.switch}
             />
-            <button type="submit" className={c.btnPrimary}>
+            <Button type="submit" className={c.btnPrimary}>
               Submit Form
-            </button>
+            </Button>
+            <div className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+              onSubmit: {formSubmit}
+            </div>
           </form>
         </DemoWrapper>
       </Section>

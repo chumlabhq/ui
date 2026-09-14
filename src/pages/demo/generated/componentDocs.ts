@@ -5083,7 +5083,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": "0.32",
-        "description": "Opacity of the overlay (0-1)."
+        "description": "How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so overlayBlur is not diluted."
       },
       {
         "name": "overlayBlur",
@@ -7572,7 +7572,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": "0.32",
-        "description": "Overlay background opacity (0-1)."
+        "description": "How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so its blur is not diluted."
       },
       {
         "name": "animationDuration",

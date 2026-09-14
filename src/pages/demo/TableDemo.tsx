@@ -59,6 +59,7 @@ interface FloatingActionsProps<T> {
   dark?: boolean;
   className?: string;
   renderContent?: (name: string, data: T) => React.ReactNode;
+  onAction?: (action: "View" | "Edit" | "Delete", data: T) => void;
 }
 
 function FloatingActions<T>({
@@ -70,6 +71,7 @@ function FloatingActions<T>({
   dark: _dark = false,
   className: classNameProp,
   renderContent,
+  onAction,
 }: FloatingActionsProps<T>) {
   // Architecture: we deliberately keep `top` OUT of React state — every
   // hover transition between rows would otherwise require a parent
@@ -201,7 +203,7 @@ function FloatingActions<T>({
           <button
             className={buttonClassName}
             title="View"
-            onClick={() => alert(`View: ${name}`)}
+            onClick={() => onAction?.("View", latchedData)}
           >
             <svg
               className="w-3.5 h-3.5"
@@ -219,7 +221,7 @@ function FloatingActions<T>({
           <button
             className={buttonClassName}
             title="Edit"
-            onClick={() => alert(`Edit: ${name}`)}
+            onClick={() => onAction?.("Edit", latchedData)}
           >
             <svg
               className="w-3.5 h-3.5"
@@ -237,7 +239,7 @@ function FloatingActions<T>({
           <button
             className={`${buttonClassName} hover:!text-cl-error hover:!bg-cl-error/15 cursor-pointer`}
             title="Delete"
-            onClick={() => alert(`Delete: ${name}`)}
+            onClick={() => onAction?.("Delete", latchedData)}
           >
             <svg
               className="w-3.5 h-3.5"
@@ -1475,6 +1477,12 @@ const TableDemo = () => {
   const [sortingState, setSortingState] = useState<SortingState>([]);
 
   const [multiSelectedIds, setMultiSelectedIds] = useState<string[]>([]);
+  const [multiDeleteAction, setMultiDeleteAction] = useState("not fired yet");
+  const [stripedRowClick, setStripedRowClick] = useState("not fired yet");
+  const [footerExportAction, setFooterExportAction] = useState("not fired yet");
+  const [rightPinAction, setRightPinAction] = useState("not fired yet");
+  const [floatingAction, setFloatingAction] = useState("not fired yet");
+  const [compFloatingAction, setCompFloatingAction] = useState("not fired yet");
 
   const [expandedRowIds, setExpandedRowIds] = useState<string[]>([]);
 
@@ -1672,10 +1680,14 @@ const TableDemo = () => {
         id: "actions",
         accessorKey: "actions",
         header: "Actions",
-        cell: () => (
+        cell: ({ row }) => (
           <button
             className={`px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30 cursor-pointer`}
-            onClick={() => alert("Action clicked")}
+            onClick={() =>
+              setRightPinAction(
+                JSON.stringify({ action: "Edit", name: row.original.name }),
+              )
+            }
           >
             Edit
           </button>
@@ -1765,6 +1777,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               onHover={handleFloatingActionsHover}
               isVisible={hoveredRowIndex !== null || isFloatingActionsHovered}
               getName={(data) => data.name}
+              onAction={(action, data) =>
+                setFloatingAction(JSON.stringify({ action, name: data.name }))
+              }
               dark={dark}
             />
           }
@@ -1776,6 +1791,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           Hover over any row to see floating action buttons (View, Edit,
           Delete). The actions stay at the right edge of the table.
         </p>
+        <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+          action: {floatingAction}
+        </div>
       </Section>
 
       <Section title="Actions Column + Floating 3-Dot Menu" isDarkMode={dark}>
@@ -1793,6 +1811,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               React.useState<React.RefObject<HTMLTableRowElement> | null>(null);
             const [dotFloatingHovered, setDotFloatingHovered] =
               React.useState(false);
+            const [dotAction, setDotAction] = React.useState("not fired yet");
             const dotMenuRef = React.useRef<HTMLDivElement>(null);
 
             React.useEffect(() => {
@@ -1855,7 +1874,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       <button
                         className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
                         title="Edit"
-                        onClick={() => alert(`Edit: ${row.original.name}`)}
+                        onClick={() =>
+                          setDotAction(
+                            JSON.stringify({ action: "Edit", name: row.original.name }),
+                          )
+                        }
                       >
                         <svg
                           className="w-4 h-4"
@@ -1873,7 +1896,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       <button
                         className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-error hover:bg-cl-bg-elevated`}
                         title="Delete"
-                        onClick={() => alert(`Delete: ${row.original.name}`)}
+                        onClick={() =>
+                          setDotAction(
+                            JSON.stringify({ action: "Delete", name: row.original.name }),
+                          )
+                        }
                       >
                         <svg
                           className="w-4 h-4"
@@ -1955,6 +1982,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   }
                   classes={s}
                 />
+                <div
+                  className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+                  data-demo-action
+                >
+                  action: {dotAction}
+                </div>
                 {dotMenuState &&
                   createPortal(
                     <div
@@ -1985,8 +2018,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           key={item.label}
                           className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm transition-colors cursor-pointer ${(item as { danger?: boolean }).danger ? (dark ? "text-cl-error hover:bg-cl-error/10" : "text-cl-error hover:bg-cl-error/15") : dark ? "text-cl-text-secondary hover:bg-cl-bg-hover" : "text-cl-text hover:bg-cl-bg-hover"}`}
                           onClick={() => {
-                            alert(
-                              `${item.label}: ${sampleData.find((u) => u.id === dotMenuState.rowId)?.name}`,
+                            setDotAction(
+                              JSON.stringify({
+                                action: item.label,
+                                name: sampleData.find((u) => u.id === dotMenuState.rowId)?.name,
+                              }),
                             );
                             setDotMenuState(null);
                           }}
@@ -2043,11 +2079,13 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               React.useState<React.RefObject<HTMLTableRowElement> | null>(null);
             const [pillFloatingHovered, setPillFloatingHovered] =
               React.useState(false);
+            const [pillAction, setPillAction] = React.useState("not fired yet");
 
             const pillFloatingData =
               pillHoverIdx !== null ? sampleData[pillHoverIdx] : undefined;
 
             return (
+              <>
               <Table
                 columns={columns}
                 data={sampleData.slice(0, 4)}
@@ -2070,7 +2108,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         <button
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/15`}
                           title="Quick edit"
-                          onClick={() => alert(`Editing ${name}`)}
+                          onClick={() =>
+                            setPillAction(JSON.stringify({ action: "Quick edit", name }))
+                          }
                         >
                           <svg
                             className="w-3.5 h-3.5"
@@ -2088,7 +2128,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         <button
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-success hover:bg-cl-success/15 dark:text-cl-success dark:hover:bg-cl-success/15`}
                           title="Bookmark"
-                          onClick={() => alert(`Bookmarked ${name}`)}
+                          onClick={() =>
+                            setPillAction(JSON.stringify({ action: "Bookmark", name }))
+                          }
                         >
                           <svg
                             className="w-3.5 h-3.5"
@@ -2105,7 +2147,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         <button
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-text hover:bg-cl-warning/15 dark:text-cl-warning dark:hover:bg-cl-warning/15`}
                           title="Share"
-                          onClick={() => alert(`Share link copied for ${name}`)}
+                          onClick={() =>
+                            setPillAction(JSON.stringify({ action: "Share", name }))
+                          }
                         >
                           <svg
                             className="w-3.5 h-3.5"
@@ -2129,7 +2173,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         <button
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-error hover:bg-cl-error/15 dark:text-cl-error dark:hover:bg-cl-error/15`}
                           title="Delete"
-                          onClick={() => alert(`Deleted ${name}`)}
+                          onClick={() =>
+                            setPillAction(JSON.stringify({ action: "Delete", name }))
+                          }
                         >
                           <svg
                             className="w-3.5 h-3.5"
@@ -2149,6 +2195,13 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 }
                 classes={s}
               />
+              <div
+                className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+                data-demo-action
+              >
+                action: {pillAction}
+              </div>
+              </>
             );
           };
           return <PillToolbarDemo />;
@@ -2635,6 +2688,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   compHoveredRowIndex !== null || compIsFloatingActionsHovered
                 }
                 getName={(data) => data.name}
+                onAction={(action, data) =>
+                  setCompFloatingAction(JSON.stringify({ action, name: data.name }))
+                }
                 dark={dark}
               />
             }
@@ -2647,6 +2703,10 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               loading: "w-max min-w-[1600px]",
             }}
           />
+
+          <div className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            action: {compFloatingAction}
+          </div>
 
           <div
             className={`text-sm space-y-1 text-cl-text-secondary`}
@@ -2805,7 +2865,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               {multiSelectedIds.length > 0 && (
                 <button
                   onClick={() => {
-                    alert(`Deleting rows: ${multiSelectedIds.join(", ")}`);
+                    setMultiDeleteAction(
+                      JSON.stringify({ action: "Delete Selected", ids: multiSelectedIds }),
+                    );
                     setMultiSelectedIds([]);
                   }}
                   className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-bg bg-cl-error hover:bg-cl-error dark:text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error/30`}
@@ -2824,6 +2886,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               checkboxColor={dark ? "#6366f1" : "#4f46e5"}
               classes={s}
             />
+            <div
+              className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+              data-demo-action
+            >
+              action: {multiDeleteAction}
+            </div>
           </div>
           <p
             className={`mt-3 text-sm text-cl-text-secondary`}
@@ -3745,7 +3813,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         {(() => {
           const StyledExpandDemo = () => {
             const [ids, setIds] = React.useState<string[]>([]);
+            const [expandAction, setExpandAction] = React.useState("not fired yet");
             return (
+              <>
               <Table
                 columns={columns}
                 data={sampleData.slice(0, 5)}
@@ -3779,13 +3849,21 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       <div className="flex items-center gap-2">
                         <button
                           className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
-                          onClick={() => alert(`View profile: ${row.name}`)}
+                          onClick={() =>
+                            setExpandAction(
+                              JSON.stringify({ action: "View Profile", name: row.name }),
+                            )
+                          }
                         >
                           View Profile
                         </button>
                         <button
                           className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-bg-elevated text-cl-text-secondary border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover`}
-                          onClick={() => alert(`Send email to: ${row.email}`)}
+                          onClick={() =>
+                            setExpandAction(
+                              JSON.stringify({ action: "Send Email", email: row.email }),
+                            )
+                          }
                         >
                           Send Email
                         </button>
@@ -3801,6 +3879,13 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     : "text-cl-accent hover:text-cl-accent",
                 }}
               />
+              <div
+                className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+                data-demo-action
+              >
+                action: {expandAction}
+              </div>
+              </>
             );
           };
           return <StyledExpandDemo />;
@@ -4480,8 +4565,14 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               ...s,
               item: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/10`,
             }}
-            onRowClick={(row) => alert(`Clicked: ${(row as User).name}`)}
+            onRowClick={(row) => setStripedRowClick(JSON.stringify(row))}
           />
+          <div
+            className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            onRowClick: {stripedRowClick}
+          </div>
           <p
             className={`mt-3 text-sm text-cl-text-secondary`}
           >
@@ -4596,6 +4687,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               pinnedRightRegion: `shrink-0 sticky right-0 z-20 border-l-2 border-cl-border-input-focus bg-cl-bg-elevated`,
             }}
           />
+          <div
+            className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            action: {rightPinAction}
+          </div>
           <p
             className={`mt-3 text-sm text-cl-text-secondary`}
           >
@@ -5507,7 +5604,14 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   </div>
                   <button
                     className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
-                    onClick={() => alert("Export triggered")}
+                    onClick={() =>
+                      setFooterExportAction(
+                        JSON.stringify({
+                          action: "Export Report",
+                          rows: sampleData.slice(0, 6).map((d) => d.id),
+                        }),
+                      )
+                    }
                   >
                     Export Report
                   </button>
@@ -5518,6 +5622,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           getRowId={(row) => row.id}
           classes={s}
         />
+        <div
+          className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+          data-demo-action
+        >
+          action: {footerExportAction}
+        </div>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >

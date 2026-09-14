@@ -1,9 +1,23 @@
 import { test, expect } from "@playwright/test";
 import { skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
 import { injectAxe } from "axe-playwright";
-import { gotoFixture } from "./_nav";
+import { gotoFixture, gotoGuarded } from "./_nav";
 
+/**
+ * The demo page is reached through `gotoGuarded`, never `page.goto` with its
+ * default `load` wait followed by `networkidle`.
+ *
+ * Those two waits are what `_nav.ts` already refuses: `load` waits on every
+ * third-party script in the app shell and `networkidle` on a quiet network. Six
+ * of these tests timed out at 37-58s in one full run, three of them in exactly
+ * those waits, and holding one allowed third-party host for 35s reproduced the
+ * same timeout. A navigation that can be slow without the page being absent is
+ * a test of the network, not of the component.
+ */
 const NAV_SELECTOR = 'nav[aria-label="Pagination"]';
+// The page renders 26 of those navs, and `gotoGuarded` asserts its marker in
+// strict mode, so the marker is the first of them rather than the selector.
+const PAGE_MARKER = `${NAV_SELECTOR} >> nth=0`;
 
 async function waitForPaginationVisible(page: import("@playwright/test").Page) {
   const nav = page.locator(NAV_SELECTOR).first();
@@ -36,8 +50,7 @@ async function tapOrClick(locator: import("@playwright/test").Locator) {
 
 test.describe("Pagination Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
   });
 
@@ -144,8 +157,7 @@ test.describe("Pagination Component - Cross-Browser Tests", () => {
 
 test.describe("Pagination Keyboard Navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
   });
 
@@ -263,8 +275,7 @@ test.describe("Pagination Keyboard Navigation", () => {
 
 test.describe("Pagination Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
     await injectAxe(page);
   });
@@ -385,8 +396,7 @@ test.describe("Pagination Accessibility Tests", () => {
 
 test.describe("Pagination Advanced Features", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
   });
 
@@ -473,8 +483,7 @@ test.describe("Pagination Advanced Features", () => {
 
 test.describe("Pagination Edge Cases", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
   });
 
@@ -521,8 +530,7 @@ test.describe("Pagination Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
 
     const navs = page.locator(NAV_SELECTOR);
@@ -538,8 +546,7 @@ test.describe("Pagination Responsive Tests", () => {
 
 test.describe("Pagination Focus Management", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
   });
 
@@ -567,8 +574,7 @@ test.describe("Pagination - Repeated Interaction", () => {
 
 
   test("returns to a closed, valid state after repeated open/close", async ({ page }) => {
-    await page.goto("/pagination");
-    await page.waitForLoadState("networkidle");
+    await gotoGuarded(page, "/pagination", PAGE_MARKER);
     await waitForPaginationVisible(page);
 
     const pagination = getRowsPagination(page);

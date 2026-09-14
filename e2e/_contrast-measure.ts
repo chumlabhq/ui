@@ -127,6 +127,7 @@ const measureSource = (roots: string) => `(() => {
     out.push({
       key: selectorFor(field) + "::placeholder",
       ratio: Math.round(value * 100) / 100,
+      exact: value,
       floor: large ? 3 : 4.5,
       detail: style.color + " on rgb(" + background.map(Math.round).join(", ") + "), " + size + "px/" + weight,
     });
@@ -155,6 +156,7 @@ const measureSource = (roots: string) => `(() => {
       out.push({
         key: selectorFor(el),
         ratio: Math.round(value * 100) / 100,
+        exact: value,
         floor: large ? 3 : 4.5,
         detail: style.color + " on rgb(" + background.map(Math.round).join(", ") + "), " + size + "px/" + weight,
       });
@@ -178,3 +180,19 @@ export const MEASURE = measureSource(
 
 /** The whole document, for the demo pages, which are not built from fixtures. */
 export const MEASURE_DOCUMENT = measureSource("[document.body]");
+
+/**
+ * Whether a measured pair is under its floor, decided on the unrounded ratio.
+ *
+ * `ratio` is rounded to two decimals, and it is for reading. Every caller used
+ * to compare it, which is how the selected rows-per-page option in light passed
+ * at 4.4999:1: rounded to 4.50, it met a 4.5 floor that WCAG does not let a
+ * ratio meet by rounding. `exact` is for deciding. A row without one is a
+ * measurement this helper refuses to guess about.
+ */
+export const underFloor = (row: { exact?: number }, floor: number): boolean => {
+  if (typeof row.exact !== "number") {
+    throw new Error(`a contrast row with no exact ratio cannot be compared: ${JSON.stringify(row)}`);
+  }
+  return row.exact < floor;
+};

@@ -66,7 +66,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   filterClearTrigger:
     "text-xs text-cl-accent hover:text-cl-accent-hover cursor-pointer",
   filterItem:
-    "w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent data-[selected]:hover:bg-cl-accent-bg",
+    "w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[selected]:hover:bg-cl-accent-bg",
   filterItemControl:
     "w-4 h-4 rounded border flex items-center justify-center shrink-0 border-cl-border-input data-[selected]:bg-cl-accent data-[selected]:border-cl-accent",
   expandButton: "",

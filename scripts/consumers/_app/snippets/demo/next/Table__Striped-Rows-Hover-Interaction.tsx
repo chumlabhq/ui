@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Table } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -148,6 +148,7 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
+  const [stripedRowClick, setStripedRowClick] = useState("not fired yet");
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -209,8 +210,15 @@ export default function TableExample() {
             item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/10"
           }
         }
-        onRowClick={(row) => alert(`Clicked: ${(row as User).name}`)}
+        onRowClick={(row) => setStripedRowClick(JSON.stringify(row))}
       />
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        onRowClick:
+        {stripedRowClick}
+      </div>
       <p className="mt-3 text-sm text-cl-text-secondary">
         Striped rows combined with a
         <strong>blue hover effect</strong>

@@ -188,8 +188,8 @@ export default defineConfig(({ mode }) => {
         "Content-Security-Policy":
           "default-src 'self'; " +
           "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; " +
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-          "font-src https://fonts.gstatic.com; " +
+          "style-src 'self' 'unsafe-inline'; " +
+          "font-src 'self'; " +
           "img-src 'self' https: data:; " +
           "connect-src 'self' https: http://localhost:5050; " +
           "frame-src https://api.razorpay.com https://checkout.razorpay.com; " +

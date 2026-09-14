@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Input } from "@chumlab/ui/input";
 
 export default function InputExample() {
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-4 w-full sm:max-w-sm">
@@ -35,7 +36,7 @@ export default function InputExample() {
                     inputRef.current?.focus();
                     inputRef.current?.select();
                   } else if (lbl === "Get Value")
-                    alert(`"${inputRef.current?.value}"`);
+                    setRefReadValue(JSON.stringify(inputRef.current?.value));
                 }
               }
               className="px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6 cursor-pointer"
@@ -44,6 +45,13 @@ export default function InputExample() {
             </button>
           ))
         }
+      </div>
+      <div
+        className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        ref.current.value:
+        {refReadValue}
       </div>
     </div>
   );

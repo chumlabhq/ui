@@ -111,6 +111,10 @@ const ROLE_ONLY = [
   // composites above whatever surface it is laid on, including ones no token
   // names.
   "--cl-bg-skeleton",
+  // ADR 005. The unfilled part of a range track — a role. Like `skeleton` it
+  // is a foreground overlay, visible because it composites above the surface
+  // it is laid on, not because of a relation to any one surface token.
+  "--cl-bg-track",
   "--cl-border",
   "--cl-border-input",
   "--cl-text",

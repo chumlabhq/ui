@@ -72,13 +72,11 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <!-- Performance Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Self-hosted: the same Google Fonts files (Geist, Instrument Serif,
+         JetBrains Mono, Space Grotesk), fetched once into public/fonts/. A
+         stylesheet on another origin put every page load, and every browser
+         gate, behind fonts.googleapis.com answering. -->
+    <link href="/fonts/fonts.css" rel="stylesheet" />
     <link rel="preconnect" href="https://checkout.razorpay.com" />
 
     <!-- Razorpay Standard Checkout. Loaded as `defer` so it doesn't block

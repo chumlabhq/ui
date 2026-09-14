@@ -76,7 +76,7 @@ export default function Example() {
 | `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | Direction from which the drawer slides in. |
 | `size` | string | `"300px"` | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
 | `overlayColor` | string | `"black"` | Background color of the overlay. |
-| `overlayOpacity` | number | `0.32` | Opacity of the overlay (0-1). |
+| `overlayOpacity` | number | `0.32` | How strongly `overlayColor` tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so `overlayBlur` is not diluted. |
 | `overlayBlur` | number | `0` | Backdrop blur in pixels for the overlay. |
 | `duration` | number | `300` | Animation duration in milliseconds. |
 | `lockScroll` | boolean | `true` | Locks body scroll when the drawer is open. |
