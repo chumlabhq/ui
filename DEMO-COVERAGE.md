@@ -11,8 +11,8 @@ recorded there because they belong next to the code that implements them.
 | | count |
 | --- | --- |
 | Components audited | 58 |
-| Library-authored props across the public surface | 1136 |
-| With no demo | 283 (25%) |
+| Library-authored props across the public surface | 1137 |
+| With no demo | 284 (25%) |
 | With no fixture | 644 (57%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
@@ -125,7 +125,7 @@ listed here with no demo anywhere fails the generator.
 | TextArea | 25 | 293 | 1 | 6 | 0 | `unstyled` |
 | TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
 | TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |
-| Toast | 21 | 2 | 21 | 10 | 0 | `type`, `unstyled` |
+| Toast | 22 | 2 | 22 | 10 | 0 | `type`, `unstyled` |
 | ToastProvider | 12 | 0 | 10 | 10 | 0 | `unstyled` |
 | Tooltip | 32 | 2 | 9 | 20 | 0 | `unstyled`, `portalContainer` |
 

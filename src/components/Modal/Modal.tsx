@@ -176,11 +176,15 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       (event: KeyboardEvent) => {
         if (!isOpen) return;
 
-        if (event.key === "Escape" && closeOnEscape) {
+        if (event.key === "Escape") {
           // Every open modal listens on document, so stopPropagation can't stop a
           // sibling listener on that same node - only the stack tells us who is on
           // top, and only stopImmediatePropagation keeps the rest from firing.
           if (!isTopModal(modalId)) return;
+          // Marked even when it declines to close: an open dialog is the top
+          // layer, and nothing behind it - a toast - may act on the key.
+          event.preventDefault();
+          if (!closeOnEscape) return;
           event.stopImmediatePropagation();
           handleClose();
           return;

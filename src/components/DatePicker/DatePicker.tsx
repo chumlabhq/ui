@@ -169,7 +169,8 @@ const CustomDropdown = memo(function CustomDropdown({
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       toggleMenu();
-    } else if (e.key === "Escape") {
+    } else if (e.key === "Escape" && isOpen) {
+      e.preventDefault();
       setIsOpen(false);
     }
   };

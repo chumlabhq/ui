@@ -21,17 +21,17 @@
     },
     "message": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Primary message content.",
+      "description": "React.ReactNode — Primary message content.",
       "x-tsType": "ReactNode"
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Secondary description text.",
+      "description": "React.ReactNode — Secondary description text.",
       "x-tsType": "ReactNode"
     },
     "content": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom content that replaces message and description.",
+      "description": "React.ReactNode — Custom content that replaces message and description.",
       "x-tsType": "ReactNode"
     },
     "duration": {
@@ -50,7 +50,7 @@
     },
     "icon": {
       "type": "object",
-      "description": "React.ReactNode \u2014 Custom icon replacing the default type icon.",
+      "description": "React.ReactNode — Custom icon replacing the default type icon.",
       "x-tsType": "ReactNode"
     },
     "showCloseButton": {
@@ -60,7 +60,7 @@
     },
     "onDismiss": {
       "type": "object",
-      "description": "() => void \u2014 Fires when the toast is dismissed.",
+      "description": "() => void — Fires when the toast is dismissed.",
       "x-tsType": "(() => void) | undefined"
     },
     "role": {
@@ -118,7 +118,7 @@
     },
     "onRemove": {
       "type": "object",
-      "description": "(id: string) => void \u2014 Internal callback to remove the toast from the provider.",
+      "description": "(id: string) => void — Internal callback to remove the toast from the provider.",
       "x-tsType": "(id: string) => void"
     }
   },
@@ -170,8 +170,8 @@
         },
         "dismissOnEscape": {
           "type": "boolean | undefined",
-          "description": "Dismisses the newest toast when Escape is pressed.",
-          "default": false
+          "description": "Dismisses the newest toast when Escape is pressed, unless something above it — an open dialog, drawer or menu — has already handled the key. On by default.",
+          "default": true
         },
         "containerAriaLabel": {
           "type": "string | undefined",

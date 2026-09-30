@@ -687,6 +687,30 @@ const LIBRARY_TOTAL_HISTORY = [
       "be SearchableDropdown's identical change, which lands in a chunk it " +
       "shares and so under no entry — its exclusive held at 0.23.",
   },
+  {
+    kb: 155.71,
+    commit: "(uncommitted)",
+    date: "2026-10-01",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.08 KB. Escape dismisses the newest toast by default and " +
+      "yields to whatever is above it. Exclusive moves, measured against a " +
+      "build of 68e2cef from `git archive` rather than against the record: " +
+      "Toast +0.07 — the listener moved from the provider to the toast, on " +
+      "window, skipping a key an overlay already marked, plus the newest-" +
+      "visible lookup and its two comments. Modal +0.01 and Drawer +0.01: " +
+      "`preventDefault` on every Escape while open and on top, including under " +
+      "`closeOnEscape={false}`. DatePicker +0.01: the month/year list's Escape " +
+      "marks the key and fires only while open. CascadingDropdown +0.01: its " +
+      "trigger marks Escape only when a submenu or the menu closes, which " +
+      "splits one `preventDefault` into two branches and adds a comment. " +
+      "Breadcrumb gained a `preventDefault` and Table's inline edit one, while " +
+      "Table's grid Escape lost its own; both held at two decimals. Those sum " +
+      "to 0.11 at two decimals; " +
+      "the total is one gzip stream over all 80 files, not the sum of " +
+      "per-entry streams. Table reads 15.86 against its declared 15.85 in both " +
+      "builds, so that 0.01 predates this move.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

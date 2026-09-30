@@ -4,14 +4,16 @@ const LocalProviderTrigger = ({
   className,
   label,
   message,
+  duration,
 }: {
   className: string;
   label: string;
   message: string;
+  duration?: number;
 }) => {
   const { info } = useToast();
   return (
-    <button className={className} onClick={() => info(message)}>
+    <button className={className} onClick={() => info(message, { duration })}>
       {label}
     </button>
   );
@@ -21,14 +23,16 @@ const LocalProviderDemo = ({
   buttonClassName,
   label,
   message,
+  duration,
   ...providerProps
 }: Omit<React.ComponentProps<typeof ToastProvider>, "children"> & {
   buttonClassName: string;
   label: string;
   message: string;
+  duration?: number;
 }) => (
   <ToastProvider {...providerProps}>
-    <LocalProviderTrigger className={buttonClassName} label={label} message={message} />
+    <LocalProviderTrigger className={buttonClassName} label={label} message={message} duration={duration} />
   </ToastProvider>
 );
 

@@ -77,6 +77,11 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
   onRemove: (id: string) => void;
   providerClasses?: ToastClasses;
   providerUnstyled?: boolean;
+  /**
+   * Dismisses this toast on Escape, through the same path as its close button.
+   * `ToastProvider` sets it on the newest toast only.
+   */
+  dismissOnEscape?: boolean;
   /** Merged onto the toast root after the default and `classes.container` styles,
    *  so a consumer's class wins on conflict. Every other component already
    *  accepted this; Toast was the one that did not. */
@@ -108,7 +113,11 @@ export interface ToastProviderProps {
   gap?: number;
   /** Stacking order for the toast container. */
   zIndex?: number;
-  /** Dismisses the newest toast when Escape is pressed. */
+  /**
+   * Dismisses the newest toast when Escape is pressed, unless something above
+   * it — an open dialog, drawer or menu — has already handled the key. On by
+   * default.
+   */
   dismissOnEscape?: boolean;
   /** Accessible name for the toast region. */
   containerAriaLabel?: string;

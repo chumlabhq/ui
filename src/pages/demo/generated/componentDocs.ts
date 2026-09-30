@@ -15427,8 +15427,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "dismissOnEscape",
             "type": "boolean",
             "required": false,
-            "default": "false",
-            "description": "Dismisses the newest toast when Escape is pressed."
+            "default": "true",
+            "description": "Dismisses the newest toast when Escape is pressed, unless something above it — an open dialog, drawer or menu — has already handled the key. On by default."
           },
           {
             "name": "containerAriaLabel",
@@ -15686,14 +15686,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "`aria-atomic=\"true\"` — full toast announced on update",
       "Close button has configurable `aria-label` (default: \"Close notification\")",
       "Container has `role=\"region\"` with `aria-label`",
-      "Escape key dismissal support"
+      "Escape dismisses the newest toast, one per press, and yields to any open overlay"
     ],
     "keyboard": {
       "note": "A toast takes focus only when it has an action; otherwise it announces itself and stays out of the tab order.",
       "rows": [
         {
           "keys": "`Escape`",
-          "description": "Dismisses the toast when `dismissOnEscape` is set."
+          "description": "Dismisses the newest toast, and fires its `onDismiss`. An open Modal, Drawer, menu or tooltip takes the key first, and the toast is left alone. On by default; `dismissOnEscape={false}` on the provider turns it off."
         },
         {
           "keys": "`Tab`",

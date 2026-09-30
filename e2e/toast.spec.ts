@@ -280,26 +280,52 @@ test.describe("Toast Keyboard Navigation", () => {
     await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
   });
 
-  test("should not dismiss on Escape when dismissOnEscape is not enabled on provider", async ({
+  test("dismisses the toast on Escape through the page provider's default", async ({
     page,
   }) => {
-    const escapeButton = page
-      .locator('button:has-text("With Escape Dismissal")')
-      .first();
+    const withEscape = page.getByRole("button", { name: "With Escape Dismissal" });
+    await withEscape.scrollIntoViewIfNeeded();
+    await withEscape.click();
+    const toast = page.locator(TOAST_SELECTOR, { hasText: "Press Escape to dismiss" });
+    await expect(toast).toBeVisible();
 
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(escapeButton.first()).toBeVisible();
-    await escapeButton.scrollIntoViewIfNeeded();
-    await escapeButton.click();
-    await waitForToastVisible(page);
-
-    // The demo's ToastProvider does not set dismissOnEscape=true,
-    // so pressing Escape should have no effect on the toast.
     await page.keyboard.press("Escape");
 
-    // Toast should still be visible since dismissOnEscape is not enabled
-    await expect(page.locator(TOAST_SELECTOR).first()).toBeVisible();
+    await expect(toast).toHaveCount(0);
+  });
+
+  test("keeps the toast on Escape when its provider sets dismissOnEscape={false}", async ({
+    page,
+  }) => {
+    const withoutEscape = page.getByRole("button", { name: "Without Escape Dismissal" });
+    await withoutEscape.scrollIntoViewIfNeeded();
+    await withoutEscape.click();
+    const toast = page.locator(TOAST_SELECTOR, {
+      hasText: "Escape leaves this one; use its close button",
+    });
+    await expect(toast).toBeVisible();
+
+    await page.keyboard.press("Escape");
+
+    // Past the 500ms exit transition, so a dismissal would have finished.
+    await page.waitForTimeout(800);
+    await expect(toast).toBeVisible();
+  });
+
+  test("dismisses only the enabled provider's toast when both are showing", async ({ page }) => {
+    await page.getByRole("button", { name: "Without Escape Dismissal" }).click();
+    await page.getByRole("button", { name: "With Escape Dismissal" }).click();
+    const kept = page.locator(TOAST_SELECTOR, {
+      hasText: "Escape leaves this one; use its close button",
+    });
+    const dismissed = page.locator(TOAST_SELECTOR, { hasText: "Press Escape to dismiss" });
+    await expect(kept).toBeVisible();
+    await expect(dismissed).toBeVisible();
+
+    await page.keyboard.press("Escape");
+
+    await expect(dismissed).toHaveCount(0);
+    await expect(kept).toBeVisible();
   });
 });
 

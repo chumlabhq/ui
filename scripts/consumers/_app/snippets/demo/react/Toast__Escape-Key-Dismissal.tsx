@@ -1,6 +1,42 @@
 import { Button } from "@chumlab/ui/button";
 import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
+const LocalProviderTrigger = ({
+  className,
+  label,
+  message,
+  duration,
+}: {
+  className: string;
+  label: string;
+  message: string;
+  duration?: number;
+}) => {
+  const { info } = useToast();
+  return (
+    <button className={className} onClick={() => info(message, { duration })}>
+      {label}
+    </button>
+  );
+};
+
+const LocalProviderDemo = ({
+  buttonClassName,
+  label,
+  message,
+  duration,
+  ...providerProps
+}: Omit<React.ComponentProps<typeof ToastProvider>, "children"> & {
+  buttonClassName: string;
+  label: string;
+  message: string;
+  duration?: number;
+}) => (
+  <ToastProvider {...providerProps}>
+    <LocalProviderTrigger className={buttonClassName} label={label} message={message} duration={duration} />
+  </ToastProvider>
+);
+
 function ToastTrigger() {
   const toast = useToast();
   return (
@@ -18,18 +54,14 @@ function ToastTrigger() {
       >
         With Escape Dismissal
       </Button>
-      <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
-        onClick={
-          () =>
-          toast.info("Standard toast", {
-            duration: Infinity,
-            description: "Use close button to dismiss (Escape disabled)"
-          })
-        }
-      >
-        Without Escape Dismissal
-      </Button>
+      <LocalProviderDemo
+        dismissOnEscape={false}
+        containerAriaLabel="Escape disabled example"
+        buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
+        label="Without Escape Dismissal"
+        message="Escape leaves this one; use its close button"
+        duration={Infinity}
+      />
     </>
   );
 }

@@ -14,13 +14,14 @@
  * terminate. `dist/` is finished by the time this is called.
  *
  *   node scripts/assert-packaging.mjs              gate the built dist
- *   node scripts/assert-packaging.mjs --self-check plant both defects back
+ *   node scripts/assert-packaging.mjs --self-check plant each defect back
  */
 import { spawnSync } from "node:child_process";
-import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { closeSync, existsSync, mkdirSync, mkdtempSync, openSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, posix, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import ts from "typescript";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -162,6 +163,105 @@ export function linksResolve(tarball) {
   return { ok: broken.length === 0, broken, checked, documents: documents.length };
 }
 
+/**
+ * Every declaration file in `dist/` belongs to a library entry or to the shared
+ * internals the entries import.
+ *
+ * `tsconfig.lib.json` included all of `src/components` and excluded the site's
+ * loose files one name at a time, so `AnnouncementBanner.tsx` — added for the
+ * playground's top bar, excluded nowhere — shipped as
+ * `dist/components/AnnouncementBanner.d.ts` and its `.d.cts` twin. attw and
+ * publint cannot see it: they walk from `exports`, and nothing in `exports`
+ * reaches it.
+ *
+ * The allowed set is derived, never listed, because a list is what failed. An
+ * entry is a `types` path in `exports`; its component directory is the entry's
+ * own. Shared internals are the top-level `dist/` directories that at least one
+ * entry's import graph reaches — `utils`, today. Directory rather than file:
+ * 622 of 982 declarations are internal to a directory an entry already owns and
+ * are reached only through the JavaScript, not through another declaration.
+ */
+export function siteOnlyDeclarations(pkgDir) {
+  const manifest = JSON.parse(readFileSync(join(pkgDir, "package.json"), "utf8"));
+  const dist = join(pkgDir, "dist");
+  const isDeclaration = (name) => name.endsWith(".d.ts") || name.endsWith(".d.cts");
+  const declarations = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const path = join(dir, entry.name);
+      if (entry.isDirectory()) walk(path);
+      else if (isDeclaration(entry.name)) declarations.push(relative(dist, path).split(sep).join("/"));
+    }
+  };
+  if (existsSync(dist)) walk(dist);
+
+  const entries = new Set();
+  for (const value of Object.values(manifest.exports ?? {})) {
+    if (typeof value !== "object") continue;
+    for (const condition of Object.values(value)) {
+      if (condition?.types?.startsWith("./dist/")) entries.add(condition.types.slice("./dist/".length));
+    }
+  }
+  const entryComponents = new Set(
+    [...entries].map((entry) => entry.match(/^components\/([^/]+)\//)?.[1]).filter(Boolean),
+  );
+
+  const reached = new Set();
+  const queue = [...entries];
+  while (queue.length > 0) {
+    const file = queue.pop();
+    if (reached.has(file) || !existsSync(join(dist, file))) continue;
+    reached.add(file);
+    const source = ts.createSourceFile(file, readFileSync(join(dist, file), "utf8"), ts.ScriptTarget.Latest);
+    const visit = (node) => {
+      let specifier;
+      if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+        specifier = node.moduleSpecifier.text;
+      } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument) && ts.isStringLiteral(node.argument.literal)) {
+        specifier = node.argument.literal.text;
+      }
+      if (specifier?.startsWith(".")) {
+        const base = posix.join(posix.dirname(file), specifier);
+        const ext = file.endsWith(".d.cts") ? ".d.cts" : ".d.ts";
+        const target = [base.replace(/\.c?js$/, ext), `${base}${ext}`, `${base}/index${ext}`].find((candidate) =>
+          existsSync(join(dist, candidate)),
+        );
+        if (target) queue.push(target);
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(source);
+  }
+  const sharedInternals = new Set(
+    [...reached].filter((file) => !file.startsWith("components/") && file.includes("/")).map((file) => file.split("/")[0]),
+  );
+
+  const siteOnly = declarations.filter((file) => {
+    if (entries.has(file)) return false;
+    const [top, component, ...rest] = file.split("/");
+    if (top === "components") return !(rest.length > 0 && entryComponents.has(component));
+    return !(component !== undefined && sharedInternals.has(top));
+  });
+
+  return {
+    ok: declarations.length > 0 && siteOnly.length === 0,
+    count: declarations.length,
+    siteOnly,
+    sharedInternals: [...sharedInternals].sort(),
+  };
+}
+
+export function declarationsBelong(tarball) {
+  const dir = mkdtempSync(join(tmpdir(), "chumlab-decls-"));
+  try {
+    const { status, output } = run("tar", ["-xzf", tarball, "-C", dir]);
+    if (status !== 0) throw new Error(`could not unpack the tarball: ${output}`);
+    return siteOnlyDeclarations(join(dir, "package"));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 function packIgnoringScripts(into) {
   // `npm_config_dry_run` is stripped, not inherited. `npm publish --dry-run`
   // sets it in the environment, `prepublishOnly` runs this gate inside that
@@ -199,9 +299,10 @@ function repack(tarball, into, suffix, mutate) {
 /**
  * The defects put back, one at a time, and required to be caught.
  *
- * Two are the ones this gate was added for, so the question is not whether
- * attw works in general — it is whether this invocation of it, with these
- * exclusions, still sees them. The third is aimed at the gate itself.
+ * The first two are the ones this gate was added for, so the question is not
+ * whether attw works in general — it is whether this invocation of it, with
+ * these exclusions, still sees them. The empty exports map and the empty dist
+ * are aimed at the gate itself.
  */
 function selfCheck(tarball, into) {
   const outcomes = [];
@@ -267,6 +368,37 @@ function selfCheck(tarball, into) {
     saw: links.ok ? `nothing across ${links.checked} link(s)` : links.broken[0],
   });
 
+  // Both shapes a site-only file takes: a loose file beside the component
+  // directories, which is how AnnouncementBanner leaked, and a directory no
+  // entry names, which is what BrandLogo, Reveal and ui would be.
+  for (const [suffix, file] of [
+    ["loose", "components/AnnouncementBanner.d.ts"],
+    ["site-dir", "components/BrandLogo/index.d.ts"],
+  ]) {
+    const planted = repack(tarball, into, suffix, (pkg) => {
+      const target = join(pkg, "dist", file);
+      if (existsSync(target)) throw new Error(`dist/${file} already exists; the plant would prove nothing`);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, "export default function Planted(): null;\n", "utf8");
+    });
+    const verdict = declarationsBelong(planted);
+    outcomes.push({
+      plant: `a site-only declaration at dist/${file}`,
+      caught: !verdict.ok && verdict.siteOnly.includes(file),
+      saw: verdict.siteOnly.length ? verdict.siteOnly.join(", ") : `nothing across ${verdict.count} declaration(s)`,
+    });
+  }
+
+  const noDeclarations = repack(tarball, into, "no-decls", (pkg) => {
+    rmSync(join(pkg, "dist"), { recursive: true, force: true });
+  });
+  const none = declarationsBelong(noDeclarations);
+  outcomes.push({
+    plant: "a dist with no declaration files",
+    caught: !none.ok && none.count === 0,
+    saw: `${none.count} declaration(s), ${none.siteOnly.length} site-only`,
+  });
+
   for (const outcome of outcomes) {
     console.log(`  ${outcome.caught ? "caught" : "NOT CAUGHT"}  ${outcome.plant} — saw ${outcome.saw}`);
   }
@@ -306,6 +438,22 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     } else {
       for (const line of links.broken) console.error(`  ${line}`);
       console.error("✗ a shipped document links to something the tarball does not carry");
+      ok = false;
+    }
+
+    const shipped = declarationsBelong(tarball);
+    if (shipped.ok) {
+      console.log(
+        `✓ ${shipped.count} declaration files, 0 site-only ` +
+          `(entries from exports, shared internals: ${shipped.sharedInternals.join(", ")})`,
+      );
+    } else {
+      for (const file of shipped.siteOnly) console.error(`  dist/${file} belongs to no library entry or shared internal`);
+      console.error(
+        shipped.count === 0
+          ? "✗ dist carries 0 declaration files — a clean verdict on nothing is not a clean verdict"
+          : `✗ ${shipped.count} declaration files, ${shipped.siteOnly.length} site-only`,
+      );
       ok = false;
     }
 

@@ -334,6 +334,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       if (!isDropdownOpen || !isBrowser) return;
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
+          e.preventDefault();
           setDropdownOpen(false);
           ellipsisButtonRef.current?.focus();
         }

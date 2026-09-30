@@ -460,11 +460,14 @@ export const useCascadingDropdown = ({
           }
           return;
         case "Escape":
-          event.preventDefault();
+          // Marked only when something closes, so a closed trigger leaves the
+          // key to whatever else is listening — a toast, a parent dialog.
           if (isInSubmenu) {
+            event.preventDefault();
             setSubmenuFocusedIndex(-1);
             setActiveSubmenu(null);
           } else if (isOpen) {
+            event.preventDefault();
             handleClose();
           }
           return;

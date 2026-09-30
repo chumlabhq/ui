@@ -52,14 +52,16 @@ const LocalProviderDemo = ({
   buttonClassName,
   label,
   message,
+  duration,
   ...providerProps
 }: Omit<React.ComponentProps<typeof ToastProvider>, "children"> & {
   buttonClassName: string;
   label: string;
   message: string;
+  duration?: number;
 }) => (
   <ToastProvider {...providerProps}>
-    <LocalProviderTrigger className={buttonClassName} label={label} message={message} />
+    <LocalProviderTrigger className={buttonClassName} label={label} message={message} duration={duration} />
   </ToastProvider>
 );
 
@@ -67,14 +69,16 @@ const LocalProviderTrigger = ({
   className,
   label,
   message,
+  duration,
 }: {
   className: string;
   label: string;
   message: string;
+  duration?: number;
 }) => {
   const { info } = useToast();
   return (
-    <button className={className} onClick={() => info(message)}>
+    <button className={className} onClick={() => info(message, { duration })}>
       {label}
     </button>
   );
@@ -386,7 +390,7 @@ const ToastDemoContent = ({
 
       <Section
         title="Escape Key Dismissal"
-        description="Enable keyboard dismissal with the dismissOnEscape prop on ToastProvider."
+        description="Escape dismisses the newest toast, one per press. Turn it off with dismissOnEscape={false} on ToastProvider."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
@@ -402,22 +406,20 @@ const ToastDemoContent = ({
           >
             With Escape Dismissal
           </Button>
-          <Button
-            className={c.btn}
-            onClick={() =>
-              toast.info("Standard toast", {
-                duration: Infinity,
-                description: "Use close button to dismiss (Escape disabled)",
-              })
-            }
-          >
-            Without Escape Dismissal
-          </Button>
+          <LocalProviderDemo
+            dismissOnEscape={false}
+            containerAriaLabel="Escape disabled example"
+            buttonClassName={c.btn}
+            label="Without Escape Dismissal"
+            message="Escape leaves this one; use its close button"
+            duration={Infinity}
+          />
         </DemoWrapper>
         <div className={c.note}>
-          <strong>Tip:</strong> Set{" "}
-          <code className="font-mono">dismissOnEscape</code> on ToastProvider to
-          enable Escape dismissal for all toasts globally.
+          <strong>Tip:</strong> An open Modal, Drawer or menu takes Escape
+          first, and the toast behind it stays.{" "}
+          <code className="font-mono">dismissOnEscape</code> is a provider prop,
+          so the second button fires through its own provider with it off.
         </div>
       </Section>
 

@@ -297,8 +297,12 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        if (event.key === "Escape" && closeOnEscape) {
+        if (event.key === "Escape") {
           if (!isTopDrawer(drawerId)) return;
+          // Marked even when it declines to close, as Modal does: nothing
+          // behind an open drawer may act on the key.
+          event.preventDefault();
+          if (!closeOnEscape) return;
           event.stopImmediatePropagation();
           handleClose();
           return;

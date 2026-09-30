@@ -12,7 +12,10 @@
     "outDir": "./dist",
     "types": ["vite/client"]
   },
-  "include": ["src/index.ts", "src/components", "src/utils"],
+  // Component directories only. Every library component is a directory; the
+  // loose files beside them are the site's, and excluding those by name is how
+  // AnnouncementBanner.d.ts shipped when it was added and never listed.
+  "include": ["src/index.ts", "src/components/*/**/*", "src/utils"],
   "exclude": [
     "src/**/__tests__/**",
     "src/**/*.test.*",
@@ -24,17 +27,6 @@
     "src/components/BrandLogo",
     "src/components/Reveal",
     "src/components/ui",
-    "src/components/SiteHeader.tsx",
-    "src/components/SiteFooter.tsx",
-    "src/components/BuyMeCoffee.tsx",
-    "src/components/useBuyMeCoffee.ts",
-    "src/components/UserMenu.tsx",
-    "src/components/CatalogSection.tsx",
-    "src/components/GetStartedSection.tsx",
-    "src/components/ChumlabComparisonSection.tsx",
-    "src/components/WhyChumlabSection.tsx",
-    "src/components/TypographicCover.tsx",
-    "src/components/FaqLogoIcon.tsx",
     "src/App.tsx",
     "src/main.tsx"
   ]

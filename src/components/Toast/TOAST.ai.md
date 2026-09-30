@@ -123,7 +123,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 
 | Key | Behaviour |
 |-----|-----------|
-| `Escape` | Dismisses the toast when `dismissOnEscape` is set. |
+| `Escape` | Dismisses the newest toast, and fires its `onDismiss`. An open Modal, Drawer, menu or tooltip takes the key first, and the toast is left alone. On by default; `dismissOnEscape={false}` on the provider turns it off. |
 | `Tab` | Moves to the toast's action and close button while it is on screen. |
 | `Enter`, `Space` | Activates the focused action. |
 
@@ -136,7 +136,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 - `aria-atomic="true"` — full toast announced on update
 - Close button has configurable `aria-label` (default: "Close notification")
 - Container has `role="region"` with `aria-label`
-- Escape key dismissal support
+- Escape dismisses the newest toast, one per press, and yields to any open overlay
 
 ---
 
@@ -181,7 +181,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `animationDuration` | `number \| undefined` | Enter and exit transition duration in milliseconds. |
 | `gap` | `number \| undefined` | Space between stacked toasts, in pixels. |
 | `zIndex` | `number \| undefined` | Stacking order for the toast container. |
-| `dismissOnEscape` | `boolean \| undefined` | Dismisses the newest toast when Escape is pressed. |
+| `dismissOnEscape` | `boolean \| undefined` | Dismisses the newest toast when Escape is pressed, unless something above it — an open dialog, drawer or menu — has already handled the key. On by default. |
 | `containerAriaLabel` | `string \| undefined` | Accessible name for the toast region. |
 | `classes` | `ToastClasses \| undefined` | Class overrides for this component's slots. |
 | `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |

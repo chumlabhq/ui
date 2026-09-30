@@ -3,6 +3,12 @@ import { render, screen, waitFor, act, fireEvent } from "@testing-library/react"
 import userEvent from "@testing-library/user-event";
 import { useEffect } from "react";
 import { ToastProvider, useToast } from "../index.js";
+import { Modal } from "../../Modal/index.js";
+import { Drawer, DrawerBody } from "../../Drawer/index.js";
+import { Dropdown } from "../../Dropdown/index.js";
+import { CascadingDropdown } from "../../CascadingDropdown/index.js";
+import { Table } from "../../Table/index.js";
+import { DatePicker } from "../../DatePicker/index.js";
 
 const TestConsumer = ({
   onMount,
@@ -507,31 +513,50 @@ describe("Toast", () => {
       });
     });
 
-    it("dismisses all toasts on Escape when dismissOnEscape is true on provider", async () => {
+    it("dismisses only the newest toast on Escape by default, through its onDismiss", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       let toastApi: ReturnType<typeof useToast>;
+      const onOlder = vi.fn();
+      const onNewer = vi.fn();
 
-      renderWithProvider(
-        <TestConsumer onMount={(api) => (toastApi = api)} />,
-        { dismissOnEscape: true }
-      );
+      renderWithProvider(<TestConsumer onMount={(api) => (toastApi = api)} />);
 
       await act(async () => {
-        toastApi.info("Message 1", { duration: Infinity });
-        toastApi.info("Message 2", { duration: Infinity });
+        toastApi.info("Older", { duration: Infinity, onDismiss: onOlder });
+        toastApi.info("Newer", { duration: Infinity, onDismiss: onNewer });
       });
 
-      expect(screen.getAllByRole("status")).toHaveLength(2);
-
       await user.keyboard("{Escape}");
-
       await act(async () => {
-        vi.advanceTimersByTime(300);
+        vi.advanceTimersByTime(600);
       });
 
       await waitFor(() => {
-        expect(screen.queryAllByRole("status")).toHaveLength(0);
+        expect(screen.queryByText("Newer")).not.toBeInTheDocument();
       });
+      expect(screen.getByText("Older")).toBeInTheDocument();
+      expect(onNewer).toHaveBeenCalledTimes(1);
+      expect(onOlder).not.toHaveBeenCalled();
+    });
+
+    it("sends a second Escape to the next toast, not the one still leaving", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      let toastApi: ReturnType<typeof useToast>;
+      const onOlder = vi.fn();
+      const onNewer = vi.fn();
+
+      renderWithProvider(<TestConsumer onMount={(api) => (toastApi = api)} />);
+
+      await act(async () => {
+        toastApi.info("Older", { duration: Infinity, onDismiss: onOlder });
+        toastApi.info("Newer", { duration: Infinity, onDismiss: onNewer });
+      });
+
+      await user.keyboard("{Escape}");
+      await user.keyboard("{Escape}");
+
+      expect(onNewer).toHaveBeenCalledTimes(1);
+      expect(onOlder).toHaveBeenCalledTimes(1);
     });
 
     it("does not dismiss on Escape when dismissOnEscape is false", async () => {
@@ -539,16 +564,21 @@ describe("Toast", () => {
       let toastApi: ReturnType<typeof useToast>;
 
       renderWithProvider(
-        <TestConsumer onMount={(api) => (toastApi = api)} />
+        <TestConsumer onMount={(api) => (toastApi = api)} />,
+        { dismissOnEscape: false }
       );
 
       await act(async () => {
-        toastApi.info("Message", { duration: Infinity });
+        toastApi.info("Message 1", { duration: Infinity });
+        toastApi.info("Message 2", { duration: Infinity });
       });
 
       await user.keyboard("{Escape}");
+      await act(async () => {
+        vi.advanceTimersByTime(600);
+      });
 
-      expect(screen.getByRole("status")).toBeInTheDocument();
+      expect(screen.getAllByRole("status")).toHaveLength(2);
     });
 
     it("close button is focusable", async () => {
@@ -873,5 +903,287 @@ describe("getDefaultIcon", () => {
     const icon = getDefaultIcon("unknown" as never);
     const { container } = render(<>{icon}</>);
     expect(container.querySelector("svg")).toBeInTheDocument();
+  });
+});
+
+/**
+ * Escape closes the top layer and nothing under it.
+ *
+ * Every overlay marks the Escape it acts on — Modal and Drawer stop it,
+ * Tooltip stops it, the dropdown family prevents its default — and the toast
+ * listens last, on window, and ignores a marked one. These set
+ * `dismissOnEscape` explicitly so that each case exercised the old listener
+ * too: under the old default of off, every one of them passed without
+ * measuring anything.
+ */
+describe("Toast Escape layering", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
+  });
+
+  const Harness = ({ children }: { children?: React.ReactNode }) => (
+    <ToastProvider dismissOnEscape>
+      <TestConsumer />
+      {children}
+    </ToastProvider>
+  );
+
+  const showToast = async (user: ReturnType<typeof userEvent.setup>) => {
+    await user.click(screen.getByRole("button", { name: "Info" }));
+    expect(screen.getByText("Info message")).toBeInTheDocument();
+  };
+
+  const settle = () =>
+    act(async () => {
+      vi.advanceTimersByTime(600);
+    });
+
+  it("closes an open Modal and leaves the toast", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const onOpenChange = vi.fn();
+    const { rerender } = render(<Harness />);
+    await showToast(user);
+
+    rerender(
+      <Harness>
+        <Modal open onOpenChange={onOpenChange} disableAnimation>
+          <p>Dialog</p>
+        </Modal>
+      </Harness>
+    );
+    await user.keyboard("{Escape}");
+    await settle();
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(screen.getByText("Info message")).toBeInTheDocument();
+  });
+
+  // The toast's listener went on document before the drawer's did, and two
+  // bubble listeners on one node fire in the order they were added.
+  it("closes a Drawer opened after the toast and leaves the toast", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const onOpenChange = vi.fn();
+    const { rerender } = render(<Harness />);
+    await showToast(user);
+
+    rerender(
+      <Harness>
+        <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0}>
+          <DrawerBody>Panel</DrawerBody>
+        </Drawer>
+      </Harness>
+    );
+    await user.keyboard("{Escape}");
+    await settle();
+
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("Info message")).toBeInTheDocument();
+  });
+
+  it("does nothing to either while a Modal that declines Escape is open", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const onOpenChange = vi.fn();
+    const { rerender } = render(<Harness />);
+    await showToast(user);
+
+    rerender(
+      <Harness>
+        <Modal open onOpenChange={onOpenChange} closeOnEscape={false} disableAnimation>
+          <p>Dialog</p>
+        </Modal>
+      </Harness>
+    );
+    await user.keyboard("{Escape}");
+    await settle();
+
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByText("Info message")).toBeInTheDocument();
+  });
+
+  it("closes an open Dropdown menu and leaves the toast", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const onOpenChange = vi.fn();
+    const { rerender } = render(<Harness />);
+    await showToast(user);
+
+    rerender(
+      <Harness>
+        <Dropdown
+          aria-label="Fruit"
+          options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }]}
+          onOpenChange={onOpenChange}
+        />
+      </Harness>
+    );
+    await user.click(screen.getByRole("combobox"));
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+
+    await user.keyboard("{Escape}");
+    await settle();
+
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    expect(screen.getByText("Info message")).toBeInTheDocument();
+  });
+
+  // A handler that marks Escape without acting on it takes the key from the
+  // toast for nothing. Each surface below is tried both ways: focused with
+  // nothing to close, where the toast must go, and acting, where it must stay.
+  describe("surfaces that act on Escape only sometimes", () => {
+    const cascadingOptions = [
+      { value: "fruits", label: "Fruits" },
+      { value: "grains", label: "Grains" },
+    ];
+
+    it("dismisses the toast from a closed CascadingDropdown trigger", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const { rerender } = render(<Harness />);
+      await showToast(user);
+
+      rerender(
+        <Harness>
+          <CascadingDropdown aria-label="Category" options={cascadingOptions} />
+        </Harness>
+      );
+      const trigger = screen.getByRole("button", { name: "Category" });
+      act(() => trigger.focus());
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard("{Escape}");
+      await settle();
+
+      await waitFor(() => {
+        expect(screen.queryByText("Info message")).not.toBeInTheDocument();
+      });
+    });
+
+    it("closes an open CascadingDropdown and leaves the toast", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const { rerender } = render(<Harness />);
+      await showToast(user);
+
+      rerender(
+        <Harness>
+          <CascadingDropdown aria-label="Category" options={cascadingOptions} />
+        </Harness>
+      );
+      const trigger = screen.getByRole("button", { name: "Category" });
+      await user.click(trigger);
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+
+      await user.keyboard("{Escape}");
+      await settle();
+
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(screen.getByText("Info message")).toBeInTheDocument();
+    });
+
+    const people = [
+      { id: "1", name: "Alice" },
+      { id: "2", name: "Bob" },
+    ];
+    const peopleColumns = [{ accessorKey: "name", header: "Name" }];
+
+    // The grid's Escape resets the roving tab stop and tells the consumer no
+    // row is hovered. Nothing closes and nothing is cancelled.
+    it("dismisses the toast from a focused Table cell", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const { rerender } = render(<Harness />);
+      await showToast(user);
+
+      rerender(
+        <Harness>
+          <Table columns={peopleColumns} data={people} getRowId={(row) => row.id} />
+        </Harness>
+      );
+      const [cell] = screen.getAllByRole("gridcell");
+      act(() => cell.focus());
+
+      await user.keyboard("{Escape}");
+      await settle();
+
+      await waitFor(() => {
+        expect(screen.queryByText("Info message")).not.toBeInTheDocument();
+      });
+    });
+
+    it("cancels a Table cell edit and leaves the toast", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const onCellEdit = vi.fn();
+      const { rerender } = render(<Harness />);
+      await showToast(user);
+
+      rerender(
+        <Harness>
+          <Table
+            columns={peopleColumns}
+            data={people}
+            getRowId={(row) => row.id}
+            editable
+            onCellEdit={onCellEdit}
+          />
+        </Harness>
+      );
+      const [cell] = screen.getAllByRole("gridcell");
+      await user.dblClick(cell);
+      expect(screen.getByDisplayValue("Alice")).toHaveFocus();
+
+      await user.keyboard("{Escape}");
+      await settle();
+
+      expect(screen.queryByDisplayValue("Alice")).not.toBeInTheDocument();
+      expect(onCellEdit).not.toHaveBeenCalled();
+      expect(screen.getByText("Info message")).toBeInTheDocument();
+    });
+
+    // No closed case for the calendar's own handlers: a closed calendar is
+    // unmounted, or `display: none` under `keepMounted`, so no day cell can
+    // hold focus while it is shut. The closed case is the field's trigger.
+    it("dismisses the toast from a DatePicker whose calendar is shut", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const { rerender } = render(<Harness />);
+      await showToast(user);
+
+      rerender(
+        <Harness>
+          <DatePicker label="Date" />
+        </Harness>
+      );
+      const trigger = screen.getByRole("combobox");
+      act(() => trigger.focus());
+
+      await user.keyboard("{Escape}");
+      await settle();
+
+      await waitFor(() => {
+        expect(screen.queryByText("Info message")).not.toBeInTheDocument();
+      });
+    });
+
+    it("closes an open DatePicker calendar from a day and leaves the toast", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const { rerender } = render(<Harness />);
+      await showToast(user);
+
+      rerender(
+        <Harness>
+          <DatePicker label="Date" />
+        </Harness>
+      );
+      const trigger = screen.getByRole("combobox");
+      await user.click(trigger);
+      const [day] = await screen.findAllByRole("gridcell");
+      act(() => day.focus());
+
+      await user.keyboard("{Escape}");
+      await settle();
+
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(screen.getByText("Info message")).toBeInTheDocument();
+    });
   });
 });

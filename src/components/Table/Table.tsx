@@ -992,7 +992,9 @@ function TableInner<TData>(
           }
           break;
         case "Escape":
-          event.preventDefault();
+          // Not marked: this only resets the roving tab stop and tells the
+          // consumer no row is hovered. Nothing closes, so the key is still
+          // free for a toast or an enclosing dialog.
           handleRowHover(null);
           setFocusedCell(null);
           break;
@@ -1459,7 +1461,10 @@ function TableInner<TData>(
           onBlur={commitEdit}
           onKeyDown={(e) => {
             if (e.key === "Enter") commitEdit();
-            if (e.key === "Escape") cancelEdit();
+            if (e.key === "Escape") {
+              e.preventDefault();
+              cancelEdit();
+            }
           }}
           className={`w-full border rounded px-1 py-0.5 ${editInputClassName}`}
           data-edit-input
