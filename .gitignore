@@ -66,3 +66,7 @@ e2e/.a11y-full-report.json
 
 # Recorded e2e matrix verdicts (see scripts/run-e2e-matrix.mjs)
 e2e/.matrix-state.json
+
+# Claude Project knowledge base — a dated snapshot regenerated from REGENERATE.md; the repo is public, so only the prompt is kept
+docs/claude-project/*
+!docs/claude-project/REGENERATE.md
