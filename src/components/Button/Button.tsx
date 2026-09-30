@@ -280,7 +280,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       ...spanRest
     } = rest as ButtonAsSpanProps & { disabled?: boolean };
 
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV !== "production") {
       const hasAriaLabel =
         "aria-label" in (rest as Record<string, unknown>) ||
         "aria-labelledby" in (rest as Record<string, unknown>);

@@ -14,8 +14,9 @@ import { useEffect, useRef } from "react";
  *
  * React warns for exactly this on its own inputs, for exactly this reason.
  *
- * Guarded by `import.meta.env.DEV`, so the branch and the strings are dropped
- * from a production build.
+ * Guarded by `process.env.NODE_ENV`, which the library build leaves for the
+ * consumer's bundler: the branch and the strings stay in their development
+ * build and are dropped from their production one.
  *
  * Fires at most once per component instance, and only on that one transition:
  * not on first render either way, and not on undefined → defined, which is a
@@ -41,7 +42,7 @@ export function useControlledSwitchWarning(
   const warned = useRef(false);
 
   useEffect(() => {
-    if (!import.meta.env.DEV) return;
+    if (process.env.NODE_ENV === "production") return;
     const wasControlled = previous.current;
     previous.current = isControlled;
 

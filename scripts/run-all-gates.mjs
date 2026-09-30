@@ -130,7 +130,7 @@ const GATES = [
   // ── medium ────────────────────────────────────────────────────────────
   { id: "library-build+bundle", slow: true, provides: ["dist"],
     cmd: "npm run build:lib && node scripts/assert-bundle-size.mjs",
-    claims: { script: ["assert-bundle-size.mjs", "assert-css-names.mjs", "assert-dist-records.mjs",
+    claims: { script: ["assert-bundle-size.mjs", "assert-css-names.mjs", "assert-dev-warnings.mjs", "assert-dist-records.mjs",
       "assert-fixture-bundle.mjs", "assert-flag-bundle.mjs", "assert-packaging.mjs",
       "assert-phone-bundle.mjs", "assert-styles-bundle.mjs"] },
     pop: /(\d+) built files/ },

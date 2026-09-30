@@ -18,8 +18,9 @@ import { useEffect, useRef } from "react";
  * a fix and is not: screen readers expose it inconsistently, and axe faults it
  * on its own.
  *
- * Guarded by `import.meta.env.DEV`, so the branch and the strings are dropped
- * from a production build.
+ * Guarded by `process.env.NODE_ENV`, which the library build leaves for the
+ * consumer's bundler: the branch and the strings stay in their development
+ * build and are dropped from their production one.
  */
 export interface AccessibleNameSources {
   /** The component's own `label` prop. */
@@ -45,7 +46,7 @@ export function useAccessibleNameWarning(
   const warned = useRef(false);
 
   useEffect(() => {
-    if (!import.meta.env.DEV || named || warned.current) return;
+    if (process.env.NODE_ENV === "production" || named || warned.current) return;
     warned.current = true;
     console.warn(
       `${component}: rendered with no accessible name. Pass \`label\`, ` +

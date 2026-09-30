@@ -13,8 +13,9 @@ import { useEffect, useRef } from "react";
  *
  * Silence is the defect. This says so once per instance.
  *
- * Guarded by `import.meta.env.DEV`, so the branch and the strings are dropped
- * from a production build.
+ * Guarded by `process.env.NODE_ENV`, which the library build leaves for the
+ * consumer's bundler: the branch and the strings stay in their development
+ * build and are dropped from their production one.
  */
 export function useInertPropWarning(
   component: string,
@@ -26,7 +27,7 @@ export function useInertPropWarning(
   const warned = useRef(false);
 
   useEffect(() => {
-    if (!import.meta.env.DEV || !inert || warned.current) return;
+    if (process.env.NODE_ENV === "production" || !inert || warned.current) return;
     warned.current = true;
     console.warn(`${component}: ${message}`);
   }, [component, inert, message]);

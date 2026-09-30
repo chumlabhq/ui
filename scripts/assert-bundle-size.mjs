@@ -603,6 +603,33 @@ const LIBRARY_TOTAL_HISTORY = [
       "on both multi-select chips and Table's selected filter item swaps one " +
       "class name for another of the same length and measures no change.",
   },
+  {
+    kb: 155.44,
+    commit: "(uncommitted)",
+    date: "2026-09-30",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.81 KB, and none of it is new behaviour: it is five dev " +
+      "warnings that were always in source and never in the package. They were " +
+      "guarded by `import.meta.env.DEV`, which the library build folds to " +
+      "`false`, so every branch and message was dropped before a consumer's " +
+      "bundler saw it. The guard is now `process.env.NODE_ENV`, which the " +
+      "build leaves for the consumer, and `assert-dev-warnings` fails when a " +
+      "message is compiled out again. Exclusive moves: Button +0.14 (the " +
+      "`span` accessible-name message), Modal +0.08 (nesting limit), " +
+      "CascadingDropdown +0.06 — not its message, which shipped all along as " +
+      "the argument it passes, but `useInertPropWarning`'s body, which rollup " +
+      "bundles into its chunk as the only caller and which was an empty " +
+      "effect before. Stepper, MultiSelectDropdown, Switch, Dropdown and " +
+      "Pagination +0.01 each, not attributed further: none of them carries a " +
+      "message. The other 0.48 is the accessible-name and controlled-switch " +
+      "messages in their shared chunks, which exclusive measurement assigns " +
+      "to no entry. Measured in the vite-react19 consumer's production " +
+      "build on 2026-09-30: 4 of 5 messages and every library `console.warn` " +
+      "are dropped. CascadingDropdown's survives, because it is the literal " +
+      "argument at the call site and `useInertPropWarning`'s body, emptied " +
+      "there, is the only part a bundler can remove.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
