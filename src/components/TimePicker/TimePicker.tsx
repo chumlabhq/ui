@@ -637,6 +637,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             style={fullWidth && !unstyled ? { width: "100%" } : undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
+            data-valid={(!error && success) || undefined}
             data-open={isOpen || undefined}
           >
             <input

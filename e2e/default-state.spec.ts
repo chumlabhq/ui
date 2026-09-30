@@ -314,6 +314,68 @@ test("disabled shows itself", async ({ page }) => {
 });
 
 /**
+ * A success state has to paint where the error state does.
+ *
+ * `data-valid` was emitted by fifteen components and styled by one: every
+ * field coloured its border for an error and only its message for a success.
+ * The migration-table comparison above cannot see that — `data-valid` is
+ * present or absent, so one fixture holds no resting value to compare against,
+ * the gap `disabled shows itself` closes for `data-disabled`.
+ *
+ * Derived rather than listed: a component is held to it when its own `error`
+ * fixture paints a border in `--cl-error`. Slider and Switch colour only the
+ * message for both states, so they are compared and not required — no
+ * exemption to keep in step with the code.
+ */
+test("success paints where error does", async ({ page }) => {
+  test.setTimeout(600_000);
+  await gotoFixtureIndex(page);
+  const paths = await page.locator("[data-fixture-index] li a").evaluateAll((els) =>
+    els.map((e) => new URL((e as HTMLAnchorElement).href).pathname),
+  );
+
+  /** Elements in the fixture with a visible border in the given token. */
+  const bordersIn = async (path: string, token: string) => {
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 });
+    await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;animation:none!important}" });
+    return page.evaluate((name) => {
+      const probe = document.createElement("div");
+      probe.style.color = `var(${name})`;
+      document.body.append(probe);
+      const colour = getComputedStyle(probe).color;
+      probe.remove();
+      return [...document.querySelectorAll<HTMLElement>("[data-fixture] *")].filter((e) => {
+        const c = getComputedStyle(e);
+        return parseFloat(c.borderTopWidth) > 0 && c.borderTopStyle !== "none" && c.borderTopColor === colour;
+      }).length;
+    }, token);
+  };
+
+  const compared: string[] = [];
+  const required: string[] = [];
+  const unpainted: string[] = [];
+  for (const path of paths.filter((p) => p.endsWith("/success"))) {
+    const errorPath = path.replace(/\/success$/, "/error");
+    if (!paths.includes(errorPath)) continue;
+    const key = path.split("/")[2].replace(".", "/");
+    compared.push(key);
+    if ((await bordersIn(errorPath, "--cl-error")) === 0) continue;
+    required.push(key);
+    if ((await bordersIn(path, "--cl-success")) === 0) unpainted.push(key);
+  }
+
+  console.log(`SUCCESS_STATE compared=${compared.length} required=${required.length} unpainted=${unpainted.length}`);
+
+  // A walk that matched nothing is not a pass.
+  expect(required.length, "no success fixture whose error state paints a border was found").toBeGreaterThan(10);
+  expect(
+    unpainted,
+    "these paint a border in --cl-error for an error and none in --cl-success for a success",
+  ).toEqual([]);
+});
+
+/**
  * A highlighted option has to look highlighted.
  *
  * The five dropdowns emitted `data-highlighted` on the active option and styled

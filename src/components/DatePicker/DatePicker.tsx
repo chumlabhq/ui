@@ -877,6 +877,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             className={cn(mergedClasses.trigger)}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
+            data-valid={(!error && success) || undefined}
             data-open={isOpen || undefined}
           >
             <span id={valueId} className={mergedClasses.input}>

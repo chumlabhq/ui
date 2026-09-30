@@ -59,7 +59,7 @@ export const DEFAULT_TEXTAREA_SIZE: TextAreaSize = "md";
 export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
   root: "flex flex-col data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   control:
-    "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-border bg-cl-bg-input shadow-sm shadow-black/[0.04] dark:shadow-none focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-cl-border-input-focus data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error",
+    "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-border bg-cl-bg-input shadow-sm shadow-black/[0.04] dark:shadow-none focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-cl-border-input-focus data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
   label:
     "text-[13px] font-medium mb-1.5 block text-cl-text-chrome",
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",

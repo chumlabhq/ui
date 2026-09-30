@@ -77,6 +77,7 @@ export interface DropdownTriggerRenderProps {
   onBlur?: () => void;
   "data-disabled": true | undefined;
   "data-error": true | undefined;
+  "data-valid": true | undefined;
   "data-open": true | undefined;
   "data-placeholder": true | undefined;
   /** Whether the dropdown is currently open */

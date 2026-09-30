@@ -25,7 +25,7 @@ export const DEFAULT_RADIO_CLASSES: Required<RadioButtonClasses> = {
   // deleted in 6dd1925 without even a migration-table row, and nothing replaced
   // them: a selected radio painted a transparent circle with a white dot.
   control:
-    "shrink-0 flex items-center justify-center rounded-full border-2 bg-cl-bg-input border-cl-border-input transition-colors data-[state=checked]:bg-cl-accent data-[state=checked]:border-cl-border-input-focus data-[state=checked]:text-cl-on-accent data-[error]:border-cl-error has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent has-[:focus-visible]:ring-offset-cl-bg",
+    "shrink-0 flex items-center justify-center rounded-full border-2 bg-cl-bg-input border-cl-border-input transition-colors data-[state=checked]:bg-cl-accent data-[state=checked]:border-cl-border-input-focus data-[state=checked]:text-cl-on-accent data-[error]:border-cl-error data-[valid]:border-cl-success has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent has-[:focus-visible]:ring-offset-cl-bg",
   itemIndicator: "",
 };
 

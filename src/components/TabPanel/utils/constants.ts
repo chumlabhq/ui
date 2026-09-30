@@ -17,7 +17,7 @@ export const DEFAULT_TABPANEL_CLASSES: Required<TabPanelClasses> = {
     "relative shrink-0 inline-flex items-center gap-2 px-1 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-0 data-[state=active]:text-cl-accent data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed",
   itemText: "",
   itemIcon: "",
-  count: "px-2 py-0.5 text-xs font-semibold rounded-full",
+  count: "px-2 py-0.5 text-xs font-semibold rounded-full bg-cl-accent-bg text-cl-accent-hover",
   indicator:
     "absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent",
   content: "p-4",

@@ -567,6 +567,7 @@ const MultiSelectSearchableDropdown = forwardRef<
               onBlur: onBlurProp,
               "data-disabled": (disabled || undefined) as true | undefined,
               "data-error": (error || undefined) as true | undefined,
+              "data-valid": ((!error && success) || undefined) as true | undefined,
               "data-open": (isOpen || undefined) as true | undefined,
               isOpen,
               selectedOptions,
@@ -594,6 +595,7 @@ const MultiSelectSearchableDropdown = forwardRef<
               className={mergedClasses.trigger || undefined}
               data-disabled={disabled || undefined}
               data-error={error || undefined}
+              data-valid={(!error && success) || undefined}
               data-open={isOpen || undefined}
             >
               {/* Each chip carries its own "Remove X" button, and a name computed

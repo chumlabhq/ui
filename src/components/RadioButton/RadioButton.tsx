@@ -29,6 +29,8 @@ interface RadioGroupContextValue {
   onSelect: (value: string) => void;
   disabled?: boolean;
   error?: boolean;
+  /** `success` without `error`: the one validity state an item paints. */
+  valid?: boolean;
   size?: RadioButtonSize;
   unstyled?: boolean;
   reduceMotion?: boolean;
@@ -145,13 +147,14 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         // keyboard mid-flight, not just visually dimmed.
         disabled: disabled || loading,
         error,
+        valid: !error && success,
         size,
         unstyled,
         reduceMotion: prefersReducedMotion,
         onFocus,
         onBlur,
       }),
-      [name, selectedValue, handleSelect, disabled, loading, error, size, unstyled, prefersReducedMotion, onFocus, onBlur],
+      [name, selectedValue, handleSelect, disabled, loading, error, success, size, unstyled, prefersReducedMotion, onFocus, onBlur],
     );
 
     return (
@@ -320,6 +323,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
           data-state={isChecked ? "checked" : "unchecked"}
           data-disabled={isDisabled || undefined}
           data-error={ctx.error || undefined}
+          data-valid={ctx.valid || undefined}
         >
           <input
             type="radio"

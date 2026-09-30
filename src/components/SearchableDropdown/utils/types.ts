@@ -137,6 +137,7 @@ export interface SearchableDropdownTriggerRenderProps {
   onBlur?: () => void;
   "data-disabled"?: true;
   "data-error"?: true;
+  "data-valid"?: true;
   "data-open"?: true;
   "data-placeholder"?: true;
 }

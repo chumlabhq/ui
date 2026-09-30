@@ -503,6 +503,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       onBlur,
       "data-disabled": (disabled || undefined) as true | undefined,
       "data-error": (error || undefined) as true | undefined,
+      "data-valid": ((!error && success) || undefined) as true | undefined,
       "data-open": (isOpen || undefined) as true | undefined,
       "data-placeholder": (!selectedOption || undefined) as true | undefined,
     };

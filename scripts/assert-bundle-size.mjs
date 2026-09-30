@@ -667,6 +667,26 @@ const LIBRARY_TOTAL_HISTORY = [
       "The total moves 0.01 less than the entries sum to because it is one " +
       "gzip stream over all 80 files, not the sum of per-entry streams.",
   },
+  {
+    kb: 155.63,
+    commit: "(uncommitted)",
+    date: "2026-10-01",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.19 KB. A success state now paints the field border an " +
+      "error state does: `data-[valid]:border-cl-success` beside every " +
+      "`data-[error]:border-cl-error`, and `data-valid` emitted on the twelve " +
+      "triggers, cells and radio controls that carried `data-error` alone, so " +
+      "the class has an element to match. Exclusive moves, all class strings " +
+      "and one attribute each: RadioButton +0.03 (also a `valid` field on the " +
+      "group context), DatePicker +0.02, TimePicker +0.02, and +0.01 each for " +
+      "CascadingDropdown, Dropdown, Input, InternationalPhoneInput, " +
+      "MultiSelectDropdown, MultiSelectSearchableDropdown, OtpInput and " +
+      "TextArea. TabPanel +0.01: the count badge's default `bg-cl-accent-bg " +
+      "text-cl-accent-hover`. Those sum to 0.16; the other 0.03 is inferred to " +
+      "be SearchableDropdown's identical change, which lands in a chunk it " +
+      "shares and so under no entry — its exclusive held at 0.23.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

@@ -299,6 +299,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           "data-index": index,
           "data-disabled": disabled || undefined,
           "data-error": error || undefined,
+          "data-valid": (!error && success) || undefined,
           "data-filled": valueArray[index] ? true : undefined,
         };
       },
