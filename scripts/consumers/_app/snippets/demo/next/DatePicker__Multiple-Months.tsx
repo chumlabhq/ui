@@ -14,7 +14,7 @@ export default function DatePickerExample() {
         label="Two-month range picker"
         placeholder="Select range..."
         numberOfMonths={2}
-        showClearButton
+        clearable
         classes={
           {
             root: "",

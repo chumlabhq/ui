@@ -12,7 +12,7 @@ export default function DatePickerExample() {
           onValueChange={(dates) => setMultipleDates(dates)}
           label="Select dates"
           placeholder="Pick multiple dates..."
-          showClearButton
+          clearable
           classes={
             {
               root: "",

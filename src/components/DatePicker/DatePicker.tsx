@@ -481,10 +481,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       success = false,
       successMessage,
       loading = false,
-      clearable,
+      clearable = true,
       required = false,
       fullWidth = false,
-      showClearButton = true,
       showCalendarIcon = true,
       calendarIcon,
       clearIcon,
@@ -515,8 +514,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     ref,
   ) => {
     const dropdownZIndex = useLayer(dropdownZIndexProp);
-
-    const resolvedShowClearButton = showClearButton ?? clearable ?? true;
 
     const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
@@ -899,7 +896,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               control never took focus, and its `aria-label` was folded into the
               trigger's own name. A real button here is reachable by Tab and
               announces itself. */}
-          {resolvedShowClearButton && hasValue && !disabled && (
+          {clearable && hasValue && !disabled && (
             <button
               type="button"
               aria-label="Clear selection"

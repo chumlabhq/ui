@@ -207,11 +207,11 @@ interface BaseDatePickerProps
   success?: boolean;
   successMessage?: ReactNode;
   loading?: boolean;
+  /** Shows a clear button in the trigger when a value is set. Default: `true`. */
   clearable?: boolean;
   required?: boolean;
   fullWidth?: boolean;
 
-  showClearButton?: boolean;
   showCalendarIcon?: boolean;
 
   calendarIcon?: ReactNode;

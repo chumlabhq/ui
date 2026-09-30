@@ -263,7 +263,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               onValueChange={(range) => setRangeValue(range)}
               label="Select a range"
               placeholder="Start date – End date"
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -299,7 +299,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   value={rangeEmerald}
                   onValueChange={(range) => setRangeEmerald(range)}
                   placeholder="Pick a range..."
-                  showClearButton
+                  clearable
                   classes={{
                     ...c.datepicker,
                     trigger: `${c.datepicker.trigger} border border-cl-success focus-within:ring-cl-success/15 focus-within:border-cl-success dark:border dark:border-cl-success/30 dark:focus-within:ring-cl-success/30 dark:focus-within:border-cl-success/50`,
@@ -323,7 +323,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   value={rangeAmber}
                   onValueChange={(range) => setRangeAmber(range)}
                   placeholder="Pick a range..."
-                  showClearButton
+                  clearable
                   classes={{
                     ...c.datepicker,
                     trigger: `${c.datepicker.trigger} border border-cl-warning focus-within:ring-cl-warning/15 focus-within:border-cl-warning dark:border dark:border-cl-warning/30 dark:focus-within:ring-cl-warning/30 dark:focus-within:border-cl-warning/50`,
@@ -347,7 +347,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   value={rangeRose}
                   onValueChange={(range) => setRangeRose(range)}
                   placeholder="Pick a range..."
-                  showClearButton
+                  clearable
                   classes={{
                     ...c.datepicker,
                     trigger: `${c.datepicker.trigger} border border-cl-border-input-focus focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
@@ -377,7 +377,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   value={rangeGradient}
                   onValueChange={(range) => setRangeGradient(range)}
                   placeholder="Pick a range..."
-                  showClearButton
+                  clearable
                   classes={{
                     ...c.datepicker,
                   }}
@@ -406,7 +406,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               onValueChange={(dates) => setMultipleDates(dates)}
               label="Select dates"
               placeholder="Pick multiple dates..."
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -440,7 +440,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               label="Date range with presets"
               placeholder="Select range..."
               showPresets
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -627,7 +627,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               label="Two-month range picker"
               placeholder="Select range..."
               numberOfMonths={2}
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -838,7 +838,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
       {/* ─── Clearable ────────────────────────────────────────────────────── */}
       <Section
         title="Clearable (Unified API)"
-        description="Use the clearable prop as a unified alternative to showClearButton."
+        description="Shows the clear button in the trigger when a value is set. Defaults to true."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -918,7 +918,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               onValueChange={(date) => setControlledDate(date)}
               label="Controlled"
               placeholder="Pick a date..."
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -1037,7 +1037,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               showMarkerIndicator
               showMarkerTooltip
               showTodayIndicator
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -1091,7 +1091,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               placeholder="Pick a date..."
               showPresets
               presets={customPresets}
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -1118,7 +1118,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               placeholder="Select range..."
               showPresets
               presets={rangePresets}
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>
@@ -1194,7 +1194,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                     value={formatDate}
                     onValueChange={setFormatDate}
                     dateFormat={fmt}
-                    showClearButton
+                    clearable
                     classes={c.datepicker}
                   />
                 </div>
@@ -1342,7 +1342,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             <DatePicker
               label="Watch the log below"
               placeholder="Interact with me..."
-              showClearButton
+              clearable
               onOpenChange={(isOpen) =>
                 log(`onOpenChange: ${isOpen ? "opened" : "closed"}`)
               }
@@ -1393,7 +1393,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                     trigger: `${c.datepicker.trigger} border border-cl-border-input-focus focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
                   }}
                   showTodayIndicator
-                  showClearButton
+                  clearable
                 />
               </div>
             </DemoWrapper>
@@ -1476,7 +1476,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                     navButton: `p-2 rounded-cl-lg transition-colors text-cl-success hover:bg-cl-success/15 dark:text-cl-success dark:hover:bg-cl-success/10`,
                   }}
                   showTodayIndicator
-                  showClearButton
+                  clearable
                 />
               </div>
             </DemoWrapper>
@@ -1497,7 +1497,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   onValueChange={(range) => setClassesRange(range)}
                   placeholder="Styled presets"
                   showPresets
-                  showClearButton
+                  clearable
                   classes={{
                     ...c.datepicker,
  presetTrigger: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-all bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:hover:bg-cl-text/10`,
@@ -1528,7 +1528,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Scroll the page..."
-                  showClearButton
+                  clearable
                   classes={c.datepicker}
                 />
               </div>
@@ -1547,7 +1547,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                 <DatePicker
                   placeholder="Open me, then try scrolling..."
                   lockScroll
-                  showClearButton
+                  clearable
                   classes={c.datepicker}
                 />
               </div>
@@ -1669,7 +1669,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               todayIcon={<span className="text-sm">⏱</span>}
               showTodayButton
               showTodayIndicator
-              showClearButton
+              clearable
               classes={c.datepicker}
             />
           </div>

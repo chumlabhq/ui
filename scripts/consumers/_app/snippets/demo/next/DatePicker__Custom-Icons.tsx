@@ -14,7 +14,7 @@ export default function DatePickerExample() {
         todayIcon={<span className="text-sm">⏱</span>}
         showTodayButton
         showTodayIndicator
-        showClearButton
+        clearable
         classes={
           {
             root: "",

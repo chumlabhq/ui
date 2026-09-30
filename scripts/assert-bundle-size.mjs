@@ -650,6 +650,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "build, where `verify:consumers` now reads 0 of 5 messages in all nine " +
       "templates against 1 of 5 in the five that render this component.",
   },
+  {
+    kb: 155.44,
+    commit: "(uncommitted)",
+    date: "2026-09-30",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.04 KB, two entries and nothing else. Slider +0.07 " +
+      "exclusive, split by building the tree twice: the range's " +
+      "`data-[disabled]:opacity-50` costs 0.00 at two decimals (5.47 without " +
+      "its comment, as before), and the four-line comment saying why the " +
+      "range is a sibling the track's opacity never reached is all 0.07 — " +
+      "`build:lib` ships comments, so that prose is bytes. DatePicker -0.02: " +
+      "`showClearButton` deleted as a duplicate of `clearable`, taking its " +
+      "destructured default and the `??` chain that made `clearable` dead. " +
+      "The total moves 0.01 less than the entries sum to because it is one " +
+      "gzip stream over all 80 files, not the sum of per-entry streams.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

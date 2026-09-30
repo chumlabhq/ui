@@ -28,7 +28,7 @@ export default function DatePickerExample() {
                             }
           }
           showTodayIndicator
-          showClearButton
+          clearable
         />
       </div>
       <div className="max-w-sm">
@@ -123,7 +123,7 @@ export default function DatePickerExample() {
                             }
           }
           showTodayIndicator
-          showClearButton
+          clearable
         />
       </div>
       <div className="w-full sm:max-w-xs">
@@ -133,7 +133,7 @@ export default function DatePickerExample() {
           onValueChange={(range) => setClassesRange(range)}
           placeholder="Styled presets"
           showPresets
-          showClearButton
+          clearable
           classes={
             {
                                ...({

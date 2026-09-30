@@ -14,7 +14,7 @@ export default function DatePickerExample() {
           onValueChange={(range) => setRangeValue(range)}
           label="Select a range"
           placeholder="Start date – End date"
-          showClearButton
+          clearable
           classes={
             {
               root: "",

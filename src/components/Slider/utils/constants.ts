@@ -16,7 +16,12 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
    * that differs in both themes, which is what a groove has to do.
    */
   track: "rounded-full bg-cl-bg-track data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-  range: "rounded-full bg-cl-accent",
+  /**
+   * A sibling of the track, not its child, so the track's disabled opacity
+   * never reached it: a disabled slider dimmed its groove and thumb and kept
+   * the fill at full accent.
+   */
+  range: "rounded-full bg-cl-accent data-[disabled]:opacity-50",
   thumb:
     "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   valueText:

@@ -12,7 +12,7 @@ export default function DatePickerExample() {
         <DatePicker
           label="Watch the log below"
           placeholder="Interact with me..."
-          showClearButton
+          clearable
           onOpenChange={
             (isOpen) =>
             log(`onOpenChange: ${isOpen ? "opened" : "closed"}`)

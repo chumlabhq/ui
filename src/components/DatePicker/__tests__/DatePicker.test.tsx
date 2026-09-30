@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DatePicker } from "../index.js";
+import type { DatePickerProps } from "../index.js";
 import { formatDate } from "../utils.js";
 
 import { setReducedMotion } from "../../../test/matchMedia.js";
@@ -406,14 +407,35 @@ describe("DatePicker", () => {
   });
 
   describe("Clearable Behavior", () => {
-    it("shows clear button when a value is set and showClearButton is true", () => {
+    it("shows the clear button by default when a value is set", () => {
+      render(<DatePicker value={new Date(2025, 3, 20)} />);
+      expect(screen.getByLabelText("Clear selection")).toBeInTheDocument();
+    });
+
+    it("hides the clear button when clearable is false", () => {
+      render(<DatePicker value={new Date(2025, 3, 20)} clearable={false} />);
+      expect(
+        screen.queryByLabelText("Clear selection"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("takes clearable as its only clear-button prop", () => {
+      // `tsc --build` is the assertion: it fails if this line stops being an
+      // error. `showClearButton` was DatePicker's alone, and while it defaulted
+      // on it made `clearable` — the name every other field uses — dead.
+      // @ts-expect-error showClearButton is not a DatePicker prop
+      const props: DatePickerProps = { showClearButton: true };
+      expect(props).toBeDefined();
+    });
+
+    it("shows clear button when a value is set and clearable is true", () => {
       const date = new Date(2025, 3, 20);
-      render(<DatePicker value={date} showClearButton />);
+      render(<DatePicker value={date} clearable />);
       expect(screen.getByLabelText("Clear selection")).toBeInTheDocument();
     });
 
     it("does not show clear button when no value is set", () => {
-      render(<DatePicker value={null} showClearButton />);
+      render(<DatePicker value={null} clearable />);
       expect(
         screen.queryByLabelText("Clear selection"),
       ).not.toBeInTheDocument();
@@ -432,7 +454,7 @@ describe("DatePicker", () => {
           value={date}
           onValueChange={onValueChange}
           onClear={onClear}
-          showClearButton
+          clearable
         />,
       );
 
@@ -442,7 +464,7 @@ describe("DatePicker", () => {
 
     it("does not show clear button when disabled", () => {
       const date = new Date(2025, 3, 20);
-      render(<DatePicker value={date} disabled showClearButton />);
+      render(<DatePicker value={date} disabled clearable />);
       expect(
         screen.queryByLabelText("Clear selection"),
       ).not.toBeInTheDocument();
@@ -1321,7 +1343,7 @@ describe("DatePicker", () => {
           value={date}
           onValueChange={onValueChange}
           onClear={onClear}
-          showClearButton
+          clearable
         />,
       );
 
@@ -1345,7 +1367,7 @@ describe("DatePicker", () => {
           mode="range"
           value={range}
           onClear={onClear}
-          showClearButton
+          clearable
         />,
       );
 
@@ -1366,7 +1388,7 @@ describe("DatePicker", () => {
           mode="multiple"
           value={dates}
           onClear={onClear}
-          showClearButton
+          clearable
         />,
       );
 
@@ -1463,7 +1485,7 @@ describe("DatePicker", () => {
      * key handler can be exercised and is not how a user reaches a control.
      */
     it("is a real button outside the trigger", () => {
-      render(<DatePicker value={new Date(2025, 3, 20)} showClearButton />);
+      render(<DatePicker value={new Date(2025, 3, 20)} clearable />);
 
       const clearBtn = screen.getByLabelText("Clear selection");
       expect(clearBtn.tagName).toBe("BUTTON");
@@ -1479,7 +1501,7 @@ describe("DatePicker", () => {
           value={new Date(2025, 3, 20)}
           onValueChange={vi.fn()}
           onClear={onClear}
-          showClearButton
+          clearable
         />,
       );
 
@@ -1494,7 +1516,7 @@ describe("DatePicker", () => {
 
     it("is reachable by Tab from the trigger", async () => {
       const user = userEvent.setup();
-      render(<DatePicker value={new Date(2025, 3, 20)} showClearButton />);
+      render(<DatePicker value={new Date(2025, 3, 20)} clearable />);
 
       const trigger = screen.getByRole("combobox");
       trigger.focus();

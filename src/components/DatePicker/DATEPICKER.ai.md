@@ -55,7 +55,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` is provided. |
 | `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
 | `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
-| `clearable` / `showClearButton` | Both control the clear button. `showClearButton` takes precedence if both are set. |
+| `clearable` | Shows the clear button in the trigger when a value is set. Defaults to `true`. |
 | `open` + `onOpenChange` | Controlled open state -- both are needed together. |
 | `outsideDaysSelectable` | Only works when `showOutsideDays` is `true` (default). |
 | `dropdownPosition` | Set to `"top"` or `"bottom"`. Use `forceDropdownPosition` to prevent auto-flipping. |
@@ -134,10 +134,9 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `success` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `loading` | boolean | `false` | Shows loading state. |
-| `clearable` | boolean | — | Shows a clear button. |
+| `clearable` | boolean | `true` | Shows a clear button. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `fullWidth` | boolean | `false` | Stretches the date picker to fill its container width. |
-| `showClearButton` | boolean | `true` | Shows the clear button in the trigger. |
 | `showCalendarIcon` | boolean | `true` | Shows the calendar icon in the trigger. |
 | `calendarIcon` | object | — | React.ReactNode — Custom calendar icon. |
 | `clearIcon` | object | — | React.ReactNode — Custom clear icon. |
@@ -275,7 +274,7 @@ const [range, setRange] = useState<DateRange | null>(null);
   value={range}
   onValueChange={(r) => setRange(r)}
   placeholder="Start date - End date"
-  showClearButton
+  clearable
 />
 ```
 
@@ -289,7 +288,7 @@ const [dates, setDates] = useState<Date[] | null>(null);
   value={dates}
   onValueChange={(d) => setDates(d)}
   placeholder="Pick multiple dates..."
-  showClearButton
+  clearable
 />
 ```
 
@@ -414,7 +413,7 @@ import { fr } from "date-fns/locale";
 | Outside days not clickable | `outsideDaysSelectable` set to `false` | Set `outsideDaysSelectable={true}` |
 | Calendar flips position unexpectedly | Auto-flip behavior | Set `forceDropdownPosition={true}` |
 | Markers not visible | `showMarkerIndicator` is `false` | Set `showMarkerIndicator={true}` (it defaults to `true`) |
-| Clear button missing | `showClearButton={false}` or no value | Ensure `showClearButton` is `true` and a value is selected |
+| Clear button missing | `clearable={false}` or no value | Ensure `clearable` is `true` and a value is selected |
 | Styles wrong after overriding one slot | `classes` replaces, not merges | Include all needed classes in your override string |
 | Full control needed | Size/variant defaults still apply | Use `unstyled` for full control |
 
@@ -442,7 +441,7 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Description text | `title="With Description"` | `description` prop |
 | Success state | `title="Success State"` | `message`, `successMessage` |
 | Loading state | `title="Loading State"` | `loading` prop |
-| Clearable | `title="Clearable (Unified API)"` | `clearable` / `showClearButton` |
+| Clearable | `title="Clearable (Unified API)"` | `clearable` |
 | Disabled | `title="Disabled"` | `disabled` prop |
 | Controlled mode | `title="Controlled Mode"` | `value` + `onValueChange` |
 | Controlled open | `title="Controlled Open"` | `open` + `onOpenChange` |

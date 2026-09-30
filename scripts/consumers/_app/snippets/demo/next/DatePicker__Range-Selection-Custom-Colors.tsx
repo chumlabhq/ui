@@ -16,7 +16,7 @@ export default function DatePickerExample() {
           value={rangeEmerald}
           onValueChange={(range) => setRangeEmerald(range)}
           placeholder="Pick a range..."
-          showClearButton
+          clearable
           classes={
             {
                               ...({
@@ -44,7 +44,7 @@ export default function DatePickerExample() {
           value={rangeAmber}
           onValueChange={(range) => setRangeAmber(range)}
           placeholder="Pick a range..."
-          showClearButton
+          clearable
           classes={
             {
                               ...({
@@ -72,7 +72,7 @@ export default function DatePickerExample() {
           value={rangeRose}
           onValueChange={(range) => setRangeRose(range)}
           placeholder="Pick a range..."
-          showClearButton
+          clearable
           classes={
             {
                               ...({
@@ -106,7 +106,7 @@ export default function DatePickerExample() {
           value={rangeGradient}
           onValueChange={(range) => setRangeGradient(range)}
           placeholder="Pick a range..."
-          showClearButton
+          clearable
           classes={
             {
                               ...({

@@ -6,7 +6,7 @@ export default function DatePickerExample() {
       <div className="w-full sm:max-w-xs">
         <DatePicker
           placeholder="Scroll the page..."
-          showClearButton
+          clearable
           classes={
             {
               root: "",
@@ -29,7 +29,7 @@ export default function DatePickerExample() {
         <DatePicker
           placeholder="Open me, then try scrolling..."
           lockScroll
-          showClearButton
+          clearable
           classes={
             {
               root: "",

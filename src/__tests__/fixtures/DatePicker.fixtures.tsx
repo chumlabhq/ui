@@ -78,7 +78,7 @@ const fixtures: Fixtures<typeof DatePicker> = [
   { name: "required", props: { label: "Date", required: true } },
   {
     name: "open-no-clear",
-    props: { defaultOpen: true, value: D, showClearButton: false },
+    props: { defaultOpen: true, value: D, clearable: false },
     note: "Removes the clear control, which is one of the two buttons in the trigger.",
   },
   {

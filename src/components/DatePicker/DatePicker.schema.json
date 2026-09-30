@@ -277,7 +277,8 @@
     },
     "clearable": {
       "type": "boolean",
-      "description": "Shows a clear button."
+      "description": "Shows a clear button.",
+      "default": true
     },
     "required": {
       "type": "boolean",
@@ -288,11 +289,6 @@
       "type": "boolean",
       "description": "Stretches the date picker to fill its container width.",
       "default": false
-    },
-    "showClearButton": {
-      "type": "boolean",
-      "description": "Shows the clear button in the trigger.",
-      "default": true
     },
     "showCalendarIcon": {
       "type": "boolean",

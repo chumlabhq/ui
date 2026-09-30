@@ -12,7 +12,7 @@ export default function DatePickerExample() {
         onValueChange={(date) => setControlledDate(date)}
         label="Controlled"
         placeholder="Pick a date..."
-        showClearButton
+        clearable
         classes={
           {
             root: "",

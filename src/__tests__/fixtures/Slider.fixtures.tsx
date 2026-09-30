@@ -21,7 +21,9 @@ const fixtures: Fixtures<typeof Slider> = [
   { name: "range", props: { defaultValue: [20, 60] } },
   { name: "tooltip-always", props: { showTooltip: true, tooltipAlways: true, defaultValue: 40 } },
   { name: "with-marks", props: { marks: [{ value: 0, label: "0" }, { value: 50, label: "50" }, { value: 100, label: "100" }], defaultValue: 50 } },
-  { name: "disabled", props: { disabled: true } },
+  // A value, so the range has width. At `min` it was 0px wide, and its disabled
+  // paint was invisible to every baseline and painted gate that loads this.
+  { name: "disabled", props: { disabled: true, defaultValue: 40 } },
   { name: "error", props: { label: "Volume", error: true, errorMessage: "Too loud" } },
   { name: "success", props: { label: "Volume", success: true, successMessage: "Nice" } },
   { name: "vertical", props: { orientation: "vertical" } },

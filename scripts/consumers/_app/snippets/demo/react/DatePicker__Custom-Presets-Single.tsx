@@ -22,7 +22,7 @@ export default function DatePickerExample() {
         placeholder="Pick a date..."
         showPresets
         presets={customPresets}
-        showClearButton
+        clearable
         classes={
           {
             root: "",

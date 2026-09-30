@@ -74,7 +74,7 @@ export default function DatePickerExample() {
         showMarkerIndicator
         showMarkerTooltip
         showTodayIndicator
-        showClearButton
+        clearable
         classes={
           {
             root: "",

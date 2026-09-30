@@ -4304,7 +4304,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "clearable",
         "type": "boolean",
         "required": false,
-        "default": null,
+        "default": "true",
         "description": "Shows a clear button."
       },
       {
@@ -4320,13 +4320,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "false",
         "description": "Stretches the date picker to fill its container width."
-      },
-      {
-        "name": "showClearButton",
-        "type": "boolean",
-        "required": false,
-        "default": "true",
-        "description": "Shows the clear button in the trigger."
       },
       {
         "name": "showCalendarIcon",

@@ -45,7 +45,7 @@ export default function DatePickerExample() {
         placeholder="Select range..."
         showPresets
         presets={rangePresets}
-        showClearButton
+        clearable
         classes={
           {
             root: "",

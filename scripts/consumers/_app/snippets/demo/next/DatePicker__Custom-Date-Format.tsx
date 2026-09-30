@@ -13,7 +13,7 @@ export default function DatePickerExample() {
         value={formatDate}
         onValueChange={setFormatDate}
         dateFormat={fmt}
-        showClearButton
+        clearable
         classes={
           {
             root: "",
