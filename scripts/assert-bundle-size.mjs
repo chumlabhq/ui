@@ -630,6 +630,26 @@ const LIBRARY_TOTAL_HISTORY = [
       "argument at the call site and `useInertPropWarning`'s body, emptied " +
       "there, is the only part a bundler can remove.",
   },
+  {
+    kb: 155.4,
+    commit: "(uncommitted)",
+    date: "2026-09-30",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.04 KB, all of it CascadingDropdown (-0.03 exclusive; no " +
+      "other entry moved at two decimals). The 0.01 between those is not a " +
+      "second move: the total gzips all 80 files as one stream and the " +
+      "exclusive figure gzips only CascadingDropdown's own files, so the same " +
+      "deleted bytes compress differently in each, and each is rounded to two " +
+      "decimals on its own. `useInertPropWarning` now takes the raw " +
+      "`onLoadChildren` and `options` and does the tree walk and the message " +
+      "inside its guarded effect, so the component's `useMemo` and the " +
+      "component-name argument are gone. The message itself still ships in " +
+      "the package — it is behind the guard rather than in the call — which " +
+      "is why this is small here: the saving is in a consumer's production " +
+      "build, where `verify:consumers` now reads 0 of 5 messages in all nine " +
+      "templates against 1 of 5 in the five that render this component.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

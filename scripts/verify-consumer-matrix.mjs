@@ -49,6 +49,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { areTheTypesWrong, publint } from "./assert-packaging.mjs";
+import { expectedMessages, measure } from "./assert-dev-warnings.mjs";
 import { runtimeChecks, serve } from "./verify-consumer-runtime.mjs";
 import { RECORD, sourceFingerprint } from "./assert-ssr-record.mjs";
 
@@ -413,6 +414,68 @@ function treeShakingChecks(dir) {
 }
 
 /**
+ * What each framework's production build emits for the browser and the server.
+ *
+ * Not the whole `output` directory: the rest of `.next` is build bookkeeping —
+ * manifests, traces, generated types, the bundler's cache — not code a consumer
+ * runs. What this cannot see: `react-router7`'s server build imports
+ * `@chumlab/ui/*` from node_modules rather than bundling it, so on that server
+ * the package runs as shipped and `NODE_ENV` is resolved when the process
+ * starts, not by a bundler. Its client build is read like every other.
+ */
+const EMITTED = {
+  dist: ["dist"],
+  ".next": [".next/static", ".next/server"],
+  build: ["build/client", "build/server"],
+};
+
+/** Every dev-warning message the library writes, derived by the gate that holds dist/ to them. */
+const DEV_WARNINGS = expectedMessages().messages;
+
+/**
+ * The other half of `assert-dev-warnings`: that gate requires every warning to
+ * reach the package, this requires none of them to survive a consumer's
+ * production build. A message passed as an argument outlives the guard inside
+ * the function it is passed to — a bundler can empty that function's body but
+ * cannot drop the call's arguments — and CascadingDropdown shipped one that way.
+ *
+ * Read through the gate's own `measure`, so a message counts only as a string
+ * literal in emitted JS, never as text in a comment. `cl-s`, the marker every
+ * library element carries, is the control: a directory that emitted none of the
+ * library would pass the message check for the wrong reason. A `.mjs` chunk is
+ * a file `measure` does not read, so finding one fails rather than being
+ * skipped.
+ */
+function devWarningStrip(dir, target) {
+  const roots = (EMITTED[target.output] ?? []).map((sub) => join(dir, sub));
+  const missing = roots.filter((root) => !existsSync(root));
+  const files = roots.flatMap((root) => [...walk(root, ".js"), ...walk(root, ".cjs")]);
+  const unread = roots.flatMap((root) => walk(root, ".mjs"));
+  const marker = files.reduce((n, file) => n + (readFileSync(file, "utf8").match(/\bcl-s\b/g) ?? []).length, 0);
+  const found = DEV_WARNINGS.map(() => []);
+  for (const root of roots.filter((r) => existsSync(r))) {
+    measure(root, DEV_WARNINGS).found.forEach((f, i) => found[i].push(...[...f.esm, ...f.cjs].map((p) => join(root, p))));
+  }
+  const present = DEV_WARNINGS.map((m, i) => ({ ...m, in: found[i] })).filter((m) => m.in.length);
+  const line =
+    `${present.length} of ${DEV_WARNINGS.length} messages in ${target.name} production output ` +
+    `(cl-s ×${marker} across ${files.length} files)`;
+  return {
+    label: "dev warnings stripped",
+    ok: DEV_WARNINGS.length > 0 && missing.length === 0 && unread.length === 0 && marker > 0 && present.length === 0,
+    line,
+    output: [
+      line,
+      ...present.map((m) => `present: "${m.text}" (${m.site}) in ${m.in.map((p) => p.slice(dir.length + 1)).join(", ")}`),
+      ...missing.map((root) => `expected build output missing: ${root.slice(dir.length + 1)}`),
+      ...unread.map((file) => `.mjs chunk the check cannot read: ${file.slice(dir.length + 1)}`),
+      ...(DEV_WARNINGS.length === 0 ? ["0 messages derived from source — the derivation is broken"] : []),
+      ...(marker === 0 ? ["no cl-s marker in the scanned output — the check read no library code"] : []),
+    ].join("\n"),
+  };
+}
+
+/**
  * `showcase` is where the shared component is copied to; `output` is the build
  * directory walked afterwards. `ssr` targets must leave HTML on disk — a build
  * that emitted none rendered nothing on a server, whatever its exit code said.
@@ -666,6 +729,10 @@ async function verifyConsumer(target, tarball, into) {
       output: `${walk(output, ".css").length} stylesheet(s) under ${target.output}, ${css.length} carrying --cl-accent`,
     });
 
+    const strip = devWarningStrip(dir, target);
+    log(`  ${strip.line}`);
+    steps.push(strip);
+
     if (target.ssr) {
       const html = walk(output, ".html").filter((file) => {
         const text = readFileSync(file, "utf8");
@@ -799,7 +866,7 @@ function report(results, packaging) {
 }
 
 /**
- * Two plants, each aimed at a failure this matrix exists to catch and at
+ * Four plants, each aimed at a failure this matrix exists to catch and at
  * nothing else. A gate that has never been shown to fail is a gate nobody has
  * tested, and on this branch that has been true of three of them.
  */
@@ -891,6 +958,21 @@ async function selfCheck(tarball, into) {
       orders.length === 2
         ? orders.map((step) => `${step.label}: ${step.ok ? "still wins" : "loses"}`).join(", ")
         : `${orders.length} order(s) tested, expected 2`,
+  });
+
+  log("\n▸ plant 4: a dev-warning message left in a consumer's production build");
+  // Planted in the control's own build output rather than the package: the
+  // question is whether the check reads what a consumer shipped, and rebuilding
+  // around a planted tarball would test the bundler's stripping instead.
+  const emitted = walk(join(control.dir, "dist"), ".js");
+  if (emitted.length === 0) throw new Error("the control emitted no .js — nothing to plant in");
+  const message = DEV_WARNINGS[0];
+  writeFileSync(emitted[0], `${readFileSync(emitted[0], "utf8")}\nconsole.warn(${JSON.stringify(message.text)});\n`, "utf8");
+  const stripped = devWarningStrip(control.dir, TARGETS[0]);
+  outcomes.push({
+    plant: "a dev-warning message in a consumer's production output",
+    caught: !stripped.ok && stripped.output.includes(emitted[0].slice(control.dir.length + 1)),
+    by: stripped.output.split("\n").slice(0, 2).join(" — "),
   });
 
   log("\n══ self-check ══════════════════════════════════════════════════");

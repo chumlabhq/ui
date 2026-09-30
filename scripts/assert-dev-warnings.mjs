@@ -37,7 +37,7 @@ import ts from "typescript";
 import { readFileSync, readdirSync, statSync, existsSync, cpSync, rmSync, writeFileSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve, dirname, join, relative, basename, extname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(root, "dist");
@@ -356,5 +356,9 @@ function selfCheck() {
   console.log(`self-check OK: ${plants.length} of ${plants.length} plants caught against ${messages.length} messages`);
 }
 
-if (process.argv.includes("--self-check")) selfCheck();
-else gate();
+// The consumer matrix imports `expectedMessages` and `measure` to read a
+// consumer's production build; only a direct invocation runs the gate.
+const invoked = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (invoked && process.argv.includes("--self-check")) selfCheck();
+else if (invoked) gate();
