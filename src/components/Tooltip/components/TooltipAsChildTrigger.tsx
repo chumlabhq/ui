@@ -1,6 +1,7 @@
 import { cloneElement } from "react";
-import type { ReactElement, Ref } from "react";
+import type { ReactElement } from "react";
 import { cn } from "../../../utils/scopedCn.js";
+import { getElementRef } from "../../../utils/getElementRef.js";
 import { mergeTooltipRefs } from "../utils/helpers.js";
 
 interface TooltipAsChildTriggerProps {
@@ -34,7 +35,7 @@ export function TooltipAsChildTrigger({
   triggerClassName,
   tooltipContent,
 }: TooltipAsChildTriggerProps) {
-  const childRef = (child.props as { ref?: Ref<HTMLElement> }).ref;
+  const childRef = getElementRef<HTMLElement>(child);
 
   return (
     <>

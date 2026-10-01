@@ -729,6 +729,27 @@ const LIBRARY_TOTAL_HISTORY = [
       "either: where the gzip boundaries of the shared chunks fell. The " +
       "underline fix is demo recipes, fixtures and docs, none of which ships.",
   },
+  {
+    kb: 155.86,
+    commit: "(uncommitted)",
+    date: "2026-10-01",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.12 KB, and 80 -> 81 files. React 18 ref paths: a new " +
+      "shared `getElementRef` chunk (0.19 KB standalone at gzip -9, computed) " +
+      "that Tooltip's asChild trigger and Slot both import, and MenuItem " +
+      "wrapped in `forwardRef`. Measured against a build of ebfc46c from " +
+      "`git archive`, which reproduces 155.74 across 80 files: closures +0.09 " +
+      "to +0.12 for the nine entries that compose Tooltip or Slot — Accordion, " +
+      "Avatar, Breadcrumb, Button, CountryFlag, InternationalPhoneInput, " +
+      "Stepper, TabPanel, Tooltip — with every exclusive held, because the new " +
+      "chunk is shared. Tooltip own 4.38 -> 4.41. CascadingDropdown exclusive " +
+      "9.27 -> 9.28 and closure +0.01, the `forwardRef` wrapper. Stepper and " +
+      "CountryFlag exclusive +0.01, Accordion own -0.01 and TabPanel own " +
+      "+0.01, with no source change in any of the four: where the gzip " +
+      "boundaries of the shared chunks fell. No declared breach moved above " +
+      "its record.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

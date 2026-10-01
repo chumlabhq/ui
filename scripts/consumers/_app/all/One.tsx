@@ -1,4 +1,4 @@
-import { CANARY, ENTRIES, MOVER, NAMES, ROUTES, VARIANTS } from "./registry";
+import { CANARY, ENTRIES, MOVER, NAMES, REF_PATHS, ROUTES, VARIANTS } from "./registry";
 
 /**
  * One component, alone on a route.
@@ -18,7 +18,7 @@ export function One({ name }: { name: string }) {
     );
   }
 
-  const entry = [...ENTRIES, ...VARIANTS, CANARY, MOVER].find(
+  const entry = [...ENTRIES, ...VARIANTS, CANARY, MOVER, REF_PATHS].find(
     (candidate) => candidate.name === name,
   );
   if (!entry) return <main data-component="__unknown">{`no component named ${name}`}</main>;

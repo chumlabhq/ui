@@ -548,6 +548,123 @@ async function fire(page, affordance) {
   };
 }
 
+/** The route `RefPaths` renders on; see REF_PATHS in `_app/all/registry.tsx`. */
+const REF_PATHS = "__refpaths";
+
+/**
+ * Presses Tab until focus is on what `selector` matches, from a fresh page.
+ *
+ * Keyboard rather than `element.focus()`: Tooltip opens on keyboard focus only,
+ * and a programmatic focus is not one. Bounded, because a probe that tabs
+ * forever is a hang that reads as a slow component.
+ */
+async function tabTo(page, selector) {
+  for (let press = 0; press < 12; press += 1) {
+    await page.keyboard.press("Tab");
+    if (await page.evaluate((s) => document.activeElement?.matches(s) ?? false, selector)) return true;
+  }
+  return false;
+}
+
+/**
+ * The two ref paths React 18 and 19 disagree about, asserted on what a user
+ * would see rather than on the ref itself.
+ *
+ * A broken submenu anchor is still a submenu in the DOM — `aria-expanded` goes
+ * true and every item is there — so presence proves nothing: on React 18 it sat
+ * at 0,0 with opacity 0. The placement is the assertion: a non-empty box beside
+ * the item that opened it, faded all the way in. "Beside" allows either side,
+ * because the surface flips left when the item is near the viewport edge.
+ *
+ * For `asChild` the consumer's own ref is read, because that is what React 18
+ * dropped while the library's internal ref kept the tooltip working.
+ */
+async function refPathChecks(page, url) {
+  const ready = async () => {
+    await page.goto(url, { waitUntil: "load", timeout: 30_000 });
+    await page
+      .waitForFunction(() => Boolean(window.__refPaths), { timeout: 15_000 })
+      .catch(() => {});
+  };
+
+  await ready();
+  const trigger = `[data-component='${REF_PATHS}'] button[aria-haspopup]`;
+  let submenu = { ok: false, detail: "the CascadingDropdown trigger never took keyboard focus" };
+  if (await tabTo(page, trigger)) {
+    await page.keyboard.press("Enter");
+    const parent = page.locator("[role='menuitem'][aria-haspopup='menu']").first();
+    const opened = await parent
+      .waitFor({ state: "visible", timeout: 3000 })
+      .then(() => true, () => false);
+    if (!opened) {
+      submenu = { ok: false, detail: "the menu did not open on Enter" };
+    } else {
+      for (let press = 0; press < 4 && !(await parent.getAttribute("data-highlighted")); press += 1) {
+        await page.keyboard.press("ArrowDown");
+      }
+      await page.keyboard.press("ArrowRight");
+      const faded = await page
+        .waitForFunction(
+          () => {
+            const surface = document.querySelector("[data-cascading-submenu]");
+            return Boolean(surface) && getComputedStyle(surface).opacity === "1";
+          },
+          undefined,
+          { timeout: 2000 },
+        )
+        .then(() => true, () => false);
+      const placed = await page.evaluate(() => {
+        const surface = document.querySelector("[data-cascading-submenu]");
+        const item = document.querySelector("[role='menuitem'][aria-expanded='true']");
+        if (!surface || !item) return null;
+        const s = surface.getBoundingClientRect();
+        const i = item.getBoundingClientRect();
+        return {
+          x: Math.round(s.left),
+          y: Math.round(s.top),
+          width: Math.round(s.width),
+          height: Math.round(s.height),
+          opacity: getComputedStyle(surface).opacity,
+          beside:
+            (Math.abs(s.left - i.right) <= 16 || Math.abs(s.right - i.left) <= 16) &&
+            s.top < i.bottom &&
+            s.bottom > i.top,
+        };
+      });
+      submenu = !placed
+        ? { ok: false, detail: "no submenu surface after ArrowRight" }
+        : {
+            ok: faded && placed.width > 0 && placed.height > 0 && placed.beside,
+            detail:
+              `submenu at (${placed.x},${placed.y}) ${placed.width}x${placed.height} opacity ${placed.opacity}` +
+              (placed.beside ? ", beside its item" : ", NOT beside its item"),
+            line: `submenu placed (${placed.x},${placed.y}) opacity ${placed.opacity}`,
+          };
+    }
+  }
+
+  await ready();
+  const resolved = await page.evaluate(() => window.__refPaths ?? null);
+  const focused = await tabTo(page, "#refpaths-tip");
+  const tip = focused
+    ? await page
+        .locator("[role='tooltip']")
+        .first()
+        .waitFor({ state: "visible", timeout: 3000 })
+        .then(() => true, () => false)
+    : false;
+  const asChild = {
+    ok: Boolean(resolved?.asChildIsTarget) && tip,
+    detail:
+      `consumer ref → ${resolved ? resolved.asChild : "never reported"}` +
+      `${resolved?.asChildIsTarget ? " (the trigger)" : ""}; ` +
+      `tooltip ${tip ? "opened" : "did NOT open"} on keyboard focus`,
+    line: `asChild ref → ${resolved ? resolved.asChild : "never reported"}`,
+  };
+
+  return { submenu, asChild };
+}
+
 /**
  * One component, on its own route: render, hydration and a smoke interaction.
  * Not a second test suite — the unit and e2e tiers cover behaviour far better
@@ -831,6 +948,15 @@ export async function runtimeChecks(dir, target) {
           : "") +
         (failed.length ? `\n      ${failed.join("\n      ")}` : ""),
     });
+
+    const refs = await refPathChecks(page, `${app.url}${target.runtime.route(REF_PATHS)}`);
+    process.stdout.write(
+      `  ref paths: ${refs.submenu.line ?? refs.submenu.detail}; ${refs.asChild.line}\n`,
+    );
+    steps.push(
+      { label: "submenu placed", ok: refs.submenu.ok, output: refs.submenu.detail },
+      { label: "asChild ref", ok: refs.asChild.ok, output: refs.asChild.detail },
+    );
 
     steps.push({
       label: "no console error",

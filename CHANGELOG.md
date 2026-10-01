@@ -221,6 +221,16 @@ none is a bug fix that happened to move behaviour.
 
 ### Fixed
 
+- **Three places read refs the way only one React major passes them.** The peer range is
+  `^18.0.0 || ^19.0.0`, and React 18 keeps `ref` out of props. On 18, `CascadingDropdown`'s
+  submenu anchored to a ref that never arrived, so it opened at 0,0 and never faded in — open
+  in the DOM, invisible on screen — and `Tooltip asChild` dropped the ref you put on its
+  child. On 19, `Button`, `Accordion` and `Avatar` `asChild` read the child's ref as
+  `element.ref`, which still worked but logged a deprecation warning in development. The
+  submenu item forwards its ref now, and every cloned child's ref is read by one helper that
+  takes it from wherever the running React put it, without touching either warning. The
+  consumer matrix opens a submenu and renders `asChild` with a consumer ref on every React
+  major it runs; before this fix its React 18 app failed both.
 - **Accent text on an accent tint clears AA.** Four sites wrote `--cl-accent` on
   `--cl-accent-bg`: `Pagination`'s selected page and its selected rows-per-page option, the
   chips in `MultiSelectDropdown` and `MultiSelectSearchableDropdown`, and `Table`'s selected

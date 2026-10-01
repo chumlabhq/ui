@@ -1,6 +1,6 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useCallback } from "react";
 import { useLayer } from "../../utils/layers.js";
-import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject, Ref, RefObject } from "react";
+import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject, RefObject } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types.js";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
@@ -86,20 +86,7 @@ const SubmenuItem = memo(function SubmenuItem({
   );
 });
 
-const MenuItem = memo(function MenuItem({
-  option,
-  isFocused,
-  isSelected,
-  hasSubmenu,
-  isSubmenuOpen,
-  dropdownId,
-  index,
-  classes,
-  onHover,
-  onClick,
-  ref,
-  submenuId,
-}: {
+interface MenuItemProps {
   option: CascadingOption;
   isFocused: boolean;
   isSelected: boolean;
@@ -110,11 +97,30 @@ const MenuItem = memo(function MenuItem({
   classes: Required<CascadingDropdownClasses>;
   onHover: (option: CascadingOption, index: number) => void;
   onClick: (option: CascadingOption) => void;
-  /** The submenu anchors to this element; only the open one receives it. */
-  ref?: Ref<HTMLDivElement>;
   /** Set only while the submenu is open, so the reference always resolves. */
   submenuId?: string;
-}) {
+}
+
+/**
+ * The submenu anchors to this element; only the open item receives the ref.
+ *
+ * `forwardRef`, not a `ref` prop: React 18 never passes `ref` to a function
+ * component, so on 18 the anchor stayed null and the submenu opened at 0,0
+ * with an opacity that never reached 1.
+ */
+const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuItem({
+  option,
+  isFocused,
+  isSelected,
+  hasSubmenu,
+  isSubmenuOpen,
+  dropdownId,
+  index,
+  classes,
+  onHover,
+  onClick,
+  submenuId,
+}, ref) {
   const combinedClassName = cn(
     classes.item,
   );
@@ -145,7 +151,7 @@ const MenuItem = memo(function MenuItem({
       {hasSubmenu && <ChevronRightIcon className={classes.itemIcon || undefined} />}
     </div>
   );
-});
+}));
 
 const Submenu = memo(function Submenu({
   parent,

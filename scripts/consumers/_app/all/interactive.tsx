@@ -1,10 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";
 import { Drawer, DrawerHeader } from "@chumlab/ui/drawer";
 import { Modal } from "@chumlab/ui/modal";
 import { Table } from "@chumlab/ui/table";
 import { ToastProvider, useToast } from "@chumlab/ui/toast";
+import { Tooltip } from "@chumlab/ui/tooltip";
 
 /**
  * The consumer's own client boundary, for the three components that cannot be
@@ -123,4 +125,53 @@ export function HydrationMover() {
  */
 export function HydrationCanary() {
   return <p>{typeof window === "undefined" ? "server" : "client"}</p>;
+}
+
+const PRODUCE = [
+  {
+    value: "fruit",
+    label: "Fruit",
+    children: [
+      { value: "apple", label: "Apple" },
+      { value: "banana", label: "Banana" },
+    ],
+  },
+  { value: "vegetable", label: "Vegetable" },
+];
+
+/**
+ * The two places the library has read a ref the way only React 19 hands one
+ * over: a ref passed to a plain function component, and `child.props.ref` on a
+ * cloned element. React 18 keeps `ref` out of props in both cases, so on 18 the
+ * submenu's anchor was null — the surface opened at 0,0 and never faded in —
+ * and an `asChild` Tooltip dropped the consumer's own ref. Neither breaks a
+ * build, and the sweep never opens a submenu or renders `asChild`, so every
+ * template stayed green on both majors.
+ *
+ * The consumer ref is the real question for `asChild`, so it is a consumer's
+ * `useRef` and the harness reads what it resolved to, not what the DOM says.
+ *
+ * The width is a consumer's, and it is load-bearing: at full page width the
+ * submenu has no room on either side, so it is clamped over its own item and
+ * "beside the item" cannot be asked. That read as a failure on React 19.
+ */
+export function RefPaths() {
+  const tipRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const node = tipRef.current;
+    (window as Window & { __refPaths?: unknown }).__refPaths = {
+      asChild: node ? node.tagName : String(node),
+      asChildIsTarget: node !== null && node === document.getElementById("refpaths-tip"),
+    };
+  }, []);
+  return (
+    <div style={{ width: 320 }}>
+      <CascadingDropdown options={PRODUCE} label="Produce" />
+      <Tooltip content="Tip" asChild>
+        <button id="refpaths-tip" type="button" ref={tipRef}>
+          Tip trigger
+        </button>
+      </Tooltip>
+    </div>
+  );
 }

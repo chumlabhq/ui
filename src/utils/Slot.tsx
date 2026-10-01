@@ -3,8 +3,8 @@ import {
   cloneElement,
   type ReactNode,
   type HTMLAttributes,
-  type Ref,
 } from "react";
+import { getElementRef } from "./getElementRef.js";
 import { mergeRefs } from "./mergeRefs.js";
 import { mergeProps, getValidChild } from "./slotHelpers.js";
 
@@ -22,7 +22,7 @@ const Slot = forwardRef<HTMLElement, SlotProps>(
       return null;
     }
 
-    const childRef = (child as unknown as { ref?: Ref<HTMLElement> }).ref;
+    const childRef = getElementRef<HTMLElement>(child);
 
     return cloneElement(child, {
       ...mergeProps(slotProps, child.props as AnyProps),

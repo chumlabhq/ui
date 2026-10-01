@@ -33,6 +33,7 @@ import {
   HydrationCanary,
   HydrationMover,
   ModalDemo,
+  RefPaths,
   ResponsiveTable,
   ToastDemo,
 } from "./interactive";
@@ -281,6 +282,13 @@ export const CANARY: Entry = { name: "__canary", node: <HydrationCanary /> };
 export const MOVER: Entry = { name: "__mover", node: <HydrationMover /> };
 
 /**
+ * The ref paths React 18 and 19 disagree about, driven by keyboard in
+ * `refPathChecks` (verify-consumer-runtime.mjs). A route of its own rather than
+ * a variant: what it asserts is a ref and a placement, not a component's render.
+ */
+export const REF_PATHS: Entry = { name: "__refpaths", node: <RefPaths /> };
+
+/**
  * Every route, including the one that lists them.
  *
  * The harness reads this list off `__routes` in the running application rather
@@ -294,5 +302,6 @@ export const NAMES = [
   ...VARIANTS.map((variant) => variant.name),
   CANARY.name,
   MOVER.name,
+  REF_PATHS.name,
   ROUTES,
 ];

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createRef } from "react";
 import { Button, ButtonGroup } from "../index.js";
 
 import { setReducedMotion } from "../../../test/matchMedia.js";
@@ -335,6 +336,25 @@ describe("Button", () => {
       const link = screen.getByRole("link");
       expect(link).toHaveClass("button-class");
       expect(link).toHaveClass("link-class");
+    });
+
+    // `Slot` read the child's ref as `element.ref`, which React 19 still answers
+    // but warns about in development — where the matrix, building for
+    // production, cannot look. The React 18 half runs in the matrix.
+    it("hands the child's own ref its element, without a ref warning", () => {
+      const error = vi.spyOn(console, "error");
+      const ref = createRef<HTMLAnchorElement>();
+      render(
+        <Button asChild>
+          <a href="/test" ref={ref}>
+            Link
+          </a>
+        </Button>
+      );
+
+      expect(ref.current).toBe(screen.getByRole("link"));
+      expect(error.mock.calls.flat().join(" ")).not.toMatch(/element\.ref|`ref` is not a prop/);
+      error.mockRestore();
     });
 
     it("does not call onClick when disabled with asChild", async () => {

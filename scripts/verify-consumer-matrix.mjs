@@ -866,7 +866,7 @@ function report(results, packaging) {
 }
 
 /**
- * Four plants, each aimed at a failure this matrix exists to catch and at
+ * Six plants, each aimed at a failure this matrix exists to catch and at
  * nothing else. A gate that has never been shown to fail is a gate nobody has
  * tested, and on this branch that has been true of three of them.
  */
@@ -973,6 +973,62 @@ async function selfCheck(tarball, into) {
     plant: "a dev-warning message in a consumer's production output",
     caught: !stripped.ok && stripped.output.includes(emitted[0].slice(control.dir.length + 1)),
     by: stripped.output.split("\n").slice(0, 2).join(" — "),
+  });
+
+  // Plants 5 and 6 hold every other step to green as well as their own to red:
+  // a plant that broke the package would fail both ref checks and prove nothing
+  // about either. Both are planted on the React 19 control, where both paths
+  // work, so the only thing that can turn a check red is the plant.
+  const onlyFailed = (result, label) => {
+    const failed = result.steps.filter((step) => !step.ok).map((step) => step.label);
+    return { caught: failed.length === 1 && failed[0] === label, failed };
+  };
+
+  log("\n▸ plant 5: an asChild child's ref no longer read");
+  // The helper every cloned child's ref goes through. Returning nothing from it
+  // is "the consumer's ref is not forwarded", which is what React 18 did to
+  // Tooltip's `child.props.ref`.
+  const unforwarded = repack(tarball, into, "asChild-ref", (pkg) => {
+    const files = walk(join(pkg, "dist", "shared"), "").filter((file) =>
+      /\/getElementRef-[^/]+\.c?js$/.test(file),
+    );
+    for (const file of files) {
+      const text = readFileSync(file, "utf8");
+      const planted = text.replace(/function \w+\(\w+\)\s*\{/, (head) => `${head}return void 0;`);
+      if (planted === text) throw new Error(`no function in ${file} — nothing was planted`);
+      writeFileSync(file, planted, "utf8");
+    }
+    if (files.length === 0) throw new Error("no getElementRef chunk in dist/shared — nothing was planted");
+    log(`  planted ${files.length} chunk(s)`);
+  });
+  const asChild = onlyFailed(await verifyConsumer(TARGETS[0], unforwarded, join(into, "plant-asChild")), "asChild ref");
+  outcomes.push({
+    plant: "an asChild child's own ref not forwarded",
+    caught: asChild.caught,
+    by: `failed: ${asChild.failed.join(", ") || "nothing"}`,
+  });
+
+  log("\n▸ plant 6: the submenu's anchor ref dropped from its item");
+  // The ref the open item hands the submenu to position against — null on
+  // React 18 before MenuItem forwarded it.
+  const unanchored = repack(tarball, into, "submenu-anchor", (pkg) => {
+    let dropped = 0;
+    for (const file of walk(join(pkg, "dist", "shared"), "").filter((f) => /\/CascadingDropdown-[^/]+\.c?js$/.test(f))) {
+      const text = readFileSync(file, "utf8");
+      const planted = text.replace(/ref:\s*\w+,(\s*id:\s*`\$\{\w+\}-option-\$\{)/, "$1");
+      if (planted !== text) {
+        writeFileSync(file, planted, "utf8");
+        dropped += 1;
+      }
+    }
+    if (dropped === 0) throw new Error("no menu item ref found in a CascadingDropdown chunk — nothing was planted");
+    log(`  dropped the anchor ref in ${dropped} chunk(s)`);
+  });
+  const submenu = onlyFailed(await verifyConsumer(TARGETS[0], unanchored, join(into, "plant-submenu")), "submenu placed");
+  outcomes.push({
+    plant: "a submenu item that no longer hands its ref to the submenu",
+    caught: submenu.caught,
+    by: `failed: ${submenu.failed.join(", ") || "nothing"}`,
   });
 
   log("\n══ self-check ══════════════════════════════════════════════════");

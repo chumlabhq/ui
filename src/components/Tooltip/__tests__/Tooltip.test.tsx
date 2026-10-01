@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useState } from "react";
+import { createRef, useState } from "react";
 import { Tooltip } from "../index.js";
 import { Modal } from "../../Modal/index.js";
 
@@ -923,6 +923,23 @@ describe("Tooltip", () => {
   });
 
   describe("AsChild / TooltipAsChildTrigger", () => {
+    // React 19 only, as is this whole suite: on 18 the same child carries its
+    // ref on the element rather than in props. That half is asserted by the
+    // consumer matrix's vite-react18 template, which runs a real React 18.
+    it("hands the child's own ref its element, without a ref warning", () => {
+      const error = vi.spyOn(console, "error");
+      const ref = createRef<HTMLButtonElement>();
+      render(
+        <Tooltip content="Ref tip" asChild>
+          <button ref={ref}>Ref trigger</button>
+        </Tooltip>
+      );
+
+      expect(ref.current).toBe(screen.getByRole("button", { name: "Ref trigger" }));
+      expect(error.mock.calls.flat().join(" ")).not.toMatch(/element\.ref|`ref` is not a prop/);
+      error.mockRestore();
+    });
+
     it("merges props onto child instead of wrapping in span", () => {
       render(
         <Tooltip content="AsChild tooltip" asChild>
