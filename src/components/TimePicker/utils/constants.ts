@@ -18,7 +18,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border-cl-border",
   list: "max-h-60 overflow-y-auto",
   item:
-    "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-cl-bg-hover",
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-cl-bg-hover data-[highlighted]:bg-cl-bg-hover",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
   empty:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary",

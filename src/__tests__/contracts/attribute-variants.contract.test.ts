@@ -31,18 +31,15 @@
  */
 import { describe, expect, it } from "vitest";
 import ts from "typescript";
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
+import { readFileSync } from "node:fs";
+import { join, relative, resolve } from "node:path";
+import { componentNames, emitted, graph, parse, type Read } from "../../test/emittedAttributes.js";
 
 const ROOT = process.cwd();
 const COMPONENTS = resolve(ROOT, "src/components");
 
 /** The thirty, from the library's own index rather than a list kept here. */
-const NAMES: string[] = (
-  JSON.parse(readFileSync(resolve(ROOT, "ai/component-index.json"), "utf8")) as {
-    components: { name: string }[];
-  }
-).components.map((component) => component.name);
+const NAMES: string[] = componentNames(ROOT);
 
 export interface Variant {
   component: string;
@@ -79,132 +76,6 @@ const ARBITRARY = /\[[^\s\]]*\[data-([a-z][a-z0-9-]*)(?:=["']?([^\]"']+)["']?)?\
  */
 const STYLESHEET = /\[data-([a-z][a-z0-9-]*)(?:=["']?([^\]"']+)["']?)?\]/g;
 const isStylesheet = (text: string) => /\{[^}]*:[^}]*\}/.test(text);
-
-type Read = (file: string) => string;
-
-const parse = (file: string, read: Read) =>
-  ts.createSourceFile(file, read(file), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-
-function resolveImport(from: string, spec: string): string | null {
-  if (!spec.startsWith(".")) return null;
-  const base = resolve(dirname(from), spec).replace(/\.js$/, "");
-  for (const candidate of [`${base}.ts`, `${base}.tsx`, `${base}/index.ts`, `${base}/index.tsx`]) {
-    if (existsSync(candidate)) return candidate;
-  }
-  return null;
-}
-
-/**
- * Every non-test file a component's entry reaches. Type-only imports are not
- * followed: a type from another component's module renders nothing, and
- * following it would credit this component with everything that one emits.
- */
-function graph(entry: string, read: Read): string[] {
-  const seen = new Set<string>();
-  const stack = [entry];
-  while (stack.length) {
-    const file = stack.pop()!;
-    if (seen.has(file) || /__tests__|\.test\./.test(file)) continue;
-    seen.add(file);
-    const visit = (node: ts.Node): void => {
-      if (
-        (ts.isImportDeclaration(node) && !node.importClause?.isTypeOnly) ||
-        (ts.isExportDeclaration(node) && !node.isTypeOnly)
-      ) {
-        const spec = node.moduleSpecifier;
-        if (spec && ts.isStringLiteral(spec)) {
-          const next = resolveImport(file, spec.text);
-          if (next) stack.push(next);
-        }
-      }
-      if (
-        ts.isCallExpression(node) &&
-        node.expression.kind === ts.SyntaxKind.ImportKeyword &&
-        node.arguments[0] &&
-        ts.isStringLiteral(node.arguments[0])
-      ) {
-        const next = resolveImport(file, node.arguments[0].text);
-        if (next) stack.push(next);
-      }
-      ts.forEachChild(node, visit);
-    };
-    visit(parse(file, read));
-  }
-  return [...seen].sort();
-}
-
-/**
- * The values an initializer can produce, or `null` when that cannot be read off
- * the syntax. A boolean attribute renders as `"true"`, so `x || undefined` and
- * a bare attribute both answer `true`.
- */
-function values(expr: ts.Expression | undefined): Set<string> | null {
-  if (!expr) return new Set(["true"]);
-  if (ts.isParenthesizedExpression(expr) || ts.isAsExpression(expr)) return values(expr.expression);
-  if (ts.isStringLiteralLike(expr)) return new Set([expr.text]);
-  if (expr.kind === ts.SyntaxKind.TrueKeyword) return new Set(["true"]);
-  if (expr.kind === ts.SyntaxKind.NullKeyword) return new Set();
-  if (ts.isIdentifier(expr) && expr.text === "undefined") return new Set();
-  if (ts.isConditionalExpression(expr)) {
-    const a = values(expr.whenTrue);
-    const b = values(expr.whenFalse);
-    return a && b ? new Set([...a, ...b]) : null;
-  }
-  if (ts.isBinaryExpression(expr) && expr.operatorToken.kind === ts.SyntaxKind.BarBarToken) {
-    // `flag || undefined`: present as "true" or absent.
-    const right = values(expr.right);
-    if (right && right.size === 0) return new Set(["true"]);
-  }
-  return null;
-}
-
-/** name → the values it can take, `null` once any site is undecidable. */
-function emitted(files: string[], read: Read): Map<string, Set<string> | null> {
-  const out = new Map<string, Set<string> | null>();
-  const add = (name: string, found: Set<string> | null) => {
-    if (!out.has(name)) {
-      out.set(name, found);
-      return;
-    }
-    const prior = out.get(name)!;
-    out.set(name, prior && found ? new Set([...prior, ...found]) : null);
-  };
-  for (const file of files) {
-    const visit = (node: ts.Node): void => {
-      if (ts.isJsxAttribute(node)) {
-        const name = node.name.getText();
-        if (name.startsWith("data-")) {
-          const init = node.initializer;
-          add(
-            name,
-            !init
-              ? new Set(["true"])
-              : ts.isStringLiteral(init)
-                ? new Set([init.text])
-                : ts.isJsxExpression(init)
-                  ? values(init.expression)
-                  : null,
-          );
-        }
-      }
-      if (ts.isPropertyAssignment(node) && ts.isStringLiteral(node.name) && node.name.text.startsWith("data-")) {
-        add(node.name.text, values(node.initializer));
-      }
-      if (
-        ts.isCallExpression(node) &&
-        /setAttribute$/.test(node.expression.getText()) &&
-        node.arguments[0] &&
-        ts.isStringLiteral(node.arguments[0]) &&
-        node.arguments[0].text.startsWith("data-")
-      ) {
-        add(node.arguments[0].text, values(node.arguments[1]));
-      }
-      ts.forEachChild(node, visit);
-    };
-    visit(parse(file, read));
-  }
-  return out;
-}
 
 /** String literals through the compiler, so a comment is never read. */
 function literals(file: string, read: Read): string[] {

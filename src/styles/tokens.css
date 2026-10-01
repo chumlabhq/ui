@@ -41,7 +41,7 @@
   :root[data-theme="dark"] {
     --cl-bg: #050608;
     --cl-bg-elevated: #0a0d12;
-    --cl-bg-hover: #0a0d12;
+    --cl-bg-hover: rgba(237, 239, 244, 0.1);
     --cl-bg-panel: #0a0d12;
     --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
     --cl-bg-skeleton: rgba(237, 239, 244, 0.14);

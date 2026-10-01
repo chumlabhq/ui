@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
+import { PAINT_HELPERS } from "./_contrast-measure";
+import { componentNames, emittedBy } from "../src/test/emittedAttributes";
 
 /**
  * A state the component reports has to be a state the component shows.
@@ -376,69 +378,171 @@ test("success paints where error does", async ({ page }) => {
 });
 
 /**
- * A highlighted option has to look highlighted.
+ * A keyboard-highlighted item has to look highlighted, as painted, in both themes.
  *
  * The five dropdowns emitted `data-highlighted` on the active option and styled
  * it in none of their `item` slots, so arrowing through any of them moved a
  * highlight that painted nothing — SC 2.4.7 for the `aria-activedescendant`
  * pattern, where DOM focus never leaves the control and the attribute IS the
- * indicator. It shipped that way from 2026-09-02, when the attribute was
- * converged onto `data-highlighted`, to 2026-09-10: eight days.
+ * indicator. It shipped that way from 2026-09-02 to 2026-09-10: eight days.
  *
- * Found by planting against a visual subject that was then withdrawn for being
- * unable to fail, which is exactly why this is a conformance check and not a
- * picture. Same reason it is in e2e as the rest of this file: jsdom applies no
- * stylesheet, so `data-[highlighted]:bg-cl-bg-hover` resolves to nothing there.
+ * The check that closed it compared computed colour STRINGS — background,
+ * colour, border, outline — in one theme, over a list of five kept here. In dark
+ * a highlighted option was `rgb(10, 13, 18)` and a plain one `transparent` over
+ * a `rgb(10, 13, 18)` panel: different strings, identical pixels, green. And the
+ * list left out the four other components that highlight by keyboard, one of
+ * which, TimePicker, styled its highlight in neither theme.
+ *
+ * So now:
+ * - the population is read from the code — every component whose render emits
+ *   `data-highlighted`, through `emittedBy`, which `attribute-variants.contract`
+ *   also uses — and a component in it with no recipe below fails rather than
+ *   being skipped;
+ * - each side is composited down to what is actually behind it, with
+ *   `contrast-painted`'s own helpers, and the two results are compared;
+ * - each theme gets its own fresh load, as `contrast-painted` does.
+ *
+ * Where DOM focus moves onto the highlighted item — a roving grid or menu — the
+ * focus ring is the indicator, and `contrast-painted`'s focus pass is what judges
+ * it. Those are measured and printed here but not judged on background.
  */
-const HIGHLIGHT_COMPONENTS = [
-  "Dropdown",
-  "SearchableDropdown",
-  "MultiSelectDropdown",
-  "MultiSelectSearchableDropdown",
-  "CascadingDropdown",
-];
+const HIGHLIGHTERS = componentNames().filter((name) => emittedBy(name).has("data-highlighted"));
 
-test("a highlighted option paints differently from its siblings", async ({ page }) => {
-  test.setTimeout(300_000);
-  const unpainted: string[] = [];
-  const checked: string[] = [];
+/**
+ * How to put each one into a keyboard highlight on an item that is neither
+ * selected nor disabled, so the comparison is the highlight alone.
+ */
+const RECIPES: Record<string, { fixture: string; focus?: string; key?: string }> = {
+  Dropdown: { fixture: "open-keyboard-focus" },
+  SearchableDropdown: { fixture: "open-keyboard-focus" },
+  MultiSelectDropdown: { fixture: "open-keyboard-focus" },
+  MultiSelectSearchableDropdown: { fixture: "open-keyboard-focus" },
+  TimePicker: { fixture: "open-keyboard-focus" },
+  // Its list opens on the fixture's act; the search field drives the highlight.
+  InternationalPhoneInput: { fixture: "country-open", focus: "[data-side] input", key: "ArrowDown" },
+  // The highlighted row is not the selected one here, unlike rows-per-page-open.
+  Pagination: { fixture: "rows-per-page-open-unhighlighted" },
+  CascadingDropdown: { fixture: "open", focus: "button[aria-haspopup]", key: "ArrowDown" },
+  DatePicker: { fixture: "keyboard-focus" },
+  Table: { fixture: "default", focus: "td[tabindex='0']", key: "ArrowDown" },
+};
 
-  for (const component of HIGHLIGHT_COMPONENTS) {
-    const fixture = component === "CascadingDropdown" ? "open-submenu" : "open";
-    await gotoFixture(page, component, fixture);
-    await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
+/**
+ * The smallest contrast a highlighted item's painted background may have against
+ * a plain item's, compared unrounded.
+ *
+ * 1.08 is the faintest highlight the library ships as visible: 1.0853443:1, a
+ * `--cl-bg-hover` row over white in light, measured identically in all six
+ * components that paint one. "Differ at all" would pass 1.001:1, which nobody can
+ * see. WCAG 1.4.11's 3:1 is deliberately not applied: every highlight in the
+ * library sits under it in both themes, and adopting it is a post-0.1.0 decision.
+ */
+const HIGHLIGHT_MIN_RATIO = 1.08;
 
-    const control = page.locator("[role='listbox'],[role='combobox'],[role='menu']").first();
-    await control.waitFor({ state: "visible", timeout: 15000 }).catch(() => {});
-    await control.evaluate((n: HTMLElement) => n.focus());
-    await page.keyboard.press("ArrowDown");
-    await page.waitForTimeout(150);
+/** The two items and what each paints, measured in the page with the shared helpers. */
+const MEASURE_HIGHLIGHT = `(() => {
+${PAINT_HELPERS}
+  const hot = document.querySelector("[data-highlighted]");
+  if (!hot) return { error: "no item carries data-highlighted" };
+  const role = hot.getAttribute("role");
+  const plain = (el) =>
+    !["data-highlighted", "data-selected", "data-disabled", "data-today", "data-outside", "data-range", "data-marked"]
+      .some((a) => el.hasAttribute(a)) &&
+    el.getAttribute("aria-selected") !== "true" &&
+    el.getAttribute("aria-checked") !== "true" &&
+    el.getAttribute("aria-disabled") !== "true";
+  const cold = [...document.querySelectorAll(role ? "[role='" + role + "']" : hot.tagName)].find(
+    (el) => el !== hot && plain(el) && el.getClientRects().length > 0,
+  );
+  if (!cold) return { error: "no plain " + (role || hot.tagName) + " beside the highlighted one" };
+  const a = backgroundOf(hot), b = backgroundOf(cold);
+  if (!a || !b) return { error: "a background is an image or gradient" };
+  return {
+    highlighted: "rgb(" + a.map((v) => v.toFixed(2)).join(", ") + ")",
+    plain: "rgb(" + b.map((v) => v.toFixed(2)).join(", ") + ")",
+    ratio: ratio(a, b),
+    focusHeld: document.activeElement === hot,
+    label: (hot.textContent || "").trim().slice(0, 20),
+  };
+})()`;
 
-    const r = await page.evaluate(() => {
-      const opts = [...document.querySelectorAll<HTMLElement>("[role='option'],[role='menuitem']")];
-      const hot = opts.find((o) => o.hasAttribute("data-highlighted"));
-      if (!hot) return { marked: false, same: false };
-      const paint = (e: HTMLElement) => {
-        const c = getComputedStyle(e);
-        return [c.backgroundColor, c.color, c.borderTopColor, c.outlineColor, c.textDecorationLine].join("~");
+test("a keyboard-highlighted item paints differently from a plain one, in both themes", async ({ page }) => {
+  test.setTimeout(600_000);
+  expect(HIGHLIGHTERS.length, "no component emits data-highlighted — the derivation read nothing").toBeGreaterThan(0);
+  expect(HIGHLIGHTERS, "InternationalPhoneInput highlights through its SearchableDropdown").toContain(
+    "InternationalPhoneInput",
+  );
+
+  const noRecipe = HIGHLIGHTERS.filter((name) => !RECIPES[name]);
+  const unmeasured: string[] = [];
+  const indistinct: string[] = [];
+  const focusHeld: string[] = [];
+
+  for (const name of HIGHLIGHTERS) {
+    const recipe = RECIPES[name];
+    if (!recipe) continue;
+    for (const theme of ["dark", "light"] as const) {
+      await gotoFixture(page, name, recipe.fixture);
+      await page
+        .waitForFunction(
+          () => {
+            const main = document.querySelector("main[data-fixture-act]");
+            const act = main?.getAttribute("data-fixture-act");
+            const still = main?.getAttribute("data-fixture-still");
+            return act && act !== "pending" && still && still !== "pending" ? act : null;
+          },
+          undefined,
+          { timeout: 30000 },
+        )
+        .catch(() => null);
+      await page.addStyleTag({
+        content: "*,*::before,*::after{transition:none!important;animation:none!important}",
+      });
+      await page.evaluate((next) => {
+        const html = document.documentElement;
+        html.setAttribute("data-theme", next);
+        html.classList.toggle("dark", next === "dark");
+      }, theme);
+      if (recipe.focus && recipe.key) {
+        for (let press = 0; press < 3 && (await page.locator("[data-highlighted]").count()) === 0; press += 1) {
+          await page.locator(recipe.focus).first().focus();
+          await page.keyboard.press(recipe.key);
+        }
+      }
+
+      const m = (await page.evaluate(MEASURE_HIGHLIGHT)) as {
+        error?: string;
+        highlighted?: string;
+        plain?: string;
+        ratio?: number;
+        focusHeld?: boolean;
+        label?: string;
       };
-      // Against a sibling that is NOT highlighted, so this cannot pass because
-      // every option happens to share one colour.
-      const cold = opts.find((o) => o !== hot && !o.hasAttribute("data-highlighted") && !o.hasAttribute("data-disabled"));
-      return { marked: true, same: cold ? paint(hot) === paint(cold) : false, hadSibling: Boolean(cold) };
-    });
-
-    if (!r.marked) continue;
-    checked.push(component);
-    if (r.same) unpainted.push(component);
+      const at = `${name}/${recipe.fixture} ${theme}`;
+      if (m.error) {
+        unmeasured.push(`${at}: ${m.error}`);
+        console.log(`HIGHLIGHT ${at}: UNMEASURED — ${m.error}`);
+        continue;
+      }
+      const distinct = m.ratio! >= HIGHLIGHT_MIN_RATIO;
+      const verdict = m.focusHeld ? "focus-held (judged by contrast-painted)" : distinct ? "distinct" : "INDISTINCT";
+      console.log(
+        `HIGHLIGHT ${at}: "${m.label}" ${m.highlighted} vs plain ${m.plain} = ${m.ratio}:1 → ${verdict}`,
+      );
+      if (m.focusHeld) focusHeld.push(at);
+      else if (!distinct) indistinct.push(`${at}: ${m.highlighted} vs ${m.plain} (${m.ratio}:1)`);
+    }
   }
 
-  console.log(`HIGHLIGHT_STATE checked=${checked.length} unpainted=${unpainted.length}`);
-  expect(checked.length, "no dropdown reported a highlighted option").toBeGreaterThan(3);
+  console.log(
+    `HIGHLIGHT_PAINT ${HIGHLIGHTERS.length} components × 2 themes, ${indistinct.length} indistinct ` +
+      `(${focusHeld.length} focus-held, ${unmeasured.length} unmeasured, ${noRecipe.length} without a recipe)`,
+  );
+  expect(noRecipe, "these highlight by keyboard and nothing here says how to reach it").toEqual([]);
+  expect(unmeasured, "a recipe that no longer reaches a highlighted item measures nothing").toEqual([]);
   expect(
-    unpainted,
-    "these mark an option `data-highlighted` and paint it exactly like an " +
-      "unhighlighted sibling — with activedescendant, the attribute is the only " +
-      "indicator a keyboard user gets",
+    indistinct,
+    "these mark an item `data-highlighted` and paint it the same as a plain item — with " +
+      "aria-activedescendant, that paint is the only indicator a keyboard user gets",
   ).toEqual([]);
 });

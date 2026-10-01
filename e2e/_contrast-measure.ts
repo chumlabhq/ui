@@ -1,17 +1,14 @@
 import { PORTAL_MARK } from "./_portals.js";
 
 /**
- * The painted-text measurement, shared.
+ * Colour parsing, compositing and contrast, as page-side source.
  *
- * `contrast-painted.spec.ts` runs it over the 444 fixtures; `scan-demo-contrast.mjs`
- * runs the same source over the 37 demo pages. One copy, because the second
- * copy is the drift: the fixture sweep reported 0 findings for months while 29
- * of one demo page's 58 triggers sat at exactly 1.00:1 against the surface
- * under them, and a re-implemented scan would have been free to disagree about
- * compositing, the floors, or which elements count.
+ * Exported so that a second check judging paint — `default-state.spec.ts`'s
+ * highlighted option — composites with this code rather than a copy of it. Every
+ * function here runs inside \`page.evaluate\`, so it is a string, embedded
+ * verbatim into whatever source uses it.
  */
-const measureSource = (roots: string) => `(() => {
-  /**
+export const PAINT_HELPERS = `  /**
    * CSS Color 4. Tailwind v4 emits its own palette in oklch — text-gray-400 is
    * oklch(0.707 0.022 261.325) — and a parser that knows only rgb() and hex
    * returned null for it, so every element painted with a palette colour was
@@ -84,7 +81,20 @@ const measureSource = (roots: string) => `(() => {
     return base;
   };
 
-  const hidden = (el) => {
+`;
+
+/**
+ * The painted-text measurement, shared.
+ *
+ * `contrast-painted.spec.ts` runs it over the 444 fixtures; `scan-demo-contrast.mjs`
+ * runs the same source over the 37 demo pages. One copy, because the second
+ * copy is the drift: the fixture sweep reported 0 findings for months while 29
+ * of one demo page's 58 triggers sat at exactly 1.00:1 against the surface
+ * under them, and a re-implemented scan would have been free to disagree about
+ * compositing, the floors, or which elements count.
+ */
+const measureSource = (roots: string) => `(() => {
+${PAINT_HELPERS}  const hidden = (el) => {
     if (el.closest("[aria-hidden='true']")) return true;
     if (el.closest("[disabled],[aria-disabled='true']")) return true;
     if (!el.getClientRects().length) return true;

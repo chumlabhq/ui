@@ -106,7 +106,13 @@
   /* Surfaces */
   --cl-bg: #050608;
   --cl-bg-elevated: #0a0d12;
-  --cl-bg-hover: #0a0d12;
+  /* An overlay, the same step as --cl-bg-item-hover, rather than a surface
+     colour. As #0a0d12 it was the panel's own value: a hovered or keyboard-
+     highlighted row, a preset button and the clock face painted exactly the
+     surface under them — 28 of its 38 uses at 1:1, the other 10 at 1.04:1 on
+     the page. Measured after: 1.24:1 on a panel, 1.21:1 on the page, with
+     body text at 13.6:1 on it. Light is unchanged. */
+  --cl-bg-hover: rgba(237, 239, 244, 0.1);
   --cl-bg-panel: #0a0d12;
   --cl-bg-item-hover: rgba(237, 239, 244, 0.1);
   /* A loading placeholder, as a foreground overlay rather than a fixed grey.
