@@ -314,6 +314,54 @@ test.describe("Tooltip (fixtures)", () => {
     await expect(trigger).toBeFocused();
   });
 
+  /**
+   * Focus opens the tip only when the engine calls it `:focus-visible`, and
+   * that heuristic is the engine's, which is why these run in all three.
+   * `focus-only` puts hover out of reach, so whatever opens it opened from
+   * focus. A focus-opened tip renders within a frame of the focus event; 500ms
+   * is that with room for a loaded runner, and nothing else opens it later.
+   */
+  test("opens on Tab onto the trigger, and Escape still closes it", async ({ page }) => {
+    await gotoFixture(page, "Tooltip", "focus-only");
+    const trigger = page.getByText("Trigger").locator("xpath=ancestor-or-self::*[@tabindex][1]");
+
+    for (let i = 0; i < 8; i++) {
+      await page.keyboard.press("Tab");
+      if (await trigger.evaluate((el) => document.activeElement === el)) break;
+    }
+    await expect(trigger).toBeFocused();
+    const tooltip = page.getByRole("tooltip");
+    await expect(tooltip).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(tooltip).toHaveCount(0);
+  });
+
+  test("stays shut when a click focuses the trigger", async ({ page }) => {
+    await gotoFixture(page, "Tooltip", "focus-only");
+    const trigger = page.getByText("Trigger").locator("xpath=ancestor-or-self::*[@tabindex][1]");
+
+    await trigger.click();
+    await expect(trigger).toBeFocused();
+    await page.waitForTimeout(500);
+
+    await expect(page.getByRole("tooltip")).toHaveCount(0);
+  });
+
+  test("stays shut when a dialog closed by the mouse hands focus back to the trigger", async ({ page }) => {
+    await gotoFixture(page, "Tooltip", "restores-focus-from-modal");
+    const trigger = page.getByRole("button", { name: "Open dialog" });
+
+    await trigger.click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.getByRole("button", { name: "Close modal" }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await page.waitForTimeout(500);
+
+    await expect(page.getByRole("tooltip")).toHaveCount(0);
+  });
+
   test("keeps the tooltip anchored to the trigger through a scroll", async ({ page }) => {
     await gotoFixture(page, "Tooltip", "in-scroller");
 

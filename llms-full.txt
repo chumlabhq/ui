@@ -3658,6 +3658,8 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 > inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
 > A variant YOU pass is never dropped.
 
+A restyle that drops the box, such as an underline, must also replace the focus ring: pass `focus-within:ring-0` and mark focus on the edge you keep, or the default `focus-within:ring-2` survives the merge and the field focuses as a box.
+
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_INPUT_CLASSES` with dark mode, focus ring, rounded corners
@@ -5269,6 +5271,8 @@ DOM nesting: `root > label + description + control > (group > input…) + separa
 > your class and win in their own state, leaving your override in the DOM and
 > inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
 > A variant YOU pass is never dropped.
+
+A restyle that drops the box, such as an underline, must also replace the focus ring: pass `focus-visible:ring-0` and mark focus on the edge you keep, or the default `focus-visible:ring-2` survives the merge and each cell focuses as a box.
 
 #### Slot → visual mapping
 
@@ -7324,6 +7328,8 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 > your class and win in their own state, leaving your override in the DOM and
 > inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
 > A variant YOU pass is never dropped.
+
+A restyle that drops the box, such as an underline, must also replace the focus ring: pass `focus-within:ring-0` and mark focus on the edge you keep, or the default `focus-within:ring-2` survives the merge and the field focuses as a box.
 
 #### How class merging works
 

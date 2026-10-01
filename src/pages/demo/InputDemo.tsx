@@ -1025,7 +1025,7 @@ const InputDemo = () => {
                   ],
                   [
                     "Underline",
-                    `px-0 py-2.5 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:border-cl-border-input-focus`,
+                    `px-0 py-2.5 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:ring-0 focus-within:border-cl-border-input-focus`,
                     "Enter text...",
                     undefined,
                   ],

@@ -2,6 +2,7 @@ import { Tooltip } from "../../components/Tooltip/index.js";
 import type { Fixtures } from "./types.js";
 import { RtlBoundary } from "./_harness.js";
 import { PortalTarget } from "./_harness.js";
+import { ModalFromTooltip, NEVER } from "./_tooltip.js";
 
 const fixtures: Fixtures<typeof Tooltip> = [
   { name: "closed", props: { content: "Tip" }, children: <button>Trigger</button> },
@@ -21,6 +22,17 @@ const fixtures: Fixtures<typeof Tooltip> = [
     children: <button>Trigger</button>,
   },
   { name: "disabled", props: { content: "Tip", disabled: true }, children: <button>Trigger</button> },
+  {
+    name: "focus-only",
+    props: { content: "Tip", delayDuration: NEVER, hideDelayDuration: NEVER },
+    children: <span>Trigger</span>,
+    note: "A text trigger, so the wrapper takes the tab stop and Tab reaches it in every engine; hover is out of reach, so focus alone decides.",
+  },
+  {
+    name: "restores-focus-from-modal",
+    props: { content: "Tip" },
+    render: () => <ModalFromTooltip />,
+  },
   {
     name: "bottom",
     props: { content: "Tip", side: "bottom", delayDuration: 0 },

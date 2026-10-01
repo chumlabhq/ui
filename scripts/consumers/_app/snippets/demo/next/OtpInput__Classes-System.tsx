@@ -43,7 +43,7 @@ export default function OtpInputExample() {
             separator: "text-lg select-none text-cl-text-tertiary"
           }),
                           control: "flex items-center gap-3",
-                          input: "w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none border-cl-border-input text-cl-text focus:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus"
+                          input: "w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none focus-visible:ring-0 border-cl-border-input text-cl-text focus:border-cl-border-input-focus dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus"
                         }
         }
       />

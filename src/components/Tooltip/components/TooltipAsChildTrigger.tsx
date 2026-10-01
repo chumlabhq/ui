@@ -8,7 +8,7 @@ interface TooltipAsChildTriggerProps {
   setTriggerNode: (node: HTMLElement | null) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  onFocus: () => void;
+  onFocus: (e: React.FocusEvent) => void;
   onBlur: () => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
   onTouchStart: () => void;
@@ -57,7 +57,7 @@ export function TooltipAsChildTrigger({
           )?.(e);
         },
         onFocus: (e: React.FocusEvent) => {
-          onFocus();
+          onFocus(e);
           (
             child.props.onFocus as ((e: React.FocusEvent) => void) | undefined
           )?.(e);

@@ -43,6 +43,14 @@ const INTERACTIVE_ELEMENT_TYPES = new Set([
   "select",
 ]);
 
+const isFocusVisible = (element: EventTarget): boolean => {
+  try {
+    return (element as Element).matches(":focus-visible");
+  } catch {
+    return true;
+  }
+};
+
 /**
  * Component: Tooltip
  *
@@ -345,10 +353,19 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       setOpen(false);
     }, [setOpen]);
 
-    const handleFocus = useCallback(() => {
-      if (disabled) return;
-      setOpen(true);
-    }, [disabled, setOpen]);
+    // Focus opens the tip only when the browser would draw a focus ring for
+    // it. A click, a tap, or focus a closing dialog hands back to its trigger
+    // is not a request for the tip, and `:focus-visible` is the browser's own
+    // answer to which one this was — the same one every ring in the library
+    // is painted from. An engine without the selector keeps opening on focus.
+    const handleFocus = useCallback(
+      (event: React.FocusEvent) => {
+        if (disabled) return;
+        if (!isFocusVisible(event.target)) return;
+        setOpen(true);
+      },
+      [disabled, setOpen],
+    );
 
     const handleBlur = useCallback(() => {
       setOpen(false);

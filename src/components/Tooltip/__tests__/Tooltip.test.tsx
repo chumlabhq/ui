@@ -1,16 +1,39 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { Tooltip } from "../index.js";
+import { Modal } from "../../Modal/index.js";
+
+/**
+ * Which kind of focus the stubbed `:focus-visible` reports.
+ *
+ * jsdom's own answer cannot be used: measured inside a focus handler, the
+ * first Tab reported `:focus-visible` true and the second, onto the next
+ * button, false. So these tests declare the browser's answer and prove the
+ * wiring — that both trigger shapes ask it of the focused element. What each
+ * engine actually answers for a click, a Tab and a restored focus is measured
+ * in `e2e/tooltip.spec.ts`, in chromium, firefox and webkit.
+ */
+let focusModality: "keyboard" | "pointer" = "keyboard";
+const nativeMatches = Element.prototype.matches;
 
 describe("Tooltip", () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
+    focusModality = "keyboard";
+    vi.spyOn(Element.prototype, "matches").mockImplementation(function (this: Element, selector: string) {
+      if (selector === ":focus-visible") {
+        return focusModality === "keyboard" && this === document.activeElement;
+      }
+      return nativeMatches.call(this, selector);
+    });
   });
 
   afterEach(() => {
     vi.runOnlyPendingTimers();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   describe("Rendering", () => {
@@ -223,6 +246,109 @@ describe("Tooltip", () => {
       act(() => {
         trigger?.blur();
       });
+
+      await waitFor(() => {
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  /**
+   * Focus opens the tooltip only when the browser would draw a focus ring for
+   * it. A click, a tap or a focus handed back by a closing dialog is not a
+   * request for the tip. Hover is delayed far past the test so that anything
+   * that opens here opened from focus; which focus it was is `focusModality`.
+   */
+  describe("Focus modality", () => {
+    const NEVER = 60_000;
+
+    it.each([
+      ["the default trigger", false],
+      ["an asChild trigger", true],
+    ])("opens from Tab onto %s", async (_label, asChild) => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <Tooltip content="Keyboard tip" delayDuration={NEVER} asChild={asChild}>
+          {asChild ? <button>Trigger</button> : <span>Trigger</span>}
+        </Tooltip>
+      );
+
+      await user.tab();
+
+      expect(await screen.findByRole("tooltip")).toHaveTextContent("Keyboard tip");
+    });
+
+    it.each([
+      ["the default trigger", false],
+      ["an asChild trigger", true],
+    ])("stays shut when a click focuses %s", async (_label, asChild) => {
+      focusModality = "pointer";
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <Tooltip content="Click tip" delayDuration={NEVER} asChild={asChild}>
+          {asChild ? <button>Trigger</button> : <span>Trigger</span>}
+        </Tooltip>
+      );
+      const trigger = asChild
+        ? screen.getByRole("button", { name: "Trigger" })
+        : (screen.getByText("Trigger").closest("[tabindex]") as HTMLElement);
+
+      await user.click(trigger);
+      await act(async () => {
+        vi.advanceTimersByTime(300);
+      });
+
+      expect(trigger).toHaveFocus();
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
+    it("stays shut when a Modal closed by the mouse hands focus back to the trigger", async () => {
+      focusModality = "pointer";
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const Harness = () => {
+        const [open, setOpen] = useState(false);
+        return (
+          <>
+            {/* The pointer leaves the trigger on its way to the dialog's close
+                button, and that hide timer would otherwise close whatever the
+                restored focus opened before this reads it. */}
+            <Tooltip content="Restored tip" delayDuration={NEVER} hideDelayDuration={NEVER} asChild>
+              <button onClick={() => setOpen(true)}>Open dialog</button>
+            </Tooltip>
+            <Modal open={open} onOpenChange={setOpen} title="Dialog" disableAnimation>
+              <p>Body</p>
+            </Modal>
+          </>
+        );
+      };
+      render(<Harness />);
+      const trigger = screen.getByRole("button", { name: "Open dialog" });
+
+      await user.click(trigger);
+      await act(async () => {
+        vi.advanceTimersByTime(50);
+      });
+      await user.click(screen.getByRole("button", { name: "Close modal" }));
+      await act(async () => {
+        vi.advanceTimersByTime(300);
+      });
+
+      expect(trigger).toHaveFocus();
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
+    it("still closes a keyboard-opened tooltip on Escape", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <Tooltip content="Escape tip" delayDuration={NEVER}>
+          <span>Trigger</span>
+        </Tooltip>
+      );
+
+      await user.tab();
+      expect(await screen.findByRole("tooltip")).toBeInTheDocument();
+
+      await user.keyboard("{Escape}");
 
       await waitFor(() => {
         expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();

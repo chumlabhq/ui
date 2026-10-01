@@ -235,7 +235,20 @@ const MEASURE_NONTEXT = `(() => {
       if (outline) out.push(outline);
     }
     if (after.boxShadow !== before.boxShadow && after.boxShadow !== "none") {
-      for (const m of after.boxShadow.matchAll(/(rgba?|oklab|oklch)\\([^)]+\\)/g)) {
+      // Only a layer that is new on focus AND paints. A ring at 0px spread with
+      // no blur and no offset changes the computed string and draws nothing:
+      // \`focus-within:ring-0\` brings the ring colour in at zero width. Counting
+      // every colour in the changed string credited that as a 4.9:1 indicator
+      // on an Input whose focus showed nothing at all, and a plant that removed
+      // its only real indicator passed.
+      const layers = (value) => value === "none" ? [] : value.split(/,(?![^(]*\\))/).map((l) => l.trim());
+      const was = new Set(layers(before.boxShadow));
+      for (const layer of layers(after.boxShadow)) {
+        if (was.has(layer)) continue;
+        const m = layer.match(/(rgba?|oklab|oklch)\\([^)]+\\)/);
+        if (!m) continue;
+        const lengths = layer.replace(m[0], "").match(/-?[\\d.]+px/g) ?? [];
+        if (lengths.every((len) => parseFloat(len) === 0)) continue;
         const colour = parse(m[0]);
         if (colour && colour[3] > 0) out.push(colour);
       }

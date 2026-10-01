@@ -137,6 +137,8 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 > inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
 > A variant YOU pass is never dropped.
 
+A restyle that drops the box, such as an underline, must also replace the focus ring: pass `focus-within:ring-0` and mark focus on the edge you keep, or the default `focus-within:ring-2` survives the merge and the field focuses as a box.
+
 ### How class merging works
 
 1. **Default** — uses `DEFAULT_TEXTAREA_CLASSES` with dark mode, focus ring

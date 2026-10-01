@@ -425,3 +425,43 @@ test.describe("Input (fixtures)", () => {
     await expect(input).toHaveValue("abcdefghijklmnopqrstuvwxyz");
   });
 });
+
+/**
+ * An underline restyle focuses on its underline, not as a box.
+ *
+ * `contrast-painted` cannot see a ring that comes back: it keeps the best of
+ * the layers that changed on focus, and a returning accent ring clears 3:1 as
+ * easily as the bottom edge does. This reads the painted edges instead. The
+ * fixture's `focus-within:ring-0` beating the default `focus-within:ring-2`
+ * through `mergeSlot` is the contract under test.
+ */
+test.describe("Input underline restyle (fixtures)", () => {
+  test("marks focus on the bottom edge only", async ({ page }) => {
+    await gotoFixture(page, "Input", "underline");
+    await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important}" });
+    const input = page.getByLabel("Email");
+    const control = input.locator("xpath=ancestor::*[contains(@class,'border-b-2')][1]");
+
+    const edges = () =>
+      control.evaluate((el) => {
+        const s = getComputedStyle(el);
+        // A ring is a box-shadow with a spread; the resting shadow-sm has none.
+        const spreads = [...s.boxShadow.replace(/(rgba?|oklab|oklch)\([^)]*\)/g, "").matchAll(/(-?[\d.]+)px\s+(-?[\d.]+)px\s+(-?[\d.]+)px\s+(-?[\d.]+)px/g)]
+          .map((m) => parseFloat(m[4]));
+        return {
+          ring: Math.max(0, ...spreads),
+          widths: [s.borderTopWidth, s.borderRightWidth, s.borderBottomWidth, s.borderLeftWidth],
+          bottom: s.borderBottomColor,
+        };
+      });
+
+    const rest = await edges();
+    await page.keyboard.press("Tab");
+    await expect(input).toBeFocused();
+    const focused = await edges();
+
+    expect(focused.ring, "a ring spread on focus: the underline focused as a box").toBe(0);
+    expect(focused.widths).toEqual(["0px", "0px", "2px", "0px"]);
+    expect(focused.bottom, "focus changed nothing on the bottom edge").not.toBe(rest.bottom);
+  });
+});

@@ -27,7 +27,7 @@ export default function TextAreaExample() {
               message: "text-xs mt-1.5 flex items-center gap-1.5",
               count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
             }),
-                              control: "px-0 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:border-cl-border-input-focus dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus"
+                              control: "px-0 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:ring-0 focus-within:border-cl-border-input-focus dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus"
                             }
           }
         />

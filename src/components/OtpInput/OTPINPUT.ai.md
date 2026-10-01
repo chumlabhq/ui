@@ -119,6 +119,8 @@ DOM nesting: `root > label + description + control > (group > input…) + separa
 > inert. Pass your own variant to keep one: `"text-red-500 hover:text-red-400"`.
 > A variant YOU pass is never dropped.
 
+A restyle that drops the box, such as an underline, must also replace the focus ring: pass `focus-visible:ring-0` and mark focus on the edge you keep, or the default `focus-visible:ring-2` survives the merge and each cell focuses as a box.
+
 ### Slot → visual mapping
 
 | Slot | Element |

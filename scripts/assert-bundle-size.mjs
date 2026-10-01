@@ -711,6 +711,24 @@ const LIBRARY_TOTAL_HISTORY = [
       "per-entry streams. Table reads 15.86 against its declared 15.85 in both " +
       "builds, so that 0.01 predates this move.",
   },
+  {
+    kb: 155.74,
+    commit: "(uncommitted)",
+    date: "2026-10-01",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.03 KB. Tooltip opens on focus only when the focus is " +
+      "`:focus-visible`: an `isFocusVisible` helper and its comment, and the " +
+      "asChild trigger forwarding the focus event it used to drop. Measured " +
+      "against a build of f3a8320 from `git archive`: Tooltip's own chunk " +
+      "4.33 -> 4.38, which is shared, so it lands under no entry's exclusive " +
+      "(Tooltip held at 0.16) and shows instead as +0.03 to +0.05 in the " +
+      "closures of the seven entries that compose it — Avatar, Breadcrumb, " +
+      "Button, CountryFlag, InternationalPhoneInput, Stepper, TabPanel. " +
+      "Stepper and CountryFlag exclusive -0.01 each, with no source change in " +
+      "either: where the gzip boundaries of the shared chunks fell. The " +
+      "underline fix is demo recipes, fixtures and docs, none of which ships.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

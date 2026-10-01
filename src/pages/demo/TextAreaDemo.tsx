@@ -865,7 +865,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    control: `px-0 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:border-cl-border-input-focus dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
+                    control: `px-0 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:ring-0 focus-within:border-cl-border-input-focus dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
                   }}
                 />
               </div>
