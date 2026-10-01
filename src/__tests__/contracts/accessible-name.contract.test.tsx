@@ -22,10 +22,10 @@
  * exists for, so a development warning satisfies this contract.
  */
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
@@ -195,6 +195,7 @@ describe("accessible name contract", () => {
     if (!fixtures.length) continue;
 
     it(`${name} names every role that cannot name itself`, async () => {
+      const session = fixtureSession();
       const missing: string[] = [];
       for (const fixture of fixtures) {
         // The warning is the escape hatch, so it has to be observed rather than
@@ -207,10 +208,10 @@ describe("accessible name contract", () => {
             {fixture.children as React.ReactNode}
           </Component>
         );
-        const { container } = render(
+        const { container } = session.render(
           (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
         );
-        await applyAct(fixture, container);
+        await session.act(fixture, container);
 
         const warned = warn.mock.calls.some((call) =>
           String(call[0]).includes("no accessible name"),
@@ -220,7 +221,7 @@ describe("accessible name contract", () => {
           for (const element of unnamed(container)) missing.push(`${fixture.name}: ${element}`);
         }
         warn.mockRestore();
-        cleanup();
+        session.unmount();
       }
       expect(
         missing,

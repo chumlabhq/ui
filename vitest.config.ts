@@ -33,7 +33,9 @@ export default defineConfig({
           name: "contracts",
           globals: true,
           environment: "jsdom",
-          setupFiles: ["./src/test/setup.ts"],
+          // The second file tracks every lazy load so a fixture's act can wait
+          // for the component's own pending loads; see src/test/lazyLoads.ts.
+          setupFiles: ["./src/test/setup.ts", "./src/test/setup.contracts.ts"],
           include: [CONTRACTS],
           isolate: true,
           // These sweeps render every fixture of every component, and the

@@ -21,6 +21,7 @@ import { Slider } from "../../components/Slider/index.js";
 import { ResizablePanel } from "../../components/ResizablePanel/index.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);
@@ -71,8 +72,9 @@ describe("dragging alternatives contract", () => {
     });
 
     it("takes a coarser step with Shift", () => {
+      const session = fixtureSession();
       const onColumnSizingChange = vi.fn();
-      render(
+      session.render(
         <Table
           columns={COLUMNS}
           data={DATA}
@@ -85,9 +87,9 @@ describe("dragging alternatives contract", () => {
 
       fireEvent.keyDown(handle, { key: "ArrowRight" });
       const fine = Object.values(onColumnSizingChange.mock.calls.at(-1)![0])[0] as number;
-      cleanup();
+      session.unmount();
 
-      render(
+      session.render(
         <Table
           columns={COLUMNS}
           data={DATA}

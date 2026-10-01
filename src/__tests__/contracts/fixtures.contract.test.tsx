@@ -19,10 +19,10 @@
  * ADR 002 R7/R8 retires it in the vocabulary phase.
  */
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import unrenderable from "../../../docs/adr/002-unrenderable-keys.json";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
@@ -42,18 +42,19 @@ const tokensFrom = async (
   fixture: ReturnType<typeof fixturesFor>[number],
   overrides: Record<string, unknown>,
 ) => {
+  const session = fixtureSession();
   const element = (
     <Component {...fixture.props} classes={overrides}>
       {fixture.children as React.ReactNode}
     </Component>
   );
-  const { container } = render(
+  const { container } = session.render(
     (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
   );
-  await applyAct(fixture, container);
+  await session.act(fixture, container);
   // Portalled content lives outside `container`; read the whole document.
   const html = document.body.innerHTML;
-  cleanup();
+  session.unmount();
   return html;
 };
 

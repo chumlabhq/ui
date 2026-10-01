@@ -18,10 +18,10 @@
  * a bare render happened to produce.
  */
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+
 import { COMPONENTS, classTokens } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
 
 /**
@@ -58,11 +58,12 @@ describe("unstyled contract", () => {
     );
 
     it("keeps structural utilities that the styled render puts in the DOM", async () => {
+      const session = fixtureSession();
       const styled = new Set<string>();
       const unstyled = new Set<string>();
       for (const f of fixtures) {
         for (const [target, on] of [[styled, false], [unstyled, true]] as const) {
-          const { container } = render(
+          const { container } = session.render(
             (f.wrap ? f.wrap(
               <Component {...props} {...f.props} unstyled={on}>
               {f.children as React.ReactNode}
@@ -73,9 +74,9 @@ describe("unstyled contract", () => {
             </Component>
             )) as React.ReactElement,
           );
-          await applyAct(f, container);
+          await session.act(f, container);
           for (const t of classTokens(document.body)) target.add(t);
-          cleanup();
+          session.unmount();
         }
       }
 
@@ -93,11 +94,12 @@ describe("unstyled contract", () => {
     });
 
     it("drops decorative utilities", async () => {
+      const session = fixtureSession();
       const styled = new Set<string>();
       const unstyled = new Set<string>();
       for (const f of fixtures) {
         for (const [target, on] of [[styled, false], [unstyled, true]] as const) {
-          const { container } = render(
+          const { container } = session.render(
             (f.wrap ? f.wrap(
               <Component {...props} {...f.props} unstyled={on}>
               {f.children as React.ReactNode}
@@ -108,9 +110,9 @@ describe("unstyled contract", () => {
             </Component>
             )) as React.ReactElement,
           );
-          await applyAct(f, container);
+          await session.act(f, container);
           for (const t of classTokens(document.body)) target.add(t);
-          cleanup();
+          session.unmount();
         }
       }
 

@@ -12,10 +12,10 @@
  * landing on two elements is one key owning two boxes.
  */
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
 
@@ -91,6 +91,7 @@ describe("key uniqueness contract", () => {
 
   describe.each(candidates.map((c) => [c.name, c] as const))("%s", (name, entry) => {
     it("applies no key to two different elements", async () => {
+      const session = fixtureSession();
       const keys = paths(entry.defaults!);
       const overrides: Record<string, unknown> = {};
       for (const k of keys) setPath(overrides, k, `clu-${k.replace(/\./g, "-")}`);
@@ -102,10 +103,10 @@ describe("key uniqueness contract", () => {
             {f.children as React.ReactNode}
           </entry.Component>
         );
-        const { container } = render(
+        const { container } = session.render(
           (f.wrap ? f.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
         );
-        await applyAct(f, container);
+        await session.act(f, container);
 
         for (const k of keys) {
           const token = `clu-${k.replace(/\./g, "-")}`;
@@ -118,7 +119,7 @@ describe("key uniqueness contract", () => {
           const nested = hits.some((el) => hits.some((other) => other !== el && other.contains(el)));
           if (nested) doubled.set(k, Math.max(doubled.get(k) ?? 0, hits.length));
         }
-        cleanup();
+        session.unmount();
       }
 
       const offenders = [...doubled.entries()]

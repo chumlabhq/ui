@@ -27,12 +27,12 @@
  *      carries no information and would pass a presence-only check
  */
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import { SELECTOR } from "./partSelectors.js";
 
@@ -68,6 +68,7 @@ const MESSAGE_COMPONENTS = [
 
 /** Every attribute value seen on any element matching `part`, across all fixtures. */
 const collect = async (componentName: string, part: string, attribute: string) => {
+  const session = fixtureSession();
   const entry = COMPONENTS.find((c) => c.name === componentName);
   if (!entry) return { seen: new Set<string>(), absentSomewhere: false, fixtures: 0 };
   const selector = SELECTOR[part] ?? "*";
@@ -81,10 +82,10 @@ const collect = async (componentName: string, part: string, attribute: string) =
         {f.children as React.ReactNode}
       </entry.Component>
     );
-    const { container } = render(
+    const { container } = session.render(
       (f.wrap ? f.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
     );
-    await applyAct(f, container);
+    await session.act(f, container);
     fixtures += 1;
 
     const nodes = Array.from(document.body.querySelectorAll(selector));
@@ -97,7 +98,7 @@ const collect = async (componentName: string, part: string, attribute: string) =
       // per fixture asked a weaker question and passed things it should not.
       else absentSomewhere = true;
     }
-    cleanup();
+    session.unmount();
   }
   return { seen, absentSomewhere, fixtures };
 };
@@ -122,13 +123,14 @@ describe("state attributes contract", () => {
       </ul>
     );
     const scan = (Node: () => React.ReactElement, attribute: string) => {
-      render(<Node />);
+      const session = fixtureSession();
+      session.render(<Node />);
       const seen = new Set<string>();
       for (const n of Array.from(document.body.querySelectorAll(SELECTOR["item"]))) {
         const v = n.getAttribute(attribute);
         if (v !== null) seen.add(v);
       }
-      cleanup();
+      session.unmount();
       return seen;
     };
 
@@ -147,16 +149,17 @@ describe("state attributes contract", () => {
     });
 
     it("catches an attribute that is always on, which carries no state", () => {
+      const session = fixtureSession();
       const AlwaysOn = () => (
         <ul>
           <li role="option" data-selected="true">a</li>
           <li role="option" data-selected="true">b</li>
         </ul>
       );
-      render(<AlwaysOn />);
+      session.render(<AlwaysOn />);
       const nodes = Array.from(document.body.querySelectorAll(SELECTOR["item"]));
       const absentSomewhere = nodes.some((n) => n.getAttribute("data-selected") === null);
-      cleanup();
+      session.unmount();
       expect(absentSomewhere).toBe(false);
     });
   });
@@ -173,6 +176,7 @@ describe("state attributes contract", () => {
    */
   describe.each(MESSAGE_COMPONENTS)("%s message", (name) => {
     it("renders one validity state, never both", async () => {
+      const session = fixtureSession();
       const entry = COMPONENTS.find((c) => c.name === name);
       if (!entry) throw new Error(`${name} is not in the registry`);
       const base = fixturesFor(name).find((f) => f.name === "error");
@@ -191,7 +195,7 @@ describe("state attributes contract", () => {
           {base.children as React.ReactNode}
         </Component>
       );
-      render(
+      session.render(
         (base.wrap ? base.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
       );
 
@@ -210,7 +214,7 @@ describe("state attributes contract", () => {
         Array.from(valid).map((el) => el.tagName.toLowerCase()),
         `${name} reports valid somewhere in the tree while showing an error`,
       ).toEqual([]);
-      cleanup();
+      session.unmount();
     });
   });
 

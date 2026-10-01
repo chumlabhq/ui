@@ -224,7 +224,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
     content: "w-72 border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border-cl-border",
     searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-border",
     searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent rounded-cl-sm",
-    item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-item-hover data-[focused]:bg-cl-bg-item-hover text-cl-text-chrome",
+    item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-item-hover data-[highlighted]:bg-cl-bg-hover text-cl-text-chrome",
     list: "max-h-60 overflow-y-auto",
     icon: "w-4 h-4 shrink-0 transition-transform duration-200",
     itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",

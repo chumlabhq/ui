@@ -13,10 +13,10 @@
  * required to stop when it is not.
  */
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import { isMotion } from "../../utils/classLayers.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import waivers from "../../../docs/adr/002-unrenderable-keys.json";
@@ -65,10 +65,11 @@ const tokensUnder = async (
   reduced: boolean,
   extraProps: Record<string, unknown> = {},
 ) => {
+  const session = fixtureSession();
   setReducedMotion(reduced);
   const seen = new Set<string>();
   for (const f of fixtures) {
-    const { container } = render(
+    const { container } = session.render(
       (f.wrap ? f.wrap(
         <Component {...props} {...f.props} {...extraProps}>
         {f.children as React.ReactNode}
@@ -79,9 +80,9 @@ const tokensUnder = async (
       </Component>
       )) as React.ReactElement,
     );
-    await applyAct(f, container);
+    await session.act(f, container);
     for (const token of motionOnElements(document.body)) seen.add(token);
-    cleanup();
+    session.unmount();
   }
   return seen;
 };

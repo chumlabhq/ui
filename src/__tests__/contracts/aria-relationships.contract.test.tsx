@@ -11,10 +11,10 @@
  * appears in one state is still checked.
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
 
@@ -56,20 +56,6 @@ const danglingRefs = (): string[] => {
   }
   return bad;
 };
-
-const renderFixture = async (
-  Component: React.ComponentType<Record<string, unknown>>,
-  fixture: ReturnType<typeof fixturesFor>[number],
-) => {
-  const element = (
-    <Component {...fixture.props}>{fixture.children as React.ReactNode}</Component>
-  );
-  const { container } = render(
-    (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
-  );
-  await applyAct(fixture, container);
-};
-
 const withFixtures = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 
 describe("aria relationships contract", () => {
@@ -125,14 +111,15 @@ describe("aria relationships contract", () => {
 
   for (const component of withFixtures) {
     it(`${component.name} points every ARIA relationship at a real element`, async () => {
+      const session = fixtureSession();
       const bad: string[] = [];
       for (const fixture of fixturesFor(component.name)) {
-        await renderFixture(
+        await session.mountFixture(
           component.Component as React.ComponentType<Record<string, unknown>>,
           fixture,
         );
         bad.push(...danglingRefs().map((b) => `${fixture.name}: ${b}`));
-        cleanup();
+        session.unmount();
       }
       expect(bad, "a dangling ARIA reference names nothing").toEqual([]);
     });

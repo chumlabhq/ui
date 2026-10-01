@@ -23,10 +23,10 @@
  * nothing left to get wrong.
  */
 import { describe, expect, it, beforeEach, vi } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 
 import { twMerge } from "tailwind-merge";
 import { readFileSync, readdirSync } from "node:fs";
@@ -117,6 +117,7 @@ describe("classes override contract", () => {
       );
 
       const renderWithOverride = async (key: string) => {
+        const session = fixtureSession();
         const seen: { cls: Set<string> }[] = [];
         for (const f of fixtures) {
           const element = (
@@ -124,14 +125,14 @@ describe("classes override contract", () => {
               {f.children as React.ReactNode}
             </Component>
           );
-          const { container } = render(
+          const { container } = session.render(
             (f.wrap ? f.wrap(element) : element) as React.ReactElement,
           );
-          await applyAct(f, container);
+          await session.act(f, container);
           for (const el of document.body.querySelectorAll(`.${SENTINEL}`)) {
             seen.push({ cls: new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean)) });
           }
-          cleanup();
+          session.unmount();
         }
         return seen;
       };
@@ -165,6 +166,7 @@ describe("classes override contract", () => {
         // Two candidates per family, so the value chosen always differs from
         // the library's own — `p-0` against a default of `p-0` asserts both
         // that it is present and that it is absent.
+        const session = fixtureSession();
         const CONFLICTS: [RegExp, string[]][] = [
           [/^cursor-/, ["cursor-default", "cursor-help"]],
           [/^rounded(-|$)/, ["rounded-full", "rounded-none"]],
@@ -188,10 +190,10 @@ describe("classes override contract", () => {
                 {f.children as React.ReactNode}
               </Component>
             );
-            const { container } = render(
+            const { container } = session.render(
               (f.wrap ? f.wrap(element) : element) as React.ReactElement,
             );
-            await applyAct(f, container);
+            await session.act(f, container);
             for (const el of document.body.querySelectorAll(`.${SENTINEL}`)) {
               const cls = new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean));
               covered += 1;
@@ -199,7 +201,7 @@ describe("classes override contract", () => {
                 lost.push(`${key}: wanted ${mine} to beat ${theirs}`);
               }
             }
-            cleanup();
+            session.unmount();
           }
         }
 
@@ -234,12 +236,13 @@ describe("classes override contract", () => {
     );
 
     const composesUnderOverride = (C: typeof Replacing) => {
-      const { container } = render(<C classes={{ root: "ovr-sentinel" }} />);
+      const session = fixtureSession();
+      const { container } = session.render(<C classes={{ root: "ovr-sentinel" }} />);
       const el = container.querySelector(".ovr-sentinel");
       if (!el) return null; // the override never reached the DOM
       const cls = new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean));
       const composed = DEFAULTS.split(" ").some((t) => cls.has(t));
-      cleanup();
+      session.unmount();
       return composed;
     };
 
@@ -334,6 +337,7 @@ describe("classes override contract", () => {
     const collides = (utility: string, probe: string) => twMerge(utility, probe) === probe;
 
     it("lets a consumer's plain utility beat a variant-scoped default", async () => {
+      const session = fixtureSession();
       const defeated: string[] = [];
       let covered = 0;
 
@@ -352,17 +356,17 @@ describe("classes override contract", () => {
                 {f.children as React.ReactNode}
               </Component>
             );
-            const { container } = render(
+            const { container } = session.render(
               (f.wrap ? f.wrap(element) : element) as React.ReactElement,
             );
-            await applyAct(f, container);
+            await session.act(f, container);
             for (const el of document.body.querySelectorAll(`.${SENTINEL}`)) {
               const onElement = (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
               if (onElement.includes(token)) {
                 defeated.push(`${key}: \`${token}\` survives a consumer's \`${probe}\``);
               }
             }
-            cleanup();
+            session.unmount();
           }
         }
       }

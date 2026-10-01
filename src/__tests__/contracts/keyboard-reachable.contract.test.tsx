@@ -15,10 +15,10 @@
  * rule is per group — exactly one member tabbable — rather than per element.
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
 
@@ -129,20 +129,6 @@ const unreachable = (): string[] => {
   }
   return bad;
 };
-
-const renderFixture = async (
-  Component: React.ComponentType<Record<string, unknown>>,
-  fixture: ReturnType<typeof fixturesFor>[number],
-) => {
-  const element = (
-    <Component {...fixture.props}>{fixture.children as React.ReactNode}</Component>
-  );
-  const { container } = render(
-    (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
-  );
-  await applyAct(fixture, container);
-};
-
 const withFixtures = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 
 
@@ -290,16 +276,17 @@ describe("keyboard reachability contract", () => {
    */
   for (const component of withFixtures) {
     it(`${component.name} keeps its controls reachable and clickable`, async () => {
+      const session = fixtureSession();
       const unreached: string[] = [];
       const uncursored: string[] = [];
       for (const fixture of fixturesFor(component.name)) {
-        await renderFixture(
+        await session.mountFixture(
           component.Component as React.ComponentType<Record<string, unknown>>,
           fixture,
         );
         unreached.push(...unreachable().map((b) => `${fixture.name}: ${b}`));
         uncursored.push(...withoutCursor().map((b) => `${fixture.name}: ${b}`));
-        cleanup();
+        session.unmount();
       }
       expect([...new Set(unreached)], "a control no keyboard user can reach").toEqual([]);
       expect([...new Set(uncursored)], "a control that does not look clickable").toEqual([]);

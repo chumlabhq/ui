@@ -12,10 +12,10 @@
  * still covered.
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
-import { render, cleanup, act } from "@testing-library/react";
+import { cleanup, act } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
 
@@ -26,20 +26,6 @@ const LIVE = '[role="alert"], [role="status"], [aria-live]';
 
 /** Fixtures whose whole point is a message or a busy state. */
 const MESSAGE_FIXTURE = /^(error|success|loading|open-empty|with-error|invalid)$/;
-
-const renderFixture = async (
-  Component: React.ComponentType<Record<string, unknown>>,
-  fixture: ReturnType<typeof fixturesFor>[number],
-) => {
-  const element = (
-    <Component {...fixture.props}>{fixture.children as React.ReactNode}</Component>
-  );
-  const { container } = render(
-    (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
-  );
-  await applyAct(fixture, container);
-};
-
 const candidates = COMPONENTS.filter((c) =>
   fixturesFor(c.name).some((f) => MESSAGE_FIXTURE.test(f.name)),
 );
@@ -75,6 +61,7 @@ describe("status messages contract", () => {
     );
 
     it(`${component.name} announces its message states without taking focus`, async () => {
+      const session = fixtureSession();
       const notLive: string[] = [];
       const stoleFocus: string[] = [];
 
@@ -84,7 +71,7 @@ describe("status messages contract", () => {
         const before = document.activeElement;
 
         await act(async () => {
-          await renderFixture(
+          await session.mountFixture(
             component.Component as React.ComponentType<Record<string, unknown>>,
             fixture,
           );
@@ -116,7 +103,7 @@ describe("status messages contract", () => {
         ) {
           stoleFocus.push(`${fixture.name} -> ${after?.tagName}`);
         }
-        cleanup();
+        session.unmount();
       }
 
       expect(notLive, "a message state with no live region").toEqual([]);

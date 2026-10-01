@@ -37,27 +37,109 @@ when it does belongs there, deleted, not here.
 | 2026-09-11 | `portal semantics contract > Table announces every portalled surface a user can operate` (`src/__tests__/contracts/portal-semantics.contract.test.tsx`) | Failed once in a full parallel `vitest run`, immediately after a run in which it passed. Passed in isolation (42/42) and on the next full run (4732 passed). | Not asked for; recorded because it appeared in the same sitting and this file is the only place it would be visible. Table renders the largest tree in the suite and this case drives several portalled surfaces open in one test, so it is the most timing-exposed contract there is. **OPEN — not covered by the per-file timeout either, and for a measured reason**: this file's slowest case across three instrumented full runs was 3.4s against a 30s limit, a 9x margin, so whatever failed was not the clock. I do not know the mechanism; one observation and no captured assertion is not enough to name one. What would close it: catch the next occurrence with `VITEST_RECONCILE_JSON` set and read the actual failure instead of inferring one. **2026-09-14: one reproduction attempt, not reproduced — still open, and still unexplained.** A full parallel run (96 files, 4855 collected, 4787 passed) came back clean. One observation with no captured assertion remains too little to name a mechanism, so none is named here; that was the standard this row was opened under and inventing one now would be worse than the gap. One thing WAS found by reading, and is recorded as structure rather than as cause: `portalRoots` takes every child of `document.body` except the render container, while the loop attributes each orphan to the CURRENT `fixture.name` — so a portal outliving its `cleanup()` would be reported under whichever fixture rendered next. That would misattribute a finding, not manufacture one, and nothing observed says it happened. Left as the first place to look if it recurs. |
 | 2026-09-11 | `classes override contract > 'DatePicker' > a slot keeps its default classes when a consumer overrides it` (`src/__tests__/contracts/overrides.contract.test.tsx`) | Failed on two of five full `vitest run` invocations the same day, always at a 30-second timeout and always on the heaviest trees (DatePicker, then Dropdown as a cascade). Green on the other three full runs and on two isolated runs of the file (81/81 each). | A fixed 30s test timeout against the largest render in the suite: this contract renders every fixture of every component and overrides every slot, and DatePicker's fixture tree is the biggest one. Under a loaded parallel run it crosses the timeout; nothing about the assertion or the component varies. **CLOSED** by `vi.setConfig({ testTimeout: 90_000 })` in the file itself, landing in `fix(ui): close six demo defects and give overrides.contract a derived timeout`. The number is derived rather than picked: with the limit lifted to 300s the tail was measured uncensored over three full runs at 13.3s, 16.3s and 32.8s for the same DatePicker case — a load factor of 2.5 on identical work — so 32.8 x 2.5 rounded up is 90. Per-file because the measurement says so: across all 96 files this is the only one with a case over 20s, the next heaviest peaks at 12.0s and everything else at 4.2s. Ten full runs after the change: nine clean at 4744 passed. |
 
-## Looked for and not found: a test that passes only in company
+## Found: a test that passed only in company (it did exist)
 
-**2026-09-14.** A case was described to me as `TimePicker clockHours`, failing 3
-of 3 in isolation and passing in the full suite — the inverted profile, which
-would mean a test asserting on state some other file sets up. That is the most
-interesting shape a "flake" can have, so it was checked rather than assumed, and
-it does not exist in this repo:
+**2026-09-14** — the entry this replaces. A case was described as
+`TimePicker clockHours`, failing 3 of 3 in isolation and passing in the full
+suite. It was looked for and recorded as not existing: no test title contained
+`clockHours`, and all 96 files were reported passing when run alone, one
+`vitest run` each.
 
-- No test is named `clockHours`. The identifier appears only as a `classes` slot
-  and in two slot maps inside `TimePicker.test.tsx`; the only test titles
-  containing "clock" are the eleven Clock-variant cases, all green.
-- `vitest run src/components/TimePicker` passes 228/228.
-- Every one of the 96 test files was then run ALONE — 38 contracts and 58 unit
-  files, one `vitest run` each. All pass. There is no test in the suite that
-  fails in isolation, TimePicker's or anyone else's. The 68 skips are the same
-  68 in isolation as in the full run, so nothing is being skipped into a pass.
+**2026-10-01 — corrected. It existed, in two contracts, from 2026-09-07.**
 
-Recorded because the negative is the useful part: the suite has no
-order-dependent test as of this date, and the sweep that establishes that is one
-command per file and worth repeating if the shape is ever suspected again. A row
-here should describe something observed; this one describes something looked for.
+- **Why the search missed it.** The title is generated at runtime:
+  `state-attributes.contract` builds `describe.each` rows from
+  `docs/adr/002-state-attributes.json`, so `TimePicker clockHours data-state`
+  is in no source file a grep for test names reads.
+  `state-replacement.contract` has the same row, titled
+  `TimePicker.clockDisplayActive -> clockHours`.
+- **What it waited on.** Both fail at an assertion, not a query: no element
+  carries `data-state` on clockHours (`state-attributes.contract.test.tsx:272`,
+  `state-replacement.contract.test.tsx:305`).
+  - ClockFace is a lazy half (`useClockFace` → `useLazyComponent`).
+  - `applyAct` waited a single `setTimeout(0)`, measured at 1.2 ms.
+  - A cold `import()` of ClockFace in a file run alone took 24.5–31.1 ms (three
+    runs).
+  - TimePicker's three clock fixtures render within 6 ms of each other
+    (+50.1, +53.5, +55.8 ms into the row).
+  - So every one was read before its face arrived, and no clock fixture comes
+    later in the row.
+- **Why the full run hid it.** Another file in the same run had already loaded
+  the module. Paired with a file that only imports ClockFace, the contract
+  passed 3 of 3; paired with an unrelated contract (`token-vocabulary`), it
+  failed 3 of 3.
+- **When it started.** `aa3a802` (2026-09-07), which put ClockFace behind a
+  dynamic import. Run alone from `git archive` copies (with today's
+  `node_modules`), 2 runs each:
+  - `ba355fc`, the parent of `aa3a802`, passes;
+  - `aa3a802` fails;
+  - `afa8d4a`, where the 2026-09-14 entry was written, fails;
+  - `14e0eb0` fails.
+
+  So the 2026-09-14 sweep was wrong about this file. It also fails at
+  `afa8d4a` when run without `--project`. How that sweep reported it green is
+  not established: the entry did not record how each file was invoked.
+- **Fixed in the test tier, not the component.** `applyAct`
+  (`src/__tests__/fixtures/_act.contract.ts`) waits for the condition. The
+  first version waited for the *modules* behind the lazy halves. A 200 ms
+  delay injected in front of each load showed the gap: the module resolved
+  first and the clock-face rows failed again. The wait now covers the
+  component's own pending loads. A contracts-only `vi.mock` of
+  `useLazyComponent` (`src/test/setup.contracts.ts`) hands each load through
+  `src/test/lazyLoads.ts`, and `applyAct` returns once none is in flight. The
+  evidence:
+  - with the delay, `state-replacement`, `state-attributes` and `unstyled` pass
+    alone;
+  - with the delay and without the wait, the clockHours and clockNumber rows
+    fail;
+  - `fixture-session.contract` keeps that delay as a permanent self-check.
+
+**The sweep, re-run 2026-10-01 on the fixed tree.** All 99 files were run
+alone (41 contracts, 58 unit), one `vitest run` each, after the cascade fix
+below: **99 of 99 pass**. That is 4820 passed, 68 skipped, 0 failed, 4888
+collected, and no step crossed the slow-step threshold. The first pass of this
+sweep, made while the wait still lived only in one contract's loop, is what
+found the second file.
+
+What generalises: **a lazy half makes "settled" a property of the module cache,
+not of the clock.** A check that waits a fixed number of ticks after rendering
+one is asserting that the cache is warm, and whether it is depends on which
+files ran first. Wait for the import itself.
+
+## A timed-out test failed 90 tests after it (2026-10-01, full run)
+
+`unit+contracts` failed 92 of 4884 in a run 3.5x slower than recorded (284 s
+against 80 s). It looked like 92 problems. It was two.
+
+- **Two tests hung.**
+  - `state-replacement` DatePicker `dropdownItemSelected`: 30,271 ms.
+  - `unstyled` InternationalPhoneInput "drops decorative utilities": 35,106 ms.
+  - Both normally take about 0.3 s.
+- **The other 90 were collateral.**
+  - In `state-replacement`, 27 tests passed, then the timeout, then 75 of the
+    next 76 failed. In `unstyled`, 17 of the 47 after its timeout failed.
+  - Every one of the 46 "fixture act: target element not found" failures was
+    the act's FIRST step, aimed at eagerly rendered content.
+  - Every one of the 44 assertions found an empty DOM.
+  - The mechanism: vitest stops waiting for a timed-out test, but its body keeps
+    running. That loop's global `cleanup()` unmounted the next test's fixture
+    mid-act, and its own renders landed in the next test's sweep.
+  - Reproduced without load: a 2 s timeout and one DatePicker probe sleeping
+    2.5 s failed 70 of 103, with the same fixture lines and messages.
+- **Fixed by `fixtureSession()`** in `_act.contract.ts`, which every contract
+  loop now goes through.
+  - It unmounts only what it rendered.
+  - It stops at its next render or act once `onTestFinished` has closed its
+    test.
+  - The same plant now fails exactly 1 of 103: the test that slept.
+- **What is still open: the hang itself.** A timeout records no stack, and the
+  test straight after DatePicker ran in 78 ms, so the process was not uniformly
+  slow. Ruled out: the 2h change (both files time the same before and after it)
+  and lazy act steps (none of the failing steps touched lazy content).
+  `applyAct` now times every act step and lazy wait, and logs
+  `SLOW_FIXTURE_STEP` past 2000 ms. The threshold sits above the slowest step
+  of a normal full run (471 ms) times the observed pressure factor. The next
+  occurrence names its fixture and step.
 
 ## Open, unnamed
 

@@ -15,10 +15,10 @@
  * resolved and the text checked.
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 
 import { setReducedMotion } from "../../test/matchMedia.js";
 
@@ -63,20 +63,6 @@ const resolveName = (el: Element): string => {
 };
 
 const comboboxes = () => [...document.querySelectorAll('[role="combobox"]')];
-
-const renderFixture = async (
-  Component: React.ComponentType<Record<string, unknown>>,
-  fixture: ReturnType<typeof fixturesFor>[number],
-) => {
-  const element = (
-    <Component {...fixture.props}>{fixture.children as React.ReactNode}</Component>
-  );
-  const { container } = render(
-    (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
-  );
-  await applyAct(fixture, container);
-};
-
 const withFixtures = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 
 describe("combobox name contract", () => {
@@ -120,11 +106,12 @@ describe("combobox name contract", () => {
 
     describe(component.name, () => {
       it("names every combobox trigger it renders", async () => {
+        const session = fixtureSession();
         const unnamed: string[] = [];
         let seen = 0;
 
         for (const fixture of fixtures) {
-          await renderFixture(
+          await session.mountFixture(
             component.Component as React.ComponentType<Record<string, unknown>>,
             fixture,
           );
@@ -132,7 +119,7 @@ describe("combobox name contract", () => {
             seen += 1;
             if (!resolveName(el)) unnamed.push(`${fixture.name} #${el.id || "?"}`);
           }
-          cleanup();
+          session.unmount();
         }
 
         expect(
@@ -144,10 +131,11 @@ describe("combobox name contract", () => {
       });
 
       it("puts aria-activedescendant only on an element that can hold focus", async () => {
+        const session = fixtureSession();
         const stranded: string[] = [];
 
         for (const fixture of fixtures) {
-          await renderFixture(
+          await session.mountFixture(
             component.Component as React.ComponentType<Record<string, unknown>>,
             fixture,
           );
@@ -165,7 +153,7 @@ describe("combobox name contract", () => {
               stranded.push(`${fixture.name}: trigger claims it while a search field has focus`);
             }
           }
-          cleanup();
+          session.unmount();
         }
 
         expect(stranded, "aria-activedescendant on the wrong element").toEqual([]);

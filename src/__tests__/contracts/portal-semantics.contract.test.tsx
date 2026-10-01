@@ -18,10 +18,10 @@
  * nothing to operate and is out of scope.
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 
 beforeEach(() => setReducedMotion(false));
@@ -102,6 +102,7 @@ describe("portal semantics contract", () => {
     if (!fixtures.length) continue;
 
     it(`${name} announces every portalled surface a user can operate`, async () => {
+      const session = fixtureSession();
       const orphans: string[] = [];
       for (const fixture of fixtures) {
         const element = fixture.render ? (
@@ -111,14 +112,14 @@ describe("portal semantics contract", () => {
             {fixture.children as React.ReactNode}
           </Component>
         );
-        const { container } = render(
+        const { container } = session.render(
           (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
         );
-        await applyAct(fixture, container);
+        await session.act(fixture, container);
         for (const root of portalRoots(container)) {
           for (const orphan of unannounced(root)) orphans.push(`${fixture.name}: ${orphan}`);
         }
-        cleanup();
+        session.unmount();
       }
       expect(orphans).toEqual([]);
     });

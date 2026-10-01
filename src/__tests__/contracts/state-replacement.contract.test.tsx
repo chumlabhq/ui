@@ -18,12 +18,12 @@
  * A key whose route cannot be demonstrated is reported, not deleted.
  */
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, cleanup } from "@testing-library/react";
+
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
-import { applyAct } from "../fixtures/_act.contract.js";
+import { fixtureSession } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import { SELECTOR } from "./partSelectors.js";
 
@@ -165,6 +165,7 @@ const probe = async (
   matches: (el: Element) => boolean,
   measure?: { variant: string; probeClass: string; property: PropertyKey },
 ) => {
+  const session = fixtureSession();
   const entry = COMPONENTS.find((c) => c.name === componentName);
   if (!entry) return { inState: [] as Element[], painted: [] as ReturnType<typeof paintedValue>[], fixtures: 0 };
   const inState: Element[] = [];
@@ -179,10 +180,10 @@ const probe = async (
         {f.children as React.ReactNode}
       </entry.Component>
     );
-    const { container } = render(
+    const { container } = session.render(
       (f.wrap ? f.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
     );
-    await applyAct(f, container);
+    await session.act(f, container);
     fixtures += 1;
     for (const el of Array.from(document.body.querySelectorAll(selector))) {
       if (!matches(el)) continue;
@@ -193,7 +194,7 @@ const probe = async (
       // render and never opened the menu it was pointed at.
       if (measure) painted.push(paintedValue(el, measure.variant, measure.probeClass, measure.property));
     }
-    cleanup();
+    session.unmount();
   }
   return { inState, painted, fixtures };
 };
@@ -321,6 +322,7 @@ describe("state replacement contract", () => {
     it("a consumer hover/focus variant reaches the part", async () => {
       // jsdom resolves no :hover, so the assertable half is that the variant
       // lands on the right element; Tailwind generates the rule from there.
+      const session = fixtureSession();
       const override = `hover:${PROBE}`;
       const { inState } = await probe(
         row.component, pseudo.part, override, SELECTOR[pseudo.part] ?? "*", () => true,
@@ -329,7 +331,7 @@ describe("state replacement contract", () => {
         inState.some((el) => el.classList.contains(override)),
         `nothing on part '${pseudo.part}' carries the consumer's '${override}'`,
       ).toBe(true);
-      cleanup();
+      session.unmount();
     });
   });
 
