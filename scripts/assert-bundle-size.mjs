@@ -750,6 +750,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "boundaries of the shared chunks fell. No declared breach moved above " +
       "its record.",
   },
+  {
+    kb: 155.96,
+    commit: "b02b4771",
+    date: "2026-10-07",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.10 KB (159,605 -> 159,700 B gzipped, +95 B), 81 files " +
+      "held. AccordionContent's latest-ref fix for the infinite render: the " +
+      "callbacks and duration are read through refs synced in a layout " +
+      "effect, the main effect keys on `isExpanded` alone, and a ref skips " +
+      "mount. Inline callbacks that set parent state had re-run the effect on " +
+      "every render. Measured against a build of b02b4771^ from `git archive`: " +
+      "Accordion exclusive 9.14 -> 9.22 (+79 B), all of it in the chunk " +
+      "holding AccordionContent (+371 B raw), plus a hash change in " +
+      "Accordion's index. No other entry moved. f4b06be3 adds 5 B more (155.957 " +
+      "-> 155.962), under the 0.01 a row needs.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -858,14 +875,20 @@ const DECLARED_BREACHES = new Map([
   [
     "Accordion",
     {
-      kb: 9.16,
-      why: "Composed, and still 1.16 over. Its own chunk is 0.52 KB; the rest " +
+      kb: 9.22,
+      why: "Composed, and still 1.22 over. Its own chunk is 0.52 KB; the rest " +
         "is AccordionContent and useAccordionStateManager in sibling chunks " +
         "nothing else reaches. It shipped four sub-components against a " +
         "Button's 6 KB ceiling until the shape rule gained a positive test for " +
         "composed — the 8 KB it is measured against now is the one it earns, " +
         "and it is over that too. Nothing here is optional behind a prop: an " +
-        "item, a trigger and a content panel are what an accordion is.",
+        "item, a trigger and a content panel are what an accordion is.\n\n" +
+        "9.16 -> 9.22 on 2026-10-07 (b02b4771): AccordionContent reads its four " +
+        "callbacks and its duration through refs and skips mount, which ended " +
+        "an infinite render on inline callbacks (reproduced on React 18 and 19). " +
+        "+79 B exclusive. The smaller variants were built and measured: writing " +
+        "the refs during render saves 15 B, dropping the mount guard 28 B, and " +
+        "neither reaches 9.16 without changing behaviour.",
     },
   ],
 ]);
