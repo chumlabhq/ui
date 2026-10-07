@@ -73,3 +73,50 @@ describe("TimePicker clock face state", () => {
     });
   }
 });
+
+/**
+ * A 12-hour clock's bounds, per period.
+ *
+ * `isHourDisabled` tested `hour * 60` with no period, so on a 12-hour clock
+ * every hour was read as AM: bounded 09:00-17:00, 1-5 PM came out disabled and
+ * the slider (which reports the enabled range) inherited it. Each case states
+ * the face it expects in one period, with the bounds as a 24-hour range.
+ */
+const TWELVE_HOUR_CASES: Array<{
+  name: string;
+  minTime: string;
+  maxTime: string;
+  value: string;
+  enabled: number[];
+}> = [
+  { name: "09:00-17:00, in the PM", minTime: "09:00", maxTime: "17:00", value: "02:00 PM", enabled: [12, 1, 2, 3, 4, 5] },
+  { name: "09:00-17:00, in the AM", minTime: "09:00", maxTime: "17:00", value: "10:00 AM", enabled: [9, 10, 11] },
+  { name: "11:00-13:00 crossing noon, in the AM", minTime: "11:00", maxTime: "13:00", value: "11:00 AM", enabled: [11] },
+  { name: "11:00-13:00 crossing noon, in the PM", minTime: "11:00", maxTime: "13:00", value: "12:30 PM", enabled: [12, 1] },
+  { name: "13:00-18:00 all in the PM, in the PM", minTime: "13:00", maxTime: "18:00", value: "03:00 PM", enabled: [1, 2, 3, 4, 5, 6] },
+  { name: "13:00-18:00 all in the PM, in the AM", minTime: "13:00", maxTime: "18:00", value: "09:00 AM", enabled: [] },
+];
+
+describe("TimePicker 12-hour clock bounds", () => {
+  beforeEach(() => setReducedMotion(false));
+
+  for (const c of TWELVE_HOUR_CASES) {
+    it(`enables exactly the in-range hours: ${c.name}`, async () => {
+      render(
+        <TimePicker variant="clock" format="12h" defaultOpen minTime={c.minTime} maxTime={c.maxTime} defaultValue={c.value} />,
+      );
+      const slider = await screen.findByRole("slider");
+      const hours = numbersOf();
+      expect(hours.map((el) => Number(el.textContent)).sort((a, b) => a - b)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+      const enabled = hours.filter((el) => !el.hasAttribute("data-disabled")).map((el) => Number(el.textContent));
+      expect([...enabled].sort((a, b) => a - b)).toEqual([...c.enabled].sort((a, b) => a - b));
+      if (c.enabled.length) {
+        // The slider's range is the enabled set in the slider's own units, the hour shown (1-12).
+        expect([Number(slider.getAttribute("aria-valuemin")), Number(slider.getAttribute("aria-valuemax"))]).toEqual([
+          Math.min(...c.enabled),
+          Math.max(...c.enabled),
+        ]);
+      }
+    });
+  }
+});

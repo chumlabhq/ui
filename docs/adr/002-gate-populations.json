@@ -18,7 +18,8 @@
   },
   "$basisChanges": [
     "2026-09-12, `e2e:demo-contrast`: rows to pages. See `$units`.",
-    "2026-09-13, `e2e/focus-not-obscured.spec.ts`: its internal population of fixtures holding a focusable child inside a clipping ancestor went 104 to 77-78. That is a basis change, not a regression — five of the six focusable clauses had never been scoped to the fixture, so the old figure counted the index nav and the page chrome. It is deliberately NOT an entry here: it varies by one between runs as a fixture whose overlay is still opening contributes no focusable child, so a ratchet on it would fail on the variance. The spec asserts a floor of 50 instead, and the basis is written beside that assertion."
+    "2026-09-13, `e2e/focus-not-obscured.spec.ts`: its internal population of fixtures holding a focusable child inside a clipping ancestor went 104 to 77-78. That is a basis change, not a regression — five of the six focusable clauses had never been scoped to the fixture, so the old figure counted the index nav and the page chrome. It is deliberately NOT an entry here: it varies by one between runs as a fixture whose overlay is still opening contributes no focusable child, so a ratchet on it would fail on the variance. The spec asserts a floor of 50 instead, and the basis is written beside that assertion.",
+    "2026-10-08, `e2e:pointer-affordance`: 1529 → 2085. +11 DatePicker/bounded-in-range (f4b06be3); +545 controls containing an aria-hidden icon no longer excluded (L2); per-fixture identical otherwise ebfc46c→HEAD."
   ],
   "$secondsNote": "Wall-clock per gate on a green run, for the slowdown check in run-all-gates. The multiple is DERIVED, not chosen: across green runs the widest healthy spread for one gate was unit+contracts at 88s to 149s, a factor of 1.69, with e2e:demo-contrast at 1.24 and the rest at or under 1.25. Under memory pressure the same gates ran e2e:icon-bounds 436->948 (2.17), e2e:visual 296->926 (3.13), e2e:a11y-full 352->1431 (4.07) and e2e:demo-contrast 70->624 (8.9). So healthy tops out at 1.69 and the mildest pressure observed is 2.17; 2.0 sits between them and is the only round number that does. Gates under 10s are exempt, because 1s to 3s is a factor of three and means nothing.",
   "$runWas": "green",
@@ -37,7 +38,7 @@
     "e2e:icon-bounds": 313,
     "e2e:demo-contrast": 33,
     "e2e:rest": 464,
-    "e2e:pointer-affordance": 1529
+    "e2e:pointer-affordance": 2085
   },
   "seconds": {
     "typecheck": 29,

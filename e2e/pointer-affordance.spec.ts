@@ -69,8 +69,21 @@ const INTERACTIVE =
  * and those are the fixture's markup, unscoped and unstyled on purpose; holding
  * the library to them would make this sweep a report on the test harness.
  */
-const NOT_AN_INVITATION =
-  '[role="dialog"],[role="alertdialog"],[role="presentation"],[role="none"],[aria-hidden="true"]';
+const NOT_AN_INVITATION = '[role="dialog"],[role="alertdialog"]';
+
+/**
+ * Removed from the page's meaning, so making no promise about the pointer: an
+ * element that IS one of these, or sits inside one. Not one that merely
+ * CONTAINS one.
+ *
+ * These shared NOT_AN_INVITATION's contains-match until 2026-10-08, and every
+ * control holding an `aria-hidden` icon — a chevron, a clear X, a check — was
+ * dropped as though it were a backdrop: 545 reachable controls across 16
+ * components, TimePicker's clear button among them, measured by nothing.
+ * `presentation` and `none` mark separators, connectors and shimmer rows in
+ * this library, so containing one is the same mistake.
+ */
+const REMOVED_FROM_PAGE = '[aria-hidden="true"],[role="presentation"],[role="none"]';
 
 type Finding = { fixture: string; detail: string };
 
@@ -127,7 +140,7 @@ test("everything clickable declares a cursor", async ({ page }) => {
     const roots = ["[data-fixture]", ...(portals > 0 ? [`[${PORTAL_MARK}]`] : [])];
 
     const r = await page.evaluate(
-      ({ scopes, interactive, allowed, surfaces }) => {
+      ({ scopes, interactive, allowed, surfaces, removed }) => {
         const reactProps = (el: Element): Record<string, unknown> | null => {
           const key = Object.keys(el).find((k) => k.startsWith("__reactProps$"));
           return key ? ((el as unknown as Record<string, unknown>)[key] as Record<string, unknown>) : null;
@@ -149,6 +162,7 @@ test("everything clickable declares a cursor", async ({ page }) => {
           // modal's positioner takes `onClick` to stop the click reaching the
           // overlay, which is the same not-an-invitation as the panel itself.
           if (el.matches(surfaces) || el.querySelector(surfaces)) continue;
+          if (el.closest(removed)) continue;
           // An element nobody can reach makes no promise about the pointer.
           // `disabled` is only a property on form controls, so the ARIA and
           // data forms are checked too — `ResizablePanel`'s separator is a div
@@ -170,7 +184,7 @@ test("everything clickable declares a cursor", async ({ page }) => {
         }
         return { bad, bound, seen };
       },
-      { scopes: roots, interactive: INTERACTIVE, allowed: [...MEANINGFUL], surfaces: NOT_AN_INVITATION },
+      { scopes: roots, interactive: INTERACTIVE, allowed: [...MEANINGFUL], surfaces: NOT_AN_INVITATION, removed: REMOVED_FROM_PAGE },
     );
 
     handlerBound += r.bound;

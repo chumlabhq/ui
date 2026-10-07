@@ -88,29 +88,30 @@ export function ClockFace({
     [value, format],
   );
 
+  // An hour is disabled if NO minute within it is in range. On a 12-hour clock
+  // the face's hour means nothing without the period shown beside it: this
+  // tested `hour * 60`, read every hour as AM, and disabled 1-5 PM under a
+  // 09:00-17:00 bound. Both checks convert through `timeValueToMinutes`, the one
+  // place a TimeValue becomes minutes from midnight.
   const isHourDisabled = useCallback(
     (hour: number): boolean => {
       if (!minTime && !maxTime) return false;
-      // An hour is disabled if NO minute within it is in range
       for (let m = 0; m < 60; m += safeStep) {
-        if (isMinutesInRange(hour * 60 + m, format, minTime, maxTime)) {
+        const total = timeValueToMinutes({ hours: hour, minutes: m, period: displayValue.period }, format);
+        if (isMinutesInRange(total, format, minTime, maxTime)) {
           return false;
         }
       }
       return true;
     },
-    [minTime, maxTime, format, safeStep],
+    [minTime, maxTime, format, safeStep, displayValue.period],
   );
 
   const isMinuteDisabled = useCallback(
     (minute: number): boolean => {
       if (!minTime && !maxTime) return false;
-      let hours24 = displayValue.hours;
-      if (format === "12h" && displayValue.period) {
-        if (displayValue.period === "PM" && displayValue.hours !== 12) hours24 = displayValue.hours + 12;
-        else if (displayValue.period === "AM" && displayValue.hours === 12) hours24 = 0;
-      }
-      return !isMinutesInRange(hours24 * 60 + minute, format, minTime, maxTime);
+      const total = timeValueToMinutes({ ...displayValue, minutes: minute }, format);
+      return !isMinutesInRange(total, format, minTime, maxTime);
     },
     [minTime, maxTime, format, displayValue],
   );
