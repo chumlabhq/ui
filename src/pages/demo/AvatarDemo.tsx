@@ -263,6 +263,7 @@ const AvatarDemo = () => {
             <Avatar
               src="data:image/gif;base64,invalid"
               fallback={<span>!</span>}
+              imageConfig={{ loading: "eager" }}
             />
             <p className={`text-xs mt-2 ${c.label}`}>image error fallback</p>
           </div>
@@ -1108,6 +1109,7 @@ const AvatarDemo = () => {
             autoColor
             colors={c.subtleColors}
             onError={() => setImageError(true)}
+            imageConfig={{ loading: "eager" }}
           />
         </DemoWrapper>
       </Section>

@@ -23,7 +23,11 @@ export default function AvatarExample() {
         <p className="text-xs mt-2 text-xs font-medium text-cl-text-tertiary">icon fallback</p>
       </div>
       <div className="text-center">
-        <Avatar src="data:image/gif;base64,invalid" fallback={<span>!</span>} />
+        <Avatar
+          src="data:image/gif;base64,invalid"
+          fallback={<span>!</span>}
+          imageConfig={{ loading: "eager" }}
+        />
         <p className="text-xs mt-2 text-xs font-medium text-cl-text-tertiary">
           image error fallback
         </p>

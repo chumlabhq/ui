@@ -33,6 +33,7 @@ export default function AvatarExample() {
         }
       }
       onError={() => setImageError(true)}
+      imageConfig={{ loading: "eager" }}
     />
   );
 }
