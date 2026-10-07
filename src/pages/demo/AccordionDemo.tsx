@@ -1205,9 +1205,9 @@ const AccordionDemo = () => {
           <Accordion type="single" collapsible defaultValue="ac-1">
             <AccordionItem value="ac-1">
               <AccordionTrigger asChild>
-                <h3 className="flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover">
-                  A heading, not a button wrapper
-                </h3>
+                <button className="flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover">
+                  Your own button, styled your way
+                </button>
               </AccordionTrigger>
               <AccordionContent>
                 `asChild` hands the trigger&rsquo;s props to the element you pass, so this is your
@@ -1223,8 +1223,10 @@ const AccordionDemo = () => {
           </Accordion>
         </DemoWrapper>
         <p className="text-[13px] text-fg-tertiary leading-[1.6] max-w-2xl mt-3">
-          Only the child&rsquo;s own element survives — anything the part would have wrapped it in
-          does not. `AccordionItem`, `AccordionTrigger` and `AccordionContent` all take it.
+          The child replaces the part&rsquo;s own element. `AccordionTrigger` still renders its
+          heading around it (`headingLevel`), so pass an interactive element such as a
+          `button`, not a heading. `AccordionItem`, `AccordionTrigger` and `AccordionContent`
+          all take it.
         </p>
       </Section>
 

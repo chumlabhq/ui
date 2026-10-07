@@ -87,15 +87,40 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
 
 
 
+    /**
+     * The callbacks are read through refs, and the effect below keys on
+     * `item.isExpanded` alone.
+     *
+     * With the callbacks in its dependency array, a consumer passing inline
+     * arrows re-ran the effect on every render, and the effect fires a start
+     * callback each time it runs. A callback that set the parent's state
+     * therefore looped: the docs page's Animation Callbacks section counted
+     * onCloseStart into the thousands and starved React Router's navigation
+     * transition, so the URL changed while the old page stayed on screen.
+     */
+    const callbacksRef = useRef({ onOpenStart, onOpenEnd, onCloseStart, onCloseEnd });
+    const durationRef = useRef(effectiveDuration);
+    useIsomorphicLayoutEffect(() => {
+      callbacksRef.current = { onOpenStart, onOpenEnd, onCloseStart, onCloseEnd };
+      durationRef.current = effectiveDuration;
+    }, [onOpenStart, onOpenEnd, onCloseStart, onCloseEnd, effectiveDuration]);
+
+    // Mounting is not opening or closing: the callbacks fire on a change only.
+    const settledExpandedRef = useRef(item.isExpanded);
+
     const endFiredRef = useRef(false);
     useEffect(() => {
+      if (settledExpandedRef.current === item.isExpanded) return;
+      settledExpandedRef.current = item.isExpanded;
+
       const node = contentNodeRef.current;
+      const duration = durationRef.current;
       endFiredRef.current = false;
 
       if (item.isExpanded) {
-        onOpenStart?.();
+        callbacksRef.current.onOpenStart?.();
       } else {
-        onCloseStart?.();
+        callbacksRef.current.onCloseStart?.();
       }
 
       const fireEnd = () => {
@@ -103,14 +128,14 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
         endFiredRef.current = true;
 
         if (item.isExpanded) {
-          onOpenEnd?.();
+          callbacksRef.current.onOpenEnd?.();
         } else {
-          onCloseEnd?.();
+          callbacksRef.current.onCloseEnd?.();
           setIsClosing(false);
         }
       };
 
-      if (effectiveDuration === 0) {
+      if (duration === 0) {
         fireEnd();
         return;
       }
@@ -132,20 +157,13 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
 
       // A real fallback: an element in a `display: none` subtree runs no
       // animation, so nothing would fire.
-      const fallbackTimer = setTimeout(fireEnd, effectiveDuration + 50);
+      const fallbackTimer = setTimeout(fireEnd, duration + 50);
 
       return () => {
         node.removeEventListener("animationend", handleAnimationEnd);
         clearTimeout(fallbackTimer);
       };
-    }, [
-      item.isExpanded,
-      effectiveDuration,
-      onOpenStart,
-      onOpenEnd,
-      onCloseStart,
-      onCloseEnd,
-    ]);
+    }, [item.isExpanded]);
 
     const combinedRef = mergeRefs(ref, contentNodeRef);
 

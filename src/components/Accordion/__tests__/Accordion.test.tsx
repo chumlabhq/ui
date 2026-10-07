@@ -717,6 +717,102 @@ describe("Accordion", () => {
       expect(onCloseStart).toHaveBeenCalled();
     });
 
+    it.each([
+      ["collapsed", undefined, false],
+      ["open", "item-1", false],
+      ["collapsed, reduced motion", undefined, true],
+      ["open, reduced motion", "item-1", true],
+    ])("fires no callback on mount (%s)", (_label, defaultValue, reduceMotion) => {
+      const callbacks = { onOpenStart: vi.fn(), onOpenEnd: vi.fn(), onCloseStart: vi.fn(), onCloseEnd: vi.fn() };
+
+      render(
+        <Accordion type="single" collapsible defaultValue={defaultValue} reduceMotion={reduceMotion}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent forceMount {...callbacks}>
+              Content 1
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      for (const fn of Object.values(callbacks)) expect(fn).not.toHaveBeenCalled();
+    });
+
+    // Inline arrows are a new identity on every render. A callback that sets
+    // the parent's state re-rendered the parent, which passed a new arrow,
+    // which re-ran the effect, which fired the callback again: the docs page
+    // counted onCloseStart into the thousands and starved React Router's
+    // navigation transition. The cap keeps a regression from hanging the run.
+    it("does not re-fire when a parent re-renders with new inline callbacks", async () => {
+      const user = userEvent.setup();
+      const CAP = 5;
+
+      const Harness = () => {
+        const [counts, setCounts] = React.useState({ openStart: 0, openEnd: 0, closeStart: 0, closeEnd: 0 });
+        const bump = (key: keyof typeof counts) =>
+          setCounts((c) => (c[key] >= CAP ? c : { ...c, [key]: c[key] + 1 }));
+        return (
+          <>
+            <output data-testid="counts">{JSON.stringify(counts)}</output>
+            <Accordion type="single" collapsible reduceMotion={true}>
+              <AccordionItem value="item-1">
+                <AccordionTrigger>Item 1</AccordionTrigger>
+                <AccordionContent
+                  onOpenStart={() => bump("openStart")}
+                  onOpenEnd={() => bump("openEnd")}
+                  onCloseStart={() => bump("closeStart")}
+                  onCloseEnd={() => bump("closeEnd")}
+                >
+                  Content 1
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </>
+        );
+      };
+
+      render(<Harness />);
+      const counts = () => JSON.parse(screen.getByTestId("counts").textContent ?? "{}");
+      expect(counts()).toEqual({ openStart: 0, openEnd: 0, closeStart: 0, closeEnd: 0 });
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(counts()).toEqual({ openStart: 1, openEnd: 1, closeStart: 0, closeEnd: 0 });
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(counts()).toEqual({ openStart: 1, openEnd: 1, closeStart: 1, closeEnd: 1 });
+    });
+
+    it("calls the latest callback, not the one from the render that started the animation", async () => {
+      const user = userEvent.setup();
+      const first = vi.fn();
+      const second = vi.fn();
+
+      const { rerender } = render(
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent onOpenEnd={first}>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      rerender(
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent onOpenEnd={second}>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      // jsdom runs no keyframes, so the fallback timer ends the animation.
+      await act(() => new Promise((r) => setTimeout(r, 400)));
+      expect(first).not.toHaveBeenCalled();
+      expect(second).toHaveBeenCalledTimes(1);
+    });
+
     it("supports animationDuration prop", () => {
       render(
         <Accordion type="single" defaultValue="item-1">
