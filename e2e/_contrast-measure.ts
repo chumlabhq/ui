@@ -109,6 +109,17 @@ ${PAINT_HELPERS}  const hidden = (el) => {
   const paintsText = (el) =>
     [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim().length > 0);
 
+  // The element's own text, so a row can be named by what it says as well as
+  // by its selector. Not used by any verdict.
+  const ownText = (el) =>
+    [...el.childNodes]
+      .filter((n) => n.nodeType === 3)
+      .map((n) => n.textContent)
+      .join("")
+      .replace(/\\s+/g, " ")
+      .trim()
+      .slice(0, 60);
+
   const selectorFor = (el) => {
     const cls = el.getAttribute("class");
     return el.tagName.toLowerCase() + (cls ? "." + cls.trim().split(/\\s+/).slice(0, 2).join(".") : "");
@@ -136,6 +147,7 @@ ${PAINT_HELPERS}  const hidden = (el) => {
     const value = ratio(over(foreground, background), background);
     out.push({
       key: selectorFor(field) + "::placeholder",
+      text: field.getAttribute("placeholder").trim().slice(0, 60),
       ratio: Math.round(value * 100) / 100,
       exact: value,
       floor: large ? 3 : 4.5,
@@ -165,6 +177,7 @@ ${PAINT_HELPERS}  const hidden = (el) => {
       const value = ratio(text, background);
       out.push({
         key: selectorFor(el),
+        text: ownText(el),
         ratio: Math.round(value * 100) / 100,
         exact: value,
         floor: large ? 3 : 4.5,

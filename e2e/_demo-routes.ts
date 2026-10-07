@@ -1,0 +1,162 @@
+import ts from "typescript";
+import { readFileSync, readdirSync } from "node:fs";
+import { basename } from "node:path";
+
+/**
+ * Which routes are demo pages, and which demo pages have a route.
+ *
+ * `demo-contrast` read its routes with a one-line regex over `<Route path="…"`.
+ * Four routes in App.tsx put `path=` on its own line, so the regex never saw
+ * them and the scan walked 33 of 37 pages while printing "pages=33" as though
+ * that were the whole site: SearchableDropdown, MultiSelectDropdown,
+ * MultiSelectSearchableDropdown and InternationalPhoneInput were measured by
+ * nothing.
+ *
+ * So there are two readings here, and they are kept apart on purpose:
+ * - `demoRoutes` walks the JSX of App.tsx, any formatting, and returns the
+ *   routes nested inside the docs layout;
+ * - `demoPages` starts from the files, `src/pages/demo/*Demo.tsx`, and maps each
+ *   one through the import that names it to the routes that render it.
+ * The second is the denominator for the first. A route the walk misses leaves
+ * its page with no measured route, and that page is named.
+ */
+
+const APP = "src/App.tsx";
+const PAGES_DIR = "src/pages/demo";
+
+const parse = (file: string) =>
+  ts.createSourceFile(file, readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+
+const tagOf = (node: ts.Node): string | null =>
+  ts.isJsxSelfClosingElement(node)
+    ? node.tagName.getText()
+    : ts.isJsxElement(node)
+      ? node.openingElement.tagName.getText()
+      : null;
+
+export interface AppRoute {
+  /** Full path, nesting resolved; `null` for a pathless layout route. */
+  path: string | null;
+  /** The component its `element` renders, e.g. `TableDemo`. */
+  element: string | null;
+  /** The `element` of the nearest enclosing route, if any. */
+  parent: string | null;
+}
+
+/** Every `<Route>` in App.tsx, however its attributes are laid out. */
+export function appRoutes(file = APP): AppRoute[] {
+  const sf = parse(file);
+  const routes: AppRoute[] = [];
+  const attr = (el: ts.JsxOpeningLikeElement, name: string) =>
+    el.attributes.properties.find(
+      (p): p is ts.JsxAttribute => ts.isJsxAttribute(p) && p.name.getText(sf) === name,
+    )?.initializer;
+  const visit = (node: ts.Node, prefix: string, parent: string | null): void => {
+    const opening = ts.isJsxElement(node) ? node.openingElement : ts.isJsxSelfClosingElement(node) ? node : null;
+    if (opening && opening.tagName.getText(sf) === "Route") {
+      const p = attr(opening, "path");
+      const own = p && ts.isStringLiteral(p) ? p.text : null;
+      const e = attr(opening, "element");
+      const element = e && ts.isJsxExpression(e) && e.expression ? tagOf(e.expression) : null;
+      const path =
+        own === null ? null : own.startsWith("/") ? own : `${prefix.replace(/\/$/, "")}/${own}`;
+      routes.push({ path, element, parent });
+      ts.forEachChild(node, (child) => visit(child, path ?? prefix, element));
+      return;
+    }
+    ts.forEachChild(node, (child) => visit(child, prefix, parent));
+  };
+  visit(sf, "", null);
+  return routes;
+}
+
+/** The identifier App.tsx binds each module to: a static import or a `lazy(() => import(…))`. */
+function bindings(file = APP): Map<string, string> {
+  const sf = parse(file);
+  const byModule = new Map<string, string>();
+  const visit = (node: ts.Node): void => {
+    if (ts.isImportDeclaration(node) && node.importClause?.name && ts.isStringLiteral(node.moduleSpecifier)) {
+      byModule.set(node.moduleSpecifier.text, node.importClause.name.text);
+    }
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+      const id = node.name.text;
+      const find = (n: ts.Node): void => {
+        if (
+          ts.isCallExpression(n) &&
+          n.expression.kind === ts.SyntaxKind.ImportKeyword &&
+          n.arguments[0] &&
+          ts.isStringLiteral(n.arguments[0])
+        ) {
+          byModule.set(n.arguments[0].text, id);
+        }
+        ts.forEachChild(n, find);
+      };
+      find(node.initializer);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return byModule;
+}
+
+/**
+ * The layout every docs page renders inside, named by its file rather than its
+ * identifier, so the derivation and the floor agree on it by construction.
+ */
+const LAYOUT_FILE = "Demo.tsx";
+
+/**
+ * Demo page files with no route of their own, each with why. The floor fails on
+ * an exemption that stops being true, the same way it fails on a page with no
+ * route, so this list cannot keep a page out of the scan by going stale.
+ */
+export const EXEMPT: Readonly<Record<string, string>> = {
+  [LAYOUT_FILE]:
+    "the docs layout, not a page: a pathless route that every demo route renders inside, so it is measured on all of them",
+};
+
+const layoutId = () => bindings().get(`./pages/demo/${LAYOUT_FILE.replace(/\.tsx$/, ".js")}`) ?? null;
+
+/** Routes nested inside the docs layout, without a leading slash, as the scan visits them. */
+export function demoRoutes(): string[] {
+  const layout = layoutId();
+  return appRoutes()
+    .filter((r) => r.path !== null && r.parent === layout)
+    .map((r) => r.path!.replace(/^\//, ""));
+}
+
+/**
+ * Routes App.tsx declares that the scan leaves out, with why. Printed with the
+ * verdict, so what is not measured is said rather than implied.
+ */
+export function outsideDemo(): Array<{ path: string; reason: string }> {
+  const layout = layoutId();
+  return appRoutes()
+    .filter((r) => r.path !== null && r.parent !== layout)
+    .map((r) => ({
+      path: r.path!,
+      reason: r.path!.startsWith("/__fixtures")
+        ? "fixtures, which contrast-painted measures"
+        : r.path === "/*"
+          ? "the not-found catch-all"
+          : "outside the docs layout (site page)",
+    }));
+}
+
+/** Each demo page file, and the routes that render it — read from the files, not the walk. */
+export function demoPages(): Array<{ file: string; routes: string[] }> {
+  const byModule = bindings();
+  const routes = appRoutes();
+  return readdirSync(PAGES_DIR)
+    .filter((f) => /Demo\.tsx$/.test(f))
+    .sort()
+    .map((file) => {
+      const id = byModule.get(`./pages/demo/${basename(file, ".tsx")}.js`);
+      return {
+        file,
+        routes: routes
+          .filter((r) => r.path !== null && id !== undefined && r.element === id)
+          .map((r) => r.path!.replace(/^\//, "")),
+      };
+    });
+}

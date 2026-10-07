@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { readFileSync } from "node:fs";
 import { MEASURE_DOCUMENT, underFloor } from "./_contrast-measure";
+import { EXEMPT, demoPages, demoRoutes, outsideDemo } from "./_demo-routes";
 
 /**
  * Contrast as painted, over the demo PAGES.
@@ -33,15 +33,155 @@ import { MEASURE_DOCUMENT, underFloor } from "./_contrast-measure";
  * by restoring one of those idioms — `bg-cl-success/15 text-cl-success` on the
  * Table page — it reports 390 and names them at 4.09:1.
  *
- * The denominator moves between runs — 41289 and 41429 on two runs of the same
- * tree — because the dropdown pages load their country lists over the network
- * and the rows exist only once that lands. Findings are what this asserts on;
- * `measured` is asserted only against a floor, for the case where the scan
- * walks nothing at all.
+ * The total moves between runs — 41289 and 41429 on two runs of the same tree,
+ * then 47727 and 47867 once the routes were complete. That was put down to the
+ * dropdown pages' country lists; measured per page it is /table alone, whose
+ * server-side example fetches its rows from dummyjson.com after the page
+ * renders (see MEASURED_FLOOR). Findings are what this asserts on; `measured`
+ * is held per page against MEASURED_FLOOR, which catches a page measured half
+ * rendered, and in total against a floor for a scan that walks nothing.
+ *
+ * The pages come from `_demo-routes.ts`: every route nested inside the docs
+ * layout in App.tsx, read from its JSX. A one-line regex read 33 of 37 and the
+ * four it missed were measured by nothing. What is left out — the site pages,
+ * the fixtures, the catch-all — is printed on every run.
  */
-const ROUTES = (readFileSync("src/App.tsx", "utf8").match(/<Route path="([^"*:]+)"/g) ?? [])
-  .map((m) => m.slice(13, -1))
-  .filter((r) => r !== "/" && r !== "/faq" && !r.startsWith("/blog"));
+const ROUTES = demoRoutes();
+
+/**
+ * CPU throttle, for proving the wait rather than for the gate.
+ *
+ * `DEMO_CONTRAST_CPU_THROTTLE=6` runs every page at 6× CPU slowdown through
+ * CDP. The scan used to measure 150ms after network idle, and at 6× that read
+ * /table while its Suspense fallback was still up: 47 elements against 5343.
+ * Throttling is how a loaded machine is reproduced on demand, so the wait below
+ * is proven against it rather than against whatever the load happened to be.
+ */
+const CPU_THROTTLE = Number(process.env.DEMO_CONTRAST_CPU_THROTTLE ?? 1);
+
+/**
+ * How long a page has to become ready before it fails by name.
+ *
+ * At 6× CPU the slowest page readied in 7108ms (/table, 2026-10-07), and
+ * unthrottled none took over 1121ms. 30s is four times the throttled worst, so
+ * a busy machine still measures every page, and a page that never readies
+ * fails in seconds rather than being measured early or hanging the run.
+ */
+const READY_TIMEOUT_MS = 30_000;
+
+/**
+ * Whether a page is ready to measure, and if not, why.
+ *
+ * Ready is two things.
+ * - The route's Suspense fallback is gone and the page's own heading is in
+ *   `<main>`. Every demo page opens with a `<header><h1>` — `DocsHero` on the
+ *   component pages, the same markup written out on the seven guides — inside
+ *   the layout's `<Suspense>`, so the heading exists only once the page's chunk
+ *   has rendered. The fallback (`DemoPageFallback`) is the `.suspense-delayed`
+ *   block standing in for it. Network idle says nothing about either: a lazy
+ *   chunk finishes downloading and then spends seconds of CPU rendering with no
+ *   request in flight.
+ * - Every `[aria-expanded="true"]` element's `aria-controls` target exists and
+ *   is visible. The heading alone was not enough: at 6× CPU the "Empty State"
+ *   example on /multi-select-searchable-dropdown, which is `defaultOpen`, had
+ *   not shown its menu yet and the page measured 705 against a floor of 707.
+ *   An expanded element with no `aria-controls`, or one naming no element, is
+ *   reported rather than skipped: there is no surface to wait on, so the page
+ *   never becomes ready and fails by name.
+ *
+ * Self-contained, because it runs in the page. `final` returns the report even
+ * when not ready, so a page that times out says which condition held it.
+ */
+const readiness = (final: boolean) => {
+  const main = document.querySelector("main");
+  const heading =
+    !!main && !main.querySelector(".suspense-delayed") && !!main.querySelector("header h1")?.textContent?.trim();
+  const visible = (el: Element) => {
+    if (!el.getClientRects().length) return false;
+    for (let n: Element | null = el; n; n = n.parentElement) {
+      const style = getComputedStyle(n);
+      if (style.display === "none" || style.visibility === "hidden" || parseFloat(style.opacity) === 0) return false;
+    }
+    return true;
+  };
+  const expanded = [...document.querySelectorAll('[aria-expanded="true"]')];
+  const pending: string[] = [];
+  for (const el of expanded) {
+    const name = `<${el.tagName.toLowerCase()}> "${(el.getAttribute("aria-label") ?? el.textContent ?? "").trim().slice(0, 40)}"`;
+    const ids = el.getAttribute("aria-controls")?.trim().split(/\s+/).filter(Boolean) ?? [];
+    if (!ids.length) pending.push(`${name} is expanded with no aria-controls`);
+    for (const id of ids) {
+      const target = document.getElementById(id);
+      if (!target) pending.push(`${name} aria-controls="${id}" resolves to nothing`);
+      else if (!visible(target)) pending.push(`${name} controls #${id}, which is not visible`);
+    }
+  }
+  const report = { heading, expanded: expanded.length, pending };
+  return final || (heading && !pending.length) ? report : null;
+};
+
+/**
+ * The fewest elements each page measures when it has rendered, per route.
+ *
+ * The lowest count either theme reached across three clean runs on 2026-10-07
+ * (load 2.5-3.2, unthrottled), recorded as read. A page under its floor was
+ * measured before it finished rendering, or lost content, and fails by name —
+ * the scan's total cannot say which page went short, and a half-rendered
+ * /table (47 elements, its Suspense fallback) sits inside the total's normal
+ * movement.
+ *
+ * Every page read the same count in all three runs except /table: 5343 in
+ * light every time and 5482/5342/5482 in dark. The 140 are its server-side
+ * example's rows, fetched from dummyjson.com in an effect after the page
+ * renders: on the first visit in a browser they land after the page is ready,
+ * on later visits from cache before it, and at 6× CPU after it even from
+ * cache. So /table's floor is the cold count, and those rows are the one piece
+ * of late content on any page that neither the ready condition nor the floor
+ * waits for.
+ * That remote fetch, not the dropdown pages' country lists, is what moved the
+ * total between runs: the five dropdown pages measured identically all three
+ * times. Pages fed by remote APIs (dummyjson.com, the country list) will fail
+ * here if those APIs are down, which is the scan saying it measured less.
+ */
+const MEASURED_FLOOR: Readonly<Record<string, number>> = {
+  "introduction": 78,
+  "getting-started": 107,
+  "accessibility": 92,
+  "guides/styling": 109,
+  "guides/theming": 93,
+  "guides/animation": 93,
+  "guides/ai-llm": 86,
+  "accordion": 947,
+  "avatar": 1084,
+  "breadcrumb": 514,
+  "button": 445,
+  "cascading-dropdown": 732,
+  "checkbox": 411,
+  "country-flag": 454,
+  "date-picker": 975,
+  "drawer": 418,
+  "dropdown": 746,
+  "input": 530,
+  "international-phone-input": 946,
+  "loader": 426,
+  "modal": 495,
+  "multi-select-dropdown": 684,
+  "multi-select-searchable-dropdown": 707,
+  "otp-input": 433,
+  "pagination": 634,
+  "radio-button": 476,
+  "resizable-panel": 359,
+  "searchable-dropdown": 755,
+  "slider": 545,
+  "stepper": 682,
+  "switch": 423,
+  "tab-panel": 677,
+  "table": 5342,
+  "text-area": 504,
+  "time-picker": 871,
+  "toast": 564,
+  "tooltip": 426,
+};
 
 /**
  * Measured, recorded, not yet fixed — down only.
@@ -82,6 +222,13 @@ const RECORDED: ReadonlySet<string> = new Set([
   // `button.px-3.py-1.5` until the demo's triggers became `<Button>`, which puts
   // the label in the component's `itemText` span. The colours did not move.
   "toast light span.inline-flex.items-center",
+  // Found when route coverage widened 2026-10-07; fixed in that page's
+  // eye-pass slice. Both pages were outside the scan until the routes came from
+  // the JSX rather than a one-line regex. rgb(91,155,255) text on
+  // rgb(59,98,160) at 2.2:1 on both pages, and on rgb(42,70,113) at 3.43:1 on
+  // MultiSelectSearchableDropdown.
+  "multi-select-dropdown dark span.truncate",
+  "multi-select-searchable-dropdown dark span.truncate",
 ]);
 
 /**
@@ -147,11 +294,103 @@ test("decides the text floor on the unrounded ratio, both directions", async ({ 
   expect(above && underFloor(above, 4.5), `4.5001:1 must pass: ${JSON.stringify(above)}`).toBe(false);
 });
 
+/**
+ * Whether the page now measures `floor` elements, for the re-read to wait on.
+ *
+ * A function rather than the expression string: Playwright evaluates a string
+ * predicate with `eval` inside the page, which the site's CSP refuses
+ * (`script-src` has no 'unsafe-eval'). The refusal rejects the wait at
+ * once, so the first planted delay read "re-read also short" instead of
+ * naming the element.
+ */
+const measuresAtLeast = new Function(
+  "floor",
+  `return ${MEASURE_DOCUMENT}.filter((r) => !r.unmeasurable).length >= floor;`,
+) as (floor: number) => boolean;
+
+type Row = {
+  key: string;
+  text?: string;
+  ratio: number;
+  exact?: number;
+  floor?: number;
+  detail: string;
+  unmeasurable?: boolean;
+};
+
 test("every demo page clears AA on the text it paints", async ({ page }) => {
-  test.setTimeout(600_000);
+  // Scaled with the throttle: the run is CPU-bound, 55s unthrottled, 2m at 6×.
+  test.setTimeout(600_000 * CPU_THROTTLE);
   await page.setViewportSize({ width: 1280, height: 1200 });
+  if (CPU_THROTTLE !== 1) {
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send("Emulation.setCPUThrottlingRate", { rate: CPU_THROTTLE });
+  }
+
+  /**
+   * Coverage, from a source the route walk does not read: the page files.
+   * Every `src/pages/demo/*Demo.tsx` has a route this scan measures, or an
+   * exemption in `_demo-routes.ts` that says why. Checked before anything is
+   * measured, because a scan over the wrong pages has nothing to say.
+   */
+  const pages = demoPages();
+  const uncovered = pages
+    .filter((p) => !EXEMPT[p.file] && !p.routes.some((r) => ROUTES.includes(r)))
+    .map((p) => `${p.file} (routes: ${p.routes.join(", ") || "none"})`);
+  const staleExemptions = pages
+    .filter((p) => EXEMPT[p.file] && p.routes.some((r) => ROUTES.includes(r)))
+    .map((p) => p.file);
+  const covered = pages.length - Object.keys(EXEMPT).length;
+  console.log(
+    `DEMO_CONTRAST_COVERAGE routes=${ROUTES.length} page-files=${pages.length} ` +
+      `exempt=${Object.keys(EXEMPT).join(",")} pages-to-cover=${covered} uncovered=${uncovered.length}`,
+  );
+  console.log(
+    `DEMO_CONTRAST_LEFT_OUT ${outsideDemo().map((o) => `${o.path} (${o.reason})`).join("; ")}`,
+  );
+  expect(uncovered, "demo pages no measured route renders — the route list missed them").toEqual([]);
+  expect(staleExemptions, "exempt from coverage and measured anyway — delete the exemption").toEqual([]);
 
   const findings: Array<{ route: string; theme: string; key: string; ratio: number; detail: string }> = [];
+  const short: Array<{ route: string; theme: string; measured: number; floor: number; named: string[] }> = [];
+
+  /**
+   * What a read under its floor was missing, by selector, text and paint.
+   *
+   * It never decides anything: the page has already failed its floor, and it
+   * still fails whatever this finds. It reloads the page, waits for it to be
+   * ready and then for it to measure its floor, inside the same
+   * READY_TIMEOUT_MS, and names every element the re-read has that the short
+   * read did not. /avatar read 1082 against 1084 once at 6× CPU and nothing
+   * could say which two elements were absent.
+   */
+  const missingFrom = async (route: string, floor: number, shortRows: Row[]): Promise<string[]> => {
+    await page.goto(`/${route}`, { waitUntil: "networkidle" });
+    const deadline = Date.now() + READY_TIMEOUT_MS;
+    const left = () => ({ timeout: Math.max(1, deadline - Date.now()) });
+    const reached = await page
+      .waitForFunction(readiness, false, left())
+      .then(() =>
+        page.waitForFunction(measuresAtLeast, floor, left()),
+      )
+      .then(() => true, () => false);
+    const again = ((await page.evaluate(MEASURE_DOCUMENT)) as Row[]).filter((r) => !r.unmeasurable);
+    if (!reached || again.length < floor) {
+      return [`re-read also short: ${again.length}/${floor}, missing elements unnamed`];
+    }
+    const id = (r: Row) => `${r.key} "${r.text ?? ""}" ${r.detail}`;
+    const unmatched = new Map<string, number>();
+    for (const r of shortRows) if (!r.unmeasurable) unmatched.set(id(r), (unmatched.get(id(r)) ?? 0) + 1);
+    const missing: string[] = [];
+    for (const r of again) {
+      const n = unmatched.get(id(r)) ?? 0;
+      if (n > 0) unmatched.set(id(r), n - 1);
+      else missing.push(id(r));
+    }
+    return [`${missing.length} named`, ...missing];
+  };
+  const notReady: string[] = [];
+  const perPage: Array<{ route: string; theme: string; measured: number; readyMs: number; expanded: number }> = [];
   let measured = 0;
 
   for (const route of ROUTES) {
@@ -170,31 +409,70 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
         ([key, value]) => window.localStorage.setItem(key, value),
         ["chumlab-theme", theme] as const,
       );
-      await page.goto(`/${route.replace(/^\//, "")}`, { waitUntil: "networkidle" });
-      await page.waitForTimeout(150);
-      const rows = (await page.evaluate(MEASURE_DOCUMENT)) as Array<{
-        key: string;
-        ratio: number;
-        exact?: number;
-        floor?: number;
-        detail: string;
-        unmeasurable?: boolean;
-      }>;
+      const started = Date.now();
+      await page.goto(`/${route}`, { waitUntil: "networkidle" });
+      const ready = await page
+        .waitForFunction(readiness, false, { timeout: READY_TIMEOUT_MS })
+        .then((handle) => handle.jsonValue() as Promise<{ expanded: number }>, () => null);
+      const readyMs = Date.now() - started;
+      if (!ready) {
+        const report = await page.evaluate(readiness, true);
+        const why = [
+          ...(report?.heading ? [] : ["no page heading in <main>, or the Suspense fallback still up"]),
+          ...(report?.pending ?? []),
+        ];
+        notReady.push(`${route} (${theme}) not ready after ${READY_TIMEOUT_MS}ms: ${why.join("; ")}`);
+        continue;
+      }
+      const rows = (await page.evaluate(MEASURE_DOCUMENT)) as Row[];
+      let onPage = 0;
       for (const row of rows) {
         if (row.unmeasurable) continue;
-        measured += 1;
+        onPage += 1;
         if (underFloor(row, row.floor ?? 4.5)) findings.push({ route, theme, ...row });
+      }
+      measured += onPage;
+      perPage.push({ route, theme, measured: onPage, readyMs, expanded: ready.expanded });
+      const floor = MEASURED_FLOOR[route];
+      if (floor !== undefined && onPage < floor) {
+        short.push({ route, theme, measured: onPage, floor, named: await missingFrom(route, floor, rows) });
       }
     }
   }
 
   console.log(
-    `DEMO_CONTRAST pages=${ROUTES.length} measured=${measured} findings=${findings.length}`,
+    `DEMO_CONTRAST pages=${ROUTES.length} measured=${measured} findings=${findings.length} ` +
+      `| page-files=${pages.length} exempt=${Object.keys(EXEMPT).length} covered=${covered - uncovered.length}/${covered}` +
+      (CPU_THROTTLE !== 1 ? ` cpu-throttle=${CPU_THROTTLE}x` : ""),
   );
+  for (const p of perPage) {
+    console.log(
+      `DEMO_CONTRAST_PAGE ${p.route} ${p.theme} measured=${p.measured} ` +
+        `expanded-waited=${p.expanded} ready=${p.readyMs}ms`,
+    );
+  }
   for (const f of findings.slice(0, 1200)) {
     console.log(`DEMO_CONTRAST_FINDING ${f.route} ${f.theme} ${f.ratio} ${f.key} :: ${f.detail}`);
   }
 
+  expect(notReady, "pages that never became ready, so were not measured").toEqual([]);
+
+  for (const s of short) {
+    console.log(`DEMO_CONTRAST_SHORT ${s.route} ${s.theme} measured=${s.measured} floor=${s.floor} — ${s.named[0]}`);
+    for (const m of s.named.slice(1)) console.log(`DEMO_CONTRAST_MISSING ${s.route} ${s.theme} ${m}`);
+  }
+  expect(
+    short.map((s) => `${s.route} (${s.theme}): measured ${s.measured}, floor ${s.floor}; ${s.named.join(" | ")}`),
+    "pages measured under their floor — rendered partly, or lost content",
+  ).toEqual([]);
+  expect(
+    ROUTES.filter((r) => MEASURED_FLOOR[r] === undefined),
+    "routes with no recorded floor — record the count a clean run reads",
+  ).toEqual([]);
+  expect(
+    Object.keys(MEASURED_FLOOR).filter((r) => !ROUTES.includes(r)),
+    "floors recorded for routes the scan no longer has — delete them",
+  ).toEqual([]);
   expect(measured, "nothing was measured — the scan walked no elements").toBeGreaterThan(2000);
 
   const key = (f: { route: string; theme: string; key: string }) => `${f.route} ${f.theme} ${f.key}`;
