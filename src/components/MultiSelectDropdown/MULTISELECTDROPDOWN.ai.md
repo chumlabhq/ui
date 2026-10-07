@@ -64,7 +64,7 @@ export default function Example() {
 | `maxDisplayedChips` | Truncates chips with "+N more" badge. |
 | `clearable` | Shows clear button when values are selected. |
 | `name` | Renders hidden `<input>` elements for native form submission. |
-| `renderTrigger` | Replaces the default trigger. Must spread all provided props and attach `ref`. |
+| `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOptions`, `placeholder`), which never reaches the DOM. |
 
 ---
 
@@ -143,7 +143,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
 | `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
 | `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
-| `renderTrigger` | object | — | (props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
+| `renderTrigger` | object | — | (triggerProps: MultiSelectDropdownTriggerRenderProps, state: MultiSelectDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder). |
 
 ## Styling Guide
 

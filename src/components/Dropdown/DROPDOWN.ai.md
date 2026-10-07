@@ -61,7 +61,7 @@ export default function Example() {
 | `loadOnOpen` | Only works when `onLoadOptions` is provided. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
-| `renderTrigger` | Replaces the default `<button>`. You must spread all provided props and attach the `ref`. |
+| `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOption`, `placeholder`), which never reaches the DOM. |
 | `name` | Renders a hidden `<input>` for native form submission. |
 
 ---
@@ -142,7 +142,7 @@ export default function Example() {
 | `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
 | `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
-| `renderTrigger` | object | — | (props: DropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
+| `renderTrigger` | object | — | (triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder). |
 | `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
 | `CheckIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom check icon component. |
 | `ClearIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom clear icon component. |
@@ -311,10 +311,10 @@ const [value, setValue] = useState<string | null>(null);
   options={options}
   value={value}
   onValueChange={setValue}
-  renderTrigger={(props) => (
-    <div ref={props.ref} {...props} className="custom-trigger">
-      {props.selectedOption?.label || props.placeholder}
-    </div>
+  renderTrigger={(triggerProps, { selectedOption, placeholder }) => (
+    <button {...triggerProps} className="custom-trigger">
+      {selectedOption?.label ?? placeholder}
+    </button>
   )}
 />
 ```

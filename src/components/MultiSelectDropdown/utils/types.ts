@@ -119,7 +119,10 @@ export interface MultiSelectDropdownBaseProps {
   ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
   loadingText?: ReactNode;
   ClearIcon?: React.ComponentType<{ className?: string }>;
-  renderTrigger?: (props: MultiSelectDropdownTriggerRenderProps) => ReactNode;
+  renderTrigger?: (
+    triggerProps: MultiSelectDropdownTriggerRenderProps,
+    state: MultiSelectDropdownTriggerState,
+  ) => ReactNode;
 }
 
 /**
@@ -137,8 +140,14 @@ export type MultiSelectDropdownLoadSource =
 export type MultiSelectDropdownProps = MultiSelectDropdownBaseProps & MultiSelectDropdownLoadSource;
 
 
+/**
+ * What the default trigger puts on its own element, and only that: spread it
+ * onto yours. The state you draw from arrives separately, as the second
+ * argument, so nothing in here becomes a stray DOM attribute.
+ */
 export interface MultiSelectDropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;
+  type: "button";
   id: string;
   role: "combobox";
   "aria-expanded": boolean;
@@ -165,8 +174,15 @@ export interface MultiSelectDropdownTriggerRenderProps {
   "data-error": true | undefined;
   "data-valid": true | undefined;
   "data-open": true | undefined;
+}
+
+/** What a custom trigger draws from: the second argument to `renderTrigger`. */
+export interface MultiSelectDropdownTriggerState {
+  /** Whether the dropdown is currently open */
   isOpen: boolean;
+  /** The currently selected options, empty when none is */
   selectedOptions: MultiSelectOption[];
+  /** The placeholder content */
   placeholder: ReactNode;
 }
 

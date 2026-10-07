@@ -602,16 +602,13 @@ const SearchableDropdownDemo = () => {
               onValueChange={(v) => setRenderTriggerValue(v)}
               placeholder="Pick a fruit..."
               classes={c.dropdown}
-              renderTrigger={({
-                ref,
-                isOpen,
-                selectedOption,
-                placeholder: ph,
-                ...rest
-              }) => (
+              renderTrigger={(
+                { ref, ...triggerProps },
+                { isOpen, selectedOption, placeholder },
+              ) => (
                 <button
                   ref={ref as React.RefCallback<HTMLButtonElement>}
-                  {...rest}
+                  {...triggerProps}
                   className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? (dark ? "border-cl-border-input-focus bg-cl-bg-elevated text-white shadow-lg shadow-accent/20" : "border-cl-border-input-focus bg-white text-cl-text shadow-lg shadow-accent/20") : dark ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border" : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input"} cursor-pointer`}
                 >
                   <span
@@ -620,7 +617,7 @@ const SearchableDropdownDemo = () => {
                     {selectedOption ? "🍎" : "🔍"}
                   </span>
                   <span className="flex-1 truncate font-medium">
-                    {selectedOption?.label ?? ph}
+                    {selectedOption?.label ?? placeholder}
                   </span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${isOpen ? (dark ? "bg-cl-accent/20 text-cl-text" : "bg-cl-accent/10 text-cl-text") : dark ? "bg-cl-bg-elevated text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
@@ -637,9 +634,9 @@ const SearchableDropdownDemo = () => {
             Important: renderTrigger must return a {"<button>"} element
           </p>
           <p>
-            The props include type=&quot;button&quot; so spreading ...rest
-            prevents accidental form submission. Use `renderTrigger` to return a
-            native `button` for listbox accessibility.
+            The first argument includes type=&quot;button&quot;, so spreading it
+            prevents accidental form submission; the state you draw from is the
+            second argument. Return a native `button` for listbox accessibility.
           </p>
         </div>
       </Section>

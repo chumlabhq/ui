@@ -129,7 +129,10 @@ export interface MultiSelectSearchableDropdownBaseProps {
   onFocus?: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   ClearIcon?: React.ComponentType<{ className?: string }>;
-  renderTrigger?: (props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode;
+  renderTrigger?: (
+    triggerProps: MultiSelectSearchableDropdownTriggerRenderProps,
+    state: MultiSelectSearchableDropdownTriggerState,
+  ) => ReactNode;
   searchInputAriaLabel?: string;
 }
 
@@ -172,8 +175,14 @@ type SearchableInitialLoad<T> =
 export type MultiSelectSearchableDropdownProps =
   MultiSelectSearchableDropdownBaseProps & MultiSelectSearchableDropdownOptionSource;
 
+/**
+ * What the default trigger puts on its own element, and only that: spread it
+ * onto yours. The state you draw from arrives separately, as the second
+ * argument, so nothing in here becomes a stray DOM attribute.
+ */
 export interface MultiSelectSearchableDropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;
+  type: "button";
   id: string;
   role: "combobox";
   "aria-expanded": boolean;
@@ -194,8 +203,15 @@ export interface MultiSelectSearchableDropdownTriggerRenderProps {
   "data-error": true | undefined;
   "data-valid": true | undefined;
   "data-open": true | undefined;
+}
+
+/** What a custom trigger draws from: the second argument to `renderTrigger`. */
+export interface MultiSelectSearchableDropdownTriggerState {
+  /** Whether the dropdown is currently open */
   isOpen: boolean;
+  /** The currently selected options, empty when none is */
   selectedOptions: MultiSelectOption[];
+  /** The placeholder content */
   placeholder: ReactNode;
 }
 

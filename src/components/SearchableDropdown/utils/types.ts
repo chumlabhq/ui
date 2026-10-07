@@ -105,7 +105,10 @@ export interface SearchableDropdownBaseProps {
   onBlur?: () => void;
   onFocus?: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
-  renderTrigger?: (props: SearchableDropdownTriggerRenderProps) => ReactNode;
+  renderTrigger?: (
+    triggerProps: SearchableDropdownTriggerRenderProps,
+    state: SearchableDropdownTriggerState,
+  ) => ReactNode;
   ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
   CheckIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
   ClearIcon?: React.ComponentType<{ className?: string }>;
@@ -113,11 +116,13 @@ export interface SearchableDropdownBaseProps {
   loadingText?: ReactNode;
 }
 
+/**
+ * What the default trigger puts on its own element, and only that: spread it
+ * onto yours. The state you draw from arrives separately, as the second
+ * argument, so nothing in here becomes a stray DOM attribute.
+ */
 export interface SearchableDropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;
-  isOpen: boolean;
-  selectedOption: SearchableDropdownOption | null;
-  placeholder: ReactNode;
   type: "button";
   id: string;
   role: "combobox";
@@ -140,6 +145,16 @@ export interface SearchableDropdownTriggerRenderProps {
   "data-valid"?: true;
   "data-open"?: true;
   "data-placeholder"?: true;
+}
+
+/** What a custom trigger draws from: the second argument to `renderTrigger`. */
+export interface SearchableDropdownTriggerState {
+  /** Whether the dropdown is currently open */
+  isOpen: boolean;
+  /** The currently selected option, or null */
+  selectedOption: SearchableDropdownOption | null;
+  /** The placeholder content */
+  placeholder: ReactNode;
 }
 
 /**

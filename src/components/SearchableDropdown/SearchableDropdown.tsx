@@ -572,18 +572,14 @@ const SearchableDropdown = forwardRef<
 
       <div className={mergedClasses.control || undefined}>
         {renderTrigger ? (
-          renderTrigger({
-            ...triggerProps,
-            ref: renderTriggerRefCallback,
-            isOpen,
-            selectedOption,
-            placeholder,
-          })
+          renderTrigger(
+            { ...triggerProps, ref: renderTriggerRefCallback },
+            { isOpen, selectedOption, placeholder },
+          )
         ) : (
           <button
             ref={mergedTriggerRef}
             {...triggerProps}
-            type="button"
             className={mergedClasses.trigger || undefined}
           >
             <span id={valueId} className={mergedClasses.value || undefined}>

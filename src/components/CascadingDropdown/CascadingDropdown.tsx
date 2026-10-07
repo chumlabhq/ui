@@ -642,6 +642,36 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const openSubmenuParent =
       filteredOptions.find((option) => option.value === activeSubmenu) ?? null;
 
+    // One object for both triggers. The custom one was handed its own copy of
+    // this list in three components, and the copies drifted: `type="button"`
+    // and CascadingDropdown's `aria-controls` reached the default trigger only.
+    //
+    // No `aria-required`: this trigger is a menu button, not a combobox, and
+    // `group`/`button` do not support the attribute — axe reports
+    // `aria-allowed-attr`, critical. The asterisk in the label is what carries
+    // the requirement here; the siblings that DO declare `role="combobox"` keep
+    // the attribute.
+    const triggerProps = {
+      type: "button" as const,
+      id: triggerId,
+      "aria-expanded": isOpen,
+      "aria-haspopup": "true" as const,
+      "aria-controls": isOpen ? menuId : undefined,
+      "aria-invalid": (error || undefined) as boolean | undefined,
+      "aria-describedby": error && errorMessage ? errorId : undefined,
+      "aria-label": ariaLabel,
+      disabled,
+      onClick: handleToggle,
+      onMouseDown: focusTriggerOnMouseDown,
+      onKeyDown: combinedKeyDown,
+      onFocus,
+      onBlur,
+      "data-disabled": (disabled || undefined) as true | undefined,
+      "data-error": (error || undefined) as true | undefined,
+      "data-valid": ((!error && success) || undefined) as true | undefined,
+      "data-open": (isOpen || undefined) as true | undefined,
+    };
+
     return (
       <div
         ref={ref}
@@ -670,55 +700,15 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         >
           {renderTrigger ? (
             // eslint-disable-next-line react-hooks/refs -- ref callback is intentionally passed to render prop for consumer to attach
-            renderTrigger({
-              ref: renderTriggerRefCallback,
-              id: triggerId,
-              "aria-expanded": isOpen,
-              "aria-haspopup": "true",
-              "aria-invalid": (error || undefined) as boolean | undefined,
-              "aria-describedby": error && errorMessage ? errorId : undefined,
-              "aria-label": ariaLabel,
-              disabled,
-              onClick: handleToggle,
-              onMouseDown: focusTriggerOnMouseDown,
-              onKeyDown: combinedKeyDown,
-              onFocus: onFocus,
-              onBlur: onBlur,
-              "data-disabled": (disabled || undefined) as true | undefined,
-              "data-error": (error || undefined) as true | undefined,
-              "data-valid": ((!error && success) || undefined) as true | undefined,
-              "data-open": (isOpen || undefined) as true | undefined,
-              isOpen,
-              displayValue,
-              placeholder: placeholder as string,
-            })
+            renderTrigger(
+              { ...triggerProps, ref: renderTriggerRefCallback },
+              { isOpen, displayValue, placeholder },
+            )
           ) : (
             <button
               ref={triggerRef}
-              type="button"
-              id={triggerId}
-              aria-expanded={isOpen}
-              aria-haspopup="true"
-              aria-controls={isOpen ? menuId : undefined}
-              aria-invalid={error || undefined}
-              aria-describedby={error && errorMessage ? errorId : undefined}
-              // No `aria-required`: this trigger is a menu button, not a
-              // combobox, and `group`/`button` do not support the attribute —
-              // axe reports `aria-allowed-attr`, critical. The asterisk in the
-              // label is what carries the requirement here; the five siblings
-              // that DO declare `role="combobox"` keep the attribute.
-              aria-label={ariaLabel}
-              disabled={disabled}
-              onClick={handleToggle}
-              onMouseDown={focusTriggerOnMouseDown}
-              onKeyDown={combinedKeyDown}
-              onBlur={onBlur}
-              onFocus={onFocus}
+              {...triggerProps}
               className={mergedClasses.trigger || undefined}
-              data-disabled={disabled || undefined}
-              data-error={error || undefined}
-              data-valid={(!error && success) || undefined}
-              data-open={isOpen || undefined}
             >
               <span className={mergedClasses.value || undefined}>
                 {displayValue || placeholder}

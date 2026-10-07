@@ -51,8 +51,14 @@ export interface DropdownClasses {
   loadingItem?: string;
 }
 
+/**
+ * What the default trigger puts on its own element, and only that: spread it
+ * onto yours. The state you draw from arrives separately, as the second
+ * argument, so nothing in here becomes a stray DOM attribute.
+ */
 export interface DropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;
+  type: "button";
   id: string;
   role: "combobox";
   "aria-expanded": boolean;
@@ -80,6 +86,10 @@ export interface DropdownTriggerRenderProps {
   "data-valid": true | undefined;
   "data-open": true | undefined;
   "data-placeholder": true | undefined;
+}
+
+/** What a custom trigger draws from: the second argument to `renderTrigger`. */
+export interface DropdownTriggerState {
   /** Whether the dropdown is currently open */
   isOpen: boolean;
   /** The currently selected option, or null */
@@ -146,7 +156,7 @@ export interface DropdownBaseProps {
   onBlur?: () => void;
   onFocus?: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
-  renderTrigger?: (props: DropdownTriggerRenderProps) => ReactNode;
+  renderTrigger?: (triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode;
   ChevronIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   CheckIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   ClearIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;

@@ -65,7 +65,7 @@ export default function Example() {
 | `showSelectedChips` | Default `true`. Set `false` for count-only display. |
 | `maxDisplayedChips` | Truncates chips with "+N more" badge. |
 | `name` | Renders hidden inputs for form submission. |
-| `renderTrigger` | Replaces default trigger. Must spread all props and attach `ref`. |
+| `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOptions`, `placeholder`), which never reaches the DOM. |
 
 ---
 
@@ -143,7 +143,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
-| `renderTrigger` | object | — | (props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger. |
+| `renderTrigger` | object | — | (triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder). |
 | `searchInputAriaLabel` | string | `"Search options"` | Accessible label for the search input. |
 
 ## Styling Guide

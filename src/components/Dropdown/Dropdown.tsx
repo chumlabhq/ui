@@ -484,7 +484,11 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       [],
     );
 
+    // One object for both triggers. The custom one was handed its own copy of
+    // this list in three components, and the copies drifted: `type="button"`
+    // and CascadingDropdown's `aria-controls` reached the default trigger only.
     const triggerProps = {
+      type: "button" as const,
       id: triggerId,
       role: "combobox" as const,
       "aria-expanded": isOpen,
@@ -536,18 +540,14 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
         <div className={mergedClasses.control || undefined}>
           {renderTrigger ? (
-            renderTrigger({
-              ...triggerProps,
-              ref: renderTriggerRefCallback,
-              isOpen,
-              selectedOption,
-              placeholder,
-            })
+            renderTrigger(
+              { ...triggerProps, ref: renderTriggerRefCallback },
+              { isOpen, selectedOption, placeholder },
+            )
           ) : (
             <button
               ref={mergedTriggerRef}
               {...triggerProps}
-              type="button"
               className={mergedClasses.trigger || undefined}
             >
               <span id={valueId} className={mergedClasses.value || undefined}>

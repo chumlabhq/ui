@@ -413,6 +413,33 @@ const MultiSelectDropdown = forwardRef<
     const displayedChips = selectedOptions.slice(0, maxDisplayedChips);
     const remainingCount = selectedOptions.length - maxDisplayedChips;
 
+    // One object for both triggers. The custom one was handed its own copy of
+    // this list in three components, and the copies drifted: `type="button"`
+    // and CascadingDropdown's `aria-controls` reached the default trigger only.
+    const triggerProps = {
+      type: "button" as const,
+      id: triggerId,
+      role: "combobox" as const,
+      "aria-expanded": isOpen,
+      "aria-haspopup": "listbox" as const,
+      "aria-controls": listboxId,
+      "aria-activedescendant": activeDescendantId,
+      ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger }),
+      "aria-invalid": (error || undefined) as boolean | undefined,
+      "aria-describedby": error && errorMessage ? errorId : undefined,
+      "aria-required": (required || undefined) as boolean | undefined,
+      disabled,
+      onClick: handleToggle,
+      onMouseDown: focusTriggerOnMouseDown,
+      onKeyDown: handleKeyDownWithPassthrough,
+      onFocus,
+      onBlur,
+      "data-disabled": (disabled || undefined) as true | undefined,
+      "data-error": (error || undefined) as true | undefined,
+      "data-valid": ((!error && success) || undefined) as true | undefined,
+      "data-open": (isOpen || undefined) as true | undefined,
+    };
+
     return (
       <div
         ref={ref}
@@ -443,57 +470,15 @@ const MultiSelectDropdown = forwardRef<
           className={mergedClasses.control || undefined}
         >
           {renderTrigger ? (
-            renderTrigger({
-              ref: renderTriggerRefCallback,
-              id: triggerId,
-              role: "combobox",
-              "aria-expanded": isOpen,
-              "aria-haspopup": "listbox",
-              "aria-controls": listboxId,
-              "aria-activedescendant": activeDescendantId,
-              "aria-invalid": (error || undefined) as boolean | undefined,
-              "aria-describedby": error && errorMessage ? errorId : undefined,
-              "aria-required": (required || undefined) as boolean | undefined,
-              ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger }),
-              disabled,
-              onClick: handleToggle,
-              onMouseDown: focusTriggerOnMouseDown,
-              onKeyDown: handleKeyDownWithPassthrough,
-              onFocus,
-              onBlur,
-              "data-disabled": (disabled || undefined) as true | undefined,
-              "data-error": (error || undefined) as true | undefined,
-              "data-valid": ((!error && success) || undefined) as true | undefined,
-              "data-open": (isOpen || undefined) as true | undefined,
-              isOpen,
-              selectedOptions,
-              placeholder,
-            })
+            renderTrigger(
+              { ...triggerProps, ref: renderTriggerRefCallback },
+              { isOpen, selectedOptions, placeholder },
+            )
           ) : (
             <button
               ref={mergedTriggerRef}
-              type="button"
-              id={triggerId}
-              role="combobox"
-              aria-expanded={isOpen}
-              aria-haspopup="listbox"
-              aria-controls={listboxId}
-              aria-activedescendant={activeDescendantId}
-              {...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger })}
-              aria-invalid={error || undefined}
-              aria-describedby={error && errorMessage ? errorId : undefined}
-              aria-required={required || undefined}
-              disabled={disabled}
-              onClick={handleToggle}
-              onMouseDown={focusTriggerOnMouseDown}
-              onKeyDown={handleKeyDownWithPassthrough}
-              onFocus={onFocus}
-              onBlur={onBlur}
+              {...triggerProps}
               className={mergedClasses.trigger || undefined}
-              data-disabled={disabled || undefined}
-              data-error={error || undefined}
-              data-valid={(!error && success) || undefined}
-              data-open={isOpen || undefined}
             >
               {/* Each chip carries its own "Remove X" button, and a name computed
                   from the value element swept those up — the trigger announced

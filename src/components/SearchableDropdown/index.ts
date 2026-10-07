@@ -4,6 +4,7 @@ export type {
   SearchableDropdownProps,
   SearchableDropdownClasses,
   SearchableDropdownTriggerRenderProps,
+  SearchableDropdownTriggerState,
 } from "./utils/types.js";
 export { useDropdown as useSearchableDropdown } from "./utils/useDropdown.js";
 export { ChevronDownIcon, CheckIcon, SearchIcon } from "./utils/icons.js";

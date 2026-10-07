@@ -200,7 +200,7 @@
     },
     "maxDisplayedChips": {
       "type": "number",
-      "description": "Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area \u2014 a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that.",
+      "description": "Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that.",
       "default": 3
     },
     "showSelectedChips": {
@@ -384,8 +384,8 @@
     },
     "renderTrigger": {
       "type": "object",
-      "description": "(props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger.",
-      "x-tsType": "((props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode) | undefined"
+      "description": "(triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder).",
+      "x-tsType": "((triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode) | undefined"
     },
     "searchInputAriaLabel": {
       "type": "string",

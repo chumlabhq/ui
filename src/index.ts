@@ -146,6 +146,7 @@ export type {
   DropdownProps,
   DropdownClasses,
   DropdownTriggerRenderProps,
+  DropdownTriggerState,
 } from "./components/Dropdown/utils/types.js";
 
 export { default as Input, InputLabel } from "./components/Input/Input.js";
@@ -251,6 +252,7 @@ export type {
   SearchableDropdownProps,
   SearchableDropdownClasses,
   SearchableDropdownTriggerRenderProps,
+  SearchableDropdownTriggerState,
 } from "./components/SearchableDropdown/utils/types.js";
 
 export { default as Stepper } from "./components/Stepper/Stepper.js";

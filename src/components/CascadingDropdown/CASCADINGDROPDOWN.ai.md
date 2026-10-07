@@ -148,7 +148,7 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | CSSProperties — Inline styles. |
 | `ClearIcon` | object | — | React.ComponentType<{ className?: string }> — Custom clear icon component. |
-| `renderTrigger` | object | — | (props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function. |
+| `renderTrigger` | object | — | (triggerProps: CascadingDropdownTriggerRenderProps, state: CascadingDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, displayValue, placeholder). |
 | `showMenuSearch` | boolean | `false` | Show a search input inside the main menu. |
 | `showSubmenuSearch` | boolean | `false` | Show a search input inside submenus. |
 | `menuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the main menu search input. |

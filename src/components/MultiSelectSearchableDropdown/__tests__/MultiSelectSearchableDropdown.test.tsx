@@ -383,7 +383,7 @@ describe("MultiSelectSearchableDropdown", () => {
   describe("renderTrigger prop", () => {
     it("renders custom trigger via renderTrigger and calls setTriggerNode", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const renderTrigger = vi.fn(({ ref, onClick, isOpen }: any) => (
+      const renderTrigger = vi.fn(({ ref, onClick }: any, { isOpen }: any) => (
         <button ref={ref} onClick={onClick} data-testid="custom-trigger" data-open={isOpen}>
           Custom trigger
         </button>

@@ -41,7 +41,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockHandDot:
     "w-3 h-3 rounded-full bg-cl-accent",
   clockNumber:
-    "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
+    "absolute text-sm font-medium cursor-pointer select-none transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
   clockCenter: "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton:

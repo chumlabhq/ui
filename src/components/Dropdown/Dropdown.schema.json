@@ -310,8 +310,8 @@
     },
     "renderTrigger": {
       "type": "object",
-      "description": "(props: DropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element.",
-      "x-tsType": "((props: DropdownTriggerRenderProps) => ReactNode) | undefined"
+      "description": "(triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder).",
+      "x-tsType": "((triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode) | undefined"
     },
     "ChevronIcon": {
       "type": "object",

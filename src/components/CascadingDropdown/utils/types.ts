@@ -147,7 +147,10 @@ interface CascadingDropdownBaseProps {
   className?: string;
   style?: React.CSSProperties;
   ClearIcon?: React.ComponentType<{ className?: string }>;
-  renderTrigger?: (props: CascadingDropdownTriggerRenderProps) => React.ReactNode;
+  renderTrigger?: (
+    triggerProps: CascadingDropdownTriggerRenderProps,
+    state: CascadingDropdownTriggerState,
+  ) => React.ReactNode;
   /** Show a search input inside the main menu. */
   showMenuSearch?: boolean;
   /** Show a search input inside submenus. */
@@ -201,11 +204,19 @@ export type CascadingDropdownProps = CascadingDropdownBaseProps &
   CascadingMenuSearch &
   CascadingSubmenuSearch;
 
+/**
+ * What the default trigger puts on its own element, and only that: spread it
+ * onto yours. The state you draw from arrives separately, as the second
+ * argument, so nothing in here becomes a stray DOM attribute.
+ */
 export interface CascadingDropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;
+  type: "button";
   id: string;
   "aria-expanded": boolean;
   "aria-haspopup": "true";
+  /** The menu's id while it is open; absent while closed, when there is no menu. */
+  "aria-controls": string | undefined;
   "aria-invalid": boolean | undefined;
   "aria-describedby": string | undefined;
   "aria-label": string | undefined;
@@ -224,8 +235,15 @@ export interface CascadingDropdownTriggerRenderProps {
   "data-error": true | undefined;
   "data-valid": true | undefined;
   "data-open": true | undefined;
+}
+
+/** What a custom trigger draws from: the second argument to `renderTrigger`. */
+export interface CascadingDropdownTriggerState {
+  /** Whether the menu is currently open */
   isOpen: boolean;
+  /** The selection as the default trigger shows it, or "" with nothing selected */
   displayValue: string;
+  /** The placeholder content */
   placeholder: ReactNode;
 }
 

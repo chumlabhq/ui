@@ -942,7 +942,7 @@ describe('SearchableDropdown - Custom Trigger', () => {
       <SearchableDropdown
         options={fruitOptions}
         value="apple"
-        renderTrigger={({ ref, isOpen, selectedOption, ...rest }) => (
+        renderTrigger={({ ref, ...rest }, { isOpen, selectedOption }) => (
           <button ref={ref as React.RefCallback<HTMLButtonElement>} {...rest}>
             {selectedOption?.label || 'None'} - {isOpen ? 'Open' : 'Closed'}
           </button>

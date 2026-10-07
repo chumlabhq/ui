@@ -605,16 +605,13 @@ const DropdownDemo = () => {
               onValueChange={(v) => setRenderTriggerValue(v)}
               placeholder="Pick a fruit..."
               classes={c.dropdown}
-              renderTrigger={({
-                ref,
-                isOpen,
-                selectedOption,
-                placeholder: ph,
-                ...rest
-              }) => (
+              renderTrigger={(
+                { ref, ...triggerProps },
+                { isOpen, selectedOption, placeholder },
+              ) => (
                 <button
                   ref={ref as React.RefCallback<HTMLButtonElement>}
-                  {...rest}
+                  {...triggerProps}
                   type="button"
                   className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${
                     isOpen
@@ -632,7 +629,7 @@ const DropdownDemo = () => {
                     {selectedOption ? "🍎" : "🔍"}
                   </span>
                   <span className="flex-1 truncate font-medium">
-                    {selectedOption?.label ?? ph}
+                    {selectedOption?.label ?? placeholder}
                   </span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full ${

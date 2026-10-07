@@ -767,6 +767,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "Accordion's index. No other entry moved. f4b06be3 adds 5 B more (155.957 " +
       "-> 155.962), under the 0.01 a row needs.",
   },
+  {
+    kb: 155.70,
+    commit: "(uncommitted)",
+    date: "2026-10-07",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.26 KB (159,705 -> 159,435 B gzipped, -270 B), 81 files " +
+      "held. `renderTrigger(triggerProps, state)`: MultiSelectDropdown, " +
+      "MultiSelectSearchableDropdown and CascadingDropdown wrote their trigger " +
+      "attributes out twice, once per branch, and now build one object both " +
+      "branches spread — exclusive -58 B, -59 B and -9 B (Cascading's net of " +
+      "the dedupe and its new subItem disabled tokens). Dropdown +6 B, " +
+      "`type` moving into the shared object. TimePicker +5 B, the clockNumber " +
+      "disabled tokens. SearchableDropdown and InternationalPhoneInput -2 B " +
+      "each, chunk hashes only. Table did not move. Measured against a build " +
+      "of f4b06be3, whose library is HEAD's.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

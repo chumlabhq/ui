@@ -147,29 +147,62 @@ export const componentNames = (root = process.cwd()): string[] =>
     }
   ).components.map((component) => component.name);
 
+/** The name of the nearest named function or variable a node sits inside. */
+const ownerOf = (node: ts.Node, sf: ts.SourceFile): string => {
+  for (let n = node.parent; n; n = n.parent) {
+    if ((ts.isVariableDeclaration(n) || ts.isFunctionDeclaration(n)) && n.name && ts.isIdentifier(n.name)) {
+      return n.name.text;
+    }
+    if (ts.isPropertyAssignment(n) || ts.isMethodDeclaration(n)) return n.name.getText(sf);
+  }
+  return "(module)";
+};
+
+/** One element in a render graph that puts an attribute on an item. */
+export interface ItemSite {
+  /** `file › owner`: stable across edits that only move lines, unlike `at`. */
+  site: string;
+  /** `file:line`, for reading the source. */
+  at: string;
+}
+
 /**
- * Where a component's render graph puts `attribute` on an ITEM: an element that
- * also carries `data-highlighted`, or whose role is an option, a menu item or a
- * grid cell. `emittedBy` answers for the whole component, and nearly every one
- * marks its root `data-disabled`, so it cannot say which ones mark an item.
- * Returns `file:line` for each site, empty when there is none.
+ * Where a component's render graph puts `attribute` on an ITEM: an element
+ * repeated once per entry of an open surface. It is read as one that also
+ * carries `data-highlighted`, an option / menu item / grid cell role, or a list
+ * `key`. The key is what finds a TimePicker clock number, which is mapped from
+ * the hour or minute list and carries no role at all. `emittedBy` answers for
+ * the whole component, and nearly every one marks its root `data-disabled`, so
+ * it cannot say which ones mark an item.
+ *
+ * Every site is returned, not just whether one exists. CascadingDropdown has
+ * two — the top-level item and the submenu's — and a check keyed by component
+ * measured the first and called the component done while the second shipped
+ * undimmed.
  */
 export function itemSitesOf(
   name: string,
   attribute: string,
   read: Read = (file) => readFileSync(file, "utf8"),
-): string[] {
+): ItemSite[] {
   const root = process.cwd();
-  const sites: string[] = [];
+  const sites: ItemSite[] = [];
   for (const file of graph(join(resolve(root, "src/components", name), "index.ts"), read)) {
     const sf = parse(file, read);
+    const rel = file.slice(root.length + 1);
     const visit = (node: ts.Node): void => {
       if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
         const attrs = node.attributes.properties.filter(ts.isJsxAttribute);
         const names = attrs.map((a) => a.name.getText(sf));
         const role = attrs.find((a) => a.name.getText(sf) === "role")?.initializer?.getText(sf) ?? "";
-        if (names.includes(attribute) && (names.includes("data-highlighted") || /option|menuitem|gridcell/.test(role))) {
-          sites.push(`${file.slice(root.length + 1)}:${sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1}`);
+        if (
+          names.includes(attribute) &&
+          (names.includes("data-highlighted") || names.includes("key") || /option|menuitem|gridcell/.test(role))
+        ) {
+          sites.push({
+            site: `${rel.split("/").pop()} › ${ownerOf(node, sf)}`,
+            at: `${rel}:${sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1}`,
+          });
         }
       }
       ts.forEachChild(node, visit);

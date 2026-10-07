@@ -102,11 +102,6 @@
     },
     {
       "component": "Dropdown",
-      "title": "Custom Trigger (renderTrigger)",
-      "reason": "`placeholder` is not declared on the page"
-    },
-    {
-      "component": "Dropdown",
       "title": "Async Data Fetching with Shimmer",
       "reason": "`fetchCountries` is not declared on the page"
     },
@@ -159,11 +154,6 @@
       "component": "MultiSelectSearchableDropdown",
       "title": "Async with Dynamic Prefetch",
       "reason": "`searchCountries` is not declared on the page"
-    },
-    {
-      "component": "SearchableDropdown",
-      "title": "Custom Trigger (renderTrigger)",
-      "reason": "`placeholder` is not declared on the page"
     },
     {
       "component": "SearchableDropdown",

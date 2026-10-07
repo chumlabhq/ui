@@ -928,7 +928,7 @@ describe("MultiSelectDropdown", () => {
   describe("renderTrigger prop", () => {
     it("renders custom trigger via renderTrigger and passes correct props", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const renderTrigger = vi.fn(({ ref, onClick, isOpen, selectedOptions, placeholder }: any) => (
+      const renderTrigger = vi.fn(({ ref, onClick }: any, { isOpen, selectedOptions, placeholder }: any) => (
         <button
           ref={ref}
           onClick={onClick}
@@ -969,7 +969,7 @@ describe("MultiSelectDropdown", () => {
 
     it("passes selectedOptions to renderTrigger when values are selected", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const renderTrigger = vi.fn(({ selectedOptions }: any) => (
+      const renderTrigger = vi.fn((_triggerProps: any, { selectedOptions }: any) => (
         <button data-testid="custom-trigger">
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {selectedOptions.map((o: any) => o.label).join(", ")}

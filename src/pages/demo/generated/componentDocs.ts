@@ -2859,10 +2859,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderTrigger",
-        "type": "((props: CascadingDropdownTriggerRenderProps) => ReactNode)",
+        "type": "((triggerProps: CascadingDropdownTriggerRenderProps, state: CascadingDropdownTriggerState) => ReactNode)",
         "required": false,
         "default": null,
-        "description": "(props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function."
+        "description": "(triggerProps: CascadingDropdownTriggerRenderProps, state: CascadingDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, displayValue, placeholder)."
       },
       {
         "name": "showMenuSearch",
@@ -5714,10 +5714,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderTrigger",
-        "type": "((props: DropdownTriggerRenderProps) => ReactNode)",
+        "type": "((triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode)",
         "required": false,
         "default": null,
-        "description": "(props: DropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element."
+        "description": "(triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder)."
       },
       {
         "name": "ChevronIcon",
@@ -5886,6 +5886,30 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "boolean",
             "required": false,
             "description": "Renders the row but refuses selection."
+          }
+        ]
+      },
+      {
+        "name": "DropdownTriggerState",
+        "description": "What a custom trigger draws from: the second argument to `renderTrigger`.",
+        "members": [
+          {
+            "name": "isOpen",
+            "type": "boolean",
+            "required": true,
+            "description": "Whether the dropdown is currently open"
+          },
+          {
+            "name": "selectedOption",
+            "type": "DropdownOption | null",
+            "required": true,
+            "description": "The currently selected option, or null"
+          },
+          {
+            "name": "placeholder",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The placeholder content"
           }
         ]
       }
@@ -8212,10 +8236,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderTrigger",
-        "type": "((props: MultiSelectDropdownTriggerRenderProps) => ReactNode)",
+        "type": "((triggerProps: MultiSelectDropdownTriggerRenderProps, state: MultiSelectDropdownTriggerState) => ReactNode)",
         "required": false,
         "default": null,
-        "description": "(props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element."
+        "description": "(triggerProps: MultiSelectDropdownTriggerRenderProps, state: MultiSelectDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder)."
       }
     ],
     "subComponents": [],
@@ -8840,10 +8864,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderTrigger",
-        "type": "((props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode)",
+        "type": "((triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode)",
         "required": false,
         "default": null,
-        "description": "(props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger."
+        "description": "(triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder)."
       },
       {
         "name": "searchInputAriaLabel",
@@ -10811,10 +10835,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "renderTrigger",
-        "type": "((props: SearchableDropdownTriggerRenderProps) => ReactNode)",
+        "type": "((triggerProps: SearchableDropdownTriggerRenderProps, state: SearchableDropdownTriggerState) => ReactNode)",
         "required": false,
         "default": null,
-        "description": "(props: SearchableDropdownTriggerRenderProps) => ReactNode — Custom trigger render function."
+        "description": "(triggerProps: SearchableDropdownTriggerRenderProps, state: SearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder)."
       },
       {
         "name": "ChevronIcon",
@@ -10974,7 +10998,32 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       }
     ],
-    "shapes": [],
+    "shapes": [
+      {
+        "name": "SearchableDropdownTriggerState",
+        "description": "What a custom trigger draws from: the second argument to `renderTrigger`.",
+        "members": [
+          {
+            "name": "isOpen",
+            "type": "boolean",
+            "required": true,
+            "description": "Whether the dropdown is currently open"
+          },
+          {
+            "name": "selectedOption",
+            "type": "SearchableDropdownOption | null",
+            "required": true,
+            "description": "The currently selected option, or null"
+          },
+          {
+            "name": "placeholder",
+            "type": "ReactNode",
+            "required": true,
+            "description": "The placeholder content"
+          }
+        ]
+      }
+    ],
     "dataAttributes": [
       {
         "name": "data-disabled",

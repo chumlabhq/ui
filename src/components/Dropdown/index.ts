@@ -4,6 +4,7 @@ export type {
   DropdownProps,
   DropdownClasses,
   DropdownTriggerRenderProps,
+  DropdownTriggerState,
 } from "./utils/types.js";
 export {
   ChevronDownIcon,

@@ -559,9 +559,11 @@ test("a keyboard-highlighted item paints differently from a plain one, in both t
  * where no item exists, and exempts CascadingDropdown's open case by name; the
  * docs page was where it showed.
  *
- * - The population is read from the code: every component whose render graph
- *   puts `data-disabled` on an item (`itemSitesOf`). One in it with no recipe
- *   fails rather than being skipped.
+ * - The population is read from the code: every item site a component's render
+ *   graph puts `data-disabled` on (`itemSitesOf`), submenus included. It was
+ *   once one entry per component, and CascadingDropdown's submenu item shipped
+ *   undimmed while its top-level item passed. One with no recipe fails rather
+ *   than being skipped.
  * - Each item's text is composited the way it reaches the screen: its colour
  *   over the item's own background, then the item's opacity against what is
  *   behind it. `contrast-painted`'s helpers do the compositing; they read no
@@ -569,18 +571,32 @@ test("a keyboard-highlighted item paints differently from a plain one, in both t
  *   applied here.
  * - Each theme gets its own fresh load.
  */
-const ITEM_DISABLERS = componentNames().filter((name) => itemSitesOf(name, "data-disabled").length > 0);
+const ITEM_DISABLERS = componentNames().flatMap((name) =>
+  [...new Set(itemSitesOf(name, "data-disabled").map((s) => s.site))].map((site) => `${name}: ${site}`),
+);
 
-/** A fixture whose open surface holds a disabled item beside an enabled, unselected one. */
-const DISABLED_ITEM_RECIPES: Record<string, { fixture: string } | { unreachable: string }> = {
-  Dropdown: { fixture: "open" },
-  SearchableDropdown: { fixture: "open" },
-  MultiSelectDropdown: { fixture: "open" },
-  MultiSelectSearchableDropdown: { fixture: "open" },
-  CascadingDropdown: { fixture: "disabled-top-level" },
-  Breadcrumb: { fixture: "collapsed-open" },
-  DatePicker: { fixture: "bounded-in-range" },
-  InternationalPhoneInput: {
+/**
+ * Per item site, a fixture whose open surface holds a disabled item beside an
+ * enabled, unselected one. `item` narrows the search to that site's elements
+ * where the surface holds more than one kind, or where the item has no role.
+ */
+const DISABLED_ITEM_RECIPES: Record<string, { fixture: string; item?: string } | { unreachable: string }> = {
+  "Dropdown: Dropdown.tsx › DropdownOptionItem": { fixture: "open" },
+  "SearchableDropdown: SearchableDropdownOption.tsx › SearchableDropdownOption": { fixture: "open" },
+  "MultiSelectDropdown: MultiSelectDropdownOption.tsx › MultiSelectDropdownOption": { fixture: "open" },
+  "MultiSelectSearchableDropdown: MultiSelectSearchableDropdown.tsx › OptionItem": { fixture: "open" },
+  "CascadingDropdown: CascadingDropdown.tsx › MenuItem": {
+    fixture: "disabled-top-level",
+    item: "[role='menuitem'], [role='menuitemradio']",
+  },
+  "CascadingDropdown: CascadingDropdown.tsx › SubmenuItem": {
+    fixture: "open-submenu",
+    item: "[role='menuitemcheckbox']",
+  },
+  "Breadcrumb: Breadcrumb.tsx › button": { fixture: "collapsed-open" },
+  "DatePicker: DatePicker.tsx › DayCell": { fixture: "bounded-in-range" },
+  "TimePicker: ClockFace.tsx › renderNumber": { fixture: "open-bounded", item: "[role='slider'] > div" },
+  "InternationalPhoneInput: SearchableDropdownOption.tsx › SearchableDropdownOption": {
     unreachable:
       "Its country list renders SearchableDropdown's option, which can carry data-disabled, " +
       "but the options it builds (InternationalPhoneInput.tsx `dropdownOptions`) never set " +
@@ -589,22 +605,32 @@ const DISABLED_ITEM_RECIPES: Record<string, { fixture: string } | { unreachable:
 };
 
 /**
- * The smallest contrast a disabled item's painted text may have against an
- * enabled sibling's, compared unrounded.
+ * How far, per 8-bit channel, a correctly dimmed item may land from the colour
+ * this check expects of it: 0.5 because every colour the browser reports is
+ * stored to the nearest of 256 levels, plus 0.5 because the browser rounds again
+ * when it composites a translucent layer onto what is behind it.
  *
- * Taken from what MultiSelectDropdown ships, `data-[disabled]:opacity-50`, at its
- * fainter theme: 3.536423678219509:1 in dark, against 5.3175872961655255:1 in
- * light (2026-10-07). 3.5 holds that treatment with no rounding room needed and
- * fails anything dimmed visibly less. Half opacity is the library's disabled
- * treatment everywhere it has one, and "differ at all" would pass a 1.01:1
- * change nobody can see.
+ * The rule it serves is relative. `expected` is the enabled sibling's own
+ * painted text at half opacity over the background measured behind it — the
+ * library's disabled treatment applied to that site's colour — and a disabled
+ * item must sit at least as far from the enabled one as `expected` does, less
+ * what this tolerance can move `expected` by.
+ *
+ * It replaced a fixed 3.5:1 floor. That number was what MultiSelectDropdown's
+ * `opacity-50` measured on full-strength option text, 3.536423678219509:1 in
+ * dark and 5.3175872961655255:1 in light (2026-10-07), and it was right only
+ * for text that strong. TimePicker's clock numbers start at tertiary text,
+ * 4.73:1 against the face in dark, so the same half opacity measured 2.14:1
+ * there and the fixed floor demanded opacity 0.2 — numbers nobody could read.
+ * Relative to each site's own colour, one rule holds the library's treatment
+ * everywhere and still fails an undimmed item (1:1) or a lighter dimming.
  */
-const DISABLED_ITEM_MIN_RATIO = 3.5;
+const DISABLED_ITEM_CHANNEL_TOLERANCE = 1;
 
 /** The disabled item's text and an enabled sibling's, each as it reaches the screen. */
 const MEASURE_DISABLED_ITEM = `(() => {
 ${PAINT_HELPERS}
-  const ITEM = "[role='option'], [role^='menuitem'], [role='gridcell']";
+  const ITEM = __ITEM__ || "[role='option'], [role^='menuitem'], [role='gridcell']";
   // Apart from being disabled, both sides carry no other state, so the
   // comparison is the disabled paint alone: a day outside the month or an
   // option already selected paints for its own reason.
@@ -616,19 +642,22 @@ ${PAINT_HELPERS}
     el.getClientRects().length > 0;
   const disabled = (el) =>
     el.hasAttribute("data-disabled") || el.hasAttribute("disabled") || el.getAttribute("aria-disabled") === "true";
-  const dead = [...document.querySelectorAll(ITEM)].find((el) => el.hasAttribute("data-disabled") && otherwisePlain(el));
-  if (!dead) return { error: "no visible item carries data-disabled and no other state" };
-  const role = dead.getAttribute("role");
-  const live = [...document.querySelectorAll("[role='" + role + "']")].find(
-    (el) => el !== dead && !disabled(el) && otherwisePlain(el),
-  );
-  if (!live) return { error: "no enabled, unselected " + role + " beside the disabled one" };
-
   /** The first element at or under the item that paints its own text. */
   const textOf = (item) =>
     [item, ...item.querySelectorAll("*")].find((el) =>
       [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()),
     );
+  // Both sides must paint text: a TimePicker clock face also holds the hand's
+  // dot, a textless sibling of the numbers.
+  const dead = [...document.querySelectorAll(ITEM)].find(
+    (el) => el.hasAttribute("data-disabled") && otherwisePlain(el) && textOf(el),
+  );
+  if (!dead) return { error: "no visible item carries data-disabled and no other state" };
+  const role = dead.getAttribute("role");
+  const live = [...document.querySelectorAll(ITEM)].find(
+    (el) => el !== dead && el.getAttribute("role") === role && !disabled(el) && otherwisePlain(el) && textOf(el),
+  );
+  if (!live) return { error: "no enabled, unselected " + (role ?? "item") + " beside the disabled one" };
   const painted = (item) => {
     const el = textOf(item);
     if (!el) return null;
@@ -642,15 +671,24 @@ ${PAINT_HELPERS}
       if (n === item) break;
     }
     const text = over(fg, inner);
-    return { rgb: over([...text, opacity], behind), opacity, label: (el.textContent || "").trim().slice(0, 20) };
+    return { rgb: over([...text, opacity], behind), text, behind, opacity, label: (el.textContent || "").trim().slice(0, 20) };
   };
   const a = painted(dead), b = painted(live);
   if (!a || !b) return { error: "an item's text or background could not be read" };
+  // The library's treatment applied to this site's own colour: the enabled
+  // item's painted text at half opacity over what is behind it.
+  const expected = over([...b.text, 0.5], b.behind);
+  // The tolerance moves \`expected\` toward the enabled colour, channel by channel.
+  const tol = __TOL__;
+  const nudged = expected.map((v, i) => (v > b.rgb[i] ? Math.max(b.rgb[i], v - tol) : Math.min(b.rgb[i], v + tol)));
   const fmt = (c) => "rgb(" + c.map((v) => v.toFixed(2)).join(", ") + ")";
   return {
     disabled: fmt(a.rgb) + " @" + a.opacity + ' "' + a.label + '"',
     enabled: fmt(b.rgb) + " @" + b.opacity + ' "' + b.label + '"',
+    expected: fmt(expected),
     ratio: ratio(a.rgb, b.rgb),
+    expectedRatio: ratio(expected, b.rgb),
+    floor: ratio(nudged, b.rgb),
   };
 })()`;
 
@@ -664,7 +702,7 @@ test("a disabled item paints differently from an enabled one, in both themes", a
   const unmeasured: string[] = [];
   const indistinct: string[] = [];
 
-  console.log(`DISABLED_ITEM population ${ITEM_DISABLERS.length}: ${ITEM_DISABLERS.join(", ")}`);
+  console.log(`DISABLED_ITEM population ${ITEM_DISABLERS.length} item sites: ${ITEM_DISABLERS.join("; ")}`);
   for (const name of ITEM_DISABLERS) {
     const recipe = DISABLED_ITEM_RECIPES[name];
     if (!recipe) continue;
@@ -672,8 +710,9 @@ test("a disabled item paints differently from an enabled one, in both themes", a
       console.log(`DISABLED_ITEM ${name}: not measured — ${recipe.unreachable}`);
       continue;
     }
+    const component = name.split(":")[0];
     for (const theme of ["dark", "light"] as const) {
-      await gotoFixture(page, name, recipe.fixture);
+      await gotoFixture(page, component, recipe.fixture);
       await page
         .waitForFunction(
           () => {
@@ -695,28 +734,39 @@ test("a disabled item paints differently from an enabled one, in both themes", a
         html.classList.toggle("dark", next === "dark");
       }, theme);
 
-      const m = (await page.evaluate(MEASURE_DISABLED_ITEM)) as {
+      const m = (await page.evaluate(
+        MEASURE_DISABLED_ITEM.replace("__ITEM__", JSON.stringify(recipe.item ?? "")).replace(
+          "__TOL__",
+          String(DISABLED_ITEM_CHANNEL_TOLERANCE),
+        ),
+      )) as {
         error?: string;
         disabled?: string;
         enabled?: string;
+        expected?: string;
         ratio?: number;
+        expectedRatio?: number;
+        floor?: number;
       };
-      const at = `${name}/${recipe.fixture} ${theme}`;
+      const at = `${name} /${recipe.fixture} ${theme}`;
       if (m.error) {
         unmeasured.push(`${at}: ${m.error}`);
         console.log(`DISABLED_ITEM ${at}: UNMEASURED — ${m.error}`);
         continue;
       }
-      const distinct = m.ratio! >= DISABLED_ITEM_MIN_RATIO;
+      const margin = m.ratio! - m.floor!;
+      const distinct = margin >= 0;
       console.log(
-        `DISABLED_ITEM ${at}: ${m.disabled} vs enabled ${m.enabled} = ${m.ratio}:1 → ${distinct ? "distinct" : "INDISTINCT"}`,
+        `DISABLED_ITEM ${at}: enabled ${m.enabled}, expected ${m.expected}, disabled ${m.disabled}; ` +
+          `disabled:enabled ${m.ratio}:1, expected:enabled ${m.expectedRatio}:1, floor ${m.floor}:1, ` +
+          `margin ${margin} → ${distinct ? "dimmed" : "UNDER-DIMMED"}`,
       );
-      if (!distinct) indistinct.push(`${at}: ${m.disabled} vs ${m.enabled} (${m.ratio}:1)`);
+      if (!distinct) indistinct.push(`${at}: ${m.disabled} vs ${m.enabled} (${m.ratio}:1, floor ${m.floor}:1)`);
     }
   }
 
   console.log(
-    `DISABLED_ITEM_PAINT ${ITEM_DISABLERS.length} components × 2 themes, ${indistinct.length} indistinct ` +
+    `DISABLED_ITEM_PAINT ${ITEM_DISABLERS.length} item sites × 2 themes, ${indistinct.length} indistinct ` +
       `(${unmeasured.length} unmeasured, ${noRecipe.length} without a recipe)`,
   );
   expect(noRecipe, "these mark an item disabled and nothing here says how to reach one").toEqual([]);

@@ -362,8 +362,8 @@
     },
     "renderTrigger": {
       "type": "object",
-      "description": "(props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function.",
-      "x-tsType": "((props: CascadingDropdownTriggerRenderProps) => ReactNode) | undefined"
+      "description": "(triggerProps: CascadingDropdownTriggerRenderProps, state: CascadingDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, displayValue, placeholder).",
+      "x-tsType": "((triggerProps: CascadingDropdownTriggerRenderProps, state: CascadingDropdownTriggerState) => ReactNode) | undefined"
     },
     "showMenuSearch": {
       "type": "boolean",
