@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { PAINT_HELPERS } from "./_contrast-measure";
-import { componentNames, emittedBy, itemSitesOf } from "../src/test/emittedAttributes";
+import { componentNames, emittedBy, itemSitesOf, pressedToggleSitesOf } from "../src/test/emittedAttributes";
 
 /**
  * A state the component reports has to be a state the component shows.
@@ -775,5 +775,138 @@ test("a disabled item paints differently from an enabled one, in both themes", a
     indistinct,
     "these mark an item `data-disabled` and `aria-disabled` and paint it like an enabled one, " +
       "so a sighted user reaches for an option that will not respond",
+  ).toEqual([]);
+});
+
+/**
+ * The pressed toggle in a group has to look pressed beside its siblings, as
+ * painted, in both themes.
+ *
+ * TimePicker's clock marks the selected hours/minutes field and the selected
+ * AM/PM button `aria-pressed` and `data-active`, and its `clockHours`,
+ * `clockMinutes` and `periodButton` slots styled neither: both buttons in each
+ * pair measured 1:1, so only a screen reader could tell AM from PM.
+ *
+ * - The population is read from the code: every element a render graph puts
+ *   both `aria-pressed` and `data-active` on (`pressedToggleSitesOf`). One with
+ *   no recipe fails rather than being skipped.
+ * - In the page, toggles are grouped by their parent, and each group's pressed
+ *   button is compared with an unpressed sibling, backgrounds composited with
+ *   `contrast-painted`'s helpers.
+ * - The floor is the treatment the library already ships for a selected button
+ *   among siblings: Pagination's active page item, `bg-cl-accent-bg` (measured
+ *   1.1461133894234306:1 light, 1.1370989146355865:1 dark against an inactive
+ *   page on its fixture, 2026-10-07). Rather than carry that ratio onto a
+ *   different surface, the check applies the same token here: `--cl-accent-bg`
+ *   composited over the unpressed sibling's own background is what the pressed
+ *   one must at least reach, less DISABLED_ITEM_CHANNEL_TOLERANCE for the same
+ *   8-bit rounding.
+ */
+const TOGGLERS = componentNames().filter((name) => pressedToggleSitesOf(name).length > 0);
+
+const TOGGLE_RECIPES: Record<string, { fixture: string }> = {
+  // The 12-hour clock is the one that has both groups: hours/minutes and AM/PM.
+  TimePicker: { fixture: "open-clock-12h" },
+};
+
+const MEASURE_TOGGLES = `(() => {
+${PAINT_HELPERS}
+  const tol = __TOL__;
+  const probe = document.createElement("div");
+  probe.style.backgroundColor = "var(--cl-accent-bg)";
+  document.body.appendChild(probe);
+  const accent = parse(getComputedStyle(probe).backgroundColor);
+  probe.remove();
+  const fmt = (c) => "rgb(" + c.map((v) => v.toFixed(2)).join(", ") + ")";
+  const groups = new Map();
+  for (const el of document.querySelectorAll("[aria-pressed]")) {
+    if (!el.getClientRects().length) continue;
+    if (!groups.has(el.parentElement)) groups.set(el.parentElement, []);
+    groups.get(el.parentElement).push(el);
+  }
+  return [...groups.values()].map((members) => {
+    const on = members.find((el) => el.getAttribute("aria-pressed") === "true");
+    const off = members.find((el) => el.getAttribute("aria-pressed") === "false");
+    const names = members.map((el) => (el.textContent || "").trim()).join("/");
+    if (!on || !off) return { group: names, error: "no pressed and unpressed pair" };
+    const a = backgroundOf(on), b = backgroundOf(off);
+    if (!a || !b || !accent) return { group: names, error: "a background is an image or gradient" };
+    const expected = over(accent, b);
+    const nudged = expected.map((v, i) => (v > b[i] ? Math.max(b[i], v - tol) : Math.min(b[i], v + tol)));
+    return {
+      group: names,
+      pressed: '"' + on.textContent.trim() + '" ' + fmt(a) + " text " + getComputedStyle(on).color,
+      unpressed: '"' + off.textContent.trim() + '" ' + fmt(b) + " text " + getComputedStyle(off).color,
+      expected: fmt(expected),
+      ratio: ratio(a, b),
+      floor: ratio(nudged, b),
+    };
+  });
+})()`;
+
+test("a pressed toggle paints differently from its unpressed sibling, in both themes", async ({ page }) => {
+  test.setTimeout(300_000);
+  expect(TOGGLERS.length, "no component marks a toggle aria-pressed and data-active — the derivation read nothing").toBeGreaterThan(0);
+  const noRecipe = TOGGLERS.filter((name) => !TOGGLE_RECIPES[name]);
+  const unmeasured: string[] = [];
+  const indistinct: string[] = [];
+  let groups = 0;
+
+  for (const name of TOGGLERS) {
+    const recipe = TOGGLE_RECIPES[name];
+    if (!recipe) continue;
+    for (const theme of ["dark", "light"] as const) {
+      await gotoFixture(page, name, recipe.fixture);
+      await page
+        .waitForFunction(
+          () => {
+            const main = document.querySelector("main[data-fixture-act]");
+            const still = main?.getAttribute("data-fixture-still");
+            return still && still !== "pending" ? still : null;
+          },
+          undefined,
+          { timeout: 30000 },
+        )
+        .catch(() => null);
+      await page.addStyleTag({
+        content: "*,*::before,*::after{transition:none!important;animation:none!important}",
+      });
+      await page.evaluate((next) => {
+        const html = document.documentElement;
+        html.setAttribute("data-theme", next);
+        html.classList.toggle("dark", next === "dark");
+      }, theme);
+      const results = (await page.evaluate(
+        MEASURE_TOGGLES.replace("__TOL__", String(DISABLED_ITEM_CHANNEL_TOLERANCE)),
+      )) as Array<{ group: string; error?: string; pressed?: string; unpressed?: string; expected?: string; ratio?: number; floor?: number }>;
+      if (!results.length) unmeasured.push(`${name}/${recipe.fixture} ${theme}: no aria-pressed toggle on the page`);
+      for (const m of results) {
+        const at = `${name}/${recipe.fixture} ${theme} [${m.group}]`;
+        if (m.error) {
+          unmeasured.push(`${at}: ${m.error}`);
+          console.log(`TOGGLE ${at}: UNMEASURED — ${m.error}`);
+          continue;
+        }
+        groups += 1;
+        const distinct = m.ratio! >= m.floor!;
+        console.log(
+          `TOGGLE ${at}: pressed ${m.pressed} vs ${m.unpressed} = ${m.ratio}:1; ` +
+            `expected ${m.expected}, floor ${m.floor}:1, margin ${m.ratio! - m.floor!} → ${distinct ? "distinct" : "INDISTINCT"}`,
+        );
+        if (!distinct) indistinct.push(`${at}: ${m.ratio}:1 under floor ${m.floor}:1`);
+      }
+    }
+  }
+
+  console.log(
+    `TOGGLE_PAINT ${TOGGLERS.length} components, ${groups} groups measured, ${indistinct.length} indistinct ` +
+      `(${unmeasured.length} unmeasured, ${noRecipe.length} without a recipe)`,
+  );
+  expect(noRecipe, "these mark a toggle aria-pressed and nothing here says which fixture shows it").toEqual([]);
+  expect(unmeasured, "a recipe that reaches no pressed/unpressed pair measures nothing").toEqual([]);
+  expect(
+    indistinct,
+    "these mark the pressed toggle aria-pressed and data-active and paint it like its sibling, " +
+      "so only a screen reader can tell which one is on",
   ).toEqual([]);
 });

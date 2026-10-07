@@ -143,7 +143,7 @@
     "clearable": {
       "type": "boolean",
       "description": "Show a clear button when a value is selected.",
-      "default": false
+      "default": true
     },
     "onClear": {
       "type": "object",

@@ -784,6 +784,22 @@ const LIBRARY_TOTAL_HISTORY = [
       "each, chunk hashes only. Table did not move. Measured against a build " +
       "of f4b06be3, whose library is HEAD's.",
   },
+  {
+    kb: 155.74,
+    commit: "(uncommitted)",
+    date: "2026-10-08",
+    attribution: "attributed",
+    reason:
+      "+0.04 KB (159,435 -> 159,476 B gzipped, +41 B), 81 files held, all of " +
+      "it TimePicker: own +26 B, closure +20 B, exclusive +23 B. The clock's " +
+      "pressed toggles get Pagination's active-item paint (three " +
+      "`data-[active]:` tokens on clockHours, clockMinutes and periodButton), " +
+      "disabled clock numbers carry aria-disabled, the slider's aria-valuemin/" +
+      "max read the bounded range, clearable defaults to true, and the clear " +
+      "icon's size test reads the consumer's clearTrigger rather than the " +
+      "never-empty default (a3354b7a inverted it). No other entry moved; " +
+      "Table held. Measured against a build of 6f7f96a6.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

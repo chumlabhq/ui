@@ -244,6 +244,14 @@ describe("TimePicker", () => {
   });
 
   describe("Clearable", () => {
+    // DatePicker has always defaulted to clearable (DatePicker.tsx `clearable = true`);
+    // TimePicker defaulted to false, so the two pickers on one form behaved differently.
+    it("is clearable by default, like DatePicker", () => {
+      render(<TimePicker value="10:00" />);
+
+      expect(screen.getByLabelText("Clear time")).toBeInTheDocument();
+    });
+
     it("shows clear button when clearable and value is set", () => {
       render(<TimePicker value="10:00" clearable />);
 

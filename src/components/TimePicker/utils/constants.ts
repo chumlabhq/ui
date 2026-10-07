@@ -28,9 +28,9 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "p-3 sm:p-4 border rounded-cl-lg shadow-lg bg-cl-bg-panel border-cl-border",
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
   clockHours:
-    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
+    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:hover:bg-cl-accent-bg-hover",
   clockMinutes:
-    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
+    "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:hover:bg-cl-accent-bg-hover",
   clockSeparator:
     "text-2xl font-semibold text-cl-text-tertiary",
   /** You pick an hour by clicking the face, so the face says so. */
@@ -50,7 +50,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent cursor-pointer",
   row: "flex flex-col gap-1 ml-3",
   periodButton:
-    "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-item-hover",
+    "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-item-hover data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:hover:bg-cl-accent-bg-hover",
 };
 
 export const UNSTYLED_TIMEPICKER_CLASSES: Required<TimePickerClasses> =

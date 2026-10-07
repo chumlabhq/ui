@@ -14747,7 +14747,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "clearable",
         "type": "boolean",
         "required": false,
-        "default": "false",
+        "default": "true",
         "description": "Show a clear button when a value is selected."
       },
       {

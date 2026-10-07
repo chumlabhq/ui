@@ -215,7 +215,7 @@ export interface TimePickerProps
   /** Visual variant: dropdown list or analog clock face. Default: `"dropdown"`. */
   variant?: TimePickerVariant;
 
-  /** Show a clear button when a value is selected. Default: `false`. */
+  /** Show a clear button when a value is selected. Default: `true`, as on DatePicker. */
   clearable?: boolean;
   /** Called when the clear button is clicked. */
   onClear?: () => void;

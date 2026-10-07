@@ -139,7 +139,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       renderOptionContent,
       fullWidth = false,
       variant = "dropdown",
-      clearable = false,
+      clearable = true,
       onClear,
       open: openProp,
       defaultOpen = false,
@@ -697,7 +697,12 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
                 // with a pointer — and for a single select there is no other way
                 // back to an empty value.
               >
-                <ClearIconDefault className={mergedClasses.clearTrigger ? "" : "w-4 h-4"} />
+                {/* The icon is sized unless the consumer styles the trigger. This read
+                    `mergedClasses.clearTrigger`, whose library default is never empty, so
+                    the icon was never sized and the button rendered 0×0: the ADR 002
+                    codemod (a3354b7a) moved the test from the old, empty-by-default
+                    `clearIcon` slot onto the button's. */}
+                <ClearIconDefault className={classesProp?.clearTrigger ? "" : "w-4 h-4"} />
               </button>
             )}
             {showEndIcon &&

@@ -438,6 +438,7 @@ export function ClockFace({
           data-selected={isSelected || undefined}
           data-inner={isInner || undefined}
           data-disabled={isDisabled || undefined}
+          aria-disabled={isDisabled || undefined}
         >
           {displayNum}
         </div>
@@ -465,6 +466,20 @@ export function ClockFace({
 
   const sliderMax =
     selectionMode === "hours" ? (format === "24h" ? 23 : 12) : 59;
+  // The slider's units are the face's own: the hour shown (0-23, or 1-12 on a
+  // 12-hour clock) in hours mode, the minute (0-59) in minutes mode. Bounded by
+  // minTime/maxTime, its range is the values the face renders enabled, so a
+  // screen reader hears the range the picker will accept.
+  const sliderRange = useMemo(() => {
+    const whole = { min: 0, max: sliderMax };
+    if (!minTime && !maxTime) return whole;
+    const values =
+      selectionMode === "hours"
+        ? Array.from({ length: format === "24h" ? 24 : 12 }, (_, i) => (format === "24h" ? i : i + 1))
+        : Array.from({ length: Math.ceil(60 / safeStep) }, (_, i) => i * safeStep);
+    const enabled = values.filter((v) => !(selectionMode === "hours" ? isHourDisabled(v) : isMinuteDisabled(v)));
+    return enabled.length ? { min: Math.min(...enabled), max: Math.max(...enabled) } : whole;
+  }, [selectionMode, format, safeStep, minTime, maxTime, sliderMax, isHourDisabled, isMinuteDisabled]);
   const sliderNow =
     selectionMode === "hours" ? displayValue.hours : displayValue.minutes;
 
@@ -561,8 +576,8 @@ export function ClockFace({
         aria-label={
           selectionMode === "hours" ? "Select hours" : "Select minutes"
         }
-        aria-valuemin={0}
-        aria-valuemax={sliderMax}
+        aria-valuemin={sliderRange.min}
+        aria-valuemax={sliderRange.max}
         aria-valuenow={sliderNow}
         tabIndex={disabled ? -1 : 0}
       >

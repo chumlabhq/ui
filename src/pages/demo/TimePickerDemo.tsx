@@ -389,7 +389,7 @@ const TimePickerDemo = () => {
       {/* ─── 5. Clearable ────────────────────────────────────────────────── */}
       <Section
         title="Clearable"
-        description="Show a clear button when a value is selected. Use onClear for custom clear logic."
+        description="A clear button shows when a value is selected; clearable defaults to true, as on DatePicker. Pass clearable={false} to hide it, and use onClear for custom clear logic."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
@@ -1451,7 +1451,7 @@ const TimePickerDemo = () => {
           "Use format='12h' for consumer-facing UIs and '24h' for technical/admin UIs.",
           "Use defaultValue for simple uncontrolled forms that don't need external state.",
           "Use cancelText/okText for i18n instead of wrapping the component.",
-          "Use clearable for optional time fields where users may want to reset.",
+          "Pass clearable={false} on time fields that must keep a value; the clear button is on by default.",
           "Use portalContainer to render the dropdown inside a specific container (e.g. a modal).",
         ]}
         donts={[

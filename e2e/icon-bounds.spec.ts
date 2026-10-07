@@ -122,6 +122,7 @@ test("no icon renders unbounded", async ({ page }) => {
   );
 
   const oversize: string[] = [];
+  const zeroBoxControls: string[] = [];
   let measured = 0;
 
   for (const path of paths) {
@@ -129,6 +130,7 @@ test("no icon renders unbounded", async ({ page }) => {
     await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
     const found = await page.evaluate((ceiling) => {
       const out: string[] = [];
+      const collapsed: string[] = [];
       let n = 0;
       for (const svg of document.querySelectorAll<SVGElement>("[data-fixture] svg")) {
         /**
@@ -154,7 +156,32 @@ test("no icon renders unbounded", async ({ page }) => {
           width: Number.isFinite(usedW) ? usedW : rect.width,
           height: Number.isFinite(usedH) ? usedH : rect.height,
         };
-        if (r.width === 0 && r.height === 0) continue;
+        if (r.width === 0 && r.height === 0) {
+          /**
+           * A zero box is usually an icon nobody can see — inside a closed
+           * panel, a `display: none` ancestor — and skipping those is right.
+           * It is not right when the icon is the only content of a control
+           * someone can tab to: TimePicker's clear button rendered 0x0 for a
+           * month, its icon never sized, and this sweep skipped it as hidden.
+           * So a 0x0 icon whose nearest focusable control is itself visible is
+           * a collapsed control, not an absent one.
+           */
+          const control = svg.closest<HTMLElement>(
+            "button, a[href], input, select, textarea, [role='button'], [tabindex]",
+          );
+          const focusable =
+            !!control &&
+            control.tabIndex >= 0 &&
+            !control.hasAttribute("disabled") &&
+            control.getAttribute("aria-disabled") !== "true" &&
+            !control.closest("[inert], [aria-hidden='true']");
+          if (focusable && control!.checkVisibility({ visibilityProperty: true })) {
+            collapsed.push(
+              `<${control!.tagName.toLowerCase()}${control!.getAttribute("aria-label") ? ` aria-label="${control!.getAttribute("aria-label")}"` : ""}> icon 0x0`,
+            );
+          }
+          continue;
+        }
         n += 1;
         // A decorative illustration would set its own size; an icon that has
         // grown past this took it from an ancestor.
@@ -162,20 +189,29 @@ test("no icon renders unbounded", async ({ page }) => {
           out.push(`${Math.round(r.width)}x${Math.round(r.height)}`);
         }
       }
-      return { out, n };
+      return { out, n, collapsed };
     }, CEILING);
     measured += found.n;
+    zeroBoxControls.push(...found.collapsed.map((c) => `${path.replace("/__fixtures/", "")}: ${c}`));
     const key = path.replace("/__fixtures/", "").replace(".", "/");
     if (SIZED_ON_PURPOSE.has(key)) continue;
     for (const size of found.out) oversize.push(`${key}: svg ${size}`);
   }
 
-  console.log(`ICON_BOUNDS measured=${measured} ceiling=${CEILING} oversize=${oversize.length}`);
+  console.log(
+    `ICON_BOUNDS measured=${measured} ceiling=${CEILING} oversize=${oversize.length} collapsed=${zeroBoxControls.length}`,
+  );
+  for (const c of zeroBoxControls) console.log(`ICON_BOUNDS_COLLAPSED ${c}`);
   // A walk that measured nothing is not a pass.
   expect(measured, "no icons were measured").toBeGreaterThan(200);
   expect(
     [...new Set(oversize)],
     `an icon wider or taller than ${CEILING}px has taken its size from an ` +
       "ancestor rather than carrying one — pin it",
+  ).toEqual([]);
+  expect(
+    [...new Set(zeroBoxControls)],
+    "a focusable, visible control whose icon renders 0x0 — the control is a tab stop " +
+      "with nothing to see; size the icon",
   ).toEqual([]);
 });

@@ -7507,7 +7507,7 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
 | `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
 | `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
-| `clearable` | boolean | `false` | Show a clear button when a value is selected. |
+| `clearable` | boolean | `true` | Show a clear button when a value is selected. |
 | `onClear` | object | — | () => void — Called when the clear button is clicked. |
 | `open` | boolean | — | Controlled open state. |
 | `defaultOpen` | boolean | `false` | Default open state (uncontrolled). |

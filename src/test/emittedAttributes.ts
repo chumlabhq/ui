@@ -212,6 +212,38 @@ export function itemSitesOf(
   return sites;
 }
 
+/**
+ * Where a component's render graph puts `aria-pressed` and `data-active` on the
+ * same element: a toggle in a group, reporting which of its siblings is on. The
+ * attribute pair is what a slot's `data-[active]:` token styles, so a site found
+ * here with nothing painting it is a toggle whose state only a screen reader sees.
+ */
+export function pressedToggleSitesOf(
+  name: string,
+  read: Read = (file) => readFileSync(file, "utf8"),
+): ItemSite[] {
+  const root = process.cwd();
+  const sites: ItemSite[] = [];
+  for (const file of graph(join(resolve(root, "src/components", name), "index.ts"), read)) {
+    const sf = parse(file, read);
+    const rel = file.slice(root.length + 1);
+    const visit = (node: ts.Node): void => {
+      if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+        const names = node.attributes.properties.filter(ts.isJsxAttribute).map((a) => a.name.getText(sf));
+        if (names.includes("aria-pressed") && names.includes("data-active")) {
+          sites.push({
+            site: `${rel.split("/").pop()} › ${ownerOf(node, sf)}`,
+            at: `${rel}:${sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1}`,
+          });
+        }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return sites;
+}
+
 /** Everything one component, and anything it renders, emits. */
 export const emittedBy = (name: string, read: Read = (file) => readFileSync(file, "utf8")) =>
   emitted(graph(join(resolve(process.cwd(), "src/components", name), "index.ts"), read), read);
