@@ -1,13 +1,77 @@
+import { CountryFlag } from "@chumlab/ui/country-flag";
 import { Dropdown, DropdownOption } from "@chumlab/ui/dropdown";
 
-const fruitOptions: DropdownOption[] = [
-  { value: "apple", label: "Apple" },
-  { value: "banana", label: "Banana" },
-  { value: "cherry", label: "Cherry" },
-  { value: "date", label: "Date" },
-  { value: "elderberry", label: "Elderberry" },
-  { value: "fig", label: "Fig" },
-  { value: "grape", label: "Grape" },
+const countryOptions: DropdownOption[] = [
+  {
+    value: "us",
+    label: "United States",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="US" size="md" className="rounded-cl-sm" />
+        United States
+      </span>
+    ),
+  },
+  {
+    value: "gb",
+    label: "United Kingdom",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="GB" size="md" className="rounded-cl-sm" />
+        United Kingdom
+      </span>
+    ),
+  },
+  {
+    value: "ca",
+    label: "Canada",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="CA" size="md" className="rounded-cl-sm" />
+        Canada
+      </span>
+    ),
+  },
+  {
+    value: "au",
+    label: "Australia",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="AU" size="md" className="rounded-cl-sm" />
+        Australia
+      </span>
+    ),
+  },
+  {
+    value: "de",
+    label: "Germany",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="DE" size="md" className="rounded-cl-sm" />
+        Germany
+      </span>
+    ),
+  },
+  {
+    value: "fr",
+    label: "France",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="FR" size="md" className="rounded-cl-sm" />
+        France
+      </span>
+    ),
+  },
+  {
+    value: "jp",
+    label: "Japan",
+    content: (
+      <span className="flex items-center gap-2">
+        <CountryFlag code="JP" size="md" className="rounded-cl-sm" />
+        Japan
+      </span>
+    ),
+  },
 ];
 
 export default function DropdownExample() {
@@ -16,7 +80,7 @@ export default function DropdownExample() {
       <Dropdown
         label="Country"
         description="Select your country of residence"
-        options={fruitOptions}
+        options={countryOptions}
         placeholder="Choose a country"
         classes={
           {

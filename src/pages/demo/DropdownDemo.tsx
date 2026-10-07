@@ -282,6 +282,7 @@ const DropdownDemo = () => {
   const [basicValue, setBasicValue] = useState<string | null>(null);
   const [controlledOpen, setControlledOpen] = useState(false);
   const [controlledValue, setControlledValue] = useState<string | null>(null);
+  const [portalEl, setPortalEl] = useState<HTMLDivElement | null>(null);
   const [clearableValue, setClearableValue] = useState<string | null>(null);
   const [renderTriggerValue, setRenderTriggerValue] = useState<string | null>(
     null,
@@ -1052,7 +1053,7 @@ const DropdownDemo = () => {
             <Dropdown
               label="Country"
               description="Select your country of residence"
-              options={fruitOptions}
+              options={countryOptions}
               placeholder="Choose a country"
               classes={c.dropdown}
             />
@@ -1206,7 +1207,7 @@ const DropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
+                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary`,
                 value: "flex-1 text-left truncate",
               }}
             />
@@ -1349,13 +1350,26 @@ const DropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full sm:max-w-64">
-            <Dropdown
-              options={fruitOptions}
-              placeholder="Renders to document.body..."
-              portalContainer={null}
-              classes={c.dropdown}
-            />
+          <div className="flex flex-col gap-4">
+            <div className="w-full sm:max-w-64">
+              <Dropdown
+                options={fruitOptions}
+                placeholder="Custom portal target..."
+                portalContainer={portalEl}
+                classes={c.dropdown}
+                aria-label="Portal container demo"
+              />
+            </div>
+            <div
+              ref={setPortalEl}
+              className={`relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated/50`}
+            >
+              <p
+                className={`text-xs text-cl-text-tertiary`}
+              >
+                Portal target container -- the dropdown renders here
+              </p>
+            </div>
           </div>
         </DemoWrapper>
         <div className={c.note}>

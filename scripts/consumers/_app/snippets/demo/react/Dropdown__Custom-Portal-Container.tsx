@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Dropdown, DropdownOption } from "@chumlab/ui/dropdown";
 
 const fruitOptions: DropdownOption[] = [
@@ -11,21 +12,33 @@ const fruitOptions: DropdownOption[] = [
 ];
 
 export default function DropdownExample() {
+  const [portalEl, setPortalEl] = useState<HTMLDivElement | null>(null);
   return (
-    <div className="w-full sm:max-w-64">
-      <Dropdown
-        options={fruitOptions}
-        placeholder="Renders to document.body..."
-        portalContainer={null}
-        classes={
-          {
-            root: "w-full",
-            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent",
-            content: "rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
-            label: "block text-sm font-medium mb-1 text-cl-text-secondary"
+    <div className="flex flex-col gap-4">
+      <div className="w-full sm:max-w-64">
+        <Dropdown
+          options={fruitOptions}
+          placeholder="Custom portal target..."
+          portalContainer={portalEl}
+          classes={
+            {
+              root: "w-full",
+              trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent",
+              content: "rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
+              label: "block text-sm font-medium mb-1 text-cl-text-secondary"
+            }
           }
-        }
-      />
+          aria-label="Portal container demo"
+        />
+      </div>
+      <div
+        ref={setPortalEl}
+        className="relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated/50"
+      >
+        <p className="text-xs text-cl-text-tertiary">
+          Portal target container -- the dropdown renders here
+        </p>
+      </div>
     </div>
   );
 }

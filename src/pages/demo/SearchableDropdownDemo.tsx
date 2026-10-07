@@ -274,6 +274,7 @@ const SearchableDropdownDemo = () => {
 
   const [basicValue, setBasicValue] = useState<string | null>(null);
   const [countryValue, setCountryValue] = useState<string | null>(null);
+  const [portalEl, setPortalEl] = useState<HTMLDivElement | null>(null);
   const [statusValue, setStatusValue] = useState<string | null>(null);
   const [disabledItemValue, setDisabledItemValue] = useState<string | null>(
     null,
@@ -1236,13 +1237,26 @@ const SearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full sm:max-w-64">
-            <SearchableDropdown
-              options={fruitOptions}
-              placeholder="Renders to document.body..."
-              portalContainer={null}
-              classes={c.dropdown}
-            />
+          <div className="flex flex-col gap-4">
+            <div className="w-full sm:max-w-64">
+              <SearchableDropdown
+                options={fruitOptions}
+                placeholder="Custom portal target..."
+                portalContainer={portalEl}
+                classes={c.dropdown}
+                aria-label="Portal container demo"
+              />
+            </div>
+            <div
+              ref={setPortalEl}
+              className={`relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated/50`}
+            >
+              <p
+                className={`text-xs text-cl-text-tertiary`}
+              >
+                Portal target container -- the dropdown renders here
+              </p>
+            </div>
           </div>
         </DemoWrapper>
         <div className={c.note}>

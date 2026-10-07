@@ -723,7 +723,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
+                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary`,
                   value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
