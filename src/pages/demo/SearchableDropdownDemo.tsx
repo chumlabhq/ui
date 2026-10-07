@@ -770,7 +770,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Custom Selected State & Icon ────────────────────────────────── */}
       <Section
         title="Custom Selected State & Icon"
-        description="Customize how selected options appear with optionSelected class and custom icons."
+        description="Customize the selected indicator with selectedIcon, or hide it with showSelectedIcon={false}."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>

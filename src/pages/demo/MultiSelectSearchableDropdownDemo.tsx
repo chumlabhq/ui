@@ -54,7 +54,7 @@ const countryOptions: MultiSelectOption[] = [
 const getClasses = () => ({
   dropdown: {
     root: "",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
     content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
     searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
@@ -1330,7 +1330,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onKeyDown={(e) => setCombinedKey(JSON.stringify(e.key))}
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus focus:outline-none focus:ring-2 focus:ring-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/40 dark:text-cl-accent dark:hover:border-cl-border-input-focus dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus focus:outline-none focus:ring-2 focus:ring-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/40 dark:text-cl-accent dark:hover:border-cl-border-input-focus dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
                 value:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus dark:bg-[color-mix(in_oklab,var(--color-cl-accent)_20%,var(--color-cl-bg-elevated))] dark:border dark:border-cl-border-input-focus`,

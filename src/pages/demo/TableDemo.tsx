@@ -587,7 +587,7 @@ function getPaginationClasses(_dark: boolean) {
     selectorButton: `flex items-center gap-1 px-2 py-1 border rounded border-cl-border-input bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg dark:hover:bg-cl-bg-elevated`,
     selectorDropdown: `absolute bottom-full mb-1 left-0 z-50 border rounded shadow-lg min-w-[60px] bg-white border-cl-border dark:bg-cl-bg dark:border-cl-text/[0.06]`,
     selectorOption: `w-full px-2 py-1 text-left text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium dark:hover:bg-cl-bg-hover dark:data-[selected]:bg-cl-accent/10 dark:data-[selected]:font-medium`,
-    pageButton: `px-2 py-1 text-sm text-cl-text-tertiary hover:text-cl-text`,
+    pageButton: `px-2 py-1 text-sm text-cl-text-tertiary hover:text-cl-text data-[active]:text-cl-accent-hover`,
     activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-text bg-cl-accent/10 border-cl-border-input-focus dark:text-cl-accent dark:bg-cl-accent/10 dark:border dark:border-cl-border-input-focus/30`,
     navButton: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-tertiary hover:text-cl-text`,
     ellipsis: "px-2 text-cl-text-tertiary",
@@ -605,7 +605,7 @@ const darkPaginationDropdownStyle =
 const darkPaginationOptionStyle =
   "w-full px-3 py-2 text-left text-sm text-cl-text-secondary hover:bg-cl-bg-elevated data-[selected]:bg-cl-accent data-[selected]:text-cl-on-accent transition-colors";
 const darkPaginationPageStyle =
-  "w-8 h-8 flex items-center justify-center text-sm text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors";
+  "w-8 h-8 flex items-center justify-center text-sm text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors data-[active]:text-cl-accent-hover";
 const darkPaginationNavStyle =
   "p-2 text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors data-[disabled]:opacity-30 data-[disabled]:cursor-not-allowed data-[disabled]:hover:bg-transparent";
 const darkPaginationEllipsisStyle = "px-1 text-cl-text-tertiary";
