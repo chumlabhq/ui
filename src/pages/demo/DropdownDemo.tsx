@@ -819,7 +819,7 @@ const DropdownDemo = () => {
       {/* ─── Custom Focus State Styling ──────────────────────────────────── */}
       <Section
         title="Custom Focus State Styling"
-        description="Use optionFocused class to customize keyboard/hover focus appearance."
+        description="Colour the highlighted option with data-[highlighted]: on the item slot, and the trigger's keyboard focus ring with focus-visible:ring-* on the trigger slot."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -833,8 +833,9 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
-                  itemIndicator: `w-4 h-4 shrink-0 text-cl-accent`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border`,
+                  item: `hover:bg-violet-500/10 data-[highlighted]:bg-violet-500/10 dark:hover:bg-violet-500/20 dark:data-[highlighted]:bg-violet-500/20`,
+                  itemIndicator: `w-4 h-4 shrink-0 text-violet-500`,
                 }}
               />
             </div>
@@ -847,7 +848,8 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-success focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-success`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-success focus-visible:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border`,
+                  item: `hover:bg-cl-success/10 data-[highlighted]:bg-cl-success/10 dark:hover:bg-cl-success/20 dark:data-[highlighted]:bg-cl-success/20`,
                   itemIndicator: `w-4 h-4 shrink-0 text-cl-success`,
                 }}
               />
@@ -1183,7 +1185,7 @@ const DropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
+                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
                 value: "flex-1 text-left truncate",
               }}
             />
@@ -1195,7 +1197,7 @@ const DropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer border border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
+                trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-0 border-b-2 rounded-none transition-colors cursor-pointer border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
                 value: "flex-1 text-left truncate",
               }}
             />
@@ -1207,7 +1209,7 @@ const DropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
+                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
                 value: "flex-1 text-left truncate",
               }}
             />

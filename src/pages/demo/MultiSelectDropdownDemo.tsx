@@ -852,7 +852,7 @@ const MultiSelectDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer min-h-[42px] bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
+                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 transition-colors cursor-pointer min-h-[42px] bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
                   value:
                     "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
                 }}
@@ -870,7 +870,7 @@ const MultiSelectDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] border border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
+                  trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-0 border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
                   value:
                     "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
                 }}
@@ -888,7 +888,7 @@ const MultiSelectDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
+                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
                   value:
                     "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
                 }}

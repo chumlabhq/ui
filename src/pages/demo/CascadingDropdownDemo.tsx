@@ -390,10 +390,10 @@ const getClasses = () => ({
     control: "",
  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
  content: `rounded-cl-md shadow-lg overflow-visible bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
-    item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-black/5 data-[focused]:bg-black/5 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[focused]:bg-white/10 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
+    item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-black/5 data-[highlighted]:bg-black/5 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[highlighted]:bg-white/10 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
  subContent: `min-w-[180px] rounded-cl-md shadow-lg ml-1 bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     subPositioner: "",
-    subItem: `flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-black/5 data-[focused]:bg-black/5 data-[selected]:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[focused]:bg-white/10 dark:data-[selected]:bg-cl-accent/50 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
+    subItem: `flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-black/5 data-[highlighted]:bg-black/5 data-[selected]:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[highlighted]:bg-white/10 dark:data-[selected]:bg-cl-accent/50 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
     label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
     message: `text-sm mt-1 text-cl-error`,
     icon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
@@ -418,7 +418,7 @@ const getClasses = () => ({
 const getBlueClasses = (_dark: boolean): CascadingDropdownClasses => ({
   trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent border-cl-accent bg-cl-accent/10 text-cl-text hover:bg-cl-accent/15`,
   content: `rounded-cl-md shadow-cl-md bg-cl-bg-elevated border border-cl-accent`,
-  item: `flex items-center justify-between px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
+  item: `flex items-center justify-between px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-accent/10 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
   subContent: `min-w-[180px] rounded-cl-md shadow-cl-md ml-1 max-h-[320px] overflow-y-auto bg-cl-bg-elevated border border-cl-accent`,
   subItem: `flex items-center gap-2 px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
   icon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent`,
@@ -1528,7 +1528,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
               }}
             />
           </div>
@@ -1541,7 +1541,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer border border-cl-border text-cl-text hover:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus`,
+                trigger: `flex items-center justify-between gap-2 w-full px-1 py-2 text-sm border-0 border-b-2 rounded-none transition-colors cursor-pointer border-cl-border text-cl-text hover:border-cl-border-input-focus dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus`,
               }}
             />
           </div>
@@ -1554,7 +1554,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
               }}
             />
           </div>
