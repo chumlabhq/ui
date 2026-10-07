@@ -147,6 +147,38 @@ export const componentNames = (root = process.cwd()): string[] =>
     }
   ).components.map((component) => component.name);
 
+/**
+ * Where a component's render graph puts `attribute` on an ITEM: an element that
+ * also carries `data-highlighted`, or whose role is an option, a menu item or a
+ * grid cell. `emittedBy` answers for the whole component, and nearly every one
+ * marks its root `data-disabled`, so it cannot say which ones mark an item.
+ * Returns `file:line` for each site, empty when there is none.
+ */
+export function itemSitesOf(
+  name: string,
+  attribute: string,
+  read: Read = (file) => readFileSync(file, "utf8"),
+): string[] {
+  const root = process.cwd();
+  const sites: string[] = [];
+  for (const file of graph(join(resolve(root, "src/components", name), "index.ts"), read)) {
+    const sf = parse(file, read);
+    const visit = (node: ts.Node): void => {
+      if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+        const attrs = node.attributes.properties.filter(ts.isJsxAttribute);
+        const names = attrs.map((a) => a.name.getText(sf));
+        const role = attrs.find((a) => a.name.getText(sf) === "role")?.initializer?.getText(sf) ?? "";
+        if (names.includes(attribute) && (names.includes("data-highlighted") || /option|menuitem|gridcell/.test(role))) {
+          sites.push(`${file.slice(root.length + 1)}:${sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1}`);
+        }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return sites;
+}
+
 /** Everything one component, and anything it renders, emits. */
 export const emittedBy = (name: string, read: Read = (file) => readFileSync(file, "utf8")) =>
   emitted(graph(join(resolve(process.cwd(), "src/components", name), "index.ts"), read), read);

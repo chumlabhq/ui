@@ -71,6 +71,11 @@ const fixtures: Fixtures<typeof DatePicker> = [
     },
   },
   { name: "bounded", props: { defaultOpen: true, minDate: new Date(2026, 0, 10), maxDate: new Date(2026, 0, 20) } },
+  {
+    name: "bounded-in-range",
+    props: { defaultOpen: true, value: D, minDate: new Date(2026, 0, 10), maxDate: new Date(2026, 0, 20) },
+    note: "Opens on the bounded month, so disabled days sit beside enabled ones. `bounded` opens on today's month, where every day is out of range.",
+  },
   { name: "error", props: { label: "Date", error: true, errorMessage: "Required" } },
   { name: "success", props: { label: "Date", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { disabled: true } },

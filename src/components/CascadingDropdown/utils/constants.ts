@@ -18,7 +18,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   // — without these, hover paints into the corner gap and looks like a
   // square highlight escaping the rounded card.
   item:
-    "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover first:rounded-t-cl-md last:rounded-b-cl-md data-[highlighted]:bg-cl-bg-hover",
+    "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text hover:bg-cl-bg-hover first:rounded-t-cl-md last:rounded-b-cl-md data-[highlighted]:bg-cl-bg-hover",
   subContent:
     "min-w-full sm:min-w-[180px] max-h-[320px] overflow-y-auto rounded-cl-md shadow-lg bg-cl-bg-panel border border-cl-border",
   subPositioner: "z-[9999]",

@@ -60,8 +60,6 @@ export const Section: React.FC<SectionProps> = ({
 };
 
 interface DocsHeroProps {
-  /** Eyebrow tag — uppercase, mono. Defaults to "Documentation". */
-  eyebrow?: string;
   /** Main heading word(s). For component pages, just the component name. */
   title: string;
   /**
@@ -77,20 +75,17 @@ interface DocsHeroProps {
 }
 
 /**
- * Hero block for every docs/demo page. Mirrors the Getting Started layout
- * exactly — eyebrow + hairline rule + large display heading + subtitle +
- * optional import code — so every component page reads as one family.
+ * Hero block for every component page: large display heading + subtitle +
+ * optional import code, so every component page reads as one family. No
+ * eyebrow — the sidebar already says which section the page is in.
  */
 export const DocsHero: React.FC<DocsHeroProps> = ({
-  eyebrow = "Components",
   title,
   accent,
   description,
   code,
 }) => (
   <header className="mb-12">
-    <div className="eyebrow text-fg-tertiary mb-3">{eyebrow}</div>
-    <div className="rule rule-t mb-8" />
     <h1
       className="font-sans font-medium text-fg mb-5 leading-[1.05]"
       style={{

@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { PAINT_HELPERS } from "./_contrast-measure";
-import { componentNames, emittedBy } from "../src/test/emittedAttributes";
+import { componentNames, emittedBy, itemSitesOf } from "../src/test/emittedAttributes";
 
 /**
  * A state the component reports has to be a state the component shows.
@@ -544,5 +544,186 @@ test("a keyboard-highlighted item paints differently from a plain one, in both t
     indistinct,
     "these mark an item `data-highlighted` and paint it the same as a plain item — with " +
       "aria-activedescendant, that paint is the only indicator a keyboard user gets",
+  ).toEqual([]);
+});
+
+/**
+ * A disabled item has to look disabled beside an enabled one, as painted, in
+ * both themes.
+ *
+ * Dropdown, SearchableDropdown and CascadingDropdown marked a disabled option
+ * `data-disabled` and `aria-disabled` and styled it in none of their `item`
+ * slots, so it painted exactly like the option above it — while
+ * MultiSelectDropdown and MultiSelectSearchableDropdown, built from the same
+ * pattern, dimmed theirs. `disabled shows itself` above walks closed fixtures,
+ * where no item exists, and exempts CascadingDropdown's open case by name; the
+ * docs page was where it showed.
+ *
+ * - The population is read from the code: every component whose render graph
+ *   puts `data-disabled` on an item (`itemSitesOf`). One in it with no recipe
+ *   fails rather than being skipped.
+ * - Each item's text is composited the way it reaches the screen: its colour
+ *   over the item's own background, then the item's opacity against what is
+ *   behind it. `contrast-painted`'s helpers do the compositing; they read no
+ *   `opacity`, which is the property the library dims with, so that step is
+ *   applied here.
+ * - Each theme gets its own fresh load.
+ */
+const ITEM_DISABLERS = componentNames().filter((name) => itemSitesOf(name, "data-disabled").length > 0);
+
+/** A fixture whose open surface holds a disabled item beside an enabled, unselected one. */
+const DISABLED_ITEM_RECIPES: Record<string, { fixture: string } | { unreachable: string }> = {
+  Dropdown: { fixture: "open" },
+  SearchableDropdown: { fixture: "open" },
+  MultiSelectDropdown: { fixture: "open" },
+  MultiSelectSearchableDropdown: { fixture: "open" },
+  CascadingDropdown: { fixture: "disabled-top-level" },
+  Breadcrumb: { fixture: "collapsed-open" },
+  DatePicker: { fixture: "bounded-in-range" },
+  InternationalPhoneInput: {
+    unreachable:
+      "Its country list renders SearchableDropdown's option, which can carry data-disabled, " +
+      "but the options it builds (InternationalPhoneInput.tsx `dropdownOptions`) never set " +
+      "`disabled`, so no props reach a disabled item.",
+  },
+};
+
+/**
+ * The smallest contrast a disabled item's painted text may have against an
+ * enabled sibling's, compared unrounded.
+ *
+ * Taken from what MultiSelectDropdown ships, `data-[disabled]:opacity-50`, at its
+ * fainter theme: 3.536423678219509:1 in dark, against 5.3175872961655255:1 in
+ * light (2026-10-07). 3.5 holds that treatment with no rounding room needed and
+ * fails anything dimmed visibly less. Half opacity is the library's disabled
+ * treatment everywhere it has one, and "differ at all" would pass a 1.01:1
+ * change nobody can see.
+ */
+const DISABLED_ITEM_MIN_RATIO = 3.5;
+
+/** The disabled item's text and an enabled sibling's, each as it reaches the screen. */
+const MEASURE_DISABLED_ITEM = `(() => {
+${PAINT_HELPERS}
+  const ITEM = "[role='option'], [role^='menuitem'], [role='gridcell']";
+  // Apart from being disabled, both sides carry no other state, so the
+  // comparison is the disabled paint alone: a day outside the month or an
+  // option already selected paints for its own reason.
+  const otherwisePlain = (el) =>
+    !["data-highlighted", "data-selected", "data-today", "data-outside", "data-range", "data-marked"]
+      .some((a) => el.hasAttribute(a)) &&
+    !["aria-selected", "aria-checked"].some((a) => el.getAttribute(a) === "true") &&
+    document.activeElement !== el &&
+    el.getClientRects().length > 0;
+  const disabled = (el) =>
+    el.hasAttribute("data-disabled") || el.hasAttribute("disabled") || el.getAttribute("aria-disabled") === "true";
+  const dead = [...document.querySelectorAll(ITEM)].find((el) => el.hasAttribute("data-disabled") && otherwisePlain(el));
+  if (!dead) return { error: "no visible item carries data-disabled and no other state" };
+  const role = dead.getAttribute("role");
+  const live = [...document.querySelectorAll("[role='" + role + "']")].find(
+    (el) => el !== dead && !disabled(el) && otherwisePlain(el),
+  );
+  if (!live) return { error: "no enabled, unselected " + role + " beside the disabled one" };
+
+  /** The first element at or under the item that paints its own text. */
+  const textOf = (item) =>
+    [item, ...item.querySelectorAll("*")].find((el) =>
+      [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()),
+    );
+  const painted = (item) => {
+    const el = textOf(item);
+    if (!el) return null;
+    const fg = parse(getComputedStyle(el).color);
+    const inner = backgroundOf(el);
+    const behind = item.parentElement ? backgroundOf(item.parentElement) : [255, 255, 255];
+    if (!fg || !inner || !behind) return null;
+    let opacity = 1;
+    for (let n = el; n; n = n.parentElement) {
+      opacity *= parseFloat(getComputedStyle(n).opacity);
+      if (n === item) break;
+    }
+    const text = over(fg, inner);
+    return { rgb: over([...text, opacity], behind), opacity, label: (el.textContent || "").trim().slice(0, 20) };
+  };
+  const a = painted(dead), b = painted(live);
+  if (!a || !b) return { error: "an item's text or background could not be read" };
+  const fmt = (c) => "rgb(" + c.map((v) => v.toFixed(2)).join(", ") + ")";
+  return {
+    disabled: fmt(a.rgb) + " @" + a.opacity + ' "' + a.label + '"',
+    enabled: fmt(b.rgb) + " @" + b.opacity + ' "' + b.label + '"',
+    ratio: ratio(a.rgb, b.rgb),
+  };
+})()`;
+
+test("a disabled item paints differently from an enabled one, in both themes", async ({ page }) => {
+  test.setTimeout(600_000);
+  expect(ITEM_DISABLERS.length, "no component marks an item data-disabled — the derivation read nothing").toBeGreaterThan(0);
+  const stale = Object.keys(DISABLED_ITEM_RECIPES).filter((name) => !ITEM_DISABLERS.includes(name));
+  expect(stale, "these have a recipe but no longer mark an item data-disabled").toEqual([]);
+
+  const noRecipe = ITEM_DISABLERS.filter((name) => !DISABLED_ITEM_RECIPES[name]);
+  const unmeasured: string[] = [];
+  const indistinct: string[] = [];
+
+  console.log(`DISABLED_ITEM population ${ITEM_DISABLERS.length}: ${ITEM_DISABLERS.join(", ")}`);
+  for (const name of ITEM_DISABLERS) {
+    const recipe = DISABLED_ITEM_RECIPES[name];
+    if (!recipe) continue;
+    if ("unreachable" in recipe) {
+      console.log(`DISABLED_ITEM ${name}: not measured — ${recipe.unreachable}`);
+      continue;
+    }
+    for (const theme of ["dark", "light"] as const) {
+      await gotoFixture(page, name, recipe.fixture);
+      await page
+        .waitForFunction(
+          () => {
+            const main = document.querySelector("main[data-fixture-act]");
+            const act = main?.getAttribute("data-fixture-act");
+            const still = main?.getAttribute("data-fixture-still");
+            return act && act !== "pending" && still && still !== "pending" ? act : null;
+          },
+          undefined,
+          { timeout: 30000 },
+        )
+        .catch(() => null);
+      await page.addStyleTag({
+        content: "*,*::before,*::after{transition:none!important;animation:none!important}",
+      });
+      await page.evaluate((next) => {
+        const html = document.documentElement;
+        html.setAttribute("data-theme", next);
+        html.classList.toggle("dark", next === "dark");
+      }, theme);
+
+      const m = (await page.evaluate(MEASURE_DISABLED_ITEM)) as {
+        error?: string;
+        disabled?: string;
+        enabled?: string;
+        ratio?: number;
+      };
+      const at = `${name}/${recipe.fixture} ${theme}`;
+      if (m.error) {
+        unmeasured.push(`${at}: ${m.error}`);
+        console.log(`DISABLED_ITEM ${at}: UNMEASURED — ${m.error}`);
+        continue;
+      }
+      const distinct = m.ratio! >= DISABLED_ITEM_MIN_RATIO;
+      console.log(
+        `DISABLED_ITEM ${at}: ${m.disabled} vs enabled ${m.enabled} = ${m.ratio}:1 → ${distinct ? "distinct" : "INDISTINCT"}`,
+      );
+      if (!distinct) indistinct.push(`${at}: ${m.disabled} vs ${m.enabled} (${m.ratio}:1)`);
+    }
+  }
+
+  console.log(
+    `DISABLED_ITEM_PAINT ${ITEM_DISABLERS.length} components × 2 themes, ${indistinct.length} indistinct ` +
+      `(${unmeasured.length} unmeasured, ${noRecipe.length} without a recipe)`,
+  );
+  expect(noRecipe, "these mark an item disabled and nothing here says how to reach one").toEqual([]);
+  expect(unmeasured, "a recipe that no longer reaches a disabled item measures nothing").toEqual([]);
+  expect(
+    indistinct,
+    "these mark an item `data-disabled` and `aria-disabled` and paint it like an enabled one, " +
+      "so a sighted user reaches for an option that will not respond",
   ).toEqual([]);
 });

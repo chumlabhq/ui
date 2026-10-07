@@ -263,6 +263,7 @@ describe("snippet shape contract", () => {
       ["Toast/Custom Content (content prop)", "A deliberately branded button inside a toast body, demonstrating that the content slot takes anything. Its colours are not ours."],
       ["DatePicker/Controlled Open", "The trigger is not written through the page's class bag, so the conversion tool had nothing to key on. Left pending a decision, not decided."],
       ["Drawer/Initial Focus", "A native `<input data-autofocus>`: the attribute on a plain field IS the mechanism the section demonstrates, and an `Input` would hide it behind a component."],
+      ["Accordion/Composition with asChild", "`asChild` hands the trigger's behaviour to an element you supply; a raw `<button>` styled your way is that element, and a `Button` would hide the point."],
     ]);
 
     /**
