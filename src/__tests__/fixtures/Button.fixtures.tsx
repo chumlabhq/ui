@@ -1,6 +1,15 @@
 import { Button } from "../../components/Button/index.js";
+import { BUTTON_SIZE_CLASSES } from "../../components/Button/utils/constants.js";
+import type { ButtonSize } from "../../components/Button/utils/types.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
+
+/** A stroke icon that fills its slot, as an icon library's SVG does. */
+const Glyph = () => (
+  <svg viewBox="0 0 16 16" aria-hidden="true" className="h-full w-full" fill="none" stroke="currentColor" strokeWidth={2}>
+    <path d="M3 8h10M8 3v10" />
+  </svg>
+);
 
 const fixtures: Fixtures<typeof Button> = [
   { name: "default", props: {}, children: "Save" },
@@ -37,6 +46,32 @@ const fixtures: Fixtures<typeof Button> = [
     children: "Save",
   },
   { name: "full-width", props: { fullWidth: true }, children: "Save" },
+  {
+    // Every size with text alone, a leading icon, a trailing icon, an icon
+    // alone and the loader. Each must stand as tall as its size's text-only
+    // Button: the content span sat on a text baseline, so an icon whose
+    // baseline is its bottom edge added the line's descent below it (+3px at
+    // md). `with-icons` above passes text glyphs as icons, which sit on that
+    // baseline like text and hid it. `default-state` reads `data-matrix`.
+    name: "height-matrix",
+    props: {},
+    render: () => (
+      // In normal flow, not flex rows: a flex item is blockified, and the
+      // Button's own display (`inline-block`, the `<button>` default) is the
+      // case being measured.
+      <div className="space-y-3">
+        {(Object.keys(BUTTON_SIZE_CLASSES) as ButtonSize[]).map((size) => (
+          <div key={size}>
+            <Button size={size} data-matrix={`${size}|text`}>Save</Button>{" "}
+            <Button size={size} data-matrix={`${size}|startIcon`} startIcon={<Glyph />}>Save</Button>{" "}
+            <Button size={size} data-matrix={`${size}|endIcon`} endIcon={<Glyph />}>Save</Button>{" "}
+            <Button size={size} data-matrix={`${size}|iconOnly`} startIcon={<Glyph />} aria-label="Add" />{" "}
+            <Button size={size} data-matrix={`${size}|loading`} loading>Save</Button>
+          </div>
+        ))}
+      </div>
+    ),
+  },
   {
     name: "as-button",
     props: { as: "button" },

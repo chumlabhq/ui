@@ -259,6 +259,7 @@ export default function ModalExample() {
       >
         <div className="relative">
           <button
+            aria-label="Close"
             onClick={() => setImagePreviewOpen(false)}
             className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(0,0,0,0.55)] text-white hover:bg-[rgba(0,0,0,0.75)] transition-colors cursor-pointer"
           >

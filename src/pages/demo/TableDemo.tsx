@@ -201,7 +201,7 @@ function FloatingActions<T>({
         renderContent(name, latchedData)
       ) : (
         <>
-          <button
+          <button aria-label="View"
             className={buttonClassName}
             title="View"
             onClick={() => onAction?.("View", latchedData)}
@@ -219,7 +219,7 @@ function FloatingActions<T>({
               <circle cx="12" cy="12" r="3" />
             </svg>
           </button>
-          <button
+          <button aria-label="Edit"
             className={buttonClassName}
             title="Edit"
             onClick={() => onAction?.("Edit", latchedData)}
@@ -237,7 +237,7 @@ function FloatingActions<T>({
               <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z" />
             </svg>
           </button>
-          <button
+          <button aria-label="Delete"
             className={`${buttonClassName} hover:!text-cl-error hover:!bg-cl-error/15 cursor-pointer`}
             title="Delete"
             onClick={() => onAction?.("Delete", latchedData)}
@@ -1053,7 +1053,7 @@ function ServerApiDemo({
             {selectedCategory && (
               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-accent/10 text-cl-text dark:bg-cl-accent/15 dark:text-cl-accent`}>
                 {selectedCategory}
-                <button onClick={() => { setSelectedCategory(""); setPage(1); setColumnFilters((prev) => prev.filter((f) => f.id !== "category")); }} className="cursor-pointer hover:opacity-70">
+                <button aria-label={`Remove ${selectedCategory} filter`} onClick={() => { setSelectedCategory(""); setPage(1); setColumnFilters((prev) => prev.filter((f) => f.id !== "category")); }} className="cursor-pointer hover:opacity-70">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
                 </button>
               </span>
@@ -1061,7 +1061,7 @@ function ServerApiDemo({
             {selectedStatuses.map((st) => (
               <span key={st} className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/15 dark:text-cl-success`}>
                 {st}
-                <button onClick={() => {
+                <button aria-label={`Remove ${st} filter`} onClick={() => {
                   const remaining = selectedStatuses.filter((s2) => s2 !== st);
                   setSelectedStatuses(remaining);
                   setColumnFilters((prev) => remaining.length > 0 ? prev.map((f) => f.id === "availabilityStatus" ? { ...f, value: remaining } : f) : prev.filter((f) => f.id !== "availabilityStatus"));
@@ -1872,7 +1872,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   size: 100,
                   cell: ({ row }) => (
                     <div className="flex items-center gap-1">
-                      <button
+                      <button aria-label="Edit"
                         className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
                         title="Edit"
                         onClick={() =>
@@ -1894,7 +1894,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                         </svg>
                       </button>
-                      <button
+                      <button aria-label="Delete"
                         className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-error hover:bg-cl-bg-elevated`}
                         title="Delete"
                         onClick={() =>
@@ -1950,7 +1950,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       getName={(data) => data.name}
                       dark={dark}
                       renderContent={(_name, rowData) => (
-                        <button
+                        <button aria-label="More actions"
                           className={`p-1.5 rounded transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-bg-hover`}
                           title="More actions"
                           onClick={(e) => {
@@ -2106,7 +2106,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     className={`z-30 flex items-center gap-1 backdrop-blur-sm border rounded-full shadow-lg px-1.5 py-1 bg-cl-text/95 border-cl-border dark:bg-cl-bg/95 dark:border dark:border-cl-text/[0.08]`}
                     renderContent={(name) => (
                       <>
-                        <button
+                        <button aria-label="Quick edit"
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/15`}
                           title="Quick edit"
                           onClick={() =>
@@ -2126,7 +2126,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                           </svg>
                         </button>
-                        <button
+                        <button aria-label="Bookmark"
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-success hover:bg-cl-success/15 dark:text-cl-success dark:hover:bg-cl-success/15`}
                           title="Bookmark"
                           onClick={() =>
@@ -2145,7 +2145,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                             <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
                           </svg>
                         </button>
-                        <button
+                        <button aria-label="Share"
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-text hover:bg-cl-warning/15 dark:text-cl-warning dark:hover:bg-cl-warning/15`}
                           title="Share"
                           onClick={() =>
@@ -2171,7 +2171,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         <div
                           className={`w-px h-5 mx-0.5 bg-cl-bg-elevated`}
                         />
-                        <button
+                        <button aria-label="Delete"
                           className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-error hover:bg-cl-error/15 dark:text-cl-error dark:hover:bg-cl-error/15`}
                           title="Delete"
                           onClick={() =>
@@ -3256,7 +3256,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       className={`w-full pl-9 pr-8 py-2 text-sm rounded-cl-md focus:outline-none focus:ring-2 bg-cl-bg-elevated border-cl-border text-cl-text placeholder-fg-muted focus:ring-cl-accent/40 focus:border-cl-border-input-focus/50`}
                     />
                     {filter && (
-                      <button
+                      <button aria-label="Clear search"
                         onClick={() => setFilter("")}
                         className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text`}
                       >
@@ -3441,7 +3441,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-full focus:outline-none focus:ring-2 bg-cl-bg-hover border-cl-border text-cl-text placeholder-gray-400 focus:ring-cl-accent/20 focus:border-cl-border-input-focus dark:bg-cl-bg-hover dark:border dark:border-cl-text/[0.08] dark:text-cl-text dark:placeholder-gray-500 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/40`}
                     />
                     {filter && (
-                      <button
+                      <button aria-label="Clear filter"
                         onClick={() => setFilter("")}
                         className={`absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary dark:hover:bg-cl-bg-hover`}
                       >
@@ -7139,7 +7139,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         {Array.isArray(f.value)
                           ? (f.value as string[]).join(", ")
                           : String(f.value)}
-                        <button
+                        <button aria-label={`Remove ${f.id} filter`}
                           onClick={() =>
                             setFilters((prev) =>
                               prev.filter((pf) => pf.id !== f.id),
@@ -7348,7 +7348,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       <span>{i + 1}.</span>
                       <span className="capitalize">{col}</span>
                       {i > 0 && (
-                        <button
+                        <button aria-label="Move left"
                           onClick={() => {
                             const next = [...colOrder];
                             [next[i - 1], next[i]] = [next[i], next[i - 1]];
@@ -7372,7 +7372,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         </button>
                       )}
                       {i < colOrder.length - 1 && (
-                        <button
+                        <button aria-label="Move right"
                           onClick={() => {
                             const next = [...colOrder];
                             [next[i], next[i + 1]] = [next[i + 1], next[i]];

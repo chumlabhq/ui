@@ -359,7 +359,7 @@ const ModalDemo = () => {
           classes={{ content: "bg-cl-bg", body: "p-0" }}
         >
           <div className="relative">
-            <button
+            <button aria-label="Close"
               onClick={() => setImagePreviewOpen(false)}
               className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(0,0,0,0.55)] text-white hover:bg-[rgba(0,0,0,0.75)] transition-colors cursor-pointer"
             >
@@ -490,6 +490,7 @@ const ModalDemo = () => {
               <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                 <Button
                   size="sm"
+                  aria-label="Close"
                   onClick={() => setFullScreenOpen(false)}
                   className="shrink-0 rounded-cl-md hover:bg-cl-bg-hover"
                   startIcon={
@@ -652,7 +653,7 @@ const ModalDemo = () => {
 
             <footer className="bg-cl-bg-elevated border-t border-cl-border px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-4">
-                <Button
+                <Button aria-label="Previous page"
                   className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer"
                   disabled
                 >
@@ -671,7 +672,7 @@ const ModalDemo = () => {
                   </svg>
                 </Button>
                 <span className="text-sm text-cl-text-secondary">Page 1 of 12</span>
-                <Button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
+                <Button aria-label="Next page" className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
                   <svg
                     className="w-5 h-5 text-cl-text-secondary"
                     fill="none"
@@ -688,7 +689,7 @@ const ModalDemo = () => {
                 </Button>
               </div>
               <div className="flex items-center gap-2">
-                <Button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
+                <Button aria-label="Zoom in" className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
                   <svg
                     className="w-5 h-5 text-cl-text-secondary"
                     fill="none"
@@ -703,7 +704,7 @@ const ModalDemo = () => {
                     />
                   </svg>
                 </Button>
-                <Button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
+                <Button aria-label="Zoom out" className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
                   <svg
                     className="w-5 h-5 text-cl-text-secondary"
                     fill="none"

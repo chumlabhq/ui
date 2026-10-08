@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { PAINT_HELPERS } from "./_contrast-measure";
+import { BUTTON_SIZE_CLASSES } from "../src/components/Button/utils/constants";
 import { componentNames, emittedBy, itemSitesOf, loadingRowSitesOf, pressedToggleSitesOf } from "../src/test/emittedAttributes";
 
 /**
@@ -1080,5 +1081,84 @@ test("a loading row paints a skeleton, in both themes", async ({ page }) => {
     blank,
     "these draw loading rows that paint the surface's own colour, so the loading state shows " +
       "empty boxes where a skeleton should be",
+  ).toEqual([]);
+});
+
+/**
+ * A Button stands as tall as its size, whatever it holds, in both themes.
+ *
+ * The content span is `inline-flex` inside a root that sets no display (the
+ * `<button>` default, `inline-block`; Tooltip `asChild` appends `block`). It
+ * sat on the line's text baseline, and an inline-flex box whose first item is
+ * an SVG takes that item's bottom edge as its baseline, so the line's descent
+ * was added beneath it: 15 of 28 icon Buttons on /button measured about 3px
+ * taller than their size, and TabPanel's "Remove this tab" 45 against md's 42.
+ *
+ * - The sizes are read from `BUTTON_SIZE_CLASSES`, and every one renders text
+ *   alone, a leading icon, a trailing icon, an icon alone and the loader in the
+ *   `height-matrix` fixture. A missing combination fails rather than shrinking
+ *   the check.
+ * - The floor is the size's own text-only Button on the same page: what `size`
+ *   promises, measured rather than restated.
+ */
+const BUTTON_SIZES = Object.keys(BUTTON_SIZE_CLASSES);
+const BUTTON_CONTENTS = ["text", "startIcon", "endIcon", "iconOnly", "loading"] as const;
+/** Sub-pixel layout rounds to a quarter pixel; anything past that is a different line box. */
+const BUTTON_HEIGHT_TOLERANCE = 0.25;
+
+test("a Button stands as tall as its size whatever it holds, in both themes", async ({ page }) => {
+  test.setTimeout(120_000);
+  expect(BUTTON_SIZES.length, "BUTTON_SIZE_CLASSES read nothing").toBeGreaterThan(0);
+  const wrong: string[] = [];
+  const missing: string[] = [];
+  let measured = 0;
+
+  for (const theme of ["dark", "light"] as const) {
+    await gotoFixture(page, "Button", "height-matrix");
+    await page.addStyleTag({
+      content: "*,*::before,*::after{transition:none!important;animation:none!important}",
+    });
+    await page.evaluate((next) => {
+      const html = document.documentElement;
+      html.setAttribute("data-theme", next);
+      html.classList.toggle("dark", next === "dark");
+    }, theme);
+    const heights = (await page.evaluate(() =>
+      Object.fromEntries(
+        [...document.querySelectorAll("[data-matrix]")].map((el) => [
+          el.getAttribute("data-matrix"),
+          el.getBoundingClientRect().height,
+        ]),
+      ),
+    )) as Record<string, number>;
+
+    for (const size of BUTTON_SIZES) {
+      const floor = heights[`${size}|text`];
+      const row = BUTTON_CONTENTS.map((content) => {
+        const h = heights[`${size}|${content}`];
+        if (h === undefined) {
+          missing.push(`${size}|${content}`);
+          return `${content} —`;
+        }
+        measured += 1;
+        const off = floor === undefined ? NaN : h - floor;
+        if (!(Math.abs(off) <= BUTTON_HEIGHT_TOLERANCE)) {
+          wrong.push(`${theme} ${size} ${content}: ${h}px against text-only ${floor}px (${off > 0 ? "+" : ""}${off})`);
+        }
+        return `${content} ${h}`;
+      });
+      console.log(`BUTTON_HEIGHT ${theme} ${size}: ${row.join(", ")}`);
+    }
+  }
+
+  console.log(
+    `BUTTON_HEIGHT_PAINT ${BUTTON_SIZES.length} sizes × ${BUTTON_CONTENTS.length} contents × 2 themes, ` +
+      `${measured} measured, ${wrong.length} off their size (${missing.length} missing)`,
+  );
+  expect(missing, "the height-matrix fixture no longer renders these, so they are not checked").toEqual([]);
+  expect(
+    wrong,
+    "these Buttons stand taller or shorter than their size's text-only Button, so a row of " +
+      "mixed Buttons does not line up and `size` does not mean one height",
   ).toEqual([]);
 });

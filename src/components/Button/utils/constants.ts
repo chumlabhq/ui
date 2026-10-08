@@ -56,9 +56,11 @@ export const BUTTON_LOADER_SIZE: Record<ButtonSize, number> = { sm: 12, md: 16, 
 
 export const DEFAULT_BUTTON_CLASSES: Required<ButtonClasses> = {
   root: "cursor-pointer font-medium rounded-cl-lg transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
-  itemText: "inline-flex items-center justify-center",
+  // align-top: on the text baseline an icon-led box stood taller than the size.
+  itemText: "inline-flex items-center justify-center align-top",
   icon: "inline-flex shrink-0",
-  loading: "",
+  // A flex box like `icon`, so the loader sits on no text line.
+  loading: "inline-flex shrink-0",
 };
 
 export const UNSTYLED_BUTTON_CLASSES: Required<ButtonClasses> =

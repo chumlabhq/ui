@@ -81,6 +81,7 @@ export default function ModalExample() {
             <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <Button
                 size="sm"
+                aria-label="Close"
                 onClick={() => setFullScreenOpen(false)}
                 className="shrink-0 rounded-cl-md hover:bg-cl-bg-hover"
                 startIcon={
@@ -218,6 +219,7 @@ export default function ModalExample() {
           >
             <div className="flex items-center gap-4">
               <Button
+                aria-label="Previous page"
                 className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer"
                 disabled
               >
@@ -237,6 +239,7 @@ export default function ModalExample() {
               </Button>
               <span className="text-sm text-cl-text-secondary">Page 1 of 12</span>
               <Button
+                aria-label="Next page"
                 className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer"
               >
                 <svg
@@ -256,6 +259,7 @@ export default function ModalExample() {
             </div>
             <div className="flex items-center gap-2">
               <Button
+                aria-label="Zoom in"
                 className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer"
               >
                 <svg
@@ -273,6 +277,7 @@ export default function ModalExample() {
                 </svg>
               </Button>
               <Button
+                aria-label="Zoom out"
                 className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer"
               >
                 <svg

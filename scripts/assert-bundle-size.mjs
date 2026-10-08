@@ -830,6 +830,21 @@ const LIBRARY_TOTAL_HISTORY = [
       "gzipped as a back-reference; the new one is fresh text in this chunk. " +
       "Every other entry byte-identical, Table held. Measured against a build " +
       "of dc6fc0b2.",
+  },  {
+    kb: 155.84,
+    commit: "(uncommitted)",
+    date: "2026-10-08",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.10 KB (159,479 -> 159,577 B gzipped, +98 B), 81 files " +
+      "held. Button: closure +82 B, exclusive +79 B. Its content span gained " +
+      "`align-top` and its `loading` slot went from empty to `inline-flex " +
+      "shrink-0`, each with a one-line comment, which ships: an icon-led or " +
+      "loading Button stood up to 5px taller than its size. `classLayers` " +
+      "gained `/^align-/` as structural, so `unstyled` keeps it; that shared " +
+      "chunk is the +1 to +11 B in every other closure. Own and exclusive " +
+      "elsewhere -3 to +4 B, chunk hashes. Table held (exclusive 16,239 -> " +
+      "16,237 B). Measured against a build of 9d7830c3.",
   },
 ];
 
