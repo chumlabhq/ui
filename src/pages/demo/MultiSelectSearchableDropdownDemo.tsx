@@ -19,11 +19,21 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-import {
-  fetchCountries,
-  searchCountries,
-  type Country,
-} from "./lib/countries.js";
+import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
+
+/**
+ * The async examples' data source: a static country list, filtered here and
+ * resolved after LATENCY_MS so the loading state shows. It replaced calls to
+ * this site's own API, which no copied example could reach.
+ */
+const LATENCY_MS = 400;
+const withLatency = (value: Country[]): Promise<Country[]> =>
+  new Promise((resolve) => setTimeout(() => resolve(value), LATENCY_MS));
+const fetchCountries = (): Promise<Country[]> => withLatency(COUNTRIES);
+const searchCountries = (query: string): Promise<Country[]> => {
+  const q = query.trim().toLowerCase();
+  return withLatency(q ? COUNTRIES.filter((c) => c.name.toLowerCase().includes(q)) : []);
+};
 
 const staticOptions: MultiSelectOption[] = [
   { value: "apple", label: "Apple" },
@@ -239,10 +249,10 @@ const MultiSelectSearchableDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Async Search (Real API) ──────────────────────────────────────── */}
+      {/* ─── Async Search ─────────────────────────────────────────────────── */}
       <Section
-        title="Async Search (Real API)"
-        description="Type to search countries using the REST Countries API."
+        title="Async Search"
+        description="Type to search a country list; results arrive after a simulated delay."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -270,7 +280,7 @@ const MultiSelectSearchableDropdownDemo = () => {
       {/* ─── Async with Dynamic Prefetch ──────────────────────────────────── */}
       <Section
         title="Async with Dynamic Prefetch"
-        description="Fetches popular countries when dropdown opens, searches API when user types."
+        description="Fetches popular countries when the dropdown opens, and searches the list as you type."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -292,8 +302,8 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Options are fetched from the REST Countries API when the dropdown
-          opens.
+          Options come from a static country list, resolved after a simulated
+          400 ms delay when the dropdown opens.
         </div>
       </Section>
 

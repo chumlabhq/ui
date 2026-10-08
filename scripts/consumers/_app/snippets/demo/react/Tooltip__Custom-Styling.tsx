@@ -1,11 +1,11 @@
 import { Button } from "@chumlab/ui/button";
 import { Tooltip } from "@chumlab/ui/tooltip";
 
-const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-white font-medium";
+const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
 
-const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-white font-medium";
+const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-cl-text dark:text-cl-on-accent font-medium";
 
-const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-white font-medium";
+const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
 
 const contentClassNameDark = "rounded-cl-md bg-[#0a0d12] shadow-xl px-3 py-2 text-sm text-white";
 

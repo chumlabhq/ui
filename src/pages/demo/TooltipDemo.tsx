@@ -37,9 +37,13 @@ const TooltipDemo = () => {
   // Dark in both themes on purpose, so a fixed colour: `bg-cl-bg` is the page
   // colour and turns white in light, which put this white text on white.
   const contentClassNameDark = "rounded-cl-md bg-[#0a0d12] shadow-xl px-3 py-2 text-sm text-white";
-  const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-white font-medium";
-  const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-white font-medium";
-  const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-white font-medium";
+  // Text that clears 4.5:1 on each fill in both themes. The light theme's success
+  // and error fills are dark and its warning fill is light; the dark theme's three
+  // are all bright. `cl-on-accent` is the text the library puts on a saturated
+  // fill: white in light, near-black in dark.
+  const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
+  const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-cl-text dark:text-cl-on-accent font-medium";
+  const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
   const contentClassNameGradient = "rounded-cl-md shadow-xl px-4 py-2.5 text-sm text-white font-medium";
 
   const gradientBlue = { background: "linear-gradient(135deg, #0c3483 0%, #a2b6df 100%)" };

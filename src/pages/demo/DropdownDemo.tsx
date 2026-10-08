@@ -19,7 +19,17 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-import { fetchCountries, type Country } from "./lib/countries.js";
+import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
+
+/**
+ * The async examples' data source: a static country list, filtered here and
+ * resolved after LATENCY_MS so the loading state shows. It replaced calls to
+ * this site's own API, which no copied example could reach.
+ */
+const LATENCY_MS = 400;
+const withLatency = (value: Country[]): Promise<Country[]> =>
+  new Promise((resolve) => setTimeout(() => resolve(value), LATENCY_MS));
+const fetchCountries = (): Promise<Country[]> => withLatency(COUNTRIES);
 
 const fruitOptions: DropdownOption[] = [
   { value: "apple", label: "Apple" },
@@ -707,8 +717,8 @@ const DropdownDemo = () => {
         <p
           className={`text-sm mt-2 text-cl-text-secondary`}
         >
-          Options are fetched from the REST Countries API when the dropdown
-          opens.
+          Options come from a static country list, resolved after a simulated
+          400 ms delay when the dropdown opens.
         </p>
       </Section>
 
@@ -734,7 +744,7 @@ const DropdownDemo = () => {
       {/* ─── Custom Selected State & Icon ────────────────────────────────── */}
       <Section
         title="Custom Selected State & Icon"
-        description="Customize how selected options appear with optionSelected class and custom icons."
+        description="Restyle the selected check with the itemIndicator slot, replace it with selectedIcon, or hide it with showSelectedIcon={false}."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col">

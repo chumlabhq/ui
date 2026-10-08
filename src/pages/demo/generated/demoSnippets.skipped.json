@@ -71,36 +71,6 @@
       "reason": "no demo wrapper in the section"
     },
     {
-      "component": "CascadingDropdown",
-      "title": "Async Single-Select (Countries API)",
-      "reason": "`fetchCountriesByRegion` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "CascadingDropdown",
-      "title": "Async Multi-Select (Countries API)",
-      "reason": "`fetchCountriesByRegion` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "CascadingDropdown",
-      "title": "Fully Async - Prefetch on Mount",
-      "reason": "`fetchCountriesByRegion` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "CascadingDropdown",
-      "title": "Fully Async - Load on Open",
-      "reason": "`fetchCountriesByRegion` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "CascadingDropdown",
-      "title": "Async Server-Side Search (Debounced)",
-      "reason": "`fetchCountriesByRegion` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "Dropdown",
-      "title": "Async Data Fetching with Shimmer",
-      "reason": "`fetchCountries` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
       "component": "GettingStarted",
       "title": "Prerequisites",
       "reason": "no demo wrapper in the section"
@@ -129,36 +99,6 @@
       "component": "Introduction",
       "title": "Who it's for",
       "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "MultiSelectDropdown",
-      "title": "Async Data Fetching with Shimmer",
-      "reason": "`fetchCountries` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "MultiSelectSearchableDropdown",
-      "title": "Async Search (Real API)",
-      "reason": "`searchCountries` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "MultiSelectSearchableDropdown",
-      "title": "Async with Dynamic Prefetch",
-      "reason": "`searchCountries` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "SearchableDropdown",
-      "title": "Async Search (Real API)",
-      "reason": "`searchCountries` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "SearchableDropdown",
-      "title": "Async with Static Initial Options",
-      "reason": "`searchCountries` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
-    },
-    {
-      "component": "SearchableDropdown",
-      "title": "Async with Dynamic Prefetch",
-      "reason": "`searchCountries` comes from ./lib/countries.js, which reads `import.meta.env.VITE_API_BASE_URL` — this site's own configuration, so the helper cannot run in a consumer app"
     },
     {
       "component": "Slider",

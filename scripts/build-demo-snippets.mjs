@@ -219,8 +219,9 @@ function pageSymbols(sf) {
       const nb = st.importClause.namedBindings;
       const from = resolveLocalModule(sf.fileName, raw);
       if (nb && ts.isNamedImports(nb)) {
+        // Types too: `type Country` from the same module has to travel with the
+        // values typed by it, or the snippet names a type it never declares.
         nb.elements.forEach((e) => {
-          if (e.isTypeOnly) return;
           localImports.set(e.name.text, { raw, file: from, exported: (e.propertyName ?? e.name).text });
         });
       }
@@ -290,7 +291,7 @@ function pageSymbols(sf) {
   return { imports, decls, stateOf, localImports };
 }
 
-/** A page-local import's source file: `./lib/countries.js` is `lib/countries.ts`. */
+/** A page-local import's source file: `./lib/countryCatalog.js` is `lib/countryCatalog.ts`. */
 function resolveLocalModule(pageFile, raw) {
   const base = resolve(dirname(join(DEMOS, pageFile)), raw).replace(/\.js$/, "");
   return [".ts", ".tsx", "/index.ts", "/index.tsx"].map((x) => base + x).find((f) => existsSync(f)) ?? null;
@@ -1290,6 +1291,12 @@ function build(section, sf, symbols, classes, componentName) {
   }
 
   for (const t of typeNames) {
+    if (symbols.localImports?.has(t)) {
+      const local = localExport(t, symbols.localImports.get(t));
+      if (local.reason) return { reason: local.reason };
+      for (const text of local.inline) if (!inlined.includes(text)) inlined.unshift(text);
+      continue;
+    }
     if (imports.has(t)) {
       const spec = imports.get(t);
       if (!importsUsed.has(spec)) importsUsed.set(spec, new Set());

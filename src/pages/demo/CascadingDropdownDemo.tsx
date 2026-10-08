@@ -21,11 +21,23 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-import {
-  fetchCountries,
-  fetchCountriesByRegion,
-  searchCountries,
-} from "./lib/countries.js";
+import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
+
+/**
+ * The async examples' data source: a static country list, filtered here and
+ * resolved after LATENCY_MS so the loading state shows. It replaced calls to
+ * this site's own API, which no copied example could reach.
+ */
+const LATENCY_MS = 400;
+const withLatency = (value: Country[]): Promise<Country[]> =>
+  new Promise((resolve) => setTimeout(() => resolve(value), LATENCY_MS));
+const fetchCountries = (): Promise<Country[]> => withLatency(COUNTRIES);
+const fetchCountriesByRegion = (region: string): Promise<Country[]> =>
+  withLatency(COUNTRIES.filter((c) => c.region.toLowerCase() === region.toLowerCase()));
+const searchCountries = (query: string): Promise<Country[]> => {
+  const q = query.trim().toLowerCase();
+  return withLatency(q ? COUNTRIES.filter((c) => c.name.toLowerCase().includes(q)) : []);
+};
 
 const regionOptionsMulti: CascadingOption[] = [
   {
@@ -94,12 +106,7 @@ const loadCountriesForRegion = async (
       label: country.name,
       content: (
         <span className="flex items-center gap-2">
-          {/* Build the flag URL from our own S3 bucket using the ISO
-              alpha-2 code. The REST Countries API's `flags.png` URL
-              points at Wikimedia, which serves the post-2021 Taliban
-              flag for Afghanistan and various other reskinned flags
-              for other politically-contested codes — using our bucket
-              keeps the flag set consistent with the rest of the UI. */}
+          {/* CountryFlag draws the flag from the ISO alpha-2 code. */}
           <CountryFlag
             code={country.code}
             size="md"
@@ -335,7 +342,7 @@ const searchableCategoryOptions: CascadingOption[] = [
   },
 ];
 
-/** Async search: fetches regions from REST Countries API matching the query */
+/** Async search: the regions of the countries matching the query */
 /** Async search: fetches all countries matching the query, groups by region */
 const asyncSearchRegions = async (
   query: string,
@@ -352,7 +359,7 @@ const asyncSearchRegions = async (
     }));
 };
 
-/** Async search: fetches countries in a region matching the query from REST Countries API */
+/** Async search: the countries in a region matching the query */
 const asyncSearchCountries = async (
   query: string,
   parent: CascadingOption,
@@ -366,12 +373,7 @@ const asyncSearchCountries = async (
       label: country.name,
       content: (
         <span className="flex items-center gap-2">
-          {/* Build the flag URL from our own S3 bucket using the ISO
-              alpha-2 code. The REST Countries API's `flags.png` URL
-              points at Wikimedia, which serves the post-2021 Taliban
-              flag for Afghanistan and various other reskinned flags
-              for other politically-contested codes — using our bucket
-              keeps the flag set consistent with the rest of the UI. */}
+          {/* CountryFlag draws the flag from the ISO alpha-2 code. */}
           <CountryFlag
             code={country.code}
             size="md"
@@ -620,9 +622,9 @@ const CascadingDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Async Single-Select (Countries API) ────────────────────────── */}
+      {/* ─── Async Single-Select ─────────────────────────────────────────── */}
       <Section
-        title="Async Single-Select (Countries API)"
+        title="Async Single-Select"
         description="Countries are loaded dynamically when hovering over a region. Single-select mode closes the menu after selection."
         isDarkMode={dark}
       >
@@ -652,10 +654,10 @@ const CascadingDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Async Multi-Select (Countries API) ─────────────────────────── */}
+      {/* ─── Async Multi-Select ──────────────────────────────────────────── */}
       <Section
-        title="Async Multi-Select (Countries API)"
-        description="Countries are loaded dynamically from the REST Countries API when you hover over a region. Multi-select mode allows selecting multiple countries per region."
+        title="Async Multi-Select"
+        description="Countries load when you hover over a region, from an async source with a simulated delay. Multi-select mode allows selecting multiple countries per region."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -731,7 +733,7 @@ const CascadingDropdownDemo = () => {
       {/* ─── Fully Async - Load on Open ─────────────────────────────────── */}
       <Section
         title="Fully Async - Load on Open"
-        description="Main menu options are fetched only when you click the dropdown. Open the Network tab before clicking to observe the API call."
+        description="Main menu options are fetched only when you click the dropdown, and resolve after a simulated delay, so the loading state shows."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -1100,10 +1102,10 @@ const CascadingDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Async Server-Side Search ─────────────────────────────────────── */}
+      {/* ─── Async Search (Debounced) ─────────────────────────────────────── */}
       <Section
-        title="Async Server-Side Search (Debounced)"
-        description="Both menu and submenu call the REST Countries API with 300ms debounce. Menu searches countries by name and groups matching regions. Submenu fetches and filters countries within a region. Static initial options are shown before the user types."
+        title="Async Search (Debounced)"
+        description="Both menu and submenu call an async search with a 300ms debounce. Menu searches countries by name and groups matching regions. Submenu fetches and filters countries within a region. Static initial options are shown before the user types."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">

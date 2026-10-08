@@ -19,7 +19,17 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-import { fetchCountries, type Country } from "./lib/countries.js";
+import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
+
+/**
+ * The async examples' data source: a static country list, filtered here and
+ * resolved after LATENCY_MS so the loading state shows. It replaced calls to
+ * this site's own API, which no copied example could reach.
+ */
+const LATENCY_MS = 400;
+const withLatency = (value: Country[]): Promise<Country[]> =>
+  new Promise((resolve) => setTimeout(() => resolve(value), LATENCY_MS));
+const fetchCountries = (): Promise<Country[]> => withLatency(COUNTRIES);
 
 const staticOptions: MultiSelectOption[] = [
   { value: "apple", label: "Apple" },
@@ -502,8 +512,8 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Options are fetched from the REST Countries API when the dropdown
-          opens.
+          Options come from a static country list, resolved after a simulated
+          400 ms delay when the dropdown opens.
         </div>
       </Section>
 

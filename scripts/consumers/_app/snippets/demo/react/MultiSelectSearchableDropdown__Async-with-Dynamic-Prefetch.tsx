@@ -1,0 +1,147 @@
+import { useCallback, useState } from "react";
+import { CountryFlag } from "@chumlab/ui/country-flag";
+import { MultiSelectOption, MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";
+
+const LATENCY_MS = 400;
+
+const withLatency = (value: Country[]): Promise<Country[]> =>
+  new Promise((resolve) => setTimeout(() => resolve(value), LATENCY_MS));
+
+const fetchCountries = (): Promise<Country[]> => withLatency(COUNTRIES);
+
+const searchCountries = (query: string): Promise<Country[]> => {
+  const q = query.trim().toLowerCase();
+  return withLatency(q ? COUNTRIES.filter((c) => c.name.toLowerCase().includes(q)) : []);
+};
+
+interface Country {
+  name: string;
+  /** ISO 3166-1 alpha-2, which CountryFlag takes. */
+  code: string;
+  capital: string;
+  region: string;
+}
+
+const COUNTRIES: Country[] = [
+  { name: "Egypt", code: "EG", capital: "Cairo", region: "Africa" },
+  { name: "Ghana", code: "GH", capital: "Accra", region: "Africa" },
+  { name: "Kenya", code: "KE", capital: "Nairobi", region: "Africa" },
+  { name: "Morocco", code: "MA", capital: "Rabat", region: "Africa" },
+  { name: "Nigeria", code: "NG", capital: "Abuja", region: "Africa" },
+  { name: "South Africa", code: "ZA", capital: "Pretoria", region: "Africa" },
+  { name: "Argentina", code: "AR", capital: "Buenos Aires", region: "Americas" },
+  { name: "Brazil", code: "BR", capital: "Brasília", region: "Americas" },
+  { name: "Canada", code: "CA", capital: "Ottawa", region: "Americas" },
+  { name: "Chile", code: "CL", capital: "Santiago", region: "Americas" },
+  { name: "Colombia", code: "CO", capital: "Bogotá", region: "Americas" },
+  { name: "Mexico", code: "MX", capital: "Mexico City", region: "Americas" },
+  { name: "United States", code: "US", capital: "Washington, D.C.", region: "Americas" },
+  { name: "China", code: "CN", capital: "Beijing", region: "Asia" },
+  { name: "India", code: "IN", capital: "New Delhi", region: "Asia" },
+  { name: "Indonesia", code: "ID", capital: "Jakarta", region: "Asia" },
+  { name: "Japan", code: "JP", capital: "Tokyo", region: "Asia" },
+  { name: "Singapore", code: "SG", capital: "Singapore", region: "Asia" },
+  { name: "South Korea", code: "KR", capital: "Seoul", region: "Asia" },
+  { name: "Vietnam", code: "VN", capital: "Hanoi", region: "Asia" },
+  { name: "France", code: "FR", capital: "Paris", region: "Europe" },
+  { name: "Germany", code: "DE", capital: "Berlin", region: "Europe" },
+  { name: "Ireland", code: "IE", capital: "Dublin", region: "Europe" },
+  { name: "Italy", code: "IT", capital: "Rome", region: "Europe" },
+  { name: "Netherlands", code: "NL", capital: "Amsterdam", region: "Europe" },
+  { name: "Spain", code: "ES", capital: "Madrid", region: "Europe" },
+  { name: "Sweden", code: "SE", capital: "Stockholm", region: "Europe" },
+  { name: "United Kingdom", code: "GB", capital: "London", region: "Europe" },
+  { name: "Australia", code: "AU", capital: "Canberra", region: "Oceania" },
+  { name: "Fiji", code: "FJ", capital: "Suva", region: "Oceania" },
+  { name: "New Zealand", code: "NZ", capital: "Wellington", region: "Oceania" },
+  { name: "Papua New Guinea", code: "PG", capital: "Port Moresby", region: "Oceania" },
+];
+
+export default function MultiSelectSearchableDropdownExample() {
+  const [asyncPrefetchValue, setAsyncPrefetchValue] = useState<string[]>([]);
+  const mapCountryToOption = useCallback(
+    (country: Country): MultiSelectOption => ({
+      value: country.code,
+      label: country.name,
+      content: (
+        <div className="flex items-center gap-2">
+          <CountryFlag
+            code={country.code}
+            size="md"
+            alt={`${country.name} flag`}
+            className="rounded-cl-sm"
+          />
+          <div className="flex flex-col">
+            <span className="text-sm">{country.name}</span>
+            <span className="text-xs text-cl-text-tertiary">
+              {country.capital || country.region}
+            </span>
+          </div>
+        </div>
+      ),
+      selectedContent: <span className="truncate">{country.name}</span>,
+    }),
+    [],
+  );
+  const handleAsyncSearch = useCallback(
+    async (query: string): Promise<MultiSelectOption[]> => {
+      const data = await searchCountries(query);
+
+      return data.slice(0, 10).map(mapCountryToOption);
+    },
+    [mapCountryToOption],
+  );
+  const handleLoadInitialOptions = useCallback(async (): Promise<
+    MultiSelectOption[]
+  > => {
+    const data = await fetchCountries();
+
+    const popularCountryCodes = [
+      "US",
+      "GB",
+      "DE",
+      "FR",
+      "JP",
+      "CA",
+      "AU",
+      "IN",
+      "BR",
+      "IT",
+    ];
+    const popularCountries = popularCountryCodes
+      .map((code) => data.find((r) => r.code === code))
+      .filter((r): r is Country => r !== undefined);
+
+    return popularCountries.map(mapCountryToOption);
+  }, [mapCountryToOption]);
+  return (
+    <div className="w-full sm:max-w-80">
+      <MultiSelectSearchableDropdown
+        value={asyncPrefetchValue}
+        onValueChange={(values) => setAsyncPrefetchValue(values)}
+        placeholder="Select or search countries..."
+        onSearch={handleAsyncSearch}
+        onLoadInitialOptions={handleLoadInitialOptions}
+        loadInitialOnOpen
+        searchDebounceMs={300}
+        maxDisplayedChips={2}
+        loadingText="Loading..."
+        noResultsContent="No countries found"
+        classes={
+          {
+            root: "",
+            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
+            content: "rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
+            searchInput: "flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border dark:border-cl-border dark:bg-cl-bg-elevated",
+            searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
+            loading: "px-3 py-4 text-sm text-center text-cl-text-secondary",
+            label: "block text-sm font-medium mb-1 text-cl-text-secondary",
+            chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-text dark:bg-cl-text/10 dark:text-cl-text",
+            chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-text-secondary"
+          }
+        }
+        aria-label="Select or search countries"
+      />
+    </div>
+  );
+}

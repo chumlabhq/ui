@@ -19,11 +19,21 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
-import {
-  fetchCountries,
-  searchCountries,
-  type Country,
-} from "./lib/countries.js";
+import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
+
+/**
+ * The async examples' data source: a static country list, filtered here and
+ * resolved after LATENCY_MS so the loading state shows. It replaced calls to
+ * this site's own API, which no copied example could reach.
+ */
+const LATENCY_MS = 400;
+const withLatency = (value: Country[]): Promise<Country[]> =>
+  new Promise((resolve) => setTimeout(() => resolve(value), LATENCY_MS));
+const fetchCountries = (): Promise<Country[]> => withLatency(COUNTRIES);
+const searchCountries = (query: string): Promise<Country[]> => {
+  const q = query.trim().toLowerCase();
+  return withLatency(q ? COUNTRIES.filter((c) => c.name.toLowerCase().includes(q)) : []);
+};
 
 const fruitOptions: SearchableDropdownOption[] = [
   { value: "apple", label: "Apple" },
@@ -663,7 +673,7 @@ const SearchableDropdownDemo = () => {
 
       {/* ─── Async Search ────────────────────────────────────────────────── */}
       <Section
-        title="Async Search (Real API)"
+        title="Async Search"
         description="Use onSearch to fetch options asynchronously. Results are debounced and a shimmer skeleton displays while loading."
         isDarkMode={dark}
       >
@@ -683,8 +693,8 @@ const SearchableDropdownDemo = () => {
         <p
           className={`text-sm mt-2 text-cl-text-secondary`}
         >
-          Type to search countries using REST Countries API. Results are
-          debounced (300ms).
+          Type to search the country list. Results are debounced (300ms) and
+          arrive after a simulated 400 ms delay.
         </p>
       </Section>
 
