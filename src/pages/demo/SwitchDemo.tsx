@@ -325,7 +325,8 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-4">
             <Switch label="Sync in progress" loading checked classes={c.switch} />
-            <Switch label="Not loading" checked classes={c.switch} />
+            {/* The comparison: an idle switch toggles; the one above, loading, does not. */}
+            <Switch label="Not loading" defaultChecked classes={c.switch} />
           </div>
         </DemoWrapper>
       </Section>

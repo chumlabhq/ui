@@ -26,8 +26,10 @@ const getClasses = (_dark: boolean) => ({
      the card it sits on — so 29 of the page's 58 triggers measured 1.00:1
      against their own surface and read as unclickable text. The border is
      what separates it now; the fill stays the surface so the painted
-     variants beside it keep their emphasis. */
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover`,
+     variants beside it keep their emphasis. In dark, panel and elevated are
+     both #0a0d12 and `--cl-border` reaches 1.18:1, so the outline there is
+     `--cl-text-tertiary` (5.09:1). */
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-text text-cl-bg hover:opacity-90`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   btnSuccess: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success`,
@@ -931,7 +933,7 @@ const ToastDemoContent = ({
                   className={
                     position === pos
                       ? "rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
-                      : "rounded-cl-md bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
+                      : "rounded-cl-md bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
                   }
                   onClick={() => setPosition(pos)}
                 >

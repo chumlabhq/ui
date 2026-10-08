@@ -122,6 +122,7 @@ const ModalDemo = () => {
   const [useModalOpen, setUseModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const [refForwardOpen, setRefForwardOpen] = useState(false);
+  const [refFocusReadout, setRefFocusReadout] = useState("nothing yet");
 
   return (
     <div className="space-y-10">
@@ -1374,16 +1375,6 @@ const ModalDemo = () => {
             <Button className={c.btnPrimary} onClick={() => setRefForwardOpen(true)}>
               Modal with Ref
             </Button>
-            <Button
-              className={c.btn}
-              // You cannot focus a modal that is not mounted: closed, the ref
-              // is null and the button silently did nothing. Disabled says so
-              // before the click rather than after it.
-              disabled={!refForwardOpen}
-              onClick={() => modalRef.current?.focus()}
-            >
-              Focus Modal via Ref
-            </Button>
           </div>
         </DemoWrapper>
         <Modal
@@ -1406,10 +1397,33 @@ const ModalDemo = () => {
             The parent holds a ref to this modal. Use it for imperative actions
             like <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">ref.current?.focus()</code>.
           </p>
-          <div className="flex justify-end mt-4">
+          {/* Inside the modal: it traps focus while open, and closed there is
+              nothing for the ref to point at, so a button outside could never
+              be used. */}
+          <div className="flex justify-end gap-2 mt-4">
+            <Button
+              className={c.btn}
+              onClick={() => {
+                modalRef.current?.focus();
+                setRefFocusReadout(
+                  document.activeElement === modalRef.current
+                    ? "the modal content element (ref.current)"
+                    : (document.activeElement?.tagName.toLowerCase() ?? "nothing"),
+                );
+              }}
+            >
+              Focus Modal via Ref
+            </Button>
             <Button className={c.btnPrimary} onClick={() => setRefForwardOpen(false)}>
               Close
             </Button>
+          </div>
+          <div
+            className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+            role="status"
+          >
+            focused: {refFocusReadout}
           </div>
         </Modal>
       </Section>

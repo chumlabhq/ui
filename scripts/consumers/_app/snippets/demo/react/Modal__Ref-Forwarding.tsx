@@ -4,6 +4,7 @@ import { Modal } from "@chumlab/ui/modal";
 
 export default function ModalExample() {
   const [refForwardOpen, setRefForwardOpen] = useState(false);
+  const [refFocusReadout, setRefFocusReadout] = useState("nothing yet");
   const modalRef = useRef<HTMLDivElement>(null);
   return (
     <>
@@ -13,13 +14,6 @@ export default function ModalExample() {
           onClick={() => setRefForwardOpen(true)}
         >
           Modal with Ref
-        </Button>
-        <Button
-          className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated cursor-pointer"
-          disabled={!refForwardOpen}
-          onClick={() => modalRef.current?.focus()}
-        >
-          Focus Modal via Ref
         </Button>
       </div>
       <Modal
@@ -47,13 +41,36 @@ export default function ModalExample() {
           </code>
           .
         </p>
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end gap-2 mt-4">
+          <Button
+            className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated cursor-pointer"
+            onClick={
+              () => {
+                modalRef.current?.focus();
+                setRefFocusReadout(
+                  document.activeElement === modalRef.current
+                    ? "the modal content element (ref.current)"
+                    : (document.activeElement?.tagName.toLowerCase() ?? "nothing"),
+                );
+              }
+            }
+          >
+            Focus Modal via Ref
+          </Button>
           <Button
             className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
             onClick={() => setRefForwardOpen(false)}
           >
             Close
           </Button>
+        </div>
+        <div
+          className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+          data-demo-action
+          role="status"
+        >
+          focused:
+          {refFocusReadout}
         </div>
       </Modal>
     </>

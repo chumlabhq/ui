@@ -41,7 +41,7 @@ export default function ToastExample() {
     <>
       <LocalProviderDemo
         containerAriaLabel="Order updates"
-        buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
+        buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
         label='containerAriaLabel="Order updates"'
         message="This one lands in a region named Order updates"
       />

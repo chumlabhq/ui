@@ -42,14 +42,14 @@ export default function ToastExample() {
       <LocalProviderDemo
         animationDuration={1600}
         containerAriaLabel="Slow animation example"
-        buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
+        buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
         label="Slow (1600ms)"
         message="Slid in over 1.6 seconds"
       />
       <LocalProviderDemo
         animationDuration={60}
         containerAriaLabel="Fast animation example"
-        buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
+        buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
         label="Fast (60ms)"
         message="Snapped in over 60ms"
       />

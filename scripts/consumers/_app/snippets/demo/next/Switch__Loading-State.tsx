@@ -18,7 +18,7 @@ export default function SwitchExample() {
       />
       <Switch
         label="Not loading"
-        checked
+        defaultChecked
         classes={
           {
             label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",
