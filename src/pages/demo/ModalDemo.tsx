@@ -206,8 +206,8 @@ const ModalDemo = () => {
         >
           <div className="flex flex-col items-center">
             {/* Animated danger icon */}
-            <div className={`relative mb-5 flex h-16 w-16 items-center justify-center rounded-cl-lg bg-cl-error/15 dark:bg-cl-error/10`}>
-              <div className={`absolute inset-0 rounded-cl-lg bg-cl-error/50 dark:bg-cl-error/5 animate-pulse`} />
+            <div className={`relative mb-5 flex h-16 w-16 items-center justify-center rounded-cl-lg bg-cl-error-bg`}>
+              <div className={`absolute inset-0 rounded-cl-lg bg-cl-error/50 animate-pulse`} />
               <svg className={`relative h-8 w-8 text-cl-error`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
               </svg>
@@ -219,7 +219,7 @@ const ModalDemo = () => {
             </p>
 
             {/* Danger zone card */}
-            <div className={`w-full rounded-cl-lg p-4 mb-6 border bg-cl-error/15 border-cl-error dark:bg-cl-error/20 dark:border dark:border-cl-error/40`}>
+            <div className={`w-full rounded-cl-lg p-4 mb-6 border bg-cl-error-bg border-cl-error`}>
               <div className="flex items-start gap-3">
                 <svg className={`h-5 w-5 mt-0.5 shrink-0 text-cl-error`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -238,7 +238,7 @@ const ModalDemo = () => {
             <div className="flex w-full gap-3">
               <Button className={`flex-1 ${c.btn} cursor-pointer`} onClick={() => setConfirmDeleteOpen(false)}>Keep Project</Button>
               <Button
-                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:hover:bg-cl-error/30 cursor-pointer`}
+                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error/95 cursor-pointer`}
                 onClick={() => setConfirmDeleteOpen(false)}
               >
                 Yes, Delete
@@ -255,7 +255,7 @@ const ModalDemo = () => {
           <div className="flex flex-col items-center">
             {/* Animated success icon */}
             <div className="relative mb-5">
-              <div className={`absolute -inset-3 rounded-full blur-xl bg-cl-success/25 dark:bg-cl-success/20`} />
+              <div className={`absolute -inset-3 rounded-full blur-xl bg-cl-success/25`} />
               <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-cl-success/30 to-cl-success shadow-lg shadow-success/25">
                 <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -267,7 +267,7 @@ const ModalDemo = () => {
             <p className={`text-sm mb-5 text-cl-text-secondary`}>Your order has been confirmed and is being processed.</p>
 
             {/* Order details card */}
-   <div className={`w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover dark:border dark:bg-cl-bg-elevated/50`}>
+   <div className={`w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover`}>
               <div className="flex items-center justify-between px-4 py-3">
                 <span className={`text-sm text-cl-text-secondary`}>Order</span>
                 <span className={`text-sm font-mono font-medium text-cl-text`}>#ORD-2024-8847</span>
@@ -285,7 +285,7 @@ const ModalDemo = () => {
             <div className="flex w-full gap-3">
               <Button className={`flex-1 ${c.btn} cursor-pointer`} onClick={() => setSuccessOpen(false)}>View Order</Button>
               <Button
-                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:hover:bg-cl-success/30 cursor-pointer`}
+                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success/95 cursor-pointer`}
                 onClick={() => setSuccessOpen(false)}
               >
                 Continue Shopping
@@ -324,7 +324,7 @@ const ModalDemo = () => {
             <ul className="space-y-3 mb-6">
               {["Unlimited projects", "Advanced analytics", "Priority support", "API access"].map((feature, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <div className={`flex h-5 w-5 items-center justify-center rounded-full bg-cl-accent/10 dark:bg-cl-accent/40`}>
+                  <div className={`flex h-5 w-5 items-center justify-center rounded-full bg-cl-accent-surface`}>
                     <svg className={`h-3 w-3 text-cl-accent`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
@@ -838,7 +838,7 @@ const ModalDemo = () => {
           classes={{ content: c.modalContent }}
         >
           <div className="space-y-4">
-            <div className={`p-4 rounded-cl-md border bg-cl-accent/10 border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus/40`}>
+            <div className={`p-4 rounded-cl-md border bg-cl-accent-surface border-cl-border-input-focus`}>
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`font-medium text-cl-accent`}>Team Members</p>
@@ -889,7 +889,7 @@ const ModalDemo = () => {
               ].map((member, i) => (
                 <div
                   key={i}
-                  className={`flex items-center justify-between p-3 rounded-cl-md bg-cl-bg-hover dark:bg-cl-bg-elevated/50`}
+                  className={`flex items-center justify-between p-3 rounded-cl-md bg-cl-bg-hover`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-cl-accent/40 to-cl-accent text-white text-sm font-medium">
@@ -903,7 +903,7 @@ const ModalDemo = () => {
                 </div>
               ))}
             </div>
-            <Button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border cursor-pointer`}>
+            <Button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent cursor-pointer`}>
               <svg
                 className="h-5 w-5"
                 fill="none"

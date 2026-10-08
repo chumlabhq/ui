@@ -29,7 +29,7 @@ export default function TextAreaExample() {
         classes={
           {
                           ...({
-            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",
             input: "w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary",
             label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
@@ -41,7 +41,7 @@ export default function TextAreaExample() {
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
           }),
                           input: "w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
-                          control: "rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
+                          control: "rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover"
                         }
         }
         className="flex flex-col"
@@ -53,7 +53,7 @@ export default function TextAreaExample() {
         classes={
           {
                           ...({
-            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",
             input: "w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary",
             label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
@@ -65,7 +65,7 @@ export default function TextAreaExample() {
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
           }),
                           input: "w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
-                          control: "rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]"
+                          control: "rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover"
                         }
         }
         className="flex flex-col"
@@ -77,7 +77,7 @@ export default function TextAreaExample() {
         classes={
           {
                           ...({
-            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",
             input: "w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary",
             label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
@@ -88,7 +88,7 @@ export default function TextAreaExample() {
             message: "text-xs mt-1.5 flex items-center gap-1.5",
             count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
           }),
-                          control: `${"rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50"} cursor-default`
+                          control: `${"rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus"} cursor-default`
                         }
         }
         className="flex flex-col"

@@ -45,11 +45,9 @@ export default function ModalExample() {
       >
         <div className="flex flex-col items-center">
           <div
-            className="relative mb-5 flex h-16 w-16 items-center justify-center rounded-cl-lg bg-cl-error/15 dark:bg-cl-error/10"
+            className="relative mb-5 flex h-16 w-16 items-center justify-center rounded-cl-lg bg-cl-error-bg"
           >
-            <div
-              className="absolute inset-0 rounded-cl-lg bg-cl-error/50 dark:bg-cl-error/5 animate-pulse"
-            />
+            <div className="absolute inset-0 rounded-cl-lg bg-cl-error/50 animate-pulse" />
             <svg
               className="relative h-8 w-8 text-cl-error"
               fill="none"
@@ -70,9 +68,7 @@ export default function ModalExample() {
             <span className="font-semibold text-cl-error">"Marketing Website"</span>
             and all its data. This cannot be undone.
           </p>
-          <div
-            className="w-full rounded-cl-lg p-4 mb-6 border bg-cl-error/15 border-cl-error dark:bg-cl-error/20 dark:border dark:border-cl-error/40"
-          >
+          <div className="w-full rounded-cl-lg p-4 mb-6 border bg-cl-error-bg border-cl-error">
             <div className="flex items-start gap-3">
               <svg
                 className="h-5 w-5 mt-0.5 shrink-0 text-cl-error"
@@ -105,7 +101,7 @@ export default function ModalExample() {
               Keep Project
             </Button>
             <Button
-              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:hover:bg-cl-error/30 cursor-pointer"
+              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error/95 cursor-pointer"
               onClick={() => setConfirmDeleteOpen(false)}
             >
               Yes, Delete
@@ -121,9 +117,7 @@ export default function ModalExample() {
       >
         <div className="flex flex-col items-center">
           <div className="relative mb-5">
-            <div
-              className="absolute -inset-3 rounded-full blur-xl bg-cl-success/25 dark:bg-cl-success/20"
-            />
+            <div className="absolute -inset-3 rounded-full blur-xl bg-cl-success/25" />
             <div
               className="relative flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-cl-success/30 to-cl-success shadow-lg shadow-success/25"
             >
@@ -147,7 +141,7 @@ export default function ModalExample() {
             Your order has been confirmed and is being processed.
           </p>
           <div
-            className="w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover dark:border dark:bg-cl-bg-elevated/50"
+            className="w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover"
           >
             <div className="flex items-center justify-between px-4 py-3">
               <span className="text-sm text-cl-text-secondary">Order</span>
@@ -170,7 +164,7 @@ export default function ModalExample() {
               View Order
             </Button>
             <Button
-              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:hover:bg-cl-success/30 cursor-pointer"
+              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success/95 cursor-pointer"
               onClick={() => setSuccessOpen(false)}
             >
               Continue Shopping
@@ -206,7 +200,7 @@ export default function ModalExample() {
               ["Unlimited projects", "Advanced analytics", "Priority support", "API access"].map((feature, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <div
-                    className="flex h-5 w-5 items-center justify-center rounded-full bg-cl-accent/10 dark:bg-cl-accent/40"
+                    className="flex h-5 w-5 items-center justify-center rounded-full bg-cl-accent-surface"
                   >
                     <svg
                       className="h-3 w-3 text-cl-accent"

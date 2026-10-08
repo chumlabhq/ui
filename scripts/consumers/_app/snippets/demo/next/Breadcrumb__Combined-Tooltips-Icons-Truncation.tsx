@@ -82,15 +82,15 @@ export default function BreadcrumbExample() {
       classes={
         {
                     ...({
-          root: "p-4 rounded-cl-md bg-cl-accent/10 dark:bg-cl-accent/20",
+          root: "p-4 rounded-cl-md bg-cl-accent-surface",
           list: "flex flex-wrap items-center gap-1",
-          item: "flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent/10 dark:hover:bg-cl-accent/20",
+          item: "flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent-surface",
           separator: "text-cl-accent"
         }),
                     itemIcon: "shrink-0",
                     ellipsisTrigger: "flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent-bg hover:bg-cl-accent-bg-hover text-cl-accent-hover",
-                    content: "flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-panel border border-cl-border-input-focus dark:border",
-                    collapsedItem: "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent/10 dark:hover:bg-cl-accent/20"
+                    content: "flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-panel border border-cl-border-input-focus",
+                    collapsedItem: "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent-surface"
                   }
       }
       onItemClick={handleItemClick}

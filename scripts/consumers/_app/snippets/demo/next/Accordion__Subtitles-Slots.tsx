@@ -82,7 +82,7 @@ export default function AccordionExample() {
           leftSlot={<ShieldIcon className="w-4 h-4 text-cl-success" />}
           rightSlot={
             <span
-              className="text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/10 dark:text-cl-success"
+              className="text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success-bg text-cl-text"
             >
               New
             </span>

@@ -17,10 +17,10 @@ function getTableClasses(_dark: boolean) {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border dark:border-cl-text/[0.06]",
+    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
     body: "",
-    row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04]",
-    selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/15",
+    row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover",
+    selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent-bg hover:bg-cl-accent-bg-hover",
     cell: "px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text",
     empty: "flex items-center justify-center py-12 text-cl-text-secondary",
     pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
@@ -40,9 +40,9 @@ function getTableClasses(_dark: boolean) {
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
     shimmer: "w-full border rounded-cl-md overflow-hidden border-cl-border",
-    shimmerRow: "border-b border-cl-border dark:border-cl-text/[0.04]",
+    shimmerRow: "border-b border-cl-border",
     shimmerCell: "px-4 py-2 h-14",
-    shimmerBar: "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.04] via-gray-300 to-fg/[0.04] dark:from-bg-elevated dark:via-gray-600 dark:to-bg-elevated",
+    shimmerBar: "h-full w-full bg-linear-to-r rounded animate-pulse from-cl-bg-hover via-cl-bg-skeleton to-cl-bg-hover",
   };
 }
 
@@ -205,7 +205,7 @@ export default function TableExample() {
           {
             ...s,
             ...s,
-            item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10 dark:border-cl-text/[0.04]"
+            item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10"
           }
         }
         onRowClick={(row) => setStripedRowClick(JSON.stringify(row))}

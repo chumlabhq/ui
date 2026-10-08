@@ -25,12 +25,12 @@ export default function MultiSelectDropdownExample() {
           portalContainer={portalEl}
           classes={
             {
-              trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
-              content: "rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border dark:border",
+              trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
+              content: "rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border",
               label: "block text-sm font-medium mb-1 text-cl-text-secondary",
               description: "text-xs mb-1 text-cl-text-secondary",
-              chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-text dark:bg-cl-text/10",
-              chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-text-secondary"
+              chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
+              chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
             }
           }
           aria-label="Portal container demo"
@@ -38,7 +38,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <div
         ref={setPortalEl}
-        className="relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover dark:bg-cl-bg-elevated/50"
+        className="relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover"
       >
         <p className="text-xs text-cl-text-tertiary">
           Portal target container -- the dropdown renders here

@@ -580,7 +580,7 @@ const ResizablePanelDemo = () => {
             </ResizablePanel>
             <div
               ref={logRef}
-              className={`h-28 overflow-y-auto rounded-cl-md border p-3 font-mono text-xs bg-cl-bg-recessed border-cl-border text-cl-text-secondary dark:border`}
+              className={`h-28 overflow-y-auto rounded-cl-md border p-3 font-mono text-xs bg-cl-bg-recessed border-cl-border text-cl-text-secondary`}
             >
               {callbackLog.length === 0 ? (
                 <span className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}>
@@ -607,8 +607,8 @@ const ResizablePanelDemo = () => {
             maxValue={500}
             onValueChange={setStyledWidth}
             classes={{
-              root: `h-32 rounded-cl-md border bg-linear-to-r from-cl-accent/10 to-cl-accent/10 border-cl-border-input-focus dark:bg-linear-to-r dark:from-cl-accent/60 dark:to-cl-accent/60 dark:border`,
-              handle: `rounded-full bg-linear-to-b from-cl-accent/30 to-cl-accent/30 hover:from-cl-accent hover:to-cl-accent dark:bg-linear-to-b dark:from-cl-accent dark:to-cl-accent dark:hover:from-cl-accent/30 dark:hover:to-cl-accent/30 transition-colors`,
+              root: `h-32 rounded-cl-md border bg-linear-to-r from-cl-accent-surface to-cl-accent-surface border-cl-border-input-focus`,
+              handle: `rounded-full bg-linear-to-b from-cl-accent to-cl-accent hover:from-cl-accent-hover hover:to-cl-accent-hover transition-colors`,
             }}
           >
             <div className="p-4">
@@ -747,7 +747,7 @@ const ResizablePanelDemo = () => {
               </div>
             </ResizablePanel>
             <div
- className={`flex-1 p-4 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border`}
+ className={`flex-1 p-4 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 bg-cl-bg-hover border border-cl-border`}
             >
               <p
                 className={`font-medium text-cl-text`}
@@ -812,7 +812,7 @@ const ResizablePanelDemo = () => {
             </ResizablePanel>
 
             <div
-              className={`flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y bg-cl-bg-hover border-cl-border dark:bg-cl-bg-elevated dark:border`}
+              className={`flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y bg-cl-bg-hover border-cl-border`}
             >
               <p
                 className={`font-medium text-cl-text`}
@@ -825,7 +825,7 @@ const ResizablePanelDemo = () => {
                 Flexible width &mdash; expands to fill available space
               </p>
               <div
-                className={`mt-4 flex-1 rounded border p-4 bg-cl-bg border-cl-border dark:border`}
+                className={`mt-4 flex-1 rounded border p-4 bg-cl-bg border-cl-border`}
               >
                 <p
                   className={`text-sm text-cl-text-tertiary`}

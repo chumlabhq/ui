@@ -78,11 +78,11 @@ export default function TabPanelExample() {
           // Track uses a subtle wash (instead of bg-cl-bg-elevated) so the
           // active pill — which now uses bg-cl-bg-elevated in the dark theme —
           // has a distinct surface to stand out against.
-          list: "inline-flex items-center gap-1 p-1 rounded-cl-md bg-black/[0.04] dark:bg-white/[0.06]",
+          list: "inline-flex items-center gap-1 p-1 rounded-cl-md bg-cl-bg-hover",
           item: "px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-white data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
           content: "p-4 mt-2"
         },
-                  item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text"
+                  item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text"
                 }
       }
       renderTab={
@@ -91,7 +91,7 @@ export default function TabPanelExample() {
             {defaultElement}
             {props.tab.count != null && props.tab.count > 0 && (
               <span
-                className={"absolute -top-1 -right-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error dark:bg-cl-error/30"}
+                className={"absolute -top-1 -right-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error"}
               >
                 {props.tab.count}
               </span>

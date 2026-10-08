@@ -25,7 +25,7 @@ export default function ModalExample() {
       >
         <div className="space-y-4">
           <div
-            className="p-4 rounded-cl-md border bg-cl-accent/10 border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus/40"
+            className="p-4 rounded-cl-md border bg-cl-accent-surface border-cl-border-input-focus"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -80,7 +80,7 @@ export default function ModalExample() {
               ].map((member, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between p-3 rounded-cl-md bg-cl-bg-hover dark:bg-cl-bg-elevated/50"
+                  className="flex items-center justify-between p-3 rounded-cl-md bg-cl-bg-hover"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -102,7 +102,7 @@ export default function ModalExample() {
             }
           </div>
           <Button
-            className="w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border cursor-pointer"
+            className="w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent cursor-pointer"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path

@@ -17,7 +17,7 @@ export default function TabPanelExample() {
           root: "w-full",
           list: "flex items-center gap-6 border-b border-cl-border",
           item: "relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:text-cl-accent data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
-          indicator: "absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90",
+          indicator: "absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent",
           content: "p-4"
         }
       }

@@ -42,7 +42,7 @@ export default function AvatarExample() {
       </button>
       <button
         onClick={() => setProfileButtonClicks((n) => n + 1)}
-        className="flex items-center gap-3 px-3 py-2 rounded-cl-md transition-colors focus:outline-none focus:ring-2 focus:ring-cl-accent hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated/50 cursor-pointer"
+        className="flex items-center gap-3 px-3 py-2 rounded-cl-md transition-colors focus:outline-none focus:ring-2 focus:ring-cl-accent hover:bg-cl-bg-hover cursor-pointer"
       >
         <Avatar
           name="Jane Doe"

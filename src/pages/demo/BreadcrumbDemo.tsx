@@ -136,7 +136,7 @@ const getClasses = (dark: boolean) => ({
     list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border border-none rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover`,
     separator: dark ? "text-cl-text-secondary" : "text-cl-text-tertiary",
-    link: `flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline dark:hover:underline`,
+    link: `flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline`,
   } satisfies BreadcrumbClasses,
 
   /* Class strings this page reuses in its own markup. Not `classes`
@@ -144,7 +144,7 @@ const getClasses = (dark: boolean) => ({
      nothing. */
   breadcrumbExtra: {
     icon: "shrink-0",
-    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-bg-elevated`,
+    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-text/[0.14] text-cl-text-secondary`,
     dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-elevated border border-cl-border`,
     dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
   },
@@ -157,9 +157,9 @@ const getClasses = (dark: boolean) => ({
     collapsedItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent text-cl-text-secondary hover:bg-cl-bg-hover`,
   } satisfies BreadcrumbClasses,
   colored: {
-    root: `p-4 rounded-cl-md bg-cl-accent/10 dark:bg-cl-accent/20`,
+    root: `p-4 rounded-cl-md bg-cl-accent-surface`,
     list: "flex flex-wrap items-center gap-1",
-    item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent/10 dark:hover:bg-cl-accent/20`,
+    item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent-surface`,
     separator: dark ? "text-cl-accent" : "text-cl-accent",
   } satisfies BreadcrumbClasses,
 
@@ -168,8 +168,8 @@ const getClasses = (dark: boolean) => ({
      nothing. */
   coloredExtra: {
     ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent-bg hover:bg-cl-accent-bg-hover text-cl-accent-hover`,
-    dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-panel border border-cl-border-input-focus dark:border`,
-    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent/10 dark:hover:bg-cl-accent/20`,
+    dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-panel border border-cl-border-input-focus`,
+    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent-surface`,
   },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
@@ -350,7 +350,7 @@ const BreadcrumbDemo = () => {
                   <span className="flex items-center gap-1.5">
                     Status{" "}
                     <span
-                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-success/15 text-cl-text dark:bg-cl-success/20 dark:text-cl-success`}
+                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-success-bg text-cl-text`}
                     >
                       Active
                     </span>

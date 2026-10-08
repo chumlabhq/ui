@@ -121,7 +121,7 @@ const getClasses = (dark: boolean) => ({
  cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
   code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
-  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent-bg text-cl-accent-hover ring-1 ring-inset ring-cl-accent/10 dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
+  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent-bg text-cl-accent-hover ring-1 ring-inset ring-cl-accent/10`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer`,
   stateDisplay: `text-sm font-mono text-cl-text-secondary`,
@@ -884,7 +884,7 @@ const AccordionDemo = () => {
                 }
                 rightSlot={
                   <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/10 dark:text-cl-success`}
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success-bg text-cl-text`}
                   >
                     New
                   </span>
@@ -1061,7 +1061,7 @@ const AccordionDemo = () => {
         </DemoWrapper>
         {toggleLog.length > 0 && (
           <div
-            className={`mt-3 p-3 rounded-cl-md text-xs font-mono space-y-1 bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated`}
+            className={`mt-3 p-3 rounded-cl-md text-xs font-mono space-y-1 bg-cl-bg-hover text-cl-text-tertiary`}
           >
             {toggleLog.map((log, i) => (
               <div key={i}>{log}</div>

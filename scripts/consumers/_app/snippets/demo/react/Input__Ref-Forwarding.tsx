@@ -14,7 +14,7 @@ export default function InputExample() {
         classes={
           {
             root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:[color-scheme:dark]",
+            input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
             label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
@@ -39,7 +39,7 @@ export default function InputExample() {
                     setRefReadValue(JSON.stringify(inputRef.current?.value));
                 }
               }
-              className="rounded-cl-md bg-cl-text/4 text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6"
+              className="rounded-cl-md bg-cl-text/4 text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft"
             >
               {lbl}
             </Button>

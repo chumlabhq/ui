@@ -9,7 +9,7 @@ export default function CountryFlagExample() {
       className="rounded-[3px]"
       fallback={
         <span
-          className="inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated"
+          className="inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide bg-cl-bg-hover text-cl-text-tertiary"
           style={{ width: 48, height: 36, borderRadius: 3 }}
         >
           US

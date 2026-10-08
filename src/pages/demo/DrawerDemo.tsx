@@ -443,7 +443,7 @@ const DrawerDemo = () => {
               {Array.from({ length: 20 }).map((_, i) => (
                 <p
                   key={i}
-                  className={`text-sm py-2 border-b border-cl-border text-cl-text-tertiary dark:border`}
+                  className={`text-sm py-2 border-b border-cl-border text-cl-text-tertiary`}
                 >
                   Item {i + 1} — scroll to see more content
                 </p>
@@ -577,15 +577,15 @@ const DrawerDemo = () => {
           direction="right"
           size="360px"
           classes={{
-            overlay: `fixed inset-0 transition-opacity bg-cl-accent/30 dark:bg-cl-accent/60`,
-            content: `fixed z-999999 shadow-2xl shadow-accent/20 dark:shadow-2xl dark:shadow-accent/10`,
+            overlay: `fixed inset-0 transition-opacity bg-cl-accent/30`,
+            content: `fixed z-999999 shadow-2xl shadow-accent/20`,
           }}
         >
           <div
-            className={`flex flex-col h-full bg-cl-bg border-l border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`}
+            className={`flex flex-col h-full bg-cl-bg border-l border-cl-border-input-focus`}
           >
             <DrawerHeader
-              className={`flex items-center justify-between px-5 py-4 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`}
+              className={`flex items-center justify-between px-5 py-4 border-b border-cl-border-input-focus`}
             >
               <h2
                 className={`text-lg font-semibold text-cl-accent`}

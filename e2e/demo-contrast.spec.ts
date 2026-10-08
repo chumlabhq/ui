@@ -188,15 +188,16 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
  * Measured, recorded, not yet fixed — down only.
  *
  * The scan opened at 746 findings across 15 pages. Six class idioms and one
- * library palette accounted for 699 of them; these 19 selectors are the tail,
+ * library palette accounted for 699 of them; these selectors are the tail,
  * and they are all real by the same rule the fixture sweep applies. They are
  * listed so the number cannot grow while they are worked through, and so that
- * "43 remaining" is a set someone can read rather than a total.
+ * "36 remaining" is a set someone can read rather than a total.
  *
- * Roughly: nine are `::placeholder` at 2.29-4.41 (the fixture gate counts
- * placeholders and fails them too, and every fixture placeholder passes, so
- * these are demo inputs specifically); the rest are single semantic-token
- * labels on light surfaces — the light-mode `--cl-warning` and `--cl-success`
+ * Roughly: one is a `::placeholder` (the fixture gate counts placeholders and
+ * fails them too, and every fixture placeholder passes, so this is a demo input
+ * specifically; T3 moved the Table and unstyled TimePicker placeholders to
+ * --cl-text-tertiary and retired seven entries, 43 -> 36); the rest are single
+ * semantic-token labels on light surfaces — the light-mode `--cl-warning` and `--cl-success`
  * are surface colours, not text colours, which is the same fact behind the
  * bulk fixes above.
  */
@@ -210,15 +211,8 @@ const RECORDED: ReadonlySet<string> = new Set([
   "slider dark div.flex.items-center",
   "stepper light span.text-sm.font-semibold",
   "tab-panel light div.text-xs.font-medium",
-  "table dark input.w-full.max-w-xs::placeholder",
-  "table dark input.w-full.pl-10::placeholder",
-  "table dark input.w-full.px-4::placeholder",
-  "table light input.w-full.max-w-xs::placeholder",
-  "table light input.w-full.pl-10::placeholder",
-  "table light input.w-full.px-4::placeholder",
   "table light td.px-4.py-2",
   "time-picker light input.flex-1.min-w-0::placeholder",
-  "time-picker light input.min-w-0.bg-transparent::placeholder",
   // Same pair, renamed: white on the warning amber at 3.19:1. It was
   // `button.px-3.py-1.5` until the demo's triggers became `<Button>`, which puts
   // the label in the component's `itemText` span. The colours did not move.

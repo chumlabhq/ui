@@ -124,7 +124,7 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 
 const getClasses = (dark: boolean) => ({
   textarea: {
-    control: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+    control: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus`,
     input: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary`,
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
     description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
@@ -144,9 +144,9 @@ const getClasses = (dark: boolean) => ({
     root: "flex flex-col",
     label: `block text-[13px] font-medium mb-1.5 text-cl-text-chrome`,
   },
-  wrapperError: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
-  wrapperSuccess: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
-  wrapperDisabled: `rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
+  wrapperError: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15`,
+  wrapperSuccess: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15`,
+  wrapperDisabled: `rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover`,
   disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary`,
 
   container: "flex flex-col",
@@ -793,7 +793,7 @@ const TextAreaDemo = () => {
                       } else if (lbl === "Get Value")
                         setRefReadValue(JSON.stringify(textAreaRef.current?.value));
                     }}
-                    className="rounded-cl-md bg-cl-text/4 text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6"
+                    className="rounded-cl-md bg-cl-text/4 text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft"
                   >
                     {lbl}
                   </Button>
@@ -878,7 +878,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    control: `rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-border-input-focus/30 dark:bg-cl-accent/[0.10] dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25`,
+                    control: `rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo`,
                   }}
                 />
               </div>

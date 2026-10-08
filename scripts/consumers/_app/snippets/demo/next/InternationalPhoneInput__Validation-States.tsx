@@ -46,24 +46,24 @@ export default function InternationalPhoneInputExample() {
                                   ...({
                 root: "flex flex-col gap-1",
                 label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-                input: "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]",
+                input: "flex-1 h-10 px-3 rounded-cl-md border outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-cl-bg-input focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:[color-scheme:dark]",
                 countrySelect: {
-                         trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-cl-bg-input hover:bg-cl-bg-hover text-cl-text-chrome dark:border dark:border-cl-text/10 dark:hover:bg-cl-text/6",
-                         content: "w-72 rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-text/10 dark:border",
-                         searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-text/10 dark:border",
-                         searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white",
+                         trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-cl-bg-input hover:bg-cl-bg-hover text-cl-text-chrome",
+                         content: "w-72 rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-text/10",
+                         searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-text/10",
+                         searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary",
                          list: "max-h-60 overflow-y-auto",
-                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome dark:hover:bg-cl-text/6",
+                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome",
                          icon: "w-4 h-4 shrink-0 transition-transform duration-200",
                          itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
                          searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
                          empty: "px-3 py-4 text-sm text-center text-cl-text-tertiary"
                        }
               }),
-                                  input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-error/[0.04] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30 dark:text-white dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:focus:ring-2",
+                                  input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-error/[0.04] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30",
                                            countrySelect: {
                                              trigger: {
-                              trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-error bg-cl-error/[0.04] hover:bg-cl-error/[0.08] text-cl-text-chrome dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:hover:bg-cl-error/[0.14]"
+                              trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-error bg-cl-error/[0.04] hover:bg-cl-error/[0.08] text-cl-text-chrome"
                             }.trigger
                                            }
                                 }
@@ -99,14 +99,14 @@ export default function InternationalPhoneInputExample() {
                                   ...({
                 root: "flex flex-col gap-1",
                 label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
-                input: "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]",
+                input: "flex-1 h-10 px-3 rounded-cl-md border outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-cl-bg-input focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:[color-scheme:dark]",
                 countrySelect: {
-                         trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-cl-bg-input hover:bg-cl-bg-hover text-cl-text-chrome dark:border dark:border-cl-text/10 dark:hover:bg-cl-text/6",
-                         content: "w-72 rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-text/10 dark:border",
-                         searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-text/10 dark:border",
-                         searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white",
+                         trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-cl-bg-input hover:bg-cl-bg-hover text-cl-text-chrome",
+                         content: "w-72 rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-text/10",
+                         searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-text/10",
+                         searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary",
                          list: "max-h-60 overflow-y-auto",
-                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome dark:hover:bg-cl-text/6",
+                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome",
                          icon: "w-4 h-4 shrink-0 transition-transform duration-200",
                          itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
                          searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
@@ -115,10 +115,10 @@ export default function InternationalPhoneInputExample() {
               }),
                                   ...(successOk
                                     ? {
-                                        input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-success/[0.06] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-success focus:ring-2 focus:ring-cl-success/30 dark:text-white dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10] dark:focus:ring-2",
+                                        input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-success/[0.06] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-success focus:ring-2 focus:ring-cl-success/30",
                                         countrySelect: {
                                           trigger: {
-                                trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-success bg-cl-success/[0.06] text-cl-text-chrome dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10]"
+                                trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-success bg-cl-success/[0.06] text-cl-text-chrome"
                               }.trigger
                                         }
                                       }

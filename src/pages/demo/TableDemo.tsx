@@ -177,7 +177,7 @@ function FloatingActions<T>({
   // partially under the sticky header, the FAB now slips behind the
   // header instead of painting over it.
   const defaultClassName = "z-10 flex items-center gap-0.5 border rounded-cl-md shadow-md px-1 py-0.5 bg-cl-bg-panel border-cl-text/10";
-  const buttonClassName = "p-1.5 rounded-cl-sm transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-black/[0.06] dark:hover:bg-white/10";
+  const buttonClassName = "p-1.5 rounded-cl-sm transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover";
 
   return (
     <div
@@ -552,10 +552,10 @@ function getTableClasses(_dark: boolean) {
     container: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: `px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border dark:border-cl-text/[0.06]`,
+    headerCell: `px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border`,
     body: "",
-    row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04]`,
-    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/15`,
+    row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover`,
+    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent-bg hover:bg-cl-accent-bg-hover`,
     cell: `px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text`,
     empty: `flex items-center justify-center py-12 text-cl-text-secondary`,
     pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
@@ -575,9 +575,9 @@ function getTableClasses(_dark: boolean) {
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
     shimmer: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
-    shimmerRow: `border-b border-cl-border dark:border-cl-text/[0.04]`,
+    shimmerRow: `border-b border-cl-border`,
     shimmerCell: "px-4 py-2 h-14",
-    shimmerBar: `h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.04] via-gray-300 to-fg/[0.04] dark:from-bg-elevated dark:via-gray-600 dark:to-bg-elevated`,
+    shimmerBar: `h-full w-full bg-linear-to-r rounded animate-pulse from-cl-bg-hover via-cl-bg-skeleton to-cl-bg-hover`,
   };
 }
 
@@ -586,10 +586,10 @@ function getPaginationClasses(_dark: boolean) {
     root: "flex items-center justify-between mt-4 px-2",
     selector: "flex items-center gap-2",
     selectorButton: `flex items-center gap-1 px-2 py-1 border rounded border-cl-border-input bg-cl-bg hover:bg-cl-bg-hover`,
-    selectorDropdown: `absolute bottom-full mb-1 left-0 z-50 border rounded shadow-lg min-w-[60px] bg-cl-bg border-cl-border dark:border-cl-text/[0.06]`,
-    selectorOption: `w-full px-2 py-1 text-left text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium dark:data-[selected]:font-medium`,
+    selectorDropdown: `absolute bottom-full mb-1 left-0 z-50 border rounded shadow-lg min-w-[60px] bg-cl-bg border-cl-border`,
+    selectorOption: `w-full px-2 py-1 text-left text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium`,
     pageButton: `px-2 py-1 text-sm text-cl-text-tertiary hover:text-cl-text data-[active]:text-cl-accent-hover`,
-    activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-accent-hover bg-cl-accent-bg border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30`,
+    activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-accent-hover bg-cl-accent-bg border border-cl-border-input-focus`,
     navButton: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-tertiary hover:text-cl-text`,
     ellipsis: "px-2 text-cl-text-tertiary",
     label: `text-sm text-cl-text-secondary`,
@@ -838,7 +838,7 @@ function ServerApiDemo({
         header: () => <span>Image</span>,
         cell: ({ row }) => (
           <div
-            className={`w-8 h-8 rounded-cl-md overflow-hidden bg-cl-bg-hover ring-1 ring-border-soft dark:ring-1 dark:ring-cl-text/[0.08]`}
+            className={`w-8 h-8 rounded-cl-md overflow-hidden bg-cl-bg-hover ring-1 ring-border-soft`}
           >
             <img
               src={row.original.thumbnail}
@@ -1059,7 +1059,7 @@ function ServerApiDemo({
               </span>
             )}
             {selectedStatuses.map((st) => (
-              <span key={st} className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-success/15 text-cl-text dark:text-cl-success`}>
+              <span key={st} className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-success/15 text-cl-text`}>
                 {st}
                 <button aria-label={`Remove ${st} filter`} onClick={() => {
                   const remaining = selectedStatuses.filter((s2) => s2 !== st);
@@ -1120,7 +1120,7 @@ function ServerApiDemo({
           // taller, accumulating a misalignment by a few rows in.
           cell: `px-4 py-3 h-[64px] text-sm whitespace-nowrap text-cl-text align-middle`,
           loading: "w-full overflow-hidden",
-          loadingRow: "border-b border-cl-border/50 dark:border-cl-text/[0.03]",
+          loadingRow: "border-b border-cl-border/50",
           loadingItem: "px-4 py-3.5 h-16",
           loadingBar: `h-3 w-full rounded-cl-md bg-cl-bg-elevated bg-[length:200%_100%] animate-[shimmer_2s_ease-in-out_infinite]`,
           filterContent: `bg-cl-bg border-cl-border`,
@@ -2103,11 +2103,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     isVisible={pillHoverIdx !== null || pillFloatingHovered}
                     getName={(data) => data.name}
                     dark={dark}
-                    className={`z-30 flex items-center gap-1 backdrop-blur-sm border rounded-full shadow-lg px-1.5 py-1 bg-cl-text/95 border-cl-border dark:bg-cl-bg/95 dark:border`}
+                    className={`z-30 flex items-center gap-1 backdrop-blur-sm border rounded-full shadow-lg px-1.5 py-1 bg-cl-bg/95 border-cl-border`}
                     renderContent={(name) => (
                       <>
                         <button aria-label="Quick edit"
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-accent hover:bg-cl-accent/10 dark:hover:bg-cl-accent/15`}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-accent hover:bg-cl-accent/10`}
                           title="Quick edit"
                           onClick={() =>
                             setPillAction(JSON.stringify({ action: "Quick edit", name }))
@@ -2146,7 +2146,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           </svg>
                         </button>
                         <button aria-label="Share"
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-text hover:bg-cl-warning/15 dark:text-cl-warning`}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-text hover:bg-cl-warning/15`}
                           title="Share"
                           onClick={() =>
                             setPillAction(JSON.stringify({ action: "Share", name }))
@@ -2336,7 +2336,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               ...s,
               root: `${s.container} overflow-x-auto`,
               pinnedRegion: "shrink-0 sticky left-0 z-30 bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
-              pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15 dark:hover:bg-cl-success/20`,
+              pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15`,
               pinIcon: "text-cl-text-tertiary",
             }}
           />
@@ -2654,7 +2654,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 setCompIsLoading(true);
                 setTimeout(() => setCompIsLoading(false), 2000);
               }}
- className={`px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors cursor-pointer text-cl-text bg-cl-bg border-cl-border-input hover:bg-cl-bg-hover dark:border dark:border-cl-border`}
+ className={`px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors cursor-pointer text-cl-text bg-cl-bg border border-cl-border hover:bg-cl-bg-hover`}
             >
               Reload Data (2s)
             </button>
@@ -2748,7 +2748,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           data={[]}
           emptyContent={
             <div
-              className={`flex flex-col items-center justify-center py-16 px-4 bg-linear-to-b border rounded-cl-md from-fg/[0.04] to-white border-cl-border dark:from-fg/[0.03] dark:to-bg-elevated dark:border-cl-text/[0.06]`}
+              className={`flex flex-col items-center justify-center py-16 px-4 bg-linear-to-b border rounded-cl-md from-fg/[0.04] to-cl-bg-panel border-cl-border`}
             >
               {/* Custom Icon */}
               <div
@@ -2803,7 +2803,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   Add User
                 </button>
                 <button
- className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-cl-bg border-cl-border-input hover:bg-cl-bg-hover dark:border dark:border-cl-border cursor-pointer`}
+ className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-cl-bg border border-cl-border hover:bg-cl-bg-hover cursor-pointer`}
                 >
                   Import CSV
                 </button>
@@ -2872,7 +2872,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     );
                     setMultiSelectedIds([]);
                   }}
-                  className="rounded text-cl-bg bg-cl-error hover:bg-cl-error dark:hover:bg-cl-error/30"
+                  className="rounded text-cl-bg bg-cl-error hover:bg-cl-error/95"
                 >
                   Delete Selected
                 </Button>
@@ -2975,7 +2975,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   {customSelectedIds.length > 0 && (
                     <button
                       onClick={() => setCustomSelectedIds([])}
-                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-success/15 hover:bg-cl-success/15 dark:text-cl-success dark:hover:bg-cl-success/25`}
+                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-success/15 hover:bg-cl-success/25`}
                     >
                       Clear Selection
                     </button>
@@ -3082,7 +3082,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   {starredIds.length > 0 && (
                     <button
                       onClick={() => setStarredIds([])}
-                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-warning/15 hover:bg-cl-warning/15 dark:hover:bg-cl-warning/25`}
+                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-warning/15 hover:bg-cl-warning/25`}
                     >
                       Clear All Stars
                     </button>
@@ -3316,7 +3316,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                     placeholder="Search with emerald focus..."
-                    className={`w-full px-4 py-2.5 text-sm border-2 rounded-cl-lg focus:outline-none bg-cl-bg border-cl-border text-cl-text placeholder-gray-400 focus:border-cl-success focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)] dark:border dark:placeholder-gray-500 dark:focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)]`}
+                    className={`w-full px-4 py-2.5 text-sm border-2 rounded-cl-lg focus:outline-none bg-cl-bg border-cl-border text-cl-text placeholder:text-cl-text-tertiary focus:border-cl-success focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)]`}
                   />
                   <div
                     className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none ${filter ? (dark ? "text-cl-success" : "text-cl-success") : dark ? "text-cl-text-secondary" : "text-cl-text-secondary"}`}
@@ -3374,7 +3374,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                   placeholder="Type to filter..."
-                  className={`w-full max-w-xs px-3 py-2 text-sm border-b-2 border-t-0 border-l-0 border-r-0 rounded-none focus:outline-none bg-transparent border-cl-border text-cl-text placeholder-gray-400 focus:border-cl-border-input-focus dark:border dark:placeholder-gray-600`}
+                  className={`w-full max-w-xs px-3 py-2 text-sm border-b-2 border-t-0 border-l-0 border-r-0 rounded-none focus:outline-none bg-transparent border-cl-border text-cl-text placeholder:text-cl-text-tertiary focus:border-cl-border-input-focus`}
                 />
                 <Table
                   columns={columns}
@@ -3435,7 +3435,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                       placeholder="Filter table data..."
-                      className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-full focus:outline-none focus:ring-2 bg-cl-bg-hover border-cl-border text-cl-text placeholder-gray-400 focus:ring-cl-accent/20 focus:border-cl-border-input-focus dark:border dark:placeholder-gray-500 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/40`}
+                      className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-full focus:outline-none focus:ring-2 bg-cl-bg-hover border border-cl-border-input text-cl-text placeholder:text-cl-text-tertiary focus:ring-cl-accent-halo focus:border-cl-border-input-focus`}
                     />
                     {filter && (
                       <button aria-label="Clear filter"
@@ -3500,7 +3500,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             onExpandedChange={setExpandedRowIds}
             renderExpandedRow={(row) => (
               <div
-                className={`p-4 bg-cl-bg-hover dark:bg-cl-text/[0.03] animate-row-expand`}
+                className={`p-4 bg-cl-bg-hover animate-row-expand`}
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
@@ -3603,7 +3603,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 ExpandIcon={ChevronIcon}
                 renderExpandedRow={(row) => (
                   <div
-                    className="px-6 py-4 bg-cl-accent/50 border-l-2 border-cl-border-input-focus dark:bg-cl-accent/5 dark:border-l-2 dark:border-cl-border-input-focus/30"
+                    className="px-6 py-4 bg-cl-accent-surface border-l-2 border-cl-border-input-focus"
                   >
                     <p
                       className={`text-sm text-cl-text-secondary`}
@@ -3672,7 +3672,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 ExpandIcon={PlusMinusIcon}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-4 bg-cl-success/50 dark:bg-cl-success/5`}
+                    className={`px-6 py-4 bg-cl-success-bg`}
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       {[
@@ -3748,7 +3748,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 ExpandIcon={ArrowIcon}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-4 bg-cl-accent/50 border-r-2 border-cl-border-input-focus dark:bg-cl-accent/5 dark:border-r-2 dark:border dark:border-cl-border-input-focus/30`}
+                    className={`px-6 py-4 bg-cl-accent-surface border-r-2 border-cl-border-input-focus`}
                   >
                     <div className="flex items-start gap-4">
                       <div
@@ -3823,7 +3823,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 onExpandedChange={setIds}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-5 bg-gradient-to-r from-cl-accent/10 to-transparent dark:bg-gradient-to-r dark:from-cl-accent/[0.06]`}
+                    className={`px-6 py-5 bg-gradient-to-r from-cl-accent/10 to-transparent`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
@@ -3847,7 +3847,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       </div>
                       <div className="flex items-center gap-2">
                         <button
-                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent-bg text-cl-accent-hover hover:bg-cl-accent-bg-hover dark:hover:bg-cl-accent/25`}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent-bg text-cl-accent-hover hover:bg-cl-accent-bg-hover`}
                           onClick={() =>
                             setExpandAction(
                               JSON.stringify({ action: "View Profile", name: row.name }),
@@ -3945,7 +3945,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 ExpandIcon={SmallChevron}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-4 bg-cl-text/80 dark:bg-cl-text/[0.02]`}
+                    className={`px-6 py-4 bg-cl-bg-hover`}
                   >
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       {[
@@ -4188,7 +4188,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   <div className="relative" ref={menuRef}>
                     <button
                       onClick={() => setOpen(!open)}
-                      className={`flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-cl-md transition-colors cursor-pointer bg-white text-cl-text-chrome border-cl-border-input hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:border dark:border-cl-text/[0.08]`}
+                      className={`flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover text-cl-text-chrome border border-cl-border hover:bg-cl-text/[0.14]`}
                     >
                       <svg
                         width="16"
@@ -4431,7 +4431,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             columns={columns}
             data={sampleData.slice(0, 6)}
             striped
-            stripedClassName="bg-cl-bg-elevated dark:bg-cl-text/[0.03]"
+            stripedClassName="bg-cl-bg-elevated"
             getRowId={(row) => row.id}
             classes={s}
           />
@@ -4457,8 +4457,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           // Same alpha for both modes: a tint that reads on light and dark.
           const colors = [
             { label: "Blue", className: "bg-cl-accent/[0.10]" },
-            { label: "Emerald", className: "bg-cl-success/[0.12] dark:bg-cl-success/[0.10]" },
-            { label: "Amber", className: "bg-cl-warning/[0.12] dark:bg-cl-warning/[0.10]" },
+            { label: "Emerald", className: "bg-cl-success/[0.12]" },
+            { label: "Amber", className: "bg-cl-warning/[0.12]" },
             { label: "Rose", className: "bg-cl-error/[0.10]" },
             { label: "Violet", className: "bg-violet-500/[0.10]" },
           ];
@@ -4479,7 +4479,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       className={`px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer border ${
                         activeColor === i
                           ? "bg-cl-accent text-cl-on-accent border-cl-accent"
-                          : "bg-cl-bg-elevated text-cl-text-chrome-quiet border-cl-border hover:bg-cl-bg-hover dark:bg-cl-text/[0.03] dark:border-cl-text/[0.06]"
+                          : "bg-cl-bg-elevated text-cl-text-chrome-quiet border-cl-border hover:bg-cl-bg-hover"
                       }`}
                     >
                       {c.label}
@@ -4562,7 +4562,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              item: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10 dark:border-cl-text/[0.04]`,
+              item: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10`,
             }}
             onRowClick={(row) => setStripedRowClick(JSON.stringify(row))}
           />
@@ -4597,7 +4597,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              item: `border-b transition-colors border-cl-border hover:bg-cl-bg-hover [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cl-accent/10 [&[data-striped]]:to-transparent dark:border-cl-text/[0.04] dark:[&[data-striped]]:bg-gradient-to-r dark:[&[data-striped]]:from-cl-accent/0.04`,
+              item: `border-b transition-colors border-cl-border hover:bg-cl-bg-hover [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cl-accent/10 [&[data-striped]]:to-transparent`,
             }}
           />
           <p
@@ -5009,7 +5009,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               onClick={() =>
                 exportTableToCSV(sampleData, columns, "users-export")
               }
-              className="rounded-cl-md text-cl-bg bg-cl-success hover:bg-cl-success dark:hover:bg-cl-success/30"
+              className="rounded-cl-md text-cl-bg bg-cl-success hover:bg-cl-success/95"
             >
               Export to CSV
             </Button>
@@ -5167,7 +5167,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             const NumberHandle = ({ className }: { className?: string }) => {
               return (
                 <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${className} bg-cl-accent/10 text-cl-text border-cl-border-input-focus dark:bg-cl-accent/20 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/30`}
+                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${className} bg-cl-accent-surface text-cl-text border border-cl-border-input-focus`}
                 >
                   ≡
                 </div>
@@ -5258,7 +5258,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  item: `border-b transition-all data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] [&[draggable]]:cursor-grab [&[draggable]]:active:cursor-grabbing`,
+                  item: `border-b transition-all data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover [&[draggable]]:cursor-grab [&[draggable]]:active:cursor-grabbing`,
                   dragHandle: `text-cl-accent hover:text-cl-accent transition-colors`,
                 }}
               />
@@ -5392,7 +5392,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             showFooter
             footerContent={
               <tr
-                className={`border-t-2 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-text/[0.1] dark:bg-cl-text/[0.03]`}
+                className={`border-t-2 border-cl-border-input bg-cl-bg-hover`}
               >
                 <td
                   colSpan={100}
@@ -5463,7 +5463,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               footerContent={
                 <>
                   <tr
-                    className={`border-t-2 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-text/[0.1] dark:bg-cl-text/[0.03]`}
+                    className={`border-t-2 border-cl-border-input bg-cl-bg-hover`}
                   >
                     <td
                       className={`px-4 py-2.5 text-sm font-semibold text-cl-text`}
@@ -5549,7 +5549,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <tr>
               <td colSpan={100} className="p-0">
                 <div
-                  className={`px-5 py-4 flex items-center justify-between bg-gradient-to-r from-cl-accent/15 to-cl-accent/10 border-t-2 border-cl-border-input-focus dark:bg-gradient-to-r dark:from-cl-accent/[0.06] dark:to-cl-accent/[0.04] dark:border-t-2 dark:border dark:border-cl-border-input-focus/20`}
+                  className={`px-5 py-4 flex items-center justify-between bg-gradient-to-r from-cl-accent/15 to-cl-accent/10 border-t-2 border-cl-border-input-focus`}
                 >
                   <div className="flex items-center gap-6">
                     <div>
@@ -5604,7 +5604,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     </div>
                   </div>
                   <button
-                    className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
+                    className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`}
                     onClick={() =>
                       setFooterExportAction(
                         JSON.stringify({
@@ -5651,7 +5651,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           showFooter
           footerContent={
             <tr
-              className={`bg-cl-bg-hover border-t-2 border-cl-border-input dark:bg-cl-bg-elevated dark:border-t-2 dark:border dark:border-cl-text/[0.1]`}
+              className={`bg-cl-bg-hover border-t-2 border-cl-border-input`}
             >
               <td
                 colSpan={100}
@@ -5741,9 +5741,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       Inactive
                     </span>
                     <span
-                      className={`flex items-center gap-1.5 text-cl-text dark:text-cl-warning`}
+                      className={`flex items-center gap-1.5 text-cl-text`}
                     >
-                      <span className={`w-2 h-2 rounded-full bg-cl-warning dark:bg-cl-warning/30`} />
+                      <span className={`w-2 h-2 rounded-full bg-cl-warning`} />
                       {
                         sampleData
                           .slice(0, 5)
@@ -5809,12 +5809,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             />
             {contextMenuInfo && (
               <div
-                className={`p-3 rounded-cl-md text-sm bg-cl-warning/15 text-cl-text border border-cl-warning dark:bg-cl-warning/10 dark:border dark:border-cl-warning/20`}
+                className={`p-3 rounded-cl-md text-sm bg-cl-warning/15 text-cl-text border border-cl-warning`}
               >
                 {contextMenuInfo}
                 <button
                   onClick={() => setContextMenuInfo(null)}
-                  className={`ml-3 underline text-xs text-cl-text dark:text-cl-warning cursor-pointer`}
+                  className={`ml-3 underline text-xs text-cl-text cursor-pointer`}
                 >
                   Dismiss
                 </button>
@@ -5853,7 +5853,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             />
             {lastCopied && (
               <div
-                className={`p-3 rounded-cl-md text-sm bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/10 dark:text-cl-success dark:border dark:border-cl-success/20`}
+                className={`p-3 rounded-cl-md text-sm bg-cl-success-bg text-cl-text border border-cl-success`}
               >
                 Copied: {lastCopied}
               </div>
@@ -5993,7 +5993,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       style={{ width: "15%" }}
                     />
                     <div
-                      className={`h-3 rounded-full animate-pulse bg-cl-bg-hover dark:bg-cl-text/[0.03]`}
+                      className={`h-3 rounded-full animate-pulse bg-cl-bg-hover`}
                       style={{ width: "20%" }}
                     />
                   </div>
@@ -6973,7 +6973,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 classes={{
                   ...s,
                   filterButton: dark ? "text-cl-accent" : "text-cl-accent",
-                  filterContent: `rounded-cl-lg border shadow-2xl bg-cl-bg border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`,
+                  filterContent: `rounded-cl-lg border shadow-2xl bg-cl-bg border-cl-border-input-focus`,
                 }}
               />
             );
@@ -7117,7 +7117,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   )}
                   classes={{
                     ...s,
-                    filterContent: `rounded-cl-lg border shadow-2xl bg-cl-bg border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`,
+                    filterContent: `rounded-cl-lg border shadow-2xl bg-cl-bg border-cl-border-input-focus`,
                   }}
                 />
                 {filters.length > 0 && (
@@ -7130,7 +7130,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     {filters.map((f) => (
                       <span
                         key={f.id}
-                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-cl-accent-bg text-cl-accent-hover border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`}
+                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-cl-accent-bg text-cl-accent-hover border border-cl-border-input-focus`}
                       >
                         {f.id}:{" "}
                         {Array.isArray(f.value)

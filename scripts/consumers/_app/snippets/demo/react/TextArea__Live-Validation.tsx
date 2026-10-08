@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextArea } from "@chumlab/ui/textarea";
 
 const wrapperFor = (err: boolean, ok: boolean) =>
-    err ? "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:border dark:border-cl-error/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25" : ok ? "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:border dark:border-cl-success/40 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25" : "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50";
+    err ? "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15" : ok ? "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15" : "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus";
 
 const CheckIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -73,7 +73,7 @@ export default function TextAreaExample() {
         }
         classes={
           { ...({
-            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+            control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",
             input: "w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary",
             label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",

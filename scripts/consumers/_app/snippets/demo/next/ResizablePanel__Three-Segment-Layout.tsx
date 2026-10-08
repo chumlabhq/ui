@@ -65,13 +65,13 @@ export default function ResizablePanelExample() {
         </div>
       </ResizablePanel>
       <div
-        className="flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y bg-cl-bg-hover border-cl-border dark:bg-cl-bg-elevated dark:border"
+        className="flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y bg-cl-bg-hover border-cl-border"
       >
         <p className="font-medium text-cl-text">Center Panel</p>
         <p className="text-sm mt-2 text-cl-text-secondary">
           Flexible width &mdash; expands to fill available space
         </p>
-        <div className="mt-4 flex-1 rounded border p-4 bg-cl-bg border-cl-border dark:border">
+        <div className="mt-4 flex-1 rounded border p-4 bg-cl-bg border-cl-border">
           <p className="text-sm text-cl-text-tertiary">Main content area</p>
         </div>
       </div>

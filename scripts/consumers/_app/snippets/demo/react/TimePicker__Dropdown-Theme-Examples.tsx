@@ -4,10 +4,10 @@ import { TimePicker, TimePickerClasses } from "@chumlab/ui/time-picker";
 const getMinimalTheme = (): TimePickerClasses => ({
   root: "inline-flex flex-col gap-1 text-cl-text",
   control: "relative",
-  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus-within:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus-within:border-cl-text",
-  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text dark:text-white",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus-within:border-cl-text",
+  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text",
   icon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
-  content: "rounded shadow-sm overflow-hidden border bg-cl-bg-panel border-cl-border dark:border",
+  content: "rounded shadow-sm overflow-hidden border bg-cl-bg-panel border-cl-border",
   list: "max-h-60 overflow-y-auto",
   item: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm transition-colors text-cl-text hover:bg-cl-bg-hover",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-text-secondary",

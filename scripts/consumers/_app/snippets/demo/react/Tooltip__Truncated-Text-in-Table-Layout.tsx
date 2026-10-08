@@ -2,7 +2,7 @@ import { Tooltip } from "@chumlab/ui/tooltip";
 
 export default function TooltipExample() {
   return (
-    <div className="w-full rounded-cl-lg border overflow-hidden border-cl-border dark:border">
+    <div className="w-full rounded-cl-lg border overflow-hidden border-cl-border">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-cl-bg-elevated">
         <div
           className="px-4 py-3 text-xs font-semibold uppercase tracking-wider bg-cl-bg-elevated text-cl-text-tertiary"

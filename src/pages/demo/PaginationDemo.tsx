@@ -122,15 +122,15 @@ const JumpToPageEllipsis = ({
   };
 
   const buttonStyles = {
-    default: `px-2.5 py-1 rounded-cl-md text-sm cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover hover:text-cl-text-secondary dark:hover:text-cl-text`,
- pill: `w-9 h-9 rounded-full flex items-center justify-center text-sm cursor-pointer transition-all text-cl-text-tertiary border border-cl-border hover:bg-cl-bg-hover hover:text-cl-text-secondary hover:border-cl-border-input dark:border dark:hover:text-cl-text dark:hover:border-cl-border`,
+    default: `px-2.5 py-1 rounded-cl-md text-sm cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover hover:text-cl-text-secondary`,
+ pill: `w-9 h-9 rounded-full flex items-center justify-center text-sm cursor-pointer transition-all text-cl-text-tertiary border border-cl-border hover:bg-cl-bg-hover hover:text-cl-text-secondary`,
     ghost: `px-2 py-1 rounded-cl-md text-sm cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text-secondary`,
   };
 
   const inputStyles = {
- default: `w-12 px-1 py-1 text-sm text-center rounded-cl-md outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-cl-bg-panel border border-cl-border-input text-cl-text placeholder-gray-400 focus:border-cl-border-input-focus focus:ring-1 focus:ring-cl-accent/30 dark:text-white dark:placeholder-gray-500 dark:focus:ring-1 dark:focus:ring-cl-accent/40`,
- pill: `w-9 h-9 text-sm text-center rounded-full outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-cl-bg-panel border border-cl-border-input-focus text-cl-text placeholder-gray-400 ring-1 ring-cl-accent/30 dark:border dark:text-white dark:placeholder-gray-500 dark:ring-1 dark:ring-cl-accent/40`,
-    ghost: `w-10 px-1 py-1 text-sm text-center rounded-cl-md border-b-2 border-t-0 border-x-0 outline-none transition-colors bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-cl-border-input-focus text-cl-text placeholder-gray-400 dark:border dark:text-white dark:placeholder-gray-500`,
+ default: `w-12 px-1 py-1 text-sm text-center rounded-cl-md outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-cl-bg-panel border border-cl-border-input text-cl-text placeholder:text-cl-text-tertiary focus:border-cl-border-input-focus focus:ring-1 focus:ring-cl-accent-halo`,
+ pill: `w-9 h-9 text-sm text-center rounded-full outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-cl-bg-panel border border-cl-border-input-focus text-cl-text placeholder:text-cl-text-tertiary ring-1 ring-cl-accent-halo`,
+    ghost: `w-10 px-1 py-1 text-sm text-center rounded-cl-md border-b-2 border-t-0 border-x-0 outline-none transition-colors bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-cl-border-input-focus text-cl-text placeholder:text-cl-text-tertiary`,
   };
 
   if (!isEditing) {
@@ -173,14 +173,14 @@ const JumpToPageEllipsis = ({
 const getClasses = (_dark: boolean) => ({
   pagination: {
     root: "flex flex-wrap items-center gap-2",
-    navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border`,
+    navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary`,
     ellipsis: `px-2 select-none text-cl-text-tertiary`,
     rowsPerPage: {
-      trigger: `flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel hover:bg-cl-bg-hover dark:border dark:text-cl-text`,
-      content: `rounded-cl-md shadow-lg py-1 min-w-[64px] bg-cl-bg-panel border border-cl-border dark:border`,
+      trigger: `flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text`,
+      content: `rounded-cl-md shadow-lg py-1 min-w-[64px] bg-cl-bg-panel border border-cl-border`,
       icon: `w-4 h-4 transition-transform text-cl-text-secondary`,
       positioner: "",
-      item: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:text-cl-text dark:data-[selected]:bg-cl-accent/60`,
+      item: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover text-cl-text`,
     },
     label: `text-sm text-cl-text-secondary`,
     pageInfo: "flex items-center",
@@ -368,8 +368,8 @@ const PaginationDemo = () => {
                   classes={{
                     ...c.pagination,
                     root: "flex flex-wrap items-center gap-1",
- navButton: `p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-panel border border-cl-border dark:border dark:text-cl-text-secondary`,
- item: `w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-cl-bg-panel border border-cl-border dark:border dark:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
+ navButton: `p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text-secondary`,
+ item: `w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
                     list: "flex items-center gap-1",
                     navIcon: "w-4 h-4 text-cl-text-secondary",
                   }}
@@ -585,7 +585,7 @@ const PaginationDemo = () => {
                 classes={{
                   ...c.pagination,
                   root: "flex flex-wrap items-center justify-between gap-4",
-                  navButton: `p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border-input-focus bg-cl-accent-bg hover:bg-cl-accent-bg-hover text-cl-accent-hover dark:border dark:bg-cl-accent/30 dark:hover:bg-cl-accent/50`,
+                  navButton: `p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border-input-focus bg-cl-accent-bg hover:bg-cl-accent-bg-hover text-cl-accent-hover`,
                   navIcon: "w-5 h-5 text-cl-accent",
                 }}
               />
@@ -614,7 +614,7 @@ const PaginationDemo = () => {
                     }
                     classes={{
                       ...c.pagination,
-                      navButton: `p-2 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-success bg-cl-success/15 hover:bg-cl-success/15 dark:border dark:bg-cl-success/30 dark:hover:bg-cl-success/50`,
+                      navButton: `p-2 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-success bg-cl-success-bg hover:bg-cl-success/15`,
                     }}
                   />
                 </div>
@@ -730,16 +730,16 @@ const PaginationDemo = () => {
             showRowsPerPage
             classes={{
               ...c.pagination,
-              root: `flex flex-wrap items-center justify-between gap-4 sm:gap-6 p-4 rounded-cl-lg bg-cl-bg-hover dark:bg-cl-bg-elevated/40`,
+              root: `flex flex-wrap items-center justify-between gap-4 sm:gap-6 p-4 rounded-cl-lg bg-cl-bg-hover`,
               row: "flex items-center gap-1",
- navButton: `p-2 rounded-full shadow-sm hover:shadow transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-panel border border-cl-border dark:border dark:text-cl-text-secondary`,
- item: `w-10 h-10 rounded-full shadow-sm hover:shadow transition-shadow flex items-center justify-center cursor-pointer bg-cl-bg-panel border border-cl-border dark:border dark:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
+ navButton: `p-2 rounded-full shadow-sm hover:shadow transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text-secondary`,
+ item: `w-10 h-10 rounded-full shadow-sm hover:shadow transition-shadow flex items-center justify-center cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover`,
               list: "flex items-center gap-1",
               rowsPerPage: {
-                trigger: `flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow transition-shadow cursor-pointer bg-cl-bg-panel border border-cl-border dark:border dark:text-cl-text`,
-                content: `rounded-cl-lg shadow-lg py-2 min-w-[80px] bg-cl-bg-panel border border-cl-border dark:border`,
+                trigger: `flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow transition-shadow cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text`,
+                content: `rounded-cl-lg shadow-lg py-2 min-w-[80px] bg-cl-bg-panel border border-cl-border`,
                 icon: `w-4 h-4 text-cl-text-secondary`,
-                item: `px-4 py-2 w-full text-left cursor-pointer transition-colors hover:bg-cl-accent/10 data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-accent/10 dark:text-cl-text dark:hover:bg-cl-accent/40 dark:data-[selected]:bg-cl-accent/60 dark:data-[highlighted]:bg-cl-accent/40`,
+                item: `px-4 py-2 w-full text-left cursor-pointer transition-colors hover:bg-cl-accent/10 data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-accent/10 text-cl-text`,
               },
               label: `text-sm font-medium text-cl-text-secondary`,
               ellipsis: `px-2 text-cl-text-tertiary`,
@@ -763,7 +763,7 @@ const PaginationDemo = () => {
             classes={{
               ...c.pagination,
               navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary`,
-              item: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-cl-on-accent data-[active]:hover:bg-cl-accent/90 dark:hover:text-cl-text`,
+              item: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-cl-on-accent data-[active]:hover:bg-cl-accent/90 hover:text-cl-text`,
             }}
           />
         </DemoWrapper>
@@ -928,7 +928,7 @@ const PaginationDemo = () => {
             value={refPage}
             totalPages={5}
             onValueChange={setRefPage}
-            className={`p-3 rounded-cl-md transition-all focus:bg-cl-accent/10 dark:focus:bg-cl-bg-elevated/50`}
+            className={`p-3 rounded-cl-md transition-all focus:bg-cl-accent-surface`}
             classes={c.pagination}
           />
         </DemoWrapper>

@@ -406,15 +406,17 @@ describe("snippet shape contract", () => {
    * such overrides and the snippets 8,704 (one class bag repeats in many
    * snippets). T1 removed the no-ops, replaced every pair a single token renders
    * identically, and moved field borders, hover fills and accent chips onto
-   * the tokens built for them; what is left has no token that holds both
-   * values, and each kind is a token gap rather than a choice.
+   * the tokens built for them. T2 minted the three tokens the remaining pairs
+   * lacked, and T3 moved every other site onto one token for both themes,
+   * fixing the pairs that failed contrast on the way; the one override left is
+   * the exemption the next test names.
    *
    * Ratcheted both ways, like the class-literal baseline: a rise fails, and a
    * fall fails until the record is lowered, so the gain cannot be spent later.
    */
   it("carries no more dark: colour overrides than recorded", () => {
-    /** 2026-10-09, T1: 8,704 -> 3,329. Lower it when the count falls. */
-    const RECORDED = 3329;
+    /** 2026-10-09, T1: 8,704 -> 3,329. T3: 3,329 -> 1. Lower it when the count falls. */
+    const RECORDED = 1;
     const COLOUR = /^(text|bg|border(-[trblxyse])?|ring|ring-offset|fill|stroke|from|via|to|shadow|outline|divide|placeholder|decoration)-(.+)$/;
     const NOT_A_COLOUR = /^(\d|\[|px$|xs$|sm$|md$|lg$|xl$|\dxl$|left$|center$|right$|justify$|start$|end$|none$|inner$|solid$|dashed$|dotted$|double$|hidden$|collapse$|separate$|inset$|offset$|x$|y$|t$|r$|b$|l$|s$|e$|wrap$|nowrap$|balance$|pretty$|ellipsis$|clip$|base$|linear-|radial|conic|gradient-|wavy$|line$|through$|box$|opacity-|width-)/;
     const isDarkColour = (token: string) => {
@@ -439,6 +441,67 @@ describe("snippet shape contract", () => {
     console.log(`SNIPPET_DARK_COLOUR snippets=${every.length} count=${count} recorded=${RECORDED} ${count > RECORDED ? "ROSE" : count < RECORDED ? "FELL — lower the record" : "held"}`);
     expect(every.length, "no snippet was read").toBeGreaterThan(0);
     expect(count, "a snippet gained a `dark:` colour override — theme it with a token that switches per theme").toBeLessThanOrEqual(RECORDED);
+    expect(count, "the count fell: lower RECORDED to it, so the gain is kept").toBe(RECORDED);
+  });
+  /**
+   * A snippet uses no `dark:` variant at all beyond the ones named here.
+   *
+   * The colour ratchet above cannot see a `dark:border` that adds a border only
+   * in dark, a `dark:focus:ring-2` that repeats the light class, or a
+   * `dark:bg-[…]` arbitrary value — T3 found 2,225 such variants in the
+   * snippets, every one a no-op or a structure one theme had and the other
+   * lacked. Theming goes through tokens; structure is the same in both themes.
+   *
+   * `[color-scheme:dark]` is the one non-colour variant allowed: it sets the
+   * scheme a native control paints its own parts in (caret, autofill, spin
+   * buttons, the date and time pickers), which no token reaches. Anything else
+   * is an exemption with its section and a reason, and an exemption whose
+   * section no longer carries it fails, so the list cannot go stale.
+   *
+   * Ratcheted both ways, like the colour count.
+   */
+  it("carries no dark: variant beyond the allowed ones", () => {
+    /** 2026-10-09, T3: 5,554 -> 101. Lower it when the count falls. */
+    const RECORDED = 101;
+    const ALLOWED: Record<string, string> = {
+      "dark:[color-scheme:dark]": "a native control paints its own parts (caret, autofill, spin buttons, pickers) in the page's scheme; no token reaches them",
+    };
+    const EXEMPT: Array<{ key: string; variant: string; reason: string }> = [
+      {
+        key: "Tooltip/Custom Styling",
+        variant: "dark:text-cl-on-accent",
+        reason: "the warning tooltip's fill is light in both themes, so its text must be dark in both; no token is dark in both (--cl-text turns light), so it waits on an --cl-on-warning token",
+      },
+    ];
+    let count = 0;
+    const found: string[] = [];
+    for (const { component, title, code } of every) {
+      const sf = ts.createSourceFile("snippet.tsx", code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const visit = (node: ts.Node): void => {
+        if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node) || ts.isTemplateHead(node) || ts.isTemplateMiddle(node) || ts.isTemplateTail(node)) {
+          for (const token of node.text.split(/\s+/)) {
+            if (!token.includes("dark:")) continue;
+            count++;
+            if (!(token in ALLOWED)) found.push(`${component}/${title} ${token}`);
+          }
+        }
+        ts.forEachChild(node, visit);
+      };
+      visit(sf);
+    }
+    const isExempt = (f: string) => EXEMPT.some((e) => f === `${e.key} ${e.variant}`);
+    const unexplained = [...new Set(found.filter((f) => !isExempt(f)))].sort();
+    const stale = EXEMPT.filter((e) => !found.includes(`${e.key} ${e.variant}`)).map((e) => `${e.key} ${e.variant}`);
+    console.log(
+      `SNIPPET_DARK_ANY snippets=${every.length} count=${count} recorded=${RECORDED} allowed=${count - found.length} ` +
+        `exempt=${found.length - found.filter((f) => !isExempt(f)).length} unexplained=${unexplained.length} stale=${stale.length} ` +
+        `${count > RECORDED ? "ROSE" : count < RECORDED ? "FELL — lower the record" : "held"}`,
+    );
+    for (const f of unexplained) console.log(`  UNEXPLAINED ${f}`);
+    expect(every.length, "no snippet was read").toBeGreaterThan(0);
+    expect(stale, "an exemption whose section no longer carries that variant excuses nothing; delete it").toEqual([]);
+    expect(unexplained, "a snippet carries a `dark:` variant that is neither allowed nor exempt — theme it with a token, and give both themes the same structure").toEqual([]);
+    expect(count, "a snippet gained a `dark:` variant").toBeLessThanOrEqual(RECORDED);
     expect(count, "the count fell: lower RECORDED to it, so the gain is kept").toBe(RECORDED);
   });
 });

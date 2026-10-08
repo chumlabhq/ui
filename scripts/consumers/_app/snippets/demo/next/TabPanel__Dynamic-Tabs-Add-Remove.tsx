@@ -142,8 +142,8 @@ export default function TabPanelExample() {
                    `--cl-bg-elevated` and `--cl-bg-hover` are both #0a0d12, the same
                    colour as the card these tabs sit on, so either one rendered the
                    badge as a bare number. Same idiom as the pill track above. */
-                count: "px-2 py-0.5 text-xs font-semibold rounded-full data-[state=active]:bg-cl-accent/10 dark:data-[state=active]:bg-cl-accent/20 data-[state=active]:text-cl-text data-[state=inactive]:bg-black/[0.06] dark:data-[state=inactive]:bg-white/[0.08] data-[state=inactive]:text-cl-text-secondary",
-                indicator: "absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90",
+                count: "px-2 py-0.5 text-xs font-semibold rounded-full data-[state=active]:bg-cl-accent-surface data-[state=active]:text-cl-text data-[state=inactive]:bg-cl-bg-hover data-[state=inactive]:text-cl-text-secondary",
+                indicator: "absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent",
                 content: "p-4"
               }
             }
@@ -169,7 +169,7 @@ export default function TabPanelExample() {
           </TabPanel>
         ) : (
           <div
-            className="p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary dark:border"
+            className="p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary"
           >
             No tabs. Click &quot;Add Tab&quot; to create one.
           </div>

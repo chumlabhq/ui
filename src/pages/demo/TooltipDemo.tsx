@@ -22,7 +22,7 @@ const getClasses = (_dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
- trigger: `cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover border border-cl-border focus-visible:ring-border-active dark:bg-cl-bg-elevated focus-visible:ring-offset-cl-bg`,
+ trigger: `cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 bg-cl-bg-hover text-cl-text hover:bg-cl-text/[0.14] border border-cl-border focus-visible:ring-border-active focus-visible:ring-offset-cl-bg`,
   // A trigger on the light shadow frame, light in both themes: the light theme's
   // own text, border and hover values, fixed, so it reads on white whatever the page is.
   frameTrigger: `cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#2563eb] focus-visible:ring-offset-white bg-white text-[#0f1218] border border-[rgba(15,18,24,0.1)] hover:bg-[rgba(15,18,24,0.04)]`,
@@ -535,11 +535,11 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-4 w-full">
- <div className={`p-4 rounded-cl-lg bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border`}>
+ <div className={`p-4 rounded-cl-lg bg-cl-bg-hover border border-cl-border`}>
               <p className={`text-sm mb-3 text-cl-text-secondary`}>
                 Tooltip only appears when text is truncated:
               </p>
- <div className={`w-full max-w-[220px] p-3 rounded-cl-md shadow-sm bg-cl-bg-panel border border-cl-border dark:border`}>
+ <div className={`w-full max-w-[220px] p-3 rounded-cl-md shadow-sm bg-cl-bg-panel border border-cl-border`}>
                 <Tooltip
                   truncate
                   truncateWidth={196}
@@ -549,11 +549,11 @@ const TooltipDemo = () => {
                 </Tooltip>
               </div>
             </div>
- <div className={`p-4 rounded-cl-lg bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border`}>
+ <div className={`p-4 rounded-cl-lg bg-cl-bg-hover border border-cl-border`}>
               <p className={`text-sm mb-3 text-cl-text-secondary`}>
                 Short text - no tooltip needed:
               </p>
- <div className={`w-full max-w-[220px] p-3 rounded-cl-md shadow-sm bg-cl-bg-panel border border-cl-border dark:border`}>
+ <div className={`w-full max-w-[220px] p-3 rounded-cl-md shadow-sm bg-cl-bg-panel border border-cl-border`}>
                 <Tooltip
                   truncate
                   truncateWidth={196}
@@ -574,7 +574,7 @@ const TooltipDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className={`w-full rounded-cl-lg border overflow-hidden border-cl-border dark:border`}>
+          <div className={`w-full rounded-cl-lg border overflow-hidden border-cl-border`}>
             <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px bg-cl-bg-elevated`}>
               <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider bg-cl-bg-elevated text-cl-text-tertiary`}>
                 Title

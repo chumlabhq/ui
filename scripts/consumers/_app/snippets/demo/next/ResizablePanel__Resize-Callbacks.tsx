@@ -105,7 +105,7 @@ export default function ResizablePanelExample() {
       </ResizablePanel>
       <div
         ref={logRef}
-        className="h-28 overflow-y-auto rounded-cl-md border p-3 font-mono text-xs bg-cl-bg-recessed border-cl-border text-cl-text-secondary dark:border"
+        className="h-28 overflow-y-auto rounded-cl-md border p-3 font-mono text-xs bg-cl-bg-recessed border-cl-border text-cl-text-secondary"
       >
         {
           callbackLog.length === 0 ? (

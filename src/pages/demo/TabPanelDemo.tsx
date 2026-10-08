@@ -230,7 +230,7 @@ const getClasses = (dark: boolean) => ({
       root: "w-full",
       list: `flex items-center gap-6 border-b border-cl-border`,
       item: `relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:text-cl-accent data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`,
-      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
+      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent`,
       content: "p-4",
     },
     pill: {
@@ -238,7 +238,7 @@ const getClasses = (dark: boolean) => ({
       // Track uses a subtle wash (instead of bg-cl-bg-elevated) so the
       // active pill — which now uses bg-cl-bg-elevated in the dark theme —
       // has a distinct surface to stand out against.
-      list: `inline-flex items-center gap-1 p-1 rounded-cl-md bg-black/[0.04] dark:bg-white/[0.06]`,
+      list: `inline-flex items-center gap-1 p-1 rounded-cl-md bg-cl-bg-hover`,
       item: dark
         ? `px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`
         : `px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-white data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`,
@@ -253,15 +253,15 @@ const getClasses = (dark: boolean) => ({
          `--cl-bg-elevated` and `--cl-bg-hover` are both #0a0d12, the same
          colour as the card these tabs sit on, so either one rendered the
          badge as a bare number. Same idiom as the pill track above. */
-      count: `px-2 py-0.5 text-xs font-semibold rounded-full data-[state=active]:bg-cl-accent/10 dark:data-[state=active]:bg-cl-accent/20 data-[state=active]:text-cl-text data-[state=inactive]:bg-black/[0.06] dark:data-[state=inactive]:bg-white/[0.08] data-[state=inactive]:text-cl-text-secondary`,
-      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
+      count: `px-2 py-0.5 text-xs font-semibold rounded-full data-[state=active]:bg-cl-accent-surface data-[state=active]:text-cl-text data-[state=inactive]:bg-cl-bg-hover data-[state=inactive]:text-cl-text-secondary`,
+      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent`,
       content: "p-4",
     },
   },
   content: `text-sm leading-relaxed text-cl-text-secondary`,
   contentStrong: `font-medium text-cl-text`,
   contentTitle: `text-base font-semibold mb-1 text-cl-text`,
-  contentCard: `rounded-cl-md p-4 bg-cl-bg-hover border border-cl-border dark:bg-cl-text/[0.02] dark:border dark:border-cl-text/[0.04]`,
+  contentCard: `rounded-cl-md p-4 bg-cl-bg-hover border border-cl-border`,
   stat: `text-2xl font-bold text-cl-text`,
   statLabel: `text-xs text-cl-text-secondary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -445,7 +445,7 @@ const TabPanelDemo = () => {
               root: "w-full",
               list: `flex items-center border-b border-cl-border`,
               item: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
- content: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-cl-bg-panel dark:border`,
+ content: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-cl-bg-panel`,
             }}
           >
             <div className={c.content}>
@@ -523,7 +523,7 @@ const TabPanelDemo = () => {
             iconPosition="right"
             classes={{
               ...c.tabs.pill,
-              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
           >
             <div className={c.content}>
@@ -717,9 +717,9 @@ const TabPanelDemo = () => {
             value={gradientTab}
             onValueChange={setGradientTab}
             classes={{
-              root: `w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20`,
-              list: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60`,
-              item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              root: `w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent-surface to-cl-accent-surface`,
+              list: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-bg-elevated/60`,
+              item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
               content: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`,
             }}
           >
@@ -749,7 +749,7 @@ const TabPanelDemo = () => {
                 onValueChange={setCustomFocusTab}
                 classes={{
                   ...c.tabs.icon,
-                  indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-success dark:bg-cl-success/30`,
+                  indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-success`,
                 }}
               >
                 <div className={c.content}>Custom green dashed focus ring</div>
@@ -889,7 +889,7 @@ const TabPanelDemo = () => {
               </TabPanel>
             ) : (
               <div
-                className={`p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary dark:border`}
+                className={`p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary`}
               >
                 No tabs. Click &quot;Add Tab&quot; to create one.
               </div>
@@ -1005,7 +1005,7 @@ const TabPanelDemo = () => {
             onValueChange={setRenderFnTab}
             classes={{
               ...c.tabs.pill,
-              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
           >
             {(tab) => (
@@ -1036,14 +1036,14 @@ const TabPanelDemo = () => {
             onValueChange={setRenderTabTab}
             classes={{
               ...c.tabs.pill,
-              item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
             renderTab={(props, defaultElement) => (
               <div key={props.tab.id} className="relative">
                 {defaultElement}
                 {props.tab.count != null && props.tab.count > 0 && (
                   <span
-                    className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error dark:bg-cl-error/30`}
+                    className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error`}
                   >
                     {props.tab.count}
                   </span>
@@ -1115,13 +1115,13 @@ const TabPanelDemo = () => {
         <div className={c.note}>
           <strong>Note:</strong> The ID is auto-generated via{" "}
           <code
-            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text-chrome dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border`}
+            className={`px-1 py-0.5 border rounded text-xs font-mono bg-cl-bg-panel border-cl-border-input text-cl-text-chrome`}
           >
             useId()
           </code>{" "}
           if not provided. Use the{" "}
           <code
-            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text-chrome dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border`}
+            className={`px-1 py-0.5 border rounded text-xs font-mono bg-cl-bg-panel border-cl-border-input text-cl-text-chrome`}
           >
             id
           </code>{" "}

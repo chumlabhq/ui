@@ -105,12 +105,12 @@ export default function CascadingDropdownExample() {
                            ...({
                root: "",
                control: "",
-            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
-            content: "rounded-cl-md shadow-lg overflow-visible bg-cl-bg-panel border border-cl-border dark:border",
-               item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-black/5 data-[highlighted]:bg-black/5 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[highlighted]:bg-white/10 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md",
-            subContent: "min-w-[180px] rounded-cl-md shadow-lg ml-1 bg-cl-bg-panel border border-cl-border dark:border",
+            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
+            content: "rounded-cl-md shadow-lg overflow-visible bg-cl-bg-panel border border-cl-border",
+               item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[highlighted]:bg-cl-bg-hover data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text first:rounded-t-cl-md last:rounded-b-cl-md",
+            subContent: "min-w-[180px] rounded-cl-md shadow-lg ml-1 bg-cl-bg-panel border border-cl-border",
                subPositioner: "",
-               subItem: "flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-black/5 data-[highlighted]:bg-black/5 data-[selected]:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[highlighted]:bg-white/10 dark:data-[selected]:bg-cl-accent/50 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md",
+               subItem: "flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[highlighted]:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text first:rounded-t-cl-md last:rounded-b-cl-md",
                label: "block text-sm font-medium mb-1 text-cl-text-secondary",
                message: "text-sm mt-1 text-cl-error data-[valid]:text-cl-success",
                icon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary",
@@ -120,7 +120,7 @@ export default function CascadingDropdownExample() {
                empty: "px-3 py-4 text-sm text-center text-cl-text-secondary",
                loading: "px-3 py-4 text-sm text-center text-cl-text-secondary"
              }),
-                           subContent: `${"min-w-[180px] rounded-cl-md shadow-lg ml-1 bg-cl-bg-panel border border-cl-border dark:border"} max-h-64 overflow-y-auto`
+                           subContent: `${"min-w-[180px] rounded-cl-md shadow-lg ml-1 bg-cl-bg-panel border border-cl-border"} max-h-64 overflow-y-auto`
                          }
           }
         />
@@ -140,9 +140,7 @@ export default function CascadingDropdownExample() {
       </div>
       {
         Object.keys(prefetchValue).length > 0 && (
-          <div
-            className="mt-3 p-3 rounded-cl-md w-full bg-cl-bg-hover dark:bg-cl-bg-elevated dark:border dark:border-cl-border"
-          >
+          <div className="mt-3 p-3 rounded-cl-md w-full bg-cl-bg-hover border border-cl-border">
             <p className="text-xs font-medium mb-1 text-cl-text-secondary">Selected Value:</p>
             <pre className="text-xs overflow-x-auto text-cl-text-chrome">
               {JSON.stringify(prefetchValue, null, 2)}

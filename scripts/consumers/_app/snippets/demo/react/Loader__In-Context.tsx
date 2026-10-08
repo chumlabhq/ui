@@ -7,7 +7,7 @@ export default function LoaderExample() {
       <div className="flex items-center gap-4 flex-wrap">
         <Button
           type="button"
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md bg-cl-bg-hover text-cl-text-tertiary cursor-not-allowed dark:bg-cl-bg-elevated dark:cursor-not-allowed"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-cl-md bg-cl-bg-hover text-cl-text-tertiary cursor-not-allowed"
           disabled
         >
           <CircularLoader size={16} className="text-cl-accent" />
@@ -41,12 +41,12 @@ export default function LoaderExample() {
           borderRadius={0}
         />
         <div className="p-6 bg-cl-bg-elevated">
-          <div className="h-4 w-32 sm:w-48 rounded bg-cl-bg-hover dark:bg-cl-text/60" />
+          <div className="h-4 w-32 sm:w-48 rounded bg-cl-bg-skeleton" />
           <div className="mt-2 h-3 w-48 sm:w-64 rounded bg-cl-bg-hover" />
         </div>
       </div>
       <div
-        className="flex items-center gap-2 rounded-cl-md px-3 py-2 text-sm bg-cl-warning/15 border border-cl-warning text-cl-warning dark:bg-cl-warning/20 dark:border dark:border-cl-warning/40"
+        className="flex items-center gap-2 rounded-cl-md px-3 py-2 text-sm bg-cl-warning/15 border border-cl-warning text-cl-warning"
       >
         <CircularLoader size={14} thickness={2} className="text-cl-accent" />
         Syncing your data...

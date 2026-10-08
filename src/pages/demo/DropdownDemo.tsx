@@ -200,8 +200,8 @@ const CustomChevronIcon = ({
 const getClasses = () => ({
   dropdown: {
     root: "w-full",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
-    content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border dark:border`,
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
+    content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border`,
     label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
   } satisfies DropdownClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -271,11 +271,11 @@ const coolTheme = {
 
 const getMinimalTheme = (dark: boolean) => ({
   wrapper: "relative",
-  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus:border-cl-text`,
+  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus:border-cl-text`,
   triggerText: "flex-1 truncate",
-  content: `rounded shadow-sm overflow-hidden border bg-cl-bg-panel border-cl-border dark:border`,
+  content: `rounded shadow-sm overflow-hidden border bg-cl-bg-panel border-cl-border`,
   optionList: "max-h-60 overflow-y-auto",
-  option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:hover:bg-white/10`,
+  option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover`,
   optionSelected: "font-medium",
   optionFocused: dark ? "bg-white/10" : "bg-black/5",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
@@ -487,7 +487,7 @@ const DropdownDemo = () => {
                 errorMessage="This field is required"
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error dark:border dark:text-white dark:focus:outline-none dark:focus:ring-2`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error`,
                 }}
               />
             </div>
@@ -797,7 +797,7 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 selectedIcon={
                   <span
-                    className={`w-2 h-2 rounded-full shrink-0 bg-cl-accent dark:bg-cl-accent/90`}
+                    className={`w-2 h-2 rounded-full shrink-0 bg-cl-accent`}
                   />
                 }
                 classes={c.dropdown}
@@ -841,8 +841,8 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:border-transparent dark:text-white dark:hover:border-cl-border`,
-                  item: `hover:bg-violet-500/10 data-[highlighted]:bg-violet-500/10 dark:hover:bg-violet-500/20 dark:data-[highlighted]:bg-violet-500/20`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:border-transparent`,
+                  item: `hover:bg-violet-500/10 data-[highlighted]:bg-violet-500/10`,
                   itemIndicator: `w-4 h-4 shrink-0 text-violet-500`,
                 }}
               />
@@ -856,8 +856,8 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-success focus-visible:border-transparent dark:text-white dark:hover:border-cl-border`,
-                  item: `hover:bg-cl-success/10 data-[highlighted]:bg-cl-success/10 dark:hover:bg-cl-success/20 dark:data-[highlighted]:bg-cl-success/20`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-success focus-visible:border-transparent`,
+                  item: `hover:bg-cl-success/10 data-[highlighted]:bg-cl-success/10`,
                   itemIndicator: `w-4 h-4 shrink-0 text-cl-success`,
                 }}
               />
@@ -1045,7 +1045,7 @@ const DropdownDemo = () => {
               placeholder="Select a fruit..."
               classes={{
                 ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error dark:border dark:text-white dark:focus:outline-none dark:focus:ring-2`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error`,
               }}
             />
           </div>
@@ -1230,7 +1230,7 @@ const DropdownDemo = () => {
               fullWidth
               classes={{
                 ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel text-cl-text hover:border-cl-border-input shadow-sm dark:border dark:hover:border-cl-border`,
+ trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover shadow-sm`,
                 value: "flex-1 text-left truncate",
               }}
             />
@@ -1372,7 +1372,7 @@ const DropdownDemo = () => {
             </div>
             <div
               ref={setPortalEl}
-              className={`relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover dark:bg-cl-bg-elevated/50`}
+              className={`relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover`}
             >
               <p
                 className={`text-xs text-cl-text-tertiary`}
