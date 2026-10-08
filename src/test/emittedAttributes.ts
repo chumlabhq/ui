@@ -244,6 +244,61 @@ export function pressedToggleSitesOf(
   return sites;
 }
 
+/**
+ * Where a component's render graph draws loading rows inside an open surface:
+ * an element mapped from `Array.from({ length })` (a placeholder repeat, with no
+ * data behind it), in a file that renders a `listbox` or `menu`, or is imported
+ * by one that does. The second half is what separates a dropdown's shimmer from
+ * the in-flow skeletons Table, Avatar and CountryFlag draw, which have no
+ * surface to sit in.
+ */
+export function loadingRowSitesOf(
+  name: string,
+  read: Read = (file) => readFileSync(file, "utf8"),
+): ItemSite[] {
+  const root = process.cwd();
+  const files = graph(join(resolve(root, "src/components", name), "index.ts"), read);
+  const SURFACE = /role=["{]?["'](listbox|menu)["']/;
+  const importersOf = (target: string) =>
+    files.filter((file) => {
+      let hit = false;
+      const visit = (node: ts.Node): void => {
+        if (ts.isImportDeclaration(node) && !node.importClause?.isTypeOnly && ts.isStringLiteral(node.moduleSpecifier)) {
+          if (resolveImport(file, node.moduleSpecifier.text) === target) hit = true;
+        }
+        ts.forEachChild(node, visit);
+      };
+      visit(parse(file, read));
+      return hit;
+    });
+  const sites: ItemSite[] = [];
+  for (const file of files) {
+    const sf = parse(file, read);
+    const rel = file.slice(root.length + 1);
+    const inSurface = () => SURFACE.test(sf.text) || importersOf(file).some((f) => SURFACE.test(read(f)));
+    const visit = (node: ts.Node): void => {
+      if (
+        ts.isCallExpression(node) &&
+        ts.isPropertyAccessExpression(node.expression) &&
+        node.expression.name.text === "map" &&
+        ts.isCallExpression(node.expression.expression) &&
+        node.expression.expression.expression.getText(sf) === "Array.from" &&
+        node.expression.expression.arguments[0] &&
+        ts.isObjectLiteralExpression(node.expression.expression.arguments[0]) &&
+        inSurface()
+      ) {
+        sites.push({
+          site: `${rel.split("/").pop()} › ${ownerOf(node, sf)}`,
+          at: `${rel}:${sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1}`,
+        });
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return sites;
+}
+
 /** Everything one component, and anything it renders, emits. */
 export const emittedBy = (name: string, read: Read = (file) => readFileSync(file, "utf8")) =>
   emitted(graph(join(resolve(process.cwd(), "src/components", name), "index.ts"), read), read);

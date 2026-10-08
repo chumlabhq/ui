@@ -815,6 +815,22 @@ const LIBRARY_TOTAL_HISTORY = [
       "to -25 B each; their own/exclusive +-1-2 B are chunk hashes. Table held. " +
       "Measured against a build of a752e433.",
   },
+  {
+    kb: 155.74,
+    commit: "(uncommitted)",
+    date: "2026-10-08",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.02 KB (159,458 -> 159,479 B gzipped, +21 B), 81 files " +
+      "held. MultiSelectSearchableDropdown: own +26 B, closure +33 B, exclusive " +
+      "+27 B. Its `loadingItem` slot carried the status text's classes, so its " +
+      "shimmer rows painted nothing; it now carries Dropdown's skeleton row, " +
+      "`mx-2 my-1.5 h-4 rounded bg-cl-bg-skeleton animate-pulse` (+4 B raw). " +
+      "The old string repeated `loading` and `empty` in the same object and " +
+      "gzipped as a back-reference; the new one is fresh text in this chunk. " +
+      "Every other entry byte-identical, Table held. Measured against a build " +
+      "of dc6fc0b2.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

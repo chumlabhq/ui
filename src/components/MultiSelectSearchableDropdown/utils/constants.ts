@@ -29,7 +29,7 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
     loading:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     loadingItem:
-      "px-3 py-4 text-sm text-center text-cl-text-tertiary",
+      "mx-2 my-1.5 h-4 rounded bg-cl-bg-skeleton animate-pulse",
     label:
       "block text-sm font-medium mb-1 text-cl-text-chrome",
     message: "text-sm mt-1 data-[invalid]:text-cl-error data-[valid]:text-cl-success",

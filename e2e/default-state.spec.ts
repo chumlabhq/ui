@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { PAINT_HELPERS } from "./_contrast-measure";
-import { componentNames, emittedBy, itemSitesOf, pressedToggleSitesOf } from "../src/test/emittedAttributes";
+import { componentNames, emittedBy, itemSitesOf, loadingRowSitesOf, pressedToggleSitesOf } from "../src/test/emittedAttributes";
 
 /**
  * A state the component reports has to be a state the component shows.
@@ -908,5 +908,177 @@ test("a pressed toggle paints differently from its unpressed sibling, in both th
     indistinct,
     "these mark the pressed toggle aria-pressed and data-active and paint it like its sibling, " +
       "so only a screen reader can tell which one is on",
+  ).toEqual([]);
+});
+
+/**
+ * A loading row has to paint a skeleton: a fill that differs from the surface
+ * behind it, in both themes.
+ *
+ * MultiSelectSearchableDropdown rendered `shimmerCount` loading rows under its
+ * status text and styled its `loadingItem` slot with text classes only, so each
+ * "shimmer" row was an empty, transparent box. The status line said Loading;
+ * nothing on screen moved or filled. Its four siblings shipped a skeleton.
+ *
+ * - The population is read from the code: every placeholder repeat a render
+ *   graph draws inside a listbox or menu (`loadingRowSitesOf`). One with no
+ *   recipe fails rather than being skipped.
+ * - In the page, the rows are a group of two or more textless siblings with one
+ *   class list, searched across the document because the surfaces are
+ *   portalled. Each row's fill is the strongest of its own composited
+ *   background and its descendants', against what is composited behind it.
+ * - The floor is the skeleton the family already ships: Dropdown's
+ *   `loadingItem`, `bg-cl-bg-skeleton`, the same class SearchableDropdown and
+ *   CascadingDropdown use. The check applies that token over the measured
+ *   surface, as the toggle check applies `--cl-accent-bg`, and a row must at
+ *   least reach it, less DISABLED_ITEM_CHANNEL_TOLERANCE for 8-bit rounding.
+ *   Animations are off, so the pulse is measured at full strength.
+ */
+const LOADING_ROW_SITES = componentNames().flatMap((name) =>
+  [...new Set(loadingRowSitesOf(name).map((s) => s.site))].map((site) => `${name}: ${site}`),
+);
+
+const LOADING_ROW_RECIPES: Record<string, { fixture: string } | { unreachable: string }> = {
+  "Dropdown: DropdownShimmer.tsx › DropdownShimmer": { fixture: "loading" },
+  "SearchableDropdown: SearchableDropdownShimmer.tsx › SearchableDropdownShimmer": { fixture: "loading" },
+  "MultiSelectDropdown: MultiSelectDropdownShimmer.tsx › MultiSelectDropdownShimmer": { fixture: "loading" },
+  "MultiSelectSearchableDropdown: MultiSelectSearchableDropdown.tsx › MultiSelectSearchableDropdown": {
+    fixture: "loading",
+  },
+  "CascadingDropdown: CascadingDropdown.tsx › CascadingDropdown": { fixture: "loading" },
+  "InternationalPhoneInput: SearchableDropdownShimmer.tsx › SearchableDropdownShimmer": {
+    unreachable:
+      "Its country list is a SearchableDropdown, and the props it passes " +
+      "(InternationalPhoneInput.tsx, the <SearchableDropdown> call) include no `loading`, " +
+      "`onSearch` or `onLoadOptions`, so its list never loads.",
+  },
+};
+
+const MEASURE_LOADING_ROWS = `(() => {
+${PAINT_HELPERS}
+  const tol = __TOL__;
+  const probe = document.createElement("div");
+  probe.style.backgroundColor = "var(--cl-bg-skeleton)";
+  document.body.appendChild(probe);
+  const skeleton = parse(getComputedStyle(probe).backgroundColor);
+  probe.remove();
+  if (!skeleton) return { error: "--cl-bg-skeleton did not resolve" };
+  const textless = (el) => !(el.textContent || "").trim();
+  const groups = [...document.querySelectorAll("body *")].filter((parent) => {
+    const kids = [...parent.children];
+    return (
+      kids.length >= 2 &&
+      kids.every((k) => textless(k) && k.tagName === kids[0].tagName && k.className === kids[0].className) &&
+      !parent.closest("svg")
+    );
+  });
+  const rows = groups.flatMap((g) => [...g.children]);
+  if (!rows.length) return { error: "no group of textless sibling rows on the page" };
+  const fmt = (c) => "rgb(" + c.map((v) => v.toFixed(2)).join(", ") + ")";
+  const results = rows.map((row) => {
+    const box = row.getBoundingClientRect();
+    const behind = backgroundOf(row.parentElement);
+    if (!behind) return { error: "the surface behind a row is an image or gradient" };
+    let best = behind, bestRatio = 1;
+    for (const el of [row, ...row.querySelectorAll("*")]) {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      const fill = backgroundOf(el);
+      if (!fill) continue;
+      const q = ratio(fill, behind);
+      if (q > bestRatio) { best = fill; bestRatio = q; }
+    }
+    const expected = over(skeleton, behind);
+    const nudged = expected.map((v, i) => (v > behind[i] ? Math.max(behind[i], v - tol) : Math.min(behind[i], v + tol)));
+    return {
+      size: Math.round(box.width) + "x" + Math.round(box.height),
+      fill: fmt(best),
+      behind: fmt(behind),
+      expected: fmt(expected),
+      ratio: bestRatio,
+      floor: ratio(nudged, behind),
+    };
+  });
+  return { rows: results };
+})()`;
+
+test("a loading row paints a skeleton, in both themes", async ({ page }) => {
+  test.setTimeout(300_000);
+  expect(LOADING_ROW_SITES.length, "no component draws loading rows in a surface — the derivation read nothing").toBeGreaterThan(0);
+  const stale = Object.keys(LOADING_ROW_RECIPES).filter((name) => !LOADING_ROW_SITES.includes(name));
+  expect(stale, "these have a recipe but no longer draw loading rows").toEqual([]);
+
+  const noRecipe = LOADING_ROW_SITES.filter((name) => !LOADING_ROW_RECIPES[name]);
+  const unmeasured: string[] = [];
+  const blank: string[] = [];
+  let measured = 0;
+
+  console.log(`LOADING_ROW population ${LOADING_ROW_SITES.length} sites: ${LOADING_ROW_SITES.join("; ")}`);
+  for (const name of LOADING_ROW_SITES) {
+    const recipe = LOADING_ROW_RECIPES[name];
+    if (!recipe) continue;
+    if ("unreachable" in recipe) {
+      console.log(`LOADING_ROW ${name}: not measured — ${recipe.unreachable}`);
+      continue;
+    }
+    const component = name.split(":")[0];
+    for (const theme of ["dark", "light"] as const) {
+      await gotoFixture(page, component, recipe.fixture);
+      await page
+        .waitForFunction(
+          () => {
+            const main = document.querySelector("main[data-fixture-act]");
+            const act = main?.getAttribute("data-fixture-act");
+            const still = main?.getAttribute("data-fixture-still");
+            return act && act !== "pending" && still && still !== "pending" ? act : null;
+          },
+          undefined,
+          { timeout: 30000 },
+        )
+        .catch(() => null);
+      await page.addStyleTag({
+        content: "*,*::before,*::after{transition:none!important;animation:none!important}",
+      });
+      await page.evaluate((next) => {
+        const html = document.documentElement;
+        html.setAttribute("data-theme", next);
+        html.classList.toggle("dark", next === "dark");
+      }, theme);
+
+      const m = (await page.evaluate(
+        MEASURE_LOADING_ROWS.replace("__TOL__", String(DISABLED_ITEM_CHANNEL_TOLERANCE)),
+      )) as {
+        error?: string;
+        rows?: Array<{ error?: string; size?: string; fill?: string; behind?: string; expected?: string; ratio?: number; floor?: number }>;
+      };
+      const at = `${name} /${recipe.fixture} ${theme}`;
+      if (m.error) {
+        unmeasured.push(`${at}: ${m.error}`);
+        console.log(`LOADING_ROW ${at}: UNMEASURED — ${m.error}`);
+        continue;
+      }
+      const rows = m.rows!;
+      const bad = rows.filter((r) => r.error || r.ratio! < r.floor!);
+      const first = rows[0];
+      measured += rows.length;
+      console.log(
+        `LOADING_ROW ${at}: ${rows.length} rows ${first.size}, fill ${first.fill} on ${first.behind} = ${first.ratio}:1; ` +
+          `expected ${first.expected}, floor ${first.floor}:1, margin ${first.ratio! - first.floor!} → ` +
+          `${bad.length ? `${bad.length} BLANK` : "skeleton"}`,
+      );
+      if (bad.length) blank.push(`${at}: ${bad.length} of ${rows.length} rows at ${bad[0].ratio}:1 under floor ${bad[0].floor}:1`);
+    }
+  }
+
+  console.log(
+    `LOADING_ROW_PAINT ${LOADING_ROW_SITES.length} sites × 2 themes, ${measured} rows measured, ${blank.length} blank ` +
+      `(${unmeasured.length} unmeasured, ${noRecipe.length} without a recipe)`,
+  );
+  expect(noRecipe, "these draw loading rows and nothing here says which fixture shows them").toEqual([]);
+  expect(unmeasured, "a recipe that reaches no loading rows measures nothing").toEqual([]);
+  expect(
+    blank,
+    "these draw loading rows that paint the surface's own colour, so the loading state shows " +
+      "empty boxes where a skeleton should be",
   ).toEqual([]);
 });

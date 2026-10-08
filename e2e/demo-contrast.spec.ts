@@ -223,13 +223,6 @@ const RECORDED: ReadonlySet<string> = new Set([
   // `button.px-3.py-1.5` until the demo's triggers became `<Button>`, which puts
   // the label in the component's `itemText` span. The colours did not move.
   "toast light span.inline-flex.items-center",
-  // Found when route coverage widened 2026-10-07; fixed in that page's
-  // eye-pass slice. Both pages were outside the scan until the routes came from
-  // the JSX rather than a one-line regex. rgb(91,155,255) text on
-  // rgb(59,98,160) at 2.2:1 on both pages, and on rgb(42,70,113) at 3.43:1 on
-  // MultiSelectSearchableDropdown.
-  "multi-select-dropdown dark span.truncate",
-  "multi-select-searchable-dropdown dark span.truncate",
 ]);
 
 /**
