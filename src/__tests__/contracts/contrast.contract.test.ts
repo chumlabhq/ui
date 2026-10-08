@@ -153,6 +153,12 @@ const SURFACES = [
  * `--cl-bg-panel` as well as `--cl-bg`.
  */
 const ACCENT_PAIRS: Array<[string, string]> = [
+  // T2, added before any site uses them: each tint with the text it is for.
+  // `--cl-success` text is NOT listed on `--cl-success-bg`: 3.9:1 in light,
+  // under AA, and its intent line says so.
+  ["--cl-text", "--cl-accent-surface"],
+  ["--cl-accent-hover", "--cl-accent-surface"],
+  ["--cl-text", "--cl-success-bg"],
   // NOT listed, on purpose: `--cl-accent` on `--cl-accent-bg`. It FAILS AA in
   // light at 4.4999:1 over both `--cl-bg` and `--cl-bg-panel`, and was only
   // ever listed here because this contract compared `ratio.toFixed(2)` and read

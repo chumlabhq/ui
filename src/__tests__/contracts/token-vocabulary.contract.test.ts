@@ -115,6 +115,12 @@ const ROLE_ONLY = [
   // is a foreground overlay, visible because it composites above the surface
   // it is laid on, not because of a relation to any one surface token.
   "--cl-bg-track",
+  // T2, role names under ADR 005 T2: each claims a purpose, not a relation.
+  // `--cl-accent-surface` equals `--cl-accent-bg` in light and is stronger in
+  // dark; "surface" says nothing about the accent tint, so equality is allowed.
+  "--cl-accent-surface",
+  "--cl-accent-halo",
+  "--cl-success-bg",
   "--cl-border",
   "--cl-border-input",
   "--cl-text",
@@ -211,6 +217,63 @@ describe("token vocabulary contract", () => {
       execFileSync("node", ["scripts/build-tokens.mjs", "--check"], { stdio: "pipe" }),
     ).not.toThrow();
   }, 120_000);
+
+  /**
+   * Every token is whole in both files: a dark and a light value, a `@theme`
+   * mapping that turns it into a utility, and a stated intent. Tokens are
+   * public API, and each part matters to a consumer: a token without a light
+   * value keeps its dark one in a light app, one without a mapping has no
+   * utility, and one without an intent gets reused for the wrong purpose.
+   * Checked in the authored file and in the shipped one, so neither can lose a
+   * part the other still has.
+   */
+  it("gives every token both values, a @theme mapping and an intent, in both files", () => {
+    const files = {
+      "src/index.css": CSS,
+      "src/styles/tokens.css": readFileSync(resolve(process.cwd(), "src/styles/tokens.css"), "utf8"),
+    };
+    const problems: string[] = [];
+    let checked = 0;
+    for (const [file, text] of Object.entries(files)) {
+      // The first block opened by this selector that declares --cl-* tokens:
+      // index.css also names the selectors in prose and reopens one inside a
+      // media query with no tokens, as build-tokens.mjs documents.
+      const block = (selector: string) => {
+        for (let at = text.indexOf(selector); at >= 0; at = text.indexOf(selector, at + 1)) {
+          const open = at + selector.length - 1;
+          let depth = 0;
+          for (let i = open; i < text.length; i += 1) {
+            if (text[i] === "{") depth += 1;
+            else if (text[i] === "}" && --depth === 0) {
+              const body = text.slice(open, i);
+              if (/--cl-[\w-]+\s*:/.test(body)) return body;
+              break;
+            }
+          }
+        }
+        return "";
+      };
+      const decls = (b: string) => new Set([...b.matchAll(/(--cl-[\w-]+)\s*:/g)].map((m) => m[1]));
+      const dark = decls(block('[data-theme="dark"] {'));
+      const light = decls(block('[data-theme="light"] {'));
+      const mapped = new Set([...text.matchAll(/--(?:color|radius|shadow)-cl-[\w-]+:\s*var\((--cl-[\w-]+)\)/g)].map((m) => m[1]));
+      const intentText = file === "src/index.css"
+        ? text.slice(text.indexOf("@cl-token-intents"), text.indexOf("*/", text.indexOf("@cl-token-intents")))
+        : text.slice(0, text.indexOf("*/"));
+      const intended = new Set([...intentText.matchAll(/^\s*\*?\s*(--cl-[\w-]+)\s{2,}\S/gm)].map((m) => m[1]));
+      for (const t of new Set([...dark, ...light])) {
+        checked += 1;
+        if (!dark.has(t)) problems.push(`${file}: ${t} has no dark value`);
+        if (!light.has(t)) problems.push(`${file}: ${t} has no light value`);
+        if (!mapped.has(t)) problems.push(`${file}: ${t} has no @theme mapping`);
+        if (!intended.has(t)) problems.push(`${file}: ${t} has no intent line`);
+      }
+      for (const t of intended) if (!dark.has(t)) problems.push(`${file}: intent line for ${t}, which is not a token`);
+    }
+    console.log(`TOKEN_COMPLETENESS ${checked} token entries across 2 files, ${problems.length} problems`);
+    expect(checked, "no tokens were read — the parse found nothing").toBeGreaterThan(60);
+    expect(problems, "a token is missing a value, a @theme mapping or an intent").toEqual([]);
+  });
 
   describe.each(RELATIONAL)("$token", ({ token, against, claim }) => {
     it.each(["dark", "light"])(`differs from ${against} in %s`, (themeName) => {
