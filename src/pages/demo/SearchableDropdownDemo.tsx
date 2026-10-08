@@ -579,14 +579,14 @@ const SearchableDropdownDemo = () => {
               classes={c.dropdown}
             />
           </div>
+          {clearableValue && (
+            <p
+              className={`w-full text-sm mt-2 text-cl-accent`}
+            >
+              Selected: {clearableValue}
+            </p>
+          )}
         </DemoWrapper>
-        {clearableValue && (
-          <p
-            className={`text-sm mt-2 text-cl-accent`}
-          >
-            Selected: {clearableValue}
-          </p>
-        )}
       </Section>
 
       {/* ─── Custom Trigger ──────────────────────────────────────────────── */}
@@ -1461,15 +1461,15 @@ const SearchableDropdownDemo = () => {
               classes={c.dropdown}
             />
           </div>
+          {focusMessage && (
+            <p
+              className={`w-full text-sm mt-2 text-cl-accent`}
+              data-demo-action
+            >
+              {focusMessage}
+            </p>
+          )}
         </DemoWrapper>
-        {focusMessage && (
-          <p
-            className={`text-sm mt-2 text-cl-accent`}
-            data-demo-action
-          >
-            {focusMessage}
-          </p>
-        )}
         <div className={c.note}>
           These callbacks fire on the trigger button's focus/blur events.
           Perfect for form validation libraries that track field touch state.
@@ -1501,14 +1501,14 @@ const SearchableDropdownDemo = () => {
               classes={c.dropdown}
             />
           </div>
+          {keyDownMessage && (
+            <p
+              className={`w-full text-sm mt-2 text-cl-success`}
+            >
+              {keyDownMessage}
+            </p>
+          )}
         </DemoWrapper>
-        {keyDownMessage && (
-          <p
-            className={`text-sm mt-2 text-cl-success`}
-          >
-            {keyDownMessage}
-          </p>
-        )}
       </Section>
 
       {/* ─── className, style & aria-label ───────────────────────────────── */}

@@ -204,33 +204,33 @@ const OtpInputDemo = () => {
         description="External state via value + onValueChange."
         isDarkMode={dark}
       >
-        <div
-          className={`mb-3 p-3 rounded-cl-md flex flex-wrap items-center gap-3 bg-cl-bg-elevated`}
-        >
-          <span
-            className={`text-xs font-medium text-cl-text-secondary`}
-          >
-            Value:
-          </span>
-          <span
-            className={`text-sm font-mono text-cl-text-secondary`}
-          >
-            &quot;{controlled}&quot;
-          </span>
-          <button
-            className={`ml-auto ${c.btn} cursor-pointer`}
-            onClick={() => setControlled("")}
-          >
-            Clear
-          </button>
-          <Button
-            className={c.btnPrimary}
-            onClick={() => setControlled("123456")}
-          >
-            Set 123456
-          </Button>
-        </div>
         <DemoWrapper isDarkMode={dark} layout="block">
+          <div
+            className={`w-full mb-3 p-3 rounded-cl-md flex flex-wrap items-center gap-3 bg-cl-bg-elevated`}
+          >
+            <span
+              className={`text-xs font-medium text-cl-text-secondary`}
+            >
+              Value:
+            </span>
+            <span
+              className={`text-sm font-mono text-cl-text-secondary`}
+            >
+              &quot;{controlled}&quot;
+            </span>
+            <button
+              className={`ml-auto ${c.btn} cursor-pointer`}
+              onClick={() => setControlled("")}
+            >
+              Clear
+            </button>
+            <Button
+              className={c.btnPrimary}
+              onClick={() => setControlled("123456")}
+            >
+              Set 123456
+            </Button>
+          </div>
           <OtpInput
             value={controlled}
             onValueChange={setControlled}

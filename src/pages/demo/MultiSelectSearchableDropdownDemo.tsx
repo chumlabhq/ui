@@ -1346,14 +1346,14 @@ const MultiSelectSearchableDropdownDemo = () => {
               <div>onKeyDown: {combinedKey}</div>
             </div>
           </div>
+          {combinedValue.length > 0 && (
+            <p
+              className={`w-full text-sm mt-2 text-cl-accent`}
+            >
+              Selected: {combinedValue.join(", ")}
+            </p>
+          )}
         </DemoWrapper>
-        {combinedValue.length > 0 && (
-          <p
-            className={`text-sm mt-2 text-cl-accent`}
-          >
-            Selected: {combinedValue.join(", ")}
-          </p>
-        )}
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}

@@ -90,6 +90,31 @@ function subpathOf(name) {
 /** Peer dependencies: present in any app that uses the component needing them. */
 const PEERS = new Set(Object.keys(pkg.peerDependencies ?? {}));
 
+/**
+ * A peer dependency, or one of its subpaths. `date-fns/locale` is date-fns, and
+ * DatePicker's Locale Support had no Show code because only the bare package
+ * name counted as one.
+ */
+const peerOf = (spec) => [...PEERS].find((p) => spec === p || spec.startsWith(`${p}/`)) ?? null;
+
+/**
+ * The published subpath for a page import of any library module, not only a
+ * component's index: `../../components/InternationalPhoneInput/validators/index.js`
+ * is `@chumlab/ui/phone-validators`. Read off the package's own exports table, so
+ * a module that is not published maps to nothing rather than to a guess.
+ */
+function publishedPathOf(raw) {
+  const m = /(components\/.+?)(?:\.js)?$/.exec(raw);
+  if (!m) return null;
+  const wanted = m[1].replace(/\/index$/, "/index");
+  for (const [key, target] of Object.entries(pkg.exports)) {
+    const file = typeof target === "string" ? target : target.import?.default ?? target.default ?? "";
+    const built = String(file).replace(/^\.\/dist\//, "").replace(/\.js$/, "");
+    if (built === wanted || built === `${wanted}/index`) return key.replace(/^\./, "@chumlab/ui");
+  }
+  return null;
+}
+
 /** Names a snippet may use without importing or declaring them. */
 const GLOBALS = new Set([
   "console", "window", "document", "navigator", "Math", "Date", "JSON", "Object", "Array",
@@ -175,6 +200,7 @@ function freeIdentifiers(nodes, sf, usedTypes = new Set()) {
 /** The page's declarations, wherever they sit, plus how each may be reused. */
 function pageSymbols(sf) {
   const imports = new Map();   // name → module specifier, already public
+  const localImports = new Map(); // name → { raw, file, exported } from a page-local module
   const decls = new Map();     // name → { kind, node, text }
   const stateOf = new Map();   // value or setter name → the whole declaration
 
@@ -186,10 +212,22 @@ function pageSymbols(sf) {
     // A declared peer dependency is something the consumer already has —
     // `ColumnDef` comes from @tanstack/react-table, which anyone using Table
     // has installed. Treating it as unavailable cost 18 Table snippets.
-    else if (PEERS.has(raw)) spec = raw;
-    else {
-      const m = /components\/([A-Za-z0-9]+)\/index/.exec(raw);
-      if (m) spec = subpathOf(m[1]);
+    else if (peerOf(raw)) spec = raw;
+    else if (raw.startsWith(".") && !/components\//.test(raw)) {
+      // A page-local module. Its exports are not public, so a snippet can only
+      // carry one by inlining it; `localExport` decides whether that is possible.
+      const nb = st.importClause.namedBindings;
+      const from = resolveLocalModule(sf.fileName, raw);
+      if (nb && ts.isNamedImports(nb)) {
+        nb.elements.forEach((e) => {
+          if (e.isTypeOnly) return;
+          localImports.set(e.name.text, { raw, file: from, exported: (e.propertyName ?? e.name).text });
+        });
+      }
+      continue;
+    } else {
+      const m = /components\/([A-Za-z0-9]+)\/index(?:\.js)?$/.exec(raw);
+      spec = m ? subpathOf(m[1]) : publishedPathOf(raw);
     }
     if (!spec) continue;
     const nb = st.importClause.namedBindings;
@@ -249,7 +287,82 @@ function pageSymbols(sf) {
     }
   }
 
-  return { imports, decls, stateOf };
+  return { imports, decls, stateOf, localImports };
+}
+
+/** A page-local import's source file: `./lib/countries.js` is `lib/countries.ts`. */
+function resolveLocalModule(pageFile, raw) {
+  const base = resolve(dirname(join(DEMOS, pageFile)), raw).replace(/\.js$/, "");
+  return [".ts", ".tsx", "/index.ts", "/index.tsx"].map((x) => base + x).find((f) => existsSync(f)) ?? null;
+}
+
+/**
+ * A page-local helper, as source a snippet can carry, or the reason it cannot.
+ *
+ * The export and every module-level declaration it closes over are extracted
+ * from the module's AST, in the module's order. That is only honest when the
+ * helper is self-contained: one that reads `import.meta.env` or imports another
+ * module depends on something only this site has, and a reader who copies it
+ * gets code that does not run. The reason names the identifier, its module and
+ * that dependency — "is not declared on the page" said none of the three for
+ * thirteen sections whose helpers were imported three lines from the top.
+ */
+function localExport(name, info) {
+  const where = `\`${name}\` comes from ${info.raw}`;
+  if (!info.file) return { reason: `${where}, which does not resolve to a file` };
+  const msf = ts.createSourceFile(info.file, readFileSync(info.file, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const moduleDecls = new Map();
+  const moduleImports = new Map();
+  for (const st of msf.statements) {
+    if (ts.isImportDeclaration(st) && st.importClause) {
+      const from = st.moduleSpecifier.getText(msf).slice(1, -1);
+      const nb = st.importClause.namedBindings;
+      if (nb && ts.isNamedImports(nb)) nb.elements.forEach((e) => moduleImports.set(e.name.text, from));
+      if (st.importClause.name) moduleImports.set(st.importClause.name.text, from);
+    }
+    if (ts.isVariableStatement(st)) {
+      st.declarationList.declarations.forEach((d) => ts.isIdentifier(d.name) && moduleDecls.set(d.name.text, st));
+    }
+    if ((ts.isFunctionDeclaration(st) || ts.isInterfaceDeclaration(st) || ts.isTypeAliasDeclaration(st)) && st.name) {
+      moduleDecls.set(st.name.text, st);
+    }
+  }
+  const root = moduleDecls.get(info.exported);
+  if (!root) return { reason: `${where}, which exports no \`${info.exported}\`` };
+  const exported = root.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
+  if (!exported) return { reason: `${where}, which declares \`${info.exported}\` but does not export it` };
+
+  const needed = new Set();
+  const queue = [root];
+  while (queue.length) {
+    const node = queue.shift();
+    if (needed.has(node)) continue;
+    needed.add(node);
+    let meta = null;
+    const findMeta = (n) => {
+      if (meta) return;
+      if (ts.isMetaProperty(n)) {
+        let outer = n;
+        while (ts.isPropertyAccessExpression(outer.parent)) outer = outer.parent;
+        meta = outer.getText(msf);
+        return;
+      }
+      ts.forEachChild(n, findMeta);
+    };
+    findMeta(node);
+    if (meta) return { reason: `${where}, which reads \`${meta}\` — this site's own configuration, so the helper cannot run in a consumer app` };
+    const types = new Set();
+    for (const id of [...freeIdentifiers([node], msf, types), ...types]) {
+      if (id === "meta" || id === "import") continue;
+      if (moduleImports.has(id)) return { reason: `${where}, which imports \`${id}\` from ${moduleImports.get(id)}` };
+      const d = moduleDecls.get(id);
+      if (d) queue.push(d);
+    }
+  }
+  const text = msf.statements
+    .filter((st) => needed.has(st))
+    .map((st) => st.getText(msf).replace(/^export\s+/, ""));
+  return { inline: text };
 }
 
 /**
@@ -1163,6 +1276,13 @@ function build(section, sf, symbols, classes, componentName) {
     if (bound) {
       const text = `const ${bound.name} = ${bound.value};`;
       if (!inlined.includes(text)) inlined.unshift(text);
+      continue;
+    }
+
+    if (symbols.localImports?.has(id)) {
+      const local = localExport(id, symbols.localImports.get(id));
+      if (local.reason) return { reason: local.reason };
+      for (const text of local.inline) if (!inlined.includes(text)) inlined.push(text);
       continue;
     }
 

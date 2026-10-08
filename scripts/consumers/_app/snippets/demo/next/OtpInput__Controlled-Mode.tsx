@@ -8,12 +8,28 @@ export default function OtpInputExample() {
   const [controlled, setControlled] = useState("123");
   return (
     <>
-      <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer"
-        onClick={() => setControlled("123456")}
+      <div
+        className="w-full mb-3 p-3 rounded-cl-md flex flex-wrap items-center gap-3 bg-cl-bg-elevated"
       >
-        Set 123456
-      </Button>
+        <span className="text-xs font-medium text-cl-text-secondary">Value:</span>
+        <span className="text-sm font-mono text-cl-text-secondary">
+          &quot;
+          {controlled}
+          &quot;
+        </span>
+        <button
+          className="ml-auto px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:bg-cl-bg-hover hover:border-cl-border-input-hover cursor-pointer cursor-pointer"
+          onClick={() => setControlled("")}
+        >
+          Clear
+        </button>
+        <Button
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer"
+          onClick={() => setControlled("123456")}
+        >
+          Set 123456
+        </Button>
+      </div>
       <OtpInput
         value={controlled}
         onValueChange={setControlled}

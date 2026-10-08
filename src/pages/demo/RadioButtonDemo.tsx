@@ -629,35 +629,35 @@ const RadioButtonDemo = () => {
         description="External state control via value + onValueChange."
         isDarkMode={dark}
       >
-        <div
-          className={`mb-3 p-3 rounded-cl-md flex items-center gap-3 bg-cl-bg-elevated`}
-        >
-          <span
-            className={`text-xs font-medium text-cl-text-secondary`}
-          >
-            Selected:
-          </span>
-          <span
-            className={`text-sm font-mono text-cl-text-secondary`}
-          >
-            {controlled}
-          </span>
-          <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`}
-            onClick={() =>
-              setControlled((prev) =>
-                prev === "option-a"
-                  ? "option-b"
-                  : prev === "option-b"
-                    ? "option-c"
-                    : "option-a",
-              )
-            }
-          >
-            Cycle Externally
-          </button>
-        </div>
         <DemoWrapper isDarkMode={dark} layout="block">
+          <div
+            className={`w-full mb-3 p-3 rounded-cl-md flex items-center gap-3 bg-cl-bg-elevated`}
+          >
+            <span
+              className={`text-xs font-medium text-cl-text-secondary`}
+            >
+              Selected:
+            </span>
+            <span
+              className={`text-sm font-mono text-cl-text-secondary`}
+            >
+              {controlled}
+            </span>
+            <button
+              className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`}
+              onClick={() =>
+                setControlled((prev) =>
+                  prev === "option-a"
+                    ? "option-b"
+                    : prev === "option-b"
+                      ? "option-c"
+                      : "option-a",
+                )
+              }
+            >
+              Cycle Externally
+            </button>
+          </div>
           <RadioGroup
             name="controlled"
             value={controlled}

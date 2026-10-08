@@ -1167,15 +1167,15 @@ const MultiSelectDropdownDemo = () => {
               classes={c.dropdown}
             />
           </div>
+          {focusMessage && (
+            <p
+              className={`w-full text-sm mt-2 text-cl-accent`}
+              data-demo-action
+            >
+              {focusMessage}
+            </p>
+          )}
         </DemoWrapper>
-        {focusMessage && (
-          <p
-            className={`text-sm mt-2 text-cl-accent`}
-            data-demo-action
-          >
-            {focusMessage}
-          </p>
-        )}
       </Section>
 
       {/* ─── Custom KeyDown Handler ──────────────────────────────────────── */}
@@ -1202,14 +1202,14 @@ const MultiSelectDropdownDemo = () => {
               classes={c.dropdown}
             />
           </div>
+          {keyDownMessage && (
+            <p
+              className={`w-full text-sm mt-2 text-cl-success`}
+            >
+              {keyDownMessage}
+            </p>
+          )}
         </DemoWrapper>
-        {keyDownMessage && (
-          <p
-            className={`text-sm mt-2 text-cl-success`}
-          >
-            {keyDownMessage}
-          </p>
-        )}
       </Section>
 
       {/* ─── className, style & aria-label ───────────────────────────────── */}
