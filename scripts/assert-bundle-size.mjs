@@ -800,6 +800,21 @@ const LIBRARY_TOTAL_HISTORY = [
       "never-empty default (a3354b7a inverted it). No other entry moved; " +
       "Table held. Measured against a build of 6f7f96a6.",
   },
+  {
+    kb: 155.72,
+    commit: "(uncommitted)",
+    date: "2026-10-08",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.01 KB (159,472 -> 159,458 B gzipped, -14 B), 81 files " +
+      "held. Tooltip: own -20 B, closure -25 B, exclusive -1 B. Its Escape moved " +
+      "from a handler passed to both triggers (and composed into asChild " +
+      "children) to one window capture listener while open, so it dismisses " +
+      "wherever focus is and ahead of a Modal or Drawer. Avatar, Button, " +
+      "CountryFlag, Stepper and TabPanel carry Tooltip in their closures, -14 " +
+      "to -25 B each; their own/exclusive +-1-2 B are chunk hashes. Table held. " +
+      "Measured against a build of a752e433.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

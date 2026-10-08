@@ -23,6 +23,9 @@ const getClasses = (_dark: boolean) => ({
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
  trigger: `cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover border border-cl-border focus-visible:ring-border-active dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
+  // A trigger on the light shadow frame, light in both themes: the light theme's
+  // own text, border and hover values, fixed, so it reads on white whatever the page is.
+  frameTrigger: `cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#2563eb] focus-visible:ring-offset-white bg-white text-[#0f1218] border border-[rgba(15,18,24,0.1)] hover:bg-[rgba(15,18,24,0.04)]`,
 });
 
 const TooltipDemo = () => {
@@ -31,15 +34,14 @@ const TooltipDemo = () => {
 
   const [controlled, setControlled] = useState(false);
 
-  const contentClassNameDark = "rounded-cl-md bg-cl-bg shadow-xl px-3 py-2 text-sm text-white";
+  // Dark in both themes on purpose, so a fixed colour: `bg-cl-bg` is the page
+  // colour and turns white in light, which put this white text on white.
+  const contentClassNameDark = "rounded-cl-md bg-[#0a0d12] shadow-xl px-3 py-2 text-sm text-white";
   const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-white font-medium";
   const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-white font-medium";
   const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-white font-medium";
   const contentClassNameGradient = "rounded-cl-md shadow-xl px-4 py-2.5 text-sm text-white font-medium";
 
-  const gradientPurple = { background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" };
-  const gradientGreen = { background: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)" };
-  const gradientPink = { background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" };
   const gradientBlue = { background: "linear-gradient(135deg, #0c3483 0%, #a2b6df 100%)" };
 
   const shadowBlueGlow = "0 4px 20px rgba(59, 130, 246, 0.5)";
@@ -368,7 +370,7 @@ const TooltipDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="Dark theme tooltip"
-            classes={{ content: contentClassNameDark, arrow: "fill-cl-bg" }}
+            classes={{ content: contentClassNameDark, arrow: "fill-[#0a0d12]" }}
           >
             <Button className={c.trigger}>Dark</Button>
           </Tooltip>
@@ -396,84 +398,64 @@ const TooltipDemo = () => {
       {/* ─── Shadow Presets ───────────────────────────────────────────── */}
       <Section
         title="Shadow Presets"
-        description="Use shadow prop with presets: none, sm, md, lg (default), xl, 2xl."
+        description="Use shadow prop with presets: none, sm, md, lg (default), xl, 2xl. Shadows read on light surfaces, so these sit on a light frame in both themes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <Tooltip content="No shadow" shadow="none">
-            <Button className={c.trigger}>None</Button>
-          </Tooltip>
-          <Tooltip content="Small shadow" shadow="sm">
-            <Button className={c.trigger}>Small</Button>
-          </Tooltip>
-          <Tooltip content="Medium shadow" shadow="md">
-            <Button className={c.trigger}>Medium</Button>
-          </Tooltip>
-          <Tooltip content="Large shadow (default)" shadow="lg">
-            <Button className={c.trigger}>Large</Button>
-          </Tooltip>
-          <Tooltip content="Extra large shadow" shadow="xl">
-            <Button className={c.trigger}>XL</Button>
-          </Tooltip>
-          <Tooltip content="2XL shadow" shadow="2xl">
-            <Button className={c.trigger}>2XL</Button>
-          </Tooltip>
+          <div className="flex flex-wrap gap-3 rounded-cl-lg bg-white px-6 pt-14 pb-6">
+            <Tooltip content="No shadow" shadow="none">
+              <Button className={c.frameTrigger}>None</Button>
+            </Tooltip>
+            <Tooltip content="Small shadow" shadow="sm">
+              <Button className={c.frameTrigger}>Small</Button>
+            </Tooltip>
+            <Tooltip content="Medium shadow" shadow="md">
+              <Button className={c.frameTrigger}>Medium</Button>
+            </Tooltip>
+            <Tooltip content="Large shadow (default)" shadow="lg">
+              <Button className={c.frameTrigger}>Large</Button>
+            </Tooltip>
+            <Tooltip content="Extra large shadow" shadow="xl">
+              <Button className={c.frameTrigger}>XL</Button>
+            </Tooltip>
+            <Tooltip content="2XL shadow" shadow="2xl">
+              <Button className={c.frameTrigger}>2XL</Button>
+            </Tooltip>
+          </div>
         </DemoWrapper>
       </Section>
 
       {/* ─── Custom Shadows ───────────────────────────────────────────── */}
       <Section
         title="Custom Shadows"
-        description="Pass a custom CSS box-shadow string to the shadow prop."
+        description="Pass a custom CSS box-shadow string to the shadow prop. Shadows read on light surfaces, so these sit on a light frame in both themes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <Tooltip content="Custom blue glow shadow" shadow={shadowBlueGlow}>
-            <Button className={c.trigger}>Blue Glow</Button>
-          </Tooltip>
-          <Tooltip content="Custom purple glow shadow" shadow={shadowPurpleGlow}>
-            <Button className={c.trigger}>Purple Glow</Button>
-          </Tooltip>
-          <Tooltip content="Soft elevated shadow" shadow={shadowSoftElevated}>
-            <Button className={c.trigger}>Soft Elevated</Button>
-          </Tooltip>
-          <Tooltip content="Sharp drop shadow" shadow={shadowSharpDrop}>
-            <Button className={c.trigger}>Sharp Drop</Button>
-          </Tooltip>
+          <div className="flex flex-wrap gap-3 rounded-cl-lg bg-white px-6 pt-14 pb-6">
+            <Tooltip content="Custom blue glow shadow" shadow={shadowBlueGlow}>
+              <Button className={c.frameTrigger}>Blue Glow</Button>
+            </Tooltip>
+            <Tooltip content="Custom purple glow shadow" shadow={shadowPurpleGlow}>
+              <Button className={c.frameTrigger}>Purple Glow</Button>
+            </Tooltip>
+            <Tooltip content="Soft elevated shadow" shadow={shadowSoftElevated}>
+              <Button className={c.frameTrigger}>Soft Elevated</Button>
+            </Tooltip>
+            <Tooltip content="Sharp drop shadow" shadow={shadowSharpDrop}>
+              <Button className={c.frameTrigger}>Sharp Drop</Button>
+            </Tooltip>
+          </div>
         </DemoWrapper>
       </Section>
 
       {/* ─── Gradient Backgrounds ─────────────────────────────────────── */}
       <Section
         title="Gradient Backgrounds"
-        description="contentStyle carries the gradient. The arrow is a flat fill — arrowColor can only take one of the gradient's stops, so it matches at the end it is named after and not along the seam. A gradient surface and an arrow do not compose; the last example turns the arrow off instead."
+        description="contentStyle carries the gradient. Turn the arrow off with it: the arrow is a flat fill, so arrowColor can only take one of the gradient's stops and would match at one end and not along the seam. A gradient surface and an arrow do not compose."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <Tooltip
-            content="Purple gradient with arrow"
-            classes={{ content: contentClassNameGradient }}
-            contentStyle={gradientPurple}
-            arrowColor="#764ba2"
-          >
-            <Button className={c.trigger}>Purple Gradient</Button>
-          </Tooltip>
-          <Tooltip
-            content="Ocean breeze gradient"
-            classes={{ content: contentClassNameGradient }}
-            contentStyle={gradientGreen}
-            arrowColor="#38ef7d"
-          >
-            <Button className={c.trigger}>Green Gradient</Button>
-          </Tooltip>
-          <Tooltip
-            content="Sunset gradient tooltip"
-            classes={{ content: contentClassNameGradient }}
-            contentStyle={gradientPink}
-            arrowColor="#f5576c"
-          >
-            <Button className={c.trigger}>Pink Gradient</Button>
-          </Tooltip>
           <Tooltip
             content="Without arrow"
             classes={{ content: contentClassNameGradient }}

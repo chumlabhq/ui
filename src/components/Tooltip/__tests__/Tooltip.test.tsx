@@ -1582,9 +1582,16 @@ describe("Tooltip", () => {
         button.focus();
       });
 
-      await user.keyboard("{Escape}");
+      // Any key but Escape: while the tooltip is open it takes Escape at the
+      // window, ahead of everything (close-on-escape contract), so the child's
+      // handler sees Escape only once the tooltip has closed. The composition
+      // this test guards is that the child's own handler still runs.
+      await user.keyboard("a");
 
       expect(onKeyDown).toHaveBeenCalled();
+
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
     });
 
     it("calls child's onTouchStart and onTouchEnd in asChild mode", () => {

@@ -180,7 +180,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "text-area": 504,
   "time-picker": 871,
   "toast": 564,
-  "tooltip": 426,
+  // 426 -> 423, 2026-10-08: the three gradient-with-arrow examples were removed (an arrow cannot take a gradient).
+  "tooltip": 423,
 };
 
 /**

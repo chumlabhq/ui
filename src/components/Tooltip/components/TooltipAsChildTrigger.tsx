@@ -11,7 +11,6 @@ interface TooltipAsChildTriggerProps {
   onMouseLeave: () => void;
   onFocus: (e: React.FocusEvent) => void;
   onBlur: () => void;
-  onKeyDown: (e: React.KeyboardEvent) => void;
   onTouchStart: () => void;
   onTouchEnd: () => void;
   isOpen: boolean;
@@ -27,7 +26,6 @@ export function TooltipAsChildTrigger({
   onMouseLeave,
   onFocus,
   onBlur,
-  onKeyDown,
   onTouchStart,
   onTouchEnd,
   isOpen,
@@ -68,14 +66,6 @@ export function TooltipAsChildTrigger({
           (child.props.onBlur as ((e: React.FocusEvent) => void) | undefined)?.(
             e,
           );
-        },
-        onKeyDown: (e: React.KeyboardEvent) => {
-          onKeyDown(e);
-          (
-            child.props.onKeyDown as
-              | ((e: React.KeyboardEvent) => void)
-              | undefined
-          )?.(e);
         },
         onTouchStart: (e: React.TouchEvent) => {
           onTouchStart();

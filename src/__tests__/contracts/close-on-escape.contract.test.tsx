@@ -29,6 +29,7 @@ import * as lib from "../../index.js";
 import { ToastProvider, useToast } from "../../components/Toast/index.js";
 import { Modal } from "../../components/Modal/index.js";
 import { Drawer, DrawerBody } from "../../components/Drawer/index.js";
+import { Tooltip } from "../../components/Tooltip/index.js";
 import { componentNames } from "../../test/emittedAttributes.js";
 import { fixturesFor } from "../fixtures/index.js";
 import { fixtureSession } from "../fixtures/_act.contract.js";
@@ -352,6 +353,125 @@ describe("close-on-escape contract", () => {
       });
     }
   });
+});
+
+/**
+ * WCAG 1.4.13: content that appears on hover or focus can be dismissed without
+ * moving the pointer or the focus. Tooltip handled Escape on its trigger only,
+ * so a tooltip opened by hover, with focus anywhere else, ignored the key — and
+ * inside an open Modal the Modal's capture-phase listener took Escape first and
+ * closed the dialog under the tooltip.
+ */
+describe("Tooltip dismisses on Escape wherever focus is", () => {
+  const tip = () => screen.queryByRole("tooltip");
+  const Tipped = () => (
+    <Tooltip content="Tip text" delayDuration={0}>
+      <button>Has a tooltip</button>
+    </Tooltip>
+  );
+
+  it("closes a hover-opened tooltip while another button has focus", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(
+      <>
+        <button>Elsewhere</button>
+        <Tipped />
+      </>,
+    );
+    screen.getByRole("button", { name: "Elsewhere" }).focus();
+    await user.hover(screen.getByRole("button", { name: "Has a tooltip" }));
+    await settle();
+    expect(tip(), "hover did not open the tooltip").toBeInTheDocument();
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Elsewhere" }));
+    await user.keyboard("{Escape}");
+    await settle();
+    expect(tip(), "Escape left a hover-opened tooltip open while focus was elsewhere").not.toBeInTheDocument();
+  });
+
+  it("closes a hover-opened tooltip while nothing has focus", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<Tipped />);
+    await user.hover(screen.getByRole("button", { name: "Has a tooltip" }));
+    await settle();
+    expect(tip()).toBeInTheDocument();
+    expect(document.activeElement).toBe(document.body);
+    await user.keyboard("{Escape}");
+    await settle();
+    expect(tip(), "Escape left a hover-opened tooltip open with focus on body").not.toBeInTheDocument();
+  });
+
+  it("closes a focus-opened tooltip, as before", async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<Tipped />);
+    await user.tab();
+    await settle();
+    expect(tip(), "keyboard focus did not open the tooltip").toBeInTheDocument();
+    await user.keyboard("{Escape}");
+    await settle();
+    expect(tip()).not.toBeInTheDocument();
+    expect(document.activeElement, "focus left the trigger").toBe(screen.getByRole("button", { name: "Has a tooltip" }));
+  });
+
+  const HOSTS: Array<{ name: string; host: (onOpenChange: () => void, children: ReactNode) => ReactNode }> = [
+    {
+      name: "Modal",
+      host: (onOpenChange, children) => (
+        <Modal open onOpenChange={onOpenChange} disableAnimation title="Dialog">
+          {children}
+        </Modal>
+      ),
+    },
+    {
+      name: "Drawer",
+      host: (onOpenChange, children) => (
+        <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0}>
+          <DrawerBody>{children}</DrawerBody>
+        </Drawer>
+      ),
+    },
+  ];
+
+  for (const h of HOSTS) {
+    it(`inside an open ${h.name}: the first Escape closes only the tooltip, the second the ${h.name}`, async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const onOpenChange = vi.fn();
+      // Focus on another control inside the host, not on the trigger: a dialog
+      // focuses its first control on open, and if that is the trigger the old
+      // trigger-only handler happened to work.
+      render(
+        <>
+          {h.host(
+            onOpenChange,
+            <>
+              <button>Elsewhere</button>
+              <Tipped />
+            </>,
+          )}
+        </>,
+      );
+      screen.getByRole("button", { name: "Elsewhere" }).focus();
+      await user.hover(screen.getByRole("button", { name: "Has a tooltip" }));
+      await settle();
+      expect(tip(), `hover did not open the tooltip inside the ${h.name}`).toBeInTheDocument();
+      await user.keyboard("{Escape}");
+      await settle();
+      expect(tip(), "the first Escape left the tooltip open").not.toBeInTheDocument();
+      expect(onOpenChange, `the ${h.name} closed on the Escape that was the tooltip's`).not.toHaveBeenCalled();
+      await user.keyboard("{Escape}");
+      await settle();
+      expect(onOpenChange, `the second Escape did not reach the ${h.name}`).toHaveBeenCalledWith(false);
+    });
+
+    it(`with no tooltip open, Escape still closes the ${h.name}`, async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const onOpenChange = vi.fn();
+      render(<>{h.host(onOpenChange, <Tipped />)}</>);
+      expect(tip()).not.toBeInTheDocument();
+      await user.keyboard("{Escape}");
+      await settle();
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+  }
 });
 
 void createElement;

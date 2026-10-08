@@ -371,19 +371,25 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       setOpen(false);
     }, [setOpen]);
 
-    const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent) => {
-        if (event.key === "Escape" && isOpen) {
-          // stopPropagation prevents Escape from bubbling up and dismissing
-          // an enclosing Modal / Drawer / Dropdown when the user only meant
-          // to close this tooltip.
-          event.stopPropagation();
-          event.preventDefault();
-          setOpen(false);
-        }
-      },
-      [isOpen, setOpen],
-    );
+    // Escape dismisses an open tooltip wherever focus is (WCAG 1.4.13), and only
+    // the tooltip. This was a handler on the trigger, so a tooltip opened by hover
+    // with focus anywhere else ignored the key, and inside an open Modal the
+    // Modal's capture listener on document closed the dialog first. Listening on
+    // window in the capture phase runs ahead of every document listener, and
+    // stopping the key there keeps the Modal or Drawer under the tooltip, and a
+    // toast under that, from seeing it. Only while open: a closed tooltip lets
+    // Escape through to whatever is underneath.
+    useEffect(() => {
+      if (!isOpen || !isBrowser) return;
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        event.stopPropagation();
+        setOpen(false);
+      };
+      window.addEventListener("keydown", handleEscape, true);
+      return () => window.removeEventListener("keydown", handleEscape, true);
+    }, [isOpen, setOpen]);
 
     const computedMaxWidth =
       typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
@@ -575,7 +581,6 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onMouseLeave={handleMouseLeave}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           isOpen={isOpen}
@@ -598,7 +603,6 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onMouseLeave={handleMouseLeave}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           tabIndex={triggerIsInteractive ? undefined : 0}
