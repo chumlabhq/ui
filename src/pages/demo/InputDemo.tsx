@@ -213,7 +213,7 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 const getClasses = (dark: boolean) => ({
   input: {
     root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-    input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
+    input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:[color-scheme:dark]`,
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
     description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
     prefix: `text-sm select-none text-cl-text-tertiary`,
@@ -225,7 +225,7 @@ const getClasses = (dark: boolean) => ({
      keys — Input has no such slots, and passing them there styled
      nothing. */
   inputExtra: {
-    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
   },
   /* The one native field this page renders, for the InputLabel section where
      pairing with a non-Chumlab control is the point. Written once rather than
@@ -239,7 +239,7 @@ const getClasses = (dark: boolean) => ({
   iconHover: dark
     ? "text-cl-text-tertiary hover:text-cl-text-secondary"
     : "text-cl-text-tertiary hover:text-cl-text-secondary",
-  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent/10 text-cl-text ring-1 ring-inset ring-cl-accent/10 dark:bg-cl-accent/10 dark:text-cl-accent dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
+  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent-bg text-cl-accent-hover ring-1 ring-inset ring-cl-accent/10 dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
@@ -950,7 +950,7 @@ const InputDemo = () => {
                       } else if (lbl === "Get Value")
                         setRefReadValue(JSON.stringify(inputRef.current?.value));
                     }}
-                    className="rounded-cl-md bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6"
+                    className="rounded-cl-md bg-cl-text/4 text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6"
                   >
                     {lbl}
                   </Button>
@@ -1020,7 +1020,7 @@ const InputDemo = () => {
                 [
                   [
                     "Pill shape",
- `px-5 py-2.5 rounded-full gap-2.5 transition-all duration-150 border border-cl-border bg-cl-bg-hover shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus focus-within:bg-cl-bg-elevated dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+ `px-5 py-2.5 rounded-full gap-2.5 transition-all duration-150 border border-cl-text/10 bg-cl-text/4 shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus focus-within:bg-cl-bg-elevated dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
                     "Search...",
                     <SearchIcon className={c.icon} />,
                   ],
@@ -1032,7 +1032,7 @@ const InputDemo = () => {
                   ],
                   [
                     "Purple accent",
-                    `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25 dark:focus-within:border-cl-border-input-focus`,
+                    `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25`,
                     "Purple theme...",
                     undefined,
                   ],
@@ -1053,7 +1053,7 @@ const InputDemo = () => {
                   ],
                   [
                     "Large size",
-                    `px-4 py-4 rounded-cl-lg border gap-3 transition-all duration-150 border-cl-border bg-white shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30`,
+                    `px-4 py-4 rounded-cl-lg border gap-3 transition-all duration-150 border-cl-text/10 bg-cl-bg-input shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30`,
                     "Large input...",
                     undefined,
                   ],

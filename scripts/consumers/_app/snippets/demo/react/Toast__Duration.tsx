@@ -6,7 +6,7 @@ function ToastTrigger() {
   return (
     <>
       <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
         onClick={
           () =>
           toast.info("Quick notification", {
@@ -18,7 +18,7 @@ function ToastTrigger() {
         2 Seconds
       </Button>
       <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
         onClick={
           () =>
           toast.info("Standard notification", {
@@ -30,7 +30,7 @@ function ToastTrigger() {
         5 Seconds (default)
       </Button>
       <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
         onClick={
           () =>
           toast.info("Long notification", {
@@ -42,7 +42,7 @@ function ToastTrigger() {
         10 Seconds
       </Button>
       <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border-input text-cl-text hover:bg-cl-bg-hover"
         onClick={
           () =>
           toast.info("Persistent notification", {

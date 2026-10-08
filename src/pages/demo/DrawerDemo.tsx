@@ -443,7 +443,7 @@ const DrawerDemo = () => {
               {Array.from({ length: 20 }).map((_, i) => (
                 <p
                   key={i}
-                  className={`text-sm py-2 border-b border-cl-border text-cl-text-tertiary dark:border dark:border-cl-border dark:text-cl-text-tertiary`}
+                  className={`text-sm py-2 border-b border-cl-border text-cl-text-tertiary dark:border`}
                 >
                   Item {i + 1} — scroll to see more content
                 </p>
@@ -588,12 +588,12 @@ const DrawerDemo = () => {
               className={`flex items-center justify-between px-5 py-4 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`}
             >
               <h2
-                className={`text-lg font-semibold text-cl-accent dark:text-cl-accent`}
+                className={`text-lg font-semibold text-cl-accent`}
               >
                 Custom Classes
               </h2>
               <DrawerCloseButton
-                className={`p-2 rounded-cl-md text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/10`}
+                className={`p-2 rounded-cl-md text-cl-accent hover:bg-cl-accent/10`}
               >
                 <CloseIcon />
               </DrawerCloseButton>

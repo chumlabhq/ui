@@ -75,7 +75,7 @@ export default function TabPanelExample() {
         {
           root: "w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20",
           list: "inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60",
-          item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+          item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
           content: "p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated"
         }
       }

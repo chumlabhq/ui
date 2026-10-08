@@ -20,7 +20,7 @@ import {
 const getClasses = (_dark: boolean) => ({
   otp: {
     group: "flex items-center gap-2",
-    input: `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20 dark:disabled:opacity-50 dark:disabled:cursor-not-allowed data-[error]:border-cl-error data-[valid]:border-cl-success`,
+    input: `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-2 dark:disabled:opacity-50 dark:disabled:cursor-not-allowed data-[error]:border-cl-error data-[valid]:border-cl-success`,
     label: `block text-sm font-medium mb-2 text-cl-text-secondary`,
     separator: `text-lg select-none text-cl-text-tertiary`,
   } satisfies OtpInputClasses,
@@ -189,7 +189,7 @@ const OtpInputDemo = () => {
           <OtpInput onComplete={(val) => setCompleted(val)} classes={c.otp} />
           {completed && (
             <div
-              className={`mt-3 px-3 py-2 rounded-cl-md text-sm font-mono bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/30 dark:text-cl-success dark:border dark:border-cl-success`}
+              className={`mt-3 px-3 py-2 rounded-cl-md text-sm font-mono bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/30 dark:text-cl-success dark:border`}
               data-demo-action
             >
               Completed: {completed}
@@ -421,7 +421,7 @@ const OtpInputDemo = () => {
                     : dark
                       ? "border-cl-border bg-cl-bg-elevated text-cl-text"
                       : "border-cl-border-input bg-white text-cl-text"
-                } focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`}
+                } focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:focus:ring-2`}
               />
             )}
             classes={{ control: "flex items-center gap-3" }}
@@ -444,7 +444,7 @@ const OtpInputDemo = () => {
                 length={4}
                 classes={{
                   ...c.otp,
-                  input: `w-14 h-14 text-center text-xl font-bold rounded-full border-2 transition-all focus:outline-none bg-white border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`,
+                  input: `w-14 h-14 text-center text-xl font-bold rounded-full border-2 transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:focus:ring-2`,
                 }}
               />
             </DemoWrapper>
@@ -457,7 +457,7 @@ const OtpInputDemo = () => {
                 classes={{
                   ...c.otp,
                   control: "flex items-center gap-1.5",
- input: `w-9 h-9 text-center text-sm font-semibold rounded-cl-md transition-all focus:outline-none bg-white border border-cl-border text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`,
+ input: `w-9 h-9 text-center text-sm font-semibold rounded-cl-md transition-all focus:outline-none bg-cl-bg-panel border border-cl-border text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:border dark:focus:ring-2`,
                 }}
               />
             </DemoWrapper>
@@ -472,7 +472,7 @@ const OtpInputDemo = () => {
                 classes={{
                   ...c.otp,
                   control: "flex items-center gap-3",
-                  input: `w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none focus-visible:ring-0 border-cl-border-input text-cl-text focus:border-cl-border-input-focus dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus`,
+                  input: `w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none focus-visible:ring-0 border-cl-border-input text-cl-text focus:border-cl-border-input-focus`,
                 }}
               />
             </DemoWrapper>
@@ -533,10 +533,10 @@ const OtpInputDemo = () => {
           <OtpInput
             length={4}
             inputClassNames={[
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-error text-cl-error focus:border-cl-error focus:ring-2 focus:ring-cl-error/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-error dark:text-cl-error dark:focus:border-cl-error dark:focus:ring-2 dark:focus:ring-cl-error/20`,
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-warning text-cl-warning focus:border-cl-warning focus:ring-2 focus:ring-cl-warning/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-warning dark:text-cl-warning dark:focus:border-cl-warning dark:focus:ring-2 dark:focus:ring-cl-warning/20`,
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-success text-cl-success focus:border-cl-success focus:ring-2 focus:ring-cl-success/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-success dark:text-cl-success dark:focus:border-cl-success dark:focus:ring-2 dark:focus:ring-cl-success/20`,
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-border-input-focus text-cl-accent focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus dark:text-cl-accent dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-error text-cl-error focus:border-cl-error focus:ring-2 focus:ring-cl-error/20 dark:border dark:focus:ring-2`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-warning text-cl-warning focus:border-cl-warning focus:ring-2 focus:ring-cl-warning/20 dark:border dark:focus:ring-2`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-success text-cl-success focus:border-cl-success focus:ring-2 focus:ring-cl-success/20 dark:border dark:focus:ring-2`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input-focus text-cl-accent focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:border dark:focus:ring-2`,
             ]}
             classes={{ control: "flex items-center gap-2" }}
           />

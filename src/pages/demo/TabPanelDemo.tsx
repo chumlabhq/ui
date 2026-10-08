@@ -445,7 +445,7 @@ const TabPanelDemo = () => {
               root: "w-full",
               list: `flex items-center border-b border-cl-border`,
               item: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
- content: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-white dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
+ content: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-cl-bg-panel dark:border`,
             }}
           >
             <div className={c.content}>
@@ -523,7 +523,7 @@ const TabPanelDemo = () => {
             iconPosition="right"
             classes={{
               ...c.tabs.pill,
-              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
           >
             <div className={c.content}>
@@ -719,7 +719,7 @@ const TabPanelDemo = () => {
             classes={{
               root: `w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20`,
               list: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60`,
-              item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
               content: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`,
             }}
           >
@@ -889,7 +889,7 @@ const TabPanelDemo = () => {
               </TabPanel>
             ) : (
               <div
-                className={`p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary dark:border dark:border-cl-border dark:text-cl-text-secondary`}
+                className={`p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary dark:border`}
               >
                 No tabs. Click &quot;Add Tab&quot; to create one.
               </div>
@@ -1005,7 +1005,7 @@ const TabPanelDemo = () => {
             onValueChange={setRenderFnTab}
             classes={{
               ...c.tabs.pill,
-              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
           >
             {(tab) => (
@@ -1036,7 +1036,7 @@ const TabPanelDemo = () => {
             onValueChange={setRenderTabTab}
             classes={{
               ...c.tabs.pill,
-              item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-white dark:data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
+              item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text dark:data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",
             }}
             renderTab={(props, defaultElement) => (
               <div key={props.tab.id} className="relative">
@@ -1115,13 +1115,13 @@ const TabPanelDemo = () => {
         <div className={c.note}>
           <strong>Note:</strong> The ID is auto-generated via{" "}
           <code
-            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border dark:text-cl-text-secondary`}
+            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text-chrome dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border`}
           >
             useId()
           </code>{" "}
           if not provided. Use the{" "}
           <code
-            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border dark:text-cl-text-secondary`}
+            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text-chrome dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border`}
           >
             id
           </code>{" "}

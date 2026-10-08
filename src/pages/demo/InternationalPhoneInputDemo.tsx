@@ -100,34 +100,34 @@ const getClasses = () => ({
   phone: {
     root: "flex flex-col gap-1",
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
-    input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]`,
     countrySelect: {
-             trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-white hover:bg-cl-bg-hover text-cl-text dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:hover:bg-cl-text/6 dark:text-cl-text-secondary`,
-             content: `w-72 rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-text/10`,
-             searchControl: `flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border dark:border-cl-text/10`,
-             searchInput: `flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary`,
+             trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-cl-bg-input hover:bg-cl-bg-hover text-cl-text-chrome dark:border dark:border-cl-text/10 dark:hover:bg-cl-text/6`,
+             content: `w-72 rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-text/10 dark:border`,
+             searchControl: `flex items-center gap-2 px-3 py-2 border-b border-cl-text/10 dark:border`,
+             searchInput: `flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white`,
              list: "max-h-60 overflow-y-auto",
-             item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/6 dark:data-[focused]:bg-cl-text/10 dark:text-cl-text-secondary`,
+             item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome dark:hover:bg-cl-text/6`,
              icon: "w-4 h-4 shrink-0 transition-transform duration-200",
-             itemIndicator: `w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent`,
+             itemIndicator: `w-4 h-4 shrink-0 text-cl-accent`,
              searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
              empty: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
            },
   } satisfies InternationalPhoneInputClasses,
   phoneError: {
-    input: `flex-1 h-10 px-3 rounded-cl-md border bg-cl-error/[0.04] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30 dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:focus:ring-2 dark:focus:ring-cl-error/30`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-cl-error/[0.04] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30 dark:text-white dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:focus:ring-2`,
                 countrySelect: {
-                  trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-error bg-cl-error/[0.04] hover:bg-cl-error/[0.08] text-cl-text dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:hover:bg-cl-error/[0.14] dark:text-cl-text-secondary`,
+                  trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-error bg-cl-error/[0.04] hover:bg-cl-error/[0.08] text-cl-text-chrome dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:hover:bg-cl-error/[0.14]`,
                 },
   },
   phoneSuccess: {
-    input: `flex-1 h-10 px-3 rounded-cl-md border bg-cl-success/[0.06] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-success focus:ring-2 focus:ring-cl-success/30 dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10] dark:focus:ring-2 dark:focus:ring-cl-success/30`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-cl-success/[0.06] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-success focus:ring-2 focus:ring-cl-success/30 dark:text-white dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10] dark:focus:ring-2`,
                   countrySelect: {
-                    trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-success bg-cl-success/[0.06] text-cl-text dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10] dark:text-cl-text-secondary`,
+                    trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-success bg-cl-success/[0.06] text-cl-text-chrome dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10]`,
                   },
   },
   phoneDisabled: {
-    input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm opacity-50 cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-secondary border-cl-border bg-cl-bg-hover dark:text-cl-text-tertiary dark:placeholder:text-cl-text-secondary dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm opacity-50 cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-secondary border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
                    countrySelect: {
                      trigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
                    },
@@ -147,7 +147,7 @@ const getClasses = () => ({
     root: "flex flex-col gap-1",
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
     control: `h-10 px-3 rounded-cl-md border bg-transparent transition-all duration-150 border-cl-border-input bg-white focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
-    input: `text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary`,
+    input: `text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white`,
   },
   resultBox: `rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
@@ -1012,9 +1012,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                     placeholder="Enter phone number"
                     classes={{
                       ...c.phone,
-                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50`,
+                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50`,
                                countrySelect: {
-                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-accent/10 data-[focused]:bg-cl-accent/10 text-cl-text dark:hover:bg-cl-accent/10 dark:data-[focused]:bg-cl-accent/15 dark:text-cl-text-secondary`,
+                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-accent/10 data-[focused]:bg-cl-accent/10 text-cl-text-chrome dark:data-[focused]:bg-cl-accent/15`,
                                  itemIndicator: `w-4 h-4 shrink-0 text-cl-accent`,
                                },
                     }}
@@ -1031,9 +1031,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                     placeholder="Enter phone number"
                     classes={{
                       ...c.phone,
-                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-success focus:border-cl-success dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-success/30 dark:focus:border-cl-success/50`,
+                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-success focus:border-cl-success dark:text-white dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-success/30 dark:focus:border-cl-success/50`,
                                countrySelect: {
-                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-success/15 data-[focused]:bg-cl-success/15 text-cl-text dark:hover:bg-cl-success/10 dark:data-[focused]:bg-cl-success/15 dark:text-cl-text-secondary`,
+                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-success/15 data-[focused]:bg-cl-success/15 text-cl-text-chrome dark:hover:bg-cl-success/10`,
                                  itemIndicator: `w-4 h-4 shrink-0 text-cl-success`,
                                },
                     }}
@@ -1050,10 +1050,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                     placeholder="Enter phone number"
                     classes={{
                       ...c.phone,
-                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-warning focus:border-cl-warning dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-warning/30 dark:focus:border-cl-warning/50`,
+                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-warning focus:border-cl-warning dark:text-white dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-warning/30 dark:focus:border-cl-warning/50`,
                                countrySelect: {
-                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-warning/15 data-[focused]:bg-cl-warning/15 text-cl-text dark:hover:bg-cl-warning/10 dark:data-[focused]:bg-cl-warning/15 dark:text-cl-text-secondary`,
-                                 itemIndicator: `w-4 h-4 shrink-0 text-cl-warning dark:text-cl-warning`,
+                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-warning/15 data-[focused]:bg-cl-warning/15 text-cl-text-chrome dark:hover:bg-cl-warning/10`,
+                                 itemIndicator: `w-4 h-4 shrink-0 text-cl-warning`,
                                },
                     }}
                   />

@@ -108,11 +108,11 @@ export default function CascadingDropdownExample() {
         }
         classes={
           {
-            searchControl: "flex items-center gap-2 px-3 py-2.5 border-b-2 border border-cl-border-input-focus bg-cl-accent/30 dark:border dark:border-cl-border-input-focus dark:bg-cl-bg-elevated/50",
+            searchControl: "flex items-center gap-2 px-3 py-2.5 border-b-2 border border-cl-border-input-focus bg-cl-accent/30 dark:border dark:bg-cl-bg-elevated/50",
             searchInput: "flex-1 bg-transparent text-sm focus:outline-none text-cl-text placeholder-teal-500/50 dark:text-white dark:placeholder-teal-400/60",
-            searchIcon: "w-5 h-5 shrink-0 text-cl-accent dark:text-cl-accent",
+            searchIcon: "w-5 h-5 shrink-0 text-cl-accent",
             subSearchControl: "flex items-center gap-1.5 mx-2 my-1.5 px-2.5 py-1 rounded-full bg-cl-accent/10 ring-1 ring-cl-accent dark:bg-cl-accent/30 dark:ring-1 dark:ring-cl-accent/20",
-            subSearchInput: "flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-teal-500/60 dark:text-cl-accent dark:placeholder-teal-400/50",
+            subSearchInput: "flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-teal-500/60 dark:placeholder-teal-400/50",
             subSearchIcon: "w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/70"
           }
         }

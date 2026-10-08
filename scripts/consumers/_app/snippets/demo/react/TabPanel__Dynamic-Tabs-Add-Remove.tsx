@@ -167,7 +167,7 @@ export default function TabPanelExample() {
           </TabPanel>
         ) : (
           <div
-            className="p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary dark:border dark:border-cl-border dark:text-cl-text-secondary"
+            className="p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary dark:border"
           >
             No tabs. Click &quot;Add Tab&quot; to create one.
           </div>

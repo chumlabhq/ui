@@ -60,7 +60,7 @@ export default function ResizablePanelExample() {
         </div>
       </ResizablePanel>
       <div
-        className="flex-1 p-4 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border"
+        className="flex-1 p-4 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border"
       >
         <p className="font-medium text-cl-text">Main Content</p>
         <p className="text-sm mt-2 text-cl-text-secondary">

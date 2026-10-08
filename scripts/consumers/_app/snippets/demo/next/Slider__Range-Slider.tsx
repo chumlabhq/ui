@@ -24,13 +24,13 @@ export default function SliderExample() {
       <div className="text-sm text-cl-text-secondary">
         Range:
         <span
-          className="inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:border dark:border-cl-text/10"
+          className="inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text-chrome border border-cl-text/10 dark:bg-cl-bg-elevated dark:border"
         >
           {(range as [number, number])[0]}
         </span>
         –
         <span
-          className="inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:border dark:border-cl-text/10"
+          className="inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text-chrome border border-cl-text/10 dark:bg-cl-bg-elevated dark:border"
         >
           {(range as [number, number])[1]}
         </span>

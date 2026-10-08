@@ -19,7 +19,7 @@ export default function SliderExample() {
               range: "rounded-full bg-cl-accent",
               thumb: "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-white dark:focus-visible:ring-offset-cl-bg"
             }),
-                            thumb: "absolute rounded-cl-md bg-cl-accent shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg"
+                            thumb: "absolute rounded-cl-md bg-cl-accent shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-cl-bg"
                           }
           }
         />
@@ -38,7 +38,7 @@ export default function SliderExample() {
               range: "rounded-full bg-cl-accent",
               thumb: "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-white dark:focus-visible:ring-offset-cl-bg"
             }),
-                            track: "rounded-full h-3 bg-cl-bg-hover dark:bg-cl-bg-hover",
+                            track: "rounded-full h-3 bg-cl-bg-hover",
                             range: "rounded-full bg-gradient-to-r from-cl-accent/150 to-cl-accent",
                             control: "relative select-none touch-none py-1"
                           }

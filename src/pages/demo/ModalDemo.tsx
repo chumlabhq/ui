@@ -225,8 +225,8 @@ const ModalDemo = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <div>
-                  <p className={`text-sm font-medium text-cl-error dark:text-cl-error`}>What will be deleted:</p>
-                  <ul className={`text-xs mt-1.5 space-y-1 text-cl-error/80 dark:text-cl-error/80`}>
+                  <p className={`text-sm font-medium text-cl-error`}>What will be deleted:</p>
+                  <ul className={`text-xs mt-1.5 space-y-1 text-cl-error/80`}>
                     <li>12 pages and all content</li>
                     <li>3 team members will lose access</li>
                     <li>Connected analytics data</li>
@@ -238,7 +238,7 @@ const ModalDemo = () => {
             <div className="flex w-full gap-3">
               <Button className={`flex-1 ${c.btn} cursor-pointer`} onClick={() => setConfirmDeleteOpen(false)}>Keep Project</Button>
               <Button
-                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:bg-cl-error dark:hover:bg-cl-error/30 cursor-pointer`}
+                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:hover:bg-cl-error/30 cursor-pointer`}
                 onClick={() => setConfirmDeleteOpen(false)}
               >
                 Yes, Delete
@@ -267,7 +267,7 @@ const ModalDemo = () => {
             <p className={`text-sm mb-5 text-cl-text-secondary`}>Your order has been confirmed and is being processed.</p>
 
             {/* Order details card */}
-   <div className={`w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover dark:border dark:border-cl-border dark:divide-border-faint dark:bg-cl-bg-elevated/50`}>
+   <div className={`w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover dark:border dark:bg-cl-bg-elevated/50`}>
               <div className="flex items-center justify-between px-4 py-3">
                 <span className={`text-sm text-cl-text-secondary`}>Order</span>
                 <span className={`text-sm font-mono font-medium text-cl-text`}>#ORD-2024-8847</span>
@@ -285,7 +285,7 @@ const ModalDemo = () => {
             <div className="flex w-full gap-3">
               <Button className={`flex-1 ${c.btn} cursor-pointer`} onClick={() => setSuccessOpen(false)}>View Order</Button>
               <Button
-                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:bg-cl-success dark:hover:bg-cl-success/30 cursor-pointer`}
+                className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:hover:bg-cl-success/30 cursor-pointer`}
                 onClick={() => setSuccessOpen(false)}
               >
                 Continue Shopping
@@ -325,7 +325,7 @@ const ModalDemo = () => {
               {["Unlimited projects", "Advanced analytics", "Priority support", "API access"].map((feature, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <div className={`flex h-5 w-5 items-center justify-center rounded-full bg-cl-accent/10 dark:bg-cl-accent/40`}>
-                    <svg className={`h-3 w-3 text-cl-accent dark:text-cl-accent`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className={`h-3 w-3 text-cl-accent`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
@@ -346,7 +346,7 @@ const ModalDemo = () => {
             </Button>
             <button
               onClick={() => setUpgradeOpen(false)}
-              className={`w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text cursor-pointer`}
+              className={`w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text cursor-pointer`}
             >
               Maybe later
             </button>
@@ -841,11 +841,11 @@ const ModalDemo = () => {
             <div className={`p-4 rounded-cl-md border bg-cl-accent/10 border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus/40`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className={`font-medium text-cl-accent dark:text-cl-accent`}>Team Members</p>
+                  <p className={`font-medium text-cl-accent`}>Team Members</p>
                   <p className={`text-sm text-cl-accent`}>5 members with access</p>
                 </div>
                 <Button
-                  className={`px-3 py-1.5 text-cl-on-accent text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90 cursor-pointer`}
+                  className={`px-3 py-1.5 text-cl-on-accent text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 cursor-pointer`}
                   onClick={() => setNestedLevel2Open(true)}
                 >
                   Manage
@@ -903,7 +903,7 @@ const ModalDemo = () => {
                 </div>
               ))}
             </div>
-            <Button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border dark:border-cl-border dark:text-cl-text-tertiary dark:hover:border-cl-border-input-focus dark:hover:text-cl-accent cursor-pointer`}>
+            <Button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border cursor-pointer`}>
               <svg
                 className="h-5 w-5"
                 fill="none"

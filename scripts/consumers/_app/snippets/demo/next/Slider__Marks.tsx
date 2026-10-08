@@ -117,7 +117,7 @@ export default function SliderExample() {
               range: "rounded-full bg-cl-accent",
               thumb: "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-white dark:focus-visible:ring-offset-cl-bg"
             }),
-                            marker: "rounded-full bg-cl-bg-hover dark:bg-cl-text/10"
+                            marker: "rounded-full bg-cl-bg-hover"
                           }
           }
         />

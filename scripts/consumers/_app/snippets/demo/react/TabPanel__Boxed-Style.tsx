@@ -19,7 +19,7 @@ export default function TabPanelExample() {
                      root: "w-full",
                      list: "flex items-center border-b border-cl-border",
                      item: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
-        content: "p-4 border-t-0 rounded-b-lg border border-cl-border bg-white dark:border dark:border-cl-border dark:bg-cl-bg-elevated"
+        content: "p-4 border-t-0 rounded-b-lg border border-cl-border bg-cl-bg-panel dark:border"
                    }
       }
     >

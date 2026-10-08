@@ -177,15 +177,15 @@ const base =
   "cursor-pointer font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none";
 
 const getClasses = (_dark: boolean) => ({
-  primary: `${base} rounded-cl-lg shadow-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90 dark:active:bg-cl-accent/80 dark:shadow-accent/20 dark:hover:shadow-accent/30 dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
-  secondary: `${base} rounded-cl-lg bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover active:bg-cl-bg-hover ring-1 ring-inset ring-border-soft shadow-sm shadow-black/[0.04] hover:shadow focus-visible:ring-border-active dark:bg-cl-text/8 dark:text-cl-text dark:hover:bg-cl-text/[0.14] dark:active:bg-cl-text/6 dark:ring-1 dark:ring-inset dark:ring-cl-text/[0.1] dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
-  outline: `${base} rounded-cl-lg border border-cl-border text-cl-text hover:bg-cl-bg-hover active:bg-cl-bg-hover shadow-sm shadow-black/[0.03] hover:border-cl-border-input focus-visible:ring-border-active dark:border dark:border-cl-text/15 dark:text-cl-text dark:hover:bg-cl-text/6 dark:active:bg-cl-text/4 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
-  ghost: `${base} px-4 py-2.5 rounded-cl-lg text-cl-text-secondary hover:bg-cl-bg-hover active:bg-cl-bg-hover focus-visible:ring-border-active dark:text-cl-text-secondary dark:hover:bg-cl-text/8 dark:active:bg-cl-text/4 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
-  danger: `${base} px-4 py-2.5 rounded-cl-lg shadow-md bg-cl-error text-cl-bg hover:bg-cl-error/30 active:bg-cl-error shadow-danger/20 hover:shadow-lg hover:shadow-danger/25 focus-visible:ring-cl-error dark:bg-cl-error dark:text-cl-bg dark:hover:bg-cl-error/30 dark:active:bg-cl-error dark:shadow-danger/20 dark:hover:shadow-danger/30 dark:focus-visible:ring-cl-error dark:focus-visible:ring-offset-cl-bg`,
-  success: `${base} px-4 py-2.5 rounded-cl-lg shadow-md bg-cl-success text-cl-bg hover:bg-cl-success/30 active:bg-cl-success shadow-success/20 hover:shadow-lg hover:shadow-success/25 focus-visible:ring-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success/30 dark:active:bg-cl-success dark:shadow-success/20 dark:hover:shadow-success/30 dark:focus-visible:ring-cl-success dark:focus-visible:ring-offset-cl-bg`,
-  link: `cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
-  text: `cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text`,
-  iconOnly: `${base} p-2.5 rounded-cl-lg text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover active:bg-cl-bg-hover shadow-sm shadow-black/[0.03] ring-1 ring-inset ring-border-soft hover:ring-border-soft focus-visible:ring-border-active dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-text/8 dark:active:bg-cl-text/4 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
+  primary: `${base} rounded-cl-lg shadow-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent dark:shadow-accent/20 focus-visible:ring-offset-cl-bg`,
+  secondary: `${base} rounded-cl-lg bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover active:bg-cl-bg-hover ring-1 ring-inset ring-border-soft shadow-sm shadow-black/[0.04] hover:shadow focus-visible:ring-border-active dark:bg-cl-text/8 dark:hover:bg-cl-text/[0.14] dark:active:bg-cl-text/6 dark:ring-1 dark:ring-inset dark:ring-cl-text/[0.1] focus-visible:ring-offset-cl-bg`,
+  outline: `${base} rounded-cl-lg border border-cl-border text-cl-text hover:bg-cl-bg-hover active:bg-cl-text/4 shadow-sm shadow-black/[0.03] hover:border-cl-border-input focus-visible:ring-border-active dark:border dark:border-cl-text/15 dark:hover:bg-cl-text/6 focus-visible:ring-offset-cl-bg`,
+  ghost: `${base} px-4 py-2.5 rounded-cl-lg text-cl-text-secondary hover:bg-cl-bg-hover active:bg-cl-text/4 focus-visible:ring-border-active dark:hover:bg-cl-text/8 focus-visible:ring-offset-cl-bg`,
+  danger: `${base} px-4 py-2.5 rounded-cl-lg shadow-md bg-cl-error text-cl-bg hover:bg-cl-error/30 active:bg-cl-error shadow-danger/20 hover:shadow-lg hover:shadow-danger/25 focus-visible:ring-cl-error dark:hover:shadow-danger/30 focus-visible:ring-offset-cl-bg`,
+  success: `${base} px-4 py-2.5 rounded-cl-lg shadow-md bg-cl-success text-cl-bg hover:bg-cl-success/30 active:bg-cl-success shadow-success/20 hover:shadow-lg hover:shadow-success/25 focus-visible:ring-cl-success dark:hover:shadow-success/30 focus-visible:ring-offset-cl-bg`,
+  link: `cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent dark:hover:underline focus-visible:ring-offset-cl-bg`,
+  text: `cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text`,
+  iconOnly: `${base} p-2.5 rounded-cl-lg text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover active:bg-cl-text/4 shadow-sm shadow-black/[0.03] ring-1 ring-inset ring-border-soft hover:ring-border-soft focus-visible:ring-border-active dark:hover:bg-cl-text/8 focus-visible:ring-offset-cl-bg`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -308,7 +308,7 @@ const ButtonDemo = () => {
             aria-label="Delete"
           />
           <Button
-            className={`${c.iconOnly} bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90 text-cl-on-accent`}
+            className={`${c.iconOnly} bg-cl-accent hover:bg-cl-accent/90 text-cl-on-accent`}
             startIcon={<CheckIcon />}
             aria-label="Confirm"
           />

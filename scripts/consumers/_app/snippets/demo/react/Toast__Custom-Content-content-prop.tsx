@@ -7,7 +7,7 @@ function ToastTrigger() {
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-wrap gap-4">
         <Button
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
           onClick={
             () =>
             toast.toast({
@@ -37,7 +37,7 @@ function ToastTrigger() {
           With Action Buttons
         </Button>
         <Button
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success"
           onClick={
             () =>
             toast.toast({
@@ -62,7 +62,7 @@ function ToastTrigger() {
           Custom Layout
         </Button>
         <Button
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border-input text-cl-text hover:bg-cl-bg-hover"
           onClick={
             () =>
             toast.toast({

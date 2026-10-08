@@ -25,7 +25,7 @@ function ToastTrigger() {
               className={
                 position === pos
                 ? "rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
-                : "rounded-cl-md bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
+                : "rounded-cl-md bg-cl-bg-panel border border-cl-border-input text-cl-text hover:bg-cl-bg-hover"
               }
               onClick={() => setPosition(pos)}
             >
@@ -42,7 +42,7 @@ function ToastTrigger() {
         </strong>
       </p>
       <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90 self-start"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 self-start"
         onClick={
           () =>
           toast.info(`Toast at ${position}`, {

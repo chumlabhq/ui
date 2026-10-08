@@ -13,10 +13,10 @@ export default function TimePickerExample() {
         classes={
           {
             root: "inline-flex flex-col gap-1",
-            trigger: "flex items-center gap-2 px-3 py-2 border-2 border-dashed rounded-cl-lg border-cl-border-input-focus bg-cl-accent/10 text-cl-text dark:border dark:border-cl-border-input-focus dark:bg-cl-bg dark:text-cl-text",
+            trigger: "flex items-center gap-2 px-3 py-2 border-2 border-dashed rounded-cl-lg border-cl-border-input-focus bg-cl-accent/10 text-cl-text dark:border dark:bg-cl-bg",
             input: "bg-transparent outline-none text-sm flex-1",
             icon: "w-4 h-4 text-cl-accent",
-            clockContent: "p-4 border-2 border-dashed rounded-cl-lg border-cl-border-input-focus bg-cl-accent/10 dark:border dark:border-cl-border-input-focus dark:bg-cl-bg",
+            clockContent: "p-4 border-2 border-dashed rounded-cl-lg border-cl-border-input-focus bg-cl-accent/10 dark:border dark:bg-cl-bg",
             clockDisplay: "flex items-center justify-center gap-1 mb-4",
             clockHours: "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer text-cl-text-secondary",
             clockMinutes: "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer text-cl-text-secondary",

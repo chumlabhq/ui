@@ -74,7 +74,7 @@ export default function DrawerExample() {
               Array.from({ length: 20 }).map((_, i) => (
                 <p
                   key={i}
-                  className="text-sm py-2 border-b border-cl-border text-cl-text-tertiary dark:border dark:border-cl-border dark:text-cl-text-tertiary"
+                  className="text-sm py-2 border-b border-cl-border text-cl-text-tertiary dark:border"
                 >
                   Item
                   {i + 1}

@@ -9,7 +9,7 @@ export default function CountryFlagExample() {
           {
             root: "flex items-center -space-x-1.5",
             item: "rounded-[3px] outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base",
-            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base"
+            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:outline dark:outline-[1.5px] dark:outline-bg-base"
           }
         }
       >
@@ -25,7 +25,7 @@ export default function CountryFlagExample() {
           {
             root: "flex items-center -space-x-1.5",
             item: "rounded-[3px] outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base",
-            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base"
+            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:outline dark:outline-[1.5px] dark:outline-bg-base"
           }
         }
       >
@@ -43,7 +43,7 @@ export default function CountryFlagExample() {
           {
             root: "flex items-center -space-x-1.5",
             item: "rounded-[3px] outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base",
-            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base"
+            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:outline dark:outline-[1.5px] dark:outline-bg-base"
           }
         }
       >
@@ -77,7 +77,7 @@ export default function CountryFlagExample() {
           {
             root: "flex items-center -space-x-1.5",
             item: "rounded-[3px] outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base",
-            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base"
+            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:outline dark:outline-[1.5px] dark:outline-bg-base"
           }
         }
         renderSurplus={
@@ -102,10 +102,10 @@ export default function CountryFlagExample() {
                           ...({
             root: "flex items-center -space-x-1.5",
             item: "rounded-[3px] outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base",
-            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base"
+            count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:outline dark:outline-[1.5px] dark:outline-bg-base"
           }),
                           item: "rounded outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base",
-                          count: `${"shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base"} text-xs rounded`
+                          count: `${"shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:outline dark:outline-[1.5px] dark:outline-bg-base"} text-xs rounded`
                         }
         }
       >

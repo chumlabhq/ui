@@ -9,7 +9,7 @@ function ToastTrigger() {
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-wrap gap-3">
         <Button
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
           onClick={
             () => {
               toastIdRef.current = toast.info("Persistent toast", {
@@ -22,7 +22,7 @@ function ToastTrigger() {
           Create Tracked Toast
         </Button>
         <Button
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
+          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border-input text-cl-text hover:bg-cl-bg-hover"
           onClick={
             () => {
               if (toastIdRef.current) {

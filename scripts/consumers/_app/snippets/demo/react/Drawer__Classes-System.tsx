@@ -56,11 +56,9 @@ export default function DrawerExample() {
           <DrawerHeader
             className="flex items-center justify-between px-5 py-4 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20"
           >
-            <h2 className="text-lg font-semibold text-cl-accent dark:text-cl-accent">
-              Custom Classes
-            </h2>
+            <h2 className="text-lg font-semibold text-cl-accent">Custom Classes</h2>
             <DrawerCloseButton
-              className="p-2 rounded-cl-md text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/10"
+              className="p-2 rounded-cl-md text-cl-accent hover:bg-cl-accent/10"
             >
               <CloseIcon />
             </DrawerCloseButton>

@@ -12,7 +12,7 @@ const sidebarContent = () => (
         {["Dashboard", "Projects", "Team", "Settings"].map((item) => (
           <div
             key={item}
-            className={"px-3 py-1.5 rounded-cl-md text-sm text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/4 cursor-pointer transition-colors"}
+            className={"px-3 py-1.5 rounded-cl-md text-sm text-cl-text-secondary hover:bg-cl-text/4 cursor-pointer transition-colors"}
           >
             {item}
           </div>

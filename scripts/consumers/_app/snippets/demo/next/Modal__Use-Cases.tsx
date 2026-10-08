@@ -90,10 +90,8 @@ export default function ModalExample() {
                 />
               </svg>
               <div>
-                <p className="text-sm font-medium text-cl-error dark:text-cl-error">
-                  What will be deleted:
-                </p>
-                <ul className="text-xs mt-1.5 space-y-1 text-cl-error/80 dark:text-cl-error/80">
+                <p className="text-sm font-medium text-cl-error">What will be deleted:</p>
+                <ul className="text-xs mt-1.5 space-y-1 text-cl-error/80">
                   <li>12 pages and all content</li>
                   <li>3 team members will lose access</li>
                   <li>Connected analytics data</li>
@@ -109,7 +107,7 @@ export default function ModalExample() {
               Keep Project
             </Button>
             <Button
-              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:bg-cl-error dark:hover:bg-cl-error/30 cursor-pointer"
+              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:hover:bg-cl-error/30 cursor-pointer"
               onClick={() => setConfirmDeleteOpen(false)}
             >
               Yes, Delete
@@ -151,7 +149,7 @@ export default function ModalExample() {
             Your order has been confirmed and is being processed.
           </p>
           <div
-            className="w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover dark:border dark:border-cl-border dark:divide-border-faint dark:bg-cl-bg-elevated/50"
+            className="w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover dark:border dark:bg-cl-bg-elevated/50"
           >
             <div className="flex items-center justify-between px-4 py-3">
               <span className="text-sm text-cl-text-secondary">Order</span>
@@ -174,7 +172,7 @@ export default function ModalExample() {
               View Order
             </Button>
             <Button
-              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:bg-cl-success dark:hover:bg-cl-success/30 cursor-pointer"
+              className="flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:hover:bg-cl-success/30 cursor-pointer"
               onClick={() => setSuccessOpen(false)}
             >
               Continue Shopping
@@ -213,7 +211,7 @@ export default function ModalExample() {
                     className="flex h-5 w-5 items-center justify-center rounded-full bg-cl-accent/10 dark:bg-cl-accent/40"
                   >
                     <svg
-                      className="h-3 w-3 text-cl-accent dark:text-cl-accent"
+                      className="h-3 w-3 text-cl-accent"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -246,7 +244,7 @@ export default function ModalExample() {
           </Button>
           <button
             onClick={() => setUpgradeOpen(false)}
-            className="w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text cursor-pointer"
+            className="w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text cursor-pointer"
           >
             Maybe later
           </button>

@@ -25,9 +25,9 @@ export default function BreadcrumbExample() {
       classes={
         { ...({
           list: "flex flex-wrap items-center gap-2",
-          item: "flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all cursor-pointer text-cl-text hover:text-cl-text bg-cl-bg-panel hover:bg-cl-bg-hover border border-cl-border dark:border-cl-text-tertiary hover:shadow-sm",
+          item: "flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all cursor-pointer text-cl-text hover:text-cl-text bg-cl-bg-panel hover:bg-cl-bg-hover border border-cl-border-input hover:shadow-sm",
           separator: "text-cl-text-secondary",
-          ellipsisTrigger: "flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text-secondary border border-cl-border dark:border-cl-text-tertiary hover:shadow-sm",
+          ellipsisTrigger: "flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text-secondary border border-cl-border-input hover:shadow-sm",
           content: "flex flex-col min-w-40 rounded-cl-lg shadow-lg py-2 bg-cl-bg-elevated border border-cl-border",
           collapsedItem: "flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent text-cl-text-secondary hover:bg-cl-bg-hover"
         }), itemIcon: "shrink-0" }

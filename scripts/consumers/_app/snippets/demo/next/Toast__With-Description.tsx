@@ -8,7 +8,7 @@ function ToastTrigger() {
   return (
     <>
       <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success"
         onClick={
           () =>
           toast.success("File uploaded", {
@@ -32,7 +32,7 @@ function ToastTrigger() {
         Error with Description
       </Button>
       <Button
-        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning"
+        className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning"
         onClick={
           () =>
           toast.warning("Session expiring", {

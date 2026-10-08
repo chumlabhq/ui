@@ -33,7 +33,7 @@ export default function BreadcrumbExample() {
               <span className="flex items-center gap-1.5">
                 Details{" "}
                 <span
-                  className={"inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-accent/10 text-cl-text dark:bg-cl-accent/20 dark:text-cl-accent"}
+                  className={"inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-accent-bg text-cl-accent-hover"}
                 >
                   New
                 </span>
@@ -46,9 +46,9 @@ export default function BreadcrumbExample() {
       classes={
         {
           list: "flex flex-wrap items-center gap-1",
-          item: "flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border border-none rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-bg-elevated",
+          item: "flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border border-none rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover",
           separator: "text-cl-text-tertiary",
-          link: "flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline"
+          link: "flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline dark:hover:underline"
         }
       }
       onItemClick={handleItemClick}

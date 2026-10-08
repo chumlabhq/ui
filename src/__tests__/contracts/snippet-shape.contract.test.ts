@@ -397,4 +397,48 @@ describe("snippet shape contract", () => {
         "harness — every line is being shown as the way to do it",
     ).toEqual([]);
   });
+  /**
+   * A snippet themes colour with tokens, not with `dark:` colour overrides.
+   *
+   * A token switches value under any dark strategy a consumer's Tailwind uses;
+   * a `dark:text-…` in a copied snippet works only if the consumer's `dark`
+   * variant is configured the way this site's is. The demo pages carried 1,082
+   * such overrides and the snippets 8,704 (one class bag repeats in many
+   * snippets). T1 removed the no-ops, replaced every pair a single token renders
+   * identically, and moved field borders, hover fills and accent chips onto
+   * the tokens built for them; what is left has no token that holds both
+   * values, and each kind is a token gap rather than a choice.
+   *
+   * Ratcheted both ways, like the class-literal baseline: a rise fails, and a
+   * fall fails until the record is lowered, so the gain cannot be spent later.
+   */
+  it("carries no more dark: colour overrides than recorded", () => {
+    /** 2026-10-09, T1: 8,704 -> 3,329. Lower it when the count falls. */
+    const RECORDED = 3329;
+    const COLOUR = /^(text|bg|border(-[trblxyse])?|ring|ring-offset|fill|stroke|from|via|to|shadow|outline|divide|placeholder|decoration)-(.+)$/;
+    const NOT_A_COLOUR = /^(\d|\[|px$|xs$|sm$|md$|lg$|xl$|\dxl$|left$|center$|right$|justify$|start$|end$|none$|inner$|solid$|dashed$|dotted$|double$|hidden$|collapse$|separate$|inset$|offset$|x$|y$|t$|r$|b$|l$|s$|e$|wrap$|nowrap$|balance$|pretty$|ellipsis$|clip$|base$|linear-|radial|conic|gradient-|wavy$|line$|through$|box$|opacity-|width-)/;
+    const isDarkColour = (token: string) => {
+      if (!token.includes("dark:")) return false;
+      const m = COLOUR.exec(token.split(":").pop()!.replace(/^!/, ""));
+      if (!m) return false;
+      const value = m[m.length - 1];
+      if (/^(ring|ring-offset|outline)$/.test(m[1]) && /^\d/.test(value)) return false;
+      return !NOT_A_COLOUR.test(value);
+    };
+    let count = 0;
+    for (const { code } of every) {
+      const sf = ts.createSourceFile("snippet.tsx", code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const visit = (node: ts.Node): void => {
+        if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node) || ts.isTemplateHead(node) || ts.isTemplateMiddle(node) || ts.isTemplateTail(node)) {
+          count += node.text.split(/\s+/).filter(isDarkColour).length;
+        }
+        ts.forEachChild(node, visit);
+      };
+      visit(sf);
+    }
+    console.log(`SNIPPET_DARK_COLOUR snippets=${every.length} count=${count} recorded=${RECORDED} ${count > RECORDED ? "ROSE" : count < RECORDED ? "FELL — lower the record" : "held"}`);
+    expect(every.length, "no snippet was read").toBeGreaterThan(0);
+    expect(count, "a snippet gained a `dark:` colour override — theme it with a token that switches per theme").toBeLessThanOrEqual(RECORDED);
+    expect(count, "the count fell: lower RECORDED to it, so the gain is kept").toBe(RECORDED);
+  });
 });

@@ -17,10 +17,10 @@ function getTableClasses(_dark: boolean) {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary bg-cl-bg-elevated border-cl-border dark:text-cl-text-tertiary dark:bg-cl-bg-elevated dark:border-cl-text/[0.06]",
+    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border dark:border-cl-text/[0.06]",
     body: "",
-    row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover",
-    selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15",
+    row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04]",
+    selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/15",
     cell: "px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text",
     empty: "flex items-center justify-center py-12 text-cl-text-secondary",
     pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
@@ -35,7 +35,7 @@ function getTableClasses(_dark: boolean) {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
+    pinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
     pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
@@ -204,7 +204,7 @@ export default function TableExample() {
           {
             ...s,
             ...s,
-            item: "border-b transition-colors border-cl-border hover:bg-cl-bg-hover [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cl-accent/10 [&[data-striped]]:to-transparent dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover dark:[&[data-striped]]:bg-gradient-to-r dark:[&[data-striped]]:from-cl-accent/0.04 dark:[&[data-striped]]:to-transparent"
+            item: "border-b transition-colors border-cl-border hover:bg-cl-bg-hover [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cl-accent/10 [&[data-striped]]:to-transparent dark:border-cl-text/[0.04] dark:[&[data-striped]]:bg-gradient-to-r dark:[&[data-striped]]:from-cl-accent/0.04"
           }
         }
       />

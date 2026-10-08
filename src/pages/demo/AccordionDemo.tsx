@@ -86,7 +86,7 @@ const getClasses = (dark: boolean) => ({
     item: dark
       ? "border-b border-cl-border last:border-b-0"
       : "border-b border-cl-border last:border-b-0",
-    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent dark:text-cl-text dark:hover:bg-cl-bg-elevated dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
+    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
     icon: `h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
   } satisfies AccordionClasses,
 
@@ -114,14 +114,14 @@ const getClasses = (dark: boolean) => ({
   accordionFlush: {
     root: "w-full",
     item: "",
-    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-cl-text hover:text-cl-accent focus-visible:ring-cl-accent dark:text-cl-text dark:hover:text-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
+    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-cl-text hover:text-cl-accent focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
   },
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
   code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
-  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent/10 text-cl-text ring-1 ring-inset ring-cl-accent/10 dark:bg-cl-accent/10 dark:text-cl-accent dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
+  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent-bg text-cl-accent-hover ring-1 ring-inset ring-cl-accent/10 dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer`,
   stateDisplay: `text-sm font-mono text-cl-text-secondary`,
@@ -879,7 +879,7 @@ const AccordionDemo = () => {
                 subtitle="Security features and compliance"
                 leftSlot={
                   <ShieldIcon
-                    className={`w-4 h-4 text-cl-success dark:text-cl-success`}
+                    className={`w-4 h-4 text-cl-success`}
                   />
                 }
                 rightSlot={
@@ -1061,7 +1061,7 @@ const AccordionDemo = () => {
         </DemoWrapper>
         {toggleLog.length > 0 && (
           <div
-            className={`mt-3 p-3 rounded-cl-md text-xs font-mono space-y-1 bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated dark:text-cl-text-tertiary`}
+            className={`mt-3 p-3 rounded-cl-md text-xs font-mono space-y-1 bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated`}
           >
             {toggleLog.map((log, i) => (
               <div key={i}>{log}</div>

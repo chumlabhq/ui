@@ -285,7 +285,7 @@ const SwitchDemo = () => {
               errorMessage="You must accept the terms to continue"
               classes={{
                 ...c.switch,
-                label: `text-sm font-medium text-cl-error dark:text-cl-error cursor-pointer`,
+                label: `text-sm font-medium text-cl-error cursor-pointer`,
               }}
             />
             <Switch
@@ -339,7 +339,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-2">
             <Switch label="Using onValueChange" onValueChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
-            <p className={`text-sm text-cl-text-secondary dark:text-cl-text-tertiary`} data-demo-action>Value: {String(callbackSwitch)}</p>
+            <p className={`text-sm text-cl-text-chrome-quiet`} data-demo-action>Value: {String(callbackSwitch)}</p>
           </div>
         </DemoWrapper>
       </Section>
@@ -387,7 +387,7 @@ const SwitchDemo = () => {
               classes={{
                 ...c.switch,
                 label: `text-xs font-medium text-cl-text cursor-pointer`,
-                control: `relative inline-flex items-center h-4 w-7 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
+                control: `relative inline-flex items-center h-4 w-7 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
                 thumb:
                   "inline-flex items-center justify-center transform h-3 w-3 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
               }}
@@ -405,7 +405,7 @@ const SwitchDemo = () => {
               classes={{
                 ...c.switch,
                 label: `text-base font-medium text-cl-text cursor-pointer`,
-                control: `relative inline-flex items-center h-7 w-12 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
+                control: `relative inline-flex items-center h-7 w-12 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
                 thumb:
                   "inline-flex items-center justify-center transform h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
               }}
@@ -542,7 +542,7 @@ const SwitchDemo = () => {
               classes={c.switch}
             />
             <div
-              className={`p-3 rounded-cl-md text-sm font-mono bg-cl-bg-hover text-cl-text dark:bg-cl-bg dark:text-cl-text-secondary`}
+              className={`p-3 rounded-cl-md text-sm font-mono bg-cl-bg-recessed text-cl-text-chrome`}
             >
               <p
                 className={`text-xs mb-2 text-cl-text-secondary`}

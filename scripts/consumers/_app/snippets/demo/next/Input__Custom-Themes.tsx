@@ -53,7 +53,7 @@ export default function InputExample() {
                        [
                          [
                            "Pill shape",
-        "px-5 py-2.5 rounded-full gap-2.5 transition-all duration-150 border border-cl-border bg-cl-bg-hover shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus focus-within:bg-cl-bg-elevated dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
+        "px-5 py-2.5 rounded-full gap-2.5 transition-all duration-150 border border-cl-text/10 bg-cl-text/4 shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus focus-within:bg-cl-bg-elevated dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50",
                            "Search...",
                            <SearchIcon className={"text-cl-text-tertiary"} />
                          ],
@@ -65,7 +65,7 @@ export default function InputExample() {
                          ],
                          [
                            "Purple accent",
-                           "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25 dark:focus-within:border-cl-border-input-focus",
+                           "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25",
                            "Purple theme...",
                            undefined
                          ],
@@ -86,7 +86,7 @@ export default function InputExample() {
                          ],
                          [
                            "Large size",
-                           "px-4 py-4 rounded-cl-lg border gap-3 transition-all duration-150 border-cl-border bg-white shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30",
+                           "px-4 py-4 rounded-cl-lg border gap-3 transition-all duration-150 border-cl-text/10 bg-cl-bg-input shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30",
                            "Large input...",
                            undefined
                          ]
@@ -106,7 +106,7 @@ export default function InputExample() {
                 {
                                     ...({
                   root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
-                  input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+                  input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:[color-scheme:dark]",
                   label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
                   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
                   prefix: "text-sm select-none text-cl-text-tertiary",
@@ -116,7 +116,7 @@ export default function InputExample() {
                                     input:
                                       String(label) === "Large size"
                                         ? "w-full bg-transparent outline-none text-lg text-cl-text placeholder:text-cl-text-tertiary"
-                                        : "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
+                                        : "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:[color-scheme:dark]",
                                     control: wCls as string
                                   }
               }

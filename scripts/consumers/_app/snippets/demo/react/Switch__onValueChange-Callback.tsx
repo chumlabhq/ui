@@ -18,7 +18,7 @@ export default function SwitchExample() {
           }
         }
       />
-      <p className="text-sm text-cl-text-secondary dark:text-cl-text-tertiary" data-demo-action>
+      <p className="text-sm text-cl-text-chrome-quiet" data-demo-action>
         Value:
         {String(callbackSwitch)}
       </p>

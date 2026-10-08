@@ -23,7 +23,7 @@ const getClasses = (_dark: boolean) => ({
   label: `text-xs font-medium text-cl-text-tertiary`,
   text: `text-sm text-cl-text-secondary`,
   textMuted: `text-xs text-cl-text-secondary`,
-  badge: `inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:border dark:border-cl-text/10`,
+  badge: `inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text-chrome border border-cl-text/10 dark:bg-cl-bg-elevated dark:border`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
@@ -248,7 +248,7 @@ const SliderDemo = () => {
                 markDotSize={10}
                 classes={{
                   ...c.slider,
-                  marker: `rounded-full bg-cl-bg-hover dark:bg-cl-text/10`,
+                  marker: `rounded-full bg-cl-bg-hover`,
                 }}
               />
             </div>
@@ -409,7 +409,7 @@ const SliderDemo = () => {
                 )}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-full bg-white border-2 border-cl-border-input-focus shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
+                  thumb: `absolute rounded-full bg-white border-2 border-cl-border-input-focus shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-cl-bg`,
                   range: "rounded-full bg-cl-accent/90",
                 }}
                 showTooltip
@@ -428,7 +428,7 @@ const SliderDemo = () => {
                 )}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-full bg-white border-2 border-cl-warning shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-warning focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
+                  thumb: `absolute rounded-full bg-white border-2 border-cl-warning shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-warning focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-cl-bg`,
                   range: "rounded-full bg-cl-warning/30",
                 }}
                 showTooltip
@@ -462,7 +462,7 @@ const SliderDemo = () => {
                 )}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-full bg-white border border-cl-border-input shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg dark:border dark:border-cl-border`,
+                  thumb: `absolute rounded-full bg-white border border-cl-border-input shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-cl-bg dark:border dark:border-cl-border`,
                 }}
                 showTooltip
               />
@@ -619,7 +619,7 @@ const SliderDemo = () => {
                   classes={{
                     ...c.slider,
                     range: `rounded-full ${rangeCls}`,
-                    thumb: `absolute rounded-full bg-white ${border} shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:${ring} focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
+                    thumb: `absolute rounded-full bg-white ${border} shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:${ring} focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-cl-bg`,
                   }}
                 />
               </div>
@@ -638,7 +638,7 @@ const SliderDemo = () => {
                 defaultValue={60}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-cl-md bg-cl-accent shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
+                  thumb: `absolute rounded-cl-md bg-cl-accent shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-cl-bg`,
                 }}
               />
             </div>
@@ -649,7 +649,7 @@ const SliderDemo = () => {
                 defaultValue={45}
                 classes={{
                   ...c.slider,
-                  track: `rounded-full h-3 bg-cl-bg-hover dark:bg-cl-bg-hover`,
+                  track: `rounded-full h-3 bg-cl-bg-hover`,
                   range: "rounded-full bg-gradient-to-r from-cl-accent/150 to-cl-accent",
                   control: "relative select-none touch-none py-1",
                 }}

@@ -20,7 +20,7 @@ export default function SwitchExample() {
             thumb:
               "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none"
           }),
-                        label: "text-sm font-medium text-cl-error dark:text-cl-error cursor-pointer"
+                        label: "text-sm font-medium text-cl-error cursor-pointer"
                       }
         }
       />

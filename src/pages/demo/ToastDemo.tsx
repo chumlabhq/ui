@@ -29,16 +29,16 @@ const getClasses = (_dark: boolean) => ({
      variants beside it keep their emphasis. In dark, panel and elevated are
      both #0a0d12 and `--cl-border` reaches 1.18:1, so the outline there is
      `--cl-text-tertiary` (5.09:1). */
-  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border-input text-cl-text hover:bg-cl-bg-hover`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-text text-cl-bg hover:opacity-90`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
-  btnSuccess: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success`,
-  btnWarning: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning`,
+  btnSuccess: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success`,
+  btnWarning: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning`,
   /* `text-cl-bg`, not `text-white`: white on the light-mode error fill
      measures 3.41:1, under AA for a 12px label. The dark foreground on
      the same fill clears it, and matches btnSuccess and btnWarning. */
   btnError: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-cl-bg hover:bg-cl-error/90`,
-  btnInfo: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90`,
+  btnInfo: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`,
 });
 
 /**
@@ -933,7 +933,7 @@ const ToastDemoContent = ({
                   className={
                     position === pos
                       ? "rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
-                      : "rounded-cl-md bg-cl-bg-panel border border-cl-border dark:border-cl-text-tertiary text-cl-text hover:bg-cl-bg-hover"
+                      : "rounded-cl-md bg-cl-bg-panel border border-cl-border-input text-cl-text hover:bg-cl-bg-hover"
                   }
                   onClick={() => setPosition(pos)}
                 >

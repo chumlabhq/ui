@@ -10,7 +10,7 @@ export default function OtpInputExample() {
         classes={
           {
             group: "flex items-center gap-2",
-            input: "w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20 dark:disabled:opacity-50 dark:disabled:cursor-not-allowed data-[error]:border-cl-error data-[valid]:border-cl-success",
+            input: "w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-2 dark:disabled:opacity-50 dark:disabled:cursor-not-allowed data-[error]:border-cl-error data-[valid]:border-cl-success",
             label: "block text-sm font-medium mb-2 text-cl-text-secondary",
             separator: "text-lg select-none text-cl-text-tertiary"
           }
@@ -19,7 +19,7 @@ export default function OtpInputExample() {
       {
         completed && (
           <div
-            className="mt-3 px-3 py-2 rounded-cl-md text-sm font-mono bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/30 dark:text-cl-success dark:border dark:border-cl-success"
+            className="mt-3 px-3 py-2 rounded-cl-md text-sm font-mono bg-cl-success/15 text-cl-text border border-cl-success dark:bg-cl-success/30 dark:text-cl-success dark:border"
             data-demo-action
           >
             Completed:

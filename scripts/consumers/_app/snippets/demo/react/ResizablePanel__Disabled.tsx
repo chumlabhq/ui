@@ -17,8 +17,8 @@ export default function ResizablePanelExample() {
           onClick={() => setDisabledToggle((p) => !p)}
           className={
             disabledToggle
-            ? "rounded-cl-md bg-cl-error hover:bg-cl-error text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error dark:text-cl-bg"
-            : "rounded-cl-md bg-cl-success hover:bg-cl-success text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success dark:text-cl-bg"
+            ? "rounded-cl-md bg-cl-error hover:bg-cl-error text-cl-bg"
+            : "rounded-cl-md bg-cl-success hover:bg-cl-success text-cl-bg"
           }
         >
           {disabledToggle ? "Disabled" : "Enabled"}

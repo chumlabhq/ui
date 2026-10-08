@@ -29,11 +29,11 @@ export default function ModalExample() {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-cl-accent dark:text-cl-accent">Team Members</p>
+                <p className="font-medium text-cl-accent">Team Members</p>
                 <p className="text-sm text-cl-accent">5 members with access</p>
               </div>
               <Button
-                className="px-3 py-1.5 text-cl-on-accent text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90 cursor-pointer"
+                className="px-3 py-1.5 text-cl-on-accent text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 cursor-pointer"
                 onClick={() => setNestedLevel2Open(true)}
               >
                 Manage
@@ -102,7 +102,7 @@ export default function ModalExample() {
             }
           </div>
           <Button
-            className="w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border dark:border-cl-border dark:text-cl-text-tertiary dark:hover:border-cl-border-input-focus dark:hover:text-cl-accent cursor-pointer"
+            className="w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border cursor-pointer"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path

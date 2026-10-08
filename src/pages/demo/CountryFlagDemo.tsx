@@ -31,7 +31,7 @@ const getClasses = (_dark: boolean) => ({
   flagGroup: {
     root: "flex items-center -space-x-1.5",
     item: `rounded-[3px] outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base`,
-    count: `shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base`,
+    count: `shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-secondary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:outline dark:outline-[1.5px] dark:outline-bg-base`,
   } satisfies CountryFlagGroupClasses,
   flagGroupDark: {
     root: "flex items-center -space-x-1.5",
@@ -39,7 +39,7 @@ const getClasses = (_dark: boolean) => ({
     count:
       "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-elevated text-cl-text-secondary outline outline-[1.5px] outline-gray-800",
   } satisfies CountryFlagGroupClasses,
-  fallback: `inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+  fallback: `inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated`,
 });
 
 const CountryFlagDemo = () => {

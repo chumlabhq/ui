@@ -62,7 +62,7 @@ export default function AccordionExample() {
         {
           root: "w-full",
           item: "border-b border-cl-border last:border-b-0",
-          trigger: "flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent dark:text-cl-text dark:hover:bg-cl-bg-elevated dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg",
+          trigger: "flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg",
           icon: "h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary"
         }
       }
@@ -79,7 +79,7 @@ export default function AccordionExample() {
       <AccordionItem value="slot-2">
         <AccordionTrigger
           subtitle="Security features and compliance"
-          leftSlot={<ShieldIcon className="w-4 h-4 text-cl-success dark:text-cl-success" />}
+          leftSlot={<ShieldIcon className="w-4 h-4 text-cl-success" />}
           rightSlot={
             <span
               className="text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-text dark:bg-cl-success/10 dark:text-cl-success"

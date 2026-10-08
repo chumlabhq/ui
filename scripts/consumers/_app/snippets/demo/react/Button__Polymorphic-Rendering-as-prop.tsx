@@ -44,7 +44,7 @@ export default function ButtonExample() {
   return (
     <>
       <Button
-        className="cursor-pointer font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none rounded-cl-lg shadow-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90 dark:active:bg-cl-accent/80 dark:shadow-accent/20 dark:hover:shadow-accent/30 dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg"
+        className="cursor-pointer font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none rounded-cl-lg shadow-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent dark:shadow-accent/20 focus-visible:ring-offset-cl-bg"
         onClick={(e) => setPolymorphicClick(JSON.stringify(e.currentTarget.tagName))}
       >
         Button Element
@@ -54,7 +54,7 @@ export default function ButtonExample() {
         href="https://chumlab.com"
         target="_blank"
         rel="noreferrer"
-        className="cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg"
+        className="cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent dark:hover:underline focus-visible:ring-offset-cl-bg"
       >
         Simple Link
       </Button>
@@ -63,7 +63,7 @@ export default function ButtonExample() {
         href="https://chumlab.com"
         target="_blank"
         rel="noreferrer"
-        className="cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg"
+        className="cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent dark:hover:underline focus-visible:ring-offset-cl-bg"
         endIcon={<ExternalLinkIcon />}
         iconAnimation="slideRight"
       >
@@ -74,20 +74,20 @@ export default function ButtonExample() {
         href="https://chumlab.com"
         target="_blank"
         rel="noreferrer"
-        className="cursor-pointer font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none rounded-cl-lg shadow-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent dark:bg-cl-accent dark:text-cl-on-accent dark:hover:bg-cl-accent/90 dark:active:bg-cl-accent/80 dark:shadow-accent/20 dark:hover:shadow-accent/30 dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg"
+        className="cursor-pointer font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none rounded-cl-lg shadow-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent dark:shadow-accent/20 focus-visible:ring-offset-cl-bg"
       >
         Styled Link
       </Button>
       <Button
         as="span"
-        className="cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text"
+        className="cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text"
         onClick={() => setSpanActivations((n) => n + 1)}
       >
         Text Button
       </Button>
       <Button
         as="span"
-        className="cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text"
+        className="cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text"
         endIcon={<ArrowRightIcon />}
         iconAnimation="slideRight"
         onClick={() => setSpanActivations((n) => n + 1)}

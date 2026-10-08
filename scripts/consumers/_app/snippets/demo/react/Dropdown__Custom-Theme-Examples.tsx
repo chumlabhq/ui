@@ -3,11 +3,11 @@ import { Dropdown, DropdownOption } from "@chumlab/ui/dropdown";
 
 const getMinimalTheme = (dark: boolean) => ({
   wrapper: "relative",
-  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border focus:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus:border-cl-text",
+  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus:border-cl-text",
   triggerText: "flex-1 truncate",
-  content: "rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border",
+  content: "rounded shadow-sm overflow-hidden border bg-cl-bg-panel border-cl-border dark:border",
   optionList: "max-h-60 overflow-y-auto",
-  option: "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10",
+  option: "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:hover:bg-white/10",
   optionSelected: "font-medium",
   optionFocused: "bg-black/5",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",

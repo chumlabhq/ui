@@ -36,7 +36,7 @@ export default function SwitchExample() {
         }
       />
       <div
-        className="p-3 rounded-cl-md text-sm font-mono bg-cl-bg-hover text-cl-text dark:bg-cl-bg dark:text-cl-text-secondary"
+        className="p-3 rounded-cl-md text-sm font-mono bg-cl-bg-recessed text-cl-text-chrome"
       >
         <p className="text-xs mb-2 text-cl-text-secondary">Event Log:</p>
         {

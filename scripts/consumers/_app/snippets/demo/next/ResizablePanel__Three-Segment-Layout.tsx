@@ -40,7 +40,7 @@ export default function ResizablePanelExample() {
         }
       >
         <div className="p-4 h-full flex flex-col">
-          <p className="font-medium text-cl-accent dark:text-cl-accent">Left Panel</p>
+          <p className="font-medium text-cl-accent">Left Panel</p>
           <p className="text-sm mt-2 text-cl-text-tertiary">
             Width:
             {Math.round(leftPanelWidth)}
@@ -65,15 +65,13 @@ export default function ResizablePanelExample() {
         </div>
       </ResizablePanel>
       <div
-        className="flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y bg-cl-bg-hover border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border"
+        className="flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y bg-cl-bg-hover border-cl-border dark:bg-cl-bg-elevated dark:border"
       >
         <p className="font-medium text-cl-text">Center Panel</p>
         <p className="text-sm mt-2 text-cl-text-secondary">
           Flexible width &mdash; expands to fill available space
         </p>
-        <div
-          className="mt-4 flex-1 rounded border p-4 bg-white border-cl-border dark:bg-cl-bg dark:border dark:border-cl-border"
-        >
+        <div className="mt-4 flex-1 rounded border p-4 bg-cl-bg border-cl-border dark:border">
           <p className="text-sm text-cl-text-tertiary">Main content area</p>
         </div>
       </div>
@@ -92,8 +90,8 @@ export default function ResizablePanelExample() {
         }
       >
         <div className="p-4 h-full flex flex-col">
-          <p className="font-medium text-cl-accent dark:text-cl-accent">Right Panel</p>
-          <p className="text-sm mt-2 text-cl-accent dark:text-cl-accent">
+          <p className="font-medium text-cl-accent">Right Panel</p>
+          <p className="text-sm mt-2 text-cl-accent">
             Width:
             {Math.round(rightPanelWidth)}
             px
