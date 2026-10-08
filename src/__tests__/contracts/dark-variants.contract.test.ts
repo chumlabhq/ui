@@ -131,8 +131,6 @@ const DECLARED: Record<string, string> = {
     "The thumb is near-white in both themes, which no token holds, and it has exactly one caller. ADR 005 wants a repeated need before a mint.",
   "TimePicker/utils/constants.ts dark:hover:text-cl-text":
     "Steps UP on hover in dark. The second of the two sites that go the other way.",
-  "Switch/utils/constants.ts dark:data-[state=unchecked]:bg-[var(--switch-tracker-unchecked-bg,#4b5563)]":
-    "The off-track. It needs a solid mid-grey and every neutral in the palette is a surface or a low-alpha overlay, so there is nothing to point at — the same gap Table has. Restored with the track colours 6dd1925 deleted, carrying the reason it was written with. Retires when a solid neutral is minted.",
 };
 
 describe("dark variant contract", () => {

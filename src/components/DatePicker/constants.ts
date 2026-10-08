@@ -3,7 +3,7 @@ import { structuralOnly } from "../../utils/classLayers.js";
 
 export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   root: "",
-  trigger: "flex items-center gap-2 w-full px-3 py-2.5 border border-cl-border-input rounded-cl-md bg-cl-bg-panel hover:border-cl-border-input focus:ring-2 focus:ring-cl-accent focus:border-transparent cursor-pointer transition-all text-sm text-cl-text data-[loading]:opacity-50 data-[loading]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
+  trigger: "flex items-center gap-2 w-full px-3 py-2.5 border border-cl-border-input rounded-cl-md bg-cl-bg-panel hover:border-cl-border-input-hover focus:ring-2 focus:ring-cl-accent focus:border-transparent cursor-pointer transition-all text-sm text-cl-text data-[loading]:opacity-50 data-[loading]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
   input: "flex-1 text-left truncate",
   triggerActions: "flex items-center gap-1",
   icon: "w-5 h-5 shrink-0 text-cl-text-tertiary",

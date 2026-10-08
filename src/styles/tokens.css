@@ -56,8 +56,8 @@
     --cl-text-disabled: rgba(237, 239, 244, 0.3);
     --cl-border: rgba(237, 239, 244, 0.08);
     --cl-border-strong: rgba(237, 239, 244, 0.15);
-    --cl-border-input: rgba(237, 239, 244, 0.08);
-    --cl-border-input-hover: rgba(237, 239, 244, 0.25);
+    --cl-border-input: #6b7280;
+    --cl-border-input-hover: #9ca3af;
     --cl-border-input-focus: #5b9bff;
     --cl-accent: #5b9bff;
     --cl-accent-hover: #7eb1ff;
@@ -97,8 +97,8 @@
     --cl-text-disabled: rgba(15, 18, 24, 0.35);
     --cl-border: rgba(15, 18, 24, 0.1);
     --cl-border-strong: rgba(15, 18, 24, 0.18);
-    --cl-border-input: rgba(15, 18, 24, 0.15);
-    --cl-border-input-hover: rgba(15, 18, 24, 0.3);
+    --cl-border-input: #6b7280;
+    --cl-border-input-hover: #4b5563;
     --cl-border-input-focus: #2563eb;
     --cl-accent: #2563eb;
     --cl-accent-hover: #1d4ed8;

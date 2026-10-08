@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
+import { join, resolve } from "node:path";
 import ts from "typescript";
 import { expect, test } from "@playwright/test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
@@ -1341,4 +1341,200 @@ test("a custom checkbox icon is a keyboard checkbox like the default", async ({ 
   }
   console.log(`CUSTOM_CHECKBOX_KEYBOARD ${CUSTOM_CHECKBOX_SITES.length} sites, ${failures.length} failures`);
   expect(failures, "a custom checkbox icon has to behave like the default checkbox at the same site").toEqual([]);
+});
+
+/**
+ * A field or selection control shows a resting boundary of at least 3:1 against
+ * every library surface it can sit on, in both themes (WCAG 1.4.11).
+ *
+ * Their fill is the surface's own colour or close to it, so the border is what
+ * says "here is a field". `--cl-border-input` was 8% white in dark and 15%
+ * ink in light: 1.18:1 and 1.23:1, and Input, TextArea and Pagination's
+ * rows-per-page trigger drew theirs with `--cl-border`, the divider token.
+ * CONTRAST_NONTEXT never saw it: it measures focus indicators and accent
+ * fills, never a resting boundary.
+ *
+ * - Population from code: every DEFAULT_*_CLASSES slot named trigger, control,
+ *   input, itemControl or filterItemControl that draws a border, plus a
+ *   control whose boundary is its unchecked fill (Switch's track), plus any
+ *   library `<input>` whose call site draws its own border. One with no
+ *   recipe fails.
+ * - Measured on the real fixture: the element's computed border and fill,
+ *   composited onto each surface token, read from the page. A text-labelled
+ *   button is out of scope: its text identifies it.
+ * - Error and valid states are held to the same floor. Disabled controls are
+ *   printed and exempt: 1.4.11 excludes inactive components. Focus is
+ *   CONTRAST_NONTEXT's focus-indicator pass.
+ */
+const BOUNDARY_SLOTS = new Set(["trigger", "control", "input", "itemControl", "filterItemControl"]);
+const BOUNDARY_FLOOR = 3;
+
+interface BoundarySite { key: string; component: string; slot: string; classes: string; kind: "border" | "fill" }
+
+const BOUNDARY_SITES: BoundarySite[] = (() => {
+  const sites: BoundarySite[] = [];
+  for (const component of componentNames()) {
+    const dir = resolve(process.cwd(), "src/components", component);
+    const files = [`${dir}/utils/constants.ts`, `${dir}/constants.ts`].filter((f) => {
+      try { readFileSync(f); return true; } catch { return false; }
+    });
+    for (const file of files) {
+      const text = readFileSync(file, "utf8");
+      for (const block of text.matchAll(/export const DEFAULT_\w+_CLASSES[^=]*=\s*\{([\s\S]*?)\n\s*\};/g)) {
+        for (const m of block[1].matchAll(/\b(\w+)\s*:\s*\n?\s*(["`])([^"`]*)\2/g)) {
+          const [, slot, , classes] = m;
+          if (!BOUNDARY_SLOTS.has(slot)) continue;
+          const base = classes.split(/\s+/).filter((t) => !t.includes(":"));
+          const kind = base.some((t) => /^border(-[0-9])?$/.test(t))
+            ? "border"
+            : slot === "control" && /data-\[state=unchecked\]:bg-/.test(classes) ? "fill" : null;
+          if (kind) sites.push({ key: `${component}.${slot}`, component, slot, classes, kind });
+        }
+      }
+    }
+    // A library <input> whose call site draws its own border, read from the syntax tree.
+    const tsxFiles = readdirSync(dir).filter((f) => f.endsWith(".tsx")).map((f) => join(dir, f));
+    for (const file of tsxFiles) {
+      let n = 0;
+      const base = file.split("/").pop();
+      const sf = ts.createSourceFile(file, readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const visit = (node: ts.Node): void => {
+        if ((ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) && node.tagName.getText(sf) === "input") {
+          const cls = node.attributes.properties.find(
+            (a): a is ts.JsxAttribute => ts.isJsxAttribute(a) && a.name.getText(sf) === "className",
+          )?.initializer;
+          const literal = cls && ts.isJsxExpression(cls) && cls.expression && ts.isTemplateExpression(cls.expression)
+            ? [cls.expression.head.text, ...cls.expression.templateSpans.map((t) => t.literal.text)].join(" ")
+            : cls && ts.isStringLiteral(cls) ? cls.text : "";
+          if (literal.split(/\s+/).includes("border")) {
+            n += 1;
+            sites.push({ key: `${component}.${base}<input>#${n}`, component, slot: "<input>", classes: literal, kind: "border" });
+          }
+        }
+        ts.forEachChild(node, visit);
+      };
+      visit(sf);
+    }
+  }
+  return sites;
+})();
+
+/** Which fixture renders each site at rest, and the state fixtures beside it. */
+const BOUNDARY_RECIPES: Record<string, { rest: string; states?: string[] } | { unreachable: string }> = {
+  "Input.control": { rest: "default", states: ["error", "success", "disabled"] },
+  "TextArea.control": { rest: "default", states: ["error", "success", "disabled"] },
+  "Checkbox.control": { rest: "default", states: ["error", "success", "disabled"] },
+  "RadioButton.control": { rest: "default", states: ["error", "success", "disabled"] },
+  "Switch.control": { rest: "default", states: ["error", "success", "disabled"] },
+  "OtpInput.input": { rest: "default", states: ["error", "success", "disabled"] },
+  "Dropdown.trigger": { rest: "closed", states: ["error", "success", "disabled"] },
+  "SearchableDropdown.trigger": { rest: "closed", states: ["error", "success", "disabled"] },
+  "MultiSelectDropdown.trigger": { rest: "closed", states: ["error", "success", "disabled"] },
+  "MultiSelectDropdown.itemControl": { rest: "open" },
+  "MultiSelectSearchableDropdown.trigger": { rest: "closed", states: ["error", "success", "disabled"] },
+  "MultiSelectSearchableDropdown.itemControl": { rest: "open" },
+  "CascadingDropdown.trigger": { rest: "closed", states: ["error", "success", "disabled"] },
+  "CascadingDropdown.itemControl": { rest: "open-multi" },
+  "DatePicker.trigger": { rest: "closed", states: ["error", "success", "disabled"] },
+  "TimePicker.trigger": { rest: "closed", states: ["error", "success", "disabled"] },
+  "InternationalPhoneInput.input": { rest: "default", states: ["error", "success", "disabled"] },
+  "InternationalPhoneInput.trigger": { rest: "default", states: ["disabled"] },
+  "Pagination.trigger": { rest: "rows-per-page" },
+  "Table.filterItemControl": { rest: "filter-open" },
+  // Table.tsx's own inputs, in source order: the inline cell editor, then the
+  // mobile and desktop search fields.
+  "Table.Table.tsx<input>#1": {
+    unreachable:
+      "the inline cell editor: `editing-cell` and `cell-editing` both double-click a cell " +
+      "and report the act applied, but no `[data-edit-input]` mounts in the browser. Its " +
+      "class names no border colour, so the border is the text colour.",
+  },
+  "Table.Table.tsx<input>#2": {
+    unreachable:
+      "the mobile layout's search field: no fixture renders `renderMobileCard` with " +
+      "`showSearch`, so it never mounts. Its border token is the desktop field's.",
+  },
+  "Table.Table.tsx<input>#3": { rest: "search-with-value" },
+};
+
+/** Per element: its boundary against each surface token, as the eye gets it. */
+const MEASURE_BOUNDARY = `((signature) => { ${PAINT_HELPERS}
+  const probe = (v) => { const d = document.createElement("div"); d.style.backgroundColor = "var(" + v + ")"; document.body.appendChild(d); const c = parse(getComputedStyle(d).backgroundColor); d.remove(); return c; };
+  const SURFACES = { bg: probe("--cl-bg"), panel: probe("--cl-bg-panel"), elevated: probe("--cl-bg-elevated") };
+  const toks = signature.split(/\\s+/).filter(Boolean);
+  const els = [...document.querySelectorAll("*")].filter((el) => el.classList && toks.every((t) => el.classList.contains(t)) && el.getClientRects().length);
+  return els.map((el) => {
+    const cs = getComputedStyle(el);
+    const bw = parseFloat(cs.borderTopWidth);
+    const border = bw > 0 ? parse(cs.borderTopColor) : null;
+    const fill = parse(cs.backgroundColor) || [0, 0, 0, 0];
+    const per = {};
+    for (const [name, s] of Object.entries(SURFACES)) {
+      const surface = [s[0], s[1], s[2]];
+      const filled = over(fill, surface);
+      const rimmed = border ? over(border, filled) : filled;
+      per[name] = Math.max(ratio(rimmed, surface), ratio(filled, surface));
+    }
+    return { per, border: border ? cs.borderTopColor : "none", fill: cs.backgroundColor, disabled: !!el.closest("[data-disabled],[disabled],[aria-disabled='true']") };
+  });
+})`;
+
+test("a field or selection control's resting boundary clears 3:1 on every library surface", async ({ page }) => {
+  test.setTimeout(600_000);
+  const perComponent = BOUNDARY_SITES.reduce((m: Record<string, number>, s) => ((m[s.component] = (m[s.component] ?? 0) + 1), m), {});
+  console.log(`CONTROL_BOUNDARY population ${BOUNDARY_SITES.length}: ${Object.entries(perComponent).map(([c, n]) => `${c} ${n}`).join(", ")}`);
+  console.log(`CONTROL_BOUNDARY sites: ${BOUNDARY_SITES.map((s) => `${s.key}(${s.kind})`).join(", ")}`);
+  expect(BOUNDARY_SITES.length, "no control boundary was found in the constants — the derivation read nothing").toBeGreaterThan(0);
+  const noRecipe = BOUNDARY_SITES.filter((s) => !BOUNDARY_RECIPES[s.key]).map((s) => s.key);
+  const stale = Object.keys(BOUNDARY_RECIPES).filter((k) => !BOUNDARY_SITES.some((s) => s.key === k));
+  const under: string[] = [];
+  const unmeasured: string[] = [];
+  let measured = 0;
+
+  for (const site of BOUNDARY_SITES) {
+    const recipe = BOUNDARY_RECIPES[site.key];
+    if (!recipe) continue;
+    if ("unreachable" in recipe) { console.log(`CONTROL_BOUNDARY ${site.key}: not measured — ${recipe.unreachable}`); continue; }
+    // Layout tokens only: a state can swap a colour class out through
+    // tailwind-merge, and the element is still this slot.
+    const signature = site.classes
+      .split(/\s+/)
+      .filter((t) => t && !/[:[/]/.test(t) && !/^(cl-|bg-|text-|border-cl|ring|shadow|placeholder|transition|duration|outline|cursor|font-|select-)/.test(t))
+      .join(" ");
+    for (const fixture of [recipe.rest, ...(recipe.states ?? [])]) {
+      for (const theme of ["dark", "light"] as const) {
+        await gotoFixture(page, site.component, fixture);
+        await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;animation:none!important}" });
+        await page.evaluate((next) => {
+          const html = document.documentElement;
+          html.setAttribute("data-theme", next);
+          html.classList.toggle("dark", next === "dark");
+        }, theme);
+        type Row = { per: Record<string, number>; border: string; fill: string; disabled: boolean };
+        let rows: Row[] = [];
+        // Popups and lazy chunks arrive late; wait for the slot, then read it.
+        for (let i = 0; i < 25 && !rows.length; i += 1) {
+          rows = (await page.evaluate(`${MEASURE_BOUNDARY}(${JSON.stringify(signature)})`)) as Row[];
+          if (!rows.length) await page.waitForTimeout(200);
+        }
+        const at = `${site.key} /${fixture} ${theme}`;
+        if (!rows.length) { unmeasured.push(at); console.log(`CONTROL_BOUNDARY ${at}: UNMEASURED — no element carries the slot's classes`); continue; }
+        measured += rows.length;
+        const worst = rows.reduce((w, r) => (Math.min(...Object.values(r.per)) < Math.min(...Object.values(w.per)) ? r : w));
+        const exempt = fixture === "disabled";
+        const lows = Object.entries(worst.per).filter(([, v]) => v < BOUNDARY_FLOOR);
+        console.log(
+          `CONTROL_BOUNDARY ${at}: ${rows.length} el, border ${worst.border} fill ${worst.fill} → ` +
+            Object.entries(worst.per).map(([s, v]) => `${s} ${v.toFixed(3)}`).join(", ") +
+            (exempt ? " (disabled: exempt)" : lows.length ? " UNDER" : ""),
+        );
+        if (!exempt && lows.length) under.push(`${at}: ${lows.map(([s, v]) => `${s} ${v.toFixed(3)}:1`).join(", ")}`);
+      }
+    }
+  }
+  console.log(`CONTROL_BOUNDARY_PAINT ${BOUNDARY_SITES.length} sites × 2 themes, ${measured} elements, ${under.length} under ${BOUNDARY_FLOOR}:1 (${unmeasured.length} unmeasured, ${noRecipe.length} without a recipe)`);
+  expect(noRecipe, "these draw a control boundary and nothing here says which fixture renders it").toEqual([]);
+  expect(stale, "these recipes name a site the constants no longer have").toEqual([]);
+  expect(unmeasured, "a recipe that no longer reaches its control measures nothing").toEqual([]);
+  expect(under, "a field or selection control's resting boundary under 3:1 against a library surface (WCAG 1.4.11)").toEqual([]);
 });

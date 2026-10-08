@@ -35,7 +35,7 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
   ellipsis: "px-2 select-none text-cl-text-tertiary",
   rowsPerPage: {
     root: "flex items-center gap-2",
-    trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md border transition-colors cursor-pointer border-cl-border bg-cl-bg-panel hover:bg-cl-bg-item-hover text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md border transition-colors cursor-pointer border-cl-border-input bg-cl-bg-panel hover:bg-cl-bg-item-hover text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     content: "rounded-cl-md shadow-lg py-1 border min-w-[64px] bg-cl-bg-panel border-cl-border",
     positioner: "relative",
     /**

@@ -861,6 +861,22 @@ const LIBRARY_TOTAL_HISTORY = [
       "call-site ratchet wants them (Table.tsx 46 -> 45 literals). Every other " +
       "entry byte-identical bar a +4 B shared closure. Measured against a " +
       "build of ba82f508.",
+  },  {
+    kb: 155.92,
+    commit: "(uncommitted)",
+    date: "2026-10-09",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.03 KB (159,685 -> 159,658 B gzipped, -27 B), 81 files " +
+      "held. Control boundaries move to `--cl-border-input`, now #6b7280 in " +
+      "both themes, so a field clears 3:1 on every library surface. Switch " +
+      "-13 B exclusive: its off-track default became that token, dropping the " +
+      "`dark:` duplicate and both hex values. The seven field triggers +1 to " +
+      "+3 B each: hover now names `--cl-border-input-hover` instead of the " +
+      "rest token. Input, TextArea, Pagination and Table -2 to -1 B: their " +
+      "field border names the input token instead of `--cl-border`. Shared " +
+      "closure -12 B. No declared breach moved (Table exclusive -2 B). " +
+      "Measured against a build of 71d52c1e.",
   },
 ];
 

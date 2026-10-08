@@ -2082,7 +2082,7 @@ function TableInner<TData>(
                   value={globalFilter ?? ""}
                   onChange={handleSearchChange}
                   placeholder={searchPlaceholder}
-                  className={`w-full ${inputPl} ${inputPr} py-2 text-sm rounded-cl-md border bg-cl-bg-elevated text-cl-text border-cl-border placeholder:text-cl-text-tertiary focus:outline-none focus:ring-2 focus:ring-cl-accent/30 focus:border-cl-border-input-focus ${searchInputClassName}`}
+                  className={`w-full ${inputPl} ${inputPr} py-2 text-sm rounded-cl-md border bg-cl-bg-elevated text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary focus:outline-none focus:ring-2 focus:ring-cl-accent/30 focus:border-cl-border-input-focus ${searchInputClassName}`}
                   aria-label="Search table"
                 />
                 {globalFilter && (
