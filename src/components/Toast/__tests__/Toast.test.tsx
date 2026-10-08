@@ -486,13 +486,13 @@ describe("Toast", () => {
   });
 
   describe("Keyboard Accessibility", () => {
-    it("dismisses toast on Escape when dismissOnEscape is true on provider", async () => {
+    it("dismisses toast on Escape when closeOnEscape is true on provider", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       let toastApi: ReturnType<typeof useToast>;
 
       renderWithProvider(
         <TestConsumer onMount={(api) => (toastApi = api)} />,
-        { dismissOnEscape: true }
+        { closeOnEscape: true }
       );
 
       await act(async () => {
@@ -559,13 +559,13 @@ describe("Toast", () => {
       expect(onOlder).toHaveBeenCalledTimes(1);
     });
 
-    it("does not dismiss on Escape when dismissOnEscape is false", async () => {
+    it("does not dismiss on Escape when closeOnEscape is false", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       let toastApi: ReturnType<typeof useToast>;
 
       renderWithProvider(
         <TestConsumer onMount={(api) => (toastApi = api)} />,
-        { dismissOnEscape: false }
+        { closeOnEscape: false }
       );
 
       await act(async () => {
@@ -912,7 +912,7 @@ describe("getDefaultIcon", () => {
  * Every overlay marks the Escape it acts on — Modal and Drawer stop it,
  * Tooltip stops it, the dropdown family prevents its default — and the toast
  * listens last, on window, and ignores a marked one. These set
- * `dismissOnEscape` explicitly so that each case exercised the old listener
+ * `closeOnEscape` explicitly so that each case exercised the old listener
  * too: under the old default of off, every one of them passed without
  * measuring anything.
  */
@@ -927,7 +927,7 @@ describe("Toast Escape layering", () => {
   });
 
   const Harness = ({ children }: { children?: React.ReactNode }) => (
-    <ToastProvider dismissOnEscape>
+    <ToastProvider closeOnEscape>
       <TestConsumer />
       {children}
     </ToastProvider>

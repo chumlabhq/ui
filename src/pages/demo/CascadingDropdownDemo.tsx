@@ -1853,7 +1853,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
         dos={[
           "Provide `label` or `aria-label` for the root trigger.",
-          "Close submenus on Escape and restore sensible focus.",
+          "Rely on Escape to close submenus: it always does, as the APG menu button pattern requires, and there is no prop to turn it off.",
           "Cache loaded branches to avoid redundant network calls.",
         ]}
         donts={[

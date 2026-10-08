@@ -168,7 +168,7 @@
           "description": "Stacking order for the toast container.",
           "x-defaultSource": "LAYERS.toast"
         },
-        "dismissOnEscape": {
+        "closeOnEscape": {
           "type": "boolean | undefined",
           "description": "Dismisses the newest toast when Escape is pressed, unless something above it — an open dialog, drawer or menu — has already handled the key. On by default.",
           "default": true

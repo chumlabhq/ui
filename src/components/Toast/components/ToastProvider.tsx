@@ -26,7 +26,7 @@ export const ToastProvider = ({
   animationDuration = 500,
   gap = 12,
   zIndex = LAYERS.toast,
-  dismissOnEscape = true,
+  closeOnEscape = true,
   containerAriaLabel = "Notifications",
   classes: providerClasses,
   unstyled: providerUnstyled = false,
@@ -184,7 +184,7 @@ export const ToastProvider = ({
 
   // One Escape, one toast: the newest still on screen. A toast already leaving
   // is skipped, so a second press reaches the one under it.
-  const escapeTargetId = dismissOnEscape
+  const escapeTargetId = closeOnEscape
     ? toasts.filter((t) => t.visible).at(-1)?.id
     : undefined;
 
@@ -232,7 +232,7 @@ export const ToastProvider = ({
                     <Toast
                       {...toastConfig}
                       onRemove={removeToast}
-                      dismissOnEscape={toast.id === escapeTargetId}
+                      closeOnEscape={toast.id === escapeTargetId}
                       providerClasses={providerClasses}
                       providerUnstyled={providerUnstyled}
                     />

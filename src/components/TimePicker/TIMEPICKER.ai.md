@@ -242,7 +242,7 @@ const [time, setTime] = useState<string | null>(null);
 | `ArrowLeft`, `ArrowRight` | Moves between the hour, minute, second and meridiem columns. |
 | `Home`, `End` | Jumps to the first or last option in the column. |
 | `PageUp`, `PageDown` | Moves by the larger step on the clock face. |
-| `Escape` | Closes the panel and returns focus to the trigger. |
+| `Escape` | Closes the panel and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Cycles within the open panel. |
 
 ---

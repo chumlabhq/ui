@@ -328,7 +328,7 @@ const [value, setValue] = useState<string | null>(null);
 | `Enter`, `Space` | Opens the menu from the trigger, and selects the focused option. |
 | `ArrowDown`, `ArrowUp` | Moves between options, opening the menu first if it is closed. |
 | `Home`, `End` | Jumps to the first or last option. |
-| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 | `Backspace`, `Delete` | Clears the selection when the trigger has focus and `clearable` is set. |
 | Printable characters | Type-ahead within `typeaheadTimeout` of the last keystroke. |

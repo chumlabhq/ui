@@ -390,7 +390,7 @@ const ToastDemoContent = ({
 
       <Section
         title="Escape Key Dismissal"
-        description="Escape dismisses the newest toast, one per press. Turn it off with dismissOnEscape={false} on ToastProvider."
+        description="Escape dismisses the newest toast, one per press. Turn it off with closeOnEscape={false} on ToastProvider."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
@@ -407,7 +407,7 @@ const ToastDemoContent = ({
             With Escape Dismissal
           </Button>
           <LocalProviderDemo
-            dismissOnEscape={false}
+            closeOnEscape={false}
             containerAriaLabel="Escape disabled example"
             buttonClassName={c.btn}
             label="Without Escape Dismissal"
@@ -418,8 +418,10 @@ const ToastDemoContent = ({
         <div className={c.note}>
           <strong>Tip:</strong> An open Modal, Drawer or menu takes Escape
           first, and the toast behind it stays.{" "}
-          <code className="font-mono">dismissOnEscape</code> is a provider prop,
+          <code className="font-mono">closeOnEscape</code> is a provider prop,
           so the second button fires through its own provider with it off.
+          Turn it off only for toasts the user has to act on, and keep their
+          close button.
         </div>
       </Section>
 

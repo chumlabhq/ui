@@ -260,7 +260,7 @@ const [values, setValues] = useState<string[]>([]);
 | `Enter`, `Space` | Opens the menu, and toggles the focused option without closing it. |
 | `ArrowDown`, `ArrowUp` | Moves between options. `aria-activedescendant` on the trigger follows, so focus itself never leaves it. |
 | `Home`, `End` | Jumps to the first or last option. |
-| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 
 ---

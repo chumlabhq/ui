@@ -55,7 +55,7 @@ function ToastTrigger() {
         With Escape Dismissal
       </Button>
       <LocalProviderDemo
-        dismissOnEscape={false}
+        closeOnEscape={false}
         containerAriaLabel="Escape disabled example"
         buttonClassName="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
         label="Without Escape Dismissal"

@@ -274,7 +274,7 @@ const [rows, setRows] = useState(10);
 | `Enter`, `Space` | Activates the focused control. |
 | `ArrowDown`, `ArrowUp` | Moves between options in the open rows-per-page menu. |
 | `Home`, `End` | Jumps to the first or last option in that menu. |
-| `Escape` | Closes it and returns focus to the trigger. |
+| `Escape` | Closes it and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 
 ---
 

@@ -2235,7 +2235,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the menu and returns focus to the ellipsis."
+          "description": "Closes the menu and returns focus to the ellipsis. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu."
         }
       ]
     },
@@ -3251,7 +3251,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the deepest open menu and returns focus to its trigger."
+          "description": "Closes the deepest open menu and returns focus to its trigger. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu."
         },
         {
           "keys": "`Tab`",
@@ -4995,7 +4995,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the calendar and returns focus to the trigger."
+          "description": "Closes the calendar and returns focus to the trigger. Always: there is no prop to turn it off, because the APG date picker dialog pattern requires Escape to close the calendar."
         },
         {
           "keys": "`Tab`",
@@ -5111,7 +5111,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "true",
-        "description": "Closes the drawer when the Escape key is pressed."
+        "description": "Enables closing via the Escape key."
       },
       {
         "name": "classes",
@@ -6014,7 +6014,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the menu and returns focus to the trigger."
+          "description": "Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup."
         },
         {
           "keys": "`Tab`",
@@ -8478,7 +8478,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the menu and returns focus to the trigger."
+          "description": "Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup."
         },
         {
           "keys": "`Tab`",
@@ -9155,7 +9155,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the menu and returns focus to the trigger."
+          "description": "Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup."
         },
         {
           "keys": "`Tab`",
@@ -9901,7 +9901,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes it and returns focus to the trigger."
+          "description": "Closes it and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup."
         }
       ]
     },
@@ -11125,7 +11125,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the menu and returns focus to the trigger."
+          "description": "Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup."
         },
         {
           "keys": "`Tab`",
@@ -13681,7 +13681,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress."
+          "description": "Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog."
         },
         {
           "keys": "`ArrowLeft`, `ArrowRight` on a resize handle",
@@ -15265,7 +15265,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the panel and returns focus to the trigger."
+          "description": "Closes the panel and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup."
         },
         {
           "keys": "`Tab`",
@@ -15473,7 +15473,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Stacking order for the toast container."
           },
           {
-            "name": "dismissOnEscape",
+            "name": "closeOnEscape",
             "type": "boolean",
             "required": false,
             "default": "true",
@@ -15742,7 +15742,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "rows": [
         {
           "keys": "`Escape`",
-          "description": "Dismisses the newest toast, and fires its `onDismiss`. An open Modal, Drawer, menu or tooltip takes the key first, and the toast is left alone. On by default; `dismissOnEscape={false}` on the provider turns it off."
+          "description": "Dismisses the newest toast, and fires its `onDismiss`. An open Modal, Drawer, menu or tooltip takes the key first, and the toast is left alone. On by default; `closeOnEscape={false}` on the provider turns it off."
         },
         {
           "keys": "`Tab`",
@@ -16036,7 +16036,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Hides it while the trigger keeps focus."
+          "description": "Hides it while the trigger keeps focus. Always: there is no prop to turn it off, because WCAG 1.4.13 requires hover or focus content to be dismissible."
         }
       ]
     },

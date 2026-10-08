@@ -34,7 +34,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   showCloseButton = true,
   onDismiss,
   onRemove,
-  dismissOnEscape = false,
+  closeOnEscape = false,
   role: roleProp,
   classes: classesProp,
   unstyled = false,
@@ -88,7 +88,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   // an open dialog, drawer, menu or tooltip has already stopped the key or
   // prevented its default by then, and a marked Escape was theirs.
   useEffect(() => {
-    if (!dismissOnEscape) return;
+    if (!closeOnEscape) return;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape" || event.defaultPrevented) return;
       event.preventDefault();
@@ -96,7 +96,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [dismissOnEscape, handleClose]);
+  }, [closeOnEscape, handleClose]);
 
   useEffect(() => {
     if (duration === Infinity || duration <= 0 || isPaused) return;

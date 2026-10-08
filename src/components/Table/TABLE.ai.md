@@ -268,7 +268,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | `ArrowLeft`, `ArrowRight` | Moves the focused cell along a row. `ArrowUp`/`ArrowDown` move down a column. |
 | `Home`, `End` | Moves to the first or last cell in the row. |
 | `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. |
-| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. |
+| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |
 | `ArrowLeft`, `ArrowRight` on a resize handle | Resizes the column in steps, so column widths are reachable without a drag (SC 2.5.7). |
 
 ---

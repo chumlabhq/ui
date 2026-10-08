@@ -48,6 +48,7 @@ export interface DrawerProps
   duration?: number;
   lockScroll?: boolean;
   closeOnOverlayClick?: boolean;
+  /** Enables closing via the Escape key. Default: `true`. */
   closeOnEscape?: boolean;
   classes?: DrawerClasses;
   unstyled?: boolean;

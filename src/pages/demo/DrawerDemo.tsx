@@ -253,8 +253,8 @@ const DrawerDemo = () => {
 
       {/* ─── Close Behavior ─────────────────────────────────────────────── */}
       <Section
-        title="Close Behavior"
-        description="Disable overlay click or Escape key closing."
+        title="Prevent Closing on Overlay Click or Escape"
+        description="Keep a drawer open with closeOnOverlayClick={false} or closeOnEscape={false}. Use that only when closing would lose work, such as unsaved changes, and keep a visible close control in the drawer, like the X here."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
@@ -273,6 +273,7 @@ const DrawerDemo = () => {
           {renderDrawerContent(
             "Click overlay won't close",
             noOverlayClose.onClose,
+            "Clicking the overlay won't close this drawer. Press Escape or use the X.",
           )}
         </Drawer>
         <Drawer
@@ -280,7 +281,11 @@ const DrawerDemo = () => {
           onOpenChange={noEscClose.onOpenChange}
           closeOnEscape={false}
         >
-          {renderDrawerContent("Escape key won't close", noEscClose.onClose)}
+          {renderDrawerContent(
+            "Escape key won't close",
+            noEscClose.onClose,
+            "Escape won't close this drawer. Use the X: with closeOnEscape={false}, a visible close control is required.",
+          )}
         </Drawer>
       </Section>
 

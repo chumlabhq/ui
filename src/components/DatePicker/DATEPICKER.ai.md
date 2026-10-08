@@ -383,7 +383,7 @@ import { fr } from "date-fns/locale";
 | `ArrowLeft`, `ArrowRight` | Moves a day. `ArrowUp`/`ArrowDown` move a week. Disabled days are stepped over rather than focused. |
 | `Home`, `End` | Jumps to the start or end of the week, honouring `weekStartsOn`. |
 | `PageUp`, `PageDown` | Changes month. With `Shift`, changes year. |
-| `Escape` | Closes the calendar and returns focus to the trigger. |
+| `Escape` | Closes the calendar and returns focus to the trigger. Always: there is no prop to turn it off, because the APG date picker dialog pattern requires Escape to close the calendar. |
 | `Tab` | Cycles within the panel, which is `role="dialog" aria-modal="true"` and traps focus in both directions. |
 
 ---

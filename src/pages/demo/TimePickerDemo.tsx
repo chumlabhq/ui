@@ -1432,7 +1432,7 @@ const TimePickerDemo = () => {
           "Changing format (12h / 24h) re-formats the displayed string from the same controlled value when not mid-edit.",
           "minuteStep <= 0 or NaN is clamped to a safe interval (at least 1 minute).",
           "Dropdown portal uses aria-controls + id; clock portal uses role=dialog with a matching id.",
-          "The dropdown closes on outside click, Escape, or Tab. Blur uses a focus pass so clicks on portal content still count as inside.",
+          "The dropdown closes on outside click, Escape, or Tab. Escape always closes it, as the APG combobox pattern requires, so there is no prop to turn that off. Blur uses a focus pass so clicks on portal content still count as inside.",
           "When both value and defaultValue are omitted the component starts empty and manages its own state.",
           "fullWidth applies width: 100% to both root and trigger automatically, even when classes specify a fixed width.",
           "clearable shows a clear button only when a value is present and the component is not disabled.",

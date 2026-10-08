@@ -375,7 +375,7 @@ const searchCountries = async (query: string) => {
 | `ArrowDown`, `ArrowUp` | Moves between items in the open menu. |
 | `ArrowRight` | Opens the focused item's submenu and moves into it. `ArrowLeft` closes it and returns to the parent. |
 | `Home`, `End` | Jumps to the first or last item of the current level. |
-| `Escape` | Closes the deepest open menu and returns focus to its trigger. |
+| `Escape` | Closes the deepest open menu and returns focus to its trigger. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu. |
 | `Tab` | Closes the menu and moves focus on. |
 | Printable characters | Type-ahead: jumps to the first item starting with what you typed. |
 

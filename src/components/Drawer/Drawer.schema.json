@@ -76,7 +76,7 @@
     },
     "closeOnEscape": {
       "type": "boolean",
-      "description": "Closes the drawer when the Escape key is pressed.",
+      "description": "Enables closing via the Escape key.",
       "default": true
     },
     "classes": {

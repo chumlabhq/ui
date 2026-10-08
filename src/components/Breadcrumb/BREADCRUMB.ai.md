@@ -329,7 +329,7 @@ const items: BreadcrumbItem[] = [
 | `Enter`, `Space` | Follows a crumb, or opens the collapsed-items menu from the ellipsis. |
 | `ArrowDown`, `ArrowUp` | Moves between items inside the open menu. |
 | `Home`, `End` | Jumps to the first or last item in the menu. |
-| `Escape` | Closes the menu and returns focus to the ellipsis. |
+| `Escape` | Closes the menu and returns focus to the ellipsis. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu. |
 
 ---
 

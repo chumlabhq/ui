@@ -127,7 +127,7 @@ Defaults include `dark:` variants. Content uses `bg-white dark:bg-gray-800`, `te
 | Key | Behaviour |
 |-----|-----------|
 | `Tab` | Moves focus to the trigger, which shows the tooltip — hover is not the only way in. |
-| `Escape` | Hides it while the trigger keeps focus. |
+| `Escape` | Hides it while the trigger keeps focus. Always: there is no prop to turn it off, because WCAG 1.4.13 requires hover or focus content to be dismissible. |
 
 ---
 

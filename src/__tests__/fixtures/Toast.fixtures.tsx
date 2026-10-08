@@ -39,12 +39,12 @@ const fixtures: Fixtures<typeof Toast> = [
   },
   {
     name: "escape-dismissable",
-    props: { id: "t7", onRemove: () => {}, message: "Saved", duration: Infinity, dismissOnEscape: true },
+    props: { id: "t7", onRemove: () => {}, message: "Saved", duration: Infinity, closeOnEscape: true },
     note: "`ToastProvider` sets this on its newest toast. Escape runs the close button's path, so the owner removes it.",
     render: () => (
       <Dismissable>
         {(onRemove) => (
-          <Toast id="fixture-toast-escape" message="Saved" duration={Infinity} dismissOnEscape onRemove={onRemove} />
+          <Toast id="fixture-toast-escape" message="Saved" duration={Infinity} closeOnEscape onRemove={onRemove} />
         )}
       </Dismissable>
     ),

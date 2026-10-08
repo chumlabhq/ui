@@ -724,8 +724,8 @@ const ModalDemo = () => {
 
       {/* ─── Overlay & Behavior ──────────────────────────────────────────── */}
       <Section
-        title="Overlay & Behavior"
-        description="Customize the overlay backdrop and close behavior."
+        title="Overlay, Outside Click & Escape"
+        description="Customize the overlay backdrop, or keep a modal open with preventOutsideClick and closeOnEscape={false}. Use that only when closing would lose work, such as unsaved changes, and always give the modal a visible close control."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -734,7 +734,7 @@ const ModalDemo = () => {
               Custom Overlay
             </Button>
             <Button className={c.btn} onClick={() => setPreventCloseOpen(true)}>
-              Prevent Outside Click
+              Prevent Outside Click & Escape
             </Button>
           </div>
         </DemoWrapper>

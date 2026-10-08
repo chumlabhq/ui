@@ -85,6 +85,7 @@ export default function DrawerExample() {
           renderDrawerContent(
             "Click overlay won't close",
             noOverlayClose.onClose,
+            "Clicking the overlay won't close this drawer. Press Escape or use the X.",
           )
         }
       </Drawer>
@@ -93,7 +94,13 @@ export default function DrawerExample() {
         onOpenChange={noEscClose.onOpenChange}
         closeOnEscape={false}
       >
-        {renderDrawerContent("Escape key won't close", noEscClose.onClose)}
+        {
+          renderDrawerContent(
+            "Escape key won't close",
+            noEscClose.onClose,
+            "Escape won't close this drawer. Use the X: with closeOnEscape={false}, a visible close control is required.",
+          )
+        }
       </Drawer>
     </>
   );

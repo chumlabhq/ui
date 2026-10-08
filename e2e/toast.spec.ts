@@ -294,7 +294,7 @@ test.describe("Toast Keyboard Navigation", () => {
     await expect(toast).toHaveCount(0);
   });
 
-  test("keeps the toast on Escape when its provider sets dismissOnEscape={false}", async ({
+  test("keeps the toast on Escape when its provider sets closeOnEscape={false}", async ({
     page,
   }) => {
     const withoutEscape = page.getByRole("button", { name: "Without Escape Dismissal" });

@@ -1446,7 +1446,7 @@ const items: BreadcrumbItem[] = [
 | `Enter`, `Space` | Follows a crumb, or opens the collapsed-items menu from the ellipsis. |
 | `ArrowDown`, `ArrowUp` | Moves between items inside the open menu. |
 | `Home`, `End` | Jumps to the first or last item in the menu. |
-| `Escape` | Closes the menu and returns focus to the ellipsis. |
+| `Escape` | Closes the menu and returns focus to the ellipsis. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu. |
 
 ---
 
@@ -2192,7 +2192,7 @@ const searchCountries = async (query: string) => {
 | `ArrowDown`, `ArrowUp` | Moves between items in the open menu. |
 | `ArrowRight` | Opens the focused item's submenu and moves into it. `ArrowLeft` closes it and returns to the parent. |
 | `Home`, `End` | Jumps to the first or last item of the current level. |
-| `Escape` | Closes the deepest open menu and returns focus to its trigger. |
+| `Escape` | Closes the deepest open menu and returns focus to its trigger. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu. |
 | `Tab` | Closes the menu and moves focus on. |
 | Printable characters | Type-ahead: jumps to the first item starting with what you typed. |
 
@@ -3099,7 +3099,7 @@ import { fr } from "date-fns/locale";
 | `ArrowLeft`, `ArrowRight` | Moves a day. `ArrowUp`/`ArrowDown` move a week. Disabled days are stepped over rather than focused. |
 | `Home`, `End` | Jumps to the start or end of the week, honouring `weekStartsOn`. |
 | `PageUp`, `PageDown` | Changes month. With `Shift`, changes year. |
-| `Escape` | Closes the calendar and returns focus to the trigger. |
+| `Escape` | Closes the calendar and returns focus to the trigger. Always: there is no prop to turn it off, because the APG date picker dialog pattern requires Escape to close the calendar. |
 | `Tab` | Cycles within the panel, which is `role="dialog" aria-modal="true"` and traps focus in both directions. |
 
 ---
@@ -3176,12 +3176,12 @@ export default function Example() {
 | `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | Direction from which the drawer slides in. |
 | `size` | string | `"300px"` | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
 | `overlayColor` | string | `"black"` | Background color of the overlay. |
-| `overlayOpacity` | number | `0.32` | How strongly `overlayColor` tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so `overlayBlur` is not diluted. |
+| `overlayOpacity` | number | `0.32` | How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so overlayBlur is not diluted. |
 | `overlayBlur` | number | `0` | Backdrop blur in pixels for the overlay. |
 | `duration` | number | `300` | Animation duration in milliseconds. |
 | `lockScroll` | boolean | `true` | Locks body scroll when the drawer is open. |
 | `closeOnOverlayClick` | boolean | `true` | Closes the drawer when the overlay is clicked. |
-| `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
+| `closeOnEscape` | boolean | `true` | Enables closing via the Escape key. |
 | `classes` | object | — | CSS class overrides for drawer sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
@@ -3532,7 +3532,7 @@ const [value, setValue] = useState<string | null>(null);
 | `Enter`, `Space` | Opens the menu from the trigger, and selects the focused option. |
 | `ArrowDown`, `ArrowUp` | Moves between options, opening the menu first if it is closed. |
 | `Home`, `End` | Jumps to the first or last option. |
-| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 | `Backspace`, `Delete` | Clears the selection when the trigger has focus and `clearable` is set. |
 | Printable characters | Type-ahead within `typeaheadTimeout` of the last keystroke. |
@@ -4862,7 +4862,7 @@ const [values, setValues] = useState<string[]>([]);
 | `Enter`, `Space` | Opens the menu, and toggles the focused option without closing it. |
 | `ArrowDown`, `ArrowUp` | Moves between options. `aria-activedescendant` on the trigger follows, so focus itself never leaves it. |
 | `Home`, `End` | Jumps to the first or last option. |
-| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 
 ---
@@ -5137,7 +5137,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 | `Enter`, `Space` | Opens the menu, and toggles the focused option without closing it. |
 | `ArrowDown`, `ArrowUp` | Moves between the filtered options. `aria-activedescendant` sits on the search input, which holds focus. |
 | `Home`, `End` | Jumps to the first or last filtered option. |
-| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 | Printable characters | Types into the search box and filters the list. |
 
@@ -5618,7 +5618,7 @@ const [rows, setRows] = useState(10);
 | `Enter`, `Space` | Activates the focused control. |
 | `ArrowDown`, `ArrowUp` | Moves between options in the open rows-per-page menu. |
 | `Home`, `End` | Jumps to the first or last option in that menu. |
-| `Escape` | Closes it and returns focus to the trigger. |
+| `Escape` | Closes it and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 
 ---
 
@@ -6082,7 +6082,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 | `Enter`, `Space` | Opens the menu, and selects the focused option. |
 | `ArrowDown`, `ArrowUp` | Moves between the filtered options. `aria-activedescendant` sits on the search input, which holds focus. |
 | `Home`, `End` | Jumps to the first or last filtered option. |
-| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 | `Backspace`, `Delete` | Clears the selection when the search box is empty and `clearable` is set. |
 | Printable characters | Filters the list. |
@@ -6955,7 +6955,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | `ArrowLeft`, `ArrowRight` | Moves the focused cell along a row. `ArrowUp`/`ArrowDown` move down a column. |
 | `Home`, `End` | Moves to the first or last cell in the row. |
 | `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. |
-| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. |
+| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |
 | `ArrowLeft`, `ArrowRight` on a resize handle | Resizes the column in steps, so column widths are reachable without a drag (SC 2.5.7). |
 
 ---
@@ -7651,7 +7651,7 @@ const [time, setTime] = useState<string | null>(null);
 | `ArrowLeft`, `ArrowRight` | Moves between the hour, minute, second and meridiem columns. |
 | `Home`, `End` | Jumps to the first or last option in the column. |
 | `PageUp`, `PageDown` | Moves by the larger step on the clock face. |
-| `Escape` | Closes the panel and returns focus to the trigger. |
+| `Escape` | Closes the panel and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Cycles within the open panel. |
 
 ---
@@ -7775,7 +7775,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 
 | Key | Behaviour |
 |-----|-----------|
-| `Escape` | Dismisses the newest toast, and fires its `onDismiss`. An open Modal, Drawer, menu or tooltip takes the key first, and the toast is left alone. On by default; `dismissOnEscape={false}` on the provider turns it off. |
+| `Escape` | Dismisses the newest toast, and fires its `onDismiss`. An open Modal, Drawer, menu or tooltip takes the key first, and the toast is left alone. On by default; `closeOnEscape={false}` on the provider turns it off. |
 | `Tab` | Moves to the toast's action and close button while it is on screen. |
 | `Enter`, `Space` | Activates the focused action. |
 
@@ -7822,7 +7822,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `animationDuration` | `number \| undefined` | Enter and exit transition duration in milliseconds. |
 | `gap` | `number \| undefined` | Space between stacked toasts, in pixels. |
 | `zIndex` | `number \| undefined` | Stacking order for the toast container. |
-| `dismissOnEscape` | `boolean \| undefined` | Dismisses the newest toast when Escape is pressed, unless something above it — an open dialog, drawer or menu — has already handled the key. On by default. |
+| `closeOnEscape` | `boolean \| undefined` | Dismisses the newest toast when Escape is pressed, unless something above it — an open dialog, drawer or menu — has already handled the key. On by default. |
 | `containerAriaLabel` | `string \| undefined` | Accessible name for the toast region. |
 | `classes` | `ToastClasses \| undefined` | Class overrides for this component's slots. |
 | `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |
@@ -8007,6 +8007,6 @@ Defaults include `dark:` variants. Content uses `bg-white dark:bg-gray-800`, `te
 | Key | Behaviour |
 |-----|-----------|
 | `Tab` | Moves focus to the trigger, which shows the tooltip — hover is not the only way in. |
-| `Escape` | Hides it while the trigger keeps focus. |
+| `Escape` | Hides it while the trigger keeps focus. Always: there is no prop to turn it off, because WCAG 1.4.13 requires hover or focus content to be dismissible. |
 
 ---

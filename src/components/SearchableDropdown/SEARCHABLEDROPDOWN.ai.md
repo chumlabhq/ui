@@ -288,7 +288,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 | `Enter`, `Space` | Opens the menu, and selects the focused option. |
 | `ArrowDown`, `ArrowUp` | Moves between the filtered options. `aria-activedescendant` sits on the search input, which holds focus. |
 | `Home`, `End` | Jumps to the first or last filtered option. |
-| `Escape` | Closes the menu and returns focus to the trigger. |
+| `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 | `Backspace`, `Delete` | Clears the selection when the search box is empty and `clearable` is set. |
 | Printable characters | Filters the list. |
