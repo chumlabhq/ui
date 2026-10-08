@@ -845,6 +845,22 @@ const LIBRARY_TOTAL_HISTORY = [
       "chunk is the +1 to +11 B in every other closure. Own and exclusive " +
       "elsewhere -3 to +4 B, chunk hashes. Table held (exclusive 16,239 -> " +
       "16,237 B). Measured against a build of 9d7830c3.",
+  },  {
+    kb: 155.94,
+    commit: "(uncommitted)",
+    date: "2026-10-08",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.11 KB (159,577 -> 159,685 B gzipped, +108 B), 81 files " +
+      "held. Table: own +129 B, closure +139 B, exclusive +131 B (16,237 -> " +
+      "16,368 B), its declared breach raised 15.85 -> 15.98 in the same move: " +
+      "the custom-checkbox selection becomes a keyboard-operable native " +
+      "checkbox (a11y defect: not focusable, no Space); HEAD sat 3.6 B under " +
+      "the limit. One input for both paths, visually hidden beside the custom " +
+      "icon in a label; its four class strings in constants.ts, where the " +
+      "call-site ratchet wants them (Table.tsx 46 -> 45 literals). Every other " +
+      "entry byte-identical bar a +4 B shared closure. Measured against a " +
+      "build of ba82f508.",
   },
 ];
 
@@ -899,8 +915,11 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 15.85,
-      why: "15.81 -> 15.85 on 2026-09-11: row select, expand, group toggle and drag handle were brought to the 24x24 target-size floor (SC 2.5.8), which is class strings on four controls, hoisted into constants.ts after the call-site literal ratchet caught them (48 -> 46 there). 16.76 until the column-filter dialog moved into a chunk of its own " +
+      kb: 15.98,
+      why: "15.85 -> 15.98 on 2026-10-08 (exclusive 16,237 -> 16,368 B gzipped, +131 B): " +
+        "the custom-checkbox selection becomes a keyboard-operable native checkbox " +
+        "(a11y defect: not focusable, no Space); HEAD sat 3.6 B under the limit. " +
+        "15.81 -> 15.85 on 2026-09-11: row select, expand, group toggle and drag handle were brought to the 24x24 target-size floor (SC 2.5.8), which is class strings on four controls, hoisted into constants.ts after the call-site literal ratchet caught them (48 -> 46 there). 16.76 until the column-filter dialog moved into a chunk of its own " +
         "(FilterPanel), with the popup behaviour that reads its element — focus " +
         "in, reposition, close on an outside click. It is the only part of " +
         "Table that exists after an interaction rather than at the first paint, " +

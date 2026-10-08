@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import ts from "typescript";
 import { expect, test } from "@playwright/test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { PAINT_HELPERS } from "./_contrast-measure";
@@ -1161,4 +1162,183 @@ test("a Button stands as tall as its size whatever it holds, in both themes", as
     "these Buttons stand taller or shorter than their size's text-only Button, so a row of " +
       "mixed Buttons does not line up and `size` does not mean one height",
   ).toEqual([]);
+});
+
+/**
+ * A custom checkbox icon is a checkbox a keyboard can use, like the default.
+ *
+ * With `CheckboxIcon` set, Table rendered the icon inside `<span
+ * role="checkbox">` with a click handler and nothing else: no tab stop, no key
+ * handler, so the select-all and every row checkbox could not be reached or
+ * toggled from the keyboard, and a click on a row's icon also counted as a
+ * row click. TableDemo's star checkbox only worked because its own icon
+ * rendered a `<button>`, nesting interactive content inside the checkbox.
+ *
+ * Real focus, not jsdom: in jsdom the grid's focus-follow effect takes focus
+ * from the default row checkbox too, which Chromium does not, so a jsdom check
+ * failed the default it is meant to be compared with.
+ *
+ * - The population is read from Table.tsx: the renderers (`header`, `cell`)
+ *   of the column whose `id` is `"__selection"`, each of which draws a
+ *   checkbox. A site with no recipe fails, and so does a recipe whose site is
+ *   gone.
+ * - The `custom-checkbox` fixture renders the default and the custom icon side
+ *   by side, and each check runs on both. Enter is compared, not asserted.
+ *   Its icon is written inline, a new component every render, as consumers
+ *   write it: as a column dependency that rebuilt the columns on each
+ *   selection and remounted the focused checkbox, so focus is read again after
+ *   Space.
+ */
+const CUSTOM_CHECKBOX_SITES = (() => {
+  const file = resolve(process.cwd(), "src/components/Table/Table.tsx");
+  const sf = ts.createSourceFile(file, readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const found: string[] = [];
+  const visit = (node: ts.Node): void => {
+    // The selection column: the object literal with `id: "__selection"`. Each
+    // of its renderers draws a checkbox, the custom icon's or the default's.
+    if (
+      ts.isObjectLiteralExpression(node) &&
+      node.properties.some(
+        (p) => ts.isPropertyAssignment(p) && p.name.getText(sf) === "id" && p.initializer.getText(sf) === '"__selection"',
+      )
+    ) {
+      for (const p of node.properties) {
+        if (ts.isPropertyAssignment(p) && ["header", "cell"].includes(p.name.getText(sf))) found.push(p.name.getText(sf));
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return found;
+})();
+
+const CUSTOM_CHECKBOX_RECIPES: Record<string, { label: string; mixed: boolean; rowClick: boolean }> = {
+  header: { label: "Select all rows", mixed: true, rowClick: false },
+  cell: { label: "Select row 2", mixed: false, rowClick: true },
+};
+
+/** Everything a check reads off one checkbox, in the page. */
+const READ_CHECKBOX = `((variant, label) => {
+  const root = document.querySelector('[data-table-variant="' + variant + '"]');
+  const boxes = [...root.querySelectorAll('[aria-label="' + label + '"]')].filter((el) =>
+    el.matches('input[type="checkbox"], [role="checkbox"]'));
+  const el = boxes[0];
+  if (!el) return { found: 0 };
+  const checked = el instanceof HTMLInputElement ? el.checked : el.getAttribute("aria-checked") === "true";
+  const mixed = el instanceof HTMLInputElement ? el.indeterminate : el.getAttribute("aria-checked") === "mixed";
+  const control = el.closest("label") || el;
+  const nested = [...control.querySelectorAll("button, a[href], input, select, textarea, [tabindex], [role='button'], [role='checkbox'], [role='link']")]
+    .filter((n) => n !== el).map((n) => n.tagName.toLowerCase());
+  return {
+    found: boxes.length, checked, mixed, nested,
+    focused: document.activeElement === el,
+    selected: Number(root.getAttribute("data-selected")),
+    rowClicks: Number(root.getAttribute("data-row-clicks")),
+  };
+})`;
+
+test("a custom checkbox icon is a keyboard checkbox like the default", async ({ page }) => {
+  test.setTimeout(120_000);
+  console.log(`CUSTOM_CHECKBOX sites=${CUSTOM_CHECKBOX_SITES.length}: ${CUSTOM_CHECKBOX_SITES.join(", ")}`);
+  expect(CUSTOM_CHECKBOX_SITES.length, "Table.tsx renders no custom checkbox — the derivation read nothing").toBeGreaterThan(0);
+  expect(CUSTOM_CHECKBOX_SITES.filter((s) => !CUSTOM_CHECKBOX_RECIPES[s]), "these render a custom checkbox and nothing here says how to reach it").toEqual([]);
+  expect(Object.keys(CUSTOM_CHECKBOX_RECIPES).filter((s) => !CUSTOM_CHECKBOX_SITES.includes(s)), "these recipes name a site Table.tsx no longer renders").toEqual([]);
+
+  const failures: string[] = [];
+  for (const site of CUSTOM_CHECKBOX_SITES) {
+    const recipe = CUSTOM_CHECKBOX_RECIPES[site];
+    const outcome: Record<string, Record<string, unknown>> = {};
+    for (const variant of ["default", "custom"] as const) {
+      await gotoFixture(page, "Table", "custom-checkbox");
+      const read = () => page.evaluate(`${READ_CHECKBOX}(${JSON.stringify(variant)}, ${JSON.stringify(recipe.label)})`) as Promise<{
+        found: number; checked: boolean; mixed: boolean; nested: string[]; focused: boolean; selected: number; rowClicks: number;
+      }>;
+      const o: Record<string, unknown> = {};
+      const first = await read();
+      o.named = first.found === 1;
+      o.nested = first.nested ?? [];
+
+      // Tab order: Tab from just before this table until the checkbox is focused.
+      await page.evaluate((v) => {
+        const root = document.querySelector(`[data-table-variant="${v}"]`) as HTMLElement;
+        const marker = document.createElement("button");
+        marker.id = "tab-start";
+        marker.textContent = "start";
+        root.before(marker);
+        marker.focus();
+      }, variant);
+      let reached = false;
+      for (let i = 0; i < 12 && !reached; i += 1) {
+        await page.keyboard.press("Tab");
+        reached = (await read()).focused;
+      }
+      o.tabbable = reached;
+      if (reached) {
+        await page.waitForTimeout(300);
+        o.keepsFocus = (await read()).focused;
+        o.focusRing = await page.evaluate((label) => {
+          const el = document.activeElement as HTMLElement;
+          if (el.getAttribute("aria-label") !== label) return false;
+          const painted = (n: Element | null) => {
+            if (!n) return false;
+            const cs = getComputedStyle(n);
+            return (cs.outlineStyle !== "none" && parseFloat(cs.outlineWidth) > 0) || cs.boxShadow !== "none";
+          };
+          return painted(el) || painted(el.nextElementSibling);
+        }, recipe.label);
+        const before = (await read()).checked;
+        await page.keyboard.press("Space");
+        await page.waitForTimeout(150);
+        const afterSpaceRead = await read();
+        const afterSpace = afterSpaceRead.checked;
+        o.keepsFocusAfterSpace = afterSpaceRead.focused;
+        await page.keyboard.press("Space");
+        o.space = afterSpace !== before && (await read()).checked === before;
+        await page.keyboard.press("Enter");
+        const afterEnter = (await read()).checked;
+        o.enterToggles = afterEnter !== before;
+        if (afterEnter !== before) await page.keyboard.press("Space");
+      }
+
+      if (recipe.mixed) {
+        await page.locator(`[data-table-variant="${variant}"] [aria-label="Select row 2"]`).first().click({ force: true });
+        o.mixed = (await read()).mixed;
+        await page.locator(`[data-table-variant="${variant}"] [aria-label="Select row 2"]`).first().click({ force: true });
+      }
+
+      // A click on the visible control: the icon for custom, the input for default.
+      const clicksBefore = (await read()).rowClicks;
+      const checkedBefore = (await read()).checked;
+      const target =
+        variant === "custom"
+          ? page
+              .locator(
+                `[data-table-variant="custom"] :is(label:has(> [aria-label="${recipe.label}"]), [role="checkbox"][aria-label="${recipe.label}"]) svg`,
+              )
+              .first()
+          : page.locator(`[data-table-variant="default"] [aria-label="${recipe.label}"]`).first();
+      await target.click();
+      const afterClick = await read();
+      o.clickToggles = afterClick.checked !== checkedBefore;
+      o.clickIsRowClick = afterClick.rowClicks !== clicksBefore;
+
+      outcome[variant] = o;
+      console.log(`CUSTOM_CHECKBOX ${site} ${variant}: ${JSON.stringify(o)}`);
+    }
+
+    const d = outcome.default, c = outcome.custom;
+    if (!c.named) failures.push(`${site}: no single checkbox named "${recipe.label}"`);
+    if (!c.tabbable) failures.push(`${site}: not reachable with Tab`);
+    if (c.tabbable && !c.keepsFocus) failures.push(`${site}: loses focus after Tab`);
+    if (c.tabbable && !c.focusRing) failures.push(`${site}: keyboard focus paints no indicator`);
+    if (c.tabbable && !c.space) failures.push(`${site}: Space does not toggle it`);
+    if (c.tabbable && c.keepsFocusAfterSpace !== d.keepsFocusAfterSpace) failures.push(`${site}: ${c.keepsFocusAfterSpace ? "keeps" : "loses"} focus after Space, unlike the default`);
+    if (c.tabbable && c.enterToggles !== d.enterToggles) failures.push(`${site}: Enter ${c.enterToggles ? "toggles" : "does not toggle"} it, unlike the default`);
+    if (recipe.mixed && !c.mixed) failures.push(`${site}: a partial selection does not report mixed`);
+    if ((c.nested as string[]).length) failures.push(`${site}: nests ${(c.nested as string[]).join(", ")} inside the checkbox`);
+    if (!c.clickToggles) failures.push(`${site}: a click on the icon does not toggle it`);
+    if (recipe.rowClick && c.clickIsRowClick !== d.clickIsRowClick) failures.push(`${site}: a click on the icon ${c.clickIsRowClick ? "also fires" : "does not fire"} onRowClick, unlike the default`);
+  }
+  console.log(`CUSTOM_CHECKBOX_KEYBOARD ${CUSTOM_CHECKBOX_SITES.length} sites, ${failures.length} failures`);
+  expect(failures, "a custom checkbox icon has to behave like the default checkbox at the same site").toEqual([]);
 });

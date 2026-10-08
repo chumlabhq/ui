@@ -15,6 +15,15 @@ export const TABLE_HIT_AREA = "inline-flex items-center justify-center min-w-6 m
 export const TABLE_DRAG_HANDLE = `${TABLE_HIT_AREA} cursor-grab select-none`;
 export const TABLE_SELECT_CONTROL = `${TABLE_HIT_AREA} cursor-pointer`;
 export const TABLE_CHECKBOX_SIZE = "w-6 h-6";
+/**
+ * A custom `CheckboxIcon`: the default's native input, visually hidden in a
+ * label beside the icon, and the focus ring drawn on the icon from the input.
+ */
+export const TABLE_CUSTOM_CHECKBOX = `relative ${TABLE_SELECT_CONTROL}`;
+export const TABLE_CUSTOM_CHECKBOX_DISABLED = "cursor-not-allowed opacity-50";
+export const TABLE_CUSTOM_CHECKBOX_INPUT = "peer sr-only";
+export const TABLE_CUSTOM_CHECKBOX_ICON =
+  "inline-flex rounded-sm peer-focus-visible:ring-2 peer-focus-visible:ring-cl-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cl-bg";
 
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   root:

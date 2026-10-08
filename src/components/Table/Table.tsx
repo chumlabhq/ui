@@ -49,8 +49,11 @@ import {
   UNSTYLED_TABLE_CLASSES,
   TABLE_HIT_AREA,
   TABLE_DRAG_HANDLE,
-  TABLE_SELECT_CONTROL,
   TABLE_CHECKBOX_SIZE,
+  TABLE_CUSTOM_CHECKBOX,
+  TABLE_CUSTOM_CHECKBOX_DISABLED,
+  TABLE_CUSTOM_CHECKBOX_INPUT,
+  TABLE_CUSTOM_CHECKBOX_ICON,
 } from "./constants.js";
 import {
   PinIcon,
@@ -451,6 +454,11 @@ function TableInner<TData>(
     [editableColumns],
   );
 
+  // Read at render time: an inline icon as a column dependency remounted the focused checkbox.
+  const checkboxIconRef = useRef(CustomCheckboxIcon);
+  checkboxIconRef.current = CustomCheckboxIcon;
+  const hasCustomCheckboxIcon = Boolean(CustomCheckboxIcon);
+
   const augmentedColumns = useMemo(() => {
     const cols: ColumnDef<TData, unknown>[] = [];
 
@@ -496,75 +504,63 @@ function TableInner<TData>(
     }
 
     if (selectionMode === "multiple") {
+      // The default checkbox, every time. With a custom icon the same input is
+      // visually hidden inside a label beside the icon, which is presentational.
+      const selectBox = (
+        checked: boolean,
+        indeterminate: boolean,
+        disabled: boolean,
+        onChange: (event: unknown) => void,
+        label: string,
+        iconClassName?: string,
+      ) => {
+        const Icon = hasCustomCheckboxIcon ? checkboxIconRef.current : undefined;
+        const input = (
+          <input
+            type="checkbox"
+            className={Icon ? TABLE_CUSTOM_CHECKBOX_INPUT : `${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
+            style={!Icon && checkboxColor ? { accentColor: checkboxColor } : undefined}
+            checked={checked}
+            ref={(el) => {
+              if (el) {
+                el.indeterminate = indeterminate;
+              }
+            }}
+            disabled={disabled}
+            onChange={onChange}
+            aria-label={label}
+          />
+        );
+        if (!Icon) return input;
+        return (
+          <label data-interactive className={cn(TABLE_CUSTOM_CHECKBOX, disabled && TABLE_CUSTOM_CHECKBOX_DISABLED)}>
+            {input}
+            <span aria-hidden="true" className={TABLE_CUSTOM_CHECKBOX_ICON}>
+              <Icon checked={checked} indeterminate={indeterminate} className={iconClassName} />
+            </span>
+          </label>
+        );
+      };
       cols.push({
         id: "__selection",
-        header: ({ table: t }) => {
-          const checked = selectAllMode === "all" ? t.getIsAllRowsSelected() : t.getIsAllPageRowsSelected();
-          const indeterminate = selectAllMode === "all" ? t.getIsSomeRowsSelected() : t.getIsSomePageRowsSelected();
-          const toggleHandler = selectAllMode === "all" ? t.getToggleAllRowsSelectedHandler() : t.getToggleAllPageRowsSelectedHandler();
-          if (CustomCheckboxIcon) {
-            return (
-              <span
-                onClick={toggleHandler}
-                role="checkbox"
-                aria-checked={indeterminate ? "mixed" : checked}
-                aria-label="Select all rows"
-                className="cursor-pointer"
-              >
-                <CustomCheckboxIcon
-                  checked={checked}
-                  indeterminate={indeterminate}
-                  className={`${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
-                />
-              </span>
-            );
-          }
-          return (
-            <input
-              type="checkbox"
-              className={`${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
-              style={checkboxColor ? { accentColor: checkboxColor } : undefined}
-              checked={checked}
-              ref={(el) => {
-                if (el) {
-                  el.indeterminate = indeterminate;
-                }
-              }}
-              onChange={toggleHandler}
-              aria-label="Select all rows"
-            />
-          );
-        },
-        cell: ({ row }) => {
-          const checked = row.getIsSelected();
-          if (CustomCheckboxIcon) {
-            return (
-              <span
-                onClick={row.getToggleSelectedHandler()}
-                role="checkbox"
-                aria-checked={checked}
-                aria-label={`Select row ${row.id}`}
-                className={TABLE_SELECT_CONTROL}
-              >
-                <CustomCheckboxIcon
-                  checked={checked}
-                  className={checkboxClassName}
-                />
-              </span>
-            );
-          }
-          return (
-            <input
-              type="checkbox"
-              className={`${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
-              style={checkboxColor ? { accentColor: checkboxColor } : undefined}
-              checked={checked}
-              disabled={!row.getCanSelect()}
-              onChange={row.getToggleSelectedHandler()}
-              aria-label={`Select row ${row.id}`}
-            />
-          );
-        },
+        header: ({ table: t }) =>
+          selectBox(
+            selectAllMode === "all" ? t.getIsAllRowsSelected() : t.getIsAllPageRowsSelected(),
+            selectAllMode === "all" ? t.getIsSomeRowsSelected() : t.getIsSomePageRowsSelected(),
+            false,
+            selectAllMode === "all" ? t.getToggleAllRowsSelectedHandler() : t.getToggleAllPageRowsSelectedHandler(),
+            "Select all rows",
+            `${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`,
+          ),
+        cell: ({ row }) =>
+          selectBox(
+            row.getIsSelected(),
+            false,
+            !row.getCanSelect(),
+            row.getToggleSelectedHandler(),
+            `Select row ${row.id}`,
+            checkboxClassName,
+          ),
         size: 40,
         maxSize: 40,
         minSize: 40,
@@ -645,7 +641,7 @@ function TableInner<TData>(
     expandIconClassName,
     enableRowDragDrop,
     dragHandleClassName,
-    CustomCheckboxIcon,
+    hasCustomCheckboxIcon,
     checkboxColor,
     CustomDragHandleIcon,
     CustomExpandIcon,

@@ -3,6 +3,7 @@ import type { ActTools } from "./_act.js";
 import { RtlBoundary } from "./_harness.js";
 import type { TableProps } from "../../components/Table/utils/types.js";
 import { ROWS, COLUMNS } from "./_data.js";
+import { CheckboxPair } from "./_table.js";
 
 type Row = (typeof ROWS)[number];
 
@@ -131,6 +132,14 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     act: openFilterPanel,
+  },
+  {
+    // A consumer's `CheckboxIcon` beside the default checkbox, both
+    // uncontrolled. `default-state` tabs to each, presses Space and Enter,
+    // clicks the icon, and holds the custom one to what the default did.
+    name: "custom-checkbox",
+    props: { data: ROWS, columns: COLUMNS },
+    render: () => <CheckboxPair />,
   },
 ];
 export default fixtures;

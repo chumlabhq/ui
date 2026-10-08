@@ -13564,6 +13564,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "when isFocused"
       },
       {
+        "name": "data-interactive",
+        "values": [],
+        "when": "always"
+      },
+      {
         "name": "data-loading-more",
         "values": [],
         "when": "always"
