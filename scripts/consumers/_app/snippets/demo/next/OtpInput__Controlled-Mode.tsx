@@ -17,12 +17,12 @@ export default function OtpInputExample() {
           {controlled}
           &quot;
         </span>
-        <button
-          className="ml-auto px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:bg-cl-bg-hover hover:border-cl-border-input-hover cursor-pointer cursor-pointer"
+        <Button
+          className="ml-auto px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:bg-cl-bg-hover hover:border-cl-border-input-hover cursor-pointer"
           onClick={() => setControlled("")}
         >
           Clear
-        </button>
+        </Button>
         <Button
           className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer"
           onClick={() => setControlled("123456")}

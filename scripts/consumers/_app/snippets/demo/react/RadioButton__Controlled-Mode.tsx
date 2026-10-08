@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { RadioButton, RadioGroup } from "@chumlab/ui/radio-button";
 
 export default function RadioButtonExample() {
@@ -10,8 +11,9 @@ export default function RadioButtonExample() {
         <span className="text-sm font-mono text-cl-text-secondary">
           {controlled}
         </span>
-        <button
-          className="ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
+        <Button
+          size="sm"
+          className="ml-auto rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
           onClick={
             () =>
             setControlled((prev) =>
@@ -24,7 +26,7 @@ export default function RadioButtonExample() {
           }
         >
           Cycle Externally
-        </button>
+        </Button>
       </div>
       <RadioGroup
         name="controlled"

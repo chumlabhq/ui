@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { DatePicker } from "@chumlab/ui/date-picker";
 
 export default function DatePickerExample() {
@@ -12,18 +13,20 @@ export default function DatePickerExample() {
         <span className="text-sm font-mono text-cl-text-secondary">
           {controlledDate?.toLocaleDateString() ?? "null"}
         </span>
-        <button
-          className="ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
+        <Button
+          size="sm"
+          className="ml-auto rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
           onClick={() => setControlledDate(null)}
         >
           Clear
-        </button>
-        <button
-          className="px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer"
+        </Button>
+        <Button
+          size="sm"
+          className="rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
           onClick={() => setControlledDate(new Date())}
         >
           Set Today
-        </button>
+        </Button>
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker

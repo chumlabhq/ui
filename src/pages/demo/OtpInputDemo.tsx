@@ -218,12 +218,12 @@ const OtpInputDemo = () => {
             >
               &quot;{controlled}&quot;
             </span>
-            <button
-              className={`ml-auto ${c.btn} cursor-pointer`}
+            <Button
+              className={`ml-auto ${c.btn}`}
               onClick={() => setControlled("")}
             >
               Clear
-            </button>
+            </Button>
             <Button
               className={c.btnPrimary}
               onClick={() => setControlled("123456")}

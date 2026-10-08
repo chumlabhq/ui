@@ -42,7 +42,7 @@ export default function MultiSelectSearchableDropdownExample() {
                           "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                         content: "rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus dark:bg-[color-mix(in_oklab,var(--color-cl-accent)_20%,var(--color-cl-bg-elevated))] dark:border dark:border-cl-border-input-focus",
                         searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-border-input-focus bg-cl-accent/10 dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/20",
-                        item: "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent",
+                        item: "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-accent-hover hover:bg-cl-accent/10",
                         icon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent",
                         itemControl: "w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input-focus dark:border dark:border-cl-border-input-focus",
                         searchIcon: "w-4 h-4 shrink-0 text-cl-accent",
