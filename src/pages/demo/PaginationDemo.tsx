@@ -4,6 +4,7 @@ import {
   useRef,
   useEffect } from "react";
 import { Pagination } from "../../components/Pagination/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -488,23 +489,23 @@ const PaginationDemo = () => {
                 Items per page:
               </span>
               {[10, 25, 50, 100].map((r) => (
-                <button
+                <Button
                   key={r}
-                  type="button"
+                  size="md"
                   onClick={() => {
                     setExternalRows(r);
                     setExternalPage(1);
                   }}
-                  className={`px-3 py-1.5 text-sm rounded-cl-md border cursor-pointer transition-all ${
+                  className={`rounded-cl-md border ${
                     externalRows === r
-                      ? "bg-cl-accent text-cl-on-accent border-cl-border-input-focus shadow-sm"
+                      ? "bg-cl-accent text-cl-on-accent border-cl-border-input-focus"
                       : dark
                         ? "border-cl-border text-cl-text-secondary hover:bg-cl-bg-elevated"
                         : "border-cl-border text-cl-text hover:bg-cl-bg-hover"
                   }`}
                 >
                   {r}
-                </button>
+                </Button>
               ))}
             </div>
             <Pagination

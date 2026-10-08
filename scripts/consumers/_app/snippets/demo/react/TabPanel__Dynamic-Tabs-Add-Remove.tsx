@@ -153,14 +153,14 @@ export default function TabPanelExample() {
                     Active:{" "}
                     <strong className={"font-medium text-cl-text"}>{tab.label}</strong>
                   </span>
-                  <button
-                    type="button"
+                  <Button
+                    size="md"
                     onClick={() => removeDynamicTab(tab.id)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors bg-cl-error/15 hover:bg-cl-error/25 text-cl-text border border-cl-error/30 cursor-pointer"
+                    startIcon={<TrashIcon className="w-4 h-4" />}
+                    className="rounded-cl-md bg-cl-error/15 hover:bg-cl-error/25 text-cl-text border border-cl-error/30"
                   >
-                    <TrashIcon className="w-4 h-4" />
                     Remove this tab
-                  </button>
+                  </Button>
                 </div>
               )
             }

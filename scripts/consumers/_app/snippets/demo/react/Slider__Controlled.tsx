@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Slider } from "@chumlab/ui/slider";
 
 export default function SliderExample() {
@@ -23,14 +24,18 @@ export default function SliderExample() {
       <div className="flex gap-2 flex-wrap">
         {
           [0, 25, 50, 75, 100].map((v) => (
-            <button
+            <Button
               key={v}
-              type="button"
-              className={controlled === v ? "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90" : "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"}
+              size="sm"
+              className={
+                controlled === v
+                ? "rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
+                : "rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
+              }
               onClick={() => setControlled(v)}
             >
               {v}
-            </button>
+            </Button>
           ))
         }
       </div>

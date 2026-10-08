@@ -939,8 +939,9 @@ const InputDemo = () => {
               />
               <div className="flex gap-2 flex-wrap">
                 {(["Focus", "Select All", "Get Value"] as const).map((lbl) => (
-                  <button
+                  <Button
                     key={lbl}
+                    size="sm"
                     onClick={() => {
                       if (lbl === "Focus") inputRef.current?.focus();
                       else if (lbl === "Select All") {
@@ -949,10 +950,10 @@ const InputDemo = () => {
                       } else if (lbl === "Get Value")
                         setRefReadValue(JSON.stringify(inputRef.current?.value));
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6 cursor-pointer`}
+                    className="rounded-cl-md bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6"
                   >
                     {lbl}
-                  </button>
+                  </Button>
                 ))}
               </div>
               <div className="rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>

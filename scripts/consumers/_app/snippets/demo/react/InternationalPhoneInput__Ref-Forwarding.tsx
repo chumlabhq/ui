@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { InternationalPhoneInput, PhoneNumberData } from "@chumlab/ui/international-phone-input";
 
 export default function InternationalPhoneInputExample() {
@@ -35,9 +36,9 @@ export default function InternationalPhoneInputExample() {
       <div className="flex gap-2 flex-wrap">
         {
           (["Focus", "Select All", "Get Value"] as const).map((lbl) => (
-            <button
+            <Button
               key={lbl}
-              type="button"
+              size="sm"
               onClick={
                 () => {
                   if (lbl === "Focus") inputRef.current?.focus();
@@ -48,10 +49,10 @@ export default function InternationalPhoneInputExample() {
                     setRefReadValue(JSON.stringify(inputRef.current?.value));
                 }
               }
-              className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
+              className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
             >
               {lbl}
-            </button>
+            </Button>
           ))
         }
       </div>

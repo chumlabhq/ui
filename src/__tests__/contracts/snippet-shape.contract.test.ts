@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import ts from "typescript";
 import { describe, expect, it } from "vitest";
 import { DEMO_SNIPPETS } from "../../pages/demo/generated/demoSnippets.js";
 
@@ -251,51 +252,147 @@ describe("snippet shape contract", () => {
    * right for the page and wrong here: in a snippet nothing is harness, every
    * line is being shown as the way to do it. A `<button>` classed
    * `bg-cl-accent text-cl-on-accent` teaches a reader to rebuild `Button`.
+   *
+   * Read from the parsed snippet, not with a regex. The regex this replaced,
+   * `/<button\b[^>]*className="[^"]*"/`, saw a double-quoted className only and
+   * stopped at the `>` of any `=>` in an earlier prop, so `onClick={() => …}`
+   * ahead of the className hid the button: it passed with 3 of 40 found. Here
+   * every string the className can produce is read: a string, a template
+   * literal, a conditional, a `cn()` / `clsx()` call, and a `c.x` or identifier
+   * the snippet itself declares.
    */
   it("hand-classes no element the library provides", () => {
-    /** The raw element is the lesson. Each with the reason it is. */
-    const EXEMPT_RAW = new Map([
-      ["Drawer/Directions", "The `.map()` exclusion above; the button is the trigger inside it."],
-      ["Input/InputLabel Standalone", "The section exists to pair `InputLabel` with a NATIVE field — with `Input` you pass `label` and never reach for it. The raw input is the lesson."],
-      ["TextArea/TextAreaLabel Standalone", "As Input's, for `TextAreaLabel`."],
-      ["Modal/Focus Trap", "Raw inputs as focus-order fodder. Borderline: `Input` is focusable too and would teach better, so this is a decision to revisit, not a principle."],
-      ["Modal/Initial Focus", "As Focus Trap's."],
-      ["Toast/Custom Content (content prop)", "A deliberately branded button inside a toast body, demonstrating that the content slot takes anything. Its colours are not ours."],
-      ["DatePicker/Controlled Open", "The trigger is not written through the page's class bag, so the conversion tool had nothing to key on. Left pending a decision, not decided."],
-      ["Drawer/Initial Focus", "A native `<input data-autofocus>`: the attribute on a plain field IS the mechanism the section demonstrates, and an `Input` would hide it behind a component."],
-      ["Accordion/Composition with asChild", "`asChild` hands the trigger's behaviour to an element you supply; a raw `<button>` styled your way is that element, and a `Button` would hide the point."],
-    ]);
-
     /**
-     * NOT exempt — UNPARSED. The balanced-tag converter reported unmatched
-     * openers on these two pages and was not run on them. They are unconverted
-     * because the tool could not read them, and if that reads as "decided" the
-     * next person will leave them alone for the wrong reason.
+     * The raw element is the lesson. Each names its section, its element by the
+     * text or aria-label a reader sees, and why — and goes stale, failing, once
+     * that section stops containing that element hand-classed.
      */
-    const UNPARSED = new Map([
-      ["Dropdown/Controlled Open State", "TooltipDemo-style converter reported `unbalanced 2` on DropdownDemo.tsx."],
-      ["SearchableDropdown/Controlled Open State", "Converter reported `unbalanced 2` on SearchableDropdownDemo.tsx."],
-    ]);
-
-    const TOKEN = /\b(?:bg-cl-|text-cl-|border-cl-|rounded-cl-)/;
-    const PROVIDED: Array<[RegExp, string]> = [
-      [/<button\b[^>]*className="[^"]*"/gs, "button"],
-      [/<input\b(?![^>]*type="(?:checkbox|radio|range|file)")[^>]*className="[^"]*"/gs, "input"],
-      [/<textarea\b[^>]*className="[^"]*"/gs, "textarea"],
+    const LINK_STYLE =
+      "A text action styled as a link: accent or plain text, no fill. Button has no text or link " +
+      "variant, and adding one is new API, not a demo fix.";
+    const EXEMPT_RAW: Array<{ key: string; element: string; reason: string }> = [
+      // The API hands you the element.
+      { key: "Accordion/Composition with asChild", element: '<button> "Your own button, styled your way"', reason: "`asChild` hands the trigger's behaviour to an element you supply; a raw `<button>` styled your way is that element, and a `Button` would hide the point." },
+      { key: "Dropdown/Custom Trigger (renderTrigger)", element: '<button> "<button>"', reason: "`renderTrigger` is handed a ref and trigger props to put on an element of your own. The raw `<button>` taking that ref is the lesson." },
+      { key: "SearchableDropdown/Custom Trigger (renderTrigger)", element: '<button> "<button>"', reason: "As Dropdown's: the `renderTrigger` element that takes the ref." },
+      { key: "OtpInput/Custom Render Input", element: '<input> "<input>"', reason: "`renderInput` passes the props for a native input; spreading them on a raw `<input>` is what the section shows." },
+      // The library's element would not fit the slot.
+      { key: "Avatar/Clickable Avatars", element: '<button> "<button>"', reason: "A profile row: an avatar and a name, `gap-3` and `px-3 py-2` around a 40px avatar. Button's sizes set their own gap (gap-1.5 to gap-2.5, in the span wrapping its children) and padding, so the row's spacing would have to be overridden back by hand." },
+      { key: "Pagination/Custom Ellipsis (Jump to Page)", element: '<button> "Jump to page"', reason: "It stands in for Pagination's ellipsis and takes each variant's page-item box (`w-9 h-9 rounded-full` for the pill). Button's sizes are padding-based, 28, 40 and 52px tall." },
+      { key: "Pagination/Custom Ellipsis (Jump to Page)", element: '<input> "<input>"', reason: "The same slot's page-number box, `w-12` inline in the pagination row. Input renders a field: a wrapper with label, description and message around its `<input>`." },
+      // Link-style text actions.
+      { key: "CascadingDropdown/Fully Async - Load on Open", element: '<button> "Reset"', reason: LINK_STYLE },
+      { key: "Modal/Use Cases", element: '<button> "Maybe later"', reason: LINK_STYLE },
+      { key: "Table/Right Column Pinning", element: '<button> "Edit"', reason: LINK_STYLE },
+      { key: "Table/Context Menu", element: '<button> "Dismiss"', reason: LINK_STYLE },
+      { key: "Table/Infinite Scroll", element: '<button> "Reset"', reason: LINK_STYLE },
+      { key: "Table/Infinite Scroll (Skeleton Loader)", element: '<button> "Reset"', reason: LINK_STYLE },
+      { key: "Table/Infinite Scroll (Progress Bar Loader)", element: '<button> "Reset"', reason: LINK_STYLE },
+      { key: "Table/Infinite Scroll (No Loading UI, Silent Load)", element: '<button> "Reset"', reason: LINK_STYLE },
+      // The raw element is the mechanism or the subject.
+      { key: "Drawer/Directions", element: '<button> "{dir}"', reason: "The drawer sits inside a `.map()` (see the missing-component rule above); the button is the trigger inside it." },
+      { key: "Input/InputLabel Standalone", element: '<input> "<input>"', reason: "The section exists to pair `InputLabel` with a NATIVE field — with `Input` you pass `label` and never reach for it. The raw input is the lesson." },
+      { key: "TextArea/TextAreaLabel Standalone", element: '<textarea> "<textarea>"', reason: "As Input's, for `TextAreaLabel`." },
+      { key: "Modal/Focus Trap", element: '<input> "<input>"', reason: "Raw inputs as focus-order fodder. Borderline: `Input` is focusable too and would teach better, so this is a decision to revisit, not a principle." },
+      { key: "Modal/Initial Focus", element: '<input> "<input>"', reason: "As Focus Trap's." },
+      { key: "Drawer/Initial Focus", element: '<input> "<input>"', reason: "A native `<input data-autofocus>`: the attribute on a plain field IS the mechanism the section demonstrates, and an `Input` would hide it behind a component." },
     ];
 
-    const handClassed: string[] = [];
+    const TOKEN = /\b(?:bg-cl-|text-cl-|border-cl-|rounded-cl-)/;
+    /** `<input>` types the library has no field for: a check, a radio, a range, a file picker. */
+    const NATIVE_ONLY_INPUT = new Set(["checkbox", "radio", "range", "file"]);
+
+    let parsed = 0;
+    const examined = { button: 0, input: 0, textarea: 0 };
+    const found: string[] = [];
+
     for (const { component, title, code } of every) {
       const key = `${component}/${title}`;
-      if (EXEMPT_RAW.has(key) || UNPARSED.has(key)) continue;
-      for (const [re, tag] of PROVIDED) {
-        for (const m of code.matchAll(re)) {
-          if (TOKEN.test(m[0])) { handClassed.push(`${key} (<${tag}>)`); break; }
+      const sf = ts.createSourceFile("snippet.tsx", code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      parsed += 1;
+
+      // What a `c.x` or a bare identifier stands for, from the snippet's own
+      // declarations: object-literal properties and `const` initializers.
+      const declared = new Map<string, ts.Expression>();
+      const collect = (node: ts.Node): void => {
+        if (ts.isPropertyAssignment(node) && (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name))) {
+          declared.set(node.name.text, node.initializer);
+        } else if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+          declared.set(node.name.text, node.initializer);
         }
-      }
+        ts.forEachChild(node, collect);
+      };
+      collect(sf);
+
+      /** Every class string a className expression can produce, concatenated. */
+      const classText = (node: ts.Node, seen = new Set<ts.Node>()): string => {
+        if (seen.has(node)) return "";
+        seen.add(node);
+        if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text;
+        if (ts.isTemplateExpression(node)) {
+          return [node.head.text, ...node.templateSpans.flatMap((s) => [classText(s.expression, seen), s.literal.text])].join(" ");
+        }
+        if (ts.isPropertyAccessExpression(node) || ts.isIdentifier(node)) {
+          const name = ts.isIdentifier(node) ? node.text : node.name.text;
+          const target = declared.get(name);
+          return target ? classText(target, seen) : "";
+        }
+        const parts: string[] = [];
+        ts.forEachChild(node, (child) => { parts.push(classText(child, seen)); });
+        return parts.join(" ");
+      };
+
+      const attr = (open: ts.JsxOpeningLikeElement, name: string) =>
+        open.attributes.properties.find(
+          (a): a is ts.JsxAttribute => ts.isJsxAttribute(a) && a.name.getText(sf) === name,
+        );
+      /** The element as a reader names it: its aria-label, else its own text. */
+      const nameOf = (node: ts.JsxElement | ts.JsxSelfClosingElement, open: ts.JsxOpeningLikeElement) => {
+        const label = attr(open, "aria-label")?.initializer;
+        if (label && ts.isStringLiteral(label)) return label.text;
+        if (ts.isJsxSelfClosingElement(node)) return `<${open.tagName.getText(sf)}>`;
+        const text = node.children
+          .map((c) => (ts.isJsxText(c) ? c.text : ts.isJsxExpression(c) && c.expression ? `{${c.expression.getText(sf)}}` : ""))
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim();
+        return text || `<${open.tagName.getText(sf)}>`;
+      };
+
+      const visit = (node: ts.Node): void => {
+        if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
+          const open = ts.isJsxElement(node) ? node.openingElement : node;
+          const tag = open.tagName.getText(sf);
+          if (tag === "button" || tag === "input" || tag === "textarea") {
+            const type = attr(open, "type")?.initializer;
+            const nativeOnly =
+              tag === "input" && type !== undefined && ts.isStringLiteral(type) && NATIVE_ONLY_INPUT.has(type.text);
+            if (!nativeOnly) {
+              examined[tag] += 1;
+              const cls = attr(open, "className")?.initializer;
+              if (cls && TOKEN.test(classText(cls))) found.push(`${key} <${tag}> "${nameOf(node, open)}"`);
+            }
+          }
+        }
+        ts.forEachChild(node, visit);
+      };
+      visit(sf);
     }
+
+    const isExempt = (f: string) => EXEMPT_RAW.some((e) => f === `${e.key} ${e.element}`);
+    const handClassed = found.filter((f) => !isExempt(f));
+    const stale = EXEMPT_RAW.filter((e) => !found.includes(`${e.key} ${e.element}`)).map((e) => `${e.key} ${e.element}`);
+    console.log(
+      `HAND_CLASSED snippets=${parsed} examined button=${examined.button} input=${examined.input} ` +
+        `textarea=${examined.textarea} found=${found.length} exempt=${found.length - handClassed.length} ` +
+        `failing=${handClassed.length} stale=${stale.length}`,
+    );
+    for (const f of found) console.log(`  ${isExempt(f) ? "exempt " : "FOUND  "} ${f}`);
+
+    expect(parsed, "the snippets were not read, so nothing was examined").toBe(every.length);
+    expect(stale, "an exemption whose section no longer hand-classes that element excuses nothing; delete it").toEqual([]);
     expect(
-      [...new Set(handClassed)].sort(),
+      handClassed.sort(),
       "a snippet dresses a raw element in the library's own tokens. In a snippet nothing is " +
         "harness — every line is being shown as the way to do it",
     ).toEqual([]);

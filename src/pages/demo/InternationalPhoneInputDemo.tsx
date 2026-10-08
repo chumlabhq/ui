@@ -853,9 +853,9 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
               <div className="flex gap-2 flex-wrap">
                 {(["Focus", "Select All", "Get Value"] as const).map(
                   (lbl) => (
-                    <button
+                    <Button
                       key={lbl}
-                      type="button"
+                      size="sm"
                       onClick={() => {
                         if (lbl === "Focus") inputRef.current?.focus();
                         else if (lbl === "Select All") {
@@ -864,10 +864,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                         } else if (lbl === "Get Value")
                           setRefReadValue(JSON.stringify(inputRef.current?.value));
                       }}
-                      className={c.btn}
+                      className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
                     >
                       {lbl}
-                    </button>
+                    </Button>
                   ),
                 )}
               </div>

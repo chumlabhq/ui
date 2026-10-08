@@ -336,12 +336,13 @@ const ModalDemo = () => {
               <span className={`text-3xl font-bold text-cl-text`}>$29</span>
               <span className="text-cl-text-tertiary">/month</span>
             </div>
-            <button
+            <Button
+              size="lg"
               onClick={() => setUpgradeOpen(false)}
-              className="w-full py-3 bg-cl-text text-cl-bg rounded-cl-md hover:opacity-90 transition-all font-semibold cursor-pointer"
+              className="w-full rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
             >
               Upgrade Now
-            </button>
+            </Button>
             <button
               onClick={() => setUpgradeOpen(false)}
               className={`w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text cursor-pointer`}
@@ -487,24 +488,26 @@ const ModalDemo = () => {
           <div className="h-full flex flex-col">
             <header className="bg-cl-bg-elevated border-b border-cl-border px-4 sm:px-6 py-4 flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
               <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                <button
+                <Button
+                  size="sm"
                   onClick={() => setFullScreenOpen(false)}
-                  className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors shrink-0 cursor-pointer"
-                >
-                  <svg
-                    className="w-5 h-5 text-cl-text-secondary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                  className="shrink-0 rounded-cl-md hover:bg-cl-bg-hover"
+                  startIcon={
+                    <svg
+                      className="w-5 h-5 text-cl-text-secondary"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  }
+                />
                 <div className="min-w-0">
                   <h1 className="font-semibold text-cl-text truncate">
                     Document Preview

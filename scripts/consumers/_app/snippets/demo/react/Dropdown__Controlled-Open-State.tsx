@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Dropdown, DropdownOption } from "@chumlab/ui/dropdown";
 
 const fruitOptions: DropdownOption[] = [
@@ -35,23 +36,23 @@ export default function DropdownExample() {
         />
       </div>
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
+        <Button
+          size="sm"
+          className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
           onMouseDown={(e) => e.stopPropagation()}
           onClick={() => setControlledOpen(!controlledOpen)}
         >
           {controlledOpen ? "Close" : "Open"}
-        </button>
+        </Button>
         {
           controlledValue && (
-            <button
-              type="button"
-              className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
+            <Button
+              size="sm"
+              className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
               onClick={() => setControlledValue(null)}
             >
               Clear
-            </button>
+            </Button>
           )
         }
       </div>

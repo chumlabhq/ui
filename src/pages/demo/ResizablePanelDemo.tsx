@@ -14,6 +14,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 
 const getClasses = (_dark: boolean) => ({
@@ -357,13 +358,13 @@ const ResizablePanelDemo = () => {
                 className="flex-1"
                 aria-label="Panel width"
               />
-              <button
-                type="button"
+              <Button
+                size="sm"
                 onClick={() => setControlledWidth(320)}
-                className={c.btnPrimary}
+                className="rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
               >
                 Reset
-              </button>
+              </Button>
             </div>
             <ResizablePanel
               value={controlledWidth}
@@ -441,17 +442,17 @@ const ResizablePanelDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div className="w-full space-y-4">
             <div className="flex items-center gap-3">
-              <button
-                type="button"
+              <Button
+                size="sm"
                 onClick={() => setDisabledToggle((p) => !p)}
                 className={
                   disabledToggle
-                    ? `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-error hover:bg-cl-error text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error dark:text-cl-bg cursor-pointer`
-                    : `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success hover:bg-cl-success text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success dark:text-cl-bg cursor-pointer`
+                    ? "rounded-cl-md bg-cl-error hover:bg-cl-error text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error dark:text-cl-bg"
+                    : "rounded-cl-md bg-cl-success hover:bg-cl-success text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success dark:text-cl-bg"
                 }
               >
                 {disabledToggle ? "Disabled" : "Enabled"} — Click to toggle
-              </button>
+              </Button>
             </div>
             <ResizablePanel
               defaultValue={280}

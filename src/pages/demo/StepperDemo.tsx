@@ -7,6 +7,7 @@ import type {
   StepStatus,
   StepTooltipConfig,
   } from "../../components/Stepper/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -676,14 +677,15 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={c.stepper}
             />
-            <button
+            <Button
+              size="sm"
               onClick={() =>
                 stepperRef.current?.scrollIntoView({ behavior: "smooth" })
               }
-              className={c.btn}
+              className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
             >
               Scroll to Stepper
-            </button>
+            </Button>
           </div>
         </DemoWrapper>
       </Section>

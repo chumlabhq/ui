@@ -4,6 +4,7 @@ import {
 import { Slider } from "../../components/Slider/index.js";
 import type { SliderValue,
   SliderMark } from "../../components/Slider/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -491,9 +492,18 @@ const SliderDemo = () => {
             <Slider value={controlled} onValueChange={(v) => setControlled(v as number)} classes={c.slider} showTooltip />
             <div className="flex gap-2 flex-wrap">
               {[0, 25, 50, 75, 100].map((v) => (
-                <button key={v} type="button" className={controlled === v ? c.btnPrimary : c.btn} onClick={() => setControlled(v)}>
+                <Button
+                  key={v}
+                  size="sm"
+                  className={
+                    controlled === v
+                      ? "rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
+                      : "rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
+                  }
+                  onClick={() => setControlled(v)}
+                >
                   {v}
-                </button>
+                </Button>
               ))}
             </div>
             <div className={c.text}>Value: <span className={c.badge}>{controlled}</span></div>

@@ -19,13 +19,18 @@ function ToastTrigger() {
               "bottom-right"
             ] as const
           ).map((pos) => (
-            <button
+            <Button
               key={pos}
-              className={position === pos ? "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-text text-cl-bg hover:opacity-90" : "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"}
+              size="sm"
+              className={
+                position === pos
+                ? "rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
+                : "rounded-cl-md bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
+              }
               onClick={() => setPosition(pos)}
             >
               {pos}
-            </button>
+            </Button>
           ))
         }
       </div>

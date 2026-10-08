@@ -15,6 +15,7 @@ import { acquireScrollLock,
 import { Pagination } from "../../components/Pagination/index.js";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { SortingState } from "../../components/Table/index.js";
+import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -2863,17 +2864,18 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 Selected: {multiSelectedIds.length} row(s)
               </span>
               {multiSelectedIds.length > 0 && (
-                <button
+                <Button
+                  size="sm"
                   onClick={() => {
                     setMultiDeleteAction(
                       JSON.stringify({ action: "Delete Selected", ids: multiSelectedIds }),
                     );
                     setMultiSelectedIds([]);
                   }}
-                  className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-bg bg-cl-error hover:bg-cl-error dark:text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error/30`}
+                  className="rounded text-cl-bg bg-cl-error hover:bg-cl-error dark:text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error/30"
                 >
                   Delete Selected
-                </button>
+                </Button>
               )}
             </div>
             <Table
@@ -4633,10 +4635,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               {(["compact", "comfortable", "spacious"] as const).map((d) => (
-                <button
+                <Button
                   key={d}
+                  size="sm"
                   onClick={() => setDensity(d)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer ${
+                  className={`rounded-cl-md ${
                     density === d
                       ? "bg-cl-accent text-cl-on-accent"
                       : dark
@@ -4645,7 +4648,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   }`}
                 >
                   {d.charAt(0).toUpperCase() + d.slice(1)}
-                </button>
+                </Button>
               ))}
             </div>
             <Table
@@ -5004,14 +5007,15 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       <Section title="CSV Export" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-3">
-            <button
+            <Button
+              size="md"
               onClick={() =>
                 exportTableToCSV(sampleData, columns, "users-export")
               }
-              className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors cursor-pointer text-cl-bg bg-cl-success hover:bg-cl-success dark:text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success/30`}
+              className="rounded-cl-md text-cl-bg bg-cl-success hover:bg-cl-success dark:text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success/30"
             >
               Export to CSV
-            </button>
+            </Button>
             <Table
               columns={columns}
               data={sampleData}

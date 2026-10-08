@@ -425,13 +425,18 @@ const DrawerDemo = () => {
             </DrawerHeader>
             <div className="flex gap-2 px-5 py-3">
               {[0, 1, 2].map((i) => (
-                <button
+                <Button
                   key={i}
-                  className={`${snapIndex === i ? c.btnPrimary : c.btn} text-xs cursor-pointer`}
+                  size="sm"
+                  className={
+                    snapIndex === i
+                      ? "rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent-hover"
+                      : "rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
+                  }
                   onClick={() => setSnapIndex(i)}
                 >
                   {Math.round([0.3, 0.6, 1][i] * 100)}%
-                </button>
+                </Button>
               ))}
             </div>
             <DrawerBody className={`flex-1 overflow-y-auto px-5 py-4`}>

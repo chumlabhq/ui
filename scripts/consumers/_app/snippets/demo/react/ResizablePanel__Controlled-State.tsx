@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { ResizablePanel } from "@chumlab/ui/resizable-panel";
 import { Slider } from "@chumlab/ui/slider";
 
@@ -82,13 +83,13 @@ export default function ResizablePanelExample() {
           className="flex-1"
           aria-label="Panel width"
         />
-        <button
-          type="button"
+        <Button
+          size="sm"
           onClick={() => setControlledWidth(320)}
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"
+          className="rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
         >
           Reset
-        </button>
+        </Button>
       </div>
       <ResizablePanel
         value={controlledWidth}

@@ -553,22 +553,22 @@ const DropdownDemo = () => {
               />
             </div>
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className={c.btn}
+              <Button
+                size="sm"
+                className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => setControlledOpen(!controlledOpen)}
               >
                 {controlledOpen ? "Close" : "Open"}
-              </button>
+              </Button>
               {controlledValue && (
-                <button
-                  type="button"
-                  className={c.btn}
+                <Button
+                  size="sm"
+                  className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
                   onClick={() => setControlledValue(null)}
                 >
                   Clear
-                </button>
+                </Button>
               )}
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Table } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -203,11 +204,12 @@ export default function TableExample() {
         <div className="flex items-center gap-2">
           {
             (["compact", "comfortable", "spacious"] as const).map((d) => (
-              <button
+              <Button
                 key={d}
+                size="sm"
                 onClick={() => setDensity(d)}
                 className={
-                  `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer ${
+                  `rounded-cl-md ${
                     density === d
                       ? "bg-cl-accent text-cl-on-accent"
                       : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-elevated"
@@ -215,7 +217,7 @@ export default function TableExample() {
                 }
               >
                 {d.charAt(0).toUpperCase() + d.slice(1)}
-              </button>
+              </Button>
             ))
           }
         </div>

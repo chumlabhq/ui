@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Pagination } from "@chumlab/ui/pagination";
 
 export default function PaginationExample() {
@@ -12,9 +13,9 @@ export default function PaginationExample() {
         <span className="text-sm font-medium text-cl-text-secondary">Items per page:</span>
         {
           [10, 25, 50, 100].map((r) => (
-            <button
+            <Button
               key={r}
-              type="button"
+              size="md"
               onClick={
                 () => {
                   setExternalRows(r);
@@ -22,15 +23,15 @@ export default function PaginationExample() {
                 }
               }
               className={
-                `px-3 py-1.5 text-sm rounded-cl-md border cursor-pointer transition-all ${
+                `rounded-cl-md border ${
                   externalRows === r
-                    ? "bg-cl-accent text-cl-on-accent border-cl-border-input-focus shadow-sm"
+                    ? "bg-cl-accent text-cl-on-accent border-cl-border-input-focus"
                     : "border-cl-border text-cl-text hover:bg-cl-bg-hover"
                 }`
               }
             >
               {r}
-            </button>
+            </Button>
           ))
         }
       </div>

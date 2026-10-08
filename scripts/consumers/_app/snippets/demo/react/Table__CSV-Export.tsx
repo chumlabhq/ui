@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Table, exportTableToCSV } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -195,15 +196,16 @@ export default function TableExample() {
   return (
     <>
       <div className="space-y-3">
-        <button
+        <Button
+          size="md"
           onClick={
             () =>
             exportTableToCSV(sampleData, columns, "users-export")
           }
-          className="px-4 py-2 text-sm font-medium rounded-cl-md transition-colors cursor-pointer text-cl-bg bg-cl-success hover:bg-cl-success dark:text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success/30"
+          className="rounded-cl-md text-cl-bg bg-cl-success hover:bg-cl-success dark:text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success/30"
         >
           Export to CSV
-        </button>
+        </Button>
         <Table columns={columns} data={sampleData} getRowId={(row) => row.id} classes={s} />
       </div>
       <p className="mt-3 text-sm text-cl-text-secondary">

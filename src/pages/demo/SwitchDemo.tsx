@@ -608,20 +608,20 @@ const SwitchDemo = () => {
               classes={c.switch}
             />
             <div className="flex gap-2">
-              <button
-                type="button"
+              <Button
+                size="sm"
                 onClick={() => switchRef.current?.focus()}
-                className={c.btn}
+                className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
               >
                 Focus Switch
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                size="sm"
                 onClick={() => switchRef.current?.click()}
-                className={c.btn}
+                className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
               >
                 Toggle Switch
-              </button>
+              </Button>
             </div>
           </div>
         </DemoWrapper>

@@ -940,13 +940,14 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           className="overflow-visible"
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <button
-              className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 shrink-0 cursor-pointer`}
+            <Button
+              size="sm"
+              className="shrink-0 rounded-cl-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90"
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setCalendarOpen((o) => !o)}
             >
               {calendarOpen ? "Close" : "Open"} Calendar
-            </button>
+            </Button>
             <div className="w-full sm:max-w-xs">
               <DatePicker
                 value={openControlDate}

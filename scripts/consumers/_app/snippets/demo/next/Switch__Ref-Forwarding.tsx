@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Switch } from "@chumlab/ui/switch";
 
 export default function SwitchExample() {
@@ -23,20 +24,20 @@ export default function SwitchExample() {
         }
       />
       <div className="flex gap-2">
-        <button
-          type="button"
+        <Button
+          size="sm"
           onClick={() => switchRef.current?.focus()}
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
+          className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
         >
           Focus Switch
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          size="sm"
           onClick={() => switchRef.current?.click()}
-          className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer"
+          className="rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
         >
           Toggle Switch
-        </button>
+        </Button>
       </div>
     </div>
   );

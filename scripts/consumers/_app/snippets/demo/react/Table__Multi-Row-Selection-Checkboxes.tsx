@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Button } from "@chumlab/ui/button";
 import { Table } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -205,7 +206,8 @@ export default function TableExample() {
           </span>
           {
             multiSelectedIds.length > 0 && (
-              <button
+              <Button
+                size="sm"
                 onClick={
                   () => {
                     setMultiDeleteAction(
@@ -214,10 +216,10 @@ export default function TableExample() {
                     setMultiSelectedIds([]);
                   }
                 }
-                className="px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-bg bg-cl-error hover:bg-cl-error dark:text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error/30"
+                className="rounded text-cl-bg bg-cl-error hover:bg-cl-error dark:text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error/30"
               >
                 Delete Selected
-              </button>
+              </Button>
             )
           }
         </div>

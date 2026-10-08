@@ -925,13 +925,18 @@ const ToastDemoContent = ({
                   "bottom-right",
                 ] as const
               ).map((pos) => (
-                <button
+                <Button
                   key={pos}
-                  className={position === pos ? c.btnPrimary : c.btn}
+                  size="sm"
+                  className={
+                    position === pos
+                      ? "rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
+                      : "rounded-cl-md bg-cl-bg-panel border border-cl-border text-cl-text hover:bg-cl-bg-hover"
+                  }
                   onClick={() => setPosition(pos)}
                 >
                   {pos}
-                </button>
+                </Button>
               ))}
             </div>
             <p

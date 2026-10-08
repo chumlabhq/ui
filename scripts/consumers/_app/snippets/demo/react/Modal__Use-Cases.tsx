@@ -235,12 +235,13 @@ export default function ModalExample() {
             <span className="text-3xl font-bold text-cl-text">$29</span>
             <span className="text-cl-text-tertiary">/month</span>
           </div>
-          <button
+          <Button
+            size="lg"
             onClick={() => setUpgradeOpen(false)}
-            className="w-full py-3 bg-cl-text text-cl-bg rounded-cl-md hover:opacity-90 transition-all font-semibold cursor-pointer"
+            className="w-full rounded-cl-md bg-cl-text text-cl-bg hover:opacity-90"
           >
             Upgrade Now
-          </button>
+          </Button>
           <button
             onClick={() => setUpgradeOpen(false)}
             className="w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text cursor-pointer"
