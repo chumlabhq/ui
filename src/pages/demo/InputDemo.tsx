@@ -268,6 +268,7 @@ const InputDemo = () => {
   const [lastAction, setLastAction] = useState("");
   const [refReadValue, setRefReadValue] = useState("not fired yet");
   const [loginSubmit, setLoginSubmit] = useState("not fired yet");
+  const [forgotNote, setForgotNote] = useState<string | null>(null);
   const [registrationSubmit, setRegistrationSubmit] = useState("not fired yet");
   const [bio, setBio] = useState("");
   const [email, setEmail] = useState("");
@@ -1142,6 +1143,7 @@ const InputDemo = () => {
                   type="button"
                   size="sm"
                   className="bg-transparent text-cl-accent hover:bg-cl-accent-bg hover:text-cl-accent-hover"
+                  onClick={() => setForgotNote("Password reset link sent (demo)")}
                 >
                   Forgot?
                 </Button>
@@ -1156,6 +1158,7 @@ const InputDemo = () => {
             </form>
             <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
               onSubmit: {loginSubmit}
+              {forgotNote && <div role="status">Forgot?: {forgotNote}</div>}
             </div>
           </DemoWrapper>
         </Section>

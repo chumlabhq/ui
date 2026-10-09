@@ -1165,6 +1165,7 @@ function ServerApiDemo({
 }
 
 const TableDemo = () => {
+  const [emptyAction, setEmptyAction] = useState<string | null>(null);
   const { isDarkMode: dark } = useTheme();
   const s = getTableClasses(dark);
   const pClasses = getPaginationClasses(dark);
@@ -2786,7 +2787,10 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
               {/* Action Buttons */}
               <div className="flex items-center gap-3">
-                <button className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors flex items-center gap-2 bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`}>
+                <button
+                  className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors flex items-center gap-2 bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`}
+                  onClick={() => setEmptyAction("Add User would open the new-member form (demo)")}
+                >
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -2804,10 +2808,16 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 </button>
                 <button
  className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-cl-bg border border-cl-border hover:bg-cl-bg-hover cursor-pointer`}
+                  onClick={() => setEmptyAction("Import CSV would open a file picker (demo)")}
                 >
                   Import CSV
                 </button>
               </div>
+              {emptyAction && (
+                <p role="status" className="mt-4 text-sm text-cl-text-secondary">
+                  {emptyAction}
+                </p>
+              )}
             </div>
           }
           classes={s}

@@ -84,6 +84,12 @@ const KeepMountedLogger = ({ onLog }: { onLog: (msg: string) => void }) => {
   return <p className="text-cl-text-secondary">This content logs mount/unmount events.</p>;
 };
 
+/** The document preview's page count and zoom range, in percent. */
+const DOC_PAGES = 12;
+const ZOOM_MIN = 50;
+const ZOOM_MAX = 200;
+const ZOOM_STEP = 25;
+
 const ModalDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses(dark);
@@ -96,6 +102,12 @@ const ModalDemo = () => {
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [customSizeOpen, setCustomSizeOpen] = useState(false);
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
+  // The document preview's pager and zoom, and what its demo actions report.
+  const [docPage, setDocPage] = useState(1);
+  const [docZoom, setDocZoom] = useState(100);
+  const [docAction, setDocAction] = useState<string | null>(null);
+  const [imageAction, setImageAction] = useState<string | null>(null);
+  const [inviteNote, setInviteNote] = useState<string | null>(null);
   const [customOverlayOpen, setCustomOverlayOpen] = useState(false);
   const [preventCloseOpen, setPreventCloseOpen] = useState(false);
   const [nestedLevel1Open, setNestedLevel1Open] = useState(false);
@@ -400,8 +412,16 @@ const ModalDemo = () => {
               <div className="text-cl-text min-w-0">
                 <p className="font-medium truncate">Sunset at Malibu Beach</p>
                 <p className="text-sm text-cl-text-tertiary truncate">4032 × 3024 • 3.2 MB</p>
+                {imageAction && (
+                  <p role="status" className="text-sm text-cl-text-secondary">
+                    {imageAction}
+                  </p>
+                )}
               </div>
-              <Button className="flex items-center gap-2 px-3 py-2 text-sm text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated rounded-cl-md transition-colors cursor-pointer">
+              <Button
+                className="flex items-center gap-2 px-3 py-2 text-sm text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated rounded-cl-md transition-colors cursor-pointer"
+                onClick={() => setImageAction("Download started (demo): Sunset at Malibu Beach.jpg")}
+              >
                 <svg
                   className="h-4 w-4"
                   fill="none"
@@ -518,7 +538,9 @@ const ModalDemo = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2 ml-auto">
-                <Button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer">
+                <Button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
+                  onClick={() => setDocAction("Download started (demo)")}
+                >
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -534,7 +556,9 @@ const ModalDemo = () => {
                   </svg>
                   <span className="hidden sm:inline">Download</span>
                 </Button>
-                <Button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer">
+                <Button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
+                  onClick={() => setDocAction("Print dialog would open (demo)")}
+                >
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -550,7 +574,9 @@ const ModalDemo = () => {
                   </svg>
                   <span className="hidden sm:inline">Print</span>
                 </Button>
-                <Button className="px-3 py-2 text-sm bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer">
+                <Button className="px-3 py-2 text-sm bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
+                  onClick={() => setDocAction("Share link copied (demo)")}
+                >
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -570,7 +596,13 @@ const ModalDemo = () => {
             </header>
 
             <div className="flex-1 overflow-auto p-8">
-              <div className="max-w-4xl mx-auto bg-cl-bg-elevated rounded-cl-lg shadow-sm border border-cl-border p-12">
+              <div
+                className="max-w-4xl mx-auto bg-cl-bg-elevated rounded-cl-lg shadow-sm border border-cl-border p-12 origin-top transition-transform"
+                style={{ transform: `scale(${docZoom / 100})` }}
+              >
+                <p className="text-right text-sm text-cl-text-tertiary mb-4">
+                  Page {docPage} of {DOC_PAGES}
+                </p>
                 <div className="text-center mb-12">
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-cl-accent/10 rounded-full mb-4">
                     <svg
@@ -655,11 +687,12 @@ const ModalDemo = () => {
             <footer className="bg-cl-bg-elevated border-t border-cl-border px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-4">
                 <Button aria-label="Previous page"
-                  className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer"
-                  disabled
+                  className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                  disabled={docPage === 1}
+                  onClick={() => setDocPage((p) => Math.max(1, p - 1))}
                 >
                   <svg
-                    className="w-5 h-5 text-cl-text-tertiary"
+                    className="w-5 h-5 text-cl-text-secondary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -672,8 +705,13 @@ const ModalDemo = () => {
                     />
                   </svg>
                 </Button>
-                <span className="text-sm text-cl-text-secondary">Page 1 of 12</span>
-                <Button aria-label="Next page" className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
+                <span className="text-sm text-cl-text-secondary">Page {docPage} of {DOC_PAGES}</span>
+                <Button
+                  aria-label="Next page"
+                  className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                  disabled={docPage === DOC_PAGES}
+                  onClick={() => setDocPage((p) => Math.min(DOC_PAGES, p + 1))}
+                >
                   <svg
                     className="w-5 h-5 text-cl-text-secondary"
                     fill="none"
@@ -689,8 +727,18 @@ const ModalDemo = () => {
                   </svg>
                 </Button>
               </div>
+              {docAction && (
+                <p role="status" className="text-sm text-cl-text-secondary">
+                  {docAction}
+                </p>
+              )}
               <div className="flex items-center gap-2">
-                <Button aria-label="Zoom in" className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
+                <Button
+                  aria-label="Zoom in"
+                  className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                  disabled={docZoom === ZOOM_MAX}
+                  onClick={() => setDocZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP))}
+                >
                   <svg
                     className="w-5 h-5 text-cl-text-secondary"
                     fill="none"
@@ -705,7 +753,12 @@ const ModalDemo = () => {
                     />
                   </svg>
                 </Button>
-                <Button aria-label="Zoom out" className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer">
+                <Button
+                  aria-label="Zoom out"
+                  className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                  disabled={docZoom === ZOOM_MIN}
+                  onClick={() => setDocZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP))}
+                >
                   <svg
                     className="w-5 h-5 text-cl-text-secondary"
                     fill="none"
@@ -720,7 +773,7 @@ const ModalDemo = () => {
                     />
                   </svg>
                 </Button>
-                <span className="text-sm text-cl-text-tertiary ml-2">100%</span>
+                <span className="text-sm text-cl-text-tertiary ml-2">{docZoom}%</span>
               </div>
             </footer>
           </div>
@@ -903,7 +956,10 @@ const ModalDemo = () => {
                 </div>
               ))}
             </div>
-            <Button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent cursor-pointer`}>
+            <Button
+              className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent cursor-pointer`}
+              onClick={() => setInviteNote("Invitation sent to new.member@example.com (demo)")}
+            >
               <svg
                 className="h-5 w-5"
                 fill="none"
@@ -919,6 +975,11 @@ const ModalDemo = () => {
               </svg>
               Invite Member
             </Button>
+            {inviteNote && (
+              <p role="status" className="mt-2 text-sm text-cl-text-secondary">
+                {inviteNote}
+              </p>
+            )}
             <div className={`flex justify-end mt-6 pt-4 border-t border-cl-border`}>
               <Button
                 className={c.btnPrimary}

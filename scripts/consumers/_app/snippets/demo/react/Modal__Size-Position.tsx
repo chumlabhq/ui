@@ -2,9 +2,20 @@ import { useState } from "react";
 import { Button } from "@chumlab/ui/button";
 import { Modal } from "@chumlab/ui/modal";
 
+const ZOOM_MIN = 50;
+
+const ZOOM_STEP = 25;
+
+const ZOOM_MAX = 200;
+
+const DOC_PAGES = 12;
+
 export default function ModalExample() {
   const [customSizeOpen, setCustomSizeOpen] = useState(false);
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
+  const [docPage, setDocPage] = useState(1);
+  const [docZoom, setDocZoom] = useState(100);
+  const [docAction, setDocAction] = useState<string | null>(null);
   return (
     <>
       <div className="flex flex-wrap gap-2">
@@ -108,6 +119,7 @@ export default function ModalExample() {
             <div className="flex items-center gap-2 ml-auto">
               <Button
                 className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
+                onClick={() => setDocAction("Download started (demo)")}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -121,6 +133,7 @@ export default function ModalExample() {
               </Button>
               <Button
                 className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
+                onClick={() => setDocAction("Print dialog would open (demo)")}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -134,6 +147,7 @@ export default function ModalExample() {
               </Button>
               <Button
                 className="px-3 py-2 text-sm bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
+                onClick={() => setDocAction("Share link copied (demo)")}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -149,8 +163,15 @@ export default function ModalExample() {
           </header>
           <div className="flex-1 overflow-auto p-8">
             <div
-              className="max-w-4xl mx-auto bg-cl-bg-elevated rounded-cl-lg shadow-sm border border-cl-border p-12"
+              className="max-w-4xl mx-auto bg-cl-bg-elevated rounded-cl-lg shadow-sm border border-cl-border p-12 origin-top transition-transform"
+              style={{ transform: `scale(${docZoom / 100})` }}
             >
+              <p className="text-right text-sm text-cl-text-tertiary mb-4">
+                Page
+                {docPage}
+                of
+                {DOC_PAGES}
+              </p>
               <div className="text-center mb-12">
                 <div
                   className="inline-flex items-center justify-center w-16 h-16 bg-cl-accent/10 rounded-full mb-4"
@@ -220,11 +241,12 @@ export default function ModalExample() {
             <div className="flex items-center gap-4">
               <Button
                 aria-label="Previous page"
-                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer"
-                disabled
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={docPage === 1}
+                onClick={() => setDocPage((p) => Math.max(1, p - 1))}
               >
                 <svg
-                  className="w-5 h-5 text-cl-text-tertiary"
+                  className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -237,10 +259,17 @@ export default function ModalExample() {
                   />
                 </svg>
               </Button>
-              <span className="text-sm text-cl-text-secondary">Page 1 of 12</span>
+              <span className="text-sm text-cl-text-secondary">
+                Page
+                {docPage}
+                of
+                {DOC_PAGES}
+              </span>
               <Button
                 aria-label="Next page"
-                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer"
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={docPage === DOC_PAGES}
+                onClick={() => setDocPage((p) => Math.min(DOC_PAGES, p + 1))}
               >
                 <svg
                   className="w-5 h-5 text-cl-text-secondary"
@@ -257,10 +286,19 @@ export default function ModalExample() {
                 </svg>
               </Button>
             </div>
+            {
+              docAction && (
+                <p role="status" className="text-sm text-cl-text-secondary">
+                  {docAction}
+                </p>
+              )
+            }
             <div className="flex items-center gap-2">
               <Button
                 aria-label="Zoom in"
-                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer"
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={docZoom === ZOOM_MAX}
+                onClick={() => setDocZoom((z) => Math.min(ZOOM_MAX, z + ZOOM_STEP))}
               >
                 <svg
                   className="w-5 h-5 text-cl-text-secondary"
@@ -278,7 +316,9 @@ export default function ModalExample() {
               </Button>
               <Button
                 aria-label="Zoom out"
-                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors cursor-pointer"
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+                disabled={docZoom === ZOOM_MIN}
+                onClick={() => setDocZoom((z) => Math.max(ZOOM_MIN, z - ZOOM_STEP))}
               >
                 <svg
                   className="w-5 h-5 text-cl-text-secondary"
@@ -294,7 +334,10 @@ export default function ModalExample() {
                   />
                 </svg>
               </Button>
-              <span className="text-sm text-cl-text-tertiary ml-2">100%</span>
+              <span className="text-sm text-cl-text-tertiary ml-2">
+                {docZoom}
+                %
+              </span>
             </div>
           </footer>
         </div>

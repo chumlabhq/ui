@@ -97,6 +97,7 @@ const ToastDemoContent = ({
   const c = getClasses(dark);
   const toast = useToast();
   const toastIdRef = useRef<string | null>(null);
+  const updateToastId = useRef<string | null>(null);
   const [infoDismissCount, setInfoDismissCount] = useState(0);
   const [successDismissCount, setSuccessDismissCount] = useState(0);
 
@@ -536,8 +537,8 @@ const ToastDemoContent = ({
             <div className="flex flex-wrap gap-4">
               <Button
                 className={c.btnInfo}
-                onClick={() =>
-                  toast.toast({
+                onClick={() => {
+                  updateToastId.current = toast.toast({
                     type: "info",
                     content: (
                       <div className="flex flex-col gap-2">
@@ -548,18 +549,29 @@ const ToastDemoContent = ({
                           Version 2.0 is now available.
                         </p>
                         <div className="flex gap-2 mt-1">
-                          <Button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90 cursor-pointer">
+                          <Button
+                            className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90 cursor-pointer"
+                            onClick={() => {
+                              if (updateToastId.current) toast.dismiss(updateToastId.current);
+                              toast.success("Updated to version 2.0 (demo)");
+                            }}
+                          >
                             Update Now
                           </Button>
-                          <Button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30 cursor-pointer">
+                          <Button
+                            className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30 cursor-pointer"
+                            onClick={() => {
+                              if (updateToastId.current) toast.dismiss(updateToastId.current);
+                            }}
+                          >
                             Later
                           </Button>
                         </div>
                       </div>
                     ),
                     duration: 10000,
-                  })
-                }
+                  });
+                }}
               >
                 With Action Buttons
               </Button>

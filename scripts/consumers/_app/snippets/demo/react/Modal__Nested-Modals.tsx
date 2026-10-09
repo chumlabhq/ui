@@ -4,6 +4,7 @@ import { Modal } from "@chumlab/ui/modal";
 import { Switch } from "@chumlab/ui/switch";
 
 export default function ModalExample() {
+  const [inviteNote, setInviteNote] = useState<string | null>(null);
   const [nestedLevel1Open, setNestedLevel1Open] = useState(false);
   const [nestedLevel2Open, setNestedLevel2Open] = useState(false);
   return (
@@ -101,6 +102,7 @@ export default function ModalExample() {
           </div>
           <Button
             className="w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent cursor-pointer"
+            onClick={() => setInviteNote("Invitation sent to new.member@example.com (demo)")}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -112,6 +114,13 @@ export default function ModalExample() {
             </svg>
             Invite Member
           </Button>
+          {
+            inviteNote && (
+              <p role="status" className="mt-2 text-sm text-cl-text-secondary">
+                {inviteNote}
+              </p>
+            )
+          }
           <div className="flex justify-end mt-6 pt-4 border-t border-cl-border">
             <Button
               className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer"

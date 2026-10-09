@@ -50,7 +50,11 @@ export default defineConfig({
           setupFiles: ["./src/test/setup.ts"],
           include: [SNIPPET_MOUNT],
           isolate: true,
-          testTimeout: 120_000,
+          // One test mounts all 744 snippets. Measured alone: 20s with a warm
+          // transform cache, 64s cold. Inside `run-vitest`, beside the other two
+          // projects and straight after a regeneration, it passed 120s and timed
+          // out (D4b). 300s is about 5x the cold figure; a real hang still fails.
+          testTimeout: 300_000,
         },
       },
       {

@@ -83,6 +83,7 @@ export default function InputExample() {
   const [showPw, setShowPw] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loginSubmit, setLoginSubmit] = useState("not fired yet");
+  const [forgotNote, setForgotNote] = useState<string | null>(null);
   return (
     <>
       <form
@@ -155,6 +156,7 @@ export default function InputExample() {
             type="button"
             size="sm"
             className="bg-transparent text-cl-accent hover:bg-cl-accent-bg hover:text-cl-accent-hover"
+            onClick={() => setForgotNote("Password reset link sent (demo)")}
           >
             Forgot?
           </Button>
@@ -169,6 +171,14 @@ export default function InputExample() {
       >
         onSubmit:
         {loginSubmit}
+        {
+          forgotNote && (
+            <div role="status">
+              Forgot?:
+              {forgotNote}
+            </div>
+          )
+        }
       </div>
     </>
   );

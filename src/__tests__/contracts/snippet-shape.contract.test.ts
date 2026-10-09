@@ -120,6 +120,29 @@ const classesObjects = (code: string): Array<{ tag: string; keys: string[]; body
 };
 
 describe("snippet shape contract", () => {
+  /**
+   * How many sections produce a snippet, ratcheted both ways.
+   *
+   * A section that stops producing one fails nowhere else: the generator moves
+   * it to its skipped list with a reason, the copy button disappears, and every
+   * case below runs over one snippet fewer and stays green. SN5 showed it — a
+   * `.map()` over page-only data took Drawer's Basic Usage from 744 to 743 with
+   * no gate red. So the count is recorded: a fall fails until the record is
+   * lowered with a reason (or the section is fixed), and a rise fails until it
+   * is raised with one, like the `dark:` ratchets.
+   */
+  it("produces as many snippets as recorded", () => {
+    /** 2026-10-09, D4b: recorded at 744 (of 839 sections; the skipped list says why for the rest). */
+    const RECORDED = 744;
+    const count = every.length;
+    console.log(
+      `SNIPPET_COUNT snippets=${count} recorded=${RECORDED} ` +
+        `${count > RECORDED ? "ROSE — raise the record, with the section that gained one" : count < RECORDED ? "FELL — a section stopped producing a snippet; see demoSnippets.skipped.json" : "held"}`,
+    );
+    expect(count, "a section stopped producing a snippet: its reason is in demoSnippets.skipped.json").toBeGreaterThanOrEqual(RECORDED);
+    expect(count, "a section started producing a snippet: raise RECORDED to it, with the reason").toBeLessThanOrEqual(RECORDED);
+  });
+
   it("reads the snippets and the schemas", () => {
     // Either side coming back empty would pass every assertion below for the
     // wrong reason.

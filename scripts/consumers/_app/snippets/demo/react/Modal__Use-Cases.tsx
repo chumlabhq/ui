@@ -7,6 +7,7 @@ export default function ModalExample() {
   const [successOpen, setSuccessOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
+  const [imageAction, setImageAction] = useState<string | null>(null);
   return (
     <>
       <div className="flex flex-wrap gap-2">
@@ -288,9 +289,17 @@ export default function ModalExample() {
             <div className="text-cl-text min-w-0">
               <p className="font-medium truncate">Sunset at Malibu Beach</p>
               <p className="text-sm text-cl-text-tertiary truncate">4032 × 3024 • 3.2 MB</p>
+              {
+                imageAction && (
+                  <p role="status" className="text-sm text-cl-text-secondary">
+                    {imageAction}
+                  </p>
+                )
+              }
             </div>
             <Button
               className="flex items-center gap-2 px-3 py-2 text-sm text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated rounded-cl-md transition-colors cursor-pointer"
+              onClick={() => setImageAction("Download started (demo): Sunset at Malibu Beach.jpg")}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
