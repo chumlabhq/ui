@@ -227,31 +227,6 @@
     },
     {
       "component": "Table",
-      "title": "Footer / Summary Row",
-      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
-    },
-    {
-      "component": "Table",
-      "title": "Footer (Column-Aligned Totals)",
-      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
-    },
-    {
-      "component": "Table",
-      "title": "Footer (Styled Summary Card)",
-      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
-    },
-    {
-      "component": "Table",
-      "title": "Footer (Sticky Footer)",
-      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
-    },
-    {
-      "component": "Table",
-      "title": "Footer (Multi-Row with Styling)",
-      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
-    },
-    {
-      "component": "Table",
       "title": "Built-in Search (No Icon)",
       "reason": "code-less by decision: a third value of searchIconPosition, shown in Built-in Search (Icon on Right)"
     },

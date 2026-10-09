@@ -140,8 +140,11 @@ describe("snippet shape contract", () => {
      * type) — 33. One more from the generator fixes: Slider's Custom Thumb, whose
      * renamed binding (`{ value: v }`) had read as an undeclared `value`. The 31
      * Table sections still without code carry their reason in the skipped list.
+     * 2026-10-09, L10: 778 -> 783. Table's five Footer sections: they were
+     * code-less while Table nested their footer rows inside a cell of its own;
+     * L10 renders a footer of rows directly in <tfoot>, so they now show code.
      */
-    const RECORDED = 778;
+    const RECORDED = 783;
     const count = every.length;
     console.log(
       `SNIPPET_COUNT snippets=${count} recorded=${RECORDED} ` +

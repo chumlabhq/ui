@@ -869,6 +869,73 @@ describe("Table", () => {
       expect(screen.getByText("Total: 3 rows")).toBeInTheDocument();
     });
 
+    /**
+     * footerContent is "rendered inside <tfoot>", so rows are what it takes.
+     * Table used to wrap every footer in a row and cell of its own, which put
+     * each of those rows inside a <td>: invalid DOM that the browser reports
+     * on load ("<tr> cannot be a child of <td>") and that the HTML parser
+     * rearranges, so server markup and the client disagree.
+     */
+    describe("footerContent", () => {
+      /** console.error during `run`, restored even when an assertion in it throws. */
+      const consoleErrorsDuring = (run: () => void) => {
+        const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+        try {
+          run();
+          return spy.mock.calls.map((c) => String(c[0]));
+        } finally {
+          spy.mockRestore();
+        }
+      };
+
+      it.each([
+        [
+          "a fragment of rows",
+          <>
+            <tr><td colSpan={3}>Total: 3 rows</td></tr>
+            <tr><td colSpan={3}>Updated today</td></tr>
+          </>,
+        ],
+        [
+          "an array of rows",
+          [
+            <tr key="a"><td colSpan={3}>Total: 3 rows</td></tr>,
+            <tr key="b"><td colSpan={3}>Updated today</td></tr>,
+          ],
+        ],
+      ])("renders %s directly in the tfoot, no row nested in a cell", (_label, footer) => {
+        let tfoot: HTMLElement | null = null;
+        const errors = consoleErrorsDuring(() => {
+          tfoot = render(<Table columns={columns} data={data} showFooter footerContent={footer} />).container.querySelector("tfoot");
+        });
+        expect(tfoot!.querySelector("td tr")).toBeNull();
+        expect([...tfoot!.children].map((r) => r.textContent)).toEqual(["Total: 3 rows", "Updated today"]);
+        expect(errors).toEqual([]);
+      });
+
+      it("keeps text in one full-width row, so no text node sits in <tfoot>", () => {
+        let container: HTMLElement | null = null;
+        const errors = consoleErrorsDuring(() => {
+          container = render(<Table columns={columns} data={data} showFooter footerContent="Total: 3 rows" />).container;
+        });
+        const rows = container!.querySelectorAll("tfoot > tr");
+        expect(rows).toHaveLength(1);
+        const cell = rows[0].querySelector("td")!;
+        expect(cell.colSpan).toBe(3);
+        expect(cell.textContent).toBe("Total: 3 rows");
+        expect(errors).toEqual([]);
+      });
+
+      it("keeps a non-row element in the full-width row too", () => {
+        const { container } = render(
+          <Table columns={columns} data={data} showFooter footerContent={<span>Summary</span>} />,
+        );
+        const rows = container.querySelectorAll("tfoot > tr");
+        expect(rows).toHaveLength(1);
+        expect(rows[0].querySelector("td > span")?.textContent).toBe("Summary");
+      });
+    });
+
     it("does not render footer by default", () => {
       const { container } = render(
         <Table columns={columns} data={data} />

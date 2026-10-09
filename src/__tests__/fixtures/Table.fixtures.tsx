@@ -8,6 +8,25 @@ import { CheckboxPair } from "./_table.js";
 type Row = (typeof ROWS)[number];
 
 const GET_ID = (r: Row) => r.id;
+
+/**
+ * A grid big enough to tell the navigation keys apart. On `default`'s two rows
+ * and two columns, Home and ArrowLeft land on the same cell, and so do Ctrl+End
+ * and one ArrowDown plus one ArrowRight; a broken key could pass for another.
+ */
+const GRID_COLUMNS = [
+  { id: "name", accessorKey: "name", header: "Name" },
+  { id: "role", accessorKey: "role", header: "Role" },
+  { id: "team", accessorKey: "team", header: "Team" },
+  { id: "city", accessorKey: "city", header: "City" },
+];
+const GRID_ROWS = ["Ada", "Grace", "Alan", "Edsger", "Barbara"].map((name, i) => ({
+  id: String(i + 1),
+  name,
+  role: ["Engineer", "Admiral", "Researcher", "Professor", "Scientist"][i],
+  team: ["Core", "Fleet", "Labs", "Theory", "Systems"][i],
+  city: ["London", "Arlington", "Manchester", "Austin", "Boston"][i],
+}));
 const FILTERABLE = { role: { options: [{ label: "Engineer", value: "Engineer" }], multi: true } };
 
 /**
@@ -46,6 +65,10 @@ const openFilterPanel = async (container: HTMLElement, ui: ActTools) => {
 // the parameter to `unknown`, which would reject every typed accessor.
 const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "default", props: { data: ROWS, columns: COLUMNS } },
+  {
+    name: "keyboard-grid",
+    props: { data: GRID_ROWS as unknown as Row[], columns: GRID_COLUMNS, getRowId: GET_ID },
+  },
   { name: "empty", props: { data: [], columns: COLUMNS } },
   { name: "loading", props: { data: [], columns: COLUMNS, loading: true } },
   {
@@ -67,6 +90,27 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     props: { data: ROWS, columns: COLUMNS, showSearch: true, globalFilter: "a" },
   },
   { name: "with-footer", props: { data: ROWS, columns: COLUMNS, showFooter: true, footerContent: "Total" } },
+  {
+    // Rows, the way the demo's footers and the prop's own doc ("rendered
+    // inside <tfoot>") use it. Beside `with-footer`'s text, so both halves of
+    // footerContent's contract render and hydrate.
+    name: "footer-rows",
+    props: {
+      data: ROWS,
+      columns: COLUMNS,
+      showFooter: true,
+      footerContent: (
+        <>
+          <tr>
+            <td colSpan={COLUMNS.length}>Total: {ROWS.length} people</td>
+          </tr>
+          <tr>
+            <td colSpan={COLUMNS.length}>Updated today</td>
+          </tr>
+        </>
+      ),
+    },
+  },
   {
     name: "selectable",
     props: { data: ROWS, columns: COLUMNS, selectionMode: "multiple", getRowId: GET_ID, selectedRowIds: ["1"] },

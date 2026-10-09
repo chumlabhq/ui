@@ -894,6 +894,20 @@ const LIBRARY_TOTAL_HISTORY = [
       "its accessible name. Every other entry byte-identical. Measured against a build of " +
       "76e92aa6.",
   },
+  {
+    kb: 156.19,
+    commit: "(uncommitted)",
+    date: "2026-10-09",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.12 KB (159,823 -> 159,942 B gzipped, +119 B), 81 files " +
+      "held. Table alone: own +134 B, closure +138 B, exclusive +135 B " +
+      "(16,512 -> 16,647 B), its declared breach raised 16.13 -> 16.26 in the " +
+      "same move. +78 B is footerContent (L10): a footer of rows renders " +
+      "directly in <tfoot> instead of nested inside Table's own cell. +57 B is " +
+      "Home/End and Ctrl+Home/Ctrl+End on the grid's cells (L10). Every other " +
+      "entry byte-identical. Measured against a build of f297c01b.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -947,8 +961,16 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.13,
-      why: "2026-10-09, L9: 15.98 -> 16.13 (exclusive 16,366 -> 16,512 B gzipped, +146 B). " +
+      kb: 16.26,
+      why: "2026-10-09, L10: 16.13 -> 16.26 (exclusive 16,512 -> 16,647 B gzipped, +135 B). " +
+        "+78 B: footerContent renders a footer of rows directly in <tfoot> (invalid DOM in " +
+        "documented use: the prop is documented as rendered inside <tfoot>, and every row " +
+        "passed to it was nested inside Table's own <td>, which the browser reports and the " +
+        "parser rearranges, so hydration mismatched). Text and other elements keep the " +
+        "full-width row. +57 B: Home/End and Ctrl+Home/Ctrl+End move the focused cell " +
+        "(documented keys missing; APG grid). Each measured on its own build, items in that " +
+        "order. " +
+        "2026-10-09, L9: 15.98 -> 16.13 (exclusive 16,366 -> 16,512 B gzipped, +146 B). " +
         "+102 B: cell editing fixed: the editor closed on open when focus arrived without a " +
         "prior mousedown, there was no keyboard way in (Enter/F2, WCAG 2.1.1), the grid stole " +
         "the editor's arrow keys, and focus was lost on commit and cancel. The focus-steal " +

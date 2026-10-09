@@ -224,7 +224,7 @@ export default function TableExample() {
         }
       </div>
       <p className="mt-3 text-sm text-cl-text-secondary">
-        Double-click a cell in the Name, Email, or Role columns to edit inline. Press Enter to save, Escape to cancel.
+        Double-click a cell in the Name, Email, or Role columns to edit inline, or focus it and press Enter or F2. Press Enter to save, Escape to cancel.
       </p>
     </>
   );

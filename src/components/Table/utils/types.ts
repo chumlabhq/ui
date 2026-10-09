@@ -292,7 +292,11 @@ export interface TableProps<TData> {
 
   /** Show the table footer (tfoot). */
   showFooter?: boolean;
-  /** Custom footer content rendered inside `<tfoot>`. */
+  /**
+   * Custom footer content for `<tfoot>`. Rows — a `<tr>`, a fragment of `<tr>`s
+   * or an array of them — render directly in `<tfoot>`; anything else (text, or
+   * any other element) is placed in one full-width row.
+   */
   footerContent?: ReactNode;
 
   /** Callback on right-click of a row. */

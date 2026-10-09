@@ -7,6 +7,8 @@ import {
   useId,
   memo,
   forwardRef,
+  Fragment,
+  isValidElement,
 } from "react";
 import { createPortal } from "react-dom";
 import { isBrowser } from "../../utils/isBrowser.js";
@@ -114,6 +116,18 @@ const loadFilterPanel = () =>
 
 const FALLBACK_COLUMNS: never[] = [];
 const FALLBACK_DATA: never[] = [];
+
+/**
+ * Only `<tr>`s: one, a fragment of them, or an array — what `<tfoot>` takes
+ * directly. A footer of rows renders as it is; wrapping it in our own full-width
+ * row nested each `<tr>` in a `<td>`, which the browser reports on load and the
+ * HTML parser rearranges, so server markup and the client disagree.
+ */
+const isRows = (node: React.ReactNode): boolean =>
+  Array.isArray(node)
+    ? node.length > 0 && node.every(isRows)
+    : isValidElement<{ children?: React.ReactNode }>(node) &&
+      (node.type === "tr" || (node.type === Fragment && isRows(node.props.children)));
 
 /**
  * Component: Table
@@ -989,6 +1003,15 @@ function TableInner<TData>(
             setFocusedCell({ row: rowIndex - 1, col: colIndex });
           }
           break;
+        case "Home":
+        case "End": {
+          // APG grid: the first or last cell in the row, or with Ctrl the
+          // first or last cell in the grid.
+          event.preventDefault();
+          const col = event.key === "Home" ? 0 : totalCols - 1;
+          setFocusedCell({ row: event.ctrlKey ? (col ? totalRows - 1 : 0) : rowIndex, col });
+          break;
+        }
         case "Escape":
           // Not marked: this only resets the roving tab stop and tells the
           // consumer no row is hovered. Nothing closes, so the key is still
@@ -1767,14 +1790,18 @@ function TableInner<TData>(
                 data-table-footer
               >
                 {footerContent ? (
-                  // A text node cannot be a child of <tfoot>: the parser hoists
-                  // it out of the table, so the server's markup and the client's
-                  // first render disagree and hydration reports a mismatch.
-                  <tr role="row">
-                    <td colSpan={table.getVisibleLeafColumns().length}>
-                      {footerContent}
-                    </td>
-                  </tr>
+                  isRows(footerContent) ? (
+                    footerContent
+                  ) : (
+                    // A text node cannot be a child of <tfoot>: the parser hoists
+                    // it out of the table, so the server's markup and the client's
+                    // first render disagree and hydration reports a mismatch.
+                    <tr role="row">
+                      <td colSpan={table.getVisibleLeafColumns().length}>
+                        {footerContent}
+                      </td>
+                    </tr>
+                  )
                 ) : (
                   table.getFooterGroups().map((footerGroup) => (
                       <tr key={footerGroup.id} role="row">

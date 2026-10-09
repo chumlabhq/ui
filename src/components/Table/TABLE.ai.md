@@ -162,7 +162,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onRowReorder` | object | — | (fromIndex: number, toIndex: number) => void — Callback when a row is reordered. |
 | `dragColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the drag handle column. |
 | `showFooter` | boolean | `false` | Show the table footer. |
-| `footerContent` | object | — | React.ReactNode — Custom footer content rendered inside <tfoot>. |
+| `footerContent` | object | — | React.ReactNode — Custom footer content for <tfoot>. Rows (a <tr>, a fragment of <tr>s, or an array of them) render directly in <tfoot>; anything else (text, or any other element) is placed in one full-width row. |
 | `onContextMenu` | object | — | (event: React.MouseEvent, row: TData) => void — Callback on right-click of a row. |
 | `enableCopyOnClick` | boolean | `false` | Enable single-click cell copy to clipboard. |
 | `onCellCopy` | object | — | (value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied. |
@@ -267,6 +267,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | `Tab` | Moves between the interactive elements — search, filter triggers, resize handles, the controls in a cell. |
 | `ArrowLeft`, `ArrowRight` | Moves the focused cell along a row. `ArrowUp`/`ArrowDown` move down a column. |
 | `Home`, `End` | Moves to the first or last cell in the row. |
+| `Ctrl+Home`, `Ctrl+End` | Moves to the first cell in the first row, or the last cell in the last row. The header row is not part of this navigation: its sort, filter and pin buttons are reached with `Tab`. |
 | `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell. |
 | `F2` | Opens the focused cell's editor when `editable` is set. |
 | `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress and returns focus to the cell. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |

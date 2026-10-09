@@ -531,7 +531,7 @@
     },
     "footerContent": {
       "type": "object",
-      "description": "React.ReactNode — Custom footer content rendered inside <tfoot>.",
+      "description": "React.ReactNode — Custom footer content for <tfoot>. Rows (a <tr>, a fragment of <tr>s, or an array of them) render directly in <tfoot>; anything else (text, or any other element) is placed in one full-width row.",
       "x-tsType": "ReactNode"
     },
     "onContextMenu": {

@@ -287,3 +287,189 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
     expect(failures, `${failures.length} of ${rows} cell-editing rows failed`).toEqual([]);
   });
 });
+
+/**
+ * The grid's navigation keys, APG data grid, over the body cells.
+ *
+ * TABLE.ai.md documented Home and End and the grid did nothing with them. These
+ * rows hold all four, from the first, a middle and the last body row, on a
+ * grid big enough that each key lands somewhere no other key would. The
+ * header row is not in the roving grid (its controls are reached with Tab), so
+ * the rows that start there check that the keys leave it alone.
+ *
+ * Around them, what the keys must not disturb: the arrows (printed, so a run
+ * at HEAD and a run after can be compared line for line), the header controls'
+ * tab order and activation, the caret in a text field — the cell editor and
+ * the built-in search — and the controls inside cells.
+ */
+test.describe("Table grid keys", () => {
+  test("Home, End, Ctrl+Home and Ctrl+End move the cell; nothing else moves", async ({ page }) => {
+    const rows: Array<{ name: string; ok: boolean; detail: string }> = [];
+    const row = (name: string, ok: boolean, detail = "") => rows.push({ name, ok, detail });
+
+    // Where focus is, as [row, column] of the body grid; null off the grid.
+    const at = () =>
+      page.evaluate(() => {
+        const td = document.activeElement?.closest("tbody td");
+        if (!td) return null;
+        const tr = td.closest("tr")!;
+        return [[...tr.parentElement!.children].indexOf(tr), [...tr.children].indexOf(td)] as [number, number];
+      });
+    const cell = (r: number, c: number) => page.locator(`[data-fixture] tbody tr:nth-child(${r + 1}) td:nth-child(${c + 1})`);
+
+    // ── the four keys, keyboard-grid: 5 rows × 4 columns ──
+    await gotoFixture(page, "Table", "keyboard-grid");
+    const LAST_ROW = 4;
+    const LAST_COL = 3;
+    const starts: Array<[string, number, number]> = [["first row", 0, 1], ["middle row", 2, 2], ["last row", LAST_ROW, 1]];
+    const keys: Array<[string, (r: number) => [number, number]]> = [
+      ["Home", (r) => [r, 0]],
+      ["End", (r) => [r, LAST_COL]],
+      ["Control+Home", () => [0, 0]],
+      ["Control+End", () => [LAST_ROW, LAST_COL]],
+    ];
+    for (const [key, target] of keys) {
+      for (const [label, r, c] of starts) {
+        await cell(r, c).focus();
+        await page.keyboard.press(key);
+        const got = await at();
+        const want = target(r);
+        row(`${key} from the ${label}`, JSON.stringify(got) === JSON.stringify(want), `at ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
+      }
+    }
+
+    // ── arrows: bounded moves, printed for a HEAD/after comparison ──
+    const arrows: string[] = [];
+    for (const [r, c, key] of [[2, 2, "ArrowLeft"], [2, 2, "ArrowRight"], [2, 2, "ArrowUp"], [2, 2, "ArrowDown"], [0, 0, "ArrowLeft"], [0, 0, "ArrowUp"], [LAST_ROW, LAST_COL, "ArrowRight"], [LAST_ROW, LAST_COL, "ArrowDown"]] as Array<[number, number, string]>) {
+      await cell(r, c).focus();
+      await page.keyboard.press(key);
+      arrows.push(`${key}@${r},${c}->${JSON.stringify(await at())}`);
+    }
+    console.log(`TABLE_ARROWS ${arrows.join(" ")}`);
+    const expectArrows = ["ArrowLeft@2,2->[2,1]", "ArrowRight@2,2->[2,3]", "ArrowUp@2,2->[1,2]", "ArrowDown@2,2->[3,2]", "ArrowLeft@0,0->[0,0]", "ArrowUp@0,0->[0,0]", "ArrowRight@4,3->[4,3]", "ArrowDown@4,3->[4,3]"];
+    row("arrows move one cell and stop at the edges", arrows.join(" ") === expectArrows.join(" "), arrows.join(" "));
+
+    // ── header controls: tab order, activation, and the keys left alone ──
+    const describe = () =>
+      page.evaluate(() => {
+        const el = document.activeElement as HTMLElement | null;
+        if (!el || !el.closest("[data-fixture]")) return "(left the fixture)";
+        const where = el.closest("thead") ? "thead" : el.closest("tbody") ? "tbody" : "other";
+        return `${where}:${el.tagName.toLowerCase()}[${el.getAttribute("aria-label") ?? el.textContent?.trim().slice(0, 20) ?? ""}]`;
+      });
+    for (const fixture of ["sortable", "filterable", "pinned-column"]) {
+      await gotoFixture(page, "Table", fixture);
+      await page.locator("body").click({ position: { x: 1, y: 1 } });
+      const order: string[] = [];
+      for (let i = 0; i < 14; i += 1) {
+        await page.keyboard.press("Tab");
+        const d = await describe();
+        order.push(d);
+        if (d === "(left the fixture)" && order.length > 1) break;
+      }
+      console.log(`TABLE_TAB_ORDER ${fixture}: ${order.join(" > ")}`);
+      row(`${fixture}: Tab reaches the header controls`, order.some((o) => o.startsWith("thead:button")), order.join(" > "));
+
+      const control = page.locator("[data-fixture] thead button").first();
+      if (!(await control.count())) {
+        row(`${fixture}: has a header control to test`, false, "none found");
+        continue;
+      }
+      await control.focus();
+      const scroll0 = await page.evaluate(() => window.scrollY);
+      for (const key of ["Home", "End", "Control+Home", "Control+End"]) await page.keyboard.press(key);
+      const still = await control.evaluate((el) => el === document.activeElement);
+      const scroll1 = await page.evaluate(() => window.scrollY);
+      row(`${fixture}: Home/End on a header control leave focus and scroll alone`, still && scroll0 === scroll1 && (await at()) === null, `focus kept ${still}, scrollY ${scroll0}->${scroll1}`);
+
+      const state = () =>
+        page.evaluate(() => {
+          const th = document.querySelector("[data-fixture] thead th");
+          const b = th?.querySelector("button");
+          return [th?.getAttribute("aria-sort"), b?.getAttribute("aria-expanded"), b?.getAttribute("data-state"), b?.getAttribute("aria-pressed"), !!document.querySelector("[data-table-filter-content]")].join("|");
+        });
+      // pinned-column's pins are fixed (onPinColumn is a no-op), so Enter has
+      // nothing to change there; pin activation is checked on the demo below.
+      if (fixture === "pinned-column") continue;
+      for (const key of ["Enter", "Space"]) {
+        await control.focus();
+        const before = await state();
+        await page.keyboard.press(key);
+        await page.waitForTimeout(150);
+        const after = await state();
+        row(`${fixture}: ${key} activates the first header control`, before !== after, `${before} -> ${after}`);
+        await page.keyboard.press("Escape");
+        await page.waitForTimeout(100);
+      }
+    }
+
+    // ── text fields keep Home and End for the caret ──
+    await gotoFixture(page, "Table", "editable");
+    const editable = page.locator("[data-fixture] tbody td").first();
+    await editable.focus();
+    await page.keyboard.press("Enter");
+    const editor = page.locator("[data-fixture] tbody input");
+    await expect(editor).toBeFocused();
+    const caret = () => editor.evaluate((el: HTMLInputElement) => [el.selectionStart, el.value.length, el === document.activeElement]);
+    await page.keyboard.press("Home");
+    const home = await caret();
+    await page.keyboard.press("End");
+    const end = await caret();
+    row("cell editor: Home and End move the caret, the editor stays open", home[0] === 0 && home[2] === true && end[0] === end[1] && end[2] === true, `Home ${JSON.stringify(home)} End ${JSON.stringify(end)}`);
+    await page.keyboard.press("Escape");
+
+    await gotoFixture(page, "Table", "with-search");
+    const search = page.locator("[data-fixture] input").first();
+    await search.fill("abc");
+    await page.keyboard.press("Home");
+    const sHome = await search.evaluate((el: HTMLInputElement) => [el.selectionStart, el === document.activeElement]);
+    await page.keyboard.press("End");
+    const sEnd = await search.evaluate((el: HTMLInputElement) => [el.selectionStart, el === document.activeElement]);
+    row("built-in search: Home and End move the caret", sHome[0] === 0 && sHome[1] === true && sEnd[0] === 3 && sEnd[1] === true, `Home ${JSON.stringify(sHome)} End ${JSON.stringify(sEnd)}`);
+
+    // ── the controls inside cells, on the demo's live sections ──
+    await page.goto("/table", { waitUntil: "networkidle" });
+    const section = (title: string) => page.locator("section", { has: page.getByRole("heading", { name: title, exact: true }) }).first();
+
+    const select = section("Multi-Row Selection (Checkboxes)").locator("tbody input[type=checkbox]").first();
+    const sel0 = await select.isChecked();
+    await select.focus();
+    await page.keyboard.press("Space");
+    row("selection: Space toggles a row checkbox", (await select.isChecked()) !== sel0, `${sel0} -> ${await select.isChecked()}`);
+
+    const expand = section("Row Expansion").getByRole("button", { name: /Expand row|Collapse row/ }).first();
+    const exp0 = await expand.getAttribute("aria-label");
+    await expand.focus();
+    await page.keyboard.press("Enter");
+    row("expansion: Enter toggles a row", (await expand.getAttribute("aria-label")) !== exp0, `${exp0} -> ${await expand.getAttribute("aria-label")}`);
+
+    const drag = section("Row Drag & Drop (Default)");
+    const first = () => drag.locator("tbody tr").first().innerText();
+    const firstBefore = await first();
+    await drag.getByRole("button", { name: /^Reorder row 2/ }).focus();
+    await page.keyboard.press("ArrowUp");
+    row("drag handle: ArrowUp moves the row", (await first()) !== firstBefore, "");
+
+    for (const key of ["Enter", "Space"]) {
+      const pin = section("With Pinned Columns (Interactive)").locator("thead button[aria-label*='column']").first();
+      const label0 = await pin.getAttribute("aria-label");
+      await pin.focus();
+      await page.keyboard.press(key);
+      await page.waitForTimeout(150);
+      const label1 = await section("With Pinned Columns (Interactive)").locator("thead button[aria-label*='column']").first().getAttribute("aria-label");
+      row(`pin: ${key} activates a header pin button`, label1 !== label0, `${label0} -> ${label1}`);
+    }
+
+    const custom = section("Custom Checkbox Selection").getByRole("checkbox").first();
+    const cus0 = await custom.getAttribute("aria-checked") ?? String(await custom.isChecked());
+    await custom.focus();
+    await page.keyboard.press("Space");
+    const cus1 = await custom.getAttribute("aria-checked") ?? String(await custom.isChecked());
+    row("custom checkbox: Space toggles it", cus1 !== cus0, `${cus0} -> ${cus1}`);
+
+    const failing = rows.filter((r) => !r.ok);
+    console.log(`TABLE_GRID_KEYS rows=${rows.length} failing=${failing.length}`);
+    for (const r of failing) console.log(`  FAILING ${r.name}: ${r.detail}`);
+    expect(failing.map((r) => `${r.name}: ${r.detail}`)).toEqual([]);
+  });
+});

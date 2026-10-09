@@ -13076,7 +13076,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "ReactNode",
         "required": false,
         "default": null,
-        "description": "React.ReactNode — Custom footer content rendered inside <tfoot>."
+        "description": "React.ReactNode — Custom footer content for <tfoot>. Rows (a <tr>, a fragment of <tr>s, or an array of them) render directly in <tfoot>; anything else (text, or any other element) is placed in one full-width row."
       },
       {
         "name": "onContextMenu",
@@ -13679,6 +13679,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "keys": "`Home`, `End`",
           "description": "Moves to the first or last cell in the row."
+        },
+        {
+          "keys": "`Ctrl+Home`, `Ctrl+End`",
+          "description": "Moves to the first cell in the first row, or the last cell in the last row. The header row is not part of this navigation: its sort, filter and pin buttons are reached with `Tab`."
         },
         {
           "keys": "`Enter`",

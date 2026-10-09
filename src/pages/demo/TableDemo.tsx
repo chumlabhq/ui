@@ -5044,7 +5044,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Double-click a cell in the Name, Email, or Role columns to edit
-            inline. Press Enter to save, Escape to cancel.
+            inline, or focus it and press Enter or F2. Press Enter to save,
+            Escape to cancel.
           </p>
         </DemoWrapper>
       </Section>
@@ -5439,8 +5440,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer / Summary Row"
-        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
+      <Section title="Footer / Summary Row" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <Table
             columns={footerColumns}
@@ -5508,81 +5508,82 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Footer (Column-Aligned Totals)"
-        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
-        {(() => {
-          const data = sampleData.slice(0, 6);
-          return (
-            <Table
-              columns={columns}
-              data={data}
-              showFooter
-              footerContent={
-                <>
-                  <tr
-                    className={`border-t-2 border-cl-border-input bg-cl-bg-hover`}
-                  >
-                    <td
-                      className={`px-4 py-2.5 text-sm font-semibold text-cl-text`}
+      <Section title="Footer (Column-Aligned Totals)" isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const data = sampleData.slice(0, 6);
+            return (
+              <Table
+                columns={columns}
+                data={data}
+                showFooter
+                footerContent={
+                  <>
+                    <tr
+                      className={`border-t-2 border-cl-border-input bg-cl-bg-hover`}
                     >
-                      Totals
-                    </td>
-                    <td
-                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
-                    >
-                      {data.length} rows
-                    </td>
-                    <td
-                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
-                    >
-                      {new Set(data.map((d) => d.role)).size} roles
-                    </td>
-                    <td
-                      className={`px-4 py-2.5 text-sm font-semibold text-cl-success`}
-                    >
-                      {data.filter((d) => d.status === "active").length} active
-                    </td>
-                    <td
-                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
-                    >
-                      {new Set(data.map((d) => d.department)).size} depts
-                    </td>
-                    <td
-                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
-                    ></td>
-                  </tr>
-                  <tr className={dark ? "bg-cl-text/[0.02]" : "bg-cl-text/50"}>
-                    <td
-                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
-                    >
-                      Summary
-                    </td>
-                    <td
-                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
-                    ></td>
-                    <td
-                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
-                    ></td>
-                    <td
-                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
-                    >
-                      {data.filter((d) => d.status === "inactive").length}{" "}
-                      inactive
-                    </td>
-                    <td
-                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
-                    ></td>
-                    <td
-                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
-                    ></td>
-                  </tr>
-                </>
-              }
-              getRowId={(row) => row.id}
-              classes={s}
-            />
-          );
-        })()}
+                      <td
+                        className={`px-4 py-2.5 text-sm font-semibold text-cl-text`}
+                      >
+                        Totals
+                      </td>
+                      <td
+                        className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
+                      >
+                        {data.length} rows
+                      </td>
+                      <td
+                        className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
+                      >
+                        {new Set(data.map((d) => d.role)).size} roles
+                      </td>
+                      <td
+                        className={`px-4 py-2.5 text-sm font-semibold text-cl-success`}
+                      >
+                        {data.filter((d) => d.status === "active").length} active
+                      </td>
+                      <td
+                        className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
+                      >
+                        {new Set(data.map((d) => d.department)).size} depts
+                      </td>
+                      <td
+                        className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
+                      ></td>
+                    </tr>
+                    <tr className={dark ? "bg-cl-text/[0.02]" : "bg-cl-text/50"}>
+                      <td
+                        className={`px-4 py-2 text-xs text-cl-text-tertiary`}
+                      >
+                        Summary
+                      </td>
+                      <td
+                        className={`px-4 py-2 text-xs text-cl-text-tertiary`}
+                      ></td>
+                      <td
+                        className={`px-4 py-2 text-xs text-cl-text-tertiary`}
+                      ></td>
+                      <td
+                        className={`px-4 py-2 text-xs text-cl-text-tertiary`}
+                      >
+                        {data.filter((d) => d.status === "inactive").length}{" "}
+                        inactive
+                      </td>
+                      <td
+                        className={`px-4 py-2 text-xs text-cl-text-tertiary`}
+                      ></td>
+                      <td
+                        className={`px-4 py-2 text-xs text-cl-text-tertiary`}
+                      ></td>
+                    </tr>
+                  </>
+                }
+                getRowId={(row) => row.id}
+                classes={s}
+              />
+            );
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -5597,96 +5598,97 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer (Styled Summary Card)"
-        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData.slice(0, 6)}
-          showFooter
-          footerContent={
-            <tr>
-              <td colSpan={100} className="p-0">
-                <div
-                  className={`px-5 py-4 flex items-center justify-between bg-gradient-to-r from-cl-accent/15 to-cl-accent/10 border-t-2 border-cl-border-input-focus`}
-                >
-                  <div className="flex items-center gap-6">
-                    <div>
-                      <p
-                        className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
-                      >
-                        Total Rows
-                      </p>
-                      <p
-                        className={`text-xl font-bold text-cl-text`}
-                      >
-                        {sampleData.slice(0, 6).length}
-                      </p>
-                    </div>
-                    <div
-                      className={`w-px h-10 bg-cl-bg-elevated`}
-                    />
-                    <div>
-                      <p
-                        className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
-                      >
-                        Active
-                      </p>
-                      <p
-                        className={`text-xl font-bold text-cl-success`}
-                      >
-                        {
-                          sampleData
-                            .slice(0, 6)
-                            .filter((d) => d.status === "active").length
-                        }
-                      </p>
-                    </div>
-                    <div
-                      className={`w-px h-10 bg-cl-bg-elevated`}
-                    />
-                    <div>
-                      <p
-                        className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
-                      >
-                        Departments
-                      </p>
-                      <p
-                        className={`text-xl font-bold text-cl-accent`}
-                      >
-                        {
-                          new Set(
-                            sampleData.slice(0, 6).map((d) => d.department),
-                          ).size
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`}
-                    onClick={() =>
-                      setFooterExportAction(
-                        JSON.stringify({
-                          action: "Export Report",
-                          rows: sampleData.slice(0, 6).map((d) => d.id),
-                        }),
-                      )
-                    }
+      <Section title="Footer (Styled Summary Card)" isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData.slice(0, 6)}
+            showFooter
+            footerContent={
+              <tr>
+                <td colSpan={100} className="p-0">
+                  <div
+                    className={`px-5 py-4 flex items-center justify-between bg-gradient-to-r from-cl-accent/15 to-cl-accent/10 border-t-2 border-cl-border-input-focus`}
                   >
-                    Export Report
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-          getRowId={(row) => row.id}
-          classes={s}
-        />
-        <div
-          className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
-          data-demo-action
-        >
-          action: {footerExportAction}
-        </div>
+                    <div className="flex items-center gap-6">
+                      <div>
+                        <p
+                          className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
+                        >
+                          Total Rows
+                        </p>
+                        <p
+                          className={`text-xl font-bold text-cl-text`}
+                        >
+                          {sampleData.slice(0, 6).length}
+                        </p>
+                      </div>
+                      <div
+                        className={`w-px h-10 bg-cl-bg-elevated`}
+                      />
+                      <div>
+                        <p
+                          className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
+                        >
+                          Active
+                        </p>
+                        <p
+                          className={`text-xl font-bold text-cl-success`}
+                        >
+                          {
+                            sampleData
+                              .slice(0, 6)
+                              .filter((d) => d.status === "active").length
+                          }
+                        </p>
+                      </div>
+                      <div
+                        className={`w-px h-10 bg-cl-bg-elevated`}
+                      />
+                      <div>
+                        <p
+                          className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
+                        >
+                          Departments
+                        </p>
+                        <p
+                          className={`text-xl font-bold text-cl-accent`}
+                        >
+                          {
+                            new Set(
+                              sampleData.slice(0, 6).map((d) => d.department),
+                            ).size
+                          }
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90`}
+                      onClick={() =>
+                        setFooterExportAction(
+                          JSON.stringify({
+                            action: "Export Report",
+                            rows: sampleData.slice(0, 6).map((d) => d.id),
+                          }),
+                        )
+                      }
+                    >
+                      Export Report
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            }
+            getRowId={(row) => row.id}
+            classes={s}
+          />
+          <div
+            className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+            data-demo-action
+          >
+            action: {footerExportAction}
+          </div>
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -5701,35 +5703,36 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer (Sticky Footer)"
-        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData}
-          maxHeight={250}
-          showFooter
-          footerContent={
-            <tr
-              className={`bg-cl-bg-hover border-t-2 border-cl-border-input`}
-            >
-              <td
-                colSpan={100}
-                className={`px-4 py-3 text-sm font-medium text-cl-text-secondary`}
+      <Section title="Footer (Sticky Footer)" isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData}
+            maxHeight={250}
+            showFooter
+            footerContent={
+              <tr
+                className={`bg-cl-bg-hover border-t-2 border-cl-border-input`}
               >
-                <div className="flex items-center justify-between">
-                  <span>Showing {sampleData.length} rows total</span>
-                  <span
-                    className={`text-xs text-cl-text-tertiary`}
-                  >
-                    Scroll to see all data
-                  </span>
-                </div>
-              </td>
-            </tr>
-          }
-          getRowId={(row) => row.id}
-          classes={{ ...s, footer: "sticky bottom-0 z-10" }}
-        />
+                <td
+                  colSpan={100}
+                  className={`px-4 py-3 text-sm font-medium text-cl-text-secondary`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span>Showing {sampleData.length} rows total</span>
+                    <span
+                      className={`text-xs text-cl-text-tertiary`}
+                    >
+                      Scroll to see all data
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            }
+            getRowId={(row) => row.id}
+            classes={{ ...s, footer: "sticky bottom-0 z-10" }}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -5756,84 +5759,85 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer (Multi-Row with Styling)"
-        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData.slice(0, 5)}
-          showFooter
-          footerContent={
-            <>
-              <tr
-                className={
-                  dark
-                    ? "border-t border-cl-text/[0.06]"
-                    : "border-t border-cl-border"
-                }
-              >
-                <td
-                  colSpan={100}
-                  className={`px-4 py-2.5 text-cl-text-secondary`}
+      <Section title="Footer (Multi-Row with Styling)" isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData.slice(0, 5)}
+            showFooter
+            footerContent={
+              <>
+                <tr
+                  className={
+                    dark
+                      ? "border-t border-cl-text/[0.06]"
+                      : "border-t border-cl-border"
+                  }
                 >
-                  <div className="flex items-center gap-4 text-xs">
-                    <span
-                      className={`flex items-center gap-1.5 text-cl-success`}
-                    >
-                      <span className={`w-2 h-2 rounded-full bg-cl-success/30`} />
-                      {
-                        sampleData
-                          .slice(0, 5)
-                          .filter((d) => d.status === "active").length
-                      }{" "}
-                      Active
-                    </span>
-                    <span
-                      className={`flex items-center gap-1.5 text-cl-text-secondary`}
-                    >
+                  <td
+                    colSpan={100}
+                    className={`px-4 py-2.5 text-cl-text-secondary`}
+                  >
+                    <div className="flex items-center gap-4 text-xs">
                       <span
-                        className={`w-2 h-2 rounded-full bg-cl-text/10`}
-                      />
-                      {
-                        sampleData
-                          .slice(0, 5)
-                          .filter((d) => d.status === "inactive").length
-                      }{" "}
-                      Inactive
-                    </span>
-                    <span
-                      className={`flex items-center gap-1.5 text-cl-text`}
-                    >
-                      <span className={`w-2 h-2 rounded-full bg-cl-warning`} />
-                      {
-                        sampleData
-                          .slice(0, 5)
-                          .filter((d) => d.status === "pending").length
-                      }{" "}
-                      Pending
-                    </span>
-                  </div>
-                </td>
-              </tr>
-              <tr className={dark ? "bg-cl-text/[0.02]" : "bg-cl-bg-hover"}>
-                <td
-                  colSpan={100}
-                  className={`px-4 py-2 text-[11px] text-cl-text-tertiary`}
-                >
-                  Last updated:{" "}
-                  {new Date().toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </td>
-              </tr>
-            </>
-          }
-          getRowId={(row) => row.id}
-          classes={s}
-        />
+                        className={`flex items-center gap-1.5 text-cl-success`}
+                      >
+                        <span className={`w-2 h-2 rounded-full bg-cl-success/30`} />
+                        {
+                          sampleData
+                            .slice(0, 5)
+                            .filter((d) => d.status === "active").length
+                        }{" "}
+                        Active
+                      </span>
+                      <span
+                        className={`flex items-center gap-1.5 text-cl-text-secondary`}
+                      >
+                        <span
+                          className={`w-2 h-2 rounded-full bg-cl-text/10`}
+                        />
+                        {
+                          sampleData
+                            .slice(0, 5)
+                            .filter((d) => d.status === "inactive").length
+                        }{" "}
+                        Inactive
+                      </span>
+                      <span
+                        className={`flex items-center gap-1.5 text-cl-text`}
+                      >
+                        <span className={`w-2 h-2 rounded-full bg-cl-warning`} />
+                        {
+                          sampleData
+                            .slice(0, 5)
+                            .filter((d) => d.status === "pending").length
+                        }{" "}
+                        Pending
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+                <tr className={dark ? "bg-cl-text/[0.02]" : "bg-cl-bg-hover"}>
+                  <td
+                    colSpan={100}
+                    className={`px-4 py-2 text-[11px] text-cl-text-tertiary`}
+                  >
+                    Last updated:{" "}
+                    {new Date().toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </td>
+                </tr>
+              </>
+            }
+            getRowId={(row) => row.id}
+            classes={s}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
