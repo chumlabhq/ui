@@ -53,31 +53,31 @@ export default function InputExample() {
                        [
                          [
                            "Pill shape",
-        "px-5 py-2.5 rounded-full gap-2.5 transition-all duration-150 border border-cl-text/10 bg-cl-text/4 shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus focus-within:bg-cl-bg-elevated",
+        "px-5 rounded-full gap-2.5 transition-all duration-150 border border-cl-text/10 bg-cl-text/4 shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus focus-within:bg-cl-bg-elevated",
                            "Search...",
                            <SearchIcon className={"text-cl-text-tertiary"} />
                          ],
                          [
                            "Underline",
-                           "px-0 py-2.5 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-border focus-within:ring-0 focus-within:border-cl-border-input-focus",
+                           "px-0 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent shadow-none border-cl-border focus-within:ring-0 focus-within:border-cl-border-input-focus",
                            "Enter text...",
                            undefined
                          ],
                          [
                            "Purple accent",
-                           "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",
+                           "px-3.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",
                            "Purple theme...",
                            undefined
                          ],
                          [
                            "Elevated shadow",
-                           "px-3.5 py-2.5 rounded-cl-lg border-0 gap-2.5 transition-all duration-150 bg-cl-bg-input shadow-cl-md focus-within:shadow-lg focus-within:ring-1 focus-within:ring-border-soft",
+                           "px-3.5 rounded-cl-lg border border-transparent gap-2.5 transition-all duration-150 bg-cl-bg-input shadow-cl-md focus-within:shadow-lg focus-within:ring-1 focus-within:ring-border-soft",
                            "Floating...",
                            undefined
                          ],
                          [
                            "Green money",
-                           "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success shadow-sm focus-within:ring-2 focus-within:ring-cl-success/15",
+                           "px-3.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success shadow-sm focus-within:ring-2 focus-within:ring-cl-success/15",
                            "0.00",
                            <Icon
                              d="M12 2v20|M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
@@ -86,7 +86,7 @@ export default function InputExample() {
                          ],
                          [
                            "Large size",
-                           "px-4 py-4 rounded-cl-lg border gap-3 transition-all duration-150 border-cl-text/10 bg-cl-bg-input shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo",
+                           "px-4 rounded-cl-lg border gap-3 transition-all duration-150 border-cl-text/10 bg-cl-bg-input shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo",
                            "Large input...",
                            undefined
                          ]
@@ -102,10 +102,11 @@ export default function InputExample() {
               aria-label={String(label)}
               placeholder={ph as string}
               startIcon={icon}
+              size={String(label) === "Large size" ? "lg" : undefined}
               classes={
                 {
                                     ...({
-                  root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_[data-slot=wrapper]]:py-1.5 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_[data-slot=wrapper]]:py-3.5 data-[size=lg]:[&_input]:text-base",
+                  root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_input]:text-base",
                   input: "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
                   label: "text-[13px] font-medium mb-1.5 block text-cl-text-secondary",
                   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
@@ -113,10 +114,6 @@ export default function InputExample() {
                   suffix: "text-sm select-none text-cl-text-tertiary",
                   count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
                 }),
-                                    input:
-                                      String(label) === "Large size"
-                                        ? "w-full bg-transparent outline-none text-lg text-cl-text placeholder:text-cl-text-tertiary"
-                                        : "w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:[color-scheme:dark]",
                                     control: wCls as string
                                   }
               }

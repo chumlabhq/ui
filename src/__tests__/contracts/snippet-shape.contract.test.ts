@@ -461,8 +461,13 @@ describe("snippet shape contract", () => {
    * Ratcheted both ways, like the colour count.
    */
   it("carries no dark: variant beyond the allowed ones", () => {
-    /** 2026-10-09, T3: 5,554 -> 101. Lower it when the count falls. */
-    const RECORDED = 101;
+    /**
+     * 2026-10-09, T3: 5,554 -> 101. Lower it when the count falls.
+     * 2026-10-09, D5: 101 -> 100. Input "Custom Themes" lost its per-row `input`
+     * override, a second copy of the allowed `dark:[color-scheme:dark]` that the
+     * spread `c.input` still carries.
+     */
+    const RECORDED = 100;
     const ALLOWED: Record<string, string> = {
       "dark:[color-scheme:dark]": "a native control paints its own parts (caret, autofill, spin buttons, pickers) in the page's scheme; no token reaches them",
     };

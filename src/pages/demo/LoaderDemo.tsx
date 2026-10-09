@@ -126,19 +126,10 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
             {[
-              {
-                cls: "text-cl-accent",
-                name: "Indigo",
-              },
-              {
-                cls: "text-cl-accent",
-                name: "Emerald",
-              },
-              { cls: "text-cl-accent", name: "Rose" },
-              {
-                cls: "text-cl-accent",
-                name: "Amber",
-              },
+              { cls: "text-cl-accent", name: "Indigo" },
+              { cls: "text-cl-success", name: "Emerald" },
+              { cls: "text-cl-error", name: "Rose" },
+              { cls: "text-cl-warning", name: "Amber" },
             ].map(({ cls, name }) => (
               <div key={name} className="flex flex-col items-center gap-2">
                 <CircularLoader size={32} className={cls} />
@@ -184,29 +175,32 @@ const LoaderDemo = () => {
             <div className="flex flex-col items-center gap-2">
               <CircularLoader
                 size={32}
-                className="text-cl-accent"
+                className="text-cl-text"
               />
               <span className={c.label}>Default track</span>
             </div>
             <div className="flex flex-col items-center gap-2">
               <CircularLoader
                 size={32}
-                className="text-cl-accent"
-                />
+                className="text-cl-text"
+                trackColor="var(--cl-accent)"
+              />
               <span className={c.label}>Indigo track</span>
             </div>
             <div className="flex flex-col items-center gap-2">
               <CircularLoader
                 size={32}
-                className="text-cl-accent"
-                />
+                className="text-cl-text"
+                trackColor="var(--cl-success)"
+              />
               <span className={c.label}>Emerald track</span>
             </div>
             <div className="flex flex-col items-center gap-2">
               <CircularLoader
                 size={32}
-                className="text-cl-accent"
-                />
+                className="text-cl-text"
+                trackColor="var(--cl-error)"
+              />
               <span className={c.label}>Rose track</span>
             </div>
           </div>
@@ -284,15 +278,15 @@ const LoaderDemo = () => {
           <div className="flex flex-col gap-4 w-full max-w-xs sm:max-w-md">
             <LinearLoader
               className="text-cl-accent"
-              trackColor="rgba(91,155,255,0.18)"
+              trackColor="var(--cl-accent-bg)"
             />
             <LinearLoader
-              className="text-cl-accent"
-              trackColor="rgba(91,155,255,0.18)"
+              className="text-cl-success"
+              trackColor="var(--cl-success-bg)"
             />
             <LinearLoader
-              className="text-cl-accent"
-              trackColor="rgba(91,155,255,0.18)"
+              className="text-cl-error"
+              trackColor="var(--cl-error-bg)"
             />
           </div>
         </DemoWrapper>
@@ -386,19 +380,10 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex items-center gap-6 sm:gap-10 flex-wrap">
             {[
-              {
-                cls: "text-cl-accent",
-                name: "Indigo",
-              },
-              {
-                cls: "text-cl-accent",
-                name: "Emerald",
-              },
-              { cls: "text-cl-accent", name: "Rose" },
-              {
-                cls: "text-cl-accent",
-                name: "Amber",
-              },
+              { cls: "text-cl-accent", name: "Indigo" },
+              { cls: "text-cl-success", name: "Emerald" },
+              { cls: "text-cl-error", name: "Rose" },
+              { cls: "text-cl-warning", name: "Amber" },
             ].map(({ cls, name }) => (
               <div key={name} className="flex flex-col items-center gap-2">
                 <DotLoader dotSize={10} className={cls} />
