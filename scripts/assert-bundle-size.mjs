@@ -877,6 +877,22 @@ const LIBRARY_TOTAL_HISTORY = [
       "field border names the input token instead of `--cl-border`. Shared " +
       "closure -12 B. No declared breach moved (Table exclusive -2 B). " +
       "Measured against a build of 71d52c1e.",
+  },  {
+    kb: 156.08,
+    commit: "(uncommitted)",
+    date: "2026-10-09",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.16 KB (159,658 -> 159,823 B gzipped, +165 B), 81 files " +
+      "held. Table alone: own +149 B, closure +143 B, exclusive +146 B " +
+      "(16,366 -> 16,512 B), its declared breach raised 15.98 -> 16.13 in the " +
+      "same move. +102 B is the cell editor fixed (L9): the roving-focus effect " +
+      "no longer takes focus from inside the cell, which closed the editor on " +
+      "open; Enter and F2 open it; it keeps its own keys; Enter and Escape hand " +
+      "focus back to the cell; the cell leaves the tab order while its editor " +
+      "is open. +36 B is the editor's field boundary and focus classes, +10 B " +
+      "its accessible name. Every other entry byte-identical. Measured against a build of " +
+      "76e92aa6.",
   },
 ];
 
@@ -931,8 +947,17 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 15.98,
-      why: "15.85 -> 15.98 on 2026-10-08 (exclusive 16,237 -> 16,368 B gzipped, +131 B): " +
+      kb: 16.13,
+      why: "2026-10-09, L9: 15.98 -> 16.13 (exclusive 16,366 -> 16,512 B gzipped, +146 B). " +
+        "+102 B: cell editing fixed: the editor closed on open when focus arrived without a " +
+        "prior mousedown, there was no keyboard way in (Enter/F2, WCAG 2.1.1), the grid stole " +
+        "the editor's arrow keys, and focus was lost on commit and cancel. The focus-steal " +
+        "guard alone is +23 B and leaves the keyboard and focus defects. +36 B: the cell " +
+        "editor takes the field boundary and focus treatment. +10 B: the editor gets an " +
+        "accessible name (axe label, critical). +3 B: the cell leaves the tab order while " +
+        "its editor is open (axe target-size). -5 B: one edit handler shared by the " +
+        "double-click and the keys. " +
+        "15.85 -> 15.98 on 2026-10-08 (exclusive 16,237 -> 16,368 B gzipped, +131 B): " +
         "the custom-checkbox selection becomes a keyboard-operable native checkbox " +
         "(a11y defect: not focusable, no Space); HEAD sat 3.6 B under the limit. " +
         "15.81 -> 15.85 on 2026-09-11: row select, expand, group toggle and drag handle were brought to the 24x24 target-size floor (SC 2.5.8), which is class strings on four controls, hoisted into constants.ts after the call-site literal ratchet caught them (48 -> 46 there). 16.76 until the column-filter dialog moved into a chunk of its own " +

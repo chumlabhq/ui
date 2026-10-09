@@ -87,6 +87,11 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "draggable", props: { data: ROWS, columns: COLUMNS, enableRowDragDrop: true, getRowId: GET_ID } },
   { name: "grouped", props: { data: ROWS, columns: COLUMNS, groupBy: ["role"] } },
   { name: "mobile", props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999 } },
+  {
+    name: "mobile-search",
+    props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999, showSearch: true },
+    note: "The mobile layout's search field, which only mounts with both renderMobileCard and showSearch.",
+  },
   { name: "load-more", props: { data: ROWS, columns: COLUMNS, hasMore: true, loadingMore: true, enableInfiniteScroll: true, onLoadMore: () => {} } },
   {
     name: "infinite-end",

@@ -102,7 +102,8 @@ export interface TableClasses {
   pinnedRightRegion?: string;
   /** The `<table>` element for right-pinned columns. */
   pinnedRightList?: string;
-  /** Inline edit input field. */
+  /** Inline edit input field. A text field, so it takes the field boundary
+   *  (`--cl-border-input`) and the field hover and focus treatment. */
   input?: string;
   /** Drag handle for row reordering. */
   dragHandle?: string;
@@ -258,7 +259,7 @@ export interface TableProps<TData> {
   /** Column IDs to pin to the right side of the table. */
   pinnedRightColumns?: string[];
 
-  /** Enable inline cell editing on double-click. */
+  /** Enable inline cell editing: double-click a cell, or press Enter or F2 on it. */
   editable?: boolean;
   /** Column IDs that are editable. If not set, all columns are editable when `editable` is true. */
   editableColumns?: string[];

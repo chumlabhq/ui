@@ -81,7 +81,8 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   expandButton: "",
   pinnedRightRegion: "",
   pinnedRightList: "",
-  input: "",
+  input:
+    "border-cl-border-input hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus",
   dragHandle: "",
   footer: "",
   searchControl: "",

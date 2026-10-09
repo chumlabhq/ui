@@ -19,7 +19,10 @@ test.describe("waived classes keys, re-attempted", () => {
   test("Table.input — a real double-click puts the consumer's class on the editor", async ({
     page,
   }) => {
-    await gotoFixture(page, "Table", "editing-cell", { classes: { input: "ovr-input" } });
+    // No longer waived (L9): `editing-cell`'s act now opens the editor, and
+    // `fixtures.contract` renders the key. Kept as the browser-tier check, on
+    // `editable`, which has no act, so the double-click is what opens it.
+    await gotoFixture(page, "Table", "editable", { classes: { input: "ovr-input" } });
 
     const cell = page.locator("[data-fixture] tbody td").first();
     await expect(page.locator(".ovr-input")).toHaveCount(0);

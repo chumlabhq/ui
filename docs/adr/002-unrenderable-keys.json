@@ -1,11 +1,7 @@
 {
-  "$comment": "Companion record to docs/adr/002-classes-key-vocabulary.md. Keys that no prop combination drives into the DOM, with the reason. Governed by ADR 002 R7/R8: these are candidates for deletion in the vocabulary phase, NOT deleted here. fixtures.contract fails if a waived key becomes reachable, so this list cannot rot. Two reason classes: 'dead' — the key is declared but no source line renders it, verified by reference count; 'state-gated' — the key renders only in a state jsdom cannot reach (pointer capture, hover, layout measurement) and needs an e2e or a prop the component does not expose. CORRECTED 2026-09-07. This list said seventeen; sixteen of them had already been deleted from the API by the key migration, so their waivers were vacuous and the '17 pieces of public API that do nothing' the release report inferred from them was false in the other direction. `DatePicker.markerTooltip` was the one still declared and still unreachable — a real hover opens the marker tooltip, but `useMarkerTooltip` writes a literal class string and never reads the value threaded to it, so the key had no sink; deleted. `Table.input` is the only survivor. `fixtures.contract` now fails on a waived key that is not in the component's classes map, which is the rot that let this stand.",
+  "$comment": "Companion record to docs/adr/002-classes-key-vocabulary.md. Keys that no prop combination drives into the DOM, with the reason. Governed by ADR 002 R7/R8: these are candidates for deletion in the vocabulary phase, NOT deleted here. fixtures.contract fails if a waived key becomes reachable, so this list cannot rot. Two reason classes: 'dead' — the key is declared but no source line renders it, verified by reference count; 'state-gated' — the key renders only in a state jsdom cannot reach (pointer capture, hover, layout measurement) and needs an e2e or a prop the component does not expose. CORRECTED 2026-09-07. This list said seventeen; sixteen of them had already been deleted from the API by the key migration, so their waivers were vacuous and the '17 pieces of public API that do nothing' the release report inferred from them was false in the other direction. `DatePicker.markerTooltip` was the one still declared and still unreachable — a real hover opens the marker tooltip, but `useMarkerTooltip` writes a literal class string and never reads the value threaded to it, so the key had no sink; deleted. `Table.input` is the only survivor. `fixtures.contract` now fails on a waived key that is not in the component's classes map, which is the rot that let this stand. REMOVED 2026-10-09 (L9): `Table.input` now renders under the fixture act too. The dispatched dblclick was closing the editor because the roving-focus effect took focus back from it, a Table bug fixed in L9, not a limit of jsdom; `fixtures.contract` reported the key reachable. No key is waived.",
   "recordedOn": "2026-09-02",
-  "waived": {
-    "Table": {
-      "input": "BROWSER TIER, re-attempted 2026-09-07 and CONFIRMED reachable. `e2e/waived-keys.spec.ts` renders the `editing-cell` fixture with `?classes={\"input\":\"ovr-input\"}`, double-clicks the cell for real, and the consumer's class is on the editor. It stays waived HERE because no fixture act can reach it: a dispatched dblclick opens the editor and closes it in the same frame, since the input autofocuses away from document.body and the cell commits the edit it has just begun. A real double-click focuses the cell on mousedown first. This is the only surviving waiver of the seventeen."
-    }
-  },
+  "waived": {},
   "$comment2": "waived: keys no fixture renders. RE-AUDITED 2026-09-02 by attempting each state with a fixture rather than by re-reading the reason. 15 keys have now been wrongly waived across three components — CascadingDropdown's six search keys (a fixture passed `showSearch`, which is not a prop), DatePicker's dayMarked/markerIndicator/presetActive (the fixture opened on the wrong month), and Table's six pin keys (canShowPinButton requires an onPinColumn handler no fixture passed). Every one had a specific, plausible, invented reason: markerIndicator's said 'marker rendering needs layout measurement jsdom does not provide'. A specific false reason is worse than a vague one because it stops the next reader checking. Every surviving reason below states what was ATTEMPTED.",
   "decorativeLeaks": {
     "Stepper": [
@@ -24,7 +20,11 @@
       "cursor-pointer",
       "select-none",
       "opacity-50",
-      "px-3"
+      "px-3",
+      "rounded",
+      "focus:outline-none",
+      "focus:ring-2",
+      "focus:border-cl-border-input-focus"
     ],
     "DatePicker": [
       "border",
@@ -96,7 +96,7 @@
       ]
     }
   },
-  "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived — the constants ratchet is the schedule.",
+  "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived — the constants ratchet is the schedule. 2026-10-09, L9: `rounded` (the cell editor's and the mobile search's literals) and `focus:outline-none`, `focus:ring-2`, `focus:border-cl-border-input-focus` (the desktop search's literal) were already there. They became visible when the editor first mounted under the fixture act and its `input` key declared the same three focus utilities.",
   "$axeBaselineHistory": "Emptied by the ADR 003 combobox slice. It held one entry: button-name x1 on InternationalPhoneInput's country trigger, recorded as out of scope for the phase. That trigger is the nested SearchableDropdown's, so naming the SearchableDropdown trigger retired it — IPI needed no change of its own. The per-fixture list in axeFixtureExpectations went 66 -> 3 in the same slice; the 3 that remain are Switch, a different cause. An empty baseline is the point of a ratchet, not a reason to delete the gate.",
   "axeExpectationsDerivedFrom": {
     "fixtures": [

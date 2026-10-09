@@ -148,7 +148,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `stripedClassName` | string | — | Custom CSS class for striped rows. |
 | `density` | `"compact"` \| `"comfortable"` \| `"spacious"` | `"comfortable"` | Controls cell padding density. |
 | `pinnedRightColumns` | array | — | Column IDs to pin to the right side. |
-| `editable` | boolean | `false` | Enable inline cell editing on double-click. |
+| `editable` | boolean | `false` | Enable inline cell editing: double-click a cell, or press Enter or F2 on it. |
 | `editableColumns` | array | — | Column IDs that are editable. |
 | `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited. |
 | `enableColumnResizing` | boolean | `false` | Enable column resizing via drag handles. |
@@ -267,8 +267,9 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | `Tab` | Moves between the interactive elements — search, filter triggers, resize handles, the controls in a cell. |
 | `ArrowLeft`, `ArrowRight` | Moves the focused cell along a row. `ArrowUp`/`ArrowDown` move down a column. |
 | `Home`, `End` | Moves to the first or last cell in the row. |
-| `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. |
-| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |
+| `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell. |
+| `F2` | Opens the focused cell's editor when `editable` is set. |
+| `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress and returns focus to the cell. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |
 | `ArrowLeft`, `ArrowRight` on a resize handle | Resizes the column in steps, so column widths are reachable without a drag (SC 2.5.7). |
 
 ---

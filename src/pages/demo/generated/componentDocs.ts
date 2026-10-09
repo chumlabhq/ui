@@ -12978,7 +12978,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "Enable inline cell editing on double-click."
+        "description": "Enable inline cell editing: double-click a cell, or press Enter or F2 on it."
       },
       {
         "name": "editableColumns",
@@ -13421,7 +13421,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "input",
             "type": "string",
             "required": false,
-            "description": "Inline edit input field."
+            "description": "Inline edit input field. A text field, so it takes the field boundary (`--cl-border-input`) and the field hover and focus treatment."
           },
           {
             "name": "dragHandle",
@@ -13682,11 +13682,15 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Enter`",
-          "description": "Opens the focused control: a filter dialog, or an editable cell when `editable` is set."
+          "description": "Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell."
+        },
+        {
+          "keys": "`F2`",
+          "description": "Opens the focused cell's editor when `editable` is set."
         },
         {
           "keys": "`Escape`",
-          "description": "Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog."
+          "description": "Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress and returns focus to the cell. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog."
         },
         {
           "keys": "`ArrowLeft`, `ArrowRight` on a resize handle",

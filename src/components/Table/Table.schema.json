@@ -453,7 +453,7 @@
     },
     "editable": {
       "type": "boolean",
-      "description": "Enable inline cell editing on double-click.",
+      "description": "Enable inline cell editing: double-click a cell, or press Enter or F2 on it.",
       "default": false
     },
     "editableColumns": {

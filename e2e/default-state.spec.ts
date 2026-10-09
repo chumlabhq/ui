@@ -1441,19 +1441,11 @@ const BOUNDARY_RECIPES: Record<string, { rest: string; states?: string[] } | { u
   "InternationalPhoneInput.trigger": { rest: "default", states: ["disabled"] },
   "Pagination.trigger": { rest: "rows-per-page" },
   "Table.filterItemControl": { rest: "filter-open" },
-  // Table.tsx's own inputs, in source order: the inline cell editor, then the
-  // mobile and desktop search fields.
-  "Table.Table.tsx<input>#1": {
-    unreachable:
-      "the inline cell editor: `editing-cell` and `cell-editing` both double-click a cell " +
-      "and report the act applied, but no `[data-edit-input]` mounts in the browser. Its " +
-      "class names no border colour, so the border is the text colour.",
-  },
-  "Table.Table.tsx<input>#2": {
-    unreachable:
-      "the mobile layout's search field: no fixture renders `renderMobileCard` with " +
-      "`showSearch`, so it never mounts. Its border token is the desktop field's.",
-  },
+  // Table.tsx's own inputs, in source order: the inline cell editor (open,
+  // and so focused, once the act's double-click lands), then the mobile and
+  // desktop search fields.
+  "Table.Table.tsx<input>#1": { rest: "editing-cell" },
+  "Table.Table.tsx<input>#2": { rest: "mobile-search" },
   "Table.Table.tsx<input>#3": { rest: "search-with-value" },
 };
 

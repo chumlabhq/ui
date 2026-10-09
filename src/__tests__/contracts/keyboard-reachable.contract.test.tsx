@@ -110,6 +110,12 @@ const unreachable = (): string[] => {
     if (enabled.length === 0) continue;
     if (enabled.some((m) => m.getAttribute("tabindex") === "0")) continue;
     if (hasActiveDescendantOwner(enabled)) continue;
+    // The stop has moved into a member: Table's inline editor holds focus inside
+    // its cell, and the cell leaves the tab order while it does, or axe faults
+    // it as a target the editor obscures. Only the focused control counts, so a
+    // group that is merely all -1 still fails.
+    const active = document.activeElement;
+    if (active && active.matches("input, textarea, select, button") && enabled.some((m) => m !== active && m.contains(active))) continue;
     bad.push(`${key}: ${enabled.length} members, no tab stop and no active-descendant owner`);
   }
 
@@ -235,6 +241,27 @@ describe("keyboard reachability contract", () => {
         '<div><div role="option" tabindex="0">a</div><div role="option" tabindex="-1">b</div></div>';
       document.body.appendChild(host);
       expect(unreachable()).toEqual([]);
+      host.remove();
+    });
+
+    it("accepts a group whose stop is a focused control inside a member", () => {
+      const host = document.createElement("div");
+      host.innerHTML =
+        '<table><tbody><tr><td role="gridcell" tabindex="-1"><input aria-label="Edit a"></td><td role="gridcell" tabindex="-1">b</td></tr></tbody></table>';
+      document.body.appendChild(host);
+      host.querySelector("input")!.focus();
+      expect(unreachable()).toEqual([]);
+      host.remove();
+    });
+
+    it("still catches that group once focus leaves the control", () => {
+      const host = document.createElement("div");
+      host.innerHTML =
+        '<table><tbody><tr><td role="gridcell" tabindex="-1"><input aria-label="Edit a"></td><td role="gridcell" tabindex="-1">b</td></tr></tbody></table>';
+      document.body.appendChild(host);
+      host.querySelector("input")!.focus();
+      host.querySelector("input")!.blur();
+      expect(unreachable().join()).toContain("gridcell@TR: 2 members, no tab stop");
       host.remove();
     });
   });

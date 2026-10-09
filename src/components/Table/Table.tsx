@@ -347,6 +347,8 @@ function TableInner<TData>(
     columnId: string;
   } | null>(null);
   const [editValue, setEditValue] = useState<string>("");
+  // The cell an Enter or Escape left, focused again once the editor is gone.
+  const editReturnRef = useRef<HTMLElement | null>(null);
 
   const [dragRowIndex, setDragRowIndex] = useState<number | null>(null);
 
@@ -1001,11 +1003,15 @@ function TableInner<TData>(
 
   // Arrow keys move `focusedCell`, but DOM focus has to follow or the
   // roving tabindex never actually moves the caret for keyboard users.
+  // Not when focus is already inside the cell: the inline editor's own focus
+  // bubbles to the cell's onFocus and moves focusedCell, and taking focus back
+  // blurred the editor, which commits and closes it in the frame it opened.
   useEffect(() => {
     if (!focusedCell) return;
-    containerRef.current
-      ?.querySelector<HTMLElement>('td[data-highlighted="true"]')
-      ?.focus({ preventScroll: true });
+    const td = containerRef.current?.querySelector<HTMLElement>(
+      'td[data-highlighted="true"]',
+    );
+    if (!td?.contains(document.activeElement)) td?.focus({ preventScroll: true });
   }, [focusedCell]);
 
   const isRowSelected = useCallback(
@@ -1038,7 +1044,7 @@ function TableInner<TData>(
     [onPinColumn, canPinMore],
   );
 
-  const handleCellDoubleClick = useCallback(
+  const startEdit = useCallback(
     (rowId: string, columnId: string, currentValue: unknown) => {
       if (!editable) return;
       if (editableColumnSet && !editableColumnSet.has(columnId)) return;
@@ -1060,6 +1066,12 @@ function TableInner<TData>(
     setEditingCell(null);
     setEditValue("");
   }, []);
+
+  useEffect(() => {
+    if (editingCell) return;
+    editReturnRef.current?.focus({ preventScroll: true });
+    editReturnRef.current = null;
+  }, [editingCell]);
 
   const handleCellClick = useCallback(
     async (cellText: string, rowId: string, columnId: string) => {
@@ -1425,6 +1437,9 @@ function TableInner<TData>(
         editable &&
         !isSyntheticColumn &&
         (!editableColumnSet || editableColumnSet.has(columnId));
+      const edit = canEdit
+        ? () => startEdit(rowId, columnId, cell.getValue())
+        : undefined;
 
       const cellStyle: React.CSSProperties = {};
       if (enableColumnResizing) {
@@ -1456,13 +1471,18 @@ function TableInner<TData>(
           onChange={(e) => setEditValue(e.target.value)}
           onBlur={commitEdit}
           onKeyDown={(e) => {
-            if (e.key === "Enter") commitEdit();
-            if (e.key === "Escape") {
+            // The editor's keys are its own: grid navigation would take the
+            // caret's arrows, and its Escape would drop the roving tab stop.
+            e.stopPropagation();
+            if (e.key === "Enter" || e.key === "Escape") {
               e.preventDefault();
-              cancelEdit();
+              editReturnRef.current = e.currentTarget.parentElement;
+              if (e.key === "Enter") commitEdit();
+              else cancelEdit();
             }
           }}
           className={`w-full border rounded px-1 py-0.5 ${editInputClassName}`}
+          aria-label={`Edit ${columnId}`}
           data-edit-input
           autoFocus
         />
@@ -1500,8 +1520,17 @@ function TableInner<TData>(
           key={cell.id}
           className={`${cellClassName} ${isSyntheticColumn ? checkboxCellClassName : ""} ${densityClass}`}
           role="gridcell"
-          tabIndex={isTabStop ? 0 : -1}
-          onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
+          // While it edits, the editor holds the tab stop: a focusable cell under
+          // it is a target the editor obscures (axe target-size).
+          tabIndex={isTabStop && !isEditing ? 0 : -1}
+          onKeyDown={(e) => {
+            // Enter and F2 open the editor from the cell itself, the keyboard
+            // equal of the double-click (APG grid, SC 2.1.1).
+            if (edit && e.target === e.currentTarget && (e.key === "Enter" || e.key === "F2")) {
+              e.preventDefault();
+              edit();
+            } else handleKeyDown(e, rowIndex, colIndex);
+          }}
           onFocus={() =>
             setFocusedCell((prev) =>
               prev?.row === rowIndex && prev?.col === colIndex
@@ -1512,11 +1541,7 @@ function TableInner<TData>(
           data-highlighted={isFocused || undefined}
           data-editing={isEditing || undefined}
           data-grouped={isGrouped || undefined}
-          onDoubleClick={
-            canEdit
-              ? () => handleCellDoubleClick(rowId, columnId, cell.getValue())
-              : undefined
-          }
+          onDoubleClick={edit}
           onClick={
             enableCopyOnClick && !isSyntheticColumn
               ? () => handleCellClick(cellText, rowId, columnId)
@@ -1540,7 +1565,7 @@ function TableInner<TData>(
       editValue,
       editable,
       editableColumnSet,
-      handleCellDoubleClick,
+      startEdit,
       commitEdit,
       cancelEdit,
       editInputClassName,
