@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Button } from "@chumlab/ui/button";
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerHeader } from "@chumlab/ui/drawer";
+import { Input } from "@chumlab/ui/input";
 
 function useDrawerState(initial = false) {
   const [open, setOpen] = useState(initial);
@@ -60,15 +61,7 @@ export default function DrawerExample() {
             </DrawerCloseButton>
           </DrawerHeader>
           <DrawerBody className="flex-1 overflow-y-auto px-6 py-5">
-            <label className="block text-sm mb-1 text-cl-text-secondary leading-relaxed">
-              Name
-            </label>
-            <input
-              ref={initialFocusRef}
-              type="text"
-              placeholder="This gets focus on open"
-              className="w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text"
-            />
+            <Input ref={initialFocusRef} label="Name" placeholder="This gets focus on open" />
           </DrawerBody>
         </div>
       </Drawer>

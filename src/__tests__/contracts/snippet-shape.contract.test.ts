@@ -295,7 +295,6 @@ describe("snippet shape contract", () => {
       { key: "TextArea/TextAreaLabel Standalone", element: '<textarea> "<textarea>"', reason: "As Input's, for `TextAreaLabel`." },
       { key: "Modal/Focus Trap", element: '<input> "<input>"', reason: "Raw inputs as focus-order fodder. Borderline: `Input` is focusable too and would teach better, so this is a decision to revisit, not a principle." },
       { key: "Modal/Initial Focus", element: '<input> "<input>"', reason: "As Focus Trap's." },
-      { key: "Drawer/Initial Focus", element: '<input> "<input>"', reason: "A native `<input data-autofocus>`: the attribute on a plain field IS the mechanism the section demonstrates, and an `Input` would hide it behind a component." },
     ];
 
     const TOKEN = /\b(?:bg-cl-|text-cl-|border-cl-|rounded-cl-)/;

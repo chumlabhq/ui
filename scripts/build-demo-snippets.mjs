@@ -127,6 +127,13 @@ const GLOBALS = new Set([
 /** React hooks a snippet can carry itself. Anything else is page machinery. */
 const PORTABLE_HOOKS = new Set(["useState", "useMemo", "useCallback", "useRef", "useEffect", "useId"]);
 
+/** Does `node` call a hook (`useX(…)` or `React.useX(…)`) outside any nested function? */
+function containsHookCall(node, sf) {
+  if (ts.isCallExpression(node) && /(^|\.)use[A-Z]\w*$/.test(node.expression.getText(sf))) return true;
+  if (ts.isFunctionLike(node)) return false;
+  return ts.forEachChild(node, (child) => containsHookCall(child, sf) || undefined) === true;
+}
+
 /**
  * Free identifiers of a node: what it uses and does not itself bind.
  *
@@ -1245,10 +1252,13 @@ function build(section, sf, symbols, classes, componentName) {
       // `const basic = useDrawerState()` cannot sit at module scope — a hook
       // call only runs inside a component. Whole function declarations go out
       // to module scope; everything else follows the page's own placement.
-      const callsHook =
-        d.node.initializer &&
-        ts.isCallExpression(d.node.initializer) &&
-        /^use[A-Z]/.test(d.node.initializer.expression.getText(sf));
+      //
+      // Anywhere in the initializer, not only as it: Drawer's Directions wrote
+      // `const directions = { left: useDrawerState(), … }`, which the old test
+      // (initializer IS a hook call) sent to module scope, where it threw on
+      // paste. A nested function is not searched — a hook inside one runs when
+      // that function is called, not where it is declared.
+      const callsHook = !!d.node.initializer && containsHookCall(d.node.initializer, sf);
       // A declaration that closes over page state goes INTO the snippet's
       // component, below the state it reads — it cannot go to module scope,
       // which is the only reason it was ever rejected.

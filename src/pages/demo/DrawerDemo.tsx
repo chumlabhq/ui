@@ -178,30 +178,30 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
+          {/* Each Drawer beside its own button, inside the wrapper: the panel
+              portals out, and the snippet carries the Drawer with its trigger. */}
           {(["left", "right", "top", "bottom"] as const).map((dir) => (
-            <button
-              key={dir}
-              className={c.btn}
-              onClick={directions[dir].onOpen}
-            >
-              {dir}
-            </button>
+            <div key={dir}>
+              <button
+                className={c.btn}
+                onClick={directions[dir].onOpen}
+              >
+                {dir}
+              </button>
+              <Drawer
+                open={directions[dir].open}
+                onOpenChange={directions[dir].onOpenChange}
+                direction={dir}
+                size={dir === "top" || dir === "bottom" ? "250px" : "320px"}
+              >
+                {renderDrawerContent(
+                  `${dir.charAt(0).toUpperCase() + dir.slice(1)} Drawer`,
+                  directions[dir].onClose,
+                )}
+              </Drawer>
+            </div>
           ))}
         </DemoWrapper>
-        {(["left", "right", "top", "bottom"] as const).map((dir) => (
-          <Drawer
-            key={dir}
-            open={directions[dir].open}
-            onOpenChange={directions[dir].onOpenChange}
-            direction={dir}
-            size={dir === "top" || dir === "bottom" ? "250px" : "320px"}
-          >
-            {renderDrawerContent(
-              `${dir.charAt(0).toUpperCase() + dir.slice(1)} Drawer`,
-              directions[dir].onClose,
-            )}
-          </Drawer>
-        ))}
       </Section>
 
       {/* ─── Custom Size ────────────────────────────────────────────────── */}
@@ -515,12 +515,10 @@ const DrawerDemo = () => {
               </DrawerCloseButton>
             </DrawerHeader>
             <DrawerBody className={c.body}>
-              <label className={`block text-sm mb-1 ${c.text}`}>Name</label>
-              <input
+              <Input
                 ref={initialFocusRef}
-                type="text"
+                label="Name"
                 placeholder="This gets focus on open"
- className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
               />
             </DrawerBody>
           </div>
