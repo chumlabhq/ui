@@ -132,8 +132,16 @@ describe("snippet shape contract", () => {
    * is raised with one, like the `dark:` ratchets.
    */
   it("produces as many snippets as recorded", () => {
-    /** 2026-10-09, D4b: recorded at 744 (of 839 sections; the skipped list says why for the rest). */
-    const RECORDED = 744;
+    /**
+     * 2026-10-09, D4b: recorded at 744 (of 839 sections; the skipped list says why for the rest).
+     * 2026-10-09, D10: 744 -> 778. Table's Show code: 30 sections wrapped so the
+     * snippet captures them, and 3 that did not typecheck fixed at the generator
+     * (default `React` import, `React` as a value, an `extends User` heritage
+     * type) — 33. One more from the generator fixes: Slider's Custom Thumb, whose
+     * renamed binding (`{ value: v }`) had read as an undeclared `value`. The 31
+     * Table sections still without code carry their reason in the skipped list.
+     */
+    const RECORDED = 778;
     const count = every.length;
     console.log(
       `SNIPPET_COUNT snippets=${count} recorded=${RECORDED} ` +

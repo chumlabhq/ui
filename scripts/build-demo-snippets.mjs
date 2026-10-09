@@ -120,7 +120,7 @@ const GLOBALS = new Set([
   "console", "window", "document", "navigator", "Math", "Date", "JSON", "Object", "Array",
   "String", "Number", "Boolean", "Set", "Map", "WeakMap", "Promise", "Error", "RegExp",
   "setTimeout", "clearTimeout", "setInterval", "clearInterval", "requestAnimationFrame",
-  "undefined", "NaN", "Infinity", "React", "Fragment", "isNaN", "parseInt", "parseFloat", "alert", "prompt", "confirm",
+  "undefined", "NaN", "Infinity", "Fragment", "isNaN", "parseInt", "parseFloat", "alert", "prompt", "confirm",
   "FormData",
 ]);
 
@@ -145,8 +145,15 @@ function containsHookCall(node, sf) {
 function freeIdentifiers(nodes, sf, usedTypes = new Set()) {
   const bound = new Set();
   const used = new Set();
+  // A type parameter binds its name the way a parameter does: `T` in
+  // `function FloatingActions<T>(…)` is not a type the page has to declare,
+  // and reading it as one dropped Table's With Floating Actions.
+  const boundTypes = new Set();
+  const seenTypes = new Set();
 
   const bind = (n) => {
+    // Bound as a value too: the value walk reaches the declaration's own name.
+    if (ts.isTypeParameterDeclaration(n)) { boundTypes.add(n.name.text); bound.add(n.name.text); }
     if (ts.isParameter(n) || ts.isVariableDeclaration(n) || ts.isBindingElement(n)) {
       const name = (nm) => {
         if (!nm) return;
@@ -184,7 +191,11 @@ function freeIdentifiers(nodes, sf, usedTypes = new Set()) {
     // import — and those are collected here rather than as values.
     if (ts.isTypeNode(n)) {
       const typeNames = (t) => {
-        if (ts.isTypeReferenceNode(t)) usedTypes.add(t.typeName.getText(sf).split(".")[0]);
+        if (ts.isTypeReferenceNode(t)) seenTypes.add(t.typeName.getText(sf).split(".")[0]);
+        // `interface ExtendedUser extends User` names `User` in a heritage
+        // clause, which is not a type reference; missing it left Table's
+        // Footer / Summary Row snippet with an undeclared `User`.
+        if (ts.isExpressionWithTypeArguments(t)) seenTypes.add(t.expression.getText(sf).split(".")[0]);
         ts.forEachChild(t, typeNames);
       };
       typeNames(n);
@@ -194,6 +205,13 @@ function freeIdentifiers(nodes, sf, usedTypes = new Set()) {
     // the snippet still has to import.
     if (ts.isAsExpression(n) || ts.isSatisfiesExpression?.(n)) { use(n.expression); if (n.type) use(n.type); return; }
     if (ts.isPropertyAccessExpression(n)) { use(n.expression); return; }
+    // `{ className: classNameProp }` renames a property; `className` is not a
+    // reference. Only a default value, or a nested pattern, can use anything.
+    if (ts.isBindingElement(n)) {
+      if (n.initializer) use(n.initializer);
+      if (!ts.isIdentifier(n.name)) use(n.name);
+      return;
+    }
     if (ts.isPropertyAssignment(n) && !ts.isComputedPropertyName(n.name)) { use(n.initializer); return; }
     if (ts.isIdentifier(n)) { used.add(n.text); return; }
     ts.forEachChild(n, use);
@@ -201,12 +219,14 @@ function freeIdentifiers(nodes, sf, usedTypes = new Set()) {
 
   nodes.forEach(bind);
   nodes.forEach(use);
+  for (const t of seenTypes) if (!boundTypes.has(t)) usedTypes.add(t);
   return [...used].filter((id) => !bound.has(id) && !GLOBALS.has(id));
 }
 
 /** The page's declarations, wherever they sit, plus how each may be reused. */
 function pageSymbols(sf) {
   const imports = new Map();   // name → module specifier, already public
+  const defaultImports = new Set(); // which of those names came in as a default import
   const localImports = new Map(); // name → { raw, file, exported } from a page-local module
   const decls = new Map();     // name → { kind, node, text }
   const stateOf = new Map();   // value or setter name → the whole declaration
@@ -240,7 +260,10 @@ function pageSymbols(sf) {
     if (!spec) continue;
     const nb = st.importClause.namedBindings;
     if (nb && ts.isNamedImports(nb)) nb.elements.forEach((e) => imports.set(e.name.text, spec));
-    if (st.importClause.name) imports.set(st.importClause.name.text, spec);
+    if (st.importClause.name) {
+      imports.set(st.importClause.name.text, spec);
+      defaultImports.add(st.importClause.name.text);
+    }
   }
 
   const record = (node, kind) => {
@@ -295,7 +318,7 @@ function pageSymbols(sf) {
     }
   }
 
-  return { imports, decls, stateOf, localImports };
+  return { imports, defaultImports, decls, stateOf, localImports };
 }
 
 /** A page-local import's source file: `./lib/countryCatalog.js` is `lib/countryCatalog.ts`. */
@@ -1145,9 +1168,19 @@ function sectionsOf(sf) {
             ? w.node.children.filter((c) => !ts.isJsxText(c) || c.getText(sf).trim())
             : [w.node],
         );
+        // A section the page marks code-less says why, and the generator
+        // records that reason instead of guessing one from the markup.
+        const codelessAttr = node.openingElement.attributes.properties.find(
+          (p) => ts.isJsxAttribute(p) && p.name.getText(sf) === "codeless",
+        );
+        const codeless =
+          codelessAttr && codelessAttr.initializer && ts.isStringLiteral(codelessAttr.initializer)
+            ? codelessAttr.initializer.text
+            : null;
         out.push({
           title,
           body,
+          codeless,
           hasWrapper: wrappers.some((w) => w.children),
           bindings,
         });
@@ -1375,9 +1408,13 @@ function build(section, sf, symbols, classes, componentName) {
      * over edited cells, and substituting there reported a missing styling key
      * and dropped an otherwise-good snippet. A section that binds `c` is
      * talking about its own value, not the page's.
+     *
+     * Only the `c.x` substitution is skipped there. Returning the text as it
+     * came skipped the `dark` fold too, so Table's Row Grouping — whose
+     * `prev.filter((c) => c !== col)` binds a `c` — shipped `dark` undeclared.
      */
-    if (/(?:\(|,\s*)c\s*(?:[,:)]|=>)|\bconst\s+c\b/.test(text)) return text;
-    let out = text.replace(/\bc\.([A-Za-z0-9_]+)(?:\.([A-Za-z0-9_]+))?/g, (_m, key, subKey) => {
+    const bindsC = /(?:\(|,\s*)c\s*(?:[,:)]|=>)|\bconst\s+c\b/.test(text);
+    let out = bindsC ? text : text.replace(/\bc\.([A-Za-z0-9_]+)(?:\.([A-Za-z0-9_]+))?/g, (_m, key, subKey) => {
       const entry = classes.get(key);
       if (!entry) { missingKey = key; return _m; }
       const whole = "literal" in entry ? JSON.stringify(entry.literal) : `(${entry.expression})`;
@@ -1424,7 +1461,14 @@ function build(section, sf, symbols, classes, componentName) {
 
   const importLines = [...importsUsed.entries()]
     .sort(([a], [b]) => (a === "react" ? -1 : b === "react" ? 1 : a.localeCompare(b)))
-    .map(([spec, names]) => `import { ${[...names].sort().join(", ")} } from "${spec}";`);
+    .map(([spec, names]) => {
+      // A default import stays one: `import { React } from "react"` names an
+      // export react does not have (Table's pin and search sections, TS2724).
+      const fallback = [...names].find((n) => symbols.defaultImports?.has(n));
+      const named = [...names].filter((n) => n !== fallback).sort();
+      if (fallback && !named.length) return `import ${fallback} from "${spec}";`;
+      return `import ${fallback ? `${fallback}, ` : ""}{ ${named.join(", ")} } from "${spec}";`;
+    });
 
   // A snippet needs a client boundary in Next when it holds state or wires a
   // handler — derived from this snippet, not from the component.
@@ -1510,6 +1554,10 @@ for (const file of pages) {
 
   for (const section of sectionsOf(sf)) {
     considered += 1;
+    if (section.codeless) {
+      skipped.push({ component: componentName, title: section.title, reason: `code-less by decision: ${section.codeless}` });
+      continue;
+    }
     if (!section.hasWrapper) {
       skipped.push({ component: componentName, title: section.title, reason: "no demo wrapper in the section" });
       continue;

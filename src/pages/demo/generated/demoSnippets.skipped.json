@@ -101,11 +101,6 @@
       "reason": "no demo wrapper in the section"
     },
     {
-      "component": "Slider",
-      "title": "Custom Thumb",
-      "reason": "`value` is not declared on the page"
-    },
-    {
       "component": "Styling",
       "title": "1. className",
       "reason": "no demo wrapper in the section"
@@ -137,303 +132,158 @@
     },
     {
       "component": "Table",
-      "title": "With Row Selection",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "With Floating Actions",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Actions Column + Floating 3-Dot Menu",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
       "title": "Floating Actions with Custom Triggers",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "With Pinned Columns (Interactive)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "With Pagination",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same floatingActions, onRowHover and isFloatingActionsHovered as With Floating Actions; only the trigger buttons differ"
     },
     {
       "component": "Table",
       "title": "Dark/Modern Pagination Style",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Horizontal Scroll (Many Columns)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Vertical Scroll (Fixed Height)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Sticky Header",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same Table and Pagination composition as With Pagination; only the colours differ"
     },
     {
       "component": "Table",
       "title": "Both Scrollbars (Fixed Height + Many Columns)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Hidden Vertical Scrollbar",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Hidden Scrollbars (Both Directions)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: maxWidth and maxHeight together; each has its own snippet (Horizontal Scroll, Vertical Scroll)"
     },
     {
       "component": "Table",
       "title": "Comprehensive Demo (All Features)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Loading State",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Empty State (Fully Customizable)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Custom Checkbox Selection",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: combines loading, scrolling, a sticky header, pinning and floating actions, each with its own snippet"
     },
     {
       "component": "Table",
       "title": "Star Selection (Favorites)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs"
     },
     {
       "component": "Table",
       "title": "Checkbox with Star Icon Inside",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs"
     },
     {
       "component": "Table",
       "title": "Global Search (Custom Colors & Focus)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same globalFilter and onGlobalFilterChange as Global Search (Basic); only the search input's styling differs"
     },
     {
       "component": "Table",
       "title": "Global Search (Minimal, No Icon)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same globalFilter and onGlobalFilterChange as Global Search (Basic); only the search input's styling differs"
     },
     {
       "component": "Table",
       "title": "Global Search (Pill Shape with Badge)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Row Expansion (Custom Chevron Icons)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same globalFilter and onGlobalFilterChange as Global Search (Basic); only the search input's styling differs"
     },
     {
       "component": "Table",
       "title": "Row Expansion (Plus/Minus Icons)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Row Expansion (Right Side, Arrow Icon)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same ExpandIcon prop as Row Expansion (Custom Chevron Icons); only the icon differs"
     },
     {
       "component": "Table",
       "title": "Row Expansion (Styled Expanded Content)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Row Expansion (Click Anywhere on Row)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same renderExpandedRow as Row Expansion; only the expanded content's styling differs"
     },
     {
       "component": "Table",
       "title": "Column Visibility (Pill Toggles)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same columnVisibility and onColumnVisibilityChange as Column Visibility (Toggle Checkboxes); only the toggle UI differs"
     },
     {
       "component": "Table",
       "title": "Column Visibility (Dropdown Menu)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same columnVisibility and onColumnVisibilityChange as Column Visibility (Toggle Checkboxes); only the toggle UI differs"
     },
     {
       "component": "Table",
       "title": "Column Visibility (Switch Toggles)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same columnVisibility and onColumnVisibilityChange as Column Visibility (Toggle Checkboxes); only the toggle UI differs"
     },
     {
       "component": "Table",
       "title": "Striped Rows (Custom Colors)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same striped and stripedClassName as the four Striped Rows snippets; only the colours differ"
     },
     {
       "component": "Table",
       "title": "Column Resizing (Custom Handle Style)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Column Resizing (Controlled with Size Display)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Column Resizing (With Initial Sizes)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Row Drag & Drop (Custom Arrow Icons)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same enableColumnResizing as Column Resizing (Basic); only the handle's styling differs"
     },
     {
       "component": "Table",
       "title": "Row Drag & Drop (Number Handle with Reorder History)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same DragHandleIcon and onRowReorder as Row Drag & Drop (Custom Arrow Icons); only the handle and the history readout differ"
     },
     {
       "component": "Table",
       "title": "Row Drag & Drop (Styled Drag State)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same enableRowDragDrop as Row Drag & Drop (Default); only the drag-state styling differs"
     },
     {
       "component": "Table",
       "title": "Row Drag & Drop (With Row Numbers)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same enableRowDragDrop and onRowReorder as Row Drag & Drop (Default); the number column is ordinary column markup"
     },
     {
       "component": "Table",
-      "title": "Row Drag & Drop (Handle on Right)",
-      "reason": "no demo wrapper in the section"
+      "title": "Footer / Summary Row",
+      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
     },
     {
       "component": "Table",
       "title": "Footer (Column-Aligned Totals)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
     },
     {
       "component": "Table",
       "title": "Footer (Styled Summary Card)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
     },
     {
       "component": "Table",
       "title": "Footer (Sticky Footer)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
     },
     {
       "component": "Table",
       "title": "Footer (Multi-Row with Styling)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Built-in Search (Rose Theme)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Built-in Search (Icon on Right)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)."
     },
     {
       "component": "Table",
       "title": "Built-in Search (No Icon)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: a third value of searchIconPosition, shown in Built-in Search (Icon on Right)"
     },
     {
       "component": "Table",
       "title": "Built-in Search (Emerald Underline Style)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same built-in search props as Built-in Search (Icon on Right); only the colours differ"
     },
     {
       "component": "Table",
       "title": "Built-in Search (Custom Filter Icon on Right)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Column Header Filters (Default)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Column Header Filters (Custom Icon)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Column Header Filters (Custom Dropdown Content)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: SearchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
     },
     {
       "component": "Table",
       "title": "Column Filters + Sorting Combined",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: enableColumnFilters and sortable together; each has its own snippet"
     },
     {
       "component": "Table",
       "title": "Column Filters (Styled Dropdown)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: the same renderColumnFilter as Column Header Filters (Custom Dropdown Content); only the styling differs"
     },
     {
       "component": "Table",
       "title": "Column Filters (Chip Tags Style)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: renderColumnFilter and FilterIcon together; each has its own snippet"
     },
     {
       "component": "Table",
       "title": "Server-Side (Real API: dummyjson.com)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Column Reordering",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Row Grouping",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Mobile Card Layout",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Select All Mode (Page vs All)",
-      "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Save View (Presets)",
-      "reason": "no demo wrapper in the section"
+      "reason": "code-less by decision: it fetches a live third-party API (dummyjson.com), which a pasted snippet should not depend on; Server-Side Mode shows the same props without one"
     },
     {
       "component": "Theming",
@@ -454,26 +304,6 @@
       "component": "Theming",
       "title": "Custom palettes",
       "reason": "no demo wrapper in the section"
-    },
-    {
-      "component": "Table",
-      "title": "Custom Pin Icon (Star)",
-      "reason": "does not typecheck: TS2724 '\"react\"' has no exported member named 'React'. Did you mean 'act'?"
-    },
-    {
-      "component": "Table",
-      "title": "Custom Pin Separator Styling",
-      "reason": "does not typecheck: TS2724 '\"react\"' has no exported member named 'React'. Did you mean 'act'?"
-    },
-    {
-      "component": "Table",
-      "title": "Footer / Summary Row",
-      "reason": "does not typecheck: TS2304 Cannot find name 'User'."
-    },
-    {
-      "component": "Table",
-      "title": "Global Search (Basic)",
-      "reason": "does not typecheck: TS2686 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead."
     }
   ],
   "droppedClassesKeys": []

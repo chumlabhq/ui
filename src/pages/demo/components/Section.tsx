@@ -25,6 +25,12 @@ interface SectionProps {
   children: React.ReactNode;
   /** Kept for API compatibility; deep-space tokens follow the parent .demo-light scope. */
   isDarkMode?: boolean;
+  /**
+   * Why this section deliberately has no Show code. Read by
+   * `build-demo-snippets.mjs`, which records it in the skipped list in place of
+   * a generic reason; nothing renders it.
+   */
+  codeless?: string;
 }
 
 /**

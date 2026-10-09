@@ -10,12 +10,11 @@ import {
   createPortal } from "react-dom";
 import { Table,
   exportTableToCSV } from "../../components/Table/index.js";
-import { acquireScrollLock,
-  releaseScrollLock } from "../../utils/scrollLock.js";
 import { Pagination } from "../../components/Pagination/index.js";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { SortingState } from "../../components/Table/index.js";
 import { Button } from "../../components/Button/index.js";
+import { Input } from "../../components/Input/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -201,7 +200,7 @@ function FloatingActions<T>({
         renderContent(name, latchedData)
       ) : (
         <>
-          <button aria-label="View"
+          <Button aria-label="View"
             className={buttonClassName}
             title="View"
             onClick={() => onAction?.("View", latchedData)}
@@ -218,8 +217,8 @@ function FloatingActions<T>({
               <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
               <circle cx="12" cy="12" r="3" />
             </svg>
-          </button>
-          <button aria-label="Edit"
+          </Button>
+          <Button aria-label="Edit"
             className={buttonClassName}
             title="Edit"
             onClick={() => onAction?.("Edit", latchedData)}
@@ -236,8 +235,8 @@ function FloatingActions<T>({
               <path d="M12 20h9" />
               <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z" />
             </svg>
-          </button>
-          <button aria-label="Delete"
+          </Button>
+          <Button aria-label="Delete"
             className={`${buttonClassName} hover:!text-cl-error hover:!bg-cl-error/15 cursor-pointer`}
             title="Delete"
             onClick={() => onAction?.("Delete", latchedData)}
@@ -257,7 +256,7 @@ function FloatingActions<T>({
               <path d="M10 11v6" />
               <path d="M14 11v6" />
             </svg>
-          </button>
+          </Button>
         </>
       )}
     </div>
@@ -1744,313 +1743,327 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="With Row Selection" isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData.slice(0, 5)}
-          getRowId={(row) => row.id}
-          selectedRowId={selectedRowId}
-          onRowClick={handleRowClick}
-          classes={s}
-        />
-        {selectedRowId && (
-          <p
-            className={`mt-2 text-sm text-cl-text-secondary`}
-          >
-            Selected:{" "}
-            <code
-              className={`px-1 rounded bg-cl-bg-elevated`}
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData.slice(0, 5)}
+            getRowId={(row) => row.id}
+            selectedRowId={selectedRowId}
+            onRowClick={handleRowClick}
+            classes={s}
+          />
+          {selectedRowId && (
+            <p
+              className={`mt-2 text-sm text-cl-text-secondary`}
             >
-              {selectedRowId}
-            </code>
-          </p>
-        )}
+              Selected:{" "}
+              <code
+                className={`px-1 rounded bg-cl-bg-elevated`}
+              >
+                {selectedRowId}
+              </code>
+            </p>
+          )}
+        </DemoWrapper>
       </Section>
 
       <Section title="With Floating Actions" isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData.slice(0, 5)}
-          onRowHover={handleRowHover}
-          isFloatingActionsHovered={isFloatingActionsHovered}
-          floatingActions={
-            <FloatingActions<User>
-              rowRef={hoveredRowRef}
-              rowData={floatingActionsData}
-              onHover={handleFloatingActionsHover}
-              isVisible={hoveredRowIndex !== null || isFloatingActionsHovered}
-              getName={(data) => data.name}
-              onAction={(action, data) =>
-                setFloatingAction(JSON.stringify({ action, name: data.name }))
-              }
-              dark={dark}
-            />
-          }
-          classes={s}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData.slice(0, 5)}
+            onRowHover={handleRowHover}
+            isFloatingActionsHovered={isFloatingActionsHovered}
+            floatingActions={
+              <FloatingActions<User>
+                rowRef={hoveredRowRef}
+                rowData={floatingActionsData}
+                onHover={handleFloatingActionsHover}
+                isVisible={hoveredRowIndex !== null || isFloatingActionsHovered}
+                getName={(data) => data.name}
+                onAction={(action, data) =>
+                  setFloatingAction(JSON.stringify({ action, name: data.name }))
+                }
+                dark={dark}
+              />
+            }
+            classes={s}
+          />
+          <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
+            action: {floatingAction}
+          </div>
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Hover over any row to see floating action buttons (View, Edit,
           Delete). The actions stay at the right edge of the table.
         </p>
-        <div className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary" data-demo-action>
-          action: {floatingAction}
-        </div>
       </Section>
 
       <Section title="Actions Column + Floating 3-Dot Menu" isDarkMode={dark}>
-        {(() => {
-          const DotMenuDemo = () => {
-            const [dotMenuState, setDotMenuState] = React.useState<{
-              rowId: string;
-              top: number;
-              left: number;
-            } | null>(null);
-            const [dotHoverIdx, setDotHoverIdx] = React.useState<number | null>(
-              null,
-            );
-            const [dotHoverRef, setDotHoverRef] =
-              React.useState<React.RefObject<HTMLTableRowElement> | null>(null);
-            const [dotFloatingHovered, setDotFloatingHovered] =
-              React.useState(false);
-            const [dotAction, setDotAction] = React.useState("not fired yet");
-            const dotMenuRef = React.useRef<HTMLDivElement>(null);
-
-            React.useEffect(() => {
-              if (!dotMenuState) return;
-              const handler = (e: MouseEvent) => {
-                if (
-                  dotMenuRef.current &&
-                  !dotMenuRef.current.contains(e.target as Node)
-                ) {
-                  setDotMenuState(null);
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const DotMenuDemo = () => {
+              const [dotMenuState, setDotMenuState] = React.useState<{
+                rowId: string;
+                top: number;
+                left: number;
+              } | null>(null);
+              const [dotHoverIdx, setDotHoverIdx] = React.useState<number | null>(
+                null,
+              );
+              const [dotHoverRef, setDotHoverRef] =
+                React.useState<React.RefObject<HTMLTableRowElement> | null>(null);
+              const [dotFloatingHovered, setDotFloatingHovered] =
+                React.useState(false);
+              const [dotAction, setDotAction] = React.useState("not fired yet");
+              const dotMenuRef = React.useRef<HTMLDivElement>(null);
+  
+              React.useEffect(() => {
+                if (!dotMenuState) return;
+                const handler = (e: MouseEvent) => {
+                  if (
+                    dotMenuRef.current &&
+                    !dotMenuRef.current.contains(e.target as Node)
+                  ) {
+                    setDotMenuState(null);
+                  }
+                };
+                document.addEventListener("mousedown", handler);
+                return () => document.removeEventListener("mousedown", handler);
+              }, [dotMenuState]);
+  
+              React.useEffect(() => {
+                if (dotMenuState && dotHoverIdx !== null) {
+                  const hoveredRowId = sampleData[dotHoverIdx]?.id;
+                  if (hoveredRowId && hoveredRowId !== dotMenuState.rowId) {
+                    setDotMenuState(null);
+                  }
                 }
-              };
-              document.addEventListener("mousedown", handler);
-              return () => document.removeEventListener("mousedown", handler);
-            }, [dotMenuState]);
-
-            React.useEffect(() => {
-              if (dotMenuState && dotHoverIdx !== null) {
-                const hoveredRowId = sampleData[dotHoverIdx]?.id;
-                if (hoveredRowId && hoveredRowId !== dotMenuState.rowId) {
-                  setDotMenuState(null);
-                }
-              }
-            }, [dotHoverIdx, dotMenuState]);
-
-            // Lock body scroll while the popup is open — the menu is
-            // portal-rendered at a fixed top/left captured from the trigger
-            // rect, so scrolling the page after open would leave the menu
-            // floating away from its anchor row.
-            React.useEffect(() => {
-              if (!dotMenuState) return;
-              acquireScrollLock();
-              return () => releaseScrollLock();
-            }, [dotMenuState]);
-
-            const actionsColumns: ColumnDef<User>[] = useMemo(
-              () => [
-                {
-                  accessorKey: "name",
-                  header: () => <span>Name</span>,
-                  cell: ({ row }) => (
-                    <span className="font-medium">{row.getValue("name")}</span>
-                  ),
-                },
-                { accessorKey: "email", header: () => <span>Email</span> },
-                { accessorKey: "role", header: () => <span>Role</span> },
-                {
-                  accessorKey: "status",
-                  header: () => <span>Status</span>,
-                  cell: ({ row }) => (
-                    <StatusBadge status={row.getValue("status")} dark={dark} />
-                  ),
-                },
-                {
-                  id: "actions",
-                  header: () => <span>Actions</span>,
-                  size: 100,
-                  cell: ({ row }) => (
-                    <div className="flex items-center gap-1">
-                      <button aria-label="Edit"
-                        className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
-                        title="Edit"
-                        onClick={() =>
-                          setDotAction(
-                            JSON.stringify({ action: "Edit", name: row.original.name }),
-                          )
-                        }
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                        </svg>
-                      </button>
-                      <button aria-label="Delete"
-                        className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-error hover:bg-cl-bg-elevated`}
-                        title="Delete"
-                        onClick={() =>
-                          setDotAction(
-                            JSON.stringify({ action: "Delete", name: row.original.name }),
-                          )
-                        }
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
-                        </svg>
-                      </button>
-                    </div>
-                  ),
-                },
-              ],
-              // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
-              [dark],
-            );
-
-            const dotFloatingData =
-              dotHoverIdx !== null ? sampleData[dotHoverIdx] : undefined;
-
-            return (
-              <>
-                <Table
-                  columns={actionsColumns}
-                  data={sampleData.slice(0, 5)}
-                  onRowHover={(idx, ref) => {
-                    setDotHoverIdx(idx);
-                    setDotHoverRef(ref ?? null);
-                  }}
-                  isFloatingActionsHovered={dotFloatingHovered}
-                  isPopupOpen={dotMenuState !== null}
-                  floatingActions={
-                    <FloatingActions<User>
-                      rowRef={dotHoverRef}
-                      rowData={dotFloatingData}
-                      onHover={setDotFloatingHovered}
-                      isVisible={
-                        dotHoverIdx !== null ||
-                        dotFloatingHovered ||
-                        dotMenuState !== null
-                      }
-                      getName={(data) => data.name}
-                      dark={dark}
-                      renderContent={(_name, rowData) => (
-                        <button aria-label="More actions"
-                          className={`p-1.5 rounded transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover`}
-                          title="More actions"
-                          onClick={(e) => {
-                            const rowId = (rowData as User)?.id ?? null;
-                            if (dotMenuState?.rowId === rowId) {
-                              setDotMenuState(null);
-                            } else if (rowId) {
-                              const rect =
-                                e.currentTarget.getBoundingClientRect();
-                              setDotMenuState({
-                                rowId,
-                                top: rect.top,
-                                left: rect.right + 8,
-                              });
-                            }
-                          }}
+              }, [dotHoverIdx, dotMenuState]);
+  
+              // Lock body scroll while the popup is open — the menu is
+              // portal-rendered at a fixed top/left captured from the trigger
+              // rect, so scrolling the page after open would leave the menu
+              // floating away from its anchor row. Plain DOM, so the snippet
+              // is code a consumer can paste: the library's own scroll lock
+              // is internal, not part of the published API.
+              React.useEffect(() => {
+                if (!dotMenuState) return;
+                const { overflow, paddingRight } = document.body.style;
+                const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+                document.body.style.overflow = "hidden";
+                if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`;
+                return () => {
+                  document.body.style.overflow = overflow;
+                  document.body.style.paddingRight = paddingRight;
+                };
+              }, [dotMenuState]);
+  
+              const actionsColumns: ColumnDef<User>[] = useMemo(
+                () => [
+                  {
+                    accessorKey: "name",
+                    header: () => <span>Name</span>,
+                    cell: ({ row }) => (
+                      <span className="font-medium">{row.getValue("name")}</span>
+                    ),
+                  },
+                  { accessorKey: "email", header: () => <span>Email</span> },
+                  { accessorKey: "role", header: () => <span>Role</span> },
+                  {
+                    accessorKey: "status",
+                    header: () => <span>Status</span>,
+                    cell: ({ row }) => (
+                      <StatusBadge status={row.getValue("status")} dark={dark} />
+                    ),
+                  },
+                  {
+                    id: "actions",
+                    header: () => <span>Actions</span>,
+                    size: 100,
+                    cell: ({ row }) => (
+                      <div className="flex items-center gap-1">
+                        <Button aria-label="Edit"
+                          className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
+                          title="Edit"
+                          onClick={() =>
+                            setDotAction(
+                              JSON.stringify({ action: "Edit", name: row.original.name }),
+                            )
+                          }
                         >
                           <svg
                             className="w-4 h-4"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle cx="12" cy="5" r="2" />
-                            <circle cx="12" cy="12" r="2" />
-                            <circle cx="12" cy="19" r="2" />
-                          </svg>
-                        </button>
-                      )}
-                    />
-                  }
-                  classes={s}
-                />
-                <div
-                  className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
-                  data-demo-action
-                >
-                  action: {dotAction}
-                </div>
-                {dotMenuState &&
-                  createPortal(
-                    <div
-                      ref={dotMenuRef}
-                      className={`fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] z-[9999] bg-cl-bg border-cl-border`}
-                      style={{ top: dotMenuState.top, left: dotMenuState.left }}
-                    >
-                      {[
-                        {
-                          label: "View Details",
-                          icon: "M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z",
-                        },
-                        {
-                          label: "Duplicate",
-                          icon: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z",
-                        },
-                        {
-                          label: "Archive",
-                          icon: "M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4",
-                        },
-                        {
-                          label: "Delete",
-                          icon: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16",
-                          danger: true,
-                        },
-                      ].map((item) => (
-                        <button
-                          key={item.label}
-                          className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm transition-colors cursor-pointer ${(item as { danger?: boolean }).danger ? (dark ? "text-cl-error hover:bg-cl-error/10" : "text-cl-error hover:bg-cl-error/15") : dark ? "text-cl-text-secondary hover:bg-cl-bg-hover" : "text-cl-text hover:bg-cl-bg-hover"}`}
-                          onClick={() => {
-                            setDotAction(
-                              JSON.stringify({
-                                action: item.label,
-                                name: sampleData.find((u) => u.id === dotMenuState.rowId)?.name,
-                              }),
-                            );
-                            setDotMenuState(null);
-                          }}
-                        >
-                          <svg
-                            className="w-4 h-4 shrink-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
-                            strokeWidth={1.5}
+                            strokeWidth={2}
                             strokeLinecap="round"
                             strokeLinejoin="round"
                           >
-                            <path d={item.icon} />
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                           </svg>
-                          {item.label}
-                        </button>
-                      ))}
-                    </div>,
-                    document.body,
-                  )}
-              </>
-            );
-          };
-          return <DotMenuDemo />;
-        })()}
+                        </Button>
+                        <Button aria-label="Delete"
+                          className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-error hover:bg-cl-bg-elevated`}
+                          title="Delete"
+                          onClick={() =>
+                            setDotAction(
+                              JSON.stringify({ action: "Delete", name: row.original.name }),
+                            )
+                          }
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                          </svg>
+                        </Button>
+                      </div>
+                    ),
+                  },
+                ],
+                // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
+                [dark],
+              );
+  
+              const dotFloatingData =
+                dotHoverIdx !== null ? sampleData[dotHoverIdx] : undefined;
+  
+              return (
+                <>
+                  <Table
+                    columns={actionsColumns}
+                    data={sampleData.slice(0, 5)}
+                    onRowHover={(idx, ref) => {
+                      setDotHoverIdx(idx);
+                      setDotHoverRef(ref ?? null);
+                    }}
+                    isFloatingActionsHovered={dotFloatingHovered}
+                    isPopupOpen={dotMenuState !== null}
+                    floatingActions={
+                      <FloatingActions<User>
+                        rowRef={dotHoverRef}
+                        rowData={dotFloatingData}
+                        onHover={setDotFloatingHovered}
+                        isVisible={
+                          dotHoverIdx !== null ||
+                          dotFloatingHovered ||
+                          dotMenuState !== null
+                        }
+                        getName={(data) => data.name}
+                        dark={dark}
+                        renderContent={(_name, rowData) => (
+                          <Button aria-label="More actions"
+                            className={`p-1.5 rounded transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover`}
+                            title="More actions"
+                            onClick={(e) => {
+                              const rowId = (rowData as User)?.id ?? null;
+                              if (dotMenuState?.rowId === rowId) {
+                                setDotMenuState(null);
+                              } else if (rowId) {
+                                const rect =
+                                  e.currentTarget.getBoundingClientRect();
+                                setDotMenuState({
+                                  rowId,
+                                  top: rect.top,
+                                  left: rect.right + 8,
+                                });
+                              }
+                            }}
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle cx="12" cy="5" r="2" />
+                              <circle cx="12" cy="12" r="2" />
+                              <circle cx="12" cy="19" r="2" />
+                            </svg>
+                          </Button>
+                        )}
+                      />
+                    }
+                    classes={s}
+                  />
+                  <div
+                    className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+                    data-demo-action
+                  >
+                    action: {dotAction}
+                  </div>
+                  {dotMenuState &&
+                    createPortal(
+                      <div
+                        ref={dotMenuRef}
+                        className={`fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] z-[9999] bg-cl-bg border-cl-border`}
+                        style={{ top: dotMenuState.top, left: dotMenuState.left }}
+                      >
+                        {[
+                          {
+                            label: "View Details",
+                            icon: "M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z",
+                          },
+                          {
+                            label: "Duplicate",
+                            icon: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z",
+                          },
+                          {
+                            label: "Archive",
+                            icon: "M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4",
+                          },
+                          {
+                            label: "Delete",
+                            icon: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16",
+                            danger: true,
+                          },
+                        ].map((item) => (
+                          <Button
+                            key={item.label}
+                            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm transition-colors cursor-pointer ${(item as { danger?: boolean }).danger ? (dark ? "text-cl-error hover:bg-cl-error/10" : "text-cl-error hover:bg-cl-error/15") : dark ? "text-cl-text-secondary hover:bg-cl-bg-hover" : "text-cl-text hover:bg-cl-bg-hover"}`}
+                            onClick={() => {
+                              setDotAction(
+                                JSON.stringify({
+                                  action: item.label,
+                                  name: sampleData.find((u) => u.id === dotMenuState.rowId)?.name,
+                                }),
+                              );
+                              setDotMenuState(null);
+                            }}
+                          >
+                            <svg
+                              className="w-4 h-4 shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d={item.icon} />
+                            </svg>
+                            {item.label}
+                          </Button>
+                        ))}
+                      </div>,
+                      document.body,
+                    )}
+                </>
+              );
+            };
+            return <DotMenuDemo />;
+          })()}
+        </DemoWrapper>
         <div
           className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
@@ -2071,7 +2084,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </div>
       </Section>
 
-      <Section title="Floating Actions with Custom Triggers" isDarkMode={dark}>
+      <Section title="Floating Actions with Custom Triggers"
+        codeless="the same floatingActions, onRowHover and isFloatingActionsHovered as With Floating Actions; only the trigger buttons differ" isDarkMode={dark}>
         {(() => {
           const PillToolbarDemo = () => {
             const [pillHoverIdx, setPillHoverIdx] = React.useState<
@@ -2232,20 +2246,22 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="With Pinned Columns (Interactive)" isDarkMode={dark}>
-        <div className="w-full">
-          <Table
-            columns={columns}
-            data={sampleData.slice(0, 5)}
-            pinnedColumns={pinnedCols}
-            onPinColumn={handlePinColumn}
-            maxPinnedColumns={3}
-            classes={{
-              ...s,
-              ...s,
-              root: `${s.container} overflow-x-auto`,
-            }}
-          />
-        </div>
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-full">
+            <Table
+              columns={columns}
+              data={sampleData.slice(0, 5)}
+              pinnedColumns={pinnedCols}
+              onPinColumn={handlePinColumn}
+              maxPinnedColumns={3}
+              classes={{
+                ...s,
+                ...s,
+                root: `${s.container} overflow-x-auto`,
+              }}
+            />
+          </div>
+        </DemoWrapper>
         <div
           className={`mt-2 text-sm space-y-1 text-cl-text-secondary`}
         >
@@ -2397,39 +2413,42 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="With Pagination" isDarkMode={dark}>
-        <div>
-          <Table
-            columns={columns}
-            data={paginatedData}
-            getRowId={(row) => row.id}
-            selectedRowId={selectedRowId}
-            onRowClick={handleRowClick}
-            classes={s}
-          />
-          <Pagination
-            value={currentPage}
-            totalPages={totalPages}
-            rowsPerPage={rowsPerPage}
-            onValueChange={handlePageChange}
-            onRowsPerPageChange={handleRowsPerPageChange}
-            classes={{
-              root: pClasses.root,
-              rowsPerPage: {
-                root: pClasses.selector,
-                trigger: pClasses.selectorButton,
-                content: pClasses.selectorDropdown,
-                item: pClasses.selectorOption,
-              },
-              item: pClasses.pageButton,
-              navButton: pClasses.navButton,
-              ellipsis: pClasses.ellipsis,
-              label: pClasses.label,
-            }}
-          />
-        </div>
+        <DemoWrapper isDarkMode={dark}>
+          <div>
+            <Table
+              columns={columns}
+              data={paginatedData}
+              getRowId={(row) => row.id}
+              selectedRowId={selectedRowId}
+              onRowClick={handleRowClick}
+              classes={s}
+            />
+            <Pagination
+              value={currentPage}
+              totalPages={totalPages}
+              rowsPerPage={rowsPerPage}
+              onValueChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              classes={{
+                root: pClasses.root,
+                rowsPerPage: {
+                  root: pClasses.selector,
+                  trigger: pClasses.selectorButton,
+                  content: pClasses.selectorDropdown,
+                  item: pClasses.selectorOption,
+                },
+                item: pClasses.pageButton,
+                navButton: pClasses.navButton,
+                ellipsis: pClasses.ellipsis,
+                label: pClasses.label,
+              }}
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Dark/Modern Pagination Style" isDarkMode={dark}>
+      <Section title="Dark/Modern Pagination Style"
+        codeless="the same Table and Pagination composition as With Pagination; only the colours differ" isDarkMode={dark}>
         <div>
           <Table columns={columns} data={darkPaginatedData} classes={s} />
           <Pagination
@@ -2465,17 +2484,19 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Horizontal Scroll (Many Columns)" isDarkMode={dark}>
-        <Table
-          columns={extendedColumns}
-          data={extendedSampleData.slice(0, 5)}
-          maxWidth={900}
-          classes={{
-            ...s,
-            ...s,
-            root: `border rounded-cl-md border-cl-border`,
-            list: "w-max border-collapse",
-          }}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={extendedColumns}
+            data={extendedSampleData.slice(0, 5)}
+            maxWidth={900}
+            classes={{
+              ...s,
+              ...s,
+              root: `border rounded-cl-md border-cl-border`,
+              list: "w-max border-collapse",
+            }}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -2490,16 +2511,18 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Vertical Scroll (Fixed Height)" isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData}
-          maxHeight={300}
-          classes={{
-            ...s,
-            ...s,
-            root: `w-full border rounded-cl-md border-cl-border`,
-          }}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData}
+            maxHeight={300}
+            classes={{
+              ...s,
+              ...s,
+              root: `w-full border rounded-cl-md border-cl-border`,
+            }}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -2514,17 +2537,19 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Sticky Header" isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData}
-          maxHeight={250}
-          stickyHeader
-          classes={{
-            ...s,
-            ...s,
-            root: `w-full border rounded-cl-md border-cl-border`,
-          }}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData}
+            maxHeight={250}
+            stickyHeader
+            classes={{
+              ...s,
+              ...s,
+              root: `w-full border rounded-cl-md border-cl-border`,
+            }}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -2541,6 +2566,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <Section
         title="Both Scrollbars (Fixed Height + Many Columns)"
+        codeless="maxWidth and maxHeight together; each has its own snippet (Horizontal Scroll, Vertical Scroll)"
         isDarkMode={dark}
       >
         <Table
@@ -2575,17 +2601,19 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Hidden Vertical Scrollbar" isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={sampleData}
-          maxHeight={250}
-          hideVerticalScrollbar
-          classes={{
-            ...s,
-            ...s,
-            root: `w-full border rounded-cl-md border-cl-border`,
-          }}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData}
+            maxHeight={250}
+            hideVerticalScrollbar
+            classes={{
+              ...s,
+              ...s,
+              root: `w-full border rounded-cl-md border-cl-border`,
+            }}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -2607,20 +2635,22 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Hidden Scrollbars (Both Directions)" isDarkMode={dark}>
-        <Table
-          columns={extendedColumns}
-          data={extendedSampleData}
-          maxWidth={900}
-          maxHeight={300}
-          hideVerticalScrollbar
-          hideHorizontalScrollbar
-          classes={{
-            ...s,
-            ...s,
-            root: `border rounded-cl-md border-cl-border`,
-            list: "w-max border-collapse",
-          }}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={extendedColumns}
+            data={extendedSampleData}
+            maxWidth={900}
+            maxHeight={300}
+            hideVerticalScrollbar
+            hideHorizontalScrollbar
+            classes={{
+              ...s,
+              ...s,
+              root: `border rounded-cl-md border-cl-border`,
+              list: "w-max border-collapse",
+            }}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -2641,7 +2671,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Comprehensive Demo (All Features)" isDarkMode={dark}>
+      <Section title="Comprehensive Demo (All Features)"
+        codeless="combines loading, scrolling, a sticky header, pinning and floating actions, each with its own snippet" isDarkMode={dark}>
         <div className="space-y-4">
           <div className="flex items-center gap-4 flex-wrap">
             <button
@@ -2734,65 +2765,32 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Loading State" isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={[]}
-          loading
-          shimmerRowCount={5}
-          classes={s}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={[]}
+            loading
+            shimmerRowCount={5}
+            classes={s}
+          />
+        </DemoWrapper>
       </Section>
 
       <Section title="Empty State (Fully Customizable)" isDarkMode={dark}>
-        <Table
-          columns={columns}
-          data={[]}
-          emptyContent={
-            <div
-              className={`flex flex-col items-center justify-center py-16 px-4 bg-linear-to-b border rounded-cl-md from-fg/[0.04] to-cl-bg-panel border-cl-border`}
-            >
-              {/* Custom Icon */}
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={[]}
+            emptyContent={
               <div
-                className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 bg-cl-accent/10`}
+                className={`flex flex-col items-center justify-center py-16 px-4 bg-linear-to-b border rounded-cl-md from-fg/[0.04] to-cl-bg-panel border-cl-border`}
               >
-                <svg
-                  className={`w-10 h-10 text-cl-accent`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
-              </div>
-
-              {/* Title */}
-              <h3
-                className={`text-lg font-semibold mb-2 text-cl-text`}
-              >
-                No users found
-              </h3>
-
-              {/* Description */}
-              <p
-                className={`text-sm text-center max-w-sm mb-6 text-cl-text-secondary`}
-              >
-                Get started by adding your first team member. You can invite
-                users via email or create accounts manually.
-              </p>
-
-              {/* Action Buttons */}
-              <div className="flex items-center gap-3">
-                <button
-                  className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors flex items-center gap-2 bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`}
-                  onClick={() => setEmptyAction("Add User would open the new-member form (demo)")}
+                {/* Custom Icon */}
+                <div
+                  className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 bg-cl-accent/10`}
                 >
                   <svg
-                    className="w-4 h-4"
+                    className={`w-10 h-10 text-cl-accent`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -2800,28 +2798,65 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
+                      strokeWidth={1.5}
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                     />
                   </svg>
-                  Add User
-                </button>
-                <button
- className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-cl-bg border border-cl-border hover:bg-cl-bg-hover cursor-pointer`}
-                  onClick={() => setEmptyAction("Import CSV would open a file picker (demo)")}
+                </div>
+  
+                {/* Title */}
+                <h3
+                  className={`text-lg font-semibold mb-2 text-cl-text`}
                 >
-                  Import CSV
-                </button>
-              </div>
-              {emptyAction && (
-                <p role="status" className="mt-4 text-sm text-cl-text-secondary">
-                  {emptyAction}
+                  No users found
+                </h3>
+  
+                {/* Description */}
+                <p
+                  className={`text-sm text-center max-w-sm mb-6 text-cl-text-secondary`}
+                >
+                  Get started by adding your first team member. You can invite
+                  users via email or create accounts manually.
                 </p>
-              )}
-            </div>
-          }
-          classes={s}
-        />
+  
+                {/* Action Buttons */}
+                <div className="flex items-center gap-3">
+                  <Button
+                    className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors flex items-center gap-2 bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`}
+                    onClick={() => setEmptyAction("Add User would open the new-member form (demo)")}
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    Add User
+                  </Button>
+                  <Button
+   className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-cl-bg border border-cl-border hover:bg-cl-bg-hover cursor-pointer`}
+                    onClick={() => setEmptyAction("Import CSV would open a file picker (demo)")}
+                  >
+                    Import CSV
+                  </Button>
+                </div>
+                {emptyAction && (
+                  <p role="status" className="mt-4 text-sm text-cl-text-secondary">
+                    {emptyAction}
+                  </p>
+                )}
+              </div>
+            }
+            classes={s}
+          />
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -2921,94 +2956,96 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Custom Checkbox Selection" isDarkMode={dark}>
-        {(() => {
-          const CustomCheckboxDemo = () => {
-            const [customSelectedIds, setCustomSelectedIds] = React.useState<
-              string[]
-            >([]);
-
-            const CustomCheck = ({
-              checked,
-              indeterminate,
-              className,
-            }: {
-              checked: boolean;
-              indeterminate?: boolean;
-              className?: string;
-            }) => (
-              <div
-                className={`w-5 h-5 rounded-cl-md border-2 flex items-center justify-center transition-all cursor-pointer ${
-                  checked || indeterminate
-                    ? dark
-                      ? "bg-cl-success border-cl-success"
-                      : "bg-cl-success border-cl-success"
-                    : dark
-                      ? "border-cl-border hover:border-cl-success"
-                      : "border-cl-border-input hover:border-cl-success"
-                } ${className ?? ""}`}
-              >
-                {indeterminate ? (
-                  <svg
-                    className="w-3 h-3 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth={3}
-                    strokeLinecap="round"
-                  >
-                    <path d="M5 12h14" />
-                  </svg>
-                ) : checked ? (
-                  <svg
-                    className="w-3 h-3 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth={3}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : null}
-              </div>
-            );
-
-            return (
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`text-sm text-cl-text-secondary`}
-                  >
-                    Selected: {customSelectedIds.length} row(s)
-                  </span>
-                  {customSelectedIds.length > 0 && (
-                    <button
-                      onClick={() => setCustomSelectedIds([])}
-                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-success/15 hover:bg-cl-success/25`}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const CustomCheckboxDemo = () => {
+              const [customSelectedIds, setCustomSelectedIds] = React.useState<
+                string[]
+              >([]);
+  
+              const CustomCheck = ({
+                checked,
+                indeterminate,
+                className,
+              }: {
+                checked: boolean;
+                indeterminate?: boolean;
+                className?: string;
+              }) => (
+                <div
+                  className={`w-5 h-5 rounded-cl-md border-2 flex items-center justify-center transition-all cursor-pointer ${
+                    checked || indeterminate
+                      ? dark
+                        ? "bg-cl-success border-cl-success"
+                        : "bg-cl-success border-cl-success"
+                      : dark
+                        ? "border-cl-border hover:border-cl-success"
+                        : "border-cl-border-input hover:border-cl-success"
+                  } ${className ?? ""}`}
+                >
+                  {indeterminate ? (
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      strokeWidth={3}
+                      strokeLinecap="round"
                     >
-                      Clear Selection
-                    </button>
-                  )}
+                      <path d="M5 12h14" />
+                    </svg>
+                  ) : checked ? (
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      strokeWidth={3}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : null}
                 </div>
-                <Table
-                  columns={columns}
-                  data={sampleData.slice(0, 6)}
-                  selectionMode="multiple"
-                  selectedRowIds={customSelectedIds}
-                  onSelectionChange={setCustomSelectedIds}
-                  getRowId={(row) => row.id}
-                  CheckboxIcon={CustomCheck}
-                  classes={{
-                    ...s,
-                    ...s,
-                  }}
-                />
-              </div>
-            );
-          };
-          return <CustomCheckboxDemo />;
-        })()}
+              );
+  
+              return (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`text-sm text-cl-text-secondary`}
+                    >
+                      Selected: {customSelectedIds.length} row(s)
+                    </span>
+                    {customSelectedIds.length > 0 && (
+                      <Button
+                        onClick={() => setCustomSelectedIds([])}
+                        className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-text bg-cl-success/15 hover:bg-cl-success/25`}
+                      >
+                        Clear Selection
+                      </Button>
+                    )}
+                  </div>
+                  <Table
+                    columns={columns}
+                    data={sampleData.slice(0, 6)}
+                    selectionMode="multiple"
+                    selectedRowIds={customSelectedIds}
+                    onSelectionChange={setCustomSelectedIds}
+                    getRowId={(row) => row.id}
+                    CheckboxIcon={CustomCheck}
+                    classes={{
+                      ...s,
+                      ...s,
+                    }}
+                  />
+                </div>
+              );
+            };
+            return <CustomCheckboxDemo />;
+          })()}
+        </DemoWrapper>
         <div
           className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
@@ -3053,7 +3090,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </div>
       </Section>
 
-      <Section title="Star Selection (Favorites)" isDarkMode={dark}>
+      <Section title="Star Selection (Favorites)"
+        codeless="the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs" isDarkMode={dark}>
         {(() => {
           const StarSelectDemo = () => {
             const [starredIds, setStarredIds] = React.useState<string[]>([]);
@@ -3133,7 +3171,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </div>
       </Section>
 
-      <Section title="Checkbox with Star Icon Inside" isDarkMode={dark}>
+      <Section title="Checkbox with Star Icon Inside"
+        codeless="the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs" isDarkMode={dark}>
         {(() => {
           const StarInsideCheckboxDemo = () => {
             const [selected, setSelected] = React.useState<string[]>([]);
@@ -3237,10 +3276,13 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               const [filter, setFilter] = React.useState("");
               return (
                 <div className="space-y-3">
-                  <div className="relative w-full max-w-sm">
-                    <div
-                      className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
-                    >
+                  <Input
+                    aria-label="Search people"
+                    value={filter}
+                    onValueChange={setFilter}
+                    placeholder="Search by name, email, role..."
+                    clearable
+                    startIcon={
                       <svg
                         width="16"
                         height="16"
@@ -3254,33 +3296,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         <circle cx="11" cy="11" r="8" />
                         <path d="m21 21-4.3-4.3" />
                       </svg>
-                    </div>
-                    <input
-                      type="text"
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                      placeholder="Search by name, email, role..."
-                      className={`w-full pl-9 pr-8 py-2 text-sm rounded-cl-md focus:outline-none focus:ring-2 bg-cl-bg-elevated border-cl-border text-cl-text placeholder-fg-muted focus:ring-cl-accent/40 focus:border-cl-border-input-focus/50`}
-                    />
-                    {filter && (
-                      <button aria-label="Clear search"
-                        onClick={() => setFilter("")}
-                        className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text`}
-                      >
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        >
-                          <path d="M18 6L6 18M6 6l12 12" />
-                        </svg>
-                      </button>
-                    )}
-                  </div>
+                    }
+                    classes={{ root: "w-full max-w-sm" }}
+                  />
                   <Table
                     columns={columns}
                     data={sampleData}
@@ -3314,7 +3332,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Global Search (Custom Colors & Focus)" isDarkMode={dark}>
+      <Section title="Global Search (Custom Colors & Focus)"
+        codeless="the same globalFilter and onGlobalFilterChange as Global Search (Basic); only the search input's styling differs" isDarkMode={dark}>
         {(() => {
           const ColorSearchDemo = () => {
             const [filter, setFilter] = React.useState("");
@@ -3373,7 +3392,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Global Search (Minimal, No Icon)" isDarkMode={dark}>
+      <Section title="Global Search (Minimal, No Icon)"
+        codeless="the same globalFilter and onGlobalFilterChange as Global Search (Basic); only the search input's styling differs" isDarkMode={dark}>
         {(() => {
           const MinimalSearchDemo = () => {
             const [filter, setFilter] = React.useState("");
@@ -3408,7 +3428,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Global Search (Pill Shape with Badge)" isDarkMode={dark}>
+      <Section title="Global Search (Pill Shape with Badge)"
+        codeless="the same globalFilter and onGlobalFilterChange as Global Search (Basic); only the search input's styling differs" isDarkMode={dark}>
         {(() => {
           const PillSearchDemo = () => {
             const [filter, setFilter] = React.useState("");
@@ -3581,58 +3602,60 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Expansion (Custom Chevron Icons)" isDarkMode={dark}>
-        {(() => {
-          const ChevronExpandDemo = () => {
-            const [ids, setIds] = React.useState<string[]>([]);
-            const ChevronIcon = ({
-              expanded,
-              className,
-            }: {
-              expanded: boolean;
-              className?: string;
-            }) => (
-              <svg
-                className={`${className} transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            );
-            return (
-              <Table
-                columns={columns}
-                data={sampleData.slice(0, 5)}
-                expandable
-                expandedRowIds={ids}
-                onExpandedChange={setIds}
-                ExpandIcon={ChevronIcon}
-                renderExpandedRow={(row) => (
-                  <div
-                    className="px-6 py-4 bg-cl-accent-surface border-l-2 border-cl-border-input-focus"
-                  >
-                    <p
-                      className={`text-sm text-cl-text-secondary`}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const ChevronExpandDemo = () => {
+              const [ids, setIds] = React.useState<string[]>([]);
+              const ChevronIcon = ({
+                expanded,
+                className,
+              }: {
+                expanded: boolean;
+                className?: string;
+              }) => (
+                <svg
+                  className={`${className} transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              );
+              return (
+                <Table
+                  columns={columns}
+                  data={sampleData.slice(0, 5)}
+                  expandable
+                  expandedRowIds={ids}
+                  onExpandedChange={setIds}
+                  ExpandIcon={ChevronIcon}
+                  renderExpandedRow={(row) => (
+                    <div
+                      className="px-6 py-4 bg-cl-accent-surface border-l-2 border-cl-border-input-focus"
                     >
-                      <strong>{row.name}</strong> works in {row.department} as a{" "}
-                      {row.role}. Contact: {row.email}
-                    </p>
-                  </div>
-                )}
-                getRowId={(row) => row.id}
-                classes={{
-                  ...s,
-                  expandButton: dark ? "text-cl-accent" : "text-cl-accent",
-                }}
-              />
-            );
-          };
-          return <ChevronExpandDemo />;
-        })()}
+                      <p
+                        className={`text-sm text-cl-text-secondary`}
+                      >
+                        <strong>{row.name}</strong> works in {row.department} as a{" "}
+                        {row.role}. Contact: {row.email}
+                      </p>
+                    </div>
+                  )}
+                  getRowId={(row) => row.id}
+                  classes={{
+                    ...s,
+                    expandButton: dark ? "text-cl-accent" : "text-cl-accent",
+                  }}
+                />
+              );
+            };
+            return <ChevronExpandDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -3647,7 +3670,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Row Expansion (Plus/Minus Icons)" isDarkMode={dark}>
+      <Section title="Row Expansion (Plus/Minus Icons)"
+        codeless="the same ExpandIcon prop as Row Expansion (Custom Chevron Icons); only the icon differs" isDarkMode={dark}>
         {(() => {
           const PlusMinusDemo = () => {
             const [ids, setIds] = React.useState<string[]>([]);
@@ -3723,82 +3747,84 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Expansion (Right Side, Arrow Icon)" isDarkMode={dark}>
-        {(() => {
-          const RightExpandDemo = () => {
-            const [ids, setIds] = React.useState<string[]>([]);
-            const ArrowIcon = ({
-              expanded,
-              className,
-            }: {
-              expanded: boolean;
-              className?: string;
-            }) => (
-              <svg
-                className={`${className} transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            );
-            return (
-              <Table
-                columns={columns}
-                data={sampleData.slice(0, 5)}
-                expandable
-                expandColumnPosition="right"
-                expandedRowIds={ids}
-                onExpandedChange={setIds}
-                ExpandIcon={ArrowIcon}
-                renderExpandedRow={(row) => (
-                  <div
-                    className={`px-6 py-4 bg-cl-accent-surface border-r-2 border-cl-border-input-focus`}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent-bg text-cl-accent-hover`}
-                      >
-                        {row.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </div>
-                      <div>
-                        <p
-                          className={`text-sm font-medium text-cl-text`}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const RightExpandDemo = () => {
+              const [ids, setIds] = React.useState<string[]>([]);
+              const ArrowIcon = ({
+                expanded,
+                className,
+              }: {
+                expanded: boolean;
+                className?: string;
+              }) => (
+                <svg
+                  className={`${className} transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              );
+              return (
+                <Table
+                  columns={columns}
+                  data={sampleData.slice(0, 5)}
+                  expandable
+                  expandColumnPosition="right"
+                  expandedRowIds={ids}
+                  onExpandedChange={setIds}
+                  ExpandIcon={ArrowIcon}
+                  renderExpandedRow={(row) => (
+                    <div
+                      className={`px-6 py-4 bg-cl-accent-surface border-r-2 border-cl-border-input-focus`}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent-bg text-cl-accent-hover`}
                         >
-                          {row.name}
-                        </p>
-                        <p
-                          className={`text-xs mt-0.5 text-cl-text-secondary`}
-                        >
-                          {row.role} in {row.department}
-                        </p>
-                        <p
-                          className={`text-xs mt-0.5 text-cl-text-tertiary`}
-                        >
-                          {row.email}
-                        </p>
+                          {row.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </div>
+                        <div>
+                          <p
+                            className={`text-sm font-medium text-cl-text`}
+                          >
+                            {row.name}
+                          </p>
+                          <p
+                            className={`text-xs mt-0.5 text-cl-text-secondary`}
+                          >
+                            {row.role} in {row.department}
+                          </p>
+                          <p
+                            className={`text-xs mt-0.5 text-cl-text-tertiary`}
+                          >
+                            {row.email}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-                getRowId={(row) => row.id}
-                classes={{
-                  ...s,
-                  expandButton: dark ? "text-cl-accent" : "text-cl-accent",
-                }}
-              />
-            );
-          };
-          return <RightExpandDemo />;
-        })()}
+                  )}
+                  getRowId={(row) => row.id}
+                  classes={{
+                    ...s,
+                    expandButton: dark ? "text-cl-accent" : "text-cl-accent",
+                  }}
+                />
+              );
+            };
+            return <RightExpandDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm space-y-1 text-cl-text-secondary`}
         >
@@ -3817,6 +3843,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <Section
         title="Row Expansion (Styled Expanded Content)"
+        codeless="the same renderExpandedRow as Row Expansion; only the expanded content's styling differs"
         isDarkMode={dark}
       >
         {(() => {
@@ -3920,78 +3947,80 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Expansion (Click Anywhere on Row)" isDarkMode={dark}>
-        {(() => {
-          const RowClickExpandDemo = () => {
-            const [ids, setIds] = React.useState<string[]>([]);
-            const SmallChevron = ({
-              expanded,
-              className,
-            }: {
-              expanded: boolean;
-              className?: string;
-            }) => (
-              <svg
-                className={`${className} transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            );
-            return (
-              <Table
-                columns={columns}
-                data={sampleData.slice(0, 5)}
-                expandable
-                expandOnRowClick
-                expandedRowIds={ids}
-                onExpandedChange={setIds}
-                ExpandIcon={SmallChevron}
-                renderExpandedRow={(row) => (
-                  <div
-                    className={`px-6 py-4 bg-cl-bg-hover`}
-                  >
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      {[
-                        { label: "Email", value: row.email },
-                        { label: "Role", value: row.role },
-                        { label: "Department", value: row.department },
-                        { label: "Joined", value: row.joinDate },
-                      ].map((item) => (
-                        <div key={item.label}>
-                          <span
-                            className={`text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`}
-                          >
-                            {item.label}
-                          </span>
-                          <p
-                            className={`text-sm mt-0.5 text-cl-text`}
-                          >
-                            {item.value}
-                          </p>
-                        </div>
-                      ))}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const RowClickExpandDemo = () => {
+              const [ids, setIds] = React.useState<string[]>([]);
+              const SmallChevron = ({
+                expanded,
+                className,
+              }: {
+                expanded: boolean;
+                className?: string;
+              }) => (
+                <svg
+                  className={`${className} transition-transform duration-200 ${expanded ? "rotate-90" : ""}`}
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              );
+              return (
+                <Table
+                  columns={columns}
+                  data={sampleData.slice(0, 5)}
+                  expandable
+                  expandOnRowClick
+                  expandedRowIds={ids}
+                  onExpandedChange={setIds}
+                  ExpandIcon={SmallChevron}
+                  renderExpandedRow={(row) => (
+                    <div
+                      className={`px-6 py-4 bg-cl-bg-hover`}
+                    >
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        {[
+                          { label: "Email", value: row.email },
+                          { label: "Role", value: row.role },
+                          { label: "Department", value: row.department },
+                          { label: "Joined", value: row.joinDate },
+                        ].map((item) => (
+                          <div key={item.label}>
+                            <span
+                              className={`text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`}
+                            >
+                              {item.label}
+                            </span>
+                            <p
+                              className={`text-sm mt-0.5 text-cl-text`}
+                            >
+                              {item.value}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-                getRowId={(row) => row.id}
-                classes={{
-                  ...s,
-                  ...s,
-                  item: `${s.row} select-none`,
-                  expandButton: "",
-                }}
-              />
-            );
-          };
-          return <RowClickExpandDemo />;
-        })()}
+                  )}
+                  getRowId={(row) => row.id}
+                  classes={{
+                    ...s,
+                    ...s,
+                    item: `${s.row} select-none`,
+                    expandButton: "",
+                  }}
+                />
+              );
+            };
+            return <RowClickExpandDemo />;
+          })()}
+        </DemoWrapper>
         <div
           className={`mt-3 text-sm space-y-1 text-cl-text-secondary`}
         >
@@ -4073,7 +4102,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Column Visibility (Pill Toggles)" isDarkMode={dark}>
+      <Section title="Column Visibility (Pill Toggles)"
+        codeless="the same columnVisibility and onColumnVisibilityChange as Column Visibility (Toggle Checkboxes); only the toggle UI differs" isDarkMode={dark}>
         {(() => {
           const PillToggleDemo = () => {
             const allCols = [
@@ -4152,7 +4182,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Column Visibility (Dropdown Menu)" isDarkMode={dark}>
+      <Section title="Column Visibility (Dropdown Menu)"
+        codeless="the same columnVisibility and onColumnVisibilityChange as Column Visibility (Toggle Checkboxes); only the toggle UI differs" isDarkMode={dark}>
         {(() => {
           const DropdownToggleDemo = () => {
             const allCols = [
@@ -4325,7 +4356,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Column Visibility (Switch Toggles)" isDarkMode={dark}>
+      <Section title="Column Visibility (Switch Toggles)"
+        codeless="the same columnVisibility and onColumnVisibilityChange as Column Visibility (Toggle Checkboxes); only the toggle UI differs" isDarkMode={dark}>
         {(() => {
           const SwitchToggleDemo = () => {
             const allCols = [
@@ -4460,7 +4492,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Striped Rows (Custom Colors)" isDarkMode={dark}>
+      <Section title="Striped Rows (Custom Colors)"
+        codeless="the same striped and stripedClassName as the four Striped Rows snippets; only the colours differ" isDarkMode={dark}>
         {(() => {
           // Use bracketed arbitrary opacity values (Tailwind requires
           // /[0.06] for non-preset alphas — `/0.06` is silently dropped).
@@ -4745,7 +4778,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Column Resizing (Custom Handle Style)" isDarkMode={dark}>
+      <Section title="Column Resizing (Custom Handle Style)"
+        codeless="the same enableColumnResizing as Column Resizing (Basic); only the handle's styling differs" isDarkMode={dark}>
         {(() => {
           const CustomHandleDemo = () => (
             <div
@@ -4787,63 +4821,65 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         title="Column Resizing (Controlled with Size Display)"
         isDarkMode={dark}
       >
-        {(() => {
-          const ControlledResizeDemo = () => {
-            const [sizing, setSizing] = React.useState<Record<string, number>>(
-              {},
-            );
-            const colNames = [
-              "name",
-              "email",
-              "role",
-              "status",
-              "department",
-              "joinDate",
-            ];
-            return (
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  {colNames.map((col) => (
-                    <span
-                      key={col}
-                      className={`text-xs px-2 py-1 rounded-cl-md font-mono bg-cl-bg-hover text-cl-text-chrome-quiet`}
-                    >
-                      {col}:{" "}
-                      {sizing[col] ? `${Math.round(sizing[col])}px` : "auto"}
-                    </span>
-                  ))}
-                  {Object.keys(sizing).length > 0 && (
-                    <button
-                      onClick={() => setSizing({})}
-                      className={`text-xs px-2 py-1 rounded-cl-md cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
-                    >
-                      Reset
-                    </button>
-                  )}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const ControlledResizeDemo = () => {
+              const [sizing, setSizing] = React.useState<Record<string, number>>(
+                {},
+              );
+              const colNames = [
+                "name",
+                "email",
+                "role",
+                "status",
+                "department",
+                "joinDate",
+              ];
+              return (
+                <div className="space-y-3">
+                  <div className="flex flex-wrap gap-2">
+                    {colNames.map((col) => (
+                      <span
+                        key={col}
+                        className={`text-xs px-2 py-1 rounded-cl-md font-mono bg-cl-bg-hover text-cl-text-chrome-quiet`}
+                      >
+                        {col}:{" "}
+                        {sizing[col] ? `${Math.round(sizing[col])}px` : "auto"}
+                      </span>
+                    ))}
+                    {Object.keys(sizing).length > 0 && (
+                      <Button
+                        onClick={() => setSizing({})}
+                        className={`text-xs px-2 py-1 rounded-cl-md cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
+                      >
+                        Reset
+                      </Button>
+                    )}
+                  </div>
+                  <div
+                    className={`overflow-x-auto rounded-cl-md border-cl-border`}
+                  >
+                    <Table
+                      columns={columns}
+                      data={sampleData.slice(0, 5)}
+                      enableColumnResizing
+                      columnSizing={sizing}
+                      onColumnSizingChange={setSizing}
+                      getRowId={(row) => row.id}
+                      classes={{
+                        ...s,
+                        ...s,
+                        root: "",
+                        cell: `${s.cell} overflow-hidden text-ellipsis`,
+                      }}
+                    />
+                  </div>
                 </div>
-                <div
-                  className={`overflow-x-auto rounded-cl-md border-cl-border`}
-                >
-                  <Table
-                    columns={columns}
-                    data={sampleData.slice(0, 5)}
-                    enableColumnResizing
-                    columnSizing={sizing}
-                    onColumnSizingChange={setSizing}
-                    getRowId={(row) => row.id}
-                    classes={{
-                      ...s,
-                      ...s,
-                      root: "",
-                      cell: `${s.cell} overflow-hidden text-ellipsis`,
-                    }}
-                  />
-                </div>
-              </div>
-            );
-          };
-          return <ControlledResizeDemo />;
-        })()}
+              );
+            };
+            return <ControlledResizeDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -4866,73 +4902,75 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Column Resizing (With Initial Sizes)" isDarkMode={dark}>
-        {(() => {
-          const InitialSizeDemo = () => {
-            const sized = useMemo<ColumnDef<User>[]>(
-              () => [
-                {
-                  accessorKey: "name",
-                  header: () => <span>Name</span>,
-                  size: 200,
-                  minSize: 100,
-                  maxSize: 400,
-                  cell: ({ row }) => (
-                    <span className="font-medium">{row.getValue("name")}</span>
-                  ),
-                },
-                {
-                  accessorKey: "email",
-                  header: () => <span>Email</span>,
-                  size: 250,
-                  minSize: 150,
-                },
-                {
-                  accessorKey: "role",
-                  header: () => <span>Role</span>,
-                  size: 100,
-                  minSize: 80,
-                  maxSize: 200,
-                },
-                {
-                  accessorKey: "status",
-                  header: () => <span>Status</span>,
-                  size: 120,
-                  enableResizing: false,
-                  cell: ({ row }) => (
-                    <StatusBadge status={row.getValue("status")} dark={dark} />
-                  ),
-                },
-                {
-                  accessorKey: "department",
-                  header: () => <span>Department</span>,
-                  size: 150,
-                },
-              ],
-              // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
-              [dark],
-            );
-
-            return (
-              <div
-                className={`overflow-x-auto rounded-cl-md border-cl-border`}
-              >
-                <Table
-                  columns={sized}
-                  data={sampleData.slice(0, 5)}
-                  enableColumnResizing
-                  getRowId={(row) => row.id}
-                  classes={{
-                    ...s,
-                    ...s,
-                    root: "",
-                    cell: `${s.cell} overflow-hidden text-ellipsis`,
-                  }}
-                />
-              </div>
-            );
-          };
-          return <InitialSizeDemo />;
-        })()}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const InitialSizeDemo = () => {
+              const sized = useMemo<ColumnDef<User>[]>(
+                () => [
+                  {
+                    accessorKey: "name",
+                    header: () => <span>Name</span>,
+                    size: 200,
+                    minSize: 100,
+                    maxSize: 400,
+                    cell: ({ row }) => (
+                      <span className="font-medium">{row.getValue("name")}</span>
+                    ),
+                  },
+                  {
+                    accessorKey: "email",
+                    header: () => <span>Email</span>,
+                    size: 250,
+                    minSize: 150,
+                  },
+                  {
+                    accessorKey: "role",
+                    header: () => <span>Role</span>,
+                    size: 100,
+                    minSize: 80,
+                    maxSize: 200,
+                  },
+                  {
+                    accessorKey: "status",
+                    header: () => <span>Status</span>,
+                    size: 120,
+                    enableResizing: false,
+                    cell: ({ row }) => (
+                      <StatusBadge status={row.getValue("status")} dark={dark} />
+                    ),
+                  },
+                  {
+                    accessorKey: "department",
+                    header: () => <span>Department</span>,
+                    size: 150,
+                  },
+                ],
+                // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
+                [dark],
+              );
+  
+              return (
+                <div
+                  className={`overflow-x-auto rounded-cl-md border-cl-border`}
+                >
+                  <Table
+                    columns={sized}
+                    data={sampleData.slice(0, 5)}
+                    enableColumnResizing
+                    getRowId={(row) => row.id}
+                    classes={{
+                      ...s,
+                      ...s,
+                      root: "",
+                      cell: `${s.cell} overflow-hidden text-ellipsis`,
+                    }}
+                  />
+                </div>
+              );
+            };
+            return <InitialSizeDemo />;
+          })()}
+        </DemoWrapper>
         <div
           className={`mt-3 text-sm space-y-1 text-cl-text-secondary`}
         >
@@ -5071,82 +5109,84 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Drag & Drop (Custom Arrow Icons)" isDarkMode={dark}>
-        {(() => {
-          const ArrowDragDemo = () => {
-            const [data, setData] = React.useState(sampleData.slice(0, 5));
-            const ArrowHandle = ({ className }: { className?: string }) => (
-              <div
-                className={`flex flex-col items-center gap-0.5 ${className}`}
-              >
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}
-                >
-                  <path d="M12 5l-5 5h10z" />
-                </svg>
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}
-                >
-                  <path d="M12 19l5-5H7z" />
-                </svg>
-              </div>
-            );
-            return (
-              <div className="space-y-3">
-                <Table
-                  columns={columns}
-                  data={data}
-                  enableRowDragDrop
-                  DragHandleIcon={ArrowHandle}
-                  onRowReorder={(from, to) => {
-                    setData((prev) => {
-                      const u = [...prev];
-                      const [m] = u.splice(from, 1);
-                      u.splice(to, 0, m);
-                      return u;
-                    });
-                  }}
-                  getRowId={(row) => row.id}
-                  classes={{
-                    ...s,
-                    dragHandle: dark
-                      ? "text-cl-text-tertiary hover:text-cl-text-secondary"
-                      : "text-cl-text-tertiary hover:text-cl-text-secondary",
-                  }}
-                />
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const ArrowDragDemo = () => {
+              const [data, setData] = React.useState(sampleData.slice(0, 5));
+              const ArrowHandle = ({ className }: { className?: string }) => (
                 <div
-                  className={`flex items-center gap-2 text-xs text-cl-text-tertiary`}
+                  className={`flex flex-col items-center gap-0.5 ${className}`}
                 >
-                  <span className="font-medium">Order:</span>
-                  {data.map((d, i) => (
-                    <span
-                      key={d.id}
-                      className={`px-2 py-0.5 rounded bg-cl-bg-hover`}
-                    >
-                      {i + 1}. {d.name}
-                    </span>
-                  ))}
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}
+                  >
+                    <path d="M12 5l-5 5h10z" />
+                  </svg>
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}
+                  >
+                    <path d="M12 19l5-5H7z" />
+                  </svg>
                 </div>
-              </div>
-            );
-          };
-          return <ArrowDragDemo />;
-        })()}
+              );
+              return (
+                <div className="space-y-3">
+                  <Table
+                    columns={columns}
+                    data={data}
+                    enableRowDragDrop
+                    DragHandleIcon={ArrowHandle}
+                    onRowReorder={(from, to) => {
+                      setData((prev) => {
+                        const u = [...prev];
+                        const [m] = u.splice(from, 1);
+                        u.splice(to, 0, m);
+                        return u;
+                      });
+                    }}
+                    getRowId={(row) => row.id}
+                    classes={{
+                      ...s,
+                      dragHandle: dark
+                        ? "text-cl-text-tertiary hover:text-cl-text-secondary"
+                        : "text-cl-text-tertiary hover:text-cl-text-secondary",
+                    }}
+                  />
+                  <div
+                    className={`flex items-center gap-2 text-xs text-cl-text-tertiary`}
+                  >
+                    <span className="font-medium">Order:</span>
+                    {data.map((d, i) => (
+                      <span
+                        key={d.id}
+                        className={`px-2 py-0.5 rounded bg-cl-bg-hover`}
+                      >
+                        {i + 1}. {d.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            };
+            return <ArrowDragDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -5168,6 +5208,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <Section
         title="Row Drag & Drop (Number Handle with Reorder History)"
+        codeless="the same DragHandleIcon and onRowReorder as Row Drag & Drop (Custom Arrow Icons); only the handle and the history readout differ"
         isDarkMode={dark}
       >
         {(() => {
@@ -5248,7 +5289,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Row Drag & Drop (Styled Drag State)" isDarkMode={dark}>
+      <Section title="Row Drag & Drop (Styled Drag State)"
+        codeless="the same enableRowDragDrop as Row Drag & Drop (Default); only the drag-state styling differs" isDarkMode={dark}>
         {(() => {
           const StyledDragDemo = () => {
             const [data, setData] = React.useState(sampleData.slice(0, 5));
@@ -5296,7 +5338,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Row Drag & Drop (With Row Numbers)" isDarkMode={dark}>
+      <Section title="Row Drag & Drop (With Row Numbers)"
+        codeless="the same enableRowDragDrop and onRowReorder as Row Drag & Drop (Default); the number column is ordinary column markup" isDarkMode={dark}>
         {(() => {
           const NumberedDragDemo = () => {
             const [data, setData] = React.useState(sampleData.slice(0, 5));
@@ -5351,35 +5394,37 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Drag & Drop (Handle on Right)" isDarkMode={dark}>
-        {(() => {
-          const RightDragDemo = () => {
-            const [data, setData] = React.useState(sampleData.slice(0, 5));
-            return (
-              <Table
-                columns={columns}
-                data={data}
-                enableRowDragDrop
-                dragColumnPosition="right"
-                onRowReorder={(from, to) => {
-                  setData((prev) => {
-                    const u = [...prev];
-                    const [m] = u.splice(from, 1);
-                    u.splice(to, 0, m);
-                    return u;
-                  });
-                }}
-                getRowId={(row) => row.id}
-                classes={{
-                  ...s,
-                  dragHandle: dark
-                    ? "text-cl-text-tertiary hover:text-cl-text-secondary"
-                    : "text-cl-text-tertiary hover:text-cl-text-secondary",
-                }}
-              />
-            );
-          };
-          return <RightDragDemo />;
-        })()}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const RightDragDemo = () => {
+              const [data, setData] = React.useState(sampleData.slice(0, 5));
+              return (
+                <Table
+                  columns={columns}
+                  data={data}
+                  enableRowDragDrop
+                  dragColumnPosition="right"
+                  onRowReorder={(from, to) => {
+                    setData((prev) => {
+                      const u = [...prev];
+                      const [m] = u.splice(from, 1);
+                      u.splice(to, 0, m);
+                      return u;
+                    });
+                  }}
+                  getRowId={(row) => row.id}
+                  classes={{
+                    ...s,
+                    dragHandle: dark
+                      ? "text-cl-text-tertiary hover:text-cl-text-secondary"
+                      : "text-cl-text-tertiary hover:text-cl-text-secondary",
+                  }}
+                />
+              );
+            };
+            return <RightDragDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -5394,7 +5439,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer / Summary Row" isDarkMode={dark}>
+      <Section title="Footer / Summary Row"
+        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <Table
             columns={footerColumns}
@@ -5462,7 +5508,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Footer (Column-Aligned Totals)" isDarkMode={dark}>
+      <Section title="Footer (Column-Aligned Totals)"
+        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
         {(() => {
           const data = sampleData.slice(0, 6);
           return (
@@ -5550,7 +5597,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer (Styled Summary Card)" isDarkMode={dark}>
+      <Section title="Footer (Styled Summary Card)"
+        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
         <Table
           columns={columns}
           data={sampleData.slice(0, 6)}
@@ -5653,7 +5701,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer (Sticky Footer)" isDarkMode={dark}>
+      <Section title="Footer (Sticky Footer)"
+        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
         <Table
           columns={columns}
           data={sampleData}
@@ -5707,7 +5756,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Footer (Multi-Row with Styling)" isDarkMode={dark}>
+      <Section title="Footer (Multi-Row with Styling)"
+        codeless="footerContent's DOM contract is undecided: Table wraps it in a row and cell of its own (Table.tsx:1773) and this section passes <tr> rows, which nests a row inside a cell. Its code waits on that library decision (D10)." isDarkMode={dark}>
         <Table
           columns={columns}
           data={sampleData.slice(0, 5)}
@@ -6254,45 +6304,47 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Built-in Search (Rose Theme)" isDarkMode={dark}>
-        {(() => {
-          const RoseSearchDemo = () => {
-            const [filter, setFilter] = React.useState("");
-            return (
-              <Table
-                columns={columns}
-                data={sampleData}
-                showSearch
-                searchPlaceholder="Find team members..."
-                globalFilter={filter}
-                onGlobalFilterChange={setFilter}
-                onSearchClear={() => setFilter("")}
-                getRowId={(row) => row.id}
-                classes={{
-                  ...s,
-                  searchInput:
-                    "rounded-cl-lg focus:!ring-rose-500/25 focus:!border-rose-500/60",
-                }}
-                SearchIcon={({ className }) => (
-                  <svg
-                    className={className}
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke={dark ? "#fb7185" : "#e11d48"}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                  </svg>
-                )}
-              />
-            );
-          };
-          return <RoseSearchDemo />;
-        })()}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const RoseSearchDemo = () => {
+              const [filter, setFilter] = React.useState("");
+              return (
+                <Table
+                  columns={columns}
+                  data={sampleData}
+                  showSearch
+                  searchPlaceholder="Find team members..."
+                  globalFilter={filter}
+                  onGlobalFilterChange={setFilter}
+                  onSearchClear={() => setFilter("")}
+                  getRowId={(row) => row.id}
+                  classes={{
+                    ...s,
+                    searchInput:
+                      "rounded-cl-lg focus:!ring-rose-500/25 focus:!border-rose-500/60",
+                  }}
+                  SearchIcon={({ className }) => (
+                    <svg
+                      className={className}
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={dark ? "#fb7185" : "#e11d48"}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="11" cy="11" r="8" />
+                      <path d="m21 21-4.3-4.3" />
+                    </svg>
+                  )}
+                />
+              );
+            };
+            return <RoseSearchDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -6307,26 +6359,28 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Built-in Search (Icon on Right)" isDarkMode={dark}>
-        {(() => {
-          const RightIconDemo = () => {
-            const [filter, setFilter] = React.useState("");
-            return (
-              <Table
-                columns={columns}
-                data={sampleData}
-                showSearch
-                searchIconPosition="right"
-                searchPlaceholder="Search users..."
-                globalFilter={filter}
-                onGlobalFilterChange={setFilter}
-                onSearchClear={() => setFilter("")}
-                getRowId={(row) => row.id}
-                classes={s}
-              />
-            );
-          };
-          return <RightIconDemo />;
-        })()}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const RightIconDemo = () => {
+              const [filter, setFilter] = React.useState("");
+              return (
+                <Table
+                  columns={columns}
+                  data={sampleData}
+                  showSearch
+                  searchIconPosition="right"
+                  searchPlaceholder="Search users..."
+                  globalFilter={filter}
+                  onGlobalFilterChange={setFilter}
+                  onSearchClear={() => setFilter("")}
+                  getRowId={(row) => row.id}
+                  classes={s}
+                />
+              );
+            };
+            return <RightIconDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -6340,7 +6394,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Built-in Search (No Icon)" isDarkMode={dark}>
+      <Section title="Built-in Search (No Icon)"
+        codeless="a third value of searchIconPosition, shown in Built-in Search (Icon on Right)" isDarkMode={dark}>
         {(() => {
           const NoIconDemo = () => {
             const [filter, setFilter] = React.useState("");
@@ -6380,6 +6435,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <Section
         title="Built-in Search (Emerald Underline Style)"
+        codeless="the same built-in search props as Built-in Search (Icon on Right); only the colours differ"
         isDarkMode={dark}
       >
         {(() => {
@@ -6416,6 +6472,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <Section
         title="Built-in Search (Custom Filter Icon on Right)"
+        codeless="SearchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
         isDarkMode={dark}
       >
         {(() => {
@@ -6475,13 +6532,120 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Column Header Filters (Default)" isDarkMode={dark}>
-        {(() => {
-          const HeaderFilterDemo = () => {
-            const [filters, setFilters] = React.useState<
-              { id: string; value: unknown }[]
-            >([]);
-            return (
-              <div className="space-y-3">
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const HeaderFilterDemo = () => {
+              const [filters, setFilters] = React.useState<
+                { id: string; value: unknown }[]
+              >([]);
+              return (
+                <div className="space-y-3">
+                  <Table
+                    columns={columns}
+                    data={sampleData}
+                    getRowId={(row) => row.id}
+                    enableColumnFilters
+                    columnFilters={filters}
+                    onColumnFiltersChange={setFilters}
+                    filterableColumns={{
+                      role: {
+                        options: [
+                          { label: "Admin", value: "Admin" },
+                          { label: "Manager", value: "Manager" },
+                          { label: "Developer", value: "Developer" },
+                          { label: "Designer", value: "Designer" },
+                        ],
+                      },
+                      status: {
+                        options: [
+                          { label: "Active", value: "active" },
+                          { label: "Inactive", value: "inactive" },
+                          { label: "Pending", value: "pending" },
+                        ],
+                      },
+                      department: {
+                        options: [
+                          { label: "Engineering", value: "Engineering" },
+                          { label: "Marketing", value: "Marketing" },
+                          { label: "Design", value: "Design" },
+                        ],
+                      },
+                    }}
+                    classes={s}
+                  />
+                  {filters.length > 0 && (
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span
+                        className={`text-xs text-cl-text-tertiary`}
+                      >
+                        Active filters:
+                      </span>
+                      {filters.map((f) => (
+                        <span
+                          key={f.id}
+                          className={`text-xs px-2 py-1 rounded-full bg-cl-accent-bg text-cl-accent-hover`}
+                        >
+                          {f.id}:{" "}
+                          {Array.isArray(f.value)
+                            ? (f.value as string[]).join(", ")
+                            : String(f.value)}
+                        </span>
+                      ))}
+                      <Button
+                        onClick={() => setFilters([])}
+                        className={`text-xs cursor-pointer text-cl-text-tertiary hover:text-cl-text`}
+                      >
+                        Clear all
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              );
+            };
+            return <HeaderFilterDemo />;
+          })()}
+        </DemoWrapper>
+        <p
+          className={`mt-3 text-sm text-cl-text-secondary`}
+        >
+          Click the filter icon in Role, Status, or Department headers to open a
+          multi-select dropdown. Active filters show a filled icon. Uses{" "}
+          <code
+            className={`px-1 rounded bg-cl-bg-elevated`}
+          >
+            filterableColumns
+          </code>{" "}
+          with options arrays.
+        </p>
+      </Section>
+
+      <Section title="Column Header Filters (Custom Icon)" isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const CustomFilterIconDemo = () => {
+              const [filters, setFilters] = React.useState<
+                { id: string; value: unknown }[]
+              >([]);
+              const DownChevronFilter = ({
+                active,
+                className,
+              }: {
+                active: boolean;
+                className?: string;
+              }) => (
+                <svg
+                  className={className}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={active ? "2.5" : "2"}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              );
+              return (
                 <Table
                   columns={columns}
                   data={sampleData}
@@ -6489,6 +6653,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   enableColumnFilters
                   columnFilters={filters}
                   onColumnFiltersChange={setFilters}
+                  FilterIcon={DownChevronFilter}
                   filterableColumns={{
                     role: {
                       options: [
@@ -6505,121 +6670,17 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                         { label: "Pending", value: "pending" },
                       ],
                     },
-                    department: {
-                      options: [
-                        { label: "Engineering", value: "Engineering" },
-                        { label: "Marketing", value: "Marketing" },
-                        { label: "Design", value: "Design" },
-                      ],
-                    },
                   }}
-                  classes={s}
+                  classes={{
+                    ...s,
+                    filterButton: dark ? "text-cl-accent" : "text-cl-accent",
+                  }}
                 />
-                {filters.length > 0 && (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span
-                      className={`text-xs text-cl-text-tertiary`}
-                    >
-                      Active filters:
-                    </span>
-                    {filters.map((f) => (
-                      <span
-                        key={f.id}
-                        className={`text-xs px-2 py-1 rounded-full bg-cl-accent-bg text-cl-accent-hover`}
-                      >
-                        {f.id}:{" "}
-                        {Array.isArray(f.value)
-                          ? (f.value as string[]).join(", ")
-                          : String(f.value)}
-                      </span>
-                    ))}
-                    <button
-                      onClick={() => setFilters([])}
-                      className={`text-xs cursor-pointer text-cl-text-tertiary hover:text-cl-text`}
-                    >
-                      Clear all
-                    </button>
-                  </div>
-                )}
-              </div>
-            );
-          };
-          return <HeaderFilterDemo />;
-        })()}
-        <p
-          className={`mt-3 text-sm text-cl-text-secondary`}
-        >
-          Click the filter icon in Role, Status, or Department headers to open a
-          multi-select dropdown. Active filters show a filled icon. Uses{" "}
-          <code
-            className={`px-1 rounded bg-cl-bg-elevated`}
-          >
-            filterableColumns
-          </code>{" "}
-          with options arrays.
-        </p>
-      </Section>
-
-      <Section title="Column Header Filters (Custom Icon)" isDarkMode={dark}>
-        {(() => {
-          const CustomFilterIconDemo = () => {
-            const [filters, setFilters] = React.useState<
-              { id: string; value: unknown }[]
-            >([]);
-            const DownChevronFilter = ({
-              active,
-              className,
-            }: {
-              active: boolean;
-              className?: string;
-            }) => (
-              <svg
-                className={className}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={active ? "2.5" : "2"}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            );
-            return (
-              <Table
-                columns={columns}
-                data={sampleData}
-                getRowId={(row) => row.id}
-                enableColumnFilters
-                columnFilters={filters}
-                onColumnFiltersChange={setFilters}
-                FilterIcon={DownChevronFilter}
-                filterableColumns={{
-                  role: {
-                    options: [
-                      { label: "Admin", value: "Admin" },
-                      { label: "Manager", value: "Manager" },
-                      { label: "Developer", value: "Developer" },
-                      { label: "Designer", value: "Designer" },
-                    ],
-                  },
-                  status: {
-                    options: [
-                      { label: "Active", value: "active" },
-                      { label: "Inactive", value: "inactive" },
-                      { label: "Pending", value: "pending" },
-                    ],
-                  },
-                }}
-                classes={{
-                  ...s,
-                  filterButton: dark ? "text-cl-accent" : "text-cl-accent",
-                }}
-              />
-            );
-          };
-          return <CustomFilterIconDemo />;
-        })()}
+              );
+            };
+            return <CustomFilterIconDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -6643,114 +6704,116 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         title="Column Header Filters (Custom Dropdown Content)"
         isDarkMode={dark}
       >
-        {(() => {
-          const CustomDropdownDemo = () => {
-            const [filters, setFilters] = React.useState<
-              { id: string; value: unknown }[]
-            >([]);
-            return (
-              <Table
-                columns={columns}
-                data={sampleData}
-                getRowId={(row) => row.id}
-                enableColumnFilters
-                columnFilters={filters}
-                onColumnFiltersChange={setFilters}
-                filterableColumns={{
-                  status: {
-                    options: [
-                      { label: "Active", value: "active" },
-                      { label: "Inactive", value: "inactive" },
-                      { label: "Pending", value: "pending" },
-                    ],
-                  },
-                }}
-                renderColumnFilter={(columnId, currentValues, setValues) => (
-                  <div className="p-3 space-y-2">
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-wider text-cl-text-secondary`}
-                    >
-                      Filter by {columnId}
-                    </p>
-                    <div className="space-y-1">
-                      {[
-                        {
-                          label: "Active",
-                          value: "active",
-                          color: dark
-                            ? "text-cl-text bg-cl-success/10"
-                            : "text-cl-text bg-cl-success/15",
-                        },
-                        {
-                          label: "Inactive",
-                          value: "inactive",
-                          color: dark
-                            ? "text-cl-text-tertiary bg-cl-text/10"
-                            : "text-cl-text-secondary bg-cl-bg-hover",
-                        },
-                        {
-                          label: "Pending",
-                          value: "pending",
-                          color: dark
-                            ? "text-cl-text bg-cl-warning/10"
-                            : "text-cl-text bg-cl-warning/15",
-                        },
-                      ].map((opt) => {
-                        const selected = currentValues.includes(opt.value);
-                        return (
-                          <button
-                            key={opt.value}
-                            onClick={() =>
-                              setValues(
-                                selected
-                                  ? currentValues.filter((v) => v !== opt.value)
-                                  : [...currentValues, opt.value],
-                              )
-                            }
-                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-cl-md text-sm cursor-pointer transition-all ${selected ? opt.color + " font-medium" : dark ? "text-cl-text-tertiary hover:bg-cl-bg-hover" : "text-cl-text-secondary hover:bg-cl-bg-hover"}`}
-                          >
-                            <span
-                              className={`w-2 h-2 rounded-full ${opt.value === "active" ? "bg-cl-success" : opt.value === "pending" ? "bg-cl-warning" : dark ? "bg-cl-text/10" : "bg-cl-text/10"}`}
-                            />
-                            {opt.label}
-                            {selected && (
-                              <svg
-                                className="w-4 h-4 ml-auto"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <path d="M5 13l4 4L19 7" />
-                              </svg>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {currentValues.length > 0 && (
-                      <button
-                        onClick={() => setValues([])}
-                        className={`w-full text-center text-xs py-1.5 rounded cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover`}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const CustomDropdownDemo = () => {
+              const [filters, setFilters] = React.useState<
+                { id: string; value: unknown }[]
+              >([]);
+              return (
+                <Table
+                  columns={columns}
+                  data={sampleData}
+                  getRowId={(row) => row.id}
+                  enableColumnFilters
+                  columnFilters={filters}
+                  onColumnFiltersChange={setFilters}
+                  filterableColumns={{
+                    status: {
+                      options: [
+                        { label: "Active", value: "active" },
+                        { label: "Inactive", value: "inactive" },
+                        { label: "Pending", value: "pending" },
+                      ],
+                    },
+                  }}
+                  renderColumnFilter={(columnId, currentValues, setValues) => (
+                    <div className="p-3 space-y-2">
+                      <p
+                        className={`text-xs font-semibold uppercase tracking-wider text-cl-text-secondary`}
                       >
-                        Clear filter
-                      </button>
-                    )}
-                  </div>
-                )}
-                classes={{
-                  ...s,
-                  filterContent: dark
-                    ? "bg-cl-bg border-cl-text/[0.08]"
-                    : "bg-white border-cl-border",
-                }}
-              />
-            );
-          };
-          return <CustomDropdownDemo />;
-        })()}
+                        Filter by {columnId}
+                      </p>
+                      <div className="space-y-1">
+                        {[
+                          {
+                            label: "Active",
+                            value: "active",
+                            color: dark
+                              ? "text-cl-text bg-cl-success/10"
+                              : "text-cl-text bg-cl-success/15",
+                          },
+                          {
+                            label: "Inactive",
+                            value: "inactive",
+                            color: dark
+                              ? "text-cl-text-tertiary bg-cl-text/10"
+                              : "text-cl-text-secondary bg-cl-bg-hover",
+                          },
+                          {
+                            label: "Pending",
+                            value: "pending",
+                            color: dark
+                              ? "text-cl-text bg-cl-warning/10"
+                              : "text-cl-text bg-cl-warning/15",
+                          },
+                        ].map((opt) => {
+                          const selected = currentValues.includes(opt.value);
+                          return (
+                            <Button
+                              key={opt.value}
+                              onClick={() =>
+                                setValues(
+                                  selected
+                                    ? currentValues.filter((v) => v !== opt.value)
+                                    : [...currentValues, opt.value],
+                                )
+                              }
+                              className={`w-full flex items-center gap-2 px-3 py-2 rounded-cl-md text-sm cursor-pointer transition-all ${selected ? opt.color + " font-medium" : dark ? "text-cl-text-tertiary hover:bg-cl-bg-hover" : "text-cl-text-secondary hover:bg-cl-bg-hover"}`}
+                            >
+                              <span
+                                className={`w-2 h-2 rounded-full ${opt.value === "active" ? "bg-cl-success" : opt.value === "pending" ? "bg-cl-warning" : dark ? "bg-cl-text/10" : "bg-cl-text/10"}`}
+                              />
+                              {opt.label}
+                              {selected && (
+                                <svg
+                                  className="w-4 h-4 ml-auto"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                      {currentValues.length > 0 && (
+                        <Button
+                          onClick={() => setValues([])}
+                          className={`w-full text-center text-xs py-1.5 rounded cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover`}
+                        >
+                          Clear filter
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                  classes={{
+                    ...s,
+                    filterContent: dark
+                      ? "bg-cl-bg border-cl-text/[0.08]"
+                      : "bg-white border-cl-border",
+                  }}
+                />
+              );
+            };
+            return <CustomDropdownDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -6783,7 +6846,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Column Filters + Sorting Combined" isDarkMode={dark}>
+      <Section title="Column Filters + Sorting Combined"
+        codeless="enableColumnFilters and sortable together; each has its own snippet" isDarkMode={dark}>
         {(() => {
           const FilterSortDemo = () => {
             const [filters, setFilters] = React.useState<
@@ -6839,7 +6903,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         })()}
       </Section>
 
-      <Section title="Column Filters (Styled Dropdown)" isDarkMode={dark}>
+      <Section title="Column Filters (Styled Dropdown)"
+        codeless="the same renderColumnFilter as Column Header Filters (Custom Dropdown Content); only the styling differs" isDarkMode={dark}>
         {(() => {
           const StyledFilterDemo = () => {
             const [filters, setFilters] = React.useState<
@@ -7010,7 +7075,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Column Filters (Chip Tags Style)" isDarkMode={dark}>
+      <Section title="Column Filters (Chip Tags Style)"
+        codeless="renderColumnFilter and FilterIcon together; each has its own snippet" isDarkMode={dark}>
         {(() => {
           const ChipFilterDemo = () => {
             const [filters, setFilters] = React.useState<
@@ -7253,7 +7319,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Server-Side (Real API: dummyjson.com)" isDarkMode={dark}>
+      <Section title="Server-Side (Real API: dummyjson.com)"
+        codeless="it fetches a live third-party API (dummyjson.com), which a pasted snippet should not depend on; Server-Side Mode shows the same props without one" isDarkMode={dark}>
         <ServerApiDemo dark={dark} s={s} />
         <div
           className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
@@ -7334,105 +7401,107 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Column Reordering" isDarkMode={dark}>
-        {(() => {
-          const ColumnReorderDemo = () => {
-            const [colOrder, setColOrder] = React.useState<string[]>([
-              "name",
-              "email",
-              "role",
-              "status",
-              "department",
-              "joinDate",
-            ]);
-            return (
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  {colOrder.map((col, i) => (
-                    <div
-                      key={col}
-                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-cl-md text-xs font-medium bg-cl-bg-hover text-cl-text-chrome`}
-                    >
-                      <span>{i + 1}.</span>
-                      <span className="capitalize">{col}</span>
-                      {i > 0 && (
-                        <button aria-label="Move left"
-                          onClick={() => {
-                            const next = [...colOrder];
-                            [next[i - 1], next[i]] = [next[i], next[i - 1]];
-                            setColOrder(next);
-                          }}
-                          className={`p-0.5 rounded cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary hover:text-cl-text-secondary`}
-                          title="Move left"
-                        >
-                          <svg
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const ColumnReorderDemo = () => {
+              const [colOrder, setColOrder] = React.useState<string[]>([
+                "name",
+                "email",
+                "role",
+                "status",
+                "department",
+                "joinDate",
+              ]);
+              return (
+                <div className="space-y-3">
+                  <div className="flex flex-wrap gap-2">
+                    {colOrder.map((col, i) => (
+                      <div
+                        key={col}
+                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-cl-md text-xs font-medium bg-cl-bg-hover text-cl-text-chrome`}
+                      >
+                        <span>{i + 1}.</span>
+                        <span className="capitalize">{col}</span>
+                        {i > 0 && (
+                          <Button aria-label="Move left"
+                            onClick={() => {
+                              const next = [...colOrder];
+                              [next[i - 1], next[i]] = [next[i], next[i - 1]];
+                              setColOrder(next);
+                            }}
+                            className={`p-0.5 rounded cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary hover:text-cl-text-secondary`}
+                            title="Move left"
                           >
-                            <path d="M15 18l-6-6 6-6" />
-                          </svg>
-                        </button>
-                      )}
-                      {i < colOrder.length - 1 && (
-                        <button aria-label="Move right"
-                          onClick={() => {
-                            const next = [...colOrder];
-                            [next[i], next[i + 1]] = [next[i + 1], next[i]];
-                            setColOrder(next);
-                          }}
-                          className={`p-0.5 rounded cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary hover:text-cl-text-secondary`}
-                          title="Move right"
-                        >
-                          <svg
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                            <svg
+                              width="12"
+                              height="12"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M15 18l-6-6 6-6" />
+                            </svg>
+                          </Button>
+                        )}
+                        {i < colOrder.length - 1 && (
+                          <Button aria-label="Move right"
+                            onClick={() => {
+                              const next = [...colOrder];
+                              [next[i], next[i + 1]] = [next[i + 1], next[i]];
+                              setColOrder(next);
+                            }}
+                            className={`p-0.5 rounded cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary hover:text-cl-text-secondary`}
+                            title="Move right"
                           >
-                            <path d="M9 18l6-6-6-6" />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                            <svg
+                              width="12"
+                              height="12"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M9 18l6-6-6-6" />
+                            </svg>
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <Table
+                    columns={columns}
+                    data={sampleData.slice(0, 5)}
+                    columnOrder={colOrder}
+                    onColumnOrderChange={setColOrder}
+                    getRowId={(row) => row.id}
+                    classes={s}
+                  />
+                  <Button
+                    onClick={() =>
+                      setColOrder([
+                        "name",
+                        "email",
+                        "role",
+                        "status",
+                        "department",
+                        "joinDate",
+                      ])
+                    }
+                    className={`text-xs cursor-pointer text-cl-accent hover:text-cl-accent`}
+                  >
+                    Reset order
+                  </Button>
                 </div>
-                <Table
-                  columns={columns}
-                  data={sampleData.slice(0, 5)}
-                  columnOrder={colOrder}
-                  onColumnOrderChange={setColOrder}
-                  getRowId={(row) => row.id}
-                  classes={s}
-                />
-                <button
-                  onClick={() =>
-                    setColOrder([
-                      "name",
-                      "email",
-                      "role",
-                      "status",
-                      "department",
-                      "joinDate",
-                    ])
-                  }
-                  className={`text-xs cursor-pointer text-cl-accent hover:text-cl-accent`}
-                >
-                  Reset order
-                </button>
-              </div>
-            );
-          };
-          return <ColumnReorderDemo />;
-        })()}
+              );
+            };
+            return <ColumnReorderDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -7459,53 +7528,55 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Grouping" isDarkMode={dark}>
-        {(() => {
-          const GroupByDemo = () => {
-            const [groupCols, setGroupCols] = React.useState<string[]>([
-              "department",
-            ]);
-            const toggleGroup = (col: string) =>
-              setGroupCols((prev) =>
-                prev.includes(col)
-                  ? prev.filter((c) => c !== col)
-                  : [...prev, col],
-              );
-            return (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`text-xs text-cl-text-tertiary`}
-                  >
-                    Group by:
-                  </span>
-                  {["department", "role", "status"].map((col) => (
-                    <button
-                      key={col}
-                      onClick={() => toggleGroup(col)}
-                      className={`px-2.5 py-1 rounded-cl-md text-xs cursor-pointer transition-colors ${groupCols.includes(col) ? (dark ? "bg-cl-accent/20 text-cl-text" : "bg-cl-accent/10 text-cl-text") : dark ? "bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover" : "bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover"}`}
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const GroupByDemo = () => {
+              const [groupCols, setGroupCols] = React.useState<string[]>([
+                "department",
+              ]);
+              const toggleGroup = (col: string) =>
+                setGroupCols((prev) =>
+                  prev.includes(col)
+                    ? prev.filter((c) => c !== col)
+                    : [...prev, col],
+                );
+              return (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`text-xs text-cl-text-tertiary`}
                     >
-                      <span className="capitalize">{col}</span>
-                    </button>
-                  ))}
+                      Group by:
+                    </span>
+                    {["department", "role", "status"].map((col) => (
+                      <Button
+                        key={col}
+                        onClick={() => toggleGroup(col)}
+                        className={`px-2.5 py-1 rounded-cl-md text-xs cursor-pointer transition-colors ${groupCols.includes(col) ? (dark ? "bg-cl-accent/20 text-cl-text" : "bg-cl-accent/10 text-cl-text") : dark ? "bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover" : "bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover"}`}
+                      >
+                        <span className="capitalize">{col}</span>
+                      </Button>
+                    ))}
+                  </div>
+                  <Table
+                    columns={columns}
+                    data={sampleData}
+                    groupBy={groupCols}
+                    getRowId={(row) => row.id}
+                    classes={{
+                      ...s,
+                      ...s,
+                      groupLabel: dark
+                        ? "bg-cl-bg-hover font-semibold text-cl-text-secondary"
+                        : "bg-cl-bg-hover font-semibold text-cl-text",
+                    }}
+                  />
                 </div>
-                <Table
-                  columns={columns}
-                  data={sampleData}
-                  groupBy={groupCols}
-                  getRowId={(row) => row.id}
-                  classes={{
-                    ...s,
-                    ...s,
-                    groupLabel: dark
-                      ? "bg-cl-bg-hover font-semibold text-cl-text-secondary"
-                      : "bg-cl-bg-hover font-semibold text-cl-text",
-                  }}
-                />
-              </div>
-            );
-          };
-          return <GroupByDemo />;
-        })()}
+              );
+            };
+            return <GroupByDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -7526,63 +7597,65 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Mobile Card Layout" isDarkMode={dark}>
-        {(() => {
-          const MobileCardDemo = () => (
-            <div className="space-y-3">
-              <p
-                className={`text-xs text-cl-text-tertiary`}
-              >
-                Resize below 768px to see cards, or view the forced preview
-                below.
-              </p>
-              <div
-                className="max-w-[360px] border-cl-border rounded-cl-lg overflow-hidden mx-auto"
-                style={{
-                  borderColor: dark ? "rgba(255,255,255,0.06)" : "#e5e7eb",
-                }}
-              >
-                <Table
-                  columns={columns}
-                  data={sampleData.slice(0, 3)}
-                  getRowId={(row) => row.id}
-                  responsiveBreakpoint={9999}
-                  renderMobileCard={(row) => (
-                    <div
-                      className={`p-4 border-b last:border-b-0 border-cl-border`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span
-                          className={`font-semibold text-sm text-cl-text`}
-                        >
-                          {row.name}
-                        </span>
-                        <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${row.status === "active" ? (dark ? "bg-cl-success/15 text-cl-text" : "bg-cl-success/15 text-cl-text") : row.status === "pending" ? (dark ? "bg-cl-warning/15 text-cl-text" : "bg-cl-warning/15 text-cl-text") : dark ? "bg-cl-text/15 text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-secondary"}`}
-                        >
-                          {row.status}
-                        </span>
-                      </div>
-                      <div
-                        className={`space-y-1 text-xs text-cl-text-secondary`}
-                      >
-                        <p>{row.email}</p>
-                        <p>
-                          {row.role} &middot; {row.department}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  classes={{
-                    ...s,
-                    ...s,
-                    mobileCard: dark ? "bg-cl-bg" : "bg-white",
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const MobileCardDemo = () => (
+              <div className="space-y-3">
+                <p
+                  className={`text-xs text-cl-text-tertiary`}
+                >
+                  Resize below 768px to see cards, or view the forced preview
+                  below.
+                </p>
+                <div
+                  className="max-w-[360px] border-cl-border rounded-cl-lg overflow-hidden mx-auto"
+                  style={{
+                    borderColor: dark ? "rgba(255,255,255,0.06)" : "#e5e7eb",
                   }}
-                />
+                >
+                  <Table
+                    columns={columns}
+                    data={sampleData.slice(0, 3)}
+                    getRowId={(row) => row.id}
+                    responsiveBreakpoint={9999}
+                    renderMobileCard={(row) => (
+                      <div
+                        className={`p-4 border-b last:border-b-0 border-cl-border`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span
+                            className={`font-semibold text-sm text-cl-text`}
+                          >
+                            {row.name}
+                          </span>
+                          <span
+                            className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${row.status === "active" ? (dark ? "bg-cl-success/15 text-cl-text" : "bg-cl-success/15 text-cl-text") : row.status === "pending" ? (dark ? "bg-cl-warning/15 text-cl-text" : "bg-cl-warning/15 text-cl-text") : dark ? "bg-cl-text/15 text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-secondary"}`}
+                          >
+                            {row.status}
+                          </span>
+                        </div>
+                        <div
+                          className={`space-y-1 text-xs text-cl-text-secondary`}
+                        >
+                          <p>{row.email}</p>
+                          <p>
+                            {row.role} &middot; {row.department}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    classes={{
+                      ...s,
+                      ...s,
+                      mobileCard: dark ? "bg-cl-bg" : "bg-white",
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          );
-          return <MobileCardDemo />;
-        })()}
+            );
+            return <MobileCardDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -7603,57 +7676,59 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Select All Mode (Page vs All)" isDarkMode={dark}>
-        {(() => {
-          const SelectAllDemo = () => {
-            const [selectedPage, setSelectedPage] = React.useState<string[]>(
-              [],
-            );
-            const [selectedAll, setSelectedAll] = React.useState<string[]>([]);
-            return (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <p
-                    className={`text-xs font-medium text-cl-text-secondary`}
-                  >
-                    selectAllMode=&quot;page&quot; (default) —{" "}
-                    {selectedPage.length} selected
-                  </p>
-                  <Table
-                    columns={columns}
-                    data={sampleData.slice(0, 5)}
-                    getRowId={(row) => row.id}
-                    selectionMode="multiple"
-                    selectedRowIds={selectedPage}
-                    onSelectionChange={setSelectedPage}
-                    selectAllMode="page"
-                    classes={s}
-                    density="compact"
-                  />
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const SelectAllDemo = () => {
+              const [selectedPage, setSelectedPage] = React.useState<string[]>(
+                [],
+              );
+              const [selectedAll, setSelectedAll] = React.useState<string[]>([]);
+              return (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <p
+                      className={`text-xs font-medium text-cl-text-secondary`}
+                    >
+                      selectAllMode=&quot;page&quot; (default) —{" "}
+                      {selectedPage.length} selected
+                    </p>
+                    <Table
+                      columns={columns}
+                      data={sampleData.slice(0, 5)}
+                      getRowId={(row) => row.id}
+                      selectionMode="multiple"
+                      selectedRowIds={selectedPage}
+                      onSelectionChange={setSelectedPage}
+                      selectAllMode="page"
+                      classes={s}
+                      density="compact"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <p
+                      className={`text-xs font-medium text-cl-text-secondary`}
+                    >
+                      selectAllMode=&quot;all&quot; — {selectedAll.length}{" "}
+                      selected
+                    </p>
+                    <Table
+                      columns={columns}
+                      data={sampleData}
+                      getRowId={(row) => row.id}
+                      selectionMode="multiple"
+                      selectedRowIds={selectedAll}
+                      onSelectionChange={setSelectedAll}
+                      selectAllMode="all"
+                      classes={s}
+                      density="compact"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <p
-                    className={`text-xs font-medium text-cl-text-secondary`}
-                  >
-                    selectAllMode=&quot;all&quot; — {selectedAll.length}{" "}
-                    selected
-                  </p>
-                  <Table
-                    columns={columns}
-                    data={sampleData}
-                    getRowId={(row) => row.id}
-                    selectionMode="multiple"
-                    selectedRowIds={selectedAll}
-                    onSelectionChange={setSelectedAll}
-                    selectAllMode="all"
-                    classes={s}
-                    density="compact"
-                  />
-                </div>
-              </div>
-            );
-          };
-          return <SelectAllDemo />;
-        })()}
+              );
+            };
+            return <SelectAllDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
@@ -7669,90 +7744,92 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Save View (Presets)" isDarkMode={dark}>
-        {(() => {
-          const SaveViewDemo = () => {
-            const [savedViews, setSavedViews] = React.useState<
-              { name: string; view: Record<string, unknown> }[]
-            >([]);
-            const [sortState, setSortState] = React.useState<SortingState>([]);
-            const [visState, setVisState] = React.useState<
-              Record<string, boolean>
-            >({
-              name: true,
-              email: true,
-              role: true,
-              status: true,
-              department: true,
-              joinDate: true,
-            });
-            return (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <button
-                    onClick={() =>
-                      setSavedViews((prev) => [
-                        ...prev,
-                        {
-                          name: `View ${prev.length + 1}`,
-                          view: {
-                            sorting: sortState,
-                            columnVisibility: visState,
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const SaveViewDemo = () => {
+              const [savedViews, setSavedViews] = React.useState<
+                { name: string; view: Record<string, unknown> }[]
+              >([]);
+              const [sortState, setSortState] = React.useState<SortingState>([]);
+              const [visState, setVisState] = React.useState<
+                Record<string, boolean>
+              >({
+                name: true,
+                email: true,
+                role: true,
+                status: true,
+                department: true,
+                joinDate: true,
+              });
+              return (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Button
+                      onClick={() =>
+                        setSavedViews((prev) => [
+                          ...prev,
+                          {
+                            name: `View ${prev.length + 1}`,
+                            view: {
+                              sorting: sortState,
+                              columnVisibility: visState,
+                            },
                           },
-                        },
-                      ])
-                    }
-                    className={`px-3 py-1.5 text-xs rounded-cl-md cursor-pointer transition-colors bg-cl-accent-bg text-cl-accent-hover hover:bg-cl-accent-bg-hover`}
-                  >
-                    Save current view
-                  </button>
-                  {savedViews.map((sv, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        setSortState((sv.view.sorting as SortingState) || []);
-                        setVisState(
-                          (sv.view.columnVisibility as Record<
-                            string,
-                            boolean
-                          >) || {
-                            name: true,
-                            email: true,
-                            role: true,
-                            status: true,
-                            department: true,
-                            joinDate: true,
-                          },
-                        );
-                      }}
-                      className={`px-2.5 py-1 text-xs rounded-cl-md cursor-pointer bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover`}
+                        ])
+                      }
+                      className={`px-3 py-1.5 text-xs rounded-cl-md cursor-pointer transition-colors bg-cl-accent-bg text-cl-accent-hover hover:bg-cl-accent-bg-hover`}
                     >
-                      {sv.name}
-                    </button>
-                  ))}
+                      Save current view
+                    </Button>
+                    {savedViews.map((sv, i) => (
+                      <Button
+                        key={i}
+                        onClick={() => {
+                          setSortState((sv.view.sorting as SortingState) || []);
+                          setVisState(
+                            (sv.view.columnVisibility as Record<
+                              string,
+                              boolean
+                            >) || {
+                              name: true,
+                              email: true,
+                              role: true,
+                              status: true,
+                              department: true,
+                              joinDate: true,
+                            },
+                          );
+                        }}
+                        className={`px-2.5 py-1 text-xs rounded-cl-md cursor-pointer bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover`}
+                      >
+                        {sv.name}
+                      </Button>
+                    ))}
+                  </div>
+                  <Table
+                    columns={sortableColumns}
+                    data={sampleData.slice(0, 5)}
+                    getRowId={(row) => row.id}
+                    sortable
+                    sorting={sortState}
+                    onSortingChange={setSortState}
+                    columnVisibility={visState}
+                    onColumnVisibilityChange={setVisState}
+                    classes={s}
+                  />
+                  <p
+                    className={`text-xs text-cl-text-tertiary`}
+                  >
+                    {savedViews.length === 0
+                      ? 'Sort or hide columns, then click "Save current view".'
+                      : `${savedViews.length} view(s) saved. Click to restore.`}
+                  </p>
                 </div>
-                <Table
-                  columns={sortableColumns}
-                  data={sampleData.slice(0, 5)}
-                  getRowId={(row) => row.id}
-                  sortable
-                  sorting={sortState}
-                  onSortingChange={setSortState}
-                  columnVisibility={visState}
-                  onColumnVisibilityChange={setVisState}
-                  classes={s}
-                />
-                <p
-                  className={`text-xs text-cl-text-tertiary`}
-                >
-                  {savedViews.length === 0
-                    ? 'Sort or hide columns, then click "Save current view".'
-                    : `${savedViews.length} view(s) saved. Click to restore.`}
-                </p>
-              </div>
-            );
-          };
-          return <SaveViewDemo />;
-        })()}
+              );
+            };
+            return <SaveViewDemo />;
+          })()}
+        </DemoWrapper>
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >

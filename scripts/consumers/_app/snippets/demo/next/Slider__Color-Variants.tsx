@@ -1,10 +1,6 @@
-"use client";
-
-import { useState } from "react";
-import { Slider, SliderValue } from "@chumlab/ui/slider";
+import { Slider } from "@chumlab/ui/slider";
 
 export default function SliderExample() {
-  const [range, setRange] = useState<SliderValue>([25, 75]);
   return (
     <div className="flex flex-col gap-6 w-full sm:max-w-sm">
       {
