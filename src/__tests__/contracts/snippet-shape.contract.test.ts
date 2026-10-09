@@ -223,21 +223,128 @@ describe("snippet shape contract", () => {
      */
     // Empty since SN4: Drawer/Directions was the one entry, excused because the
     // generator dropped library elements rendered inside a `.map()`. It now
-    // carries the map with them (build-demo-snippets.mjs, sectionsOf).
+    // carries the map with them (build-demo-snippets.mjs, sectionsOf). The
+    // entry stayed a release after its reason was gone, because nothing here
+    // checked that an exempt section was still missing anything.
     const EXEMPT_MISSING = new Map<string, string>([]);
 
-    const missing: string[] = [];
+    const lacking: string[] = [];
     for (const { component, title, code } of every) {
       const tags = exportedTagsOf(component);
       if ([...tags].some((t) => new RegExp(`<${t}[\\s/>]`).test(code))) continue;
-      const key = `${component}/${title}`;
-      if (EXEMPT_MISSING.has(key)) continue;
-      missing.push(key);
+      lacking.push(`${component}/${title}`);
     }
+    const missing = lacking.filter((key) => !EXEMPT_MISSING.has(key));
+    // An exemption whose section names its component now, or has no snippet at
+    // all, excuses nothing.
+    const stale = [...EXEMPT_MISSING.keys()].filter((key) => !lacking.includes(key));
+    console.log(
+      `SNIPPET_NAMES_COMPONENT snippets=${every.length} lacking=${lacking.length} ` +
+        `exempt=${lacking.length - missing.length} failing=${missing.length} stale=${stale.length}`,
+    );
+    expect(stale, "an exemption whose section is no longer missing its component excuses nothing; delete it").toEqual([]);
     expect(
       missing.sort(),
       "the snippet under this section never names the component whose page it is on. A reader " +
         "copies it and gets the trigger without the thing the trigger opens",
+    ).toEqual([]);
+  });
+
+  /**
+   * A snippet carries every library component its section renders.
+   *
+   * "Names the component" passes once one tag of the page's component appears.
+   * Drawer's Directions passed it with a Drawer it never rendered: the page
+   * drew four buttons in the demo wrapper and the four Drawers they open in a
+   * `.map()` beside it, and the generator dropped library elements rendered
+   * inside a `.map()`, so the snippet shipped four buttons that opened nothing.
+   * SN4 made the generator carry the map; this holds it there.
+   *
+   * Both sides are read by the compiler: the page side is every library tag
+   * (an import from `src/components`) anywhere inside the `<Section>`, `.map()`
+   * callbacks included; the snippet side is every tag in its code. Sections
+   * without a snippet are not in this count — they are the generator's skipped
+   * list, which says why for each. `SNIPPET_SHAPE_TREE` points the case at
+   * another checkout's `src/pages/demo`, which is how it was proven red on D7's
+   * parent.
+   */
+  it("carries every library component its section renders", () => {
+    const tree = process.env.SNIPPET_SHAPE_TREE ?? process.cwd();
+    const pagesDir = join(tree, "src/pages/demo");
+    const generated = readFileSync(join(pagesDir, "generated/demoSnippets.ts"), "utf8");
+    const start = generated.indexOf("= {", generated.indexOf("export const DEMO_SNIPPETS")) + 2;
+    const snippets = JSON.parse(generated.slice(start, generated.lastIndexOf("}") + 1)) as Record<
+      string,
+      Record<string, { react: string }>
+    >;
+
+    const tagOf = (n: ts.Node, sf: ts.SourceFile) =>
+      ts.isJsxElement(n) ? n.openingElement.tagName.getText(sf) : ts.isJsxSelfClosingElement(n) ? n.tagName.getText(sf) : null;
+    const tagsIn = (root: ts.Node, sf: ts.SourceFile, keep: (tag: string) => boolean) => {
+      const out = new Set<string>();
+      const visit = (n: ts.Node): void => {
+        const tag = tagOf(n, sf);
+        if (tag && keep(tag)) out.add(tag);
+        ts.forEachChild(n, visit);
+      };
+      visit(root);
+      return out;
+    };
+
+    // The generator's own population: every `<Name>Demo.tsx`, the component
+    // named by the file (build-demo-snippets.mjs).
+    const pages = readdirSync(pagesDir).filter((f) => f.endsWith("Demo.tsx") && f !== "Demo.tsx");
+    let checked = 0;
+    let withoutSnippet = 0;
+    const missing: string[] = [];
+    for (const file of pages) {
+      const component = file.replace(/Demo\.tsx$/, "");
+      const sf = ts.createSourceFile(file, readFileSync(join(pagesDir, file), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const library = new Set<string>();
+      for (const st of sf.statements) {
+        if (!ts.isImportDeclaration(st) || !ts.isStringLiteral(st.moduleSpecifier)) continue;
+        if (!/^\.\.\/\.\.\/components\//.test(st.moduleSpecifier.text)) continue;
+        const clause = st.importClause;
+        if (!clause || clause.isTypeOnly) continue;
+        if (clause.name) library.add(clause.name.text);
+        if (clause.namedBindings && ts.isNamedImports(clause.namedBindings)) {
+          for (const el of clause.namedBindings.elements) if (!el.isTypeOnly) library.add(el.name.text);
+        }
+      }
+      const visit = (n: ts.Node): void => {
+        if (ts.isJsxElement(n) && n.openingElement.tagName.getText(sf) === "Section") {
+          const title = n.openingElement.attributes.properties.find(
+            (p): p is ts.JsxAttribute => ts.isJsxAttribute(p) && p.name.getText(sf) === "title",
+          )?.initializer;
+          if (title && ts.isStringLiteral(title)) {
+            const snippet = snippets[component]?.[title.text];
+            if (!snippet) withoutSnippet += 1;
+            else {
+              checked += 1;
+              const code = ts.createSourceFile("snippet.tsx", snippet.react, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+              const shipped = tagsIn(code, code, () => true);
+              const gone = [...tagsIn(n, sf, (t) => library.has(t))].filter((t) => !shipped.has(t)).sort();
+              if (gone.length) missing.push(`${component} / ${title.text}: ${gone.join(", ")}`);
+            }
+          }
+        }
+        ts.forEachChild(n, visit);
+      };
+      visit(sf);
+    }
+    const total = Object.values(snippets).reduce((n, sections) => n + Object.keys(sections).length, 0);
+    console.log(
+      `SNIPPET_CARRIES pages=${pages.length} sections checked=${checked} (no snippet: ${withoutSnippet}) ` +
+        `missing a component=${missing.length} ${missing.length ? "FAIL" : "ok"}`,
+    );
+    for (const m of missing) console.log(`  MISSING ${m}`);
+    // Every snippet has to be found under a page section, or the count above is
+    // over a population that quietly lost some.
+    expect(checked, "a snippet was not found under any page section, so it was never compared").toBe(total);
+    expect(
+      missing,
+      "the page renders a library component in this section that its snippet does not. A reader " +
+        "copies the snippet and gets part of what the page shows",
     ).toEqual([]);
   });
 
@@ -293,12 +400,23 @@ describe("snippet shape contract", () => {
     ];
 
     const TOKEN = /\b(?:bg-cl-|text-cl-|border-cl-|rounded-cl-)/;
-    /** `<input>` types the library has no field for: a check, a radio, a range, a file picker. */
-    const NATIVE_ONLY_INPUT = new Set(["checkbox", "radio", "range", "file"]);
+    /**
+     * `<input>` types a snippet may hand-class, by type, with why.
+     *
+     * Empty since SN5. It held checkbox, radio, range and file as "types the
+     * library has no field for", and both halves had stopped being true: the
+     * library ships Checkbox, RadioButton and Slider, and no snippet
+     * hand-classed an input of any of the four — the one native checkbox
+     * (Table's column toggles) carries `cursor-pointer` and no token. An entry
+     * that excuses nothing fails as stale below, like every other list here.
+     */
+    const NATIVE_ONLY_INPUT = new Map<string, string>([]);
 
     let parsed = 0;
     const examined = { button: 0, input: 0, textarea: 0 };
     const found: string[] = [];
+    /** Native-only types that actually excused a hand-classed input. */
+    const nativeExcused = new Set<string>();
 
     for (const { component, title, code } of every) {
       const key = `${component}/${title}`;
@@ -361,10 +479,13 @@ describe("snippet shape contract", () => {
             const type = attr(open, "type")?.initializer;
             const nativeOnly =
               tag === "input" && type !== undefined && ts.isStringLiteral(type) && NATIVE_ONLY_INPUT.has(type.text);
-            if (!nativeOnly) {
+            const cls = attr(open, "className")?.initializer;
+            const tokened = cls !== undefined && TOKEN.test(classText(cls));
+            if (nativeOnly) {
+              if (tokened) nativeExcused.add((type as ts.StringLiteral).text);
+            } else {
               examined[tag] += 1;
-              const cls = attr(open, "className")?.initializer;
-              if (cls && TOKEN.test(classText(cls))) found.push(`${key} <${tag}> "${nameOf(node, open)}"`);
+              if (tokened) found.push(`${key} <${tag}> "${nameOf(node, open)}"`);
             }
           }
         }
@@ -376,15 +497,17 @@ describe("snippet shape contract", () => {
     const isExempt = (f: string) => EXEMPT_RAW.some((e) => f === `${e.key} ${e.element}`);
     const handClassed = found.filter((f) => !isExempt(f));
     const stale = EXEMPT_RAW.filter((e) => !found.includes(`${e.key} ${e.element}`)).map((e) => `${e.key} ${e.element}`);
+    const staleNative = [...NATIVE_ONLY_INPUT.keys()].filter((type) => !nativeExcused.has(type)).map((type) => `<input type="${type}">`);
     console.log(
       `HAND_CLASSED snippets=${parsed} examined button=${examined.button} input=${examined.input} ` +
         `textarea=${examined.textarea} found=${found.length} exempt=${found.length - handClassed.length} ` +
-        `failing=${handClassed.length} stale=${stale.length}`,
+        `failing=${handClassed.length} stale=${stale.length} native-only=${NATIVE_ONLY_INPUT.size} (stale ${staleNative.length})`,
     );
     for (const f of found) console.log(`  ${isExempt(f) ? "exempt " : "FOUND  "} ${f}`);
 
     expect(parsed, "the snippets were not read, so nothing was examined").toBe(every.length);
     expect(stale, "an exemption whose section no longer hand-classes that element excuses nothing; delete it").toEqual([]);
+    expect(staleNative, "a native-only input type no snippet hand-classes excuses nothing; delete it").toEqual([]);
     expect(
       handClassed.sort(),
       "a snippet dresses a raw element in the library's own tokens. In a snippet nothing is " +
@@ -474,6 +597,7 @@ describe("snippet shape contract", () => {
     ];
     let count = 0;
     const found: string[] = [];
+    const allowedSeen = new Set<string>();
     for (const { component, title, code } of every) {
       const sf = ts.createSourceFile("snippet.tsx", code, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
       const visit = (node: ts.Node): void => {
@@ -481,7 +605,8 @@ describe("snippet shape contract", () => {
           for (const token of node.text.split(/\s+/)) {
             if (!token.includes("dark:")) continue;
             count++;
-            if (!(token in ALLOWED)) found.push(`${component}/${title} ${token}`);
+            if (token in ALLOWED) allowedSeen.add(token);
+            else found.push(`${component}/${title} ${token}`);
           }
         }
         ts.forEachChild(node, visit);
@@ -491,14 +616,18 @@ describe("snippet shape contract", () => {
     const isExempt = (f: string) => EXEMPT.some((e) => f === `${e.key} ${e.variant}`);
     const unexplained = [...new Set(found.filter((f) => !isExempt(f)))].sort();
     const stale = EXEMPT.filter((e) => !found.includes(`${e.key} ${e.variant}`)).map((e) => `${e.key} ${e.variant}`);
+    // An allowed variant no snippet carries any more allows nothing.
+    const staleAllowed = Object.keys(ALLOWED).filter((variant) => !allowedSeen.has(variant));
     console.log(
       `SNIPPET_DARK_ANY snippets=${every.length} count=${count} recorded=${RECORDED} allowed=${count - found.length} ` +
-        `exempt=${found.length - found.filter((f) => !isExempt(f)).length} unexplained=${unexplained.length} stale=${stale.length} ` +
+        `exempt=${found.length - found.filter((f) => !isExempt(f)).length} unexplained=${unexplained.length} ` +
+        `stale=${stale.length} stale-allowed=${staleAllowed.length} ` +
         `${count > RECORDED ? "ROSE" : count < RECORDED ? "FELL — lower the record" : "held"}`,
     );
     for (const f of unexplained) console.log(`  UNEXPLAINED ${f}`);
     expect(every.length, "no snippet was read").toBeGreaterThan(0);
     expect(stale, "an exemption whose section no longer carries that variant excuses nothing; delete it").toEqual([]);
+    expect(staleAllowed, "an allowed variant no snippet carries any more allows nothing; delete it").toEqual([]);
     expect(unexplained, "a snippet carries a `dark:` variant that is neither allowed nor exempt — theme it with a token, and give both themes the same structure").toEqual([]);
     expect(count, "a snippet gained a `dark:` variant").toBeLessThanOrEqual(RECORDED);
     expect(count, "the count fell: lower RECORDED to it, so the gain is kept").toBe(RECORDED);
