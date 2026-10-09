@@ -176,7 +176,7 @@ const ExternalLinkIcon = ({ className = "" }: { className?: string }) => (
 const base =
   "cursor-pointer font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   primary: `${base} rounded-cl-lg shadow-md bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
   secondary: `${base} rounded-cl-lg bg-cl-bg-hover text-cl-text hover:bg-cl-text/[0.14] active:bg-cl-bg-hover ring-1 ring-inset ring-border-soft shadow-sm shadow-black/[0.04] hover:shadow focus-visible:ring-border-active focus-visible:ring-offset-cl-bg`,
   outline: `${base} rounded-cl-lg border border-cl-border-strong text-cl-text hover:bg-cl-bg-hover active:bg-cl-text/4 shadow-sm shadow-black/[0.03] hover:border-cl-border-input focus-visible:ring-border-active focus-visible:ring-offset-cl-bg`,
@@ -194,7 +194,7 @@ const getClasses = (_dark: boolean) => ({
 
 const ButtonDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const [loading, setLoading] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   // The caption below claims span buttons support Enter/Space. Without an
@@ -930,7 +930,7 @@ const ButtonDemo = () => {
                 {["Left", "Middle", "Right"].map((label, i) => (
                   <Button
                     key={label}
-                    className={`${c.outline} ${i === 0 ? "rounded-r-none border-r-0" : i === 2 ? "rounded-l-none" : "rounded-none border-r-0"} ${activeGroup === label.toLowerCase() ? (dark ? "bg-cl-text/10" : "bg-cl-accent/10") : ""}`}
+                    className={`${c.outline} ${i === 0 ? "rounded-r-none border-r-0" : i === 2 ? "rounded-l-none" : "rounded-none border-r-0"} ${activeGroup === label.toLowerCase() ? ("bg-cl-accent/10") : ""}`}
                     onClick={() => {
                       setActiveGroup(label.toLowerCase());
                       setTimeout(() => setActiveGroup(null), 500);

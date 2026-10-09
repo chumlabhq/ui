@@ -105,7 +105,7 @@ const getClasses = (dark: boolean) => ({
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
   label: `text-xs font-medium text-cl-text-tertiary`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
-  fallbackBg: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
+  fallbackBg: "bg-cl-bg-hover",
   stateDisplay: `text-sm font-mono text-cl-text-secondary`,
   // The ring demo needs a surface that is plainly not the page background in
   // both themes, and the token scale has none: `bg-cl-elevated` is a hair off
@@ -358,7 +358,7 @@ const AvatarDemo = () => {
           <Avatar
             name="Custom"
             className={c.fallbackBg}
-            textStyle={{ color: "#6366f1", fontWeight: 600 }}
+            textStyle={{ color: "var(--cl-accent)", fontWeight: 600 }}
           />
         </DemoWrapper>
       </Section>

@@ -78,6 +78,7 @@ Gated. Each holds in both themes today.
 | `--cl-accent-hover` | the hover form of the accent | `--cl-accent` |
 | `--cl-accent-bg-hover` | the hover form of the accent background | `--cl-accent-bg` |
 | `--cl-on-accent` | is legible *on* the accent, so cannot be the accent | `--cl-accent` |
+| `--cl-on-warning` | is legible *on* the warning fill, so cannot be the warning colour | `--cl-warning` |
 | `--cl-radius-sm/md/lg` | an ordered scale | each other |
 
 Two tokens deliberately **not** on this list, both of which currently share a
@@ -104,6 +105,7 @@ It is not duplicated here.
 | `--cl-accent-surface` | **NOVEL** | T2. An accent-tinted container for `--cl-text` or `--cl-accent-hover`: `rgba(37,99,235,.10)` light, `rgba(91,155,255,.20)` dark, the dominant pair of the demos' `bg-cl-accent/10 dark:bg-cl-accent/20` (39 uses). Justified by T1: `--cl-accent-<role>` beside `--cl-accent-bg`. A role name under T2: it equals `--cl-accent-bg` in light and claims no relation to it. Text measured 5.55:1 or more in both themes over every surface; gated in `contrast.contract`. |
 | `--cl-accent-halo` | **NOVEL** | T2. The soft glow beside a focus border, never the only focus indicator: `rgba(37,99,235,.15)` light, `rgba(91,155,255,.30)` dark, the demos' `ring-cl-accent/15 dark:ring-cl-accent/30` (35 uses in the focus-ring group). Justified by T1: `--cl-accent-<role>`. Not a boundary and carries no text, so no floor applies; the border it sits beside carries 1.4.11. |
 | `--cl-success-bg` | **NOVEL** | T2. A success tint behind `--cl-text` content, as `--cl-error-bg` is for errors: `rgba(21,128,61,.15)` light, `rgba(34,197,94,.10)` dark, the dominant pair of 21 uses. Justified by T1 alone: `--cl-<status>-bg`, of which `--cl-error-bg` is the precedent. `--cl-text` on it 14.6:1 or more; `--cl-success` text on it is 3.9:1 in light, under AA, and is not its text. |
+| `--cl-on-warning` | **NOVEL** | T4 (2026-10-10). Text and icons on a `--cl-warning` fill, dark in both themes: `#050608` dark, `#0f1218` light. The amber fill is light in both themes, so its text cannot follow `--cl-on-error`, which turns white in light. Justified by T1: `--cl-on-<status>`, of which `--cl-on-error` is the precedent. Minted for the one `dark:` override left in the snippets — Tooltip's Custom Styling warning tooltip, which wrote `text-cl-on-accent dark:text-cl-on-accent` around exactly this gap. Gated ≥ 4.5:1 on `--cl-warning` in both themes in `contrast.contract`, and as a relational claim in `token-vocabulary.contract`. |
 
 The skeleton and track values are foreground overlays rather than fixed colours, chosen by
 measurement. `bg-gray-200` sat at 1.24 against the page in light and **16.37**

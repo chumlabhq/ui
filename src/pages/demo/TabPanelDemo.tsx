@@ -211,7 +211,7 @@ const rtlTabs: Tab[] = [
 // `tabInactive` off it (TabPanel/utils/constants.ts:14); this map used to hand
 // it straight back on every instance the page renders, which is what made the
 // old whole-page axe audit report 77 contrast nodes (E2E-TRIAGE.md Appendix D).
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   /**
    * TabPanel's slots are `root`, `list`, `item`, `itemText`, `itemIcon`,
    * `count`, `indicator` and `content`, and it expresses state as variants on
@@ -239,9 +239,7 @@ const getClasses = (dark: boolean) => ({
       // active pill — which now uses bg-cl-bg-elevated in the dark theme —
       // has a distinct surface to stand out against.
       list: `inline-flex items-center gap-1 p-1 rounded-cl-md bg-cl-bg-hover`,
-      item: dark
-        ? `px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-cl-bg-elevated data-[state=active]:text-white data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`
-        : `px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-white data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`,
+      item: `px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`,
       content: "p-4 mt-2",
     },
     icon: {
@@ -274,7 +272,7 @@ const getClasses = (dark: boolean) => ({
 
 const TabPanelDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   // Each demo section has its own independent state
   const [underlinedTab, setUnderlinedTab] = useState("home");

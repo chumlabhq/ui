@@ -1238,7 +1238,7 @@ const MultiSelectDropdownDemo = () => {
                   value={classNameDemoValue}
                   onValueChange={setClassNameDemoValue}
                   placeholder="Select fruits..."
-                  className={dark ? "opacity-90" : "opacity-95"}
+                  className={"opacity-95"}
                   maxDisplayedChips={2}
                   classes={c.dropdown}
                 />

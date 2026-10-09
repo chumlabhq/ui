@@ -47,7 +47,7 @@ const categoryOptions = [
   { value: "engineering", label: "Engineering" },
 ];
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   // Drawer panel surface. bg-cl-bg uses the page background colour so the
   // panel reads as an extension of the page, not a separate elevated card
   // (drawers slide in from screen edges — they ARE the page). Border on
@@ -82,7 +82,7 @@ function useDrawerState(initial = false) {
 
 const DrawerDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const basic = useDrawerState();
   const untrapped = useDrawerState();

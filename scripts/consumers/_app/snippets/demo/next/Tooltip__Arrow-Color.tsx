@@ -6,7 +6,7 @@ export default function TooltipExample() {
     <>
       <Tooltip
         content="Indigo arrow"
-        arrowColor="#4f46e5"
+        arrowColor="var(--cl-accent)"
         classes={{ content: "rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent" }}
       >
         <Button
@@ -17,7 +17,7 @@ export default function TooltipExample() {
       </Tooltip>
       <Tooltip
         content="Emerald arrow"
-        arrowColor="#047857"
+        arrowColor="var(--cl-success)"
         classes={{ content: "rounded-cl-md px-3 py-2 text-sm text-cl-bg bg-cl-success" }}
       >
         <Button
@@ -28,7 +28,7 @@ export default function TooltipExample() {
       </Tooltip>
       <Tooltip
         content="Rose arrow"
-        arrowColor="#e11d48"
+        arrowColor="var(--cl-error)"
         classes={{ content: "rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent" }}
       >
         <Button
@@ -37,7 +37,7 @@ export default function TooltipExample() {
           Rose
         </Button>
       </Tooltip>
-      <Tooltip content="Default content, colored arrow only" arrowColor="#4f46e5">
+      <Tooltip content="Default content, colored arrow only" arrowColor="var(--cl-accent)">
         <Button
           className="cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 bg-cl-bg-hover text-cl-text hover:bg-cl-text/[0.14] border border-cl-border focus-visible:ring-border-active focus-visible:ring-offset-cl-bg"
         >

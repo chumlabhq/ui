@@ -12,7 +12,6 @@ interface FloatingActionsProps<T> {
   onHover: (isHovered: boolean) => void;
   isVisible: boolean;
   getName: (data: T) => string;
-  dark?: boolean;
   className?: string;
   renderContent?: (name: string, data: T) => React.ReactNode;
   onAction?: (action: "View" | "Edit" | "Delete", data: T) => void;
@@ -28,7 +27,7 @@ interface User {
   joinDate: string;
 }
 
-function getTableClasses(_dark: boolean) {
+function getTableClasses() {
   return {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
@@ -62,7 +61,7 @@ function getTableClasses(_dark: boolean) {
   };
 }
 
-const s = getTableClasses(false);
+const s = getTableClasses();
 
 function FloatingActions<T>({
   rowRef,
@@ -70,7 +69,6 @@ function FloatingActions<T>({
   onHover,
   isVisible,
   getName,
-  dark: _dark = false,
   className: classNameProp,
   renderContent,
   onAction,
@@ -267,10 +265,8 @@ function FloatingActions<T>({
 
 const StatusBadge = ({
   status,
-  dark = false,
 }: {
   status: User["status"];
-  dark?: boolean;
 }) => {
   const styles = {
         active: "bg-cl-success/15 text-cl-text",
@@ -439,7 +435,7 @@ export default function TableExample() {
                   accessorKey: "status",
                   header: () => <span>Status</span>,
                   cell: ({ row }) => (
-                    <StatusBadge status={row.getValue("status")} dark={false} />
+                    <StatusBadge status={row.getValue("status")} />
                   )
                 },
                 {
@@ -495,8 +491,7 @@ export default function TableExample() {
                   )
                 }
               ],
-              // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
-              [false],
+              [],
             );
 
             const dotFloatingData =
@@ -524,7 +519,6 @@ export default function TableExample() {
                         dotMenuState !== null
                       }
                       getName={(data) => data.name}
-                      dark={false}
                       renderContent={(_name, rowData) => (
                         <Button aria-label="More actions"
                           className={"p-1.5 rounded transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover"}

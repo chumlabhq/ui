@@ -81,7 +81,7 @@ export default function InternationalPhoneInputExample() {
               }),
                                   input: "flex-1 h-10 px-3 rounded-cl-md border outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-cl-bg-input focus:ring-2 focus:ring-cl-success focus:border-cl-success",
                                            countrySelect: {
-                                             item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-success-bg data-[highlighted]:bg-cl-success/15 text-cl-text-chrome",
+                                             item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-success-bg data-[highlighted]:bg-cl-success-bg text-cl-text-chrome",
                                              itemIndicator: "w-4 h-4 shrink-0 text-cl-success"
                                            }
                                 }

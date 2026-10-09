@@ -14,7 +14,7 @@ interface User {
   joinDate: string;
 }
 
-function getTableClasses(_dark: boolean) {
+function getTableClasses() {
   return {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
@@ -125,10 +125,8 @@ const sampleData: User[] = [
 
 const StatusBadge = ({
   status,
-  dark = false,
 }: {
   status: User["status"];
-  dark?: boolean;
 }) => {
   const styles = {
         active: "bg-cl-success/15 text-cl-text",
@@ -145,7 +143,7 @@ const StatusBadge = ({
   );
 };
 
-const s = getTableClasses(false);
+const s = getTableClasses();
 
 export default function TableExample() {
   const [editedCells, setEditedCells] = useState<
@@ -169,13 +167,13 @@ export default function TableExample() {
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => (
-          <StatusBadge status={row.getValue("status")} dark={false} />
+          <StatusBadge status={row.getValue("status")} />
         ),
       },
       { accessorKey: "department", header: "Department" },
       { accessorKey: "joinDate", header: "Join Date" },
     ],
-    [false],
+    [],
   );
   return (
     <>

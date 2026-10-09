@@ -210,7 +210,7 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   input: {
     root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_input]:text-base",
     input: `w-full bg-transparent outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:[color-scheme:dark]`,
@@ -235,10 +235,8 @@ const getClasses = (dark: boolean) => ({
   wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15`,
   wrapperDisabled: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover`,
   disabledInput: `w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary`,
-  icon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
-  iconHover: dark
-    ? "text-cl-text-tertiary hover:text-cl-text-secondary"
-    : "text-cl-text-tertiary hover:text-cl-text-secondary",
+  icon: "text-cl-text-tertiary",
+  iconHover: "text-cl-text-tertiary hover:text-cl-text-secondary",
   badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent-bg text-cl-accent-hover ring-1 ring-inset ring-cl-accent/10`,
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -256,7 +254,7 @@ const getClasses = (dark: boolean) => ({
 
 const InputDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [showPw, setShowPw] = useState(false);
@@ -760,7 +758,7 @@ const InputDemo = () => {
                 disabled
                 startIcon={
                   <LockIcon
-                    className={dark ? "text-cl-text-secondary" : "text-cl-text-secondary"}
+                    className={"text-cl-text-secondary"}
                   />
                 }
                 classes={{
@@ -1049,7 +1047,7 @@ const InputDemo = () => {
                     "0.00",
                     <Icon
                       d="M12 2v20|M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
-                      className={dark ? "text-cl-success" : "text-cl-success"}
+                      className={"text-cl-success"}
                     />,
                   ],
                   [

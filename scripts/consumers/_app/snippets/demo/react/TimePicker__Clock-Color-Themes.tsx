@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TimePicker, TimePickerClasses } from "@chumlab/ui/time-picker";
 
-const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
+const getVioletClockTheme = (): TimePickerClasses => ({
   root: "inline-flex flex-col gap-1 text-cl-text",
   control: "relative",
  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-border-input-focus bg-cl-bg-panel hover:border-cl-border-input-focus focus-within:ring-2 focus-within:ring-cl-accent",
@@ -25,7 +25,7 @@ const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
   periodButton: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated",
 });
 
-const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
+const getRoseClockTheme = (): TimePickerClasses => ({
   root: "inline-flex flex-col gap-1 text-cl-text",
   control: "relative",
  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-border-input-focus bg-cl-bg-panel hover:border-cl-border-input-focus focus-within:ring-2 focus-within:ring-cl-accent",
@@ -49,7 +49,7 @@ const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
   periodButton: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated",
 });
 
-const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
+const getEmeraldClockTheme = (): TimePickerClasses => ({
   root: "inline-flex flex-col gap-1 text-cl-text",
   control: "relative",
  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-success bg-cl-bg-panel hover:border-cl-success focus-within:ring-2 focus-within:ring-cl-success",
@@ -85,7 +85,7 @@ export default function TimePickerExample() {
           onValueChange={(v) => setClockEmerald(v)}
           variant="clock"
           format="12h"
-          classes={getEmeraldClockTheme(false)}
+          classes={getEmeraldClockTheme()}
         />
         <span className="text-xs mt-1 block text-cl-text-secondary">
           Selected:
@@ -98,7 +98,7 @@ export default function TimePickerExample() {
           onValueChange={(v) => setClockRose(v)}
           variant="clock"
           format="12h"
-          classes={getRoseClockTheme(false)}
+          classes={getRoseClockTheme()}
         />
         <span className="text-xs mt-1 block text-cl-text-secondary">
           Selected:
@@ -111,7 +111,7 @@ export default function TimePickerExample() {
           onValueChange={(v) => setClockViolet(v)}
           variant="clock"
           format="12h"
-          classes={getVioletClockTheme(false)}
+          classes={getVioletClockTheme()}
         />
         <span className="text-xs mt-1 block text-cl-text-secondary">
           Selected:

@@ -8,7 +8,7 @@ export default function LoaderExample() {
         <span className="text-xs font-medium text-cl-text-tertiary">Circular</span>
       </div>
       <div className="flex flex-col items-center gap-3 w-32 sm:w-40">
-        <LinearLoader className="text-cl-accent" width="100%" trackColor={undefined} />
+        <LinearLoader trackColor="var(--cl-bg-track)" className="text-cl-accent" width="100%" />
         <span className="text-xs font-medium text-cl-text-tertiary">Linear</span>
       </div>
       <div className="flex flex-col items-center gap-3">

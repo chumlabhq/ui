@@ -18,7 +18,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   label: `text-xs font-medium text-cl-text-tertiary`,
   text: `text-sm text-cl-text-secondary`,
@@ -58,7 +58,7 @@ const VolumeIcon = () => (
 
 const SliderDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [basic, setBasic] = useState(50);
 
@@ -270,8 +270,8 @@ const SliderDemo = () => {
                       height: "10px",
                       borderRadius: "1px",
                       backgroundColor: isActive
-                        ? (dark ? "#818cf8" : "#6366f1")
-                        : (dark ? "#4b5563" : "#d1d5db"),
+                        ? ("var(--cl-accent)")
+                        : ("var(--cl-bg-track)"),
                       transform: "translateY(-50%)",
                     }}
                   />
@@ -292,8 +292,8 @@ const SliderDemo = () => {
                       width: "8px",
                       height: "8px",
                       backgroundColor: isActive
-                        ? (dark ? "#818cf8" : "#6366f1")
-                        : (dark ? "#4b5563" : "#d1d5db"),
+                        ? ("var(--cl-accent)")
+                        : ("var(--cl-bg-track)"),
                       transform: "translateY(-50%) rotate(45deg)",
                     }}
                   />

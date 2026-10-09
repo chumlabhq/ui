@@ -92,6 +92,7 @@ const RELATIONAL: { token: string; against: string; claim: string }[] = [
   { token: "--cl-accent-bg-hover", against: "--cl-accent-bg", claim: "the hover form of the accent background" },
   { token: "--cl-on-accent", against: "--cl-accent", claim: "is legible on the accent" },
   { token: "--cl-on-error", against: "--cl-error", claim: "is legible on the error colour" },
+  { token: "--cl-on-warning", against: "--cl-warning", claim: "is legible on the warning colour" },
   // ADR 007. "quiet" is a relation to the chrome step, and "recessed" is a
   // relation to the surface it is set into — both assert something checkable.
   { token: "--cl-text-chrome-quiet", against: "--cl-text-chrome", claim: "is quieter than the chrome text" },

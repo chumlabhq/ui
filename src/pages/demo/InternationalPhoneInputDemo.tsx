@@ -984,7 +984,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                     placeholder="Enter phone number"
                     selectedIcon={
                       <DotIcon
-                        className={dark ? "text-cl-accent" : "text-cl-accent"}
+                        className={"text-cl-accent"}
                       />
                     }
                     classes={c.phone}
@@ -1033,7 +1033,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                       ...c.phone,
                       input: `flex-1 h-10 px-3 rounded-cl-md border outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-cl-bg-input focus:ring-2 focus:ring-cl-success focus:border-cl-success`,
                                countrySelect: {
-                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-success-bg data-[highlighted]:bg-cl-success/15 text-cl-text-chrome`,
+                                 item: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-success-bg data-[highlighted]:bg-cl-success-bg text-cl-text-chrome`,
                                  itemIndicator: `w-4 h-4 shrink-0 text-cl-success`,
                                },
                     }}
@@ -1084,7 +1084,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                       style={{ height: 17 }}
                     />
                     <div className="min-w-0 flex-1">
-                      <div className={`text-sm font-medium ${isSelected ? (dark ? "text-cl-accent" : "text-cl-accent") : ""}`}>
+                      <div className={`text-sm font-medium ${isSelected ? ("text-cl-accent") : ""}`}>
                         {country.name}
                       </div>
                       <div className={`text-[11px] text-cl-text-tertiary`}>

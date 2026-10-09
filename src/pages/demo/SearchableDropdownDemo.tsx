@@ -620,7 +620,7 @@ const SearchableDropdownDemo = () => {
                 <button
                   ref={ref as React.RefCallback<HTMLButtonElement>}
                   {...triggerProps}
-                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? (dark ? "border-cl-border-input-focus bg-cl-bg-elevated text-white shadow-lg shadow-accent/20" : "border-cl-border-input-focus bg-white text-cl-text shadow-lg shadow-accent/20") : dark ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border" : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input"} cursor-pointer`}
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? ("border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"} cursor-pointer`}
                 >
                   <span
                     className={`text-xl ${selectedOption ? "" : "opacity-50"}`}
@@ -631,7 +631,7 @@ const SearchableDropdownDemo = () => {
                     {selectedOption?.label ?? placeholder}
                   </span>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded-full ${isOpen ? (dark ? "bg-cl-accent/20 text-cl-text" : "bg-cl-accent/10 text-cl-text") : dark ? "bg-cl-bg-elevated text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
+                    className={`text-xs px-2 py-0.5 rounded-full ${isOpen ? ("bg-cl-accent/10 text-cl-text") : "bg-cl-bg-hover text-cl-text-secondary"}`}
                   >
                     {isOpen ? "Open" : "Closed"}
                   </span>
@@ -1043,7 +1043,7 @@ const SearchableDropdownDemo = () => {
               placeholder="Search fruits..."
               classes={{
                 ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors ${successValue ? (dark ? "border border-cl-success bg-cl-bg-elevated text-white focus:outline-none focus:ring-2 focus:ring-cl-success" : "border-cl-success bg-white text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-success") : dark ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border focus:outline-none focus:ring-2 focus:ring-cl-accent" : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent"}`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors ${successValue ? ("border-cl-success bg-cl-bg-input text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-success") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent"}`,
               }}
             />
           </div>

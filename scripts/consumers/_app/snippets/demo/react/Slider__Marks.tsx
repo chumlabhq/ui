@@ -141,8 +141,8 @@ export default function SliderExample() {
                   height: "10px",
                   borderRadius: "1px",
                   backgroundColor: isActive
-                    ? ("#6366f1")
-                    : ("#d1d5db"),
+                    ? ("var(--cl-accent)")
+                    : ("var(--cl-bg-track)"),
                   transform: "translateY(-50%)"
                 }}
               />
@@ -174,8 +174,8 @@ export default function SliderExample() {
                   width: "8px",
                   height: "8px",
                   backgroundColor: isActive
-                    ? ("#6366f1")
-                    : ("#d1d5db"),
+                    ? ("var(--cl-accent)")
+                    : ("var(--cl-bg-track)"),
                   transform: "translateY(-50%) rotate(45deg)"
                 }}
               />

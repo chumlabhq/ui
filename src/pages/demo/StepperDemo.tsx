@@ -164,7 +164,7 @@ const perStepIconSteps: Step[] = [
   { id: 3, label: "Publish" },
 ];
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   // Same overrides for light + dark — the underlying tokens (cl-accent,
   // cl-success, cl-error, cl-bg-hover, cl-bg-elevated) are theme-aware,
   // so a single object is correct for both modes. Previously light mode
@@ -195,7 +195,7 @@ const getClasses = (_dark: boolean) => ({
 
 const StepperDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [basicStep, setBasicStep] = useState<number>(2);
   const [checkoutStep, setCheckoutStep] = useState<string>("payment");

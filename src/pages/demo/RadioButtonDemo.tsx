@@ -47,7 +47,7 @@ const ThumbsUpIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   group: {
     root: "",
     label: `text-sm font-medium text-cl-text`,
@@ -93,7 +93,7 @@ const getClasses = (_dark: boolean) => ({
 
 const RadioButtonDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [controlled, setControlled] = useState("option-a");
 
@@ -273,7 +273,7 @@ const RadioButtonDemo = () => {
                   checkedIcon={
                     <span
                       style={{ width: 10, height: 10, borderRadius: "50%", display: "block" }}
-                      className={dark ? "bg-cl-accent" : "bg-cl-accent"}
+                      className={"bg-cl-accent"}
                     />
                   }
                 />
@@ -284,7 +284,7 @@ const RadioButtonDemo = () => {
                   checkedIcon={
                     <span
                       style={{ width: 10, height: 10, borderRadius: "50%", display: "block" }}
-                      className={dark ? "bg-cl-accent" : "bg-cl-accent"}
+                      className={"bg-cl-accent"}
                     />
                   }
                 />

@@ -15,7 +15,7 @@ interface User {
   joinDate: string;
 }
 
-function getPaginationClasses(_dark: boolean) {
+function getPaginationClasses() {
   return {
     root: "flex items-center justify-between mt-4 px-2",
     selector: "flex items-center gap-2",
@@ -30,7 +30,7 @@ function getPaginationClasses(_dark: boolean) {
   };
 }
 
-function getTableClasses(_dark: boolean) {
+function getTableClasses() {
   return {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
@@ -141,10 +141,8 @@ const sampleData: User[] = [
 
 const StatusBadge = ({
   status,
-  dark = false,
 }: {
   status: User["status"];
-  dark?: boolean;
 }) => {
   const styles = {
         active: "bg-cl-success/15 text-cl-text",
@@ -161,9 +159,9 @@ const StatusBadge = ({
   );
 };
 
-const pClasses = getPaginationClasses(false);
+const pClasses = getPaginationClasses();
 
-const s = getTableClasses(false);
+const s = getTableClasses();
 
 export default function TableExample() {
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
@@ -192,7 +190,7 @@ export default function TableExample() {
         accessorKey: "status",
         header: () => <span>Status</span>,
         cell: ({ row }) => (
-          <StatusBadge status={row.getValue("status")} dark={false} />
+          <StatusBadge status={row.getValue("status")} />
         ),
       },
       {
@@ -213,7 +211,7 @@ export default function TableExample() {
         },
       },
     ],
-    [false],
+    [],
   );
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * rowsPerPage;

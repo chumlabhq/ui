@@ -18,7 +18,7 @@ import {
 import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   label: `text-xs font-medium text-cl-text-tertiary`,
   text: `text-sm text-cl-text-secondary`,
@@ -31,7 +31,7 @@ const getClasses = (_dark: boolean) => ({
 
 const LoaderDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   return (
     <div className="space-y-10">
@@ -74,9 +74,9 @@ const LoaderDemo = () => {
             </div>
             <div className="flex flex-col items-center gap-3 w-32 sm:w-40">
               <LinearLoader
+                trackColor="var(--cl-bg-track)"
                 className="text-cl-accent"
                 width="100%"
-                trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
               />
               <span className={c.label}>Linear</span>
             </div>
@@ -241,8 +241,8 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="w-full max-w-xs sm:max-w-md">
             <LinearLoader
+              trackColor="var(--cl-bg-track)"
               className="text-cl-accent"
-              trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
             />
           </div>
         </DemoWrapper>
@@ -259,9 +259,9 @@ const LoaderDemo = () => {
               <div key={h} className="space-y-1">
                 <span className={c.label}>{h}px</span>
                 <LinearLoader
+                  trackColor="var(--cl-bg-track)"
                   height={h}
                   className="text-cl-accent"
-                  trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
                 />
               </div>
             ))}
@@ -307,9 +307,9 @@ const LoaderDemo = () => {
               <div key={label} className="space-y-1">
                 <span className={c.label}>{label}</span>
                 <LinearLoader
+                  trackColor="var(--cl-bg-track)"
                   speed={speed}
                   className="text-cl-accent"
-                  trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
                 />
               </div>
             ))}

@@ -131,11 +131,11 @@ const itemsWithDisabled: BreadcrumbItem[] = [
   { id: "phones", label: "Phones" },
 ];
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   breadcrumb: {
     list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border border-none rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover`,
-    separator: dark ? "text-cl-text-secondary" : "text-cl-text-tertiary",
+    separator: "text-cl-text-tertiary",
     link: `flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline`,
   } satisfies BreadcrumbClasses,
 
@@ -160,7 +160,7 @@ const getClasses = (dark: boolean) => ({
     root: `p-4 rounded-cl-md bg-cl-accent-surface`,
     list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent-surface`,
-    separator: dark ? "text-cl-accent" : "text-cl-accent",
+    separator: "text-cl-accent",
   } satisfies BreadcrumbClasses,
 
   /* Class strings this page reuses in its own markup. Not `classes`
@@ -179,7 +179,7 @@ const getClasses = (dark: boolean) => ({
 
 const BreadcrumbDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const [clickedItem, setClickedItem] = useState<string | null>(null);
   // Its own state: `onDropdownOpenChange` wrote into `clickedItem`, so opening
   // the ellipsis anywhere on the page put "Dropdown closed" under the Per-Item
@@ -577,7 +577,7 @@ const BreadcrumbDemo = () => {
               <Breadcrumb
                 items={basicItems}
                 separator={
-                  <span className={dark ? "text-cl-text-secondary" : "text-cl-text-tertiary"}>
+                  <span className={"text-cl-text-tertiary"}>
                     /
                   </span>
                 }

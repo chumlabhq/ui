@@ -17,7 +17,7 @@ import {
 import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   panel: {
     root: "",
     handle: "",
@@ -32,7 +32,7 @@ const getClasses = (_dark: boolean) => ({
 
 const ResizablePanelDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [rightWidth, setRightWidth] = useState(300);
   const [leftWidth, setLeftWidth] = useState(350);
@@ -113,32 +113,32 @@ const ResizablePanelDemo = () => {
   const simpleContent = (color: string, label: string, size: number) => {
     const cl = {
       blue: {
-        text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent" : "text-cl-accent",
+        text: "text-cl-accent",
+        muted: "text-cl-accent",
       },
       green: {
-        text: dark ? "text-cl-success" : "text-cl-success",
-        muted: dark ? "text-cl-success" : "text-cl-success",
+        text: "text-cl-success",
+        muted: "text-cl-success",
       },
       amber: {
-        text: dark ? "text-cl-warning" : "text-cl-warning",
-        muted: dark ? "text-cl-warning" : "text-cl-warning",
+        text: "text-cl-warning",
+        muted: "text-cl-warning",
       },
       indigo: {
-        text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent" : "text-cl-accent",
+        text: "text-cl-accent",
+        muted: "text-cl-accent",
       },
       teal: {
-        text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent" : "text-cl-accent",
+        text: "text-cl-accent",
+        muted: "text-cl-accent",
       },
       purple: {
-        text: dark ? "text-cl-accent" : "text-cl-accent",
-        muted: dark ? "text-cl-accent" : "text-cl-accent",
+        text: "text-cl-accent",
+        muted: "text-cl-accent",
       },
     }[color] ?? {
-      text: dark ? "text-cl-text-tertiary" : "text-cl-text-secondary",
-      muted: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
+      text: "text-cl-text-secondary",
+      muted: "text-cl-text-tertiary",
     };
     return (
       <div className="h-full p-4 flex flex-col justify-between">
@@ -583,7 +583,7 @@ const ResizablePanelDemo = () => {
               className={`h-28 overflow-y-auto rounded-cl-md border p-3 font-mono text-xs bg-cl-bg-recessed border-cl-border text-cl-text-secondary`}
             >
               {callbackLog.length === 0 ? (
-                <span className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}>
+                <span className={"text-cl-text-tertiary"}>
                   Drag the handle to see resize events...
                 </span>
               ) : (
@@ -648,7 +648,7 @@ const ResizablePanelDemo = () => {
                 height="16"
                 viewBox="0 0 4 16"
                 fill="currentColor"
-                className={dark ? "text-cl-accent" : "text-cl-accent"}
+                className={"text-cl-accent"}
                 aria-hidden="true"
               >
                 <circle cx="2" cy="2" r="1.5" />

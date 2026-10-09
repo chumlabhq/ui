@@ -14,10 +14,8 @@ interface User {
 
 const StatusBadge = ({
   status,
-  dark = false,
 }: {
   status: User["status"];
-  dark?: boolean;
 }) => {
   const styles = {
         active: "bg-cl-success/15 text-cl-text",
@@ -133,7 +131,7 @@ export default function TableExample() {
         accessorKey: "status",
         header: () => <span>Status</span>,
         cell: ({ row }) => (
-          <StatusBadge status={row.getValue("status")} dark={false} />
+          <StatusBadge status={row.getValue("status")} />
         ),
       },
       {
@@ -154,7 +152,7 @@ export default function TableExample() {
         },
       },
     ],
-    [false],
+    [],
   );
   return (
     <Table columns={columns} data={sampleData.slice(0, 5)} />

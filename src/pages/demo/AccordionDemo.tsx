@@ -80,12 +80,10 @@ const SettingsIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   accordion: {
     root: "w-full",
-    item: dark
-      ? "border-b border-cl-border last:border-b-0"
-      : "border-b border-cl-border last:border-b-0",
+    item: "border-b border-cl-border last:border-b-0",
     trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
     icon: `h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
   } satisfies AccordionClasses,
@@ -103,9 +101,7 @@ const getClasses = (dark: boolean) => ({
   },
   accordionBordered: {
     root: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
-    item: dark
-      ? "border-b border-cl-border last:border-b-0"
-      : "border-b border-cl-border last:border-b-0",
+    item: "border-b border-cl-border last:border-b-0",
   },
   accordionSeparated: {
     root: "w-full space-y-2",
@@ -130,7 +126,7 @@ const getClasses = (dark: boolean) => ({
 
 const AccordionDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [singleValue, setSingleValue] = useState<string | null>("item-1");
   const [multipleValue, setMultipleValue] = useState<string[]>(["multi-1"]);

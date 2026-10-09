@@ -20,7 +20,7 @@ import {
 } from "./components/index.js";
 import { useTheme } from "./ThemeContext.js";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -44,7 +44,7 @@ const getClasses = (_dark: boolean) => ({
 
 const CountryFlagDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const [isLoading, setIsLoading] = useState(true);
   // Re-mounts the two flags below so the fade-in plays again. Without it the
   // section showed three motionless boxes: the transition had already finished

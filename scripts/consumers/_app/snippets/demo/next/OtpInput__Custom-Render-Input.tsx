@@ -17,7 +17,7 @@ export default function OtpInputExample() {
             className={`w-14 h-14 text-center text-xl font-bold rounded-cl-lg border-2 transition-all focus:outline-none ${
               filled
                 ? "border-cl-border-input-focus bg-cl-accent/10 text-cl-text"
-                : "border-cl-border-input bg-white text-cl-text"
+                : "border-cl-border-input bg-cl-bg-input text-cl-text"
             } focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20`}
           />
         )

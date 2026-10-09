@@ -95,11 +95,9 @@ const DoubleArrowRightIcon = ({ className }: { className?: string }) => (
 
 const JumpToPageEllipsis = ({
   onValueChange,
-  dark: _dark,
   variant = "default",
 }: {
   onValueChange: (page: number) => void;
-  dark: boolean;
   variant?: "default" | "pill" | "ghost";
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -170,7 +168,7 @@ const JumpToPageEllipsis = ({
   );
 };
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   pagination: {
     root: "flex flex-wrap items-center gap-2",
     navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary`,
@@ -180,7 +178,7 @@ const getClasses = (_dark: boolean) => ({
       content: `rounded-cl-md shadow-lg py-1 min-w-[64px] bg-cl-bg-panel border border-cl-border`,
       icon: `w-4 h-4 transition-transform text-cl-text-secondary`,
       positioner: "",
-      item: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover text-cl-text`,
+      item: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-bg-hover text-cl-text`,
     },
     label: `text-sm text-cl-text-secondary`,
     pageInfo: "flex items-center",
@@ -195,7 +193,7 @@ const getClasses = (_dark: boolean) => ({
 
 const PaginationDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const paginationRef = useRef<HTMLElement>(null);
   const [refNote, setRefNote] = useState("");
   const [valueLog, setValueLog] = useState<number[]>([]);
@@ -340,7 +338,6 @@ const PaginationDemo = () => {
                 renderEllipsis={({ onValueChange }) => (
                   <JumpToPageEllipsis
                     onValueChange={onValueChange}
-                    dark={dark}
                     variant="default"
                   />
                 )}
@@ -361,7 +358,6 @@ const PaginationDemo = () => {
                   renderEllipsis={({ onValueChange }) => (
                     <JumpToPageEllipsis
                       onValueChange={onValueChange}
-                      dark={dark}
                       variant="pill"
                     />
                   )}
@@ -390,7 +386,6 @@ const PaginationDemo = () => {
                   renderEllipsis={({ onValueChange }) => (
                     <JumpToPageEllipsis
                       onValueChange={onValueChange}
-                      dark={dark}
                       variant="ghost"
                     />
                   )}
@@ -499,9 +494,7 @@ const PaginationDemo = () => {
                   className={`rounded-cl-md border ${
                     externalRows === r
                       ? "bg-cl-accent text-cl-on-accent border-cl-border-input-focus"
-                      : dark
-                        ? "border-cl-border text-cl-text-secondary hover:bg-cl-bg-elevated"
-                        : "border-cl-border text-cl-text hover:bg-cl-bg-hover"
+                      : "border-cl-border text-cl-text hover:bg-cl-bg-hover"
                   }`}
                 >
                   {r}
@@ -739,7 +732,7 @@ const PaginationDemo = () => {
                 trigger: `flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow transition-shadow cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text`,
                 content: `rounded-cl-lg shadow-lg py-2 min-w-[80px] bg-cl-bg-panel border border-cl-border`,
                 icon: `w-4 h-4 text-cl-text-secondary`,
-                item: `px-4 py-2 w-full text-left cursor-pointer transition-colors hover:bg-cl-accent/10 data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-accent/10 text-cl-text`,
+                item: `px-4 py-2 w-full text-left cursor-pointer transition-colors hover:bg-cl-accent/10 data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-accent/10 text-cl-text`,
               },
               label: `text-sm font-medium text-cl-text-secondary`,
               ellipsis: `px-2 text-cl-text-tertiary`,

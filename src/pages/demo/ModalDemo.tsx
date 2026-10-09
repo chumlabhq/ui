@@ -30,7 +30,7 @@ import {
 const baseBtn =
   "inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   btn: `${baseBtn} bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated cursor-pointer`,
   btnPrimary: `${baseBtn} bg-cl-text text-cl-bg hover:opacity-90 cursor-pointer`,
   btnAccent: `${baseBtn} bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer`,
@@ -38,7 +38,7 @@ const getClasses = (dark: boolean) => ({
   btnSuccess: `${baseBtn} bg-cl-success text-cl-bg hover:bg-cl-success/90 cursor-pointer`,
   btnWarning: `${baseBtn} bg-cl-warning text-cl-bg hover:bg-cl-warning/90 cursor-pointer`,
   btnGhost: `${baseBtn} text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover`,
-  text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
+  text: "text-cl-text-secondary",
   card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   label: `text-xs font-medium text-cl-text-tertiary`,
   modalContent: "w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border",
@@ -92,7 +92,7 @@ const ZOOM_STEP = 25;
 
 const ModalDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [basicOpen, setBasicOpen] = useState(false);
   const [bareOpen, setBareOpen] = useState(false);

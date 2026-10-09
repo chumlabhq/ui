@@ -15,7 +15,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -30,7 +30,7 @@ const getClasses = (_dark: boolean) => ({
 
 const TooltipDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [controlled, setControlled] = useState(false);
 
@@ -40,9 +40,10 @@ const TooltipDemo = () => {
   // Text that clears 4.5:1 on each fill in both themes. The light theme's success
   // and error fills are dark and its warning fill is light; the dark theme's three
   // are all bright. `cl-on-accent` is the text the library puts on a saturated
-  // fill: white in light, near-black in dark.
+  // fill: white in light, near-black in dark. The warning fill is light in both
+  // themes, so its text is `cl-on-warning`, which stays dark in both.
   const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
-  const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-cl-text dark:text-cl-on-accent font-medium";
+  const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-cl-on-warning font-medium";
   const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
   const contentClassNameGradient = "rounded-cl-md shadow-xl px-4 py-2.5 text-sm text-white font-medium";
 
@@ -56,9 +57,9 @@ const TooltipDemo = () => {
   const richContentProTip = (
     <div className="space-y-2">
       <div className={`font-semibold text-cl-text`}>Pro Tip</div>
-      <p className={dark ? "text-cl-text-secondary" : "text-cl-text-secondary"}>
+      <p className={"text-cl-text-secondary"}>
         Tooltips can contain <strong>rich HTML</strong> content including{" "}
-        <span className={dark ? "text-cl-accent" : "text-cl-accent"}>colored text</span>,{" "}
+        <span className={"text-cl-accent"}>colored text</span>,{" "}
         <em>italics</em>, and more.
       </p>
     </div>
@@ -480,28 +481,28 @@ const TooltipDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="Indigo arrow"
-            arrowColor={dark ? "#818cf8" : "#4f46e5"}
+            arrowColor={"var(--cl-accent)"}
             classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent` }}
           >
             <Button className={c.trigger}>Indigo</Button>
           </Tooltip>
           <Tooltip
             content="Emerald arrow"
-            arrowColor={dark ? "#34d399" : "#047857"}
+            arrowColor={"var(--cl-success)"}
             classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-bg bg-cl-success` }}
           >
             <Button className={c.trigger}>Emerald</Button>
           </Tooltip>
           <Tooltip
             content="Rose arrow"
-            arrowColor={dark ? "#fb7185" : "#e11d48"}
+            arrowColor={"var(--cl-error)"}
             classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-on-accent bg-cl-accent` }}
           >
             <Button className={c.trigger}>Rose</Button>
           </Tooltip>
           <Tooltip
             content="Default content, colored arrow only"
-            arrowColor={dark ? "#818cf8" : "#4f46e5"}
+            arrowColor={"var(--cl-accent)"}
           >
             <Button className={c.trigger}>Arrow Only</Button>
           </Tooltip>

@@ -154,6 +154,76 @@ describe("snippet shape contract", () => {
     expect(count, "a section started producing a snippet: raise RECORDED to it, with the reason").toBeLessThanOrEqual(RECORDED);
   });
 
+  /**
+   * One theming method: a token whose value switches per theme. The demo pages
+   * also carried a second, a ternary on the theme flag (`dark ? "…" : "…"`),
+   * and the snippet generator folds every one of those to its light branch, so
+   * a reader copied light-only strings. T4 took them from 157 to 2.
+   *
+   * Counted from the pages' source by the compiler, not from the snippets: a
+   * ternary in page markup the generator does not capture is still a second
+   * theming method on the page. Ratcheted both ways. What remains is allowed
+   * by name, keyed by file and the property or variable it assigns rather than
+   * a line, with its reason; an allowed entry that no longer matches fails as
+   * stale.
+   */
+  it("themes demo pages with tokens, not ternaries on the theme flag", () => {
+    /** 2026-10-10, T4: 157 -> 2. Lower it when the count falls. */
+    const RECORDED = 2;
+    const ALLOWED: Record<string, string> = {
+      "AvatarDemo.tsx ringSurface":
+        "the ring demo needs an opaque surface plainly distinct from the page in both themes, and the token " +
+        "scale has none (--cl-bg-elevated is a hair off white; --cl-bg-recessed and --cl-bg-hover are translucent " +
+        "in light), while a solid ring colour has to equal the surface exactly",
+      "AvatarDemo.tsx ringSurfaceColor": "the same pair as ringSurface: the ring colour that has to equal it",
+    };
+    const FLAGS = new Set(["dark", "isDarkMode", "isDark", "_dark"]);
+    const strip = (e: ts.Expression): ts.Expression => (ts.isParenthesizedExpression(e) ? strip(e.expression) : e);
+    const isFlag = (e: ts.Expression): boolean => {
+      const x = strip(e);
+      if (ts.isPrefixUnaryExpression(x) && x.operator === ts.SyntaxKind.ExclamationToken) return isFlag(x.operand);
+      if (ts.isIdentifier(x)) return FLAGS.has(x.text);
+      if (ts.isPropertyAccessExpression(x)) return FLAGS.has(x.name.text);
+      return false;
+    };
+    const dir = "src/pages/demo";
+    const walk = (d: string): string[] =>
+      readdirSync(d, { withFileTypes: true }).flatMap((e) =>
+        e.isDirectory() ? (e.name === "generated" ? [] : walk(join(d, e.name))) : /\.tsx?$/.test(e.name) ? [join(d, e.name)] : [],
+      );
+    const files = walk(dir);
+    const found: string[] = [];
+    for (const file of files) {
+      const sf = ts.createSourceFile(file, readFileSync(file, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const visit = (n: ts.Node): void => {
+        if (ts.isConditionalExpression(n) && isFlag(n.condition)) {
+          let owner = "(expression)";
+          for (let up: ts.Node | undefined = n.parent; up; up = up.parent) {
+            if ((ts.isPropertyAssignment(up) || ts.isVariableDeclaration(up)) && up.name) { owner = up.name.getText(sf); break; }
+          }
+          found.push(`${file.split("/").pop()} ${owner}:${sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1}`);
+        }
+        ts.forEachChild(n, visit);
+      };
+      visit(sf);
+    }
+    const keyOf = (f: string) => f.replace(/:\d+$/, "");
+    const unexplained = found.filter((f) => !(keyOf(f) in ALLOWED));
+    const stale = Object.keys(ALLOWED).filter((k) => !found.some((f) => keyOf(f) === k));
+    const count = found.length;
+    console.log(
+      `DEMO_THEME_TERNARIES files=${files.length} count=${count} recorded=${RECORDED} allowed=${count - unexplained.length} ` +
+        `unexplained=${unexplained.length} stale=${stale.length} ` +
+        `${count > RECORDED ? "ROSE" : count < RECORDED ? "FELL — lower the record" : "held"}`,
+    );
+    for (const f of unexplained) console.log(`  UNEXPLAINED ${f}`);
+    expect(files.length, "no demo page was read").toBeGreaterThan(30);
+    expect(stale, "an allowed ternary that no longer exists excuses nothing; delete it").toEqual([]);
+    expect(unexplained, "a demo page themes with a ternary on the theme flag; use a token that switches per theme").toEqual([]);
+    expect(count, "a theme-flag ternary was added").toBeLessThanOrEqual(RECORDED);
+    expect(count, "the count fell: lower RECORDED to it, so the gain is kept").toBe(RECORDED);
+  });
+
   it("reads the snippets and the schemas", () => {
     // Either side coming back empty would pass every assertion below for the
     // wrong reason.
@@ -566,8 +636,12 @@ describe("snippet shape contract", () => {
    * fall fails until the record is lowered, so the gain cannot be spent later.
    */
   it("carries no more dark: colour overrides than recorded", () => {
-    /** 2026-10-09, T1: 8,704 -> 3,329. T3: 3,329 -> 1. Lower it when the count falls. */
-    const RECORDED = 1;
+    /**
+     * 2026-10-09, T1: 8,704 -> 3,329. T3: 3,329 -> 1. Lower it when the count falls.
+     * 2026-10-10, T4: 1 -> 0. Tooltip's warning tooltip, the last one, takes
+     * --cl-on-warning, minted for it.
+     */
+    const RECORDED = 0;
     const COLOUR = /^(text|bg|border(-[trblxyse])?|ring|ring-offset|fill|stroke|from|via|to|shadow|outline|divide|placeholder|decoration)-(.+)$/;
     const NOT_A_COLOUR = /^(\d|\[|px$|xs$|sm$|md$|lg$|xl$|\dxl$|left$|center$|right$|justify$|start$|end$|none$|inner$|solid$|dashed$|dotted$|double$|hidden$|collapse$|separate$|inset$|offset$|x$|y$|t$|r$|b$|l$|s$|e$|wrap$|nowrap$|balance$|pretty$|ellipsis$|clip$|base$|linear-|radial|conic|gradient-|wavy$|line$|through$|box$|opacity-|width-)/;
     const isDarkColour = (token: string) => {
@@ -617,18 +691,16 @@ describe("snippet shape contract", () => {
      * 2026-10-09, D5: 101 -> 100. Input "Custom Themes" lost its per-row `input`
      * override, a second copy of the allowed `dark:[color-scheme:dark]` that the
      * spread `c.input` still carries.
+     * 2026-10-10, T4: 100 -> 99. Tooltip's warning tooltip lost its exempt
+     * `dark:text-cl-on-accent` to --cl-on-warning; the 99 left are all the
+     * allowed `dark:[color-scheme:dark]`.
      */
-    const RECORDED = 100;
+    const RECORDED = 99;
     const ALLOWED: Record<string, string> = {
       "dark:[color-scheme:dark]": "a native control paints its own parts (caret, autofill, spin buttons, pickers) in the page's scheme; no token reaches them",
     };
-    const EXEMPT: Array<{ key: string; variant: string; reason: string }> = [
-      {
-        key: "Tooltip/Custom Styling",
-        variant: "dark:text-cl-on-accent",
-        reason: "the warning tooltip's fill is light in both themes, so its text must be dark in both; no token is dark in both (--cl-text turns light), so it waits on an --cl-on-warning token",
-      },
-    ];
+    /** Empty since T4: Tooltip's warning tooltip was the one entry; --cl-on-warning replaced it. */
+    const EXEMPT: Array<{ key: string; variant: string; reason: string }> = [];
     let count = 0;
     const found: string[] = [];
     const allowedSeen = new Set<string>();

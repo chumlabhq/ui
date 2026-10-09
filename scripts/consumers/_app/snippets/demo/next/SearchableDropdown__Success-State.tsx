@@ -37,7 +37,7 @@ export default function SearchableDropdownExample() {
              searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
              label: "block text-sm font-medium mb-1 text-cl-text-secondary"
            }),
-          trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors ${successValue ? ("border-cl-success bg-white text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-success") : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent"}`
+          trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors ${successValue ? ("border-cl-success bg-cl-bg-input text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-success") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent"}`
                        }
         }
       />

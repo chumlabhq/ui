@@ -23,7 +23,7 @@ interface ExtendedUser extends User {
   lastLogin: string;
 }
 
-function getTableClasses(_dark: boolean) {
+function getTableClasses() {
   return {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
@@ -59,10 +59,8 @@ function getTableClasses(_dark: boolean) {
 
 const PerformanceBadge = ({
   performance,
-  dark = false,
 }: {
   performance: ExtendedUser["performance"];
-  dark?: boolean;
 }) => {
   const styles = {
         excellent: "bg-cl-success/15 text-cl-text",
@@ -82,10 +80,8 @@ const PerformanceBadge = ({
 
 const StatusBadge = ({
   status,
-  dark = false,
 }: {
   status: User["status"];
-  dark?: boolean;
 }) => {
   const styles = {
         active: "bg-cl-success/15 text-cl-text",
@@ -102,7 +98,7 @@ const StatusBadge = ({
   );
 };
 
-const s = getTableClasses(false);
+const s = getTableClasses();
 
 const extendedSampleData: ExtendedUser[] = [
   {
@@ -325,7 +321,7 @@ export default function TableExample() {
         accessorKey: "status",
         header: () => <span>Status</span>,
         cell: ({ row }) => (
-          <StatusBadge status={row.getValue("status")} dark={false} />
+          <StatusBadge status={row.getValue("status")} />
         ),
       },
       {
@@ -380,7 +376,6 @@ export default function TableExample() {
         cell: ({ row }) => (
           <PerformanceBadge
             performance={row.getValue("performance")}
-            dark={false}
           />
         ),
       },
@@ -402,7 +397,7 @@ export default function TableExample() {
         cell: ({ row }) => row.getValue("lastLogin"),
       },
     ],
-    [false],
+    [],
   );
   return (
     <Table

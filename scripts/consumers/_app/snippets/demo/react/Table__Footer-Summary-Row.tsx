@@ -23,7 +23,7 @@ interface ExtendedUser extends User {
   lastLogin: string;
 }
 
-function getTableClasses(_dark: boolean) {
+function getTableClasses() {
   return {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
@@ -57,7 +57,7 @@ function getTableClasses(_dark: boolean) {
   };
 }
 
-const s = getTableClasses(false);
+const s = getTableClasses();
 
 const extendedSampleData: ExtendedUser[] = [
   {

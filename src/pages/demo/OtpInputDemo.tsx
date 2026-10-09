@@ -17,7 +17,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   otp: {
     group: "flex items-center gap-2",
     input: `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-cl-bg-panel border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed data-[error]:border-cl-error data-[valid]:border-cl-success`,
@@ -35,7 +35,7 @@ const getClasses = (_dark: boolean) => ({
 
 const OtpInputDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const otpRef = useRef<HTMLInputElement>(null);
 
   const [showAutoFocus, setShowAutoFocus] = useState(false);
@@ -412,12 +412,8 @@ const OtpInputDemo = () => {
                 {...inputProps}
                 className={`w-14 h-14 text-center text-xl font-bold rounded-cl-lg border-2 transition-all focus:outline-none ${
                   filled
-                    ? dark
-                      ? "border-cl-border-input-focus bg-cl-accent/10 text-cl-text"
-                      : "border-cl-border-input-focus bg-cl-accent/10 text-cl-text"
-                    : dark
-                      ? "border-cl-border bg-cl-bg-elevated text-cl-text"
-                      : "border-cl-border-input bg-white text-cl-text"
+                    ? "border-cl-border-input-focus bg-cl-accent/10 text-cl-text"
+                    : "border-cl-border-input bg-cl-bg-input text-cl-text"
                 } focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20`}
               />
             )}

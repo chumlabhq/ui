@@ -18,7 +18,7 @@ import {
 import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   label: `text-xs font-medium text-cl-text-tertiary`,
@@ -94,7 +94,7 @@ const ToastDemoContent = ({
   setPosition: (pos: ToastPosition) => void;
 }) => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const toast = useToast();
   const toastIdRef = useRef<string | null>(null);
   const updateToastId = useRef<string | null>(null);
@@ -957,7 +957,7 @@ const ToastDemoContent = ({
               className={`text-xs text-cl-text-secondary`}
             >
               Current position:{" "}
-              <strong className={dark ? "text-cl-text" : "text-cl-text"}>
+              <strong className={"text-cl-text"}>
                 {position}
               </strong>
             </p>

@@ -49,7 +49,7 @@ const EmptyHeartIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const getClasses = (_dark: boolean) => ({
+const getClasses = () => ({
   checkbox: {
     root: "",
     label: `text-sm font-medium text-cl-text`,
@@ -63,7 +63,7 @@ const getClasses = (_dark: boolean) => ({
 
 const CheckboxDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const checkboxRef = useRef<HTMLInputElement>(null);
 
   const [basic, setBasic] = useState(false);

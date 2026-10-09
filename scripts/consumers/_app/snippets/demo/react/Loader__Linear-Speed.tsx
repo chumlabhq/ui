@@ -13,7 +13,11 @@ export default function LoaderExample() {
             <span className="text-xs font-medium text-cl-text-tertiary">
               {label}
             </span>
-            <LinearLoader speed={speed} className="text-cl-accent" trackColor={undefined} />
+            <LinearLoader
+              trackColor="var(--cl-bg-track)"
+              speed={speed}
+              className="text-cl-accent"
+            />
           </div>
         ))
       }

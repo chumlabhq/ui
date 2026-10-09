@@ -17,11 +17,11 @@ import {
   SetupNote,
 } from "./components/index.js";
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
   btnPrimary:
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90 cursor-pointer",
-  text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
+  text: "text-cl-text-secondary",
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
   label: `text-xs font-medium text-cl-text-tertiary`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
@@ -46,10 +46,10 @@ const getClasses = (dark: boolean) => ({
     clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
     clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-bg-hover`,
     clockHand: "absolute inset-0",
-    clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
+    clockHandLine: "stroke-cl-accent",
     clockHandDot: `w-3 h-3 rounded-full bg-cl-accent`,
     clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary data-[disabled]:cursor-not-allowed",
-    clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
+    clockCenter: "fill-cl-accent",
     footer: "flex items-center justify-end gap-2 mt-4",
     cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover`,
     confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
@@ -111,7 +111,7 @@ const getMinimalTheme = (): TimePickerClasses => ({
   empty: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
 });
 
-const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
+const getEmeraldClockTheme = (): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 text-cl-text`,
   control: "relative",
  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-success bg-cl-bg-panel hover:border-cl-success focus-within:ring-2 focus-within:ring-cl-success`,
@@ -124,10 +124,10 @@ const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
   clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
   clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-success-bg`,
   clockHand: "absolute inset-0",
-  clockHandLine: dark ? "stroke-cl-success" : "stroke-cl-success",
+  clockHandLine: "stroke-cl-success",
   clockHandDot: `w-3 h-3 rounded-full bg-cl-success/30`,
   clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
-  clockCenter: dark ? "fill-cl-success" : "fill-cl-success",
+  clockCenter: "fill-cl-success",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success text-white hover:bg-cl-success",
@@ -135,7 +135,7 @@ const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
 
-const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
+const getRoseClockTheme = (): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 text-cl-text`,
   control: "relative",
  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-border-input-focus bg-cl-bg-panel hover:border-cl-border-input-focus focus-within:ring-2 focus-within:ring-cl-accent`,
@@ -148,10 +148,10 @@ const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
   clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
   clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-accent-surface`,
   clockHand: "absolute inset-0",
-  clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
+  clockHandLine: "stroke-cl-accent",
   clockHandDot: `w-3 h-3 rounded-full bg-cl-accent`,
   clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
-  clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
+  clockCenter: "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
@@ -159,7 +159,7 @@ const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
 
-const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
+const getVioletClockTheme = (): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 text-cl-text`,
   control: "relative",
  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-border-input-focus bg-cl-bg-panel hover:border-cl-border-input-focus focus-within:ring-2 focus-within:ring-cl-accent`,
@@ -172,10 +172,10 @@ const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
   clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
   clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-accent-surface`,
   clockHand: "absolute inset-0",
-  clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
+  clockHandLine: "stroke-cl-accent",
   clockHandDot: `w-3 h-3 rounded-full bg-cl-accent`,
   clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
-  clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
+  clockCenter: "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
@@ -197,7 +197,7 @@ const StarCheckIcon = ({ className }: { className?: string }) => (
 
 const TimePickerDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
 
   const [basic24, setBasic24] = useState<string | null>(null);
   const [twelve, setTwelve] = useState<string | null>(null);
@@ -887,7 +887,7 @@ const TimePickerDemo = () => {
                 onValueChange={(v) => setClockEmerald(v)}
                 variant="clock"
                 format="12h"
-                classes={getEmeraldClockTheme(dark)}
+                classes={getEmeraldClockTheme()}
               />
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {clockEmerald ?? "none"}</span>
             </div>
@@ -898,7 +898,7 @@ const TimePickerDemo = () => {
                 onValueChange={(v) => setClockRose(v)}
                 variant="clock"
                 format="12h"
-                classes={getRoseClockTheme(dark)}
+                classes={getRoseClockTheme()}
               />
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {clockRose ?? "none"}</span>
             </div>
@@ -909,7 +909,7 @@ const TimePickerDemo = () => {
                 onValueChange={(v) => setClockViolet(v)}
                 variant="clock"
                 format="12h"
-                classes={getVioletClockTheme(dark)}
+                classes={getVioletClockTheme()}
               />
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {clockViolet ?? "none"}</span>
             </div>
@@ -1330,7 +1330,7 @@ const TimePickerDemo = () => {
               renderOptionContent={(time, isSelected) => (
                 <span className="flex items-center gap-2">
                   <span
-                    className={`w-2 h-2 rounded-full ${isSelected ? "bg-cl-accent" : dark ? "bg-cl-text/10" : "bg-cl-bg-hover"}`}
+                    className={`w-2 h-2 rounded-full ${isSelected ? "bg-cl-accent" : "bg-cl-bg-hover"}`}
                   />
                   <span className={isSelected ? "font-semibold" : ""}>{time}</span>
                   {(() => {

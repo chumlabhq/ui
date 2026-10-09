@@ -15,7 +15,7 @@ interface User {
   joinDate: string;
 }
 
-function getTableClasses(_dark: boolean) {
+function getTableClasses() {
   return {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
@@ -51,10 +51,8 @@ function getTableClasses(_dark: boolean) {
 
 const StatusBadge = ({
   status,
-  dark = false,
 }: {
   status: User["status"];
-  dark?: boolean;
 }) => {
   const styles = {
         active: "bg-cl-success/15 text-cl-text",
@@ -71,7 +69,7 @@ const StatusBadge = ({
   );
 };
 
-const s = getTableClasses(false);
+const s = getTableClasses();
 
 const sampleData: User[] = [
   {
@@ -172,7 +170,7 @@ export default function TableExample() {
         accessorKey: "status",
         header: () => <span>Status</span>,
         cell: ({ row }) => (
-          <StatusBadge status={row.getValue("status")} dark={false} />
+          <StatusBadge status={row.getValue("status")} />
         ),
       },
       {
@@ -193,7 +191,7 @@ export default function TableExample() {
         },
       },
     ],
-    [false],
+    [],
   );
   const [multiSelectedIds, setMultiSelectedIds] = useState<string[]>([]);
   const [multiDeleteAction, setMultiDeleteAction] = useState("not fired yet");
@@ -232,7 +230,7 @@ export default function TableExample() {
           selectedRowIds={multiSelectedIds}
           onSelectionChange={setMultiSelectedIds}
           getRowId={(row) => row.id}
-          checkboxColor="#4f46e5"
+          checkboxColor="var(--cl-accent)"
           classes={s}
         />
         <div

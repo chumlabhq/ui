@@ -93,7 +93,7 @@ export default function AvatarExample() {
       <Avatar
         name="Custom"
         className="bg-cl-bg-hover"
-        textStyle={{ color: "#6366f1", fontWeight: 600 }}
+        textStyle={{ color: "var(--cl-accent)", fontWeight: 600 }}
       />
     </>
   );

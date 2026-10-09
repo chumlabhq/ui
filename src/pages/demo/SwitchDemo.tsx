@@ -498,7 +498,7 @@ const SwitchDemo = () => {
             aria-label="Toggle feature status"
             renderLabel={({ checked }) => (
               <span
-                className={`font-bold ${checked ? (dark ? "text-cl-success" : "text-cl-success") : dark ? "text-cl-error" : "text-cl-error"}`}
+                className={`font-bold ${checked ? ("text-cl-success") : "text-cl-error"}`}
               >
                 {checked ? "Active" : "Inactive"}
               </span>
@@ -550,7 +550,7 @@ const SwitchDemo = () => {
                 Event Log:
               </p>
               {focusLog.length === 0 ? (
-                <span className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}>
+                <span className={"text-cl-text-tertiary"}>
                   Focus or blur the switch to see events...
                 </span>
               ) : (

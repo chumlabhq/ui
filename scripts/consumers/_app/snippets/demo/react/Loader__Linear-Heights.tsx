@@ -10,7 +10,11 @@ export default function LoaderExample() {
               {h}
               px
             </span>
-            <LinearLoader height={h} className="text-cl-accent" trackColor={undefined} />
+            <LinearLoader
+              trackColor="var(--cl-bg-track)"
+              height={h}
+              className="text-cl-accent"
+            />
           </div>
         ))
       }

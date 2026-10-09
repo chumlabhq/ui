@@ -41,8 +41,8 @@ export default function DropdownExample() {
               type="button"
               className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${
                 isOpen
-                  ? "border-cl-border-input-focus bg-white text-cl-text shadow-lg shadow-accent/20"
-                  : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input"
+                  ? "border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20"
+                  : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"
               } cursor-pointer`}
             >
               <span
@@ -57,7 +57,7 @@ export default function DropdownExample() {
                 className={`text-xs px-2 py-0.5 rounded-full ${
                   isOpen
                     ? "bg-cl-accent/10 text-cl-text"
-                    : "bg-cl-bg-hover text-cl-text-tertiary"
+                    : "bg-cl-bg-hover text-cl-text-secondary"
                 }`}
               >
                 {isOpen ? "Open" : "Closed"}

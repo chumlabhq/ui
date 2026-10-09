@@ -3,7 +3,7 @@ import { Tooltip } from "@chumlab/ui/tooltip";
 
 const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
 
-const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-cl-text dark:text-cl-on-accent font-medium";
+const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-cl-on-warning font-medium";
 
 const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-cl-on-accent font-medium";
 

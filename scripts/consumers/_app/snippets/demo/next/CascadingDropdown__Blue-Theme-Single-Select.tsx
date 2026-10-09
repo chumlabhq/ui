@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CascadingDropdown, CascadingDropdownClasses, CascadingOption, CascadingValue } from "@chumlab/ui/cascading-dropdown";
 
-const getBlueClasses = (_dark: boolean): CascadingDropdownClasses => ({
+const getBlueClasses = (): CascadingDropdownClasses => ({
   trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent border-cl-accent bg-cl-accent/10 text-cl-text hover:bg-cl-accent/15",
   content: "rounded-cl-md shadow-cl-md bg-cl-bg-elevated border border-cl-accent",
   item: "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-accent/10 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md",
@@ -61,7 +61,7 @@ export default function CascadingDropdownExample() {
         value={purpleThemeValue}
         onValueChange={(val) => setPurpleThemeValue(val)}
         placeholder="Select category..."
-        classes={getPurpleClasses(false)}
+        classes={getPurpleClasses()}
       />
     </div>
   );

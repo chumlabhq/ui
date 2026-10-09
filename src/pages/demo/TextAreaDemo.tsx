@@ -122,7 +122,7 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const getClasses = (dark: boolean) => ({
+const getClasses = () => ({
   textarea: {
     control: `rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus`,
     input: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-tertiary`,
@@ -150,10 +150,8 @@ const getClasses = (dark: boolean) => ({
   disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary`,
 
   container: "flex flex-col",
-  icon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
-  iconHover: dark
-    ? "text-cl-text-tertiary hover:text-cl-text-secondary"
-    : "text-cl-text-tertiary hover:text-cl-text-secondary",
+  icon: "text-cl-text-tertiary",
+  iconHover: "text-cl-text-tertiary hover:text-cl-text-secondary",
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
@@ -170,7 +168,7 @@ const getClasses = (dark: boolean) => ({
 
 const TextAreaDemo = () => {
   const { isDarkMode: dark } = useTheme();
-  const c = getClasses(dark);
+  const c = getClasses();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [message, setMessage] = useState("");
@@ -671,7 +669,7 @@ const TextAreaDemo = () => {
                 disabled
                 startIcon={
                   <LockIcon
-                    className={dark ? "text-cl-text-secondary" : "text-cl-text-secondary"}
+                    className={"text-cl-text-secondary"}
                   />
                 }
                 classes={{

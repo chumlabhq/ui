@@ -178,6 +178,9 @@ const ACCENT_PAIRS: Array<[string, string]> = [
   // pair is measured as written.
   ["--cl-error", "--cl-error-bg"],
   ["--cl-on-error", "--cl-error"],
+  // Minted in T4 for the warning tooltip: the amber fill is light in both
+  // themes, so its text is dark in both.
+  ["--cl-on-warning", "--cl-warning"],
 ];
 
 const ACCENT_BASES = ["--cl-bg", "--cl-bg-panel"];

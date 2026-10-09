@@ -191,7 +191,11 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
  * library palette accounted for 699 of them; these selectors are the tail,
  * and they are all real by the same rule the fixture sweep applies. They are
  * listed so the number cannot grow while they are worked through, and so that
- * "36 remaining" is a set someone can read rather than a total.
+ * "32 remaining" is a set someone can read rather than a total. T4 retired two
+ * keys and four findings: Avatar's fallback initials took the accent token in
+ * place of a hard-coded indigo (its dark key; the light key still covers the
+ * page's red-on-red palette spans), and Table's footer band, a 50% text tint in
+ * light only, became the subtle surface the dark theme already had.
  *
  * Roughly: one is a `::placeholder` (the fixture gate counts placeholders and
  * fails them too, and every fixture placeholder passes, so this is a demo input
@@ -202,7 +206,6 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
  * bulk fixes above.
  */
 const RECORDED: ReadonlySet<string> = new Set([
-  "avatar dark span",
   "avatar light span",
   "breadcrumb light span",
   "loader light div.flex.items-center",
@@ -211,7 +214,6 @@ const RECORDED: ReadonlySet<string> = new Set([
   "slider dark div.flex.items-center",
   "stepper light span.text-sm.font-semibold",
   "tab-panel light div.text-xs.font-medium",
-  "table light td.px-4.py-2",
   "time-picker light input.flex-1.min-w-0::placeholder",
   // Same pair, renamed: white on the warning amber at 3.19:1. It was
   // `button.px-3.py-1.5` until the demo's triggers became `<Button>`, which puts

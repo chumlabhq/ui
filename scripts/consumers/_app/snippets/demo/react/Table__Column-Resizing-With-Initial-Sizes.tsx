@@ -12,7 +12,7 @@ interface User {
   joinDate: string;
 }
 
-function getTableClasses(_dark: boolean) {
+function getTableClasses() {
   return {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
@@ -46,7 +46,7 @@ function getTableClasses(_dark: boolean) {
   };
 }
 
-const s = getTableClasses(false);
+const s = getTableClasses();
 
 const sampleData: User[] = [
   {
@@ -125,10 +125,8 @@ const sampleData: User[] = [
 
 const StatusBadge = ({
   status,
-  dark = false,
 }: {
   status: User["status"];
-  dark?: boolean;
 }) => {
   const styles = {
         active: "bg-cl-success/15 text-cl-text",
@@ -182,7 +180,7 @@ export default function TableExample() {
                   size: 120,
                   enableResizing: false,
                   cell: ({ row }) => (
-                    <StatusBadge status={row.getValue("status")} dark={false} />
+                    <StatusBadge status={row.getValue("status")} />
                   )
                 },
                 {
@@ -191,8 +189,7 @@ export default function TableExample() {
                   size: 150
                 }
               ],
-              // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
-              [false],
+              [],
             );
 
             return (
