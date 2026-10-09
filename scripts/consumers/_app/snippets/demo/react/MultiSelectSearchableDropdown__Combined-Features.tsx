@@ -17,10 +17,10 @@ const countryOptions: MultiSelectOption[] = [
 ];
 
 export default function MultiSelectSearchableDropdownExample() {
-  const [combinedValue, setCombinedValue] = useState<string[]>([]);
   const [combinedFocusCount, setCombinedFocusCount] = useState(0);
   const [combinedBlurCount, setCombinedBlurCount] = useState(0);
   const [combinedKey, setCombinedKey] = useState("not fired yet");
+  const [combinedValue, setCombinedValue] = useState<string[]>([]);
   return (
     <>
       <div className="w-full sm:max-w-80">

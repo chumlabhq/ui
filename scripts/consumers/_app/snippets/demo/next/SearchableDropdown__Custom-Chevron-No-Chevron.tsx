@@ -41,10 +41,10 @@ const fruitOptions: SearchableDropdownOption[] = [
 ];
 
 export default function SearchableDropdownExample() {
+  const [noChevronValue, setNoChevronValue] = useState<string | null>(null);
   const [customChevronValue, setCustomChevronValue] = useState<string | null>(
     null,
   );
-  const [noChevronValue, setNoChevronValue] = useState<string | null>(null);
   return (
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">

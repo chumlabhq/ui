@@ -2,8 +2,8 @@ import { useState } from "react";
 import { TimePicker } from "@chumlab/ui/time-picker";
 
 export default function TimePickerExample() {
-  const [zIndexVal, setZIndexVal] = useState<string | null>(null);
   const [keepMountedVal, setKeepMountedVal] = useState<string | null>(null);
+  const [zIndexVal, setZIndexVal] = useState<string | null>(null);
   return (
     <div className="w-full space-y-6">
       <div>

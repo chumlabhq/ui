@@ -5,8 +5,8 @@ import { Button } from "@chumlab/ui/button";
 import { TimePicker } from "@chumlab/ui/time-picker";
 
 export default function TimePickerExample() {
-  const [controlledOpen, setControlledOpen] = useState(false);
   const [controlled, setControlled] = useState<string | null>(null);
+  const [controlledOpen, setControlledOpen] = useState(false);
   return (
     <div className="flex items-center gap-4">
       <Button

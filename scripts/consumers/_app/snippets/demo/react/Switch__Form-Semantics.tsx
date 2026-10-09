@@ -3,8 +3,8 @@ import { Button } from "@chumlab/ui/button";
 import { Switch } from "@chumlab/ui/switch";
 
 export default function SwitchExample() {
-  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [formSwitch, setFormSwitch] = useState(false);
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   return (
     <form
       className="space-y-4"

@@ -5,9 +5,9 @@ import { InternationalPhoneInput, PhoneNumberData } from "@chumlab/ui/internatio
 
 export default function InternationalPhoneInputExample() {
   const [checkoutSubmit, setCheckoutSubmit] = useState("not fired yet");
+  const [checkoutPhone, setCheckoutPhone] = useState<PhoneNumberData | undefined>();
   const [checkoutName, setCheckoutName] = useState("");
   const [checkoutEmail, setCheckoutEmail] = useState("");
-  const [checkoutPhone, setCheckoutPhone] = useState<PhoneNumberData | undefined>();
   return (
     <>
       <form

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Switch } from "@chumlab/ui/switch";
 
 export default function SwitchExample() {
-  const [sizeSwitchSmall, setSizeSwitchSmall] = useState(false);
   const [sizeSwitch, setSizeSwitch] = useState(false);
+  const [sizeSwitchSmall, setSizeSwitchSmall] = useState(false);
   const [sizeSwitchLarge, setSizeSwitchLarge] = useState(false);
   return (
     <div className="space-y-4">

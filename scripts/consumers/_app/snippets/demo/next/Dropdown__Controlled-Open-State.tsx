@@ -15,8 +15,8 @@ const fruitOptions: DropdownOption[] = [
 ];
 
 export default function DropdownExample() {
-  const [controlledValue, setControlledValue] = useState<string | null>(null);
   const [controlledOpen, setControlledOpen] = useState(false);
+  const [controlledValue, setControlledValue] = useState<string | null>(null);
   return (
     <div className="w-full flex flex-col sm:flex-row sm:items-end gap-4">
       <div className="w-full sm:max-w-64">

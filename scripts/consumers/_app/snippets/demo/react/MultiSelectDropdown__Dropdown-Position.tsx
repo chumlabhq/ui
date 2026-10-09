@@ -13,8 +13,8 @@ const staticOptions: MultiSelectOption[] = [
 ];
 
 export default function MultiSelectDropdownExample() {
-  const [posBotValue, setPosBotValue] = useState<string[]>([]);
   const [posTopValue, setPosTopValue] = useState<string[]>([]);
+  const [posBotValue, setPosBotValue] = useState<string[]>([]);
   const [forceBotValue, setForceBotValue] = useState<string[]>([]);
   const [forceTopValue, setForceTopValue] = useState<string[]>([]);
   const [forceLockValue, setForceLockValue] = useState<string[]>([]);

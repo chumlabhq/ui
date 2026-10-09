@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Slider, SliderValue } from "@chumlab/ui/slider";
 
 export default function SliderExample() {
-  const [price2, setPrice2] = useState<SliderValue>([200, 800]);
   const [price, setPrice] = useState<SliderValue>([200, 800]);
+  const [price2, setPrice2] = useState<SliderValue>([200, 800]);
   return (
     <div className="w-full sm:max-w-md space-y-4">
       <Slider

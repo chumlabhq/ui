@@ -39,8 +39,8 @@ const ExternalLinkIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function ButtonExample() {
-  const [polymorphicClick, setPolymorphicClick] = useState("not fired yet");
   const [spanActivations, setSpanActivations] = useState(0);
+  const [polymorphicClick, setPolymorphicClick] = useState("not fired yet");
   return (
     <>
       <Button

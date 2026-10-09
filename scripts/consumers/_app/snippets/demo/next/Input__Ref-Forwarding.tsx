@@ -5,8 +5,8 @@ import { Button } from "@chumlab/ui/button";
 import { Input } from "@chumlab/ui/input";
 
 export default function InputExample() {
-  const [refReadValue, setRefReadValue] = useState("not fired yet");
   const inputRef = useRef<HTMLInputElement>(null);
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
   return (
     <div className="space-y-4 w-full sm:max-w-sm">
       <Input

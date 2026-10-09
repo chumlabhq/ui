@@ -3,8 +3,8 @@ import { Button } from "@chumlab/ui/button";
 import { TextArea } from "@chumlab/ui/textarea";
 
 export default function TextAreaExample() {
-  const [refReadValue, setRefReadValue] = useState("not fired yet");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [refReadValue, setRefReadValue] = useState("not fired yet");
   return (
     <div className="space-y-4 w-full max-w-md">
       <TextArea

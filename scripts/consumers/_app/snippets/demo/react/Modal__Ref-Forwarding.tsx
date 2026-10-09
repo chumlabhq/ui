@@ -3,9 +3,9 @@ import { Button } from "@chumlab/ui/button";
 import { Modal } from "@chumlab/ui/modal";
 
 export default function ModalExample() {
+  const modalRef = useRef<HTMLDivElement>(null);
   const [refForwardOpen, setRefForwardOpen] = useState(false);
   const [refFocusReadout, setRefFocusReadout] = useState("nothing yet");
-  const modalRef = useRef<HTMLDivElement>(null);
   return (
     <>
       <div className="flex flex-wrap gap-2">

@@ -3,8 +3,8 @@ import { Button } from "@chumlab/ui/button";
 import { InternationalPhoneInput, PhoneNumberData } from "@chumlab/ui/international-phone-input";
 
 export default function InternationalPhoneInputExample() {
-  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [formValue, setFormValue] = useState<PhoneNumberData | undefined>();
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   return (
     <>
       <form

@@ -3,9 +3,9 @@ import { Button } from "@chumlab/ui/button";
 import { ToastProvider, useToast } from "@chumlab/ui/toast";
 
 function ToastTrigger() {
+  const toast = useToast();
   const [infoDismissCount, setInfoDismissCount] = useState(0);
   const [successDismissCount, setSuccessDismissCount] = useState(0);
-  const toast = useToast();
   return (
     <>
       <Button

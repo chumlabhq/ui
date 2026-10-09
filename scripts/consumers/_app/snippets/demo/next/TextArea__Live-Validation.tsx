@@ -44,8 +44,8 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function TextAreaExample() {
-  const [bio2, setBio2] = useState("");
   const [bio, setBio] = useState("");
+  const [bio2, setBio2] = useState("");
   const bioOk = bio.length >= 10;
   const bioBad = bio.length > 0 && bio.length < 10;
   return (

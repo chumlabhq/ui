@@ -80,14 +80,14 @@ const COUNTRIES: Country[] = [
 ];
 
 export default function CascadingDropdownExample() {
-  const [loadOnOpenDropdownClicked, setLoadOnOpenDropdownClicked] =
-    useState(false);
+  const [loadOnOpenValue, setLoadOnOpenValue] = useState<CascadingValue>({});
   const [loadOnOpenOptions, setLoadOnOpenOptions] = useState<CascadingOption[]>(
     [],
   );
-  const [loadOnOpenValue, setLoadOnOpenValue] = useState<CascadingValue>({});
   const [isLoadOnOpenLoading, setIsLoadOnOpenLoading] = useState(false);
   const [hasLoadOnOpenLoaded, setHasLoadOnOpenLoaded] = useState(false);
+  const [loadOnOpenDropdownClicked, setLoadOnOpenDropdownClicked] =
+    useState(false);
   const resetLoadOnOpenDemo = useCallback(() => {
     setHasLoadOnOpenLoaded(false);
     setLoadOnOpenOptions([]);

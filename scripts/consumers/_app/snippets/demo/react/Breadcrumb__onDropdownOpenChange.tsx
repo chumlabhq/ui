@@ -11,8 +11,8 @@ const longItems: BreadcrumbItem[] = [
 ];
 
 export default function BreadcrumbExample() {
-  const [dropdownState, setDropdownState] = useState<string | null>(null);
   const [clickedItem, setClickedItem] = useState<string | null>(null);
+  const [dropdownState, setDropdownState] = useState<string | null>(null);
   const handleItemClick = useCallback((item: BreadcrumbItem) => {
     setClickedItem(item.label);
     setTimeout(() => setClickedItem(null), 2000);

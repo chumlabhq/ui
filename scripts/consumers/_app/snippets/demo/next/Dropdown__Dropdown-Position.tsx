@@ -14,8 +14,8 @@ const fruitOptions: DropdownOption[] = [
 ];
 
 export default function DropdownExample() {
-  const [posBotValue, setPosBotValue] = useState<string | null>(null);
   const [posTopValue, setPosTopValue] = useState<string | null>(null);
+  const [posBotValue, setPosBotValue] = useState<string | null>(null);
   const [forceBotValue, setForceBotValue] = useState<string | null>(null);
   const [forceTopValue, setForceTopValue] = useState<string | null>(null);
   const [forceLockValue, setForceLockValue] = useState<string | null>(null);

@@ -1057,22 +1057,32 @@ function sectionsOf(sf) {
             ? n.tagName.getText(sf)
             : null;
         if (tag && libraryTags.has(tag)) {
-          // Not one rendered inside a `.map()`: lifting it out of the callback
-          // leaves its loop parameter undeclared, which is how `Drawer`'s
-          // Directions section stopped compiling. The repetition is the point
-          // there, and a copy-paste example is one example.
-          let inMap = false;
-          for (let up = n.parent; up; up = up.parent) {
+          // One rendered inside a `.map()` is carried WITH the map: the whole
+          // `{….map(…)}` expression around it, so the loop parameter stays
+          // bound inside its own callback. Lifting the element out alone left
+          // that parameter undeclared; skipping it instead (what this did
+          // until SN4) shipped Drawer's Directions as four buttons that opened
+          // nothing — the component the page documents, missing from its own
+          // example. The outermost `.map()` is the one carried, so a nested
+          // map keeps its outer parameter too.
+          let mapCall = null;
+          for (let up = n.parent; up && up !== node; up = up.parent) {
             if (
               (ts.isArrowFunction(up) || ts.isFunctionExpression(up)) &&
               up.parent &&
               ts.isCallExpression(up.parent) &&
               ts.isPropertyAccessExpression(up.parent.expression) &&
               up.parent.expression.name.getText(sf) === "map"
-            ) { inMap = true; break; }
+            ) mapCall = up.parent;
           }
-          if (!inMap) {
+          if (!mapCall) {
             wrappers.push({ node: n, children: false });
+            return;
+          }
+          let carried = mapCall;
+          while (carried && carried !== node && !ts.isJsxExpression(carried)) carried = carried.parent;
+          if (carried && ts.isJsxExpression(carried)) {
+            if (!wrappers.some((w) => w.node === carried)) wrappers.push({ node: carried, children: false });
             return;
           }
         }
@@ -1209,6 +1219,7 @@ function build(section, sf, symbols, classes, componentName) {
   const importsUsed = new Map();     // spec → Set(names)
   const inlined = [];                // declaration text, in dependency order
   const hoistedState = [];           // useState lines
+  const hoistedStateAt = [];         // where the page declares each, for ordering
   const hoistedHooks = [];           // in-component declarations that call a hook
   const seen = new Set();
   const queue = [...needed];
@@ -1232,6 +1243,7 @@ function build(section, sf, symbols, classes, componentName) {
       const st = stateOf.get(id);
       if (!hoistedState.includes(st.text)) {
         hoistedState.push(st.text);
+        hoistedStateAt.push(st.node.getStart(sf));
         // The annotation counts too: `useState<CascadingValue[]>([])` names a
         // library type the snippet has to import.
         const stateTypes = new Set();
@@ -1435,9 +1447,17 @@ function build(section, sf, symbols, classes, componentName) {
   const inner = single
     ? printBody(rawBody, 2)
     : `${pad(2)}<>\n${printBody(rawBody, 3)}\n${pad(2)}</>`;
+  // State and hook-calling declarations together, in the page's order. Two
+  // blocks (all state first) broke Table's four Infinite Scroll snippets: the
+  // page declares `allInfiniteData = useMemo(…)` above the `useState` whose
+  // initializer reads it, and state-first put the read before the declaration,
+  // a ReferenceError on the first render.
+  const declared = [
+    ...hoistedState.map((h, i) => ({ line: `  const ${h};`, at: hoistedStateAt[i] })),
+    ...hoistedHooks.map((h) => ({ line: `  ${h.text.startsWith("const ") ? h.text : `const ${h.text}`}`, at: h.at })),
+  ].sort((a, b) => a.at - b.at);
   const bodyLines = [
-    ...hoistedState.map((h) => `  const ${h};`),
-    ...hoistedHooks.map((h) => `  ${h.text.startsWith("const ") ? h.text : `const ${h.text}`}`),
+    ...declared.map((d) => d.line),
     `  return (`,
     ...inner.split("\n"),
     `  );`,

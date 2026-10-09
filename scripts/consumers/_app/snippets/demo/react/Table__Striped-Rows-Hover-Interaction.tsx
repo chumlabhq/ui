@@ -146,7 +146,6 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
-  const [stripedRowClick, setStripedRowClick] = useState("not fired yet");
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -193,6 +192,7 @@ export default function TableExample() {
     ],
     [false],
   );
+  const [stripedRowClick, setStripedRowClick] = useState("not fired yet");
   return (
     <>
       <Table

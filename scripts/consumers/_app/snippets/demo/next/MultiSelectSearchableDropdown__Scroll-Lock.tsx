@@ -15,8 +15,8 @@ const staticOptions: MultiSelectOption[] = [
 ];
 
 export default function MultiSelectSearchableDropdownExample() {
-  const [scrollUnlockedValue, setScrollUnlockedValue] = useState<string[]>([]);
   const [scrollLockValue, setScrollLockValue] = useState<string[]>([]);
+  const [scrollUnlockedValue, setScrollUnlockedValue] = useState<string[]>([]);
   return (
     <>
       <div className="w-full sm:max-w-72">

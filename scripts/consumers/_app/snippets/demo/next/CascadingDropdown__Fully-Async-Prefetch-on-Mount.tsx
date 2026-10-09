@@ -80,8 +80,8 @@ const COUNTRIES: Country[] = [
 ];
 
 export default function CascadingDropdownExample() {
-  const [prefetchOptions, setPrefetchOptions] = useState<CascadingOption[]>([]);
   const [prefetchValue, setPrefetchValue] = useState<CascadingValue>({});
+  const [prefetchOptions, setPrefetchOptions] = useState<CascadingOption[]>([]);
   const [isPrefetchLoading, setIsPrefetchLoading] = useState(true);
   const [hasPrefetchLoaded, setHasPrefetchLoaded] = useState(false);
   const handleLoadChildrenAsync = useCallback(

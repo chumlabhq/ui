@@ -146,8 +146,8 @@ const StatusBadge = ({
 const s = getTableClasses(false);
 
 export default function TableExample() {
-  const [serverData, setServerData] = useState<User[]>(sampleData.slice(0, 5));
   const [serverSorting, setServerSorting] = useState<SortingState>([]);
+  const [serverData, setServerData] = useState<User[]>(sampleData.slice(0, 5));
   const [serverLoading, setServerLoading] = useState(false);
   const handleServerSortingChange = useCallback((newSorting: SortingState) => {
     setServerSorting(newSorting);

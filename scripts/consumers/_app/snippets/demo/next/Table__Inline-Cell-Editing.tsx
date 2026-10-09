@@ -148,12 +148,12 @@ const StatusBadge = ({
 const s = getTableClasses(false);
 
 export default function TableExample() {
-  const [editableData, setEditableData] = useState<User[]>(() =>
-    sampleData.slice(0, 5),
-  );
   const [editedCells, setEditedCells] = useState<
     { rowId: string; columnId: string; value: unknown }[]
   >([]);
+  const [editableData, setEditableData] = useState<User[]>(() =>
+    sampleData.slice(0, 5),
+  );
   const sortableColumns: ColumnDef<User>[] = useMemo(
     () => [
       {

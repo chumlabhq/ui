@@ -4,8 +4,8 @@ import { TimePicker } from "@chumlab/ui/time-picker";
 
 export default function TimePickerExample() {
   const [formTime, setFormTime] = useState<string | null>("14:30");
-  const [eventsTime, setEventsTime] = useState<string | null>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
+  const [eventsTime, setEventsTime] = useState<string | null>(null);
   const log = (msg: string) => setEventLog((prev) => [msg, ...prev.slice(0, 4)]);
   return (
     <>

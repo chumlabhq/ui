@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Input } from "@chumlab/ui/input";
 
 export default function InputExample() {
-  const [amount, setAmount] = useState("");
   const [url, setUrl] = useState("");
+  const [amount, setAmount] = useState("");
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
       <Input

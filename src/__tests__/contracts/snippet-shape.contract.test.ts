@@ -221,14 +221,10 @@ describe("snippet shape contract", () => {
      *   EXEMPT — the snippet is right as it is, for a stated reason.
      *   UNPARSED — nobody decided; the tool could not read the page.
      */
-    const EXEMPT_MISSING = new Map([
-      [
-        "Drawer/Directions",
-        "The drawer is inside a second `.map()`. Lifting it out of the callback " +
-          "leaves its loop parameter undeclared, and a copy-paste example is one " +
-          "example, so the repetition is not what the snippet should carry.",
-      ],
-    ]);
+    // Empty since SN4: Drawer/Directions was the one entry, excused because the
+    // generator dropped library elements rendered inside a `.map()`. It now
+    // carries the map with them (build-demo-snippets.mjs, sectionsOf).
+    const EXEMPT_MISSING = new Map<string, string>([]);
 
     const missing: string[] = [];
     for (const { component, title, code } of every) {
@@ -290,7 +286,6 @@ describe("snippet shape contract", () => {
       { key: "Table/Infinite Scroll (Progress Bar Loader)", element: '<button> "Reset"', reason: LINK_STYLE },
       { key: "Table/Infinite Scroll (No Loading UI, Silent Load)", element: '<button> "Reset"', reason: LINK_STYLE },
       // The raw element is the mechanism or the subject.
-      { key: "Drawer/Directions", element: '<button> "{dir}"', reason: "The drawer sits inside a `.map()` (see the missing-component rule above); the button is the trigger inside it." },
       { key: "Input/InputLabel Standalone", element: '<input> "<input>"', reason: "The section exists to pair `InputLabel` with a NATIVE field — with `Input` you pass `label` and never reach for it. The raw input is the lesson." },
       { key: "TextArea/TextAreaLabel Standalone", element: '<textarea> "<textarea>"', reason: "As Input's, for `TextAreaLabel`." },
       { key: "Modal/Focus Trap", element: '<input> "<input>"', reason: "Raw inputs as focus-order fodder. Borderline: `Input` is focusable too and would teach better, so this is a decision to revisit, not a principle." },

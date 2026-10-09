@@ -2,8 +2,8 @@ import { useState } from "react";
 import { TimePicker } from "@chumlab/ui/time-picker";
 
 export default function TimePickerExample() {
-  const [clearableVal, setClearableVal] = useState<string | null>("14:30");
   const [clearableClearCount, setClearableClearCount] = useState(0);
+  const [clearableVal, setClearableVal] = useState<string | null>("14:30");
   return (
     <>
       <div className="flex items-center gap-4">

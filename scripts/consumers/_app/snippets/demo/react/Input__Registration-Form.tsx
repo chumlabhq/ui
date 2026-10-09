@@ -80,10 +80,10 @@ const CheckIcon = ({ className = "" }: { className?: string }) => (
 
 export default function InputExample() {
   const [registrationSubmit, setRegistrationSubmit] = useState("not fired yet");
-  const [username2, setUsername2] = useState("");
+  const [email, setEmail] = useState("");
   const [email2, setEmail2] = useState("");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [username2, setUsername2] = useState("");
   const emailOk = email.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const emailBad = email.length > 0 && !emailOk;
   const userOk = username.length >= 3;

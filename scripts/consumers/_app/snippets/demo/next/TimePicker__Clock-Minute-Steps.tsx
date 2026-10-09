@@ -4,8 +4,8 @@ import { useState } from "react";
 import { TimePicker } from "@chumlab/ui/time-picker";
 
 export default function TimePickerExample() {
-  const [clockStep1, setClockStep1] = useState<string | null>(null);
   const [clockStep5, setClockStep5] = useState<string | null>(null);
+  const [clockStep1, setClockStep1] = useState<string | null>(null);
   return (
     <div className="flex flex-wrap gap-6">
       <div>

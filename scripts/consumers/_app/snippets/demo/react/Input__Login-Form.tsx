@@ -78,9 +78,9 @@ const MailIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function InputExample() {
-  const [loginSubmit, setLoginSubmit] = useState("not fired yet");
   const [showPw, setShowPw] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [loginSubmit, setLoginSubmit] = useState("not fired yet");
   return (
     <>
       <form

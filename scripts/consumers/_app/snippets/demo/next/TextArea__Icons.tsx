@@ -57,8 +57,8 @@ const MessageIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function TextAreaExample() {
-  const [lastAction, setLastAction] = useState("");
   const [message, setMessage] = useState("");
+  const [lastAction, setLastAction] = useState("");
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
       <div className="space-y-1.5">

@@ -1,9 +1,25 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
+import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import VitestReconcileReporter from "./src/test/reconcile-reporter.js";
 
 const CONTRACTS = "src/__tests__/contracts/**/*.{test,spec}.{ts,tsx}";
+const SNIPPET_MOUNT = "src/__tests__/snippets/**/*.snippets.{ts,tsx}";
+
+/**
+ * `@chumlab/ui/<subpath>` as a consumer resolves it: through the package's own
+ * `exports` map to the built files in dist/, never to src/. Derived from the
+ * map so a subpath the package does not publish fails to resolve here too.
+ */
+const pkg = JSON.parse(readFileSync(resolve(__dirname, "package.json"), "utf8")) as {
+  exports: Record<string, string | { import?: { default?: string } }>;
+};
+const PUBLISHED = Object.entries(pkg.exports).flatMap(([key, target]) => {
+  const file = typeof target === "string" ? target : target.import?.default;
+  if (!file || !/\.js$/.test(file)) return [];
+  return [{ find: new RegExp(`^${key.replace(/^\./, "@chumlab/ui").replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}$`), replacement: resolve(__dirname, file) }];
+});
 
 export default defineConfig({
   test: {
@@ -18,6 +34,23 @@ export default defineConfig({
           include: ["src/**/*.{test,spec}.{ts,tsx}"],
           exclude: ["**/node_modules/**", "**/dist/**", CONTRACTS],
           isolate: true,
+        },
+      },
+      {
+        // Every generated copy-paste snippet, mounted the way a consumer runs
+        // it: the default React JSX runtime (not the library's marking one),
+        // `@chumlab/ui` resolved to dist/, and the unit tier's jsdom setup.
+        // See src/__tests__/snippets/mount.snippets.tsx.
+        plugins: [react()],
+        resolve: { alias: PUBLISHED, dedupe: ["react", "react-dom"] },
+        test: {
+          name: "snippets",
+          globals: true,
+          environment: "jsdom",
+          setupFiles: ["./src/test/setup.ts"],
+          include: [SNIPPET_MOUNT],
+          isolate: true,
+          testTimeout: 120_000,
         },
       },
       {

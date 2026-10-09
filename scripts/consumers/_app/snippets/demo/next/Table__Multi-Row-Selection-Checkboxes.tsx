@@ -149,8 +149,6 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
-  const [multiSelectedIds, setMultiSelectedIds] = useState<string[]>([]);
-  const [multiDeleteAction, setMultiDeleteAction] = useState("not fired yet");
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -197,6 +195,8 @@ export default function TableExample() {
     ],
     [false],
   );
+  const [multiSelectedIds, setMultiSelectedIds] = useState<string[]>([]);
+  const [multiDeleteAction, setMultiDeleteAction] = useState("not fired yet");
   return (
     <>
       <div className="space-y-3">

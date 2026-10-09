@@ -182,12 +182,9 @@ const DrawerDemo = () => {
               portals out, and the snippet carries the Drawer with its trigger. */}
           {(["left", "right", "top", "bottom"] as const).map((dir) => (
             <div key={dir}>
-              <button
-                className={c.btn}
-                onClick={directions[dir].onOpen}
-              >
+              <Button className={c.btn} onClick={directions[dir].onOpen}>
                 {dir}
-              </button>
+              </Button>
               <Drawer
                 open={directions[dir].open}
                 onOpenChange={directions[dir].onOpenChange}

@@ -5,8 +5,8 @@ import { Slider, SliderValue } from "@chumlab/ui/slider";
 
 export default function SliderExample() {
   const [basic2, setBasic2] = useState(50);
-  const [opacity, setOpacity] = useState(80);
   const [price, setPrice] = useState<SliderValue>([200, 800]);
+  const [opacity, setOpacity] = useState(80);
   return (
     <div className="flex flex-col gap-10 w-full sm:max-w-sm">
       <div className="space-y-1">

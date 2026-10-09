@@ -57,8 +57,8 @@ const SearchIcon = ({ className = "" }: { className?: string }) => (
 );
 
 export default function InputExample() {
-  const [lastAction, setLastAction] = useState("");
   const [search, setSearch] = useState("");
+  const [lastAction, setLastAction] = useState("");
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
       {

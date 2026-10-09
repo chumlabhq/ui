@@ -2,8 +2,8 @@ import { useState } from "react";
 import { DatePicker } from "@chumlab/ui/date-picker";
 
 export default function DatePickerExample() {
-  const [callbackDate, setCallbackDate] = useState<Date | null>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
+  const [callbackDate, setCallbackDate] = useState<Date | null>(null);
   const log = (msg: string) =>
     setEventLog((prev) => [msg, ...prev.slice(0, 4)]);
   return (

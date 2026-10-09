@@ -5,9 +5,9 @@ import { Button } from "@chumlab/ui/button";
 import { InternationalPhoneInput, PhoneNumberData } from "@chumlab/ui/international-phone-input";
 
 export default function InternationalPhoneInputExample() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [refValue, setRefValue] = useState<PhoneNumberData | undefined>();
   const [refReadValue, setRefReadValue] = useState("not fired yet");
-  const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-4 w-full sm:max-w-md">
       <InternationalPhoneInput

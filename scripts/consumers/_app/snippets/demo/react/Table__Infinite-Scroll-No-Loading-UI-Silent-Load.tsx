@@ -146,11 +146,6 @@ const StatusBadge = ({
 const s = getTableClasses(false);
 
 export default function TableExample() {
-  const [inf4Data, setInf4Data] = useState<User[]>(() =>
-    allInfiniteData.slice(0, 10),
-  );
-  const [inf4HasMore, setInf4HasMore] = useState(true);
-  const [inf4Loading, setInf4Loading] = useState(false);
   const columns: ColumnDef<User>[] = useMemo(
     () => [
       {
@@ -210,6 +205,11 @@ export default function TableExample() {
     return data;
   }, []);
   const inf4Ref = useRef<HTMLDivElement>(null);
+  const [inf4Data, setInf4Data] = useState<User[]>(() =>
+    allInfiniteData.slice(0, 10),
+  );
+  const [inf4HasMore, setInf4HasMore] = useState(true);
+  const [inf4Loading, setInf4Loading] = useState(false);
   const handleLoadMore4 = useCallback(() => {
     if (inf4Loading || !inf4HasMore) return;
     setInf4Loading(true);

@@ -16,10 +16,10 @@ const staticOptions: MultiSelectOption[] = [
 ];
 
 export default function MultiSelectDropdownExample() {
-  const [formSubmit, setFormSubmit] = useState("not fired yet");
   const [formIntegrationValue, setFormIntegrationValue] = useState<string[]>(
     [],
   );
+  const [formSubmit, setFormSubmit] = useState("not fired yet");
   return (
     <>
       <form

@@ -16,8 +16,8 @@ const staticOptions: MultiSelectOption[] = [
 ];
 
 export default function MultiSelectSearchableDropdownExample() {
-  const [controlledValue, setControlledValue] = useState<string[]>([]);
   const [controlledOpen, setControlledOpen] = useState(false);
+  const [controlledValue, setControlledValue] = useState<string[]>([]);
   return (
     <div className="flex items-end gap-4">
       <div className="w-full sm:max-w-72">

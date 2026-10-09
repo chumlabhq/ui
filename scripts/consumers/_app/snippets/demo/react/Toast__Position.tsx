@@ -3,8 +3,8 @@ import { Button } from "@chumlab/ui/button";
 import { ToastPosition, ToastProvider, useToast } from "@chumlab/ui/toast";
 
 function ToastTrigger() {
-  const [position, setPosition] = useState<ToastPosition>("bottom-right");
   const toast = useToast();
+  const [position, setPosition] = useState<ToastPosition>("bottom-right");
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-wrap gap-2">

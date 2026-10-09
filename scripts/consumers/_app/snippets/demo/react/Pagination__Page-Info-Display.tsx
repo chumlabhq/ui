@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Pagination } from "@chumlab/ui/pagination";
 
 export default function PaginationExample() {
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [pageInfoPage, setPageInfoPage] = useState(1);
   const [pageInfoRowsPerPage, setPageInfoRowsPerPage] = useState(10);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   return (
     <Pagination
       value={pageInfoPage}

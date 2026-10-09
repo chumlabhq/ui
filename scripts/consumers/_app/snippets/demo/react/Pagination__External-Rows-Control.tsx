@@ -3,8 +3,8 @@ import { Button } from "@chumlab/ui/button";
 import { Pagination } from "@chumlab/ui/pagination";
 
 export default function PaginationExample() {
-  const [externalRows, setExternalRows] = useState(10);
   const [externalPage, setExternalPage] = useState(1);
+  const [externalRows, setExternalRows] = useState(10);
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">

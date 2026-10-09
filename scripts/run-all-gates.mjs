@@ -134,8 +134,11 @@ const GATES = [
       "assert-fixture-bundle.mjs", "assert-flag-bundle.mjs", "assert-packaging.mjs",
       "assert-phone-bundle.mjs", "assert-styles-bundle.mjs"] },
     pop: /(\d+) built files/ },
-  { id: "unit+contracts", slow: true, cmd: "node scripts/run-vitest.mjs",
-    claims: { vitest: ["unit", "contracts"] }, pop: /collected (\d+)/ },
+  // `snippets` mounts every copy-paste snippet against dist/, so this reads the
+  // build the entry above provides. One run of vitest runs all three projects;
+  // a separate entry for the mount gate would run it twice.
+  { id: "unit+contracts", slow: true, cmd: "node scripts/run-vitest.mjs", needs: ["dist"],
+    claims: { vitest: ["unit", "contracts", "snippets"] }, pop: /collected (\d+)/ },
 
   // ── e2e ───────────────────────────────────────────────────────────────
   { id: "e2e:a11y-full", slow: true, cmd: pw("--project=a11y-full"),

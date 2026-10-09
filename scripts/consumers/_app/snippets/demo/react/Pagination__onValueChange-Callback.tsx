@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Pagination } from "@chumlab/ui/pagination";
 
 export default function PaginationExample() {
-  const [valuePage, setValuePage] = useState(1);
   const [valueLog, setValueLog] = useState<number[]>([]);
+  const [valuePage, setValuePage] = useState(1);
   return (
     <>
       <Pagination
