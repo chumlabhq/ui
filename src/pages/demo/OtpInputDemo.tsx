@@ -256,10 +256,7 @@ const OtpInputDemo = () => {
                 ? "Please enter all 6 digits"
                 : undefined
             }
-            classes={{
-              ...c.otp,
-              input: `${c.otp.input} ${errorVal.length > 0 && errorVal.length < 6 ? (dark ? "border border-cl-error focus:border-cl-error focus:ring-cl-error/20" : "border-cl-error focus:border-cl-error focus:ring-cl-error/20") : ""}`,
-            }}
+            classes={c.otp}
           />
         </DemoWrapper>
       </Section>

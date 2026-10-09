@@ -53,17 +53,17 @@ export default function InternationalPhoneInputExample() {
                          searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-text/10",
                          searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary",
                          list: "max-h-60 overflow-y-auto",
-                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome",
+                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover text-cl-text-chrome",
                          icon: "w-4 h-4 shrink-0 transition-transform duration-200",
                          itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
                          searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
                          empty: "px-3 py-4 text-sm text-center text-cl-text-tertiary"
                        }
               }),
-                                  input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-error/[0.04] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30",
+                                  input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-bg-input outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30",
                                            countrySelect: {
                                              trigger: {
-                              trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-error bg-cl-error/[0.04] hover:bg-cl-error/[0.08] text-cl-text-chrome"
+                              trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-error bg-cl-bg-input hover:bg-cl-bg-hover text-cl-text-chrome"
                             }.trigger
                                            }
                                 }
@@ -106,7 +106,7 @@ export default function InternationalPhoneInputExample() {
                          searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-text/10",
                          searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary",
                          list: "max-h-60 overflow-y-auto",
-                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome",
+                         item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover text-cl-text-chrome",
                          icon: "w-4 h-4 shrink-0 transition-transform duration-200",
                          itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
                          searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
@@ -115,10 +115,10 @@ export default function InternationalPhoneInputExample() {
               }),
                                   ...(successOk
                                     ? {
-                                        input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-success/[0.06] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-success focus:ring-2 focus:ring-cl-success/30",
+                                        input: "flex-1 h-10 px-3 rounded-cl-md border bg-cl-bg-input outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-success focus:ring-2 focus:ring-cl-success/30",
                                         countrySelect: {
                                           trigger: {
-                                trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-success bg-cl-success/[0.06] text-cl-text-chrome"
+                                trigger: "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-success bg-cl-bg-input text-cl-text-chrome"
                               }.trigger
                                         }
                                       }

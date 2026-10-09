@@ -33,7 +33,7 @@ export default function InternationalPhoneInputExample() {
                        searchControl: "flex items-center gap-2 px-3 py-2 border-b border-cl-text/10",
                        searchInput: "flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary",
                        list: "max-h-60 overflow-y-auto",
-                       item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text-chrome",
+                       item: "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover text-cl-text-chrome",
                        icon: "w-4 h-4 shrink-0 transition-transform duration-200",
                        itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
                        searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
