@@ -163,7 +163,9 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "dropdown": 746,
   "input": 530,
   "international-phone-input": 946,
-  "loader": 426,
+  // L11, 426 -> 425: the In Context "Processing" button is now disabled while
+  // it loads, and an inactive control's label is exempt from 1.4.3.
+  "loader": 425,
   "modal": 495,
   "multi-select-dropdown": 684,
   "multi-select-searchable-dropdown": 707,

@@ -491,18 +491,20 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-4 flex-wrap">
-              <Button type="button" className={c.btnDisabled} disabled>
+              {/* Loading buttons, as Button's own `loading` makes them: disabled
+                  and aria-busy, so they do not look or act live mid-action. */}
+              <Button type="button" className={c.btnDisabled} disabled aria-busy>
                 <CircularLoader
                   size={16}
                   className="text-cl-accent"
                 />
                 Saving...
               </Button>
-              <Button type="button" className={c.btn}>
+              <Button type="button" className={c.btn} disabled aria-busy>
                 <CircularLoader size={16} className="text-cl-accent" />
                 Processing
               </Button>
-              <Button type="button" className={c.btn}>
+              <Button type="button" className={c.btn} disabled aria-busy aria-label="Loading results">
                 <DotLoader dotSize={5} gap={3} className="text-cl-accent" />
               </Button>
             </div>

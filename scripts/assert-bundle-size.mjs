@@ -908,6 +908,21 @@ const LIBRARY_TOTAL_HISTORY = [
       "Home/End and Ctrl+Home/Ctrl+End on the grid's cells (L10). Every other " +
       "entry byte-identical. Measured against a build of f297c01b.",
   },
+  {
+    kb: 156.28,
+    commit: "(uncommitted)",
+    date: "2026-10-10",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.09 KB (159,942 -> 160,030 B gzipped, +88 B), 81 files " +
+      "held. Table exclusive +68 B (16,647 -> 16,715 B; own +65 B, closure " +
+      "+64 B), its declared breach raised 16.26 -> 16.32 in the same move: one " +
+      "body tab stop with pinned columns (L11), each pinned part continuing the " +
+      "column index. Loader exclusive +12 B (1,745 -> 1,757 B): the LinearLoader " +
+      "track fix (L11), the default track painted at 20% on its own instead of " +
+      "the root's opacity fading the bar with it. Every other entry " +
+      "byte-identical. Measured against a build of 1b1c91f9.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -961,8 +976,13 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.26,
-      why: "2026-10-09, L10: 16.13 -> 16.26 (exclusive 16,512 -> 16,647 B gzipped, +135 B). " +
+      kb: 16.32,
+      why: "2026-10-10, L11: 16.26 -> 16.32 (exclusive 16,647 -> 16,715 B gzipped, +68 B). " +
+        "+68 B: one body tab stop with pinned columns (WCAG 2.4.3, APG grid). Pinned parts " +
+        "numbered their cells from 0, giving two tab stops and arrows that couldn't cross; the " +
+        "cheaper count-from-pinnedColumns variant gives a wrong offset when a pinned column is " +
+        "hidden. " +
+        "2026-10-09, L10: 16.13 -> 16.26 (exclusive 16,512 -> 16,647 B gzipped, +135 B). " +
         "+78 B: footerContent renders a footer of rows directly in <tfoot> (invalid DOM in " +
         "documented use: the prop is documented as rendered inside <tfoot>, and every row " +
         "passed to it was nested inside Table's own <td>, which the browser reports and the " +

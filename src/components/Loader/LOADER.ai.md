@@ -65,7 +65,7 @@ export default function Example() {
 | `height` | number | `4` | Height of the bar in pixels. |
 | `width` | string \| number | `"100%"` | Width of the bar (CSS value). |
 | `speed` | number | `1.5` | Animation duration in seconds. |
-| `trackColor` | string | `"currentColor"` | Background track color. |
+| `trackColor` | string | `"color-mix(in srgb, currentColor 20%, transparent)"` | Background track color. Defaults to the bar's colour at 20%, painted on the track only, so the bar keeps full strength. |
 | `borderRadius` | number | `9999` | Border radius in pixels. |
 | `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -117,7 +117,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `height` | `number \| undefined` | Height of the bar in pixels. Default: 4 |
 | `width` | `string \| number \| undefined` | Width of the bar (CSS value). Default: "100%" |
 | `speed` | `number \| undefined` | Animation duration in seconds. Default: 1.5 |
-| `trackColor` | `string \| undefined` | Background track color |
+| `trackColor` | `string \| undefined` | Background track color. Default: currentColor at 20%, painted on the track only, so the bar keeps full strength |
 | `borderRadius` | `number \| undefined` | Border radius in pixels. Default: 9999 (pill) |
 | `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
 | `classes` | `LinearLoaderClasses \| undefined` | CSS class overrides for sub-elements. |

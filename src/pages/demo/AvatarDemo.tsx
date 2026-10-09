@@ -1183,6 +1183,7 @@ const AvatarDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <button
+            aria-label="Click"
             onClick={() => setAvatarButtonClicks((n) => n + 1)}
             className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-2 rounded-full"
           >

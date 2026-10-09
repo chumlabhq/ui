@@ -467,6 +467,36 @@ test.describe("Table grid keys", () => {
     const cus1 = await custom.getAttribute("aria-checked") ?? String(await custom.isChecked());
     row("custom checkbox: Space toggles it", cus1 !== cus0, `${cus0} -> ${cus1}`);
 
+    // ── pinned columns: one grid, one tab stop, keys cross the parts ──
+    // Pinned columns render as tables of their own beside the scrolling one.
+    // The body is still one grid: one tab stop, and the keys move across the
+    // seam. Cells are found by their text, since each part numbers its own.
+    await gotoFixture(page, "Table", "pinned");
+    const stops = await page.locator("[data-fixture] tbody td[tabindex='0']").count();
+    row("pinned: the body grid has exactly one tab stop", stops === 1, `${stops} cells with tabindex=0`);
+    const active = () => page.evaluate(() => document.activeElement?.closest("tbody td")?.textContent?.trim() ?? null);
+    const bodyCell = (text: string) => page.locator("[data-fixture] tbody td", { hasText: text }).first();
+    await bodyCell("Engineer").focus();
+    const placed = await active();
+    row("pinned: focusing a scrolling cell keeps focus there", placed === "Engineer", `at ${placed}`);
+    await bodyCell("Ada").focus();
+    await page.keyboard.press("ArrowRight");
+    const right = await active();
+    row("pinned: ArrowRight crosses from the pinned cell into the scrolling part", right === "Engineer", `at ${right}`);
+    await page.keyboard.press("ArrowLeft");
+    const left = await active();
+    // Only a real crossing counts: if ArrowRight never left Ada, Ada is no proof.
+    row("pinned: ArrowLeft crosses back into the pinned part", right === "Engineer" && left === "Ada", `right ${right}, then left ${left}`);
+    await bodyCell("Ada").focus();
+    await page.keyboard.press("End");
+    const pinnedEnd = await active();
+    row("pinned: End reaches the scrolling last cell", pinnedEnd === "Engineer", `at ${pinnedEnd}`);
+    await page.keyboard.press("Home");
+    const pinnedHome = await active();
+    row("pinned: Home reaches the pinned first cell", pinnedEnd === "Engineer" && pinnedHome === "Ada", `End ${pinnedEnd}, then Home ${pinnedHome}`);
+    const highlighted = await page.locator("[data-fixture] tbody td[data-highlighted]").count();
+    row("pinned: one cell is highlighted, not one per part", highlighted === 1, `${highlighted} highlighted`);
+
     const failing = rows.filter((r) => !r.ok);
     console.log(`TABLE_GRID_KEYS rows=${rows.length} failing=${failing.length}`);
     for (const r of failing) console.log(`  FAILING ${r.name}: ${r.detail}`);

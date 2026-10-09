@@ -27,7 +27,10 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
     ref,
   ) => {
     const prefersReducedMotion = useReducedMotion(reduceMotion);
-    const trackBg = trackColor ?? "currentColor";
+    // The default track is the indicator's colour at 20%, painted on the track
+    // alone. It was `currentColor` with `opacity: 0.2` on the root, and the bar
+    // is inside the root, so the bar faded with it: 1:1, nothing visible moving.
+    const trackBg = trackColor ?? "color-mix(in srgb, currentColor 20%, transparent)";
     const w = typeof width === "number" ? `${width}px` : width;
 
     const baseClassesRaw = unstyled
@@ -51,7 +54,6 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
       height: `${height}px`,
       borderRadius: `${borderRadius}px`,
       backgroundColor: trackBg,
-      opacity: trackColor ? undefined : 0.2,
       overflow: "hidden",
       position: "relative",
       ...style,

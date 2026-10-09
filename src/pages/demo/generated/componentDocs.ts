@@ -7150,8 +7150,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "trackColor",
             "type": "string",
             "required": false,
-            "default": "\"currentColor\"",
-            "description": "Background track color"
+            "default": "\"color-mix(in srgb, currentColor 20%, transparent)\"",
+            "description": "Background track color. Default: currentColor at 20%, painted on the track only, so the bar keeps full strength"
           },
           {
             "name": "borderRadius",

@@ -93,8 +93,8 @@
         },
         "trackColor": {
           "type": "string",
-          "description": "Background track color.",
-          "default": "currentColor"
+          "description": "Background track color. Defaults to the bar's colour at 20%, painted on the track only, so the bar keeps full strength.",
+          "default": "color-mix(in srgb, currentColor 20%, transparent)"
         },
         "borderRadius": {
           "type": "number",
@@ -306,8 +306,8 @@
         },
         "trackColor": {
           "type": "string | undefined",
-          "description": "Background track color",
-          "default": "currentColor"
+          "description": "Background track color. Default: currentColor at 20%, painted on the track only, so the bar keeps full strength",
+          "default": "color-mix(in srgb, currentColor 20%, transparent)"
         },
         "borderRadius": {
           "type": "number | undefined",

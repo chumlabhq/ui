@@ -68,7 +68,7 @@ export interface LinearLoaderProps extends HTMLAttributes<HTMLDivElement> {
   width?: string | number;
   /** Animation duration in seconds. Default: 1.5 */
   speed?: number;
-  /** Background track color */
+  /** Background track color. Default: currentColor at 20%, painted on the track only, so the bar keeps full strength */
   trackColor?: string;
   /** Border radius in pixels. Default: 9999 (pill) */
   borderRadius?: number;

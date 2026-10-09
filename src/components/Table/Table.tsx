@@ -1603,6 +1603,7 @@ function TableInner<TData>(
       row: Row<TData>,
       rowIndex: number,
       filterFn?: (columnId: string) => boolean,
+      colOffset = 0,
     ) => {
       const selected = isRowSelected(row);
       const cells = row.getVisibleCells();
@@ -1670,7 +1671,7 @@ function TableInner<TData>(
             {...rowDragProps}
           >
             {filteredCells.map((cell, colIndex) =>
-              renderCell(cell, rowIndex, colIndex),
+              renderCell(cell, rowIndex, colOffset + colIndex),
             )}
           </tr>
           {isExpanded && renderExpandedRow && !isGroupRow && (
@@ -1718,6 +1719,7 @@ function TableInner<TData>(
       tableClass: string,
       containerClass: string,
       tableAriaLabel: string,
+      colOffset?: number,
     ) => {
       const headerGroups = table.getHeaderGroups();
       const rows = table.getRowModel().rows;
@@ -1781,7 +1783,7 @@ function TableInner<TData>(
               </thead>
             )}
             <tbody className={bodyClassName} role="rowgroup">
-              {rows.map((row, index) => renderRow(row, index, filterFn))}
+              {rows.map((row, index) => renderRow(row, index, filterFn, colOffset))}
             </tbody>
             {showFooter && (
               <tfoot
@@ -2035,6 +2037,19 @@ function TableInner<TData>(
     "__dragHandle",
   ]);
 
+  // Pinned columns are tables of their own, but the body is one grid: each
+  // part's cells continue the column index where the part before it stopped,
+  // so there is one tab stop and the keys cross from one part into the next.
+  const visibleColumnIds = table
+    .getVisibleLeafColumns()
+    .map((col) => getColumnId(col.columnDef as { accessorKey?: string; id?: string }));
+  const pinnedCount = visibleColumnIds.filter(
+    (id) => pinnedColumnIds.has(id) && !syntheticColumnIds.has(id),
+  ).length;
+  const unpinnedCount = visibleColumnIds.filter(
+    (id) => !pinnedColumnIds.has(id) && !pinnedRightColumnIds.has(id),
+  ).length;
+
   const hasUnpinnedColumns = allColumnIds.some(
     (id) => !pinnedColumnIds.has(id) && !pinnedRightColumnIds.has(id),
   );
@@ -2248,6 +2263,7 @@ function TableInner<TData>(
             hasPinnedColumns || hasPinnedRightColumns
               ? `${ariaLabel} - Scrollable columns`
               : ariaLabel,
+            pinnedCount,
           )}
 
         {hasPinnedRightColumns &&
@@ -2258,6 +2274,7 @@ function TableInner<TData>(
             finalPinnedRightTableClass,
             finalPinnedRightContainerClass,
             `${ariaLabel} - Right pinned columns`,
+            pinnedCount + unpinnedCount,
           )}
 
         {floatingActions && (
