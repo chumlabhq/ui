@@ -7,7 +7,7 @@ export default function CheckboxExample() {
     <Checkbox
       label="Controlled checkbox"
       checked={controlled}
-      onValueChange={setControlled}
+      onCheckedChange={setControlled}
       size="md"
       shape="rounded"
       classes={

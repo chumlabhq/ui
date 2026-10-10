@@ -56,8 +56,8 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
-| `onLoadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<MultiSelectOption[]>`. |
-| `loadOnOpen` | Only works when `onLoadOptions` is provided. |
+| `loadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<MultiSelectOption[]>`. |
+| `loadOnOpen` | Only works when `loadOptions` is provided. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `showSelectedChips` | Default `true`. Set `false` to show count-only display. |
@@ -114,8 +114,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading/shimmer state. |
-| `onLoadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
-| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
+| `loadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
+| `loadOnOpen` | boolean | `false` | When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
@@ -137,8 +137,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
-| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
 | `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
@@ -235,7 +235,7 @@ const [values, setValues] = useState<string[]>([]);
 ```tsx
 <MultiSelectDropdown
   loadOnOpen
-  onLoadOptions={() => fetch("/api/options").then(r => r.json())}
+  loadOptions={() => fetch("/api/options").then(r => r.json())}
   placeholder="Click to load..."
 />
 ```
@@ -289,7 +289,7 @@ const [values, setValues] = useState<string[]>([]);
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string for each slot |
 | Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownPosition` |
-| Options don't load on open | Missing `loadOnOpen` prop | Add `loadOnOpen` alongside `onLoadOptions` |
+| Options don't load on open | Missing `loadOnOpen` prop | Add `loadOnOpen` alongside `loadOptions` |
 | Controlled value not updating | Missing `onValueChange` | Pair `value` with `onValueChange` |
 | Chips not showing | `showSelectedChips={false}` | Set to `true` (default) |
 | Clear button not visible | `clearable` not set | Add `clearable` prop |

@@ -60,8 +60,8 @@
     },
     "onDismiss": {
       "type": "object",
-      "description": "() => void — Fires when the toast is dismissed.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(id: string) => void — Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out.",
+      "x-tsType": "((id: string) => void) | undefined"
     },
     "role": {
       "type": "string",
@@ -115,16 +115,10 @@
       "type": "boolean",
       "description": "When true, removes all default styling.",
       "default": false
-    },
-    "onRemove": {
-      "type": "object",
-      "description": "(id: string) => void — Internal callback to remove the toast from the provider.",
-      "x-tsType": "(id: string) => void"
     }
   },
   "required": [
-    "id",
-    "onRemove"
+    "id"
   ],
   "subComponents": {
     "ToastProvider": {

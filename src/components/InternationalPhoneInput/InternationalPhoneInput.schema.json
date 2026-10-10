@@ -197,9 +197,9 @@
       "description": "Format used when copying the phone number.",
       "default": "e164"
     },
-    "onPasteDetected": {
+    "onPasteDetect": {
       "type": "object",
-      "description": "(data: PasteDetectedData) => void - Fires when a phone number paste is detected.",
+      "description": "(data: PasteDetectedData) => void - Fires when a pasted number is recognised, with what it was understood to be.",
       "x-tsType": "((data: PasteDetectedData) => void) | undefined"
     },
     "countryDropdownPlaceholder": {

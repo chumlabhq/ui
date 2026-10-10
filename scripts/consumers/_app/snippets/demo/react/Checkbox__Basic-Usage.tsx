@@ -9,7 +9,7 @@ export default function CheckboxExample() {
         <Checkbox
           label="Accept terms and conditions"
           checked={basic}
-          onValueChange={setBasic}
+          onCheckedChange={setBasic}
         />
         <Checkbox
           label="Subscribe to newsletter"

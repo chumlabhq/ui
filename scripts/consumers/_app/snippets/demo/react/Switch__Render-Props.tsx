@@ -6,7 +6,7 @@ export default function SwitchExample() {
   return (
     <Switch
       checked={renderPropsSwitch}
-      onValueChange={setRenderPropsSwitch}
+      onCheckedChange={setRenderPropsSwitch}
       aria-label="Toggle feature status"
       renderLabel={
         ({ checked }) => (

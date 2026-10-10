@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties } from "react";
+import type { ReactNode, CSSProperties, FocusEvent } from "react";
 import type { DropdownOption } from "../../Dropdown/utils/types.js";
 
 export type SearchableDropdownOption = DropdownOption;
@@ -102,8 +102,10 @@ export interface SearchableDropdownBaseProps {
   unstyled?: boolean;
   lockScroll?: boolean;
   "aria-label"?: string;
-  onBlur?: () => void;
-  onFocus?: () => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   renderTrigger?: (
     triggerProps: SearchableDropdownTriggerRenderProps,
@@ -138,8 +140,10 @@ export interface SearchableDropdownTriggerRenderProps {
   disabled?: boolean;
   onClick: () => void;
   onKeyDown: (event: React.KeyboardEvent) => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
   "data-disabled"?: true;
   "data-error"?: true;
   "data-valid"?: true;
@@ -160,7 +164,7 @@ export interface SearchableDropdownTriggerState {
 /**
  * Where the options come from — sync or async, never both.
  *
- * `useDropdown` drops `options` entirely once `onSearch` is a function: the menu
+ * `useDropdown` drops `options` entirely once `searchOptions` is a function: the menu
  * renders `initialOptions` before a query and the async results after, so
  * passing both showed an empty menu. It looked half-working rather than broken
  * because `selectedOption` DOES consult `options`, so the trigger kept
@@ -174,15 +178,15 @@ export type SearchableDropdownOptionSource =
   | {
       /** Array of `{ value: string, label: string }` objects. Not `items`. */
       options?: SearchableDropdownOption[];
-      onSearch?: never;
+      searchOptions?: never;
       initialOptions?: never;
-      onLoadInitialOptions?: never;
+      loadInitialOptions?: never;
       loadInitialOnOpen?: never;
     }
   | {
       options?: never;
       /** Async search callback. Fires with the query. Return filtered options. Not `onFilter`. */
-      onSearch: (query: string) => Promise<SearchableDropdownOption[]>;
+      searchOptions: (query: string) => Promise<SearchableDropdownOption[]>;
       /** Shown before the first query, and merged into the value lookup. */
       initialOptions?: SearchableDropdownOption[];
     } & SearchableInitialLoad<SearchableDropdownOption>;
@@ -192,8 +196,8 @@ export type SearchableDropdownOptionSource =
  * typechecked and fetched nothing.
  */
 type SearchableInitialLoad<T> =
-  | { onLoadInitialOptions?: never; loadInitialOnOpen?: never }
-  | { onLoadInitialOptions: () => Promise<T[]>; loadInitialOnOpen: true };
+  | { loadInitialOptions?: never; loadInitialOnOpen?: never }
+  | { loadInitialOptions: () => Promise<T[]>; loadInitialOnOpen: true };
 
 export type SearchableDropdownProps = SearchableDropdownBaseProps &
   SearchableDropdownOptionSource;

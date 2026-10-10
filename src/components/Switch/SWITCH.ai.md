@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<Switch label="Feature" checked={val} onValueChange={setVal} />` for a labeled toggle. Uses native `<button role="switch">` with `aria-checked`. Supports error/success states, loading, custom icons on thumb, and CSS custom properties for theming.
+Use `<Switch label="Feature" checked={val} onCheckedChange={setVal} />` for a labeled toggle. Uses native `<button role="switch">` with `aria-checked`. Supports error/success states, loading, custom icons on thumb, and CSS custom properties for theming.
 
 ---
 
@@ -33,7 +33,7 @@ export default function Example() {
     <Switch
       label="Email notifications"
       checked={enabled}
-      onValueChange={setEnabled}
+      onCheckedChange={setEnabled}
     />
   );
 }
@@ -45,7 +45,7 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `checked` + `onValueChange` | Controlled mode. |
+| `checked` + `onCheckedChange` | Controlled mode. |
 | `defaultChecked` | Uncontrolled mode. Cannot combine with `checked`. |
 | `checkedIcon` / `uncheckedIcon` | ReactNode rendered inside the thumb. |
 | `transitionDuration` | Respects `reduceMotion` — set to 0ms when motion reduced. |
@@ -162,7 +162,7 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `description` | object | — | React.ReactNode — Description text below the label. |
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
-| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. Reports the new `checked` state, not the `value` prop — the name follows the library-wide change-handler convention. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Fires with the new `checked` state. The `value` prop is form data and is never reported here. |
 | `name` | string | — | Form field name attribute. |
 | `value` | string | `"on"` | Value attribute for the hidden input element. |
 | `required` | boolean | `false` | Whether the field is required. |

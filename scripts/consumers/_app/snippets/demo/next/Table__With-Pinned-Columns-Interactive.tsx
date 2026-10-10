@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Table } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -47,22 +47,6 @@ function getTableClasses() {
     shimmerBar: "h-full w-full bg-linear-to-r rounded animate-pulse from-cl-bg-hover via-cl-bg-skeleton to-cl-bg-hover",
   };
 }
-
-const togglePinnedCol = (
-    setter: React.Dispatch<React.SetStateAction<string[]>>,
-    columnId: string,
-    isPinned: boolean,
-  ) => {
-    setter((prev) => {
-      if (isPinned) {
-        // Dedupe — the Table fires isPinned=true on every click of an
-        // unpinned column, so without this guard a hardcoded-pinned
-        // demo (where prev never updates) would accumulate duplicates.
-        return prev.includes(columnId) ? prev : [...prev, columnId];
-      }
-      return prev.filter((id) => id !== columnId);
-    });
-  };
 
 const StatusBadge = ({
   status,
@@ -209,16 +193,13 @@ export default function TableExample() {
     ],
     [],
   );
-  const handlePinColumn = (columnId: string, isPinned: boolean) => {
-    togglePinnedCol(setPinnedCols, columnId, isPinned);
-  };
   return (
     <div className="w-full">
       <Table
         columns={columns}
         data={sampleData.slice(0, 5)}
         pinnedColumns={pinnedCols}
-        onPinColumn={handlePinColumn}
+        onPinnedColumnsChange={setPinnedCols}
         maxPinnedColumns={3}
         classes={
           {

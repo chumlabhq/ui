@@ -36,7 +36,7 @@ export interface SwitchClasses {
  *
  * @example
  * ```tsx
- * <Switch checked={on} onValueChange={setOn} />
+ * <Switch checked={on} onCheckedChange={setOn} />
  * ```
  */
 export interface SwitchProps
@@ -49,12 +49,8 @@ export interface SwitchProps
   description?: ReactNode;
   checked?: boolean;
   defaultChecked?: boolean;
-  /**
-   * Fires when the checked state changes. Named for the library-wide
-   * change-handler convention, so it hands back the new `checked` state rather
-   * than the `value` prop below, which it never reports.
-   */
-  onValueChange?: (checked: boolean) => void;
+  /** Fires with the new `checked` state. The `value` prop below is form data and is never reported here. */
+  onCheckedChange?: (checked: boolean) => void;
   name?: string;
   value?: string;
   required?: boolean;

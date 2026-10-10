@@ -2,10 +2,10 @@
  * Async tests for useMultiSelectDropdown are kept in a separate file to avoid
  * memory pressure when running many async act() wrappers in a single vitest worker.
  *
- * NOTE: When both `onSearch` and `loadInitialOnOpen` are combined, the hook's
+ * NOTE: When both `searchOptions` and `loadInitialOnOpen` are combined, the hook's
  * debounce effect calls setAsyncOptions([]) with a new reference on every render
  * (when searchQuery is empty), which can cause a re-render loop in test environments.
- * Tests that exercise `loadInitialOnOpen` therefore do NOT pass `onSearch` simultaneously
+ * Tests that exercise `loadInitialOnOpen` therefore do NOT pass `searchOptions` simultaneously
  * to avoid this interaction.
  */
 import { describe, it, expect, vi } from "vitest";
@@ -19,13 +19,13 @@ const OPTIONS: MultiSelectOption[] = [
   { value: "cherry", label: "Cherry" },
 ];
 
-describe("useMultiSelectDropdown – async onSearch", () => {
-  it("calls onSearch after debounce and populates displayOptions", async () => {
+describe("useMultiSelectDropdown – async searchOptions", () => {
+  it("calls searchOptions after debounce and populates displayOptions", async () => {
     const asyncResults: MultiSelectOption[] = [{ value: "x", label: "X" }];
-    const onSearch = vi.fn().mockResolvedValue(asyncResults);
+    const searchOptions = vi.fn().mockResolvedValue(asyncResults);
 
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], onSearch, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 0 })
     );
 
     act(() => result.current.setSearchQuery("foo"));
@@ -34,15 +34,15 @@ describe("useMultiSelectDropdown – async onSearch", () => {
       await new Promise<void>((resolve) => setTimeout(resolve, 50));
     });
 
-    expect(onSearch).toHaveBeenCalledWith("foo");
+    expect(searchOptions).toHaveBeenCalledWith("foo");
     expect(result.current.isSearching).toBe(false);
     expect(result.current.displayOptions).toEqual(asyncResults);
   });
 
-  it("calls onSearch only once for the last query (debounce cancels prior calls)", async () => {
-    const onSearch = vi.fn().mockResolvedValue([]);
+  it("calls searchOptions only once for the last query (debounce cancels prior calls)", async () => {
+    const searchOptions = vi.fn().mockResolvedValue([]);
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], onSearch, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 0 })
     );
 
     // Fire multiple rapid updates — only the last should produce a call
@@ -54,14 +54,14 @@ describe("useMultiSelectDropdown – async onSearch", () => {
       await new Promise<void>((resolve) => setTimeout(resolve, 50));
     });
 
-    expect(onSearch).toHaveBeenCalledWith("abc");
+    expect(searchOptions).toHaveBeenCalledWith("abc");
   });
 
   it("clears asyncOptions and isSearching when searchQuery becomes empty after search", async () => {
     const asyncResults: MultiSelectOption[] = [{ value: "x", label: "X" }];
-    const onSearch = vi.fn().mockResolvedValue(asyncResults);
+    const searchOptions = vi.fn().mockResolvedValue(asyncResults);
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], onSearch, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 0 })
     );
 
     act(() => result.current.setSearchQuery("foo"));
@@ -75,13 +75,13 @@ describe("useMultiSelectDropdown – async onSearch", () => {
     expect(result.current.isSearching).toBe(false);
   });
 
-  it("calls onLoadError when onSearch rejects", async () => {
+  it("calls onLoadError when searchOptions rejects", async () => {
     const error = new Error("search failed");
-    const onSearch = vi.fn().mockRejectedValue(error);
+    const searchOptions = vi.fn().mockRejectedValue(error);
     const onLoadError = vi.fn();
 
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], onSearch, onLoadError, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, onLoadError, searchDebounceMs: 0 })
     );
 
     act(() => result.current.setSearchQuery("fail"));
@@ -97,12 +97,12 @@ describe("useMultiSelectDropdown – async onSearch", () => {
   it("keeps selected initialOptions in selectedOptions after search resolves", async () => {
     const initialOpts: MultiSelectOption[] = [{ value: "saved", label: "Saved Option" }];
     const searchResults: MultiSelectOption[] = [{ value: "r1", label: "Result 1" }];
-    const onSearch = vi.fn().mockResolvedValue(searchResults);
+    const searchOptions = vi.fn().mockResolvedValue(searchResults);
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: [],
-        onSearch,
+        searchOptions,
         initialOptions: initialOpts,
         defaultValue: ["saved"],
         searchDebounceMs: 0,
@@ -122,51 +122,51 @@ describe("useMultiSelectDropdown – async onSearch", () => {
 });
 
 describe("useMultiSelectDropdown – loadInitialOnOpen", () => {
-  it("calls onLoadInitialOptions on first open", async () => {
+  it("calls loadInitialOptions on first open", async () => {
     const initialResults: MultiSelectOption[] = [{ value: "loaded", label: "Loaded" }];
-    const onLoadInitialOptions = vi.fn().mockResolvedValue(initialResults);
+    const loadInitialOptions = vi.fn().mockResolvedValue(initialResults);
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: [],
-        onLoadInitialOptions,
+        loadInitialOptions,
         loadInitialOnOpen: true,
       })
     );
 
     await act(async () => { result.current.handleToggle(); });
-    expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
+    expect(loadInitialOptions).toHaveBeenCalledTimes(1);
   });
 
-  it("does NOT call onLoadInitialOptions on subsequent opens", async () => {
+  it("does NOT call loadInitialOptions on subsequent opens", async () => {
     const initialResults: MultiSelectOption[] = [{ value: "loaded", label: "Loaded" }];
-    const onLoadInitialOptions = vi.fn().mockResolvedValue(initialResults);
+    const loadInitialOptions = vi.fn().mockResolvedValue(initialResults);
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: [],
-        onLoadInitialOptions,
+        loadInitialOptions,
         loadInitialOnOpen: true,
       })
     );
 
     await act(async () => { result.current.handleToggle(); }); // first open
-    expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
+    expect(loadInitialOptions).toHaveBeenCalledTimes(1);
 
     act(() => result.current.handleToggle());
     await act(async () => { result.current.handleToggle(); }); // second open
-    expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
+    expect(loadInitialOptions).toHaveBeenCalledTimes(1);
   });
 
   it("sets isLoadingInitial=true while loading, false after", async () => {
     let resolve!: (opts: MultiSelectOption[]) => void;
     const pending = new Promise<MultiSelectOption[]>((res) => { resolve = res; });
-    const onLoadInitialOptions = vi.fn().mockReturnValue(pending);
+    const loadInitialOptions = vi.fn().mockReturnValue(pending);
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: [],
-        onLoadInitialOptions,
+        loadInitialOptions,
         loadInitialOnOpen: true,
       })
     );
@@ -182,33 +182,33 @@ describe("useMultiSelectDropdown – loadInitialOnOpen", () => {
     const initialResults: MultiSelectOption[] = [
       { value: "loaded", label: "Loaded Option" },
     ];
-    const onLoadInitialOptions = vi.fn().mockResolvedValue(initialResults);
+    const loadInitialOptions = vi.fn().mockResolvedValue(initialResults);
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: [],
-        onLoadInitialOptions,
+        loadInitialOptions,
         loadInitialOnOpen: true,
       })
     );
 
     await act(async () => { result.current.handleToggle(); });
-    // In sync mode (no onSearch), loaded options go into loadedInitialOptions
+    // In sync mode (no searchOptions), loaded options go into loadedInitialOptions
     // which feeds into allInitialOptions. Since isAsync=false, displayOptions = filteredSyncOptions = options
     // But we can verify the loaded options appear in allOptions via selectedOptions
     // when a loaded option value is in selectedValues
-    expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
+    expect(loadInitialOptions).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onLoadError when onLoadInitialOptions rejects", async () => {
+  it("calls onLoadError when loadInitialOptions rejects", async () => {
     const error = new Error("load failed");
-    const onLoadInitialOptions = vi.fn().mockRejectedValue(error);
+    const loadInitialOptions = vi.fn().mockRejectedValue(error);
     const onLoadError = vi.fn();
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: [],
-        onLoadInitialOptions,
+        loadInitialOptions,
         loadInitialOnOpen: true,
         onLoadError,
       })
@@ -218,36 +218,36 @@ describe("useMultiSelectDropdown – loadInitialOnOpen", () => {
     expect(onLoadError).toHaveBeenCalledWith(error);
   });
 
-  it("does not call onLoadInitialOptions when loadInitialOnOpen=false", async () => {
-    const onLoadInitialOptions = vi.fn().mockResolvedValue([]);
+  it("does not call loadInitialOptions when loadInitialOnOpen=false", async () => {
+    const loadInitialOptions = vi.fn().mockResolvedValue([]);
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: OPTIONS,
-        onLoadInitialOptions,
+        loadInitialOptions,
         loadInitialOnOpen: false,
       })
     );
 
     await act(async () => { result.current.handleToggle(); });
-    expect(onLoadInitialOptions).not.toHaveBeenCalled();
+    expect(loadInitialOptions).not.toHaveBeenCalled();
   });
 
-  it("loaded options appear in async displayOptions when onSearch also provided", async () => {
+  it("loaded options appear in async displayOptions when searchOptions also provided", async () => {
     // This tests the async mode with loadInitialOnOpen loading into allInitialOptions
     // Use a controlled approach: set searchQuery to truthy first so the debounce
     // effect no longer calls setAsyncOptions([]) on empty string, then open
     const initialResults: MultiSelectOption[] = [
       { value: "loaded", label: "Loaded Option" },
     ];
-    const onLoadInitialOptions = vi.fn().mockResolvedValue(initialResults);
-    const onSearch = vi.fn().mockResolvedValue([]);
+    const loadInitialOptions = vi.fn().mockResolvedValue(initialResults);
+    const searchOptions = vi.fn().mockResolvedValue([]);
 
     const { result } = renderHook(() =>
       useMultiSelectDropdown({
         options: [],
-        onSearch,
-        onLoadInitialOptions,
+        searchOptions,
+        loadInitialOptions,
         loadInitialOnOpen: true,
         searchDebounceMs: 60_000, // large debounce so timer doesn't fire
       })

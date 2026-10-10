@@ -51,7 +51,7 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `clearable` | Only shows clear button when phone input has content and not disabled/readOnly. |
-| `enablePasteDetection` | Must be `true` for `onPasteDetected` to fire. |
+| `enablePasteDetection` | Must be `true` for `onPasteDetect` to fire. |
 | `copyFormat` | Only affects Ctrl+C behavior. Does not change display format. |
 | `validateOnBlur` | When `true` (default), shows validation error on blur. Set `false` to disable. |
 | `validationMessage` | Overrides the built-in "Please enter a valid phone number" message. |
@@ -120,7 +120,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `autoComplete` | string | — | Native input autocomplete. Defaults to "off" so browser autofill can't corrupt the national-number field; pass e.g. "tel-national" to opt in. |
 | `enablePasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
 | `copyFormat` | `"e164"` \| `"international"` \| `"national"` | `"e164"` | Format used when copying the phone number. |
-| `onPasteDetected` | object | — | (data: PasteDetectedData) => void - Fires when a phone number paste is detected. |
+| `onPasteDetect` | object | — | (data: PasteDetectedData) => void - Fires when a pasted number is recognised, with what it was understood to be. |
 | `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
 | `countrySearchPlaceholder` | string | `"Search countries..."` | Placeholder text for the country search input. |
 | `countryDropdownAriaLabel` | string | `"Select country"` | Accessible label for the country dropdown. |
@@ -292,7 +292,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
 ```tsx
 <InternationalPhoneInput
   enablePasteDetection
-  onPasteDetected={(data) => console.log(data.detectedCountry?.name)}
+  onPasteDetect={(data) => console.log(data.detectedCountry?.name)}
   copyFormat="e164"
 />
 ```

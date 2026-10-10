@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef, type MouseEvent, type ReactNode } from "react";
 import { FieldLabel } from "./FieldLabel.js";
 import { CircularLoader } from "../components/Loader/index.js";
 import { cn } from "./cn.js";
@@ -18,8 +18,8 @@ export interface FieldWrapperProps {
   suffix?: ReactNode;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
-  onStartIconClick?: () => void;
-  onEndIconClick?: () => void;
+  onStartIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onEndIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   startIconLabel?: string;
   endIconLabel?: string;
   clearable?: boolean;

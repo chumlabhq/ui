@@ -96,7 +96,7 @@ export default function CascadingDropdownExample() {
           options={prefetchOptions}
           value={prefetchValue}
           onValueChange={(val) => setPrefetchValue(val)}
-          onLoadChildren={handleLoadChildrenAsync}
+          loadChildren={handleLoadChildrenAsync}
           placeholder="Select region and country..."
           loading={isPrefetchLoading}
           loadingText="Loading regions..."

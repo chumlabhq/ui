@@ -223,7 +223,7 @@ export default function TableExample() {
                 data={sampleData.slice(0, 5)}
                 expandable
                 expandedRowIds={ids}
-                onExpandedChange={setIds}
+                onExpandedRowIdsChange={setIds}
                 ExpandIcon={ChevronIcon}
                 renderExpandedRow={(row) => (
                   <div

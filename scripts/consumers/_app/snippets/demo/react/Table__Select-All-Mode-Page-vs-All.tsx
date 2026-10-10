@@ -214,7 +214,7 @@ export default function TableExample() {
                     getRowId={(row) => row.id}
                     selectionMode="multiple"
                     selectedRowIds={selectedPage}
-                    onSelectionChange={setSelectedPage}
+                    onSelectedRowIdsChange={setSelectedPage}
                     selectAllMode="page"
                     classes={s}
                     density="compact"
@@ -233,7 +233,7 @@ export default function TableExample() {
                     getRowId={(row) => row.id}
                     selectionMode="multiple"
                     selectedRowIds={selectedAll}
-                    onSelectionChange={setSelectedAll}
+                    onSelectedRowIdsChange={setSelectedAll}
                     selectAllMode="all"
                     classes={s}
                     density="compact"

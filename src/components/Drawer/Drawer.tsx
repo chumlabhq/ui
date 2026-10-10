@@ -94,7 +94,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       swipeable = false,
       swipeThreshold = DEFAULT_SWIPE_THRESHOLD,
       snapPoints,
-      activeSnapPointIndex,
+      snapPointIndex,
       defaultSnapPointIndex = DEFAULT_SNAP_POINT_INDEX,
       onSnapPointIndexChange,
       className,
@@ -144,8 +144,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const prefersReducedMotion = useReducedMotion(reduceMotionProp);
 
     const safeActiveSnap =
-      activeSnapPointIndex !== undefined
-        ? Math.max(0, Math.floor(activeSnapPointIndex))
+      snapPointIndex !== undefined
+        ? Math.max(0, Math.floor(snapPointIndex))
         : undefined;
 
     const [currentSnapIndex, setSnapIndex] = useControllableState({

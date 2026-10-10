@@ -159,14 +159,14 @@ export default function CascadingDropdownExample() {
         options={regionOptionsMulti}
         value={asyncSearchValue}
         onValueChange={(val) => setAsyncSearchValue(val)}
-        onLoadChildren={loadCountriesForRegion}
+        loadChildren={loadCountriesForRegion}
         placeholder="Search regions & countries..."
         showMenuSearch
         showSubmenuSearch
         menuSearchPlaceholder="Search regions..."
         submenuSearchPlaceholder="Search countries..."
-        onMenuSearch={asyncSearchRegions}
-        onSubmenuSearch={asyncSearchCountries}
+        searchMenu={asyncSearchRegions}
+        searchSubmenu={asyncSearchCountries}
         searchDebounceMs={300}
       />
     </div>

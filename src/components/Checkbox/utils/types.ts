@@ -29,7 +29,7 @@ export interface CheckboxClasses {
  *
  * @example
  * ```tsx
- * <Checkbox checked={val} onValueChange={setVal} label="Accept" />
+ * <Checkbox checked={val} onCheckedChange={setVal} label="Accept" />
  * ```
  */
 export interface CheckboxProps
@@ -44,8 +44,8 @@ export interface CheckboxProps
   defaultChecked?: boolean;
   /** Displays the indeterminate (minus) indicator instead of a checkmark. */
   indeterminate?: boolean;
-  /** Fires when the checked state changes. */
-  onValueChange?: (checked: boolean) => void;
+  /** Fires with the new `checked` state. */
+  onCheckedChange?: (checked: boolean) => void;
   /** Fires when the checkbox receives focus. */
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
   /** Fires when the checkbox loses focus. */

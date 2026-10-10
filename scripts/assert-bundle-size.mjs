@@ -923,6 +923,26 @@ const LIBRARY_TOTAL_HISTORY = [
       "the root's opacity fading the bar with it. Every other entry " +
       "byte-identical. Measured against a build of 1b1c91f9.",
   },
+  {
+    kb: 156.24,
+    commit: "(uncommitted)",
+    date: "2026-10-10",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.04 KB (160,030 -> 159,990 B gzipped, -40 B), 81 files " +
+      "held. A2a API renames. Accordion exclusive -65 B (9,442 -> 9,377 B): " +
+      "its root onExpandedChange(event) and the AccordionExpandEvent payload " +
+      "removed, onValueChange already reporting the same change. Table " +
+      "exclusive +27 B (16,715 -> 16,742 B), its declared breach raised 16.32 " +
+      "-> 16.35 in the same move: onPinnedColumnsChange builds the full new " +
+      "array; the renames alone measure 0 B. Toast -7 B (4,570 -> 4,563 B): " +
+      "onRemove and onDismiss merged into one onDismiss(id). Drawer -4 B, " +
+      "CascadingDropdown +3 B, Avatar +2 B (onLoad/onError forward the " +
+      "event), TimePicker -2 B (onBlur forwards the event), MultiSelectDropdown " +
+      "-2 B, SearchableDropdown +1 B, Checkbox, Switch, Dropdown -1 B each: " +
+      "name lengths. Every other entry byte-identical. Measured against a " +
+      "build of cd48847c.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -976,8 +996,13 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.32,
-      why: "2026-10-10, L11: 16.26 -> 16.32 (exclusive 16,647 -> 16,715 B gzipped, +68 B). " +
+      kb: 16.35,
+      why: "2026-10-10, A2a API renames: 16.32 -> 16.35 (exclusive 16,715 -> 16,742 B gzipped, +27 B). " +
+        "The renames themselves are 0 B: built with every A2a name and the old pin call, Table " +
+        "measured 16,715 B, identical to HEAD. All +27 B is onPinnedColumnsChange receiving the " +
+        "full new pinnedColumns array (the column appended or filtered out) instead of one id and " +
+        "a flag, which every consumer had to fold back into an array themselves. " +
+        "2026-10-10, L11: 16.26 -> 16.32 (exclusive 16,647 -> 16,715 B gzipped, +68 B). " +
         "+68 B: one body tab stop with pinned columns (WCAG 2.4.3, APG grid). Pinned parts " +
         "numbered their cells from 0, giving two tab stops and arrows that couldn't cross; the " +
         "cheaper count-from-pinnedColumns variant gives a wrong offset when a pinned column is " +

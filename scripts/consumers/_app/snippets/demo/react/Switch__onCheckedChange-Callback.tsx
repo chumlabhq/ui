@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Switch } from "@chumlab/ui/switch";
 
@@ -8,8 +6,8 @@ export default function SwitchExample() {
   return (
     <div className="flex flex-col gap-2">
       <Switch
-        label="Using onValueChange"
-        onValueChange={setCallbackSwitch}
+        label="Using onCheckedChange"
+        onCheckedChange={setCallbackSwitch}
         checked={callbackSwitch}
         classes={
           {

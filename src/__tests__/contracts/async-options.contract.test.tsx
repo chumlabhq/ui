@@ -4,7 +4,7 @@
  * their trigger.
  *
  * `useDropdown` and `useMultiSelectDropdown` both compute `displayOptions` from
- * `asyncOptions`/`allInitialOptions` once `onSearch` is a function, and never
+ * `asyncOptions`/`allInitialOptions` once `searchOptions` is a function, and never
  * from `options` -- while the selection lookup spreads all three. Passing both
  * therefore rendered an empty menu underneath a correctly-labelled trigger,
  * which is why it read as half-working rather than as broken.
@@ -61,7 +61,7 @@ const asserted = { n: 0 };
 describe("async options contract", () => {
   describe("self-check", () => {
     it("catches a menu resolved from a source the branch ignores", async () => {
-      // The pre-fix shape: options supplied, onSearch present, menu empty.
+      // The pre-fix shape: options supplied, searchOptions present, menu empty.
       const brokenDisplayOptions = (
         isAsync: boolean,
         options: string[],
@@ -166,7 +166,7 @@ const drive = async (
 };
 
 /**
- * `loadOnOpen` + `onLoadOptions`: the menu is fetched when the trigger opens it.
+ * `loadOnOpen` + `loadOptions`: the menu is fetched when the trigger opens it.
  *
  * These two load from `handleOpen`/`handleToggle` rather than from an effect, so
  * every assertion here depends on the fixture opening the menu by clicking.
@@ -224,8 +224,8 @@ describe("load-on-open branch", () => {
 });
 
 /**
- * `loadInitialOnOpen` + `onLoadInitialOptions`: the prefetch that populates the
- * menu before the first query, distinct from `onSearch` above.
+ * `loadInitialOnOpen` + `loadInitialOptions`: the prefetch that populates the
+ * menu before the first query, distinct from `searchOptions` above.
  */
 describe("initial-load branch", () => {
   const CASES = [
@@ -269,7 +269,7 @@ describe("cascading async branches", () => {
     await drive(CascadingDropdown as never, "CascadingDropdown", "async-menu-search-resolved");
     expect(
       renderedMenuItems(),
-      "onMenuSearch resolved but the menu kept showing the client-side list",
+      "searchMenu resolved but the menu kept showing the client-side list",
     ).toEqual(["Apple"]);
   });
 
@@ -285,7 +285,7 @@ describe("cascading async branches", () => {
     await drive(CascadingDropdown as never, "CascadingDropdown", "async-children-resolved");
     expect(
       renderedMenuItems().includes("Apple"),
-      "onLoadChildren resolved but the submenu did not render its children",
+      "loadChildren resolved but the submenu did not render its children",
     ).toBe(true);
   });
 

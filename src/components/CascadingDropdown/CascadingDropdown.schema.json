@@ -68,7 +68,7 @@
       "description": "(value: CascadingValue, path: CascadingOption[]) => void",
       "x-tsType": "((value: CascadingValue, path: CascadingOption[]) => void) | undefined"
     },
-    "onLoadChildren": {
+    "loadChildren": {
       "type": "object",
       "description": "(parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader.",
       "x-tsType": "((parent: CascadingOption) => Promise<CascadingOption[]>) | undefined"
@@ -94,13 +94,13 @@
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event.",
+      "x-tsType": "((event: FocusEvent<HTMLElement, Element>) => void) | undefined"
     },
     "onFocus": {
       "type": "object",
-      "description": "() => void",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event.",
+      "x-tsType": "((event: FocusEvent<HTMLElement, Element>) => void) | undefined"
     },
     "onKeyDown": {
       "type": "object",
@@ -385,12 +385,12 @@
       "description": "Placeholder text for the submenu search input.",
       "default": "Search..."
     },
-    "onMenuSearch": {
+    "searchMenu": {
       "type": "object",
       "description": "(query: string) => Promise<CascadingOption[]> — Async search for main menu.",
       "x-tsType": "(query: string) => Promise<CascadingOption[]>"
     },
-    "onSubmenuSearch": {
+    "searchSubmenu": {
       "type": "object",
       "description": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu.",
       "x-tsType": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]>"

@@ -166,9 +166,9 @@
       },
       "description": "Array of snap point positions (0-1) for the drawer panel."
     },
-    "activeSnapPointIndex": {
+    "snapPointIndex": {
       "type": "number",
-      "description": "Controlled active snap point index."
+      "description": "Controlled index into `snapPoints`. Pairs with `defaultSnapPointIndex` and `onSnapPointIndexChange`."
     },
     "defaultSnapPointIndex": {
       "type": "number",

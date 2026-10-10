@@ -218,7 +218,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
  * AI Usage Guidelines:
  * - Use for selecting a single value with search/filter capability
  * - Minimum: `<SearchableDropdown options={[...]} onValueChange={handler} />`
- * - Use `onSearch` for async search, `onLoadInitialOptions` for prefetch
+ * - Use `searchOptions` for async search, `loadInitialOptions` for prefetch
  * - Pair `value` with `onValueChange` for controlled mode
  *
  * Behavior:
@@ -264,10 +264,10 @@ const SearchableDropdown = forwardRef<
     selectedIcon,
     fullWidth = false,
     loading: externalLoading = false,
-    onSearch,
+    searchOptions,
     searchDebounceMs = 300,
     initialOptions = [],
-    onLoadInitialOptions,
+    loadInitialOptions,
     loadInitialOnOpen = false,
     onLoadError,
     shimmerCount = 5,
@@ -370,10 +370,10 @@ const SearchableDropdown = forwardRef<
     disabled,
     clearable,
     showSearch,
-    onSearch,
+    searchOptions,
     searchDebounceMs,
     initialOptions,
-    onLoadInitialOptions,
+    loadInitialOptions,
     loadInitialOnOpen,
     onLoadError,
     typeaheadTimeout,

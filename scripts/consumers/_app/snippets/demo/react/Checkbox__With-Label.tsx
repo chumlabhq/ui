@@ -7,7 +7,7 @@ export default function CheckboxExample() {
     <Checkbox
       label="Accept terms and conditions"
       checked={withLabel}
-      onValueChange={setWithLabel}
+      onCheckedChange={setWithLabel}
       size="md"
       shape="rounded"
       classes={

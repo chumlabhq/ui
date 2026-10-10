@@ -251,9 +251,9 @@ describe("Table", () => {
       expect(checkboxes.length).toBe(0);
     });
 
-    it("calls onSelectionChange when a row checkbox is clicked", async () => {
+    it("calls onSelectedRowIdsChange when a row checkbox is clicked", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedRowIdsChange = vi.fn();
 
       render(
         <Table
@@ -261,7 +261,7 @@ describe("Table", () => {
           data={data}
           selectionMode="multiple"
           getRowId={getRowId}
-          onSelectionChange={onSelectionChange}
+          onSelectedRowIdsChange={onSelectedRowIdsChange}
         />
       );
 
@@ -269,12 +269,12 @@ describe("Table", () => {
       // Click the first data row checkbox (index 1, since 0 is "select all")
       await user.click(checkboxes[1]);
 
-      expect(onSelectionChange).toHaveBeenCalled();
+      expect(onSelectedRowIdsChange).toHaveBeenCalled();
     });
 
     it("selects all rows when select-all checkbox is clicked", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedRowIdsChange = vi.fn();
 
       render(
         <Table
@@ -282,21 +282,21 @@ describe("Table", () => {
           data={data}
           selectionMode="multiple"
           getRowId={getRowId}
-          onSelectionChange={onSelectionChange}
+          onSelectedRowIdsChange={onSelectedRowIdsChange}
         />
       );
 
       const checkboxes = screen.getAllByRole("checkbox");
       await user.click(checkboxes[0]); // select all
 
-      expect(onSelectionChange).toHaveBeenCalledWith(
+      expect(onSelectedRowIdsChange).toHaveBeenCalledWith(
         expect.arrayContaining(["1", "2", "3"])
       );
     });
 
     it("selects a single row and reports its id", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedRowIdsChange = vi.fn();
 
       render(
         <Table
@@ -304,7 +304,7 @@ describe("Table", () => {
           data={data}
           selectionMode="multiple"
           getRowId={getRowId}
-          onSelectionChange={onSelectionChange}
+          onSelectedRowIdsChange={onSelectedRowIdsChange}
         />
       );
 
@@ -312,12 +312,12 @@ describe("Table", () => {
       // Click second data row (index 2 = Bob)
       await user.click(checkboxes[2]);
 
-      expect(onSelectionChange).toHaveBeenCalledWith(["2"]);
+      expect(onSelectedRowIdsChange).toHaveBeenCalledWith(["2"]);
     });
 
     it("deselects a row when clicked again", async () => {
       const user = userEvent.setup();
-      const onSelectionChange = vi.fn();
+      const onSelectedRowIdsChange = vi.fn();
 
       render(
         <Table
@@ -325,7 +325,7 @@ describe("Table", () => {
           data={data}
           selectionMode="multiple"
           getRowId={getRowId}
-          onSelectionChange={onSelectionChange}
+          onSelectedRowIdsChange={onSelectedRowIdsChange}
         />
       );
 
@@ -333,7 +333,7 @@ describe("Table", () => {
       await user.click(checkboxes[1]);
       await user.click(checkboxes[1]);
 
-      const lastCall = onSelectionChange.mock.calls[onSelectionChange.mock.calls.length - 1];
+      const lastCall = onSelectedRowIdsChange.mock.calls[onSelectedRowIdsChange.mock.calls.length - 1];
       expect(lastCall[0]).toEqual([]);
     });
 
@@ -698,9 +698,9 @@ describe("Table", () => {
       expect(screen.queryByText("Details for Alice")).not.toBeInTheDocument();
     });
 
-    it("calls onExpandedChange with expanded row ids", async () => {
+    it("calls onExpandedRowIdsChange with expanded row ids", async () => {
       const user = userEvent.setup();
-      const onExpandedChange = vi.fn();
+      const onExpandedRowIdsChange = vi.fn();
 
       render(
         <Table
@@ -708,7 +708,7 @@ describe("Table", () => {
           data={data}
           getRowId={getRowId}
           expandable
-          onExpandedChange={onExpandedChange}
+          onExpandedRowIdsChange={onExpandedRowIdsChange}
           renderExpandedRow={(row) => <div>Details for {row.name}</div>}
         />
       );
@@ -716,7 +716,7 @@ describe("Table", () => {
       const expandButtons = screen.getAllByRole("button", { name: /expand row/i });
       await user.click(expandButtons[0]);
 
-      expect(onExpandedChange).toHaveBeenCalledWith(["1"]);
+      expect(onExpandedRowIdsChange).toHaveBeenCalledWith(["1"]);
     });
 
     it("expands row on row click when expandOnRowClick is true", async () => {
@@ -762,7 +762,7 @@ describe("Table", () => {
           columns={columns}
           data={data}
           pinnedColumns={["name"]}
-          onPinColumn={() => {}}
+          onPinnedColumnsChange={() => {}}
         />
       );
 
@@ -770,23 +770,43 @@ describe("Table", () => {
       expect(grids.length).toBe(2);
     });
 
-    it("calls onPinColumn when pin button is clicked", async () => {
+    it("calls onPinnedColumnsChange when pin button is clicked", async () => {
       const user = userEvent.setup();
-      const onPinColumn = vi.fn();
+      const onPinnedColumnsChange = vi.fn();
 
       render(
         <Table
           columns={columns}
           data={data}
           pinnableColumns={["name", "age", "email"]}
-          onPinColumn={onPinColumn}
+          onPinnedColumnsChange={onPinnedColumnsChange}
         />
       );
 
-      const pinButtons = screen.getAllByRole("button", { name: /pin .* column/i });
-      await user.click(pinButtons[0]);
+      await user.click(screen.getByRole("button", { name: /^pin age column/i }));
 
-      expect(onPinColumn).toHaveBeenCalled();
+      expect(onPinnedColumnsChange).toHaveBeenCalledWith(["age"]);
+    });
+
+    it("hands onPinnedColumnsChange the full new array, appending and removing", async () => {
+      const user = userEvent.setup();
+      const onPinnedColumnsChange = vi.fn();
+
+      render(
+        <Table
+          columns={columns}
+          data={data}
+          pinnedColumns={["name"]}
+          pinnableColumns={["name", "age", "email"]}
+          onPinnedColumnsChange={onPinnedColumnsChange}
+        />
+      );
+
+      await user.click(screen.getByRole("button", { name: /^pin email column/i }));
+      expect(onPinnedColumnsChange).toHaveBeenLastCalledWith(["name", "email"]);
+
+      await user.click(screen.getByRole("button", { name: /unpin name column/i }));
+      expect(onPinnedColumnsChange).toHaveBeenLastCalledWith([]);
     });
 
     it("shows unpin button for already pinned columns", () => {
@@ -796,7 +816,7 @@ describe("Table", () => {
           data={data}
           pinnedColumns={["name"]}
           pinnableColumns={["name", "age", "email"]}
-          onPinColumn={() => {}}
+          onPinnedColumnsChange={() => {}}
         />
       );
 
@@ -1309,7 +1329,7 @@ describe("Table", () => {
           columns={columns}
           data={data}
           pinnedRightColumns={["email"]}
-          onPinColumn={() => {}}
+          onPinnedColumnsChange={() => {}}
         />
       );
 
@@ -1826,14 +1846,14 @@ describe("Table – additional coverage", () => {
 
   describe("getRowId prop", () => {
     it("uses custom getRowId for row identification", () => {
-      const onSelectionChange = vi.fn();
+      const onSelectedRowIdsChange = vi.fn();
       render(
         <Table
           columns={columns}
           data={data}
           getRowId={(row) => (row as Person).id}
           selectionMode="multiple"
-          onSelectionChange={onSelectionChange}
+          onSelectedRowIdsChange={onSelectedRowIdsChange}
           ariaLabel="t"
         />,
       );

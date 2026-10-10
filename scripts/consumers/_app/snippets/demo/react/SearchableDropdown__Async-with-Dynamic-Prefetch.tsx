@@ -121,8 +121,8 @@ export default function SearchableDropdownExample() {
         value={asyncPrefetchValue}
         onValueChange={(v) => setAsyncPrefetchValue(v)}
         placeholder="Select or search countries..."
-        onSearch={handleAsyncSearch}
-        onLoadInitialOptions={handleLoadInitialOptions}
+        searchOptions={handleAsyncSearch}
+        loadInitialOptions={handleLoadInitialOptions}
         loadInitialOnOpen
         searchDebounceMs={300}
         noResultsContent="No countries found"

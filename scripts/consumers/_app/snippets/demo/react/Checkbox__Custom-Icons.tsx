@@ -45,7 +45,7 @@ export default function CheckboxExample() {
       <Checkbox
         label="Add to favorites"
         checked={customHeart}
-        onValueChange={setCustomHeart}
+        onCheckedChange={setCustomHeart}
         checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
         size="md"
         shape="rounded"
@@ -62,7 +62,7 @@ export default function CheckboxExample() {
       <Checkbox
         label="Star this item"
         checked={customStar}
-        onValueChange={setCustomStar}
+        onCheckedChange={setCustomStar}
         checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
         size="md"
         shape="rounded"
@@ -79,7 +79,7 @@ export default function CheckboxExample() {
       <Checkbox
         label="Bookmark (outline when off)"
         checked={customBookmark}
-        onValueChange={setCustomBookmark}
+        onCheckedChange={setCustomBookmark}
         checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
         uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-cl-text-tertiary" />}
         size="md"

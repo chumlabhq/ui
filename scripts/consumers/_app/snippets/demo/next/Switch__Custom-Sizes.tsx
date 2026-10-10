@@ -12,7 +12,7 @@ export default function SwitchExample() {
       <Switch
         label="Small switch"
         checked={sizeSwitchSmall}
-        onValueChange={setSizeSwitchSmall}
+        onCheckedChange={setSizeSwitchSmall}
         classes={
           {
                         ...({
@@ -31,7 +31,7 @@ export default function SwitchExample() {
       <Switch
         label="Default switch"
         checked={sizeSwitch}
-        onValueChange={setSizeSwitch}
+        onCheckedChange={setSizeSwitch}
         classes={
           {
             label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",
@@ -44,7 +44,7 @@ export default function SwitchExample() {
       <Switch
         label="Large switch"
         checked={sizeSwitchLarge}
-        onValueChange={setSizeSwitchLarge}
+        onCheckedChange={setSizeSwitchLarge}
         classes={
           {
                         ...({

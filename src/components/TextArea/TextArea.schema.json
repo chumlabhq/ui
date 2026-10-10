@@ -55,13 +55,13 @@
     },
     "onStartIconClick": {
       "type": "object",
-      "description": "() => void — Makes startIcon a clickable button.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: MouseEvent<HTMLButtonElement>) => void — Makes startIcon a clickable button, called with the native click event.",
+      "x-tsType": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined"
     },
     "onEndIconClick": {
       "type": "object",
-      "description": "() => void — Makes endIcon a clickable button.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: MouseEvent<HTMLButtonElement>) => void — Makes endIcon a clickable button, called with the native click event.",
+      "x-tsType": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined"
     },
     "startIconLabel": {
       "type": "string",

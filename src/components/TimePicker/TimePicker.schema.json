@@ -25,8 +25,8 @@
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void — Called when the input loses focus.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: FocusEvent<HTMLInputElement>) => void — Fires once focus has left the whole time picker, with the input's native blur event.",
+      "x-tsType": "((event: FocusEvent<HTMLInputElement, Element>) => void) | undefined"
     },
     "format": {
       "type": "string",

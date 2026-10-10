@@ -96,7 +96,7 @@ export default function MultiSelectDropdownExample() {
         value={asyncValue}
         onValueChange={(values) => setAsyncValue(values)}
         placeholder="Select countries..."
-        onLoadOptions={handleLoadOptions}
+        loadOptions={handleLoadOptions}
         loadOnOpen
         shimmerCount={5}
         maxDisplayedChips={2}

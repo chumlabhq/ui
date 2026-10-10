@@ -69,7 +69,7 @@ const searchSubmenu = async (c: HTMLElement, ui: ActTools) => {
 /**
  * A parent whose children are fetched rather than declared. `hasChildren` is
  * what makes the submenu reachable when `children` is absent — without it the
- * option is a leaf and `onLoadChildren` can never fire.
+ * option is a leaf and `loadChildren` can never fire.
  */
 const LAZY = [
   { value: "fruit", label: "Fruit", hasChildren: true },
@@ -192,8 +192,8 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
   { name: "error", props: { options: NESTED, label: "Produce", error: true, errorMessage: "Required" } },
   { name: "success", props: { options: NESTED, label: "Produce", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { options: NESTED, disabled: true } },
-  // The async half of the menu. `onMenuSearch` and `onSubmenuSearch` replace
-  // client-side filtering; `onLoadChildren` fetches a submenu's contents. All
+  // The async half of the menu. `searchMenu` and `searchSubmenu` replace
+  // client-side filtering; `loadChildren` fetches a submenu's contents. All
   // three are Promise-returning and none had a fixture, so every contract below
   // has only ever seen this component's synchronous tree.
   {
@@ -203,7 +203,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       defaultOpen: true,
       keepMounted: true,
       showMenuSearch: true,
-      onMenuSearch: neverResolves(),
+      searchMenu: neverResolves(),
       searchDebounceMs: SEARCH_DEBOUNCE,
     },
     act: searchMenu,
@@ -216,7 +216,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       defaultOpen: true,
       keepMounted: true,
       showMenuSearch: true,
-      onMenuSearch: resolvesTo([{ value: "a", label: "Apple" }]),
+      searchMenu: resolvesTo([{ value: "a", label: "Apple" }]),
       searchDebounceMs: SEARCH_DEBOUNCE,
     },
     act: searchMenu,
@@ -228,7 +228,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       defaultOpen: true,
       keepMounted: true,
       showMenuSearch: true,
-      onMenuSearch: resolvesTo([]),
+      searchMenu: resolvesTo([]),
       searchDebounceMs: SEARCH_DEBOUNCE,
     },
     act: searchMenu,
@@ -241,20 +241,20 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       defaultOpen: true,
       keepMounted: true,
       showSubmenuSearch: true,
-      onSubmenuSearch: resolvesTo([{ value: "a", label: "Apple" }]),
+      searchSubmenu: resolvesTo([{ value: "a", label: "Apple" }]),
       searchDebounceMs: SEARCH_DEBOUNCE,
     },
     act: searchSubmenu,
   },
   {
     name: "async-children-initial",
-    props: { options: LAZY, defaultOpen: true, keepMounted: true, onLoadChildren: resolvesTo([]) },
+    props: { options: LAZY, defaultOpen: true, keepMounted: true, loadChildren: resolvesTo([]) },
     act: settle,
     note: "Lazy parents before any submenu is opened: nothing fetched yet.",
   },
   {
     name: "async-children-pending",
-    props: { options: LAZY, defaultOpen: true, keepMounted: true, onLoadChildren: neverResolves() },
+    props: { options: LAZY, defaultOpen: true, keepMounted: true, loadChildren: neverResolves() },
     act: hoverSubmenu,
     note: "Submenu opened, children outstanding — the loading item.",
   },
@@ -264,13 +264,13 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       options: LAZY,
       defaultOpen: true,
       keepMounted: true,
-      onLoadChildren: resolvesTo([{ value: "a", label: "Apple" }]),
+      loadChildren: resolvesTo([{ value: "a", label: "Apple" }]),
     },
     act: hoverSubmenu,
   },
   {
     name: "async-children-empty",
-    props: { options: LAZY, defaultOpen: true, keepMounted: true, onLoadChildren: resolvesTo([]) },
+    props: { options: LAZY, defaultOpen: true, keepMounted: true, loadChildren: resolvesTo([]) },
     act: hoverSubmenu,
     note: "A parent that turns out to have no children.",
   },
@@ -280,7 +280,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       options: LAZY,
       defaultOpen: true,
       keepMounted: true,
-      onLoadChildren: rejectsWith("network"),
+      loadChildren: rejectsWith("network"),
       onLoadError: () => {},
     },
     act: hoverSubmenu,
@@ -292,7 +292,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       options: LAZY,
       defaultOpen: true,
       keepMounted: true,
-      onLoadChildren: resolvesTo([{ value: "a", label: "Apple" }]),
+      loadChildren: resolvesTo([{ value: "a", label: "Apple" }]),
     },
     act: clickSubmenu,
     note: "Click with no hover. handleMenuItemClick used to read this parent as a leaf and commit a value instead of opening the submenu.",

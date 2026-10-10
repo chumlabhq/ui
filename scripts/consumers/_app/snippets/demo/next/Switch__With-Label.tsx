@@ -9,7 +9,7 @@ export default function SwitchExample() {
     <Switch
       label="Enable notifications"
       checked={labelSwitch}
-      onValueChange={setLabelSwitch}
+      onCheckedChange={setLabelSwitch}
       classes={
         {
           label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",

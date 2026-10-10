@@ -1,4 +1,4 @@
-import type { CSSProperties, MutableRefObject, ReactNode } from "react";
+import type { CSSProperties, MutableRefObject, ReactNode, FocusEvent } from "react";
 
 /**
  * One selectable option. The same shape `MultiSelectDropdown` uses, minus the search.
@@ -125,8 +125,10 @@ export interface MultiSelectSearchableDropdownBaseProps {
   typeaheadTimeout?: number;
   keepMounted?: boolean;
   "aria-label"?: string;
-  onBlur?: () => void;
-  onFocus?: () => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   ClearIcon?: React.ComponentType<{ className?: string }>;
   renderTrigger?: (
@@ -138,7 +140,7 @@ export interface MultiSelectSearchableDropdownBaseProps {
 
 /**
  * `useMultiSelectDropdown` computes `displayOptions` from `asyncOptions` and
- * `allInitialOptions` once `onSearch` is a function -- `options` never reaches
+ * `allInitialOptions` once `searchOptions` is a function -- `options` never reaches
  * the menu on that branch. `allOptions`, which resolves the chips, does still
  * read it, so passing both rendered an empty menu under correctly-labelled
  * chips. The union makes that combination fail to typecheck; a runtime fallback
@@ -151,15 +153,15 @@ export type MultiSelectSearchableDropdownOptionSource =
   | {
       /** Array of `{ value: string, label: string }` objects. Not `items`. */
       options?: MultiSelectOption[];
-      onSearch?: never;
+      searchOptions?: never;
       initialOptions?: never;
-      onLoadInitialOptions?: never;
+      loadInitialOptions?: never;
       loadInitialOnOpen?: never;
     }
   | {
       options?: never;
       /** Async search callback. Fires with the search query string. Return filtered options. Not `onFilter`. */
-      onSearch: (query: string) => Promise<MultiSelectOption[]>;
+      searchOptions: (query: string) => Promise<MultiSelectOption[]>;
       /** Shown before the first query, and merged into the chip lookup. */
       initialOptions?: MultiSelectOption[];
     } & SearchableInitialLoad<MultiSelectOption>;
@@ -169,8 +171,8 @@ export type MultiSelectSearchableDropdownOptionSource =
  * typechecked and fetched nothing.
  */
 type SearchableInitialLoad<T> =
-  | { onLoadInitialOptions?: never; loadInitialOnOpen?: never }
-  | { onLoadInitialOptions: () => Promise<T[]>; loadInitialOnOpen: true };
+  | { loadInitialOptions?: never; loadInitialOnOpen?: never }
+  | { loadInitialOptions: () => Promise<T[]>; loadInitialOnOpen: true };
 
 export type MultiSelectSearchableDropdownProps =
   MultiSelectSearchableDropdownBaseProps & MultiSelectSearchableDropdownOptionSource;
@@ -197,8 +199,10 @@ export interface MultiSelectSearchableDropdownTriggerRenderProps {
   disabled: boolean;
   onClick: () => void;
   onKeyDown: (event: React.KeyboardEvent) => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
   "data-disabled": true | undefined;
   "data-error": true | undefined;
   "data-valid": true | undefined;
@@ -221,11 +225,13 @@ export interface UseMultiSelectDropdownProps {
   defaultValue?: string[];
   disabled?: boolean;
   showSearch?: boolean;
-  onSearch?: (query: string) => Promise<MultiSelectOption[]>;
+  /** Async search: called with the query, returns the matching options. */
+  searchOptions?: (query: string) => Promise<MultiSelectOption[]>;
   searchDebounceMs?: number;
   onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   initialOptions?: MultiSelectOption[];
-  onLoadInitialOptions?: () => Promise<MultiSelectOption[]>;
+  /** Loads the options shown before the first query. */
+  loadInitialOptions?: () => Promise<MultiSelectOption[]>;
   loadInitialOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   typeaheadTimeout?: number;

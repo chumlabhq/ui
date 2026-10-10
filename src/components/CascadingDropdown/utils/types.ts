@@ -1,5 +1,5 @@
 import type React from "react";
-import type { ReactNode } from "react";
+import type { FocusEvent, ReactNode } from "react";
 
 export type SelectionMode = "single" | "multi";
 
@@ -100,15 +100,18 @@ interface CascadingDropdownBaseProps {
   defaultValue?: CascadingValue;
   /** Fires with `(value, path)` when selection changes. Not `onChange`. */
   onValueChange?: (value: CascadingValue, path: CascadingOption[]) => void;
-  onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
+  /** Loads a parent's children when it is first opened. Returns them; it is a loader, not an event. */
+  loadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
   /** Called when async child loading fails. */
   onLoadError?: (error: unknown) => void;
   /** Called when the dropdown open state changes. */
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onBlur?: () => void;
-  onFocus?: () => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   id?: string;
   name?: string;
@@ -173,7 +176,7 @@ interface CascadingDropdownBaseProps {
 /**
  * The menu's async search, paired with the control that can fire it.
  *
- * `onMenuSearch` is read only when a query is typed, and the query input is
+ * `searchMenu` is read only when a query is typed, and the query input is
  * rendered only under `showMenuSearch` — which defaults to false. Supplying the
  * callback alone is therefore a loader with nothing to trigger it: no search
  * input ever mounts, `menuSearchQuery` never leaves `""`, and the callback is
@@ -181,19 +184,19 @@ interface CascadingDropdownBaseProps {
  * asserted the same way.
  */
 export type CascadingMenuSearch =
-  | { onMenuSearch?: never }
+  | { searchMenu?: never }
   | {
       /** Async search for the main menu. Disables client-side filtering there. */
-      onMenuSearch: (query: string) => Promise<CascadingOption[]>;
+      searchMenu: (query: string) => Promise<CascadingOption[]>;
       showMenuSearch: true;
     };
 
 /** The submenu's async search and its control. See `CascadingMenuSearch`. */
 export type CascadingSubmenuSearch =
-  | { onSubmenuSearch?: never }
+  | { searchSubmenu?: never }
   | {
       /** Async search for a submenu. Receives the parent option and the query. */
-      onSubmenuSearch: (
+      searchSubmenu: (
         query: string,
         parent: CascadingOption,
       ) => Promise<CascadingOption[]>;
@@ -229,8 +232,10 @@ export interface CascadingDropdownTriggerRenderProps {
    */
   onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
   onKeyDown: (event: React.KeyboardEvent) => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
   "data-disabled": true | undefined;
   "data-error": true | undefined;
   "data-valid": true | undefined;
@@ -254,7 +259,8 @@ export interface UseCascadingDropdownProps {
   disabled?: boolean;
   closeOnSelect?: boolean;
   onValueChange?: (value: CascadingValue, path: CascadingOption[]) => void;
-  onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
+  /** Loads a parent's children when it is first opened. Returns them; it is a loader, not an event. */
+  loadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
   onLoadError?: (error: unknown) => void;
   open?: boolean;
   defaultOpen?: boolean;
@@ -263,8 +269,10 @@ export interface UseCascadingDropdownProps {
   "aria-label"?: string;
   showMenuSearch?: boolean;
   showSubmenuSearch?: boolean;
-  onMenuSearch?: (query: string) => Promise<CascadingOption[]>;
-  onSubmenuSearch?: (query: string, parent: CascadingOption) => Promise<CascadingOption[]>;
+  /** Loads the top-level menu's results for a typed query. */
+  searchMenu?: (query: string) => Promise<CascadingOption[]>;
+  /** Loads a submenu's results for a typed query. */
+  searchSubmenu?: (query: string, parent: CascadingOption) => Promise<CascadingOption[]>;
   searchDebounceMs?: number;
 }
 

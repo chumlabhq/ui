@@ -65,14 +65,14 @@ export function IndexPicker({
 /**
  * Owns the "is it still there" half of a dismissal.
  *
- * A Toast calls `onRemove` and keeps rendering; unmounting it is the host's
+ * A Toast calls `onDismiss` and keeps rendering; unmounting it is the host's
  * job. Without an owner, "tapping close dismisses the toast" has nothing to
  * assert against.
  */
 export function Dismissable({
   children,
 }: {
-  children: (onRemove: () => void) => ReactNode;
+  children: (onDismiss: () => void) => ReactNode;
 }) {
   const [present, setPresent] = useState(true);
   return (

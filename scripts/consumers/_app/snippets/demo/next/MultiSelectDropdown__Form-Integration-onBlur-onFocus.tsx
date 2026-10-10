@@ -24,8 +24,8 @@ export default function MultiSelectDropdownExample() {
           value={[]}
           onValueChange={() => {}}
           placeholder="Focus or blur me..."
-          onFocus={() => setFocusMessage("Dropdown focused")}
-          onBlur={() => setFocusMessage("Dropdown blurred")}
+          onFocus={(event) => setFocusMessage(`Dropdown focused: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
+          onBlur={(event) => setFocusMessage(`Dropdown blurred: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
           maxDisplayedChips={2}
           classes={
             {

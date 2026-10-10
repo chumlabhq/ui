@@ -72,7 +72,7 @@ const fixtures: Fixtures<typeof Drawer> = [
             modal={false}
             swipeable
             snapPoints={[0.3, 0.6, 0.9]}
-            activeSnapPointIndex={index}
+            snapPointIndex={index}
             aria-label="Snapping sheet"
           >
             <DrawerHeader title="Sheet" />

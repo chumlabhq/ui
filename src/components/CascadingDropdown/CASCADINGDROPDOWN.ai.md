@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<CascadingDropdown options={[...]} />` for hierarchical data (categories → subcategories). Children can use `selectionMode: "single"` or `"multi"` independently. For async data, pass `onLoadChildren` to fetch children on hover. For search, set `showMenuSearch` and/or `showSubmenuSearch`.
+Use `<CascadingDropdown options={[...]} />` for hierarchical data (categories → subcategories). Children can use `selectionMode: "single"` or `"multi"` independently. For async data, pass `loadChildren` to fetch children on hover. For search, set `showMenuSearch` and/or `showSubmenuSearch`.
 
 ---
 
@@ -70,9 +70,9 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 | Prop | Constraint |
 |------|-----------|
 | `selectionMode` on an option | Set on each `CascadingOption.children` parent. `"single"` = radio behavior, `"multi"` = checkbox. Defaults to `"single"`. |
-| `onLoadChildren` | Only called when `option.hasChildren` is true and `option.children` is undefined. Must return `Promise<CascadingOption[]>`. |
-| `onMenuSearch` | When provided, disables client-side menu filtering. You must return filtered results. |
-| `onSubmenuSearch` | When provided, disables client-side submenu filtering. Receives `(query, parent)`. |
+| `loadChildren` | Only called when `option.hasChildren` is true and `option.children` is undefined. Must return `Promise<CascadingOption[]>`. |
+| `searchMenu` | When provided, disables client-side menu filtering. You must return filtered results. |
+| `searchSubmenu` | When provided, disables client-side submenu filtering. Receives `(query, parent)`. |
 | `value` / `onValueChange` | Controlled mode. Shape: `{ parentValue: "childValue" }` for single, `{ parentValue: ["a","b"] }` for multi. |
 | `defaultValue` | Uncontrolled mode. Cannot be used with `value`. |
 | `closeOnSelect` | Defaults to `true`. Set `false` to keep menu open after selection (useful for multi-select). |
@@ -106,13 +106,13 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `value` | object | — | Controlled selection value as { [parentValue]: string \| string[] }. |
 | `defaultValue` | object | — | Initial selection value for uncontrolled usage. |
 | `onValueChange` | object | — | (value: CascadingValue, path: CascadingOption[]) => void |
-| `onLoadChildren` | object | — | (parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader. |
+| `loadChildren` | object | — | (parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader. |
 | `onLoadError` | object | — | (error: unknown) => void — Called when async child loading fails. |
 | `open` | boolean | — | Controlled open state. |
 | `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
 | `onOpenChange` | object | — | (open: boolean) => void |
-| `onBlur` | object | — | () => void |
-| `onFocus` | object | — | () => void |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void |
 | `id` | string | — | HTML id attribute. |
 | `name` | string | — | Form field name. |
@@ -153,8 +153,8 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `showSubmenuSearch` | boolean | `false` | Show a search input inside submenus. |
 | `menuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the main menu search input. |
 | `submenuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the submenu search input. |
-| `onMenuSearch` | object | — | (query: string) => Promise<CascadingOption[]> — Async search for main menu. |
-| `onSubmenuSearch` | object | — | (query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu. |
+| `searchMenu` | object | — | (query: string) => Promise<CascadingOption[]> — Async search for main menu. |
+| `searchSubmenu` | object | — | (query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu. |
 | `searchDebounceMs` | number | `300` | Debounce delay in ms for async search callbacks. |
 | `SearchIcon` | object | — | React.ComponentType<{ className?: string }> — Custom search icon component. |
 | `menuSearchAriaLabel` | string | `"Search menu"` | Accessible label for the menu search input. |
@@ -302,7 +302,7 @@ const loadChildren = async (parent: CascadingOption) => {
     { value: "electronics", label: "Electronics", hasChildren: true },
     { value: "clothing", label: "Clothing", hasChildren: true },
   ]}
-  onLoadChildren={loadChildren}
+  loadChildren={loadChildren}
   value={value}
   onValueChange={setValue}
 />
@@ -345,7 +345,7 @@ const searchCountries = async (query: string) => {
 <CascadingDropdown
   options={regions}
   showMenuSearch
-  onMenuSearch={searchCountries}
+  searchMenu={searchCountries}
   searchDebounceMs={300}
 />
 ```
@@ -399,9 +399,9 @@ const searchCountries = async (query: string) => {
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Submenu clipped/hidden | Parent has `overflow: hidden` | Menu renders in portal — check `portalContainer` and z-index |
-| No submenu appears on hover | `children` is empty or undefined | Provide `children` or set `hasChildren: true` with `onLoadChildren` |
+| No submenu appears on hover | `children` is empty or undefined | Provide `children` or set `hasChildren: true` with `loadChildren` |
 | Async children load every hover | Children not cached | Hook caches loaded children by parent value automatically |
-| Search not calling API | `showMenuSearch` is true but no `onMenuSearch` | Without `onMenuSearch`, search is client-side filtering only |
+| Search not calling API | `showMenuSearch` is true but no `searchMenu` | Without `searchMenu`, search is client-side filtering only |
 | Stale search results | Race condition with fast typing | Built-in version tracking prevents stale results; increase `searchDebounceMs` if needed |
 | Submenu search styling same as menu | `subSearchControl` not set | Set `subSearchControl`, `subSearchInput`, `subSearchIcon` for independent styles |
 | Classes override doesn't work | Expected additive behavior | Classes REPLACE per slot, not merge. Provide full styling for overridden slots |
@@ -419,7 +419,7 @@ const searchCountries = async (query: string) => {
 | Async single-select | `title="Async Single-Select (Countries API)"` | REST Countries API integration |
 | Async multi-select | `title="Async Multi-Select (Countries API)"` | Multi-select with API |
 | Client-side search | `title="Client-Side Search"` | showMenuSearch + showSubmenuSearch |
-| Async search | `title="Async Server-Side Search (Debounced)"` | onMenuSearch + onSubmenuSearch with debounce |
+| Async search | `title="Async Server-Side Search (Debounced)"` | searchMenu + searchSubmenu with debounce |
 | Custom search styling | `title="Custom Search Styling: Teal"` | Independent menu/submenu search styles |
 | Custom checkbox | `title="Custom Checkbox - Green Rounded"` | `itemControl` with a `data-[state=checked]:` variant |
 | Disabled options | `title="Disabled Options"` | Per-option disabled |

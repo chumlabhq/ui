@@ -113,7 +113,6 @@ These props have dependencies — using them wrong causes silent bugs:
 | `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
 | `expandOnPrint` | boolean | `false` | Expands all items when printing. |
 | `storageKey` | string \| object | — | Key or config for persisting expanded state to storage. |
-| `onExpandedChange` | object | — | (event: AccordionExpandEvent) => void |
 | `onKeyDown` | object | — | (event: KeyboardEvent, itemValue: string \| null) => void |
 | `preventClose` | object | — | (value: string) => boolean \| Promise<boolean> |
 | `preventCloseTimeout` | number | `10000` | Timeout in ms for the preventClose callback. |

@@ -819,7 +819,7 @@ describe('Dropdown - Loading State', () => {
     
     render(
       <Dropdown 
-        onLoadOptions={mockLoadOptions}
+        loadOptions={mockLoadOptions}
         loadOnOpen
       />
     );
@@ -840,7 +840,7 @@ describe('Dropdown - Loading State', () => {
     
     render(
       <Dropdown 
-        onLoadOptions={mockLoadOptions}
+        loadOptions={mockLoadOptions}
         loadOnOpen
         onLoadError={handleError}
       />
@@ -981,7 +981,9 @@ describe('Dropdown - Form Integration', () => {
     
     await user.click(screen.getByRole('combobox'));
     
-    expect(handleFocus).toHaveBeenCalled();
+    expect(handleFocus).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'focus', target: screen.getByRole('combobox') }),
+    );
   });
 
   it('should call onBlur callback', async () => {
@@ -1003,7 +1005,7 @@ describe('Dropdown - Form Integration', () => {
     await user.click(screen.getByRole('button', { name: 'Outside' }));
     
     await waitFor(() => {
-      expect(handleBlur).toHaveBeenCalled();
+      expect(handleBlur).toHaveBeenCalledWith(expect.objectContaining({ type: 'blur', target: trigger }));
     });
   });
 });

@@ -363,7 +363,7 @@ describe('SearchableDropdown - Search Functionality', () => {
 });
 
 describe('SearchableDropdown - Async Search', () => {
-  it('should call onSearch with debounced query', async () => {
+  it('should call searchOptions with debounced query', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn().mockResolvedValue([
       { value: 'result1', label: 'Result 1' },
@@ -371,7 +371,7 @@ describe('SearchableDropdown - Async Search', () => {
 
     render(
       <SearchableDropdown
-        onSearch={handleSearch}
+        searchOptions={handleSearch}
         searchDebounceMs={100}
       />
     );
@@ -819,7 +819,9 @@ describe('SearchableDropdown - Form Integration', () => {
     screen.getByRole('combobox').focus();
 
     await waitFor(() => {
-      expect(handleFocus).toHaveBeenCalled();
+      expect(handleFocus).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'focus', target: screen.getByRole('combobox') }),
+      );
     });
   });
 
@@ -841,7 +843,7 @@ describe('SearchableDropdown - Form Integration', () => {
     await user.click(screen.getByText('Other'));
 
     await waitFor(() => {
-      expect(handleBlur).toHaveBeenCalled();
+      expect(handleBlur).toHaveBeenCalledWith(expect.objectContaining({ type: 'blur' }));
     });
   });
 });

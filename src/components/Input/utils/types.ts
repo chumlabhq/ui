@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { InputHTMLAttributes, MouseEvent, ReactNode } from "react";
 
 export interface InputLabelProps {
   /** The label's content. */
@@ -74,10 +74,10 @@ export interface InputProps
   startIcon?: ReactNode;
   /** Icon rendered after the input. Becomes a button when `onEndIconClick` is provided. */
   endIcon?: ReactNode;
-  /** Makes `startIcon` a clickable button. Requires `startIconLabel` for accessibility. */
-  onStartIconClick?: () => void;
-  /** Makes `endIcon` a clickable button. Requires `endIconLabel` for accessibility. */
-  onEndIconClick?: () => void;
+  /** Makes `startIcon` a clickable button, called with the native click event. Requires `startIconLabel` for accessibility. */
+  onStartIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  /** Makes `endIcon` a clickable button, called with the native click event. Requires `endIconLabel` for accessibility. */
+  onEndIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   /** Accessible label for `startIcon` when it is clickable. Required with `onStartIconClick`. */
   startIconLabel?: string;
   /** Accessible label for `endIcon` when it is clickable. Required with `onEndIconClick`. */

@@ -15,7 +15,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
  *
  * AI Usage Guidelines:
  * - Use `label` for visible labeling, or `aria-label` for icon-only
- * - Use `checked` + `onValueChange` for controlled mode
+ * - Use `checked` + `onCheckedChange` for controlled mode
  * - Use `checkedIcon`/`uncheckedIcon` for thumb icons
  * - CSS custom properties available for easy theming
  *
@@ -29,7 +29,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       description,
       checked: controlledChecked,
       defaultChecked = false,
-      onValueChange,
+      onCheckedChange,
       name,
       value = "on",
       required = false,
@@ -68,7 +68,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
-      onChange: onValueChange,
+      onChange: onCheckedChange,
     });
 
     const handleToggle = useCallback(() => {

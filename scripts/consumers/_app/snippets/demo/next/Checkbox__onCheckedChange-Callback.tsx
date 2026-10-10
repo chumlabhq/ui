@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Checkbox } from "@chumlab/ui/checkbox";
 
 export default function CheckboxExample() {
-  const [onValueChangeDemo, setOnValueChangeDemo] = useState(false);
+  const [onCheckedChangeDemo, setOnCheckedChangeDemo] = useState(false);
   return (
     <div className="flex flex-col gap-2">
       <Checkbox
-        label="Using onValueChange"
-        onValueChange={setOnValueChangeDemo}
-        checked={onValueChangeDemo}
+        label="Using onCheckedChange"
+        onCheckedChange={setOnCheckedChangeDemo}
+        checked={onCheckedChangeDemo}
         size="md"
         shape="rounded"
         classes={
@@ -23,7 +23,7 @@ export default function CheckboxExample() {
       />
       <p className="text-sm text-cl-text-secondary" data-demo-action>
         Checked:
-        {String(onValueChangeDemo)}
+        {String(onCheckedChangeDemo)}
       </p>
     </div>
   );

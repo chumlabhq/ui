@@ -125,8 +125,8 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
-| `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
-| `onError` | object | — | () => void — Fires when the avatar image fails to load. |
+| `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image finishes loading, with the image's native load event. |
+| `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image fails to load, with the image's native error event. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
 
 ## Sub-component Props

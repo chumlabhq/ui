@@ -324,13 +324,13 @@ describe("InternationalPhoneInput", () => {
 
   describe("Paste detection", () => {
     it("detects and parses international numbers when pasted", async () => {
-      const onPasteDetected = vi.fn();
+      const onPasteDetect = vi.fn();
       const onCountryChange = vi.fn();
       const onValueChange = vi.fn();
       render(
         <InternationalPhoneInput
           enablePasteDetection
-          onPasteDetected={onPasteDetected}
+          onPasteDetect={onPasteDetect}
           onCountryChange={onCountryChange}
           onValueChange={onValueChange}
         />
@@ -349,7 +349,7 @@ describe("InternationalPhoneInput", () => {
       // The expectation used to sit in a comment. It is the whole point of the
       // test: a pasted +44 number switches the country and reports the parse.
       await waitFor(() => {
-        expect(onPasteDetected).toHaveBeenCalled();
+        expect(onPasteDetect).toHaveBeenCalled();
       });
       expect(onCountryChange).toHaveBeenCalledWith(
         expect.objectContaining({ value: "GB" }),
@@ -358,10 +358,10 @@ describe("InternationalPhoneInput", () => {
     });
 
     it("does not detect paste when enablePasteDetection is false", async () => {
-      const onPasteDetected = vi.fn();
+      const onPasteDetect = vi.fn();
       render(
         <InternationalPhoneInput
-          onPasteDetected={onPasteDetected}
+          onPasteDetect={onPasteDetect}
         />
       );
 
@@ -375,16 +375,16 @@ describe("InternationalPhoneInput", () => {
       });
       input.dispatchEvent(pasteEvent);
 
-      expect(onPasteDetected).not.toHaveBeenCalled();
+      expect(onPasteDetect).not.toHaveBeenCalled();
     });
 
     it("does not detect paste when readOnly", async () => {
-      const onPasteDetected = vi.fn();
+      const onPasteDetect = vi.fn();
       render(
         <InternationalPhoneInput
           enablePasteDetection
           readOnly
-          onPasteDetected={onPasteDetected}
+          onPasteDetect={onPasteDetect}
         />
       );
 
@@ -398,7 +398,7 @@ describe("InternationalPhoneInput", () => {
       });
       input.dispatchEvent(pasteEvent);
 
-      expect(onPasteDetected).not.toHaveBeenCalled();
+      expect(onPasteDetect).not.toHaveBeenCalled();
     });
   });
 
@@ -540,12 +540,12 @@ describe("InternationalPhoneInput", () => {
 
   describe("Paste detection — phone-only (no country detected)", () => {
     it("formats pasted digits without '+' prefix using current country", () => {
-      const onPasteDetected = vi.fn();
+      const onPasteDetect = vi.fn();
       const onValueChange = vi.fn();
       render(
         <InternationalPhoneInput
           enablePasteDetection
-          onPasteDetected={onPasteDetected}
+          onPasteDetect={onPasteDetect}
           onValueChange={onValueChange}
         />
       );
@@ -559,7 +559,7 @@ describe("InternationalPhoneInput", () => {
       });
       input.dispatchEvent(pasteEvent);
 
-      expect(onPasteDetected).toHaveBeenCalledWith(
+      expect(onPasteDetect).toHaveBeenCalledWith(
         expect.objectContaining({
           rawValue: "2025551234",
           detectedCountry: null,
@@ -587,11 +587,11 @@ describe("InternationalPhoneInput", () => {
     });
 
     it("does nothing when pasted text is empty", () => {
-      const onPasteDetected = vi.fn();
+      const onPasteDetect = vi.fn();
       render(
         <InternationalPhoneInput
           enablePasteDetection
-          onPasteDetected={onPasteDetected}
+          onPasteDetect={onPasteDetect}
         />
       );
 
@@ -602,7 +602,7 @@ describe("InternationalPhoneInput", () => {
       });
       input.dispatchEvent(pasteEvent);
 
-      expect(onPasteDetected).not.toHaveBeenCalled();
+      expect(onPasteDetect).not.toHaveBeenCalled();
     });
   });
 

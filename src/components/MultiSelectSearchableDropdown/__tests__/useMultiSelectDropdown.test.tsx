@@ -539,19 +539,19 @@ describe("useMultiSelectDropdown", () => {
 
   describe("async mode: isAsync detection", () => {
     it("in async mode, empty query shows allInitialOptions", () => {
-      const onSearch = vi.fn().mockResolvedValue([]);
+      const searchOptions = vi.fn().mockResolvedValue([]);
       const initialOpts: MultiSelectOption[] = [{ value: "i1", label: "I1" }];
       const { result } = renderHook(() =>
-        useMultiSelectDropdown({ options: [], onSearch, initialOptions: initialOpts })
+        useMultiSelectDropdown({ options: [], searchOptions, initialOptions: initialOpts })
       );
       expect(result.current.displayOptions).toEqual(initialOpts);
     });
 
     it("in async mode, non-empty searchQuery sets isSearching=true before debounce fires", () => {
-      const onSearch = vi.fn().mockResolvedValue([]);
+      const searchOptions = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
         // large debounce ensures timeout doesn't fire during synchronous assertions
-        useMultiSelectDropdown({ options: [], onSearch, searchDebounceMs: 60_000 })
+        useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 60_000 })
       );
       act(() => result.current.setSearchQuery("foo"));
       expect(result.current.isSearching).toBe(true);
@@ -559,9 +559,9 @@ describe("useMultiSelectDropdown", () => {
     });
 
     it("in async mode, clearing searchQuery resets isSearching to false immediately", () => {
-      const onSearch = vi.fn().mockResolvedValue([]);
+      const searchOptions = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
-        useMultiSelectDropdown({ options: [], onSearch, searchDebounceMs: 60_000 })
+        useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 60_000 })
       );
       act(() => result.current.setSearchQuery("foo"));
       expect(result.current.isSearching).toBe(true);
@@ -605,9 +605,9 @@ describe("useMultiSelectDropdown", () => {
         { value: "init1", label: "Initial 1" },
         { value: "init2", label: "Initial 2" },
       ];
-      const onSearch = vi.fn().mockResolvedValue([]);
+      const searchOptions = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
-        useMultiSelectDropdown({ options: [], onSearch, initialOptions: initialOpts })
+        useMultiSelectDropdown({ options: [], searchOptions, initialOptions: initialOpts })
       );
       expect(result.current.displayOptions).toEqual(initialOpts);
     });
@@ -616,11 +616,11 @@ describe("useMultiSelectDropdown", () => {
       const initialOpts: MultiSelectOption[] = [
         { value: "init1", label: "Initial 1" },
       ];
-      const onSearch = vi.fn().mockResolvedValue([]);
+      const searchOptions = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
         useMultiSelectDropdown({
           options: [],
-          onSearch,
+          searchOptions,
           initialOptions: initialOpts,
           defaultValue: ["init1"],
         })
@@ -634,7 +634,7 @@ describe("useMultiSelectDropdown", () => {
       const { result } = renderHook(() =>
         useMultiSelectDropdown({ options: OPTIONS, initialOptions: initialOpts })
       );
-      // no onSearch → isAsync=false → displayOptions = filteredSyncOptions = options
+      // no searchOptions → isAsync=false → displayOptions = filteredSyncOptions = options
       expect(result.current.displayOptions).toEqual(OPTIONS);
     });
   });

@@ -252,11 +252,6 @@
       ],
       "description": "Key or config for persisting expanded state to storage."
     },
-    "onExpandedChange": {
-      "type": "object",
-      "description": "(event: AccordionExpandEvent) => void",
-      "x-tsType": "((event: AccordionExpandEvent) => void) | undefined"
-    },
     "onKeyDown": {
       "type": "object",
       "description": "(event: KeyboardEvent, itemValue: string | null) => void",

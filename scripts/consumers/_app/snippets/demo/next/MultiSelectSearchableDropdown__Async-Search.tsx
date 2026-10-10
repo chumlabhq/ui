@@ -97,7 +97,7 @@ export default function MultiSelectSearchableDropdownExample() {
         value={asyncValue}
         onValueChange={(values) => setAsyncValue(values)}
         placeholder="Search countries..."
-        onSearch={handleAsyncSearch}
+        searchOptions={handleAsyncSearch}
         searchDebounceMs={300}
         maxDisplayedChips={2}
         loadingText="Searching countries..."

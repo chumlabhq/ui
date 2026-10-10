@@ -200,7 +200,7 @@ export default function TableExample() {
         data={sampleData.slice(0, 5)}
         expandable
         expandedRowIds={expandedRowIds}
-        onExpandedChange={setExpandedRowIds}
+        onExpandedRowIdsChange={setExpandedRowIds}
         renderExpandedRow={
           (row) => (
             <div

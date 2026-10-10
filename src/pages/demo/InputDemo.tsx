@@ -1134,7 +1134,7 @@ const InputDemo = () => {
                 <Checkbox
                   label="Remember me"
                   checked={rememberMe}
-                  onValueChange={setRememberMe}
+                  onCheckedChange={setRememberMe}
                   size="sm"
                 />
                 <Button

@@ -14,7 +14,7 @@ export function useMultiSelectDropdown({
   defaultValue: defaultValueProp,
   disabled = false,
   onValueChange,
-  onLoadOptions,
+  loadOptions,
   loadOnOpen = false,
   onLoadError,
   typeaheadTimeout = 500,
@@ -51,21 +51,21 @@ export function useMultiSelectDropdown({
 
   // Reset when the loader config changes, adjusted during render rather than
   // from an effect. Same shape as SearchableDropdown's `prevLoadConfig`.
-  const [prevLoadConfig, setPrevLoadConfig] = useState({ onLoadOptions, loadOnOpen });
+  const [prevLoadConfig, setPrevLoadConfig] = useState({ loadOptions, loadOnOpen });
   if (
-    prevLoadConfig.onLoadOptions !== onLoadOptions ||
+    prevLoadConfig.loadOptions !== loadOptions ||
     prevLoadConfig.loadOnOpen !== loadOnOpen
   ) {
-    setPrevLoadConfig({ onLoadOptions, loadOnOpen });
+    setPrevLoadConfig({ loadOptions, loadOnOpen });
     if (hasLoaded) setHasLoaded(false);
   }
 
   const displayOptions = useMemo(() => {
-    if (onLoadOptions && loadedOptions.length > 0) {
+    if (loadOptions && loadedOptions.length > 0) {
       return loadedOptions;
     }
     return options;
-  }, [options, loadedOptions, onLoadOptions]);
+  }, [options, loadedOptions, loadOptions]);
 
   const selectedOptions = useMemo(
     () => displayOptions.filter((option) => value.includes(option.value)),
@@ -79,7 +79,7 @@ export function useMultiSelectDropdown({
    * `defaultOpen` and a controlled `open` fetch too. Matches Dropdown and the
    * two searchable dropdowns; all four resolve this the same way now.
    */
-  const shouldLoad = isOpen && loadOnOpen && !!onLoadOptions && !hasLoaded;
+  const shouldLoad = isOpen && loadOnOpen && !!loadOptions && !hasLoaded;
 
   // Adjusted during render rather than from the effect, which would be a
   // cascading render.
@@ -90,11 +90,11 @@ export function useMultiSelectDropdown({
   }
 
   useEffect(() => {
-    if (!shouldLoad || !onLoadOptions) return;
+    if (!shouldLoad || !loadOptions) return;
 
     let cancelled = false;
     isLoadingRef.current = true;
-    onLoadOptions()
+    loadOptions()
       .then((results) => {
         if (cancelled) return;
         setLoadedOptions(results);
@@ -117,7 +117,7 @@ export function useMultiSelectDropdown({
     return () => {
       cancelled = true;
     };
-  }, [shouldLoad, onLoadOptions, onLoadError]);
+  }, [shouldLoad, loadOptions, onLoadError]);
 
   // The active index is not reset here: `useMenuNavigation` clears it whenever
   // the surface closes, so doing it again from the toggle would be a second

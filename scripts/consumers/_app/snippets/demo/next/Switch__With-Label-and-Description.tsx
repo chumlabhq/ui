@@ -10,7 +10,7 @@ export default function SwitchExample() {
       label="Dark mode"
       description="Enable dark theme for the application"
       checked={descSwitch}
-      onValueChange={setDescSwitch}
+      onCheckedChange={setDescSwitch}
       classes={
         {
           label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",

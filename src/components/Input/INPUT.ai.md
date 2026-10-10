@@ -83,8 +83,8 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 | `suffix` | object | — | React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com'). |
 | `startIcon` | object | — | React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided. |
 | `endIcon` | object | — | React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided. |
-| `onStartIconClick` | object | — | () => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility. |
-| `onEndIconClick` | object | — | () => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility. |
+| `onStartIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes startIcon a clickable button, called with the native click event. Requires startIconLabel for accessibility. |
+| `onEndIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes endIcon a clickable button, called with the native click event. Requires endIconLabel for accessibility. |
 | `startIconLabel` | string | — | Accessible label for startIcon when it is clickable. Required with onStartIconClick. |
 | `endIconLabel` | string | — | Accessible label for endIcon when it is clickable. Required with onEndIconClick. |
 | `onValueChange` | object | — | (value: string) => void - Fires with the current string value when the value changes. |

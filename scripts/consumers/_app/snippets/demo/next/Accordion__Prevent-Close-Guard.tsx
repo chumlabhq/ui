@@ -9,7 +9,11 @@ export default function AccordionExample() {
   const [guardDecision, setGuardDecision] = useState("not fired yet");
   return (
     <>
-      <Switch label="Unsaved changes" checked={guardUnsaved} onValueChange={setGuardUnsaved} />
+      <Switch
+        label="Unsaved changes"
+        checked={guardUnsaved}
+        onCheckedChange={setGuardUnsaved}
+      />
       <Accordion
         type="single"
         collapsible

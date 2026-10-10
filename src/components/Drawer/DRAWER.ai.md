@@ -95,7 +95,7 @@ export default function Example() {
 | `swipeable` | boolean | `false` | Enables swipe-to-close gesture. |
 | `swipeThreshold` | number | `0.4` | Minimum swipe distance in pixels to trigger close. |
 | `snapPoints` | array | — | Array of snap point positions (0-1) for the drawer panel. |
-| `activeSnapPointIndex` | number | — | Controlled active snap point index. |
+| `snapPointIndex` | number | — | Controlled index into `snapPoints`. Pairs with `defaultSnapPointIndex` and `onSnapPointIndexChange`. |
 | `defaultSnapPointIndex` | number | `0` | Initial snap point index for uncontrolled usage. |
 | `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
 

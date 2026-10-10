@@ -8,7 +8,7 @@ export default function CheckboxExample() {
       label="Select all items"
       indeterminate={indeterminate}
       checked={false}
-      onValueChange={() => setIndeterminate(!indeterminate)}
+      onCheckedChange={() => setIndeterminate(!indeterminate)}
       size="md"
       shape="rounded"
       classes={

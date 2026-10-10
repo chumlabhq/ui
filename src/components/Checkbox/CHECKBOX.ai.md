@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<Checkbox label="Accept" checked={val} onValueChange={setVal} />` for a basic labeled checkbox. Supports `indeterminate` for tree/list "select all" patterns. Works out-of-the-box with built-in dark mode styles.
+Use `<Checkbox label="Accept" checked={val} onCheckedChange={setVal} />` for a basic labeled checkbox. Supports `indeterminate` for tree/list "select all" patterns. Works out-of-the-box with built-in dark mode styles.
 
 ---
 
@@ -33,7 +33,7 @@ export default function Example() {
     <Checkbox
       label="I agree to the terms"
       checked={checked}
-      onValueChange={setChecked}
+      onCheckedChange={setChecked}
     />
   );
 }
@@ -84,7 +84,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
 | `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
-| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Fires with the new `checked` state. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
 | `error` | boolean | `false` | Displays the checkbox in an error state. |
@@ -211,7 +211,7 @@ classes={{
   label="Subscribe to newsletter"
   description="Get weekly updates"
   checked={checked}
-  onValueChange={setChecked}
+  onCheckedChange={setChecked}
   shape="circle"
   classes={{
     root: "",
@@ -240,14 +240,14 @@ const someChecked = items.some(Boolean);
   label="Select All"
   checked={allChecked}
   indeterminate={someChecked && !allChecked}
-  onValueChange={(checked) => setItems(items.map(() => checked))}
+  onCheckedChange={(checked) => setItems(items.map(() => checked))}
 />
 {items.map((checked, i) => (
   <Checkbox
     key={i}
     label={`Item ${i + 1}`}
     checked={checked}
-    onValueChange={(v) => {
+    onCheckedChange={(v) => {
       const next = [...items];
       next[i] = v;
       setItems(next);
@@ -266,7 +266,7 @@ const someChecked = items.some(Boolean);
   errorMessage={errors.terms}
   label="I accept the Terms of Service"
   checked={accepted}
-  onValueChange={setAccepted}
+  onCheckedChange={setAccepted}
 />
 ```
 
@@ -312,7 +312,7 @@ A native `<input type="checkbox">`, so the browser owns this — `Enter` deliber
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Checkbox doesn't toggle | Using `checked` without `onValueChange` | Add `onValueChange` handler or use `defaultChecked` |
+| Checkbox doesn't toggle | Using `checked` without `onCheckedChange` | Add `onCheckedChange` handler or use `defaultChecked` |
 | Indeterminate not showing | `indeterminate` not set | Pass `indeterminate={true}` — it's visual only |
 | Custom icon wrong size | Icon doesn't match checkbox size | Use the `itemIndicator` class slot or size your icon to match |
 | Classes don't merge | Expected additive | Classes REPLACE per slot. Provide complete styling. |

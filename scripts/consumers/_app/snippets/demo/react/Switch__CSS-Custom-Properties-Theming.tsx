@@ -17,7 +17,7 @@ export default function SwitchExample() {
         <Switch
           label="Purple theme via CSS vars"
           checked={cssVarSwitch}
-          onValueChange={setCssVarSwitch}
+          onCheckedChange={setCssVarSwitch}
           classes={
             {
                             ...({
@@ -43,7 +43,7 @@ export default function SwitchExample() {
         <Switch
           label="Green theme via CSS vars"
           checked={!cssVarSwitch}
-          onValueChange={(checked) => setCssVarSwitch(!checked)}
+          onCheckedChange={(checked) => setCssVarSwitch(!checked)}
           classes={
             {
                             ...({

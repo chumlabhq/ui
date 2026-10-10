@@ -449,7 +449,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       };
     }, [lockScroll, isOpen]);
 
-    const handleInputBlur = () => {
+    const handleInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           // If the blur was caused by clicking the trigger (chevron, etc.),
@@ -463,7 +463,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           if (dropdownContentRef.current?.contains(active)) return;
           handleBlur();
           handleClose();
-          onBlur?.();
+          onBlur?.(event);
         });
       });
     };

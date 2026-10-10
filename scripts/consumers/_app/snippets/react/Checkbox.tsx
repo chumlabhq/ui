@@ -7,7 +7,7 @@ export default function Example() {
     <Checkbox
       label="I agree to the terms"
       checked={checked}
-      onValueChange={setChecked}
+      onCheckedChange={setChecked}
     />
   );
 }

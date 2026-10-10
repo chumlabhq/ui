@@ -113,7 +113,7 @@ const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
  * - Use for selecting multiple values from a list
  * - Minimum: `<MultiSelectDropdown options={[...]} onValueChange={handler} />`
  * - Pair `value` with `onValueChange` for controlled mode
- * - Use `loadOnOpen` + `onLoadOptions` for async data
+ * - Use `loadOnOpen` + `loadOptions` for async data
  *
  * Behavior:
  * - Portal-rendered popup (never clipped by overflow ancestors)
@@ -151,7 +151,7 @@ const MultiSelectDropdown = forwardRef<
       showChevron = true,
       fullWidth = false,
       loading: externalLoading = false,
-      onLoadOptions,
+      loadOptions,
       loadOnOpen = false,
       onLoadError,
       shimmerCount = 5,
@@ -252,7 +252,7 @@ const MultiSelectDropdown = forwardRef<
       defaultValue,
       disabled,
       onValueChange,
-      onLoadOptions,
+      loadOptions,
       loadOnOpen,
       onLoadError,
       typeaheadTimeout,

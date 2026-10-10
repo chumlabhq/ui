@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties, ComponentType } from "react";
+import type { ReactNode, CSSProperties, ComponentType, FocusEvent } from "react";
 
 /**
  * One selectable option.
@@ -79,8 +79,10 @@ export interface DropdownTriggerRenderProps {
    */
   onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
   onKeyDown: (event: React.KeyboardEvent) => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
   "data-disabled": true | undefined;
   "data-error": true | undefined;
   "data-valid": true | undefined;
@@ -153,8 +155,10 @@ export interface DropdownBaseProps {
   dropdownGap?: number;
   typeaheadTimeout?: number;
   "aria-label"?: string;
-  onBlur?: () => void;
-  onFocus?: () => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   renderTrigger?: (triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode;
   ChevronIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
@@ -164,14 +168,15 @@ export interface DropdownBaseProps {
 }
 
 /**
- * `loadOptions` returns early unless BOTH are set, so `onLoadOptions` on its own
+ * The dropdown loads only when BOTH are set, so `loadOptions` on its own
  * fetched nothing and `loadOnOpen` on its own had nothing to fetch. Either half
  * alone typechecked and did exactly nothing.
  */
 export type DropdownLoadSource =
-  | { onLoadOptions?: never; loadOnOpen?: never }
+  | { loadOptions?: never; loadOnOpen?: never }
   | {
-      onLoadOptions: () => Promise<DropdownOption[]>;
+      /** Loads the options when the menu first opens. Returns them; it is a loader, not an event. */
+      loadOptions: () => Promise<DropdownOption[]>;
       loadOnOpen: true;
     };
 

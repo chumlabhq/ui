@@ -503,7 +503,7 @@ const MultiSelectDropdownDemo = () => {
               value={asyncValue}
               onValueChange={(values) => setAsyncValue(values)}
               placeholder="Select countries..."
-              onLoadOptions={handleLoadOptions}
+              loadOptions={handleLoadOptions}
               loadOnOpen
               shimmerCount={5}
               maxDisplayedChips={2}
@@ -1171,8 +1171,8 @@ const MultiSelectDropdownDemo = () => {
               value={[]}
               onValueChange={() => {}}
               placeholder="Focus or blur me..."
-              onFocus={() => setFocusMessage("Dropdown focused")}
-              onBlur={() => setFocusMessage("Dropdown blurred")}
+              onFocus={(event) => setFocusMessage(`Dropdown focused: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
+              onBlur={(event) => setFocusMessage(`Dropdown blurred: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
               maxDisplayedChips={2}
               classes={c.dropdown}
             />

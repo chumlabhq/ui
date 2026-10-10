@@ -10,7 +10,7 @@ export default function SwitchExample() {
       <Switch
         label="Purple theme"
         checked={colorSwitch}
-        onValueChange={setColorSwitch}
+        onCheckedChange={setColorSwitch}
         classes={
           {
                         ...({
@@ -26,7 +26,7 @@ export default function SwitchExample() {
       <Switch
         label="Green theme"
         checked={!colorSwitch}
-        onValueChange={(checked) => setColorSwitch(!checked)}
+        onCheckedChange={(checked) => setColorSwitch(!checked)}
         classes={
           {
                         ...({

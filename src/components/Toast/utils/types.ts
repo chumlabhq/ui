@@ -56,8 +56,8 @@ export interface ToastConfig {
   icon?: ReactNode;
   /** Renders the dismiss button. */
   showCloseButton?: boolean;
-  /** Fires when the toast is dismissed. */
-  onDismiss?: () => void;
+  /** Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out. */
+  onDismiss?: (id: string) => void;
   /** `alert` interrupts a screen reader, `status` waits for a pause. Errors want the first, confirmations the second. */
   role?: "alert" | "status";
   /** Inline styles for the toast surface. */
@@ -74,7 +74,6 @@ export interface ToastConfig {
 
 export interface ToastProps extends Omit<ToastConfig, "id"> {
   id: string;
-  onRemove: (id: string) => void;
   providerClasses?: ToastClasses;
   providerUnstyled?: boolean;
   /**

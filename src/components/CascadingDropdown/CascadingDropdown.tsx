@@ -305,9 +305,9 @@ const Submenu = memo(function Submenu({
  *
  * AI Usage Guidelines:
  * - Pass `options` with nested `children` for static data
- * - Use `onLoadChildren` + `hasChildren: true` for async child loading
+ * - Use `loadChildren` + `hasChildren: true` for async child loading
  * - Use `showMenuSearch` / `showSubmenuSearch` for search bars
- * - Use `onMenuSearch` / `onSubmenuSearch` for server-side search
+ * - Use `searchMenu` / `searchSubmenu` for server-side search
  * - Value shape: `{ parentValue: "child" | string[] }`
  *
  * Behavior:
@@ -326,7 +326,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       value,
       defaultValue,
       onValueChange,
-      onLoadChildren,
+      loadChildren,
       onLoadError,
       open,
       defaultOpen,
@@ -373,8 +373,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       showSubmenuSearch = false,
       menuSearchPlaceholder = "Search...",
       submenuSearchPlaceholder = "Search...",
-      onMenuSearch,
-      onSubmenuSearch,
+      searchMenu,
+      searchSubmenu,
       searchDebounceMs = 300,
       SearchIcon: SearchIconProp,
       menuSearchAriaLabel = "Search menu",
@@ -388,7 +388,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     // `loadChildrenForOption` runs only for an option whose `hasChildren` is
     // set, so a loader over options that never set it is silently inert. No
     // union can express a constraint on the consumer's own data.
-    useInertPropWarning(onLoadChildren, options);
+    useInertPropWarning(loadChildren, options);
 
     const shimmerCount = Math.min(Math.max(0, rawShimmerCount), 50);
     const prefersReducedMotion = useReducedMotion();
@@ -474,7 +474,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       disabled,
       closeOnSelect,
       onValueChange,
-      onLoadChildren,
+      loadChildren,
       onLoadError,
       open,
       defaultOpen,
@@ -483,8 +483,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       "aria-label": ariaLabel,
       showMenuSearch,
       showSubmenuSearch,
-      onMenuSearch,
-      onSubmenuSearch,
+      searchMenu,
+      searchSubmenu,
       searchDebounceMs,
     });
 

@@ -29,12 +29,12 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
   { name: "multi-value", props: { options: OPTIONS, defaultOpen: true, defaultValue: ["a", "b"], clearable: true, showSelectedChips: true } },
   { name: "chips-overflow", props: { options: OPTIONS, defaultValue: ["a", "b", "c"], showSelectedChips: true, maxDisplayedChips: 1 }, note: "moreCount needs more selections than maxDisplayedChips." },
   // Both branches of the option source, which is now a discriminated union:
-  // passing `options` AND `onSearch` no longer typechecks, because
-  // useMultiSelectDropdown drops `options` once onSearch is a function.
+  // passing `options` AND `searchOptions` no longer typechecks, because
+  // useMultiSelectDropdown drops `options` once searchOptions is a function.
   {
     name: "async-initial",
     props: {
-      onSearch: async () => OPTIONS,
+      searchOptions: async () => OPTIONS,
       initialOptions: OPTIONS,
       defaultOpen: true,
       showSearch: true,
@@ -42,18 +42,18 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
   },
   {
     name: "async-searched",
-    props: { onSearch: async () => OPTIONS, defaultOpen: true, showSearch: true },
+    props: { searchOptions: async () => OPTIONS, defaultOpen: true, showSearch: true },
     note: "Async with no initialOptions: the menu is empty until a query resolves.",
   },
-  // The initial-load branch: `loadInitialOnOpen` + `onLoadInitialOptions`, which
+  // The initial-load branch: `loadInitialOnOpen` + `loadInitialOptions`, which
   // sits on the async half of the option-source union and is separate from the
-  // `onSearch` states above. Unlike Dropdown this one loads from an effect keyed
+  // `searchOptions` states above. Unlike Dropdown this one loads from an effect keyed
   // on `isOpen`, so `defaultOpen` is enough to reach it.
   {
     name: "async-initial-load-pending",
     props: {
-      onSearch: resolvesTo(OPTIONS),
-      onLoadInitialOptions: neverResolves(),
+      searchOptions: resolvesTo(OPTIONS),
+      loadInitialOptions: neverResolves(),
       loadInitialOnOpen: true,
       defaultOpen: true,
       showSearch: true,
@@ -63,8 +63,8 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
   {
     name: "async-initial-load-resolved",
     props: {
-      onSearch: resolvesTo(OPTIONS),
-      onLoadInitialOptions: resolvesTo(OPTIONS),
+      searchOptions: resolvesTo(OPTIONS),
+      loadInitialOptions: resolvesTo(OPTIONS),
       loadInitialOnOpen: true,
       defaultOpen: true,
       showSearch: true,
@@ -74,8 +74,8 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
   {
     name: "async-initial-load-empty",
     props: {
-      onSearch: resolvesTo(OPTIONS),
-      onLoadInitialOptions: resolvesTo([]),
+      searchOptions: resolvesTo(OPTIONS),
+      loadInitialOptions: resolvesTo([]),
       loadInitialOnOpen: true,
       defaultOpen: true,
       showSearch: true,

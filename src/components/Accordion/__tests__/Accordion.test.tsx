@@ -1115,13 +1115,13 @@ describe("Accordion", () => {
     });
   });
 
-  describe("Imperative API fires onExpandedChange", () => {
-    it("fires onExpandedChange from imperative expand", async () => {
-      const onExpandedChange = vi.fn();
+  describe("Imperative API fires onValueChange", () => {
+    it("fires onValueChange from imperative expand", async () => {
+      const onValueChange = vi.fn();
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="multiple" ref={ref} onExpandedChange={onExpandedChange}>
+        <Accordion type="multiple" ref={ref} onValueChange={onValueChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1137,20 +1137,15 @@ describe("Accordion", () => {
         ref.current?.expand("item-1");
       });
 
-      expect(onExpandedChange).toHaveBeenCalledWith(
-        expect.objectContaining({
-          value: "item-1",
-          isExpanded: true,
-        }),
-      );
+      expect(onValueChange).toHaveBeenCalledWith(["item-1"]);
     });
 
-    it("fires onExpandedChange from imperative collapse", async () => {
-      const onExpandedChange = vi.fn();
+    it("fires onValueChange from imperative collapse", async () => {
+      const onValueChange = vi.fn();
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="multiple" ref={ref} defaultValue={["item-1"]} onExpandedChange={onExpandedChange}>
+        <Accordion type="multiple" ref={ref} defaultValue={["item-1"]} onValueChange={onValueChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1162,12 +1157,7 @@ describe("Accordion", () => {
         ref.current?.collapse("item-1");
       });
 
-      expect(onExpandedChange).toHaveBeenCalledWith(
-        expect.objectContaining({
-          value: "item-1",
-          isExpanded: false,
-        }),
-      );
+      expect(onValueChange).toHaveBeenCalledWith([]);
     });
   });
 

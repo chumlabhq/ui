@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<MultiSelectSearchableDropdown options={[...]} value={selected} onValueChange={setSelected} />` for a searchable multi-select control with chip display. Supports local filtering, async search via `onSearch`, initial prefetch via `onLoadInitialOptions`, and portal-based positioning. Works out-of-the-box with built-in Tailwind styles.
+Use `<MultiSelectSearchableDropdown options={[...]} value={selected} onValueChange={setSelected} />` for a searchable multi-select control with chip display. Supports local filtering, async search via `searchOptions`, initial prefetch via `loadInitialOptions`, and portal-based positioning. Works out-of-the-box with built-in Tailwind styles.
 
 ---
 
@@ -56,9 +56,9 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
-| `onSearch` | Async search function. Replaces local filtering when provided. |
-| `onLoadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
-| `searchDebounceMs` | Only applies to `onSearch`. Default: `300`. |
+| `searchOptions` | Async search function. Replaces local filtering when provided. |
+| `loadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
+| `searchDebounceMs` | Only applies to `searchOptions`. Default: `300`. |
 | `showSearch` | Default `true`. Set `false` to hide search input. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
@@ -90,7 +90,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | `[]` | List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | List of selectable options. Mutually exclusive with `searchOptions`: the async branch never reads it. |
 | `value` | array | — | Controlled selected values. |
 | `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
 | `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
@@ -114,11 +114,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading state. |
-| `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
+| `searchOptions` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | `[]` | Options to display before any search is performed. Async branch only (`onSearch`). |
-| `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
-| `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
+| `initialOptions` | array | `[]` | Options to display before any search is performed. Async branch only (`searchOptions`). |
+| `loadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
+| `loadInitialOnOpen` | boolean | `false` | When true, calls loadInitialOptions each time the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
@@ -139,8 +139,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
-| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
 | `renderTrigger` | object | — | (triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder). |
@@ -221,7 +221,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ```tsx
 <MultiSelectSearchableDropdown
-  onSearch={async (query) => {
+  searchOptions={async (query) => {
     const res = await fetch(`/api/search?q=${query}`);
     return res.json();
   }}
@@ -235,8 +235,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 ```tsx
 <MultiSelectSearchableDropdown
   loadInitialOnOpen
-  onLoadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
-  onSearch={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
+  loadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
+  searchOptions={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
 />
 ```
 
@@ -290,9 +290,9 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
 | Dropdown opens in wrong direction | Auto-flip | Use `forceDropdownPosition` |
-| Search not working | Using `options` prop with `onSearch` | `onSearch` replaces local filtering |
-| Async results not appearing | `onSearch` not returning array | Must return `Promise<MultiSelectOption[]>` |
-| Options don't load on open | Missing `loadInitialOnOpen` | Add alongside `onLoadInitialOptions` |
+| Search not working | Using `options` prop with `searchOptions` | `searchOptions` replaces local filtering |
+| Async results not appearing | `searchOptions` not returning array | Must return `Promise<MultiSelectOption[]>` |
+| Options don't load on open | Missing `loadInitialOnOpen` | Add alongside `loadInitialOptions` |
 | Controlled value not updating | Missing `onValueChange` | Pair `value` with `onValueChange` |
 | Search input not visible | `showSearch={false}` | Set to `true` (default) |
 

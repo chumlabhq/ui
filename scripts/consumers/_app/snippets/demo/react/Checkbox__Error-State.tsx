@@ -7,7 +7,7 @@ export default function CheckboxExample() {
     <Checkbox
       label="I accept the terms"
       checked={errorDemo}
-      onValueChange={setErrorDemo}
+      onCheckedChange={setErrorDemo}
       error={!errorDemo}
       errorMessage={!errorDemo ? "You must accept the terms to continue" : undefined}
       size="md"

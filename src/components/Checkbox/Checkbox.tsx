@@ -25,7 +25,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
  * custom icons, sizes, shapes, and full form integration.
  *
  * AI Usage Guidelines:
- * - Use `checked` + `onValueChange` for controlled mode
+ * - Use `checked` + `onCheckedChange` for controlled mode
  * - Use `indeterminate` for "select all" patterns (visual only)
  * - Use `shape` for square/rounded/circle variants
  * - Use `classes` for per-slot styling overrides
@@ -52,7 +52,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       disabled = false,
       readOnly = false,
       required = false,
-      onValueChange,
+      onCheckedChange,
       onFocus,
       onBlur,
       error = false,
@@ -93,7 +93,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
-      onChange: onValueChange,
+      onChange: onCheckedChange,
     });
 
     useEffect(() => {

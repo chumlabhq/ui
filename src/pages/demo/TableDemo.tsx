@@ -1075,11 +1075,7 @@ function ServerApiDemo({
         onColumnFiltersChange={handleColumnFiltersChange}
         filterableColumns={filterColumnsConfig}
         pinnedColumns={serverPinnedCols}
-        onPinColumn={(col) =>
-          setServerPinnedCols((prev) =>
-            prev.includes(col) ? prev.filter((c) => c !== col) : [...prev, col],
-          )
-        }
+        onPinnedColumnsChange={setServerPinnedCols}
         maxPinnedColumns={2}
         shimmerRowCount={pageSize}
         getRowId={(row) => String(row.id)}
@@ -1344,32 +1340,6 @@ const TableDemo = () => {
     setDarkCurrentPage(1);
   };
 
-  const togglePinnedCol = (
-    setter: React.Dispatch<React.SetStateAction<string[]>>,
-    columnId: string,
-    isPinned: boolean,
-  ) => {
-    setter((prev) => {
-      if (isPinned) {
-        // Dedupe — the Table fires isPinned=true on every click of an
-        // unpinned column, so without this guard a hardcoded-pinned
-        // demo (where prev never updates) would accumulate duplicates.
-        return prev.includes(columnId) ? prev : [...prev, columnId];
-      }
-      return prev.filter((id) => id !== columnId);
-    });
-  };
-
-  const handlePinColumn = (columnId: string, isPinned: boolean) => {
-    togglePinnedCol(setPinnedCols, columnId, isPinned);
-  };
-  const handleStarPinColumn = (columnId: string, isPinned: boolean) => {
-    togglePinnedCol(setStarPinnedCols, columnId, isPinned);
-  };
-  const handleSepPinColumn = (columnId: string, isPinned: boolean) => {
-    togglePinnedCol(setSepPinnedCols, columnId, isPinned);
-  };
-
   // Floating actions handlers - state is set directly, FloatingActions handles delay internally
   const handleRowHover = (
     rowIndex: number | null,
@@ -1432,14 +1402,6 @@ const TableDemo = () => {
 
   const handleCompFloatingActionsHover = (isHovered: boolean) => {
     setCompIsFloatingActionsHovered(isHovered);
-  };
-
-  const handleCompPinColumn = (columnId: string, isPinned: boolean) => {
-    if (isPinned) {
-      setCompPinnedCols((prev) => [...prev, columnId]);
-    } else {
-      setCompPinnedCols((prev) => prev.filter((id) => id !== columnId));
-    }
   };
 
   const compFloatingActionsData =
@@ -1919,7 +1881,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       setDotHoverRef(ref ?? null);
                     }}
                     isFloatingActionsHovered={dotFloatingHovered}
-                    isPopupOpen={dotMenuState !== null}
+                    popupOpen={dotMenuState !== null}
                     floatingActions={
                       <FloatingActions<User>
                         rowRef={dotHoverRef}
@@ -2046,7 +2008,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              isPopupOpen
+              popupOpen
             </code>{" "}
             to keep the floating panel visible while the dropdown is open.
           </p>
@@ -2220,7 +2182,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               columns={columns}
               data={sampleData.slice(0, 5)}
               pinnedColumns={pinnedCols}
-              onPinColumn={handlePinColumn}
+              onPinnedColumnsChange={setPinnedCols}
               maxPinnedColumns={3}
               classes={{
                 ...s,
@@ -2253,7 +2215,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             columns={columns}
             data={sampleData.slice(0, 5)}
             pinnedColumns={starPinnedCols}
-            onPinColumn={handleStarPinColumn}
+            onPinnedColumnsChange={setStarPinnedCols}
             maxPinnedColumns={3}
             PinIcon={({ className }) => (
               <svg
@@ -2314,7 +2276,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             columns={columns}
             data={sampleData.slice(0, 5)}
             pinnedColumns={sepPinnedCols}
-            onPinColumn={handleSepPinColumn}
+            onPinnedColumnsChange={setSepPinnedCols}
             maxPinnedColumns={3}
             classes={{
               ...s,
@@ -2676,7 +2638,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             maxHeight={400}
             stickyHeader={true}
             pinnedColumns={compPinnedCols}
-            onPinColumn={handleCompPinColumn}
+            onPinnedColumnsChange={setCompPinnedCols}
             maxPinnedColumns={3}
             onRowHover={handleCompRowHover}
             isFloatingActionsHovered={compIsFloatingActionsHovered}
@@ -2895,7 +2857,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               data={sampleData.slice(0, 6)}
               selectionMode="multiple"
               selectedRowIds={multiSelectedIds}
-              onSelectionChange={setMultiSelectedIds}
+              onSelectedRowIdsChange={setMultiSelectedIds}
               getRowId={(row) => row.id}
               checkboxColor={"var(--cl-accent)"}
               classes={s}
@@ -2995,7 +2957,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     data={sampleData.slice(0, 6)}
                     selectionMode="multiple"
                     selectedRowIds={customSelectedIds}
-                    onSelectionChange={setCustomSelectedIds}
+                    onSelectedRowIdsChange={setCustomSelectedIds}
                     getRowId={(row) => row.id}
                     CheckboxIcon={CustomCheck}
                     classes={{
@@ -3104,7 +3066,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   data={sampleData.slice(0, 6)}
                   selectionMode="multiple"
                   selectedRowIds={starredIds}
-                  onSelectionChange={setStarredIds}
+                  onSelectedRowIdsChange={setStarredIds}
                   getRowId={(row) => row.id}
                   CheckboxIcon={StarCheck}
                   classes={{
@@ -3194,7 +3156,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   data={sampleData.slice(0, 5)}
                   selectionMode="multiple"
                   selectedRowIds={selected}
-                  onSelectionChange={setSelected}
+                  onSelectedRowIdsChange={setSelected}
                   getRowId={(row) => row.id}
                   CheckboxIcon={StarCheckbox}
                   classes={{
@@ -3487,7 +3449,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             data={sampleData.slice(0, 5)}
             expandable
             expandedRowIds={expandedRowIds}
-            onExpandedChange={setExpandedRowIds}
+            onExpandedRowIdsChange={setExpandedRowIds}
             renderExpandedRow={(row) => (
               <div
                 className={`p-4 bg-cl-bg-hover animate-row-expand`}
@@ -3590,7 +3552,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   data={sampleData.slice(0, 5)}
                   expandable
                   expandedRowIds={ids}
-                  onExpandedChange={setIds}
+                  onExpandedRowIdsChange={setIds}
                   ExpandIcon={ChevronIcon}
                   renderExpandedRow={(row) => (
                     <div
@@ -3657,7 +3619,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 data={sampleData.slice(0, 5)}
                 expandable
                 expandedRowIds={ids}
-                onExpandedChange={setIds}
+                onExpandedRowIdsChange={setIds}
                 ExpandIcon={PlusMinusIcon}
                 renderExpandedRow={(row) => (
                   <div
@@ -3734,7 +3696,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   expandable
                   expandColumnPosition="right"
                   expandedRowIds={ids}
-                  onExpandedChange={setIds}
+                  onExpandedRowIdsChange={setIds}
                   ExpandIcon={ArrowIcon}
                   renderExpandedRow={(row) => (
                     <div
@@ -3812,7 +3774,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 data={sampleData.slice(0, 5)}
                 expandable
                 expandedRowIds={ids}
-                onExpandedChange={setIds}
+                onExpandedRowIdsChange={setIds}
                 renderExpandedRow={(row) => (
                   <div
                     className={`px-6 py-5 bg-gradient-to-r from-cl-accent/10 to-transparent`}
@@ -3932,7 +3894,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   expandable
                   expandOnRowClick
                   expandedRowIds={ids}
-                  onExpandedChange={setIds}
+                  onExpandedRowIdsChange={setIds}
                   ExpandIcon={SmallChevron}
                   renderExpandedRow={(row) => (
                     <div
@@ -7613,7 +7575,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       getRowId={(row) => row.id}
                       selectionMode="multiple"
                       selectedRowIds={selectedPage}
-                      onSelectionChange={setSelectedPage}
+                      onSelectedRowIdsChange={setSelectedPage}
                       selectAllMode="page"
                       classes={s}
                       density="compact"
@@ -7632,7 +7594,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       getRowId={(row) => row.id}
                       selectionMode="multiple"
                       selectedRowIds={selectedAll}
-                      onSelectionChange={setSelectedAll}
+                      onSelectedRowIdsChange={setSelectedAll}
                       selectAllMode="all"
                       classes={s}
                       density="compact"

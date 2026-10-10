@@ -634,7 +634,7 @@ const CascadingDropdownDemo = () => {
               options={regionOptionsSingle}
               value={asyncSingleValue}
               onValueChange={(val) => setAsyncSingleValue(val)}
-              onLoadChildren={handleLoadChildren}
+              loadChildren={handleLoadChildren}
               placeholder="Select region and country..."
               loadingText="Loading countries..."
               classes={{
@@ -666,7 +666,7 @@ const CascadingDropdownDemo = () => {
               options={regionOptionsMulti}
               value={asyncMultiValue}
               onValueChange={(val) => setAsyncMultiValue(val)}
-              onLoadChildren={handleLoadChildren}
+              loadChildren={handleLoadChildren}
               placeholder="Select region and countries..."
               closeOnSelect={false}
               loadingText="Loading countries..."
@@ -699,7 +699,7 @@ const CascadingDropdownDemo = () => {
               options={prefetchOptions}
               value={prefetchValue}
               onValueChange={(val) => setPrefetchValue(val)}
-              onLoadChildren={handleLoadChildrenAsync}
+              loadChildren={handleLoadChildrenAsync}
               placeholder="Select region and country..."
               loading={isPrefetchLoading}
               loadingText="Loading regions..."
@@ -745,7 +745,7 @@ const CascadingDropdownDemo = () => {
               options={loadOnOpenOptions}
               value={loadOnOpenValue}
               onValueChange={(val) => setLoadOnOpenValue(val)}
-              onLoadChildren={handleLoadChildrenAsync}
+              loadChildren={handleLoadChildrenAsync}
               placeholder="Click to load regions..."
               loading={isLoadOnOpenLoading}
               loadingText="Loading regions..."
@@ -1114,14 +1114,14 @@ const CascadingDropdownDemo = () => {
               options={regionOptionsMulti}
               value={asyncSearchValue}
               onValueChange={(val) => setAsyncSearchValue(val)}
-              onLoadChildren={loadCountriesForRegion}
+              loadChildren={loadCountriesForRegion}
               placeholder="Search regions & countries..."
               showMenuSearch
               showSubmenuSearch
               menuSearchPlaceholder="Search regions..."
               submenuSearchPlaceholder="Search countries..."
-              onMenuSearch={asyncSearchRegions}
-              onSubmenuSearch={asyncSearchCountries}
+              searchMenu={asyncSearchRegions}
+              searchSubmenu={asyncSearchCountries}
               searchDebounceMs={300}
             />
           </div>

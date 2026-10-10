@@ -1236,7 +1236,7 @@ const TimePickerDemo = () => {
               value={blurFocusVal}
               onValueChange={(v) => setBlurFocusVal(v)}
               placeholder="Focus, then blur me..."
-              onBlur={() => setFocusMessage("onBlur fired")}
+              onBlur={(event) => setFocusMessage(`onBlur fired: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
               classes={c.timepicker}
             />
             <span className={`text-sm ${c.text}`}>

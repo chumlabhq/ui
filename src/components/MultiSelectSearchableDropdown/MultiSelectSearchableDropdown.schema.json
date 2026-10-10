@@ -6,7 +6,7 @@
   "properties": {
     "options": {
       "type": "array",
-      "description": "List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it.",
+      "description": "List of selectable options. Mutually exclusive with `searchOptions`: the async branch never reads it.",
       "items": {
         "type": "object",
         "properties": {
@@ -157,7 +157,7 @@
       "type": "boolean",
       "description": "Shows a loading state."
     },
-    "onSearch": {
+    "searchOptions": {
       "type": "object",
       "description": "(query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`.",
       "x-tsType": "(query: string) => Promise<MultiSelectOption[]>"
@@ -169,7 +169,7 @@
     },
     "initialOptions": {
       "type": "array",
-      "description": "Options to display before any search is performed. Async branch only (`onSearch`).",
+      "description": "Options to display before any search is performed. Async branch only (`searchOptions`).",
       "items": {
         "type": "object",
         "properties": {
@@ -183,14 +183,14 @@
       },
       "default": []
     },
-    "onLoadInitialOptions": {
+    "loadInitialOptions": {
       "type": "object",
       "description": "() => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`.",
       "x-tsType": "() => Promise<MultiSelectOption[]>"
     },
     "loadInitialOnOpen": {
       "type": "boolean",
-      "description": "When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load.",
+      "description": "When true, calls loadInitialOptions each time the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load.",
       "default": false
     },
     "onLoadError": {
@@ -364,13 +364,13 @@
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void - Fires when the dropdown loses focus.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event.",
+      "x-tsType": "((event: FocusEvent<HTMLElement, Element>) => void) | undefined"
     },
     "onFocus": {
       "type": "object",
-      "description": "() => void - Fires when the dropdown receives focus.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event.",
+      "x-tsType": "((event: FocusEvent<HTMLElement, Element>) => void) | undefined"
     },
     "onKeyDown": {
       "type": "object",

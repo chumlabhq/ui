@@ -14,11 +14,11 @@ export function useMultiSelectDropdown({
   defaultValue,
   disabled = false,
   showSearch = true,
-  onSearch,
+  searchOptions,
   searchDebounceMs = 300,
   onValueChange,
   initialOptions = [],
-  onLoadInitialOptions,
+  loadInitialOptions,
   loadInitialOnOpen = false,
   onLoadError,
   typeaheadTimeout = 500,
@@ -47,7 +47,7 @@ export function useMultiSelectDropdown({
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shouldRestoreFocusRef = useRef(false);
 
-  const isAsync = typeof onSearch === "function";
+  const isAsync = typeof searchOptions === "function";
 
   const allInitialOptions = useMemo(
     () => [...initialOptions, ...loadedInitialOptions],
@@ -85,12 +85,12 @@ export function useMultiSelectDropdown({
   }, [isAsync, searchQuery, asyncOptions, allInitialOptions, filteredSyncOptions]);
 
   useEffect(() => {
-    if (!isOpen || !loadInitialOnOpen || !onLoadInitialOptions || hasLoadedInitial) {
+    if (!isOpen || !loadInitialOnOpen || !loadInitialOptions || hasLoadedInitial) {
       return;
     }
 
     setIsLoadingInitial(true);
-    onLoadInitialOptions()
+    loadInitialOptions()
       .then((results) => {
         setLoadedInitialOptions(results);
         setHasLoadedInitial(true);
@@ -101,10 +101,10 @@ export function useMultiSelectDropdown({
       .finally(() => {
         setIsLoadingInitial(false);
       });
-  }, [isOpen, loadInitialOnOpen, onLoadInitialOptions, hasLoadedInitial, onLoadError]);
+  }, [isOpen, loadInitialOnOpen, loadInitialOptions, hasLoadedInitial, onLoadError]);
 
   useEffect(() => {
-    if (!isAsync || !onSearch || !searchQuery.trim()) {
+    if (!isAsync || !searchOptions || !searchQuery.trim()) {
       setAsyncOptions([]);
       setIsSearching(false);
       return;
@@ -118,7 +118,7 @@ export function useMultiSelectDropdown({
 
     debounceRef.current = setTimeout(async () => {
       try {
-        const results = await onSearch(searchQuery);
+        const results = await searchOptions(searchQuery);
         setAsyncOptions(results);
       } catch (error: unknown) {
         onLoadError?.(error);
@@ -133,7 +133,7 @@ export function useMultiSelectDropdown({
         clearTimeout(debounceRef.current);
       }
     };
-  }, [searchQuery, onSearch, searchDebounceMs, isAsync, onLoadError]);
+  }, [searchQuery, searchOptions, searchDebounceMs, isAsync, onLoadError]);
 
   const handleToggle = useCallback(() => {
     if (disabled) return;

@@ -11,9 +11,9 @@ recorded there because they belong next to the code that implements them.
 | | count |
 | --- | --- |
 | Components audited | 58 |
-| Library-authored props across the public surface | 1137 |
-| With no demo | 283 (25%) |
-| With no fixture | 642 (56%) |
+| Library-authored props across the public surface | 1135 |
+| With no demo | 282 (25%) |
+| With no fixture | 640 (56%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -70,7 +70,7 @@ listed here with no demo anywhere fails the generator.
 
 | Component | Props | Inherited | No demo | No fixture | Phantom | Tier-A gaps |
 | --- | --- | --- | --- | --- | --- | --- |
-| Accordion | 32 | 271 | 9 | 20 | 0 | `asChild`, `unstyled` |
+| Accordion | 31 | 271 | 9 | 19 | 0 | `asChild`, `unstyled` |
 | AccordionContent | 11 | 279 | 4 | 10 | 0 | `asChild` |
 | AccordionItem | 6 | 277 | 3 | 5 | 0 | `asChild` |
 | AccordionShimmer | 11 | 2 | 7 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` |
@@ -125,7 +125,7 @@ listed here with no demo anywhere fails the generator.
 | TextArea | 25 | 293 | 1 | 6 | 0 | `unstyled` |
 | TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
 | TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |
-| Toast | 22 | 2 | 22 | 10 | 0 | `type`, `unstyled` |
+| Toast | 21 | 2 | 21 | 9 | 0 | `type`, `unstyled` |
 | ToastProvider | 12 | 0 | 10 | 10 | 0 | `unstyled` |
 | Tooltip | 32 | 2 | 9 | 19 | 0 | `unstyled`, `portalContainer` |
 

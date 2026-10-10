@@ -22,7 +22,6 @@ export type {
   AccordionVariant,
   AnimationEasing,
   AccordionShimmerProps,
-  AccordionExpandEvent,
   AccordionContextValue,
   AccordionItemContextValue,
   StorageConfig,

@@ -1032,9 +1032,9 @@ const AccordionDemo = () => {
             type="multiple"
             ref={accordionRef}
             classes={c.accordion}
-            onExpandedChange={(e) => {
+            onValueChange={(values: string[]) => {
               setToggleLog((prev) => [
-                `${e.value} ${e.isExpanded ? "expanded" : "collapsed"} (${e.expandedCount}/${e.totalCount})`,
+                `expanded: ${values.join(", ") || "none"} (${values.length}/3)`,
                 ...prev.slice(0, 4),
               ]);
             }}
@@ -1359,7 +1359,7 @@ const AccordionDemo = () => {
           <Switch
             label="Unsaved changes"
             checked={guardUnsaved}
-            onValueChange={setGuardUnsaved}
+            onCheckedChange={setGuardUnsaved}
           />
           <Accordion
             type="single"

@@ -15,15 +15,15 @@ export const useCascadingDropdown = ({
   disabled = false,
   closeOnSelect = true,
   onValueChange,
-  onLoadChildren,
+  loadChildren,
   onLoadError,
   open: openProp,
   defaultOpen = false,
   onOpenChange,
   showMenuSearch = false,
   showSubmenuSearch = false,
-  onMenuSearch,
-  onSubmenuSearch,
+  searchMenu,
+  searchSubmenu,
   searchDebounceMs = 300,
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
   const [internalValue, setInternalValue] = useControllableState<CascadingValue>({
@@ -55,7 +55,7 @@ export const useCascadingDropdown = ({
   const menuSearchVersionRef = useRef(0);
   const submenuSearchVersionRef = useRef(0);
 
-  const hasActiveMenuSearch = !!onMenuSearch && !!menuSearchQuery.trim();
+  const hasActiveMenuSearch = !!searchMenu && !!menuSearchQuery.trim();
 
   useEffect(() => {
     if (!hasActiveMenuSearch) {
@@ -67,7 +67,7 @@ export const useCascadingDropdown = ({
     const currentVersion = ++menuSearchVersionRef.current;
 
     const timer = setTimeout(() => {
-      onMenuSearch!(menuSearchQuery)
+      searchMenu!(menuSearchQuery)
         .then((results) => {
           if (menuSearchVersionRef.current === currentVersion) {
             setAsyncMenuResults(results);
@@ -86,13 +86,13 @@ export const useCascadingDropdown = ({
     }, searchDebounceMs);
 
     return () => clearTimeout(timer);
-  }, [hasActiveMenuSearch, menuSearchQuery, onMenuSearch, searchDebounceMs]);
+  }, [hasActiveMenuSearch, menuSearchQuery, searchMenu, searchDebounceMs]);
 
   const activeSubmenuParent = useMemo(
     () => (activeSubmenu ? options.find((opt) => opt.value === activeSubmenu) ?? null : null),
     [activeSubmenu, options],
   );
-  const hasActiveSubmenuSearch = !!onSubmenuSearch && !!submenuSearchQuery.trim() && !!activeSubmenuParent;
+  const hasActiveSubmenuSearch = !!searchSubmenu && !!submenuSearchQuery.trim() && !!activeSubmenuParent;
 
   useEffect(() => {
     if (!hasActiveSubmenuSearch || !activeSubmenuParent) {
@@ -105,7 +105,7 @@ export const useCascadingDropdown = ({
     const parent = activeSubmenuParent;
 
     const timer = setTimeout(() => {
-      onSubmenuSearch!(submenuSearchQuery, parent)
+      searchSubmenu!(submenuSearchQuery, parent)
         .then((results) => {
           if (submenuSearchVersionRef.current === currentVersion) {
             setAsyncSubmenuResults(results);
@@ -124,9 +124,9 @@ export const useCascadingDropdown = ({
     }, searchDebounceMs);
 
     return () => clearTimeout(timer);
-  }, [hasActiveSubmenuSearch, submenuSearchQuery, onSubmenuSearch, searchDebounceMs, activeSubmenuParent]);
+  }, [hasActiveSubmenuSearch, submenuSearchQuery, searchSubmenu, searchDebounceMs, activeSubmenuParent]);
 
-  const isMenuAsync = !!onMenuSearch;
+  const isMenuAsync = !!searchMenu;
   const filteredOptions = useMemo(() => {
     if (isMenuAsync) {
       if (menuSearchQuery.trim()) {
@@ -141,7 +141,7 @@ export const useCascadingDropdown = ({
     return options.filter((opt) => opt.label.toLowerCase().includes(q));
   }, [isMenuAsync, showMenuSearch, menuSearchQuery, options, asyncMenuResults]);
 
-  const isSubmenuAsync = !!onSubmenuSearch;
+  const isSubmenuAsync = !!searchSubmenu;
   const getFilteredSubmenuOptions = useCallback(
     (parent: CascadingOption): CascadingOption[] => {
       const dynamicChildren = loadedChildren[parent.value];
@@ -220,14 +220,14 @@ export const useCascadingDropdown = ({
 
   const loadChildrenForOption = useCallback(
     async (option: CascadingOption) => {
-      if (!onLoadChildren) return;
+      if (!loadChildren) return;
       if (loadedChildren[option.value]) return;
       if (loadingChildren[option.value]) return;
 
       setLoadingChildren((prev) => ({ ...prev, [option.value]: true }));
 
       try {
-        const children = await onLoadChildren(option);
+        const children = await loadChildren(option);
         setLoadedChildren((prev) => ({ ...prev, [option.value]: children }));
       } catch (error: unknown) {
         onLoadError?.(error);
@@ -235,7 +235,7 @@ export const useCascadingDropdown = ({
         setLoadingChildren((prev) => ({ ...prev, [option.value]: false }));
       }
     },
-    [onLoadChildren, loadedChildren, loadingChildren, onLoadError]
+    [loadChildren, loadedChildren, loadingChildren, onLoadError]
   );
 
   /**
@@ -252,8 +252,8 @@ export const useCascadingDropdown = ({
     (option: CascadingOption) =>
       (option.children?.length ?? 0) > 0 ||
       (loadedChildren[option.value]?.length ?? 0) > 0 ||
-      !!(option.hasChildren && onLoadChildren),
-    [loadedChildren, onLoadChildren]
+      !!(option.hasChildren && loadChildren),
+    [loadedChildren, loadChildren]
   );
 
   /** Opens a parent's submenu, fetching its children if they are not in yet. */
@@ -264,11 +264,11 @@ export const useCascadingDropdown = ({
       setSubmenuSearchQuery("");
       setAsyncSubmenuResults(null);
 
-      if (option.hasChildren && onLoadChildren && !loadedChildren[option.value]) {
+      if (option.hasChildren && loadChildren && !loadedChildren[option.value]) {
         loadChildrenForOption(option);
       }
     },
-    [loadedChildren, onLoadChildren, loadChildrenForOption]
+    [loadedChildren, loadChildren, loadChildrenForOption]
   );
 
   const handleMenuItemHover = useCallback(

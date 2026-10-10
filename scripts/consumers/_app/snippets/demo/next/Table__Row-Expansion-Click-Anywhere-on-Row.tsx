@@ -226,7 +226,7 @@ export default function TableExample() {
                 expandable
                 expandOnRowClick
                 expandedRowIds={ids}
-                onExpandedChange={setIds}
+                onExpandedRowIdsChange={setIds}
                 ExpandIcon={SmallChevron}
                 renderExpandedRow={(row) => (
                   <div

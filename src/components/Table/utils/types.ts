@@ -155,11 +155,14 @@ export interface TableProps<TData> {
   loading?: boolean;
   showHeader?: boolean;
   pinnedColumns?: string[];
-  onPinColumn?: (columnId: string, isPinned: boolean) => void;
+  /** Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned. */
+  onPinnedColumnsChange?: (pinnedColumns: string[]) => void;
   pinnableColumns?: string[];
   maxPinnedColumns?: number;
-  onCursorPosition?: (position: { x: number; y: number } | null) => void;
-  onCursorOverHeader?: (isOverHeader: boolean) => void;
+  /** Fires as the pointer moves over the table, with its position relative to the root; `null` when it leaves. */
+  onCursorPositionChange?: (position: { x: number; y: number } | null) => void;
+  /** Fires with whether the pointer is over the header row. */
+  onHeaderHoverChange?: (isOverHeader: boolean) => void;
   emptyContent?: ReactNode;
   ariaLabel?: string;
   /** Accessible caption for the table, rendered as a visually hidden <caption> element. */
@@ -173,7 +176,8 @@ export interface TableProps<TData> {
   ) => void;
   floatingActions?: ReactNode;
   isFloatingActionsHovered?: boolean;
-  isPopupOpen?: boolean;
+  /** Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still. */
+  popupOpen?: boolean;
   maxWidth?: string | number;
   maxHeight?: string | number;
   minHeight?: string | number;
@@ -205,8 +209,8 @@ export interface TableProps<TData> {
   selectionMode?: "single" | "multiple" | "none";
   /** Array of selected row IDs (controlled). */
   selectedRowIds?: string[];
-  /** Callback when selection changes. */
-  onSelectionChange?: (selectedIds: string[]) => void;
+  /** Fires with the new `selectedRowIds` when selection changes. */
+  onSelectedRowIdsChange?: (selectedRowIds: string[]) => void;
   /** Whether the header "select all" checkbox selects all rows on the current page or all rows. Defaults to "page". */
   selectAllMode?: "page" | "all";
 
@@ -232,8 +236,8 @@ export interface TableProps<TData> {
   expandable?: boolean;
   /** Array of expanded row IDs (controlled). */
   expandedRowIds?: string[];
-  /** Callback when expanded rows change. */
-  onExpandedChange?: (expandedIds: string[]) => void;
+  /** Fires with the new `expandedRowIds` when a row expands or collapses. */
+  onExpandedRowIdsChange?: (expandedRowIds: string[]) => void;
   /** Render function for expanded row content. */
   renderExpandedRow?: (row: TData) => ReactNode;
   /** Custom expand icon component. Receives `expanded` boolean. */
@@ -363,7 +367,7 @@ export interface TableContextValue<TData> {
   getRowId?: (row: TData) => string;
   selectedRowId?: string | null;
   isFloatingActionsHovered?: boolean;
-  isPopupOpen?: boolean;
+  popupOpen?: boolean;
   headerCellClassName?: string;
   cellClassName?: string;
   rowClassName?: string;

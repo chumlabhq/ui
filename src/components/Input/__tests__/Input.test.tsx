@@ -345,6 +345,7 @@ describe("Input", () => {
       );
       await user.click(screen.getByRole("button", { name: "Search" }));
       expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
     it("calls onEndIconClick when trailing icon clicked", async () => {
@@ -360,6 +361,7 @@ describe("Input", () => {
       );
       await user.click(screen.getByRole("button", { name: "Clear" }));
       expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
     it("does not render button role when no onClick handler", () => {

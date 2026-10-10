@@ -293,13 +293,13 @@
     },
     "onLoad": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image finishes loading.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image finishes loading, with the image's native load event.",
+      "x-tsType": "((event: SyntheticEvent<HTMLImageElement, Event>) => void) | undefined"
     },
     "onError": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image fails to load.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image fails to load, with the image's native error event.",
+      "x-tsType": "((event: SyntheticEvent<HTMLImageElement, Event>) => void) | undefined"
     },
     "asChild": {
       "type": "boolean",

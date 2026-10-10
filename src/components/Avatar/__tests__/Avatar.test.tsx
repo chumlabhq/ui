@@ -69,6 +69,7 @@ describe("Avatar", () => {
       fireEvent.load(img);
 
       expect(onLoad).toHaveBeenCalledTimes(1);
+      expect(onLoad).toHaveBeenCalledWith(expect.objectContaining({ type: "load", target: img }));
     });
 
     it("calls onError and shows initials when image fails", async () => {
@@ -79,6 +80,7 @@ describe("Avatar", () => {
       fireEvent.error(img);
 
       expect(onError).toHaveBeenCalledTimes(1);
+      expect(onError).toHaveBeenCalledWith(expect.objectContaining({ type: "error", target: img }));
       await waitFor(() => {
         expect(screen.getByText("JD")).toBeInTheDocument();
       });

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect.js";
 import { useControlledSwitchWarning } from "../../../utils/useControlledSwitchWarning.js";
 import { createExpandedStore } from "../utils/context.js";
-import type { AccordionExpandEvent, AccordionType } from "../utils/types.js";
+import type { AccordionType } from "../utils/types.js";
 
 export interface UseAccordionStateManagerOptions {
   type: AccordionType;
@@ -11,7 +11,6 @@ export interface UseAccordionStateManagerOptions {
   controlledValue: string | string[] | null | undefined;
   defaultValue: string | string[] | undefined;
   onValueChange: ((value: string | null) => void) | ((value: string[]) => void) | undefined;
-  onExpandedChange: ((event: AccordionExpandEvent) => void) | undefined;
   announceExpanded: boolean;
   announce: (message: string) => void;
   defaultExpandAll: boolean;
@@ -47,7 +46,6 @@ export function useAccordionStateManager(
     controlledValue,
     defaultValue,
     onValueChange,
-    onExpandedChange,
     announceExpanded,
     announce,
     defaultExpandAll,
@@ -62,13 +60,11 @@ export function useAccordionStateManager(
   useControlledSwitchWarning(isControlled, "Accordion");
 
   const onValueChangeRef = useRef(onValueChange);
-  const onExpandedChangeRef = useRef(onExpandedChange);
   const announceRef = useRef(announce);
   useIsomorphicLayoutEffect(() => {
     onValueChangeRef.current = onValueChange;
-    onExpandedChangeRef.current = onExpandedChange;
     announceRef.current = announce;
-  }, [onValueChange, onExpandedChange, announce]);
+  }, [onValueChange, announce]);
 
   const [internalValue, setInternalValue] = useState<Set<string>>(() => {
     if (defaultValue !== undefined) {
@@ -147,19 +143,6 @@ export function useAccordionStateManager(
         } else {
           (cb as (value: string[]) => void)(Array.from(newSet));
         }
-      }
-
-      if (
-        onExpandedChangeRef.current &&
-        changedValue !== undefined &&
-        wasExpanded !== undefined
-      ) {
-        onExpandedChangeRef.current({
-          value: changedValue,
-          isExpanded: !wasExpanded,
-          expandedCount: newSet.size,
-          totalCount: itemCount,
-        });
       }
 
       if (

@@ -30,7 +30,7 @@ function Counted({ variant }: { variant: "default" | "custom" }) {
         columns={COLUMNS}
         selectionMode="multiple"
         getRowId={GET_ID}
-        onSelectionChange={(ids) => setSelected(ids as string[])}
+        onSelectedRowIdsChange={(ids) => setSelected(ids as string[])}
         onRowClick={() => setRowClicks((n) => n + 1)}
         // Inline on purpose: a new component every render, as consumers write it.
         CheckboxIcon={variant === "custom" ? (props) => <StarIcon {...props} /> : undefined}

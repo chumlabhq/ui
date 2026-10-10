@@ -34,8 +34,8 @@ import ts from "typescript";
  *      - an inline function that calls a `useState` setter whose argument
  *        reads one of the function's parameters. If the callback's own type
  *        passes no argument (`() => void`, read from the checker at that exact
- *        attachment, because `onBlur` is `() => void` on Dropdown and takes an
- *        event on Checkbox), calling the setter at all is the record.
+ *        attachment, because `onClear` is `() => void` on Input while `onBlur`
+ *        takes an event), calling the setter at all is the record.
  *    and that state must be read inside an element carrying `data-demo-action`
  *    in the same section. A state that only feeds the component's own props is
  *    the component showing itself, not the demo showing the callback.
@@ -282,7 +282,7 @@ describe("demo callbacks", () => {
       path: resolve(DEMO_DIR, `__plant_${id}Demo.tsx`),
       source: `import { useState, type ReactNode } from "react";
 import { Slider } from "../../components/Slider/index.js";
-import { Dropdown } from "../../components/Dropdown/index.js";
+import { Input } from "../../components/Input/index.js";
 const Section = (_: { title: string; children?: ReactNode }) => null;
 export const Plant = () => {
   const [received, setReceived] = useState("not fired yet");
@@ -291,10 +291,9 @@ export const Plant = () => {
 };
 `,
     });
-    const OPTIONS = `options={[{ value: "a", label: "A" }]}`;
     const plants = {
       correct: page("correct", `<Section title="onValueCommit"><Slider onValueCommit={(v) => setReceived(JSON.stringify(v))} /><div data-demo-action>{received}</div></Section>`),
-      correctZeroArg: page("zero", `<Section title="Form (onBlur)"><Dropdown ${OPTIONS} onBlur={() => setReceived("blurred")} /><div data-demo-action>{received}</div></Section>`),
+      correctZeroArg: page("zero", `<Section title="Clearing (onClear)"><Input aria-label="Name" clearable onClear={() => setReceived("cleared")} /><div data-demo-action>{received}</div></Section>`),
       alert: page("alert", `<Section title="Plain"><button onClick={() => window.alert("hi")} /></Section>`),
       console: page("console", `<Section title="onValueCommit"><Slider onValueCommit={(v) => console.log(v)} /><div data-demo-action>{received}</div></Section>`),
       ignoresArgument: page("ignores", `<Section title="onValueCommit"><Slider onValueCommit={() => setReceived("fired")} /><div data-demo-action>{received}</div></Section>`),

@@ -590,7 +590,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 onValueChange={setCopyPasteValue}
                 enablePasteDetection
                 copyFormat="e164"
-                onPasteDetected={setLastPasteData}
+                onPasteDetect={setLastPasteData}
                 placeholder="Try pasting +44 20 7123 4567"
                 classes={c.phone}
               />
@@ -1362,7 +1362,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 onValueChange={setCombinedValue}
                 onCountryChange={setCombinedCountry}
                 enablePasteDetection
-                onPasteDetected={setCombinedPaste}
+                onPasteDetect={setCombinedPaste}
                 copyFormat="international"
                 validateOnBlur
                 validationMessage="The phone number you entered is not valid"

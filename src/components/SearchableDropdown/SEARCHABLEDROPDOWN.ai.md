@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<SearchableDropdown options={[...]} />` for a searchable single-select. Supports local filtering by default, async search via `onSearch`, initial prefetch via `onLoadInitialOptions`, and portal-based positioning. Controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue`). Works out-of-the-box with built-in Tailwind styles.
+Use `<SearchableDropdown options={[...]} />` for a searchable single-select. Supports local filtering by default, async search via `searchOptions`, initial prefetch via `loadInitialOptions`, and portal-based positioning. Controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue`). Works out-of-the-box with built-in Tailwind styles.
 
 ---
 
@@ -56,9 +56,9 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
-| `onSearch` | Async search function. Replaces local filtering when provided. |
-| `onLoadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
-| `searchDebounceMs` | Only applies to `onSearch`. Default: `300`. |
+| `searchOptions` | Async search function. Replaces local filtering when provided. |
+| `loadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
+| `searchDebounceMs` | Only applies to `searchOptions`. Default: `300`. |
 | `showSearch` | Default `true`. Set `false` to hide search input. |
 | `clearable` | Only works when a value is selected. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
@@ -94,7 +94,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | `[]` | Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | Array of dropdown options. Mutually exclusive with `searchOptions`: the async branch never reads it. |
 | `value` | string \| null | — | Controlled selected value. |
 | `defaultValue` | string | — | Default uncontrolled selected value. |
 | `onValueChange` | object | — | (value: string \| null, option: SearchableDropdownOption \| null) => void — Callback fired when the selected value changes. |
@@ -122,11 +122,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `selectedIcon` | object | — | React.ReactNode — Custom icon for the selected option. |
 | `fullWidth` | boolean | `false` | Whether the dropdown expands to fill its parent container. |
 | `loading` | boolean | — | Whether the dropdown is in a loading state. |
-| `onSearch` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
+| `searchOptions` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | `[]` | Initial options to display before any search is performed. Async branch only (`onSearch`). |
-| `onLoadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
-| `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
+| `initialOptions` | array | `[]` | Initial options to display before any search is performed. Async branch only (`searchOptions`). |
+| `loadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
+| `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void — Callback when async loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items to show while loading. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -142,8 +142,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `lockScroll` | boolean | `false` | Whether to lock body scroll when the dropdown is open. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void — Callback fired when the dropdown loses focus. |
-| `onFocus` | object | — | () => void — Callback fired when the dropdown gains focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void — Callback fired on keydown events. |
 | `renderTrigger` | object | — | (triggerProps: SearchableDropdownTriggerRenderProps, state: SearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder). |
 | `ChevronIcon` | object | — | React.ComponentType — Custom chevron icon component. |
@@ -236,7 +236,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 
 ```tsx
 <SearchableDropdown
-  onSearch={async (query) => {
+  searchOptions={async (query) => {
     const res = await fetch(`/api/search?q=${query}`);
     return res.json();
   }}
@@ -250,8 +250,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 ```tsx
 <SearchableDropdown
   loadInitialOnOpen
-  onLoadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
-  onSearch={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
+  loadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
+  searchOptions={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
 />
 ```
 
@@ -321,9 +321,9 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
 | Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownPosition` |
-| Search not working with `onSearch` | Local filtering overridden | `onSearch` replaces local filtering entirely |
-| Async results not appearing | `onSearch` not returning array | Must return `Promise<SearchableDropdownOption[]>` |
-| Options don't load on open | Missing `loadInitialOnOpen` | Add alongside `onLoadInitialOptions` |
+| Search not working with `searchOptions` | Local filtering overridden | `searchOptions` replaces local filtering entirely |
+| Async results not appearing | `searchOptions` not returning array | Must return `Promise<SearchableDropdownOption[]>` |
+| Options don't load on open | Missing `loadInitialOnOpen` | Add alongside `loadInitialOptions` |
 | Controlled value not updating | Missing `onValueChange` | Pair `value` with `onValueChange` |
 | Clear button not visible | `clearable` not set | Add `clearable` prop |
 | Dropdown clipped by parent | Not using portal | Default uses portal; check `portalContainer` |

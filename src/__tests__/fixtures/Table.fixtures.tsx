@@ -73,8 +73,8 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "loading", props: { data: [], columns: COLUMNS, loading: true } },
   {
     name: "pinned-column",
-    props: { data: ROWS, columns: COLUMNS, pinnedColumns: ["name"], pinnableColumns: ["name", "role"], onPinColumn: () => {} },
-    note: "The only fixture where pinButton reaches data-state=active. Needs all three: pinnableColumns to make the control eligible, onPinColumn because canShowPinButton requires a handler, and pinnedColumns to put it in the active state.",
+    props: { data: ROWS, columns: COLUMNS, pinnedColumns: ["name"], pinnableColumns: ["name", "role"], onPinnedColumnsChange: () => {} },
+    note: "The only fixture where pinButton reaches data-state=active. Needs all three: pinnableColumns to make the control eligible, onPinnedColumnsChange because canShowPinButton requires a handler, and pinnedColumns to put it in the active state.",
   },
   {
     name: "editing-cell",

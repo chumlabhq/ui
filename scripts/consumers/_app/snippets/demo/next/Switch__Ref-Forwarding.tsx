@@ -13,7 +13,7 @@ export default function SwitchExample() {
         ref={switchRef}
         label="Click the buttons below to control me"
         checked={refSwitch}
-        onValueChange={setRefSwitch}
+        onCheckedChange={setRefSwitch}
         classes={
           {
             label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",

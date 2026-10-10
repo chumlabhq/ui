@@ -226,7 +226,7 @@ export default function TableExample() {
           data={sampleData.slice(0, 6)}
           selectionMode="multiple"
           selectedRowIds={multiSelectedIds}
-          onSelectionChange={setMultiSelectedIds}
+          onSelectedRowIdsChange={setMultiSelectedIds}
           getRowId={(row) => row.id}
           checkboxColor="var(--cl-accent)"
           classes={s}

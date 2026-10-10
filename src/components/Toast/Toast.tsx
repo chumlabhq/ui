@@ -33,7 +33,6 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   icon,
   showCloseButton = true,
   onDismiss,
-  onRemove,
   closeOnEscape = false,
   role: roleProp,
   classes: classesProp,
@@ -50,14 +49,11 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const toastRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const resolvedDismissCallback = onDismiss;
-  const onCloseRef = useRef(resolvedDismissCallback);
-  const onRemoveRef = useRef(onRemove);
+  const onDismissRef = useRef(onDismiss);
 
   useEffect(() => {
-    onCloseRef.current = onDismiss;
-    onRemoveRef.current = onRemove;
-  }, [onDismiss, onRemove]);
+    onDismissRef.current = onDismiss;
+  }, [onDismiss]);
   const [isPaused, setIsPaused] = useState(false);
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);
@@ -80,8 +76,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const toastRole = roleProp ?? getRoleForType(type);
 
   const handleClose = useCallback(() => {
-    onCloseRef.current?.();
-    onRemoveRef.current(id);
+    onDismissRef.current?.(id);
   }, [id]);
 
   // On window, in the bubble phase, so it is the last thing an Escape reaches:

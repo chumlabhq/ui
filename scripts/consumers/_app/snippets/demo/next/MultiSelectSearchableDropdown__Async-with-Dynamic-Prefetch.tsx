@@ -122,8 +122,8 @@ export default function MultiSelectSearchableDropdownExample() {
         value={asyncPrefetchValue}
         onValueChange={(values) => setAsyncPrefetchValue(values)}
         placeholder="Select or search countries..."
-        onSearch={handleAsyncSearch}
-        onLoadInitialOptions={handleLoadInitialOptions}
+        searchOptions={handleAsyncSearch}
+        loadInitialOptions={handleLoadInitialOptions}
         loadInitialOnOpen
         searchDebounceMs={300}
         maxDisplayedChips={2}

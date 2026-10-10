@@ -7,7 +7,7 @@ interface LazyOption {
 }
 
 /**
- * Warns, in development only, when CascadingDropdown's `onLoadChildren` is set
+ * Warns, in development only, when CascadingDropdown's `loadChildren` is set
  * but no option declares `hasChildren`, so the loader can never fire.
  *
  * The prop-union work removed every combination this library could express in
@@ -41,7 +41,7 @@ export function useInertPropWarning(loader: unknown, options: readonly LazyOptio
     if (declaresChildren(options)) return;
     warned.current = true;
     console.warn(
-      "CascadingDropdown: `onLoadChildren` is set, but no option has `hasChildren: true`. " +
+      "CascadingDropdown: `loadChildren` is set, but no option has `hasChildren: true`. " +
         "Children are loaded only for options that declare they have some, so the loader " +
         "will never fire.",
     );

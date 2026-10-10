@@ -23,7 +23,7 @@ export default function CheckboxExample() {
             <Checkbox
               aria-label={`Size ${s}`}
               checked={val}
-              onValueChange={set}
+              onCheckedChange={set}
               size={s}
               shape="rounded"
               classes={

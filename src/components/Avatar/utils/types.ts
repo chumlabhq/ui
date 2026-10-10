@@ -1,4 +1,4 @@
-import type { ReactNode, HTMLAttributes, ImgHTMLAttributes, CSSProperties } from "react";
+import type { ReactNode, HTMLAttributes, ImgHTMLAttributes, CSSProperties, SyntheticEvent } from "react";
 
 export type TooltipSide = "top" | "right" | "bottom" | "left";
 export type TooltipAlign = "start" | "center" | "end";
@@ -167,10 +167,10 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLDivElement>, "onLoa
   loading?: boolean;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
-  /** Fires when the avatar image finishes loading. */
-  onLoad?: () => void;
-  /** Fires when the avatar image fails to load. */
-  onError?: () => void;
+  /** Fires when the avatar image finishes loading, with the image's native load event. */
+  onLoad?: (event: SyntheticEvent<HTMLImageElement>) => void;
+  /** Fires when the avatar image fails to load, with the image's native error event. */
+  onError?: (event: SyntheticEvent<HTMLImageElement>) => void;
   /** Merges avatar props onto the child element via Slot. */
   asChild?: boolean;
 }

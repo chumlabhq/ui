@@ -15,10 +15,10 @@ interface UseDropdownProps {
   disabled?: boolean;
   clearable?: boolean;
   showSearch?: boolean;
-  onSearch?: (query: string) => Promise<SearchableDropdownOption[]>;
+  searchOptions?: (query: string) => Promise<SearchableDropdownOption[]>;
   searchDebounceMs?: number;
   initialOptions?: SearchableDropdownOption[];
-  onLoadInitialOptions?: () => Promise<SearchableDropdownOption[]>;
+  loadInitialOptions?: () => Promise<SearchableDropdownOption[]>;
   loadInitialOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   typeaheadTimeout?: number;
@@ -57,10 +57,10 @@ export function useDropdown({
   disabled = false,
   clearable = false,
   showSearch = true,
-  onSearch,
+  searchOptions,
   searchDebounceMs = 300,
   initialOptions = [],
-  onLoadInitialOptions,
+  loadInitialOptions,
   loadInitialOnOpen = false,
   onLoadError,
   typeaheadTimeout = 1000,
@@ -98,7 +98,7 @@ export function useDropdown({
   const searchVersionRef = useRef(0);
   const loadInitialMountedRef = useRef(true);
 
-  const isAsync = typeof onSearch === "function";
+  const isAsync = typeof searchOptions === "function";
 
   const allInitialOptions = useMemo(
     () => [...initialOptions, ...loadedInitialOptions],
@@ -142,18 +142,18 @@ export function useDropdown({
     };
   }, []);
 
-  const [prevLoadConfig, setPrevLoadConfig] = useState({ onLoadInitialOptions, loadInitialOnOpen });
+  const [prevLoadConfig, setPrevLoadConfig] = useState({ loadInitialOptions, loadInitialOnOpen });
   if (
-    prevLoadConfig.onLoadInitialOptions !== onLoadInitialOptions ||
+    prevLoadConfig.loadInitialOptions !== loadInitialOptions ||
     prevLoadConfig.loadInitialOnOpen !== loadInitialOnOpen
   ) {
-    setPrevLoadConfig({ onLoadInitialOptions, loadInitialOnOpen });
+    setPrevLoadConfig({ loadInitialOptions, loadInitialOnOpen });
     if (hasLoadedInitial) {
       setHasLoadedInitial(false);
     }
   }
 
-  const shouldLoadInitial = isOpen && loadInitialOnOpen && !!onLoadInitialOptions && !hasLoadedInitial;
+  const shouldLoadInitial = isOpen && loadInitialOnOpen && !!loadInitialOptions && !hasLoadedInitial;
 
   const [prevShouldLoad, setPrevShouldLoad] = useState(false);
   if (prevShouldLoad !== shouldLoadInitial) {
@@ -164,10 +164,10 @@ export function useDropdown({
   }
 
   useEffect(() => {
-    if (!shouldLoadInitial || !onLoadInitialOptions) return;
+    if (!shouldLoadInitial || !loadInitialOptions) return;
 
     let cancelled = false;
-    onLoadInitialOptions()
+    loadInitialOptions()
       .then((results) => {
         if (cancelled) return;
         setLoadedInitialOptions(results);
@@ -183,9 +183,9 @@ export function useDropdown({
         }
       });
     return () => { cancelled = true; };
-  }, [shouldLoadInitial, onLoadInitialOptions, onLoadError]);
+  }, [shouldLoadInitial, loadInitialOptions, onLoadError]);
 
-  const hasActiveSearch = isAsync && !!onSearch && !!searchQuery.trim();
+  const hasActiveSearch = isAsync && !!searchOptions && !!searchQuery.trim();
 
   const [prevHasActiveSearch, setPrevHasActiveSearch] = useState(false);
   if (prevHasActiveSearch !== hasActiveSearch) {
@@ -199,7 +199,7 @@ export function useDropdown({
   }
 
   useEffect(() => {
-    if (!hasActiveSearch || !onSearch) return;
+    if (!hasActiveSearch || !searchOptions) return;
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -208,7 +208,7 @@ export function useDropdown({
     const currentVersion = ++searchVersionRef.current;
 
     debounceRef.current = setTimeout(() => {
-      onSearch(searchQuery)
+      searchOptions(searchQuery)
         .then((results) => {
           if (searchVersionRef.current === currentVersion) {
             setAsyncOptions(results);
@@ -232,7 +232,7 @@ export function useDropdown({
         clearTimeout(debounceRef.current);
       }
     };
-  }, [hasActiveSearch, searchQuery, onSearch, searchDebounceMs, isAsync, onLoadError]);
+  }, [hasActiveSearch, searchQuery, searchOptions, searchDebounceMs, isAsync, onLoadError]);
 
   const handleOpen = useCallback(() => {
     if (disabled) return;

@@ -231,7 +231,10 @@ export const ToastProvider = ({
                   <div className="overflow-hidden">
                     <Toast
                       {...toastConfig}
-                      onRemove={removeToast}
+                      onDismiss={(id) => {
+                        toastConfig.onDismiss?.(id);
+                        removeToast(id);
+                      }}
                       closeOnEscape={toast.id === escapeTargetId}
                       providerClasses={providerClasses}
                       providerUnstyled={providerUnstyled}

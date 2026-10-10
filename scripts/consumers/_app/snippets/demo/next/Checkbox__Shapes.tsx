@@ -19,7 +19,7 @@ export default function CheckboxExample() {
             <Checkbox
               aria-label={`Shape ${sh}`}
               checked={val}
-              onValueChange={set}
+              onCheckedChange={set}
               size="lg"
               shape={sh}
               classes={

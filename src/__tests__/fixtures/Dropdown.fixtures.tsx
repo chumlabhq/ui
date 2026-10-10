@@ -31,37 +31,37 @@ const fixtures: Fixtures<typeof Dropdown> = [
   { name: "error", props: { options: OPTIONS, label: "Fruit", error: true, errorMessage: "Required" } },
   { name: "success", props: { options: OPTIONS, label: "Fruit", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { options: OPTIONS, disabled: true } },
-  // The load-on-open branch. `loadOnOpen` + `onLoadOptions` is a discriminated
+  // The load-on-open branch. `loadOnOpen` + `loadOptions` is a discriminated
   // union prop-unions.type-test proves cannot be half-supplied; these are what
   // prove it renders. The menu is opened by clicking the trigger because
   // `loadOptions()` runs from the open handlers, not from an effect — see
   // `openMenu` in _async.
   {
     name: "async-load-initial",
-    props: { onLoadOptions: resolvesTo(OPTIONS), loadOnOpen: true },
+    props: { loadOptions: resolvesTo(OPTIONS), loadOnOpen: true },
     note: "Before the first open: a trigger with no menu and nothing fetched yet.",
   },
   {
     name: "async-load-pending",
-    props: { onLoadOptions: neverResolves(), loadOnOpen: true, loadingText: "Loading fruit" },
+    props: { loadOptions: neverResolves(), loadOnOpen: true, loadingText: "Loading fruit" },
     act: openMenu,
     note: "Opened, loader never settles — the in-flight menu holds still.",
   },
   {
     name: "async-load-resolved",
-    props: { onLoadOptions: resolvesTo(OPTIONS), loadOnOpen: true },
+    props: { loadOptions: resolvesTo(OPTIONS), loadOnOpen: true },
     act: openMenuAndSettle,
   },
   {
     name: "async-load-empty",
-    props: { onLoadOptions: resolvesTo([]), loadOnOpen: true },
+    props: { loadOptions: resolvesTo([]), loadOnOpen: true },
     act: openMenuAndSettle,
     note: "Resolving to nothing is a different state from still loading.",
   },
   {
     name: "async-load-default-open",
     props: {
-      onLoadOptions: resolvesTo(OPTIONS),
+      loadOptions: resolvesTo(OPTIONS),
       loadOnOpen: true,
       defaultOpen: true,
     },

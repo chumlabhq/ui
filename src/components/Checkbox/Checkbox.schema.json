@@ -28,9 +28,9 @@
       "description": "Displays the indeterminate (minus) indicator instead of a checkmark.",
       "default": false
     },
-    "onValueChange": {
+    "onCheckedChange": {
       "type": "object",
-      "description": "(checked: boolean) => void — Fires when the checked state changes.",
+      "description": "(checked: boolean) => void — Fires with the new `checked` state.",
       "x-tsType": "((checked: boolean) => void) | undefined"
     },
     "onFocus": {

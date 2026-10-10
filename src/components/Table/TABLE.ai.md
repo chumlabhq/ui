@@ -55,7 +55,7 @@ export default function Example() {
 | `columns` + `data` | **Required.** TanStack `ColumnDef<TData>[]` and `TData[]`. |
 | `sortable` | Enables column sorting. Combine with `onSortingChange` for controlled. |
 | `manualSorting` | When true, sorting is server-side; table won't sort locally. |
-| `pinnedColumns` | Array of column IDs to pin left. Requires `onPinColumn` for interactive. |
+| `pinnedColumns` | Array of column IDs to pin left. Requires `onPinnedColumnsChange` for interactive. |
 | `expandable` + `renderExpandedRow` | Both needed for row expansion. |
 | `enableRowDragDrop` + `onRowReorder` | Both needed for drag-and-drop row reordering. |
 | `editable` + `onCellEdit` | Both needed for inline cell editing. |
@@ -90,11 +90,11 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `loading` | boolean | `false` | Whether the table is in a loading state showing shimmer rows. |
 | `showHeader` | boolean | `true` | Whether to show the table header row. |
 | `pinnedColumns` | array | — | Column IDs to pin to the left side. |
-| `onPinColumn` | object | — | (columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned. |
+| `onPinnedColumnsChange` | object | — | (pinnedColumns: string[]) => void — Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned. |
 | `pinnableColumns` | array | — | Column IDs that are allowed to be pinned. |
 | `maxPinnedColumns` | number | `3` | Maximum number of columns that can be pinned simultaneously. |
-| `onCursorPosition` | object | — | (position: { x: number; y: number } \| null) => void — Callback with cursor position over the table. |
-| `onCursorOverHeader` | object | — | (isOverHeader: boolean) => void — Callback when cursor enters/leaves the header. |
+| `onCursorPositionChange` | object | — | (position: { x: number; y: number } \| null) => void — Fires as the pointer moves over the table, with its position relative to the root; `null` when it leaves. |
+| `onHeaderHoverChange` | object | — | (isOverHeader: boolean) => void — Fires with whether the pointer is over the header row. |
 | `emptyContent` | object | — | React.ReactNode — Content shown when the table has no data. |
 | `ariaLabel` | string | `"Data table"` | Accessible label for the table. |
 | `caption` | string | — | Accessible caption rendered as a visually hidden <caption> element. |
@@ -104,7 +104,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onRowHover` | object | — | (rowIndex: number \| null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered. |
 | `floatingActions` | object | — | React.ReactNode — Floating action elements displayed on row hover. |
 | `isFloatingActionsHovered` | boolean | `false` | Whether the floating actions area is being hovered. |
-| `isPopupOpen` | boolean | `false` | Whether a popup triggered from the table is currently open. |
+| `popupOpen` | boolean | `false` | Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still. |
 | `maxWidth` | string \| number | — | Maximum width of the table container. |
 | `maxHeight` | string \| number | — | Maximum height of the table container. |
 | `minHeight` | string \| number | — | Minimum height of the table container. |
@@ -125,7 +125,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `manualSorting` | boolean | `false` | When true, sorting is handled server-side. |
 | `selectionMode` | `"single"` \| `"multiple"` \| `"none"` | `"none"` | Row selection mode. |
 | `selectedRowIds` | array | — | Array of selected row IDs (controlled). |
-| `onSelectionChange` | object | — | (selectedIds: string[]) => void — Callback when selection changes. |
+| `onSelectedRowIdsChange` | object | — | (selectedRowIds: string[]) => void — Fires with the new `selectedRowIds` when selection changes. |
 | `selectAllMode` | `"page"` \| `"all"` | `"page"` | Whether select-all selects current page or all rows. |
 | `globalFilter` | string | — | Global filter value for searching across all columns. |
 | `onGlobalFilterChange` | object | — | (value: string) => void — Callback when global filter changes. |
@@ -137,7 +137,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `renderColumnFilter` | object | — | (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer. |
 | `expandable` | boolean | `false` | Enable row expansion. |
 | `expandedRowIds` | array | — | Array of expanded row IDs (controlled). |
-| `onExpandedChange` | object | — | (expandedIds: string[]) => void — Callback when expanded rows change. |
+| `onExpandedRowIdsChange` | object | — | (expandedRowIds: string[]) => void — Fires with the new `expandedRowIds` when a row expands or collapses. |
 | `renderExpandedRow` | object | — | (row: TData) => ReactNode — Render function for expanded row content. |
 | `ExpandIcon` | object | — | React.ComponentType — Custom expand icon component. |
 | `expandColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the expand column. |
@@ -247,13 +247,15 @@ const [sorting, setSorting] = useState<SortingState>([]);
 ### Row selection
 
 ```tsx
-<Table columns={columns} data={data} selectionMode="multiple" onSelectionChange={(rows) => console.log(rows)} />
+<Table columns={columns} data={data} selectionMode="multiple" onSelectedRowIdsChange={(rows) => console.log(rows)} />
 ```
 
 ### Column pinning
 
 ```tsx
-<Table columns={columns} data={data} pinnedColumns={["name"]} onPinColumn={(id, pinned) => ...} />
+const [pinned, setPinned] = useState<string[]>(["name"]);
+
+<Table columns={columns} data={data} pinnableColumns={["name", "email"]} pinnedColumns={pinned} onPinnedColumnsChange={setPinned} />
 ```
 
 ---

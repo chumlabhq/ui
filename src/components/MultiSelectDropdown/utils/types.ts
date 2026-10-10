@@ -1,4 +1,4 @@
-import type { CSSProperties, MutableRefObject, ReactNode } from "react";
+import type { CSSProperties, MutableRefObject, ReactNode, FocusEvent } from "react";
 import type { DropdownOption } from "../../Dropdown/utils/types.js";
 
 export type MultiSelectOption = DropdownOption;
@@ -113,8 +113,10 @@ export interface MultiSelectDropdownBaseProps {
   /** Timeout in milliseconds for keyboard typeahead matching. */
   typeaheadTimeout?: number;
   "aria-label"?: string;
-  onBlur?: () => void;
-  onFocus?: () => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
   loadingText?: ReactNode;
@@ -126,14 +128,15 @@ export interface MultiSelectDropdownBaseProps {
 }
 
 /**
- * `loadOptions` returns early unless BOTH are set, so `onLoadOptions` on its own
+ * The dropdown loads only when BOTH are set, so `loadOptions` on its own
  * fetched nothing and `loadOnOpen` on its own had nothing to fetch. Either half
  * alone typechecked and did exactly nothing.
  */
 export type MultiSelectDropdownLoadSource =
-  | { onLoadOptions?: never; loadOnOpen?: never }
+  | { loadOptions?: never; loadOnOpen?: never }
   | {
-      onLoadOptions: () => Promise<MultiSelectOption[]>;
+      /** Loads the options when the menu first opens. Returns them; it is a loader, not an event. */
+      loadOptions: () => Promise<MultiSelectOption[]>;
       loadOnOpen: true;
     };
 
@@ -168,8 +171,10 @@ export interface MultiSelectDropdownTriggerRenderProps {
    */
   onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
   onKeyDown: (event: React.KeyboardEvent) => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  /** Fires when the trigger takes focus, with the native focus event. */
+  onFocus?: (event: FocusEvent<HTMLElement>) => void;
+  /** Fires when the trigger loses focus, with the native focus event. */
+  onBlur?: (event: FocusEvent<HTMLElement>) => void;
   "data-disabled": true | undefined;
   "data-error": true | undefined;
   "data-valid": true | undefined;
@@ -192,7 +197,8 @@ export interface UseMultiSelectDropdownProps {
   defaultValue?: string[];
   disabled?: boolean;
   onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
-  onLoadOptions?: () => Promise<MultiSelectOption[]>;
+  /** Loads the options when the menu first opens. Returns them; it is a loader, not an event. */
+  loadOptions?: () => Promise<MultiSelectOption[]>;
   loadOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   typeaheadTimeout?: number;

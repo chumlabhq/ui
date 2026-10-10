@@ -10,7 +10,7 @@ export default function CheckboxExample() {
       label="Email notifications"
       description="Receive email updates about your account activity"
       checked={withDesc}
-      onValueChange={setWithDesc}
+      onCheckedChange={setWithDesc}
       size="md"
       shape="rounded"
       classes={

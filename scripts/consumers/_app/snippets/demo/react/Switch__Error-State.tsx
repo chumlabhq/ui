@@ -9,7 +9,7 @@ export default function SwitchExample() {
       <Switch
         label="Accept terms of service"
         checked={termsSwitch}
-        onValueChange={setTermsSwitch}
+        onCheckedChange={setTermsSwitch}
         error
         errorMessage="You must accept the terms to continue"
         classes={
@@ -27,7 +27,7 @@ export default function SwitchExample() {
       <Switch
         label="Enable notifications"
         checked={notifySwitch}
-        onValueChange={setNotifySwitch}
+        onCheckedChange={setNotifySwitch}
         error
         errorMessage="Notification service is currently unavailable"
         classes={

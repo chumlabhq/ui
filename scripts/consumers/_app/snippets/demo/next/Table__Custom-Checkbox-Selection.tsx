@@ -267,7 +267,7 @@ export default function TableExample() {
                   data={sampleData.slice(0, 6)}
                   selectionMode="multiple"
                   selectedRowIds={customSelectedIds}
-                  onSelectionChange={setCustomSelectedIds}
+                  onSelectedRowIdsChange={setCustomSelectedIds}
                   getRowId={(row) => row.id}
                   CheckboxIcon={CustomCheck}
                   classes={{

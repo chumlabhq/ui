@@ -103,7 +103,7 @@ const TYPED_REQUIRED_PROPS = {
   Tooltip: { content: "tip", children: "trigger" },
   Modal: { children: "body" },
   Drawer: { children: "body" },
-  Toast: { id: "t", onRemove: () => {}, message: "hi" },
+  Toast: { id: "t", onDismiss: () => {}, message: "hi" },
 } satisfies RequiredPropsShape;
 
 /** Widened: both call sites look up an arbitrary registry name. */

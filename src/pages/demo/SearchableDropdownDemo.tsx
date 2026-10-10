@@ -674,7 +674,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Async Search ────────────────────────────────────────────────── */}
       <Section
         title="Async Search"
-        description="Use onSearch to fetch options asynchronously. Results are debounced and a shimmer skeleton displays while loading."
+        description="Use searchOptions to fetch options asynchronously. Results are debounced and a shimmer skeleton displays while loading."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -683,7 +683,7 @@ const SearchableDropdownDemo = () => {
               value={asyncCountryValue}
               onValueChange={(v) => setAsyncCountryValue(v)}
               placeholder="Search countries..."
-              onSearch={handleAsyncSearch}
+              searchOptions={handleAsyncSearch}
               searchDebounceMs={300}
               noResultsContent="No countries found"
               classes={c.dropdown}
@@ -701,7 +701,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Async with Static Initial Options ───────────────────────────── */}
       <Section
         title="Async with Static Initial Options"
-        description="Combine onSearch with initialOptions to show static options before the user starts typing."
+        description="Combine searchOptions with initialOptions to show static options before the user starts typing."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -710,7 +710,7 @@ const SearchableDropdownDemo = () => {
               value={asyncStaticInitialValue}
               onValueChange={(v) => setAsyncStaticInitialValue(v)}
               placeholder="Select or search countries..."
-              onSearch={handleAsyncSearch}
+              searchOptions={handleAsyncSearch}
               initialOptions={countryOptions}
               searchDebounceMs={300}
               noResultsContent="No countries found"
@@ -729,7 +729,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Async with Dynamic Prefetch ─────────────────────────────────── */}
       <Section
         title="Async with Dynamic Prefetch"
-        description="Use onLoadInitialOptions with loadInitialOnOpen to fetch options when the dropdown first opens."
+        description="Use loadInitialOptions with loadInitialOnOpen to fetch options when the dropdown first opens."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -738,8 +738,8 @@ const SearchableDropdownDemo = () => {
               value={asyncPrefetchValue}
               onValueChange={(v) => setAsyncPrefetchValue(v)}
               placeholder="Select or search countries..."
-              onSearch={handleAsyncSearch}
-              onLoadInitialOptions={handleLoadInitialOptions}
+              searchOptions={handleAsyncSearch}
+              loadInitialOptions={handleLoadInitialOptions}
               loadInitialOnOpen
               searchDebounceMs={300}
               noResultsContent="No countries found"
@@ -1466,8 +1466,8 @@ const SearchableDropdownDemo = () => {
               value={focusBlurValue}
               onValueChange={(v) => setFocusBlurValue(v)}
               placeholder="Focus or blur me..."
-              onFocus={() => setFocusMessage("Dropdown focused")}
-              onBlur={() => setFocusMessage("Dropdown blurred")}
+              onFocus={(event) => setFocusMessage(`Dropdown focused: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
+              onBlur={(event) => setFocusMessage(`Dropdown blurred: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
               classes={c.dropdown}
             />
           </div>
@@ -1697,7 +1697,7 @@ const SearchableDropdownDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Combine `value` / `onValueChange` with async `onSearch` or static `options`. Control `open` when coordinating with other overlays. Debounce network search in the parent."
+        summary="Combine `value` / `onValueChange` with async `searchOptions` or static `options`. Control `open` when coordinating with other overlays. Debounce network search in the parent."
       />
       <DocEdgeCases
         isDarkMode={dark}

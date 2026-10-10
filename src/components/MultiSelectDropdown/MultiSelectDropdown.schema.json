@@ -136,14 +136,14 @@
       "type": "boolean",
       "description": "Shows a loading/shimmer state."
     },
-    "onLoadOptions": {
+    "loadOptions": {
       "type": "object",
       "description": "() => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires.",
       "x-tsType": "() => Promise<DropdownOption[]>"
     },
     "loadOnOpen": {
       "type": "boolean",
-      "description": "When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load.",
+      "description": "When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load.",
       "default": false
     },
     "onLoadError": {
@@ -313,13 +313,13 @@
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void - Fires when the dropdown loses focus.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event.",
+      "x-tsType": "((event: FocusEvent<HTMLElement, Element>) => void) | undefined"
     },
     "onFocus": {
       "type": "object",
-      "description": "() => void - Fires when the dropdown receives focus.",
-      "x-tsType": "(() => void) | undefined"
+      "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event.",
+      "x-tsType": "((event: FocusEvent<HTMLElement, Element>) => void) | undefined"
     },
     "onKeyDown": {
       "type": "object",

@@ -151,7 +151,9 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "guides/theming": 93,
   "guides/animation": 93,
   "guides/ai-llm": 86,
-  "accordion": 947,
+  // A2a, 947 -> 921: the API Reference lost the root onExpandedChange row and the
+  // AccordionExpandEvent shape table with the prop (26 cells, measured HEAD vs now).
+  "accordion": 921,
   "avatar": 1084,
   "breadcrumb": 514,
   "button": 445,
@@ -181,7 +183,9 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "table": 5342,
   "text-area": 504,
   "time-picker": 871,
-  "toast": 564,
+  // A2a, 564 -> 562: the API Reference lost the onRemove row (4 cells) and the
+  // rewritten onDismiss(id) description gained two `id` code spans.
+  "toast": 562,
   // 426 -> 423, 2026-10-08: the three gradient-with-arrow examples were removed (an arrow cannot take a gradient).
   "tooltip": 423,
 };

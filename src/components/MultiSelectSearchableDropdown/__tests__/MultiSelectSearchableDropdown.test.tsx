@@ -576,3 +576,22 @@ describe("MultiSelectSearchableDropdown", () => {
     });
   });
 });
+
+describe("MultiSelectSearchableDropdown focus callbacks", () => {
+  it("forwards the trigger's native focus and blur events", async () => {
+    const user = userEvent.setup();
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(
+      <>
+        <MultiSelectSearchableDropdown options={options} onFocus={onFocus} onBlur={onBlur} />
+        <button>Outside</button>
+      </>,
+    );
+    const trigger = screen.getByRole("combobox");
+    await user.click(trigger);
+    await user.click(screen.getByRole("button", { name: "Outside" }));
+    expect(onFocus).toHaveBeenCalledWith(expect.objectContaining({ type: "focus", target: trigger }));
+    expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur", target: trigger }));
+  });
+});

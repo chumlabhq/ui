@@ -658,3 +658,22 @@ describe("CascadingDropdown Icons", () => {
     expect(container.querySelector("svg")).toBeInTheDocument();
   });
 });
+
+describe("CascadingDropdown focus callbacks", () => {
+  it("forwards the trigger's native focus and blur events", async () => {
+    const user = userEvent.setup();
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(
+      <>
+        <CascadingDropdown options={simpleOptions} onFocus={onFocus} onBlur={onBlur} />
+        <button>Outside</button>
+      </>,
+    );
+    const trigger = screen.getByRole("button", { name: "Select an option" });
+    await user.click(trigger);
+    await user.click(screen.getByRole("button", { name: "Outside" }));
+    expect(onFocus).toHaveBeenCalledWith(expect.objectContaining({ type: "focus", target: trigger }));
+    expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur", target: trigger }));
+  });
+});

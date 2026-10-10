@@ -693,25 +693,25 @@ describe("MultiSelectDropdown", () => {
       expect(screen.getByText("Fetching...")).toBeInTheDocument();
     });
 
-    it("loads options via onLoadOptions when loadOnOpen is true", async () => {
+    it("loads options via loadOptions when loadOnOpen is true", async () => {
       const asyncOptions: MultiSelectOption[] = [
         { value: "loaded1", label: "Loaded 1" },
         { value: "loaded2", label: "Loaded 2" },
       ];
-      const onLoadOptions = vi.fn().mockResolvedValue(asyncOptions);
+      const loadOptions = vi.fn().mockResolvedValue(asyncOptions);
       const user = userEvent.setup();
 
       render(
         <MultiSelectDropdown
           options={[]}
           loadOnOpen
-          onLoadOptions={onLoadOptions}
+          loadOptions={loadOptions}
         />
       );
 
       await user.click(screen.getByRole("combobox"));
 
-      expect(onLoadOptions).toHaveBeenCalled();
+      expect(loadOptions).toHaveBeenCalled();
 
       await waitFor(() => {
         expect(screen.getByText("Loaded 1")).toBeInTheDocument();
@@ -719,9 +719,9 @@ describe("MultiSelectDropdown", () => {
       expect(screen.getByText("Loaded 2")).toBeInTheDocument();
     });
 
-    it("calls onLoadError when onLoadOptions rejects", async () => {
+    it("calls onLoadError when loadOptions rejects", async () => {
       const error = new Error("Network error");
-      const onLoadOptions = vi.fn().mockRejectedValue(error);
+      const loadOptions = vi.fn().mockRejectedValue(error);
       const onLoadError = vi.fn();
       const user = userEvent.setup();
 
@@ -729,7 +729,7 @@ describe("MultiSelectDropdown", () => {
         <MultiSelectDropdown
           options={[]}
           loadOnOpen
-          onLoadOptions={onLoadOptions}
+          loadOptions={loadOptions}
           onLoadError={onLoadError}
         />
       );
@@ -1040,5 +1040,24 @@ describe("MultiSelectDropdown", () => {
 
       expect(onRemove).toHaveBeenCalledWith("apple");
     });
+  });
+});
+
+describe("MultiSelectDropdown focus callbacks", () => {
+  it("forwards the trigger's native focus and blur events", async () => {
+    const user = userEvent.setup();
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(
+      <>
+        <MultiSelectDropdown options={options} onFocus={onFocus} onBlur={onBlur} />
+        <button>Outside</button>
+      </>,
+    );
+    const trigger = screen.getByRole("combobox");
+    await user.click(trigger);
+    await user.click(screen.getByRole("button", { name: "Outside" }));
+    expect(onFocus).toHaveBeenCalledWith(expect.objectContaining({ type: "focus", target: trigger }));
+    expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur", target: trigger }));
   });
 });

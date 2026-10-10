@@ -140,7 +140,7 @@ const SwitchDemo = () => {
             <Switch
               label="Email notifications"
               checked={basicSwitch}
-              onValueChange={setBasicSwitch}
+              onCheckedChange={setBasicSwitch}
             />
             <Switch
               label="Dark mode"
@@ -177,7 +177,7 @@ const SwitchDemo = () => {
           <Switch
             label="Enable notifications"
             checked={labelSwitch}
-            onValueChange={setLabelSwitch}
+            onCheckedChange={setLabelSwitch}
             classes={c.switch}
           />
         </DemoWrapper>
@@ -193,7 +193,7 @@ const SwitchDemo = () => {
             label="Dark mode"
             description="Enable dark theme for the application"
             checked={descSwitch}
-            onValueChange={setDescSwitch}
+            onCheckedChange={setDescSwitch}
             classes={c.switch}
           />
         </DemoWrapper>
@@ -209,7 +209,7 @@ const SwitchDemo = () => {
             label="Accept terms of service"
             required
             checked={requiredSwitch}
-            onValueChange={setRequiredSwitch}
+            onCheckedChange={setRequiredSwitch}
             classes={c.switch}
           />
         </DemoWrapper>
@@ -225,7 +225,7 @@ const SwitchDemo = () => {
             <Switch
               label="Feature enabled"
               checked={iconSwitch}
-              onValueChange={setIconSwitch}
+              onCheckedChange={setIconSwitch}
               checkedIcon={<CheckIcon />}
               uncheckedIcon={<CrossIcon />}
               classes={c.switch}
@@ -236,7 +236,7 @@ const SwitchDemo = () => {
                 themeSwitch ? "Dark mode enabled" : "Light mode enabled"
               }
               checked={themeSwitch}
-              onValueChange={setThemeSwitch}
+              onCheckedChange={setThemeSwitch}
               checkedIcon={<MoonIcon />}
               uncheckedIcon={<SunIcon />}
               classes={{
@@ -280,7 +280,7 @@ const SwitchDemo = () => {
             <Switch
               label="Accept terms of service"
               checked={termsSwitch}
-              onValueChange={setTermsSwitch}
+              onCheckedChange={setTermsSwitch}
               error
               errorMessage="You must accept the terms to continue"
               classes={{
@@ -291,7 +291,7 @@ const SwitchDemo = () => {
             <Switch
               label="Enable notifications"
               checked={notifySwitch}
-              onValueChange={setNotifySwitch}
+              onCheckedChange={setNotifySwitch}
               error
               errorMessage="Notification service is currently unavailable"
               classes={c.switch}
@@ -309,7 +309,7 @@ const SwitchDemo = () => {
           <Switch
             label="Email notifications"
             checked={successSwitch}
-            onValueChange={setSuccessSwitch}
+            onCheckedChange={setSuccessSwitch}
             success={successSwitch}
             successMessage="Notifications are enabled"
             classes={c.switch}
@@ -332,13 +332,13 @@ const SwitchDemo = () => {
       </Section>
 
       <Section
-        title="onValueChange Callback"
+        title="onCheckedChange Callback"
         description="Primary event handler for checked state changes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-2">
-            <Switch label="Using onValueChange" onValueChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
+            <Switch label="Using onCheckedChange" onCheckedChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
             <p className={`text-sm text-cl-text-chrome-quiet`} data-demo-action>Value: {String(callbackSwitch)}</p>
           </div>
         </DemoWrapper>
@@ -354,7 +354,7 @@ const SwitchDemo = () => {
             <Switch
               label="Purple theme"
               checked={colorSwitch}
-              onValueChange={setColorSwitch}
+              onCheckedChange={setColorSwitch}
               classes={{
                 ...c.switch,
                 label: `text-sm font-medium text-cl-accent cursor-pointer`,
@@ -363,7 +363,7 @@ const SwitchDemo = () => {
             <Switch
               label="Green theme"
               checked={!colorSwitch}
-              onValueChange={(checked) => setColorSwitch(!checked)}
+              onCheckedChange={(checked) => setColorSwitch(!checked)}
               classes={{
                 ...c.switch,
                 label: `text-sm font-medium text-cl-success cursor-pointer`,
@@ -383,7 +383,7 @@ const SwitchDemo = () => {
             <Switch
               label="Small switch"
               checked={sizeSwitchSmall}
-              onValueChange={setSizeSwitchSmall}
+              onCheckedChange={setSizeSwitchSmall}
               classes={{
                 ...c.switch,
                 label: `text-xs font-medium text-cl-text cursor-pointer`,
@@ -395,13 +395,13 @@ const SwitchDemo = () => {
             <Switch
               label="Default switch"
               checked={sizeSwitch}
-              onValueChange={setSizeSwitch}
+              onCheckedChange={setSizeSwitch}
               classes={c.switch}
             />
             <Switch
               label="Large switch"
               checked={sizeSwitchLarge}
-              onValueChange={setSizeSwitchLarge}
+              onCheckedChange={setSizeSwitchLarge}
               classes={{
                 ...c.switch,
                 label: `text-base font-medium text-cl-text cursor-pointer`,
@@ -431,7 +431,7 @@ const SwitchDemo = () => {
               <Switch
                 label="Purple theme via CSS vars"
                 checked={cssVarSwitch}
-                onValueChange={setCssVarSwitch}
+                onCheckedChange={setCssVarSwitch}
                 classes={{
                   ...c.switch,
                   label: `text-sm font-medium text-cl-accent cursor-pointer`,
@@ -448,7 +448,7 @@ const SwitchDemo = () => {
               <Switch
                 label="Green theme via CSS vars"
                 checked={!cssVarSwitch}
-                onValueChange={(checked) => setCssVarSwitch(!checked)}
+                onCheckedChange={(checked) => setCssVarSwitch(!checked)}
                 classes={{
                   ...c.switch,
                   label: `text-sm font-medium text-cl-success cursor-pointer`,
@@ -469,7 +469,7 @@ const SwitchDemo = () => {
             <Switch
               label="Slow transition (500ms)"
               checked={animationSwitch}
-              onValueChange={setAnimationSwitch}
+              onCheckedChange={setAnimationSwitch}
               transitionDuration={500}
               transitionTimingFunction="ease-in-out"
               classes={c.switch}
@@ -477,7 +477,7 @@ const SwitchDemo = () => {
             <Switch
               label="Bouncy transition"
               checked={animationSwitchBouncy}
-              onValueChange={setAnimationSwitchBouncy}
+              onCheckedChange={setAnimationSwitchBouncy}
               transitionDuration={300}
               transitionTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
               classes={c.switch}
@@ -494,7 +494,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
             checked={renderPropsSwitch}
-            onValueChange={setRenderPropsSwitch}
+            onCheckedChange={setRenderPropsSwitch}
             aria-label="Toggle feature status"
             renderLabel={({ checked }) => (
               <span
@@ -526,7 +526,7 @@ const SwitchDemo = () => {
             <Switch
               label="Focus me to see events"
               checked={focusBlurSwitch}
-              onValueChange={setFocusBlurSwitch}
+              onCheckedChange={setFocusBlurSwitch}
               onFocus={() =>
                 setFocusLog((prev) => [
                   ...prev.slice(-4),
@@ -580,7 +580,7 @@ const SwitchDemo = () => {
               name="notifications"
               label="Enable notifications"
               checked={formSwitch}
-              onValueChange={setFormSwitch}
+              onCheckedChange={setFormSwitch}
               classes={c.switch}
             />
             <Button type="submit" className={c.btnPrimary}>
@@ -605,7 +605,7 @@ const SwitchDemo = () => {
               ref={switchRef}
               label="Click the buttons below to control me"
               checked={refSwitch}
-              onValueChange={setRefSwitch}
+              onCheckedChange={setRefSwitch}
               classes={c.switch}
             />
             <div className="flex gap-2">
@@ -634,7 +634,7 @@ const SwitchDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Use `checked` with `onValueChange` for controlled mode, or `defaultChecked` for uncontrolled. Keep boolean state in the parent for forms and analytics."
+        summary="Use `checked` with `onCheckedChange` for controlled mode, or `defaultChecked` for uncontrolled. Keep boolean state in the parent for forms and analytics."
       />
       <DocEdgeCases
         isDarkMode={dark}

@@ -22,7 +22,7 @@ export default function SwitchExample() {
         name="notifications"
         label="Enable notifications"
         checked={formSwitch}
-        onValueChange={setFormSwitch}
+        onCheckedChange={setFormSwitch}
         classes={
           {
             label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",

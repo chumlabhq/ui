@@ -403,7 +403,7 @@ const DrawerDemo = () => {
           direction="bottom"
           size="85vh"
           snapPoints={[0.3, 0.6, 1]}
-          activeSnapPointIndex={snapIndex}
+          snapPointIndex={snapIndex}
           onSnapPointIndexChange={setSnapIndex}
           defaultSnapPointIndex={1}
         >
@@ -693,7 +693,7 @@ const DrawerDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Use the `open` prop with `onOpenChange` for full control. For swipe and snap points, coordinate `activeSnapPointIndex` with `onSnapPointIndexChange` when you own that state."
+        summary="Use the `open` prop with `onOpenChange` for full control. For swipe and snap points, coordinate `snapPointIndex` with `onSnapPointIndexChange` when you own that state."
       />
       <DocEdgeCases
         isDarkMode={dark}

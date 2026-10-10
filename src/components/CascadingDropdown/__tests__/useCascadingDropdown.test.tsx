@@ -1053,38 +1053,38 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  describe("async menu search (onMenuSearch)", () => {
+  describe("async menu search (searchMenu)", () => {
     beforeEach(() => { vi.useFakeTimers(); });
 
-    it("calls onMenuSearch after debounce delay", async () => {
-      const onMenuSearch = vi.fn().mockResolvedValue([flatOptions[0]]);
+    it("calls searchMenu after debounce delay", async () => {
+      const searchMenu = vi.fn().mockResolvedValue([flatOptions[0]]);
       const { result } = renderHook(() =>
         useCascadingDropdown({
           options: flatOptions,
-          onMenuSearch,
+          searchMenu,
           searchDebounceMs: 300,
         })
       );
       act(() => { result.current.onMenuSearchChange("fru"); });
       // Not called immediately
-      expect(onMenuSearch).not.toHaveBeenCalled();
+      expect(searchMenu).not.toHaveBeenCalled();
       await act(async () => { vi.advanceTimersByTime(300); });
-      expect(onMenuSearch).toHaveBeenCalledWith("fru");
+      expect(searchMenu).toHaveBeenCalledWith("fru");
     });
 
     it("sets isMenuSearching=true while debounce is pending", () => {
-      const onMenuSearch = vi.fn().mockResolvedValue([]);
+      const searchMenu = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
-        useCascadingDropdown({ options: flatOptions, onMenuSearch, searchDebounceMs: 300 })
+        useCascadingDropdown({ options: flatOptions, searchMenu, searchDebounceMs: 300 })
       );
       act(() => { result.current.onMenuSearchChange("fru"); });
       expect(result.current.isMenuSearching).toBe(true);
     });
 
     it("resets isMenuSearching when query is cleared", () => {
-      const onMenuSearch = vi.fn().mockResolvedValue([]);
+      const searchMenu = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
-        useCascadingDropdown({ options: flatOptions, onMenuSearch, searchDebounceMs: 300 })
+        useCascadingDropdown({ options: flatOptions, searchMenu, searchDebounceMs: 300 })
       );
       act(() => { result.current.onMenuSearchChange("fru"); });
       act(() => { result.current.onMenuSearchChange(""); });
@@ -1130,34 +1130,34 @@ describe("useCascadingDropdown", () => {
     });
   });
 
-  describe("onLoadChildren", () => {
+  describe("loadChildren", () => {
     it("loads children when hovering option with hasChildren", async () => {
       const dynamicChildren: CascadingOption[] = [
         { value: "dynamic-1", label: "Dynamic 1" },
       ];
-      const onLoadChildren = vi.fn().mockResolvedValue(dynamicChildren);
+      const loadChildren = vi.fn().mockResolvedValue(dynamicChildren);
       const lazyOptions: CascadingOption[] = [
         { value: "lazy", label: "Lazy", hasChildren: true },
       ];
       const { result } = renderHook(() =>
-        useCascadingDropdown({ options: lazyOptions, onLoadChildren })
+        useCascadingDropdown({ options: lazyOptions, loadChildren })
       );
       await act(async () => {
         result.current.handleMenuItemHover(lazyOptions[0], 0);
       });
-      expect(onLoadChildren).toHaveBeenCalledWith(lazyOptions[0]);
+      expect(loadChildren).toHaveBeenCalledWith(lazyOptions[0]);
       expect(result.current.loadedChildren["lazy"]).toEqual(dynamicChildren);
     });
 
-    it("calls onLoadError when onLoadChildren rejects", async () => {
+    it("calls onLoadError when loadChildren rejects", async () => {
       const error = new Error("Load failed");
-      const onLoadChildren = vi.fn().mockRejectedValue(error);
+      const loadChildren = vi.fn().mockRejectedValue(error);
       const onLoadError = vi.fn();
       const lazyOptions: CascadingOption[] = [
         { value: "lazy", label: "Lazy", hasChildren: true },
       ];
       const { result } = renderHook(() =>
-        useCascadingDropdown({ options: lazyOptions, onLoadChildren, onLoadError })
+        useCascadingDropdown({ options: lazyOptions, loadChildren, onLoadError })
       );
       await act(async () => {
         result.current.handleMenuItemHover(lazyOptions[0], 0);

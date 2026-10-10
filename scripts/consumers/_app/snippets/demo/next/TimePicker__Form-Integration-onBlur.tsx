@@ -13,7 +13,7 @@ export default function TimePickerExample() {
           value={blurFocusVal}
           onValueChange={(v) => setBlurFocusVal(v)}
           placeholder="Focus, then blur me..."
-          onBlur={() => setFocusMessage("onBlur fired")}
+          onBlur={(event) => setFocusMessage(`onBlur fired: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
           classes={
             {
                root: "inline-flex flex-col gap-1 text-cl-text",

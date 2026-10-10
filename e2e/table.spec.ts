@@ -388,7 +388,7 @@ test.describe("Table grid keys", () => {
           const b = th?.querySelector("button");
           return [th?.getAttribute("aria-sort"), b?.getAttribute("aria-expanded"), b?.getAttribute("data-state"), b?.getAttribute("aria-pressed"), !!document.querySelector("[data-table-filter-content]")].join("|");
         });
-      // pinned-column's pins are fixed (onPinColumn is a no-op), so Enter has
+      // pinned-column's pins are fixed (onPinnedColumnsChange is a no-op), so Enter has
       // nothing to change there; pin activation is checked on the demo below.
       if (fixture === "pinned-column") continue;
       for (const key of ["Enter", "Space"]) {

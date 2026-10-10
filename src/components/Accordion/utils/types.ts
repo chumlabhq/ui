@@ -75,18 +75,6 @@ export interface AccordionRef {
   element: HTMLDivElement | null;
 }
 
-/** The payload passed to `onExpandedChange`. */
-export interface AccordionExpandEvent {
-  /** The item the event is about. */
-  value: string;
-  /** Its state after the change. */
-  isExpanded: boolean;
-  /** How many items are expanded once the change lands. */
-  expandedCount: number;
-  /** How many items the accordion holds. */
-  totalCount: number;
-}
-
 /** How an accordion persists which items are open. */
 export interface StorageConfig {
   /** The storage key the expanded set is written under. */
@@ -120,7 +108,6 @@ interface AccordionBaseProps extends Omit<
   defaultExpandAll?: boolean;
   expandOnPrint?: boolean;
   storageKey?: string | StorageConfig;
-  onExpandedChange?: (event: AccordionExpandEvent) => void;
   onKeyDown?: (
     event: KeyboardEvent<HTMLDivElement>,
     itemValue: string | null,

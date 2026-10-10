@@ -12,7 +12,6 @@ export type {
   AccordionContentProps,
   AccordionClasses,
   AccordionShimmerProps,
-  AccordionExpandEvent,
   AccordionRef,
 } from "./components/Accordion/utils/types.js";
 

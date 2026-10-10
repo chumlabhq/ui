@@ -67,7 +67,7 @@ them — prefer the `cl-*` tokens and the component's own props.
 ## Common mistakes (AVOID these patterns)
 - ✗ `error="Required field"` — `error` is a boolean. Use `error errorMessage="Required field"` (two props). Same for `success` + `successMessage`.
 - ✗ Passing both `value` and `defaultValue` — pick one (controlled OR uncontrolled), never both.
-- ✗ `onChange`, `onSelect`, `onTabChange`, `onPageChange`, `onStepChange`, `onCheckedChange` — the value callback is always `onValueChange`. Open-state callback is always `onOpenChange`.
+- ✗ `onChange`, `onSelect`, `onTabChange`, `onPageChange`, `onStepChange` — the value callback is always `onValueChange`. A `checked` prop (Checkbox, Switch) pairs with `onCheckedChange`; open state with `onOpenChange`.
 - ✗ `placement="top"` on Tooltip — use `side="top"`. Drawer uses `direction`, not `side`/`placement`.
 - ✗ CascadingDropdown value as a plain string — value is `Record<parentValue, string | string[]>`. Use key `"root"` for top-level (no-children) selections.
 - ✗ Stepper `activeStep` / `currentStep` — those don't exist. Use `value` (current index, zero-based).

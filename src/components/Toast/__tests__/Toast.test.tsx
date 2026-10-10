@@ -209,14 +209,16 @@ describe("Toast", () => {
         <TestConsumer onMount={(api) => (toastApi = api)} />
       );
 
+      let id = "";
       await act(async () => {
-        toastApi.info("Message", { onDismiss });
+        id = toastApi.info("Message", { onDismiss });
       });
 
       const closeButton = screen.getByRole("button", { name: "Close notification" });
       fireEvent.click(closeButton);
 
       expect(onDismiss).toHaveBeenCalledTimes(1);
+      expect(onDismiss).toHaveBeenCalledWith(id);
     });
   });
 

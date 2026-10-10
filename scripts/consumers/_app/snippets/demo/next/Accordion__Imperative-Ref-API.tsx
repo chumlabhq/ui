@@ -18,10 +18,10 @@ export default function AccordionExample() {
           icon: "h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary"
         }
       }
-      onExpandedChange={
-        (e) => {
+      onValueChange={
+        (values: string[]) => {
           setToggleLog((prev) => [
-            `${e.value} ${e.isExpanded ? "expanded" : "collapsed"} (${e.expandedCount}/${e.totalCount})`,
+            `expanded: ${values.join(", ") || "none"} (${values.length}/3)`,
             ...prev.slice(0, 4)
           ]);
         }

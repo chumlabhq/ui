@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode, HTMLAttributes } from "react";
+import type { CSSProperties, FocusEvent, ReactNode, HTMLAttributes } from "react";
 
 export type TimeFormat = "12h" | "24h";
 export type TimePickerVariant = "dropdown" | "clock";
@@ -162,8 +162,8 @@ export interface TimePickerProps
   defaultValue?: string | null;
   /** Called when the selected time changes. Not `onChange`. */
   onValueChange?: (time: string | null, timeValue: TimeValue | null) => void;
-  /** Called when the input loses focus (no event argument, suitable for form libraries). */
-  onBlur?: () => void;
+  /** Fires once focus has left the whole time picker, with the input's native blur event. */
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
   /** Time display format. Default: `"24h"`. */
   format?: TimeFormat;
   /**

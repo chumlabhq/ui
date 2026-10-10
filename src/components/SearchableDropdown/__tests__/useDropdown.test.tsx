@@ -920,13 +920,13 @@ describe("useDropdown – searchInputFocused path", () => {
 describe("useDropdown – loadInitialOnOpen", () => {
   it("loads initial options on first open", async () => {
     const extra = [{ value: "fig", label: "Fig" }];
-    const onLoadInitialOptions = vi.fn().mockResolvedValue(extra);
+    const loadInitialOptions = vi.fn().mockResolvedValue(extra);
 
     const { result } = renderHook(() =>
       useDropdown({
         options,
         loadInitialOnOpen: true,
-        onLoadInitialOptions,
+        loadInitialOptions,
       }),
     );
 
@@ -934,18 +934,18 @@ describe("useDropdown – loadInitialOnOpen", () => {
       result.current.handleOpen();
     });
 
-    expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
+    expect(loadInitialOptions).toHaveBeenCalledTimes(1);
   });
 
   it("does not re-load on second open (hasLoadedInitial guard)", async () => {
     const extra = [{ value: "fig", label: "Fig" }];
-    const onLoadInitialOptions = vi.fn().mockResolvedValue(extra);
+    const loadInitialOptions = vi.fn().mockResolvedValue(extra);
 
     const { result } = renderHook(() =>
       useDropdown({
         options,
         loadInitialOnOpen: true,
-        onLoadInitialOptions,
+        loadInitialOptions,
       }),
     );
 
@@ -959,19 +959,19 @@ describe("useDropdown – loadInitialOnOpen", () => {
       result.current.handleOpen();
     });
 
-    expect(onLoadInitialOptions).toHaveBeenCalledTimes(1);
+    expect(loadInitialOptions).toHaveBeenCalledTimes(1);
   });
 
   it("sets isLoadingInitial=true while loading, false after", async () => {
     let resolve!: (v: typeof options) => void;
     const promise = new Promise<typeof options>((res) => { resolve = res; });
-    const onLoadInitialOptions = vi.fn().mockReturnValue(promise);
+    const loadInitialOptions = vi.fn().mockReturnValue(promise);
 
     const { result } = renderHook(() =>
       useDropdown({
         options,
         loadInitialOnOpen: true,
-        onLoadInitialOptions,
+        loadInitialOptions,
       }),
     );
 
@@ -989,16 +989,16 @@ describe("useDropdown – loadInitialOnOpen", () => {
 });
 
 describe("useDropdown – onLoadError", () => {
-  it("calls onLoadError when onLoadInitialOptions rejects", async () => {
+  it("calls onLoadError when loadInitialOptions rejects", async () => {
     const error = new Error("load failed");
-    const onLoadInitialOptions = vi.fn().mockRejectedValue(error);
+    const loadInitialOptions = vi.fn().mockRejectedValue(error);
     const onLoadError = vi.fn();
 
     const { result } = renderHook(() =>
       useDropdown({
         options,
         loadInitialOnOpen: true,
-        onLoadInitialOptions,
+        loadInitialOptions,
         onLoadError,
       }),
     );
@@ -1009,14 +1009,14 @@ describe("useDropdown – onLoadError", () => {
     expect(onLoadError).toHaveBeenCalledWith(error);
   });
 
-  it("calls onLoadError when async onSearch rejects", async () => {
+  it("calls onLoadError when async searchOptions rejects", async () => {
     vi.useFakeTimers();
     const error = new Error("search failed");
-    const onSearch = vi.fn().mockRejectedValue(error);
+    const searchOptions = vi.fn().mockRejectedValue(error);
     const onLoadError = vi.fn();
 
     const { result } = renderHook(() =>
-      useDropdown({ options, onSearch, onLoadError, searchDebounceMs: 0, defaultOpen: true }),
+      useDropdown({ options, searchOptions, onLoadError, searchDebounceMs: 0, defaultOpen: true }),
     );
 
     act(() => { result.current.setSearchQuery("apple"); });
@@ -1078,15 +1078,15 @@ describe("useDropdown – disabled mode (keyboard)", () => {
   });
 });
 
-describe("useDropdown – async mode (onSearch)", () => {
+describe("useDropdown – async mode (searchOptions)", () => {
   it("displayOptions returns allInitialOptions when searchQuery is empty", () => {
     const asyncInitial = [{ value: "fig", label: "Fig" }];
-    const onSearch = vi.fn().mockResolvedValue([]);
+    const searchOptions = vi.fn().mockResolvedValue([]);
 
     const { result } = renderHook(() =>
       useDropdown({
         options,
-        onSearch,
+        searchOptions,
         initialOptions: asyncInitial,
         defaultOpen: true,
       }),
@@ -1098,10 +1098,10 @@ describe("useDropdown – async mode (onSearch)", () => {
   it("displayOptions returns asyncOptions when searchQuery is non-empty", async () => {
     vi.useFakeTimers();
     const searchResults = [{ value: "avocado", label: "Avocado" }];
-    const onSearch = vi.fn().mockResolvedValue(searchResults);
+    const searchOptions = vi.fn().mockResolvedValue(searchResults);
 
     const { result } = renderHook(() =>
-      useDropdown({ options, onSearch, searchDebounceMs: 0, defaultOpen: true }),
+      useDropdown({ options, searchOptions, searchDebounceMs: 0, defaultOpen: true }),
     );
 
     act(() => { result.current.setSearchQuery("avo"); });
@@ -1113,9 +1113,9 @@ describe("useDropdown – async mode (onSearch)", () => {
   });
 
   it("isSearching becomes true when searchQuery is set (async mode)", () => {
-    const onSearch = vi.fn().mockResolvedValue([]);
+    const searchOptions = vi.fn().mockResolvedValue([]);
     const { result } = renderHook(() =>
-      useDropdown({ options, onSearch, searchDebounceMs: 300, defaultOpen: true }),
+      useDropdown({ options, searchOptions, searchDebounceMs: 300, defaultOpen: true }),
     );
 
     act(() => { result.current.setSearchQuery("ban"); });
@@ -1127,12 +1127,12 @@ describe("useDropdown – async mode (onSearch)", () => {
     vi.useFakeTimers();
     const asyncInitial = [{ value: "fig", label: "Fig" }];
     const searchResults = [{ value: "avocado", label: "Avocado" }];
-    const onSearch = vi.fn().mockResolvedValue(searchResults);
+    const searchOptions = vi.fn().mockResolvedValue(searchResults);
 
     const { result } = renderHook(() =>
       useDropdown({
         options,
-        onSearch,
+        searchOptions,
         initialOptions: asyncInitial,
         searchDebounceMs: 0,
         defaultOpen: true,

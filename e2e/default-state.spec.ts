@@ -952,7 +952,7 @@ const LOADING_ROW_RECIPES: Record<string, { fixture: string } | { unreachable: s
     unreachable:
       "Its country list is a SearchableDropdown, and the props it passes " +
       "(InternationalPhoneInput.tsx, the <SearchableDropdown> call) include no `loading`, " +
-      "`onSearch` or `onLoadOptions`, so its list never loads.",
+      "`searchOptions` or `loadOptions`, so its list never loads.",
   },
 };
 

@@ -186,7 +186,7 @@ const SelectedChip = memo(function SelectedChip({
  * AI Usage Guidelines:
  * - Use for selecting multiple values with search/filter capability
  * - Minimum: `<MultiSelectSearchableDropdown options={[...]} onValueChange={handler} />`
- * - Use `onSearch` for async search, `onLoadInitialOptions` for prefetch
+ * - Use `searchOptions` for async search, `loadInitialOptions` for prefetch
  * - Pair `value` with `onValueChange` for controlled mode
  *
  * Behavior:
@@ -229,10 +229,10 @@ const MultiSelectSearchableDropdown = forwardRef<
       showChevron = true,
       fullWidth = false,
       loading: externalLoading = false,
-      onSearch,
+      searchOptions,
       searchDebounceMs = 300,
       initialOptions = [],
-      onLoadInitialOptions,
+      loadInitialOptions,
       loadInitialOnOpen = false,
       onLoadError,
       maxDisplayedChips = 3,
@@ -338,11 +338,11 @@ const MultiSelectSearchableDropdown = forwardRef<
       defaultValue,
       disabled,
       showSearch,
-      onSearch,
+      searchOptions,
       searchDebounceMs,
       onValueChange,
       initialOptions,
-      onLoadInitialOptions,
+      loadInitialOptions,
       loadInitialOnOpen,
       onLoadError,
       typeaheadTimeout,

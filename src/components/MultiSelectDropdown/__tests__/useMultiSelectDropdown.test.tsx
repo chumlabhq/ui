@@ -519,29 +519,29 @@ describe("useMultiSelectDropdown", () => {
   });
 
   describe("loadOnOpen – loads on toggle", () => {
-    it("calls onLoadOptions when toggling open with loadOnOpen=true", async () => {
+    it("calls loadOptions when toggling open with loadOnOpen=true", async () => {
       const loadedOpts: MultiSelectOption[] = [
         { value: "mango", label: "Mango" },
       ];
-      const onLoadOptions = vi.fn().mockResolvedValue(loadedOpts);
-      const { result } = renderDefault({ loadOnOpen: true, onLoadOptions });
+      const loadOptions = vi.fn().mockResolvedValue(loadedOpts);
+      const { result } = renderDefault({ loadOnOpen: true, loadOptions });
 
       await act(async () => {
         result.current.handleToggle();
       });
 
-      expect(onLoadOptions).toHaveBeenCalledOnce();
+      expect(loadOptions).toHaveBeenCalledOnce();
     });
 
     it("sets isLoadingOptions to true while loading", async () => {
       let resolveLoad!: (v: MultiSelectOption[]) => void;
-      const onLoadOptions = vi.fn(
+      const loadOptions = vi.fn(
         () =>
           new Promise<MultiSelectOption[]>((res) => {
             resolveLoad = res;
           }),
       );
-      const { result } = renderDefault({ loadOnOpen: true, onLoadOptions });
+      const { result } = renderDefault({ loadOnOpen: true, loadOptions });
 
       act(() => result.current.handleToggle());
       expect(result.current.isLoadingOptions).toBe(true);
@@ -555,8 +555,8 @@ describe("useMultiSelectDropdown", () => {
         { value: "mango", label: "Mango" },
         { value: "papaya", label: "Papaya" },
       ];
-      const onLoadOptions = vi.fn().mockResolvedValue(loadedOpts);
-      const { result } = renderDefault({ loadOnOpen: true, onLoadOptions });
+      const loadOptions = vi.fn().mockResolvedValue(loadedOpts);
+      const { result } = renderDefault({ loadOnOpen: true, loadOptions });
 
       await act(async () => result.current.handleToggle());
 
@@ -565,29 +565,29 @@ describe("useMultiSelectDropdown", () => {
   });
 
   describe("loadOnOpen – loads only once", () => {
-    it("does not call onLoadOptions a second time on re-open", async () => {
+    it("does not call loadOptions a second time on re-open", async () => {
       const loadedOpts: MultiSelectOption[] = [
         { value: "mango", label: "Mango" },
       ];
-      const onLoadOptions = vi.fn().mockResolvedValue(loadedOpts);
-      const { result } = renderDefault({ loadOnOpen: true, onLoadOptions });
+      const loadOptions = vi.fn().mockResolvedValue(loadedOpts);
+      const { result } = renderDefault({ loadOnOpen: true, loadOptions });
 
       await act(async () => result.current.handleToggle());
       await act(async () => result.current.handleToggle());
       await act(async () => result.current.handleToggle());
 
-      expect(onLoadOptions).toHaveBeenCalledOnce();
+      expect(loadOptions).toHaveBeenCalledOnce();
     });
   });
 
   describe("onLoadError", () => {
-    it("calls onLoadError when onLoadOptions rejects", async () => {
+    it("calls onLoadError when loadOptions rejects", async () => {
       const error = new Error("network failure");
-      const onLoadOptions = vi.fn().mockRejectedValue(error);
+      const loadOptions = vi.fn().mockRejectedValue(error);
       const onLoadError = vi.fn();
       const { result } = renderDefault({
         loadOnOpen: true,
-        onLoadOptions,
+        loadOptions,
         onLoadError,
       });
 
@@ -597,10 +597,10 @@ describe("useMultiSelectDropdown", () => {
     });
 
     it("resets isLoadingOptions to false after error", async () => {
-      const onLoadOptions = vi.fn().mockRejectedValue(new Error("fail"));
+      const loadOptions = vi.fn().mockRejectedValue(new Error("fail"));
       const { result } = renderDefault({
         loadOnOpen: true,
-        onLoadOptions,
+        loadOptions,
         onLoadError: vi.fn(),
       });
 
@@ -681,19 +681,19 @@ describe("useMultiSelectDropdown", () => {
   });
 
   describe("displayOptions fallback", () => {
-    it("uses options prop when onLoadOptions is set but no options have loaded yet", () => {
-      const onLoadOptions = vi.fn(
+    it("uses options prop when loadOptions is set but no options have loaded yet", () => {
+      const loadOptions = vi.fn(
         () =>
           new Promise<MultiSelectOption[]>(() => {
             // never resolves during test
           }),
       );
-      const { result } = renderDefault({ loadOnOpen: true, onLoadOptions });
+      const { result } = renderDefault({ loadOnOpen: true, loadOptions });
       // Before toggling open, loadedOptions is empty → should use options prop
       expect(result.current.displayOptions).toEqual(options);
     });
 
-    it("falls back to options prop when onLoadOptions is not provided", () => {
+    it("falls back to options prop when loadOptions is not provided", () => {
       const { result } = renderDefault();
       expect(result.current.displayOptions).toEqual(options);
     });

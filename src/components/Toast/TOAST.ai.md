@@ -56,7 +56,7 @@ Three things that follow from that, and are the ones missed first:
   provider's props, so a second one gives you two independent stacks that do not
   know about each other's limits.
 - **You never render `<Toast>` yourself.** It is exported for typing; the
-  provider renders it, and its `id` and `onRemove` come from there.
+  provider renders it, gives it its `id`, and removes it once your `onDismiss(id)` has run.
 
 There is no Anatomy section for this, deliberately: the thing nested inside
 `ToastProvider` is your tree, not another Toast part, and a diagram naming one
@@ -156,14 +156,13 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | `progressColor` | string | — | Custom color for the progress bar. |
 | `icon` | object | — | React.ReactNode — Custom icon replacing the default type icon. |
 | `showCloseButton` | boolean | `true` | Whether to show a close/dismiss button. |
-| `onDismiss` | object | — | () => void — Fires when the toast is dismissed. |
+| `onDismiss` | object | — | (id: string) => void — Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out. |
 | `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
 | `style` | object | — | Inline styles applied to the toast element. |
 | `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
 | `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
-| `onRemove` **(required)** | object | — | (id: string) => void — Internal callback to remove the toast from the provider. |
 
 ## Sub-component Props
 

@@ -185,13 +185,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Key or config for persisting expanded state to storage."
       },
       {
-        "name": "onExpandedChange",
-        "type": "((event: AccordionExpandEvent) => void)",
-        "required": false,
-        "default": null,
-        "description": "(event: AccordionExpandEvent) => void"
-      },
-      {
         "name": "onKeyDown",
         "type": "((event: KeyboardEvent<HTMLDivElement>, itemValue: string | null) => void)",
         "required": false,
@@ -690,36 +683,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         ]
       },
       {
-        "name": "AccordionExpandEvent",
-        "description": "The payload passed to `onExpandedChange`.",
-        "members": [
-          {
-            "name": "value",
-            "type": "string",
-            "required": true,
-            "description": "The item the event is about."
-          },
-          {
-            "name": "isExpanded",
-            "type": "boolean",
-            "required": true,
-            "description": "Its state after the change."
-          },
-          {
-            "name": "expandedCount",
-            "type": "number",
-            "required": true,
-            "description": "How many items are expanded once the change lands."
-          },
-          {
-            "name": "totalCount",
-            "type": "number",
-            "required": true,
-            "description": "How many items the accordion holds."
-          }
-        ]
-      },
-      {
         "name": "AccordionItemContextValue",
         "description": "What each item hands to its own trigger and panel.",
         "members": [
@@ -1065,17 +1028,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onLoad",
-        "type": "(() => void)",
+        "type": "((event: SyntheticEvent<HTMLImageElement, Event>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Fires when the avatar image finishes loading."
+        "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image finishes loading, with the image's native load event."
       },
       {
         "name": "onError",
-        "type": "(() => void)",
+        "type": "((event: SyntheticEvent<HTMLImageElement, Event>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Fires when the avatar image fails to load."
+        "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image fails to load, with the image's native error event."
       },
       {
         "name": "asChild",
@@ -2564,7 +2527,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "(value: CascadingValue, path: CascadingOption[]) => void"
       },
       {
-        "name": "onLoadChildren",
+        "name": "loadChildren",
         "type": "((parent: CascadingOption) => Promise<CascadingOption[]>)",
         "required": false,
         "default": null,
@@ -2600,17 +2563,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onBlur",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void"
+        "description": "(event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event."
       },
       {
         "name": "onFocus",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void"
+        "description": "(event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event."
       },
       {
         "name": "onKeyDown",
@@ -2893,14 +2856,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Placeholder text for the submenu search input."
       },
       {
-        "name": "onMenuSearch",
+        "name": "searchMenu",
         "type": "(query: string) => Promise<CascadingOption[]>",
         "required": false,
         "default": null,
         "description": "(query: string) => Promise<CascadingOption[]> — Async search for main menu."
       },
       {
-        "name": "onSubmenuSearch",
+        "name": "searchSubmenu",
         "type": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]>",
         "required": false,
         "default": null,
@@ -3311,11 +3274,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Displays the indeterminate (minus) indicator instead of a checkmark."
       },
       {
-        "name": "onValueChange",
+        "name": "onCheckedChange",
         "type": "((checked: boolean) => void)",
         "required": false,
         "default": null,
-        "description": "(checked: boolean) => void — Fires when the checked state changes."
+        "description": "(checked: boolean) => void — Fires with the new `checked` state."
       },
       {
         "name": "onFocus",
@@ -3600,8 +3563,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       ]
     },
     "snippets": {
-      "react": "import { Checkbox } from \"@chumlab/ui/checkbox\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [checked, setChecked] = useState(false);\n  return (\n    <Checkbox\n      label=\"I agree to the terms\"\n      checked={checked}\n      onValueChange={setChecked}\n    />\n  );\n}",
-      "next": "\"use client\";\n\nimport { Checkbox } from \"@chumlab/ui/checkbox\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [checked, setChecked] = useState(false);\n  return (\n    <Checkbox\n      label=\"I agree to the terms\"\n      checked={checked}\n      onValueChange={setChecked}\n    />\n  );\n}",
+      "react": "import { Checkbox } from \"@chumlab/ui/checkbox\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [checked, setChecked] = useState(false);\n  return (\n    <Checkbox\n      label=\"I agree to the terms\"\n      checked={checked}\n      onCheckedChange={setChecked}\n    />\n  );\n}",
+      "next": "\"use client\";\n\nimport { Checkbox } from \"@chumlab/ui/checkbox\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [checked, setChecked] = useState(false);\n  return (\n    <Checkbox\n      label=\"I agree to the terms\"\n      checked={checked}\n      onCheckedChange={setChecked}\n    />\n  );\n}",
       "needsClientBoundary": true
     }
   },
@@ -5205,11 +5168,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Array of snap point positions (0-1) for the drawer panel."
       },
       {
-        "name": "activeSnapPointIndex",
+        "name": "snapPointIndex",
         "type": "number",
         "required": false,
         "default": null,
-        "description": "Controlled active snap point index."
+        "description": "Controlled index into `snapPoints`. Pairs with `defaultSnapPointIndex` and `onSnapPointIndexChange`."
       },
       {
         "name": "defaultSnapPointIndex",
@@ -5580,7 +5543,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Shows a loading/shimmer state."
       },
       {
-        "name": "onLoadOptions",
+        "name": "loadOptions",
         "type": "() => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
@@ -5591,7 +5554,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load."
+        "description": "When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load."
       },
       {
         "name": "onLoadError",
@@ -5693,17 +5656,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onBlur",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Fires when the dropdown loses focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event."
       },
       {
         "name": "onFocus",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Fires when the dropdown receives focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event."
       },
       {
         "name": "onKeyDown",
@@ -6121,17 +6084,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onStartIconClick",
-        "type": "(() => void)",
+        "type": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility."
+        "description": "(event: MouseEvent<HTMLButtonElement>) => void - Makes startIcon a clickable button, called with the native click event. Requires startIconLabel for accessibility."
       },
       {
         "name": "onEndIconClick",
-        "type": "(() => void)",
+        "type": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility."
+        "description": "(event: MouseEvent<HTMLButtonElement>) => void - Makes endIcon a clickable button, called with the native click event. Requires endIconLabel for accessibility."
       },
       {
         "name": "startIconLabel",
@@ -6595,11 +6558,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Format used when copying the phone number."
       },
       {
-        "name": "onPasteDetected",
+        "name": "onPasteDetect",
         "type": "((data: PasteDetectedData) => void)",
         "required": false,
         "default": null,
-        "description": "(data: PasteDetectedData) => void - Fires when a phone number paste is detected."
+        "description": "(data: PasteDetectedData) => void - Fires when a pasted number is recognised, with what it was understood to be."
       },
       {
         "name": "countryDropdownPlaceholder",
@@ -6860,7 +6823,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "PasteDetectedData",
-        "description": "What a paste was understood to be, handed to `onPasteDetected` so a caller can accept or override the inference.",
+        "description": "What a paste was understood to be, handed to `onPasteDetect` so a caller can accept or override the inference.",
         "members": [
           {
             "name": "rawValue",
@@ -8039,7 +8002,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Shows a loading/shimmer state."
       },
       {
-        "name": "onLoadOptions",
+        "name": "loadOptions",
         "type": "() => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
@@ -8050,7 +8013,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load."
+        "description": "When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load."
       },
       {
         "name": "onLoadError",
@@ -8194,17 +8157,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onBlur",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Fires when the dropdown loses focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event."
       },
       {
         "name": "onFocus",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Fires when the dropdown receives focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event."
       },
       {
         "name": "onKeyDown",
@@ -8503,7 +8466,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "array",
         "required": false,
         "default": "[]",
-        "description": "List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it."
+        "description": "List of selectable options. Mutually exclusive with `searchOptions`: the async branch never reads it."
       },
       {
         "name": "value",
@@ -8667,7 +8630,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Shows a loading state."
       },
       {
-        "name": "onSearch",
+        "name": "searchOptions",
         "type": "(query: string) => Promise<MultiSelectOption[]>",
         "required": false,
         "default": null,
@@ -8685,10 +8648,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "array",
         "required": false,
         "default": "[]",
-        "description": "Options to display before any search is performed. Async branch only (`onSearch`)."
+        "description": "Options to display before any search is performed. Async branch only (`searchOptions`)."
       },
       {
-        "name": "onLoadInitialOptions",
+        "name": "loadInitialOptions",
         "type": "() => Promise<MultiSelectOption[]>",
         "required": false,
         "default": null,
@@ -8699,7 +8662,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load."
+        "description": "When true, calls loadInitialOptions each time the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load."
       },
       {
         "name": "onLoadError",
@@ -8836,17 +8799,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onBlur",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Fires when the dropdown loses focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event."
       },
       {
         "name": "onFocus",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void - Fires when the dropdown receives focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event."
       },
       {
         "name": "onKeyDown",
@@ -10488,7 +10451,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "array",
         "required": false,
         "default": "[]",
-        "description": "Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it."
+        "description": "Array of dropdown options. Mutually exclusive with `searchOptions`: the async branch never reads it."
       },
       {
         "name": "value",
@@ -10680,7 +10643,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Whether the dropdown is in a loading state."
       },
       {
-        "name": "onSearch",
+        "name": "searchOptions",
         "type": "(query: string) => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
@@ -10698,10 +10661,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "array",
         "required": false,
         "default": "[]",
-        "description": "Initial options to display before any search is performed. Async branch only (`onSearch`)."
+        "description": "Initial options to display before any search is performed. Async branch only (`searchOptions`)."
       },
       {
-        "name": "onLoadInitialOptions",
+        "name": "loadInitialOptions",
         "type": "() => Promise<DropdownOption[]>",
         "required": false,
         "default": null,
@@ -10712,7 +10675,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "Whether to load initial options when the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load."
+        "description": "Whether to load initial options when the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load."
       },
       {
         "name": "onLoadError",
@@ -10814,17 +10777,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onBlur",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Callback fired when the dropdown loses focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event."
       },
       {
         "name": "onFocus",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Callback fired when the dropdown gains focus."
+        "description": "(event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event."
       },
       {
         "name": "onKeyDown",
@@ -12221,11 +12184,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Default uncontrolled checked state."
       },
       {
-        "name": "onValueChange",
+        "name": "onCheckedChange",
         "type": "((checked: boolean) => void)",
         "required": false,
         "default": null,
-        "description": "(checked: boolean) => void — Fires when the checked state changes. Reports the new `checked` state, not the `value` prop — the name follows the library-wide change-handler convention."
+        "description": "(checked: boolean) => void — Fires with the new `checked` state. The `value` prop is form data and is never reported here."
       },
       {
         "name": "name",
@@ -12521,8 +12484,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       ]
     },
     "snippets": {
-      "react": "import { Switch } from \"@chumlab/ui/switch\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [enabled, setEnabled] = useState(false);\n  return (\n    <Switch\n      label=\"Email notifications\"\n      checked={enabled}\n      onValueChange={setEnabled}\n    />\n  );\n}",
-      "next": "\"use client\";\n\nimport { Switch } from \"@chumlab/ui/switch\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [enabled, setEnabled] = useState(false);\n  return (\n    <Switch\n      label=\"Email notifications\"\n      checked={enabled}\n      onValueChange={setEnabled}\n    />\n  );\n}",
+      "react": "import { Switch } from \"@chumlab/ui/switch\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [enabled, setEnabled] = useState(false);\n  return (\n    <Switch\n      label=\"Email notifications\"\n      checked={enabled}\n      onCheckedChange={setEnabled}\n    />\n  );\n}",
+      "next": "\"use client\";\n\nimport { Switch } from \"@chumlab/ui/switch\";\nimport { useState } from \"react\";\n\nexport default function Example() {\n  const [enabled, setEnabled] = useState(false);\n  return (\n    <Switch\n      label=\"Email notifications\"\n      checked={enabled}\n      onCheckedChange={setEnabled}\n    />\n  );\n}",
       "needsClientBoundary": true
     }
   },
@@ -12568,11 +12531,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Column IDs to pin to the left side."
       },
       {
-        "name": "onPinColumn",
-        "type": "((columnId: string, isPinned: boolean) => void)",
+        "name": "onPinnedColumnsChange",
+        "type": "((pinnedColumns: string[]) => void)",
         "required": false,
         "default": null,
-        "description": "(columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned."
+        "description": "(pinnedColumns: string[]) => void — Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned."
       },
       {
         "name": "pinnableColumns",
@@ -12589,18 +12552,18 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Maximum number of columns that can be pinned simultaneously."
       },
       {
-        "name": "onCursorPosition",
+        "name": "onCursorPositionChange",
         "type": "((position: { x: number; y: number; } | null) => void)",
         "required": false,
         "default": null,
-        "description": "(position: { x: number; y: number } | null) => void — Callback with cursor position over the table."
+        "description": "(position: { x: number; y: number } | null) => void — Fires as the pointer moves over the table, with its position relative to the root; `null` when it leaves."
       },
       {
-        "name": "onCursorOverHeader",
+        "name": "onHeaderHoverChange",
         "type": "((isOverHeader: boolean) => void)",
         "required": false,
         "default": null,
-        "description": "(isOverHeader: boolean) => void — Callback when cursor enters/leaves the header."
+        "description": "(isOverHeader: boolean) => void — Fires with whether the pointer is over the header row."
       },
       {
         "name": "emptyContent",
@@ -12666,11 +12629,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Whether the floating actions area is being hovered."
       },
       {
-        "name": "isPopupOpen",
+        "name": "popupOpen",
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "Whether a popup triggered from the table is currently open."
+        "description": "Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still."
       },
       {
         "name": "maxWidth",
@@ -12813,11 +12776,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Array of selected row IDs (controlled)."
       },
       {
-        "name": "onSelectionChange",
-        "type": "((selectedIds: string[]) => void)",
+        "name": "onSelectedRowIdsChange",
+        "type": "((selectedRowIds: string[]) => void)",
         "required": false,
         "default": null,
-        "description": "(selectedIds: string[]) => void — Callback when selection changes."
+        "description": "(selectedRowIds: string[]) => void — Fires with the new `selectedRowIds` when selection changes."
       },
       {
         "name": "selectAllMode",
@@ -12897,11 +12860,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Array of expanded row IDs (controlled)."
       },
       {
-        "name": "onExpandedChange",
-        "type": "((expandedIds: string[]) => void)",
+        "name": "onExpandedRowIdsChange",
+        "type": "((expandedRowIds: string[]) => void)",
         "required": false,
         "default": null,
-        "description": "(expandedIds: string[]) => void — Callback when expanded rows change."
+        "description": "(expandedRowIds: string[]) => void — Fires with the new `expandedRowIds` when a row expands or collapses."
       },
       {
         "name": "renderExpandedRow",
@@ -14241,17 +14204,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onStartIconClick",
-        "type": "(() => void)",
+        "type": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Makes startIcon a clickable button."
+        "description": "(event: MouseEvent<HTMLButtonElement>) => void — Makes startIcon a clickable button, called with the native click event."
       },
       {
         "name": "onEndIconClick",
-        "type": "(() => void)",
+        "type": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Makes endIcon a clickable button."
+        "description": "(event: MouseEvent<HTMLButtonElement>) => void — Makes endIcon a clickable button, called with the native click event."
       },
       {
         "name": "startIconLabel",
@@ -14597,10 +14560,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onBlur",
-        "type": "(() => void)",
+        "type": "((event: FocusEvent<HTMLInputElement, Element>) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Called when the input loses focus."
+        "description": "(event: FocusEvent<HTMLInputElement>) => void — Fires once focus has left the whole time picker, with the input's native blur event."
       },
       {
         "name": "format",
@@ -15370,10 +15333,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "onDismiss",
-        "type": "(() => void)",
+        "type": "((id: string) => void)",
         "required": false,
         "default": null,
-        "description": "() => void — Fires when the toast is dismissed."
+        "description": "(id: string) => void — Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out."
       },
       {
         "name": "role",
@@ -15416,13 +15379,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "false",
         "description": "When true, removes all default styling."
-      },
-      {
-        "name": "onRemove",
-        "type": "(id: string) => void",
-        "required": true,
-        "default": null,
-        "description": "(id: string) => void — Internal callback to remove the toast from the provider."
       }
     ],
     "subComponents": [
@@ -15638,9 +15594,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "onDismiss",
-            "type": "() => void",
+            "type": "(id: string) => void",
             "required": false,
-            "description": "Fires when the toast is dismissed."
+            "description": "Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out."
           },
           {
             "name": "role",

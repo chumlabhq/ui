@@ -2,7 +2,7 @@
  * The dev-only warning for a lazy-children loader nothing can trigger.
  *
  * `loadChildrenForOption` runs only for an option whose `hasChildren` is set,
- * so `onLoadChildren` over a tree that never sets the flag does nothing at all.
+ * so `loadChildren` over a tree that never sets the flag does nothing at all.
  * The prop-union work fixed every inert combination the type system could
  * express; this one is a constraint on the consumer's data, so the only place
  * it can be caught is at runtime, and the only failure mode was silence.
@@ -52,27 +52,27 @@ const warnings = (): string[] =>
 
 describe("CascadingDropdown inert-loader warning", () => {
   it("warns when a loader is set and no option declares children", () => {
-    render(<CascadingDropdown options={FLAT} onLoadChildren={load} />);
+    render(<CascadingDropdown options={FLAT} loadChildren={load} />);
     expect(warnings()).toHaveLength(1);
     expect(warnings()[0]).toContain("never fire");
   });
 
   it("warns once per instance, not once per render", () => {
     const { rerender } = render(
-      <CascadingDropdown options={FLAT} onLoadChildren={load} />,
+      <CascadingDropdown options={FLAT} loadChildren={load} />,
     );
-    rerender(<CascadingDropdown options={FLAT} onLoadChildren={load} />);
-    rerender(<CascadingDropdown options={[...FLAT]} onLoadChildren={load} />);
+    rerender(<CascadingDropdown options={FLAT} loadChildren={load} />);
+    rerender(<CascadingDropdown options={[...FLAT]} loadChildren={load} />);
     expect(warnings()).toHaveLength(1);
   });
 
   it("stays silent when an option declares children", () => {
-    render(<CascadingDropdown options={LAZY} onLoadChildren={load} />);
+    render(<CascadingDropdown options={LAZY} loadChildren={load} />);
     expect(warnings()).toEqual([]);
   });
 
   it("stays silent when only a nested option declares children", () => {
-    render(<CascadingDropdown options={NESTED_LAZY} onLoadChildren={load} />);
+    render(<CascadingDropdown options={NESTED_LAZY} loadChildren={load} />);
     expect(warnings()).toEqual([]);
   });
 

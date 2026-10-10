@@ -8,7 +8,7 @@ export default function SwitchExample() {
       <Switch
         label="Email notifications"
         checked={basicSwitch}
-        onValueChange={setBasicSwitch}
+        onCheckedChange={setBasicSwitch}
       />
       <Switch label="Dark mode" defaultChecked />
       <Switch label="Maintenance mode" disabled />

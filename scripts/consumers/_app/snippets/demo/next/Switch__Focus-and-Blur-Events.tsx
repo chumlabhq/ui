@@ -11,7 +11,7 @@ export default function SwitchExample() {
       <Switch
         label="Focus me to see events"
         checked={focusBlurSwitch}
-        onValueChange={setFocusBlurSwitch}
+        onCheckedChange={setFocusBlurSwitch}
         onFocus={
           () =>
           setFocusLog((prev) => [

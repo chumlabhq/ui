@@ -7,7 +7,7 @@ export default function Example() {
     <Switch
       label="Email notifications"
       checked={enabled}
-      onValueChange={setEnabled}
+      onCheckedChange={setEnabled}
     />
   );
 }

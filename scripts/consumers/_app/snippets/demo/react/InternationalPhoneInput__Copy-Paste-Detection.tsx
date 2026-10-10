@@ -12,7 +12,7 @@ export default function InternationalPhoneInputExample() {
         onValueChange={setCopyPasteValue}
         enablePasteDetection
         copyFormat="e164"
-        onPasteDetected={setLastPasteData}
+        onPasteDetect={setLastPasteData}
         placeholder="Try pasting +44 20 7123 4567"
         classes={
           {

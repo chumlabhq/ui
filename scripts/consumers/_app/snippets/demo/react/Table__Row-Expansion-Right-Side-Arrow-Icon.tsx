@@ -224,7 +224,7 @@ export default function TableExample() {
                 expandable
                 expandColumnPosition="right"
                 expandedRowIds={ids}
-                onExpandedChange={setIds}
+                onExpandedRowIdsChange={setIds}
                 ExpandIcon={ArrowIcon}
                 renderExpandedRow={(row) => (
                   <div

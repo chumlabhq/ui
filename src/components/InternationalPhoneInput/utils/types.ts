@@ -44,7 +44,7 @@ export interface PhoneNumberData extends PhoneNumberValue {
 export type CopyFormat = "e164" | "international" | "national";
 
 /**
- * What a paste was understood to be, handed to `onPasteDetected` so a caller can accept or override the inference.
+ * What a paste was understood to be, handed to `onPasteDetect` so a caller can accept or override the inference.
  */
 export interface PasteDetectedData {
   /** Exactly what was pasted, before any parsing. */
@@ -186,7 +186,8 @@ export interface InternationalPhoneInputProps
   ) => boolean | { valid: boolean; message?: string };
   enablePasteDetection?: boolean;
   copyFormat?: CopyFormat;
-  onPasteDetected?: (data: PasteDetectedData) => void;
+  /** Fires when a pasted number is recognised, with what it was understood to be. */
+  onPasteDetect?: (data: PasteDetectedData) => void;
   countryDropdownPlaceholder?: string;
   countrySearchPlaceholder?: string;
   countryDropdownAriaLabel?: string;

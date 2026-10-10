@@ -7,7 +7,7 @@ export default function SwitchExample() {
     <Switch
       label="Email notifications"
       checked={successSwitch}
-      onValueChange={setSuccessSwitch}
+      onCheckedChange={setSuccessSwitch}
       success={successSwitch}
       successMessage="Notifications are enabled"
       classes={

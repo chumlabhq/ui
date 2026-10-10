@@ -7,7 +7,7 @@ export default function CheckboxExample() {
     <Checkbox
       label="I agree to the terms"
       checked={successDemo}
-      onValueChange={setSuccessDemo}
+      onCheckedChange={setSuccessDemo}
       success={successDemo}
       successMessage="Terms accepted"
       size="md"

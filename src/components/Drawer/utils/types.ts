@@ -63,7 +63,8 @@ export interface DrawerProps
   swipeable?: boolean;
   swipeThreshold?: number;
   snapPoints?: number[];
-  activeSnapPointIndex?: number;
+  /** Controlled index into `snapPoints`. Pairs with `defaultSnapPointIndex` and `onSnapPointIndexChange`. */
+  snapPointIndex?: number;
   defaultSnapPointIndex?: number;
   onSnapPointIndexChange?: (index: number) => void;
 }

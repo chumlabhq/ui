@@ -308,6 +308,7 @@ describe("TextArea", () => {
       render(<TextArea aria-label="test" startIcon={<span>S</span>} onStartIconClick={onClick} startIconLabel="Format" />);
       await user.click(screen.getByRole("button", { name: "Format" }));
       expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
     it("calls onEndIconClick when end icon clicked", async () => {
@@ -316,6 +317,7 @@ describe("TextArea", () => {
       render(<TextArea aria-label="test" endIcon={<span>E</span>} onEndIconClick={onClick} endIconLabel="Send" />);
       await user.click(screen.getByRole("button", { name: "Send" }));
       expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
     it("does not render button role when no onClick handler", () => {

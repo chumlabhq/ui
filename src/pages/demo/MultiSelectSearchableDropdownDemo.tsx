@@ -261,7 +261,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={asyncValue}
               onValueChange={(values) => setAsyncValue(values)}
               placeholder="Search countries..."
-              onSearch={handleAsyncSearch}
+              searchOptions={handleAsyncSearch}
               searchDebounceMs={300}
               maxDisplayedChips={2}
               loadingText="Searching countries..."
@@ -289,8 +289,8 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={asyncPrefetchValue}
               onValueChange={(values) => setAsyncPrefetchValue(values)}
               placeholder="Select or search countries..."
-              onSearch={handleAsyncSearch}
-              onLoadInitialOptions={handleLoadInitialOptions}
+              searchOptions={handleAsyncSearch}
+              loadInitialOptions={handleLoadInitialOptions}
               loadInitialOnOpen
               searchDebounceMs={300}
               maxDisplayedChips={2}
@@ -1373,7 +1373,7 @@ const MultiSelectSearchableDropdownDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Combine multi-value state with search or async `onSearch`. Parent owns the array of selected ids; debounce network calls and keep `options` consistent with results."
+        summary="Combine multi-value state with search or async `searchOptions`. Parent owns the array of selected ids; debounce network calls and keep `options` consistent with results."
       />
       <DocEdgeCases
         isDarkMode={dark}

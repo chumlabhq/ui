@@ -28,7 +28,7 @@ import { useEffect, useRef } from "react";
  * helper, so a code the country list does not know flips it to uncontrolled
  * while the consumer's `value` prop stayed defined the whole time. Warning
  * there would tell them to keep a prop they never dropped. `Drawer` has the
- * same shape on `activeSnapPointIndex`, where the message would also name the
+ * same shape on `snapPointIndex`, where the message would also name the
  * wrong prop. Both stay silent until someone decides what they should say.
  */
 export function useControlledSwitchWarning(

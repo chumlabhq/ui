@@ -14,7 +14,7 @@ export default function InternationalPhoneInputExample() {
         onValueChange={setCombinedValue}
         onCountryChange={setCombinedCountry}
         enablePasteDetection
-        onPasteDetected={setCombinedPaste}
+        onPasteDetect={setCombinedPaste}
         copyFormat="international"
         validateOnBlur
         validationMessage="The phone number you entered is not valid"

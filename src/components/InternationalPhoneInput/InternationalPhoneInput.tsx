@@ -135,7 +135,7 @@ const InternationalPhoneInput = forwardRef<
       validate,
       enablePasteDetection = false,
       copyFormat = "e164",
-      onPasteDetected,
+      onPasteDetect,
       countryDropdownPlaceholder = "Country",
       countrySearchPlaceholder = "Search countries...",
       countryDropdownAriaLabel = "Select country",
@@ -462,7 +462,7 @@ const InternationalPhoneInput = forwardRef<
           onCountryChange?.(parsed.detectedCountry);
           emitChange(parsed.phoneNumber, parsed.detectedCountry);
 
-          onPasteDetected?.({
+          onPasteDetect?.({
             rawValue: pastedText,
             detectedCountry: parsed.detectedCountry,
             phoneNumber: parsed.phoneNumber,
@@ -479,7 +479,7 @@ const InternationalPhoneInput = forwardRef<
           setHasValidationError(false);
           emitChange(parsed.phoneNumber, selectedCountry);
 
-          onPasteDetected?.({
+          onPasteDetect?.({
             rawValue: pastedText,
             detectedCountry: null,
             phoneNumber: parsed.phoneNumber,
@@ -494,7 +494,7 @@ const InternationalPhoneInput = forwardRef<
         selectedCountry,
         onCountryChange,
         emitChange,
-        onPasteDetected,
+        onPasteDetect,
         setSelectedCountryCode,
         setPhoneInput,
         formatPatterns,

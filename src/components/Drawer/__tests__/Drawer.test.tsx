@@ -1291,7 +1291,7 @@ describe("Drawer", () => {
           duration={0}
           swipeable
           snapPoints={[0.3, 0.6, 1]}
-          activeSnapPointIndex={10}
+          snapPointIndex={10}
           onSnapPointIndexChange={onSnapPointChange}
         >
           <DrawerBody>Content</DrawerBody>
@@ -1310,7 +1310,7 @@ describe("Drawer", () => {
           duration={0}
           swipeable
           snapPoints={[0.3, 0.6, 1]}
-          activeSnapPointIndex={1.7}
+          snapPointIndex={1.7}
         >
           <DrawerBody>Content</DrawerBody>
         </Drawer>,

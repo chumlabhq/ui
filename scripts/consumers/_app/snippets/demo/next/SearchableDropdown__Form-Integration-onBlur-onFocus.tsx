@@ -27,8 +27,8 @@ export default function SearchableDropdownExample() {
           value={focusBlurValue}
           onValueChange={(v) => setFocusBlurValue(v)}
           placeholder="Focus or blur me..."
-          onFocus={() => setFocusMessage("Dropdown focused")}
-          onBlur={() => setFocusMessage("Dropdown blurred")}
+          onFocus={(event) => setFocusMessage(`Dropdown focused: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
+          onBlur={(event) => setFocusMessage(`Dropdown blurred: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
           classes={
             {
               trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent",

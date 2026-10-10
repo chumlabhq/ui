@@ -106,7 +106,7 @@ export default function CascadingDropdownExample() {
           options={loadOnOpenOptions}
           value={loadOnOpenValue}
           onValueChange={(val) => setLoadOnOpenValue(val)}
-          onLoadChildren={handleLoadChildrenAsync}
+          loadChildren={handleLoadChildrenAsync}
           placeholder="Click to load regions..."
           loading={isLoadOnOpenLoading}
           loadingText="Loading regions..."

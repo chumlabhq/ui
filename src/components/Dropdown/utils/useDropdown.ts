@@ -14,7 +14,7 @@ interface UseDropdownProps {
   clearable?: boolean;
   onValueChange?: (value: string | null, option: DropdownOption | null) => void;
   onOpenChange?: (open: boolean) => void;
-  onLoadOptions?: () => Promise<DropdownOption[]>;
+  loadOptions?: () => Promise<DropdownOption[]>;
   loadOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   dropdownId: string;
@@ -34,7 +34,7 @@ export const useDropdown = ({
   clearable = false,
   onValueChange,
   onOpenChange,
-  onLoadOptions,
+  loadOptions,
   loadOnOpen = false,
   onLoadError,
   dropdownId,
@@ -79,10 +79,10 @@ export const useDropdown = ({
     };
   }, []);
 
-  const prevLoadOptionsRef = useRef(onLoadOptions);
+  const prevLoadOptionsRef = useRef(loadOptions);
   useIsomorphicLayoutEffect(() => {
-    if (prevLoadOptionsRef.current !== onLoadOptions) {
-      prevLoadOptionsRef.current = onLoadOptions;
+    if (prevLoadOptionsRef.current !== loadOptions) {
+      prevLoadOptionsRef.current = loadOptions;
       hasLoadedRef.current = false;
       setHasLoaded(false);
       setLoadedOptions([]);
@@ -94,11 +94,11 @@ export const useDropdown = ({
   });
 
   const displayOptions = useMemo(() => {
-    if (loadOnOpen && onLoadOptions && hasLoaded) {
+    if (loadOnOpen && loadOptions && hasLoaded) {
       return loadedOptions;
     }
     return options;
-  }, [options, loadedOptions, loadOnOpen, onLoadOptions, hasLoaded]);
+  }, [options, loadedOptions, loadOnOpen, loadOptions, hasLoaded]);
 
   useEffect(() => {
     displayOptionsRef.current = displayOptions;
@@ -118,7 +118,7 @@ export const useDropdown = ({
    * with a menu that never populated and never retried. This is the shape the
    * two searchable dropdowns already used; the four now agree.
    */
-  const shouldLoad = isOpen && loadOnOpen && !!onLoadOptions && !hasLoaded;
+  const shouldLoad = isOpen && loadOnOpen && !!loadOptions && !hasLoaded;
 
   // Loading state is adjusted during render, not from the effect below.
   // Setting it inside the effect is a cascading render — the effect would
@@ -134,11 +134,11 @@ export const useDropdown = ({
   }
 
   useEffect(() => {
-    if (!shouldLoad || !onLoadOptions) return;
+    if (!shouldLoad || !loadOptions) return;
 
     let cancelled = false;
     isLoadingRef.current = true;
-    onLoadOptions()
+    loadOptions()
       .then((results) => {
         if (cancelled) return;
         setLoadedOptions(results);
@@ -169,7 +169,7 @@ export const useDropdown = ({
     return () => {
       cancelled = true;
     };
-  }, [shouldLoad, onLoadOptions, onLoadError]);
+  }, [shouldLoad, loadOptions, onLoadError]);
 
   const getInitialFocusIndex = useCallback(() => {
     if (currentValue) {
@@ -186,7 +186,7 @@ export const useDropdown = ({
     setIsOpen(true);
     setFocusedIndex(getInitialFocusIndex());
 
-    if (!loadOnOpen || !onLoadOptions) {
+    if (!loadOnOpen || !loadOptions) {
       const count = displayOptions.length;
       setStatusMessage(
         count === 0
@@ -194,7 +194,7 @@ export const useDropdown = ({
           : `${count} option${count === 1 ? "" : "s"} available`,
       );
     }
-  }, [disabled, setIsOpen, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
+  }, [disabled, setIsOpen, getInitialFocusIndex, loadOnOpen, loadOptions, displayOptions.length]);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -211,7 +211,7 @@ export const useDropdown = ({
         return false;
       }
       setFocusedIndex(getInitialFocusIndex());
-      if (!loadOnOpen || !onLoadOptions) {
+      if (!loadOnOpen || !loadOptions) {
         const count = displayOptions.length;
         setStatusMessage(
           count === 0
@@ -221,7 +221,7 @@ export const useDropdown = ({
       }
       return true;
     });
-  }, [disabled, setIsOpen, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
+  }, [disabled, setIsOpen, getInitialFocusIndex, loadOnOpen, loadOptions, displayOptions.length]);
 
   const handleOptionSelect = useCallback(
     (option: DropdownOption) => {

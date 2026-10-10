@@ -8,7 +8,7 @@ export default function SwitchExample() {
       label="Accept terms of service"
       required
       checked={requiredSwitch}
-      onValueChange={setRequiredSwitch}
+      onCheckedChange={setRequiredSwitch}
       classes={
         {
           label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",

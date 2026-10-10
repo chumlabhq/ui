@@ -63,7 +63,7 @@ them — prefer the `cl-*` tokens and the component's own props.
 ## Common mistakes (AVOID these patterns)
 - ✗ `error="Required field"` — `error` is a boolean. Use `error errorMessage="Required field"` (two props). Same for `success` + `successMessage`.
 - ✗ Passing both `value` and `defaultValue` — pick one (controlled OR uncontrolled), never both.
-- ✗ `onChange`, `onSelect`, `onTabChange`, `onPageChange`, `onStepChange`, `onCheckedChange` — the value callback is always `onValueChange`. Open-state callback is always `onOpenChange`.
+- ✗ `onChange`, `onSelect`, `onTabChange`, `onPageChange`, `onStepChange` — the value callback is always `onValueChange`. A `checked` prop (Checkbox, Switch) pairs with `onCheckedChange`; open state with `onOpenChange`.
 - ✗ `placement="top"` on Tooltip — use `side="top"`. Drawer uses `direction`, not `side`/`placement`.
 - ✗ CascadingDropdown value as a plain string — value is `Record<parentValue, string | string[]>`. Use key `"root"` for top-level (no-children) selections.
 - ✗ Stepper `activeStep` / `currentStep` — those don't exist. Use `value` (current index, zero-based).
@@ -196,7 +196,6 @@ These props have dependencies — using them wrong causes silent bugs:
 | `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
 | `expandOnPrint` | boolean | `false` | Expands all items when printing. |
 | `storageKey` | string \| object | — | Key or config for persisting expanded state to storage. |
-| `onExpandedChange` | object | — | (event: AccordionExpandEvent) => void |
 | `onKeyDown` | object | — | (event: KeyboardEvent, itemValue: string \| null) => void |
 | `preventClose` | object | — | (value: string) => boolean \| Promise<boolean> |
 | `preventCloseTimeout` | number | `10000` | Timeout in ms for the preventClose callback. |
@@ -762,8 +761,8 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 | `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
 | `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
-| `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
-| `onError` | object | — | () => void — Fires when the avatar image fails to load. |
+| `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image finishes loading, with the image's native load event. |
+| `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the avatar image fails to load, with the image's native error event. |
 | `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
 
 ### Sub-component Props
@@ -1887,9 +1886,9 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 | Prop | Constraint |
 |------|-----------|
 | `selectionMode` on an option | Set on each `CascadingOption.children` parent. `"single"` = radio behavior, `"multi"` = checkbox. Defaults to `"single"`. |
-| `onLoadChildren` | Only called when `option.hasChildren` is true and `option.children` is undefined. Must return `Promise<CascadingOption[]>`. |
-| `onMenuSearch` | When provided, disables client-side menu filtering. You must return filtered results. |
-| `onSubmenuSearch` | When provided, disables client-side submenu filtering. Receives `(query, parent)`. |
+| `loadChildren` | Only called when `option.hasChildren` is true and `option.children` is undefined. Must return `Promise<CascadingOption[]>`. |
+| `searchMenu` | When provided, disables client-side menu filtering. You must return filtered results. |
+| `searchSubmenu` | When provided, disables client-side submenu filtering. Receives `(query, parent)`. |
 | `value` / `onValueChange` | Controlled mode. Shape: `{ parentValue: "childValue" }` for single, `{ parentValue: ["a","b"] }` for multi. |
 | `defaultValue` | Uncontrolled mode. Cannot be used with `value`. |
 | `closeOnSelect` | Defaults to `true`. Set `false` to keep menu open after selection (useful for multi-select). |
@@ -1923,13 +1922,13 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `value` | object | — | Controlled selection value as { [parentValue]: string \| string[] }. |
 | `defaultValue` | object | — | Initial selection value for uncontrolled usage. |
 | `onValueChange` | object | — | (value: CascadingValue, path: CascadingOption[]) => void |
-| `onLoadChildren` | object | — | (parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader. |
+| `loadChildren` | object | — | (parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader. |
 | `onLoadError` | object | — | (error: unknown) => void — Called when async child loading fails. |
 | `open` | boolean | — | Controlled open state. |
 | `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
 | `onOpenChange` | object | — | (open: boolean) => void |
-| `onBlur` | object | — | () => void |
-| `onFocus` | object | — | () => void |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void |
 | `id` | string | — | HTML id attribute. |
 | `name` | string | — | Form field name. |
@@ -1970,8 +1969,8 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `showSubmenuSearch` | boolean | `false` | Show a search input inside submenus. |
 | `menuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the main menu search input. |
 | `submenuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the submenu search input. |
-| `onMenuSearch` | object | — | (query: string) => Promise<CascadingOption[]> — Async search for main menu. |
-| `onSubmenuSearch` | object | — | (query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu. |
+| `searchMenu` | object | — | (query: string) => Promise<CascadingOption[]> — Async search for main menu. |
+| `searchSubmenu` | object | — | (query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu. |
 | `searchDebounceMs` | number | `300` | Debounce delay in ms for async search callbacks. |
 | `SearchIcon` | object | — | React.ComponentType<{ className?: string }> — Custom search icon component. |
 | `menuSearchAriaLabel` | string | `"Search menu"` | Accessible label for the menu search input. |
@@ -2119,7 +2118,7 @@ const loadChildren = async (parent: CascadingOption) => {
     { value: "electronics", label: "Electronics", hasChildren: true },
     { value: "clothing", label: "Clothing", hasChildren: true },
   ]}
-  onLoadChildren={loadChildren}
+  loadChildren={loadChildren}
   value={value}
   onValueChange={setValue}
 />
@@ -2162,7 +2161,7 @@ const searchCountries = async (query: string) => {
 <CascadingDropdown
   options={regions}
   showMenuSearch
-  onMenuSearch={searchCountries}
+  searchMenu={searchCountries}
   searchDebounceMs={300}
 />
 ```
@@ -2227,7 +2226,7 @@ export default function Example() {
     <Checkbox
       label="I agree to the terms"
       checked={checked}
-      onValueChange={setChecked}
+      onCheckedChange={setChecked}
     />
   );
 }
@@ -2278,7 +2277,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
 | `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
-| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Fires with the new `checked` state. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
 | `error` | boolean | `false` | Displays the checkbox in an error state. |
@@ -2404,7 +2403,7 @@ classes={{
   label="Subscribe to newsletter"
   description="Get weekly updates"
   checked={checked}
-  onValueChange={setChecked}
+  onCheckedChange={setChecked}
   shape="circle"
   classes={{
     root: "",
@@ -2433,14 +2432,14 @@ const someChecked = items.some(Boolean);
   label="Select All"
   checked={allChecked}
   indeterminate={someChecked && !allChecked}
-  onValueChange={(checked) => setItems(items.map(() => checked))}
+  onCheckedChange={(checked) => setItems(items.map(() => checked))}
 />
 {items.map((checked, i) => (
   <Checkbox
     key={i}
     label={`Item ${i + 1}`}
     checked={checked}
-    onValueChange={(v) => {
+    onCheckedChange={(v) => {
       const next = [...items];
       next[i] = v;
       setItems(next);
@@ -2459,7 +2458,7 @@ const someChecked = items.some(Boolean);
   errorMessage={errors.terms}
   label="I accept the Terms of Service"
   checked={accepted}
-  onValueChange={setAccepted}
+  onCheckedChange={setAccepted}
 />
 ```
 
@@ -3195,7 +3194,7 @@ export default function Example() {
 | `swipeable` | boolean | `false` | Enables swipe-to-close gesture. |
 | `swipeThreshold` | number | `0.4` | Minimum swipe distance in pixels to trigger close. |
 | `snapPoints` | array | — | Array of snap point positions (0-1) for the drawer panel. |
-| `activeSnapPointIndex` | number | — | Controlled active snap point index. |
+| `snapPointIndex` | number | — | Controlled index into `snapPoints`. Pairs with `defaultSnapPointIndex` and `onSnapPointIndexChange`. |
 | `defaultSnapPointIndex` | number | `0` | Initial snap point index for uncontrolled usage. |
 | `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
 
@@ -3261,8 +3260,8 @@ export default function Example() {
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
 | `clearable` | Only works when a value is selected. Adds a clear button and allows deselect via click. |
-| `onLoadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<DropdownOption[]>`. |
-| `loadOnOpen` | Only works when `onLoadOptions` is provided. |
+| `loadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<DropdownOption[]>`. |
+| `loadOnOpen` | Only works when `loadOptions` is provided. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOption`, `placeholder`), which never reaches the DOM. |
@@ -3326,8 +3325,8 @@ export default function Example() {
 | `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected option indicator. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading/shimmer state. |
-| `onLoadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
-| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
+| `loadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
+| `loadOnOpen` | boolean | `false` | When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -3343,8 +3342,8 @@ export default function Example() {
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
-| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `renderTrigger` | object | — | (triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder). |
 | `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
@@ -3484,7 +3483,7 @@ const [value, setValue] = useState<string | null>(null);
 ```tsx
 <Dropdown
   loadOnOpen
-  onLoadOptions={async () => {
+  loadOptions={async () => {
     const res = await fetch("/api/options");
     return res.json();
   }}
@@ -3618,8 +3617,8 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 | `suffix` | object | — | React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com'). |
 | `startIcon` | object | — | React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided. |
 | `endIcon` | object | — | React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided. |
-| `onStartIconClick` | object | — | () => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility. |
-| `onEndIconClick` | object | — | () => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility. |
+| `onStartIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes startIcon a clickable button, called with the native click event. Requires startIconLabel for accessibility. |
+| `onEndIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes endIcon a clickable button, called with the native click event. Requires endIconLabel for accessibility. |
 | `startIconLabel` | string | — | Accessible label for startIcon when it is clickable. Required with onStartIconClick. |
 | `endIconLabel` | string | — | Accessible label for endIcon when it is clickable. Required with onEndIconClick. |
 | `onValueChange` | object | — | (value: string) => void - Fires with the current string value when the value changes. |
@@ -3795,7 +3794,7 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `clearable` | Only shows clear button when phone input has content and not disabled/readOnly. |
-| `enablePasteDetection` | Must be `true` for `onPasteDetected` to fire. |
+| `enablePasteDetection` | Must be `true` for `onPasteDetect` to fire. |
 | `copyFormat` | Only affects Ctrl+C behavior. Does not change display format. |
 | `validateOnBlur` | When `true` (default), shows validation error on blur. Set `false` to disable. |
 | `validationMessage` | Overrides the built-in "Please enter a valid phone number" message. |
@@ -3864,7 +3863,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `autoComplete` | string | — | Native input autocomplete. Defaults to "off" so browser autofill can't corrupt the national-number field; pass e.g. "tel-national" to opt in. |
 | `enablePasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
 | `copyFormat` | `"e164"` \| `"international"` \| `"national"` | `"e164"` | Format used when copying the phone number. |
-| `onPasteDetected` | object | — | (data: PasteDetectedData) => void - Fires when a phone number paste is detected. |
+| `onPasteDetect` | object | — | (data: PasteDetectedData) => void - Fires when a pasted number is recognised, with what it was understood to be. |
 | `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
 | `countrySearchPlaceholder` | string | `"Search countries..."` | Placeholder text for the country search input. |
 | `countryDropdownAriaLabel` | string | `"Select country"` | Accessible label for the country dropdown. |
@@ -4036,7 +4035,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
 ```tsx
 <InternationalPhoneInput
   enablePasteDetection
-  onPasteDetected={(data) => console.log(data.detectedCountry?.name)}
+  onPasteDetect={(data) => console.log(data.detectedCountry?.name)}
   copyFormat="e164"
 />
 ```
@@ -4658,8 +4657,8 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
-| `onLoadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<MultiSelectOption[]>`. |
-| `loadOnOpen` | Only works when `onLoadOptions` is provided. |
+| `loadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<MultiSelectOption[]>`. |
+| `loadOnOpen` | Only works when `loadOptions` is provided. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `showSelectedChips` | Default `true`. Set `false` to show count-only display. |
@@ -4716,8 +4715,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading/shimmer state. |
-| `onLoadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
-| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
+| `loadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
+| `loadOnOpen` | boolean | `false` | When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
@@ -4739,8 +4738,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
-| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
 | `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
@@ -4837,7 +4836,7 @@ const [values, setValues] = useState<string[]>([]);
 ```tsx
 <MultiSelectDropdown
   loadOnOpen
-  onLoadOptions={() => fetch("/api/options").then(r => r.json())}
+  loadOptions={() => fetch("/api/options").then(r => r.json())}
   placeholder="Click to load..."
 />
 ```
@@ -4933,9 +4932,9 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
-| `onSearch` | Async search function. Replaces local filtering when provided. |
-| `onLoadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
-| `searchDebounceMs` | Only applies to `onSearch`. Default: `300`. |
+| `searchOptions` | Async search function. Replaces local filtering when provided. |
+| `loadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
+| `searchDebounceMs` | Only applies to `searchOptions`. Default: `300`. |
 | `showSearch` | Default `true`. Set `false` to hide search input. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
@@ -4967,7 +4966,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | `[]` | List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | List of selectable options. Mutually exclusive with `searchOptions`: the async branch never reads it. |
 | `value` | array | — | Controlled selected values. |
 | `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
 | `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
@@ -4991,11 +4990,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading state. |
-| `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
+| `searchOptions` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | `[]` | Options to display before any search is performed. Async branch only (`onSearch`). |
-| `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
-| `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
+| `initialOptions` | array | `[]` | Options to display before any search is performed. Async branch only (`searchOptions`). |
+| `loadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
+| `loadInitialOnOpen` | boolean | `false` | When true, calls loadInitialOptions each time the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
@@ -5016,8 +5015,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
-| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
 | `renderTrigger` | object | — | (triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder). |
@@ -5098,7 +5097,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ```tsx
 <MultiSelectSearchableDropdown
-  onSearch={async (query) => {
+  searchOptions={async (query) => {
     const res = await fetch(`/api/search?q=${query}`);
     return res.json();
   }}
@@ -5112,8 +5111,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 ```tsx
 <MultiSelectSearchableDropdown
   loadInitialOnOpen
-  onLoadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
-  onSearch={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
+  loadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
+  searchOptions={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
 />
 ```
 
@@ -5850,9 +5849,9 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
-| `onSearch` | Async search function. Replaces local filtering when provided. |
-| `onLoadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
-| `searchDebounceMs` | Only applies to `onSearch`. Default: `300`. |
+| `searchOptions` | Async search function. Replaces local filtering when provided. |
+| `loadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
+| `searchDebounceMs` | Only applies to `searchOptions`. Default: `300`. |
 | `showSearch` | Default `true`. Set `false` to hide search input. |
 | `clearable` | Only works when a value is selected. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
@@ -5888,7 +5887,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | `[]` | Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it. |
+| `options` | array | `[]` | Array of dropdown options. Mutually exclusive with `searchOptions`: the async branch never reads it. |
 | `value` | string \| null | — | Controlled selected value. |
 | `defaultValue` | string | — | Default uncontrolled selected value. |
 | `onValueChange` | object | — | (value: string \| null, option: SearchableDropdownOption \| null) => void — Callback fired when the selected value changes. |
@@ -5916,11 +5915,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `selectedIcon` | object | — | React.ReactNode — Custom icon for the selected option. |
 | `fullWidth` | boolean | `false` | Whether the dropdown expands to fill its parent container. |
 | `loading` | boolean | — | Whether the dropdown is in a loading state. |
-| `onSearch` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
+| `searchOptions` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | `[]` | Initial options to display before any search is performed. Async branch only (`onSearch`). |
-| `onLoadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
-| `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
+| `initialOptions` | array | `[]` | Initial options to display before any search is performed. Async branch only (`searchOptions`). |
+| `loadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
+| `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void — Callback when async loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items to show while loading. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -5936,8 +5935,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `lockScroll` | boolean | `false` | Whether to lock body scroll when the dropdown is open. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void — Callback fired when the dropdown loses focus. |
-| `onFocus` | object | — | () => void — Callback fired when the dropdown gains focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void — Callback fired on keydown events. |
 | `renderTrigger` | object | — | (triggerProps: SearchableDropdownTriggerRenderProps, state: SearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder). |
 | `ChevronIcon` | object | — | React.ComponentType — Custom chevron icon component. |
@@ -6030,7 +6029,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 
 ```tsx
 <SearchableDropdown
-  onSearch={async (query) => {
+  searchOptions={async (query) => {
     const res = await fetch(`/api/search?q=${query}`);
     return res.json();
   }}
@@ -6044,8 +6043,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 ```tsx
 <SearchableDropdown
   loadInitialOnOpen
-  onLoadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
-  onSearch={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
+  loadInitialOptions={() => fetch("/api/popular").then(r => r.json())}
+  searchOptions={(q) => fetch(`/api/search?q=${q}`).then(r => r.json())}
 />
 ```
 
@@ -6531,7 +6530,7 @@ export default function Example() {
     <Switch
       label="Email notifications"
       checked={enabled}
-      onValueChange={setEnabled}
+      onCheckedChange={setEnabled}
     />
   );
 }
@@ -6543,7 +6542,7 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `checked` + `onValueChange` | Controlled mode. |
+| `checked` + `onCheckedChange` | Controlled mode. |
 | `defaultChecked` | Uncontrolled mode. Cannot combine with `checked`. |
 | `checkedIcon` / `uncheckedIcon` | ReactNode rendered inside the thumb. |
 | `transitionDuration` | Respects `reduceMotion` — set to 0ms when motion reduced. |
@@ -6645,7 +6644,7 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `description` | object | — | React.ReactNode — Description text below the label. |
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
-| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. Reports the new `checked` state, not the `value` prop — the name follows the library-wide change-handler convention. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Fires with the new `checked` state. The `value` prop is form data and is never reported here. |
 | `name` | string | — | Form field name attribute. |
 | `value` | string | `"on"` | Value attribute for the hidden input element. |
 | `required` | boolean | `false` | Whether the field is required. |
@@ -6742,7 +6741,7 @@ export default function Example() {
 | `columns` + `data` | **Required.** TanStack `ColumnDef<TData>[]` and `TData[]`. |
 | `sortable` | Enables column sorting. Combine with `onSortingChange` for controlled. |
 | `manualSorting` | When true, sorting is server-side; table won't sort locally. |
-| `pinnedColumns` | Array of column IDs to pin left. Requires `onPinColumn` for interactive. |
+| `pinnedColumns` | Array of column IDs to pin left. Requires `onPinnedColumnsChange` for interactive. |
 | `expandable` + `renderExpandedRow` | Both needed for row expansion. |
 | `enableRowDragDrop` + `onRowReorder` | Both needed for drag-and-drop row reordering. |
 | `editable` + `onCellEdit` | Both needed for inline cell editing. |
@@ -6777,11 +6776,11 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `loading` | boolean | `false` | Whether the table is in a loading state showing shimmer rows. |
 | `showHeader` | boolean | `true` | Whether to show the table header row. |
 | `pinnedColumns` | array | — | Column IDs to pin to the left side. |
-| `onPinColumn` | object | — | (columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned. |
+| `onPinnedColumnsChange` | object | — | (pinnedColumns: string[]) => void — Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned. |
 | `pinnableColumns` | array | — | Column IDs that are allowed to be pinned. |
 | `maxPinnedColumns` | number | `3` | Maximum number of columns that can be pinned simultaneously. |
-| `onCursorPosition` | object | — | (position: { x: number; y: number } \| null) => void — Callback with cursor position over the table. |
-| `onCursorOverHeader` | object | — | (isOverHeader: boolean) => void — Callback when cursor enters/leaves the header. |
+| `onCursorPositionChange` | object | — | (position: { x: number; y: number } \| null) => void — Fires as the pointer moves over the table, with its position relative to the root; `null` when it leaves. |
+| `onHeaderHoverChange` | object | — | (isOverHeader: boolean) => void — Fires with whether the pointer is over the header row. |
 | `emptyContent` | object | — | React.ReactNode — Content shown when the table has no data. |
 | `ariaLabel` | string | `"Data table"` | Accessible label for the table. |
 | `caption` | string | — | Accessible caption rendered as a visually hidden <caption> element. |
@@ -6791,7 +6790,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onRowHover` | object | — | (rowIndex: number \| null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered. |
 | `floatingActions` | object | — | React.ReactNode — Floating action elements displayed on row hover. |
 | `isFloatingActionsHovered` | boolean | `false` | Whether the floating actions area is being hovered. |
-| `isPopupOpen` | boolean | `false` | Whether a popup triggered from the table is currently open. |
+| `popupOpen` | boolean | `false` | Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still. |
 | `maxWidth` | string \| number | — | Maximum width of the table container. |
 | `maxHeight` | string \| number | — | Maximum height of the table container. |
 | `minHeight` | string \| number | — | Minimum height of the table container. |
@@ -6812,7 +6811,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `manualSorting` | boolean | `false` | When true, sorting is handled server-side. |
 | `selectionMode` | `"single"` \| `"multiple"` \| `"none"` | `"none"` | Row selection mode. |
 | `selectedRowIds` | array | — | Array of selected row IDs (controlled). |
-| `onSelectionChange` | object | — | (selectedIds: string[]) => void — Callback when selection changes. |
+| `onSelectedRowIdsChange` | object | — | (selectedRowIds: string[]) => void — Fires with the new `selectedRowIds` when selection changes. |
 | `selectAllMode` | `"page"` \| `"all"` | `"page"` | Whether select-all selects current page or all rows. |
 | `globalFilter` | string | — | Global filter value for searching across all columns. |
 | `onGlobalFilterChange` | object | — | (value: string) => void — Callback when global filter changes. |
@@ -6824,7 +6823,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `renderColumnFilter` | object | — | (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer. |
 | `expandable` | boolean | `false` | Enable row expansion. |
 | `expandedRowIds` | array | — | Array of expanded row IDs (controlled). |
-| `onExpandedChange` | object | — | (expandedIds: string[]) => void — Callback when expanded rows change. |
+| `onExpandedRowIdsChange` | object | — | (expandedRowIds: string[]) => void — Fires with the new `expandedRowIds` when a row expands or collapses. |
 | `renderExpandedRow` | object | — | (row: TData) => ReactNode — Render function for expanded row content. |
 | `ExpandIcon` | object | — | React.ComponentType — Custom expand icon component. |
 | `expandColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the expand column. |
@@ -6934,13 +6933,15 @@ const [sorting, setSorting] = useState<SortingState>([]);
 #### Row selection
 
 ```tsx
-<Table columns={columns} data={data} selectionMode="multiple" onSelectionChange={(rows) => console.log(rows)} />
+<Table columns={columns} data={data} selectionMode="multiple" onSelectedRowIdsChange={(rows) => console.log(rows)} />
 ```
 
 #### Column pinning
 
 ```tsx
-<Table columns={columns} data={data} pinnedColumns={["name"]} onPinColumn={(id, pinned) => ...} />
+const [pinned, setPinned] = useState<string[]>(["name"]);
+
+<Table columns={columns} data={data} pinnableColumns={["name", "email"]} pinnedColumns={pinned} onPinnedColumnsChange={setPinned} />
 ```
 
 ---
@@ -7281,8 +7282,8 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the textarea. |
-| `onStartIconClick` | object | — | () => void — Makes startIcon a clickable button. |
-| `onEndIconClick` | object | — | () => void — Makes endIcon a clickable button. |
+| `onStartIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void — Makes startIcon a clickable button, called with the native click event. |
+| `onEndIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void — Makes endIcon a clickable button, called with the native click event. |
 | `startIconLabel` | string | — | Accessible label for startIcon when clickable. Required with onStartIconClick. |
 | `endIconLabel` | string | — | Accessible label for endIcon when clickable. Required with onEndIconClick. |
 | `onValueChange` | object | — | (value: string) => void — Fires with the current string value when the value changes. |
@@ -7486,7 +7487,7 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `value` | string \| null | — | Current time value (e.g. '14:30' or '2:30 PM'). |
 | `defaultValue` | string \| null | — | Default time value for uncontrolled usage. |
 | `onValueChange` | object | — | (time: string \| null, timeValue: TimeValue \| null) => void — Called when the selected time changes. |
-| `onBlur` | object | — | () => void — Called when the input loses focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLInputElement>) => void — Fires once focus has left the whole time picker, with the input's native blur event. |
 | `format` | `"12h"` \| `"24h"` | `"24h"` | Time display format. |
 | `minuteStep` | number | `15` | Minute interval for dropdown options and clock snapping. Clamped to 1-60. |
 | `minTime` | string | — | Minimum selectable time (e.g. '09:00'). |
@@ -7710,7 +7711,7 @@ Three things that follow from that, and are the ones missed first:
   provider's props, so a second one gives you two independent stacks that do not
   know about each other's limits.
 - **You never render `<Toast>` yourself.** It is exported for typing; the
-  provider renders it, and its `id` and `onRemove` come from there.
+  provider renders it, gives it its `id`, and removes it once your `onDismiss(id)` has run.
 
 There is no Anatomy section for this, deliberately: the thing nested inside
 `ToastProvider` is your tree, not another Toast part, and a diagram naming one
@@ -7799,14 +7800,13 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | `progressColor` | string | — | Custom color for the progress bar. |
 | `icon` | object | — | React.ReactNode — Custom icon replacing the default type icon. |
 | `showCloseButton` | boolean | `true` | Whether to show a close/dismiss button. |
-| `onDismiss` | object | — | () => void — Fires when the toast is dismissed. |
+| `onDismiss` | object | — | (id: string) => void — Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out. |
 | `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
 | `style` | object | — | Inline styles applied to the toast element. |
 | `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
 | `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
-| `onRemove` **(required)** | object | — | (id: string) => void — Internal callback to remove the toast from the provider. |
 
 ### Sub-component Props
 

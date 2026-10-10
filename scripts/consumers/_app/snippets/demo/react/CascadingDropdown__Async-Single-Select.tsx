@@ -117,7 +117,7 @@ export default function CascadingDropdownExample() {
           options={regionOptionsSingle}
           value={asyncSingleValue}
           onValueChange={(val) => setAsyncSingleValue(val)}
-          onLoadChildren={handleLoadChildren}
+          loadChildren={handleLoadChildren}
           placeholder="Select region and country..."
           loadingText="Loading countries..."
           classes={

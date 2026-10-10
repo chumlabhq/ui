@@ -29,10 +29,10 @@
       },
       "description": "Column IDs to pin to the left side."
     },
-    "onPinColumn": {
+    "onPinnedColumnsChange": {
       "type": "object",
-      "description": "(columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned.",
-      "x-tsType": "((columnId: string, isPinned: boolean) => void) | undefined"
+      "description": "(pinnedColumns: string[]) => void — Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned.",
+      "x-tsType": "((pinnedColumns: string[]) => void) | undefined"
     },
     "pinnableColumns": {
       "type": "array",
@@ -46,14 +46,14 @@
       "description": "Maximum number of columns that can be pinned simultaneously.",
       "default": 3
     },
-    "onCursorPosition": {
+    "onCursorPositionChange": {
       "type": "object",
-      "description": "(position: { x: number; y: number } | null) => void — Callback with cursor position over the table.",
+      "description": "(position: { x: number; y: number } | null) => void — Fires as the pointer moves over the table, with its position relative to the root; `null` when it leaves.",
       "x-tsType": "((position: { x: number; y: number; } | null) => void) | undefined"
     },
-    "onCursorOverHeader": {
+    "onHeaderHoverChange": {
       "type": "object",
-      "description": "(isOverHeader: boolean) => void — Callback when cursor enters/leaves the header.",
+      "description": "(isOverHeader: boolean) => void — Fires with whether the pointer is over the header row.",
       "x-tsType": "((isOverHeader: boolean) => void) | undefined"
     },
     "emptyContent": {
@@ -102,9 +102,9 @@
       "description": "Whether the floating actions area is being hovered.",
       "default": false
     },
-    "isPopupOpen": {
+    "popupOpen": {
       "type": "boolean",
-      "description": "Whether a popup triggered from the table is currently open.",
+      "description": "Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still.",
       "default": false
     },
     "maxWidth": {
@@ -322,10 +322,10 @@
       },
       "description": "Array of selected row IDs (controlled)."
     },
-    "onSelectionChange": {
+    "onSelectedRowIdsChange": {
       "type": "object",
-      "description": "(selectedIds: string[]) => void — Callback when selection changes.",
-      "x-tsType": "((selectedIds: string[]) => void) | undefined"
+      "description": "(selectedRowIds: string[]) => void — Fires with the new `selectedRowIds` when selection changes.",
+      "x-tsType": "((selectedRowIds: string[]) => void) | undefined"
     },
     "selectAllMode": {
       "type": "string",
@@ -386,10 +386,10 @@
       },
       "description": "Array of expanded row IDs (controlled)."
     },
-    "onExpandedChange": {
+    "onExpandedRowIdsChange": {
       "type": "object",
-      "description": "(expandedIds: string[]) => void — Callback when expanded rows change.",
-      "x-tsType": "((expandedIds: string[]) => void) | undefined"
+      "description": "(expandedRowIds: string[]) => void — Fires with the new `expandedRowIds` when a row expands or collapses.",
+      "x-tsType": "((expandedRowIds: string[]) => void) | undefined"
     },
     "renderExpandedRow": {
       "type": "object",

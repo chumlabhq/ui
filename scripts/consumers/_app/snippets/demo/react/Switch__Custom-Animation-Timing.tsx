@@ -9,7 +9,7 @@ export default function SwitchExample() {
       <Switch
         label="Slow transition (500ms)"
         checked={animationSwitch}
-        onValueChange={setAnimationSwitch}
+        onCheckedChange={setAnimationSwitch}
         transitionDuration={500}
         transitionTimingFunction="ease-in-out"
         classes={
@@ -24,7 +24,7 @@ export default function SwitchExample() {
       <Switch
         label="Bouncy transition"
         checked={animationSwitchBouncy}
-        onValueChange={setAnimationSwitchBouncy}
+        onCheckedChange={setAnimationSwitchBouncy}
         transitionDuration={300}
         transitionTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
         classes={

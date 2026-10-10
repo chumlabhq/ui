@@ -63,7 +63,7 @@ export default function SwitchExample() {
       <Switch
         label="Feature enabled"
         checked={iconSwitch}
-        onValueChange={setIconSwitch}
+        onCheckedChange={setIconSwitch}
         checkedIcon={<CheckIcon />}
         uncheckedIcon={<CrossIcon />}
         classes={
@@ -79,7 +79,7 @@ export default function SwitchExample() {
         label="Theme"
         description={themeSwitch ? "Dark mode enabled" : "Light mode enabled"}
         checked={themeSwitch}
-        onValueChange={setThemeSwitch}
+        onCheckedChange={setThemeSwitch}
         checkedIcon={<MoonIcon />}
         uncheckedIcon={<SunIcon />}
         classes={

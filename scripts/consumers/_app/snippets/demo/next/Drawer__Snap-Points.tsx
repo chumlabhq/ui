@@ -39,7 +39,7 @@ export default function DrawerExample() {
         direction="bottom"
         size="85vh"
         snapPoints={[0.3, 0.6, 1]}
-        activeSnapPointIndex={snapIndex}
+        snapPointIndex={snapIndex}
         onSnapPointIndexChange={setSnapIndex}
         defaultSnapPointIndex={1}
       >

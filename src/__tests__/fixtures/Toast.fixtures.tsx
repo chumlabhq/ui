@@ -3,13 +3,13 @@ import { Dismissable } from "./_harness.js";
 import type { Fixtures } from "./types.js";
 
 const fixtures: Fixtures<typeof Toast> = [
-  { name: "default", props: { id: "t1", onRemove: () => {}, message: "Saved" } },
-  { name: "with-description", props: { id: "t2", onRemove: () => {}, message: "Saved", description: "Your changes are live." } },
+  { name: "default", props: { id: "t1", onDismiss: () => {}, message: "Saved" } },
+  { name: "with-description", props: { id: "t2", onDismiss: () => {}, message: "Saved", description: "Your changes are live." } },
   {
     name: "with-content",
     props: {
       id: "t3",
-      onRemove: () => {},
+      onDismiss: () => {},
       message: "Saved",
       // Not a control. A bare `<button>` here fell back to the browser's focus
       // ring — `rgb(0, 95, 204)` in Chrome — which measures 1.75:1 on the
@@ -24,34 +24,34 @@ const fixtures: Fixtures<typeof Toast> = [
     },
     note: "There is no `action` prop; extra nodes go through `content`.",
   },
-  { name: "success", props: { id: "t4", onRemove: () => {}, message: "Saved", type: "success", showProgress: true }, note: "The prop is `type`, not `variant`." },
+  { name: "success", props: { id: "t4", onDismiss: () => {}, message: "Saved", type: "success", showProgress: true }, note: "The prop is `type`, not `variant`." },
   {
     name: "dismissable",
-    props: { id: "t5", onRemove: () => {} },
-    note: "Toast never unmounts itself; `onRemove` is the host's job, so a fixture that can be closed needs an owner.",
+    props: { id: "t5", onDismiss: () => {} },
+    note: "Toast never unmounts itself; `onDismiss` is where the host removes it, so a fixture that can be closed needs an owner.",
     render: () => (
       <Dismissable>
-        {(onRemove) => (
-          <Toast id="fixture-toast" message="Saved" duration={Infinity} onRemove={onRemove} />
+        {(onDismiss) => (
+          <Toast id="fixture-toast" message="Saved" duration={Infinity} onDismiss={onDismiss} />
         )}
       </Dismissable>
     ),
   },
   {
     name: "escape-dismissable",
-    props: { id: "t7", onRemove: () => {}, message: "Saved", duration: Infinity, closeOnEscape: true },
+    props: { id: "t7", onDismiss: () => {}, message: "Saved", duration: Infinity, closeOnEscape: true },
     note: "`ToastProvider` sets this on its newest toast. Escape runs the close button's path, so the owner removes it.",
     render: () => (
       <Dismissable>
-        {(onRemove) => (
-          <Toast id="fixture-toast-escape" message="Saved" duration={Infinity} closeOnEscape onRemove={onRemove} />
+        {(onDismiss) => (
+          <Toast id="fixture-toast-escape" message="Saved" duration={Infinity} closeOnEscape onDismiss={onDismiss} />
         )}
       </Dismissable>
     ),
   },
   {
     name: "no-close-button",
-    props: { id: "t6", onRemove: () => {}, message: "Saved", showCloseButton: false },
+    props: { id: "t6", onDismiss: () => {}, message: "Saved", showCloseButton: false },
     note: "Removes the only interactive element in the toast.",
   },
 ];

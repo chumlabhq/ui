@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useMemo, useEffect } from "react";
+import { forwardRef, useState, useCallback, useMemo, useEffect, type SyntheticEvent } from "react";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import type {
   AvatarProps,
@@ -149,14 +149,14 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       [autoColor, name, colors],
     );
 
-    const handleImageError = useCallback(() => {
+    const handleImageError = useCallback((event: SyntheticEvent<HTMLImageElement>) => {
       setImageError(true);
-      onError?.();
+      onError?.(event);
     }, [onError]);
 
-    const handleImageLoad = useCallback(() => {
+    const handleImageLoad = useCallback((event: SyntheticEvent<HTMLImageElement>) => {
       setImageLoaded(true);
-      onLoad?.();
+      onLoad?.(event);
     }, [onLoad]);
 
     const imgRef = useCallback((node: HTMLImageElement | null) => {

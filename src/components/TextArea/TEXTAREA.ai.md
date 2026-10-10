@@ -87,8 +87,8 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Sets the control's padding and type size together: a 28, 40 and 52px field, 30/42/54 with its border. Also emits data-size on the root for CSS to target; the attribute is a hook beside the sizing, not the sizing itself. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the textarea. |
-| `onStartIconClick` | object | — | () => void — Makes startIcon a clickable button. |
-| `onEndIconClick` | object | — | () => void — Makes endIcon a clickable button. |
+| `onStartIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void — Makes startIcon a clickable button, called with the native click event. |
+| `onEndIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void — Makes endIcon a clickable button, called with the native click event. |
 | `startIconLabel` | string | — | Accessible label for startIcon when clickable. Required with onStartIconClick. |
 | `endIconLabel` | string | — | Accessible label for endIcon when clickable. Required with onEndIconClick. |
 | `onValueChange` | object | — | (value: string) => void — Fires with the current string value when the value changes. |

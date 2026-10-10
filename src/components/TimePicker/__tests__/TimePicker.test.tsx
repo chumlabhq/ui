@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, act as rtlAct } from "@testing-library/react";
+import { render, screen, waitFor, act as rtlAct } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TimePicker } from "../index.js";
 import { ClockFace } from "../ClockFace.js";
@@ -2234,12 +2234,22 @@ describe("TimePicker (additional coverage)", () => {
   });
 
   describe("onBlur prop", () => {
-    it("accepts onBlur prop without error", () => {
-      // onBlur fires inside double-requestAnimationFrame which JSDOM doesn't run
-      // synchronously; verify the component at least mounts with onBlur provided.
+    it("fires once focus leaves the picker, with the input's native blur event", async () => {
+      // onBlur fires two animation frames after the input's blur, so the
+      // assertion waits for it rather than expecting it synchronously.
+      const user = userEvent.setup();
       const onBlur = vi.fn();
-      render(<TimePicker format="24h" onBlur={onBlur} />);
-      expect(screen.getByRole("combobox")).toBeInTheDocument();
+      render(
+        <>
+          <TimePicker format="24h" onBlur={onBlur} />
+          <button>Outside</button>
+        </>,
+      );
+      const input = screen.getByRole("combobox");
+      input.focus();
+      await user.click(screen.getByRole("button", { name: "Outside" }));
+      await waitFor(() => expect(onBlur).toHaveBeenCalledTimes(1));
+      expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur", target: input }));
     });
   });
 

@@ -57,8 +57,8 @@ export default function Example() {
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
 | `clearable` | Only works when a value is selected. Adds a clear button and allows deselect via click. |
-| `onLoadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<DropdownOption[]>`. |
-| `loadOnOpen` | Only works when `onLoadOptions` is provided. |
+| `loadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<DropdownOption[]>`. |
+| `loadOnOpen` | Only works when `loadOptions` is provided. |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOption`, `placeholder`), which never reaches the DOM. |
@@ -122,8 +122,8 @@ export default function Example() {
 | `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected option indicator. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading/shimmer state. |
-| `onLoadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
-| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
+| `loadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
+| `loadOnOpen` | boolean | `false` | When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -139,8 +139,8 @@ export default function Example() {
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
-| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
-| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
+| `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `renderTrigger` | object | — | (triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder). |
 | `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
@@ -280,7 +280,7 @@ const [value, setValue] = useState<string | null>(null);
 ```tsx
 <Dropdown
   loadOnOpen
-  onLoadOptions={async () => {
+  loadOptions={async () => {
     const res = await fetch("/api/options");
     return res.json();
   }}
@@ -360,7 +360,7 @@ const [value, setValue] = useState<string | null>(null);
 | Dropdown clipped by parent overflow | Not using portal | Default behavior uses portal — ensure `portalContainer` is not set to a clipped container |
 | Styles look wrong after setting one class | `classes` replaces per slot, not merges | Provide full class string for each slot you override |
 | Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownPosition={true}` to lock direction |
-| Options don't load on open | Missing `loadOnOpen` prop | Add `loadOnOpen` alongside `onLoadOptions` |
+| Options don't load on open | Missing `loadOnOpen` prop | Add `loadOnOpen` alongside `loadOptions` |
 | Controlled value doesn't update | Missing `onValueChange` | Always pair `value` with `onValueChange` |
 | Clear button not visible | `clearable` not set | Add `clearable` prop |
 | Form doesn't submit value | Missing `name` prop | Add `name` to render hidden input |
@@ -382,7 +382,7 @@ const [value, setValue] = useState<string | null>(null);
 | Clearable | `title="Clearable"` | clearable prop demo |
 | Custom trigger | `title="Custom Trigger (renderTrigger)"` | renderTrigger usage |
 | Rich content | `title="With Custom Content"` | option.content with JSX |
-| Async loading | `title="Async Data Fetching with Shimmer"` | loadOnOpen + onLoadOptions |
+| Async loading | `title="Async Data Fetching with Shimmer"` | loadOnOpen + loadOptions |
 | Custom themes | `title="Custom Theme Examples"` | Multiple themed styles |
 | Force position | `forceDropdownPosition` | Forced top/bottom |
 | Lock scroll | `lockScroll` | Scroll lock + force position |

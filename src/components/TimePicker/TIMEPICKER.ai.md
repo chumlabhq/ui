@@ -75,7 +75,7 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `value` | string \| null | — | Current time value (e.g. '14:30' or '2:30 PM'). |
 | `defaultValue` | string \| null | — | Default time value for uncontrolled usage. |
 | `onValueChange` | object | — | (time: string \| null, timeValue: TimeValue \| null) => void — Called when the selected time changes. |
-| `onBlur` | object | — | () => void — Called when the input loses focus. |
+| `onBlur` | object | — | (event: FocusEvent<HTMLInputElement>) => void — Fires once focus has left the whole time picker, with the input's native blur event. |
 | `format` | `"12h"` \| `"24h"` | `"24h"` | Time display format. |
 | `minuteStep` | number | `15` | Minute interval for dropdown options and clock snapping. Clamped to 1-60. |
 | `minTime` | string | — | Minimum selectable time (e.g. '09:00'). |

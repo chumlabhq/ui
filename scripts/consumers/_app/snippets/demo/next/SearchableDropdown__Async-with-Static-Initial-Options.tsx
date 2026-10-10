@@ -183,7 +183,7 @@ export default function SearchableDropdownExample() {
         value={asyncStaticInitialValue}
         onValueChange={(v) => setAsyncStaticInitialValue(v)}
         placeholder="Select or search countries..."
-        onSearch={handleAsyncSearch}
+        searchOptions={handleAsyncSearch}
         initialOptions={countryOptions}
         searchDebounceMs={300}
         noResultsContent="No countries found"

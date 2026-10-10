@@ -686,7 +686,7 @@ const DropdownDemo = () => {
       {/* ─── Async Data Fetching with Shimmer ────────────────────────────── */}
       <Section
         title="Async Data Fetching with Shimmer"
-        description="Use onLoadOptions and loadOnOpen to fetch options asynchronously. A shimmer skeleton displays while loading."
+        description="Use loadOptions and loadOnOpen to fetch options asynchronously. A shimmer skeleton displays while loading."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -695,7 +695,7 @@ const DropdownDemo = () => {
               value={asyncCountryValue}
               onValueChange={(v) => setAsyncCountryValue(v)}
               placeholder="Select a country..."
-              onLoadOptions={handleLoadCountries}
+              loadOptions={handleLoadCountries}
               loadOnOpen
               shimmerCount={5}
               onLoadError={(err) => setAsyncLoadError(err instanceof Error ? err.message : String(err))}
@@ -1604,8 +1604,8 @@ const DropdownDemo = () => {
               value={formIntegrationValue}
               onValueChange={(v) => setFormIntegrationValue(v)}
               placeholder="Focus or blur me..."
-              onFocus={() => setFocusMessage("Dropdown focused")}
-              onBlur={() => setFocusMessage("Dropdown blurred")}
+              onFocus={(event) => setFocusMessage(`Dropdown focused: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
+              onBlur={(event) => setFocusMessage(`Dropdown blurred: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
               classes={c.dropdown}
             />
           </div>

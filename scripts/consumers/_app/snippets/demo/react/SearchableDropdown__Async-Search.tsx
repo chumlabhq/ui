@@ -108,7 +108,7 @@ export default function SearchableDropdownExample() {
         value={asyncCountryValue}
         onValueChange={(v) => setAsyncCountryValue(v)}
         placeholder="Search countries..."
-        onSearch={handleAsyncSearch}
+        searchOptions={handleAsyncSearch}
         searchDebounceMs={300}
         noResultsContent="No countries found"
         classes={

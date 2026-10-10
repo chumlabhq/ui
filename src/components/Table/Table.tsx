@@ -159,11 +159,11 @@ function TableInner<TData>(
     loading = false,
     showHeader = true,
     pinnedColumns = [],
-    onPinColumn,
+    onPinnedColumnsChange,
     pinnableColumns,
     maxPinnedColumns = 3,
-    onCursorPosition,
-    onCursorOverHeader,
+    onCursorPositionChange,
+    onHeaderHoverChange,
     emptyContent,
     ariaLabel = "Data table",
     caption,
@@ -173,7 +173,7 @@ function TableInner<TData>(
     onRowHover,
     floatingActions,
     isFloatingActionsHovered = false,
-    isPopupOpen = false,
+    popupOpen = false,
     maxWidth,
     maxHeight,
     minHeight,
@@ -196,7 +196,7 @@ function TableInner<TData>(
 
     selectionMode = "none",
     selectedRowIds: selectedRowIdsProp,
-    onSelectionChange,
+    onSelectedRowIdsChange,
     selectAllMode = "page",
 
     globalFilter: globalFilterProp,
@@ -211,7 +211,7 @@ function TableInner<TData>(
 
     expandable = false,
     expandedRowIds: expandedRowIdsProp,
-    onExpandedChange,
+    onExpandedRowIdsChange,
     renderExpandedRow,
     ExpandIcon: CustomExpandIcon,
     expandColumnPosition = "left",
@@ -748,8 +748,8 @@ function TableInner<TData>(
             const newExpanded =
               typeof updater === "function" ? updater(expanded) : updater;
             setInternalExpanded(newExpanded);
-            if (onExpandedChange && typeof newExpanded === "object") {
-              onExpandedChange(
+            if (onExpandedRowIdsChange && typeof newExpanded === "object") {
+              onExpandedRowIdsChange(
                 Object.keys(newExpanded).filter(
                   (k) => (newExpanded as Record<string, boolean>)[k],
                 ),
@@ -775,7 +775,7 @@ function TableInner<TData>(
             const newSelection =
               typeof updater === "function" ? updater(rowSelection) : updater;
             setInternalRowSelection(newSelection);
-            onSelectionChange?.(
+            onSelectedRowIdsChange?.(
               Object.keys(newSelection).filter((k) => newSelection[k]),
             );
           },
@@ -950,12 +950,12 @@ function TableInner<TData>(
       rowIndex: number | null,
       rowRef?: React.RefObject<HTMLTableRowElement>,
     ) => {
-      if ((isFloatingActionsHovered || isPopupOpen) && rowIndex === null) {
+      if ((isFloatingActionsHovered || popupOpen) && rowIndex === null) {
         return;
       }
       onRowHover?.(rowIndex, rowRef);
     },
-    [onRowHover, isFloatingActionsHovered, isPopupOpen],
+    [onRowHover, isFloatingActionsHovered, popupOpen],
   );
 
   const handleRowClick = useCallback(
@@ -1062,9 +1062,11 @@ function TableInner<TData>(
       if (!isPinned && !canPinMore) {
         return;
       }
-      onPinColumn?.(columnId, !isPinned);
+      onPinnedColumnsChange?.(
+        isPinned ? pinnedColumns.filter((id) => id !== columnId) : [...pinnedColumns, columnId],
+      );
     },
-    [onPinColumn, canPinMore],
+    [onPinnedColumnsChange, canPinMore, pinnedColumns],
   );
 
   const startEdit = useCallback(
@@ -1211,7 +1213,7 @@ function TableInner<TData>(
       const isPinned = pinnedColumnIds.has(columnId);
       const isColumnPinnable =
         pinnableColumnIds.size === 0 || pinnableColumnIds.has(columnId);
-      const canShowPinButton = onPinColumn && isColumnPinnable;
+      const canShowPinButton = onPinnedColumnsChange && isColumnPinnable;
       const isDisabled = !isPinned && !canPinMore;
 
       const isSortableColumn = sortable && header.column.getCanSort();
@@ -1406,7 +1408,7 @@ function TableInner<TData>(
       headerCellContentClassName,
       pinnedColumnIds,
       pinnableColumnIds,
-      onPinColumn,
+      onPinnedColumnsChange,
       handlePinClick,
       pinIconClassName,
       pinButtonClassName,
@@ -1861,7 +1863,7 @@ function TableInner<TData>(
 
   const handleMouseMove = useCallback(
     (event: React.MouseEvent) => {
-      if (isFloatingActionsHovered || isPopupOpen) {
+      if (isFloatingActionsHovered || popupOpen) {
         return;
       }
 
@@ -1872,30 +1874,30 @@ function TableInner<TData>(
       const y = (event as unknown as { clientY: number }).clientY - rect.top;
 
       const isOverHeader = shouldShowHeader && y < 60;
-      onCursorOverHeader?.(isOverHeader);
-      onCursorPosition?.({ x, y });
+      onHeaderHoverChange?.(isOverHeader);
+      onCursorPositionChange?.({ x, y });
     },
     [
-      onCursorPosition,
+      onCursorPositionChange,
       isFloatingActionsHovered,
-      isPopupOpen,
+      popupOpen,
       shouldShowHeader,
-      onCursorOverHeader,
+      onHeaderHoverChange,
     ],
   );
 
   const handleMouseLeave = useCallback(() => {
     onRowHover?.(null);
-    if (!isFloatingActionsHovered && !isPopupOpen) {
-      onCursorPosition?.(null);
-      onCursorOverHeader?.(false);
+    if (!isFloatingActionsHovered && !popupOpen) {
+      onCursorPositionChange?.(null);
+      onHeaderHoverChange?.(false);
     }
   }, [
     onRowHover,
     isFloatingActionsHovered,
-    isPopupOpen,
-    onCursorPosition,
-    onCursorOverHeader,
+    popupOpen,
+    onCursorPositionChange,
+    onHeaderHoverChange,
   ]);
 
   if (loading) {
@@ -2236,8 +2238,8 @@ function TableInner<TData>(
               : undefined
         }
         data-testid="table-container"
-        onMouseMove={onCursorPosition ? handleMouseMove : undefined}
-        onMouseLeave={onCursorPosition ? handleMouseLeave : undefined}
+        onMouseMove={onCursorPositionChange ? handleMouseMove : undefined}
+        onMouseLeave={onCursorPositionChange ? handleMouseLeave : undefined}
       >
         {hasPinnedColumns &&
           renderTable(

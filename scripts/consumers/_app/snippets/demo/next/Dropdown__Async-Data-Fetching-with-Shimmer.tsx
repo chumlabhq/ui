@@ -111,7 +111,7 @@ export default function DropdownExample() {
         value={asyncCountryValue}
         onValueChange={(v) => setAsyncCountryValue(v)}
         placeholder="Select a country..."
-        onLoadOptions={handleLoadCountries}
+        loadOptions={handleLoadCountries}
         loadOnOpen
         shimmerCount={5}
         onLoadError={(err) => setAsyncLoadError(err instanceof Error ? err.message : String(err))}
