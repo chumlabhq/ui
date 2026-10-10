@@ -2,7 +2,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@c
 
 export default function AccordionExample() {
   return (
-    <Accordion type="single" collapsible defaultValue="ac-1">
+    <Accordion selectionMode="single" collapsible defaultValue="ac-1">
       <AccordionItem value="ac-1">
         <AccordionTrigger asChild>
           <button

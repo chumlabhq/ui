@@ -285,7 +285,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "Custom progress color",
                 description: "Using progressColor prop (inline style)",
                 progressColor: "#a855f7",
@@ -298,7 +298,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "Gradient progress",
                 description: "Using classes.progress prop",
                 classes: {
@@ -314,7 +314,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "success",
+                variant: "success",
                 message: "Themed progress",
                 description: "Green progress bar",
                 progressColor: "#22c55e",
@@ -438,7 +438,7 @@ const ToastDemoContent = ({
             className={c.btnInfo}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "Custom icon",
                 description: "Using emoji as icon",
                 icon: <span className="text-xl">🚀</span>,
@@ -471,7 +471,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "SVG Icon",
                 description: "Custom SVG icon",
                 icon: (
@@ -501,7 +501,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "Styled icon",
                 description: "Icon with custom background",
                 icon: <span className="text-lg">✨</span>,
@@ -515,7 +515,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "success",
+                variant: "success",
                 message: "Large icon",
                 description: "Icon with larger size",
                 classes: { icon: "text-2xl" },
@@ -539,7 +539,7 @@ const ToastDemoContent = ({
                 className={c.btnInfo}
                 onClick={() => {
                   updateToastId.current = toast.toast({
-                    type: "info",
+                    variant: "info",
                     content: (
                       <div className="flex flex-col gap-2">
                         <p className="font-bold text-base">
@@ -579,7 +579,7 @@ const ToastDemoContent = ({
                 className={c.btnSuccess}
                 onClick={() =>
                   toast.toast({
-                    type: "success",
+                    variant: "success",
                     content: (
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-cl-text/20 flex items-center justify-center">
@@ -603,7 +603,7 @@ const ToastDemoContent = ({
                 className={c.btn}
                 onClick={() =>
                   toast.toast({
-                    type: "info",
+                    variant: "info",
                     content: (
                       <div>
                         <p className="font-medium">Download Progress</p>
@@ -643,7 +643,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "Light themed toast",
                 description: "Using classes.container to override styles",
                 classes: {
@@ -665,7 +665,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "success",
+                variant: "success",
                 message: "Custom border radius",
                 description: "Rounded-full style",
                 classes: {
@@ -680,7 +680,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "Custom message style",
                 description: "Description with custom styling",
                 classes: {
@@ -696,7 +696,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "success",
+                variant: "success",
                 message: "Custom content wrapper",
                 description: "Using classes.content for padding",
                 classes: {
@@ -720,7 +720,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
+                variant: "info",
                 message: "Custom shadow",
                 description: "Using style prop for box-shadow",
                 style: {
@@ -735,7 +735,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "success",
+                variant: "success",
                 message: "Custom width",
                 description: "This toast has a wider minimum width",
                 style: {
@@ -750,7 +750,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "warning",
+                variant: "warning",
                 message: "Gradient background",
                 description: "Using style for gradient",
                 style: {
@@ -992,7 +992,7 @@ const ToastDemoContent = ({
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "success",
+                variant: "success",
                 message: "Full config",
                 description: "Using toast() with object config",
                 duration: 4000,

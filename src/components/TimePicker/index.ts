@@ -6,7 +6,7 @@ export type {
   ClockFaceProps,
   TimeFormat,
   TimeValue,
-  TimePickerVariant,
+  TimePickerMode,
   TimePickerIconProps,
   ClockSelectionMode,
   UseTimePickerProps,

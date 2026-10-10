@@ -91,13 +91,13 @@ const TimeOption = memo(function TimeOption({
  * Component: TimePicker
  *
  * Purpose:
- * A time input with dropdown list or analog clock variant. Supports 12/24-hour formats,
+ * A time input with a dropdown list or an analog clock face. Supports 12/24-hour formats,
  * min/max constraints, smart parsing, clearable, portal-based positioning, and full keyboard navigation.
  *
  * AI Usage Guidelines:
  * - Use `<TimePicker />` for any time selection need
  * - Minimum: `value` + `onValueChange` for controlled, or no props for uncontrolled
- * - Use `variant="clock"` for analog clock face; default is dropdown list
+ * - Use `mode="clock"` for an analog clock face; default is the dropdown list
  * - Use `forceDropdownPosition` to lock dropdown direction without auto-flipping
  *
  * Behavior:
@@ -138,7 +138,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       selectedIcon,
       renderOptionContent,
       fullWidth = false,
-      variant = "dropdown",
+      mode = "dropdown",
       clearable = true,
       onClear,
       open: openProp,
@@ -206,9 +206,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       periodButton: mergeSlot(baseClasses.periodButton, classesProp?.periodButton),
     }), [classesProp, baseClasses]);
 
-    // Fetched at mount when the clock variant is asked for, and null until it
+    // Fetched at mount when the clock mode is asked for, and null until it
     // resolves — see `useClockFace`.
-    const ClockFace = useClockFace(variant === "clock");
+    const ClockFace = useClockFace(mode === "clock");
 
     const clockClasses = useMemo<Required<ClockFaceClasses>>(() => ({
       clockContent: mergedClasses.clockContent,
@@ -509,9 +509,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       { side: dropdownPosition, gap: dropdownGap, forceSide: forceDropdownPosition },
     );
 
-    const shouldRenderDropdown = variant === "dropdown"
+    const shouldRenderDropdown = mode === "dropdown"
       ? (isOpen || keepMounted)
-      : isOpen; // Clock variant always remounts to reset selectionMode
+      : isOpen; // Clock mode always remounts to reset selectionMode
 
     const dropdownPortal = shouldRenderDropdown ? (
       <MenuSurface
@@ -523,11 +523,11 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         gap={dropdownGap}
         zIndex={dropdownZIndex}
         portalContainer={portalContainer}
-        // The clock variant remounts on every open to reset its selection mode,
-        // so `keepMounted` is the dropdown variant's alone.
-        keepMounted={variant === "dropdown" ? keepMounted : false}
-        matchTriggerWidth={variant === "dropdown"}
-        {...(variant === "dropdown"
+        // Clock mode remounts on every open to reset its selection mode,
+        // so `keepMounted` is the dropdown mode's alone.
+        keepMounted={mode === "dropdown" ? keepMounted : false}
+        matchTriggerWidth={mode === "dropdown"}
+        {...(mode === "dropdown"
           ? {
               className: mergedClasses.content,
               "data-position": dropdownCoords?.side ?? dropdownPosition,
@@ -539,7 +539,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
               "aria-label": typeof label === "string" ? label : "Select time",
             })}
       >
-        {variant === "dropdown" ? (
+        {mode === "dropdown" ? (
           <>
             {/* Beside the listbox, not inside it: a listbox owns options, and
                 "no matching times" is a status message. It had no role at all,
@@ -646,23 +646,23 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
               type="text"
               role="combobox"
               aria-expanded={isOpen}
-              aria-haspopup={variant === "dropdown" ? "listbox" : "dialog"}
+              aria-haspopup={mode === "dropdown" ? "listbox" : "dialog"}
               aria-controls={
                 isOpen
-                  ? variant === "dropdown"
+                  ? mode === "dropdown"
                     ? listboxId
                     : clockPopupId
                   : undefined
               }
               aria-activedescendant={
-                variant === "dropdown" &&
+                mode === "dropdown" &&
                 isOpen &&
                 focusedIndex >= 0 &&
                 displayOptions[focusedIndex]
                   ? `${dropdownId}-option-${focusedIndex}`
                   : undefined
               }
-              aria-autocomplete={variant === "dropdown" ? "list" : "none"}
+              aria-autocomplete={mode === "dropdown" ? "list" : "none"}
               aria-label={!label ? restProps["aria-label"] : undefined}
               aria-invalid={error || undefined}
               aria-describedby={describedBy}

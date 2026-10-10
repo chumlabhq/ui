@@ -90,11 +90,11 @@
     "iconPosition": {
       "type": "string",
       "enum": [
-        "left",
-        "right"
+        "start",
+        "end"
       ],
-      "description": "Position of tab icons relative to the label.",
-      "default": "left"
+      "description": "Which end of the tab label its icon sits at: `start` before the text, `end` after it.",
+      "default": "start"
     },
     "showZeroCount": {
       "type": "boolean",

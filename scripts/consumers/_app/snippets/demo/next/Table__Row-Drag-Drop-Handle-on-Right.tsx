@@ -202,8 +202,8 @@ export default function TableExample() {
               <Table
                 columns={columns}
                 data={data}
-                enableRowDragDrop
-                dragColumnPosition="right"
+                reorderable
+                dragColumnPosition="end"
                 onRowReorder={(from, to) => {
                   setData((prev) => {
                     const u = [...prev];

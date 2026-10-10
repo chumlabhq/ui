@@ -73,10 +73,10 @@
       "description": "Delay in milliseconds before hiding the tooltip.",
       "default": 100
     },
-    "disableHoverableContent": {
+    "hoverableContent": {
       "type": "boolean",
-      "description": "When true, the tooltip content is not hoverable (closes on mouse leave of trigger).",
-      "default": false
+      "description": "Keeps the tooltip open while the pointer moves onto it (WCAG 1.4.13). `false` closes it as soon as the pointer leaves the trigger.",
+      "default": true
     },
     "open": {
       "type": "boolean",

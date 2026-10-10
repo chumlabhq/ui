@@ -97,7 +97,7 @@
       "description": "React.ReactNode — Floating action elements displayed on row hover.",
       "x-tsType": "ReactNode"
     },
-    "isFloatingActionsHovered": {
+    "floatingActionsHovered": {
       "type": "boolean",
       "description": "Whether the floating actions area is being hovered.",
       "default": false
@@ -354,7 +354,7 @@
       "description": "(filters: ColumnFiltersState) => void — Callback when column filters change.",
       "x-tsType": "((filters: ColumnFiltersState) => void) | undefined"
     },
-    "enableColumnFilters": {
+    "filterable": {
       "type": "boolean",
       "description": "Enable per-column filtering.",
       "default": false
@@ -404,11 +404,11 @@
     "expandColumnPosition": {
       "type": "string",
       "enum": [
-        "left",
-        "right"
+        "start",
+        "end"
       ],
-      "description": "Position of the expand column.",
-      "default": "left"
+      "description": "Which end of the row the expand column sits at. `start` is the first column.",
+      "default": "start"
     },
     "expandOnRowClick": {
       "type": "boolean",
@@ -434,15 +434,15 @@
       "type": "string",
       "description": "Custom CSS class for striped rows."
     },
-    "density": {
+    "size": {
       "type": "string",
       "enum": [
-        "compact",
-        "comfortable",
-        "spacious"
+        "sm",
+        "md",
+        "lg"
       ],
-      "description": "Controls cell padding density.",
-      "default": "comfortable"
+      "description": "Cell padding and text size.",
+      "default": "md"
     },
     "pinnedRightColumns": {
       "type": "array",
@@ -468,7 +468,7 @@
       "description": "(rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited.",
       "x-tsType": "((rowId: string, columnId: string, value: unknown) => void) | undefined"
     },
-    "enableColumnResizing": {
+    "resizable": {
       "type": "boolean",
       "description": "Enable column resizing via drag handles.",
       "default": false
@@ -505,7 +505,7 @@
       "description": "(order: string[]) => void — Callback when column order changes.",
       "x-tsType": "((order: string[]) => void) | undefined"
     },
-    "enableRowDragDrop": {
+    "reorderable": {
       "type": "boolean",
       "description": "Enable row drag-and-drop reordering.",
       "default": false
@@ -518,11 +518,11 @@
     "dragColumnPosition": {
       "type": "string",
       "enum": [
-        "left",
-        "right"
+        "start",
+        "end"
       ],
-      "description": "Position of the drag handle column.",
-      "default": "left"
+      "description": "Which end of the row the drag handle column sits at.",
+      "default": "start"
     },
     "showFooter": {
       "type": "boolean",
@@ -539,7 +539,7 @@
       "description": "(event: React.MouseEvent, row: TData) => void — Callback on right-click of a row.",
       "x-tsType": "((event: MouseEvent<Element, MouseEvent>, row: TData) => void) | undefined"
     },
-    "enableCopyOnClick": {
+    "copyOnClick": {
       "type": "boolean",
       "description": "Enable single-click cell copy to clipboard.",
       "default": false
@@ -549,7 +549,7 @@
       "description": "(value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied.",
       "x-tsType": "((value: string, rowId: string, columnId: string) => void) | undefined"
     },
-    "enableInfiniteScroll": {
+    "infiniteScroll": {
       "type": "boolean",
       "description": "Enable infinite scroll loading.",
       "default": false
@@ -608,12 +608,12 @@
     "searchIconPosition": {
       "type": "string",
       "enum": [
-        "left",
-        "right",
+        "start",
+        "end",
         "none"
       ],
-      "description": "Position of the search icon.",
-      "default": "left"
+      "description": "Which end of the search field the icon sits at, or `none`.",
+      "default": "start"
     },
     "CheckboxIcon": {
       "type": "object",

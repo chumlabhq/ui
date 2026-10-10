@@ -83,9 +83,9 @@ const TabButton = memo(function TabButton({
       data-disabled={isDisabled || undefined}
       data-orientation={ctx.orientation}
     >
-      {ctx.iconPosition === "left" && iconElement}
+      {ctx.iconPosition === "start" && iconElement}
       {labelElement}
-      {ctx.iconPosition === "right" && iconElement}
+      {ctx.iconPosition === "end" && iconElement}
       {countElement}
       {isActive && classNames.indicator && (
         <span className={classNames.indicator} aria-hidden="true" />

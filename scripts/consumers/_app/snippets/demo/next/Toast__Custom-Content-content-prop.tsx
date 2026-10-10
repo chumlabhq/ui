@@ -15,7 +15,7 @@ function ToastTrigger() {
           onClick={
             () => {
               updateToastId.current = toast.toast({
-                type: "info",
+                variant: "info",
                 content: (
                   <div className="flex flex-col gap-2">
                     <p className="font-bold text-base">
@@ -57,7 +57,7 @@ function ToastTrigger() {
           onClick={
             () =>
             toast.toast({
-              type: "success",
+              variant: "success",
               content: (
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-cl-text/20 flex items-center justify-center">
@@ -82,7 +82,7 @@ function ToastTrigger() {
           onClick={
             () =>
             toast.toast({
-              type: "info",
+              variant: "info",
               content: (
                 <div>
                   <p className="font-medium">Download Progress</p>

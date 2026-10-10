@@ -10,7 +10,7 @@ export default function AccordionExample() {
               {variant}
             </div>
             <Accordion
-              type="single"
+              selectionMode="single"
               collapsible
               variant={variant}
               defaultValue={`v-${variant}`}

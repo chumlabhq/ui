@@ -4,7 +4,7 @@
   "description": "A date picker component supporting single, range, and multiple date selection with calendar navigation, presets, and markers.",
   "type": "object",
   "properties": {
-    "mode": {
+    "selectionMode": {
       "type": "string",
       "enum": [
         "single",
@@ -15,11 +15,11 @@
       "default": "single"
     },
     "value": {
-      "description": "Controlled selected value. Type depends on mode: Date | null (single), DateRange | null (range), Date[] | null (multiple)."
+      "description": "Controlled selected value. Type depends on `selectionMode`: Date | null (single), DateRange | null (range), Date[] | null (multiple)."
     },
     "onValueChange": {
       "type": "object",
-      "description": "Callback when the selected value changes. Signature depends on mode.",
+      "description": "Callback when the selected value changes. Signature depends on `selectionMode`.",
       "x-tsType": "((dates: Date[] | null, dateValues: DateValue[] | null) => void) | undefined"
     },
     "onClear": {

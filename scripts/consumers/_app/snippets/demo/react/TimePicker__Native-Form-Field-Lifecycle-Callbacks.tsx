@@ -70,7 +70,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={eventsTime}
           onValueChange={(v) => setEventsTime(v)}
-          variant="clock"
+          mode="clock"
           onOpenChange={(open) => log(`onOpenChange: ${open}`)}
           onConfirm={() => log("onConfirm")}
           onCancel={() => log("onCancel")}

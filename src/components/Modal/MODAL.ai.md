@@ -122,7 +122,6 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `overlayColor` | string | `"black"` | Custom overlay background color. |
 | `overlayOpacity` | number | `0.32` | How strongly `overlayColor` tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so its blur is not diluted. |
 | `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
-| `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
 | `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
 | `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
@@ -367,7 +366,7 @@ const emailRef = useRef<HTMLInputElement>(null);
 | Focus escapes modal | `trapFocus={false}` | Set `trapFocus={true}` (default) |
 | Can't close on outside click | `preventOutsideClick={true}` | Set to `false` or add explicit close buttons |
 | Nested modal renders behind parent | Missing `nestingLevel` | Increment `nestingLevel` for each nested modal |
-| No animation | `disableAnimation={true}` or `reduceMotion={true}` | Set to `false` or use `reduceMotion="auto"` |
+| No animation | `reduceMotion={true}` | Use `reduceMotion="auto"` (the default) |
 | Styles look wrong after overriding one class | `classes` replaces per slot, not merges | Provide full class string for each slot you override |
 | Modal content overflows viewport | `minWidth` too large for mobile | Avoid fixed `minWidth` or use responsive values |
 | Body still scrolls when open | `lockScroll={false}` | Set `lockScroll={true}` (default) |

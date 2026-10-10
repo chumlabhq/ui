@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<Accordion type="single" collapsible>` for FAQs. Use `type="multiple"` when users need several sections open. Works out-of-the-box with zero configuration beyond `type` and children.
+Use `<Accordion selectionMode="single" collapsible>` for FAQs. Use `selectionMode="multiple"` when users need several sections open. Works out-of-the-box with zero configuration beyond `selectionMode` and children.
 
 ---
 
@@ -33,7 +33,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@c
 
 export default function FAQ() {
   return (
-    <Accordion type="single" collapsible defaultValue="q1">
+    <Accordion selectionMode="single" collapsible defaultValue="q1">
       <AccordionItem value="q1">
         <AccordionTrigger>What is your return policy?</AccordionTrigger>
         <AccordionContent>
@@ -77,7 +77,7 @@ These props have dependencies — using them wrong causes silent bugs:
 - `data-pending` — during async preventClose
 - `data-orientation="vertical|horizontal"` — on root
 - `data-value` — item's unique value string
-- `data-type="single|multiple"`, `data-size`, `data-variant` — on root
+- `data-selection-mode="single|multiple"`, `data-size`, `data-variant` — on root
 - `data-accordion-expand-print="true"` — on root when `expandOnPrint` is set. The
   print stylesheet the component ships keys off it: `[data-accordion-expand-print="true"]`
   forces every `data-state="closed"` panel open for print and unhides its
@@ -95,7 +95,7 @@ These props have dependencies — using them wrong causes silent bugs:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `type` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
+| `selectionMode` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
 | `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
 | `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror. |
 | `disabled` | boolean | `false` | Disables all accordion items. |
@@ -128,7 +128,7 @@ These props have dependencies — using them wrong causes silent bugs:
 const ref = useRef<AccordionRef>(null);
 
 // Use in JSX
-<Accordion ref={ref} type="multiple">...</Accordion>
+<Accordion ref={ref} selectionMode="multiple">...</Accordion>
 
 // Available methods:
 ref.current?.expandAll()             // Open all items (multiple mode only)
@@ -167,7 +167,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `children` | `ReactNode` | Content rendered inside this element. |
 | `expandedIcon` | `ReactNode` | Icon shown while the item is expanded. Replaces the default chevron. |
 | `collapsedIcon` | `ReactNode` | Icon shown while the item is collapsed. Replaces the default chevron. |
-| `iconPosition` | `"left" \| "right" \| "none" \| undefined` | Which side of the trigger the icon sits on, or `"none"` to drop it. |
+| `iconPosition` | `"start" \| "end" \| "none" \| undefined` | Which end of the trigger the icon sits at — `start` before the text, `end` after it — or `"none"` to drop it. |
 | `asChild` | `boolean \| undefined` | Render the passed child instead of the default element, keeping behaviour, ARIA and props. |
 | `subtitle` | `ReactNode` | Secondary line rendered under the trigger's label. |
 | `iconAnimation` | `"none" \| "rotate" \| "switch" \| undefined` | How the icon changes on toggle: rotate the chevron, switch between the two icons, or neither. |
@@ -359,7 +359,7 @@ Or in plain CSS:
 
 ```tsx
 // Full control — no defaults, no size/variant classes:
-<Accordion type="single" collapsible unstyled classes={{
+<Accordion selectionMode="single" collapsible unstyled classes={{
   root: "divide-y divide-gray-200 dark:divide-gray-700",
   trigger: "w-full flex justify-between py-4 text-left text-base font-medium text-gray-900 dark:text-white",
   body: "pb-4 text-sm text-gray-500 dark:text-gray-400",
@@ -372,7 +372,7 @@ Or in plain CSS:
 
 ```tsx
 <Accordion
-  type="single"
+  selectionMode="single"
   collapsible
   unstyled
   classes={{
@@ -421,7 +421,7 @@ Or in plain CSS:
 ```tsx
 const [openItem, setOpenItem] = useState<string | null>("settings");
 
-<Accordion type="single" collapsible value={openItem} onValueChange={setOpenItem}>
+<Accordion selectionMode="single" collapsible value={openItem} onValueChange={setOpenItem}>
   <AccordionItem value="settings">
     <AccordionTrigger>Settings</AccordionTrigger>
     <AccordionContent>...</AccordionContent>
@@ -436,7 +436,7 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 ### Multiple with limit
 
 ```tsx
-<Accordion type="multiple" maxExpanded={2} defaultValue={["a", "b"]}>
+<Accordion selectionMode="multiple" maxExpanded={2} defaultValue={["a", "b"]}>
   <AccordionItem value="a">...</AccordionItem>
   <AccordionItem value="b">...</AccordionItem>
   <AccordionItem value="c">...</AccordionItem>
@@ -446,7 +446,7 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 ### Persist to localStorage
 
 ```tsx
-<Accordion type="multiple" storageKey="sidebar-sections">
+<Accordion selectionMode="multiple" storageKey="sidebar-sections">
   ...
 </Accordion>
 ```
@@ -457,7 +457,7 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 {isLoading ? (
   <AccordionShimmer count={3} variant="bordered" />
 ) : (
-  <Accordion type="single" collapsible variant="bordered">
+  <Accordion selectionMode="single" collapsible variant="bordered">
     {items.map(item => (
       <AccordionItem key={item.id} value={item.id}>
         <AccordionTrigger>{item.title}</AccordionTrigger>
@@ -547,13 +547,13 @@ and `prefers-reduced-motion` each switch it off.
 
 ```tsx
 // ❌ DON'T: Combine value + defaultValue
-<Accordion type="single" value={val} defaultValue="item-1" />
+<Accordion selectionMode="single" value={val} defaultValue="item-1" />
 
 // ❌ DON'T: Use collapsible with type="multiple" (it's ignored)
-<Accordion type="multiple" collapsible />
+<Accordion selectionMode="multiple" collapsible />
 
 // ❌ DON'T: Use storageKey with controlled mode (value prop)
-<Accordion type="single" value={val} storageKey="my-key" />
+<Accordion selectionMode="single" value={val} storageKey="my-key" />
 
 // ❌ DON'T: Override one class slot and expect others to remain
 // classes replaces the entire slot, it does NOT merge with defaults
@@ -562,19 +562,19 @@ and `prefers-reduced-motion` each switch it off.
 <Accordion classes={{ trigger: "flex w-full items-center px-4 py-4 my-trigger" }} />
 
 // ❌ DON'T: Use maxExpanded with type="single"
-<Accordion type="single" maxExpanded={3} />
+<Accordion selectionMode="single" maxExpanded={3} />
 
 // ❌ DON'T: Forget onValueChange with controlled value
-<Accordion type="single" value={val} />
+<Accordion selectionMode="single" value={val} />
 // ✅ DO: Always pair value with onValueChange
-<Accordion type="single" value={val} onValueChange={setVal} />
+<Accordion selectionMode="single" value={val} onValueChange={setVal} />
 ```
 
 ---
 
 ## AI Instructions
 
-- **Always set `type`** — it's required. Use `"single"` for FAQ/settings, `"multiple"` for checklists/filters.
+- **Always set `selectionMode`** — it's required. Use `"single"` for FAQ/settings, `"multiple"` for checklists/filters.
 - **Always add `collapsible`** to `type="single"` unless you intentionally want one item always open.
 - **Use `defaultValue` for uncontrolled**, `value` + `onValueChange` for controlled. Never mix.
 - **Don't partially override `classes`** — each slot replaces the default entirely. If you override `trigger`, include layout classes too.

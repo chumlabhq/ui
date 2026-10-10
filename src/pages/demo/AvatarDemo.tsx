@@ -845,7 +845,7 @@ const AvatarDemo = () => {
                 layout="block"
                 className="overflow-visible"
               >
-                <AvatarGroup variant={v} spacing={v === "stack" ? -8 : 4}>
+                <AvatarGroup layout={v} spacing={v === "stack" ? -8 : 4}>
                   <Avatar name="Alice" autoColor colors={c.subtleColors} />
                   <Avatar name="Bob" autoColor colors={c.subtleColors} />
                   <Avatar name="Charlie" autoColor colors={c.subtleColors} />

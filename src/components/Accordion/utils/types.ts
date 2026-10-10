@@ -6,7 +6,7 @@ import type {
   KeyboardEvent,
 } from "react";
 
-export type AccordionType = "single" | "multiple";
+export type AccordionSelectionMode = "single" | "multiple";
 export type Orientation = "vertical" | "horizontal";
 export type Direction = "ltr" | "rtl";
 export type DataState = "open" | "closed";
@@ -126,11 +126,11 @@ interface AccordionBaseProps extends Omit<
  *
  * @example
  * ```tsx
- * <Accordion type="single" value={expanded} onValueChange={setExpanded} collapsible>...</Accordion>
+ * <Accordion selectionMode="single" value={expanded} onValueChange={setExpanded} collapsible>...</Accordion>
  * ```
  */
 export interface AccordionSingleProps extends AccordionBaseProps {
-  type: "single";
+  selectionMode: "single";
   /** Allow collapsing the active item. */
   collapsible?: boolean;
   /**
@@ -156,11 +156,11 @@ export interface AccordionSingleProps extends AccordionBaseProps {
  *
  * @example
  * ```tsx
- * <Accordion type="multiple" value={expandedItems} onValueChange={setExpandedItems}>...</Accordion>
+ * <Accordion selectionMode="multiple" value={expandedItems} onValueChange={setExpandedItems}>...</Accordion>
  * ```
  */
 export interface AccordionMultipleProps extends AccordionBaseProps {
-  type: "multiple";
+  selectionMode: "multiple";
   /** Maximum number of simultaneously expanded items. */
   maxExpanded?: number;
   /** Expanded item values. Not `activeItems` or `expandedItems`. */
@@ -171,7 +171,7 @@ export interface AccordionMultipleProps extends AccordionBaseProps {
   onValueChange?: (value: string[]) => void;
 }
 
-/** Accordion props — discriminated by `type`. */
+/** Accordion props — discriminated by `selectionMode`. */
 export type AccordionProps = AccordionSingleProps | AccordionMultipleProps;
 
 export interface AccordionItemProps extends Omit<
@@ -201,8 +201,8 @@ export interface AccordionTriggerProps extends Omit<
   expandedIcon?: ReactNode;
   /** Icon shown while the item is collapsed. Replaces the default chevron. */
   collapsedIcon?: ReactNode;
-  /** Which side of the trigger the icon sits on, or `"none"` to drop it. */
-  iconPosition?: "left" | "right" | "none";
+  /** Which end of the trigger the icon sits at — `start` before the text, `end` after it — or `"none"` to drop it. */
+  iconPosition?: "start" | "end" | "none";
   /** Render the passed child instead of the default element, keeping behaviour, ARIA and props. */
   asChild?: boolean;
   /** Secondary line rendered under the trigger's label. */
@@ -260,7 +260,7 @@ export interface AccordionConfigValue {
 /** What `Accordion` hands to the items beneath it. */
 export interface AccordionContextValue {
   /** Whether one item or several may be expanded. */
-  type: AccordionType;
+  selectionMode: AccordionSelectionMode;
   /** Whether the last expanded item may be closed. */
   collapsible: boolean;
   /** Whether arrow keys wrap past the first and last trigger. */
@@ -343,7 +343,7 @@ export interface AccordionShimmerProps {
 }
 
 export interface UseAccordionStateOptions {
-  type: AccordionType;
+  selectionMode: AccordionSelectionMode;
   defaultValue?: string | string[];
   value?: string | string[] | null;
   onValueChange?:

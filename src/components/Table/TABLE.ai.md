@@ -57,11 +57,11 @@ export default function Example() {
 | `manualSorting` | When true, sorting is server-side; table won't sort locally. |
 | `pinnedColumns` | Array of column IDs to pin left. Requires `onPinnedColumnsChange` for interactive. |
 | `expandable` + `renderExpandedRow` | Both needed for row expansion. |
-| `enableRowDragDrop` + `onRowReorder` | Both needed for drag-and-drop row reordering. |
+| `reorderable` + `onRowReorder` | Both needed for drag-and-drop row reordering. |
 | `editable` + `onCellEdit` | Both needed for inline cell editing. |
-| `enableColumnResizing` | Enables column resize handles. |
+| `resizable` | Enables column resize handles. |
 | `stickyHeader` | Requires `maxHeight` to be meaningful. |
-| `enableInfiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
+| `infiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
 | `showSearch` | Enables built-in search bar. |
 | `classes` | Per-slot class overrides. **Replaces** per slot, not additive. |
 
@@ -103,7 +103,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onRowClick` | object | — | (rowData: TData) => void — Callback fired when a row is clicked. |
 | `onRowHover` | object | — | (rowIndex: number \| null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered. |
 | `floatingActions` | object | — | React.ReactNode — Floating action elements displayed on row hover. |
-| `isFloatingActionsHovered` | boolean | `false` | Whether the floating actions area is being hovered. |
+| `floatingActionsHovered` | boolean | `false` | Whether the floating actions area is being hovered. |
 | `popupOpen` | boolean | `false` | Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still. |
 | `maxWidth` | string \| number | — | Maximum width of the table container. |
 | `maxHeight` | string \| number | — | Maximum height of the table container. |
@@ -131,7 +131,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onGlobalFilterChange` | object | — | (value: string) => void — Callback when global filter changes. |
 | `columnFilters` | array | — | Controlled column filters state. |
 | `onColumnFiltersChange` | object | — | (filters: ColumnFiltersState) => void — Callback when column filters change. |
-| `enableColumnFilters` | boolean | `false` | Enable per-column filtering. |
+| `filterable` | boolean | `false` | Enable per-column filtering. |
 | `filterableColumns` | object | — | Map of column ID to filter options configuration. |
 | `FilterIcon` | object | — | React.ComponentType — Custom filter icon component. |
 | `renderColumnFilter` | object | — | (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer. |
@@ -140,33 +140,33 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onExpandedRowIdsChange` | object | — | (expandedRowIds: string[]) => void — Fires with the new `expandedRowIds` when a row expands or collapses. |
 | `renderExpandedRow` | object | — | (row: TData) => ReactNode — Render function for expanded row content. |
 | `ExpandIcon` | object | — | React.ComponentType — Custom expand icon component. |
-| `expandColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the expand column. |
+| `expandColumnPosition` | `"start"` \| `"end"` | `"start"` | Which end of the row the expand column sits at. `start` is the first column. |
 | `expandOnRowClick` | boolean | `false` | Make the entire row clickable to toggle expansion. |
 | `columnVisibility` | object | — | Controlled column visibility map (column ID to boolean). |
 | `onColumnVisibilityChange` | object | — | (visibility: Record<string, boolean>) => void — Callback when column visibility changes. |
 | `striped` | boolean | `false` | Alternate row background colors. |
 | `stripedClassName` | string | — | Custom CSS class for striped rows. |
-| `density` | `"compact"` \| `"comfortable"` \| `"spacious"` | `"comfortable"` | Controls cell padding density. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Cell padding and text size. |
 | `pinnedRightColumns` | array | — | Column IDs to pin to the right side. |
 | `editable` | boolean | `false` | Enable inline cell editing: double-click a cell, or press Enter or F2 on it. |
 | `editableColumns` | array | — | Column IDs that are editable. |
 | `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited. |
-| `enableColumnResizing` | boolean | `false` | Enable column resizing via drag handles. |
+| `resizable` | boolean | `false` | Enable column resizing via drag handles. |
 | `columnSizing` | object | — | Controlled column sizing state. |
 | `onColumnSizingChange` | object | — | (sizing: ColumnSizingState) => void — Callback when column sizing changes. |
 | `manualPagination` | boolean | `false` | When true, pagination is handled server-side. |
 | `manualFiltering` | boolean | `false` | When true, filtering is handled server-side. |
 | `columnOrder` | array | — | Controlled column order (array of column IDs). |
 | `onColumnOrderChange` | object | — | (order: string[]) => void — Callback when column order changes. |
-| `enableRowDragDrop` | boolean | `false` | Enable row drag-and-drop reordering. |
+| `reorderable` | boolean | `false` | Enable row drag-and-drop reordering. |
 | `onRowReorder` | object | — | (fromIndex: number, toIndex: number) => void — Callback when a row is reordered. |
-| `dragColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the drag handle column. |
+| `dragColumnPosition` | `"start"` \| `"end"` | `"start"` | Which end of the row the drag handle column sits at. |
 | `showFooter` | boolean | `false` | Show the table footer. |
 | `footerContent` | object | — | React.ReactNode — Custom footer content for <tfoot>. Rows (a <tr>, a fragment of <tr>s, or an array of them) render directly in <tfoot>; anything else (text, or any other element) is placed in one full-width row. |
 | `onContextMenu` | object | — | (event: React.MouseEvent, row: TData) => void — Callback on right-click of a row. |
-| `enableCopyOnClick` | boolean | `false` | Enable single-click cell copy to clipboard. |
+| `copyOnClick` | boolean | `false` | Enable single-click cell copy to clipboard. |
 | `onCellCopy` | object | — | (value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied. |
-| `enableInfiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
+| `infiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
 | `onLoadMore` | object | — | () => void — Callback when user scrolls near the bottom. |
 | `hasMore` | boolean | `false` | Whether there is more data to load. |
 | `loadingMore` | boolean | `false` | Whether more data is currently being loaded. |
@@ -177,7 +177,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onGroupByChange` | object | — | (groupBy: string[]) => void — Callback when group-by columns change. |
 | `showSearch` | boolean | `false` | Show a built-in search bar above the table. |
 | `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search bar. |
-| `searchIconPosition` | `"left"` \| `"right"` \| `"none"` | `"left"` | Position of the search icon. |
+| `searchIconPosition` | `"start"` \| `"end"` \| `"none"` | `"start"` | Which end of the search field the icon sits at, or `none`. |
 | `CheckboxIcon` | object | — | React.ComponentType — Custom checkbox component for multi-row selection. |
 | `checkboxColor` | string | — | Simple color customization for the default checkbox. |
 | `DragHandleIcon` | object | — | React.ComponentType — Custom drag handle icon component. |
@@ -298,7 +298,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | Server-side sort not triggering | Missing `manualSorting` | Set `manualSorting={true}` |
 | Pinned columns not scrolling | Expected behavior | Pinned columns stay fixed; unpinned scroll |
 | Row expansion not showing | Missing `renderExpandedRow` | Provide render function |
-| Drag handle not showing | Missing `enableRowDragDrop` | Add `enableRowDragDrop` prop |
+| Drag handle not showing | Missing `reorderable` | Add `reorderable` prop |
 
 ---
 

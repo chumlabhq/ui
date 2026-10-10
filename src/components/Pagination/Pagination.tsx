@@ -187,8 +187,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       disabled,
       onRowsPerPageChange,
       showRowsPerPage = false,
-      rowsPerPageLabel = "rows",
-      showLabel = "Show",
+      rowsPerPageSuffix = "rows",
+      rowsPerPagePrefix = "Show",
       dropdownAriaLabel = "Rows per page",
       dropdownPosition = "top",
       dropdownZIndex: dropdownZIndexProp,
@@ -380,7 +380,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const selectorSection =
       showRowsPerPage && rowsPerPage !== undefined ? (
         <div className={mergedClasses.rowsPerPage.root}>
-          <span className={mergedClasses.label}>{showLabel}</span>
+          <span className={mergedClasses.label}>{rowsPerPagePrefix}</span>
           <div className={cn(mergedClasses.rowsPerPage.positioner)}>
             <button
               ref={triggerRef}
@@ -434,7 +434,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               />
             )}
           </div>
-          <span className={mergedClasses.label}>{rowsPerPageLabel}</span>
+          <span className={mergedClasses.label}>{rowsPerPageSuffix}</span>
         </div>
       ) : null;
 

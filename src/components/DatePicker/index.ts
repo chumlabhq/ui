@@ -3,7 +3,7 @@ export { default as DatePicker } from "./DatePicker.js";
 export type {
   DatePickerProps,
   DatePickerClasses,
-  DatePickerMode,
+  DatePickerSelectionMode,
   DateValue,
   DateRange,
   DateRangeValue,

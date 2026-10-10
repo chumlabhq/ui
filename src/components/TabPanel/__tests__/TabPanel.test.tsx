@@ -616,7 +616,7 @@ describe("TabPanel", () => {
 
     it("renders icons in right position when configured", () => {
       render(
-        <TabPanel tabs={tabsWithIcons} defaultValue="home" iconPosition="right">
+        <TabPanel tabs={tabsWithIcons} defaultValue="home" iconPosition="end">
           Content
         </TabPanel>,
       );

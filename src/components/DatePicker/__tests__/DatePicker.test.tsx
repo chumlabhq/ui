@@ -54,12 +54,12 @@ describe("DatePicker", () => {
     });
 
     it("shows the default placeholder for range mode", () => {
-      render(<DatePicker mode="range" />);
+      render(<DatePicker selectionMode="range" />);
       expect(screen.getByText("Select date range")).toBeInTheDocument();
     });
 
     it("shows the default placeholder for multiple mode", () => {
-      render(<DatePicker mode="multiple" />);
+      render(<DatePicker selectionMode="multiple" />);
       expect(screen.getByText("Select dates")).toBeInTheDocument();
     });
 
@@ -293,7 +293,7 @@ describe("DatePicker", () => {
 
     it("applies a range preset when uncontrolled", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-      render(<DatePicker mode="range" showPresets placeholder="Pick a range" />);
+      render(<DatePicker selectionMode="range" showPresets placeholder="Pick a range" />);
 
       await openCalendar(user);
       // findByRole for the reason given above: the presets mount a frame after
@@ -530,7 +530,7 @@ describe("DatePicker", () => {
       const user = userEvent.setup({
         advanceTimers: vi.advanceTimersByTime,
       });
-      render(<DatePicker mode="range" />);
+      render(<DatePicker selectionMode="range" />);
 
       await openCalendar(user);
       const dialog = screen.getByRole("dialog");
@@ -541,7 +541,7 @@ describe("DatePicker", () => {
       const user = userEvent.setup({
         advanceTimers: vi.advanceTimersByTime,
       });
-      render(<DatePicker mode="multiple" />);
+      render(<DatePicker selectionMode="multiple" />);
 
       await openCalendar(user);
       const dialog = screen.getByRole("dialog");
@@ -645,7 +645,7 @@ describe("DatePicker", () => {
         advanceTimers: vi.advanceTimersByTime,
       });
       const onValueChange = vi.fn();
-      render(<DatePicker mode="range" onValueChange={onValueChange} />);
+      render(<DatePicker selectionMode="range" onValueChange={onValueChange} />);
 
       await openCalendar(user);
 
@@ -681,7 +681,7 @@ describe("DatePicker", () => {
       const startDate = new Date(2025, 5, 20);
       render(
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={{ start: startDate, end: null }}
           onValueChange={onValueChange}
         />,
@@ -706,7 +706,7 @@ describe("DatePicker", () => {
         advanceTimers: vi.advanceTimersByTime,
       });
       const onValueChange = vi.fn();
-      render(<DatePicker mode="multiple" onValueChange={onValueChange} />);
+      render(<DatePicker selectionMode="multiple" onValueChange={onValueChange} />);
 
       await openCalendar(user);
 
@@ -733,7 +733,7 @@ describe("DatePicker", () => {
       const onValueChange = vi.fn();
       render(
         <DatePicker
-          mode="multiple"
+          selectionMode="multiple"
           value={selected}
           onValueChange={onValueChange}
         />,
@@ -758,7 +758,7 @@ describe("DatePicker", () => {
 
     it("displays multiple selected dates in the trigger", () => {
       const dates = [new Date(2025, 5, 10), new Date(2025, 5, 15)];
-      render(<DatePicker mode="multiple" value={dates} />);
+      render(<DatePicker selectionMode="multiple" value={dates} />);
       // The trigger should show formatted dates
       const trigger = screen.getByRole("combobox");
       expect(trigger.textContent).toBeTruthy();
@@ -1364,7 +1364,7 @@ describe("DatePicker", () => {
       };
       render(
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={range}
           onClear={onClear}
           clearable
@@ -1385,7 +1385,7 @@ describe("DatePicker", () => {
       const dates = [new Date(2025, 5, 10), new Date(2025, 5, 15)];
       render(
         <DatePicker
-          mode="multiple"
+          selectionMode="multiple"
           value={dates}
           onClear={onClear}
           clearable
@@ -1405,7 +1405,7 @@ describe("DatePicker", () => {
         start: new Date(2025, 5, 10),
         end: new Date(2025, 5, 20),
       };
-      render(<DatePicker mode="range" value={range} />);
+      render(<DatePicker selectionMode="range" value={range} />);
 
       const trigger = screen.getByRole("combobox");
       expect(trigger.textContent).toContain("Jun 10, 2025");
@@ -1417,7 +1417,7 @@ describe("DatePicker", () => {
         start: new Date(2025, 5, 10),
         end: null,
       };
-      render(<DatePicker mode="range" value={range} />);
+      render(<DatePicker selectionMode="range" value={range} />);
 
       const trigger = screen.getByRole("combobox");
       expect(trigger.textContent).toContain("Jun 10, 2025");
@@ -1536,7 +1536,7 @@ describe("DatePicker", () => {
       const onValueChange = vi.fn();
       render(
         <DatePicker
-          mode="range"
+          selectionMode="range"
           showPresets
           onValueChange={onValueChange}
         />,
@@ -1563,7 +1563,7 @@ describe("DatePicker", () => {
       const onValueChange = vi.fn();
       render(
         <DatePicker
-          mode="multiple"
+          selectionMode="multiple"
           showPresets
           onValueChange={onValueChange}
         />,

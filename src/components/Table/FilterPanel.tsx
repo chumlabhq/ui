@@ -3,7 +3,7 @@ import { useEffect, useRef, type ReactNode, type RefObject } from "react";
 /**
  * The column-filter dialog, in its own chunk.
  *
- * `enableColumnFilters` with `filterableColumns` is off by default, and even
+ * `filterable` with `filterableColumns` is off by default, and even
  * with it on this subtree exists only while a filter popup is open — after a
  * click, portalled to `document.body`, over the grid rather than in it. That
  * makes it the one part of Table that can arrive late without costing a

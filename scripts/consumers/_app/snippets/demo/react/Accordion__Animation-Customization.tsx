@@ -11,7 +11,7 @@ const duration = 100;
 export default function AccordionExample() {
   return (
     <Accordion
-      type="single"
+      selectionMode="single"
       collapsible
       animationDuration={duration}
       animationEasing={easing}

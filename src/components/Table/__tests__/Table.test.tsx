@@ -43,7 +43,7 @@ describe("Table", () => {
     it("applies default slot styles with no classes prop", () => {
       const { container } = render(<Table columns={columns} data={data} />);
       const th = container.querySelector("th");
-      // A bare Table must render styled, not naked density-only markup.
+      // A bare Table must render styled, not naked padding-only markup.
       expect(th?.className).toContain("bg-cl-bg-elevated");
       expect(th?.className).toContain("border-cl-border");
     });
@@ -519,21 +519,34 @@ describe("Table", () => {
     });
   });
 
-  describe("Density", () => {
-    it("sets data-density attribute", () => {
+  describe("Size", () => {
+    it("sets data-size attribute", () => {
       render(
-        <Table columns={columns} data={data} density="compact" />
+        <Table columns={columns} data={data} size="sm" />
       );
 
       const region = screen.getByRole("region");
-      expect(region).toHaveAttribute("data-density", "compact");
+      expect(region).toHaveAttribute("data-size", "sm");
     });
 
-    it("defaults density to comfortable", () => {
+    it("defaults size to md", () => {
       render(<Table columns={columns} data={data} />);
 
       const region = screen.getByRole("region");
-      expect(region).toHaveAttribute("data-density", "comfortable");
+      expect(region).toHaveAttribute("data-size", "md");
+    });
+
+    // The padding each size paints is the one compact, comfortable and
+    // spacious painted before the rename, class for class.
+    it.each([
+      ["sm", "px-2 py-1 text-xs"],
+      ["md", "px-3 py-2.5 text-sm"],
+      ["lg", "px-5 py-4 text-base"],
+    ] as const)("size %s pads cells with %s", (size, classes) => {
+      render(<Table columns={columns} data={data} size={size} />);
+
+      const cell = screen.getAllByRole("gridcell")[0];
+      for (const cls of classes.split(" ")) expect(cell.className.split(/\s+/)).toContain(cls);
     });
   });
 
@@ -1102,7 +1115,7 @@ describe("Table", () => {
         <Table
           columns={columns}
           data={data}
-          enableInfiniteScroll
+          infiniteScroll
           hasMore
           loadingMore
           onLoadMore={() => {}}
@@ -1117,7 +1130,7 @@ describe("Table", () => {
         <Table
           columns={columns}
           data={data}
-          enableInfiniteScroll
+          infiniteScroll
           hasMore
           loadingMore
           onLoadMore={() => {}}
@@ -1133,7 +1146,7 @@ describe("Table", () => {
         <Table
           columns={columns}
           data={data}
-          enableInfiniteScroll
+          infiniteScroll
           hasMore={false}
           onLoadMore={() => {}}
           infiniteEndContent="No more data"
@@ -1145,7 +1158,7 @@ describe("Table", () => {
   });
 
   describe("Copy on click", () => {
-    it("calls onCellCopy when a cell is clicked with enableCopyOnClick", async () => {
+    it("calls onCellCopy when a cell is clicked with copyOnClick", async () => {
       const user = userEvent.setup();
       const onCellCopy = vi.fn();
 
@@ -1160,7 +1173,7 @@ describe("Table", () => {
           columns={columns}
           data={data}
           getRowId={getRowId}
-          enableCopyOnClick
+          copyOnClick
           onCellCopy={onCellCopy}
         />
       );
@@ -1298,7 +1311,7 @@ describe("Table", () => {
           columns={columns}
           data={data}
           showSearch
-          searchIconPosition="right"
+          searchIconPosition="end"
         />
       );
 
@@ -1861,13 +1874,13 @@ describe("Table – additional coverage", () => {
     });
   });
 
-  describe("enableColumnResizing", () => {
-    it("renders with enableColumnResizing without error", () => {
+  describe("resizable", () => {
+    it("renders with resizable without error", () => {
       render(
         <Table
           columns={columns}
           data={data}
-          enableColumnResizing
+          resizable
           ariaLabel="t"
         />,
       );
@@ -1880,7 +1893,7 @@ describe("Table – additional coverage", () => {
         <Table
           columns={columns}
           data={data}
-          enableColumnResizing
+          resizable
           onColumnSizingChange={onColumnSizingChange}
           ariaLabel="t"
         />,
@@ -1889,13 +1902,13 @@ describe("Table – additional coverage", () => {
     });
   });
 
-  describe("enableRowDragDrop", () => {
-    it("renders drag handles when enableRowDragDrop is true", () => {
+  describe("reorderable", () => {
+    it("renders drag handles when reorderable is true", () => {
       render(
         <Table
           columns={columns}
           data={data}
-          enableRowDragDrop
+          reorderable
           ariaLabel="t"
         />,
       );
@@ -1908,8 +1921,8 @@ describe("Table – additional coverage", () => {
         <Table
           columns={columns}
           data={data}
-          enableRowDragDrop
-          dragColumnPosition="right"
+          reorderable
+          dragColumnPosition="end"
           ariaLabel="t"
         />,
       );

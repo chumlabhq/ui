@@ -13,7 +13,7 @@ export type {
   AccordionTriggerProps,
   AccordionContentProps,
   AccordionClasses,
-  AccordionType,
+  AccordionSelectionMode,
   Orientation,
   Direction,
   AnimationCallbacks,

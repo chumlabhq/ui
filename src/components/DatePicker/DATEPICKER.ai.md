@@ -51,7 +51,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 
 | Prop | Constraint |
 |------|-----------|
-| `mode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
+| `selectionMode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
 | `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` is provided. |
 | `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
 | `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
@@ -96,7 +96,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mode` | `"single"` \| `"range"` \| `"multiple"` | `"single"` | Selection mode: single date, date range, or multiple dates. |
+| `selectionMode` | `"single"` \| `"range"` \| `"multiple"` | `"single"` | Selection mode: single date, date range, or multiple dates. |
 | `value` | — | — | Controlled selected value. Type depends on mode: Date \| null (single), DateRange \| null (range), Date[] \| null (multiple). |
 | `onValueChange` | object | — | Callback when the selected value changes. Signature depends on mode. |
 | `onClear` | object | — | () => void — Called when the clear button is clicked. |
@@ -270,7 +270,7 @@ Or in plain CSS:
 const [range, setRange] = useState<DateRange | null>(null);
 
 <DatePicker
-  mode="range"
+  selectionMode="range"
   value={range}
   onValueChange={(r) => setRange(r)}
   placeholder="Start date - End date"
@@ -284,7 +284,7 @@ const [range, setRange] = useState<DateRange | null>(null);
 const [dates, setDates] = useState<Date[] | null>(null);
 
 <DatePicker
-  mode="multiple"
+  selectionMode="multiple"
   value={dates}
   onValueChange={(d) => setDates(d)}
   placeholder="Pick multiple dates..."
@@ -296,7 +296,7 @@ const [dates, setDates] = useState<Date[] | null>(null);
 
 ```tsx
 <DatePicker
-  mode="range"
+  selectionMode="range"
   value={range}
   onValueChange={(r) => setRange(r)}
   showPresets
@@ -358,7 +358,7 @@ import { fr } from "date-fns/locale";
 ### Multiple months
 
 ```tsx
-<DatePicker mode="range" numberOfMonths={2} />
+<DatePicker selectionMode="range" numberOfMonths={2} />
 ```
 
 ### Form field with validation
@@ -408,7 +408,7 @@ import { fr } from "date-fns/locale";
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Wrong `onValueChange` type | Mode mismatch | Ensure `value` and `onValueChange` types match the `mode` |
+| Wrong `onValueChange` type | Selection mode mismatch | Ensure `value` and `onValueChange` types match the `selectionMode` |
 | Presets not showing | `showPresets` not set | Add `showPresets` to the component |
 | Outside days not clickable | `outsideDaysSelectable` set to `false` | Set `outsideDaysSelectable={true}` |
 | Calendar flips position unexpectedly | Auto-flip behavior | Set `forceDropdownPosition={true}` |

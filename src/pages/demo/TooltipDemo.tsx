@@ -337,14 +337,14 @@ const TooltipDemo = () => {
       {/* ─── Hoverable Content ────────────────────────────────────────── */}
       <Section
         title="Hoverable Content"
-        description="By default, moving mouse to tooltip keeps it open. Use disableHoverableContent to disable."
+        description="By default, moving mouse to tooltip keeps it open. Set hoverableContent={false} to close it as soon as the pointer leaves the trigger."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
-          <Tooltip content="Move mouse to tooltip - it stays open" disableHoverableContent={false}>
+          <Tooltip content="Move mouse to tooltip - it stays open" hoverableContent>
             <Button className={c.trigger}>Hoverable (default)</Button>
           </Tooltip>
-          <Tooltip content="Tooltip closes when leaving trigger" disableHoverableContent={true}>
+          <Tooltip content="Tooltip closes when leaving trigger" hoverableContent={false}>
             <Button className={c.trigger}>Not Hoverable</Button>
           </Tooltip>
         </DemoWrapper>

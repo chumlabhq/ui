@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@c
 export default function AccordionExample() {
   return (
     <Accordion
-      type="single"
+      selectionMode="single"
       defaultValue="nc-1"
       collapsible={false}
       classes={

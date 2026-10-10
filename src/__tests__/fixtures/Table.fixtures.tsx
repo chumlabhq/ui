@@ -120,15 +120,15 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     props: { data: ROWS, columns: COLUMNS, expandable: true, getRowId: GET_ID, expandedRowIds: ["1"], renderExpandedRow: () => <div>More</div> },
   },
   { name: "sortable", props: { data: ROWS, columns: COLUMNS, sortable: true } },
-  { name: "resizable", props: { data: ROWS, columns: COLUMNS, enableColumnResizing: true } },
+  { name: "resizable", props: { data: ROWS, columns: COLUMNS, resizable: true } },
   {
     name: "pinned",
     props: { data: ROWS, columns: COLUMNS, pinnableColumns: ["name", "role"], pinnedColumns: ["name"] },
     note: "Drives both the pinned container and the unpinned remainder.",
   },
-  { name: "filterable", props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE } },
+  { name: "filterable", props: { data: ROWS, columns: COLUMNS, filterable: true, filterableColumns: FILTERABLE } },
   { name: "editable", props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID } },
-  { name: "draggable", props: { data: ROWS, columns: COLUMNS, enableRowDragDrop: true, getRowId: GET_ID } },
+  { name: "draggable", props: { data: ROWS, columns: COLUMNS, reorderable: true, getRowId: GET_ID } },
   { name: "grouped", props: { data: ROWS, columns: COLUMNS, groupBy: ["role"] } },
   { name: "mobile", props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999 } },
   {
@@ -136,10 +136,10 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999, showSearch: true },
     note: "The mobile layout's search field, which only mounts with both renderMobileCard and showSearch.",
   },
-  { name: "load-more", props: { data: ROWS, columns: COLUMNS, hasMore: true, loadingMore: true, enableInfiniteScroll: true, onLoadMore: () => {} } },
+  { name: "load-more", props: { data: ROWS, columns: COLUMNS, hasMore: true, loadingMore: true, infiniteScroll: true, onLoadMore: () => {} } },
   {
     name: "infinite-end",
-    props: { data: ROWS, columns: COLUMNS, enableInfiniteScroll: true, hasMore: false, infiniteEndContent: "No more rows", onLoadMore: () => {} },
+    props: { data: ROWS, columns: COLUMNS, infiniteScroll: true, hasMore: false, infiniteEndContent: "No more rows", onLoadMore: () => {} },
     note:
       "The end-of-list label, which no fixture reached. It shipped `text-gray-500` — a fixed " +
       "grey that cannot follow the theme, and one the painted sweep could not read either, " +
@@ -157,12 +157,12 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   {
     name: "filter-open",
-    props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
+    props: { data: ROWS, columns: COLUMNS, filterable: true, filterableColumns: FILTERABLE },
     act: openFilterPanel,
   },
   {
     name: "filter-selected",
-    props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
+    props: { data: ROWS, columns: COLUMNS, filterable: true, filterableColumns: FILTERABLE },
     // `filterClearTrigger` only appears once a value is selected, so the act
     // opens the panel AND picks an option.
     act: async (c, ui) => {
@@ -178,7 +178,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   {
     name: "filter-open-rtl",
-    props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
+    props: { data: ROWS, columns: COLUMNS, filterable: true, filterableColumns: FILTERABLE },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     act: openFilterPanel,
   },

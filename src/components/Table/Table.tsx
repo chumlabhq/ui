@@ -71,10 +71,10 @@ import {
 
 const EMPTY_DATA: unknown[] = [];
 
-const densityPaddingMap = {
-  compact: "px-2 py-1 text-xs",
-  comfortable: "px-3 py-2.5 text-sm",
-  spacious: "px-5 py-4 text-base",
+const sizePaddingMap = {
+  sm: "px-2 py-1 text-xs",
+  md: "px-3 py-2.5 text-sm",
+  lg: "px-5 py-4 text-base",
 } as const;
 
 /** What a server assumes, and therefore what the first client render must say. */
@@ -172,7 +172,7 @@ function TableInner<TData>(
     onRowClick,
     onRowHover,
     floatingActions,
-    isFloatingActionsHovered = false,
+    floatingActionsHovered = false,
     popupOpen = false,
     maxWidth,
     maxHeight,
@@ -204,7 +204,7 @@ function TableInner<TData>(
 
     columnFilters: columnFiltersProp,
     onColumnFiltersChange,
-    enableColumnFilters = false,
+    filterable = false,
     filterableColumns,
     FilterIcon: CustomFilterIcon,
     renderColumnFilter,
@@ -214,7 +214,7 @@ function TableInner<TData>(
     onExpandedRowIdsChange,
     renderExpandedRow,
     ExpandIcon: CustomExpandIcon,
-    expandColumnPosition = "left",
+    expandColumnPosition = "start",
     expandOnRowClick = false,
 
     columnVisibility: columnVisibilityProp,
@@ -223,7 +223,7 @@ function TableInner<TData>(
     striped = false,
     stripedClassName: stripedClassNameProp,
 
-    density = "comfortable",
+    size = "md",
 
     pinnedRightColumns = [],
 
@@ -231,7 +231,7 @@ function TableInner<TData>(
     editableColumns,
     onCellEdit,
 
-    enableColumnResizing = false,
+    resizable = false,
     columnSizing: columnSizingProp,
     onColumnSizingChange,
 
@@ -241,19 +241,19 @@ function TableInner<TData>(
     columnOrder: columnOrderProp,
     onColumnOrderChange,
 
-    enableRowDragDrop = false,
+    reorderable = false,
     onRowReorder,
-    dragColumnPosition = "left",
+    dragColumnPosition = "start",
 
     showFooter = false,
     footerContent,
 
     onContextMenu,
 
-    enableCopyOnClick = false,
+    copyOnClick = false,
     onCellCopy,
 
-    enableInfiniteScroll = false,
+    infiniteScroll = false,
     onLoadMore,
     hasMore = false,
     loadingMore = false,
@@ -267,7 +267,7 @@ function TableInner<TData>(
 
     showSearch = false,
     searchPlaceholder = "Search...",
-    searchIconPosition = "left",
+    searchIconPosition = "start",
 
     CheckboxIcon: CustomCheckboxIcon,
     checkboxColor,
@@ -479,7 +479,7 @@ function TableInner<TData>(
     const cols: ColumnDef<TData, unknown>[] = [];
 
     const DragHandleIconComponent = CustomDragHandleIcon || DragHandleIcon;
-    const dragCol: ColumnDef<TData, unknown> | null = enableRowDragDrop
+    const dragCol: ColumnDef<TData, unknown> | null = reorderable
       ? ({
           id: "__dragHandle",
           header: () => null,
@@ -515,7 +515,7 @@ function TableInner<TData>(
         } as ColumnDef<TData, unknown>)
       : null;
 
-    if (dragCol && dragColumnPosition === "left") {
+    if (dragCol && dragColumnPosition === "start") {
       cols.push(dragCol);
     }
 
@@ -620,7 +620,7 @@ function TableInner<TData>(
         } as ColumnDef<TData, unknown>)
       : null;
 
-    if (expandCol && expandColumnPosition === "left") {
+    if (expandCol && expandColumnPosition === "start") {
       cols.push(expandCol);
     }
 
@@ -636,11 +636,11 @@ function TableInner<TData>(
     });
     cols.push(...(userCols as unknown as typeof cols));
 
-    if (expandCol && expandColumnPosition === "right") {
+    if (expandCol && expandColumnPosition === "end") {
       cols.push(expandCol);
     }
 
-    if (dragCol && dragColumnPosition === "right") {
+    if (dragCol && dragColumnPosition === "end") {
       cols.push(dragCol);
     }
 
@@ -655,7 +655,7 @@ function TableInner<TData>(
     expandable,
     checkboxClassName,
     expandIconClassName,
-    enableRowDragDrop,
+    reorderable,
     dragHandleClassName,
     hasCustomCheckboxIcon,
     checkboxColor,
@@ -667,11 +667,11 @@ function TableInner<TData>(
     selectAllMode,
   ]);
 
-  const densityClass = densityPaddingMap[density] || "";
+  const sizeClass = sizePaddingMap[size] || "";
 
   const needsFiltering =
     globalFilter !== undefined ||
-    enableColumnFilters ||
+    filterable ||
     showSearch ||
     !!filterableColumns;
 
@@ -689,7 +689,7 @@ function TableInner<TData>(
         return filterValue.some((v: string) => cellValue === v.toLowerCase());
       },
     },
-    ...(filterableColumns ? { enableColumnFilters: true } : {}),
+    ...(filterableColumns ? { filterable: true } : {}),
 
     ...(sortable
       ? {
@@ -712,7 +712,7 @@ function TableInner<TData>(
       ...(expandable || grouping.length > 0 ? { expanded } : {}),
       columnVisibility,
       ...(selectionMode !== "none" ? { rowSelection } : {}),
-      ...(enableColumnResizing ? { columnSizing } : {}),
+      ...(resizable ? { columnSizing } : {}),
       ...(columnOrder.length > 0 ? { columnOrder } : {}),
       ...(grouping.length > 0 ? { grouping } : {}),
     },
@@ -735,7 +735,7 @@ function TableInner<TData>(
             setInternalColumnFilters(newFilters);
             onColumnFiltersChange?.(newFilters);
           },
-          enableColumnFilters,
+          filterable,
         }
       : {}),
 
@@ -784,9 +784,9 @@ function TableInner<TData>(
 
     ...(getRowId ? { getRowId: (row: TData) => getRowId(row) } : {}),
 
-    ...(enableColumnResizing
+    ...(resizable
       ? {
-          enableColumnResizing: true,
+          resizable: true,
           columnResizeMode: "onChange" as const,
           onColumnSizingChange: (updater) => {
             const newSizing =
@@ -922,7 +922,7 @@ function TableInner<TData>(
   onLoadMoreRef.current = onLoadMore;
 
   useEffect(() => {
-    if (!enableInfiniteScroll) return;
+    if (!infiniteScroll) return;
 
     const container = containerRef.current;
     if (!container) return;
@@ -943,19 +943,19 @@ function TableInner<TData>(
 
     container.addEventListener("scroll", handleScroll, { passive: true });
     return () => container.removeEventListener("scroll", handleScroll);
-  }, [enableInfiniteScroll]);
+  }, [infiniteScroll]);
 
   const handleRowHover = useCallback(
     (
       rowIndex: number | null,
       rowRef?: React.RefObject<HTMLTableRowElement>,
     ) => {
-      if ((isFloatingActionsHovered || popupOpen) && rowIndex === null) {
+      if ((floatingActionsHovered || popupOpen) && rowIndex === null) {
         return;
       }
       onRowHover?.(rowIndex, rowRef);
     },
-    [onRowHover, isFloatingActionsHovered, popupOpen],
+    [onRowHover, floatingActionsHovered, popupOpen],
   );
 
   const handleRowClick = useCallback(
@@ -1100,11 +1100,11 @@ function TableInner<TData>(
 
   const handleCellClick = useCallback(
     async (cellText: string, rowId: string, columnId: string) => {
-      if (!enableCopyOnClick) return;
+      if (!copyOnClick) return;
       await copyToClipboard(cellText);
       onCellCopy?.(cellText, rowId, columnId);
     },
-    [enableCopyOnClick, onCellCopy],
+    [copyOnClick, onCellCopy],
   );
 
   const handleDragStart = useCallback(
@@ -1200,7 +1200,7 @@ function TableInner<TData>(
           <th
             key={header.id}
             colSpan={header.colSpan}
-            className={`${headerCellClassName} ${densityClass}`}
+            className={`${headerCellClassName} ${sizeClass}`}
             role="columnheader"
             data-column-index={index}
           />
@@ -1225,13 +1225,13 @@ function TableInner<TData>(
 
       const headerStyle: React.CSSProperties = {};
       const hasFilter = filterableColumns && filterableColumns[columnId];
-      if (enableColumnResizing && header.column.getCanResize()) {
+      if (resizable && header.column.getCanResize()) {
         const size = header.getSize();
         headerStyle.width = size;
         headerStyle.minWidth = size;
         headerStyle.maxWidth = size;
       }
-      if ((enableColumnResizing && header.column.getCanResize()) || hasFilter) {
+      if ((resizable && header.column.getCanResize()) || hasFilter) {
         headerStyle.position = "relative";
       }
 
@@ -1239,7 +1239,7 @@ function TableInner<TData>(
         <th
           key={header.id}
           colSpan={header.colSpan > 1 ? header.colSpan : undefined}
-          className={`group/header ${headerCellClassName} ${isCheckboxColumn || isExpandColumn || isDragColumn ? checkboxCellClassName : ""} ${densityClass}`}
+          className={`group/header ${headerCellClassName} ${isCheckboxColumn || isExpandColumn || isDragColumn ? checkboxCellClassName : ""} ${sizeClass}`}
           role="columnheader"
           aria-sort={getSortDirection(header.column.getIsSorted())}
           data-pinned={isPinned || undefined}
@@ -1248,10 +1248,10 @@ function TableInner<TData>(
           style={Object.keys(headerStyle).length > 0 ? headerStyle : undefined}
         >
           <div
-            className={`${enableColumnResizing ? "overflow-hidden pr-3" : ""} ${headerCellContentClassName}`}
+            className={`${resizable ? "overflow-hidden pr-3" : ""} ${headerCellContentClassName}`}
           >
             <span
-              className={`flex items-center gap-1 ${enableColumnResizing ? "truncate" : ""}`}
+              className={`flex items-center gap-1 ${resizable ? "truncate" : ""}`}
             >
               {flexRender(header.column.columnDef.header, header.getContext())}
               {/* Sort indicator - click only on icon to sort */}
@@ -1375,7 +1375,7 @@ function TableInner<TData>(
             )}
           </div>
           {/* Column resize handle - positioned inside th, outside content div */}
-          {enableColumnResizing && header.column.getCanResize() && (
+          {resizable && header.column.getCanResize() && (
             <div
               onMouseDown={header.getResizeHandler()}
               onTouchStart={header.getResizeHandler()}
@@ -1419,8 +1419,8 @@ function TableInner<TData>(
       sortable,
       sortIconClassName,
       checkboxCellClassName,
-      densityClass,
-      enableColumnResizing,
+      sizeClass,
+      resizable,
       resizeHandleClassName,
       filterableColumns,
       CustomFilterIcon,
@@ -1467,7 +1467,7 @@ function TableInner<TData>(
         : undefined;
 
       const cellStyle: React.CSSProperties = {};
-      if (enableColumnResizing) {
+      if (resizable) {
         const size = cell.column.getSize();
         cellStyle.width = size;
         cellStyle.minWidth = size;
@@ -1482,7 +1482,7 @@ function TableInner<TData>(
         return (
           <td
             key={cell.id}
-            className={`${cellClassName} ${densityClass}`}
+            className={`${cellClassName} ${sizeClass}`}
             role="gridcell"
             style={Object.keys(cellStyle).length > 0 ? cellStyle : undefined}
           />
@@ -1543,7 +1543,7 @@ function TableInner<TData>(
       return (
         <td
           key={cell.id}
-          className={`${cellClassName} ${isSyntheticColumn ? checkboxCellClassName : ""} ${densityClass}`}
+          className={`${cellClassName} ${isSyntheticColumn ? checkboxCellClassName : ""} ${sizeClass}`}
           role="gridcell"
           // While it edits, the editor holds the tab stop: a focusable cell under
           // it is a target the editor obscures (axe target-size).
@@ -1568,7 +1568,7 @@ function TableInner<TData>(
           data-grouped={isGrouped || undefined}
           onDoubleClick={edit}
           onClick={
-            enableCopyOnClick && !isSyntheticColumn
+            copyOnClick && !isSyntheticColumn
               ? () => handleCellClick(cellText, rowId, columnId)
               : undefined
           }
@@ -1585,7 +1585,7 @@ function TableInner<TData>(
       focusedCell,
       handleKeyDown,
       checkboxCellClassName,
-      densityClass,
+      sizeClass,
       editingCell,
       editValue,
       editable,
@@ -1594,9 +1594,9 @@ function TableInner<TData>(
       commitEdit,
       cancelEdit,
       editInputClassName,
-      enableCopyOnClick,
+      copyOnClick,
       handleCellClick,
-      enableColumnResizing,
+      resizable,
     ],
   );
 
@@ -1624,7 +1624,7 @@ function TableInner<TData>(
 
       const isGroupRow = grouping.length > 0 && row.getIsGrouped();
 
-      const rowDragProps = enableRowDragDrop
+      const rowDragProps = reorderable
         ? {
             draggable: true,
             onDragStart: (e: React.DragEvent<HTMLTableRowElement>) =>
@@ -1697,7 +1697,7 @@ function TableInner<TData>(
       striped,
       expandable,
       renderExpandedRow,
-      enableRowDragDrop,
+      reorderable,
       handleDragStart,
       handleDragOver,
       handleDrop,
@@ -1729,11 +1729,11 @@ function TableInner<TData>(
       return (
         <div className={containerClass}>
           <table
-            className={`${enableColumnResizing ? "table-fixed min-w-full" : "w-full"} ${tableClass}`}
+            className={`${resizable ? "table-fixed min-w-full" : "w-full"} ${tableClass}`}
             role="grid"
             aria-label={tableAriaLabel}
             style={
-              enableColumnResizing
+              resizable
                 ? {
                     width: Math.max(table.getCenterTotalSize(), 0) || undefined,
                   }
@@ -1856,14 +1856,14 @@ function TableInner<TData>(
       showFooter,
       footerContent,
       footerClassName,
-      enableColumnResizing,
+      resizable,
       caption,
     ],
   );
 
   const handleMouseMove = useCallback(
     (event: React.MouseEvent) => {
-      if (isFloatingActionsHovered || popupOpen) {
+      if (floatingActionsHovered || popupOpen) {
         return;
       }
 
@@ -1879,7 +1879,7 @@ function TableInner<TData>(
     },
     [
       onCursorPositionChange,
-      isFloatingActionsHovered,
+      floatingActionsHovered,
       popupOpen,
       shouldShowHeader,
       onHeaderHoverChange,
@@ -1888,13 +1888,13 @@ function TableInner<TData>(
 
   const handleMouseLeave = useCallback(() => {
     onRowHover?.(null);
-    if (!isFloatingActionsHovered && !popupOpen) {
+    if (!floatingActionsHovered && !popupOpen) {
       onCursorPositionChange?.(null);
       onHeaderHoverChange?.(false);
     }
   }, [
     onRowHover,
-    isFloatingActionsHovered,
+    floatingActionsHovered,
     popupOpen,
     onCursorPositionChange,
     onHeaderHoverChange,
@@ -2015,7 +2015,7 @@ function TableInner<TData>(
               </div>
             ))}
         {/* Infinite scroll loading for mobile */}
-        {enableInfiniteScroll && loadingMore && (
+        {infiniteScroll && loadingMore && (
           <div
             className={`text-center flex items-center justify-center py-3 ${loadingMoreClassName}`}
             data-loading-more
@@ -2121,21 +2121,21 @@ function TableInner<TData>(
       aria-label={ariaLabel}
       data-table-container
       data-striped={striped || undefined}
-      data-density={density}
+      data-size={size}
     >
       {/* Search bar */}
       {showSearch &&
         (() => {
           const iconPos = searchIconPosition;
           const showIcon = iconPos !== "none";
-          const iconLeft = iconPos === "left";
+          const iconAtStart = iconPos === "start";
           const IconComponent = CustomSearchIcon || SearchIcon;
-          const inputPl = showIcon && iconLeft ? "pl-9" : "pl-3";
+          const inputPl = showIcon && iconAtStart ? "pl-9" : "pl-3";
           const inputPr = globalFilter
-            ? showIcon && !iconLeft
+            ? showIcon && !iconAtStart
               ? "pr-16"
               : "pr-9"
-            : showIcon && !iconLeft
+            : showIcon && !iconAtStart
               ? "pr-9"
               : "pr-3";
 
@@ -2143,7 +2143,7 @@ function TableInner<TData>(
             <div className={`mb-3 ${searchBarClassName}`} data-table-search>
               <div
                 className="relative group/search"
-                data-side={showIcon ? (iconLeft ? "start" : "end") : undefined}
+                data-side={showIcon ? (iconAtStart ? "start" : "end") : undefined}
               >
                 {showIcon && <IconComponent className={searchIconClassName} />}
                 <input
@@ -2291,7 +2291,7 @@ function TableInner<TData>(
       </div>
 
       {/* Infinite scroll loading indicator */}
-      {enableInfiniteScroll && loadingMore && (
+      {infiniteScroll && loadingMore && (
         <div
           className={`w-full text-center flex items-center justify-center py-3 ${loadingMoreClassName}`}
           data-loading-more
@@ -2299,7 +2299,7 @@ function TableInner<TData>(
           {loadingMoreContent ?? "Loading more..."}
         </div>
       )}
-      {enableInfiniteScroll && !hasMore && infiniteEndContent !== undefined && (
+      {infiniteScroll && !hasMore && infiniteEndContent !== undefined && (
         <div
           className={`w-full text-center py-3 text-sm ${loadingMoreClassName}`}
         >

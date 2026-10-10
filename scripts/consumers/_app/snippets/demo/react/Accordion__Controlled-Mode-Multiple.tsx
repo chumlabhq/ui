@@ -5,7 +5,7 @@ export default function AccordionExample() {
   const [multipleValue, setMultipleValue] = useState<string[]>(["multi-1"]);
   return (
     <Accordion
-      type="multiple"
+      selectionMode="multiple"
       value={multipleValue}
       onValueChange={setMultipleValue}
       classes={

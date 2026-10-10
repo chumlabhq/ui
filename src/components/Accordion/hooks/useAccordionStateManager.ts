@@ -2,10 +2,10 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect.js";
 import { useControlledSwitchWarning } from "../../../utils/useControlledSwitchWarning.js";
 import { createExpandedStore } from "../utils/context.js";
-import type { AccordionType } from "../utils/types.js";
+import type { AccordionSelectionMode } from "../utils/types.js";
 
 export interface UseAccordionStateManagerOptions {
-  type: AccordionType;
+  selectionMode: AccordionSelectionMode;
   collapsible: boolean;
   maxExpanded: number | undefined;
   controlledValue: string | string[] | null | undefined;
@@ -40,7 +40,7 @@ export function useAccordionStateManager(
   options: UseAccordionStateManagerOptions,
 ): UseAccordionStateManagerReturn {
   const {
-    type,
+    selectionMode,
     collapsible,
     maxExpanded,
     controlledValue,
@@ -121,7 +121,7 @@ export function useAccordionStateManager(
   useIsomorphicLayoutEffect(() => {
     if (
       defaultExpandAll &&
-      type === "multiple" &&
+      selectionMode === "multiple" &&
       !isControlled &&
       !defaultExpandAllApplied.current
     ) {
@@ -131,13 +131,13 @@ export function useAccordionStateManager(
         setInternalValue(new Set(items));
       }
     }
-  }, [defaultExpandAll, type, isControlled, getOrderedItems]);
+  }, [defaultExpandAll, selectionMode, isControlled, getOrderedItems]);
 
   const fireCallbacks = useCallback(
     (newSet: Set<string>, changedValue?: string, wasExpanded?: boolean) => {
       const cb = onValueChangeRef.current;
       if (cb) {
-        if (type === "single") {
+        if (selectionMode === "single") {
           const singleValue = Array.from(newSet)[0] ?? null;
           (cb as (value: string | null) => void)(singleValue);
         } else {
@@ -156,7 +156,7 @@ export function useAccordionStateManager(
         );
       }
     },
-    [type, itemCount, announceExpanded],
+    [selectionMode, itemCount, announceExpanded],
   );
 
   const computeNewValue = useCallback(
@@ -168,12 +168,12 @@ export function useAccordionStateManager(
       const newSet = new Set(prev);
 
       if (isCurrentlyExpanded) {
-        if (type === "single" && !collapsible && newSet.size === 1) {
+        if (selectionMode === "single" && !collapsible && newSet.size === 1) {
           return prev;
         }
         newSet.delete(value);
       } else {
-        if (type === "single") {
+        if (selectionMode === "single") {
           newSet.clear();
         }
         if (maxExpanded !== undefined && newSet.size >= maxExpanded) {
@@ -184,7 +184,7 @@ export function useAccordionStateManager(
 
       return newSet;
     },
-    [type, collapsible, maxExpanded],
+    [selectionMode, collapsible, maxExpanded],
   );
 
   const applyStateChange = useCallback(
@@ -250,7 +250,7 @@ export function useAccordionStateManager(
   );
 
   const expandAll = useCallback(() => {
-    if (type !== "multiple") return;
+    if (selectionMode !== "multiple") return;
 
     const items = getOrderedItems();
     const itemsToExpand = maxExpanded ? items.slice(0, maxExpanded) : items;
@@ -263,10 +263,10 @@ export function useAccordionStateManager(
         `All items expanded. ${itemsToExpand.length} of ${items.length} items expanded.`,
       );
     }
-  }, [type, maxExpanded, getOrderedItems, applyStateChange, announceExpanded]);
+  }, [selectionMode, maxExpanded, getOrderedItems, applyStateChange, announceExpanded]);
 
   const collapseAll = useCallback(() => {
-    if (type === "single" && !collapsible) return;
+    if (selectionMode === "single" && !collapsible) return;
 
     const newSet = new Set<string>();
     applyStateChange(newSet);
@@ -274,14 +274,14 @@ export function useAccordionStateManager(
     if (announceExpanded) {
       announceRef.current("All items collapsed.");
     }
-  }, [type, collapsible, applyStateChange, announceExpanded]);
+  }, [selectionMode, collapsible, applyStateChange, announceExpanded]);
 
   const expand = useCallback(
     (value: string) => {
       const current = expandedValuesRef.current;
       if (current.has(value)) return;
 
-      if (type === "single") {
+      if (selectionMode === "single") {
         const newSet = new Set([value]);
         applyStateChange(newSet, value, false);
       } else {
@@ -291,7 +291,7 @@ export function useAccordionStateManager(
         applyStateChange(newSet, value, false);
       }
     },
-    [type, maxExpanded, applyStateChange],
+    [selectionMode, maxExpanded, applyStateChange],
   );
 
   const collapse = useCallback(
@@ -299,13 +299,13 @@ export function useAccordionStateManager(
       const current = expandedValuesRef.current;
       if (!current.has(value)) return;
 
-      if (type === "single" && !collapsible) return;
+      if (selectionMode === "single" && !collapsible) return;
 
       const newSet = new Set(current);
       newSet.delete(value);
       applyStateChange(newSet, value, true);
     },
-    [type, collapsible, applyStateChange],
+    [selectionMode, collapsible, applyStateChange],
   );
 
   const isExpanded = useCallback(

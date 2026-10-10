@@ -447,7 +447,7 @@ const loadMarkerTooltip = () =>
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   (
     {
-      mode = "single",
+      selectionMode = "single",
       value,
       defaultValue,
       onValueChange,
@@ -590,7 +590,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       handleKeyDown,
       handleCalendarKeyDown,
     } = useDatePicker({
-      mode,
+      selectionMode,
       value,
       defaultValue,
       onValueChange,
@@ -611,17 +611,17 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       onMonthChange,
     } as UseDatePickerProps);
 
-    const singleValue = mode === "single" ? (currentValue as Date | null | undefined) : undefined;
-    const rangeValue = mode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
-    const multipleValue = mode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
+    const singleValue = selectionMode === "single" ? (currentValue as Date | null | undefined) : undefined;
+    const rangeValue = selectionMode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
+    const multipleValue = selectionMode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
 
-    const emitSingle = mode === "single"
+    const emitSingle = selectionMode === "single"
       ? (onValueChange as ((date: Date | null, dateValue: DateValue | null) => void) | undefined)
       : undefined;
-    const emitRange = mode === "range"
+    const emitRange = selectionMode === "range"
       ? (onValueChange as ((range: DateRange | null, rangeValue: DateRangeValue | null) => void) | undefined)
       : undefined;
-    const emitMultiple = mode === "multiple"
+    const emitMultiple = selectionMode === "multiple"
       ? (onValueChange as ((dates: Date[] | null, dateValues: DateValue[] | null) => void) | undefined)
       : undefined;
 
@@ -741,21 +741,21 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     );
 
     const displayValue = (() => {
-      if (mode === "single" && singleValue) {
+      if (selectionMode === "single" && singleValue) {
         return formatDate(singleValue, dateFormat, locale);
       }
-      if (mode === "range" && (rangeValue?.start || rangeValue?.end)) {
+      if (selectionMode === "range" && (rangeValue?.start || rangeValue?.end)) {
         return formatDateRange(rangeValue, dateFormat, locale);
       }
-      if (mode === "multiple" && multipleValue?.length) {
+      if (selectionMode === "multiple" && multipleValue?.length) {
         return formatMultipleDates(multipleValue, dateFormat, locale);
       }
       return "";
     })();
 
     const defaultPlaceholder = (() => {
-      if (mode === "single") return "Select a date";
-      if (mode === "range") return "Select date range";
+      if (selectionMode === "single") return "Select a date";
+      if (selectionMode === "range") return "Select date range";
       return "Select dates";
     })();
 
@@ -774,7 +774,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       (preset: DatePreset) => {
         const presetValue = preset.getValue();
 
-        if (mode === "single" && presetValue instanceof Date) {
+        if (selectionMode === "single" && presetValue instanceof Date) {
           const dateValue = {
             date: presetValue,
             dateString: presetValue.toISOString().split("T")[0],
@@ -783,7 +783,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           emitSingle?.(presetValue, dateValue);
           handleClose();
         } else if (
-          mode === "range" &&
+          selectionMode === "range" &&
           typeof presetValue === "object" &&
           "start" in presetValue
         ) {
@@ -804,7 +804,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               : null,
           });
           handleClose();
-        } else if (mode === "multiple" && Array.isArray(presetValue)) {
+        } else if (selectionMode === "multiple" && Array.isArray(presetValue)) {
           const dates = presetValue;
           const dateValues = dates.map((d) => ({
             date: d,
@@ -814,7 +814,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           emitMultiple?.(dates, dateValues);
         }
       },
-      [mode, emitSingle, emitRange, emitMultiple, setCurrentValue, handleClose],
+      [selectionMode, emitSingle, emitRange, emitMultiple, setCurrentValue, handleClose],
     );
 
     const weekdays = getWeekdayHeaders(weekStartsOn, "EEE", locale);
@@ -929,14 +929,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               aria-modal="true"
               tabIndex={-1}
               onKeyDown={handlePanelKeyDown}
-              aria-label={`${mode === "single" ? "Date" : mode === "range" ? "Date range" : "Multiple dates"} picker`}
+              aria-label={`${selectionMode === "single" ? "Date" : selectionMode === "range" ? "Date range" : "Multiple dates"} picker`}
               className={mergedClasses.content}
             >
               {showPresets && PresetsPanel && (
                 // eslint-disable-next-line react-hooks/static-components
                 <PresetsPanel
                   presets={presets}
-                  mode={mode}
+                  selectionMode={selectionMode}
                   value={singleValue}
                   rangeValue={rangeValue}
                   multipleValue={multipleValue}

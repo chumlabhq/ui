@@ -3,13 +3,16 @@
  *
  * Slice A2a renamed the callbacks and controlled pairs that broke the library's
  * own conventions: `checked` paired with `onValueChange`, a Table callback
- * named for nothing it controls, loaders spelled as events. Nothing is
+ * named for nothing it controls, loaders spelled as events. A2b renamed the
+ * prefixed booleans (`enable…`, `disable…`, `is…`), the props that called a
+ * mode or a layout a `variant` or a `type`, and the `left`/`right` position
+ * values, which are now `start`/`end`. Nothing is
  * published, so there are no aliases and no deprecations — the old name is
  * simply gone. A name that comes back anywhere, in a type, a demo, a snippet a
  * consumer copies or the docs the codegen product reads, is a second API for
  * the same thing, and the generated code picks whichever it saw last.
  *
- * Each tombstone is scoped to the components it belonged to, in one of two ways:
+ * Each tombstone is scoped to the components it belonged to, in one of three ways:
  *
  *   word       no other export has a prop by that name, so the word itself is
  *              the tombstone, anywhere in the population below
@@ -20,6 +23,21 @@
  *              directory, schema root, componentDocs and component-index
  *              entries, their llms-full section, and JSX attributes on their
  *              tags everywhere else
+ *   narrow     the old name is a word no directory scan can read — `type`,
+ *              `variant`, `mode` are TypeScript keywords, HTML attributes and
+ *              other components' props inside the same files — so the scan is
+ *              the public type, the schema root, the All Props tables,
+ *              componentDocs, component-index, JSX attributes on the
+ *              component's tags in every file including its own, the
+ *              component's own fixture `props`, and for Toast the options
+ *              object of every `toast.*(…)` call
+ *
+ * Old union VALUES are tombstoned too, where the prop kept its name:
+ * `iconPosition="left"`. A value hit is the literal as a JSX attribute on the
+ * component's tag, as the prop's value in its fixtures, in the schema enum and
+ * the generated docs' type text, and on a line of the component's own
+ * directory that names the prop. The compiler then holds each renamed prop's
+ * union to exactly its new members, so a value can be neither missing nor kept.
  *
  * Comments are scanned, not stripped. GATE-RULES' "strip comments first" is
  * about counting code; a tombstone is about a name, and JSDoc and prose are
@@ -47,7 +65,7 @@ interface Tombstone {
   now: string;
   /** The exports the old name was a prop of. */
   components: string[];
-  scope: "word" | "component";
+  scope: "word" | "component" | "narrow";
 }
 
 const DROPDOWNS = ["Dropdown", "SearchableDropdown", "MultiSelectDropdown", "MultiSelectSearchableDropdown", "CascadingDropdown"];
@@ -71,6 +89,59 @@ const TOMBSTONES: Tombstone[] = [
   { old: "onSubmenuSearch", now: "searchSubmenu", components: ["CascadingDropdown"], scope: "word" },
   { old: "onRemove", now: "onDismiss", components: ["Toast"], scope: "component" },
   { old: "onPasteDetected", now: "onPasteDetect", components: ["InternationalPhoneInput"], scope: "word" },
+
+  // A2b
+  { old: "isFloatingActionsHovered", now: "floatingActionsHovered", components: ["Table"], scope: "word" },
+  { old: "enableColumnFilters", now: "filterable", components: ["Table"], scope: "word" },
+  { old: "enableColumnResizing", now: "resizable", components: ["Table"], scope: "word" },
+  { old: "enableRowDragDrop", now: "reorderable", components: ["Table"], scope: "word" },
+  { old: "enableCopyOnClick", now: "copyOnClick", components: ["Table"], scope: "word" },
+  { old: "enableInfiniteScroll", now: "infiniteScroll", components: ["Table"], scope: "word" },
+  { old: "density", now: "size", components: ["Table"], scope: "component" },
+  { old: "data-density", now: "data-size", components: ["Table"], scope: "word" },
+  { old: "enablePasteDetection", now: "pasteDetection", components: ["InternationalPhoneInput"], scope: "word" },
+  { old: "disableAnimation", now: "reduceMotion", components: ["Modal"], scope: "word" },
+  { old: "disableHoverableContent", now: "hoverableContent", components: ["Tooltip"], scope: "word" },
+  { old: "showLabel", now: "rowsPerPagePrefix", components: ["Pagination"], scope: "component" },
+  { old: "rowsPerPageLabel", now: "rowsPerPageSuffix", components: ["Pagination"], scope: "word" },
+  { old: "type", now: "variant", components: ["Toast"], scope: "narrow" },
+  { old: "ToastType", now: "ToastVariant", components: ["Toast"], scope: "word" },
+  { old: "data-toast-type", now: "data-variant", components: ["Toast"], scope: "word" },
+  { old: "variant", now: "mode", components: ["TimePicker"], scope: "narrow" },
+  { old: "TimePickerVariant", now: "TimePickerMode", components: ["TimePicker"], scope: "word" },
+  { old: "variant", now: "layout", components: ["AvatarGroup"], scope: "narrow" },
+  { old: "GroupVariant", now: "AvatarGroupLayout", components: ["AvatarGroup"], scope: "word" },
+  { old: "type", now: "selectionMode", components: ["Accordion"], scope: "narrow" },
+  { old: "AccordionType", now: "AccordionSelectionMode", components: ["Accordion"], scope: "word" },
+  { old: "data-type", now: "data-selection-mode", components: ["Accordion"], scope: "word" },
+  { old: "mode", now: "selectionMode", components: ["DatePicker"], scope: "narrow" },
+  { old: "DatePickerMode", now: "DatePickerSelectionMode", components: ["DatePicker"], scope: "word" },
+  { old: "dotSize", now: "size", components: ["DotLoader"], scope: "word" },
+];
+
+interface ValueTombstone {
+  component: string;
+  prop: string;
+  /** Literals the prop no longer takes. */
+  old: string[];
+  /** The prop's whole union now, read by the compiler. */
+  now: string[];
+}
+
+const VALUE_TOMBSTONES: ValueTombstone[] = [
+  { component: "AccordionTrigger", prop: "iconPosition", old: ["left", "right"], now: ["start", "end", "none"] },
+  { component: "TabPanel", prop: "iconPosition", old: ["left", "right"], now: ["start", "end"] },
+  { component: "Button", prop: "loaderPosition", old: ["left", "right"], now: ["start", "end"] },
+  { component: "Table", prop: "expandColumnPosition", old: ["left", "right"], now: ["start", "end"] },
+  { component: "Table", prop: "dragColumnPosition", old: ["left", "right"], now: ["start", "end"] },
+  { component: "Table", prop: "searchIconPosition", old: ["left", "right"], now: ["start", "end", "none"] },
+  { component: "Stepper", prop: "labelPosition", old: ["right"], now: ["end", "bottom"] },
+  { component: "Table", prop: "size", old: ["compact", "comfortable", "spacious"], now: ["sm", "md", "lg"] },
+  { component: "TimePicker", prop: "mode", old: [], now: ["dropdown", "clock"] },
+  { component: "AvatarGroup", prop: "layout", old: [], now: ["stack", "grid", "inline"] },
+  { component: "Accordion", prop: "selectionMode", old: [], now: ["single", "multiple"] },
+  { component: "DatePicker", prop: "selectionMode", old: [], now: ["single", "range", "multiple"] },
+  { component: "Toast", prop: "variant", old: [], now: ["success", "warning", "error", "info"] },
 ];
 
 /**
@@ -98,7 +169,16 @@ const SHARED_DIRECTORY = new Set(["Accordion"]);
 
 const DIR_OF: Record<string, string> = {};
 for (const { name } of (index as { components: { name: string }[] }).components) DIR_OF[name] = name;
-DIR_OF.AccordionItem = "Accordion";
+for (const [exp, dir] of Object.entries({
+  AccordionItem: "Accordion",
+  AccordionTrigger: "Accordion",
+  AvatarGroup: "Avatar",
+  DotLoader: "Loader",
+})) DIR_OF[exp] = dir;
+
+/** The fixture file for an export: `<Dir>.fixtures.tsx`, or `<Dir>.<Export>.fixtures.tsx` for a sub-export. */
+const fixtureFileOf = (exp: string) =>
+  `src/__tests__/fixtures/${DIR_OF[exp] === exp ? exp : `${DIR_OF[exp]}.${exp}`}.fixtures.tsx`;
 
 type Group = "library" | "demos" | "snippets" | "componentDocs" | "tests" | "aimd" | "schema" | "llms" | "ai-index";
 
@@ -175,10 +255,11 @@ function wordHits(text: string, name: string): number[] {
  * an attribute's expression (`onChange={() => x.onValueChange}`) is not an
  * attribute of the tag.
  */
-function jsxAttributes(text: string, tag: string): { attrs: string[]; line: number }[] {
-  const out: { attrs: string[]; line: number }[] = [];
+function jsxAttributes(text: string, tag: string): { attrs: string[]; line: number; raw: string }[] {
+  const out: { attrs: string[]; line: number; raw: string }[] = [];
   for (const m of text.matchAll(new RegExp(`<${tag}(?![\\w.])`, "g"))) {
     let i = m.index! + m[0].length;
+    const start = i;
     if (text[i] === "<") {
       let angle = 0;
       for (; i < text.length; i++) {
@@ -208,7 +289,7 @@ function jsxAttributes(text: string, tag: string): { attrs: string[]; line: numb
       top += c;
     }
     const attrs = [...top.matchAll(/(?:^|\s)([A-Za-z_$][\w$-]*)(?=\s*=|\s|\/|$)/g)].map((a) => a[1]);
-    out.push({ attrs, line: text.slice(0, m.index).split("\n").length });
+    out.push({ attrs, line: text.slice(0, m.index).split("\n").length, raw: text.slice(start, i) });
   }
   return out;
 }
@@ -240,6 +321,25 @@ function propsTypeOf(exportName: string): { type: ts.Type; at: ts.Node } {
   const at = (sym.valueDeclaration ?? sym.declarations![0])!;
   const sig = checker.getTypeOfSymbolAtLocation(sym, at).getCallSignatures()[0];
   return { type: checker.getTypeOfSymbolAtLocation(sig.getParameters()[0], at), at };
+}
+
+/** The other component exports of a component's directory. */
+function siblingsOf(exportName: string): string[] {
+  const sf = program.getSourceFile(`${SRC}/${DIR_OF[exportName]}/index.ts`);
+  if (!sf) return [];
+  return checker
+    .getExportsOfModule(checker.getSymbolAtLocation(sf)!)
+    .map((s) => s.name)
+    .filter((n) => n !== exportName && /^[A-Z]/.test(n) && !/Context$|Icon$/.test(n))
+    .filter((n) => {
+      try {
+        DIR_OF[n] ??= DIR_OF[exportName];
+        propsTypeOf(n);
+        return true;
+      } catch {
+        return false;
+      }
+    });
 }
 
 function propNames(exportName: string): Set<string> {
@@ -299,6 +399,90 @@ function mdSection(text: string, heading: RegExp): string {
   return lines.slice(start, end < 0 ? undefined : end).join("\n");
 }
 
+/**
+ * A component's documented props in its schema: the root's `properties` and
+ * every `oneOf` branch (Accordion, DatePicker and Loader document their
+ * discriminated unions as branches), or for a sub-export its `subComponents`
+ * entry and the branch titled with its name.
+ */
+function schemaPropsOf(exp: string): Record<string, unknown> | null {
+  const dir = DIR_OF[exp];
+  const path = `${SRC}/${dir}/${dir}.schema.json`;
+  if (!existsSync(path)) return null;
+  const schema = JSON.parse(readFileSync(path, "utf8"));
+  const branches: { title?: string; properties?: Record<string, unknown> }[] = schema.oneOf ?? [];
+  const parts =
+    exp === dir
+      ? [schema.properties, ...branches.filter((b) => !b.title || b.title === exp).map((b) => b.properties)]
+      : [schema.subComponents?.[exp]?.properties, ...branches.filter((b) => b.title === exp).map((b) => b.properties)];
+  const present = parts.filter(Boolean) as Record<string, unknown>[];
+  return present.length ? Object.assign({}, ...present) : null;
+}
+
+function docPropsOf(exp: string): { name: string; type: string }[] | null {
+  const doc = COMPONENT_DOCS[DIR_OF[exp]];
+  if (!doc) return null;
+  return exp === DIR_OF[exp] ? doc.props : (doc.subComponents.find((s) => s.name === exp)?.props ?? null);
+}
+
+/**
+ * Lines where a fixture's `props: { … }` object names `key` (with `value`, when
+ * given). The object is read to its balanced closing brace, since props carry
+ * nested objects (`tabs: TABS.map((t) => ({ ...t, icon }))`).
+ */
+function propsKeyHits(text: string, key: string, value?: string): number[] {
+  const lines: number[] = [];
+  const keyRe = new RegExp(`(?<![\\w$.])${key}\\s*:${value === undefined ? "" : `\\s*["']${value}["']`}`, "g");
+  for (const m of text.matchAll(/props:\s*\{/g)) {
+    const open = m.index! + m[0].length - 1;
+    let depth = 0;
+    let i = open;
+    for (; i < text.length; i++) {
+      if (text[i] === "{") depth++;
+      else if (text[i] === "}" && --depth === 0) break;
+    }
+    for (const k of text.slice(open, i).matchAll(keyRe)) lines.push(text.slice(0, open + k.index!).split("\n").length);
+  }
+  return lines;
+}
+
+/**
+ * Lines where a call into the toast API carries the key in its arguments: every
+ * `ToastContextValue` method on a toast-named object (`toast.toast(…)`,
+ * `toastApi.info(…)`), the provider's own `addToast(…)`, and — in a file that
+ * calls `useToast()` — the methods destructured out of it (`info(…)`).
+ */
+function toastCallKeyHits(text: string, key: string): number[] {
+  const lines: number[] = [];
+  const keyRe = new RegExp(`(?<![\\w$.])${key}\\s*:`);
+  const calls = /useToast\(/.test(text)
+    ? /(?<![\w$.])(?:addToast|toast|success|warning|error|info|\w*[tT]oast\w*\.(?:toast|success|warning|error|info))\s*\(/g
+    : /(?<![\w$.])(?:addToast|\w*[tT]oast\w*\.(?:toast|success|warning|error|info))\s*\(/g;
+  for (const m of text.matchAll(calls)) {
+    let depth = 0;
+    let i = m.index! + m[0].length - 1;
+    for (; i < text.length; i++) {
+      if (text[i] === "(") depth++;
+      else if (text[i] === ")" && --depth === 0) break;
+    }
+    if (keyRe.test(text.slice(m.index!, i))) lines.push(text.slice(0, m.index).split("\n").length);
+  }
+  return lines;
+}
+
+/** The literal members of a prop's union, as the checker reads them; empty when it is not a literal union. */
+function literalsOf(exportName: string, prop: string): string[] | null {
+  const { type, at } = propsTypeOf(exportName);
+  const members = type.isUnion() ? type.types.map((t) => t.getProperty(prop)).filter(Boolean) : [type.getProperty(prop)];
+  if (!members[0]) return null;
+  const values = new Set<string>();
+  for (const sym of members) {
+    const pt = checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(sym!, at));
+    for (const u of pt.isUnion() ? pt.types : [pt]) if (u.isStringLiteral()) values.add(u.value);
+  }
+  return [...values].sort();
+}
+
 function scan(): Hit[] {
   const hits: Hit[] = [];
   const indexEntries = (index as { components: { name: string; props?: string[] }[] }).components;
@@ -319,25 +503,51 @@ function scan(): Hit[] {
     const dirs = new Set(t.components.map((c) => `${SRC}/${DIR_OF[c]}/`));
     const own = (path: string) => [...dirs].some((d) => path.startsWith(d));
 
+    const narrow = t.scope === "narrow";
     for (const c of t.components) {
       const dir = DIR_OF[c];
-      const schemaPath = `${SRC}/${dir}/${dir}.schema.json`;
-      if (existsSync(schemaPath) && t.old in (JSON.parse(readFileSync(schemaPath, "utf8")).properties ?? {}))
-        add(`${schemaPath} properties`, "schema");
-      if (COMPONENT_DOCS[c]?.props.some((p) => p.name === t.old)) add(`componentDocs ${c}.props`, "componentDocs");
+      if (schemaPropsOf(c) && t.old in schemaPropsOf(c)!) add(`${dir}.schema.json ${c} properties`, "schema");
+      if (docPropsOf(c)?.some((p) => p.name === t.old)) add(`componentDocs ${c}.props`, "componentDocs");
       if (indexEntries.find((e) => e.name === c)?.props?.includes(t.old)) add(`ai/component-index.json ${c}.props`, "ai-index");
 
-      if (SHARED_DIRECTORY.has(dir)) {
+      if (narrow) {
+        const fixtures = SOURCES.find((s) => s.path === fixtureFileOf(c));
+        if (fixtures)
+          for (const line of propsKeyHits(fixtures.text, t.old)) add(`${fixtures.path}:${line} props.${t.old}`, "tests");
+      }
+
+      if (SHARED_DIRECTORY.has(dir) || narrow) {
+        // The name in backticks — a table row or prose — anywhere in the
+        // component's doc; bare, `mode` and `type` are also English. Shared
+        // directories keep the old name on a sibling, so only All Props there.
+        // A sibling export that keeps the name (AvatarBadge's `variant` beside
+        // AvatarGroup's) narrows it to the lines that name this component.
+        const keptBySibling = siblingsOf(c).some((s) => propNames(s).has(t.old));
+        const named = (text: string) =>
+          text
+            .split("\n")
+            .filter((l) => !keptBySibling || new RegExp(`(?<![\\w$])${c}(?![\\w$])`).test(l))
+            .reduce((n, l) => n + [...l.matchAll(new RegExp(`\`${t.old}\``, "g"))].length, 0);
         const aimd = SOURCES.find((s) => s.group === "aimd" && s.path.startsWith(`${SRC}/${dir}/`));
-        if (aimd && wordHits(mdSection(aimd.text, /^## All Props/), t.old).length) add(`${aimd.path} All Props`, "aimd");
-        if (wordHits(mdSection(llmsSection(c), /^### All Props/), t.old).length) add(`llms-full.txt ${c} All Props`, "llms");
+        const docText = (text: string, heading: RegExp) => (narrow ? text : mdSection(text, heading));
+        if (aimd && named(docText(aimd.text, /^## All Props/))) add(`${aimd.path} \`${t.old}\` ×${named(docText(aimd.text, /^## All Props/))}`, "aimd");
+        const llms = docText(llmsSection(c), /^### All Props/);
+        if (named(llms)) add(`llms-full.txt ${c} \`${t.old}\` ×${named(llms)}`, "llms");
       } else {
         for (const line of wordHits(llmsSection(c), t.old)) add(`llms-full.txt ## ${c} +${line}`, "llms");
       }
     }
 
+    if (narrow && t.components.includes("Toast"))
+      for (const s of SOURCES)
+        if (!GENERATED_FILES.has(s.path))
+          for (const line of toastCallKeyHits(s.text, t.old)) add(`${s.path}:${line} toast(…{ ${t.old} })`, s.group);
+    if (narrow && t.components.includes("Toast"))
+      for (const g of GENERATED_STRINGS)
+        if (toastCallKeyHits(g.text, t.old).length) add(`${g.path} toast(…{ ${t.old} })`, g.path.startsWith("componentDocs") ? "componentDocs" : "snippets");
+
     for (const s of SOURCES) {
-      if (own(s.path)) {
+      if (own(s.path) && !narrow) {
         if ([...dirs].some((d) => SHARED_DIRECTORY.has(d.slice(SRC.length + 1, -1)))) continue;
         for (const line of wordHits(s.text, t.old))
           if (!isExcused(t.old, s.path, s.text, line)) add(`${s.path}:${line}`, s.group);
@@ -358,6 +568,39 @@ function scan(): Hit[] {
         for (const { attrs, line } of jsxAttributes(llms.text, c))
           if (attrs.includes(t.old)) add(`llms-full.txt:${line} <${c}>`, "llms");
   }
+
+  for (const v of VALUE_TOMBSTONES) {
+    const dir = DIR_OF[v.component];
+    for (const old of v.old) {
+      const label = `${v.prop}="${old}"`;
+      const add = (where: string, group: Hit["group"]) => hits.push({ old: label, components: v.component, where, group });
+      const quoted = new RegExp(`\\\\?["']${old}\\\\?["']`);
+      const attr = new RegExp(`(?:^|\\s)${v.prop}\\s*=\\s*(?:"${old}"|'${old}'|\\{\\s*["']${old}["']\\s*\\})`);
+
+      const schemaEntry = schemaPropsOf(v.component)?.[v.prop];
+      if (schemaEntry && quoted.test(JSON.stringify(schemaEntry))) add(`${dir}.schema.json ${v.component}.${v.prop}`, "schema");
+      const docEntry = docPropsOf(v.component)?.find((p) => p.name === v.prop);
+      if (docEntry && quoted.test(docEntry.type)) add(`componentDocs ${v.component}.${v.prop}`, "componentDocs");
+
+      const fixtures = SOURCES.find((s) => s.path === fixtureFileOf(v.component));
+      if (fixtures)
+        for (const line of propsKeyHits(fixtures.text, v.prop, old)) add(`${fixtures.path}:${line} props.${label}`, "tests");
+
+      for (const s of SOURCES) {
+        if (s.path.startsWith(`${SRC}/${dir}/`) || s.path === "llms-full.txt") {
+          const text = s.path === "llms-full.txt" ? llmsSection(dir) : s.text;
+          text.split("\n").forEach((l, i) => {
+            if (wordRe(v.prop).test(l) && quoted.test(l)) add(`${s.path === "llms-full.txt" ? `llms-full.txt ## ${dir}` : s.path}:${i + 1}`, s.group);
+          });
+        }
+        if (GENERATED_FILES.has(s.path) || s.path === "llms-full.txt") continue;
+        for (const { raw, line } of jsxAttributes(s.text, v.component)) if (attr.test(raw)) add(`${s.path}:${line} <${v.component} ${label}>`, s.group);
+      }
+      for (const g of GENERATED_STRINGS)
+        for (const { raw } of jsxAttributes(g.text, v.component))
+          if (attr.test(raw)) add(`${g.path} <${v.component} ${label}>`, g.path.startsWith("componentDocs") ? "componentDocs" : "snippets");
+    }
+  }
   return hits;
 }
 
@@ -370,14 +613,20 @@ console.log(
 );
 for (const t of TOMBSTONES) {
   const mine = HITS.filter((h) => h.old === t.old && h.components === t.components.join(", "));
-  console.log(`  ${t.old.padEnd(22)} → ${t.now.padEnd(24)} ${t.components.join(", ").padEnd(48)} ${t.scope.padEnd(9)} hits=${mine.length}`);
+  console.log(`  ${t.old.padEnd(24)} → ${t.now.padEnd(24)} ${t.components.join(", ").padEnd(48)} ${t.scope.padEnd(9)} hits=${mine.length}`);
 }
+console.log(`API_VALUES props=${VALUE_TOMBSTONES.length} old-values=${VALUE_TOMBSTONES.reduce((n, v) => n + v.old.length, 0)}`);
+for (const v of VALUE_TOMBSTONES)
+  for (const old of v.old) {
+    const mine = HITS.filter((h) => h.old === `${v.prop}="${old}"` && h.components === v.component);
+    console.log(`  ${`${v.component}.${v.prop}="${old}"`.padEnd(44)} hits=${mine.length}`);
+  }
 
-describe("API names: A2a's old names are gone", () => {
+describe("API names: A2a's and A2b's old names and values are gone", () => {
   it("reads attributes on the named tag only, outside expressions", () => {
     const text = `<Checkbox checked onValueChange={set} /> <CheckboxGroup onValueChange={x} />
       <Switch onCheckedChange={() => ({ onValueChange: 1 })} label="a > b" />`;
-    expect(jsxAttributes(text, "Checkbox")).toEqual([{ attrs: ["checked", "onValueChange"], line: 1 }]);
+    expect(jsxAttributes(text, "Checkbox").map(({ attrs, line }) => ({ attrs, line }))).toEqual([{ attrs: ["checked", "onValueChange"], line: 1 }]);
     expect(jsxAttributes(text, "Switch")[0].attrs).toEqual(["onCheckedChange", "label"]);
   });
 
@@ -390,7 +639,8 @@ describe("API names: A2a's old names are gone", () => {
   });
 
   it("every new name is a prop of its components", () => {
-    const missing = TOMBSTONES.filter((t) => !/^[A-Z]/.test(t.old)).flatMap((t) =>
+    // Type names and data attributes are not props.
+    const missing = TOMBSTONES.filter((t) => !/^[A-Z]|-/.test(t.old)).flatMap((t) =>
       t.components.filter((c) => !propNames(c).has(t.now)).map((c) => `${c}.${t.now}`),
     );
     expect(missing).toEqual([]);
@@ -417,6 +667,27 @@ describe("API names: A2a's old names are gone", () => {
     ["Avatar", "onError", /^SyntheticEvent<HTMLImageElement/],
     ["Toast", "onDismiss", /^string$/],
   ];
+
+  it("every renamed prop's union is exactly its new values", () => {
+    const rows = VALUE_TOMBSTONES.map((v) => ({ v, got: literalsOf(v.component, v.prop) }));
+    const wrong = rows.filter(({ v, got }) => JSON.stringify(got) !== JSON.stringify([...v.now].sort()));
+    console.log(`API_UNIONS checked=${rows.length} wrong=${wrong.length}`);
+    for (const { v, got } of rows) console.log(`  ${`${v.component}.${v.prop}`.padEnd(32)} ${got ? got.join(" | ") : "(no such prop)"}`);
+    expect(wrong.map(({ v, got }) => `${v.component}.${v.prop}: ${got ? got.join("|") : "missing"}, want ${v.now.join("|")}`)).toEqual([]);
+  });
+
+  it("the booleans that lost their prefix are booleans", () => {
+    const BOOLEANS: [string, string][] = [
+      ["Table", "floatingActionsHovered"], ["Table", "filterable"], ["Table", "resizable"], ["Table", "reorderable"],
+      ["Table", "copyOnClick"], ["Table", "infiniteScroll"], ["InternationalPhoneInput", "pasteDetection"], ["Tooltip", "hoverableContent"],
+    ];
+    const wrong = BOOLEANS.filter(([c, p]) => {
+      const { type, at } = propsTypeOf(c);
+      const sym = type.getProperty(p);
+      return !sym || checker.typeToString(checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(sym, at))) !== "boolean";
+    });
+    expect(wrong.map(([c, p]) => `${c}.${p}`)).toEqual([]);
+  });
 
   it("callbacks receive what their names promise", () => {
     const rows = SIGNATURES.map(([c, p, re]) => ({ c, p, first: firstParam(c, p), ok: re.test(firstParam(c, p)) }));

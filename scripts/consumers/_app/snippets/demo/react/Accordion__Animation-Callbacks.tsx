@@ -9,7 +9,7 @@ export default function AccordionExample() {
   return (
     <>
       <Accordion
-        type="single"
+        selectionMode="single"
         collapsible
         classes={
           {

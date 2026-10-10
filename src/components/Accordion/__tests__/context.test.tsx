@@ -120,7 +120,7 @@ describe("useAccordionContext", () => {
 
   it("returns the context value when provided", () => {
     const value: AccordionContextValue = {
-      type: "single",
+      selectionMode: "single",
       collapsible: true,
       loop: false,
       itemCount: 3,
@@ -246,7 +246,7 @@ function makeAllContextWrapper(
 }
 
 const baseContext: AccordionContextValue = {
-  type: "single",
+  selectionMode: "single",
   collapsible: true,
   loop: false,
   itemCount: 2,
@@ -384,7 +384,7 @@ describe("useAccordionState", () => {
     const context: AccordionContextValue = {
       ...baseContext,
       itemCount: 3,
-      type: "multiple",
+      selectionMode: "multiple",
     };
     const wrapper = makeAllContextWrapper(new Set<string>(), dispatch, context, baseConfig);
     const { result } = renderHook(() => useAccordionState(), { wrapper });
@@ -392,7 +392,7 @@ describe("useAccordionState", () => {
     expect(result.current.expandedValues).toEqual([]);
     expect(result.current.expandedCount).toBe(0);
     expect(result.current.itemCount).toBe(3);
-    expect(result.current.type).toBe("multiple");
+    expect(result.current.selectionMode).toBe("multiple");
     expect(result.current.disabled).toBe(false);
     expect(result.current.isAllExpanded).toBe(false);
     expect(result.current.isAllCollapsed).toBe(true);
@@ -409,7 +409,7 @@ describe("useAccordionState", () => {
     const context: AccordionContextValue = {
       ...baseContext,
       itemCount: 2,
-      type: "multiple",
+      selectionMode: "multiple",
     };
     const config: AccordionConfigValue = { ...baseConfig, disabled: true };
     const wrapper = makeAllContextWrapper(new Set(["a", "b"]), dispatch, context, config);

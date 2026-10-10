@@ -8,7 +8,7 @@
       "type": "string",
       "description": "Unique identifier for the toast."
     },
-    "type": {
+    "variant": {
       "type": "string",
       "enum": [
         "success",
@@ -16,7 +16,7 @@
         "error",
         "info"
       ],
-      "description": "Visual type/severity of the toast.",
+      "description": "Which status this is, choosing the colour and the indicator glyph.",
       "default": "info"
     },
     "message": {
@@ -50,7 +50,7 @@
     },
     "icon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon replacing the default type icon.",
+      "description": "React.ReactNode — Custom icon replacing the variant's default icon.",
       "x-tsType": "ReactNode"
     },
     "showCloseButton": {

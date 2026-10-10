@@ -60,11 +60,11 @@
     "loaderPosition": {
       "type": "string",
       "enum": [
-        "left",
-        "right"
+        "start",
+        "end"
       ],
-      "description": "Which side of the label the loader appears on.",
-      "default": "right"
+      "description": "Which end of the label the loader appears at: `start` before it, `end` after it.",
+      "default": "end"
     },
     "loaderSize": {
       "type": "number",

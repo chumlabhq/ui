@@ -109,7 +109,7 @@ import { Modal } from "@chumlab/ui";
         />
         <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
           Modal takes{" "}
-          <code className="font-mono text-[12px] text-accent">disableAnimation</code>{" "}
+          <code className="font-mono text-[12px] text-accent">reduceMotion</code>{" "}
           to drop its defaults entirely, and both Modal and Toast take{" "}
           <code className="font-mono text-[12px] text-accent">animationDuration</code>{" "}
           to retime them, so your motion library doesn&rsquo;t fight them.

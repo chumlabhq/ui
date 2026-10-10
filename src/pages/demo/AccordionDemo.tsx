@@ -196,7 +196,7 @@ const AccordionDemo = () => {
             {(["default", "bordered", "separated", "flush"] as const).map((variant) => (
               <div key={variant}>
                 <div className="eyebrow mb-2">{variant}</div>
-                <Accordion type="single" collapsible variant={variant} defaultValue={`v-${variant}`}>
+                <Accordion selectionMode="single" collapsible variant={variant} defaultValue={`v-${variant}`}>
                   <AccordionItem value={`v-${variant}`}>
                     <AccordionTrigger>Shipping</AccordionTrigger>
                     <AccordionContent>Dispatched within two working days.</AccordionContent>
@@ -218,7 +218,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible orientation="horizontal" defaultValue="h-1">
+          <Accordion selectionMode="single" collapsible orientation="horizontal" defaultValue="h-1">
             <AccordionItem value="h-1">
               <AccordionTrigger>Overview</AccordionTrigger>
               <AccordionContent>The first panel, opened along the inline axis.</AccordionContent>
@@ -240,7 +240,7 @@ const AccordionDemo = () => {
           <div className="grid gap-8 md:grid-cols-2">
             <div>
               <div className="eyebrow mb-2">loop</div>
-              <Accordion type="single" collapsible loop>
+              <Accordion selectionMode="single" collapsible loop>
                 <AccordionItem value="loop-1">
                   <AccordionTrigger>First</AccordionTrigger>
                   <AccordionContent>Wraps round to First from Last.</AccordionContent>
@@ -253,7 +253,7 @@ const AccordionDemo = () => {
             </div>
             <div>
               <div className="eyebrow mb-2">loop={"{false}"} (default)</div>
-              <Accordion type="single" collapsible loop={false}>
+              <Accordion selectionMode="single" collapsible loop={false}>
                 <AccordionItem value="noloop-1">
                   <AccordionTrigger>First</AccordionTrigger>
                   <AccordionContent>Stops at the ends.</AccordionContent>
@@ -276,7 +276,7 @@ const AccordionDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           {/* Basic usage — works out-of-the-box with built-in styles */}
           <Accordion
-            type="single"
+            selectionMode="single"
             defaultValue="basic-1"
             collapsible
           >
@@ -315,7 +315,7 @@ const AccordionDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
-            type="single"
+            selectionMode="single"
             defaultValue="nc-1"
             collapsible={false}
             classes={c.accordion}
@@ -344,7 +344,7 @@ const AccordionDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
-            type="multiple"
+            selectionMode="multiple"
             defaultValue={["multi-1", "multi-2"]}
             classes={c.accordion}
           >
@@ -377,7 +377,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="multiple" maxExpanded={2} classes={c.accordion}>
+          <Accordion selectionMode="multiple" maxExpanded={2} classes={c.accordion}>
             <AccordionItem value="max-1">
               <AccordionTrigger>First (open me)</AccordionTrigger>
               <AccordionContent>
@@ -407,7 +407,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="multiple" defaultExpandAll classes={c.accordion}>
+          <Accordion selectionMode="multiple" defaultExpandAll classes={c.accordion}>
             <AccordionItem value="dea-1">
               <AccordionTrigger>All items start open</AccordionTrigger>
               <AccordionContent>This was expanded on mount.</AccordionContent>
@@ -436,7 +436,7 @@ const AccordionDemo = () => {
               </p>
               <DemoWrapper isDarkMode={dark} layout="block">
                 <Accordion
-                  type="single"
+                  selectionMode="single"
                   collapsible
                   headingLevel={level}
                   classes={c.accordion}
@@ -487,7 +487,7 @@ const AccordionDemo = () => {
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
-            type="single"
+            selectionMode="single"
             value={singleValue}
             onValueChange={setSingleValue}
             collapsible
@@ -542,7 +542,7 @@ const AccordionDemo = () => {
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
-            type="multiple"
+            selectionMode="multiple"
             value={multipleValue}
             onValueChange={setMultipleValue}
             classes={c.accordion}
@@ -579,7 +579,7 @@ const AccordionDemo = () => {
               </p>
               <DemoWrapper isDarkMode={dark} layout="block">
                 <Accordion
-                  type="single"
+                  selectionMode="single"
                   collapsible
                   size={size}
                   classes={{
@@ -626,7 +626,7 @@ const AccordionDemo = () => {
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion
-                type="single"
+                selectionMode="single"
                 collapsible
                 disabled
                 classes={c.accordion}
@@ -649,7 +649,7 @@ const AccordionDemo = () => {
               Individual item disabled
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="di-1">
                   <AccordionTrigger>Enabled Item</AccordionTrigger>
                   <AccordionContent>This works.</AccordionContent>
@@ -682,7 +682,7 @@ const AccordionDemo = () => {
               Plus/Minus icons
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="icon-1">
                   <AccordionTrigger
                     expandedIcon={
@@ -729,10 +729,10 @@ const AccordionDemo = () => {
               Icon on left
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="left-1">
                   <AccordionTrigger
-                    iconPosition="left"
+                    iconPosition="start"
                     expandedIcon={
                       <ChevronUpIcon className="w-4 h-4 text-cl-accent" />
                     }
@@ -756,7 +756,7 @@ const AccordionDemo = () => {
               No icon (iconPosition=&quot;none&quot;)
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="noicon-1">
                   <AccordionTrigger iconPosition="none">
                     No icon shown
@@ -785,7 +785,7 @@ const AccordionDemo = () => {
               iconAnimation=&quot;rotate&quot; (default)
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="anim-rotate">
                   <AccordionTrigger iconAnimation="rotate">
                     Toggle to see rotate animation
@@ -804,7 +804,7 @@ const AccordionDemo = () => {
               iconAnimation=&quot;switch&quot;
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="anim-switch">
                   <AccordionTrigger
                     iconAnimation="switch"
@@ -835,7 +835,7 @@ const AccordionDemo = () => {
               iconAnimation=&quot;none&quot;
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="anim-none">
                   <AccordionTrigger iconAnimation="none">
                     Toggle with no animation
@@ -854,7 +854,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible classes={c.accordion}>
+          <Accordion selectionMode="single" collapsible classes={c.accordion}>
             <AccordionItem value="slot-1">
               <AccordionTrigger
                 subtitle="Learn about our performance features"
@@ -918,7 +918,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible dir="rtl" classes={c.accordion}>
+          <Accordion selectionMode="single" collapsible dir="rtl" classes={c.accordion}>
             <AccordionItem value="rtl-1">
               <AccordionTrigger>العنصر الأول</AccordionTrigger>
               <AccordionContent>
@@ -963,7 +963,7 @@ const AccordionDemo = () => {
           </div>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible classes={c.accordion}>
+          <Accordion selectionMode="single" collapsible classes={c.accordion}>
             <AccordionItem value="kb-1">
               <AccordionTrigger>
                 Click here to focus, then use arrow keys
@@ -1029,7 +1029,7 @@ const AccordionDemo = () => {
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
-            type="multiple"
+            selectionMode="multiple"
             ref={accordionRef}
             classes={c.accordion}
             onValueChange={(values: string[]) => {
@@ -1078,7 +1078,7 @@ const AccordionDemo = () => {
           </button>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="multiple" classes={c.accordion}>
+          <Accordion selectionMode="multiple" classes={c.accordion}>
             {dynamicItems.map((item) => (
               <AccordionItem key={item.id} value={item.id}>
                 <AccordionTrigger
@@ -1120,7 +1120,7 @@ const AccordionDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
-            type="multiple"
+            selectionMode="multiple"
             storageKey="accordion-demo-persist"
             classes={c.accordion}
           >
@@ -1161,7 +1161,7 @@ const AccordionDemo = () => {
               lazyLoad (renders only after first open)
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="lazy-1">
                   <AccordionTrigger>Lazy Loaded Content</AccordionTrigger>
                   <AccordionContent lazyLoad>
@@ -1178,7 +1178,7 @@ const AccordionDemo = () => {
               unmountOnClose (removed from DOM when closed)
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={c.accordion}>
+              <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="unmount-1">
                   <AccordionTrigger>Unmount on Close</AccordionTrigger>
                   <AccordionContent unmountOnClose>
@@ -1198,7 +1198,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible defaultValue="ac-1">
+          <Accordion selectionMode="single" collapsible defaultValue="ac-1">
             <AccordionItem value="ac-1">
               <AccordionTrigger asChild>
                 <button className="flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover">
@@ -1301,7 +1301,7 @@ const AccordionDemo = () => {
               </p>
               <DemoWrapper isDarkMode={dark} layout="block">
                 <Accordion
-                  type="single"
+                  selectionMode="single"
                   collapsible
                   animationDuration={duration}
                   animationEasing={easing}
@@ -1327,7 +1327,7 @@ const AccordionDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
-            type="single"
+            selectionMode="single"
             collapsible
             expandOnPrint
             classes={c.accordion}
@@ -1362,7 +1362,7 @@ const AccordionDemo = () => {
             onCheckedChange={setGuardUnsaved}
           />
           <Accordion
-            type="single"
+            selectionMode="single"
             collapsible
             defaultValue="pc-1"
             classes={c.accordion}
@@ -1397,7 +1397,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="multiple" announceExpanded classes={c.accordion}>
+          <Accordion selectionMode="multiple" announceExpanded classes={c.accordion}>
             <AccordionItem value="ann-1">
               <AccordionTrigger>
                 Toggle me (check screen reader)
@@ -1423,7 +1423,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible classes={c.accordion}>
+          <Accordion selectionMode="single" collapsible classes={c.accordion}>
             <AccordionItem value="fm-1">
               <AccordionTrigger>Always in DOM</AccordionTrigger>
               <AccordionContent forceMount>
@@ -1442,7 +1442,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible classes={c.accordion}>
+          <Accordion selectionMode="single" collapsible classes={c.accordion}>
             <AccordionItem value="cb-1">
               <AccordionTrigger>Toggle to fire the callbacks</AccordionTrigger>
               <AccordionContent
@@ -1474,7 +1474,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="multiple" classes={c.accordion}>
+          <Accordion selectionMode="multiple" classes={c.accordion}>
             <AccordionItem
               value="tog-1"
               onExpandedChange={(expanded) =>

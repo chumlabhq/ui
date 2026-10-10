@@ -73,7 +73,7 @@ export default function TabPanelExample() {
       tabs={tabsWithIcons}
       value={iconLeftTab}
       onValueChange={setIconLeftTab}
-      iconPosition="left"
+      iconPosition="start"
       classes={
         {
           root: "w-full",

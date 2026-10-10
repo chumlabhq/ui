@@ -75,7 +75,7 @@ This renders correctly with no additional props, classes, or setup.
 | `status` | Can be a string shorthand (`"online"`) or a config object (`{ type: "online", position: "bottom-right" }`). |
 | AvatarGroup `max` | Hides excess children and shows a surplus count. Set `total` separately if you're rendering a subset from an API. |
 | AvatarGroup `ringColor` | The ring between stacked avatars. Match to your background color for clean overlap (e.g., `ringColor="#111827"` on dark bg). |
-| AvatarGroup `variant` | `"stack"` overlaps, `"grid"` uses CSS grid, `"inline"` uses inline-flex. Only `"stack"` uses `spacing` and `ringColor`. |
+| AvatarGroup `layout` | `"stack"` overlaps, `"grid"` uses CSS grid, `"inline"` uses inline-flex. Only `"stack"` uses `spacing` and `ringColor`. |
 
 ---
 
@@ -146,7 +146,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `ringColor` | `string \| undefined` | Border ring color for overlapping avatars. |
 | `showTooltip` | `boolean \| undefined` | Shows a tooltip with the avatar's name on hover. |
 | `total` | `number \| undefined` | Total count for surplus calculation (when not all items are rendered). |
-| `variant` | `GroupVariant \| undefined` | Layout variant: stacked overlap, grid, or inline. Default: `"stack"`. |
+| `layout` | `AvatarGroupLayout \| undefined` | How the avatars are laid out: stacked overlap, grid, or inline. Default: `"stack"`. |
 | `reverseOrder` | `boolean \| undefined` | Reverses the visual stacking order. |
 | `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Custom render function for the surplus count indicator. |
 | `onAvatarClick` | `((info: { index: number; name?: string \| undefined; }, event: MouseEvent<Element, MouseEvent>) => void) \| undefined` | Click handler for individual avatars within the group. |
@@ -361,7 +361,7 @@ For grouped avatars, match `ringColor` to your background:
   spacing={-6}
   ringColor="#1a1d21"
   showTooltip
-  variant="stack"
+  layout="stack"
 >
   <Avatar
     src="/avatars/alice.jpg"

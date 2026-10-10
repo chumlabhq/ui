@@ -88,7 +88,7 @@ function resolveInitialPhone(
  * - Use for any phone number entry requiring country selection
  * - Minimum: `<InternationalPhoneInput label="Phone" onValueChange={handler} />`
  * - Pair `value` with `onValueChange` for controlled mode
- * - Set `enablePasteDetection` for international number paste handling
+ * - Set `pasteDetection` for international number paste handling
  *
  * Behavior:
  * - Auto-formats numbers per country-specific patterns
@@ -133,7 +133,7 @@ const InternationalPhoneInput = forwardRef<
       validateOnBlur = true,
       validationMessage,
       validate,
-      enablePasteDetection = false,
+      pasteDetection = false,
       copyFormat = "e164",
       onPasteDetect,
       countryDropdownPlaceholder = "Country",
@@ -436,7 +436,7 @@ const InternationalPhoneInput = forwardRef<
 
     const handlePaste = useCallback(
       (e: React.ClipboardEvent<HTMLInputElement>) => {
-        if (!enablePasteDetection || readOnly) return;
+        if (!pasteDetection || readOnly) return;
 
         const pastedText = e.clipboardData.getData("text");
         if (!pastedText) return;
@@ -487,7 +487,7 @@ const InternationalPhoneInput = forwardRef<
         }
       },
       [
-        enablePasteDetection,
+        pasteDetection,
         readOnly,
         sortedCountries,
         preferredCountries,

@@ -10,7 +10,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "Custom progress color",
             description: "Using progressColor prop (inline style)",
             progressColor: "#a855f7"
@@ -24,7 +24,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "Gradient progress",
             description: "Using classes.progress prop",
             classes: {
@@ -41,7 +41,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "success",
+            variant: "success",
             message: "Themed progress",
             description: "Green progress bar",
             progressColor: "#22c55e"

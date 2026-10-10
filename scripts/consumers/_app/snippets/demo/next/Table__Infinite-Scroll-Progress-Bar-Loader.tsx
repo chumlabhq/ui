@@ -229,7 +229,7 @@ export default function TableExample() {
         ref={inf3Ref}
         columns={columns}
         data={inf3Data}
-        enableInfiniteScroll
+        infiniteScroll
         hasMore={inf3HasMore}
         loadingMore={inf3Loading}
         onLoadMore={handleLoadMore3}

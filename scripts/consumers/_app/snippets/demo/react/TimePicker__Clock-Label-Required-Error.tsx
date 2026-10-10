@@ -10,7 +10,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={clockLabeled}
           onValueChange={(v) => setClockLabeled(v)}
-          variant="clock"
+          mode="clock"
           label="Alarm Time"
           required
           classes={
@@ -56,7 +56,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={clockError}
           onValueChange={(v) => setClockError(v)}
-          variant="clock"
+          mode="clock"
           label="Check-in"
           error
           errorMessage="Time is outside business hours."

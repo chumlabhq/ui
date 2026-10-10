@@ -51,7 +51,7 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `clearable` | Only shows clear button when phone input has content and not disabled/readOnly. |
-| `enablePasteDetection` | Must be `true` for `onPasteDetect` to fire. |
+| `pasteDetection` | Must be `true` for `onPasteDetect` to fire. |
 | `copyFormat` | Only affects Ctrl+C behavior. Does not change display format. |
 | `validateOnBlur` | When `true` (default), shows validation error on blur. Set `false` to disable. |
 | `validationMessage` | Overrides the built-in "Please enter a valid phone number" message. |
@@ -118,7 +118,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `validationMessage` | object | — | React.ReactNode - Custom validation message shown on blur validation. |
 | `validate` | object | — | (data: PhoneNumberData) => boolean \| { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators. |
 | `autoComplete` | string | — | Native input autocomplete. Defaults to "off" so browser autofill can't corrupt the national-number field; pass e.g. "tel-national" to opt in. |
-| `enablePasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
+| `pasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
 | `copyFormat` | `"e164"` \| `"international"` \| `"national"` | `"e164"` | Format used when copying the phone number. |
 | `onPasteDetect` | object | — | (data: PasteDetectedData) => void - Fires when a pasted number is recognised, with what it was understood to be. |
 | `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
@@ -291,7 +291,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
 
 ```tsx
 <InternationalPhoneInput
-  enablePasteDetection
+  pasteDetection
   onPasteDetect={(data) => console.log(data.detectedCountry?.name)}
   copyFormat="e164"
 />
@@ -365,7 +365,7 @@ The number itself is a native `<input>`. The country selector is a listbox with 
 |---------|-------|-----|
 | Styles look wrong after overriding one class | `classes` replaces per slot, not merges | Provide the full class string for each slot you override |
 | Validation error shows on every blur | `validateOnBlur` defaults to `true` | Set `validateOnBlur={false}` if you want manual validation only |
-| Paste detection doesn't work | `enablePasteDetection` not set | Add `enablePasteDetection` prop |
+| Paste detection doesn't work | `pasteDetection` not set | Add `pasteDetection` prop |
 | Country doesn't auto-detect on paste | Number missing `+` prefix | Paste detection requires international format with dial code |
 | Want browser autofill to fill the number | `autoComplete` defaults to `"off"` to protect the split field | Pass `autoComplete="tel-national"` to opt back in |
 | Copy gives unexpected format | `copyFormat` defaults to `"e164"` | Set `copyFormat="international"` or `"national"` |
@@ -386,7 +386,7 @@ The number itself is a native `<input>`. The country selector is a listbox with 
 | With label | `title="With Label"` | Label + required |
 | Error / success | `title="Validation States"` | Error and success styling |
 | i18n validation | `title="Validation Message (i18n)"` | Custom messages |
-| Paste detection | `title="Copy & Paste Detection"` | enablePasteDetection + callbacks |
+| Paste detection | `title="Copy & Paste Detection"` | pasteDetection + callbacks |
 | Copy formats | `title="Copy Format Variants"` | E.164, international, national |
 | Disabled / read-only | `title="Disabled State"`, `title="Read-Only State"` | State demos |
 | Custom countries | `title="Custom Countries List"` | Subset of countries |

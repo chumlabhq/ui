@@ -113,7 +113,7 @@ export { default as DatePicker } from "./components/DatePicker/DatePicker.js";
 export type {
   DatePickerProps,
   DatePickerClasses,
-  DatePickerMode,
+  DatePickerSelectionMode,
   DateValue,
   DateRange,
   DateRangeValue,
@@ -323,7 +323,7 @@ export type {
   ClockFaceProps,
   TimeFormat,
   TimeValue,
-  TimePickerVariant,
+  TimePickerMode,
   TimePickerIconProps,
   ClockSelectionMode,
   UseTimePickerProps,
@@ -334,7 +334,7 @@ export { default as Toast } from "./components/Toast/Toast.js";
 export { default as ToastProvider } from "./components/Toast/components/ToastProvider.js";
 export { useToast } from "./components/Toast/utils/context.js";
 export type {
-  ToastType,
+  ToastVariant,
   ToastPosition,
   ToastConfig,
   ToastProps,

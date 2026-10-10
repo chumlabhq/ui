@@ -199,7 +199,7 @@ export default function TableExample() {
         <Table
           columns={columns}
           data={sampleData.slice(0, 5)}
-          enableCopyOnClick
+          copyOnClick
           onCellCopy={
             (value, rowId, columnId) => {
               setLastCopied(
@@ -225,7 +225,7 @@ export default function TableExample() {
       <p className="mt-3 text-sm text-cl-text-secondary">
         Click any cell to copy its value to clipboard. Uses
         {" "}
-        <code className="px-1 rounded bg-cl-bg-elevated">enableCopyOnClick</code>
+        <code className="px-1 rounded bg-cl-bg-elevated">copyOnClick</code>
         {" "}
         and
         {" "}

@@ -146,7 +146,8 @@ const LEFT_UNDEMONSTRATED = new Map([
   [
     "variant",
     "Demonstrated on the parents. AccordionShimmer and AvatarBadge take the variant " +
-      "their parent is already showing; a second demo would restate the parent's.",
+      "their parent is already showing; a second demo would restate the parent's. Toast " +
+      "has no JSX form: `useToast().toast({ variant })` is its public surface and is demonstrated.",
   ],
   [
     "size",
@@ -158,11 +159,6 @@ const LEFT_UNDEMONSTRATED = new Map([
     "dropdownPosition",
     "Demonstrated on Dropdown, Pagination and SearchableDropdown. CascadingDropdown's " +
       "is the same prop with the same three values.",
-  ],
-  [
-    "type",
-    "Toast has no JSX form — `useToast().show({ variant })` is the public surface and is " +
-      "demonstrated. `type` is the internal discriminant of the same idea.",
   ],
 ]);
 

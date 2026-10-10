@@ -5,7 +5,7 @@ export default function AccordionExample() {
     <div className="grid gap-8 md:grid-cols-2">
       <div>
         <div className="eyebrow mb-2">loop</div>
-        <Accordion type="single" collapsible loop>
+        <Accordion selectionMode="single" collapsible loop>
           <AccordionItem value="loop-1">
             <AccordionTrigger>First</AccordionTrigger>
             <AccordionContent>Wraps round to First from Last.</AccordionContent>
@@ -22,7 +22,7 @@ export default function AccordionExample() {
           {"{false}"}
           (default)
         </div>
-        <Accordion type="single" collapsible loop={false}>
+        <Accordion selectionMode="single" collapsible loop={false}>
           <AccordionItem value="noloop-1">
             <AccordionTrigger>First</AccordionTrigger>
             <AccordionContent>Stops at the ends.</AccordionContent>

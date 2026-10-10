@@ -83,7 +83,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={clockEmerald}
           onValueChange={(v) => setClockEmerald(v)}
-          variant="clock"
+          mode="clock"
           format="12h"
           classes={getEmeraldClockTheme()}
         />
@@ -96,7 +96,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={clockRose}
           onValueChange={(v) => setClockRose(v)}
-          variant="clock"
+          mode="clock"
           format="12h"
           classes={getRoseClockTheme()}
         />
@@ -109,7 +109,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={clockViolet}
           onValueChange={(v) => setClockViolet(v)}
-          variant="clock"
+          mode="clock"
           format="12h"
           classes={getVioletClockTheme()}
         />

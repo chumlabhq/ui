@@ -8,7 +8,7 @@ export default function TimePickerExample() {
       <TimePicker
         value={clockMinMax}
         onValueChange={(v) => setClockMinMax(v)}
-        variant="clock"
+        mode="clock"
         minTime="09:00"
         maxTime="17:00"
         classes={

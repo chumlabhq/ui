@@ -115,7 +115,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
 | `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
 | `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
-| `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
+| `loaderPosition` | `"start"` \| `"end"` | `"end"` | Which end of the label the loader appears at: `start` before it, `end` after it. |
 | `loaderSize` | number | `16` | Pixel size of the loading spinner. |
 | `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |

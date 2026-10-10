@@ -85,8 +85,8 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `defaultValue` | number | `1` | Initial page number for uncontrolled usage. |
 | `onRowsPerPageChange` | object | — | (rows: number) => void - Fires when the rows-per-page value changes. |
 | `showRowsPerPage` | boolean | `false` | Whether to show the rows-per-page selector. |
-| `rowsPerPageLabel` | string | `"rows"` | Label text for the rows-per-page selector. |
-| `showLabel` | string | `"Show"` | Label text for the 'show' section of the rows-per-page selector. |
+| `rowsPerPageSuffix` | string | `"rows"` | Visible text after the rows-per-page select ("Show 10 rows"). Not the select's accessible name. |
+| `rowsPerPagePrefix` | string | `"Show"` | Visible text before the rows-per-page select. Not the select's accessible name. |
 | `dropdownAriaLabel` | string | `"Rows per page"` | Accessible label for the rows-per-page dropdown. |
 | `dropdownPosition` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
@@ -248,8 +248,8 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
-  showLabel="Afficher"
-  rowsPerPageLabel="lignes"
+  rowsPerPagePrefix="Afficher"
+  rowsPerPageSuffix="lignes"
   dropdownAriaLabel="Lignes par page"
   paginationAriaLabel="Navigation des pages"
   prevAriaLabel="Page précédente"
@@ -328,7 +328,7 @@ const [rows, setRows] = useState(10);
 | External rows | `title="External Rows Control"` | Custom rows UI |
 | i18n | `title="i18n / Custom Labels"` | French labels |
 | Custom icons | `title="Custom Icons"` | prevIcon, nextIcon, dropdownIcon |
-| Custom row options | `title="Custom Row Options & Label"` | rowOptions, rowsPerPageLabel |
+| Custom row options | `title="Custom Row Options & Label"` | rowOptions, rowsPerPageSuffix |
 | Pill style | `title="Pill Style"` | Full themed example |
 | Data-attribute styling | `title="Data-Attribute Styling"` | data-[active] variants |
 | Minimal/borderless | `title="Minimal / Borderless"` | Ghost style |

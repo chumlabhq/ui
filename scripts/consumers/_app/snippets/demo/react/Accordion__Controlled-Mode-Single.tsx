@@ -5,7 +5,7 @@ export default function AccordionExample() {
   const [singleValue, setSingleValue] = useState<string | null>("item-1");
   return (
     <Accordion
-      type="single"
+      selectionMode="single"
       value={singleValue}
       onValueChange={setSingleValue}
       collapsible

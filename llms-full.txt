@@ -116,7 +116,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@c
 
 export default function FAQ() {
   return (
-    <Accordion type="single" collapsible defaultValue="q1">
+    <Accordion selectionMode="single" collapsible defaultValue="q1">
       <AccordionItem value="q1">
         <AccordionTrigger>What is your return policy?</AccordionTrigger>
         <AccordionContent>
@@ -160,7 +160,7 @@ These props have dependencies — using them wrong causes silent bugs:
 - `data-pending` — during async preventClose
 - `data-orientation="vertical|horizontal"` — on root
 - `data-value` — item's unique value string
-- `data-type="single|multiple"`, `data-size`, `data-variant` — on root
+- `data-selection-mode="single|multiple"`, `data-size`, `data-variant` — on root
 - `data-accordion-expand-print="true"` — on root when `expandOnPrint` is set. The
   print stylesheet the component ships keys off it: `[data-accordion-expand-print="true"]`
   forces every `data-state="closed"` panel open for print and unhides its
@@ -178,7 +178,7 @@ These props have dependencies — using them wrong causes silent bugs:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `type` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
+| `selectionMode` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
 | `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
 | `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror. |
 | `disabled` | boolean | `false` | Disables all accordion items. |
@@ -211,7 +211,7 @@ These props have dependencies — using them wrong causes silent bugs:
 const ref = useRef<AccordionRef>(null);
 
 // Use in JSX
-<Accordion ref={ref} type="multiple">...</Accordion>
+<Accordion ref={ref} selectionMode="multiple">...</Accordion>
 
 // Available methods:
 ref.current?.expandAll()             // Open all items (multiple mode only)
@@ -250,7 +250,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `children` | `ReactNode` | Content rendered inside this element. |
 | `expandedIcon` | `ReactNode` | Icon shown while the item is expanded. Replaces the default chevron. |
 | `collapsedIcon` | `ReactNode` | Icon shown while the item is collapsed. Replaces the default chevron. |
-| `iconPosition` | `"left" \| "right" \| "none" \| undefined` | Which side of the trigger the icon sits on, or `"none"` to drop it. |
+| `iconPosition` | `"start" \| "end" \| "none" \| undefined` | Which end of the trigger the icon sits at — `start` before the text, `end` after it — or `"none"` to drop it. |
 | `asChild` | `boolean \| undefined` | Render the passed child instead of the default element, keeping behaviour, ARIA and props. |
 | `subtitle` | `ReactNode` | Secondary line rendered under the trigger's label. |
 | `iconAnimation` | `"none" \| "rotate" \| "switch" \| undefined` | How the icon changes on toggle: rotate the chevron, switch between the two icons, or neither. |
@@ -442,7 +442,7 @@ Or in plain CSS:
 
 ```tsx
 // Full control — no defaults, no size/variant classes:
-<Accordion type="single" collapsible unstyled classes={{
+<Accordion selectionMode="single" collapsible unstyled classes={{
   root: "divide-y divide-gray-200 dark:divide-gray-700",
   trigger: "w-full flex justify-between py-4 text-left text-base font-medium text-gray-900 dark:text-white",
   body: "pb-4 text-sm text-gray-500 dark:text-gray-400",
@@ -455,7 +455,7 @@ Or in plain CSS:
 
 ```tsx
 <Accordion
-  type="single"
+  selectionMode="single"
   collapsible
   unstyled
   classes={{
@@ -504,7 +504,7 @@ Or in plain CSS:
 ```tsx
 const [openItem, setOpenItem] = useState<string | null>("settings");
 
-<Accordion type="single" collapsible value={openItem} onValueChange={setOpenItem}>
+<Accordion selectionMode="single" collapsible value={openItem} onValueChange={setOpenItem}>
   <AccordionItem value="settings">
     <AccordionTrigger>Settings</AccordionTrigger>
     <AccordionContent>...</AccordionContent>
@@ -519,7 +519,7 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 #### Multiple with limit
 
 ```tsx
-<Accordion type="multiple" maxExpanded={2} defaultValue={["a", "b"]}>
+<Accordion selectionMode="multiple" maxExpanded={2} defaultValue={["a", "b"]}>
   <AccordionItem value="a">...</AccordionItem>
   <AccordionItem value="b">...</AccordionItem>
   <AccordionItem value="c">...</AccordionItem>
@@ -529,7 +529,7 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 #### Persist to localStorage
 
 ```tsx
-<Accordion type="multiple" storageKey="sidebar-sections">
+<Accordion selectionMode="multiple" storageKey="sidebar-sections">
   ...
 </Accordion>
 ```
@@ -540,7 +540,7 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 {isLoading ? (
   <AccordionShimmer count={3} variant="bordered" />
 ) : (
-  <Accordion type="single" collapsible variant="bordered">
+  <Accordion selectionMode="single" collapsible variant="bordered">
     {items.map(item => (
       <AccordionItem key={item.id} value={item.id}>
         <AccordionTrigger>{item.title}</AccordionTrigger>
@@ -602,13 +602,13 @@ and `prefers-reduced-motion` each switch it off.
 
 ```tsx
 // ❌ DON'T: Combine value + defaultValue
-<Accordion type="single" value={val} defaultValue="item-1" />
+<Accordion selectionMode="single" value={val} defaultValue="item-1" />
 
 // ❌ DON'T: Use collapsible with type="multiple" (it's ignored)
-<Accordion type="multiple" collapsible />
+<Accordion selectionMode="multiple" collapsible />
 
 // ❌ DON'T: Use storageKey with controlled mode (value prop)
-<Accordion type="single" value={val} storageKey="my-key" />
+<Accordion selectionMode="single" value={val} storageKey="my-key" />
 
 // ❌ DON'T: Override one class slot and expect others to remain
 // classes replaces the entire slot, it does NOT merge with defaults
@@ -617,19 +617,19 @@ and `prefers-reduced-motion` each switch it off.
 <Accordion classes={{ trigger: "flex w-full items-center px-4 py-4 my-trigger" }} />
 
 // ❌ DON'T: Use maxExpanded with type="single"
-<Accordion type="single" maxExpanded={3} />
+<Accordion selectionMode="single" maxExpanded={3} />
 
 // ❌ DON'T: Forget onValueChange with controlled value
-<Accordion type="single" value={val} />
+<Accordion selectionMode="single" value={val} />
 // ✅ DO: Always pair value with onValueChange
-<Accordion type="single" value={val} onValueChange={setVal} />
+<Accordion selectionMode="single" value={val} onValueChange={setVal} />
 ```
 
 ---
 
 ### AI Instructions
 
-- **Always set `type`** — it's required. Use `"single"` for FAQ/settings, `"multiple"` for checklists/filters.
+- **Always set `selectionMode`** — it's required. Use `"single"` for FAQ/settings, `"multiple"` for checklists/filters.
 - **Always add `collapsible`** to `type="single"` unless you intentionally want one item always open.
 - **Use `defaultValue` for uncontrolled**, `value` + `onValueChange` for controlled. Never mix.
 - **Don't partially override `classes`** — each slot replaces the default entirely. If you override `trigger`, include layout classes too.
@@ -711,7 +711,7 @@ This renders correctly with no additional props, classes, or setup.
 | `status` | Can be a string shorthand (`"online"`) or a config object (`{ type: "online", position: "bottom-right" }`). |
 | AvatarGroup `max` | Hides excess children and shows a surplus count. Set `total` separately if you're rendering a subset from an API. |
 | AvatarGroup `ringColor` | The ring between stacked avatars. Match to your background color for clean overlap (e.g., `ringColor="#111827"` on dark bg). |
-| AvatarGroup `variant` | `"stack"` overlaps, `"grid"` uses CSS grid, `"inline"` uses inline-flex. Only `"stack"` uses `spacing` and `ringColor`. |
+| AvatarGroup `layout` | `"stack"` overlaps, `"grid"` uses CSS grid, `"inline"` uses inline-flex. Only `"stack"` uses `spacing` and `ringColor`. |
 
 ---
 
@@ -782,7 +782,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `ringColor` | `string \| undefined` | Border ring color for overlapping avatars. |
 | `showTooltip` | `boolean \| undefined` | Shows a tooltip with the avatar's name on hover. |
 | `total` | `number \| undefined` | Total count for surplus calculation (when not all items are rendered). |
-| `variant` | `GroupVariant \| undefined` | Layout variant: stacked overlap, grid, or inline. Default: `"stack"`. |
+| `layout` | `AvatarGroupLayout \| undefined` | How the avatars are laid out: stacked overlap, grid, or inline. Default: `"stack"`. |
 | `reverseOrder` | `boolean \| undefined` | Reverses the visual stacking order. |
 | `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Custom render function for the surplus count indicator. |
 | `onAvatarClick` | `((info: { index: number; name?: string \| undefined; }, event: MouseEvent<Element, MouseEvent>) => void) \| undefined` | Click handler for individual avatars within the group. |
@@ -996,7 +996,7 @@ For grouped avatars, match `ringColor` to your background:
   spacing={-6}
   ringColor="#1a1d21"
   showTooltip
-  variant="stack"
+  layout="stack"
 >
   <Avatar
     src="/avatars/alice.jpg"
@@ -1560,7 +1560,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
 | `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
 | `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
-| `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
+| `loaderPosition` | `"start"` \| `"end"` | `"end"` | Which end of the label the loader appears at: `start` before it, `end` after it. |
 | `loaderSize` | number | `16` | Pixel size of the loading spinner. |
 | `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
@@ -2766,7 +2766,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 
 | Prop | Constraint |
 |------|-----------|
-| `mode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
+| `selectionMode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
 | `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` is provided. |
 | `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
 | `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
@@ -2811,7 +2811,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mode` | `"single"` \| `"range"` \| `"multiple"` | `"single"` | Selection mode: single date, date range, or multiple dates. |
+| `selectionMode` | `"single"` \| `"range"` \| `"multiple"` | `"single"` | Selection mode: single date, date range, or multiple dates. |
 | `value` | — | — | Controlled selected value. Type depends on mode: Date \| null (single), DateRange \| null (range), Date[] \| null (multiple). |
 | `onValueChange` | object | — | Callback when the selected value changes. Signature depends on mode. |
 | `onClear` | object | — | () => void — Called when the clear button is clicked. |
@@ -2985,7 +2985,7 @@ Or in plain CSS:
 const [range, setRange] = useState<DateRange | null>(null);
 
 <DatePicker
-  mode="range"
+  selectionMode="range"
   value={range}
   onValueChange={(r) => setRange(r)}
   placeholder="Start date - End date"
@@ -2999,7 +2999,7 @@ const [range, setRange] = useState<DateRange | null>(null);
 const [dates, setDates] = useState<Date[] | null>(null);
 
 <DatePicker
-  mode="multiple"
+  selectionMode="multiple"
   value={dates}
   onValueChange={(d) => setDates(d)}
   placeholder="Pick multiple dates..."
@@ -3011,7 +3011,7 @@ const [dates, setDates] = useState<Date[] | null>(null);
 
 ```tsx
 <DatePicker
-  mode="range"
+  selectionMode="range"
   value={range}
   onValueChange={(r) => setRange(r)}
   showPresets
@@ -3073,7 +3073,7 @@ import { fr } from "date-fns/locale";
 #### Multiple months
 
 ```tsx
-<DatePicker mode="range" numberOfMonths={2} />
+<DatePicker selectionMode="range" numberOfMonths={2} />
 ```
 
 #### Form field with validation
@@ -3794,7 +3794,7 @@ export default function Example() {
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both needed together. |
 | `clearable` | Only shows clear button when phone input has content and not disabled/readOnly. |
-| `enablePasteDetection` | Must be `true` for `onPasteDetect` to fire. |
+| `pasteDetection` | Must be `true` for `onPasteDetect` to fire. |
 | `copyFormat` | Only affects Ctrl+C behavior. Does not change display format. |
 | `validateOnBlur` | When `true` (default), shows validation error on blur. Set `false` to disable. |
 | `validationMessage` | Overrides the built-in "Please enter a valid phone number" message. |
@@ -3861,7 +3861,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `validationMessage` | object | — | React.ReactNode - Custom validation message shown on blur validation. |
 | `validate` | object | — | (data: PhoneNumberData) => boolean \| { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators. |
 | `autoComplete` | string | — | Native input autocomplete. Defaults to "off" so browser autofill can't corrupt the national-number field; pass e.g. "tel-national" to opt in. |
-| `enablePasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
+| `pasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
 | `copyFormat` | `"e164"` \| `"international"` \| `"national"` | `"e164"` | Format used when copying the phone number. |
 | `onPasteDetect` | object | — | (data: PasteDetectedData) => void - Fires when a pasted number is recognised, with what it was understood to be. |
 | `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
@@ -4034,7 +4034,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
 
 ```tsx
 <InternationalPhoneInput
-  enablePasteDetection
+  pasteDetection
   onPasteDetect={(data) => console.log(data.detectedCountry?.name)}
   copyFormat="e164"
 />
@@ -4157,7 +4157,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `dotSize` | number | `8` | Diameter of each dot in pixels. |
+| `size` | number | `8` | Diameter of each dot in pixels. |
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
 | `speed` | number | `1.4` | Full animation cycle duration in seconds. |
@@ -4209,7 +4209,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `dotSize` | `number \| undefined` | Diameter of each dot in pixels. Default: 8 |
+| `size` | `number \| undefined` | Diameter of each dot in pixels. Default: 8 |
 | `gap` | `number \| undefined` | Gap between dots in pixels. Default: 4 |
 | `count` | `number \| undefined` | Number of dots. Default: 3 |
 | `speed` | `number \| undefined` | Full animation cycle duration in seconds. Default: 1.4 |
@@ -4388,7 +4388,6 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `overlayColor` | string | `"black"` | Custom overlay background color. |
 | `overlayOpacity` | number | `0.32` | How strongly `overlayColor` tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so its blur is not diluted. |
 | `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
-| `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
 | `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
 | `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
@@ -5428,8 +5427,8 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `defaultValue` | number | `1` | Initial page number for uncontrolled usage. |
 | `onRowsPerPageChange` | object | — | (rows: number) => void - Fires when the rows-per-page value changes. |
 | `showRowsPerPage` | boolean | `false` | Whether to show the rows-per-page selector. |
-| `rowsPerPageLabel` | string | `"rows"` | Label text for the rows-per-page selector. |
-| `showLabel` | string | `"Show"` | Label text for the 'show' section of the rows-per-page selector. |
+| `rowsPerPageSuffix` | string | `"rows"` | Visible text after the rows-per-page select ("Show 10 rows"). Not the select's accessible name. |
+| `rowsPerPagePrefix` | string | `"Show"` | Visible text before the rows-per-page select. Not the select's accessible name. |
 | `dropdownAriaLabel` | string | `"Rows per page"` | Accessible label for the rows-per-page dropdown. |
 | `dropdownPosition` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
@@ -5591,8 +5590,8 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
-  showLabel="Afficher"
-  rowsPerPageLabel="lignes"
+  rowsPerPagePrefix="Afficher"
+  rowsPerPageSuffix="lignes"
   dropdownAriaLabel="Lignes par page"
   paginationAriaLabel="Navigation des pages"
   prevAriaLabel="Page précédente"
@@ -6269,7 +6268,7 @@ export default function Example() {
 | `beforeStepChange` | Return `false` to prevent navigation. |
 | `variant` | `"numbered"` (default), `"icon"`, or `"dot"`. |
 | `orientation` | `"horizontal"` (default) or `"vertical"`. |
-| `labelPosition` | `"right"` (default) or `"bottom"`. Only applies to horizontal. |
+| `labelPosition` | `"end"` (default) or `"bottom"`. Only applies to horizontal. |
 | `showTooltips` | Requires `tooltip` property on individual steps. |
 | `getStepStatus` | Overrides default status logic. Must handle all steps. |
 | `renderStep` | Custom renderer. Receives `(props, defaultElement)`. |
@@ -6341,7 +6340,7 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `showLabels` | boolean | `true` | Whether to show step labels. |
 | `showDescriptions` | boolean | `false` | Whether to show step descriptions. |
 | `showConnectors` | boolean | `true` | Whether to show connectors between steps. |
-| `labelPosition` | `"bottom"` \| `"right"` | `"right"` | Position of step labels relative to the indicator. |
+| `labelPosition` | `"bottom"` \| `"end"` | `"end"` | Where each step's label sits: under its indicator, or after it (`end`). |
 | `completedIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for completed steps. |
 | `errorIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for error steps. |
 | `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
@@ -6743,11 +6742,11 @@ export default function Example() {
 | `manualSorting` | When true, sorting is server-side; table won't sort locally. |
 | `pinnedColumns` | Array of column IDs to pin left. Requires `onPinnedColumnsChange` for interactive. |
 | `expandable` + `renderExpandedRow` | Both needed for row expansion. |
-| `enableRowDragDrop` + `onRowReorder` | Both needed for drag-and-drop row reordering. |
+| `reorderable` + `onRowReorder` | Both needed for drag-and-drop row reordering. |
 | `editable` + `onCellEdit` | Both needed for inline cell editing. |
-| `enableColumnResizing` | Enables column resize handles. |
+| `resizable` | Enables column resize handles. |
 | `stickyHeader` | Requires `maxHeight` to be meaningful. |
-| `enableInfiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
+| `infiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
 | `showSearch` | Enables built-in search bar. |
 | `classes` | Per-slot class overrides. **Replaces** per slot, not additive. |
 
@@ -6789,7 +6788,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onRowClick` | object | — | (rowData: TData) => void — Callback fired when a row is clicked. |
 | `onRowHover` | object | — | (rowIndex: number \| null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered. |
 | `floatingActions` | object | — | React.ReactNode — Floating action elements displayed on row hover. |
-| `isFloatingActionsHovered` | boolean | `false` | Whether the floating actions area is being hovered. |
+| `floatingActionsHovered` | boolean | `false` | Whether the floating actions area is being hovered. |
 | `popupOpen` | boolean | `false` | Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still. |
 | `maxWidth` | string \| number | — | Maximum width of the table container. |
 | `maxHeight` | string \| number | — | Maximum height of the table container. |
@@ -6817,7 +6816,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onGlobalFilterChange` | object | — | (value: string) => void — Callback when global filter changes. |
 | `columnFilters` | array | — | Controlled column filters state. |
 | `onColumnFiltersChange` | object | — | (filters: ColumnFiltersState) => void — Callback when column filters change. |
-| `enableColumnFilters` | boolean | `false` | Enable per-column filtering. |
+| `filterable` | boolean | `false` | Enable per-column filtering. |
 | `filterableColumns` | object | — | Map of column ID to filter options configuration. |
 | `FilterIcon` | object | — | React.ComponentType — Custom filter icon component. |
 | `renderColumnFilter` | object | — | (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer. |
@@ -6826,33 +6825,33 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onExpandedRowIdsChange` | object | — | (expandedRowIds: string[]) => void — Fires with the new `expandedRowIds` when a row expands or collapses. |
 | `renderExpandedRow` | object | — | (row: TData) => ReactNode — Render function for expanded row content. |
 | `ExpandIcon` | object | — | React.ComponentType — Custom expand icon component. |
-| `expandColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the expand column. |
+| `expandColumnPosition` | `"start"` \| `"end"` | `"start"` | Which end of the row the expand column sits at. `start` is the first column. |
 | `expandOnRowClick` | boolean | `false` | Make the entire row clickable to toggle expansion. |
 | `columnVisibility` | object | — | Controlled column visibility map (column ID to boolean). |
 | `onColumnVisibilityChange` | object | — | (visibility: Record<string, boolean>) => void — Callback when column visibility changes. |
 | `striped` | boolean | `false` | Alternate row background colors. |
 | `stripedClassName` | string | — | Custom CSS class for striped rows. |
-| `density` | `"compact"` \| `"comfortable"` \| `"spacious"` | `"comfortable"` | Controls cell padding density. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Cell padding and text size. |
 | `pinnedRightColumns` | array | — | Column IDs to pin to the right side. |
 | `editable` | boolean | `false` | Enable inline cell editing: double-click a cell, or press Enter or F2 on it. |
 | `editableColumns` | array | — | Column IDs that are editable. |
 | `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited. |
-| `enableColumnResizing` | boolean | `false` | Enable column resizing via drag handles. |
+| `resizable` | boolean | `false` | Enable column resizing via drag handles. |
 | `columnSizing` | object | — | Controlled column sizing state. |
 | `onColumnSizingChange` | object | — | (sizing: ColumnSizingState) => void — Callback when column sizing changes. |
 | `manualPagination` | boolean | `false` | When true, pagination is handled server-side. |
 | `manualFiltering` | boolean | `false` | When true, filtering is handled server-side. |
 | `columnOrder` | array | — | Controlled column order (array of column IDs). |
 | `onColumnOrderChange` | object | — | (order: string[]) => void — Callback when column order changes. |
-| `enableRowDragDrop` | boolean | `false` | Enable row drag-and-drop reordering. |
+| `reorderable` | boolean | `false` | Enable row drag-and-drop reordering. |
 | `onRowReorder` | object | — | (fromIndex: number, toIndex: number) => void — Callback when a row is reordered. |
-| `dragColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the drag handle column. |
+| `dragColumnPosition` | `"start"` \| `"end"` | `"start"` | Which end of the row the drag handle column sits at. |
 | `showFooter` | boolean | `false` | Show the table footer. |
 | `footerContent` | object | — | React.ReactNode — Custom footer content for <tfoot>. Rows (a <tr>, a fragment of <tr>s, or an array of them) render directly in <tfoot>; anything else (text, or any other element) is placed in one full-width row. |
 | `onContextMenu` | object | — | (event: React.MouseEvent, row: TData) => void — Callback on right-click of a row. |
-| `enableCopyOnClick` | boolean | `false` | Enable single-click cell copy to clipboard. |
+| `copyOnClick` | boolean | `false` | Enable single-click cell copy to clipboard. |
 | `onCellCopy` | object | — | (value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied. |
-| `enableInfiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
+| `infiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
 | `onLoadMore` | object | — | () => void — Callback when user scrolls near the bottom. |
 | `hasMore` | boolean | `false` | Whether there is more data to load. |
 | `loadingMore` | boolean | `false` | Whether more data is currently being loaded. |
@@ -6863,7 +6862,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onGroupByChange` | object | — | (groupBy: string[]) => void — Callback when group-by columns change. |
 | `showSearch` | boolean | `false` | Show a built-in search bar above the table. |
 | `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search bar. |
-| `searchIconPosition` | `"left"` \| `"right"` \| `"none"` | `"left"` | Position of the search icon. |
+| `searchIconPosition` | `"start"` \| `"end"` \| `"none"` | `"start"` | Which end of the search field the icon sits at, or `none`. |
 | `CheckboxIcon` | object | — | React.ComponentType — Custom checkbox component for multi-row selection. |
 | `checkboxColor` | string | — | Simple color customization for the default checkbox. |
 | `DragHandleIcon` | object | — | React.ComponentType — Custom drag handle icon component. |
@@ -7066,7 +7065,7 @@ There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
 | `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout orientation of the tab list. |
 | `activationMode` | `"automatic"` \| `"manual"` | `"automatic"` | Whether tabs activate automatically on focus or require manual activation. |
 | `loop` | boolean | `true` | Whether keyboard navigation loops from last tab to first. |
-| `iconPosition` | `"left"` \| `"right"` | `"left"` | Position of tab icons relative to the label. |
+| `iconPosition` | `"start"` \| `"end"` | `"start"` | Which end of the tab label its icon sits at: `start` before the text, `end` after it. |
 | `showZeroCount` | boolean | `false` | Whether to show a count badge when the count is zero. |
 | `alwaysShowLabels` | boolean | `true` | Whether to always show tab labels (even when icons are present). |
 | `showTooltips` | boolean | `true` | Whether to show tooltips on tabs. |
@@ -7451,7 +7450,7 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `variant` | `"dropdown"` (default) shows a list; `"clock"` shows an analog clock face. |
+| `mode` | `"dropdown"` (default) shows a list; `"clock"` shows an analog clock face. |
 | `format` | `"24h"` (default) or `"12h"`. Affects display, parsing, and option generation. |
 | `minuteStep` | Clamped to 1-60. Invalid values (0, NaN, negatives) are auto-corrected. |
 | `minTime` / `maxTime` | Format: `"HH:MM"`. Dims/disables out-of-range options in both variants. |
@@ -7509,7 +7508,7 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
 | `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
 | `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
-| `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
+| `mode` | `"dropdown"` \| `"clock"` | `"dropdown"` | How a time is picked: a dropdown list or an analog clock face. |
 | `clearable` | boolean | `true` | Show a clear button when a value is selected. |
 | `onClear` | object | — | () => void — Called when the clear button is clicked. |
 | `open` | boolean | — | Controlled open state. |
@@ -7621,7 +7620,7 @@ const [time, setTime] = useState<string | null>(null);
 
 ```tsx
 <TimePicker
-  variant="clock"
+  mode="clock"
   format="12h"
   onConfirm={() => console.log("confirmed")}
   onCancel={() => console.log("cancelled")}
@@ -7748,7 +7747,7 @@ function MyComponent() {
 
 | Prop | Constraint |
 |------|-----------|
-| `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
+| `variant` | `"success"`, `"warning"`, `"error"`, `"info"` |
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `classes.root` | Class string for the toast's outer element. It does not replace the layout. |
@@ -7791,7 +7790,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
-| `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
+| `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the indicator glyph. |
 | `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
 | `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
@@ -7834,7 +7833,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ### Data Attributes (for CSS selectors and testing)
 
 - `data-toast-id` — on each toast, the id the API returns from `toast.success(...)`
-- `data-toast-type="default" | "success" | "error" | "warning" | "info"` — the variant
+- `data-variant="default" | "success" | "error" | "warning" | "info"` — the variant
 
 ---
 
@@ -7949,7 +7948,7 @@ export default function Example() {
 | `wordWrap` | `"normal"` \| `"break-word"` \| `"nowrap"` | `"break-word"` | Word wrap behavior for tooltip content. |
 | `delayDuration` | number | `200` | Delay in milliseconds before showing the tooltip. |
 | `hideDelayDuration` | number | `100` | Delay in milliseconds before hiding the tooltip. |
-| `disableHoverableContent` | boolean | `false` | When true, the tooltip content is not hoverable (closes on mouse leave of trigger). |
+| `hoverableContent` | boolean | `true` | Keeps the tooltip open while the pointer moves onto it (WCAG 1.4.13). `false` closes it as soon as the pointer leaves the trigger. |
 | `open` | boolean | — | Controlled open state. |
 | `defaultOpen` | boolean | `false` | Default uncontrolled open state. |
 | `onOpenChange` | object | — | (open: boolean) => void — Callback when the open state changes. |

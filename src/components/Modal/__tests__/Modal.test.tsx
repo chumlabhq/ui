@@ -139,7 +139,7 @@ describe("Modal", () => {
   describe("Focus Trap", () => {
     it("cycles focus forward from the last to the first focusable element", async () => {
       render(
-        <Modal open onOpenChange={() => {}} disableAnimation>
+        <Modal open onOpenChange={() => {}} reduceMotion>
           <button>First</button>
           <button>Second</button>
         </Modal>
@@ -167,7 +167,7 @@ describe("Modal", () => {
 
     it("cycles focus backward from the first to the last focusable element", async () => {
       render(
-        <Modal open onOpenChange={() => {}} disableAnimation>
+        <Modal open onOpenChange={() => {}} reduceMotion>
           <button>First</button>
           <button>Second</button>
         </Modal>
@@ -201,7 +201,7 @@ describe("Modal", () => {
       const { rerender } = render(
         <div>
           <button data-testid="trigger">Open</button>
-          <Modal open={false} onOpenChange={onOpenChange} disableAnimation>
+          <Modal open={false} onOpenChange={onOpenChange} reduceMotion>
             <p>Content</p>
           </Modal>
         </div>
@@ -214,7 +214,7 @@ describe("Modal", () => {
       rerender(
         <div>
           <button data-testid="trigger">Open</button>
-          <Modal open onOpenChange={onOpenChange} disableAnimation>
+          <Modal open onOpenChange={onOpenChange} reduceMotion>
             <p>Content</p>
           </Modal>
         </div>
@@ -227,7 +227,7 @@ describe("Modal", () => {
       rerender(
         <div>
           <button data-testid="trigger">Open</button>
-          <Modal open={false} onOpenChange={onOpenChange} disableAnimation>
+          <Modal open={false} onOpenChange={onOpenChange} reduceMotion>
             <p>Content</p>
           </Modal>
         </div>
@@ -249,7 +249,7 @@ describe("Modal", () => {
             open={false}
             onOpenChange={onOpenChange}
             restoreFocus={false}
-            disableAnimation
+            reduceMotion
           >
             <p>Content</p>
           </Modal>
@@ -266,7 +266,7 @@ describe("Modal", () => {
             open
             onOpenChange={onOpenChange}
             restoreFocus={false}
-            disableAnimation
+            reduceMotion
           >
             <p>Content</p>
           </Modal>
@@ -287,7 +287,7 @@ describe("Modal", () => {
             open={false}
             onOpenChange={onOpenChange}
             restoreFocus={false}
-            disableAnimation
+            reduceMotion
           >
             <p>Content</p>
           </Modal>
@@ -535,13 +535,13 @@ describe("Modal", () => {
 
     it("releases scroll lock when modal closes", () => {
       const { rerender } = render(
-        <Modal open onOpenChange={() => {}} disableAnimation>
+        <Modal open onOpenChange={() => {}} reduceMotion>
           <p>Content</p>
         </Modal>
       );
 
       rerender(
-        <Modal open={false} onOpenChange={() => {}} disableAnimation>
+        <Modal open={false} onOpenChange={() => {}} reduceMotion>
           <p>Content</p>
         </Modal>
       );

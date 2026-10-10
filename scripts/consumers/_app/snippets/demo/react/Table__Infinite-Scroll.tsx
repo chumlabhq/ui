@@ -230,7 +230,7 @@ export default function TableExample() {
         ref={infiniteScrollTableRef}
         columns={columns}
         data={infiniteData}
-        enableInfiniteScroll
+        infiniteScroll
         hasMore={infiniteHasMore}
         loadingMore={infiniteLoading}
         onLoadMore={handleLoadMore}

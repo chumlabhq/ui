@@ -9,7 +9,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          mode="multiple"
+          selectionMode="multiple"
           value={multipleDates}
           onValueChange={(dates) => setMultipleDates(dates)}
           label="Select dates"

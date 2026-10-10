@@ -95,9 +95,7 @@ export interface ModalProps {
   overlayOpacity?: number;
   /** Open/close animation duration in ms. */
   animationDuration?: number;
-  /** Disables open/close animations entirely. */
-  disableAnimation?: boolean;
-  /** Controls motion preferences. `"auto"` respects the user's OS setting. Default: `"auto"`. */
+  /** `true` turns the open/close animation off; `"auto"` follows the user's OS setting. Default: `"auto"`. */
   reduceMotion?: boolean | "auto";
   /** Current nesting depth (for stacked modals). Managed automatically. */
   nestingLevel?: number;

@@ -8,7 +8,7 @@ export default function TimePickerExample() {
       <TimePicker
         value={clockDisabled}
         onValueChange={() => {}}
-        variant="clock"
+        mode="clock"
         disabled
         classes={
           {

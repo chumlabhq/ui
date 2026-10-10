@@ -15,7 +15,7 @@ export default function AccordionExample() {
         onCheckedChange={setGuardUnsaved}
       />
       <Accordion
-        type="single"
+        selectionMode="single"
         collapsible
         defaultValue="pc-1"
         classes={

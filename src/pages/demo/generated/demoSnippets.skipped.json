@@ -133,7 +133,7 @@
     {
       "component": "Table",
       "title": "Floating Actions with Custom Triggers",
-      "reason": "code-less by decision: the same floatingActions, onRowHover and isFloatingActionsHovered as With Floating Actions; only the trigger buttons differ"
+      "reason": "code-less by decision: the same floatingActions, onRowHover and floatingActionsHovered as With Floating Actions; only the trigger buttons differ"
     },
     {
       "component": "Table",
@@ -208,7 +208,7 @@
     {
       "component": "Table",
       "title": "Column Resizing (Custom Handle Style)",
-      "reason": "code-less by decision: the same enableColumnResizing as Column Resizing (Basic); only the handle's styling differs"
+      "reason": "code-less by decision: the same resizable as Column Resizing (Basic); only the handle's styling differs"
     },
     {
       "component": "Table",
@@ -218,12 +218,12 @@
     {
       "component": "Table",
       "title": "Row Drag & Drop (Styled Drag State)",
-      "reason": "code-less by decision: the same enableRowDragDrop as Row Drag & Drop (Default); only the drag-state styling differs"
+      "reason": "code-less by decision: the same reorderable as Row Drag & Drop (Default); only the drag-state styling differs"
     },
     {
       "component": "Table",
       "title": "Row Drag & Drop (With Row Numbers)",
-      "reason": "code-less by decision: the same enableRowDragDrop and onRowReorder as Row Drag & Drop (Default); the number column is ordinary column markup"
+      "reason": "code-less by decision: the same reorderable and onRowReorder as Row Drag & Drop (Default); the number column is ordinary column markup"
     },
     {
       "component": "Table",
@@ -243,7 +243,7 @@
     {
       "component": "Table",
       "title": "Column Filters + Sorting Combined",
-      "reason": "code-less by decision: enableColumnFilters and sortable together; each has its own snippet"
+      "reason": "code-less by decision: filterable and sortable together; each has its own snippet"
     },
     {
       "component": "Table",

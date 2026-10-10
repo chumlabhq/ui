@@ -4,7 +4,7 @@ const v = "stack";
 
 export default function AvatarExample() {
   return (
-    <AvatarGroup variant={v} spacing={v === "stack" ? -8 : 4}>
+    <AvatarGroup layout={v} spacing={v === "stack" ? -8 : 4}>
       <Avatar
         name="Alice"
         autoColor

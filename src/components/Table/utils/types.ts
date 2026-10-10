@@ -175,7 +175,7 @@ export interface TableProps<TData> {
     rowRef?: React.RefObject<HTMLTableRowElement>,
   ) => void;
   floatingActions?: ReactNode;
-  isFloatingActionsHovered?: boolean;
+  floatingActionsHovered?: boolean;
   /** Set while a popup opened from `floatingActions` is open, so the hovered row and cursor tracking hold still. */
   popupOpen?: boolean;
   maxWidth?: string | number;
@@ -224,7 +224,7 @@ export interface TableProps<TData> {
   /** Callback when column filters change. */
   onColumnFiltersChange?: (filters: ColumnFiltersState) => void;
   /** Enable per-column filtering. */
-  enableColumnFilters?: boolean;
+  filterable?: boolean;
   /** Columns that should show a filter icon in the header. Maps column ID to filter options. */
   filterableColumns?: Record<string, { options: { label: string; value: string }[]; multi?: boolean }>;
   /** Custom filter icon component. Receives `active` boolean when the column has active filters. */
@@ -242,8 +242,8 @@ export interface TableProps<TData> {
   renderExpandedRow?: (row: TData) => ReactNode;
   /** Custom expand icon component. Receives `expanded` boolean. */
   ExpandIcon?: ComponentType<{ expanded: boolean; className?: string }>;
-  /** Place the expand column on the right side of the table. */
-  expandColumnPosition?: "left" | "right";
+  /** Which end of the row the expand column sits at. `start` is the first column. Defaults to `"start"`. */
+  expandColumnPosition?: "start" | "end";
   /** Make the entire row clickable to toggle expansion instead of just the icon. */
   expandOnRowClick?: boolean;
 
@@ -257,8 +257,8 @@ export interface TableProps<TData> {
   /** Custom class for striped (alternating) rows. Overrides the default bg-gray-50. */
   stripedClassName?: string;
 
-  /** Controls cell padding density. Defaults to "comfortable". */
-  density?: "compact" | "comfortable" | "spacious";
+  /** Cell padding and text size. Defaults to `"md"`. */
+  size?: "sm" | "md" | "lg";
 
   /** Column IDs to pin to the right side of the table. */
   pinnedRightColumns?: string[];
@@ -271,7 +271,7 @@ export interface TableProps<TData> {
   onCellEdit?: (rowId: string, columnId: string, value: unknown) => void;
 
   /** Enable column resizing via drag handles. */
-  enableColumnResizing?: boolean;
+  resizable?: boolean;
   /** Controlled column sizing state. */
   columnSizing?: ColumnSizingState;
   /** Callback when column sizing changes. */
@@ -288,11 +288,11 @@ export interface TableProps<TData> {
   onColumnOrderChange?: (order: string[]) => void;
 
   /** Enable row drag-and-drop reordering. */
-  enableRowDragDrop?: boolean;
+  reorderable?: boolean;
   /** Callback when a row is reordered. */
   onRowReorder?: (fromIndex: number, toIndex: number) => void;
-  /** Place the drag handle column on the left or right side. */
-  dragColumnPosition?: "left" | "right";
+  /** Which end of the row the drag handle column sits at. Defaults to `"start"`. */
+  dragColumnPosition?: "start" | "end";
 
   /** Show the table footer (tfoot). */
   showFooter?: boolean;
@@ -307,12 +307,12 @@ export interface TableProps<TData> {
   onContextMenu?: (event: React.MouseEvent, row: TData) => void;
 
   /** Enable single-click cell copy to clipboard. */
-  enableCopyOnClick?: boolean;
+  copyOnClick?: boolean;
   /** Callback after a cell value is copied. */
   onCellCopy?: (value: string, rowId: string, columnId: string) => void;
 
   /** Enable infinite scroll loading. */
-  enableInfiniteScroll?: boolean;
+  infiniteScroll?: boolean;
   /** Callback when user scrolls near the bottom. */
   onLoadMore?: () => void;
   /** Whether there is more data to load. */
@@ -336,8 +336,8 @@ export interface TableProps<TData> {
   showSearch?: boolean;
   /** Placeholder text for the search bar. */
   searchPlaceholder?: string;
-  /** Position of the search icon. */
-  searchIconPosition?: "left" | "right" | "none";
+  /** Which end of the search field the icon sits at, or `"none"`. Defaults to `"start"`. */
+  searchIconPosition?: "start" | "end" | "none";
 
   /** Custom checkbox component for multi-row selection. */
   CheckboxIcon?: ComponentType<{ checked: boolean; indeterminate?: boolean; className?: string }>;
@@ -366,7 +366,7 @@ export interface TableContextValue<TData> {
   onRowClick?: (rowData: TData) => void;
   getRowId?: (row: TData) => string;
   selectedRowId?: string | null;
-  isFloatingActionsHovered?: boolean;
+  floatingActionsHovered?: boolean;
   popupOpen?: boolean;
   headerCellClassName?: string;
   cellClassName?: string;

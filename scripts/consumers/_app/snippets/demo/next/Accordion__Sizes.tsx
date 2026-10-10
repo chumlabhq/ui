@@ -5,7 +5,7 @@ const size = "sm";
 export default function AccordionExample() {
   return (
     <Accordion
-      type="single"
+      selectionMode="single"
       collapsible
       size={size}
       classes={

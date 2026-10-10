@@ -59,7 +59,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "anatomy": "<Accordion>\n  <AccordionItem>\n    <AccordionTrigger />\n    <AccordionContent />\n  </AccordionItem>\n</Accordion>",
     "props": [
       {
-        "name": "type",
+        "name": "selectionMode",
         "type": "\"single\" | \"multiple\"",
         "required": true,
         "default": null,
@@ -294,10 +294,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           },
           {
             "name": "iconPosition",
-            "type": "\"left\" | \"right\" | \"none\"",
+            "type": "\"start\" | \"end\" | \"none\"",
             "required": false,
-            "default": "\"right\"",
-            "description": "Which side of the trigger the icon sits on, or `\"none\"` to drop it."
+            "default": "\"end\"",
+            "description": "Which end of the trigger the icon sits at — `start` before the text, `end` after it — or `\"none\"` to drop it."
           },
           {
             "name": "asChild",
@@ -639,8 +639,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "What `Accordion` hands to the items beneath it.",
         "members": [
           {
-            "name": "type",
-            "type": "AccordionType",
+            "name": "selectionMode",
+            "type": "AccordionSelectionMode",
             "required": true,
             "description": "Whether one item or several may be expanded."
           },
@@ -816,6 +816,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "when isPending"
       },
       {
+        "name": "data-selection-mode",
+        "values": [],
+        "when": "always"
+      },
+      {
         "name": "data-size",
         "values": [
           "lg",
@@ -831,14 +836,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           "closed",
           "has-expanded",
           "open"
-        ],
-        "when": "always"
-      },
-      {
-        "name": "data-type",
-        "values": [
-          "multiple",
-          "single"
         ],
         "when": "always"
       },
@@ -889,8 +886,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       ]
     },
     "snippets": {
-      "react": "import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from \"@chumlab/ui/accordion\";\n\nexport default function FAQ() {\n  return (\n    <Accordion type=\"single\" collapsible defaultValue=\"q1\">\n      <AccordionItem value=\"q1\">\n        <AccordionTrigger>What is your return policy?</AccordionTrigger>\n        <AccordionContent>\n          You can return any item within 30 days of purchase.\n        </AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"q2\">\n        <AccordionTrigger>How long does shipping take?</AccordionTrigger>\n        <AccordionContent>\n          Standard shipping takes 3-5 business days.\n        </AccordionContent>\n      </AccordionItem>\n    </Accordion>\n  );\n}",
-      "next": "import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from \"@chumlab/ui/accordion\";\n\nexport default function FAQ() {\n  return (\n    <Accordion type=\"single\" collapsible defaultValue=\"q1\">\n      <AccordionItem value=\"q1\">\n        <AccordionTrigger>What is your return policy?</AccordionTrigger>\n        <AccordionContent>\n          You can return any item within 30 days of purchase.\n        </AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"q2\">\n        <AccordionTrigger>How long does shipping take?</AccordionTrigger>\n        <AccordionContent>\n          Standard shipping takes 3-5 business days.\n        </AccordionContent>\n      </AccordionItem>\n    </Accordion>\n  );\n}",
+      "react": "import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from \"@chumlab/ui/accordion\";\n\nexport default function FAQ() {\n  return (\n    <Accordion selectionMode=\"single\" collapsible defaultValue=\"q1\">\n      <AccordionItem value=\"q1\">\n        <AccordionTrigger>What is your return policy?</AccordionTrigger>\n        <AccordionContent>\n          You can return any item within 30 days of purchase.\n        </AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"q2\">\n        <AccordionTrigger>How long does shipping take?</AccordionTrigger>\n        <AccordionContent>\n          Standard shipping takes 3-5 business days.\n        </AccordionContent>\n      </AccordionItem>\n    </Accordion>\n  );\n}",
+      "next": "import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from \"@chumlab/ui/accordion\";\n\nexport default function FAQ() {\n  return (\n    <Accordion selectionMode=\"single\" collapsible defaultValue=\"q1\">\n      <AccordionItem value=\"q1\">\n        <AccordionTrigger>What is your return policy?</AccordionTrigger>\n        <AccordionContent>\n          You can return any item within 30 days of purchase.\n        </AccordionContent>\n      </AccordionItem>\n      <AccordionItem value=\"q2\">\n        <AccordionTrigger>How long does shipping take?</AccordionTrigger>\n        <AccordionContent>\n          Standard shipping takes 3-5 business days.\n        </AccordionContent>\n      </AccordionItem>\n    </Accordion>\n  );\n}",
       "needsClientBoundary": false
     }
   },
@@ -1116,11 +1113,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Total count for surplus calculation (when not all items are rendered)."
           },
           {
-            "name": "variant",
-            "type": "GroupVariant",
+            "name": "layout",
+            "type": "AvatarGroupLayout",
             "required": false,
             "default": "\"stack\"",
-            "description": "Layout variant: stacked overlap, grid, or inline. Default: `\"stack\"`."
+            "description": "How the avatars are laid out: stacked overlap, grid, or inline. Default: `\"stack\"`."
           },
           {
             "name": "reverseOrder",
@@ -2279,10 +2276,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "loaderPosition",
-        "type": "\"left\" | \"right\"",
+        "type": "\"start\" | \"end\"",
         "required": false,
-        "default": "\"right\"",
-        "description": "Which side of the label the loader appears on."
+        "default": "\"end\"",
+        "description": "Which end of the label the loader appears at: `start` before it, `end` after it."
       },
       {
         "name": "loaderSize",
@@ -3998,7 +3995,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "anatomy": "<DatePicker />",
     "props": [
       {
-        "name": "mode",
+        "name": "selectionMode",
         "type": "\"single\" | \"range\" | \"multiple\"",
         "required": false,
         "default": "\"single\"",
@@ -4009,14 +4006,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "—",
         "required": false,
         "default": null,
-        "description": "Controlled selected value. Type depends on mode: Date | null (single), DateRange | null (range), Date[] | null (multiple)."
+        "description": "Controlled selected value. Type depends on `selectionMode`: Date | null (single), DateRange | null (range), Date[] | null (multiple)."
       },
       {
         "name": "onValueChange",
         "type": "((dates: Date[] | null, dateValues: DateValue[] | null) => void)",
         "required": false,
         "default": null,
-        "description": "Callback when the selected value changes. Signature depends on mode."
+        "description": "Callback when the selected value changes. Signature depends on `selectionMode`."
       },
       {
         "name": "onClear",
@@ -6544,7 +6541,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Native input autocomplete. Defaults to \"off\" so browser autofill can't corrupt the national-number field; pass e.g. \"tel-national\" to opt in."
       },
       {
-        "name": "enablePasteDetection",
+        "name": "pasteDetection",
         "type": "boolean",
         "required": false,
         "default": "false",
@@ -7150,7 +7147,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "DotLoader",
         "props": [
           {
-            "name": "dotSize",
+            "name": "size",
             "type": "number",
             "required": false,
             "default": "8",
@@ -7560,13 +7557,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "200",
         "description": "Open/close animation duration in milliseconds."
-      },
-      {
-        "name": "disableAnimation",
-        "type": "boolean",
-        "required": false,
-        "default": "false",
-        "description": "Disables open/close animations entirely."
       },
       {
         "name": "reduceMotion",
@@ -9573,18 +9563,18 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Whether to show the rows-per-page selector."
       },
       {
-        "name": "rowsPerPageLabel",
+        "name": "rowsPerPageSuffix",
         "type": "string",
         "required": false,
         "default": "\"rows\"",
-        "description": "Label text for the rows-per-page selector."
+        "description": "Visible text after the rows-per-page select (\"Show 10 rows\"). Not the select's accessible name."
       },
       {
-        "name": "showLabel",
+        "name": "rowsPerPagePrefix",
         "type": "string",
         "required": false,
         "default": "\"Show\"",
-        "description": "Label text for the 'show' section of the rows-per-page selector."
+        "description": "Visible text before the rows-per-page select. Not the select's accessible name."
       },
       {
         "name": "dropdownAriaLabel",
@@ -11621,10 +11611,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "labelPosition",
-        "type": "\"bottom\" | \"right\"",
+        "type": "\"bottom\" | \"end\"",
         "required": false,
-        "default": "\"right\"",
-        "description": "Position of step labels relative to the indicator."
+        "default": "\"end\"",
+        "description": "Where each step's label sits: under its indicator, or after it (`end`)."
       },
       {
         "name": "completedIcon",
@@ -12622,7 +12612,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "React.ReactNode — Floating action elements displayed on row hover."
       },
       {
-        "name": "isFloatingActionsHovered",
+        "name": "floatingActionsHovered",
         "type": "boolean",
         "required": false,
         "default": "false",
@@ -12818,7 +12808,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "(filters: ColumnFiltersState) => void — Callback when column filters change."
       },
       {
-        "name": "enableColumnFilters",
+        "name": "filterable",
         "type": "boolean",
         "required": false,
         "default": "false",
@@ -12882,10 +12872,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "expandColumnPosition",
-        "type": "\"left\" | \"right\"",
+        "type": "\"start\" | \"end\"",
         "required": false,
-        "default": "\"left\"",
-        "description": "Position of the expand column."
+        "default": "\"start\"",
+        "description": "Which end of the row the expand column sits at. `start` is the first column."
       },
       {
         "name": "expandOnRowClick",
@@ -12923,11 +12913,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Custom CSS class for striped rows."
       },
       {
-        "name": "density",
-        "type": "\"compact\" | \"comfortable\" | \"spacious\"",
+        "name": "size",
+        "type": "\"sm\" | \"md\" | \"lg\"",
         "required": false,
-        "default": "\"comfortable\"",
-        "description": "Controls cell padding density."
+        "default": "\"md\"",
+        "description": "Cell padding and text size."
       },
       {
         "name": "pinnedRightColumns",
@@ -12958,7 +12948,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "(rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited."
       },
       {
-        "name": "enableColumnResizing",
+        "name": "resizable",
         "type": "boolean",
         "required": false,
         "default": "false",
@@ -13007,7 +12997,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "(order: string[]) => void — Callback when column order changes."
       },
       {
-        "name": "enableRowDragDrop",
+        "name": "reorderable",
         "type": "boolean",
         "required": false,
         "default": "false",
@@ -13022,10 +13012,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "dragColumnPosition",
-        "type": "\"left\" | \"right\"",
+        "type": "\"start\" | \"end\"",
         "required": false,
-        "default": "\"left\"",
-        "description": "Position of the drag handle column."
+        "default": "\"start\"",
+        "description": "Which end of the row the drag handle column sits at."
       },
       {
         "name": "showFooter",
@@ -13049,7 +13039,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "(event: React.MouseEvent, row: TData) => void — Callback on right-click of a row."
       },
       {
-        "name": "enableCopyOnClick",
+        "name": "copyOnClick",
         "type": "boolean",
         "required": false,
         "default": "false",
@@ -13063,7 +13053,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "(value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied."
       },
       {
-        "name": "enableInfiniteScroll",
+        "name": "infiniteScroll",
         "type": "boolean",
         "required": false,
         "default": "false",
@@ -13141,10 +13131,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "searchIconPosition",
-        "type": "\"left\" | \"right\" | \"none\"",
+        "type": "\"start\" | \"end\" | \"none\"",
         "required": false,
-        "default": "\"left\"",
-        "description": "Position of the search icon."
+        "default": "\"start\"",
+        "description": "Which end of the search field the icon sits at, or `none`."
       },
       {
         "name": "CheckboxIcon",
@@ -13473,15 +13463,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "always"
       },
       {
-        "name": "data-density",
-        "values": [
-          "comfortable",
-          "compact",
-          "spacious"
-        ],
-        "when": "always"
-      },
-      {
         "name": "data-drag-handle",
         "values": [],
         "when": "always"
@@ -13572,6 +13553,15 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           "start"
         ],
         "when": "varies"
+      },
+      {
+        "name": "data-size",
+        "values": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "when": "always"
       },
       {
         "name": "data-sorted",
@@ -13742,10 +13732,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "iconPosition",
-        "type": "\"left\" | \"right\"",
+        "type": "\"start\" | \"end\"",
         "required": false,
-        "default": "\"left\"",
-        "description": "Position of tab icons relative to the label."
+        "default": "\"start\"",
+        "description": "Which end of the tab label its icon sits at: `start` before the text, `end` after it."
       },
       {
         "name": "showZeroCount",
@@ -14713,11 +14703,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Expand the picker to fill its parent container."
       },
       {
-        "name": "variant",
+        "name": "mode",
         "type": "\"dropdown\" | \"clock\"",
         "required": false,
         "default": "\"dropdown\"",
-        "description": "Visual variant: dropdown list or analog clock face."
+        "description": "How a time is picked: a dropdown list or an analog clock face."
       },
       {
         "name": "clearable",
@@ -14794,7 +14784,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "false",
-        "description": "Keep dropdown DOM mounted when closed (dropdown variant only)."
+        "description": "Keep dropdown DOM mounted when closed (dropdown mode only)."
       },
       {
         "name": "portalContainer",
@@ -14946,7 +14936,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "clockContent",
             "type": "string",
             "required": false,
-            "description": "Clock variant outermost container."
+            "description": "Clock mode outermost container."
           },
           {
             "name": "clockDisplay",
@@ -15269,11 +15259,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Unique identifier for the toast."
       },
       {
-        "name": "type",
+        "name": "variant",
         "type": "\"success\" | \"warning\" | \"error\" | \"info\"",
         "required": false,
         "default": "\"info\"",
-        "description": "Visual type/severity of the toast."
+        "description": "Which status this is, choosing the colour and the indicator glyph."
       },
       {
         "name": "message",
@@ -15322,7 +15312,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "ReactNode",
         "required": false,
         "default": null,
-        "description": "React.ReactNode — Custom icon replacing the default type icon."
+        "description": "React.ReactNode — Custom icon replacing the variant's default icon."
       },
       {
         "name": "showCloseButton",
@@ -15539,8 +15529,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Identifies the toast so it can be dismissed by name later; generated when omitted."
           },
           {
-            "name": "type",
-            "type": "ToastType",
+            "name": "variant",
+            "type": "ToastVariant",
             "required": false,
             "description": "Which status this is, choosing the colour and the indicator glyph."
           },
@@ -15584,7 +15574,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": "Replaces the type's default indicator glyph."
+            "description": "Replaces the variant's default indicator glyph."
           },
           {
             "name": "showCloseButton",
@@ -15644,7 +15634,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "toast",
             "type": "(config: Omit<ToastConfig, \"id\"> | string) => string",
             "required": true,
-            "description": "Shows a toast and returns its id. The other methods are this with `type` filled in."
+            "description": "Shows a toast and returns its id. The other methods are this with `variant` filled in."
           },
           {
             "name": "success",
@@ -15692,8 +15682,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "always"
       },
       {
-        "name": "data-toast-type",
-        "values": [],
+        "name": "data-variant",
+        "values": [
+          "error",
+          "info",
+          "success",
+          "warning"
+        ],
         "when": "always"
       }
     ],
@@ -15806,11 +15801,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Delay in milliseconds before hiding the tooltip."
       },
       {
-        "name": "disableHoverableContent",
+        "name": "hoverableContent",
         "type": "boolean",
         "required": false,
-        "default": "false",
-        "description": "When true, the tooltip content is not hoverable (closes on mouse leave of trigger)."
+        "default": "true",
+        "description": "Keeps the tooltip open while the pointer moves onto it (WCAG 1.4.13). `false` closes it as soon as the pointer leaves the trigger."
       },
       {
         "name": "open",

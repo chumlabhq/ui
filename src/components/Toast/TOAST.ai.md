@@ -93,7 +93,7 @@ function MyComponent() {
 
 | Prop | Constraint |
 |------|-----------|
-| `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
+| `variant` | `"success"`, `"warning"`, `"error"`, `"info"` |
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `classes.root` | Class string for the toast's outer element. It does not replace the layout. |
@@ -147,7 +147,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
-| `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
+| `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the indicator glyph. |
 | `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
 | `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
@@ -190,7 +190,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ## Data Attributes (for CSS selectors and testing)
 
 - `data-toast-id` — on each toast, the id the API returns from `toast.success(...)`
-- `data-toast-type="default" | "success" | "error" | "warning" | "info"` — the variant
+- `data-variant="default" | "success" | "error" | "warning" | "info"` — the variant
 
 ---
 

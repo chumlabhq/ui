@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@c
 export default function AccordionExample() {
   return (
     <>
-      <Accordion type="single" defaultValue="basic-1" collapsible>
+      <Accordion selectionMode="single" defaultValue="basic-1" collapsible>
         <AccordionItem value="basic-1">
           <AccordionTrigger>What is React?</AccordionTrigger>
           <AccordionContent>

@@ -1,9 +1,9 @@
-import type { ToastType } from "./types.js";
+import type { ToastVariant } from "./types.js";
 import { SuccessIcon, WarningIcon, ErrorIcon, InfoIcon } from "./icons.js";
 
-export const getDefaultIcon = (type: ToastType) => {
+export const getDefaultIcon = (variant: ToastVariant) => {
   const iconClass = "w-5 h-5 shrink-0";
-  switch (type) {
+  switch (variant) {
     case "success":
       return <SuccessIcon className={iconClass} />;
     case "warning":

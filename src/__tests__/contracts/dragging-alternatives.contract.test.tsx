@@ -41,7 +41,7 @@ describe("dragging alternatives contract", () => {
   describe("Table column resize", () => {
     it("exposes the handle to the keyboard", () => {
       render(
-        <Table columns={COLUMNS} data={DATA} enableColumnResizing ariaLabel="t" />,
+        <Table columns={COLUMNS} data={DATA} resizable ariaLabel="t" />,
       );
       const handle = document.querySelector("[data-resize-handle]") as HTMLElement;
       expect(handle, "no resize handle rendered").not.toBeNull();
@@ -55,7 +55,7 @@ describe("dragging alternatives contract", () => {
         <Table
           columns={COLUMNS}
           data={DATA}
-          enableColumnResizing
+          resizable
           onColumnSizingChange={onColumnSizingChange}
           ariaLabel="t"
         />,
@@ -78,7 +78,7 @@ describe("dragging alternatives contract", () => {
         <Table
           columns={COLUMNS}
           data={DATA}
-          enableColumnResizing
+          resizable
           onColumnSizingChange={onColumnSizingChange}
           ariaLabel="t"
         />,
@@ -93,7 +93,7 @@ describe("dragging alternatives contract", () => {
         <Table
           columns={COLUMNS}
           data={DATA}
-          enableColumnResizing
+          resizable
           onColumnSizingChange={onColumnSizingChange}
           ariaLabel="t"
         />,
@@ -108,7 +108,7 @@ describe("dragging alternatives contract", () => {
   describe("Table row reorder", () => {
     it("exposes the handle to the keyboard", () => {
       render(
-        <Table columns={COLUMNS} data={DATA} enableRowDragDrop ariaLabel="t" />,
+        <Table columns={COLUMNS} data={DATA} reorderable ariaLabel="t" />,
       );
       const handles = screen.getAllByRole("button", { name: /Reorder row/ });
       expect(handles).toHaveLength(DATA.length);
@@ -120,7 +120,7 @@ describe("dragging alternatives contract", () => {
         <Table
           columns={COLUMNS}
           data={DATA}
-          enableRowDragDrop
+          reorderable
           onRowReorder={onRowReorder}
           ariaLabel="t"
         />,
@@ -140,7 +140,7 @@ describe("dragging alternatives contract", () => {
         <Table
           columns={COLUMNS}
           data={DATA}
-          enableRowDragDrop
+          reorderable
           onRowReorder={onRowReorder}
           ariaLabel="t"
         />,

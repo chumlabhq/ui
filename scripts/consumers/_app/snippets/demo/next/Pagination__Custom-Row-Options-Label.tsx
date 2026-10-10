@@ -20,7 +20,7 @@ export default function PaginationExample() {
         }
       }
       showRowsPerPage
-      rowsPerPageLabel="items"
+      rowsPerPageSuffix="items"
       classes={
         {
                     ...({

@@ -10,7 +10,7 @@ export default function TimePickerExample() {
       <TimePicker
         value={clock12}
         onValueChange={(v) => setClock12(v)}
-        variant="clock"
+        mode="clock"
         format="12h"
         classes={
           {

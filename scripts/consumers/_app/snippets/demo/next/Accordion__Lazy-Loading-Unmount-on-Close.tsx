@@ -4,7 +4,7 @@ export default function AccordionExample() {
   return (
     <>
       <Accordion
-        type="single"
+        selectionMode="single"
         collapsible
         classes={
           {
@@ -23,7 +23,7 @@ export default function AccordionExample() {
         </AccordionItem>
       </Accordion>
       <Accordion
-        type="single"
+        selectionMode="single"
         collapsible
         classes={
           {

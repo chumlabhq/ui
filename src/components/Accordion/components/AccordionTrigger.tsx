@@ -19,7 +19,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       children,
       expandedIcon,
       collapsedIcon,
-      iconPosition = "right",
+      iconPosition = "end",
       className,
       asChild = false,
       subtitle,
@@ -138,7 +138,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       className: cn(
         config.classes.trigger,
         className,
-        iconPosition === "left" && "gap-2"
+        iconPosition === "start" && "gap-2"
       ) || undefined,
       onClick: handleClick,
       onKeyDown: handleKeyDown,
@@ -163,7 +163,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
             {leftSlot}
           </span>
         )}
-        {iconPosition === "left" && iconElement}
+        {iconPosition === "start" && iconElement}
         <span className={config.classes.itemText || undefined}>
           <span>{children}</span>
           {subtitle && (
@@ -172,7 +172,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
             </span>
           )}
         </span>
-        {iconPosition === "right" && iconElement}
+        {iconPosition === "end" && iconElement}
         {rightSlot && (
           <span className={config.classes.triggerActions || undefined} aria-hidden="true" inert>
             {rightSlot}

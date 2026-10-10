@@ -17,7 +17,7 @@ import type { DatePreset, DateRange } from "./utils/types.js";
 export interface PresetsPanelProps {
   /** Omitted means the defaults for this mode, resolved in this chunk. */
   presets?: DatePreset[];
-  mode: "single" | "range" | "multiple";
+  selectionMode: "single" | "range" | "multiple";
   value?: Date | null;
   rangeValue?: DateRange | null;
   multipleValue?: Date[] | null;
@@ -28,7 +28,7 @@ export interface PresetsPanelProps {
 
 export const PresetsPanel = memo(function PresetsPanel({
   presets: presetsProp,
-  mode,
+  selectionMode,
   value,
   rangeValue,
   multipleValue,
@@ -36,17 +36,17 @@ export const PresetsPanel = memo(function PresetsPanel({
   presetButtonClassName,
   onPresetClick,
 }: PresetsPanelProps) {
-  const presets = presetsProp ?? getDefaultPresets(mode);
+  const presets = presetsProp ?? getDefaultPresets(selectionMode);
 
   const isPresetActive = useCallback(
     (preset: DatePreset) => {
       const presetValue = preset.getValue();
 
-      if (mode === "single" && value) {
+      if (selectionMode === "single" && value) {
         return presetValue instanceof Date && isSameDay(presetValue, value);
       }
 
-      if (mode === "range" && rangeValue?.start && rangeValue?.end) {
+      if (selectionMode === "range" && rangeValue?.start && rangeValue?.end) {
         if (
           presetValue &&
           typeof presetValue === "object" &&
@@ -61,7 +61,7 @@ export const PresetsPanel = memo(function PresetsPanel({
         }
       }
 
-      if (mode === "multiple" && multipleValue?.length) {
+      if (selectionMode === "multiple" && multipleValue?.length) {
         if (Array.isArray(presetValue)) {
           if (presetValue.length !== multipleValue.length) return false;
           return presetValue.every((d) =>
@@ -72,7 +72,7 @@ export const PresetsPanel = memo(function PresetsPanel({
 
       return false;
     },
-    [mode, value, rangeValue, multipleValue],
+    [selectionMode, value, rangeValue, multipleValue],
   );
 
   return (

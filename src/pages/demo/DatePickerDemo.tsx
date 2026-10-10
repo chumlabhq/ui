@@ -259,7 +259,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              mode="range"
+              selectionMode="range"
               value={rangeValue}
               onValueChange={(range) => setRangeValue(range)}
               label="Select a range"
@@ -296,7 +296,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  mode="range"
+                  selectionMode="range"
                   value={rangeEmerald}
                   onValueChange={(range) => setRangeEmerald(range)}
                   placeholder="Pick a range..."
@@ -320,7 +320,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  mode="range"
+                  selectionMode="range"
                   value={rangeAmber}
                   onValueChange={(range) => setRangeAmber(range)}
                   placeholder="Pick a range..."
@@ -344,7 +344,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  mode="range"
+                  selectionMode="range"
                   value={rangeRose}
                   onValueChange={(range) => setRangeRose(range)}
                   placeholder="Pick a range..."
@@ -374,7 +374,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  mode="range"
+                  selectionMode="range"
                   value={rangeGradient}
                   onValueChange={(range) => setRangeGradient(range)}
                   placeholder="Pick a range..."
@@ -402,7 +402,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              mode="multiple"
+              selectionMode="multiple"
               value={multipleDates}
               onValueChange={(dates) => setMultipleDates(dates)}
               label="Select dates"
@@ -435,7 +435,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              mode="range"
+              selectionMode="range"
               value={presetRange}
               onValueChange={(range) => setPresetRange(range)}
               label="Date range with presets"
@@ -622,7 +622,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-md">
             <DatePicker
-              mode="range"
+              selectionMode="range"
               value={multiMonthRange}
               onValueChange={(range) => setMultiMonthRange(range)}
               label="Two-month range picker"
@@ -1115,7 +1115,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              mode="range"
+              selectionMode="range"
               value={customPresetRange}
               onValueChange={(range) => setCustomPresetRange(range)}
               label="Analytics period"
@@ -1496,7 +1496,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  mode="range"
+                  selectionMode="range"
                   value={classesRange}
                   onValueChange={(range) => setClassesRange(range)}
                   placeholder="Styled presets"

@@ -10,8 +10,8 @@ const fixtures: Fixtures<typeof DatePicker> = [
   { name: "labelled", props: { label: "Date", description: "Pick a day" } },
   { name: "open", props: { defaultOpen: true } },
   { name: "open-with-value", props: { defaultOpen: true, value: D, clearable: true } },
-  { name: "range", props: { defaultOpen: true, mode: "range", value: { start: D, end: new Date(2026, 0, 20) } } },
-  { name: "multiple", props: { defaultOpen: true, mode: "multiple", value: [D] } },
+  { name: "range", props: { defaultOpen: true, selectionMode: "range", value: { start: D, end: new Date(2026, 0, 20) } } },
+  { name: "multiple", props: { defaultOpen: true, selectionMode: "multiple", value: [D] } },
   { name: "with-presets", props: { defaultOpen: true, showPresets: true } },
   { name: "with-today-button", props: { defaultOpen: true, showTodayButton: true } },
     {

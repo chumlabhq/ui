@@ -8,7 +8,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        mode="range"
+        selectionMode="range"
         value={presetRange}
         onValueChange={(range) => setPresetRange(range)}
         label="Date range with presets"

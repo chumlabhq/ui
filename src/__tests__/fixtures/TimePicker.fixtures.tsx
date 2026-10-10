@@ -11,11 +11,11 @@ const fixtures: Fixtures<typeof TimePicker> = [
   { name: "open-with-value", props: { defaultOpen: true, defaultValue: "09:30", clearable: true } },
   {
     name: "open-clock",
-    props: { defaultOpen: true, variant: "clock", defaultValue: "09:30" },
+    props: { defaultOpen: true, mode: "clock", defaultValue: "09:30" },
     note: "`defaultValue` is what makes the dial deterministic. Without it the hand points at the current time and moves between runs — 96 to 295 differing pixels against a visual baseline, once a minute, forever.",
   },
-  { name: "open-clock-12h", props: { defaultOpen: true, variant: "clock", format: "12h", defaultValue: "09:30" }, note: "The period toggle only exists on a 12-hour clock." },
-  { name: "open-bounded", props: { defaultOpen: true, variant: "clock", minTime: "09:00", maxTime: "17:00", defaultValue: "10:00" }, note: "Disabled clock numbers need a bounded range." },
+  { name: "open-clock-12h", props: { defaultOpen: true, mode: "clock", format: "12h", defaultValue: "09:30" }, note: "The period toggle only exists on a 12-hour clock." },
+  { name: "open-bounded", props: { defaultOpen: true, mode: "clock", minTime: "09:00", maxTime: "17:00", defaultValue: "10:00" }, note: "Disabled clock numbers need a bounded range." },
   { name: "open-no-matches", props: { defaultOpen: true, minTime: "23:59", maxTime: "23:59" } },
   {
     name: "open-keyboard-focus",

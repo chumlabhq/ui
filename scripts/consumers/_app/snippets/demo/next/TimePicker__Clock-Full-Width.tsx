@@ -10,7 +10,7 @@ export default function TimePickerExample() {
       <TimePicker
         value={clockFullWidth}
         onValueChange={(v) => setClockFullWidth(v)}
-        variant="clock"
+        mode="clock"
         fullWidth
         classes={
           {

@@ -36,7 +36,8 @@ export interface TooltipBaseProps {
   /** Delay in ms before the tooltip appears. Default: 700. */
   delayDuration?: number;
   hideDelayDuration?: number;
-  disableHoverableContent?: boolean;
+  /** Keeps the tooltip open while the pointer moves onto it (WCAG 1.4.13). `false` closes it as soon as the pointer leaves the trigger. Default: `true`. */
+  hoverableContent?: boolean;
   /** Controlled open state. Use with `onOpenChange`. */
   open?: boolean;
   defaultOpen?: boolean;

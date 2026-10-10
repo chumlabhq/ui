@@ -205,7 +205,7 @@ export default function TableExample() {
                   columns={columns}
                   data={sampleData}
                   getRowId={(row) => row.id}
-                  enableColumnFilters
+                  filterable
                   columnFilters={filters}
                   onColumnFiltersChange={setFilters}
                   filterableColumns={{

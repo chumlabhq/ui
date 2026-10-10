@@ -115,16 +115,16 @@ export function useAccordionItem(value: string) {
 export function useAccordionState() {
   const store = useExpandedStore();
   const expandedValues = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
-  const { type, itemCount } = useAccordionContext();
+  const { selectionMode, itemCount } = useAccordionContext();
   const { disabled } = useAccordionConfig();
 
   return useMemo(() => ({
     expandedValues: Array.from(expandedValues),
     expandedCount: expandedValues.size,
     itemCount,
-    type,
+    selectionMode,
     disabled,
     isAllExpanded: expandedValues.size === itemCount,
     isAllCollapsed: expandedValues.size === 0,
-  }), [expandedValues, itemCount, type, disabled]);
+  }), [expandedValues, itemCount, selectionMode, disabled]);
 }

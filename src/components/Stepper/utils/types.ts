@@ -168,7 +168,8 @@ export interface StepperProps {
   showLabels?: boolean;
   showDescriptions?: boolean;
   showConnectors?: boolean;
-  labelPosition?: "bottom" | "right";
+  /** Where each step's label sits: under its indicator, or after it (`end`). */
+  labelPosition?: "bottom" | "end";
   completedIcon?: ComponentType<IconProps> | ReactNode;
   errorIcon?: ComponentType<IconProps> | ReactNode;
   fullWidth?: boolean;

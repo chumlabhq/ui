@@ -131,13 +131,13 @@
       "description": "Expand the picker to fill its parent container.",
       "default": false
     },
-    "variant": {
+    "mode": {
       "type": "string",
       "enum": [
         "dropdown",
         "clock"
       ],
-      "description": "Visual variant: dropdown list or analog clock face.",
+      "description": "How a time is picked: a dropdown list or an analog clock face.",
       "default": "dropdown"
     },
     "clearable": {
@@ -195,7 +195,7 @@
     },
     "keepMounted": {
       "type": "boolean",
-      "description": "Keep dropdown DOM mounted when closed (dropdown variant only).",
+      "description": "Keep dropdown DOM mounted when closed (dropdown mode only).",
       "default": false
     },
     "portalContainer": {

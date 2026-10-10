@@ -75,7 +75,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `dotSize` | number | `8` | Diameter of each dot in pixels. |
+| `size` | number | `8` | Diameter of each dot in pixels. |
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
 | `speed` | number | `1.4` | Full animation cycle duration in seconds. |
@@ -127,7 +127,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `dotSize` | `number \| undefined` | Diameter of each dot in pixels. Default: 8 |
+| `size` | `number \| undefined` | Diameter of each dot in pixels. Default: 8 |
 | `gap` | `number \| undefined` | Gap between dots in pixels. Default: 4 |
 | `count` | `number \| undefined` | Number of dots. Default: 3 |
 | `speed` | `number \| undefined` | Full animation cycle duration in seconds. Default: 1.4 |

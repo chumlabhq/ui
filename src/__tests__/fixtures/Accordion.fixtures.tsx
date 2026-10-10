@@ -41,27 +41,27 @@ const fixtures: Fixtures<typeof Accordion> = [
     // headingLevel 2: audited in isolation the trigger's default h3 has no h2
     // above it, which axe reads as a skipped level — an artefact of the scope,
     // not the component.
-    props: { type: "single", collapsible: true, defaultValue: "one", headingLevel: 2 },
+    props: { selectionMode: "single", collapsible: true, defaultValue: "one", headingLevel: 2 },
     children: focusableSlots,
     note: "A focusable node in an aria-hidden trigger slot — two critical axe violations before the slots were made inert.",
   },
-  { name: "single-open", props: { type: "single", collapsible: true, defaultValue: "one" }, children: items },
-  { name: "bordered", props: { type: "single", variant: "bordered", defaultValue: "one" }, children: items },
-  { name: "separated", props: { type: "single", variant: "separated", defaultValue: "one" }, children: items },
-  { name: "flush", props: { type: "single", variant: "flush", defaultValue: "one" }, children: items },
-  { name: "multiple", props: { type: "multiple", defaultValue: ["one", "two"] }, children: items },
-  { name: "headings", props: { type: "single", headingLevel: 3, defaultValue: "one" }, children: items },
-  { name: "disabled", props: { type: "single", disabled: true }, children: items },
+  { name: "single-open", props: { selectionMode: "single", collapsible: true, defaultValue: "one" }, children: items },
+  { name: "bordered", props: { selectionMode: "single", variant: "bordered", defaultValue: "one" }, children: items },
+  { name: "separated", props: { selectionMode: "single", variant: "separated", defaultValue: "one" }, children: items },
+  { name: "flush", props: { selectionMode: "single", variant: "flush", defaultValue: "one" }, children: items },
+  { name: "multiple", props: { selectionMode: "multiple", defaultValue: ["one", "two"] }, children: items },
+  { name: "headings", props: { selectionMode: "single", headingLevel: 3, defaultValue: "one" }, children: items },
+  { name: "disabled", props: { selectionMode: "single", disabled: true }, children: items },
   {
     name: "announced",
-    props: { type: "single", collapsible: true, defaultValue: "one", announceExpanded: true },
+    props: { selectionMode: "single", collapsible: true, defaultValue: "one", announceExpanded: true },
     children: items,
     note: "Adds a live region that announces the expanded panel; nothing rendered it before.",
   },
   {
     name: "classes-override",
     props: {
-      type: "single",
+      selectionMode: "single",
       collapsible: true,
       defaultValue: "one",
       // A consumer restyling one slot, written the way the demo pages write it:

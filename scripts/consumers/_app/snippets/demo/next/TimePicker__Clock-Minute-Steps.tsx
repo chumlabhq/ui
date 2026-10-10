@@ -12,7 +12,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={clockStep1}
           onValueChange={(v) => setClockStep1(v)}
-          variant="clock"
+          mode="clock"
           minuteStep={1}
           classes={
             {
@@ -57,7 +57,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={clockStep5}
           onValueChange={(v) => setClockStep5(v)}
-          variant="clock"
+          mode="clock"
           minuteStep={5}
           classes={
             {

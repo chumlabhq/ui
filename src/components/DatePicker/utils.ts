@@ -304,10 +304,10 @@ export function sortDates(dates: Date[]): Date[] {
   return [...dates].sort((a, b) => a.getTime() - b.getTime());
 }
 
-export function getDefaultPresets(mode: "single" | "range" | "multiple") {
+export function getDefaultPresets(selectionMode: "single" | "range" | "multiple") {
   const today = startOfDay(new Date());
   
-  if (mode === "single") {
+  if (selectionMode === "single") {
     return [
       { label: "Today", getValue: () => today },
       { label: "Yesterday", getValue: () => subDays(today, 1) },
@@ -315,7 +315,7 @@ export function getDefaultPresets(mode: "single" | "range" | "multiple") {
     ];
   }
   
-  if (mode === "range") {
+  if (selectionMode === "range") {
     return [
       { label: "Today", getValue: () => ({ start: today, end: today }) },
       { label: "Yesterday", getValue: () => ({ start: subDays(today, 1), end: subDays(today, 1) }) },

@@ -236,7 +236,7 @@ export default function TableExample() {
                   <Table
                     columns={columns}
                     data={sampleData.slice(0, 5)}
-                    enableColumnResizing
+                    resizable
                     columnSizing={sizing}
                     onColumnSizingChange={setSizing}
                     getRowId={(row) => row.id}

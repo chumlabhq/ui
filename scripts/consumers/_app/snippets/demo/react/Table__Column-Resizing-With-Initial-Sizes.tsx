@@ -199,7 +199,7 @@ export default function TableExample() {
                 <Table
                   columns={sized}
                   data={sampleData.slice(0, 5)}
-                  enableColumnResizing
+                  resizable
                   getRowId={(row) => row.id}
                   classes={{
                     ...s,

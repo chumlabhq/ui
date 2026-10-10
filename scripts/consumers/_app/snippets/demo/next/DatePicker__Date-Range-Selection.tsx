@@ -9,7 +9,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={rangeValue}
           onValueChange={(range) => setRangeValue(range)}
           label="Select a range"

@@ -1,8 +1,8 @@
-import type { ToastType, ToastPosition, ToastClasses } from "./types.js";
+import type { ToastVariant, ToastPosition, ToastClasses } from "./types.js";
 import { structuralOnly } from "../../../utils/classLayers.js";
 
-export const getRoleForType = (type: ToastType): "alert" | "status" => {
-  switch (type) {
+export const getRoleForVariant = (variant: ToastVariant): "alert" | "status" => {
+  switch (variant) {
     case "error":
     case "warning":
       return "alert";
@@ -13,7 +13,7 @@ export const getRoleForType = (type: ToastType): "alert" | "status" => {
   }
 };
 
-export const defaultContainerStyles: Record<ToastType | "default", string> = {
+export const defaultContainerStyles: Record<ToastVariant | "default", string> = {
   success:
     "bg-[var(--toast-success-bg,#195030)] border-[var(--toast-success-border,#195030)] text-[var(--toast-success-text,white)]",
   warning:

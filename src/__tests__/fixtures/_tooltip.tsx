@@ -27,7 +27,7 @@ export function ModalFromTooltip() {
           Open dialog
         </span>
       </Tooltip>
-      <Modal open={open} onOpenChange={setOpen} title="Dialog" disableAnimation>
+      <Modal open={open} onOpenChange={setOpen} title="Dialog" reduceMotion>
         <p>Body</p>
       </Modal>
     </>

@@ -12,7 +12,7 @@ import type { ActTools } from "./_act.js";
  * *does* render is untested. This module is what makes the difference decidable.
  */
 /**
- * Distributive, so a discriminated union of props (Accordion's `type: "single"`
+ * Distributive, so a discriminated union of props (Accordion's `selectionMode: "single"`
  * vs `"multiple"`) survives the omit instead of collapsing to its common keys.
  */
 type WithoutChildren<T> = T extends unknown ? Omit<T, "children"> : never;

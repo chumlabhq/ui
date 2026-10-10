@@ -82,7 +82,7 @@ export interface LinearLoaderProps extends HTMLAttributes<HTMLDivElement> {
 
 export interface DotLoaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Diameter of each dot in pixels. Default: 8 */
-  dotSize?: number;
+  size?: number;
   /** Gap between dots in pixels. Default: 4 */
   gap?: number;
   /** Number of dots. Default: 3 */

@@ -219,7 +219,7 @@ export default function TableExample() {
                     onSelectedRowIdsChange={setSelectedPage}
                     selectAllMode="page"
                     classes={s}
-                    density="compact"
+                    size="sm"
                   />
                 </div>
                 <div className="space-y-2">
@@ -238,7 +238,7 @@ export default function TableExample() {
                     onSelectedRowIdsChange={setSelectedAll}
                     selectAllMode="all"
                     classes={s}
-                    density="compact"
+                    size="sm"
                   />
                 </div>
               </div>

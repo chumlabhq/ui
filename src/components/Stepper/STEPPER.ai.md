@@ -60,7 +60,7 @@ export default function Example() {
 | `beforeStepChange` | Return `false` to prevent navigation. |
 | `variant` | `"numbered"` (default), `"icon"`, or `"dot"`. |
 | `orientation` | `"horizontal"` (default) or `"vertical"`. |
-| `labelPosition` | `"right"` (default) or `"bottom"`. Only applies to horizontal. |
+| `labelPosition` | `"end"` (default) or `"bottom"`. Only applies to horizontal. |
 | `showTooltips` | Requires `tooltip` property on individual steps. |
 | `getStepStatus` | Overrides default status logic. Must handle all steps. |
 | `renderStep` | Custom renderer. Receives `(props, defaultElement)`. |
@@ -132,7 +132,7 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `showLabels` | boolean | `true` | Whether to show step labels. |
 | `showDescriptions` | boolean | `false` | Whether to show step descriptions. |
 | `showConnectors` | boolean | `true` | Whether to show connectors between steps. |
-| `labelPosition` | `"bottom"` \| `"right"` | `"right"` | Position of step labels relative to the indicator. |
+| `labelPosition` | `"bottom"` \| `"end"` | `"end"` | Where each step's label sits: under its indicator, or after it (`end`). |
 | `completedIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for completed steps. |
 | `errorIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for error steps. |
 | `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |

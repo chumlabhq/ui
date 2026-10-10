@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@c
 export default function AccordionExample() {
   return (
     <Accordion
-      type="multiple"
+      selectionMode="multiple"
       defaultValue={["multi-1", "multi-2"]}
       classes={
         {

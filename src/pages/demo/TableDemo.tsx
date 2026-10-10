@@ -1070,7 +1070,7 @@ function ServerApiDemo({
         manualPagination
         manualFiltering
         loading={loading}
-        enableColumnFilters
+        filterable
         columnFilters={columnFilters}
         onColumnFiltersChange={handleColumnFiltersChange}
         filterableColumns={filterColumnsConfig}
@@ -1150,7 +1150,7 @@ const TableDemo = () => {
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
   const [hoveredRowRef, setHoveredRowRef] =
     useState<React.RefObject<HTMLTableRowElement> | null>(null);
-  const [isFloatingActionsHovered, setIsFloatingActionsHovered] =
+  const [floatingActionsHovered, setIsFloatingActionsHovered] =
     useState(false);
 
   const [compHoveredRowIndex, setCompHoveredRowIndex] = useState<number | null>(
@@ -1430,11 +1430,9 @@ const TableDemo = () => {
     joinDate: true,
   });
 
-  const [density, setDensity] = useState<
-    "compact" | "comfortable" | "spacious"
-  >("comfortable");
+  const [size, setSize] = useState<"sm" | "md" | "lg">("md");
 
-  // Column Resizing (no extra state needed beyond enableColumnResizing)
+  // Column Resizing (no extra state needed beyond resizable)
   // Inline Cell Editing
   const [editedCells, setEditedCells] = useState<
     { rowId: string; columnId: string; value: unknown }[]
@@ -1707,13 +1705,13 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             columns={columns}
             data={sampleData.slice(0, 5)}
             onRowHover={handleRowHover}
-            isFloatingActionsHovered={isFloatingActionsHovered}
+            floatingActionsHovered={floatingActionsHovered}
             floatingActions={
               <FloatingActions<User>
                 rowRef={hoveredRowRef}
                 rowData={floatingActionsData}
                 onHover={handleFloatingActionsHover}
-                isVisible={hoveredRowIndex !== null || isFloatingActionsHovered}
+                isVisible={hoveredRowIndex !== null || floatingActionsHovered}
                 getName={(data) => data.name}
                 onAction={(action, data) =>
                   setFloatingAction(JSON.stringify({ action, name: data.name }))
@@ -1880,7 +1878,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       setDotHoverIdx(idx);
                       setDotHoverRef(ref ?? null);
                     }}
-                    isFloatingActionsHovered={dotFloatingHovered}
+                    floatingActionsHovered={dotFloatingHovered}
                     popupOpen={dotMenuState !== null}
                     floatingActions={
                       <FloatingActions<User>
@@ -2016,7 +2014,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Floating Actions with Custom Triggers"
-        codeless="the same floatingActions, onRowHover and isFloatingActionsHovered as With Floating Actions; only the trigger buttons differ" isDarkMode={dark}>
+        codeless="the same floatingActions, onRowHover and floatingActionsHovered as With Floating Actions; only the trigger buttons differ" isDarkMode={dark}>
         {(() => {
           const PillToolbarDemo = () => {
             const [pillHoverIdx, setPillHoverIdx] = React.useState<
@@ -2040,7 +2038,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   setPillHoverIdx(idx);
                   setPillHoverRef(ref ?? null);
                 }}
-                isFloatingActionsHovered={pillFloatingHovered}
+                floatingActionsHovered={pillFloatingHovered}
                 floatingActions={
                   <FloatingActions<User>
                     rowRef={pillHoverRef}
@@ -2388,7 +2386,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             rowOptions={[3, 6, 9, 12]}
             onValueChange={handleDarkPageChange}
             onRowsPerPageChange={handleDarkRowsPerPageChange}
-            rowsPerPageLabel="per page"
+            rowsPerPageSuffix="per page"
             classes={{
               root: darkPaginationContainerStyle,
               rowsPerPage: {
@@ -2641,7 +2639,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             onPinnedColumnsChange={setCompPinnedCols}
             maxPinnedColumns={3}
             onRowHover={handleCompRowHover}
-            isFloatingActionsHovered={compIsFloatingActionsHovered}
+            floatingActionsHovered={compIsFloatingActionsHovered}
             floatingActions={
               <FloatingActions<ExtendedUser>
                 rowRef={compHoveredRowRef}
@@ -3694,7 +3692,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   columns={columns}
                   data={sampleData.slice(0, 5)}
                   expandable
-                  expandColumnPosition="right"
+                  expandColumnPosition="end"
                   expandedRowIds={ids}
                   onExpandedRowIdsChange={setIds}
                   ExpandIcon={ArrowIcon}
@@ -4571,29 +4569,29 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Density Modes" isDarkMode={dark}>
+      <Section title="Sizes" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              {(["compact", "comfortable", "spacious"] as const).map((d) => (
+              {(["sm", "md", "lg"] as const).map((d) => (
                 <Button
                   key={d}
                   size="sm"
-                  onClick={() => setDensity(d)}
+                  onClick={() => setSize(d)}
                   className={`rounded-cl-md ${
-                    density === d
+                    size === d
                       ? "bg-cl-accent text-cl-on-accent"
                       : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-elevated"
                   }`}
                 >
-                  {d.charAt(0).toUpperCase() + d.slice(1)}
+                  {d}
                 </Button>
               ))}
             </div>
             <Table
               columns={columns}
               data={sampleData.slice(0, 5)}
-              density={density}
+              size={size}
               getRowId={(row) => row.id}
               classes={s}
             />
@@ -4601,14 +4599,14 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <p
             className={`mt-3 text-sm text-cl-text-secondary`}
           >
-            Current density:{" "}
+            Current size:{" "}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              {density}
+              {size}
             </code>
-            . This controls cell padding: compact (tight), comfortable
-            (default), spacious (generous).
+            . This controls cell padding and text size: sm (tight), md
+            (default), lg (generous).
           </p>
         </DemoWrapper>
       </Section>
@@ -4657,7 +4655,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <Table
               columns={columns}
               data={sampleData.slice(0, 5)}
-              enableColumnResizing
+              resizable
               getRowId={(row) => row.id}
               classes={{
                 ...s,
@@ -4678,7 +4676,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Column Resizing (Custom Handle Style)"
-        codeless="the same enableColumnResizing as Column Resizing (Basic); only the handle's styling differs" isDarkMode={dark}>
+        codeless="the same resizable as Column Resizing (Basic); only the handle's styling differs" isDarkMode={dark}>
         {(() => {
           const CustomHandleDemo = () => (
             <div
@@ -4687,7 +4685,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               <Table
                 columns={columns}
                 data={sampleData.slice(0, 5)}
-                enableColumnResizing
+                resizable
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
@@ -4761,7 +4759,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     <Table
                       columns={columns}
                       data={sampleData.slice(0, 5)}
-                      enableColumnResizing
+                      resizable
                       columnSizing={sizing}
                       onColumnSizingChange={setSizing}
                       getRowId={(row) => row.id}
@@ -4854,7 +4852,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   <Table
                     columns={sized}
                     data={sampleData.slice(0, 5)}
-                    enableColumnResizing
+                    resizable
                     getRowId={(row) => row.id}
                     classes={{
                       ...s,
@@ -4986,7 +4984,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <Table
             columns={columns}
             data={dragDropData}
-            enableRowDragDrop
+            reorderable
             onRowReorder={(fromIndex, toIndex) => {
               setDragDropData((prev) => {
                 const updated = [...prev];
@@ -5049,7 +5047,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   <Table
                     columns={columns}
                     data={data}
-                    enableRowDragDrop
+                    reorderable
                     DragHandleIcon={ArrowHandle}
                     onRowReorder={(from, to) => {
                       setData((prev) => {
@@ -5126,7 +5124,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 <Table
                   columns={columns}
                   data={data}
-                  enableRowDragDrop
+                  reorderable
                   DragHandleIcon={NumberHandle}
                   onRowReorder={(from, to) => {
                     const name = data[from].name;
@@ -5187,7 +5185,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Drag & Drop (Styled Drag State)"
-        codeless="the same enableRowDragDrop as Row Drag & Drop (Default); only the drag-state styling differs" isDarkMode={dark}>
+        codeless="the same reorderable as Row Drag & Drop (Default); only the drag-state styling differs" isDarkMode={dark}>
         {(() => {
           const StyledDragDemo = () => {
             const [data, setData] = React.useState(sampleData.slice(0, 5));
@@ -5195,7 +5193,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               <Table
                 columns={columns}
                 data={data}
-                enableRowDragDrop
+                reorderable
                 onRowReorder={(from, to) => {
                   setData((prev) => {
                     const u = [...prev];
@@ -5236,7 +5234,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Row Drag & Drop (With Row Numbers)"
-        codeless="the same enableRowDragDrop and onRowReorder as Row Drag & Drop (Default); the number column is ordinary column markup" isDarkMode={dark}>
+        codeless="the same reorderable and onRowReorder as Row Drag & Drop (Default); the number column is ordinary column markup" isDarkMode={dark}>
         {(() => {
           const NumberedDragDemo = () => {
             const [data, setData] = React.useState(sampleData.slice(0, 5));
@@ -5264,7 +5262,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               <Table
                 columns={numberedColumns}
                 data={data}
-                enableRowDragDrop
+                reorderable
                 onRowReorder={(from, to) => {
                   setData((prev) => {
                     const u = [...prev];
@@ -5298,8 +5296,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 <Table
                   columns={columns}
                   data={data}
-                  enableRowDragDrop
-                  dragColumnPosition="right"
+                  reorderable
+                  dragColumnPosition="end"
                   onRowReorder={(from, to) => {
                     setData((prev) => {
                       const u = [...prev];
@@ -5796,7 +5794,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <Table
               columns={columns}
               data={sampleData.slice(0, 5)}
-              enableCopyOnClick
+              copyOnClick
               onCellCopy={(value, rowId, columnId) => {
                 setLastCopied(
                   `"${value}" from row ${rowId}, column "${columnId}"`,
@@ -5821,7 +5819,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              enableCopyOnClick
+              copyOnClick
             </code>{" "}
             and{" "}
             <code
@@ -5840,7 +5838,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             ref={infiniteScrollTableRef}
             columns={columns}
             data={infiniteData}
-            enableInfiniteScroll
+            infiniteScroll
             hasMore={infiniteHasMore}
             loadingMore={infiniteLoading}
             onLoadMore={handleLoadMore}
@@ -5922,7 +5920,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             ref={inf2Ref}
             columns={columns}
             data={inf2Data}
-            enableInfiniteScroll
+            infiniteScroll
             hasMore={inf2HasMore}
             loadingMore={inf2Loading}
             onLoadMore={handleLoadMore2}
@@ -6028,7 +6026,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             ref={inf3Ref}
             columns={columns}
             data={inf3Data}
-            enableInfiniteScroll
+            infiniteScroll
             hasMore={inf3HasMore}
             loadingMore={inf3Loading}
             onLoadMore={handleLoadMore3}
@@ -6104,7 +6102,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             ref={inf4Ref}
             columns={columns}
             data={inf4Data}
-            enableInfiniteScroll
+            infiniteScroll
             hasMore={inf4HasMore}
             loadingMore={inf4Loading}
             onLoadMore={handleLoadMore4}
@@ -6263,7 +6261,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   columns={columns}
                   data={sampleData}
                   showSearch
-                  searchIconPosition="right"
+                  searchIconPosition="end"
                   searchPlaceholder="Search users..."
                   globalFilter={filter}
                   onGlobalFilterChange={setFilter}
@@ -6283,7 +6281,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            searchIconPosition="right"
+            searchIconPosition="end"
           </code>
           . The clear button shifts left when a right icon is present.
         </p>
@@ -6378,7 +6376,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 columns={columns}
                 data={sampleData}
                 showSearch
-                searchIconPosition="right"
+                searchIconPosition="end"
                 searchPlaceholder="Filter by any column..."
                 globalFilter={filter}
                 onGlobalFilterChange={setFilter}
@@ -6420,7 +6418,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            searchIconPosition="right"
+            searchIconPosition="end"
           </code>
           . Violet theme with thick border and focus glow.
         </p>
@@ -6439,7 +6437,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     columns={columns}
                     data={sampleData}
                     getRowId={(row) => row.id}
-                    enableColumnFilters
+                    filterable
                     columnFilters={filters}
                     onColumnFiltersChange={setFilters}
                     filterableColumns={{
@@ -6545,7 +6543,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   columns={columns}
                   data={sampleData}
                   getRowId={(row) => row.id}
-                  enableColumnFilters
+                  filterable
                   columnFilters={filters}
                   onColumnFiltersChange={setFilters}
                   FilterIcon={DownChevronFilter}
@@ -6610,7 +6608,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   columns={columns}
                   data={sampleData}
                   getRowId={(row) => row.id}
-                  enableColumnFilters
+                  filterable
                   columnFilters={filters}
                   onColumnFiltersChange={setFilters}
                   filterableColumns={{
@@ -6734,7 +6732,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Column Filters + Sorting Combined"
-        codeless="enableColumnFilters and sortable together; each has its own snippet" isDarkMode={dark}>
+        codeless="filterable and sortable together; each has its own snippet" isDarkMode={dark}>
         {(() => {
           const FilterSortDemo = () => {
             const [filters, setFilters] = React.useState<
@@ -6747,7 +6745,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   data={sampleData}
                   getRowId={(row) => row.id}
                   sortable
-                  enableColumnFilters
+                  filterable
                   columnFilters={filters}
                   onColumnFiltersChange={setFilters}
                   filterableColumns={{
@@ -6802,7 +6800,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 columns={columns}
                 data={sampleData}
                 getRowId={(row) => row.id}
-                enableColumnFilters
+                filterable
                 columnFilters={filters}
                 onColumnFiltersChange={setFilters}
                 filterableColumns={{
@@ -6971,7 +6969,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   columns={columns}
                   data={sampleData}
                   getRowId={(row) => row.id}
-                  enableColumnFilters
+                  filterable
                   columnFilters={filters}
                   onColumnFiltersChange={setFilters}
                   filterableColumns={{
@@ -7578,7 +7576,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       onSelectedRowIdsChange={setSelectedPage}
                       selectAllMode="page"
                       classes={s}
-                      density="compact"
+                      size="sm"
                     />
                   </div>
                   <div className="space-y-2">
@@ -7597,7 +7595,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       onSelectedRowIdsChange={setSelectedAll}
                       selectAllMode="all"
                       classes={s}
-                      density="compact"
+                      size="sm"
                     />
                   </div>
                 </div>

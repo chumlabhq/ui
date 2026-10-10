@@ -24,7 +24,7 @@ const fixtures: Fixtures<typeof Toast> = [
     },
     note: "There is no `action` prop; extra nodes go through `content`.",
   },
-  { name: "success", props: { id: "t4", onDismiss: () => {}, message: "Saved", type: "success", showProgress: true }, note: "The prop is `type`, not `variant`." },
+  { name: "success", props: { id: "t4", onDismiss: () => {}, message: "Saved", variant: "success", showProgress: true } },
   {
     name: "dismissable",
     props: { id: "t5", onDismiss: () => {} },

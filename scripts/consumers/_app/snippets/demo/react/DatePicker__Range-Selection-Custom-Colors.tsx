@@ -10,7 +10,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={rangeEmerald}
           onValueChange={(range) => setRangeEmerald(range)}
           placeholder="Pick a range..."
@@ -38,7 +38,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={rangeAmber}
           onValueChange={(range) => setRangeAmber(range)}
           placeholder="Pick a range..."
@@ -66,7 +66,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={rangeRose}
           onValueChange={(range) => setRangeRose(range)}
           placeholder="Pick a range..."
@@ -100,7 +100,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={rangeGradient}
           onValueChange={(range) => setRangeGradient(range)}
           placeholder="Pick a range..."

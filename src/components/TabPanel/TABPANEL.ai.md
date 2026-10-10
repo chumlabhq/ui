@@ -107,7 +107,7 @@ There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
 | `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout orientation of the tab list. |
 | `activationMode` | `"automatic"` \| `"manual"` | `"automatic"` | Whether tabs activate automatically on focus or require manual activation. |
 | `loop` | boolean | `true` | Whether keyboard navigation loops from last tab to first. |
-| `iconPosition` | `"left"` \| `"right"` | `"left"` | Position of tab icons relative to the label. |
+| `iconPosition` | `"start"` \| `"end"` | `"start"` | Which end of the tab label its icon sits at: `start` before the text, `end` after it. |
 | `showZeroCount` | boolean | `false` | Whether to show a count badge when the count is zero. |
 | `alwaysShowLabels` | boolean | `true` | Whether to always show tab labels (even when icons are present). |
 | `showTooltips` | boolean | `true` | Whether to show tooltips on tabs. |

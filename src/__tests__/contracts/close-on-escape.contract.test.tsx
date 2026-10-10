@@ -170,7 +170,7 @@ const OPENERS: Record<
   Modal: async (props) => {
     const onOpenChange = vi.fn();
     render(
-      <Modal open onOpenChange={onOpenChange} disableAnimation title="Dialog" {...props}>
+      <Modal open onOpenChange={onOpenChange} reduceMotion title="Dialog" {...props}>
         <p>Dialog body</p>
       </Modal>,
     );
@@ -240,7 +240,7 @@ describe("close-on-escape contract", () => {
       {
         name: "Modal",
         surface: (onOpenChange) => (
-          <Modal open onOpenChange={onOpenChange} disableAnimation closeOnEscape={false} title="Dialog">
+          <Modal open onOpenChange={onOpenChange} reduceMotion closeOnEscape={false} title="Dialog">
             <p>Dialog body</p>
           </Modal>
         ),
@@ -416,7 +416,7 @@ describe("Tooltip dismisses on Escape wherever focus is", () => {
     {
       name: "Modal",
       host: (onOpenChange, children) => (
-        <Modal open onOpenChange={onOpenChange} disableAnimation title="Dialog">
+        <Modal open onOpenChange={onOpenChange} reduceMotion title="Dialog">
           {children}
         </Modal>
       ),

@@ -87,15 +87,15 @@ describe("TimePicker", () => {
       expect(input).toHaveAttribute("aria-expanded", "false");
     });
 
-    it("has aria-haspopup=listbox for dropdown variant", () => {
-      render(<TimePicker variant="dropdown" />);
+    it("has aria-haspopup=listbox for dropdown mode", () => {
+      render(<TimePicker mode="dropdown" />);
 
       const input = screen.getByRole("combobox");
       expect(input).toHaveAttribute("aria-haspopup", "listbox");
     });
 
-    it("has aria-haspopup=dialog for clock variant", () => {
-      render(<TimePicker variant="clock" />);
+    it("has aria-haspopup=dialog for clock mode", () => {
+      render(<TimePicker mode="clock" />);
 
       const input = screen.getByRole("combobox");
       expect(input).toHaveAttribute("aria-haspopup", "dialog");
@@ -210,8 +210,8 @@ describe("TimePicker", () => {
       expect(input).toHaveAttribute("aria-describedby", errorEl.id);
     });
 
-    it("sets aria-autocomplete to list for dropdown variant", () => {
-      render(<TimePicker variant="dropdown" />);
+    it("sets aria-autocomplete to list for dropdown mode", () => {
+      render(<TimePicker mode="dropdown" />);
 
       const input = screen.getByRole("combobox");
       expect(input).toHaveAttribute("aria-autocomplete", "list");
@@ -449,10 +449,10 @@ describe("TimePicker", () => {
     });
   });
 
-  describe("Clock variant", () => {
-    it("opens clock face dialog on click when variant is clock", async () => {
+  describe("Clock mode", () => {
+    it("opens clock face dialog on click when mode is clock", async () => {
       const user = userEvent.setup();
-      render(<TimePicker variant="clock" format="24h" />);
+      render(<TimePicker mode="clock" format="24h" />);
 
       const input = screen.getByRole("combobox");
       await user.click(input);
@@ -463,7 +463,7 @@ describe("TimePicker", () => {
     it("calls onCancel callback when cancel is clicked on clock", async () => {
       const user = userEvent.setup();
       const onCancel = vi.fn();
-      render(<TimePicker variant="clock" format="24h" onCancel={onCancel} />);
+      render(<TimePicker mode="clock" format="24h" onCancel={onCancel} />);
 
       const input = screen.getByRole("combobox");
       await user.click(input);
@@ -480,7 +480,7 @@ describe("TimePicker", () => {
       const onValueChange = vi.fn();
       render(
         <TimePicker
-          variant="clock"
+          mode="clock"
           format="24h"
           onConfirm={onConfirm}
           onValueChange={onValueChange}
@@ -1989,13 +1989,13 @@ describe("TimePicker (additional coverage)", () => {
     });
   });
 
-  describe("Clock variant — value flowing through handleClockChange", () => {
+  describe("Clock mode — value flowing through handleClockChange", () => {
     it("updates displayed value when clock face interaction changes value then OK is clicked", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
       render(
         <TimePicker
-          variant="clock"
+          mode="clock"
           format="24h"
           value="10:00"
           onValueChange={onValueChange}
@@ -2022,7 +2022,7 @@ describe("TimePicker (additional coverage)", () => {
       const onCancel = vi.fn();
       render(
         <TimePicker
-          variant="clock"
+          mode="clock"
           format="24h"
           value="10:00"
           onValueChange={onValueChange}
@@ -2051,7 +2051,7 @@ describe("TimePicker (additional coverage)", () => {
       const onValueChange = vi.fn();
       render(
         <TimePicker
-          variant="clock"
+          mode="clock"
           format="24h"
           value="14:30"
           onValueChange={onValueChange}
@@ -2149,13 +2149,13 @@ describe("TimePicker (additional coverage)", () => {
     });
   });
 
-  describe("12h clock variant OK with no prior value", () => {
+  describe("12h clock mode OK with no prior value", () => {
     it("uses default time value when OK clicked on clock with no value prop", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
       render(
         <TimePicker
-          variant="clock"
+          mode="clock"
           format="12h"
           onValueChange={onValueChange}
         />,

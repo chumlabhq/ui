@@ -40,7 +40,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        mode="range"
+        selectionMode="range"
         value={customPresetRange}
         onValueChange={(range) => setCustomPresetRange(range)}
         label="Analytics period"

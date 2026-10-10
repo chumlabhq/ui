@@ -5,7 +5,7 @@ const level = 2;
 export default function AccordionExample() {
   return (
     <Accordion
-      type="single"
+      selectionMode="single"
       collapsible
       headingLevel={level}
       classes={

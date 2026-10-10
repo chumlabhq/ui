@@ -78,8 +78,10 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   onRowsPerPageChange?: (rows: number) => void;
   /** Show the rows-per-page selector. Default: false. */
   showRowsPerPage?: boolean;
-  rowsPerPageLabel?: string;
-  showLabel?: string;
+  /** Visible text after the rows-per-page select ("Show 10 rows"). Not the select's accessible name. Default: `"rows"`. */
+  rowsPerPageSuffix?: string;
+  /** Visible text before the rows-per-page select. Not the select's accessible name. Default: `"Show"`. */
+  rowsPerPagePrefix?: string;
   dropdownAriaLabel?: string;
   dropdownPosition?: "top" | "bottom";
   dropdownZIndex?: number;

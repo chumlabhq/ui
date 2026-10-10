@@ -286,8 +286,8 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
   });
 
   test.describe("Multiple Selection Mode", () => {
-    test("should find accordion with data-type=multiple", async ({ page }) => {
-      const multiAccordion = page.locator('[data-type="multiple"]').first();
+    test("should find accordion with data-selection-mode=multiple", async ({ page }) => {
+      const multiAccordion = page.locator('[data-selection-mode="multiple"]').first();
 
       // The guard used to make this pass when the element was absent, which is
       // the failure the test exists to catch. Assert presence, then behaviour.
@@ -298,7 +298,7 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
     test("should allow multiple items open in multiple mode", async ({
       page,
     }) => {
-      const multiAccordion = page.locator('[data-type="multiple"]').first();
+      const multiAccordion = page.locator('[data-selection-mode="multiple"]').first();
 
       // The guard used to make this pass when the element was absent, which is
       // the failure the test exists to catch. Assert presence, then behaviour.

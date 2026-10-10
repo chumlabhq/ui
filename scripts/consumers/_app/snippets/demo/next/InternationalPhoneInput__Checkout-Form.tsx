@@ -62,7 +62,7 @@ export default function InternationalPhoneInputExample() {
           required
           value={checkoutPhone}
           onValueChange={setCheckoutPhone}
-          enablePasteDetection
+          pasteDetection
           classes={
             {
               root: "flex flex-col gap-1",

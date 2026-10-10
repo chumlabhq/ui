@@ -300,11 +300,24 @@ describe("Pagination", () => {
       expect(screen.queryByText("Show")).not.toBeInTheDocument();
     });
 
-    it("uses custom showLabel and rowsPerPageLabel", () => {
-      renderWithDropdown({ showLabel: "Afficher", rowsPerPageLabel: "lignes" });
+    it("uses custom rowsPerPagePrefix and rowsPerPageSuffix", () => {
+      renderWithDropdown({ rowsPerPagePrefix: "Afficher", rowsPerPageSuffix: "lignes" });
 
       expect(screen.getByText("Afficher")).toBeInTheDocument();
       expect(screen.getByText("lignes")).toBeInTheDocument();
+    });
+
+    it("names the rows-per-page select by its value, never by the prefix or suffix text", () => {
+      const { unmount } = renderWithDropdown();
+      const byDefault = screen.getByRole("button", { expanded: false, name: "25" });
+      expect(byDefault).toHaveAccessibleName("25");
+      expect(byDefault).toHaveAttribute("aria-haspopup", "listbox");
+      unmount();
+
+      renderWithDropdown({ rowsPerPagePrefix: "Afficher", rowsPerPageSuffix: "lignes" });
+      const translated = screen.getByRole("button", { expanded: false, name: "25" });
+      expect(translated).toHaveAccessibleName("25");
+      expect(translated).not.toHaveAttribute("aria-labelledby");
     });
 
     it("uses custom dropdownAriaLabel", async () => {

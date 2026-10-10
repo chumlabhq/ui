@@ -32,5 +32,5 @@ export type {
   BadgeVariant,
   BadgeOverlap,
   CountVariant,
-  GroupVariant,
+  AvatarGroupLayout,
 } from "./utils/types.js";

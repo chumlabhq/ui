@@ -201,7 +201,7 @@ export default function TableExample() {
                 columns={columns}
                 data={sampleData}
                 showSearch
-                searchIconPosition="right"
+                searchIconPosition="end"
                 searchPlaceholder="Search users..."
                 globalFilter={filter}
                 onGlobalFilterChange={setFilter}

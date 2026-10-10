@@ -83,7 +83,7 @@ export const ToastProvider = ({
           ? {
               id,
               message: config,
-              type: "info",
+              variant: "info",
               duration: defaultDuration,
               visible: true,
             }
@@ -119,28 +119,28 @@ export const ToastProvider = ({
 
   const success = useCallback(
     (message: ReactNode, options?: Partial<ToastConfig>): string => {
-      return addToast({ ...options, message, type: "success" });
+      return addToast({ ...options, message, variant: "success" });
     },
     [addToast],
   );
 
   const warning = useCallback(
     (message: ReactNode, options?: Partial<ToastConfig>): string => {
-      return addToast({ ...options, message, type: "warning" });
+      return addToast({ ...options, message, variant: "warning" });
     },
     [addToast],
   );
 
   const error = useCallback(
     (message: ReactNode, options?: Partial<ToastConfig>): string => {
-      return addToast({ ...options, message, type: "error" });
+      return addToast({ ...options, message, variant: "error" });
     },
     [addToast],
   );
 
   const info = useCallback(
     (message: ReactNode, options?: Partial<ToastConfig>): string => {
-      return addToast({ ...options, message, type: "info" });
+      return addToast({ ...options, message, variant: "info" });
     },
     [addToast],
   );

@@ -1,6 +1,7 @@
 import type { ReactNode, KeyboardEvent, CSSProperties } from "react";
 
-export type IconPosition = "left" | "right";
+/** Which end of the tab label its icon sits at: `start` before the text, `end` after it. */
+export type IconPosition = "start" | "end";
 export type TooltipPosition = "top" | "bottom" | "left" | "right";
 export type Orientation = "horizontal" | "vertical";
 export type ActivationMode = "automatic" | "manual";

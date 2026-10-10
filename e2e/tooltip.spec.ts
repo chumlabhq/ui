@@ -221,7 +221,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       await expect(tooltip).toBeVisible();
     });
 
-    test("should close tooltip when leaving trigger with disableHoverableContent", async ({ page }) => {
+    test("should close tooltip when leaving trigger with hoverableContent={false}", async ({ page }) => {
       const hoverableSection = page.locator("section").filter({ hasText: "Hoverable Content" }).first();
       const trigger = hoverableSection.locator("button").filter({ hasText: "Not Hoverable" });
       await trigger.scrollIntoViewIfNeeded();

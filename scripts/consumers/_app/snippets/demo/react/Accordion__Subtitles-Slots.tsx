@@ -56,7 +56,7 @@ const BoltIcon = ({ className = "" }: { className?: string }) => (
 export default function AccordionExample() {
   return (
     <Accordion
-      type="single"
+      selectionMode="single"
       collapsible
       classes={
         {

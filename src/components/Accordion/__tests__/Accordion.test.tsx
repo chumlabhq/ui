@@ -55,7 +55,7 @@ function renderAccordion(props: RenderAccordionProps) {
 describe("Accordion", () => {
   describe("Rendering", () => {
     it("renders all accordion items", () => {
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       expect(screen.getByText("Item 1")).toBeInTheDocument();
       expect(screen.getByText("Item 2")).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe("Accordion", () => {
 
     it("renders with custom className", () => {
       const { container } = renderAccordion({
-        type: "single",
+        selectionMode: "single",
         className: "custom-class",
       });
 
@@ -72,14 +72,14 @@ describe("Accordion", () => {
     });
 
     it("renders with custom id", () => {
-      renderAccordion({ type: "single", id: "my-accordion" });
+      renderAccordion({ selectionMode: "single", id: "my-accordion" });
 
       expect(document.getElementById("my-accordion")).toBeInTheDocument();
     });
 
     it("renders with aria-label", () => {
       const { container } = renderAccordion({
-        type: "single",
+        selectionMode: "single",
         "aria-label": "FAQ Section",
       });
 
@@ -90,7 +90,7 @@ describe("Accordion", () => {
   describe("Single Selection Mode", () => {
     it("opens an item when clicked", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       await user.click(trigger);
@@ -100,7 +100,7 @@ describe("Accordion", () => {
 
     it("closes previously opened item when another is clicked", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger2 = screen.getByRole("button", { name: "Item 2" });
@@ -115,7 +115,7 @@ describe("Accordion", () => {
 
     it("does not close item when clicked again if collapsible=false", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", collapsible: false });
+      renderAccordion({ selectionMode: "single", collapsible: false });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       await user.click(trigger);
@@ -127,7 +127,7 @@ describe("Accordion", () => {
 
     it("closes item when clicked again if collapsible=true", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", collapsible: true });
+      renderAccordion({ selectionMode: "single", collapsible: true });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       await user.click(trigger);
@@ -142,7 +142,7 @@ describe("Accordion", () => {
       const onValueChange = vi.fn();
 
       render(
-        <Accordion type="single" value="item-1" onValueChange={onValueChange} collapsible>
+        <Accordion selectionMode="single" value="item-1" onValueChange={onValueChange} collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -157,7 +157,7 @@ describe("Accordion", () => {
     it("calls onValueChange with string value when expanding", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
-      renderAccordion({ type: "single", value: "", onValueChange });
+      renderAccordion({ selectionMode: "single", value: "", onValueChange });
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
 
@@ -165,7 +165,7 @@ describe("Accordion", () => {
     });
 
     it("respects defaultValue", () => {
-      renderAccordion({ type: "single", defaultValue: "item-2" });
+      renderAccordion({ selectionMode: "single", defaultValue: "item-2" });
 
       expect(screen.getByRole("button", { name: "Item 2" })).toHaveAttribute(
         "aria-expanded",
@@ -181,7 +181,7 @@ describe("Accordion", () => {
   describe("Multiple Selection Mode", () => {
     it("allows multiple items to be open", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "multiple" });
+      renderAccordion({ selectionMode: "multiple" });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger2 = screen.getByRole("button", { name: "Item 2" });
@@ -197,7 +197,7 @@ describe("Accordion", () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
       const { rerender } = render(
-        <Accordion type="multiple" value={[]} onValueChange={onValueChange}>
+        <Accordion selectionMode="multiple" value={[]} onValueChange={onValueChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -218,7 +218,7 @@ describe("Accordion", () => {
 
       rerender(
         <Accordion
-          type="multiple"
+          selectionMode="multiple"
           value={["item-1"]}
           onValueChange={onValueChange}
         >
@@ -243,7 +243,7 @@ describe("Accordion", () => {
 
     it("allows closing items in multiple mode", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "multiple" });
+      renderAccordion({ selectionMode: "multiple" });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       await user.click(trigger);
@@ -255,7 +255,7 @@ describe("Accordion", () => {
 
     it("respects defaultValue array", () => {
       renderAccordion({
-        type: "multiple",
+        selectionMode: "multiple",
         defaultValue: ["item-1", "item-3"],
       });
 
@@ -273,9 +273,9 @@ describe("Accordion", () => {
       );
     });
 
-    it("sets data-type=multiple for multiple type", () => {
-      const { container } = renderAccordion({ type: "multiple" });
-      expect(container.firstChild).toHaveAttribute("data-type", "multiple");
+    it("sets data-selection-mode=multiple for multiple type", () => {
+      const { container } = renderAccordion({ selectionMode: "multiple" });
+      expect(container.firstChild).toHaveAttribute("data-selection-mode", "multiple");
     });
   });
 
@@ -285,7 +285,7 @@ describe("Accordion", () => {
       const onValueChange = vi.fn();
 
       const { rerender } = render(
-        <Accordion type="single" value="item-1" onValueChange={onValueChange}>
+        <Accordion selectionMode="single" value="item-1" onValueChange={onValueChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -310,7 +310,7 @@ describe("Accordion", () => {
       );
 
       rerender(
-        <Accordion type="single" value="item-2" onValueChange={onValueChange}>
+        <Accordion selectionMode="single" value="item-2" onValueChange={onValueChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -335,7 +335,7 @@ describe("Accordion", () => {
     it("respects controlled value in multiple mode", () => {
       render(
         <Accordion
-          type="multiple"
+          selectionMode="multiple"
           value={["item-1", "item-3"]}
           onValueChange={() => {}}
         >
@@ -372,7 +372,7 @@ describe("Accordion", () => {
   describe("Keyboard Navigation", () => {
     it("navigates down with ArrowDown", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger2 = screen.getByRole("button", { name: "Item 2" });
@@ -385,7 +385,7 @@ describe("Accordion", () => {
 
     it("navigates up with ArrowUp", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger2 = screen.getByRole("button", { name: "Item 2" });
@@ -398,7 +398,7 @@ describe("Accordion", () => {
 
     it("moves to first item with Home key", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger3 = screen.getByRole("button", { name: "Item 3" });
@@ -411,7 +411,7 @@ describe("Accordion", () => {
 
     it("moves to last item with End key", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger3 = screen.getByRole("button", { name: "Item 3" });
@@ -424,7 +424,7 @@ describe("Accordion", () => {
 
     it("loops from last to first when loop=true", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", loop: true });
+      renderAccordion({ selectionMode: "single", loop: true });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger3 = screen.getByRole("button", { name: "Item 3" });
@@ -437,7 +437,7 @@ describe("Accordion", () => {
 
     it("loops from first to last when loop=true", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", loop: true });
+      renderAccordion({ selectionMode: "single", loop: true });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger3 = screen.getByRole("button", { name: "Item 3" });
@@ -450,7 +450,7 @@ describe("Accordion", () => {
 
     it("does not loop when loop=false", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", loop: false });
+      renderAccordion({ selectionMode: "single", loop: false });
 
       const trigger3 = screen.getByRole("button", { name: "Item 3" });
 
@@ -462,7 +462,7 @@ describe("Accordion", () => {
 
     it("opens item with Enter key", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       trigger.focus();
@@ -473,7 +473,7 @@ describe("Accordion", () => {
 
     it("opens item with Space key", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       trigger.focus();
@@ -486,7 +486,7 @@ describe("Accordion", () => {
   describe("Horizontal Orientation", () => {
     it("uses ArrowRight/ArrowLeft for horizontal orientation", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", orientation: "horizontal" });
+      renderAccordion({ selectionMode: "single", orientation: "horizontal" });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
       const trigger2 = screen.getByRole("button", { name: "Item 2" });
@@ -503,7 +503,7 @@ describe("Accordion", () => {
 
     it("sets data-orientation attribute", () => {
       const { container } = renderAccordion({
-        type: "single",
+        selectionMode: "single",
         orientation: "horizontal",
       });
 
@@ -518,7 +518,7 @@ describe("Accordion", () => {
     it("reverses arrow keys in RTL horizontal mode", async () => {
       const user = userEvent.setup();
       renderAccordion({
-        type: "single",
+        selectionMode: "single",
         orientation: "horizontal",
         dir: "rtl",
       });
@@ -533,7 +533,7 @@ describe("Accordion", () => {
     });
 
     it("sets dir attribute", () => {
-      const { container } = renderAccordion({ type: "single", dir: "rtl" });
+      const { container } = renderAccordion({ selectionMode: "single", dir: "rtl" });
 
       expect(container.firstChild).toHaveAttribute("dir", "rtl");
     });
@@ -542,7 +542,7 @@ describe("Accordion", () => {
   describe("Disabled State", () => {
     it("does not open disabled accordion", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", disabled: true });
+      renderAccordion({ selectionMode: "single", disabled: true });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       await user.click(trigger);
@@ -551,7 +551,7 @@ describe("Accordion", () => {
     });
 
     it("disables all triggers when accordion is disabled", () => {
-      renderAccordion({ type: "single", disabled: true });
+      renderAccordion({ selectionMode: "single", disabled: true });
 
       expect(screen.getByRole("button", { name: "Item 1" })).toBeDisabled();
       expect(screen.getByRole("button", { name: "Item 2" })).toBeDisabled();
@@ -561,7 +561,7 @@ describe("Accordion", () => {
     it("disables individual items", async () => {
       const user = userEvent.setup();
       render(
-        <Accordion type="single">
+        <Accordion selectionMode="single">
           <AccordionItem value="item-1" disabled>
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -586,7 +586,7 @@ describe("Accordion", () => {
     it("skips disabled items during keyboard navigation", async () => {
       const user = userEvent.setup();
       render(
-        <Accordion type="single">
+        <Accordion selectionMode="single">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -614,7 +614,7 @@ describe("Accordion", () => {
 
   describe("Accessibility", () => {
     it("associates trigger with content via aria-controls", () => {
-      renderAccordion({ type: "single", id: "test-accordion" });
+      renderAccordion({ selectionMode: "single", id: "test-accordion" });
 
       const trigger = screen.getByText("Item 1").closest("button");
       const controlsId = trigger?.getAttribute("aria-controls");
@@ -624,7 +624,7 @@ describe("Accordion", () => {
 
     it("sets aria-labelledby on content region", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", id: "test-accordion" });
+      renderAccordion({ selectionMode: "single", id: "test-accordion" });
 
       const trigger = screen.getByText("Item 1").closest("button")!;
       await user.click(trigger);
@@ -637,7 +637,7 @@ describe("Accordion", () => {
 
     it("sets role=region on content", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       await user.click(screen.getByText("Item 1"));
 
@@ -645,14 +645,14 @@ describe("Accordion", () => {
     });
 
     it("wraps trigger in heading element", () => {
-      renderAccordion({ type: "single", headingLevel: 2 });
+      renderAccordion({ selectionMode: "single", headingLevel: 2 });
 
       const trigger = screen.getByText("Item 1").closest("button");
       expect(trigger?.closest("h2")).toBeInTheDocument();
     });
 
     it("respects custom headingLevel", () => {
-      renderAccordion({ type: "single", headingLevel: 4 });
+      renderAccordion({ selectionMode: "single", headingLevel: 4 });
 
       const trigger = screen.getByText("Item 1").closest("button");
       expect(trigger?.closest("h4")).toBeInTheDocument();
@@ -660,7 +660,7 @@ describe("Accordion", () => {
 
     it("sets data-state attribute on items", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger = screen.getByText("Item 1").closest("button")!;
       expect(trigger).toHaveAttribute("data-state", "closed");
@@ -670,7 +670,7 @@ describe("Accordion", () => {
     });
 
     it("sets data-disabled attribute when disabled", () => {
-      renderAccordion({ type: "single", disabled: true });
+      renderAccordion({ selectionMode: "single", disabled: true });
 
       const trigger = screen.getByText("Item 1").closest("button");
       expect(trigger).toHaveAttribute("data-disabled", "true");
@@ -683,7 +683,7 @@ describe("Accordion", () => {
       const onOpenStart = vi.fn();
 
       render(
-        <Accordion type="single">
+        <Accordion selectionMode="single">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent onOpenStart={onOpenStart}>
@@ -703,7 +703,7 @@ describe("Accordion", () => {
       const onCloseStart = vi.fn();
 
       render(
-        <Accordion type="single" collapsible defaultValue="item-1">
+        <Accordion selectionMode="single" collapsible defaultValue="item-1">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent onCloseStart={onCloseStart}>
@@ -726,7 +726,7 @@ describe("Accordion", () => {
       const callbacks = { onOpenStart: vi.fn(), onOpenEnd: vi.fn(), onCloseStart: vi.fn(), onCloseEnd: vi.fn() };
 
       render(
-        <Accordion type="single" collapsible defaultValue={defaultValue} reduceMotion={reduceMotion}>
+        <Accordion selectionMode="single" collapsible defaultValue={defaultValue} reduceMotion={reduceMotion}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent forceMount {...callbacks}>
@@ -755,7 +755,7 @@ describe("Accordion", () => {
         return (
           <>
             <output data-testid="counts">{JSON.stringify(counts)}</output>
-            <Accordion type="single" collapsible reduceMotion={true}>
+            <Accordion selectionMode="single" collapsible reduceMotion={true}>
               <AccordionItem value="item-1">
                 <AccordionTrigger>Item 1</AccordionTrigger>
                 <AccordionContent
@@ -789,7 +789,7 @@ describe("Accordion", () => {
       const second = vi.fn();
 
       const { rerender } = render(
-        <Accordion type="single" collapsible>
+        <Accordion selectionMode="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent onOpenEnd={first}>Content 1</AccordionContent>
@@ -799,7 +799,7 @@ describe("Accordion", () => {
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
       rerender(
-        <Accordion type="single" collapsible>
+        <Accordion selectionMode="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent onOpenEnd={second}>Content 1</AccordionContent>
@@ -815,7 +815,7 @@ describe("Accordion", () => {
 
     it("supports animationDuration prop", () => {
       render(
-        <Accordion type="single" defaultValue="item-1">
+        <Accordion selectionMode="single" defaultValue="item-1">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent animationDuration={500}>
@@ -832,14 +832,14 @@ describe("Accordion", () => {
 
   describe("Content Rendering", () => {
     it("does not render content initially when not expanded", () => {
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
     });
 
     it("renders content when expanded", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
 
@@ -848,7 +848,7 @@ describe("Accordion", () => {
 
     it("keeps content mounted after first open (for animation)", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", collapsible: true });
+      renderAccordion({ selectionMode: "single", collapsible: true });
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
       expect(screen.getByText("Content 1")).toBeInTheDocument();
@@ -859,7 +859,7 @@ describe("Accordion", () => {
 
     it("respects forceMount prop", () => {
       render(
-        <Accordion type="single">
+        <Accordion selectionMode="single">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent forceMount>Content 1</AccordionContent>
@@ -873,7 +873,7 @@ describe("Accordion", () => {
     it("sets aria-hidden on collapsed content", async () => {
       const user = userEvent.setup();
       render(
-        <Accordion type="single" collapsible>
+        <Accordion selectionMode="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent forceMount>Content 1</AccordionContent>
@@ -895,7 +895,7 @@ describe("Accordion", () => {
     it("applies custom classNames to root", () => {
       const { container } = render(
         <Accordion
-          type="single"
+          selectionMode="single"
           classes={{
             root: "custom-root",
           }}
@@ -913,7 +913,7 @@ describe("Accordion", () => {
     it("applies custom classNames to item", () => {
       render(
         <Accordion
-          type="single"
+          selectionMode="single"
           classes={{
             item: "custom-item",
           }}
@@ -932,7 +932,7 @@ describe("Accordion", () => {
     it("applies custom classNames to trigger", () => {
       render(
         <Accordion
-          type="single"
+          selectionMode="single"
           classes={{
             trigger: "custom-trigger",
           }}
@@ -952,7 +952,7 @@ describe("Accordion", () => {
       const user = userEvent.setup();
       render(
         <Accordion
-          type="single"
+          selectionMode="single"
           classes={{
             body: "custom-content",
           }}
@@ -974,7 +974,7 @@ describe("Accordion", () => {
   describe("Icon Customization", () => {
     it("renders default chevron icon", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
       await user.click(trigger);
@@ -986,7 +986,7 @@ describe("Accordion", () => {
     it("renders custom expanded/collapsed icons", async () => {
       const user = userEvent.setup();
       render(
-        <Accordion type="single">
+        <Accordion selectionMode="single">
           <AccordionItem value="item-1">
             <AccordionTrigger
               expandedIcon={<span data-testid="expanded-icon">-</span>}
@@ -1010,7 +1010,7 @@ describe("Accordion", () => {
 
     it("hides icon when iconPosition=none", () => {
       render(
-        <Accordion type="single">
+        <Accordion selectionMode="single">
           <AccordionItem value="item-1">
             <AccordionTrigger iconPosition="none">Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1025,9 +1025,9 @@ describe("Accordion", () => {
 
     it("positions icon on left when iconPosition=left", () => {
       render(
-        <Accordion type="single">
+        <Accordion selectionMode="single">
           <AccordionItem value="item-1">
-            <AccordionTrigger iconPosition="left">Item 1</AccordionTrigger>
+            <AccordionTrigger iconPosition="start">Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
         </Accordion>,
@@ -1041,7 +1041,7 @@ describe("Accordion", () => {
   describe("Data Attributes", () => {
     it("sets data-state on accordion root", async () => {
       const user = userEvent.setup();
-      const { container } = renderAccordion({ type: "single" });
+      const { container } = renderAccordion({ selectionMode: "single" });
 
       expect(container.firstChild).toHaveAttribute("data-state", "all-closed");
 
@@ -1056,7 +1056,7 @@ describe("Accordion", () => {
 
   describe("Print Styles", () => {
     it("injects print style into document head when expandOnPrint is true", () => {
-      renderAccordion({ type: "single", expandOnPrint: true });
+      renderAccordion({ selectionMode: "single", expandOnPrint: true });
 
       const styleEl = document.head.querySelector("[data-accordion-print-styles]");
       expect(styleEl).toBeInTheDocument();
@@ -1065,7 +1065,7 @@ describe("Accordion", () => {
 
     it("removes print style from document head on unmount", () => {
       const { unmount } = render(
-        <Accordion type="single" expandOnPrint>
+        <Accordion selectionMode="single" expandOnPrint>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1081,7 +1081,7 @@ describe("Accordion", () => {
     });
 
     it("does not inject style when expandOnPrint is false", () => {
-      renderAccordion({ type: "single", expandOnPrint: false });
+      renderAccordion({ selectionMode: "single", expandOnPrint: false });
 
       // Clean up any styles from other tests
       const before = document.head.querySelectorAll("[data-accordion-print-styles]").length;
@@ -1121,7 +1121,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="multiple" ref={ref} onValueChange={onValueChange}>
+        <Accordion selectionMode="multiple" ref={ref} onValueChange={onValueChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1145,7 +1145,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="multiple" ref={ref} defaultValue={["item-1"]} onValueChange={onValueChange}>
+        <Accordion selectionMode="multiple" ref={ref} defaultValue={["item-1"]} onValueChange={onValueChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1166,7 +1166,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="single" collapsible ref={ref}>
+        <Accordion selectionMode="single" collapsible ref={ref}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1196,7 +1196,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="multiple" ref={ref} defaultValue={["item-1", "item-3"]}>
+        <Accordion selectionMode="multiple" ref={ref} defaultValue={["item-1", "item-3"]}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1221,7 +1221,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="multiple" ref={ref} defaultValue={["item-1"]}>
+        <Accordion selectionMode="multiple" ref={ref} defaultValue={["item-1"]}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1241,7 +1241,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="single" ref={ref}>
+        <Accordion selectionMode="single" ref={ref}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1271,7 +1271,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="single" ref={ref}>
+        <Accordion selectionMode="single" ref={ref}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1294,7 +1294,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="single" ref={ref} id="test-el">
+        <Accordion selectionMode="single" ref={ref} id="test-el">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1313,7 +1313,7 @@ describe("Accordion", () => {
       const onKeyDown = vi.fn();
 
       render(
-        <Accordion type="single" onKeyDown={onKeyDown}>
+        <Accordion selectionMode="single" onKeyDown={onKeyDown}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1338,7 +1338,7 @@ describe("Accordion", () => {
       const onOpenEnd = vi.fn();
 
       render(
-        <Accordion type="single" reduceMotion={true}>
+        <Accordion selectionMode="single" reduceMotion={true}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent onOpenEnd={onOpenEnd}>
@@ -1358,7 +1358,7 @@ describe("Accordion", () => {
       const onCloseEnd = vi.fn();
 
       render(
-        <Accordion type="single" collapsible defaultValue="item-1" reduceMotion={true}>
+        <Accordion selectionMode="single" collapsible defaultValue="item-1" reduceMotion={true}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent onCloseEnd={onCloseEnd}>
@@ -1375,7 +1375,7 @@ describe("Accordion", () => {
 
     it("sets animationDuration to 0ms with reduceMotion='always'", () => {
       render(
-        <Accordion type="single" defaultValue="item-1" reduceMotion={true}>
+        <Accordion selectionMode="single" defaultValue="item-1" reduceMotion={true}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1391,7 +1391,7 @@ describe("Accordion", () => {
   describe("Keyboard nav with no initial focus", () => {
     it("ArrowDown with no focused item focuses the first item", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single" });
+      renderAccordion({ selectionMode: "single" });
 
       await user.tab();
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
@@ -1400,7 +1400,7 @@ describe("Accordion", () => {
 
     it("does not loop at first item boundary when loop=false and ArrowUp is pressed", async () => {
       const user = userEvent.setup();
-      renderAccordion({ type: "single", loop: false });
+      renderAccordion({ selectionMode: "single", loop: false });
 
       const trigger1 = screen.getByRole("button", { name: "Item 1" });
 
@@ -1416,7 +1416,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="single" collapsible={false} ref={ref} defaultValue="item-1">
+        <Accordion selectionMode="single" collapsible={false} ref={ref} defaultValue="item-1">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1440,7 +1440,7 @@ describe("Accordion", () => {
       const ref = createRef<AccordionRef>();
 
       render(
-        <Accordion type="multiple" maxExpanded={2} ref={ref}>
+        <Accordion selectionMode="multiple" maxExpanded={2} ref={ref}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1481,7 +1481,7 @@ describe("Accordion", () => {
       const user = userEvent.setup();
 
       render(
-        <Accordion type="multiple" storageKey="test-accordion-storage">
+        <Accordion selectionMode="multiple" storageKey="test-accordion-storage">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1504,7 +1504,7 @@ describe("Accordion", () => {
       localStorage.setItem("test-corrupted", "not-valid-json{{{");
 
       render(
-        <Accordion type="multiple" storageKey="test-corrupted">
+        <Accordion selectionMode="multiple" storageKey="test-corrupted">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>
@@ -1527,7 +1527,7 @@ describe("Accordion", () => {
 
       render(
         <Accordion
-          type="multiple"
+          selectionMode="multiple"
           storageKey={{
             key: "test-throwing",
             storage: throwingStorage as unknown as Storage,

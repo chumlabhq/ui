@@ -12,7 +12,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "Custom icon",
             description: "Using emoji as icon",
             icon: <span className="text-xl">🚀</span>
@@ -48,7 +48,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "SVG Icon",
             description: "Custom SVG icon",
             icon: (

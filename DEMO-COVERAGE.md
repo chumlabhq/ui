@@ -11,9 +11,9 @@ recorded there because they belong next to the code that implements them.
 | | count |
 | --- | --- |
 | Components audited | 58 |
-| Library-authored props across the public surface | 1135 |
+| Library-authored props across the public surface | 1134 |
 | With no demo | 282 (25%) |
-| With no fixture | 640 (56%) |
+| With no fixture | 639 (56%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -32,9 +32,9 @@ observation about the vocabulary, recorded rather than smoothed over.
 
 - size: A on Accordion, C on Drawer
 - size: A on Accordion, C on CircularLoader
+- size: A on Accordion, C on DotLoader
 - size: A on Accordion, C on PulseLoader
 - format: C on AvatarGroupCount, A on TimePicker
-- type: C on Accordion, A on Toast
 
 ## Tier-A gaps
 
@@ -60,11 +60,10 @@ listed here with no demo anywhere fails the generator.
 | Prop | Components | Why |
 | --- | --- | --- |
 | `reduceMotion` | 14 | A demo of it is a page that does not move. The behaviour is gated instead — `reduced-motion.contract` requires motion to EXIST when the preference is unset before requiring it to stop, which a screenshot could not show. |
-| `variant` | 2 | Demonstrated on the parents. AccordionShimmer and AvatarBadge take the variant their parent is already showing; a second demo would restate the parent's. |
+| `variant` | 3 | Demonstrated on the parents. AccordionShimmer and AvatarBadge take the variant their parent is already showing; a second demo would restate the parent's. Toast has no JSX form: `useToast().toast({ variant })` is its public surface and is demonstrated. |
 | `size` | 2 | A visible scale, demonstrated on the components that own it. AvatarGroupCount and RadioButton inherit the same scale their parents demo. |
 | `shape` | 1 | As `size`: AvatarGroupCount follows the Avatar shape already on the page. |
 | `dropdownPosition` | 1 | Demonstrated on Dropdown, Pagination and SearchableDropdown. CascadingDropdown's is the same prop with the same three values. |
-| `type` | 1 | Toast has no JSX form — `useToast().show({ variant })` is the public surface and is demonstrated. `type` is the internal discriminant of the same idea. |
 
 ## Per component
 
@@ -103,7 +102,7 @@ listed here with no demo anywhere fails the generator.
 | InputLabel | 4 | 0 | 0 | 4 | 0 | — |
 | InternationalPhoneInput | 48 | 296 | 9 | 33 | 0 | `unstyled`, `portalContainer` |
 | LinearLoader | 8 | 280 | 3 | 4 | 0 | `reduceMotion`, `unstyled` |
-| Modal | 40 | 2 | 12 | 27 | 0 | `unstyled` |
+| Modal | 39 | 2 | 12 | 26 | 0 | `unstyled` |
 | ModalBody | 2 | 2 | 2 | 2 | 0 | — |
 | ModalFooter | 2 | 2 | 2 | 2 | 0 | — |
 | ModalHeader | 2 | 2 | 2 | 2 | 0 | — |
@@ -125,7 +124,7 @@ listed here with no demo anywhere fails the generator.
 | TextArea | 25 | 293 | 1 | 6 | 0 | `unstyled` |
 | TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
 | TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |
-| Toast | 21 | 2 | 21 | 9 | 0 | `type`, `unstyled` |
+| Toast | 21 | 2 | 21 | 9 | 0 | `variant`, `unstyled` |
 | ToastProvider | 12 | 0 | 10 | 10 | 0 | `unstyled` |
 | Tooltip | 32 | 2 | 9 | 19 | 0 | `unstyled`, `portalContainer` |
 

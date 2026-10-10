@@ -152,7 +152,7 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "guides/animation": 93,
   "guides/ai-llm": 86,
   // A2a, 947 -> 921: the API Reference lost the root onExpandedChange row and the
-  // AccordionExpandEvent shape table with the prop (26 cells, measured HEAD vs now).
+  // shape table of the event payload it passed (26 cells, measured HEAD vs now).
   "accordion": 921,
   "avatar": 1084,
   "breadcrumb": 514,
@@ -168,7 +168,9 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // L11, 426 -> 425: the In Context "Processing" button is now disabled while
   // it loads, and an inactive control's label is exempt from 1.4.3.
   "loader": 425,
-  "modal": 495,
+  // A2b, 495 -> 491: the API Reference lost the disableAnimation row (4 cells),
+  // folded into the reduceMotion row above it (measured HEAD vs now).
+  "modal": 491,
   "multi-select-dropdown": 684,
   "multi-select-searchable-dropdown": 707,
   "otp-input": 433,

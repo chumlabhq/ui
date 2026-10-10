@@ -82,7 +82,7 @@ const LoaderDemo = () => {
             </div>
             <div className="flex flex-col items-center gap-3">
               <DotLoader
-                dotSize={10}
+                size={10}
                 className="text-cl-accent"
               />
               <span className={c.label}>Dot</span>
@@ -324,7 +324,7 @@ const LoaderDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <DotLoader
-            dotSize={10}
+            size={10}
             className="text-cl-accent"
           />
         </DemoWrapper>
@@ -339,7 +339,7 @@ const LoaderDemo = () => {
           <div className="flex items-center gap-6 sm:gap-10 flex-wrap">
             <div className="flex flex-col items-center gap-2">
               <DotLoader
-                dotSize={6}
+                size={6}
                 gap={3}
                 className="text-cl-accent"
               />
@@ -347,14 +347,14 @@ const LoaderDemo = () => {
             </div>
             <div className="flex flex-col items-center gap-2">
               <DotLoader
-                dotSize={10}
+                size={10}
                 className="text-cl-accent"
               />
               <span className={c.label}>Default</span>
             </div>
             <div className="flex flex-col items-center gap-2">
               <DotLoader
-                dotSize={14}
+                size={14}
                 gap={6}
                 className="text-cl-accent"
               />
@@ -362,7 +362,7 @@ const LoaderDemo = () => {
             </div>
             <div className="flex flex-col items-center gap-2">
               <DotLoader
-                dotSize={8}
+                size={8}
                 count={5}
                 className="text-cl-accent"
               />
@@ -386,7 +386,7 @@ const LoaderDemo = () => {
               { cls: "text-cl-warning", name: "Amber" },
             ].map(({ cls, name }) => (
               <div key={name} className="flex flex-col items-center gap-2">
-                <DotLoader dotSize={10} className={cls} />
+                <DotLoader size={10} className={cls} />
                 <span className={c.label}>{name}</span>
               </div>
             ))}
@@ -463,7 +463,7 @@ const LoaderDemo = () => {
             </div>
             <div className="flex items-center gap-3">
               <DotLoader
-                dotSize={6}
+                size={6}
                 className="text-cl-accent"
               />
               <span className={c.textMuted}>Typing</span>
@@ -505,7 +505,7 @@ const LoaderDemo = () => {
                 Processing
               </Button>
               <Button type="button" className={c.btn} disabled aria-busy aria-label="Loading results">
-                <DotLoader dotSize={5} gap={3} className="text-cl-accent" />
+                <DotLoader size={5} gap={3} className="text-cl-accent" />
               </Button>
             </div>
 

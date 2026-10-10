@@ -30,7 +30,7 @@ export default function LoaderExample() {
           aria-busy
           aria-label="Loading results"
         >
-          <DotLoader dotSize={5} gap={3} className="text-cl-accent" />
+          <DotLoader size={5} gap={3} className="text-cl-accent" />
         </Button>
       </div>
       <div

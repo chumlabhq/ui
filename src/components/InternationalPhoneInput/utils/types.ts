@@ -184,7 +184,7 @@ export interface InternationalPhoneInputProps
   validate?: (
     data: PhoneNumberData,
   ) => boolean | { valid: boolean; message?: string };
-  enablePasteDetection?: boolean;
+  pasteDetection?: boolean;
   copyFormat?: CopyFormat;
   /** Fires when a pasted number is recognised, with what it was understood to be. */
   onPasteDetect?: (data: PasteDetectedData) => void;

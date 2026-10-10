@@ -54,9 +54,9 @@ const DEFAULT_PREVENT_CLOSE_TIMEOUT = 10000;
  * (header) that toggles the visibility of its associated content panel.
  *
  * AI Usage Guidelines:
- * - Use type="single" collapsible for FAQs and settings panels
- * - Use type="multiple" for multi-section forms or filter panels
- * - Works out-of-the-box with no props beyond type and children
+ * - Use selectionMode="single" collapsible for FAQs and settings panels
+ * - Use selectionMode="multiple" for multi-section forms or filter panels
+ * - Works out-of-the-box with no props beyond selectionMode and children
  * - Prefer variant/size props over custom classes for common styling
  * - Use defaultValue (uncontrolled) or value+onValueChange (controlled)
  *
@@ -74,7 +74,7 @@ const DEFAULT_PREVENT_CLOSE_TIMEOUT = 10000;
  */
 const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const {
-    type,
+    selectionMode,
     orientation = DEFAULT_ORIENTATION,
     dir = DEFAULT_DIRECTION,
     disabled = false,
@@ -116,8 +116,8 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
 
   const generatedId = useId();
   const accordionId = propId ?? `accordion-${generatedId}`;
-  const collapsible = type === "single" ? ((props as { collapsible?: boolean }).collapsible ?? false) : true;
-  const maxExpanded = type === "multiple" ? (props as { maxExpanded?: number }).maxExpanded : undefined;
+  const collapsible = selectionMode === "single" ? ((props as { collapsible?: boolean }).collapsible ?? false) : true;
+  const maxExpanded = selectionMode === "multiple" ? (props as { maxExpanded?: number }).maxExpanded : undefined;
   const controlledValue = (props as { value?: string | string[] }).value;
   const defaultValue = (props as { defaultValue?: string | string[] }).defaultValue;
   const onValueChange = (props as { onValueChange?: (...args: unknown[]) => void }).onValueChange;
@@ -167,7 +167,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     internalValue,
     storageRead,
   } = useAccordionStateManager({
-    type,
+    selectionMode,
     collapsible,
     maxExpanded,
     controlledValue,
@@ -302,7 +302,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
 
   const contextValue = useMemo(
     () => ({
-      type,
+      selectionMode,
       collapsible,
       loop,
       itemCount,
@@ -311,7 +311,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
       pendingItem,
     }),
     [
-      type,
+      selectionMode,
       collapsible,
       loop,
       itemCount,
@@ -345,7 +345,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
               className={cn(mergedClasses.root, className) || undefined}
               data-orientation={orientation}
               data-state={hasExpanded ? "has-expanded" : "all-closed"}
-              data-type={type}
+              data-selection-mode={selectionMode}
               data-size={size}
               data-variant={variant}
               data-accordion-expand-print={expandOnPrint || undefined}

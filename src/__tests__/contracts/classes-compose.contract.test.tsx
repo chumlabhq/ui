@@ -21,7 +21,7 @@ const trigger = () => screen.getByRole("button", { name: /Section/ });
 
 const renderWith = (classes?: { trigger?: string }) =>
   render(
-    <Accordion type="single" collapsible classes={classes}>
+    <Accordion selectionMode="single" collapsible classes={classes}>
       <AccordionItem value="a">
         <AccordionTrigger>Section</AccordionTrigger>
         <AccordionContent>Body</AccordionContent>

@@ -359,7 +359,7 @@ export default function TableExample() {
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
   const [hoveredRowRef, setHoveredRowRef] =
     useState<React.RefObject<HTMLTableRowElement> | null>(null);
-  const [isFloatingActionsHovered, setIsFloatingActionsHovered] =
+  const [floatingActionsHovered, setIsFloatingActionsHovered] =
     useState(false);
   const columns: ColumnDef<User>[] = useMemo(
     () => [
@@ -426,13 +426,13 @@ export default function TableExample() {
         columns={columns}
         data={sampleData.slice(0, 5)}
         onRowHover={handleRowHover}
-        isFloatingActionsHovered={isFloatingActionsHovered}
+        floatingActionsHovered={floatingActionsHovered}
         floatingActions={
           <FloatingActions
             rowRef={hoveredRowRef}
             rowData={floatingActionsData}
             onHover={handleFloatingActionsHover}
-            isVisible={hoveredRowIndex !== null || isFloatingActionsHovered}
+            isVisible={hoveredRowIndex !== null || floatingActionsHovered}
             getName={(data) => data.name}
             onAction={
               (action, data) =>

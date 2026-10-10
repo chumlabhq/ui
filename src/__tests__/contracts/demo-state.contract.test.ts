@@ -97,10 +97,10 @@ const SHARED_ACROSS_SECTIONS = new Set([
   "SliderDemo.tsx:opacity",
   "SliderDemo.tsx:price",
   "TableDemo.tsx:selectedRowId",
-  "TableDemo.tsx:isFloatingActionsHovered",
+  "TableDemo.tsx:floatingActionsHovered",
   "TableDemo.tsx:rowsPerPage",
   "TableDemo.tsx:expandedRowIds",
-  "TableDemo.tsx:density",
+  "TableDemo.tsx:size",
 ]);
 
 /**

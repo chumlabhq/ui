@@ -1345,7 +1345,7 @@ const ModalDemo = () => {
           onOpenChange={setDisableAnimOpen}
           title="No Animation"
           description="This modal opens and closes instantly."
-          disableAnimation={true}
+          reduceMotion={true}
           classes={{
             content: c.modalContent,
             header: c.modalHeader,
@@ -1357,8 +1357,8 @@ const ModalDemo = () => {
           }}
         >
           <p className="text-cl-text-secondary">
-            The <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">disableAnimation</code> prop
-            completely removes open/close transitions.
+            <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">reduceMotion={true}</code> removes the
+            open/close transitions; the default, <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">"auto"</code>, follows the OS setting.
           </p>
         </Modal>
       </Section>

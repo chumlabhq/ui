@@ -34,7 +34,7 @@ export type BadgeOverlap = "rectangular" | "circular";
 export type CountVariant = "solid" | "outline" | "ghost";
 
 /** Layout mode for grouped avatars. */
-export type GroupVariant = "stack" | "grid" | "inline";
+export type AvatarGroupLayout = "stack" | "grid" | "inline";
 
 /** CSS class overrides for avatar sub-elements. */
 export interface AvatarClasses {
@@ -195,8 +195,8 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   showTooltip?: boolean;
   /** Total count for surplus calculation (when not all items are rendered). */
   total?: number;
-  /** Layout variant: stacked overlap, grid, or inline. Default: `"stack"`. */
-  variant?: GroupVariant;
+  /** How the avatars are laid out: stacked overlap, grid, or inline. Default: `"stack"`. */
+  layout?: AvatarGroupLayout;
   /** Reverses the visual stacking order. */
   reverseOrder?: boolean;
   /** Custom render function for the surplus count indicator. */

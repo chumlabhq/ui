@@ -315,7 +315,7 @@ describe("Tooltip", () => {
             <Tooltip content="Restored tip" delayDuration={NEVER} hideDelayDuration={NEVER} asChild>
               <button onClick={() => setOpen(true)}>Open dialog</button>
             </Tooltip>
-            <Modal open={open} onOpenChange={setOpen} title="Dialog" disableAnimation>
+            <Modal open={open} onOpenChange={setOpen} title="Dialog" reduceMotion>
               <p>Body</p>
             </Modal>
           </>
@@ -577,11 +577,11 @@ describe("Tooltip", () => {
       expect(screen.getByRole("tooltip")).toBeInTheDocument();
     });
 
-    it("closes immediately when disableHoverableContent=true", async () => {
+    it("closes immediately when hoverableContent={false}", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
       render(
-        <Tooltip content="Not hoverable" disableHoverableContent delayDuration={0}>
+        <Tooltip content="Not hoverable" hoverableContent={false} delayDuration={0}>
           <button>Trigger</button>
         </Tooltip>
       );

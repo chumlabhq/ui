@@ -506,7 +506,7 @@ export default function TableExample() {
                     setDotHoverIdx(idx);
                     setDotHoverRef(ref ?? null);
                   }}
-                  isFloatingActionsHovered={dotFloatingHovered}
+                  floatingActionsHovered={dotFloatingHovered}
                   popupOpen={dotMenuState !== null}
                   floatingActions={
                     <FloatingActions<User>

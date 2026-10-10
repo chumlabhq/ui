@@ -10,7 +10,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "Custom shadow",
             description: "Using style prop for box-shadow",
             style: {
@@ -26,7 +26,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "success",
+            variant: "success",
             message: "Custom width",
             description: "This toast has a wider minimum width",
             style: {
@@ -42,7 +42,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "warning",
+            variant: "warning",
             message: "Gradient background",
             description: "Using style for gradient",
             style: {

@@ -329,7 +329,7 @@ describe("InternationalPhoneInput", () => {
       const onValueChange = vi.fn();
       render(
         <InternationalPhoneInput
-          enablePasteDetection
+          pasteDetection
           onPasteDetect={onPasteDetect}
           onCountryChange={onCountryChange}
           onValueChange={onValueChange}
@@ -357,7 +357,7 @@ describe("InternationalPhoneInput", () => {
       expect(onValueChange).toHaveBeenCalled();
     });
 
-    it("does not detect paste when enablePasteDetection is false", async () => {
+    it("does not detect paste when pasteDetection is false", async () => {
       const onPasteDetect = vi.fn();
       render(
         <InternationalPhoneInput
@@ -382,7 +382,7 @@ describe("InternationalPhoneInput", () => {
       const onPasteDetect = vi.fn();
       render(
         <InternationalPhoneInput
-          enablePasteDetection
+          pasteDetection
           readOnly
           onPasteDetect={onPasteDetect}
         />
@@ -544,7 +544,7 @@ describe("InternationalPhoneInput", () => {
       const onValueChange = vi.fn();
       render(
         <InternationalPhoneInput
-          enablePasteDetection
+          pasteDetection
           onPasteDetect={onPasteDetect}
           onValueChange={onValueChange}
         />
@@ -571,7 +571,7 @@ describe("InternationalPhoneInput", () => {
       const onValueChange = vi.fn();
       render(
         <InternationalPhoneInput
-          enablePasteDetection
+          pasteDetection
           onValueChange={onValueChange}
         />
       );
@@ -590,7 +590,7 @@ describe("InternationalPhoneInput", () => {
       const onPasteDetect = vi.fn();
       render(
         <InternationalPhoneInput
-          enablePasteDetection
+          pasteDetection
           onPasteDetect={onPasteDetect}
         />
       );

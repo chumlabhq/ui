@@ -224,7 +224,7 @@ export default function TableExample() {
                 columns={columns}
                 data={sampleData.slice(0, 5)}
                 expandable
-                expandColumnPosition="right"
+                expandColumnPosition="end"
                 expandedRowIds={ids}
                 onExpandedRowIdsChange={setIds}
                 ExpandIcon={ArrowIcon}

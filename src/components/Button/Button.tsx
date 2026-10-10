@@ -55,7 +55,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     endIcon,
     loading = false,
     loadingText,
-    loaderPosition = "right",
+    loaderPosition = "end",
     loaderSize,
     loader,
     fullWidth = false,
@@ -161,7 +161,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const content = (
     <span className={mergedClasses.itemText || undefined}>
       {loadingAnnouncement}
-      {loaderPosition === "left" && loading && (
+      {loaderPosition === "start" && loading && (
         <span className={mergedClasses.loading || undefined}>{loaderElement}</span>
       )}
       {startIcon && (
@@ -175,7 +175,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
           {endIcon}
         </span>
       )}
-      {loaderPosition === "right" && loading && (
+      {loaderPosition === "end" && loading && (
         <span className={mergedClasses.loading || undefined}>{loaderElement}</span>
       )}
     </span>

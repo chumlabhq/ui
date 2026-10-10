@@ -6,7 +6,7 @@ export default function AccordionExample() {
   const [toggleLog, setToggleLog] = useState<string[]>([]);
   return (
     <Accordion
-      type="multiple"
+      selectionMode="multiple"
       ref={accordionRef}
       classes={
         {

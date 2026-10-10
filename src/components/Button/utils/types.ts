@@ -79,8 +79,8 @@ interface ButtonSharedProps {
   loading?: boolean;
   /** Text displayed alongside the loading spinner. */
   loadingText?: ReactNode;
-  /** Which side of the label the loader appears on. */
-  loaderPosition?: "left" | "right";
+  /** Which end of the label the loader appears at: `start` before it, `end` after it. */
+  loaderPosition?: "start" | "end";
   /** Pixel size of the loading spinner. */
   loaderSize?: number;
   /** Custom loader element replacing the default spinner. */

@@ -55,13 +55,13 @@ afterEach(() => vi.useRealTimers());
 describe("DatePicker focus management", () => {
   describe("the dialog claim", () => {
     it("moves focus into the panel on open", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       expect(panel().contains(active())).toBe(true);
       expect(activeDay()).toBe("15");
     });
 
     it("returns focus to the trigger on Escape", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       await act(async () => {
         fireEvent.keyDown(active(), { key: "Escape" });
       });
@@ -73,7 +73,7 @@ describe("DatePicker focus management", () => {
     });
 
     it("keeps Tab inside the panel", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
 
       // Walk forward well past the number of focusables; focus must never
       // leave the panel, which is what `aria-modal` promises.
@@ -85,7 +85,7 @@ describe("DatePicker focus management", () => {
     });
 
     it("keeps Shift+Tab inside the panel", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       for (let i = 0; i < 40; i++) {
         fireEvent.keyDown(active(), { key: "Tab", shiftKey: true });
         expect(panel().contains(active())).toBe(true);
@@ -95,7 +95,7 @@ describe("DatePicker focus management", () => {
 
   describe("the grid keyboard pattern", () => {
     it("keeps exactly one cell tabbable", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       expect(rovingCells()).toHaveLength(1);
 
       await act(async () => {
@@ -105,7 +105,7 @@ describe("DatePicker focus management", () => {
     });
 
     it("moves focus by one day, repeatedly", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       expect(activeDay()).toBe("15");
 
       // The regression this covers: the second press used to recompute from
@@ -124,7 +124,7 @@ describe("DatePicker focus management", () => {
     });
 
     it("moves by a week on ArrowUp and ArrowDown", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       await act(async () => {
         fireEvent.keyDown(active(), { key: "ArrowDown" });
       });
@@ -138,7 +138,7 @@ describe("DatePicker focus management", () => {
 
     it("moves to the week bounds on Home and End", async () => {
       // 15 Jan 2026 is a Thursday; with weekStartsOn=0 the week is 11–17.
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       await act(async () => {
         fireEvent.keyDown(active(), { key: "Home" });
       });
@@ -152,7 +152,7 @@ describe("DatePicker focus management", () => {
 
     it("honours weekStartsOn at the week bounds", async () => {
       await openPicker(
-        <DatePicker mode="single" value={SELECTED} weekStartsOn={1} />,
+        <DatePicker selectionMode="single" value={SELECTED} weekStartsOn={1} />,
       );
       await act(async () => {
         fireEvent.keyDown(active(), { key: "Home" });
@@ -161,7 +161,7 @@ describe("DatePicker focus management", () => {
     });
 
     it("moves by a month on PageUp and PageDown", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       await act(async () => {
         fireEvent.keyDown(active(), { key: "PageDown" });
       });
@@ -181,7 +181,7 @@ describe("DatePicker focus management", () => {
     });
 
     it("moves by a year on Shift+PageUp and Shift+PageDown", async () => {
-      await openPicker(<DatePicker mode="single" value={SELECTED} />);
+      await openPicker(<DatePicker selectionMode="single" value={SELECTED} />);
       await act(async () => {
         fireEvent.keyDown(active(), { key: "PageDown", shiftKey: true });
       });
@@ -194,7 +194,7 @@ describe("DatePicker focus management", () => {
     it("selects the focused day on Enter", async () => {
       const onValueChange = vi.fn();
       await openPicker(
-        <DatePicker mode="single" value={SELECTED} onValueChange={onValueChange} />,
+        <DatePicker selectionMode="single" value={SELECTED} onValueChange={onValueChange} />,
       );
       await act(async () => {
         fireEvent.keyDown(active(), { key: "ArrowRight" });
@@ -212,7 +212,7 @@ describe("DatePicker focus management", () => {
     it("steps over a disabled day rather than stranding focus on it", async () => {
       await openPicker(
         <DatePicker
-          mode="single"
+          selectionMode="single"
           value={SELECTED}
           disabledDates={{ dates: [new Date(2026, 0, 16)] }}
         />,
@@ -228,7 +228,7 @@ describe("DatePicker focus management", () => {
     it("does not move past maxDate", async () => {
       await openPicker(
         <DatePicker
-          mode="single"
+          selectionMode="single"
           value={SELECTED}
           maxDate={new Date(2026, 0, 15)}
         />,

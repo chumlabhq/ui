@@ -17,8 +17,8 @@ export default function PaginationExample() {
         }
       }
       showRowsPerPage
-      showLabel="Afficher"
-      rowsPerPageLabel="lignes"
+      rowsPerPagePrefix="Afficher"
+      rowsPerPageSuffix="lignes"
       dropdownAriaLabel="Lignes par page"
       paginationAriaLabel="Navigation des pages"
       prevAriaLabel="Page pr\u00e9c\u00e9dente"

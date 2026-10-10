@@ -8,7 +8,7 @@ export default function TimePickerExample() {
       <TimePicker
         value={clockI18n}
         onValueChange={(v) => setClockI18n(v)}
-        variant="clock"
+        mode="clock"
         cancelText="Abbrechen"
         okText="Fertig"
         classes={

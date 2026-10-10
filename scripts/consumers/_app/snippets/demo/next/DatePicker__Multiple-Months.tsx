@@ -8,7 +8,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-md">
       <DatePicker
-        mode="range"
+        selectionMode="range"
         value={multiMonthRange}
         onValueChange={(range) => setMultiMonthRange(range)}
         label="Two-month range picker"

@@ -200,7 +200,7 @@ export default function TableExample() {
       <Table
         columns={columns}
         data={dragDropData}
-        enableRowDragDrop
+        reorderable
         onRowReorder={
           (fromIndex, toIndex) => {
             setDragDropData((prev) => {

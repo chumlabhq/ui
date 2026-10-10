@@ -514,7 +514,7 @@ const PaginationDemo = () => {
       {/* ─── i18n / Custom Labels ─────────────────────────────────────── */}
       <Section
         title="i18n / Custom Labels"
-        description="Customize all visible text with showLabel, rowsPerPageLabel, and dropdownAriaLabel for internationalization."
+        description="Customize all visible text with rowsPerPagePrefix, rowsPerPageSuffix, and dropdownAriaLabel for internationalization."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -528,8 +528,8 @@ const PaginationDemo = () => {
               setI18nPage(1);
             }}
             showRowsPerPage
-            showLabel="Afficher"
-            rowsPerPageLabel="lignes"
+            rowsPerPagePrefix="Afficher"
+            rowsPerPageSuffix="lignes"
             dropdownAriaLabel="Lignes par page"
             paginationAriaLabel="Navigation des pages"
             prevAriaLabel="Page pr\u00e9c\u00e9dente"
@@ -620,7 +620,7 @@ const PaginationDemo = () => {
       {/* ─── Custom Row Options ───────────────────────────────────────── */}
       <Section
         title="Custom Row Options & Label"
-        description="Provide custom values via rowOptions and change the label with rowsPerPageLabel."
+        description="Provide custom values via rowOptions and change the label with rowsPerPageSuffix."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -635,7 +635,7 @@ const PaginationDemo = () => {
               setCustomRowsPage(1);
             }}
             showRowsPerPage
-            rowsPerPageLabel="items"
+            rowsPerPageSuffix="items"
             classes={{
               ...c.pagination,
               root: "flex flex-wrap items-center justify-between gap-4",

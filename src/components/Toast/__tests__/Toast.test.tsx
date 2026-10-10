@@ -112,22 +112,22 @@ describe("Toast", () => {
       expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
     });
 
-    it("applies correct type styling via data-toast-type attribute", async () => {
+    it("applies correct variant styling via data-variant attribute", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       renderWithProvider();
 
       await user.click(screen.getByRole("button", { name: "Error" }));
 
       expect(screen.getByRole("alert")).toHaveAttribute(
-        "data-toast-type",
+        "data-variant",
         "error"
       );
     });
   });
 
-  describe("Toast Types", () => {
+  describe("Toast Variants", () => {
     it.each(["success", "error", "warning", "info"] as const)(
-      "renders %s toast with correct type attribute",
+      "renders %s toast with correct variant attribute",
       async (type) => {
         const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
         renderWithProvider();
@@ -137,7 +137,7 @@ describe("Toast", () => {
 
         const role = type === "error" || type === "warning" ? "alert" : "status";
         expect(screen.getByRole(role)).toHaveAttribute(
-          "data-toast-type",
+          "data-variant",
           type
         );
       }
@@ -660,7 +660,7 @@ describe("Toast", () => {
   });
 
   describe("Accessibility Attributes", () => {
-    it("toast has correct role based on type", async () => {
+    it("toast has correct role based on variant", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       renderWithProvider();
 
@@ -901,7 +901,7 @@ import { setReducedMotion } from "../../../test/matchMedia.js";
 beforeEach(() => setReducedMotion(false));
 
 describe("getDefaultIcon", () => {
-  it("returns InfoIcon for unknown type (default case)", () => {
+  it("returns InfoIcon for unknown variant (default case)", () => {
     const icon = getDefaultIcon("unknown" as never);
     const { container } = render(<>{icon}</>);
     expect(container.querySelector("svg")).toBeInTheDocument();
@@ -953,7 +953,7 @@ describe("Toast Escape layering", () => {
 
     rerender(
       <Harness>
-        <Modal open onOpenChange={onOpenChange} disableAnimation>
+        <Modal open onOpenChange={onOpenChange} reduceMotion>
           <p>Dialog</p>
         </Modal>
       </Harness>
@@ -995,7 +995,7 @@ describe("Toast Escape layering", () => {
 
     rerender(
       <Harness>
-        <Modal open onOpenChange={onOpenChange} closeOnEscape={false} disableAnimation>
+        <Modal open onOpenChange={onOpenChange} closeOnEscape={false} reduceMotion>
           <p>Dialog</p>
         </Modal>
       </Harness>

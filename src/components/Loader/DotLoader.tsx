@@ -12,7 +12,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
   (
     {
-      dotSize = 8,
+      size = 8,
       gap = 4,
       count = 3,
       speed = 1.4,
@@ -67,8 +67,8 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
             key={i}
             className={mergedClasses.range || undefined}
             style={{
-              width: `${dotSize}px`,
-              height: `${dotSize}px`,
+              width: `${size}px`,
+              height: `${size}px`,
               borderRadius: "50%",
               backgroundColor: "currentColor",
               animation: prefersReducedMotion ? "none" : `dot-loader-bounce ${speed}s ease-in-out infinite`,

@@ -10,7 +10,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "Styled icon",
             description: "Icon with custom background",
             icon: <span className="text-lg">✨</span>,
@@ -25,7 +25,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "success",
+            variant: "success",
             message: "Large icon",
             description: "Icon with larger size",
             classes: { icon: "text-2xl" }

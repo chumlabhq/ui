@@ -6,7 +6,7 @@
   "oneOf": [
     {
       "properties": {
-        "type": {
+        "selectionMode": {
           "type": "string",
           "const": "single",
           "description": "Only one item can be expanded at a time."
@@ -30,12 +30,12 @@
         }
       },
       "required": [
-        "type"
+        "selectionMode"
       ]
     },
     {
       "properties": {
-        "type": {
+        "selectionMode": {
           "type": "string",
           "const": "multiple",
           "description": "Multiple items can be expanded simultaneously."
@@ -65,12 +65,12 @@
         }
       },
       "required": [
-        "type"
+        "selectionMode"
       ]
     }
   ],
   "properties": {
-    "type": {
+    "selectionMode": {
       "type": "string",
       "enum": [
         "single",
@@ -161,7 +161,7 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode \u2014 AccordionItem children.",
+      "description": "React.ReactNode — AccordionItem children.",
       "x-tsType": "ReactNode"
     },
     "asChild": {
@@ -297,7 +297,7 @@
     }
   },
   "required": [
-    "type",
+    "selectionMode",
     "children"
   ],
   "subComponents": {
@@ -347,9 +347,9 @@
           "description": "Icon shown while the item is collapsed. Replaces the default chevron."
         },
         "iconPosition": {
-          "type": "\"left\" | \"right\" | \"none\" | undefined",
-          "description": "Which side of the trigger the icon sits on, or `\"none\"` to drop it.",
-          "default": "right"
+          "type": "\"start\" | \"end\" | \"none\" | undefined",
+          "description": "Which end of the trigger the icon sits at — `start` before the text, `end` after it — or `\"none\"` to drop it.",
+          "default": "end"
         },
         "asChild": {
           "type": "boolean | undefined",

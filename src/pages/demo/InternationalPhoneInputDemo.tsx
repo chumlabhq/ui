@@ -588,7 +588,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 label="Phone Number"
                 value={copyPasteValue}
                 onValueChange={setCopyPasteValue}
-                enablePasteDetection
+                pasteDetection
                 copyFormat="e164"
                 onPasteDetect={setLastPasteData}
                 placeholder="Try pasting +44 20 7123 4567"
@@ -1335,7 +1335,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 required
                 value={checkoutPhone}
                 onValueChange={setCheckoutPhone}
-                enablePasteDetection
+                pasteDetection
                 classes={c.phone}
               />
               <Button type="submit" fullWidth className={c.btnPrimary}>
@@ -1361,7 +1361,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 value={combinedValue}
                 onValueChange={setCombinedValue}
                 onCountryChange={setCombinedCountry}
-                enablePasteDetection
+                pasteDetection
                 onPasteDetect={setCombinedPaste}
                 copyFormat="international"
                 validateOnBlur

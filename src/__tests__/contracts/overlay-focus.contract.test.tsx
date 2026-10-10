@@ -87,7 +87,7 @@ const SURFACES: Surface[] = [
     name: "DatePicker",
     closes: true,
     open: async () => {
-      render(<DatePicker mode="single" value={new Date(2026, 0, 15)} defaultOpen />);
+      render(<DatePicker selectionMode="single" value={new Date(2026, 0, 15)} defaultOpen />);
       await act(async () => {
         vi.advanceTimersByTime(50);
       });

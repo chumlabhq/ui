@@ -18,7 +18,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "success",
+            variant: "success",
             message: "Full config",
             description: "Using toast() with object config",
             duration: 4000,

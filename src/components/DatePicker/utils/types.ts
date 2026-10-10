@@ -3,7 +3,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 
 export type { Locale };
 
-export type DatePickerMode = "single" | "range" | "multiple";
+export type DatePickerSelectionMode = "single" | "range" | "multiple";
 
 /**
  * A selected day together with the string the trigger shows for it.
@@ -152,7 +152,7 @@ export interface DatePickerClasses {
  *
  * @example Range selection
  * ```tsx
- * <DatePicker mode="range" value={range} onValueChange={setRange} />
+ * <DatePicker selectionMode="range" value={range} onValueChange={setRange} />
  * ```
  */
 interface BaseDatePickerProps
@@ -247,7 +247,7 @@ interface BaseDatePickerProps
 
 /** Single date selection mode. */
 interface SingleDatePickerProps extends BaseDatePickerProps {
-  mode?: "single";
+  selectionMode?: "single";
   /** Selected date. Omit for an uncontrolled picker. */
   value?: Date | null;
   /** Initial date when uncontrolled. Ignored if `value` is set. */
@@ -258,7 +258,7 @@ interface SingleDatePickerProps extends BaseDatePickerProps {
 
 /** Date range selection mode. */
 interface RangeDatePickerProps extends BaseDatePickerProps {
-  mode: "range";
+  selectionMode: "range";
   /** Selected date range. Omit for an uncontrolled picker. */
   value?: DateRange | null;
   /** Initial range when uncontrolled. Ignored if `value` is set. */
@@ -269,7 +269,7 @@ interface RangeDatePickerProps extends BaseDatePickerProps {
 
 /** Multiple date selection mode. */
 interface MultipleDatePickerProps extends BaseDatePickerProps {
-  mode: "multiple";
+  selectionMode: "multiple";
   /** Selected dates. Omit for an uncontrolled picker. */
   value?: Date[] | null;
   /** Initial dates when uncontrolled. Ignored if `value` is set. */
@@ -278,7 +278,7 @@ interface MultipleDatePickerProps extends BaseDatePickerProps {
   onValueChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
 }
 
-/** DatePicker props — discriminated by `mode`. */
+/** DatePicker props — discriminated by `selectionMode`. */
 export type DatePickerProps =
   | SingleDatePickerProps
   | RangeDatePickerProps
@@ -303,21 +303,21 @@ interface BaseUseDatePickerProps {
 }
 
 interface SingleUseDatePickerProps extends BaseUseDatePickerProps {
-  mode: "single";
+  selectionMode: "single";
   value?: Date | null;
   defaultValue?: Date | null;
   onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
 }
 
 interface RangeUseDatePickerProps extends BaseUseDatePickerProps {
-  mode: "range";
+  selectionMode: "range";
   value?: DateRange | null;
   defaultValue?: DateRange | null;
   onValueChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
 }
 
 interface MultipleUseDatePickerProps extends BaseUseDatePickerProps {
-  mode: "multiple";
+  selectionMode: "multiple";
   value?: Date[] | null;
   defaultValue?: Date[] | null;
   onValueChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;

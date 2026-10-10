@@ -109,7 +109,7 @@ interface StepItemInternalProps {
   variant: "numbered" | "icon" | "dot";
   indicatorPx: number;
   orientation: "horizontal" | "vertical";
-  labelPosition: "bottom" | "right";
+  labelPosition: "bottom" | "end";
   showLabels: boolean;
   showDescriptions: boolean;
   showConnectors: boolean;
@@ -506,7 +506,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       showLabels = true,
       showDescriptions = false,
       showConnectors = true,
-      labelPosition = "right",
+      labelPosition = "end",
       completedIcon,
       errorIcon,
       fullWidth = false,

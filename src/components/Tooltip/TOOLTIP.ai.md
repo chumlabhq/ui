@@ -67,7 +67,7 @@ export default function Example() {
 | `wordWrap` | `"normal"` \| `"break-word"` \| `"nowrap"` | `"break-word"` | Word wrap behavior for tooltip content. |
 | `delayDuration` | number | `200` | Delay in milliseconds before showing the tooltip. |
 | `hideDelayDuration` | number | `100` | Delay in milliseconds before hiding the tooltip. |
-| `disableHoverableContent` | boolean | `false` | When true, the tooltip content is not hoverable (closes on mouse leave of trigger). |
+| `hoverableContent` | boolean | `true` | Keeps the tooltip open while the pointer moves onto it (WCAG 1.4.13). `false` closes it as soon as the pointer leaves the trigger. |
 | `open` | boolean | — | Controlled open state. |
 | `defaultOpen` | boolean | `false` | Default uncontrolled open state. |
 | `onOpenChange` | object | — | (open: boolean) => void — Callback when the open state changes. |

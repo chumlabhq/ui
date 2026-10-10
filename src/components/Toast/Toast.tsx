@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, memo, forwardRef, useState, useMemo } f
 import type { ToastProps, ToastClasses } from "./utils/types.js";
 import { CloseIcon } from "./utils/icons.js";
 import { getDefaultIcon } from "./utils/getDefaultIcon.js";
-import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants.js";
+import { getRoleForVariant, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 
@@ -23,7 +23,7 @@ import { useReducedMotion } from "../../utils/useReducedMotion.js";
  */
 const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   id,
-  type = "info",
+  variant = "info",
   message,
   description,
   content,
@@ -72,8 +72,8 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
     icon: mergeSlot(baseClasses.icon, classesProp?.icon ?? providerClasses?.icon),
   }), [classesProp, providerClasses, baseClasses]);
 
-  const defaultIcon = getDefaultIcon(type);
-  const toastRole = roleProp ?? getRoleForType(type);
+  const defaultIcon = getDefaultIcon(variant);
+  const toastRole = roleProp ?? getRoleForVariant(variant);
 
   const handleClose = useCallback(() => {
     onDismissRef.current?.(id);
@@ -152,7 +152,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
       aria-live={toastRole === "alert" ? "assertive" : "polite"}
       aria-atomic="true"
       className={cn(
-                !isUnstyled && (defaultContainerStyles[type] ?? defaultContainerStyles.default),
+                !isUnstyled && (defaultContainerStyles[variant] ?? defaultContainerStyles.default),
         mergedClasses.root,
         className,
       )}
@@ -160,7 +160,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-toast-id={id}
-      data-toast-type={type}
+      data-variant={variant}
     >
       <div className={mergedClasses.body || undefined}>
         {(icon || defaultIcon) && (

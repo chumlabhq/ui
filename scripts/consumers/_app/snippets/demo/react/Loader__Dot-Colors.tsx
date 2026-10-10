@@ -11,7 +11,7 @@ export default function LoaderExample() {
           { cls: "text-cl-warning", name: "Amber" }
         ].map(({ cls, name }) => (
           <div key={name} className="flex flex-col items-center gap-2">
-            <DotLoader dotSize={10} className={cls} />
+            <DotLoader size={10} className={cls} />
             <span className="text-xs font-medium text-cl-text-tertiary">
               {name}
             </span>

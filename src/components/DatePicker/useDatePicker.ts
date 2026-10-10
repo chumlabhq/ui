@@ -26,7 +26,7 @@ import { useControllableState } from "../../utils/useControllableState.js";
 
 export function useDatePicker(props: UseDatePickerProps) {
   const {
-    mode,
+    selectionMode,
     value,
     defaultValue,
     onValueChange,
@@ -58,25 +58,25 @@ export function useDatePicker(props: UseDatePickerProps) {
     defaultValue: defaultValue ?? null,
   });
 
-  const singleValue = mode === "single" ? (currentValue as Date | null | undefined) : undefined;
-  const rangeValue = mode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
-  const multipleValue = mode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
+  const singleValue = selectionMode === "single" ? (currentValue as Date | null | undefined) : undefined;
+  const rangeValue = selectionMode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
+  const multipleValue = selectionMode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
 
-  const emitSingle = mode === "single"
+  const emitSingle = selectionMode === "single"
     ? (onValueChange as ((date: Date | null, dateValue: import("./utils/types.js").DateValue | null) => void) | undefined)
     : undefined;
-  const emitRange = mode === "range"
+  const emitRange = selectionMode === "range"
     ? (onValueChange as ((range: DateRange | null, rangeValue: DateRangeValue | null) => void) | undefined)
     : undefined;
-  const emitMultiple = mode === "multiple"
+  const emitMultiple = selectionMode === "multiple"
     ? (onValueChange as ((dates: Date[] | null, dateValues: import("./utils/types.js").DateValue[] | null) => void) | undefined)
     : undefined;
 
   const getInitialMonth = () => {
-    if (mode === "single" && singleValue) return startOfMonth(singleValue);
-    if (mode === "range" && rangeValue?.start)
+    if (selectionMode === "single" && singleValue) return startOfMonth(singleValue);
+    if (selectionMode === "range" && rangeValue?.start)
       return startOfMonth(rangeValue.start);
-    if (mode === "multiple" && multipleValue?.length)
+    if (selectionMode === "multiple" && multipleValue?.length)
       return startOfMonth(multipleValue[0]);
     return startOfMonth(new Date());
   };
@@ -94,20 +94,20 @@ export function useDatePicker(props: UseDatePickerProps) {
   >("start");
 
   const selectedDates = useMemo(() => {
-    if (mode === "single") {
+    if (selectionMode === "single") {
       return singleValue ? [singleValue] : [];
     }
-    if (mode === "range") {
+    if (selectionMode === "range") {
       const dates: Date[] = [];
       if (rangeValue?.start) dates.push(rangeValue.start);
       if (rangeValue?.end) dates.push(rangeValue.end);
       return dates;
     }
     return multipleValue || [];
-  }, [mode, singleValue, rangeValue, multipleValue]);
+  }, [selectionMode, singleValue, rangeValue, multipleValue]);
 
-  const rangeStart = mode === "range" ? rangeValue?.start || null : null;
-  const rangeEnd = mode === "range" ? rangeValue?.end || null : null;
+  const rangeStart = selectionMode === "range" ? rangeValue?.start || null : null;
+  const rangeEnd = selectionMode === "range" ? rangeValue?.end || null : null;
 
   const calendarMonths: CalendarMonth[] = useMemo(() => {
     const months: CalendarMonth[] = [];
@@ -152,14 +152,14 @@ export function useDatePicker(props: UseDatePickerProps) {
     if (disabled) return;
     setIsOpen(true);
     setFocusedDate(null);
-    if (mode === "single" && singleValue) {
+    if (selectionMode === "single" && singleValue) {
       setDisplayMonth(startOfMonth(singleValue));
-    } else if (mode === "range" && rangeValue?.start) {
+    } else if (selectionMode === "range" && rangeValue?.start) {
       setDisplayMonth(startOfMonth(rangeValue.start));
-    } else if (mode === "multiple" && multipleValue?.length) {
+    } else if (selectionMode === "multiple" && multipleValue?.length) {
       setDisplayMonth(startOfMonth(multipleValue[0]));
     }
-  }, [disabled, mode, singleValue, rangeValue, multipleValue, setIsOpen]);
+  }, [disabled, selectionMode, singleValue, rangeValue, multipleValue, setIsOpen]);
 
   /**
    * The grid's roving tabindex needs a starting cell, and every way the panel
@@ -177,12 +177,12 @@ export function useDatePicker(props: UseDatePickerProps) {
   const seededFocusDate = useMemo(() => {
     if (!isOpen) return null;
     return startOfDay(
-      (mode === "single" ? singleValue : undefined) ??
-        (mode === "range" ? rangeValue?.start : undefined) ??
-        (mode === "multiple" ? multipleValue?.[0] : undefined) ??
+      (selectionMode === "single" ? singleValue : undefined) ??
+        (selectionMode === "range" ? rangeValue?.start : undefined) ??
+        (selectionMode === "multiple" ? multipleValue?.[0] : undefined) ??
         new Date(),
     );
-  }, [isOpen, mode, singleValue, rangeValue, multipleValue]);
+  }, [isOpen, selectionMode, singleValue, rangeValue, multipleValue]);
 
   const effectiveFocusedDate = focusedDate ?? seededFocusDate;
 
@@ -190,10 +190,10 @@ export function useDatePicker(props: UseDatePickerProps) {
     setIsOpen(false);
     setHoverDate(null);
     setFocusedDate(null);
-    if (mode === "range" && rangeValue?.start && !rangeValue?.end) {
+    if (selectionMode === "range" && rangeValue?.start && !rangeValue?.end) {
       setRangeSelectionState("start");
     }
-  }, [mode, rangeValue, setIsOpen]);
+  }, [selectionMode, rangeValue, setIsOpen]);
 
   const handleToggle = useCallback(() => {
     if (isOpen) {
@@ -210,7 +210,7 @@ export function useDatePicker(props: UseDatePickerProps) {
 
       const normalizedDate = startOfDay(date);
 
-      if (mode === "single") {
+      if (selectionMode === "single") {
         const dateValue = toDateValue(normalizedDate);
         setCurrentValue(normalizedDate);
         emitSingle?.(normalizedDate, dateValue);
@@ -218,7 +218,7 @@ export function useDatePicker(props: UseDatePickerProps) {
         return;
       }
 
-      if (mode === "range") {
+      if (selectionMode === "range") {
         if (rangeSelectionState === "start") {
           const newRange: DateRange = { start: normalizedDate, end: null };
           const newRangeValue: DateRangeValue = {
@@ -254,7 +254,7 @@ export function useDatePicker(props: UseDatePickerProps) {
         return;
       }
 
-      if (mode === "multiple") {
+      if (selectionMode === "multiple") {
         const currentDates = multipleValue || [];
         const existingIndex = currentDates.findIndex((d) =>
           isSameDay(d, normalizedDate),
@@ -276,7 +276,7 @@ export function useDatePicker(props: UseDatePickerProps) {
       }
     },
     [
-      mode,
+      selectionMode,
       disabled,
       outsideDaysSelectable,
       rangeSelectionState,
@@ -328,13 +328,13 @@ export function useDatePicker(props: UseDatePickerProps) {
 
   const handleDateHover = useCallback(
     (date: Date | null) => {
-      if (mode === "range" && rangeSelectionState === "end" && date) {
+      if (selectionMode === "range" && rangeSelectionState === "end" && date) {
         setHoverDate(date);
       } else {
         setHoverDate(null);
       }
     },
-    [mode, rangeSelectionState],
+    [selectionMode, rangeSelectionState],
   );
 
   const handleDateFocus = useCallback((date: Date | null) => {
@@ -343,15 +343,15 @@ export function useDatePicker(props: UseDatePickerProps) {
 
   const handleClear = useCallback(() => {
     setCurrentValue(null);
-    if (mode === "single") {
+    if (selectionMode === "single") {
       emitSingle?.(null, null);
-    } else if (mode === "range") {
+    } else if (selectionMode === "range") {
       emitRange?.(null, null);
       setRangeSelectionState("start");
     } else {
       emitMultiple?.(null, null);
     }
-  }, [mode, emitSingle, emitRange, emitMultiple, setCurrentValue]);
+  }, [selectionMode, emitSingle, emitRange, emitMultiple, setCurrentValue]);
 
   const handleTodayClick = useCallback(() => {
     const today = startOfDay(new Date());

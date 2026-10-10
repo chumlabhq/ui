@@ -39,7 +39,7 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `variant` | `"dropdown"` (default) shows a list; `"clock"` shows an analog clock face. |
+| `mode` | `"dropdown"` (default) shows a list; `"clock"` shows an analog clock face. |
 | `format` | `"24h"` (default) or `"12h"`. Affects display, parsing, and option generation. |
 | `minuteStep` | Clamped to 1-60. Invalid values (0, NaN, negatives) are auto-corrected. |
 | `minTime` / `maxTime` | Format: `"HH:MM"`. Dims/disables out-of-range options in both variants. |
@@ -97,7 +97,7 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
 | `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
 | `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
-| `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
+| `mode` | `"dropdown"` \| `"clock"` | `"dropdown"` | How a time is picked: a dropdown list or an analog clock face. |
 | `clearable` | boolean | `true` | Show a clear button when a value is selected. |
 | `onClear` | object | — | () => void — Called when the clear button is clicked. |
 | `open` | boolean | — | Controlled open state. |
@@ -209,7 +209,7 @@ const [time, setTime] = useState<string | null>(null);
 
 ```tsx
 <TimePicker
-  variant="clock"
+  mode="clock"
   format="12h"
   onConfirm={() => console.log("confirmed")}
   onCancel={() => console.log("cancelled")}

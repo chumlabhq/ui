@@ -4,7 +4,7 @@ export default function AccordionExample() {
   return (
     <>
       <Accordion
-        type="single"
+        selectionMode="single"
         collapsible
         classes={
           {
@@ -35,7 +35,7 @@ export default function AccordionExample() {
         </AccordionItem>
       </Accordion>
       <Accordion
-        type="single"
+        selectionMode="single"
         collapsible
         classes={
           {
@@ -48,7 +48,7 @@ export default function AccordionExample() {
       >
         <AccordionItem value="left-1">
           <AccordionTrigger
-            iconPosition="left"
+            iconPosition="start"
             expandedIcon={<ChevronUpIcon className="w-4 h-4 text-cl-accent" />}
             collapsedIcon={<ChevronDownIcon className="w-4 h-4 text-cl-accent" />}
           >
@@ -58,7 +58,7 @@ export default function AccordionExample() {
         </AccordionItem>
       </Accordion>
       <Accordion
-        type="single"
+        selectionMode="single"
         collapsible
         classes={
           {

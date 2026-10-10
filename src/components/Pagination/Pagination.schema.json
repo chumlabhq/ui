@@ -52,14 +52,14 @@
       "description": "Whether to show the rows-per-page selector.",
       "default": false
     },
-    "rowsPerPageLabel": {
+    "rowsPerPageSuffix": {
       "type": "string",
-      "description": "Label text for the rows-per-page selector.",
+      "description": "Visible text after the rows-per-page select (\"Show 10 rows\"). Not the select's accessible name.",
       "default": "rows"
     },
-    "showLabel": {
+    "rowsPerPagePrefix": {
       "type": "string",
-      "description": "Label text for the 'show' section of the rows-per-page selector.",
+      "description": "Visible text before the rows-per-page select. Not the select's accessible name.",
       "default": "Show"
     },
     "dropdownAriaLabel": {

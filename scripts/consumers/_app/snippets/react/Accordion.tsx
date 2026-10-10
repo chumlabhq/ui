@@ -2,7 +2,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@c
 
 export default function FAQ() {
   return (
-    <Accordion type="single" collapsible defaultValue="q1">
+    <Accordion selectionMode="single" collapsible defaultValue="q1">
       <AccordionItem value="q1">
         <AccordionTrigger>What is your return policy?</AccordionTrigger>
         <AccordionContent>

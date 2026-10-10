@@ -9,7 +9,7 @@ export default function AccordionExample() {
   return (
     <>
       <Accordion
-        type="multiple"
+        selectionMode="multiple"
         classes={
           {
             root: "w-full",

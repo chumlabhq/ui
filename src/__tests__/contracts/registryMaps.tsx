@@ -84,7 +84,7 @@ interface RequiredPropsShape {
 }
 
 const TYPED_REQUIRED_PROPS = {
-  Accordion: { type: "single", children: null },
+  Accordion: { selectionMode: "single", children: null },
   Breadcrumb: { items: [{ id: "home", label: "Home" }] },
   CascadingDropdown: { options: [] },
   CountryFlag: { code: "US" },

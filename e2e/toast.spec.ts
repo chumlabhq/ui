@@ -12,14 +12,14 @@ async function waitForToastVisible(page: import("@playwright/test").Page) {
 
 async function triggerToast(
   page: import("@playwright/test").Page,
-  type: "success" | "error" | "warning" | "info" = "success",
+  variant: "success" | "error" | "warning" | "info" = "success",
 ) {
   const buttonText =
-    type === "success"
+    variant === "success"
       ? "Success"
-      : type === "error"
+      : variant === "error"
         ? "Error"
-        : type === "warning"
+        : variant === "warning"
           ? "Warning"
           : "Info";
 
@@ -41,7 +41,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
 
       const toast = page.locator(TOAST_SELECTOR).first();
       await expect(toast).toBeVisible();
-      await expect(toast).toHaveAttribute("data-toast-type", "success");
+      await expect(toast).toHaveAttribute("data-variant", "success");
     });
 
     test("should display multiple toasts", async ({ page }) => {
@@ -74,7 +74,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
         await triggerToast(page, type);
 
         const toast = page.locator(TOAST_SELECTOR).first();
-        await expect(toast).toHaveAttribute("data-toast-type", type);
+        await expect(toast).toHaveAttribute("data-variant", type);
       });
     }
   });
@@ -364,7 +364,7 @@ test.describe("Toast Accessibility Tests", () => {
     const role = await toast.getAttribute("role");
     expect(["alert", "status"]).toContain(role);
     await expect(toast).toHaveAttribute("data-toast-id");
-    await expect(toast).toHaveAttribute("data-toast-type");
+    await expect(toast).toHaveAttribute("data-variant");
   });
 
   test("should have accessible close button", async ({ page }) => {

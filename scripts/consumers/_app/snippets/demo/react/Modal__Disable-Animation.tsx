@@ -17,7 +17,7 @@ export default function ModalExample() {
         onOpenChange={setDisableAnimOpen}
         title="No Animation"
         description="This modal opens and closes instantly."
-        disableAnimation={true}
+        reduceMotion={true}
         classes={
           {
             content: "w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border",
@@ -31,11 +31,13 @@ export default function ModalExample() {
         }
       >
         <p className="text-cl-text-secondary">
-          The
           <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">
-            disableAnimation
+            reduceMotion=
+            {true}
           </code>
-          prop completely removes open/close transitions.
+          removes the open/close transitions; the default,
+          <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">"auto"</code>
+          , follows the OS setting.
         </p>
       </Modal>
     </>

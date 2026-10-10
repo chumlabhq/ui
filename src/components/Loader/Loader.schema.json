@@ -139,7 +139,7 @@
       "description": "An animated bouncing dots loading indicator.",
       "type": "object",
       "properties": {
-        "dotSize": {
+        "size": {
           "type": "number",
           "description": "Diameter of each dot in pixels.",
           "default": 8
@@ -333,7 +333,7 @@
     "DotLoader": {
       "type": "object",
       "properties": {
-        "dotSize": {
+        "size": {
           "type": "number | undefined",
           "description": "Diameter of each dot in pixels. Default: 8",
           "default": 8

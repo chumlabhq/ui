@@ -111,11 +111,11 @@ describe("Button", () => {
       expect(screen.getByTestId("custom-loader")).toBeInTheDocument();
     });
 
-    it("positions loader on the left when loaderPosition='left'", () => {
+    it("positions loader at the start when loaderPosition='start'", () => {
       render(
         <Button
           loading
-          loaderPosition="left"
+          loaderPosition="start"
           loader={<span data-testid="loader">⏳</span>}
         >
           Loading

@@ -1,7 +1,7 @@
 import type { CSSProperties, FocusEvent, ReactNode, HTMLAttributes } from "react";
 
 export type TimeFormat = "12h" | "24h";
-export type TimePickerVariant = "dropdown" | "clock";
+export type TimePickerMode = "dropdown" | "clock";
 export type ClockSelectionMode = "hours" | "minutes";
 
 /**
@@ -52,7 +52,7 @@ export interface TimePickerClasses {
   /** Description element. */
   description?: string;
 
-  /** Clock variant outermost container. */
+  /** Clock mode outermost container. */
   clockContent?: string;
   /** Hours / minutes display row. */
   clockDisplay?: string;
@@ -212,8 +212,8 @@ export interface TimePickerProps
   renderOptionContent?: (time: string, isSelected: boolean) => ReactNode;
   /** Expand the picker to fill its parent container. */
   fullWidth?: boolean;
-  /** Visual variant: dropdown list or analog clock face. Default: `"dropdown"`. */
-  variant?: TimePickerVariant;
+  /** How a time is picked: a dropdown list or an analog clock face. Default: `"dropdown"`. */
+  mode?: TimePickerMode;
 
   /** Show a clear button when a value is selected. Default: `true`, as on DatePicker. */
   clearable?: boolean;
@@ -237,7 +237,7 @@ export interface TimePickerProps
   dropdownZIndex?: number;
   /** Gap between trigger and dropdown in pixels. Default: `4`. */
   dropdownGap?: number;
-  /** Keep dropdown DOM mounted when closed (dropdown variant only). Default: `false`. */
+  /** Keep dropdown DOM mounted when closed (dropdown mode only). Default: `false`. */
   keepMounted?: boolean;
   /** Custom container element for the dropdown portal. Defaults to `document.body`. */
   portalContainer?: HTMLElement | null;

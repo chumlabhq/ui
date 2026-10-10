@@ -182,7 +182,7 @@
       "type": "string",
       "description": "Native input autocomplete. Defaults to \"off\" so browser autofill can't corrupt the national-number field; pass e.g. \"tel-national\" to opt in."
     },
-    "enablePasteDetection": {
+    "pasteDetection": {
       "type": "boolean",
       "description": "Enables automatic detection and parsing of pasted phone numbers.",
       "default": false

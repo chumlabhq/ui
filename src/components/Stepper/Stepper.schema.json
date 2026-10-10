@@ -133,10 +133,10 @@
       "type": "string",
       "enum": [
         "bottom",
-        "right"
+        "end"
       ],
-      "description": "Position of step labels relative to the indicator.",
-      "default": "right"
+      "description": "Where each step's label sits: under its indicator, or after it (`end`).",
+      "default": "end"
     },
     "completedIcon": {
       "type": "object",

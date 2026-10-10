@@ -1,5 +1,3 @@
-"use client";
-
 import { useMemo, useState } from "react";
 import { Button } from "@chumlab/ui/button";
 import { Table } from "@chumlab/ui/table";
@@ -193,28 +191,26 @@ export default function TableExample() {
     ],
     [],
   );
-  const [density, setDensity] = useState<
-    "compact" | "comfortable" | "spacious"
-  >("comfortable");
+  const [size, setSize] = useState<"sm" | "md" | "lg">("md");
   return (
     <>
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           {
-            (["compact", "comfortable", "spacious"] as const).map((d) => (
+            (["sm", "md", "lg"] as const).map((d) => (
               <Button
                 key={d}
                 size="sm"
-                onClick={() => setDensity(d)}
+                onClick={() => setSize(d)}
                 className={
                   `rounded-cl-md ${
-                    density === d
+                    size === d
                       ? "bg-cl-accent text-cl-on-accent"
                       : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-elevated"
                   }`
                 }
               >
-                {d.charAt(0).toUpperCase() + d.slice(1)}
+                {d}
               </Button>
             ))
           }
@@ -222,18 +218,18 @@ export default function TableExample() {
         <Table
           columns={columns}
           data={sampleData.slice(0, 5)}
-          density={density}
+          size={size}
           getRowId={(row) => row.id}
           classes={s}
         />
       </div>
       <p className="mt-3 text-sm text-cl-text-secondary">
-        Current density:
+        Current size:
         {" "}
         <code className="px-1 rounded bg-cl-bg-elevated">
-          {density}
+          {size}
         </code>
-        . This controls cell padding: compact (tight), comfortable (default), spacious (generous).
+        . This controls cell padding and text size: sm (tight), md (default), lg (generous).
       </p>
     </>
   );

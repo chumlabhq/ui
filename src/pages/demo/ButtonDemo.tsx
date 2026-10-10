@@ -595,7 +595,7 @@ const ButtonDemo = () => {
               loaderPosition=&quot;left&quot;
             </p>
             <DemoWrapper isDarkMode={dark} layout="inline">
-              <Button className={c.primary} loading loaderPosition="left">
+              <Button className={c.primary} loading loaderPosition="start">
                 Processing
               </Button>
             </DemoWrapper>

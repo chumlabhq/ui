@@ -10,7 +10,7 @@ import {
 import { AvatarGroupContext } from "../utils/context.js";
 import { cn } from "../../../utils/scopedCn.js";
 
-const variantClassNames = {
+const layoutClassNames = {
   stack: "flex items-center",
   grid: "flex flex-wrap items-center gap-2",
   inline: "inline-flex items-center",
@@ -31,7 +31,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       ringColor = "var(--cl-bg)",
       showTooltip = false,
       total,
-      variant = "stack",
+      layout = "stack",
       reverseOrder = false,
       renderSurplus,
       onAvatarClick,
@@ -115,7 +115,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       <AvatarGroupContext.Provider value={contextValue}>
         <Comp
           ref={ref}
-          className={cn(variantClassNames[variant], classes.root, className) || undefined}
+          className={cn(layoutClassNames[layout], classes.root, className) || undefined}
           style={style}
           dir={dir}
           role="group"

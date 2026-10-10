@@ -151,11 +151,6 @@
       "description": "Open/close animation duration in milliseconds.",
       "default": 200
     },
-    "disableAnimation": {
-      "type": "boolean",
-      "description": "Disables open/close animations entirely.",
-      "default": false
-    },
     "reduceMotion": {
       "type": [
         "boolean",

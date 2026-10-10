@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type ToastType = "success" | "warning" | "error" | "info";
+export type ToastVariant = "success" | "warning" | "error" | "info";
 
 export type ToastPosition =
   | "top-left"
@@ -39,7 +39,7 @@ export interface ToastConfig {
   /** Identifies the toast so it can be dismissed by name later; generated when omitted. */
   id: string;
   /** Which status this is, choosing the colour and the indicator glyph. */
-  type?: ToastType;
+  variant?: ToastVariant;
   /** The main line, and the toast's accessible name. */
   message?: ReactNode;
   /** A second line under the message. */
@@ -52,7 +52,7 @@ export interface ToastConfig {
   showProgress?: boolean;
   /** Overrides that bar's colour. */
   progressColor?: string;
-  /** Replaces the type's default indicator glyph. */
+  /** Replaces the variant's default indicator glyph. */
   icon?: ReactNode;
   /** Renders the dismiss button. */
   showCloseButton?: boolean;
@@ -130,7 +130,7 @@ export interface ToastProviderProps {
  * What `useToast()` returns: one method per status, plus the two dismissals.
  */
 export interface ToastContextValue {
-  /** Shows a toast and returns its id. The other methods are this with `type` filled in. */
+  /** Shows a toast and returns its id. The other methods are this with `variant` filled in. */
   toast: (config: Omit<ToastConfig, "id"> | string) => string;
   /** Shows a success toast. */
   success: (message: ReactNode, options?: Partial<ToastConfig>) => string;

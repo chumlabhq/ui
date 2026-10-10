@@ -166,8 +166,8 @@ describe("DotLoader", () => {
     expect(dotElements).toHaveLength(5);
   });
 
-  it("applies custom dotSize", () => {
-    render(<DotLoader dotSize={12} />);
+  it("applies custom size", () => {
+    render(<DotLoader size={12} />);
     const loader = screen.getByRole("status");
     const firstDot = Array.from(loader.children).find(
       (el) => el.tagName !== "STYLE"

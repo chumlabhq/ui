@@ -233,7 +233,7 @@ export default function TableExample() {
                 <Table
                   columns={columns}
                   data={data}
-                  enableRowDragDrop
+                  reorderable
                   DragHandleIcon={ArrowHandle}
                   onRowReorder={(from, to) => {
                     setData((prev) => {

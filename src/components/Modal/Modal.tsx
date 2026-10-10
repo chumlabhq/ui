@@ -83,7 +83,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       overlayColor = "black",
       overlayOpacity = 0.32,
       animationDuration = 200,
-      disableAnimation = false,
       reduceMotion = "auto",
       nestingLevel: externalNestingLevel,
       maxNestingLevel = 5,
@@ -117,7 +116,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const hydrated = useHydrated();
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
-    const effectiveDuration = prefersReducedMotion || disableAnimation ? 0 : animationDuration;
+    const effectiveDuration = prefersReducedMotion ? 0 : animationDuration;
     const shouldAnimate = effectiveDuration > 0;
 
     const baseClassesRaw = unstyled

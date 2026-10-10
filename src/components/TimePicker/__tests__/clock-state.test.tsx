@@ -39,7 +39,7 @@ describe("TimePicker clock face state", () => {
 
   it("has a bounded fixture to read", () => {
     expect(bounded, "the open-bounded fixture is gone").toBeDefined();
-    expect(bounded!.props).toMatchObject({ variant: "clock", minTime: "09:00", maxTime: "17:00" });
+    expect(bounded!.props).toMatchObject({ mode: "clock", minTime: "09:00", maxTime: "17:00" });
   });
 
   for (const mode of ["hours", "minutes"] as const) {
@@ -103,7 +103,7 @@ describe("TimePicker 12-hour clock bounds", () => {
   for (const c of TWELVE_HOUR_CASES) {
     it(`enables exactly the in-range hours: ${c.name}`, async () => {
       render(
-        <TimePicker variant="clock" format="12h" defaultOpen minTime={c.minTime} maxTime={c.maxTime} defaultValue={c.value} />,
+        <TimePicker mode="clock" format="12h" defaultOpen minTime={c.minTime} maxTime={c.maxTime} defaultValue={c.value} />,
       );
       const slider = await screen.findByRole("slider");
       const hours = numbersOf();

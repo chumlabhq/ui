@@ -353,9 +353,9 @@
           "type": "number | undefined",
           "description": "Total count for surplus calculation (when not all items are rendered)."
         },
-        "variant": {
-          "type": "GroupVariant | undefined",
-          "description": "Layout variant: stacked overlap, grid, or inline. Default: `\"stack\"`.",
+        "layout": {
+          "type": "AvatarGroupLayout | undefined",
+          "description": "How the avatars are laid out: stacked overlap, grid, or inline. Default: `\"stack\"`.",
           "default": "stack"
         },
         "reverseOrder": {

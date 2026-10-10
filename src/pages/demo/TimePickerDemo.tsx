@@ -708,7 +708,7 @@ const TimePickerDemo = () => {
             <TimePicker
               value={clock24}
               onValueChange={(v) => setClock24(v)}
-              variant="clock"
+              mode="clock"
               classes={c.timepicker}
             />
             <span className={`text-sm ${c.text}`}>
@@ -729,7 +729,7 @@ const TimePickerDemo = () => {
             <TimePicker
               value={clock12}
               onValueChange={(v) => setClock12(v)}
-              variant="clock"
+              mode="clock"
               format="12h"
               classes={c.timepicker}
             />
@@ -753,7 +753,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={clockStep1}
                 onValueChange={(v) => setClockStep1(v)}
-                variant="clock"
+                mode="clock"
                 minuteStep={1}
                 classes={c.timepicker}
               />
@@ -764,7 +764,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={clockStep5}
                 onValueChange={(v) => setClockStep5(v)}
-                variant="clock"
+                mode="clock"
                 minuteStep={5}
                 classes={c.timepicker}
               />
@@ -785,7 +785,7 @@ const TimePickerDemo = () => {
             <TimePicker
               value={clockMinMax}
               onValueChange={(v) => setClockMinMax(v)}
-              variant="clock"
+              mode="clock"
               minTime="09:00"
               maxTime="17:00"
               classes={c.timepicker}
@@ -810,7 +810,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={clockLabeled}
                 onValueChange={(v) => setClockLabeled(v)}
-                variant="clock"
+                mode="clock"
                 label="Alarm Time"
                 required
                 classes={c.timepicker}
@@ -822,7 +822,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={clockError}
                 onValueChange={(v) => setClockError(v)}
-                variant="clock"
+                mode="clock"
                 label="Check-in"
                 error
                 errorMessage="Time is outside business hours."
@@ -845,7 +845,7 @@ const TimePickerDemo = () => {
             <TimePicker
               value={clockDisabled}
               onValueChange={() => {}}
-              variant="clock"
+              mode="clock"
               disabled
               classes={c.timepicker}
             />
@@ -864,7 +864,7 @@ const TimePickerDemo = () => {
           <TimePicker
             value={clockFullWidth}
             onValueChange={(v) => setClockFullWidth(v)}
-            variant="clock"
+            mode="clock"
             fullWidth
             classes={c.timepicker}
           />
@@ -885,7 +885,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={clockEmerald}
                 onValueChange={(v) => setClockEmerald(v)}
-                variant="clock"
+                mode="clock"
                 format="12h"
                 classes={getEmeraldClockTheme()}
               />
@@ -896,7 +896,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={clockRose}
                 onValueChange={(v) => setClockRose(v)}
-                variant="clock"
+                mode="clock"
                 format="12h"
                 classes={getRoseClockTheme()}
               />
@@ -907,7 +907,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={clockViolet}
                 onValueChange={(v) => setClockViolet(v)}
-                variant="clock"
+                mode="clock"
                 format="12h"
                 classes={getVioletClockTheme()}
               />
@@ -928,7 +928,7 @@ const TimePickerDemo = () => {
             <TimePicker
               value={clockUnstyled}
               onValueChange={(v) => setClockUnstyled(v)}
-              variant="clock"
+              mode="clock"
               unstyled
               classes={{
                 root: "inline-flex flex-col gap-1",
@@ -971,7 +971,7 @@ const TimePickerDemo = () => {
             <TimePicker
               value={clockI18n}
               onValueChange={(v) => setClockI18n(v)}
-              variant="clock"
+              mode="clock"
               cancelText="Abbrechen"
               okText="Fertig"
               classes={c.timepicker}
@@ -1203,7 +1203,7 @@ const TimePickerDemo = () => {
                 <TimePicker
                   value={eventsTime}
                   onValueChange={(v) => setEventsTime(v)}
-                  variant="clock"
+                  mode="clock"
                   onOpenChange={(open) => log(`onOpenChange: ${open}`)}
                   onConfirm={() => log("onConfirm")}
                   onCancel={() => log("onCancel")}

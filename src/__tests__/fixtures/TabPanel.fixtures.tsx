@@ -31,7 +31,7 @@ const fixtures: Fixtures<typeof TabPanel> = [
     name: "icon-left",
     props: {
       tabs: TABS.map((t) => ({ ...t, icon: <CircleIcon /> })),
-      iconPosition: "left" as const,
+      iconPosition: "start" as const,
     },
     note: "The first fixture to give a tab an icon. `iconPosition` had never been rendered by any fixture, so it was in the 151 props whose markup no gate had seen — and it had never worked: the tab button had no flex layout, so the icon sat above the label in both positions rather than beside it.",
   },
@@ -39,7 +39,7 @@ const fixtures: Fixtures<typeof TabPanel> = [
     name: "icon-right",
     props: {
       tabs: TABS.map((t) => ({ ...t, icon: <CircleIcon /> })),
-      iconPosition: "right" as const,
+      iconPosition: "end" as const,
     },
   },
 ];

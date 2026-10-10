@@ -12,7 +12,7 @@ export default function LoaderExample() {
         <span className="text-xs font-medium text-cl-text-tertiary">Linear</span>
       </div>
       <div className="flex flex-col items-center gap-3">
-        <DotLoader dotSize={10} className="text-cl-accent" />
+        <DotLoader size={10} className="text-cl-accent" />
         <span className="text-xs font-medium text-cl-text-tertiary">Dot</span>
       </div>
       <div className="flex flex-col items-center gap-3">

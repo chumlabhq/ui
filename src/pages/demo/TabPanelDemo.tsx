@@ -469,7 +469,7 @@ const TabPanelDemo = () => {
             tabs={tabsWithIcons}
             value={iconLeftTab}
             onValueChange={setIconLeftTab}
-            iconPosition="left"
+            iconPosition="start"
             classes={c.tabs.icon}
           >
             {iconLeftTab === "home" && (
@@ -518,7 +518,7 @@ const TabPanelDemo = () => {
             tabs={tabsWithIcons}
             value={iconRightTab}
             onValueChange={setIconRightTab}
-            iconPosition="right"
+            iconPosition="end"
             classes={{
               ...c.tabs.pill,
               item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md data-[state=active]:bg-cl-bg-panel data-[state=active]:text-cl-text data-[state=active]:shadow-sm data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text",

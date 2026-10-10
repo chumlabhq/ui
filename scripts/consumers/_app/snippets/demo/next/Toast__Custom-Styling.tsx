@@ -12,7 +12,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "Light themed toast",
             description: "Using classes.container to override styles",
             classes: {
@@ -35,7 +35,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "success",
+            variant: "success",
             message: "Custom border radius",
             description: "Rounded-full style",
             classes: {
@@ -51,7 +51,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "info",
+            variant: "info",
             message: "Custom message style",
             description: "Description with custom styling",
             classes: {
@@ -68,7 +68,7 @@ function ToastTrigger() {
         onClick={
           () =>
           toast.toast({
-            type: "success",
+            variant: "success",
             message: "Custom content wrapper",
             description: "Using classes.content for padding",
             classes: {

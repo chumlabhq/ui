@@ -130,7 +130,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          mode="range"
+          selectionMode="range"
           value={classesRange}
           onValueChange={(range) => setClassesRange(range)}
           placeholder="Styled presets"

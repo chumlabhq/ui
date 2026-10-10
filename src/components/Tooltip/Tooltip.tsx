@@ -78,7 +78,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       wordWrap = "break-word",
       delayDuration = 200,
       hideDelayDuration = 100,
-      disableHoverableContent = false,
+      hoverableContent = true,
       open: controlledOpen,
       defaultOpen = false,
       onOpenChange,
@@ -342,12 +342,12 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     }, []);
 
     const handleTooltipMouseEnter = useCallback(() => {
-      if (disableHoverableContent) return;
+      if (!hoverableContent) return;
       if (hideTimeoutRef.current) {
         clearTimeout(hideTimeoutRef.current);
         hideTimeoutRef.current = null;
       }
-    }, [disableHoverableContent]);
+    }, [hoverableContent]);
 
     const handleTooltipMouseLeave = useCallback(() => {
       setOpen(false);

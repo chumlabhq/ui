@@ -15,7 +15,7 @@ export default function InternationalPhoneInputExample() {
         value={combinedValue}
         onValueChange={setCombinedValue}
         onCountryChange={setCombinedCountry}
-        enablePasteDetection
+        pasteDetection
         onPasteDetect={setCombinedPaste}
         copyFormat="international"
         validateOnBlur

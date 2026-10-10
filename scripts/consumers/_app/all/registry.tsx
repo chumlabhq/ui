@@ -114,7 +114,7 @@ export const ENTRIES: Entry[] = [
   {
     name: "Accordion",
     node: (
-      <Accordion type="single" collapsible>
+      <Accordion selectionMode="single" collapsible>
         <AccordionItem value="one">
           <AccordionTrigger>First</AccordionTrigger>
           <AccordionContent>First body</AccordionContent>
@@ -250,7 +250,7 @@ export const VARIANTS: Entry[] = [
   {
     name: "Accordion__stored",
     node: (
-      <Accordion type="single" collapsible storageKey={ACCORDION_STORAGE_KEY}>
+      <Accordion selectionMode="single" collapsible storageKey={ACCORDION_STORAGE_KEY}>
         <AccordionItem value="one">
           <AccordionTrigger>First</AccordionTrigger>
           <AccordionContent>First body</AccordionContent>
