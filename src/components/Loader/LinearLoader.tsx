@@ -14,7 +14,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
     {
       height = 4,
       width = "100%",
-      speed = 1.5,
+      animationDuration = 1500,
       trackColor,
       borderRadius = 9999,
       reduceMotion = "auto",
@@ -64,7 +64,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
       inset: 0,
       borderRadius: "inherit",
       backgroundColor: "currentColor",
-      animation: prefersReducedMotion ? "none" : `linear-loader-slide ${speed}s ease-in-out infinite`,
+      animation: prefersReducedMotion ? "none" : `linear-loader-slide ${animationDuration}ms ease-in-out infinite`,
     };
 
     return (

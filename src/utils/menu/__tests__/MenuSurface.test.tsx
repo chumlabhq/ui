@@ -92,7 +92,7 @@ describe("MenuSurface", () => {
     expect(surface()?.dataset.side).toBe("bottom");
   });
 
-  it("honours forceSide, which is what the family calls forceDropdownPosition", () => {
+  it("honours forceSide, which is what the family calls forceDropdownSide", () => {
     render(<Harness side="top" forceSide />);
     expect(surface()?.dataset.side).toBe("top");
   });

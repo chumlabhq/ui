@@ -51,7 +51,7 @@ export default function SearchableDropdownExample() {
           value={customChevronValue}
           onValueChange={(v) => setCustomChevronValue(v)}
           placeholder="Search fruits..."
-          ChevronIcon={CustomChevronIcon}
+          chevronIcon={<CustomChevronIcon className="w-4 h-4" />}
           classes={
             {
               trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent",

@@ -63,10 +63,10 @@
       "description": "Whether to render the backdrop overlay.",
       "default": true
     },
-    "preventOutsideClick": {
+    "closeOnOverlayClick": {
       "type": "boolean",
-      "description": "Prevents closing when clicking outside the modal content.",
-      "default": false
+      "description": "Closes the modal when the overlay is clicked. `false` keeps it open until an explicit action.",
+      "default": true
     },
     "closeOnEscape": {
       "type": "boolean",

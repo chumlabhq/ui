@@ -72,7 +72,7 @@ export default function DrawerExample() {
       <Drawer
         open={customDuration.open}
         onOpenChange={customDuration.onOpenChange}
-        duration={600}
+        animationDuration={600}
       >
         {renderDrawerContent("Slow Animation", customDuration.onClose)}
       </Drawer>

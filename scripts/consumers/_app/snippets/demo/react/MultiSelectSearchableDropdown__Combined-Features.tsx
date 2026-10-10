@@ -37,10 +37,10 @@ export default function MultiSelectSearchableDropdownExample() {
             : undefined
           }
           placeholder="Pick countries..."
-          maxDisplayedChips={2}
+          maxVisible={2}
           fullWidth
           keepMounted
-          dropdownGap={8}
+          dropdownOffset={8}
           dropdownZIndex={100}
           searchPlaceholder="Filter countries..."
           onFocus={() => setCombinedFocusCount((n) => n + 1)}

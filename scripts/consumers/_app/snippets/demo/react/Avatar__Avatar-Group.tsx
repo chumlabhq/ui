@@ -117,7 +117,7 @@ export default function AvatarExample() {
           }
         />
       </AvatarGroup>
-      <AvatarGroup max={3}>
+      <AvatarGroup maxVisible={3}>
         <Avatar
           name="Alice Brown"
           autoColor
@@ -259,7 +259,7 @@ export default function AvatarExample() {
           }
         />
       </AvatarGroup>
-      <AvatarGroup max={3} total={50}>
+      <AvatarGroup maxVisible={3} total={50}>
         <Avatar
           name="Alice Brown"
           autoColor
@@ -345,7 +345,7 @@ export default function AvatarExample() {
           }
         />
       </AvatarGroup>
-      <AvatarGroup max={2} showTooltip>
+      <AvatarGroup maxVisible={2} showTooltip>
         <Avatar
           name="Alice Brown"
           autoColor
@@ -916,7 +916,7 @@ export default function AvatarExample() {
         />
       </AvatarGroup>
       <AvatarGroup
-        max={2}
+        maxVisible={2}
         renderSurplus={
           (count) => (
             <span

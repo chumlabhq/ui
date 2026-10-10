@@ -23,7 +23,7 @@ export default function MultiSelectSearchableDropdownExample() {
         value={classNameValue}
         onValueChange={(values) => setClassNameValue(values)}
         placeholder="Styled root..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         className="my-custom-dropdown"
         style={
           {

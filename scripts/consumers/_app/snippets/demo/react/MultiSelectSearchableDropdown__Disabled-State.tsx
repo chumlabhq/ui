@@ -25,7 +25,7 @@ export default function MultiSelectSearchableDropdownExample() {
         onValueChange={(values) => setDisabledValue(values)}
         disabled
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
                         ...({

@@ -7,7 +7,7 @@ export default function CascadingDropdownExample() {
       value={{}}
       onValueChange={() => {}}
       loading
-      loadingText={
+      loadingContent={
         <div className="space-y-3 p-3">
           {
             [1, 2, 3, 4].map((i) => (

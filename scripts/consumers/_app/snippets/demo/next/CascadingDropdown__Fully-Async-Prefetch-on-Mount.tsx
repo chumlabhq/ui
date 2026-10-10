@@ -101,7 +101,7 @@ export default function CascadingDropdownExample() {
           loadChildren={handleLoadChildrenAsync}
           placeholder="Select region and country..."
           loading={isPrefetchLoading}
-          loadingText="Loading regions..."
+          loadingContent="Loading regions..."
           classes={
             {
                            ...({

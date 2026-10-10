@@ -22,7 +22,7 @@ export default function MultiSelectSearchableDropdownExample() {
         onValueChange={(values) => setNoSearchValue(values)}
         showSearch={false}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
             root: "",

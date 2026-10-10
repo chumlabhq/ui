@@ -156,7 +156,7 @@ const LEFT_UNDEMONSTRATED = new Map([
   ],
   ["shape", "As `size`: AvatarGroupCount follows the Avatar shape already on the page."],
   [
-    "dropdownPosition",
+    "dropdownSide",
     "Demonstrated on Dropdown, Pagination and SearchableDropdown. CascadingDropdown's " +
       "is the same prop with the same three values.",
   ],

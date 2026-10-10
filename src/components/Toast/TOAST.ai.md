@@ -154,7 +154,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | `duration` | number | `5000` | Auto-dismiss duration in milliseconds. |
 | `showProgress` | boolean | `true` | Whether to show a progress bar countdown. |
 | `progressColor` | string | — | Custom color for the progress bar. |
-| `icon` | object | — | React.ReactNode — Custom icon replacing the default type icon. |
+| `icon` | object | — | React.ReactNode — Custom icon replacing the variant's default icon. |
 | `showCloseButton` | boolean | `true` | Whether to show a close/dismiss button. |
 | `onDismiss` | object | — | (id: string) => void — Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out. |
 | `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |

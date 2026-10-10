@@ -1062,7 +1062,7 @@ describe("useCascadingDropdown", () => {
         useCascadingDropdown({
           options: flatOptions,
           searchMenu,
-          searchDebounceMs: 300,
+          searchDebounce: 300,
         })
       );
       act(() => { result.current.onMenuSearchChange("fru"); });
@@ -1075,7 +1075,7 @@ describe("useCascadingDropdown", () => {
     it("sets isMenuSearching=true while debounce is pending", () => {
       const searchMenu = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
-        useCascadingDropdown({ options: flatOptions, searchMenu, searchDebounceMs: 300 })
+        useCascadingDropdown({ options: flatOptions, searchMenu, searchDebounce: 300 })
       );
       act(() => { result.current.onMenuSearchChange("fru"); });
       expect(result.current.isMenuSearching).toBe(true);
@@ -1084,7 +1084,7 @@ describe("useCascadingDropdown", () => {
     it("resets isMenuSearching when query is cleared", () => {
       const searchMenu = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
-        useCascadingDropdown({ options: flatOptions, searchMenu, searchDebounceMs: 300 })
+        useCascadingDropdown({ options: flatOptions, searchMenu, searchDebounce: 300 })
       );
       act(() => { result.current.onMenuSearchChange("fru"); });
       act(() => { result.current.onMenuSearchChange(""); });

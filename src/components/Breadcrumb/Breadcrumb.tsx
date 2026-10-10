@@ -182,7 +182,7 @@ DropdownPortal.displayName = "DropdownPortal";
  *
  * AI Usage Guidelines:
  * - Pass an `items` array — last item is always the active page
- * - Use `maxVisibleItems` to collapse deep hierarchies
+ * - Use `maxVisible` to collapse deep hierarchies
  * - Items with `href` render as links, others as buttons
  * - Use `onItemClick` for SPA navigation (preventDefault is handled)
  *
@@ -199,7 +199,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
   (
     {
       items,
-      maxVisibleItems = 4,
+      maxVisible = 4,
       separator,
       onItemClick,
       "aria-label": ariaLabel = "Breadcrumb",
@@ -207,16 +207,16 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       unstyled = false,
       className,
       style,
-      separatorIcon: SeparatorIconProp,
-      ellipsisIcon: EllipsisIconProp,
+      separatorIcon,
+      ellipsisIcon,
       iconSize = 16,
       showTooltips = true,
-      tooltipPosition = "bottom",
+      tooltipSide = "bottom",
       tooltipOffset = 4,
       defaultTooltipProps,
       ellipsisTooltip,
       ellipsisTooltipProps,
-      dropdownPosition = "top",
+      dropdownSide = "top",
       dropdownZIndex: dropdownZIndexProp,
       portalContainer,
       keepMounted = false,
@@ -238,7 +238,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     // Tight gap so the dropdown reads as anchored to the ellipsis trigger
     // rather than floating away from it. 4 px felt visually closer to 20 px
     // once the dropdown's own py-1 padding stacked on top.
-    const dropdownGap = 0;
+    const dropdownOffset = 0;
 
     /**
      * Every path that changes the dropdown's state reports it, rather than an
@@ -396,7 +396,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 
     const { visibleItems, collapsedItems, shouldTruncate } = useMemo(() => {
       const totalItems = items.length;
-      const effectiveMaxVisible = Math.max(maxVisibleItems, 2);
+      const effectiveMaxVisible = Math.max(maxVisible, 2);
 
       if (totalItems <= effectiveMaxVisible) {
         return { visibleItems: items, collapsedItems: [], shouldTruncate: false };
@@ -412,7 +412,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         collapsedItems: collapsed,
         shouldTruncate: true,
       };
-    }, [items, maxVisibleItems]);
+    }, [items, maxVisible]);
 
     useEffect(() => {
       menuItemRefs.current = menuItemRefs.current.slice(0, collapsedItems.length);
@@ -470,8 +470,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       [activeItemIndex, setActiveItemIndex, onMenuKeyDown],
     );
 
-    const SeparatorComponent = SeparatorIconProp || ChevronRightIcon;
-    const EllipsisComponent = EllipsisIconProp || DefaultEllipsisIcon;
 
     const iconSizeProps = useMemo(() => {
       if (typeof iconSize === "number") {
@@ -483,10 +481,10 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const renderSeparator = useCallback(
       (key: string) => (
         <li key={key} role="presentation" aria-hidden="true" className={mergedClasses.separator || undefined}>
-          {separator || <SeparatorComponent {...iconSizeProps} />}
+          {separator || separatorIcon || <ChevronRightIcon {...iconSizeProps} />}
         </li>
       ),
-      [separator, mergedClasses.separator, SeparatorComponent, iconSizeProps],
+      [separator, mergedClasses.separator, separatorIcon, iconSizeProps],
     );
 
     const renderItem = useCallback(
@@ -507,7 +505,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               <li key={key}>
                 <Tooltip
                   content={item.tooltip}
-                  side={mergedTooltipProps.side ?? tooltipPosition}
+                  side={mergedTooltipProps.side ?? tooltipSide}
                   sideOffset={mergedTooltipProps.sideOffset ?? tooltipOffset}
                   maxWidth={mergedTooltipProps.maxWidth}
                   delayDuration={mergedTooltipProps.delayDuration}
@@ -577,7 +575,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         onItemClick,
         handleItemClick,
         showTooltips,
-        tooltipPosition,
+        tooltipSide,
         tooltipOffset,
         defaultTooltipProps,
       ],
@@ -598,7 +596,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           aria-controls={isDropdownOpen ? dropdownId : undefined}
           aria-label={ellipsisAriaLabel}
         >
-          <EllipsisComponent {...iconSizeProps} />
+          {ellipsisIcon ?? <DefaultEllipsisIcon {...iconSizeProps} />}
         </button>
       );
 
@@ -606,7 +604,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         showTooltips && ellipsisTooltip && !isDropdownOpen ? (
           <Tooltip
             content={ellipsisTooltip}
-            side={mergedEllipsisTp.side ?? tooltipPosition}
+            side={mergedEllipsisTp.side ?? tooltipSide}
             sideOffset={mergedEllipsisTp.sideOffset ?? tooltipOffset}
             maxWidth={mergedEllipsisTp.maxWidth}
             delayDuration={mergedEllipsisTp.delayDuration}
@@ -629,9 +627,9 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               dropdownItemClassName={mergedClasses.collapsedItem}
               iconClassName={mergedClasses.itemIcon}
               collapsedItems={collapsedItems}
-              position={dropdownPosition}
+              position={dropdownSide}
               zIndex={dropdownZIndex}
-              gap={dropdownGap}
+              gap={dropdownOffset}
               onItemClick={handleItemClick}
               onMenuKeyDown={handleMenuKeyDown}
               setMenuItemRef={setMenuItemRef}
@@ -652,15 +650,15 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       handleItemClick,
       handleMenuKeyDown,
       setMenuItemRef,
-      EllipsisComponent,
+      ellipsisIcon,
       iconSizeProps,
       showTooltips,
-      tooltipPosition,
+      tooltipSide,
       tooltipOffset,
       ellipsisTooltip,
       ellipsisTooltipProps,
       defaultTooltipProps,
-      dropdownPosition,
+      dropdownSide,
       dropdownZIndex,
       dropdownId,
       ellipsisAriaLabel,

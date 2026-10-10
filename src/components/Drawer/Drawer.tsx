@@ -12,11 +12,11 @@ import { LAYERS, OverlayLayerContext } from "../../utils/layers.js";
 import type { DrawerProps, DrawerClasses } from "./utils/types.js";
 import { cycleTabWithin } from "../../utils/focusUtils.js";
 import {
-  getDirectionStyles,
+  getSideStyles,
   getFocusableElements,
   getClosingDelta,
   getTransformString,
-  isHorizontalDirection,
+  isHorizontalSide,
   getTouchAction,
   pushDrawer,
   popDrawer,
@@ -28,12 +28,12 @@ import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import {
   DEFAULT_DRAWER_CLASSES,
   UNSTYLED_DRAWER_CLASSES,
-  DEFAULT_DIRECTION,
+  DEFAULT_SIDE,
   DEFAULT_SIZE,
   DEFAULT_OVERLAY_COLOR,
   DEFAULT_OVERLAY_OPACITY,
   DEFAULT_OVERLAY_BLUR,
-  DEFAULT_DURATION,
+  DEFAULT_ANIMATION_DURATION,
   DEFAULT_SWIPE_THRESHOLD,
   DEFAULT_SNAP_POINT_INDEX,
   SWIPE_DEADZONE,
@@ -57,7 +57,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
  * snap points, stacked drawer support, and accessible keyboard navigation.
  *
  * AI Usage Guidelines:
- * - Use `direction` for slide direction (left/right/top/bottom)
+ * - Use `side` for the edge it slides in from (left/right/top/bottom)
  * - Use DrawerHeader/Body/Footer/CloseButton as children
  * - Use `swipeable` + `snapPoints` for bottom sheet patterns
  * - Focus is trapped and restored automatically
@@ -72,12 +72,12 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       onOpenChange,
       zIndex = LAYERS.overlay,
       children,
-      direction = DEFAULT_DIRECTION,
+      side = DEFAULT_SIDE,
       size = DEFAULT_SIZE,
       overlayColor = DEFAULT_OVERLAY_COLOR,
       overlayOpacity = DEFAULT_OVERLAY_OPACITY,
       overlayBlur = DEFAULT_OVERLAY_BLUR,
-      duration = DEFAULT_DURATION,
+      animationDuration = DEFAULT_ANIMATION_DURATION,
       lockScroll = true,
       closeOnOverlayClick = true,
       closeOnEscape = true,
@@ -154,7 +154,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       onChange: onSnapPointIndexChange,
     });
 
-    const effectiveDuration = prefersReducedMotion ? 0 : duration;
+    const effectiveDuration = prefersReducedMotion ? 0 : animationDuration;
 
     const hasSnapPoints = snapPoints !== undefined && snapPoints.length > 0;
     const clampedSnapIndex = hasSnapPoints
@@ -185,8 +185,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     );
 
     const drawerStyles = useMemo(
-      () => getDirectionStyles(direction, size, fraction, effectiveDuration),
-      [direction, size, fraction, effectiveDuration],
+      () => getSideStyles(side, size, fraction, effectiveDuration),
+      [side, size, fraction, effectiveDuration],
     );
 
     /* eslint-disable react-hooks/set-state-in-effect -- synchronizes mount/visual state with isOpen prop */
@@ -438,8 +438,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           dragRef.current.hasMoved = true;
         }
 
-        const closingDelta = getClosingDelta(direction, deltaX, deltaY);
-        const horizontal = isHorizontalDirection(direction);
+        const closingDelta = getClosingDelta(side, deltaX, deltaY);
+        const horizontal = isHorizontalSide(side);
         const panelSize = horizontal ? panel.offsetWidth : panel.offsetHeight;
         const baseFraction = hasSnapPoints ? snapPoints![clampedSnapIndex] : 1;
 
@@ -467,10 +467,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           const dragFraction = next.closingDelta / next.panelSize;
           const newFraction = Math.max(0, next.baseFraction - dragFraction);
           el.style.transition = "none";
-          el.style.transform = getTransformString(direction, (1 - newFraction) * 100);
+          el.style.transform = getTransformString(side, (1 - newFraction) * 100);
         });
       },
-      [direction, hasSnapPoints, snapPoints, clampedSnapIndex, endDrag],
+      [side, hasSnapPoints, snapPoints, clampedSnapIndex, endDrag],
     );
 
     const handlePanelPointerUp = useCallback(
@@ -502,11 +502,11 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         const deltaX = e.clientX - startX;
         const deltaY = e.clientY - startY;
         const elapsed = Date.now() - startTime;
-        const closingDelta = getClosingDelta(direction, deltaX, deltaY);
+        const closingDelta = getClosingDelta(side, deltaX, deltaY);
 
         if (closingDelta <= 0) return;
 
-        const horizontal = isHorizontalDirection(direction);
+        const horizontal = isHorizontalSide(side);
         const panelSize = panel
           ? horizontal
             ? panel.offsetWidth
@@ -554,7 +554,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         }
       },
       [
-        direction,
+        side,
         hasSnapPoints,
         snapPoints,
         clampedSnapIndex,
@@ -599,7 +599,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
             }
             style={{ zIndex }}
             data-state={isOpen ? "open" : "closed"}
-            data-direction={direction}
+            data-side={side}
             aria-hidden={isHiddenMounted || undefined}
           >
             {modal && (
@@ -674,11 +674,11 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               style={{
                 ...drawerStyles,
                 ...(swipeable
-                  ? { touchAction: getTouchAction(direction) }
+                  ? { touchAction: getTouchAction(side) }
                   : {}),
               }}
               data-drawer-panel
-              data-direction={direction}
+              data-side={side}
               onPointerDown={swipeable ? handlePanelPointerDown : undefined}
               onPointerMove={swipeable ? handlePanelPointerMove : undefined}
               onPointerUp={swipeable ? handlePanelPointerUp : undefined}

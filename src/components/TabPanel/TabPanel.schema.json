@@ -111,7 +111,7 @@
       "description": "Whether to show tooltips on tabs.",
       "default": true
     },
-    "tooltipPosition": {
+    "tooltipSide": {
       "type": "string",
       "enum": [
         "top",
@@ -203,14 +203,17 @@
       "description": "Inline styles applied to the root element.",
       "x-tsType": "CSSProperties | undefined"
     },
-    "forceMount": {
-      "type": "boolean",
-      "description": "Force mount all tab panels regardless of active state.",
-      "default": false
-    },
     "keepMounted": {
-      "type": "boolean",
-      "description": "Keep previously mounted tab panels in the DOM.",
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "enum": [
+        false,
+        "visited",
+        true
+      ],
+      "description": "Which panels' content is in the DOM: `false` the active panel only, `\"visited\"` every panel opened so far, `true` every panel, including ones never opened.",
       "default": false
     }
   },

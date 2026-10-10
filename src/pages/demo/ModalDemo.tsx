@@ -212,7 +212,7 @@ const ModalDemo = () => {
           open={confirmDeleteOpen}
           onOpenChange={setConfirmDeleteOpen}
           showHeader={false}
-          preventOutsideClick
+          closeOnOverlayClick={false}
           closeOnEscape={false}
           classes={{ body: "p-6" }}
         >
@@ -783,7 +783,7 @@ const ModalDemo = () => {
       {/* ─── Overlay & Behavior ──────────────────────────────────────────── */}
       <Section
         title="Overlay, Outside Click & Escape"
-        description="Customize the overlay backdrop, or keep a modal open with preventOutsideClick and closeOnEscape={false}. Use that only when closing would lose work, such as unsaved changes, and always give the modal a visible close control."
+        description="Customize the overlay backdrop, or keep a modal open with closeOnOverlayClick={false} and closeOnEscape={false}. Use that only when closing would lose work, such as unsaved changes, and always give the modal a visible close control."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -821,7 +821,7 @@ const ModalDemo = () => {
           onOpenChange={setPreventCloseOpen}
           title="Important Action Required"
           description="You must complete this action before continuing."
-          preventOutsideClick
+          closeOnOverlayClick={false}
           closeOnEscape={false}
           showCloseButton={false}
           showIcon

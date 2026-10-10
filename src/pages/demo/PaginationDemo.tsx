@@ -553,7 +553,7 @@ const PaginationDemo = () => {
       {/* ─── Custom Icons ─────────────────────────────────────────────── */}
       <Section
         title="Custom Icons"
-        description="Pass icon components via prevIcon, nextIcon, and dropdownIcon. Supports both component functions and ReactNode elements."
+        description="Pass icons as elements via prevIcon, nextIcon, and dropdownIcon. Each is rendered as given."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -572,9 +572,9 @@ const PaginationDemo = () => {
                   setCustomIconsPage(1);
                 }}
                 showRowsPerPage
-                prevIcon={ArrowLeftIcon}
-                nextIcon={ArrowRightIcon}
-                dropdownIcon={CaretDownIcon}
+                prevIcon={<ArrowLeftIcon className="w-5 h-5 text-cl-accent" />}
+                nextIcon={<ArrowRightIcon className="w-5 h-5 text-cl-accent" />}
+                dropdownIcon={<CaretDownIcon className="w-4 h-4" />}
                 classes={{
                   ...c.pagination,
                   root: "flex flex-wrap items-center justify-between gap-4",
@@ -647,13 +647,13 @@ const PaginationDemo = () => {
       {/* ─── Dropdown Position ────────────────────────────────────────── */}
       <Section
         title="Dropdown Position"
-        description="Control whether the rows-per-page dropdown opens upward (default) or downward with the dropdownPosition prop."
+        description="Control whether the rows-per-page dropdown opens upward (default) or downward with the dropdownSide prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-8">
             <div className="space-y-3">
-              <DemoLabel isDarkMode={dark}>dropdownPosition="top" (default)</DemoLabel>
+              <DemoLabel isDarkMode={dark}>dropdownSide="top" (default)</DemoLabel>
               <Pagination
                 value={dropdownUpPage}
                 totalPages={Math.ceil(100 / dropdownUpRowsPerPage)}
@@ -664,7 +664,7 @@ const PaginationDemo = () => {
                   setDropdownUpPage(1);
                 }}
                 showRowsPerPage
-                dropdownPosition="top"
+                dropdownSide="top"
                 classes={{
                   ...c.pagination,
                   root: "flex flex-wrap items-center justify-between gap-4",
@@ -675,7 +675,7 @@ const PaginationDemo = () => {
               className="border-t pt-8 border-cl-border"
             >
               <div className="space-y-3">
-                <DemoLabel isDarkMode={dark}>dropdownPosition="bottom"</DemoLabel>
+                <DemoLabel isDarkMode={dark}>dropdownSide="bottom"</DemoLabel>
                 <Pagination
                   value={dropdownDownPage}
                   totalPages={Math.ceil(100 / dropdownDownRowsPerPage)}
@@ -686,7 +686,7 @@ const PaginationDemo = () => {
                     setDropdownDownPage(1);
                   }}
                   showRowsPerPage
-                  dropdownPosition="bottom"
+                  dropdownSide="bottom"
                   classes={{
                     ...c.pagination,
                     root: "flex flex-wrap items-center justify-between gap-4",

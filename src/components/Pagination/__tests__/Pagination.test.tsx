@@ -670,26 +670,23 @@ describe("Pagination", () => {
   });
 
   describe("Custom Icons", () => {
-    it("renders custom prev and next icons as components", () => {
-      const CustomPrev = ({ className }: { className?: string }) => (
-        <span data-testid="custom-prev" className={className}>←</span>
-      );
-      const CustomNext = ({ className }: { className?: string }) => (
-        <span data-testid="custom-next" className={className}>→</span>
-      );
-
+    it("renders a custom dropdownIcon as given, in place of the default chevron", () => {
       render(
         <Pagination
-          value={3}
+          value={1}
           totalPages={5}
           onValueChange={() => {}}
-          prevIcon={CustomPrev}
-          nextIcon={CustomNext}
+          showRowsPerPage
+          rowsPerPage={10}
+          onRowsPerPageChange={() => {}}
+          dropdownIcon={<span aria-hidden="true" data-testid="custom-caret">v</span>}
         />
       );
 
-      expect(screen.getByTestId("custom-prev")).toBeInTheDocument();
-      expect(screen.getByTestId("custom-next")).toBeInTheDocument();
+      const trigger = screen.getByRole("button", { name: "10" });
+      const caret = screen.getByTestId("custom-caret");
+      expect(caret.parentElement).toBe(trigger);
+      expect(trigger.querySelector("svg")).toBeNull();
     });
 
     it("renders custom icons as ReactNode", () => {

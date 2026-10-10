@@ -5,12 +5,16 @@ export default function LoaderExample() {
     <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
       {
         [
-          { speed: 2, label: "Slow (2s)" },
-          { speed: 0.75, label: "Normal (0.75s)" },
-          { speed: 0.35, label: "Fast (0.35s)" }
-        ].map(({ speed, label }) => (
+          { animationDuration: 2000, label: "Slow (2s)" },
+          { animationDuration: 750, label: "Normal (0.75s)" },
+          { animationDuration: 350, label: "Fast (0.35s)" }
+        ].map(({ animationDuration, label }) => (
           <div key={label} className="flex flex-col items-center gap-2">
-            <CircularLoader size={32} speed={speed} className="text-cl-accent" />
+            <CircularLoader
+              size={32}
+              animationDuration={animationDuration}
+              className="text-cl-accent"
+            />
             <span className="text-xs font-medium text-cl-text-tertiary">
               {label}
             </span>

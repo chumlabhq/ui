@@ -179,8 +179,8 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLDivElement>, "onLoa
 export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** Avatar elements to group. */
   children?: ReactNode;
-  /** Maximum visible avatars before showing a surplus count. */
-  max?: number;
+  /** How many avatars to show before the rest collapse into a surplus count. */
+  maxVisible?: number;
   /** Default size for all avatars in the group. */
   size?: AvatarSize;
   /** Default shape for all avatars in the group. */

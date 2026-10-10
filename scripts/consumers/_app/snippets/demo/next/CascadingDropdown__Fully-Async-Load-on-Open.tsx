@@ -111,8 +111,8 @@ export default function CascadingDropdownExample() {
           loadChildren={handleLoadChildrenAsync}
           placeholder="Click to load regions..."
           loading={isLoadOnOpenLoading}
-          loadingText="Loading regions..."
-          noResultsContent={
+          loadingContent="Loading regions..."
+          emptyContent={
             hasLoadOnOpenLoaded
             ? "No regions found"
             : "Click to load regions"

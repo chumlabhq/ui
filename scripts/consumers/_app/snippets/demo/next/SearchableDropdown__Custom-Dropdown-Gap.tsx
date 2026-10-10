@@ -24,7 +24,7 @@ export default function SearchableDropdownExample() {
         <div className="w-full sm:max-w-64">
           <SearchableDropdown
             options={fruitOptions}
-            dropdownGap={0}
+            dropdownOffset={0}
             placeholder="No gap..."
             classes={
               {
@@ -44,7 +44,7 @@ export default function SearchableDropdownExample() {
             options={fruitOptions}
             value={customGapValue}
             onValueChange={(v) => setCustomGapValue(v)}
-            dropdownGap={16}
+            dropdownOffset={16}
             placeholder="Large gap..."
             classes={
               {

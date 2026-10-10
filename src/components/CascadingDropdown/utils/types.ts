@@ -126,8 +126,8 @@ interface CascadingDropdownBaseProps {
   success?: boolean;
   successMessage?: ReactNode;
   required?: boolean;
-  noResultsContent?: ReactNode;
-  loadingText?: ReactNode;
+  emptyContent?: ReactNode;
+  loadingContent?: ReactNode;
   shimmerCount?: number;
   loading?: boolean;
   clearable?: boolean;
@@ -136,20 +136,21 @@ interface CascadingDropdownBaseProps {
   selectedIcon?: ReactNode;
   checkboxIcon?: ReactNode;
   fullWidth?: boolean;
-  submenuPosition?: "right" | "left";
-  dropdownPosition?: "top" | "bottom";
+  submenuSide?: "right" | "left";
+  dropdownSide?: "top" | "bottom";
   closeOnSelect?: boolean;
   classes?: CascadingDropdownClasses;
   unstyled?: boolean;
   lockScroll?: boolean;
   portalContainer?: HTMLElement | null;
   dropdownZIndex?: number;
-  dropdownGap?: number;
+  dropdownOffset?: number;
   /** Keep the dropdown DOM mounted when closed. */
   keepMounted?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  ClearIcon?: React.ComponentType<{ className?: string }>;
+  /** Replaces the clear button's glyph. Rendered as given. */
+  clearIcon?: ReactNode;
   renderTrigger?: (
     triggerProps: CascadingDropdownTriggerRenderProps,
     state: CascadingDropdownTriggerState,
@@ -163,9 +164,9 @@ interface CascadingDropdownBaseProps {
   /** Placeholder text for the submenu search input. */
   submenuSearchPlaceholder?: string;
   /** Debounce delay in ms for async search callbacks. Defaults to 300. */
-  searchDebounceMs?: number;
-  /** Custom search icon component. */
-  SearchIcon?: React.ComponentType<{ className?: string }>;
+  searchDebounce?: number;
+  /** Replaces the menu and submenu search fields' magnifier. Rendered as given; `classes.searchIcon` styles the default one. */
+  searchIcon?: ReactNode;
   /** Accessible label for the menu search input. */
   menuSearchAriaLabel?: string;
   /** Accessible label for the submenu search input. */
@@ -273,7 +274,7 @@ export interface UseCascadingDropdownProps {
   searchMenu?: (query: string) => Promise<CascadingOption[]>;
   /** Loads a submenu's results for a typed query. */
   searchSubmenu?: (query: string, parent: CascadingOption) => Promise<CascadingOption[]>;
-  searchDebounceMs?: number;
+  searchDebounce?: number;
 }
 
 export interface UseCascadingDropdownReturn {

@@ -96,7 +96,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onCursorPositionChange` | object | — | (position: { x: number; y: number } \| null) => void — Fires as the pointer moves over the table, with its position relative to the root; `null` when it leaves. |
 | `onHeaderHoverChange` | object | — | (isOverHeader: boolean) => void — Fires with whether the pointer is over the header row. |
 | `emptyContent` | object | — | React.ReactNode — Content shown when the table has no data. |
-| `ariaLabel` | string | `"Data table"` | Accessible label for the table. |
+| `aria-label` | string | `"Data table"` | The grid's accessible name; pinned parts append " - Pinned columns" and so on. |
 | `caption` | string | — | Accessible caption rendered as a visually hidden <caption> element. |
 | `getRowId` | object | — | (row: TData) => string — Function to derive a unique row ID. |
 | `selectedRowId` | string \| null | — | ID of the currently selected row (single selection). |
@@ -114,9 +114,9 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `classes` | object | — | CSS class overrides for table sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `style` | object | — | Inline styles applied to the root container. |
-| `PinIcon` | object | — | React.ComponentType — Custom pin icon component (unpinned state). |
-| `PinnedIcon` | object | — | React.ComponentType — Custom pin icon component (pinned state). |
-| `shimmerRowCount` | number | `10` | Number of shimmer rows to display while loading. |
+| `pinIcon` | object | — | ReactNode — Replaces the pin button's glyph. Rendered as given; also used for pinned columns unless `pinnedIcon` is set. |
+| `pinnedIcon` | object | — | ReactNode — Replaces the pin button's glyph on a pinned column. Rendered as given. |
+| `shimmerCount` | number | `10` | Number of shimmer rows to display while loading. |
 | `className` | string | — | CSS class for the root element. |
 | `children` | object | — | React.ReactNode — Child elements. |
 | `sortable` | boolean | `false` | Enable column sorting. |
@@ -133,13 +133,13 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onColumnFiltersChange` | object | — | (filters: ColumnFiltersState) => void — Callback when column filters change. |
 | `filterable` | boolean | `false` | Enable per-column filtering. |
 | `filterableColumns` | object | — | Map of column ID to filter options configuration. |
-| `FilterIcon` | object | — | React.ComponentType — Custom filter icon component. |
+| `renderFilterIcon` | object | — | (state: { active: boolean; className: string }) => ReactNode — Draws the column filter button's icon. `active` is true while the column has a filter applied. |
 | `renderColumnFilter` | object | — | (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer. |
 | `expandable` | boolean | `false` | Enable row expansion. |
 | `expandedRowIds` | array | — | Array of expanded row IDs (controlled). |
 | `onExpandedRowIdsChange` | object | — | (expandedRowIds: string[]) => void — Fires with the new `expandedRowIds` when a row expands or collapses. |
 | `renderExpandedRow` | object | — | (row: TData) => ReactNode — Render function for expanded row content. |
-| `ExpandIcon` | object | — | React.ComponentType — Custom expand icon component. |
+| `renderExpandIcon` | object | — | (state: { expanded: boolean; className: string }) => ReactNode — Draws the row expand button's icon, which can change with `expanded`. |
 | `expandColumnPosition` | `"start"` \| `"end"` | `"start"` | Which end of the row the expand column sits at. `start` is the first column. |
 | `expandOnRowClick` | boolean | `false` | Make the entire row clickable to toggle expansion. |
 | `columnVisibility` | object | — | Controlled column visibility map (column ID to boolean). |
@@ -178,10 +178,10 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `showSearch` | boolean | `false` | Show a built-in search bar above the table. |
 | `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search bar. |
 | `searchIconPosition` | `"start"` \| `"end"` \| `"none"` | `"start"` | Which end of the search field the icon sits at, or `none`. |
-| `CheckboxIcon` | object | — | React.ComponentType — Custom checkbox component for multi-row selection. |
+| `renderCheckboxIcon` | object | — | (state: { checked: boolean; indeterminate: boolean; className?: string }) => ReactNode — Draws the multi-row selection checkboxes in place of the native box. |
 | `checkboxColor` | string | — | Simple color customization for the default checkbox. |
-| `DragHandleIcon` | object | — | React.ComponentType — Custom drag handle icon component. |
-| `SearchIcon` | object | — | React.ComponentType — Custom search icon component. |
+| `dragHandleIcon` | object | — | ReactNode — Replaces the drag handle's glyph. Rendered as given. |
+| `searchIcon` | object | — | ReactNode — Replaces the search field's magnifier. Rendered inside a box carrying `classes.searchIcon`, which positions it in the field. |
 | `onSearchClear` | object | — | () => void — Callback when the search clear button is clicked. |
 | `loadingMoreContent` | object | — | React.ReactNode — Custom content for the loading more indicator. |
 

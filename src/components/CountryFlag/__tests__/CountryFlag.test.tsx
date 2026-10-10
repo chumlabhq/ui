@@ -260,7 +260,7 @@ describe("CountryFlagGroup", () => {
 
     it("limits visible flags and shows count badge when max is set", () => {
       render(
-        <CountryFlagGroup max={2} size="lg">
+        <CountryFlagGroup maxVisible={2} size="lg">
           <CountryFlag code="us" />
           <CountryFlag code="gb" />
           <CountryFlag code="ca" />
@@ -276,7 +276,7 @@ describe("CountryFlagGroup", () => {
 
     it("shows all children when max is 0 (treated as no limit)", () => {
       render(
-        <CountryFlagGroup max={0}>
+        <CountryFlagGroup maxVisible={0}>
           <CountryFlag code="us" />
           <CountryFlag code="gb" />
         </CountryFlagGroup>,
@@ -288,7 +288,7 @@ describe("CountryFlagGroup", () => {
 
     it("shows all children when max is negative (treated as no limit)", () => {
       render(
-        <CountryFlagGroup max={-1}>
+        <CountryFlagGroup maxVisible={-1}>
           <CountryFlag code="us" />
           <CountryFlag code="gb" />
         </CountryFlagGroup>,
@@ -300,7 +300,7 @@ describe("CountryFlagGroup", () => {
 
     it("floors non-integer max values", () => {
       render(
-        <CountryFlagGroup max={2.9} size="md">
+        <CountryFlagGroup maxVisible={2.9} size="md">
           <CountryFlag code="us" />
           <CountryFlag code="gb" />
           <CountryFlag code="ca" />
@@ -331,7 +331,7 @@ describe("CountryFlagGroup", () => {
     it("uses renderSurplus when provided instead of default count badge", () => {
       render(
         <CountryFlagGroup
-          max={1}
+          maxVisible={1}
           renderSurplus={(count) => (
             <span data-testid="custom-surplus">{count} more</span>
           )}
@@ -365,7 +365,7 @@ describe("CountryFlagGroup", () => {
 
     it("includes remaining count in aria-label when max is set", () => {
       render(
-        <CountryFlagGroup max={1} size="md">
+        <CountryFlagGroup maxVisible={1} size="md">
           <CountryFlag code="us" />
           <CountryFlag code="gb" />
           <CountryFlag code="ca" />

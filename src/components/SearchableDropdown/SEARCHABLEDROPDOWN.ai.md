@@ -58,10 +58,10 @@ export default function Example() {
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
 | `searchOptions` | Async search function. Replaces local filtering when provided. |
 | `loadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
-| `searchDebounceMs` | Only applies to `searchOptions`. Default: `300`. |
+| `searchDebounce` | Only applies to `searchOptions`. Default: `300`. |
 | `showSearch` | Default `true`. Set `false` to hide search input. |
 | `clearable` | Only works when a value is selected. |
-| `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
+| `forceDropdownSide` | Only meaningful with `dropdownSide`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOption`, `placeholder`), which never reaches the DOM. |
 | `name` | Renders a hidden `<input>` for native form submission. |
@@ -116,14 +116,14 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
 | `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search input. |
 | `searchInputAriaLabel` | string | `"Search options"` | Custom aria-label for the search input. Defaults to 'Search options'. |
-| `noResultsContent` | object | `"No results found"` | React.ReactNode — Content shown when no search results are found. |
+| `emptyContent` | object | `"No results found"` | React.ReactNode — Content shown when no search results are found. |
 | `showChevron` | boolean | `true` | Whether to show the chevron icon on the trigger. |
 | `showSelectedIcon` | boolean | `true` | Whether to show a check icon on the selected option. |
 | `selectedIcon` | object | — | React.ReactNode — Custom icon for the selected option. |
 | `fullWidth` | boolean | `false` | Whether the dropdown expands to fill its parent container. |
 | `loading` | boolean | — | Whether the dropdown is in a loading state. |
 | `searchOptions` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
-| `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
+| `searchDebounce` | number | `300` | Debounce delay in milliseconds for the search callback. |
 | `initialOptions` | array | `[]` | Initial options to display before any search is performed. Async branch only (`searchOptions`). |
 | `loadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
 | `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load. |
@@ -134,10 +134,10 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `style` | object | — | Inline styles applied to the root element. |
 | `keepMounted` | boolean | `false` | Whether to keep the dropdown DOM mounted when closed. |
 | `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Position of the dropdown relative to the trigger. |
-| `forceDropdownPosition` | boolean | `false` | When true, locks the dropdown to the specified dropdownPosition without auto-flipping. |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Position of the dropdown relative to the trigger. |
+| `forceDropdownSide` | boolean | `false` | When true, locks the dropdown to the specified dropdownSide without auto-flipping. |
 | `dropdownZIndex` | number | `50` | Z-index for the dropdown. |
-| `dropdownGap` | number | `4` | Gap between trigger and dropdown in pixels. |
+| `dropdownOffset` | number | `4` | Gap between trigger and dropdown in pixels. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for typeahead keyboard navigation. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `lockScroll` | boolean | `false` | Whether to lock body scroll when the dropdown is open. |
@@ -146,11 +146,10 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void — Callback fired on keydown events. |
 | `renderTrigger` | object | — | (triggerProps: SearchableDropdownTriggerRenderProps, state: SearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder). |
-| `ChevronIcon` | object | — | React.ComponentType — Custom chevron icon component. |
-| `CheckIcon` | object | — | React.ComponentType — Custom check icon component. |
-| `ClearIcon` | object | — | React.ComponentType — Custom clear icon component. |
-| `SearchIcon` | object | — | React.ComponentType — Custom search icon component. |
-| `loadingText` | object | `"Loading..."` | React.ReactNode — Text shown during loading state. |
+| `chevronIcon` | object | — | ReactNode — Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open. |
+| `clearIcon` | object | — | ReactNode — Replaces the clear button's glyph. Rendered as given. |
+| `searchIcon` | object | — | ReactNode — Replaces the search field's magnifier. Rendered as given; `classes.searchIcon` styles the default one. |
+| `loadingContent` | object | `"Loading..."` | React.ReactNode — Text shown during loading state. |
 
 ## Styling Guide
 
@@ -240,7 +239,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
     const res = await fetch(`/api/search?q=${query}`);
     return res.json();
   }}
-  searchDebounceMs={300}
+  searchDebounce={300}
   placeholder="Search..."
 />
 ```
@@ -260,8 +259,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 ```tsx
 <SearchableDropdown
   options={options}
-  dropdownPosition="top"
-  forceDropdownPosition
+  dropdownSide="top"
+  forceDropdownSide
   lockScroll
 />
 ```
@@ -320,7 +319,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
-| Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownPosition` |
+| Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownSide` |
 | Search not working with `searchOptions` | Local filtering overridden | `searchOptions` replaces local filtering entirely |
 | Async results not appearing | `searchOptions` not returning array | Must return `Promise<SearchableDropdownOption[]>` |
 | Options don't load on open | Missing `loadInitialOnOpen` | Add alongside `loadInitialOptions` |
@@ -352,7 +351,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 | Form integration | `title="Native Form Participation"` |
 | Scroll lock | `title="Scroll Lock"` |
 | Position control | `title="Dropdown Position"` |
-| Force position | `forceDropdownPosition` |
+| Force position | `forceDropdownSide` |
 | Custom icons | `title="Custom Chevron & No Chevron"`, `title="Custom Check Icon"`, `title="Custom Search Icon"`, `title="Custom Clear Icon"` |
 | Combined | `title="Combined: All Features"` |
 

@@ -409,7 +409,7 @@ const TextAreaDemo = () => {
                     setLastAction(`Sent: ${message}`);
                     setMessage("");
                   }}
-                  endIconLabel="Send message"
+                  endIconAriaLabel="Send message"
                   classes={c.textarea}
                 />
               </div>
@@ -420,7 +420,7 @@ const TextAreaDemo = () => {
                   placeholder="Click the icon to attach..."
                   startIcon={<FileIcon className={c.iconHover} />}
                   onStartIconClick={() => setLastAction("Attach file clicked")}
-                  startIconLabel="Attach file"
+                  startIconAriaLabel="Attach file"
                   classes={c.textarea}
                 />
               </div>

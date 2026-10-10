@@ -59,11 +59,11 @@ export default function BreadcrumbExample() {
             id: "current",
             label: "Current Page",
             icon: <DocumentIcon className="w-4 h-4" />,
-            iconPosition: "right"
+            iconPosition: "end"
           }
         ]
       }
-      maxVisibleItems={3}
+      maxVisible={3}
       classes={
         {
                     ...({

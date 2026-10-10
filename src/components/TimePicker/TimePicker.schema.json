@@ -169,7 +169,7 @@
       "description": "Lock body scroll when dropdown is open.",
       "default": false
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -178,7 +178,7 @@
       "description": "Position of the dropdown relative to the trigger.",
       "default": "bottom"
     },
-    "forceDropdownPosition": {
+    "forceDropdownSide": {
       "type": "boolean",
       "description": "When true, locks the dropdown to the specified position without auto-flipping.",
       "default": false
@@ -188,7 +188,7 @@
       "description": "Z-index for the dropdown.",
       "default": 50
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap between trigger and dropdown in pixels.",
       "default": 4
@@ -333,7 +333,7 @@
       "description": "Text for the clock cancel button.",
       "default": "Cancel"
     },
-    "okText": {
+    "confirmText": {
       "type": "string",
       "description": "Text for the clock OK button.",
       "default": "OK"

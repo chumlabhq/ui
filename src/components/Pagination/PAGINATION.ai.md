@@ -48,8 +48,8 @@ export default function Example() {
 | `sectionOrder` | Controls layout order: `["selector", "pageInfo", "nav"]`. |
 | `renderEllipsis` | Replaces default `...` with custom content. Receives `{ position, onValueChange }`. |
 | `renderPageInfo` | Custom render for page info. Receives `{ value, totalPages, rowsPerPage }`. |
-| `navIcon` / `navIcon` / `rowsPerPage.icon` | Accept either a `ComponentType<{ className }>` or `ReactNode`. |
-| `dropdownPosition` | `"top"` or `"bottom"` — controls rows dropdown direction. |
+| `prevIcon` / `nextIcon` / `dropdownIcon` | Elements, not components, rendered as given. `classes.navIcon` styles the default arrows and `classes.rowsPerPage.icon` the default chevron. |
+| `dropdownSide` | `"top"` or `"bottom"` — controls rows dropdown direction. |
 | `unstyled` | Strips all default classes. Must provide styling via `classes`. |
 
 ---
@@ -88,12 +88,12 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `rowsPerPageSuffix` | string | `"rows"` | Visible text after the rows-per-page select ("Show 10 rows"). Not the select's accessible name. |
 | `rowsPerPagePrefix` | string | `"Show"` | Visible text before the rows-per-page select. Not the select's accessible name. |
 | `dropdownAriaLabel` | string | `"Rows per page"` | Accessible label for the rows-per-page dropdown. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
-| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
-| `dropdownIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
-| `prevIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
-| `nextIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
+| `dropdownOffset` | number | `4` | Gap in pixels between trigger and dropdown. |
+| `dropdownIcon` | object | — | ReactNode — Replaces the rows-per-page select's chevron. Rendered as given; `classes.rowsPerPage.icon` styles the default one. |
+| `prevIcon` | object | — | ReactNode — Replaces the previous-page arrow. Rendered as given; `classes.navIcon` styles the default one. |
+| `nextIcon` | object | — | ReactNode — Replaces the next-page arrow. Rendered as given; `classes.navIcon` styles the default one. |
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |

@@ -65,19 +65,19 @@
     },
     "onStartIconClick": {
       "type": "object",
-      "description": "(event: MouseEvent<HTMLButtonElement>) => void - Makes startIcon a clickable button, called with the native click event. Requires startIconLabel for accessibility.",
+      "description": "(event: MouseEvent<HTMLButtonElement>) => void - Makes startIcon a clickable button, called with the native click event. Requires startIconAriaLabel for accessibility.",
       "x-tsType": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined"
     },
     "onEndIconClick": {
       "type": "object",
-      "description": "(event: MouseEvent<HTMLButtonElement>) => void - Makes endIcon a clickable button, called with the native click event. Requires endIconLabel for accessibility.",
+      "description": "(event: MouseEvent<HTMLButtonElement>) => void - Makes endIcon a clickable button, called with the native click event. Requires endIconAriaLabel for accessibility.",
       "x-tsType": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined"
     },
-    "startIconLabel": {
+    "startIconAriaLabel": {
       "type": "string",
       "description": "Accessible label for startIcon when it is clickable. Required with onStartIconClick."
     },
-    "endIconLabel": {
+    "endIconAriaLabel": {
       "type": "string",
       "description": "Accessible label for endIcon when it is clickable. Required with onEndIconClick."
     },

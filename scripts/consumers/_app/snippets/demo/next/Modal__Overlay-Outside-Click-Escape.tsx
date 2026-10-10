@@ -51,7 +51,7 @@ export default function ModalExample() {
         onOpenChange={setPreventCloseOpen}
         title="Important Action Required"
         description="You must complete this action before continuing."
-        preventOutsideClick
+        closeOnOverlayClick={false}
         closeOnEscape={false}
         showCloseButton={false}
         showIcon

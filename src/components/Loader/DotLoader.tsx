@@ -15,7 +15,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
       size = 8,
       gap = 4,
       count = 3,
-      speed = 1.4,
+      animationDuration = 1400,
       reduceMotion = "auto",
       classes: classesProp,
       unstyled = false,
@@ -71,8 +71,8 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
               height: `${size}px`,
               borderRadius: "50%",
               backgroundColor: "currentColor",
-              animation: prefersReducedMotion ? "none" : `dot-loader-bounce ${speed}s ease-in-out infinite`,
-              animationDelay: prefersReducedMotion ? undefined : `${(i * speed) / (count + 1)}s`,
+              animation: prefersReducedMotion ? "none" : `dot-loader-bounce ${animationDuration}ms ease-in-out infinite`,
+              animationDelay: prefersReducedMotion ? undefined : `${(i * animationDuration) / (count + 1)}ms`,
             }}
           />
         ))}

@@ -24,7 +24,7 @@ export default function MultiSelectDropdownExample() {
             options={staticOptions}
             value={[]}
             onValueChange={() => {}}
-            dropdownGap={0}
+            dropdownOffset={0}
             placeholder="No gap..."
             classes={
               {
@@ -45,9 +45,9 @@ export default function MultiSelectDropdownExample() {
             options={staticOptions}
             value={customGapValue}
             onValueChange={setCustomGapValue}
-            dropdownGap={16}
+            dropdownOffset={16}
             placeholder="Large gap..."
-            maxDisplayedChips={2}
+            maxVisible={2}
             classes={
               {
                 trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",

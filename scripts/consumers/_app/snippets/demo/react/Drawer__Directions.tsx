@@ -78,7 +78,7 @@ export default function DrawerExample() {
             <Drawer
               open={directions[dir].open}
               onOpenChange={directions[dir].onOpenChange}
-              direction={dir}
+              side={dir}
               size={dir === "top" || dir === "bottom" ? "250px" : "320px"}
             >
               {

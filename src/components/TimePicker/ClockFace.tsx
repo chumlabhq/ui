@@ -73,7 +73,7 @@ export function ClockFace({
   minTime,
   maxTime,
   cancelText = "Cancel",
-  okText = "OK",
+  confirmText = "OK",
 }: ClockFaceProps) {
   const safeStep = clampMinuteStep(minuteStep);
   const [selectionMode, setSelectionMode] =
@@ -634,7 +634,7 @@ export function ClockFace({
           onClick={onConfirm}
           disabled={disabled || !isCurrentTimeInRange}
         >
-          {okText}
+          {confirmText}
         </button>
       </div>
     </div>

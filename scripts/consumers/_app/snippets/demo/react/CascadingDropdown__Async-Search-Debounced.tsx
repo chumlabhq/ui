@@ -167,7 +167,7 @@ export default function CascadingDropdownExample() {
         submenuSearchPlaceholder="Search countries..."
         searchMenu={asyncSearchRegions}
         searchSubmenu={asyncSearchCountries}
-        searchDebounceMs={300}
+        searchDebounce={300}
       />
     </div>
   );

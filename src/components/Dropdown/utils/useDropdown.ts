@@ -21,7 +21,7 @@ interface UseDropdownProps {
   typeaheadTimeout?: number;
   label?: React.ReactNode;
   "aria-label"?: string;
-  loadingText?: React.ReactNode;
+  loadingContent?: React.ReactNode;
 }
 
 export const useDropdown = ({
@@ -39,7 +39,7 @@ export const useDropdown = ({
   onLoadError,
   dropdownId,
   typeaheadTimeout = 500,
-  loadingText = "Loading...",
+  loadingContent = "Loading...",
 }: UseDropdownProps) => {
   const [currentValue, setCurrentValue] = useControllableState<string | null>({
     value: valueProp,
@@ -129,7 +129,7 @@ export const useDropdown = ({
     setPrevShouldLoad(shouldLoad);
     if (shouldLoad) {
       setIsLoadingOptions(true);
-      setStatusMessage(typeof loadingText === "string" ? loadingText : "Loading...");
+      setStatusMessage(typeof loadingContent === "string" ? loadingContent : "Loading...");
     }
   }
 

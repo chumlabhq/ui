@@ -22,7 +22,7 @@ export default function MultiSelectSearchableDropdownExample() {
         value={successValue}
         onValueChange={(values) => setSuccessValue(values)}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         success={successValue.length > 0}
         successMessage="Selection saved successfully"
         classes={

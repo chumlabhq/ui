@@ -192,7 +192,7 @@ const SelectedChip = memo(function SelectedChip({
  * Behavior:
  * - Built-in search input with local filtering or async search
  * - Portal-rendered popup (never clipped by overflow ancestors)
- * - Auto-flips position (disable with `forceDropdownPosition`)
+ * - Auto-flips position (disable with `forceDropdownSide`)
  * - Full keyboard navigation
  *
  * Reference:
@@ -222,20 +222,20 @@ const MultiSelectSearchableDropdown = forwardRef<
       required = false,
       showSearch = true,
       searchPlaceholder = "Search...",
-      noResultsContent = "No options found",
-      loadingText = "Loading...",
+      emptyContent = "No options found",
+      loadingContent = "Loading...",
       shimmerCount = 5,
       clearable = false,
       showChevron = true,
       fullWidth = false,
       loading: externalLoading = false,
       searchOptions,
-      searchDebounceMs = 300,
+      searchDebounce = 300,
       initialOptions = [],
       loadInitialOptions,
       loadInitialOnOpen = false,
       onLoadError,
-      maxDisplayedChips = 3,
+      maxVisible = 3,
       showSelectedChips = true,
       checkboxIcon,
       unstyled = false,
@@ -248,16 +248,16 @@ const MultiSelectSearchableDropdown = forwardRef<
       onOpenChange,
       "aria-label": ariaLabel,
       portalContainer,
-      dropdownPosition = "bottom",
-      forceDropdownPosition = false,
+      dropdownSide = "bottom",
+      forceDropdownSide = false,
       dropdownZIndex: dropdownZIndexProp,
-      dropdownGap = 4,
+      dropdownOffset = 4,
       typeaheadTimeout = 500,
       keepMounted = false,
       onBlur: onBlurProp,
       onFocus: onFocusProp,
       onKeyDown: onKeyDownProp,
-      ClearIcon: ClearIconProp,
+      clearIcon,
       renderTrigger,
       searchInputAriaLabel = "Search options",
     },
@@ -339,7 +339,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       disabled,
       showSearch,
       searchOptions,
-      searchDebounceMs,
+      searchDebounce,
       onValueChange,
       initialOptions,
       loadInitialOptions,
@@ -468,8 +468,6 @@ const MultiSelectSearchableDropdown = forwardRef<
       }
     }, [onValueChange]);
 
-    const ClearIconComponent = ClearIconProp ?? ClearIconDefault;
-
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
         setTriggerNode(node);
@@ -515,8 +513,8 @@ const MultiSelectSearchableDropdown = forwardRef<
     };
     const hasRootStyle = Object.keys(rootStyle).length > 0;
 
-    const displayedChips = selectedOptions.slice(0, maxDisplayedChips);
-    const remainingCount = selectedOptions.length - maxDisplayedChips;
+    const displayedChips = selectedOptions.slice(0, maxVisible);
+    const remainingCount = selectedOptions.length - maxVisible;
 
     // One object for both triggers. The custom one was handed its own copy of
     // this list in three components, and the copies drifted: `type="button"`
@@ -642,7 +640,7 @@ const MultiSelectSearchableDropdown = forwardRef<
                 triggerNode?.focus({ preventScroll: true });
               }}
             >
-              <ClearIconComponent className="w-4 h-4" />
+              {clearIcon ?? <ClearIconDefault className="w-4 h-4" />}
             </button>
           )}
 
@@ -650,10 +648,10 @@ const MultiSelectSearchableDropdown = forwardRef<
             triggerElement={triggerNode}
             isOpen={isOpen}
             keepMounted={keepMounted}
-            position={dropdownPosition}
-            forcePosition={forceDropdownPosition}
+            position={dropdownSide}
+            forcePosition={forceDropdownSide}
             zIndex={dropdownZIndex}
-            gap={dropdownGap}
+            gap={dropdownOffset}
             portalContainer={portalContainer}
             classes={mergedClasses}
             dropdownId={dropdownId}
@@ -691,7 +689,7 @@ const MultiSelectSearchableDropdown = forwardRef<
             {loading ? (
               <>
                 <div role="status" className={mergedClasses.loading || undefined}>
-                  {loadingText}
+                  {loadingContent}
                 </div>
                 <div className={mergedClasses.loading || undefined}>
                   {Array.from({ length: shimmerCount }).map((_, i) => (
@@ -701,7 +699,7 @@ const MultiSelectSearchableDropdown = forwardRef<
               </>
             ) : displayOptions.length === 0 ? (
               <div role="status" className={mergedClasses.empty || undefined}>
-                {noResultsContent}
+                {emptyContent}
               </div>
             ) : null}
 

@@ -1077,7 +1077,7 @@ function ServerApiDemo({
         pinnedColumns={serverPinnedCols}
         onPinnedColumnsChange={setServerPinnedCols}
         maxPinnedColumns={2}
-        shimmerRowCount={pageSize}
+        shimmerCount={pageSize}
         getRowId={(row) => String(row.id)}
         classes={{
           ...s,
@@ -2215,9 +2215,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             pinnedColumns={starPinnedCols}
             onPinnedColumnsChange={setStarPinnedCols}
             maxPinnedColumns={3}
-            PinIcon={({ className }) => (
+            pinIcon={
               <svg
-                className={className}
+                className="w-4 h-4 text-cl-text-tertiary"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -2227,10 +2227,10 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               >
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
-            )}
-            PinnedIcon={({ className }) => (
+            }
+            pinnedIcon={
               <svg
-                className={className}
+                className="w-4 h-4 text-cl-text-tertiary"
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 stroke="currentColor"
@@ -2238,7 +2238,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               >
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
-            )}
+            }
             classes={{
               ...s,
               root: `${s.container} overflow-x-auto`,
@@ -2254,15 +2254,15 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              PinIcon
+              pinIcon
             </code>{" "}
             (outline star) and{" "}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              PinnedIcon
+              pinnedIcon
             </code>{" "}
-            (filled star) via component props. The pinned icon is yellow to
+            (filled star) as icon props. The pinned icon is yellow to
             visually distinguish starred columns.
           </p>
         </div>
@@ -2697,7 +2697,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             columns={columns}
             data={[]}
             loading
-            shimmerRowCount={5}
+            shimmerCount={5}
             classes={s}
           />
         </DemoWrapper>
@@ -2957,7 +2957,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     selectedRowIds={customSelectedIds}
                     onSelectedRowIdsChange={setCustomSelectedIds}
                     getRowId={(row) => row.id}
-                    CheckboxIcon={CustomCheck}
+                    renderCheckboxIcon={(state) => <CustomCheck {...state} />}
                     classes={{
                       ...s,
                       ...s,
@@ -2977,9 +2977,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              CheckboxIcon
+              renderCheckboxIcon
             </code>{" "}
-            prop. The component receives{" "}
+            prop. The function receives{" "}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
@@ -3014,7 +3014,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Star Selection (Favorites)"
-        codeless="the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs" isDarkMode={dark}>
+        codeless="the same renderCheckboxIcon prop as Custom Checkbox Selection; only the icon differs" isDarkMode={dark}>
         {(() => {
           const StarSelectDemo = () => {
             const [starredIds, setStarredIds] = React.useState<string[]>([]);
@@ -3066,7 +3066,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   selectedRowIds={starredIds}
                   onSelectedRowIdsChange={setStarredIds}
                   getRowId={(row) => row.id}
-                  CheckboxIcon={StarCheck}
+                  renderCheckboxIcon={(state) => <StarCheck {...state} />}
                   classes={{
                     ...s,
                     ...s,
@@ -3085,7 +3085,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              CheckboxIcon
+              renderCheckboxIcon
             </code>
             . Unselected rows show an outline star, selected rows show a filled
             amber star. Great for "favorites" or "bookmarks" patterns in SaaS
@@ -3095,7 +3095,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Checkbox with Star Icon Inside"
-        codeless="the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs" isDarkMode={dark}>
+        codeless="the same renderCheckboxIcon prop as Custom Checkbox Selection; only the icon differs" isDarkMode={dark}>
         {(() => {
           const StarInsideCheckboxDemo = () => {
             const [selected, setSelected] = React.useState<string[]>([]);
@@ -3156,7 +3156,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   selectedRowIds={selected}
                   onSelectedRowIdsChange={setSelected}
                   getRowId={(row) => row.id}
-                  CheckboxIcon={StarCheckbox}
+                  renderCheckboxIcon={(state) => <StarCheckbox {...state} />}
                   classes={{
                     ...s,
                     ...s,
@@ -3178,7 +3178,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              CheckboxIcon
+              renderCheckboxIcon
             </code>
             .
           </p>
@@ -3551,7 +3551,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   expandable
                   expandedRowIds={ids}
                   onExpandedRowIdsChange={setIds}
-                  ExpandIcon={ChevronIcon}
+                  renderExpandIcon={(state) => <ChevronIcon {...state} />}
                   renderExpandedRow={(row) => (
                     <div
                       className="px-6 py-4 bg-cl-accent-surface border-l-2 border-cl-border-input-focus"
@@ -3583,14 +3583,14 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            ExpandIcon
+            renderExpandIcon
           </code>{" "}
-          component prop. The expanded row has a left blue border accent.
+          render prop. The expanded row has a left blue border accent.
         </p>
       </Section>
 
       <Section title="Row Expansion (Plus/Minus Icons)"
-        codeless="the same ExpandIcon prop as Row Expansion (Custom Chevron Icons); only the icon differs" isDarkMode={dark}>
+        codeless="the same renderExpandIcon prop as Row Expansion (Custom Chevron Icons); only the icon differs" isDarkMode={dark}>
         {(() => {
           const PlusMinusDemo = () => {
             const [ids, setIds] = React.useState<string[]>([]);
@@ -3618,7 +3618,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 expandable
                 expandedRowIds={ids}
                 onExpandedRowIdsChange={setIds}
-                ExpandIcon={PlusMinusIcon}
+                renderExpandIcon={(state) => <PlusMinusIcon {...state} />}
                 renderExpandedRow={(row) => (
                   <div
                     className={`px-6 py-4 bg-cl-success-bg`}
@@ -3695,7 +3695,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   expandColumnPosition="end"
                   expandedRowIds={ids}
                   onExpandedRowIdsChange={setIds}
-                  ExpandIcon={ArrowIcon}
+                  renderExpandIcon={(state) => <ArrowIcon {...state} />}
                   renderExpandedRow={(row) => (
                     <div
                       className={`px-6 py-4 bg-cl-accent-surface border-r-2 border-cl-border-input-focus`}
@@ -3893,7 +3893,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   expandOnRowClick
                   expandedRowIds={ids}
                   onExpandedRowIdsChange={setIds}
-                  ExpandIcon={SmallChevron}
+                  renderExpandIcon={(state) => <SmallChevron {...state} />}
                   renderExpandedRow={(row) => (
                     <div
                       className={`px-6 py-4 bg-cl-bg-hover`}
@@ -5048,7 +5048,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     columns={columns}
                     data={data}
                     reorderable
-                    DragHandleIcon={ArrowHandle}
+                    dragHandleIcon={<ArrowHandle className="w-4 h-4" />}
                     onRowReorder={(from, to) => {
                       setData((prev) => {
                         const u = [...prev];
@@ -5089,7 +5089,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            DragHandleIcon
+            dragHandleIcon
           </code>{" "}
           prop. Styled via{" "}
           <code
@@ -5103,7 +5103,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <Section
         title="Row Drag & Drop (Number Handle with Reorder History)"
-        codeless="the same DragHandleIcon and onRowReorder as Row Drag & Drop (Custom Arrow Icons); only the handle and the history readout differ"
+        codeless="the same dragHandleIcon and onRowReorder as Row Drag & Drop (Custom Arrow Icons); only the handle and the history readout differ"
         isDarkMode={dark}
       >
         {(() => {
@@ -5125,7 +5125,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   columns={columns}
                   data={data}
                   reorderable
-                  DragHandleIcon={NumberHandle}
+                  dragHandleIcon={<NumberHandle className="w-4 h-4" />}
                   onRowReorder={(from, to) => {
                     const name = data[from].name;
                     setHistory((prev) => [
@@ -6216,9 +6216,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     searchInput:
                       "rounded-cl-lg focus:!ring-rose-500/25 focus:!border-rose-500/60",
                   }}
-                  SearchIcon={({ className }) => (
+                  searchIcon={
                     <svg
-                      className={className}
+                      className="w-4 h-4"
                       width="16"
                       height="16"
                       viewBox="0 0 24 24"
@@ -6231,7 +6231,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       <circle cx="11" cy="11" r="8" />
                       <path d="m21 21-4.3-4.3" />
                     </svg>
-                  )}
+                  }
                 />
               );
             };
@@ -6245,7 +6245,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            SearchIcon
+            searchIcon
           </code>
           , thicker border, and a rose focus glow effect.
         </p>
@@ -6365,7 +6365,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <Section
         title="Built-in Search (Custom Filter Icon on Right)"
-        codeless="SearchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
+        codeless="searchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
         isDarkMode={dark}
       >
         {(() => {
@@ -6382,9 +6382,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 onGlobalFilterChange={setFilter}
                 onSearchClear={() => setFilter("")}
                 getRowId={(row) => row.id}
-                SearchIcon={({ className }) => (
+                searchIcon={
                   <svg
-                    className={className}
+                    className="w-4 h-4"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke={"var(--cl-accent)"}
@@ -6394,7 +6394,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   >
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                   </svg>
-                )}
+                }
                 classes={{
                   ...s,
                   searchInput:
@@ -6412,7 +6412,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            SearchIcon
+            searchIcon
           </code>{" "}
           +{" "}
           <code
@@ -6546,7 +6546,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   filterable
                   columnFilters={filters}
                   onColumnFiltersChange={setFilters}
-                  FilterIcon={DownChevronFilter}
+                  renderFilterIcon={(state) => <DownChevronFilter {...state} />}
                   filterableColumns={{
                     role: {
                       options: [
@@ -6581,7 +6581,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            FilterIcon
+            renderFilterIcon
           </code>{" "}
           prop. Styled in violet via{" "}
           <code
@@ -6957,7 +6957,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section title="Column Filters (Chip Tags Style)"
-        codeless="renderColumnFilter and FilterIcon together; each has its own snippet" isDarkMode={dark}>
+        codeless="renderColumnFilter and renderFilterIcon together; each has its own snippet" isDarkMode={dark}>
         {(() => {
           const ChipFilterDemo = () => {
             const [filters, setFilters] = React.useState<
@@ -7052,7 +7052,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       </div>
                     );
                   }}
-                  FilterIcon={({ active, className }) => (
+                  renderFilterIcon={({ active, className }) => (
                     <svg
                       className={className}
                       viewBox="0 0 24 24"
@@ -7150,7 +7150,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               onSortingChange={handleServerSortingChange}
               manualSorting
               loading={serverLoading}
-              shimmerRowCount={5}
+              shimmerCount={5}
               getRowId={(row) => row.id}
               classes={s}
             />

@@ -59,8 +59,8 @@ export interface ModalProps {
   showHeader?: boolean;
   /** Whether to render the backdrop overlay. Default: `true`. */
   showOverlay?: boolean;
-  /** Prevents closing when clicking outside the modal content. Default: `false`. */
-  preventOutsideClick?: boolean;
+  /** Closes the modal when the overlay is clicked. `false` keeps it open until an explicit action. Default: `true`. */
+  closeOnOverlayClick?: boolean;
   /** Enables closing via the Escape key. Default: `true`. */
   closeOnEscape?: boolean;
   /** Locks body scroll when the modal is open. Default: `true`. */

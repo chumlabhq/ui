@@ -16,7 +16,7 @@ interface UseDropdownProps {
   clearable?: boolean;
   showSearch?: boolean;
   searchOptions?: (query: string) => Promise<SearchableDropdownOption[]>;
-  searchDebounceMs?: number;
+  searchDebounce?: number;
   initialOptions?: SearchableDropdownOption[];
   loadInitialOptions?: () => Promise<SearchableDropdownOption[]>;
   loadInitialOnOpen?: boolean;
@@ -58,7 +58,7 @@ export function useDropdown({
   clearable = false,
   showSearch = true,
   searchOptions,
-  searchDebounceMs = 300,
+  searchDebounce = 300,
   initialOptions = [],
   loadInitialOptions,
   loadInitialOnOpen = false,
@@ -225,14 +225,14 @@ export function useDropdown({
             setIsSearching(false);
           }
         });
-    }, searchDebounceMs);
+    }, searchDebounce);
 
     return () => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
     };
-  }, [hasActiveSearch, searchQuery, searchOptions, searchDebounceMs, isAsync, onLoadError]);
+  }, [hasActiveSearch, searchQuery, searchOptions, searchDebounce, isAsync, onLoadError]);
 
   const handleOpen = useCallback(() => {
     if (disabled) return;

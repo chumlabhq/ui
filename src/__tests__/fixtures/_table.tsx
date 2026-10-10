@@ -33,7 +33,7 @@ function Counted({ variant }: { variant: "default" | "custom" }) {
         onSelectedRowIdsChange={(ids) => setSelected(ids as string[])}
         onRowClick={() => setRowClicks((n) => n + 1)}
         // Inline on purpose: a new component every render, as consumers write it.
-        CheckboxIcon={variant === "custom" ? (props) => <StarIcon {...props} /> : undefined}
+        renderCheckboxIcon={variant === "custom" ? (props) => <StarIcon {...props} /> : undefined}
       />
     </div>
   );

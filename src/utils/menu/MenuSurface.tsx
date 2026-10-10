@@ -24,7 +24,7 @@ export interface MenuSurfaceProps
   trigger: HTMLElement | null | RefObject<HTMLElement | null>;
   isOpen: boolean;
   side?: AnchoredSide;
-  /** Pins the side, disabling the flip. The family's `forceDropdownPosition`. */
+  /** Pins the side, disabling the flip. The family's `forceDropdownSide`. */
   forceSide?: boolean;
   gap?: number;
   zIndex?: number;

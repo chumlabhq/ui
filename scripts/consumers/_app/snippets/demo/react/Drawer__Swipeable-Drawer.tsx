@@ -71,7 +71,7 @@ export default function DrawerExample() {
         open={swipeable.open}
         onOpenChange={swipeable.onOpenChange}
         swipeable
-        direction="bottom"
+        side="bottom"
         size="300px"
       >
         {renderDrawerContent("Swipe Down to Close", swipeable.onClose)}

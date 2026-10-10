@@ -203,13 +203,13 @@ export interface InternationalPhoneInputProps
   unstyled?: boolean;
 
   /** Vertical placement of the country dropdown relative to the trigger. */
-  dropdownPosition?: "top" | "bottom";
-  /** When true, locks the country dropdown to the specified dropdownPosition without auto-flipping. */
-  forceDropdownPosition?: boolean;
+  dropdownSide?: "top" | "bottom";
+  /** When true, locks the country dropdown to the specified dropdownSide without auto-flipping. */
+  forceDropdownSide?: boolean;
   /** Z-index of the country dropdown popup. */
   dropdownZIndex?: number;
   /** Gap in pixels between trigger and country dropdown popup. */
-  dropdownGap?: number;
+  dropdownOffset?: number;
   /** Portal target for the country dropdown. */
   portalContainer?: HTMLElement | null;
   /** When true, locks body scroll while the country dropdown is open. */

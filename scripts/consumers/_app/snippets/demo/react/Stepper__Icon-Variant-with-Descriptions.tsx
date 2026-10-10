@@ -44,25 +44,25 @@ const checkoutSteps: Step[] = [
     id: "account",
     label: "Account",
     description: "Create your account",
-    icon: UserIcon,
+    icon: <UserIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
   {
     id: "payment",
     label: "Payment",
     description: "Add payment method",
-    icon: CreditCardIcon,
+    icon: <CreditCardIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
   {
     id: "shipping",
     label: "Shipping",
     description: "Set delivery address",
-    icon: TruckIcon,
+    icon: <TruckIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
   {
     id: "confirm",
     label: "Confirm",
     description: "Review your order",
-    icon: CheckCircleIcon,
+    icon: <CheckCircleIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
 ];
 

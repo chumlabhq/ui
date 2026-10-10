@@ -684,8 +684,8 @@ const SearchableDropdownDemo = () => {
               onValueChange={(v) => setAsyncCountryValue(v)}
               placeholder="Search countries..."
               searchOptions={handleAsyncSearch}
-              searchDebounceMs={300}
-              noResultsContent="No countries found"
+              searchDebounce={300}
+              emptyContent="No countries found"
               classes={c.dropdown}
             />
           </div>
@@ -712,8 +712,8 @@ const SearchableDropdownDemo = () => {
               placeholder="Select or search countries..."
               searchOptions={handleAsyncSearch}
               initialOptions={countryOptions}
-              searchDebounceMs={300}
-              noResultsContent="No countries found"
+              searchDebounce={300}
+              emptyContent="No countries found"
               classes={c.dropdown}
             />
           </div>
@@ -741,8 +741,8 @@ const SearchableDropdownDemo = () => {
               searchOptions={handleAsyncSearch}
               loadInitialOptions={handleLoadInitialOptions}
               loadInitialOnOpen
-              searchDebounceMs={300}
-              noResultsContent="No countries found"
+              searchDebounce={300}
+              emptyContent="No countries found"
               onLoadError={(err) => setAsyncLoadError(err instanceof Error ? err.message : String(err))}
               classes={c.dropdown}
             />
@@ -1065,7 +1065,7 @@ const SearchableDropdownDemo = () => {
                 value={customChevronValue}
                 onValueChange={(v) => setCustomChevronValue(v)}
                 placeholder="Search fruits..."
-                ChevronIcon={CustomChevronIcon}
+                chevronIcon={<CustomChevronIcon className="w-4 h-4" />}
                 classes={c.dropdown}
               />
             </div>
@@ -1135,14 +1135,14 @@ const SearchableDropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;bottom&quot; (default)
+                dropdownSide=&quot;bottom&quot; (default)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
                   options={fruitOptions}
                   value={posBotValue}
                   onValueChange={(v) => setPosBotValue(v)}
-                  dropdownPosition="bottom"
+                  dropdownSide="bottom"
                   placeholder="Opens below..."
                   classes={c.dropdown}
                 />
@@ -1150,14 +1150,14 @@ const SearchableDropdownDemo = () => {
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;top&quot;
+                dropdownSide=&quot;top&quot;
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
                   options={fruitOptions}
                   value={posTopValue}
                   onValueChange={(v) => setPosTopValue(v)}
-                  dropdownPosition="top"
+                  dropdownSide="top"
                   placeholder="Opens above..."
                   classes={c.dropdown}
                 />
@@ -1176,15 +1176,15 @@ const SearchableDropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced bottom)
+                forceDropdownSide (forced bottom)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
                   options={fruitOptions}
                   value={forceBotValue}
                   onValueChange={(v) => setForceBotValue(v)}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   placeholder="Always opens below..."
                   classes={c.dropdown}
                 />
@@ -1192,15 +1192,15 @@ const SearchableDropdownDemo = () => {
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced top)
+                forceDropdownSide (forced top)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
                   options={fruitOptions}
                   value={forceTopValue}
                   onValueChange={(v) => setForceTopValue(v)}
-                  dropdownPosition="top"
-                  forceDropdownPosition
+                  dropdownSide="top"
+                  forceDropdownSide
                   placeholder="Always opens above..."
                   classes={c.dropdown}
                 />
@@ -1209,22 +1209,22 @@ const SearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          When forceDropdownPosition is true, the dropdown will always open in
+          When forceDropdownSide is true, the dropdown will always open in
           the specified direction regardless of available viewport space.
         </div>
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition + lockScroll
+                forceDropdownSide + lockScroll
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
                   options={fruitOptions}
                   value={forceLockValue}
                   onValueChange={(v) => setForceLockValue(v)}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   lockScroll
                   placeholder="Forced bottom + scroll locked"
                   classes={c.dropdown}
@@ -1234,7 +1234,7 @@ const SearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Combining forceDropdownPosition with lockScroll prevents the page from
+          Combining forceDropdownSide with lockScroll prevents the page from
           scrolling while the dropdown is open, ensuring the menu stays anchored
           in place.
         </div>
@@ -1298,7 +1298,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Custom Dropdown Gap ─────────────────────────────────────────── */}
       <Section
         title="Custom Dropdown Gap"
-        description="Control the gap between the trigger and dropdown with the dropdownGap prop (in pixels). Default is 4px."
+        description="Control the gap between the trigger and dropdown with the dropdownOffset prop (in pixels). Default is 4px."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col">
@@ -1308,7 +1308,7 @@ const SearchableDropdownDemo = () => {
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
                   options={fruitOptions}
-                  dropdownGap={0}
+                  dropdownOffset={0}
                   placeholder="No gap..."
                   classes={c.dropdown}
                 />
@@ -1321,7 +1321,7 @@ const SearchableDropdownDemo = () => {
                   options={fruitOptions}
                   value={customGapValue}
                   onValueChange={(v) => setCustomGapValue(v)}
-                  dropdownGap={16}
+                  dropdownOffset={16}
                   placeholder="Large gap..."
                   classes={c.dropdown}
                 />
@@ -1358,7 +1358,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Custom Clear Icon ───────────────────────────────────────────── */}
       <Section
         title="Custom Clear Icon"
-        description="Replace the default clear icon with a custom icon component via the ClearIcon prop."
+        description="Replace the default clear icon with a custom icon via the clearIcon prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1369,7 +1369,7 @@ const SearchableDropdownDemo = () => {
               onValueChange={(v) => setCustomClearIconValue(v)}
               clearable
               placeholder="Search fruits..."
-              ClearIcon={() => (
+              clearIcon={
                 <svg
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -1382,7 +1382,7 @@ const SearchableDropdownDemo = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={c.dropdown}
             />
           </div>
@@ -1392,7 +1392,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Custom Check Icon ───────────────────────────────────────────── */}
       <Section
         title="Custom Check Icon"
-        description="Replace the default check icon with a custom icon component via the CheckIcon prop."
+        description="Replace the default check icon with a custom icon via the selectedIcon prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1402,11 +1402,11 @@ const SearchableDropdownDemo = () => {
               value={customCheckIconValue}
               onValueChange={(v) => setCustomCheckIconValue(v)}
               placeholder="Search fruits..."
-              CheckIcon={({ className }) => (
+              selectedIcon={
                 <svg
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className={className}
+                  className="w-4 h-4 shrink-0 text-cl-accent"
                   aria-hidden="true"
                 >
                   <path
@@ -1415,7 +1415,7 @@ const SearchableDropdownDemo = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={c.dropdown}
             />
           </div>
@@ -1425,7 +1425,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Custom Search Icon ──────────────────────────────────────────── */}
       <Section
         title="Custom Search Icon"
-        description="Replace the default search icon with a custom icon component via the SearchIcon prop. This is unique to SearchableDropdown."
+        description="Replace the default search icon with a custom icon via the searchIcon prop. This is unique to SearchableDropdown."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1433,11 +1433,11 @@ const SearchableDropdownDemo = () => {
             <SearchableDropdown
               options={fruitOptions}
               placeholder="Custom search icon..."
-              SearchIcon={({ className }) => (
+              searchIcon={
                 <svg
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className={className}
+                  className="w-4 h-4 shrink-0 text-cl-text-tertiary"
                   aria-hidden="true"
                 >
                   <path
@@ -1446,7 +1446,7 @@ const SearchableDropdownDemo = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={c.dropdown}
             />
           </div>
@@ -1627,7 +1627,7 @@ const SearchableDropdownDemo = () => {
               <SearchableDropdown
                 options={[]}
                 placeholder="Custom empty..."
-                noResultsContent={
+                emptyContent={
                   <span className="flex flex-col items-center gap-1 py-2">
                     <span
                       className={`text-lg text-cl-text-tertiary`}
@@ -1664,12 +1664,12 @@ const SearchableDropdownDemo = () => {
               clearable
               placeholder="Search fruits..."
               searchPlaceholder="Type to filter..."
-              ChevronIcon={CustomChevronIcon}
-              CheckIcon={({ className }) => (
+              chevronIcon={<CustomChevronIcon className="w-4 h-4" />}
+              selectedIcon={
                 <svg
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className={className}
+                  className="w-4 h-4 shrink-0 text-cl-accent"
                   aria-hidden="true"
                 >
                   <path
@@ -1678,7 +1678,7 @@ const SearchableDropdownDemo = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={c.dropdown}
             />
           </div>

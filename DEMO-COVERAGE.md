@@ -11,9 +11,9 @@ recorded there because they belong next to the code that implements them.
 | | count |
 | --- | --- |
 | Components audited | 58 |
-| Library-authored props across the public surface | 1134 |
+| Library-authored props across the public surface | 1130 |
 | With no demo | 282 (25%) |
-| With no fixture | 639 (56%) |
+| With no fixture | 622 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -63,14 +63,14 @@ listed here with no demo anywhere fails the generator.
 | `variant` | 3 | Demonstrated on the parents. AccordionShimmer and AvatarBadge take the variant their parent is already showing; a second demo would restate the parent's. Toast has no JSX form: `useToast().toast({ variant })` is its public surface and is demonstrated. |
 | `size` | 2 | A visible scale, demonstrated on the components that own it. AvatarGroupCount and RadioButton inherit the same scale their parents demo. |
 | `shape` | 1 | As `size`: AvatarGroupCount follows the Avatar shape already on the page. |
-| `dropdownPosition` | 1 | Demonstrated on Dropdown, Pagination and SearchableDropdown. CascadingDropdown's is the same prop with the same three values. |
+| `dropdownSide` | 1 | Demonstrated on Dropdown, Pagination and SearchableDropdown. CascadingDropdown's is the same prop with the same three values. |
 
 ## Per component
 
 | Component | Props | Inherited | No demo | No fixture | Phantom | Tier-A gaps |
 | --- | --- | --- | --- | --- | --- | --- |
 | Accordion | 31 | 271 | 9 | 19 | 0 | `asChild`, `unstyled` |
-| AccordionContent | 11 | 279 | 4 | 10 | 0 | `asChild` |
+| AccordionContent | 10 | 279 | 4 | 8 | 0 | `asChild` |
 | AccordionItem | 6 | 277 | 3 | 5 | 0 | `asChild` |
 | AccordionShimmer | 11 | 2 | 7 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` |
 | AccordionTrigger | 10 | 277 | 2 | 9 | 0 | — |
@@ -80,10 +80,10 @@ listed here with no demo anywhere fails the generator.
 | AvatarGroupCount | 14 | 278 | 9 | 11 | 0 | `size`, `shape`, `asChild` |
 | AvatarGroupShimmer | 9 | 280 | 2 | 8 | 0 | `reduceMotion`, `asChild` |
 | AvatarShimmer | 6 | 280 | 2 | 1 | 0 | `unstyled` |
-| Breadcrumb | 24 | 277 | 10 | 18 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
+| Breadcrumb | 24 | 277 | 10 | 16 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
 | Button | 24 | 292 | 1 | 12 | 0 | — |
 | ButtonGroup | 2 | 279 | 1 | 0 | 0 | — |
-| CascadingDropdown | 58 | 2 | 24 | 29 | 0 | `dropdownPosition`, `unstyled`, `portalContainer`, `keepMounted` |
+| CascadingDropdown | 58 | 2 | 24 | 27 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` |
 | Checkbox | 21 | 303 | 2 | 10 | 0 | `reduceMotion` |
 | CircularLoader | 7 | 280 | 3 | 2 | 0 | `reduceMotion`, `unstyled` |
 | CountryFlag | 13 | 278 | 3 | 8 | 0 | `unstyled` |
@@ -97,7 +97,7 @@ listed here with no demo anywhere fails the generator.
 | DrawerCloseButton | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerFooter | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerHeader | 1 | 279 | 1 | 1 | 0 | — |
-| Dropdown | 50 | 2 | 4 | 28 | 0 | `unstyled` |
+| Dropdown | 49 | 2 | 4 | 25 | 0 | `unstyled` |
 | Input | 26 | 307 | 2 | 10 | 0 | `unstyled` |
 | InputLabel | 4 | 0 | 0 | 4 | 0 | — |
 | InternationalPhoneInput | 48 | 296 | 9 | 33 | 0 | `unstyled`, `portalContainer` |
@@ -106,8 +106,8 @@ listed here with no demo anywhere fails the generator.
 | ModalBody | 2 | 2 | 2 | 2 | 0 | — |
 | ModalFooter | 2 | 2 | 2 | 2 | 0 | — |
 | ModalHeader | 2 | 2 | 2 | 2 | 0 | — |
-| MultiSelectDropdown | 50 | 2 | 10 | 26 | 0 | `unstyled` |
-| MultiSelectSearchableDropdown | 55 | 2 | 13 | 29 | 0 | `unstyled` |
+| MultiSelectDropdown | 50 | 2 | 10 | 24 | 0 | `unstyled` |
+| MultiSelectSearchableDropdown | 55 | 2 | 13 | 28 | 0 | `unstyled` |
 | OtpInput | 30 | 277 | 3 | 14 | 0 | `unstyled` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | — |
 | Pagination | 31 | 278 | 6 | 21 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` |
@@ -115,12 +115,12 @@ listed here with no demo anywhere fails the generator.
 | RadioButton | 8 | 279 | 1 | 3 | 0 | `size` |
 | RadioGroup | 21 | 275 | 5 | 5 | 0 | `unstyled`, `reduceMotion` |
 | ResizablePanel | 14 | 279 | 2 | 11 | 0 | `reduceMotion`, `unstyled` |
-| SearchableDropdown | 57 | 2 | 6 | 33 | 0 | `unstyled` |
+| SearchableDropdown | 56 | 2 | 6 | 29 | 0 | `unstyled` |
 | Slider | 35 | 274 | 4 | 18 | 0 | `unstyled` |
 | Slot | 1 | 279 | 1 | 1 | 0 | — |
 | Stepper | 30 | 2 | 5 | 17 | 0 | `reduceMotion`, `unstyled` |
 | Switch | 28 | 277 | 6 | 11 | 0 | `reduceMotion` |
-| TabPanel | 26 | 2 | 6 | 16 | 0 | `reduceMotion`, `unstyled` |
+| TabPanel | 25 | 2 | 6 | 15 | 0 | `reduceMotion`, `unstyled` |
 | TextArea | 25 | 293 | 1 | 6 | 0 | `unstyled` |
 | TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
 | TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |

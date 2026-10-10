@@ -61,8 +61,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       endIcon,
       onStartIconClick,
       onEndIconClick,
-      startIconLabel,
-      endIconLabel,
+      startIconAriaLabel,
+      endIconAriaLabel,
       onValueChange,
       onChange,
       clearable = false,
@@ -214,8 +214,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         endIcon={endIcon}
         onStartIconClick={onStartIconClick}
         onEndIconClick={onEndIconClick}
-        startIconLabel={startIconLabel}
-        endIconLabel={endIconLabel}
+        startIconAriaLabel={startIconAriaLabel}
+        endIconAriaLabel={endIconAriaLabel}
         clearable={clearable && isInteractive}
         onClearClick={handleClear}
         clearLabel="Clear textarea"

@@ -27,9 +27,9 @@ export default function MultiSelectDropdownExample() {
               options={staticOptions}
               value={posBotValue}
               onValueChange={setPosBotValue}
-              dropdownPosition="bottom"
+              dropdownSide="bottom"
               placeholder="Opens below..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={
                 {
                   trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
@@ -49,9 +49,9 @@ export default function MultiSelectDropdownExample() {
               options={staticOptions}
               value={posTopValue}
               onValueChange={setPosTopValue}
-              dropdownPosition="top"
+              dropdownSide="top"
               placeholder="Opens above..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={
                 {
                   trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
@@ -73,8 +73,8 @@ export default function MultiSelectDropdownExample() {
               options={staticOptions}
               value={forceBotValue}
               onValueChange={setForceBotValue}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               placeholder="Always opens below..."
               classes={
                 {
@@ -95,8 +95,8 @@ export default function MultiSelectDropdownExample() {
               options={staticOptions}
               value={forceTopValue}
               onValueChange={setForceTopValue}
-              dropdownPosition="top"
-              forceDropdownPosition
+              dropdownSide="top"
+              forceDropdownSide
               placeholder="Always opens above..."
               classes={
                 {
@@ -119,8 +119,8 @@ export default function MultiSelectDropdownExample() {
               options={staticOptions}
               value={forceLockValue}
               onValueChange={setForceLockValue}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               lockScroll
               placeholder="Forced bottom + scroll locked"
               classes={

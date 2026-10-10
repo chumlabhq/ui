@@ -8,7 +8,7 @@ export default function TimePickerExample() {
       <div>
         <TimePicker
           defaultValue={null}
-          dropdownGap={0}
+          dropdownOffset={0}
           placeholder="No gap..."
           classes={
             {
@@ -49,7 +49,7 @@ export default function TimePickerExample() {
         <TimePicker
           value={gapLargeVal}
           onValueChange={(v) => setGapLargeVal(v)}
-          dropdownGap={16}
+          dropdownOffset={16}
           placeholder="Large gap..."
           classes={
             {

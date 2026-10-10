@@ -26,6 +26,7 @@ const DECLARED = new Map([
     "CascadingDropdown/disabled-top-level",
     "CascadingDropdown/open",
     "CascadingDropdown/open-search",
+    "CascadingDropdown/open-search-custom-search-icon",
     "CascadingDropdown/open-empty",
     "CascadingDropdown/loading",
     "CascadingDropdown/async-children-initial",

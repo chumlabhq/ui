@@ -213,9 +213,9 @@ export default function TableExample() {
                   searchInput:
                     "rounded-cl-lg focus:!ring-rose-500/25 focus:!border-rose-500/60"
                 }}
-                SearchIcon={({ className }) => (
+                searchIcon={
                   <svg
-                    className={className}
+                    className="w-4 h-4"
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
@@ -228,7 +228,7 @@ export default function TableExample() {
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.3-4.3" />
                   </svg>
-                )}
+                }
               />
             );
           };

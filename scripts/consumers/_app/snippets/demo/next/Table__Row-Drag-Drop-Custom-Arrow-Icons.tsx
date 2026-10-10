@@ -236,7 +236,7 @@ export default function TableExample() {
                   columns={columns}
                   data={data}
                   reorderable
-                  DragHandleIcon={ArrowHandle}
+                  dragHandleIcon={<ArrowHandle className="w-4 h-4" />}
                   onRowReorder={(from, to) => {
                     setData((prev) => {
                       const u = [...prev];

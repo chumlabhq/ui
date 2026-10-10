@@ -15,7 +15,7 @@ export function useMultiSelectDropdown({
   disabled = false,
   showSearch = true,
   searchOptions,
-  searchDebounceMs = 300,
+  searchDebounce = 300,
   onValueChange,
   initialOptions = [],
   loadInitialOptions,
@@ -126,14 +126,14 @@ export function useMultiSelectDropdown({
       } finally {
         setIsSearching(false);
       }
-    }, searchDebounceMs);
+    }, searchDebounce);
 
     return () => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
     };
-  }, [searchQuery, searchOptions, searchDebounceMs, isAsync, onLoadError]);
+  }, [searchQuery, searchOptions, searchDebounce, isAsync, onLoadError]);
 
   const handleToggle = useCallback(() => {
     if (disabled) return;

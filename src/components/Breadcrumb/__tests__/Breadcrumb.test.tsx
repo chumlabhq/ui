@@ -117,15 +117,15 @@ describe("Breadcrumb", () => {
       { id: "5", label: "Details" },
     ];
 
-    it("truncates items when exceeding maxVisibleItems", () => {
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+    it("truncates items when exceeding maxVisible", () => {
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const nav = screen.getByRole("navigation");
       expect(nav).toHaveAttribute("data-truncated", "true");
     });
 
     it("shows ellipsis button when truncated", () => {
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       expect(ellipsisButton).toBeInTheDocument();
@@ -133,14 +133,14 @@ describe("Breadcrumb", () => {
     });
 
     it("always shows first and last items when truncated", () => {
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       expect(screen.getByText("Home")).toBeInTheDocument();
       expect(screen.getByText("Details")).toBeInTheDocument();
     });
 
-    it("does not truncate when items fit within maxVisibleItems", () => {
-      render(<Breadcrumb items={items} maxVisibleItems={5} />);
+    it("does not truncate when items fit within maxVisible", () => {
+      render(<Breadcrumb items={items} maxVisible={5} />);
 
       const nav = screen.getByRole("navigation");
       expect(nav).not.toHaveAttribute("data-truncated");
@@ -148,7 +148,7 @@ describe("Breadcrumb", () => {
 
     it("opens dropdown when ellipsis is clicked", async () => {
       const user = userEvent.setup();
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       await user.click(ellipsisButton);
@@ -304,9 +304,9 @@ describe("Breadcrumb", () => {
       expect(iconIndex).toBeLessThan(labelIndex);
     });
 
-    it("renders icon on the right when iconPosition is right", () => {
+    it("renders icon at the end when iconPosition is end", () => {
       const itemsWithIcon: BreadcrumbItem[] = [
-        { id: "home", label: "Home", icon: <span data-testid="icon">I</span>, iconPosition: "right" },
+        { id: "home", label: "Home", icon: <span data-testid="icon">I</span>, iconPosition: "end" },
         { id: "current", label: "Current" },
       ];
 
@@ -344,11 +344,11 @@ describe("Breadcrumb", () => {
       { id: "6", label: "Current" },
     ];
 
-    it("shows first item and last N-1 items based on maxVisibleItems", () => {
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+    it("shows first item and last N-1 items based on maxVisible", () => {
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       expect(screen.getByText("Root")).toBeInTheDocument();
-      // Last 2 items visible (maxVisibleItems=3 means first + last 2)
+      // Last 2 items visible (maxVisible=3 means first + last 2)
       expect(screen.getByText("Level4")).toBeInTheDocument();
       expect(screen.getByText("Current")).toBeInTheDocument();
       expect(screen.queryByText("Level1")).not.toBeInTheDocument();
@@ -358,7 +358,7 @@ describe("Breadcrumb", () => {
 
     it("shows collapsed items in dropdown when ellipsis is clicked", async () => {
       const user = userEvent.setup();
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       await user.click(ellipsisButton);
@@ -374,7 +374,7 @@ describe("Breadcrumb", () => {
     it("closes dropdown when clicking an item in it", async () => {
       const user = userEvent.setup();
       const onItemClick = vi.fn();
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} onItemClick={onItemClick} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} onItemClick={onItemClick} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       await user.click(ellipsisButton);
@@ -388,10 +388,10 @@ describe("Breadcrumb", () => {
       expect(document.querySelector("[role='menu']")).not.toBeInTheDocument();
     });
 
-    it("enforces minimum maxVisibleItems of 2", () => {
-      render(<Breadcrumb items={manyItems} maxVisibleItems={1} />);
+    it("enforces minimum maxVisible of 2", () => {
+      render(<Breadcrumb items={manyItems} maxVisible={1} />);
 
-      // Even with maxVisibleItems=1, it should show at least 2 (first + last)
+      // Even with maxVisible=1, it should show at least 2 (first + last)
       expect(screen.getByText("Root")).toBeInTheDocument();
       expect(screen.getByText("Current")).toBeInTheDocument();
       // Ellipsis should be present since there are collapsed items
@@ -404,7 +404,7 @@ describe("Breadcrumb", () => {
       render(
         <Breadcrumb
           items={manyItems}
-          maxVisibleItems={3}
+          maxVisible={3}
           onDropdownOpenChange={onDropdownOpenChange}
         />,
       );
@@ -430,7 +430,7 @@ describe("Breadcrumb", () => {
         <StrictMode>
           <Breadcrumb
             items={manyItems}
-            maxVisibleItems={3}
+            maxVisible={3}
             onDropdownOpenChange={onDropdownOpenChange}
           />
         </StrictMode>,
@@ -440,7 +440,7 @@ describe("Breadcrumb", () => {
 
     it("sets data-dropdown-open on nav when dropdown is open", async () => {
       const user = userEvent.setup();
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const nav = screen.getByRole("navigation");
       expect(nav).not.toHaveAttribute("data-dropdown-open");
@@ -458,7 +458,7 @@ describe("Breadcrumb", () => {
         <span data-testid="custom-sep-icon" style={style}>&gt;</span>
       );
 
-      render(<Breadcrumb items={items} separatorIcon={CustomSeparator} />);
+      render(<Breadcrumb items={items} separatorIcon={<CustomSeparator />} />);
 
       const seps = screen.getAllByTestId("custom-sep-icon");
       expect(seps.length).toBe(2);
@@ -500,7 +500,7 @@ describe("Breadcrumb", () => {
         { id: "5", label: "Current" },
       ];
 
-      render(<Breadcrumb items={manyItemsWithDisabled} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItemsWithDisabled} maxVisible={3} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       await user.click(ellipsisButton);
@@ -575,7 +575,7 @@ describe("Breadcrumb", () => {
 
     it("closes dropdown on Escape and returns focus to ellipsis", async () => {
       const user = userEvent.setup();
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       await user.click(ellipsisButton);
@@ -590,7 +590,7 @@ describe("Breadcrumb", () => {
 
     it("opens dropdown on ArrowDown when focused on ellipsis", async () => {
       const user = userEvent.setup();
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       ellipsisButton.focus();
@@ -602,7 +602,7 @@ describe("Breadcrumb", () => {
 
     it("ellipsis button has aria-expanded and aria-haspopup", async () => {
       const user = userEvent.setup();
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} />);
 
       const ellipsisButton = screen.getByRole("button", { name: /collapsed breadcrumb/i });
       expect(ellipsisButton).toHaveAttribute("aria-haspopup", "menu");
@@ -626,7 +626,7 @@ describe("Breadcrumb", () => {
         { id: "5", label: "Current" },
       ];
 
-      render(<Breadcrumb items={manyItems} maxVisibleItems={3} ellipsisIcon={CustomEllipsis} />);
+      render(<Breadcrumb items={manyItems} maxVisible={3} ellipsisIcon={<CustomEllipsis />} />);
 
       expect(screen.getByTestId("custom-ellipsis")).toBeInTheDocument();
     });
@@ -642,7 +642,7 @@ describe("Breadcrumb", () => {
       render(
         <Breadcrumb
           items={manyItems}
-          maxVisibleItems={3}
+          maxVisible={3}
           ellipsisAriaLabel="Show more items"
         />,
       );
@@ -747,7 +747,7 @@ describe("Breadcrumb", () => {
       render(
         <Breadcrumb
           items={manyItems}
-          maxVisibleItems={3}
+          maxVisible={3}
           onItemClick={onItemClick}
         />,
       );
@@ -771,7 +771,7 @@ describe("Breadcrumb", () => {
       render(
         <Breadcrumb
           items={manyItems}
-          maxVisibleItems={3}
+          maxVisible={3}
           onItemClick={onItemClick}
         />,
       );

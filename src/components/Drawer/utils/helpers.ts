@@ -1,5 +1,5 @@
 import { type CSSProperties } from "react";
-import type { DrawerDirection } from "./types.js";
+import type { DrawerSide } from "./types.js";
 
 export { getFocusableElements } from "../../../utils/focusUtils.js";
 import { useReducedMotion } from "../../../utils/useReducedMotion.js";
@@ -12,8 +12,8 @@ import { useReducedMotion } from "../../../utils/useReducedMotion.js";
  */
 export const usePrefersReducedMotion = useReducedMotion;
 
-export const getDirectionStyles = (
-  direction: DrawerDirection,
+export const getSideStyles = (
+  side: DrawerSide,
   size: string,
   fraction: number,
   duration: number,
@@ -22,7 +22,7 @@ export const getDirectionStyles = (
   const closedPercent = (1 - fraction) * 100;
   const transition = `transform ${duration}ms ${easing}`;
 
-  switch (direction) {
+  switch (side) {
     case "left":
       return { top: 0, left: 0, height: "100vh", width: size, transform: `translateX(${-closedPercent}%)`, transition };
     case "right":
@@ -35,11 +35,11 @@ export const getDirectionStyles = (
 };
 
 export function getClosingDelta(
-  direction: DrawerDirection,
+  side: DrawerSide,
   deltaX: number,
   deltaY: number,
 ): number {
-  switch (direction) {
+  switch (side) {
     case "bottom":
       return deltaY;
     case "top":
@@ -52,10 +52,10 @@ export function getClosingDelta(
 }
 
 export function getTransformString(
-  direction: DrawerDirection,
+  side: DrawerSide,
   closedPercent: number,
 ): string {
-  switch (direction) {
+  switch (side) {
     case "left":
       return `translateX(${-closedPercent}%)`;
     case "right":
@@ -67,12 +67,12 @@ export function getTransformString(
   }
 }
 
-export function isHorizontalDirection(direction: DrawerDirection): boolean {
-  return direction === "left" || direction === "right";
+export function isHorizontalSide(side: DrawerSide): boolean {
+  return side === "left" || side === "right";
 }
 
-export function getTouchAction(direction: DrawerDirection): string {
-  return isHorizontalDirection(direction) ? "pan-y" : "pan-x";
+export function getTouchAction(side: DrawerSide): string {
+  return isHorizontalSide(side) ? "pan-y" : "pan-x";
 }
 
 const drawerStack: string[] = [];

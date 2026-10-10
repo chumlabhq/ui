@@ -116,6 +116,6 @@ export default function TableExample() {
     [],
   );
   return (
-    <Table columns={columns} data={[]} loading shimmerRowCount={5} classes={s} />
+    <Table columns={columns} data={[]} loading shimmerCount={5} classes={s} />
   );
 }

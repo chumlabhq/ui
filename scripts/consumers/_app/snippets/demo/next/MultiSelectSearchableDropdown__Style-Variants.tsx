@@ -32,7 +32,7 @@ export default function MultiSelectSearchableDropdownExample() {
             value={variantDefaultValue}
             onValueChange={(values) => setVariantDefaultValue(values)}
             placeholder="Select..."
-            maxDisplayedChips={2}
+            maxVisible={2}
             classes={
               {
                 root: "",
@@ -58,7 +58,7 @@ export default function MultiSelectSearchableDropdownExample() {
             value={variantBorderlessValue}
             onValueChange={(values) => setVariantBorderlessValue(values)}
             placeholder="Select..."
-            maxDisplayedChips={2}
+            maxVisible={2}
             classes={
               {
                               ...({
@@ -89,7 +89,7 @@ export default function MultiSelectSearchableDropdownExample() {
             value={variantBottomValue}
             onValueChange={(values) => setVariantBottomValue(values)}
             placeholder="Select..."
-            maxDisplayedChips={2}
+            maxVisible={2}
             classes={
               {
                               ...({
@@ -120,7 +120,7 @@ export default function MultiSelectSearchableDropdownExample() {
             value={variantGhostValue}
             onValueChange={(values) => setVariantGhostValue(values)}
             placeholder="Select..."
-            maxDisplayedChips={2}
+            maxVisible={2}
             classes={
               {
                               ...({
@@ -151,7 +151,7 @@ export default function MultiSelectSearchableDropdownExample() {
             value={variantPillValue}
             onValueChange={(values) => setVariantPillValue(values)}
             placeholder="Select..."
-            maxDisplayedChips={2}
+            maxVisible={2}
             classes={
               {
                                ...({

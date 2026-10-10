@@ -807,3 +807,36 @@ describe("useTabPanelContext", () => {
     );
   });
 });
+
+/**
+ * `forceMount` folded into `keepMounted`, which gained `"visited"` for what
+ * `keepMounted` used to mean. Each old combination with the panels HEAD had
+ * mounted (recorded with the old props before the merge) at each step:
+ * start on Home, open Profile, return to Home. Settings is never opened.
+ */
+describe("TabPanel keepMounted keeps every old forceMount/keepMounted behaviour", () => {
+  const CASES = [
+    { forceMount: false, oldKeepMounted: false, keepMounted: false, start: "home", onProfile: "profile", backHome: "home" },
+    { forceMount: false, oldKeepMounted: true, keepMounted: "visited", start: "home", onProfile: "home,profile", backHome: "home,profile" },
+    { forceMount: true, oldKeepMounted: false, keepMounted: true, start: "home,profile,settings", onProfile: "home,profile,settings", backHome: "home,profile,settings" },
+    { forceMount: true, oldKeepMounted: true, keepMounted: true, start: "home,profile,settings", onProfile: "home,profile,settings", backHome: "home,profile,settings" },
+  ] as const;
+
+  it.each(CASES)(
+    "forceMount=$forceMount keepMounted=$oldKeepMounted → keepMounted=$keepMounted",
+    async ({ keepMounted, start, onProfile, backHome }) => {
+      const user = userEvent.setup();
+      render(
+        <TabPanel tabs={tabs} defaultValue="home" keepMounted={keepMounted}>
+          {(tab: Tab) => <span data-testid={`body-${tab.id}`}>{tab.id}</span>}
+        </TabPanel>,
+      );
+      const mounted = () => tabs.filter((t) => screen.queryByTestId(`body-${t.id}`)).map((t) => t.id).join(",");
+      expect(mounted()).toBe(start);
+      await user.click(screen.getByRole("tab", { name: "Profile" }));
+      expect(mounted()).toBe(onProfile);
+      await user.click(screen.getByRole("tab", { name: "Home" }));
+      expect(mounted()).toBe(backHome);
+    },
+  );
+});

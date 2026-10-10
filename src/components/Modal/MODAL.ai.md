@@ -61,7 +61,7 @@ export default function Example() {
 | `maxNestingLevel` | Prevents infinite nesting. Default: `5`. Exceeding logs a warning in dev. |
 | `trapFocus` | Default `true`. Set `false` only for non-modal dialogs. |
 | `fullScreen` | Overrides maxWidth/maxHeight. Sets `w-full h-full` on content. |
-| `preventOutsideClick` + `closeOnEscape={false}` | Combine for mandatory action modals. Must provide explicit close buttons. |
+| `closeOnOverlayClick={false}` + `closeOnEscape={false}` | Combine for mandatory action modals. Must provide explicit close buttons. |
 | `showHeader={false}` | Hides title, description, and close button. Must provide your own close mechanism. |
 | `keepMounted` | Content stays in DOM when closed. Useful for preserving form state. |
 | `initialFocus` | Requires a `RefObject<HTMLElement>`. Focus is set after a 10ms delay. |
@@ -106,7 +106,7 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `closeIcon` | object | — | React.ReactNode - Custom close button icon. |
 | `showHeader` | boolean | `true` | Whether to render the built-in header section. |
 | `showOverlay` | boolean | `true` | Whether to render the backdrop overlay. |
-| `preventOutsideClick` | boolean | `false` | Prevents closing when clicking outside the modal content. |
+| `closeOnOverlayClick` | boolean | `true` | Closes the modal when the overlay is clicked. `false` keeps it open until an explicit action. |
 | `closeOnEscape` | boolean | `true` | Enables closing via the Escape key. |
 | `lockScroll` | boolean | `true` | Locks body scroll when the modal is open. |
 | `trapFocus` | boolean | `true` | Traps keyboard focus within the modal. |
@@ -275,7 +275,7 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. Conten
   open={open}
   onOpenChange={setOpen}
   title="Delete project?"
-  preventOutsideClick
+  closeOnOverlayClick={false}
   closeOnEscape={false}
   showCloseButton={false}
 >
@@ -364,7 +364,7 @@ const emailRef = useRef<HTMLInputElement>(null);
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Focus escapes modal | `trapFocus={false}` | Set `trapFocus={true}` (default) |
-| Can't close on outside click | `preventOutsideClick={true}` | Set to `false` or add explicit close buttons |
+| Can't close on outside click | `closeOnOverlayClick={false}` | Remove it (default `true`) or add explicit close buttons |
 | Nested modal renders behind parent | Missing `nestingLevel` | Increment `nestingLevel` for each nested modal |
 | No animation | `reduceMotion={true}` | Use `reduceMotion="auto"` (the default) |
 | Styles look wrong after overriding one class | `classes` replaces per slot, not merges | Provide full class string for each slot you override |

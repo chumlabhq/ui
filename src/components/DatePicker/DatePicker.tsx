@@ -501,9 +501,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       portalContainer,
       lockScroll = false,
       dropdownZIndex: dropdownZIndexProp,
-      dropdownPosition = "bottom",
-      forceDropdownPosition = false,
-      dropdownGap = 4,
+      dropdownSide = "bottom",
+      forceDropdownSide = false,
+      dropdownOffset = 4,
       keepMounted = false,
       reduceMotion = "auto",
       onMonthChange,
@@ -914,9 +914,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               ref={calendarRef}
               trigger={triggerRef}
               isOpen={isOpen}
-              side={dropdownPosition}
-              forceSide={forceDropdownPosition}
-              gap={dropdownGap}
+              side={dropdownSide}
+              forceSide={forceDropdownSide}
+              gap={dropdownOffset}
               zIndex={dropdownZIndex}
               portalContainer={portalContainer}
               keepMounted={keepMounted}

@@ -22,7 +22,7 @@ export default function MultiSelectDropdownExample() {
         value={successValue}
         onValueChange={(values) => setSuccessValue(values)}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         success={successValue.length > 0}
         successMessage={`${successValue.length} fruit${successValue.length === 1 ? "" : "s"} selected`}
         classes={

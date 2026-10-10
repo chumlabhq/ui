@@ -78,7 +78,7 @@ interface ButtonSharedProps {
   /** Shows a loading spinner and disables interaction. */
   loading?: boolean;
   /** Text displayed alongside the loading spinner. */
-  loadingText?: ReactNode;
+  loadingContent?: ReactNode;
   /** Which end of the label the loader appears at: `start` before it, `end` after it. */
   loaderPosition?: "start" | "end";
   /** Pixel size of the loading spinner. */

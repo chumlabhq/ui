@@ -67,7 +67,7 @@
       "description": "Accessible label for the rows-per-page dropdown.",
       "default": "Rows per page"
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -81,25 +81,25 @@
       "description": "Z-index of the rows-per-page dropdown.",
       "default": 50
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap in pixels between trigger and dropdown.",
       "default": 4
     },
     "dropdownIcon": {
       "type": "object",
-      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the rows-per-page dropdown.",
-      "x-tsType": "ReactNode | ComponentType<IconProps>"
+      "description": "ReactNode — Replaces the rows-per-page select's chevron. Rendered as given; `classes.rowsPerPage.icon` styles the default one.",
+      "x-tsType": "ReactNode"
     },
     "prevIcon": {
       "type": "object",
-      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the previous page button.",
-      "x-tsType": "ReactNode | ComponentType<IconProps>"
+      "description": "ReactNode — Replaces the previous-page arrow. Rendered as given; `classes.navIcon` styles the default one.",
+      "x-tsType": "ReactNode"
     },
     "nextIcon": {
       "type": "object",
-      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the next page button.",
-      "x-tsType": "ReactNode | ComponentType<IconProps>"
+      "description": "ReactNode — Replaces the next-page arrow. Rendered as given; `classes.navIcon` styles the default one.",
+      "x-tsType": "ReactNode"
     },
     "renderEllipsis": {
       "type": "object",

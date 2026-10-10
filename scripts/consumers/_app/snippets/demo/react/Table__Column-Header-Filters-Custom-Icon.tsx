@@ -225,7 +225,7 @@ export default function TableExample() {
                 filterable
                 columnFilters={filters}
                 onColumnFiltersChange={setFilters}
-                FilterIcon={DownChevronFilter}
+                renderFilterIcon={(state) => <DownChevronFilter {...state} />}
                 filterableColumns={{
                   role: {
                     options: [

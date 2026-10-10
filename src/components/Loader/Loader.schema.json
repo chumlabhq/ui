@@ -19,10 +19,10 @@
           "description": "Stroke width of track and arc.",
           "default": 2
         },
-        "speed": {
+        "animationDuration": {
           "type": "number",
-          "description": "Animation duration in seconds (lower = faster).",
-          "default": 0.75
+          "description": "One animation cycle, in milliseconds. Lower is faster.",
+          "default": 750
         },
         "trackColor": {
           "type": "string",
@@ -86,10 +86,10 @@
           "description": "Width of the bar (CSS value).",
           "default": "100%"
         },
-        "speed": {
+        "animationDuration": {
           "type": "number",
-          "description": "Animation duration in seconds.",
-          "default": 1.5
+          "description": "One animation cycle, in milliseconds. Lower is faster.",
+          "default": 1500
         },
         "trackColor": {
           "type": "string",
@@ -154,10 +154,10 @@
           "description": "Number of dots.",
           "default": 3
         },
-        "speed": {
+        "animationDuration": {
           "type": "number",
-          "description": "Full animation cycle duration in seconds.",
-          "default": 1.4
+          "description": "One animation cycle, in milliseconds. Lower is faster.",
+          "default": 1400
         },
         "reduceMotion": {
           "type": [
@@ -202,10 +202,10 @@
           "description": "Diameter of the circle in pixels.",
           "default": 40
         },
-        "speed": {
+        "animationDuration": {
           "type": "number",
-          "description": "Animation duration in seconds.",
-          "default": 1.5
+          "description": "One animation cycle, in milliseconds. Lower is faster.",
+          "default": 1500
         },
         "rings": {
           "type": "number",
@@ -260,10 +260,10 @@
           "description": "Stroke width of track and arc. Default: 2",
           "default": 2
         },
-        "speed": {
+        "animationDuration": {
           "type": "number | undefined",
-          "description": "Animation duration in seconds (lower = faster). Default: 0.75",
-          "default": 0.75
+          "description": "One spin, in milliseconds (lower = faster). Default: 750",
+          "default": 750
         },
         "trackColor": {
           "type": "string | undefined",
@@ -299,10 +299,10 @@
           "description": "Width of the bar (CSS value). Default: \"100%\"",
           "default": "100%"
         },
-        "speed": {
+        "animationDuration": {
           "type": "number | undefined",
-          "description": "Animation duration in seconds. Default: 1.5",
-          "default": 1.5
+          "description": "One animation cycle, in milliseconds. Default: 1500",
+          "default": 1500
         },
         "trackColor": {
           "type": "string | undefined",
@@ -348,10 +348,10 @@
           "description": "Number of dots. Default: 3",
           "default": 3
         },
-        "speed": {
+        "animationDuration": {
           "type": "number | undefined",
-          "description": "Full animation cycle duration in seconds. Default: 1.4",
-          "default": 1.4
+          "description": "One full bounce cycle, in milliseconds. Default: 1400",
+          "default": 1400
         },
         "reduceMotion": {
           "type": "boolean | \"auto\" | undefined",
@@ -377,10 +377,10 @@
           "description": "Diameter of the circle in pixels. Default: 40",
           "default": 40
         },
-        "speed": {
+        "animationDuration": {
           "type": "number | undefined",
-          "description": "Animation duration in seconds. Default: 1.5",
-          "default": 1.5
+          "description": "One animation cycle, in milliseconds. Default: 1500",
+          "default": 1500
         },
         "rings": {
           "type": "number | undefined",

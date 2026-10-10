@@ -94,7 +94,7 @@ function resolveInitialPhone(
  * - Auto-formats numbers per country-specific patterns
  * - Validates phone length on blur (configurable via `validateOnBlur`)
  * - Country dropdown rendered via portal (never clipped by overflow)
- * - Auto-flips dropdown position when insufficient viewport space (disable with `forceDropdownPosition`)
+ * - Auto-flips dropdown position when insufficient viewport space (disable with `forceDropdownSide`)
  * - Copies in E.164, international, or national format
  *
  * Reference:
@@ -149,10 +149,10 @@ const InternationalPhoneInput = forwardRef<
       style,
       classes: classesProp,
       unstyled = false,
-      dropdownPosition,
-      forceDropdownPosition,
+      dropdownSide,
+      forceDropdownSide,
       dropdownZIndex,
-      dropdownGap,
+      dropdownOffset,
       portalContainer,
       lockScroll,
       onFocus,
@@ -603,10 +603,10 @@ const InternationalPhoneInput = forwardRef<
             showChevron={true}
             selectedIcon={selectedIcon}
             aria-label={countryDropdownAriaLabel}
-            dropdownPosition={dropdownPosition}
-            forceDropdownPosition={forceDropdownPosition}
+            dropdownSide={dropdownSide}
+            forceDropdownSide={forceDropdownSide}
             dropdownZIndex={dropdownZIndex}
-            dropdownGap={dropdownGap}
+            dropdownOffset={dropdownOffset}
             portalContainer={portalContainer}
             lockScroll={lockScroll}
             // ADR 002 R6: the child's own bag, handed over whole. `unstyled`

@@ -49,8 +49,8 @@ export interface CircularLoaderProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
   /** Stroke width of track and arc. Default: 2 */
   thickness?: number;
-  /** Animation duration in seconds (lower = faster). Default: 0.75 */
-  speed?: number;
+  /** One spin, in milliseconds (lower = faster). Default: 750 */
+  animationDuration?: number;
   /** Background track color. Default: currentColor at 20% opacity */
   trackColor?: string;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
@@ -66,8 +66,8 @@ export interface LinearLoaderProps extends HTMLAttributes<HTMLDivElement> {
   height?: number;
   /** Width of the bar (CSS value). Default: "100%" */
   width?: string | number;
-  /** Animation duration in seconds. Default: 1.5 */
-  speed?: number;
+  /** One animation cycle, in milliseconds. Default: 1500 */
+  animationDuration?: number;
   /** Background track color. Default: currentColor at 20%, painted on the track only, so the bar keeps full strength */
   trackColor?: string;
   /** Border radius in pixels. Default: 9999 (pill) */
@@ -87,8 +87,8 @@ export interface DotLoaderProps extends HTMLAttributes<HTMLDivElement> {
   gap?: number;
   /** Number of dots. Default: 3 */
   count?: number;
-  /** Full animation cycle duration in seconds. Default: 1.4 */
-  speed?: number;
+  /** One full bounce cycle, in milliseconds. Default: 1400 */
+  animationDuration?: number;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
   /** CSS class overrides for sub-elements. */
@@ -100,8 +100,8 @@ export interface DotLoaderProps extends HTMLAttributes<HTMLDivElement> {
 export interface PulseLoaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Diameter of the circle in pixels. Default: 40 */
   size?: number;
-  /** Animation duration in seconds. Default: 1.5 */
-  speed?: number;
+  /** One animation cycle, in milliseconds. Default: 1500 */
+  animationDuration?: number;
   /** Number of ripple rings. Default: 2 */
   rings?: number;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */

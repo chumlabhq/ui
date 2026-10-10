@@ -37,7 +37,7 @@ const LoaderDemo = () => {
     <div className="space-y-10">
       <DocsHero
         title="Loaders"
-        description='Lightweight, animated loading indicators. Four variants — CircularLoader, LinearLoader, DotLoader, and PulseLoader — each configurable for size, speed, and color. All use role="status" and aria-label out of the box.'
+        description='Lightweight, animated loading indicators. Four variants — CircularLoader, LinearLoader, DotLoader, and PulseLoader — each configurable for size, animation duration, and color. All use role="status" and aria-label out of the box.'
         code={`import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "@chumlab/ui/loader";`}
       />
 
@@ -141,21 +141,21 @@ const LoaderDemo = () => {
       </Section>
 
       <Section
-        title="Circular — Speed"
-        description="Control the animation duration in seconds. Lower values spin faster."
+        title="Circular — Animation Duration"
+        description="Control the animation duration in milliseconds. Lower values spin faster."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
             {[
-              { speed: 2, label: "Slow (2s)" },
-              { speed: 0.75, label: "Normal (0.75s)" },
-              { speed: 0.35, label: "Fast (0.35s)" },
-            ].map(({ speed, label }) => (
+              { animationDuration: 2000, label: "Slow (2s)" },
+              { animationDuration: 750, label: "Normal (0.75s)" },
+              { animationDuration: 350, label: "Fast (0.35s)" },
+            ].map(({ animationDuration, label }) => (
               <div key={label} className="flex flex-col items-center gap-2">
                 <CircularLoader
                   size={32}
-                  speed={speed}
+                  animationDuration={animationDuration}
                   className="text-cl-accent"
                 />
                 <span className={c.label}>{label}</span>
@@ -293,22 +293,22 @@ const LoaderDemo = () => {
       </Section>
 
       <Section
-        title="Linear — Speed"
-        description="Animation duration in seconds via the speed prop."
+        title="Linear — Animation Duration"
+        description="Animation duration in milliseconds via the animationDuration prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-4 w-full max-w-xs sm:max-w-md">
             {[
-              { speed: 3, label: "Slow (3s)" },
-              { speed: 1.5, label: "Normal (1.5s)" },
-              { speed: 0.7, label: "Fast (0.7s)" },
-            ].map(({ speed, label }) => (
+              { animationDuration: 3000, label: "Slow (3s)" },
+              { animationDuration: 1500, label: "Normal (1.5s)" },
+              { animationDuration: 700, label: "Fast (0.7s)" },
+            ].map(({ animationDuration, label }) => (
               <div key={label} className="space-y-1">
                 <span className={c.label}>{label}</span>
                 <LinearLoader
                   trackColor="var(--cl-bg-track)"
-                  speed={speed}
+                  animationDuration={animationDuration}
                   className="text-cl-accent"
                 />
               </div>

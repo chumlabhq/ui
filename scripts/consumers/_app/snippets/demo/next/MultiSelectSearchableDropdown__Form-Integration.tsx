@@ -42,7 +42,7 @@ export default function MultiSelectSearchableDropdownExample() {
             ])
           }
           placeholder="Select fruits..."
-          maxDisplayedChips={2}
+          maxVisible={2}
           classes={
             {
               root: "",

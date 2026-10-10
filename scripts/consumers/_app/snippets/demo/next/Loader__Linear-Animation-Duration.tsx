@@ -5,17 +5,17 @@ export default function LoaderExample() {
     <div className="flex flex-col gap-4 w-full max-w-xs sm:max-w-md">
       {
         [
-          { speed: 3, label: "Slow (3s)" },
-          { speed: 1.5, label: "Normal (1.5s)" },
-          { speed: 0.7, label: "Fast (0.7s)" }
-        ].map(({ speed, label }) => (
+          { animationDuration: 3000, label: "Slow (3s)" },
+          { animationDuration: 1500, label: "Normal (1.5s)" },
+          { animationDuration: 700, label: "Fast (0.7s)" }
+        ].map(({ animationDuration, label }) => (
           <div key={label} className="space-y-1">
             <span className="text-xs font-medium text-cl-text-tertiary">
               {label}
             </span>
             <LinearLoader
               trackColor="var(--cl-bg-track)"
-              speed={speed}
+              animationDuration={animationDuration}
               className="text-cl-accent"
             />
           </div>

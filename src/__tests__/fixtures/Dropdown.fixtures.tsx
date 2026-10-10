@@ -1,5 +1,6 @@
 import { Dropdown } from "../../components/Dropdown/index.js";
 import type { Fixtures } from "./types.js";
+import { ChevronGlyph, CrossGlyph } from "./_icons.js";
 import { RtlBoundary } from "./_harness.js";
 import { OPTIONS } from "./_data.js";
 import {
@@ -26,6 +27,16 @@ const fixtures: Fixtures<typeof Dropdown> = [
     note: "Highlight state has no prop; arrow-down is the only way in.",
     act: (c, ui) => ui.keyDown(c.querySelector("[role='combobox'], button"), "ArrowDown"),
   },
+  {
+    name: "open-custom-chevron-icon",
+    props: { options: OPTIONS, defaultOpen: true, chevronIcon: <ChevronGlyph /> },
+    note: "Passes a real SVG in place of the default chevron; icon-slots holds it to Dropdown/open's box and position.",
+  },
+  {
+    name: "open-with-selection-custom-clear-icon",
+    props: { options: OPTIONS, defaultOpen: true, defaultValue: "a", clearable: true, clearIcon: <CrossGlyph size={14} /> },
+    note: "Passes a real SVG in place of the default clear glyph; icon-slots holds it to Dropdown/open-with-selection's box and position.",
+  },
   { name: "open-empty", props: { options: [], defaultOpen: true } },
   { name: "loading", props: { options: OPTIONS, loading: true, defaultOpen: true } },
   { name: "error", props: { options: OPTIONS, label: "Fruit", error: true, errorMessage: "Required" } },
@@ -43,7 +54,7 @@ const fixtures: Fixtures<typeof Dropdown> = [
   },
   {
     name: "async-load-pending",
-    props: { loadOptions: neverResolves(), loadOnOpen: true, loadingText: "Loading fruit" },
+    props: { loadOptions: neverResolves(), loadOnOpen: true, loadingContent: "Loading fruit" },
     act: openMenu,
     note: "Opened, loader never settles — the in-flight menu holds still.",
   },

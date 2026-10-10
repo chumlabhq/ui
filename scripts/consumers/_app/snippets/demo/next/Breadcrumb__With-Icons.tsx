@@ -37,7 +37,7 @@ const itemsWithIcons: BreadcrumbItem[] = [
     id: "annual-report",
     label: "Annual Report",
     icon: <DocumentIcon className="w-4 h-4" />,
-    iconPosition: "right",
+    iconPosition: "end",
   },
 ];
 

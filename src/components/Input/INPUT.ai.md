@@ -43,8 +43,8 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `onStartIconClick` | Requires `startIconLabel` for accessibility |
-| `onEndIconClick` | Requires `endIconLabel` for accessibility |
+| `onStartIconClick` | Requires `startIconAriaLabel` for accessibility |
+| `onEndIconClick` | Requires `endIconAriaLabel` for accessibility |
 | `showCount` | Requires `maxLength` to be set |
 | `size` | Sets the control's padding and type: 28/40/52px fields, 30/42/54 with the border. Emits `data-size` as well, for CSS that wants it |
 | `prefix` / `suffix` | For static text/elements. Use `startIcon`/`endIcon` for icons |
@@ -83,10 +83,10 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 | `suffix` | object | — | React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com'). |
 | `startIcon` | object | — | React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided. |
 | `endIcon` | object | — | React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided. |
-| `onStartIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes startIcon a clickable button, called with the native click event. Requires startIconLabel for accessibility. |
-| `onEndIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes endIcon a clickable button, called with the native click event. Requires endIconLabel for accessibility. |
-| `startIconLabel` | string | — | Accessible label for startIcon when it is clickable. Required with onStartIconClick. |
-| `endIconLabel` | string | — | Accessible label for endIcon when it is clickable. Required with onEndIconClick. |
+| `onStartIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes startIcon a clickable button, called with the native click event. Requires startIconAriaLabel for accessibility. |
+| `onEndIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void - Makes endIcon a clickable button, called with the native click event. Requires endIconAriaLabel for accessibility. |
+| `startIconAriaLabel` | string | — | Accessible label for startIcon when it is clickable. Required with onStartIconClick. |
+| `endIconAriaLabel` | string | — | Accessible label for endIcon when it is clickable. Required with onEndIconClick. |
 | `onValueChange` | object | — | (value: string) => void - Fires with the current string value when the value changes. |
 | `clearable` | boolean | `false` | Show a built-in clear button when the input has a value. |
 | `onClear` | object | — | () => void - Callback when the clear button is clicked. |
@@ -185,7 +185,7 @@ const [show, setShow] = useState(false);
   label="Password"
   endIcon={show ? <EyeOff /> : <Eye />}
   onEndIconClick={() => setShow(!show)}
-  endIconLabel={show ? "Hide password" : "Show password"}
+  endIconAriaLabel={show ? "Hide password" : "Show password"}
 />
 ```
 
@@ -220,7 +220,7 @@ A native `<input>`: the browser owns text entry, selection and the clear afforda
 - `aria-invalid` set on error
 - `aria-describedby` links error, success, description, and count
 - `aria-required` set when required
-- Icon buttons get `aria-label` via `startIconLabel` / `endIconLabel`
+- Icon buttons get `aria-label` via `startIconAriaLabel` / `endIconAriaLabel`
 - Character count has `role="status"` and `aria-live="polite"`
 
 ---

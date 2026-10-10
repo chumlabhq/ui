@@ -12,7 +12,7 @@ export default function TimePickerExample() {
         onValueChange={(v) => setClockI18n(v)}
         mode="clock"
         cancelText="Abbrechen"
-        okText="Fertig"
+        confirmText="Fertig"
         classes={
           {
              root: "inline-flex flex-col gap-1 text-cl-text",

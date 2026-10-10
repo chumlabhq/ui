@@ -16,7 +16,7 @@ export default function InternationalPhoneInputExample() {
               aria-label="Position bottom"
               value={posBotValue}
               onValueChange={setPosBotValue}
-              dropdownPosition="bottom"
+              dropdownSide="bottom"
               placeholder="Opens below..."
               classes={
                 {
@@ -46,7 +46,7 @@ export default function InternationalPhoneInputExample() {
               aria-label="Position top"
               value={posTopValue}
               onValueChange={setPosTopValue}
-              dropdownPosition="top"
+              dropdownSide="top"
               placeholder="Opens above..."
               classes={
                 {
@@ -78,8 +78,8 @@ export default function InternationalPhoneInputExample() {
               aria-label="Force bottom"
               value={forceBottomValue}
               onValueChange={setForceBottomValue}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               placeholder="Always opens below..."
               classes={
                 {
@@ -109,8 +109,8 @@ export default function InternationalPhoneInputExample() {
               aria-label="Force top"
               value={forceTopValue}
               onValueChange={setForceTopValue}
-              dropdownPosition="top"
-              forceDropdownPosition
+              dropdownSide="top"
+              forceDropdownSide
               placeholder="Always opens above..."
               classes={
                 {
@@ -142,8 +142,8 @@ export default function InternationalPhoneInputExample() {
               aria-label="Force bottom with scroll lock"
               value={forceLockScrollValue}
               onValueChange={setForceLockScrollValue}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               lockScroll
               placeholder="Forced bottom + scroll locked"
               classes={

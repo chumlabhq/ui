@@ -21,7 +21,7 @@ export default function MultiSelectDropdownExample() {
         value={orangeCheckboxValue}
         onValueChange={(values) => setOrangeCheckboxValue(values)}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
                         ...({

@@ -32,7 +32,7 @@ export default function MultiSelectSearchableDropdownExample() {
         <div className="w-56">
           <MultiSelectSearchableDropdown
             options={[]}
-            noResultsContent={
+            emptyContent={
               <div className="flex flex-col items-center gap-1 py-2">
                 <span className="text-lg">🍎</span>
                 <span className="text-xs text-cl-text-secondary">

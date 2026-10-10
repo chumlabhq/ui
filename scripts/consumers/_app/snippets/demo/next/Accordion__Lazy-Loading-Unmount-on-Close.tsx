@@ -36,7 +36,7 @@ export default function AccordionExample() {
       >
         <AccordionItem value="unmount-1">
           <AccordionTrigger>Unmount on Close</AccordionTrigger>
-          <AccordionContent unmountOnClose>
+          <AccordionContent keepMounted={false}>
             This content is removed from the DOM when closed.
           </AccordionContent>
         </AccordionItem>

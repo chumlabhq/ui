@@ -63,7 +63,7 @@ export default function BreadcrumbExample() {
     <Breadcrumb
       items={itemsWithTooltips}
       showTooltips
-      tooltipPosition="bottom"
+      tooltipSide="bottom"
       classes={
         { ...({
           list: "flex flex-wrap items-center gap-1",

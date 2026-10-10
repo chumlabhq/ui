@@ -74,14 +74,14 @@ export interface InputProps
   startIcon?: ReactNode;
   /** Icon rendered after the input. Becomes a button when `onEndIconClick` is provided. */
   endIcon?: ReactNode;
-  /** Makes `startIcon` a clickable button, called with the native click event. Requires `startIconLabel` for accessibility. */
+  /** Makes `startIcon` a clickable button, called with the native click event. Requires `startIconAriaLabel` for accessibility. */
   onStartIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  /** Makes `endIcon` a clickable button, called with the native click event. Requires `endIconLabel` for accessibility. */
+  /** Makes `endIcon` a clickable button, called with the native click event. Requires `endIconAriaLabel` for accessibility. */
   onEndIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   /** Accessible label for `startIcon` when it is clickable. Required with `onStartIconClick`. */
-  startIconLabel?: string;
+  startIconAriaLabel?: string;
   /** Accessible label for `endIcon` when it is clickable. Required with `onEndIconClick`. */
-  endIconLabel?: string;
+  endIconAriaLabel?: string;
   /**
    * Fired with the current string value when the value changes (including clear).
    * Prefer this when you only need the value; use `onChange` when you need the DOM event.

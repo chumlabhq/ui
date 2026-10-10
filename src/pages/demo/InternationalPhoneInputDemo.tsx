@@ -1448,14 +1448,14 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
             <div className="w-full space-y-8">
               <div>
                 <DemoLabel isDarkMode={dark}>
-                  dropdownPosition=&quot;bottom&quot; (default)
+                  dropdownSide=&quot;bottom&quot; (default)
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
                     aria-label="Position bottom"
                     value={posBotValue}
                     onValueChange={setPosBotValue}
-                    dropdownPosition="bottom"
+                    dropdownSide="bottom"
                     placeholder="Opens below..."
                     classes={c.phone}
                   />
@@ -1463,14 +1463,14 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
               </div>
               <div>
                 <DemoLabel isDarkMode={dark}>
-                  dropdownPosition=&quot;top&quot;
+                  dropdownSide=&quot;top&quot;
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
                     aria-label="Position top"
                     value={posTopValue}
                     onValueChange={setPosTopValue}
-                    dropdownPosition="top"
+                    dropdownSide="top"
                     placeholder="Opens above..."
                     classes={c.phone}
                   />
@@ -1488,15 +1488,15 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
             <div className="w-full space-y-8">
               <div>
                 <DemoLabel isDarkMode={dark}>
-                  forceDropdownPosition (forced bottom)
+                  forceDropdownSide (forced bottom)
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
                     aria-label="Force bottom"
                     value={forceBottomValue}
                     onValueChange={setForceBottomValue}
-                    dropdownPosition="bottom"
-                    forceDropdownPosition
+                    dropdownSide="bottom"
+                    forceDropdownSide
                     placeholder="Always opens below..."
                     classes={c.phone}
                   />
@@ -1504,15 +1504,15 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
               </div>
               <div>
                 <DemoLabel isDarkMode={dark}>
-                  forceDropdownPosition (forced top)
+                  forceDropdownSide (forced top)
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
                     aria-label="Force top"
                     value={forceTopValue}
                     onValueChange={setForceTopValue}
-                    dropdownPosition="top"
-                    forceDropdownPosition
+                    dropdownSide="top"
+                    forceDropdownSide
                     placeholder="Always opens above..."
                     classes={c.phone}
                   />
@@ -1521,22 +1521,22 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
             </div>
           </DemoWrapper>
           <div className={c.note}>
-            When forceDropdownPosition is true, the country dropdown will always open in
+            When forceDropdownSide is true, the country dropdown will always open in
             the specified direction regardless of available viewport space.
           </div>
           <DemoWrapper isDarkMode={dark} layout="flex-col">
             <div className="w-full space-y-8">
               <div>
                 <DemoLabel isDarkMode={dark}>
-                  forceDropdownPosition + lockScroll
+                  forceDropdownSide + lockScroll
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
                     aria-label="Force bottom with scroll lock"
                     value={forceLockScrollValue}
                     onValueChange={setForceLockScrollValue}
-                    dropdownPosition="bottom"
-                    forceDropdownPosition
+                    dropdownSide="bottom"
+                    forceDropdownSide
                     lockScroll
                     placeholder="Forced bottom + scroll locked"
                     classes={c.phone}
@@ -1546,7 +1546,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
             </div>
           </DemoWrapper>
           <div className={c.note}>
-            Combining forceDropdownPosition with lockScroll prevents the page from
+            Combining forceDropdownSide with lockScroll prevents the page from
             scrolling while the country dropdown is open, ensuring the menu stays anchored
             in place.
           </div>

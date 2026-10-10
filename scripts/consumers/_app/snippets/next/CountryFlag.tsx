@@ -4,7 +4,7 @@ export default function Example() {
   return (
     <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
       <CountryFlag code="us" size="lg" />
-      <CountryFlagGroup max={3} size="lg">
+      <CountryFlagGroup maxVisible={3} size="lg">
         <CountryFlag code="gb" />
         <CountryFlag code="jp" />
         <CountryFlag code="de" />

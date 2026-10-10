@@ -124,7 +124,7 @@
       "description": "Custom aria-label for the search input. Defaults to 'Search options'.",
       "default": "Search options"
     },
-    "noResultsContent": {
+    "emptyContent": {
       "type": "object",
       "description": "React.ReactNode — Content shown when no search results are found.",
       "default": "No results found",
@@ -159,7 +159,7 @@
       "description": "(query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`.",
       "x-tsType": "(query: string) => Promise<DropdownOption[]>"
     },
-    "searchDebounceMs": {
+    "searchDebounce": {
       "type": "number",
       "description": "Debounce delay in milliseconds for the search callback.",
       "default": 300
@@ -275,7 +275,7 @@
       "description": "HTMLElement | null — Custom container element for the dropdown portal.",
       "x-tsType": "HTMLElement | null | undefined"
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -284,9 +284,9 @@
       "description": "Position of the dropdown relative to the trigger.",
       "default": "bottom"
     },
-    "forceDropdownPosition": {
+    "forceDropdownSide": {
       "type": "boolean",
-      "description": "When true, locks the dropdown to the specified dropdownPosition without auto-flipping.",
+      "description": "When true, locks the dropdown to the specified dropdownSide without auto-flipping.",
       "default": false
     },
     "dropdownZIndex": {
@@ -294,7 +294,7 @@
       "description": "Z-index for the dropdown.",
       "default": 50
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap between trigger and dropdown in pixels.",
       "default": 4
@@ -338,28 +338,22 @@
       "description": "(triggerProps: SearchableDropdownTriggerRenderProps, state: SearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder).",
       "x-tsType": "((triggerProps: SearchableDropdownTriggerRenderProps, state: SearchableDropdownTriggerState) => ReactNode) | undefined"
     },
-    "ChevronIcon": {
+    "chevronIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom chevron icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined",
-      "x-defaultSource": "ChevronDownIcon"
+      "description": "ReactNode — Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open.",
+      "x-tsType": "ReactNode"
     },
-    "CheckIcon": {
+    "clearIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom check icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the clear button's glyph. Rendered as given.",
+      "x-tsType": "ReactNode"
     },
-    "ClearIcon": {
+    "searchIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom clear icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the search field's magnifier. Rendered as given; `classes.searchIcon` styles the default one.",
+      "x-tsType": "ReactNode"
     },
-    "SearchIcon": {
-      "type": "object",
-      "description": "React.ComponentType — Custom search icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; }> | undefined"
-    },
-    "loadingText": {
+    "loadingContent": {
       "type": "object",
       "description": "React.ReactNode — Text shown during loading state.",
       "default": "Loading...",

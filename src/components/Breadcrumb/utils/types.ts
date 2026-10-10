@@ -1,8 +1,9 @@
-import type { ReactNode, CSSProperties, ComponentType, HTMLAttributes } from "react";
+import type { ReactNode, CSSProperties, HTMLAttributes } from "react";
 
 export type TooltipSide = "top" | "right" | "bottom" | "left";
 export type TooltipAlign = "start" | "center" | "end";
-export type IconPosition = "left" | "right";
+/** Which end of the label an item's icon sits at: `start` before it, `end` after it. */
+export type IconPosition = "start" | "end";
 
 export interface BreadcrumbTooltipProps {
   side?: TooltipSide;
@@ -30,10 +31,9 @@ export interface BreadcrumbItem {
   /** An icon beside the label, placed by `iconPosition`. */
   icon?: ReactNode;
   /**
-   * Which side of the label the icon sits on. Falls back to the component's
-   * setting.
+   * Which end of the label the icon sits at.
    *
-   * @default "left" when icon is provided
+   * @default "start" when icon is provided
    */
   iconPosition?: IconPosition;
   /** Renders the item but refuses activation. */
@@ -69,7 +69,7 @@ export interface BreadcrumbClasses {
   collapsedItem?: string;
 }
 
-export type DropdownPosition = "top" | "bottom" | "left" | "right";
+export type DropdownSide = "top" | "bottom" | "left" | "right";
 
 /**
  * Props for the Breadcrumb component.
@@ -81,7 +81,7 @@ export type DropdownPosition = "top" | "bottom" | "left" | "right";
  */
 export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "className" | "style" | "aria-label"> {
   items: BreadcrumbItem[];
-  maxVisibleItems?: number;
+  maxVisible?: number;
   separator?: ReactNode;
   onItemClick?: (item: BreadcrumbItem) => void;
   "aria-label"?: string;
@@ -89,16 +89,18 @@ export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "clas
   unstyled?: boolean;
   className?: string;
   style?: CSSProperties;
-  separatorIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
-  ellipsisIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
+  /** Replaces the default chevron between items. Rendered as given; `iconSize` sizes the default one. `separator` takes precedence when both are set. */
+  separatorIcon?: ReactNode;
+  /** Replaces the collapsed-items button's glyph. Rendered as given; `iconSize` sizes the default one. */
+  ellipsisIcon?: ReactNode;
   iconSize?: number | string;
   showTooltips?: boolean;
-  tooltipPosition?: TooltipSide;
+  tooltipSide?: TooltipSide;
   tooltipOffset?: number;
   defaultTooltipProps?: BreadcrumbTooltipProps;
   ellipsisTooltip?: ReactNode;
   ellipsisTooltipProps?: BreadcrumbTooltipProps;
-  dropdownPosition?: DropdownPosition;
+  dropdownSide?: DropdownSide;
   dropdownZIndex?: number;
   portalContainer?: HTMLElement | null;
   /** Keeps the collapsed-items menu mounted while closed. */

@@ -408,7 +408,7 @@ describe("AvatarGroup", () => {
 
     it("limits visible avatars when max is set", () => {
       render(
-        <AvatarGroup max={2}>
+        <AvatarGroup maxVisible={2}>
           <Avatar name="John Doe" />
           <Avatar name="Jane Smith" />
           <Avatar name="Bob Lee" />
@@ -422,7 +422,7 @@ describe("AvatarGroup", () => {
 
     it("shows surplus count when max exceeded", () => {
       render(
-        <AvatarGroup max={2}>
+        <AvatarGroup maxVisible={2}>
           <Avatar name="John" />
           <Avatar name="Jane" />
           <Avatar name="Bob" />
@@ -434,7 +434,7 @@ describe("AvatarGroup", () => {
 
     it("shows total-based surplus when total prop provided", () => {
       render(
-        <AvatarGroup max={2} total={10}>
+        <AvatarGroup maxVisible={2} total={10}>
           <Avatar name="John" />
           <Avatar name="Jane" />
         </AvatarGroup>
@@ -473,7 +473,7 @@ describe("AvatarGroup", () => {
 
     it("does not show a surplus when max covers every child", () => {
       render(
-        <AvatarGroup max={3}>
+        <AvatarGroup maxVisible={3}>
           <Avatar name="John Doe" />
           <Avatar name="Jane Smith" />
           <Avatar name="Bob Lee" />
@@ -487,7 +487,7 @@ describe("AvatarGroup", () => {
   describe("Surplus in the stack", () => {
     const renderSurplusGroup = (count: number) =>
       render(
-        <AvatarGroup max={1} total={count + 1}>
+        <AvatarGroup maxVisible={1} total={count + 1}>
           <Avatar name="John Doe" />
         </AvatarGroup>,
       );
@@ -502,7 +502,7 @@ describe("AvatarGroup", () => {
 
     it("leaves an explicit max alone inside a group", () => {
       render(
-        <AvatarGroup max={1} total={51}>
+        <AvatarGroup maxVisible={1} total={51}>
           <Avatar name="John Doe" />
         </AvatarGroup>,
       );
@@ -549,7 +549,7 @@ describe("AvatarGroup", () => {
     it("renders custom surplus element", () => {
       render(
         <AvatarGroup
-          max={2}
+          maxVisible={2}
           renderSurplus={(count) => (
             <span data-testid="custom-surplus">{count} more</span>
           )}
@@ -631,7 +631,7 @@ describe("AvatarGroup", () => {
   describe("Tooltip Content", () => {
     it("builds tooltip content from remaining children names", () => {
       render(
-        <AvatarGroup max={2} showTooltip>
+        <AvatarGroup maxVisible={2} showTooltip>
           <Avatar name="John Doe" />
           <Avatar name="Jane Smith" />
           <Avatar name="Bob Lee" />
@@ -645,7 +645,7 @@ describe("AvatarGroup", () => {
 
     it("builds tooltip content using alt when name not present", () => {
       render(
-        <AvatarGroup max={1} showTooltip>
+        <AvatarGroup maxVisible={1} showTooltip>
           <Avatar name="John" />
           <Avatar alt="Jane alt" />
         </AvatarGroup>
@@ -660,7 +660,7 @@ describe("AvatarGroup", () => {
       // but we can pass {false} or {null} which React.Children.toArray skips,
       // and a valid React element with no name/alt to exercise the '' fallback on line 82
       render(
-        <AvatarGroup max={1} showTooltip>
+        <AvatarGroup maxVisible={1} showTooltip>
           <Avatar name="John" />
           <Avatar />
         </AvatarGroup>
@@ -708,7 +708,7 @@ describe("AvatarGroup", () => {
 
     it("has descriptive aria-label", () => {
       render(
-        <AvatarGroup max={2}>
+        <AvatarGroup maxVisible={2}>
           <Avatar name="John" />
           <Avatar name="Jane" />
           <Avatar name="Bob" />

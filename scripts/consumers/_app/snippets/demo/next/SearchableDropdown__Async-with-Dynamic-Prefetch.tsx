@@ -126,8 +126,8 @@ export default function SearchableDropdownExample() {
         searchOptions={handleAsyncSearch}
         loadInitialOptions={handleLoadInitialOptions}
         loadInitialOnOpen
-        searchDebounceMs={300}
-        noResultsContent="No countries found"
+        searchDebounce={300}
+        emptyContent="No countries found"
         onLoadError={(err) => setAsyncLoadError(err instanceof Error ? err.message : String(err))}
         classes={
           {

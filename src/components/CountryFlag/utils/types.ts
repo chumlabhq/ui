@@ -38,7 +38,7 @@ export interface CountryFlagGroupClasses {
   root?: string;
   /** Each flag in that row, which is where the stack margin lives. */
   item?: string;
-  /** The `+N` disc closing the row when there are more flags than `max`. */
+  /** The `+N` disc closing the row when there are more flags than `maxVisible`. */
   count?: string;
 }
 
@@ -77,7 +77,7 @@ export interface CountryFlagGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** Content rendered inside this element. */
   children: ReactNode;
   /** How many flags to show before the rest are collapsed into a surplus count. */
-  max?: number;
+  maxVisible?: number;
   /** Flag size for every member of the group. */
   size?: CountryFlagSize | number;
   /** Shows a tooltip on the surplus count listing the hidden countries. */

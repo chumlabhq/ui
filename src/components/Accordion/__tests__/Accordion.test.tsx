@@ -729,7 +729,7 @@ describe("Accordion", () => {
         <Accordion selectionMode="single" collapsible defaultValue={defaultValue} reduceMotion={reduceMotion}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
-            <AccordionContent forceMount {...callbacks}>
+            <AccordionContent keepMounted {...callbacks}>
               Content 1
             </AccordionContent>
           </AccordionItem>
@@ -857,12 +857,12 @@ describe("Accordion", () => {
       expect(screen.getByText("Content 1")).toBeInTheDocument();
     });
 
-    it("respects forceMount prop", () => {
+    it("respects keepMounted={true}", () => {
       render(
         <Accordion selectionMode="single">
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
-            <AccordionContent forceMount>Content 1</AccordionContent>
+            <AccordionContent keepMounted>Content 1</AccordionContent>
           </AccordionItem>
         </Accordion>,
       );
@@ -876,7 +876,7 @@ describe("Accordion", () => {
         <Accordion selectionMode="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
-            <AccordionContent forceMount>Content 1</AccordionContent>
+            <AccordionContent keepMounted>Content 1</AccordionContent>
           </AccordionItem>
         </Accordion>,
       );
@@ -1812,4 +1812,49 @@ describe("AccordionShimmer – extended", () => {
   it("has displayName set to 'AccordionShimmer'", () => {
     expect(AccordionShimmer.displayName).toBe("AccordionShimmer");
   });
+});
+
+/**
+ * `forceMount` and `unmountOnClose` became one `keepMounted`. Each old
+ * combination is listed with the mount states HEAD produced for it (recorded
+ * with the old props before the merge), and the mapped `keepMounted` must
+ * produce exactly those: forceMount wins, then unmountOnClose, then the default.
+ */
+describe("AccordionContent keepMounted keeps every old forceMount/unmountOnClose behaviour", () => {
+  const CASES = [
+    { forceMount: false, unmountOnClose: false, lazyLoad: false, keepMounted: undefined, beforeOpen: false, open: true, afterClose: true },
+    { forceMount: false, unmountOnClose: false, lazyLoad: true, keepMounted: undefined, beforeOpen: false, open: true, afterClose: true },
+    { forceMount: false, unmountOnClose: true, lazyLoad: false, keepMounted: false, beforeOpen: false, open: true, afterClose: false },
+    { forceMount: false, unmountOnClose: true, lazyLoad: true, keepMounted: false, beforeOpen: false, open: true, afterClose: false },
+    { forceMount: true, unmountOnClose: false, lazyLoad: false, keepMounted: true, beforeOpen: true, open: true, afterClose: true },
+    { forceMount: true, unmountOnClose: false, lazyLoad: true, keepMounted: true, beforeOpen: true, open: true, afterClose: true },
+    { forceMount: true, unmountOnClose: true, lazyLoad: false, keepMounted: true, beforeOpen: true, open: true, afterClose: true },
+    { forceMount: true, unmountOnClose: true, lazyLoad: true, keepMounted: true, beforeOpen: true, open: true, afterClose: true },
+  ] as const;
+
+  it.each(CASES)(
+    "forceMount=$forceMount unmountOnClose=$unmountOnClose lazyLoad=$lazyLoad → keepMounted=$keepMounted",
+    async ({ lazyLoad, keepMounted, beforeOpen, open, afterClose }) => {
+      const user = userEvent.setup();
+      render(
+        <Accordion selectionMode="multiple" reduceMotion>
+          <AccordionItem value="a">
+            <AccordionTrigger>A</AccordionTrigger>
+            <AccordionContent lazyLoad={lazyLoad} keepMounted={keepMounted}>
+              <span data-testid="body">Body</span>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+      const mounted = () => Boolean(screen.queryByTestId("body"));
+      expect(mounted()).toBe(beforeOpen);
+      await user.click(screen.getByRole("button", { name: "A" }));
+      expect(mounted()).toBe(open);
+      await user.click(screen.getByRole("button", { name: "A" }));
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+      });
+      expect(mounted()).toBe(afterClose);
+    },
+  );
 });

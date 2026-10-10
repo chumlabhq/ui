@@ -133,8 +133,8 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `showDescriptions` | boolean | `false` | Whether to show step descriptions. |
 | `showConnectors` | boolean | `true` | Whether to show connectors between steps. |
 | `labelPosition` | `"bottom"` \| `"end"` | `"end"` | Where each step's label sits: under its indicator, or after it (`end`). |
-| `completedIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for completed steps. |
-| `errorIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for error steps. |
+| `completedIcon` | object | — | ReactNode — Replaces every step's completed check. Rendered as given; a step's own `completedIcon` wins. |
+| `errorIcon` | object | — | ReactNode — Replaces every step's error mark. Rendered as given; a step's own `errorIcon` wins. |
 | `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
 | `aria-label` | string | — | Accessible label for the stepper. |
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |

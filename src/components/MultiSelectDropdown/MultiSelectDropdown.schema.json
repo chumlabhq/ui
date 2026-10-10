@@ -111,7 +111,7 @@
       "description": "Marks the field as required.",
       "default": false
     },
-    "noResultsContent": {
+    "emptyContent": {
       "type": "object",
       "description": "React.ReactNode - Content shown when no options are available.",
       "default": "No options found",
@@ -156,7 +156,7 @@
       "description": "Number of shimmer placeholder items shown during loading.",
       "default": 5
     },
-    "maxDisplayedChips": {
+    "maxVisible": {
       "type": "number",
       "description": "Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that.",
       "default": 3
@@ -278,7 +278,7 @@
       "description": "HTMLElement | null - Portal target for the dropdown popup.",
       "x-tsType": "HTMLElement | null | undefined"
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -287,7 +287,7 @@
       "description": "Vertical placement of the dropdown relative to the trigger.",
       "default": "bottom"
     },
-    "forceDropdownPosition": {
+    "forceDropdownSide": {
       "type": "boolean",
       "description": "Locks the dropdown to the specified position without auto-flipping.",
       "default": false
@@ -297,7 +297,7 @@
       "description": "Z-index of the dropdown popup.",
       "default": 50
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap in pixels between trigger and dropdown popup.",
       "default": 4
@@ -326,21 +326,21 @@
       "description": "(event: React.KeyboardEvent) => void - Fires on keydown events.",
       "x-tsType": "((event: KeyboardEvent<Element>) => void) | undefined"
     },
-    "ChevronIcon": {
+    "chevronIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open.",
+      "x-tsType": "ReactNode"
     },
-    "loadingText": {
+    "loadingContent": {
       "type": "object",
       "description": "React.ReactNode - Text shown during async loading.",
       "default": "Loading...",
       "x-tsType": "ReactNode"
     },
-    "ClearIcon": {
+    "clearIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string }> - Custom clear icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the clear button's glyph. Rendered as given.",
+      "x-tsType": "ReactNode"
     },
     "renderTrigger": {
       "type": "object",

@@ -37,7 +37,7 @@ function renderDrawer(
         open={true}
         onOpenChange={onOpenChange}
         aria-label="Test drawer"
-        duration={0}
+        animationDuration={0}
         {...props}
       >
         <DrawerHeader>Header</DrawerHeader>
@@ -89,10 +89,10 @@ describe("Drawer", () => {
       expect(screen.getByText("Footer")).toBeInTheDocument();
     });
 
-    it("sets data-direction attribute", () => {
-      renderDrawer({ direction: "right" });
+    it("sets data-side attribute", () => {
+      renderDrawer({ side: "right" });
       const dialog = screen.getByRole("dialog");
-      expect(dialog).toHaveAttribute("data-direction", "right");
+      expect(dialog).toHaveAttribute("data-side", "right");
     });
 
     it("sets data-state='open' on root element when open", () => {
@@ -107,7 +107,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="State test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -119,7 +119,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="State test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -136,7 +136,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Inert test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -148,7 +148,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Inert test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -214,7 +214,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={outerOpenChange}
             aria-label="Outer"
-            duration={0}
+            animationDuration={0}
           >
             <DrawerBody>Outer</DrawerBody>
           </Drawer>
@@ -222,7 +222,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={innerOpenChange}
             aria-label="Inner"
-            duration={0}
+            animationDuration={0}
           >
             <DrawerBody>Inner</DrawerBody>
           </Drawer>
@@ -246,7 +246,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={onOpenChange}
           aria-label="Close test"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerCloseButton data-testid="close-btn" />
         </Drawer>,
@@ -262,7 +262,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Icon test"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerCloseButton data-testid="close-btn" />
         </Drawer>,
@@ -278,7 +278,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Custom test"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerCloseButton data-testid="close-btn">
             <span>X</span>
@@ -297,7 +297,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="A11y test"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerCloseButton data-testid="close-btn" />
         </Drawer>,
@@ -359,7 +359,7 @@ describe("Drawer", () => {
               open={open}
               onOpenChange={(o) => setOpen(o)}
               aria-label="Restore focus test"
-              duration={0}
+              animationDuration={0}
             >
               <DrawerBody>
                 <button>Inside</button>
@@ -394,7 +394,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={() => {}}
             aria-label="Initial focus test"
-            duration={0}
+            animationDuration={0}
             initialFocus={inputRef}
           >
             <DrawerBody>
@@ -420,7 +420,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Autofocus test"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerBody>
             <button>First</button>
@@ -444,7 +444,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Fallback focus test"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerBody>
             <button data-testid="first-btn">First</button>
@@ -480,7 +480,7 @@ describe("Drawer", () => {
               open={open}
               onOpenChange={setOpen}
               aria-label="Open from closed"
-              duration={0}
+              animationDuration={0}
             >
               <DrawerBody>
                 <button>First</button>
@@ -509,7 +509,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={() => {}}
             aria-label="Non-modal test"
-            duration={0}
+            animationDuration={0}
             modal={false}
           >
             <DrawerBody>
@@ -559,7 +559,7 @@ describe("Drawer", () => {
         <Drawer
           open={true}
           onOpenChange={() => {}}
-          duration={0}
+          animationDuration={0}
         >
           <DrawerHeader>Title</DrawerHeader>
         </Drawer>,
@@ -582,7 +582,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-labelledby="custom-id"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerHeader>Title</DrawerHeader>
         </Drawer>,
@@ -634,7 +634,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Keep mounted"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Persistent</DrawerBody>
@@ -646,7 +646,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Keep mounted"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Persistent</DrawerBody>
@@ -666,7 +666,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Not kept"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerBody>Transient</DrawerBody>
         </Drawer>,
@@ -677,7 +677,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Not kept"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerBody>Transient</DrawerBody>
         </Drawer>,
@@ -708,7 +708,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Transition test"
-          duration={200}
+          animationDuration={200}
           onTransitionEnd={onTransitionEnd}
           keepMounted
         >
@@ -721,7 +721,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Transition test"
-          duration={200}
+          animationDuration={200}
           onTransitionEnd={onTransitionEnd}
           keepMounted
         >
@@ -744,7 +744,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Transition test"
-          duration={200}
+          animationDuration={200}
           onTransitionEnd={onTransitionEnd}
         >
           <DrawerBody>Content</DrawerBody>
@@ -762,7 +762,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Transition test"
-          duration={200}
+          animationDuration={200}
           onTransitionEnd={onTransitionEnd}
           keepMounted
         >
@@ -780,12 +780,12 @@ describe("Drawer", () => {
 
   describe("Direction", () => {
     it.each(["left", "right", "top", "bottom"] as const)(
-      "sets data-direction='%s' on the panel",
-      (direction) => {
-        renderDrawer({ direction });
+      "sets data-side='%s' on the panel",
+      (side) => {
+        renderDrawer({ side });
         expect(screen.getByRole("dialog")).toHaveAttribute(
-          "data-direction",
-          direction,
+          "data-side",
+          side,
         );
       },
     );
@@ -831,9 +831,9 @@ describe("Drawer", () => {
       ["top", "translateY"],
       ["bottom", "translateY"],
     ] as const)(
-      "applies %s direction with correct transform axis (%s)",
-      (direction, expectedTransform) => {
-        renderDrawer({ direction });
+      "applies %s side with correct transform axis (%s)",
+      (side, expectedTransform) => {
+        renderDrawer({ side });
         const panel = screen.getByRole("dialog");
         const style = panel.getAttribute("style") ?? "";
         expect(style).toContain(expectedTransform);
@@ -841,13 +841,13 @@ describe("Drawer", () => {
     );
 
     it("applies width style for left/right directions", () => {
-      renderDrawer({ direction: "left", size: "400px" });
+      renderDrawer({ side: "left", size: "400px" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.width).toBe("400px");
     });
 
     it("applies height style for top/bottom directions", () => {
-      renderDrawer({ direction: "top", size: "200px" });
+      renderDrawer({ side: "top", size: "200px" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.height).toBe("200px");
     });
@@ -879,19 +879,19 @@ describe("Drawer", () => {
     }
 
     it("sets touch-action on the panel when swipeable", () => {
-      renderDrawer({ swipeable: true, direction: "left" });
+      renderDrawer({ swipeable: true, side: "left" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.touchAction).toBe("pan-y");
     });
 
-    it("sets touch-action to pan-x for top/bottom direction", () => {
-      renderDrawer({ swipeable: true, direction: "bottom" });
+    it("sets touch-action to pan-x for top/bottom side", () => {
+      renderDrawer({ swipeable: true, side: "bottom" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.touchAction).toBe("pan-x");
     });
 
     it("does not set touch-action when not swipeable", () => {
-      renderDrawer({ swipeable: false, direction: "left" });
+      renderDrawer({ swipeable: false, side: "left" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.touchAction).toBeFalsy();
     });
@@ -906,7 +906,7 @@ describe("Drawer", () => {
       const onOpenChange = vi.fn();
       renderDrawer({
         swipeable: true,
-        direction: "right",
+        side: "right",
         swipeThreshold: 0.3,
         onOpenChange,
       });
@@ -965,7 +965,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={() => {}}
             aria-label="Escape test"
-            duration={0}
+            animationDuration={0}
           >
             <DrawerBody>Content</DrawerBody>
           </Drawer>
@@ -988,7 +988,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Empty drawer"
-          duration={0}
+          animationDuration={0}
         >
           <DrawerBody>
             <p>No focusable elements here</p>
@@ -1014,7 +1014,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Scroll lock cleanup"
-          duration={0}
+          animationDuration={0}
           lockScroll
           modal
         >
@@ -1043,7 +1043,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Keep test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -1055,7 +1055,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Keep test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -1072,7 +1072,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Toggle test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Persistent Content</DrawerBody>
@@ -1084,7 +1084,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Toggle test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Persistent Content</DrawerBody>
@@ -1098,7 +1098,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Toggle test"
-          duration={0}
+          animationDuration={0}
           keepMounted
         >
           <DrawerBody>Persistent Content</DrawerBody>
@@ -1125,7 +1125,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="No callback test"
-          duration={100}
+          animationDuration={100}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -1137,7 +1137,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="No callback test"
-          duration={100}
+          animationDuration={100}
           keepMounted
         >
           <DrawerBody>Content</DrawerBody>
@@ -1159,7 +1159,7 @@ describe("Drawer", () => {
           open={false}
           onOpenChange={() => {}}
           aria-label="Reduce motion test"
-          duration={300}
+          animationDuration={300}
           reduceMotion={true}
           onTransitionEnd={onTransitionEnd}
           keepMounted
@@ -1173,7 +1173,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Reduce motion test"
-          duration={300}
+          animationDuration={300}
           reduceMotion={true}
           onTransitionEnd={onTransitionEnd}
           keepMounted
@@ -1198,7 +1198,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={() => {}}
             aria-label="Outer drawer"
-            duration={0}
+            animationDuration={0}
           >
             <DrawerBody>Outer Content</DrawerBody>
           </Drawer>
@@ -1206,7 +1206,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={() => {}}
             aria-label="Inner drawer"
-            duration={0}
+            animationDuration={0}
           >
             <DrawerBody>Inner Content</DrawerBody>
           </Drawer>
@@ -1230,7 +1230,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={outerChange}
             aria-label="Outer"
-            duration={0}
+            animationDuration={0}
           >
             <DrawerBody>Outer</DrawerBody>
           </Drawer>
@@ -1238,7 +1238,7 @@ describe("Drawer", () => {
             open={true}
             onOpenChange={innerChange}
             aria-label="Inner"
-            duration={0}
+            animationDuration={0}
           >
             <DrawerBody>Inner</DrawerBody>
           </Drawer>
@@ -1288,7 +1288,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Snap test"
-          duration={0}
+          animationDuration={0}
           swipeable
           snapPoints={[0.3, 0.6, 1]}
           snapPointIndex={10}
@@ -1307,7 +1307,7 @@ describe("Drawer", () => {
           open={true}
           onOpenChange={() => {}}
           aria-label="Snap test"
-          duration={0}
+          animationDuration={0}
           swipeable
           snapPoints={[0.3, 0.6, 1]}
           snapPointIndex={1.7}

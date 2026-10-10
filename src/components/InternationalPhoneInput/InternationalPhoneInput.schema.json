@@ -321,7 +321,7 @@
       "description": "Removes all default styling.",
       "default": false
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -329,7 +329,7 @@
       ],
       "description": "Vertical placement of the country dropdown relative to the trigger."
     },
-    "forceDropdownPosition": {
+    "forceDropdownSide": {
       "type": "boolean",
       "description": "Locks the country dropdown to the specified position without auto-flipping."
     },
@@ -337,7 +337,7 @@
       "type": "number",
       "description": "Z-index of the country dropdown popup."
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap in pixels between trigger and country dropdown popup."
     },

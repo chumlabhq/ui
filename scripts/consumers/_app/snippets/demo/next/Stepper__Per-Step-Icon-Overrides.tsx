@@ -31,8 +31,8 @@ const errorGetStatus = (
   };
 
 const perStepIconSteps: Step[] = [
-  { id: 1, label: "Upload", completedIcon: ThumbsUpIcon },
-  { id: 2, label: "Validate", errorIcon: WarningIcon },
+  { id: 1, label: "Upload", completedIcon: <ThumbsUpIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+  { id: 2, label: "Validate", errorIcon: <WarningIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
   { id: 3, label: "Publish" },
 ];
 

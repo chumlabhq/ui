@@ -14,7 +14,7 @@ export default function UserList() {
       <Avatar name="Jane Smith" autoColor />
 
       {/* Grouped avatars with overflow */}
-      <AvatarGroup max={3}>
+      <AvatarGroup maxVisible={3}>
         <Avatar name="Alice" autoColor />
         <Avatar name="Bob" autoColor />
         <Avatar name="Charlie" autoColor />

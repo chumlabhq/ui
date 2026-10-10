@@ -130,7 +130,7 @@ export default function InputExample() {
             )
           }
           onEndIconClick={() => setShowPw(!showPw)}
-          endIconLabel={showPw ? "Hide" : "Show"}
+          endIconAriaLabel={showPw ? "Hide" : "Show"}
           classes={
             {
               root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_input]:text-base",

@@ -54,7 +54,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     startIcon,
     endIcon,
     loading = false,
-    loadingText,
+    loadingContent,
     loaderPosition = "end",
     loaderSize,
     loader,
@@ -137,7 +137,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     </span>
   ) : null;
 
-  const displayContent = loading && loadingText ? loadingText : children;
+  const displayContent = loading && loadingContent ? loadingContent : children;
 
   const effectiveAnimation = effectiveReduceMotion ? "none" : iconAnimation;
 

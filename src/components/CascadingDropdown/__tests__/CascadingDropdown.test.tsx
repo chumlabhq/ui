@@ -568,7 +568,7 @@ describe("CascadingDropdown — loading state", () => {
       <CascadingDropdown
         options={simpleOptions}
         loading
-        loadingText="Loading items..."
+        loadingContent="Loading items..."
         shimmerCount={3}
       />
     );
@@ -578,13 +578,13 @@ describe("CascadingDropdown — loading state", () => {
     expect(screen.getByText("Loading items...")).toBeInTheDocument();
   });
 
-  it("uses custom loadingText when loading", async () => {
+  it("uses custom loadingContent when loading", async () => {
     const user = userEvent.setup();
     render(
       <CascadingDropdown
         options={[]}
         loading
-        loadingText={<span data-testid="custom-loading">Custom loader</span>}
+        loadingContent={<span data-testid="custom-loading">Custom loader</span>}
       />
     );
 
@@ -593,13 +593,13 @@ describe("CascadingDropdown — loading state", () => {
   });
 });
 
-describe("CascadingDropdown — submenuPosition left", () => {
-  it("renders the submenu through the anchored surface when submenuPosition='left'", async () => {
+describe("CascadingDropdown — submenuSide left", () => {
+  it("renders the submenu through the anchored surface when submenuSide='left'", async () => {
     const user = userEvent.setup();
     render(
       <CascadingDropdown
         options={nestedOptions}
-        submenuPosition="left"
+        submenuSide="left"
       />
     );
 

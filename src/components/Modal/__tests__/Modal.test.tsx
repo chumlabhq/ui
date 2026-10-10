@@ -320,12 +320,12 @@ describe("Modal", () => {
       expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
-    it("does not close on overlay click when preventOutsideClick=true", async () => {
+    it("does not close on overlay click when closeOnOverlayClick={false}", async () => {
       const user = userEvent.setup();
       const onOpenChange = vi.fn();
 
       render(
-        <Modal open onOpenChange={onOpenChange} preventOutsideClick>
+        <Modal open onOpenChange={onOpenChange} closeOnOverlayClick={false}>
           <p>Content</p>
         </Modal>
       );

@@ -52,6 +52,8 @@ import {
   TABLE_HIT_AREA,
   TABLE_DRAG_HANDLE,
   TABLE_CHECKBOX_SIZE,
+  TABLE_EXPAND_ICON_SIZE,
+  TABLE_FILTER_ICON_SIZE,
   TABLE_CUSTOM_CHECKBOX,
   TABLE_CUSTOM_CHECKBOX_DISABLED,
   TABLE_CUSTOM_CHECKBOX_INPUT,
@@ -165,7 +167,7 @@ function TableInner<TData>(
     onCursorPositionChange,
     onHeaderHoverChange,
     emptyContent,
-    ariaLabel = "Data table",
+    "aria-label": tableLabel = "Data table",
     caption,
     getRowId,
     selectedRowId,
@@ -183,9 +185,9 @@ function TableInner<TData>(
     classes: classesProp,
     unstyled = false,
     style: styleProp,
-    PinIcon: CustomPinIcon,
-    PinnedIcon: CustomPinnedIcon,
-    shimmerRowCount = 10,
+    pinIcon,
+    pinnedIcon,
+    shimmerCount = 10,
     className,
     children,
 
@@ -206,14 +208,14 @@ function TableInner<TData>(
     onColumnFiltersChange,
     filterable = false,
     filterableColumns,
-    FilterIcon: CustomFilterIcon,
+    renderFilterIcon,
     renderColumnFilter,
 
     expandable = false,
     expandedRowIds: expandedRowIdsProp,
     onExpandedRowIdsChange,
     renderExpandedRow,
-    ExpandIcon: CustomExpandIcon,
+    renderExpandIcon,
     expandColumnPosition = "start",
     expandOnRowClick = false,
 
@@ -269,10 +271,10 @@ function TableInner<TData>(
     searchPlaceholder = "Search...",
     searchIconPosition = "start",
 
-    CheckboxIcon: CustomCheckboxIcon,
+    renderCheckboxIcon,
     checkboxColor,
-    DragHandleIcon: CustomDragHandleIcon,
-    SearchIcon: CustomSearchIcon,
+    dragHandleIcon,
+    searchIcon,
     onSearchClear,
     loadingMoreContent,
   }: TableProps<TData>,
@@ -471,14 +473,20 @@ function TableInner<TData>(
   );
 
   // Read at render time: an inline icon as a column dependency remounted the focused checkbox.
-  const checkboxIconRef = useRef(CustomCheckboxIcon);
-  checkboxIconRef.current = CustomCheckboxIcon;
-  const hasCustomCheckboxIcon = Boolean(CustomCheckboxIcon);
+  // The expand and drag-handle icons are inline elements and functions too, so the same applies.
+  const checkboxIconRef = useRef(renderCheckboxIcon);
+  checkboxIconRef.current = renderCheckboxIcon;
+  const hasCustomCheckboxIcon = Boolean(renderCheckboxIcon);
+  const expandIconRef = useRef(renderExpandIcon);
+  expandIconRef.current = renderExpandIcon;
+  const hasCustomExpandIcon = Boolean(renderExpandIcon);
+  const dragHandleIconRef = useRef(dragHandleIcon);
+  dragHandleIconRef.current = dragHandleIcon;
+  const hasCustomDragHandleIcon = dragHandleIcon != null;
 
   const augmentedColumns = useMemo(() => {
     const cols: ColumnDef<TData, unknown>[] = [];
 
-    const DragHandleIconComponent = CustomDragHandleIcon || DragHandleIcon;
     const dragCol: ColumnDef<TData, unknown> | null = reorderable
       ? ({
           id: "__dragHandle",
@@ -505,7 +513,7 @@ function TableInner<TData>(
                 onRowReorder?.(row.index, to);
               }}
             >
-              <DragHandleIconComponent className="w-4 h-4" />
+              {hasCustomDragHandleIcon ? dragHandleIconRef.current : <DragHandleIcon className="w-4 h-4" />}
             </button>
           ),
           size: 40,
@@ -530,12 +538,12 @@ function TableInner<TData>(
         label: string,
         iconClassName?: string,
       ) => {
-        const Icon = hasCustomCheckboxIcon ? checkboxIconRef.current : undefined;
+        const renderIcon = hasCustomCheckboxIcon ? checkboxIconRef.current : undefined;
         const input = (
           <input
             type="checkbox"
-            className={Icon ? TABLE_CUSTOM_CHECKBOX_INPUT : `${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
-            style={!Icon && checkboxColor ? { accentColor: checkboxColor } : undefined}
+            className={renderIcon ? TABLE_CUSTOM_CHECKBOX_INPUT : `${TABLE_CHECKBOX_SIZE} ${checkboxClassName ?? ""}`}
+            style={!renderIcon && checkboxColor ? { accentColor: checkboxColor } : undefined}
             checked={checked}
             ref={(el) => {
               if (el) {
@@ -547,12 +555,12 @@ function TableInner<TData>(
             aria-label={label}
           />
         );
-        if (!Icon) return input;
+        if (!renderIcon) return input;
         return (
           <label data-interactive className={cn(TABLE_CUSTOM_CHECKBOX, disabled && TABLE_CUSTOM_CHECKBOX_DISABLED)}>
             {input}
             <span aria-hidden="true" className={TABLE_CUSTOM_CHECKBOX_ICON}>
-              <Icon checked={checked} indeterminate={indeterminate} className={iconClassName} />
+              {renderIcon({ checked, indeterminate, className: iconClassName })}
             </span>
           </label>
         );
@@ -603,8 +611,8 @@ function TableInner<TData>(
                 aria-label={isExpanded ? "Collapse row" : "Expand row"}
                 data-expanded={isExpanded || undefined}
               >
-                {CustomExpandIcon ? (
-                  <CustomExpandIcon expanded={isExpanded} className="w-4 h-4" />
+                {hasCustomExpandIcon && expandIconRef.current ? (
+                  expandIconRef.current({ expanded: isExpanded, className: TABLE_EXPAND_ICON_SIZE })
                 ) : isExpanded ? (
                   <CollapseIcon className="w-4 h-4" />
                 ) : (
@@ -659,8 +667,8 @@ function TableInner<TData>(
     dragHandleClassName,
     hasCustomCheckboxIcon,
     checkboxColor,
-    CustomDragHandleIcon,
-    CustomExpandIcon,
+    hasCustomDragHandleIcon,
+    hasCustomExpandIcon,
     expandColumnPosition,
     dragColumnPosition,
     filterableColumns,
@@ -1146,8 +1154,6 @@ function TableInner<TData>(
     [onGlobalFilterChange, table],
   );
 
-  const UnpinnedIconComponent = CustomPinIcon || PinIcon;
-  const PinnedIconComponent = CustomPinnedIcon || CustomPinIcon || PinIcon;
 
   /**
    * Keyboard resizing for a column, so the function is not drag-only.
@@ -1322,11 +1328,11 @@ function TableInner<TData>(
                 }
                 title="Filter column"
               >
-                {CustomFilterIcon ? (
-                  <CustomFilterIcon
-                    active={getColumnFilterValues(columnId).length > 0}
-                    className="w-3.5 h-3.5"
-                  />
+                {renderFilterIcon ? (
+                  renderFilterIcon({
+                    active: getColumnFilterValues(columnId).length > 0,
+                    className: TABLE_FILTER_ICON_SIZE,
+                  })
                 ) : (
                   <DefaultFilterIcon
                     active={getColumnFilterValues(columnId).length > 0}
@@ -1362,15 +1368,9 @@ function TableInner<TData>(
                       : "Pin column"
                 }
               >
-                {isPinned ? (
-                  <PinnedIconComponent
-                    className={cn( pinIconClassName)}
-                  />
-                ) : (
-                  <UnpinnedIconComponent
-                    className={cn( pinIconClassName)}
-                  />
-                )}
+                {isPinned
+                  ? (pinnedIcon ?? pinIcon ?? <PinIcon className={cn( pinIconClassName)} />)
+                  : (pinIcon ?? <PinIcon className={cn( pinIconClassName)} />)}
               </button>
             )}
           </div>
@@ -1414,8 +1414,8 @@ function TableInner<TData>(
       pinButtonClassName,
       canPinMore,
       effectiveMaxPinnedColumns,
-      UnpinnedIconComponent,
-      PinnedIconComponent,
+      pinIcon,
+      pinnedIcon,
       sortable,
       sortIconClassName,
       checkboxCellClassName,
@@ -1423,7 +1423,7 @@ function TableInner<TData>(
       resizable,
       resizeHandleClassName,
       filterableColumns,
-      CustomFilterIcon,
+      renderFilterIcon,
       filterIconClassName,
       openFilterColumn,
       getColumnFilterValues,
@@ -1910,7 +1910,7 @@ function TableInner<TData>(
         style={{ overflow: "hidden", ...containerStyle, ...styleProp }}
       >
         <TableShimmer
-          rowCount={shimmerRowCount}
+          rowCount={shimmerCount}
           className={shimmerClassName}
           rowClassName={shimmerRowClassName}
           cellClassName={shimmerCellClassName}
@@ -1940,7 +1940,7 @@ function TableInner<TData>(
         }
         style={{ overflow: "hidden", ...containerStyle, ...styleProp }}
         role="region"
-        aria-label={ariaLabel}
+        aria-label={tableLabel}
         data-table-container
         data-mobile-view
       >
@@ -1948,8 +1948,8 @@ function TableInner<TData>(
         {showSearch && (
           <div className={`mb-2 ${searchBarClassName}`} data-table-search>
             <div className="relative group/search" data-side="start">
-              {CustomSearchIcon ? (
-                <CustomSearchIcon className={searchIconClassName} />
+              {searchIcon != null ? (
+                <span className={searchIconClassName || undefined}>{searchIcon}</span>
               ) : (
                 <SearchIcon className={searchIconClassName} />
               )}
@@ -2118,7 +2118,7 @@ function TableInner<TData>(
       }
       style={{ overflow: "hidden", ...containerStyle, ...styleProp }}
       role="region"
-      aria-label={ariaLabel}
+      aria-label={tableLabel}
       data-table-container
       data-striped={striped || undefined}
       data-size={size}
@@ -2129,7 +2129,6 @@ function TableInner<TData>(
           const iconPos = searchIconPosition;
           const showIcon = iconPos !== "none";
           const iconAtStart = iconPos === "start";
-          const IconComponent = CustomSearchIcon || SearchIcon;
           const inputPl = showIcon && iconAtStart ? "pl-9" : "pl-3";
           const inputPr = globalFilter
             ? showIcon && !iconAtStart
@@ -2145,7 +2144,12 @@ function TableInner<TData>(
                 className="relative group/search"
                 data-side={showIcon ? (iconAtStart ? "start" : "end") : undefined}
               >
-                {showIcon && <IconComponent className={searchIconClassName} />}
+                {showIcon &&
+                  (searchIcon != null ? (
+                    <span className={searchIconClassName || undefined}>{searchIcon}</span>
+                  ) : (
+                    <SearchIcon className={searchIconClassName} />
+                  ))}
                 <input
                   type="text"
                   value={globalFilter ?? ""}
@@ -2248,7 +2252,7 @@ function TableInner<TData>(
               !syntheticColumnIds.has(columnId),
             finalPinnedTableClass,
             finalPinnedContainerClass,
-            `${ariaLabel} - Pinned columns`,
+            `${tableLabel} - Pinned columns`,
           )}
 
         {hasUnpinnedColumns &&
@@ -2263,8 +2267,8 @@ function TableInner<TData>(
               unpinnedContainerClassName || defaultUnpinnedContainerClass,
             ),
             hasPinnedColumns || hasPinnedRightColumns
-              ? `${ariaLabel} - Scrollable columns`
-              : ariaLabel,
+              ? `${tableLabel} - Scrollable columns`
+              : tableLabel,
             pinnedCount,
           )}
 
@@ -2275,7 +2279,7 @@ function TableInner<TData>(
               !syntheticColumnIds.has(columnId),
             finalPinnedRightTableClass,
             finalPinnedRightContainerClass,
-            `${ariaLabel} - Right pinned columns`,
+            `${tableLabel} - Right pinned columns`,
             pinnedCount + unpinnedCount,
           )}
 

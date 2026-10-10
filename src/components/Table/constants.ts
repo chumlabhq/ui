@@ -15,8 +15,11 @@ export const TABLE_HIT_AREA = "inline-flex items-center justify-center min-w-6 m
 export const TABLE_DRAG_HANDLE = `${TABLE_HIT_AREA} cursor-grab select-none`;
 export const TABLE_SELECT_CONTROL = `${TABLE_HIT_AREA} cursor-pointer`;
 export const TABLE_CHECKBOX_SIZE = "w-6 h-6";
+/** The box `renderExpandIcon` and `renderFilterIcon` are handed as `className`, the size their defaults draw at. */
+export const TABLE_EXPAND_ICON_SIZE = "w-4 h-4";
+export const TABLE_FILTER_ICON_SIZE = "w-3.5 h-3.5";
 /**
- * A custom `CheckboxIcon`: the default's native input, visually hidden in a
+ * A custom `renderCheckboxIcon`: the default's native input, visually hidden in a
  * label beside the icon, and the focus ring drawn on the icon from the input.
  */
 export const TABLE_CUSTOM_CHECKBOX = `relative ${TABLE_SELECT_CONTROL}`;
@@ -87,7 +90,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   footer: "",
   searchControl: "",
   searchIcon:
-    "w-4 h-4 absolute top-1/2 -translate-y-1/2 text-cl-text-tertiary pointer-events-none group-data-[side=start]/search:left-3 group-data-[side=end]/search:right-3",
+    "inline-flex w-4 h-4 absolute top-1/2 -translate-y-1/2 text-cl-text-tertiary pointer-events-none group-data-[side=start]/search:left-3 group-data-[side=end]/search:right-3",
   clearTrigger:
     "absolute top-1/2 -translate-y-1/2 right-2.5 inline-flex items-center justify-center min-w-6 min-h-6 rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover cursor-pointer group-data-[side=end]/search:right-9",
   searchInput: "",

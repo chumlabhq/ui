@@ -100,7 +100,7 @@
       "description": "React.ReactNode — Icon displayed inside the thumb when unchecked.",
       "x-tsType": "ReactNode"
     },
-    "transitionDuration": {
+    "animationDuration": {
       "type": "number",
       "description": "Duration of the toggle transition in milliseconds."
     },

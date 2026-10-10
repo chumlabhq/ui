@@ -61,7 +61,7 @@ export interface MultiSelectSearchableDropdownClasses {
   searchInput?: string;
   /** Search icon */
   searchIcon?: string;
-  /** The `+N` chip standing in for selections past `maxDisplayedChips`. */
+  /** The `+N` chip standing in for selections past `maxVisible`. */
   count?: string;
 }
 
@@ -94,17 +94,17 @@ export interface MultiSelectSearchableDropdownBaseProps {
   required?: boolean;
   showSearch?: boolean;
   searchPlaceholder?: string;
-  noResultsContent?: ReactNode;
-  loadingText?: ReactNode;
+  emptyContent?: ReactNode;
+  loadingContent?: ReactNode;
   shimmerCount?: number;
   clearable?: boolean;
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
-  searchDebounceMs?: number;
+  searchDebounce?: number;
   /** Called when async loading or search fails. */
   onLoadError?: (error: unknown) => void;
-  maxDisplayedChips?: number;
+  maxVisible?: number;
   showSelectedChips?: boolean;
   checkboxIcon?: ReactNode;
   unstyled?: boolean;
@@ -116,11 +116,11 @@ export interface MultiSelectSearchableDropdownBaseProps {
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   portalContainer?: HTMLElement | null;
-  dropdownPosition?: "top" | "bottom";
-  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
-  forceDropdownPosition?: boolean;
+  dropdownSide?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownSide without auto-flipping. */
+  forceDropdownSide?: boolean;
   dropdownZIndex?: number;
-  dropdownGap?: number;
+  dropdownOffset?: number;
   /** Timeout in milliseconds for keyboard typeahead matching. */
   typeaheadTimeout?: number;
   keepMounted?: boolean;
@@ -130,7 +130,8 @@ export interface MultiSelectSearchableDropdownBaseProps {
   /** Fires when the trigger takes focus, with the native focus event. */
   onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
-  ClearIcon?: React.ComponentType<{ className?: string }>;
+  /** Replaces the clear-all button's glyph. Rendered as given. */
+  clearIcon?: ReactNode;
   renderTrigger?: (
     triggerProps: MultiSelectSearchableDropdownTriggerRenderProps,
     state: MultiSelectSearchableDropdownTriggerState,
@@ -227,7 +228,7 @@ export interface UseMultiSelectDropdownProps {
   showSearch?: boolean;
   /** Async search: called with the query, returns the matching options. */
   searchOptions?: (query: string) => Promise<MultiSelectOption[]>;
-  searchDebounceMs?: number;
+  searchDebounce?: number;
   onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   initialOptions?: MultiSelectOption[];
   /** Loads the options shown before the first query. */

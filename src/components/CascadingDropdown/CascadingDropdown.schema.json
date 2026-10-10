@@ -161,13 +161,13 @@
       "description": "Marks the field as required.",
       "default": false
     },
-    "noResultsContent": {
+    "emptyContent": {
       "type": "object",
       "description": "React.ReactNode — Content shown when no results match.",
       "default": "No options found",
       "x-tsType": "ReactNode"
     },
-    "loadingText": {
+    "loadingContent": {
       "type": "object",
       "description": "React.ReactNode — Text shown during async loading.",
       "default": "Loading...",
@@ -211,7 +211,7 @@
       "description": "Stretches the dropdown to fill its container width.",
       "default": false
     },
-    "submenuPosition": {
+    "submenuSide": {
       "type": "string",
       "enum": [
         "right",
@@ -220,7 +220,7 @@
       "description": "Horizontal position of submenus.",
       "default": "right"
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -336,7 +336,7 @@
       "description": "Z-index of the dropdown.",
       "default": 50
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap in pixels between trigger and dropdown.",
       "default": 4
@@ -355,10 +355,10 @@
       "description": "CSSProperties — Inline styles.",
       "x-tsType": "CSSProperties | undefined"
     },
-    "ClearIcon": {
+    "clearIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string }> — Custom clear icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the clear button's glyph. Rendered as given.",
+      "x-tsType": "ReactNode"
     },
     "renderTrigger": {
       "type": "object",
@@ -395,15 +395,15 @@
       "description": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu.",
       "x-tsType": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]>"
     },
-    "searchDebounceMs": {
+    "searchDebounce": {
       "type": "number",
       "description": "Debounce delay in ms for async search callbacks.",
       "default": 300
     },
-    "SearchIcon": {
+    "searchIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string }> — Custom search icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the search field's magnifier. Rendered as given; `classes.searchIcon` styles the default one.",
+      "x-tsType": "ReactNode"
     },
     "menuSearchAriaLabel": {
       "type": "string",

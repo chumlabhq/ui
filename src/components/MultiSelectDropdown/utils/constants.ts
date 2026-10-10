@@ -17,7 +17,7 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
     item:
       "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text hover:bg-cl-bg-hover first:rounded-t-cl-md last:rounded-b-cl-md data-[highlighted]:bg-cl-bg-hover",
     icon:
-      "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
+      "inline-flex w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
     itemControl:
       "w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input",
     itemIndicator: "w-full h-full",

@@ -63,11 +63,11 @@
       "description": "(event: MouseEvent<HTMLButtonElement>) => void — Makes endIcon a clickable button, called with the native click event.",
       "x-tsType": "((event: MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined"
     },
-    "startIconLabel": {
+    "startIconAriaLabel": {
       "type": "string",
       "description": "Accessible label for startIcon when clickable. Required with onStartIconClick."
     },
-    "endIconLabel": {
+    "endIconAriaLabel": {
       "type": "string",
       "description": "Accessible label for endIcon when clickable. Required with onEndIconClick."
     },

@@ -28,7 +28,7 @@
       "description": "React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter).",
       "x-tsType": "ReactNode"
     },
-    "direction": {
+    "side": {
       "type": "string",
       "enum": [
         "left",
@@ -36,7 +36,7 @@
         "top",
         "bottom"
       ],
-      "description": "Direction from which the drawer slides in.",
+      "description": "The edge the drawer slides in from.",
       "default": "left"
     },
     "size": {
@@ -59,9 +59,9 @@
       "description": "Backdrop blur in pixels for the overlay.",
       "default": 0
     },
-    "duration": {
+    "animationDuration": {
       "type": "number",
-      "description": "Animation duration in milliseconds.",
+      "description": "Open and close animation length, in milliseconds.",
       "default": 300
     },
     "lockScroll": {

@@ -125,8 +125,8 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `success` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `required` | boolean | `false` | Marks the field as required. |
-| `noResultsContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |
-| `loadingText` | object | `"Loading..."` | React.ReactNode — Text shown during async loading. |
+| `emptyContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |
+| `loadingContent` | object | `"Loading..."` | React.ReactNode — Text shown during async loading. |
 | `shimmerCount` | number | — | Number of shimmer placeholders during loading. |
 | `loading` | boolean | — | Shows loading state. |
 | `clearable` | boolean | `false` | Shows a clear button to reset the selection. |
@@ -135,19 +135,19 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `selectedIcon` | object | — | React.ReactNode — Custom icon for selected items. |
 | `checkboxIcon` | object | — | React.ReactNode — Custom checkbox icon for multi-select. |
 | `fullWidth` | boolean | `false` | Stretches the dropdown to fill its container width. |
-| `submenuPosition` | `"right"` \| `"left"` | `"right"` | Horizontal position of submenus. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical position of the dropdown. |
+| `submenuSide` | `"right"` \| `"left"` | `"right"` | Horizontal position of submenus. |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Vertical position of the dropdown. |
 | `closeOnSelect` | boolean | `true` | Closes the dropdown after an item is selected. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll when the dropdown is open. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the dropdown. |
 | `dropdownZIndex` | number | `50` | Z-index of the dropdown. |
-| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
+| `dropdownOffset` | number | `4` | Gap in pixels between trigger and dropdown. |
 | `keepMounted` | boolean | `false` | Keep the dropdown DOM mounted when closed. |
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | CSSProperties — Inline styles. |
-| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> — Custom clear icon component. |
+| `clearIcon` | object | — | ReactNode — Replaces the clear button's glyph. Rendered as given. |
 | `renderTrigger` | object | — | (triggerProps: CascadingDropdownTriggerRenderProps, state: CascadingDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, displayValue, placeholder). |
 | `showMenuSearch` | boolean | `false` | Show a search input inside the main menu. |
 | `showSubmenuSearch` | boolean | `false` | Show a search input inside submenus. |
@@ -155,8 +155,8 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `submenuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the submenu search input. |
 | `searchMenu` | object | — | (query: string) => Promise<CascadingOption[]> — Async search for main menu. |
 | `searchSubmenu` | object | — | (query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu. |
-| `searchDebounceMs` | number | `300` | Debounce delay in ms for async search callbacks. |
-| `SearchIcon` | object | — | React.ComponentType<{ className?: string }> — Custom search icon component. |
+| `searchDebounce` | number | `300` | Debounce delay in ms for async search callbacks. |
+| `searchIcon` | object | — | ReactNode — Replaces the search field's magnifier. Rendered as given; `classes.searchIcon` styles the default one. |
 | `menuSearchAriaLabel` | string | `"Search menu"` | Accessible label for the menu search input. |
 | `submenuSearchAriaLabel` | string | `"Search submenu"` | Accessible label for the submenu search input. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
@@ -227,7 +227,7 @@ the submenu's own portal, positioned by `useAnchoredPosition` — the same
 clamp-and-flip every other floating surface in the package uses. Positioning
 utilities on this key no longer do anything: `top`, `left` and `position` are
 inline styles, and inline wins. Everything else it carried still applies; the
-default value (`z-[9999]`) is unchanged. Use `submenuPosition` to choose a side;
+default value (`z-[9999]`) is unchanged. Use `submenuSide` to choose a side;
 the side actually used, after any flip, is on the element as `data-side`.
 
 | "I want to change..." | Slot to use | Notes |
@@ -346,7 +346,7 @@ const searchCountries = async (query: string) => {
   options={regions}
   showMenuSearch
   searchMenu={searchCountries}
-  searchDebounceMs={300}
+  searchDebounce={300}
 />
 ```
 
@@ -402,7 +402,7 @@ const searchCountries = async (query: string) => {
 | No submenu appears on hover | `children` is empty or undefined | Provide `children` or set `hasChildren: true` with `loadChildren` |
 | Async children load every hover | Children not cached | Hook caches loaded children by parent value automatically |
 | Search not calling API | `showMenuSearch` is true but no `searchMenu` | Without `searchMenu`, search is client-side filtering only |
-| Stale search results | Race condition with fast typing | Built-in version tracking prevents stale results; increase `searchDebounceMs` if needed |
+| Stale search results | Race condition with fast typing | Built-in version tracking prevents stale results; increase `searchDebounce` if needed |
 | Submenu search styling same as menu | `subSearchControl` not set | Set `subSearchControl`, `subSearchInput`, `subSearchIcon` for independent styles |
 | Classes override doesn't work | Expected additive behavior | Classes REPLACE per slot, not merge. Provide full styling for overridden slots |
 | Value shape wrong | Using string instead of object | Value must be `{ parentValue: "childValue" }` or `{ parentValue: ["a","b"] }` |

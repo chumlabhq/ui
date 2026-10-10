@@ -1,5 +1,6 @@
 import { CascadingDropdown } from "../../components/CascadingDropdown/index.js";
 import type { Fixtures } from "./types.js";
+import { CrossGlyph, SearchGlyph } from "./_icons.js";
 import { RtlBoundary } from "./_harness.js";
 import type { ActTools } from "./_act.js";
 import { neverResolves, rejectsWith, resolvesTo } from "./_async.js";
@@ -117,6 +118,12 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     act: settle,
   },
   {
+    name: "open-search-custom-search-icon",
+    props: { options: NESTED, defaultOpen: true, keepMounted: true, showMenuSearch: true, showSubmenuSearch: true, searchIcon: <SearchGlyph /> },
+    note: "Passes a real SVG in place of the default search magnifier; icon-slots holds it to CascadingDropdown/open-search's box and position.",
+    act: settle,
+  },
+  {
     name: "open-submenu",
     props: { options: NESTED, defaultOpen: true, keepMounted: true, showMenuSearch: true, showSubmenuSearch: true },
     note: "Submenu parts, and their own search box, only exist once a parent row is entered.",
@@ -143,10 +150,10 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       defaultOpen: true,
       keepMounted: true,
       showSubmenuSearch: true,
-      submenuPosition: "left",
+      submenuSide: "left",
     },
     wrap: (node) => <div style={{ width: 260, marginLeft: "auto" }}>{node}</div>,
-    note: "submenuPosition honoured when the preferred side has room; the side is a layout answer and jsdom has none.",
+    note: "submenuSide honoured when the preferred side has room; the side is a layout answer and jsdom has none.",
     act: openSubmenu,
   },
   {
@@ -164,6 +171,12 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       defaultValue: { fruit: "a" },
       clearable: true,
     },
+    act: openSubmenu,
+  },
+  {
+    name: "open-with-selection-custom-clear-icon",
+    props: { options: NESTED, defaultOpen: true, keepMounted: true, defaultValue: { fruit: "a" }, clearable: true, clearIcon: <CrossGlyph /> },
+    note: "Passes a real SVG in place of the default clear glyph; icon-slots holds it to CascadingDropdown/open-with-selection's box and position.",
     act: openSubmenu,
   },
   {
@@ -204,7 +217,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       keepMounted: true,
       showMenuSearch: true,
       searchMenu: neverResolves(),
-      searchDebounceMs: SEARCH_DEBOUNCE,
+      searchDebounce: SEARCH_DEBOUNCE,
     },
     act: searchMenu,
     note: "Query typed, results outstanding: the menu still shows the sync options.",
@@ -217,7 +230,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       keepMounted: true,
       showMenuSearch: true,
       searchMenu: resolvesTo([{ value: "a", label: "Apple" }]),
-      searchDebounceMs: SEARCH_DEBOUNCE,
+      searchDebounce: SEARCH_DEBOUNCE,
     },
     act: searchMenu,
   },
@@ -229,7 +242,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       keepMounted: true,
       showMenuSearch: true,
       searchMenu: resolvesTo([]),
-      searchDebounceMs: SEARCH_DEBOUNCE,
+      searchDebounce: SEARCH_DEBOUNCE,
     },
     act: searchMenu,
     note: "An async search that matches nothing must reach the empty state, not fall back to the full list.",
@@ -242,7 +255,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       keepMounted: true,
       showSubmenuSearch: true,
       searchSubmenu: resolvesTo([{ value: "a", label: "Apple" }]),
-      searchDebounceMs: SEARCH_DEBOUNCE,
+      searchDebounce: SEARCH_DEBOUNCE,
     },
     act: searchSubmenu,
   },

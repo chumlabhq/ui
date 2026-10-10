@@ -267,7 +267,7 @@ export default function TableExample() {
                   selectedRowIds={customSelectedIds}
                   onSelectedRowIdsChange={setCustomSelectedIds}
                   getRowId={(row) => row.id}
-                  CheckboxIcon={CustomCheck}
+                  renderCheckboxIcon={(state) => <CustomCheck {...state} />}
                   classes={{
                     ...s,
                     ...s

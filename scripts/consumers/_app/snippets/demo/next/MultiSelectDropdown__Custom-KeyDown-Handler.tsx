@@ -25,7 +25,7 @@ export default function MultiSelectDropdownExample() {
           value={customKeyDownValue}
           onValueChange={setCustomKeyDownValue}
           placeholder="Try pressing 'x'..."
-          maxDisplayedChips={2}
+          maxVisible={2}
           onKeyDown={
             (e) => {
               if (e.key === "x" || e.key === "X") {

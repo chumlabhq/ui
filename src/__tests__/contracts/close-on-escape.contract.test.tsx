@@ -179,7 +179,7 @@ const OPENERS: Record<
   Drawer: async (props) => {
     const onOpenChange = vi.fn();
     render(
-      <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0} {...props}>
+      <Drawer open onOpenChange={onOpenChange} aria-label="Panel" animationDuration={0} {...props}>
         <DrawerBody>Panel body</DrawerBody>
       </Drawer>,
     );
@@ -248,7 +248,7 @@ describe("close-on-escape contract", () => {
       {
         name: "Drawer (modal)",
         surface: (onOpenChange) => (
-          <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0} closeOnEscape={false}>
+          <Drawer open onOpenChange={onOpenChange} aria-label="Panel" animationDuration={0} closeOnEscape={false}>
             <DrawerBody>Panel body</DrawerBody>
           </Drawer>
         ),
@@ -256,7 +256,7 @@ describe("close-on-escape contract", () => {
       {
         name: "Drawer (non-modal)",
         surface: (onOpenChange) => (
-          <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0} modal={false} closeOnEscape={false}>
+          <Drawer open onOpenChange={onOpenChange} aria-label="Panel" animationDuration={0} modal={false} closeOnEscape={false}>
             <DrawerBody>Panel body</DrawerBody>
           </Drawer>
         ),
@@ -285,7 +285,7 @@ describe("close-on-escape contract", () => {
       await user.click(screen.getByRole("button", { name: "Show toast" }));
       rerender(
         <Toasts>
-          <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0} modal={false}>
+          <Drawer open onOpenChange={onOpenChange} aria-label="Panel" animationDuration={0} modal={false}>
             <DrawerBody>Panel body</DrawerBody>
           </Drawer>
         </Toasts>,
@@ -424,7 +424,7 @@ describe("Tooltip dismisses on Escape wherever focus is", () => {
     {
       name: "Drawer",
       host: (onOpenChange, children) => (
-        <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0}>
+        <Drawer open onOpenChange={onOpenChange} aria-label="Panel" animationDuration={0}>
           <DrawerBody>{children}</DrawerBody>
         </Drawer>
       ),

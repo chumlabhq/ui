@@ -15,7 +15,7 @@ import type {
   SearchableDropdownClasses,
 } from "./utils/types.js";
 import { useDropdown } from "./utils/useDropdown.js";
-import { ChevronDownIcon, CheckIcon, SearchIcon } from "./utils/icons.js";
+import { ChevronDownIcon, SearchIcon } from "./utils/icons.js";
 import {
   scrollOptionIntoView,
   isBrowser,
@@ -76,7 +76,7 @@ interface SearchableDropdownContentProps {
   searchInputAriaLabel: string;
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
-  SearchIconComponent: React.ComponentType<{ className?: string }>;
+  searchIcon?: ReactNode;
   searchInputRef: React.RefObject<HTMLInputElement | null>;
   onSearchInputKeyDown: (event: React.KeyboardEvent) => void;
   onSearchInputKeyDownCapture?: (event: React.KeyboardEvent) => void;
@@ -106,7 +106,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
   searchInputAriaLabel,
   searchQuery,
   onSearchQueryChange,
-  SearchIconComponent,
+  searchIcon,
   searchInputRef,
   onSearchInputKeyDown,
   onSearchInputKeyDownCapture,
@@ -161,7 +161,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
     >
       {showSearch && (
         <div className={classes.searchControl || undefined}>
-          <SearchIconComponent className={cn(classes.searchIcon) || undefined} />
+          {searchIcon ?? <SearchIcon className={cn(classes.searchIcon) || undefined} />}
           <input
             ref={searchInputRef}
             type="text"
@@ -224,7 +224,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
  * Behavior:
  * - Built-in search input with local filtering or async search
  * - Portal-rendered popup (never clipped by overflow ancestors)
- * - Auto-flips position (disable with `forceDropdownPosition`)
+ * - Auto-flips position (disable with `forceDropdownSide`)
  * - Full keyboard navigation with type-ahead
  *
  * Reference:
@@ -258,20 +258,20 @@ const SearchableDropdown = forwardRef<
     showSearch = true,
     searchPlaceholder = "Search...",
     searchInputAriaLabel = "Search options",
-    noResultsContent = "No results found",
+    emptyContent = "No results found",
     showChevron = true,
     showSelectedIcon = true,
     selectedIcon,
     fullWidth = false,
     loading: externalLoading = false,
     searchOptions,
-    searchDebounceMs = 300,
+    searchDebounce = 300,
     initialOptions = [],
     loadInitialOptions,
     loadInitialOnOpen = false,
     onLoadError,
     shimmerCount = 5,
-    loadingText = "Loading...",
+    loadingContent = "Loading...",
     unstyled = false,
     classes: classesProp,
     className,
@@ -279,20 +279,19 @@ const SearchableDropdown = forwardRef<
     keepMounted = false,
     portalContainer,
     lockScroll = false,
-    dropdownPosition = "bottom",
-    forceDropdownPosition = false,
+    dropdownSide = "bottom",
+    forceDropdownSide = false,
     dropdownZIndex: dropdownZIndexProp,
-    dropdownGap = 4,
+    dropdownOffset = 4,
     typeaheadTimeout = 500,
     "aria-label": ariaLabel,
     onBlur,
     onFocus,
     onKeyDown: onKeyDownProp,
     renderTrigger,
-    ChevronIcon = ChevronDownIcon,
-    CheckIcon: CheckIconProp = CheckIcon,
-    ClearIcon: ClearIconProp = DefaultClearIcon,
-    SearchIcon: SearchIconProp = SearchIcon,
+    chevronIcon,
+    clearIcon,
+    searchIcon,
   } = props;
 
   const dropdownZIndex = useLayer(dropdownZIndexProp);
@@ -371,7 +370,7 @@ const SearchableDropdown = forwardRef<
     clearable,
     showSearch,
     searchOptions,
-    searchDebounceMs,
+    searchDebounce,
     initialOptions,
     loadInitialOptions,
     loadInitialOnOpen,
@@ -391,7 +390,7 @@ const SearchableDropdown = forwardRef<
       : undefined;
 
   const statusMessage = loading
-    ? loadingText
+    ? loadingContent
     : isOpen
       ? `${displayOptions.length} option${displayOptions.length === 1 ? "" : "s"} available`
       : selectedOption
@@ -590,10 +589,19 @@ const SearchableDropdown = forwardRef<
                 : placeholder}
             </span>
             {showChevron && (
-              <ChevronIcon
-                className={cn(mergedClasses.icon) || undefined}
-                style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-              />
+              chevronIcon ? (
+                <span
+                  className={mergedClasses.icon || undefined}
+                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                >
+                  {chevronIcon}
+                </span>
+              ) : (
+                <ChevronDownIcon
+                  className={cn(mergedClasses.icon) || undefined}
+                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                />
+              )
             )}
           </button>
         )}
@@ -609,7 +617,7 @@ const SearchableDropdown = forwardRef<
               triggerNode?.focus({ preventScroll: true });
             }}
           >
-            <ClearIconProp />
+            {clearIcon ?? <DefaultClearIcon />}
           </button>
         )}
 
@@ -617,10 +625,10 @@ const SearchableDropdown = forwardRef<
           triggerElement={triggerNode}
           isOpen={isOpen}
           keepMounted={keepMounted}
-          position={dropdownPosition}
-          forcePosition={forceDropdownPosition}
+          position={dropdownSide}
+          forcePosition={forceDropdownSide}
           zIndex={dropdownZIndex}
-          gap={dropdownGap}
+          gap={dropdownOffset}
           portalContainer={portalContainer}
           classes={mergedClasses}
           contentRef={dropdownContentRef}
@@ -634,7 +642,7 @@ const SearchableDropdown = forwardRef<
           searchInputAriaLabel={searchInputAriaLabel}
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
-          SearchIconComponent={SearchIconProp}
+          searchIcon={searchIcon}
           searchInputRef={searchInputRef}
           onSearchInputKeyDown={handleSearchInputKeyDown}
           onSearchInputKeyDownCapture={handleSearchInputKeyDownCapture}
@@ -647,7 +655,7 @@ const SearchableDropdown = forwardRef<
               />
             ) : displayOptions.length === 0 ? (
               <div role="status" className={mergedClasses.empty || undefined}>
-                {noResultsContent}
+                {emptyContent}
               </div>
             ) : null
           }
@@ -665,7 +673,6 @@ const SearchableDropdown = forwardRef<
                   classes={mergedClasses}
                   showSelectedIcon={showSelectedIcon}
                   selectedIcon={selectedIcon}
-                  CheckIconComponent={CheckIconProp}
                   onSelect={handleOptionSelect}
                   onHover={setFocusedIndex}
                 />

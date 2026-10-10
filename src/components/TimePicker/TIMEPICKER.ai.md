@@ -46,7 +46,7 @@ export default function Example() {
 | `keepMounted` | Only affects dropdown variant. Clock always remounts to reset selection mode. |
 | `open` + `onOpenChange` | For controlled open state. Don't mix with `defaultOpen`. |
 | `value` + `onValueChange` | For controlled mode. Don't mix with `defaultValue`. |
-| `forceDropdownPosition` | When true, locks to `dropdownPosition` without auto-flipping. |
+| `forceDropdownSide` | When true, locks to `dropdownSide` without auto-flipping. |
 | `lockScroll` | Prevents body scroll when dropdown/clock is open. |
 | `fullWidth` | Applies `width: 100%` to root and trigger, overriding class widths. |
 
@@ -104,11 +104,11 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `defaultOpen` | boolean | `false` | Default open state (uncontrolled). |
 | `onOpenChange` | object | — | (open: boolean) => void — Called when the open state changes. |
 | `lockScroll` | boolean | `false` | Lock body scroll when dropdown is open. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Position of the dropdown relative to the trigger. |
-| `forceDropdownPosition` | boolean | `false` | When true, locks the dropdown to the specified position without auto-flipping. |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Position of the dropdown relative to the trigger. |
+| `forceDropdownSide` | boolean | `false` | When true, locks the dropdown to the specified position without auto-flipping. |
 | `dropdownZIndex` | number | `50` | Z-index for the dropdown. |
-| `dropdownGap` | number | `4` | Gap between trigger and dropdown in pixels. |
-| `keepMounted` | boolean | `false` | Keep dropdown DOM mounted when closed (dropdown variant only). |
+| `dropdownOffset` | number | `4` | Gap between trigger and dropdown in pixels. |
+| `keepMounted` | boolean | `false` | Keep dropdown DOM mounted when closed (dropdown mode only). |
 | `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
 | `classes` | object | — | CSS class overrides for all sub-elements. |
 | `unstyled` | boolean | `false` | Omits built-in layout helpers so layout comes entirely from classes. |
@@ -116,7 +116,7 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `onCancel` | object | — | () => void — Called when the clock cancel button is pressed. |
 | `onConfirm` | object | — | () => void — Called when the clock confirm button is pressed. |
 | `cancelText` | string | `"Cancel"` | Text for the clock cancel button. |
-| `okText` | string | `"OK"` | Text for the clock OK button. |
+| `confirmText` | string | `"OK"` | Text for the clock OK button. |
 
 ## Styling Guide
 
@@ -219,7 +219,7 @@ const [time, setTime] = useState<string | null>(null);
 ### Force dropdown position
 
 ```tsx
-<TimePicker dropdownPosition="bottom" forceDropdownPosition lockScroll />
+<TimePicker dropdownSide="bottom" forceDropdownSide lockScroll />
 ```
 
 ### Form submission
@@ -272,7 +272,7 @@ const [time, setTime] = useState<string | null>(null);
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string for the slot |
-| Dropdown opens in wrong direction | Auto-flip based on viewport | Use `forceDropdownPosition` to lock position |
+| Dropdown opens in wrong direction | Auto-flip based on viewport | Use `forceDropdownSide` to lock position |
 | minuteStep ignored | Value out of 1-60 range | Clamped automatically; use valid integer |
 | Clock OK disabled | Time outside min/max range | Adjust selection or widen range |
 | Value not updating | Using controlled mode without `onValueChange` | Always pair `value` with `onValueChange` |
@@ -301,7 +301,7 @@ const [time, setTime] = useState<string | null>(null);
 | Full width | `title="Full Width"` |
 | Controlled open | `title="Controlled Open"` |
 | Dropdown position | `title="Dropdown Position"` |
-| Force position | `title="Dropdown Position"` (forceDropdownPosition demos) |
+| Force position | `title="Dropdown Position"` (forceDropdownSide demos) |
 | Clock 24h | `title="Clock Variant (24h)"` |
 | Clock 12h | `title="Clock Variant (12h)"` |
 | Clock themes | `title="Clock Color Themes"` |

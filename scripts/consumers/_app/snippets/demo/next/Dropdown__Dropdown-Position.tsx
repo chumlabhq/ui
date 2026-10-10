@@ -28,7 +28,7 @@ export default function DropdownExample() {
               options={fruitOptions}
               value={posBotValue}
               onValueChange={(v) => setPosBotValue(v)}
-              dropdownPosition="bottom"
+              dropdownSide="bottom"
               placeholder="Opens below..."
               classes={
                 {
@@ -47,7 +47,7 @@ export default function DropdownExample() {
               options={fruitOptions}
               value={posTopValue}
               onValueChange={(v) => setPosTopValue(v)}
-              dropdownPosition="top"
+              dropdownSide="top"
               placeholder="Opens above..."
               classes={
                 {
@@ -68,8 +68,8 @@ export default function DropdownExample() {
               options={fruitOptions}
               value={forceBotValue}
               onValueChange={(v) => setForceBotValue(v)}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               placeholder="Always opens below..."
               classes={
                 {
@@ -88,8 +88,8 @@ export default function DropdownExample() {
               options={fruitOptions}
               value={forceTopValue}
               onValueChange={(v) => setForceTopValue(v)}
-              dropdownPosition="top"
-              forceDropdownPosition
+              dropdownSide="top"
+              forceDropdownSide
               placeholder="Always opens above..."
               classes={
                 {
@@ -110,8 +110,8 @@ export default function DropdownExample() {
               options={fruitOptions}
               value={forceLockValue}
               onValueChange={(v) => setForceLockValue(v)}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               lockScroll
               placeholder="Forced bottom + scroll locked"
               classes={

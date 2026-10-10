@@ -383,7 +383,7 @@ describe("Stepper", () => {
         </svg>
       );
       const iconSteps: Step[] = [
-        { id: 1, label: "Step 1", icon: CustomIcon },
+        { id: 1, label: "Step 1", icon: <CustomIcon /> },
         { id: 2, label: "Step 2" },
       ];
       renderStepper({ steps: iconSteps, variant: "icon", defaultValue: 1 });

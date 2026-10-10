@@ -12,7 +12,6 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
   classes,
   showSelectedIcon,
   selectedIcon,
-  CheckIconComponent,
   onSelect,
   onHover,
 }: {
@@ -24,7 +23,6 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
   classes: Required<SearchableDropdownClasses>;
   showSelectedIcon: boolean;
   selectedIcon?: React.ReactNode;
-  CheckIconComponent?: React.ComponentType<{ className?: string }>;
   onSelect: (option: OptionType) => void;
   onHover: (index: number) => void;
 }) {
@@ -32,8 +30,6 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
     cn(
       classes.item,
     ) || undefined;
-
-  const IconComponent = CheckIconComponent || CheckIcon;
 
   return (
     <div
@@ -57,7 +53,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || (
-          <IconComponent className={classes.itemIndicator} />
+          <CheckIcon className={classes.itemIndicator} />
         ))}
     </div>
   );

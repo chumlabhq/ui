@@ -438,12 +438,12 @@ const InputDemo = () => {
                   onChange={(e) => setSearch(e.target.value)}
                   startIcon={<SearchIcon className={c.icon} />}
                   onStartIconClick={() => setLastAction("Search submitted")}
-                  startIconLabel="Submit search"
+                  startIconAriaLabel="Submit search"
                   endIcon={
                     search ? <CloseIcon className={c.iconHover} /> : undefined
                   }
                   onEndIconClick={search ? () => setSearch("") : undefined}
-                  endIconLabel="Clear"
+                  endIconAriaLabel="Clear"
                   classes={c.input}
                 />
               </div>
@@ -655,7 +655,7 @@ const InputDemo = () => {
                   )
                 }
                 onEndIconClick={() => setShowPw(!showPw)}
-                endIconLabel={showPw ? "Hide password" : "Show password"}
+                endIconAriaLabel={showPw ? "Hide password" : "Show password"}
                 classes={c.input}
               />
             </div>
@@ -1127,7 +1127,7 @@ const InputDemo = () => {
                   )
                 }
                 onEndIconClick={() => setShowPw(!showPw)}
-                endIconLabel={showPw ? "Hide" : "Show"}
+                endIconAriaLabel={showPw ? "Hide" : "Show"}
                 classes={c.input}
               />
               <div className="flex items-center justify-between">
@@ -1282,7 +1282,7 @@ const InputDemo = () => {
         isDarkMode={dark}
         items={[
           "Autofill and password managers may bypass React—test real browsers.",
-          "Icon buttons need `startIconLabel` / `endIconLabel` when they perform actions.",
+          "Icon buttons need `startIconAriaLabel` / `endIconAriaLabel` when they perform actions.",
           "`clearable` should sync with form libraries that track touched state.",
         ]}
       />

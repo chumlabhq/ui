@@ -23,7 +23,7 @@ export default function MultiSelectSearchableDropdownExample() {
           value={scrollUnlockedValue}
           onValueChange={(values) => setScrollUnlockedValue(values)}
           placeholder="Default (scrollable)"
-          maxDisplayedChips={2}
+          maxVisible={2}
           classes={
             {
               root: "",
@@ -47,7 +47,7 @@ export default function MultiSelectSearchableDropdownExample() {
           onValueChange={(values) => setScrollLockValue(values)}
           placeholder="lockScroll enabled"
           lockScroll
-          maxDisplayedChips={2}
+          maxVisible={2}
           classes={
             {
               root: "",

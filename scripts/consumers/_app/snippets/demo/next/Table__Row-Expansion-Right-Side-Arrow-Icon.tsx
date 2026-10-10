@@ -227,7 +227,7 @@ export default function TableExample() {
                 expandColumnPosition="end"
                 expandedRowIds={ids}
                 onExpandedRowIdsChange={setIds}
-                ExpandIcon={ArrowIcon}
+                renderExpandIcon={(state) => <ArrowIcon {...state} />}
                 renderExpandedRow={(row) => (
                   <div
                     className={"px-6 py-4 bg-cl-accent-surface border-r-2 border-cl-border-input-focus"}

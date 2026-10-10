@@ -47,7 +47,7 @@ export default function UserList() {
       <Avatar name="Jane Smith" autoColor />
 
       {/* Grouped avatars with overflow */}
-      <AvatarGroup max={3}>
+      <AvatarGroup maxVisible={3}>
         <Avatar name="Alice" autoColor />
         <Avatar name="Bob" autoColor />
         <Avatar name="Charlie" autoColor />
@@ -73,7 +73,7 @@ This renders correctly with no additional props, classes, or setup.
 | `maxInitials` | Only affects initials display. Ignored when `src` loads successfully. |
 | `loading={true}` | Renders shimmer in place of the avatar. Overrides `src`/`name`/`fallback`. |
 | `status` | Can be a string shorthand (`"online"`) or a config object (`{ type: "online", position: "bottom-right" }`). |
-| AvatarGroup `max` | Hides excess children and shows a surplus count. Set `total` separately if you're rendering a subset from an API. |
+| AvatarGroup `maxVisible` | Hides excess children and shows a surplus count. Set `total` separately if you're rendering a subset from an API. |
 | AvatarGroup `ringColor` | The ring between stacked avatars. Match to your background color for clean overlap (e.g., `ringColor="#111827"` on dark bg). |
 | AvatarGroup `layout` | `"stack"` overlaps, `"grid"` uses CSS grid, `"inline"` uses inline-flex. Only `"stack"` uses `spacing` and `ringColor`. |
 
@@ -138,7 +138,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Prop | Type | Description |
 | --- | --- | --- |
 | `children` | `ReactNode` | Avatar elements to group. |
-| `max` | `number \| undefined` | Maximum visible avatars before showing a surplus count. |
+| `maxVisible` | `number \| undefined` | How many avatars to show before the rest collapse into a surplus count. |
 | `size` | `AvatarSize \| undefined` | Default size for all avatars in the group. |
 | `shape` | `AvatarShape \| undefined` | Default shape for all avatars in the group. |
 | `bordered` | `string \| boolean \| undefined` | Adds border rings to all avatars. |
@@ -357,7 +357,7 @@ For grouped avatars, match `ringColor` to your background:
 
 ```tsx
 <AvatarGroup
-  max={4}
+  maxVisible={4}
   spacing={-6}
   ringColor="#1a1d21"
   showTooltip
@@ -407,7 +407,7 @@ For grouped avatars, match `ringColor` to your background:
 {isLoading ? (
   <AvatarGroupShimmer count={4} showCount />
 ) : (
-  <AvatarGroup max={4}>
+  <AvatarGroup maxVisible={4}>
     {users.map(u => (
       <Avatar key={u.id} name={u.name} src={u.avatar} autoColor />
     ))}
@@ -419,7 +419,7 @@ For grouped avatars, match `ringColor` to your background:
 
 ```tsx
 <div className="flex items-center gap-2">
-  <AvatarGroup max={3}>
+  <AvatarGroup maxVisible={3}>
     {users.slice(0, 3).map(u => <Avatar key={u.id} name={u.name} autoColor />)}
   </AvatarGroup>
   <AvatarGroupCount count={users.length - 3} variant="ghost" />
@@ -430,7 +430,7 @@ For grouped avatars, match `ringColor` to your background:
 
 ```tsx
 <AvatarGroup
-  max={5}
+  maxVisible={5}
   onAvatarClick={(info, event) => {
     console.log(`Clicked ${info.name} at index ${info.index}`);
     navigate(`/users/${info.name}`);

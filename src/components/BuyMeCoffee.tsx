@@ -274,7 +274,7 @@ function BuyMeCoffeeModal({
       onOpenChange={handleOpenChange}
       showHeader={false}
       showCloseButton={false}
-      preventOutsideClick={submitting}
+      closeOnOverlayClick={!submitting}
       maxWidth={520}
       unstyled
       classes={{

@@ -205,12 +205,12 @@ describe("MultiSelectDropdown", () => {
       );
     });
 
-    it("shows '+N' when more items selected than maxDisplayedChips", () => {
+    it("shows '+N' when more items selected than maxVisible", () => {
       render(
         <MultiSelectDropdown
           options={options}
           defaultValue={["apple", "banana", "cherry", "date"]}
-          maxDisplayedChips={2}
+          maxVisible={2}
         />
       );
 
@@ -687,7 +687,7 @@ describe("MultiSelectDropdown", () => {
           options={options}
           loading
           defaultOpen
-          loadingText="Fetching..."
+          loadingContent="Fetching..."
         />
       );
       expect(screen.getByText("Fetching...")).toBeInTheDocument();
@@ -841,7 +841,7 @@ describe("MultiSelectDropdown", () => {
       render(
         <MultiSelectDropdown
           options={[]}
-          noResultsContent="Nothing here"
+          emptyContent="Nothing here"
         />
       );
 

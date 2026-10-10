@@ -58,7 +58,7 @@ export default function Example() {
 | `validate` | Authoritative custom validator. Receives the full `PhoneNumberData` (incl. built-in `isValid` and E.164 `fullNumber`); its verdict overrides the built-in for both the emitted `isValid` and the blur error. Return `boolean` or `{ valid, message }`. Compose via `data.isValid && myCheck(data)`. For real number validation, use the opt-in `createLibphonenumberValidator(opts?)` from `@chumlab/ui/phone-validators` — `opts.mode` (`"isValid"` default \| `"isPossible"`), `opts.mobileOnly` (default `false`; when `true`, rejects CONFIRMED fixed-line numbers like `+91 1234567890` — accepts `MOBILE` and `FIXED_LINE_OR_MOBILE`, so US and other regions that can't disambiguate still pass, which is what SMS/OTP flows want), `opts.message`. Backed by the `/max` metadata. |
 | `formatPatterns` | Merged over the built-in patterns: a matching key overrides that pattern, new keys are added. Keyed by pattern name. |
 | `lengthRules` | Merged over the built-in rules: a matching country key overrides that country's min/max, new keys are added. Keyed by country code (uppercase). |
-| `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
+| `forceDropdownSide` | Only meaningful with `dropdownSide`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while country dropdown is open. Default: `false`. |
 | `renderCountryOption` | Replaces default country option rendering in the dropdown list. |
 | `renderSelectedCountry` | Replaces default selected country rendering in the trigger. |
@@ -134,10 +134,10 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `style` | object | — | Inline styles for the root element. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | — | Vertical placement of the country dropdown relative to the trigger. |
-| `forceDropdownPosition` | boolean | — | Locks the country dropdown to the specified position without auto-flipping. |
+| `dropdownSide` | `"top"` \| `"bottom"` | — | Vertical placement of the country dropdown relative to the trigger. |
+| `forceDropdownSide` | boolean | — | Locks the country dropdown to the specified position without auto-flipping. |
 | `dropdownZIndex` | number | — | Z-index of the country dropdown popup. |
-| `dropdownGap` | number | — | Gap in pixels between trigger and country dropdown popup. |
+| `dropdownOffset` | number | — | Gap in pixels between trigger and country dropdown popup. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the country dropdown. |
 | `lockScroll` | boolean | — | Locks body scroll while the country dropdown is open. |
 
@@ -311,8 +311,8 @@ const euCountries = [
 
 ```tsx
 <InternationalPhoneInput
-  dropdownPosition="bottom"
-  forceDropdownPosition
+  dropdownSide="bottom"
+  forceDropdownSide
   lockScroll
 />
 ```
@@ -371,7 +371,7 @@ The number itself is a native `<input>`. The country selector is a listbox with 
 | Copy gives unexpected format | `copyFormat` defaults to `"e164"` | Set `copyFormat="international"` or `"national"` |
 | Controlled value not updating | Missing `onValueChange` | Always pair `value` with `onValueChange` |
 | Custom format patterns ignored | Wrong key structure | Use `{ pattern: (digits) => string, countries: ["xx"] }` |
-| Country dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownPosition={true}` to lock direction |
+| Country dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownSide={true}` to lock direction |
 
 ---
 
@@ -396,7 +396,7 @@ The number itself is a native `<input>`. The country selector is a listbox with 
 | Selected icons | `title="Custom Selected Icon"` | Star, circle, dot icons |
 | Form integration | `title="Form Semantics"` | name prop + hidden inputs |
 | Ref forwarding | `title="Ref Forwarding"` | Focus, select, getValue |
-| Force position | `title="Dropdown Position"` | dropdownPosition + forceDropdownPosition |
+| Force position | `title="Dropdown Position"` | dropdownSide + forceDropdownSide |
 | Scroll lock | `title="Scroll Lock"` | lockScroll prop |
 | Checkout form | `title="Checkout Form"` | Real-world form example |
 | Combined | `title="Combined: All Features"` | Kitchen-sink demo |

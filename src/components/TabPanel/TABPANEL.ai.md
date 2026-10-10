@@ -55,8 +55,7 @@ export default function Example() {
 | `activationMode` | `"automatic"` (default) or `"manual"` (Enter/Space to activate). |
 | `children` | Render function `(tab) => ReactNode`. This is how panel content is rendered — not a `renderContent` prop or `content` on tab objects. |
 | `renderTab` | Custom tab renderer. Receives `(props, defaultElement)`. |
-| `keepMounted` | Keep panels in DOM after switching away. |
-| `forceMount` | Mount all panels regardless of active state. |
+| `keepMounted` | `false` (default) mounts only the active panel, `"visited"` keeps every panel opened so far, `true` mounts every panel including ones never opened. |
 | `unstyled` | Strips all defaults. Must provide styling via `classes`. |
 
 ---
@@ -111,7 +110,7 @@ There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
 | `showZeroCount` | boolean | `false` | Whether to show a count badge when the count is zero. |
 | `alwaysShowLabels` | boolean | `true` | Whether to always show tab labels (even when icons are present). |
 | `showTooltips` | boolean | `true` | Whether to show tooltips on tabs. |
-| `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
+| `tooltipSide` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
 | `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
 | `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
@@ -122,8 +121,7 @@ There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | Inline styles applied to the root element. |
-| `forceMount` | boolean | `false` | Force mount all tab panels regardless of active state. |
-| `keepMounted` | boolean | `false` | Keep previously mounted tab panels in the DOM. |
+| `keepMounted` | `false` \| `"visited"` \| `true` | `false` | Which panels' content is in the DOM: `false` the active panel only, `"visited"` every panel opened so far, `true` every panel, including ones never opened. |
 
 ## Styling Guide
 
@@ -217,8 +215,10 @@ const tabs = [
 
 ### Keep panels mounted
 
+`keepMounted` takes three values: `false` (default) mounts only the active panel, `"visited"` keeps every panel opened so far, and `true` mounts every panel, including ones never opened.
+
 ```tsx
-<TabPanel tabs={tabs} keepMounted>{(item) => <Panel id={item.id} />}</TabPanel>
+<TabPanel tabs={tabs} keepMounted="visited">{(item) => <Panel id={item.id} />}</TabPanel>
 ```
 
 ### Vertical orientation

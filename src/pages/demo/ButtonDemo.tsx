@@ -573,7 +573,7 @@ const ButtonDemo = () => {
       {/* ─── Loading States ─────────────────────────────────────────────── */}
       <Section
         title="Loading States"
-        description="Use loading to show a spinner. Customize with loadingText, loaderPosition, and loaderSize."
+        description="Use loading to show a spinner. Customize with loadingContent, loaderPosition, and loaderSize."
         isDarkMode={dark}
       >
         <div className="space-y-4">
@@ -602,10 +602,10 @@ const ButtonDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              With loadingText
+              With loadingContent
             </p>
             <DemoWrapper isDarkMode={dark} layout="inline">
-              <Button className={c.outline} loading loadingText="Submitting...">
+              <Button className={c.outline} loading loadingContent="Submitting...">
                 Submit
               </Button>
             </DemoWrapper>
@@ -688,7 +688,7 @@ const ButtonDemo = () => {
           <Button
             className={c.primary}
             loading={loading}
-            loadingText="Processing..."
+            loadingContent="Processing..."
             onClick={simulateLoading}
           >
             Click to Load
@@ -1019,7 +1019,7 @@ const ButtonDemo = () => {
         items={[
           "`asChild` requires exactly one valid element child—merge event handlers carefully.",
           "Anchor buttons (`as=\"a\"`) need `href` for keyboard and SR expectations.",
-          "Loading state should pair with `loadingText` or visible content so progress is clear.",
+          "Loading state should pair with `loadingContent` or visible content so progress is clear.",
         ]}
       />
       <DocDoDont

@@ -114,7 +114,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
 | `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
-| `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
+| `loadingContent` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
 | `loaderPosition` | `"start"` \| `"end"` | `"end"` | Which end of the label the loader appears at: `start` before it, `end` after it. |
 | `loaderSize` | number | `16` | Pixel size of the loading spinner. |
 | `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
@@ -282,7 +282,7 @@ const [saving, setSaving] = useState(false);
 <Button
   className={primaryClasses}
   loading={saving}
-  loadingText="Saving..."
+  loadingContent="Saving..."
   onClick={async () => {
     setSaving(true);
     await saveData();
@@ -401,7 +401,7 @@ const [saving, setSaving] = useState(false);
 - **Always add `aria-label`** to icon-only buttons.
 - **`size` sets dimensions now** — sm/md/lg are 28/40/52px tall, with padding, type, gap, icon box and loader moving together. It did not until v1: the prop emitted `data-size` and painted nothing, and this line used to say so. A `className` still wins over any of it — the size tokens are plain utilities in the same merge groups, so `px-8` replaces the size's padding rather than sitting beside it.
 - **Safe defaults:** `<Button className="bg-blue-600 text-white hover:bg-blue-700 ...">Label</Button>`.
-- **Use `loading` + `loadingText`** for async actions. The button auto-disables during loading.
+- **Use `loading` + `loadingContent`** for async actions. The button auto-disables during loading.
 - **`disabled` vs `loading`:** both disable interaction, but `loading` shows a spinner and sets `aria-busy`.
 
 ---
@@ -422,7 +422,7 @@ const [saving, setSaving] = useState(false);
 | Both icons animated | `title="Animate Both Icons"` | animateIcon="both" |
 | Always-on animation | `title="Continuous Animation"` | animateOnHover={false} |
 | Motion reduction | `title="Reduce Motion"` | reduceMotion prop |
-| Loading states | `title="Loading States"` | loaderPosition, loadingText |
+| Loading states | `title="Loading States"` | loaderPosition, loadingContent |
 | Custom loader | `title="Custom Loader"` | Custom loader elements |
 | Click-to-load | `title="Interactive Loading"` | useState + async pattern |
 | Size presets | `title="Sizes"` | sm, md, lg |

@@ -551,7 +551,7 @@ describe("useMultiSelectDropdown", () => {
       const searchOptions = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
         // large debounce ensures timeout doesn't fire during synchronous assertions
-        useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 60_000 })
+        useMultiSelectDropdown({ options: [], searchOptions, searchDebounce: 60_000 })
       );
       act(() => result.current.setSearchQuery("foo"));
       expect(result.current.isSearching).toBe(true);
@@ -561,7 +561,7 @@ describe("useMultiSelectDropdown", () => {
     it("in async mode, clearing searchQuery resets isSearching to false immediately", () => {
       const searchOptions = vi.fn().mockResolvedValue([]);
       const { result } = renderHook(() =>
-        useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 60_000 })
+        useMultiSelectDropdown({ options: [], searchOptions, searchDebounce: 60_000 })
       );
       act(() => result.current.setSearchQuery("foo"));
       expect(result.current.isSearching).toBe(true);

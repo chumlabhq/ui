@@ -36,7 +36,7 @@ const fixtures: Fixtures<typeof Avatar> = [
       // `classes.surplus` is passed here because it was in the public type and
       // read nowhere — a slot a consumer could set that painted nothing. This
       // fixture is the only place the wired slot reaches markup.
-      <AvatarGroup max={2} classes={{ surplus: "bg-cl-accent text-cl-on-accent" }}>
+      <AvatarGroup maxVisible={2} classes={{ surplus: "bg-cl-accent text-cl-on-accent" }}>
         <Avatar name="Ada Lovelace" />
         <Avatar name="Bob Barker" />
         <Avatar name="Cy Coleman" />
@@ -49,7 +49,7 @@ const fixtures: Fixtures<typeof Avatar> = [
     note: "The `renderSurplus` escape hatch had no fixture: the branch that hands the slot to the caller was never painted, measured or photographed, while the default surplus beside it was. It is also the branch that does NOT join the overlap stack, which is the behaviour most likely to regress.",
     props: {},
     render: () => (
-      <AvatarGroup max={2} renderSurplus={(n) => <span>and {n} more</span>}>
+      <AvatarGroup maxVisible={2} renderSurplus={(n) => <span>and {n} more</span>}>
         <Avatar name="Ada Lovelace" />
         <Avatar name="Bob Barker" />
         <Avatar name="Cy Coleman" />

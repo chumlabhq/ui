@@ -36,7 +36,7 @@ export default function DrawerExample() {
         open={snapPoints.open}
         onOpenChange={snapPoints.onOpenChange}
         swipeable
-        direction="bottom"
+        side="bottom"
         size="85vh"
         snapPoints={[0.3, 0.6, 1]}
         snapPointIndex={snapIndex}

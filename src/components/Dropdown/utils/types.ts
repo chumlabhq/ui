@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties, ComponentType, FocusEvent } from "react";
+import type { ReactNode, CSSProperties, FocusEvent } from "react";
 
 /**
  * One selectable option.
@@ -133,9 +133,10 @@ export interface DropdownBaseProps {
   successMessage?: ReactNode;
   required?: boolean;
   clearable?: boolean;
-  noResultsContent?: ReactNode;
+  emptyContent?: ReactNode;
   showChevron?: boolean;
   showSelectedIcon?: boolean;
+  /** Replaces the selected option's check mark. Rendered as given; `classes.itemIndicator` styles the default one. */
   selectedIcon?: ReactNode;
   fullWidth?: boolean;
   loading?: boolean;
@@ -149,10 +150,10 @@ export interface DropdownBaseProps {
   portalContainer?: HTMLElement | null;
   /** When true, locks body scroll while the dropdown is open. Default: false. */
   lockScroll?: boolean;
-  dropdownPosition?: "top" | "bottom";
-  forceDropdownPosition?: boolean;
+  dropdownSide?: "top" | "bottom";
+  forceDropdownSide?: boolean;
   dropdownZIndex?: number;
-  dropdownGap?: number;
+  dropdownOffset?: number;
   typeaheadTimeout?: number;
   "aria-label"?: string;
   /** Fires when the trigger loses focus, with the native focus event. */
@@ -161,10 +162,11 @@ export interface DropdownBaseProps {
   onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   renderTrigger?: (triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode;
-  ChevronIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
-  CheckIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
-  ClearIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
-  loadingText?: ReactNode;
+  /** Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open. */
+  chevronIcon?: ReactNode;
+  /** Replaces the clear button's glyph. Rendered as given. */
+  clearIcon?: ReactNode;
+  loadingContent?: ReactNode;
 }
 
 /**

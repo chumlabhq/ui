@@ -1866,7 +1866,7 @@ describe("lockScroll prop", () => {
   });
 });
 
-describe("dropdownPosition top flipping (DatePicker.tsx lines 668-671)", () => {
+describe("dropdownSide top flipping (DatePicker.tsx lines 668-671)", () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
   });
@@ -1874,20 +1874,20 @@ describe("dropdownPosition top flipping (DatePicker.tsx lines 668-671)", () => {
     vi.useRealTimers();
   });
 
-  it("renders with dropdownPosition=top prop without crashing", async () => {
+  it("renders with dropdownSide=top prop without crashing", async () => {
     const user = userEvent.setup({
       advanceTimers: vi.advanceTimersByTime,
     });
-    render(<DatePicker dropdownPosition="top" />);
+    render(<DatePicker dropdownSide="top" />);
     await openCalendar(user);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  it("renders with forceDropdownPosition=true without crashing", async () => {
+  it("renders with forceDropdownSide=true without crashing", async () => {
     const user = userEvent.setup({
       advanceTimers: vi.advanceTimersByTime,
     });
-    render(<DatePicker dropdownPosition="top" forceDropdownPosition />);
+    render(<DatePicker dropdownSide="top" forceDropdownSide />);
     await openCalendar(user);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });

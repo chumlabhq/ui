@@ -33,11 +33,11 @@
           "iconPosition": {
             "type": "string",
             "enum": [
-              "left",
-              "right"
+              "start",
+              "end"
             ],
-            "description": "Position of the icon relative to the label.",
-            "default": "left"
+            "description": "Which end of the label the icon sits at.",
+            "default": "start"
           },
           "disabled": {
             "type": "boolean",
@@ -107,7 +107,7 @@
         ]
       }
     },
-    "maxVisibleItems": {
+    "maxVisible": {
       "type": "number",
       "description": "Maximum visible items before collapsing into an ellipsis dropdown.",
       "default": 4
@@ -179,13 +179,13 @@
     },
     "separatorIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom separator icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the default chevron between items. Rendered as given; `iconSize` sizes the default one. `separator` takes precedence.",
+      "x-tsType": "ReactNode"
     },
     "ellipsisIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom ellipsis icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the collapsed-items button's glyph. Rendered as given; `iconSize` sizes the default one.",
+      "x-tsType": "ReactNode"
     },
     "iconSize": {
       "oneOf": [
@@ -204,7 +204,7 @@
       "description": "Enables tooltips on breadcrumb items.",
       "default": true
     },
-    "tooltipPosition": {
+    "tooltipSide": {
       "type": "string",
       "enum": [
         "top",
@@ -280,7 +280,7 @@
       "description": "Tooltip configuration for the ellipsis button.",
       "x-tsType": "BreadcrumbTooltipProps | undefined"
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",

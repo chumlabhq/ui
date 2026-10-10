@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<CountryFlag code="us" />` to render a flag. Pass `size` for preset or pixel size. Use `<CountryFlagGroup max={5}>` to show a row of flags with overflow count. Flags load from `/flags/{code}.svg` by default.
+Use `<CountryFlag code="us" />` to render a flag. Pass `size` for preset or pixel size. Use `<CountryFlagGroup maxVisible={5}>` to show a row of flags with overflow count. Flags load from `/flags/{code}.svg` by default.
 
 ---
 
@@ -30,7 +30,7 @@ export default function Example() {
   return (
     <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
       <CountryFlag code="us" size="lg" />
-      <CountryFlagGroup max={3} size="lg">
+      <CountryFlagGroup maxVisible={3} size="lg">
         <CountryFlag code="gb" />
         <CountryFlag code="jp" />
         <CountryFlag code="de" />
@@ -121,7 +121,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Prop | Type | Description |
 | --- | --- | --- |
 | `children` | `ReactNode` | Content rendered inside this element. |
-| `max` | `number \| undefined` | How many flags to show before the rest are collapsed into a surplus count. |
+| `maxVisible` | `number \| undefined` | How many flags to show before the rest are collapsed into a surplus count. |
 | `size` | `number \| CountryFlagSize \| undefined` | Flag size for every member of the group. |
 | `showCountTooltip` | `boolean \| undefined` | Shows a tooltip on the surplus count listing the hidden countries. |
 | `countTooltip` | `Omit<CountryFlagTooltipConfig, "content"> \| undefined` | Tooltip settings for the surplus count. Its content comes from `surplusTooltipContent`. |
@@ -217,7 +217,7 @@ CountryFlag is image-based — no dark mode classes needed. Group count uses `bg
 ### Flag group with overflow
 
 ```tsx
-<CountryFlagGroup max={3} size="md">
+<CountryFlagGroup maxVisible={3} size="md">
   <CountryFlag code="us" />
   <CountryFlag code="gb" />
   <CountryFlag code="de" />
@@ -259,7 +259,7 @@ Presentational: it renders an image and takes no keyboard input.
 |---------|-------|-----|
 | Flag not showing | Unrecognised code | Verify code is a lowercase 2-letter ISO 3166-1 alpha-2 code |
 | Fallback always shows | `basePath` set but the file is missing | Ensure `{basePath}/{code}.svg` exists, or drop `basePath` to use the packaged flags |
-| Group count wrong | `max` not set | Pass `max` prop to CountryFlagGroup |
+| Group count wrong | `maxVisible` not set | Pass `maxVisible` to CountryFlagGroup |
 | Tooltip not showing | Missing tooltip prop | Pass `tooltip="Country Name"` |
 | Classes don't merge | Expected additive | Classes REPLACE per slot |
 

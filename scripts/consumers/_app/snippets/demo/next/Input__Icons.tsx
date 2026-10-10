@@ -129,7 +129,7 @@ export default function InputExample() {
           onChange={(e) => setSearch(e.target.value)}
           startIcon={<SearchIcon className="text-cl-text-tertiary" />}
           onStartIconClick={() => setLastAction("Search submitted")}
-          startIconLabel="Submit search"
+          startIconAriaLabel="Submit search"
           endIcon={
             search ? (
               <CloseIcon className="text-cl-text-tertiary hover:text-cl-text-secondary" />
@@ -138,7 +138,7 @@ export default function InputExample() {
             )
           }
           onEndIconClick={search ? () => setSearch("") : undefined}
-          endIconLabel="Clear"
+          endIconAriaLabel="Clear"
           classes={
             {
               root: "flex flex-col data-[size=sm]:[&_[data-slot=wrapper]]:px-3 data-[size=sm]:[&_input]:text-xs data-[size=lg]:[&_[data-slot=wrapper]]:px-4 data-[size=lg]:[&_input]:text-base",

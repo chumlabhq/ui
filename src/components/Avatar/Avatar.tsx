@@ -54,7 +54,7 @@ const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
  * AI Usage Guidelines:
  * - Use `name` for initials and `src` for images — both can coexist (image wins, initials are fallback)
  * - Use `autoColor` for deterministic colors from the name hash
- * - Wrap in `<AvatarGroup max={N}>` for stacked groups with overflow counting
+ * - Wrap in `<AvatarGroup maxVisible={N}>` for stacked groups with overflow counting
  * - Use `<AvatarBadge>` as a sibling inside a relative container for notifications
  *
  * Behavior:

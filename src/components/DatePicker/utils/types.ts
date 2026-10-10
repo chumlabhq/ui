@@ -234,11 +234,11 @@ interface BaseDatePickerProps
   /** Z-index of the calendar popup. */
   dropdownZIndex?: number;
   /** Vertical placement of the calendar popup relative to the trigger. */
-  dropdownPosition?: "top" | "bottom";
-  /** When true, locks the calendar to the specified dropdownPosition without auto-flipping. */
-  forceDropdownPosition?: boolean;
+  dropdownSide?: "top" | "bottom";
+  /** When true, locks the calendar to the specified dropdownSide without auto-flipping. */
+  forceDropdownSide?: boolean;
   /** Gap in pixels between trigger and calendar popup. */
-  dropdownGap?: number;
+  dropdownOffset?: number;
   /** Keep the calendar DOM mounted when closed. */
   keepMounted?: boolean;
 

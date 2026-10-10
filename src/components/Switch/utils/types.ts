@@ -65,7 +65,8 @@ export interface SwitchProps
   loaderSize?: number;
   checkedIcon?: ReactNode;
   uncheckedIcon?: ReactNode;
-  transitionDuration?: number;
+  /** How long the thumb takes to slide, in milliseconds. */
+  animationDuration?: number;
   transitionTimingFunction?: string;
   renderLabel?: (props: SwitchRenderProps) => ReactNode;
   renderDescription?: (props: SwitchRenderProps) => ReactNode;

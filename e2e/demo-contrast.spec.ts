@@ -162,14 +162,17 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "country-flag": 454,
   "date-picker": 975,
   "drawer": 418,
-  "dropdown": 746,
+  // A2c, 746 -> 744: the API Reference lost the CheckIcon row (4 cells), folded
+  // into selectedIcon, and the rewritten icon descriptions gained one code span
+  // (747 -> 744 measured HEAD vs now).
+  "dropdown": 744,
   "input": 530,
   "international-phone-input": 946,
   // L11, 426 -> 425: the In Context "Processing" button is now disabled while
   // it loads, and an inactive control's label is exempt from 1.4.3.
   "loader": 425,
-  // A2b, 495 -> 491: the API Reference lost the disableAnimation row (4 cells),
-  // folded into the reduceMotion row above it (measured HEAD vs now).
+  // A2b, 495 -> 491: the API Reference lost the animation-off boolean's row (4
+  // cells), folded into the reduceMotion row above it (measured HEAD vs now).
   "modal": 491,
   "multi-select-dropdown": 684,
   "multi-select-searchable-dropdown": 707,

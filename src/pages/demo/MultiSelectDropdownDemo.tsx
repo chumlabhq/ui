@@ -379,7 +379,7 @@ const MultiSelectDropdownDemo = () => {
                 value={stateDefaultValue}
                 onValueChange={setStateDefaultValue}
                 placeholder="Select fruits..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
               />
             </div>
@@ -390,7 +390,7 @@ const MultiSelectDropdownDemo = () => {
                 value={stateSelectedValue}
                 onValueChange={setStateSelectedValue}
                 placeholder="Select fruits..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
               />
             </div>
@@ -402,7 +402,7 @@ const MultiSelectDropdownDemo = () => {
                 onValueChange={() => {}}
                 disabled
                 placeholder="Select fruits..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
                   trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed`,
@@ -464,7 +464,7 @@ const MultiSelectDropdownDemo = () => {
               value={countryValue}
               onValueChange={(values) => setCountryValue(values)}
               placeholder="Select countries..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -484,7 +484,7 @@ const MultiSelectDropdownDemo = () => {
               value={statusValue}
               onValueChange={(values) => setStatusValue(values)}
               placeholder="Select statuses..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -506,7 +506,7 @@ const MultiSelectDropdownDemo = () => {
               loadOptions={handleLoadOptions}
               loadOnOpen
               shimmerCount={5}
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -530,7 +530,7 @@ const MultiSelectDropdownDemo = () => {
               value={disabledItemValue}
               onValueChange={(values) => setDisabledItemValue(values)}
               placeholder="Select options..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -552,7 +552,7 @@ const MultiSelectDropdownDemo = () => {
               value={labelValue}
               onValueChange={(values) => setLabelValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -575,7 +575,7 @@ const MultiSelectDropdownDemo = () => {
                 open={controlledOpen}
                 onOpenChange={setControlledOpen}
                 placeholder="Controlled dropdown..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
               />
             </div>
@@ -635,7 +635,7 @@ const MultiSelectDropdownDemo = () => {
               onValueChange={(values) => setDisabledValue(values)}
               disabled
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed`,
@@ -662,7 +662,7 @@ const MultiSelectDropdownDemo = () => {
               error
               errorMessage="Please select at least one option"
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger: `${c.dropdown.trigger} border border-cl-error focus:ring-cl-error`,
@@ -687,7 +687,7 @@ const MultiSelectDropdownDemo = () => {
               value={descriptionValue}
               onValueChange={(values) => setDescriptionValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -708,7 +708,7 @@ const MultiSelectDropdownDemo = () => {
               value={successValue}
               onValueChange={(values) => setSuccessValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               success={successValue.length > 0}
               successMessage={`${successValue.length} fruit${successValue.length === 1 ? "" : "s"} selected`}
               classes={{
@@ -745,7 +745,7 @@ const MultiSelectDropdownDemo = () => {
                 value={formIntegrationValue}
                 onValueChange={setFormIntegrationValue}
                 placeholder="Select fruits..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
               />
             </div>
@@ -773,7 +773,7 @@ const MultiSelectDropdownDemo = () => {
               onValueChange={(values) => setNoChevronValue(values)}
               showChevron={false}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -794,7 +794,7 @@ const MultiSelectDropdownDemo = () => {
               onValueChange={(values) => setFullWidthValue(values)}
               fullWidth
               placeholder="Select fruits..."
-              maxDisplayedChips={3}
+              maxVisible={3}
               classes={c.dropdown}
             />
           </div>
@@ -814,7 +814,7 @@ const MultiSelectDropdownDemo = () => {
               value={scrollUnlockedValue}
               onValueChange={setScrollUnlockedValue}
               placeholder="Default (scrollable)"
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -825,7 +825,7 @@ const MultiSelectDropdownDemo = () => {
               onValueChange={setScrollLockValue}
               placeholder="lockScroll enabled"
               lockScroll
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -847,7 +847,7 @@ const MultiSelectDropdownDemo = () => {
                 value={variantDefaultValue}
                 onValueChange={setVariantDefaultValue}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
               />
             </div>
@@ -860,7 +860,7 @@ const MultiSelectDropdownDemo = () => {
                 value={variantBorderlessValue}
                 onValueChange={setVariantBorderlessValue}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 transition-colors cursor-pointer min-h-[42px] bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover`,
@@ -878,7 +878,7 @@ const MultiSelectDropdownDemo = () => {
                 value={variantBottomValue}
                 onValueChange={setVariantBottomValue}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-0 border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus`,
@@ -896,7 +896,7 @@ const MultiSelectDropdownDemo = () => {
                 value={variantGhostValue}
                 onValueChange={setVariantGhostValue}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover`,
@@ -914,7 +914,7 @@ const MultiSelectDropdownDemo = () => {
                 value={variantPillValue}
                 onValueChange={setVariantPillValue}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
  trigger: `flex items-center gap-2 px-4 py-2 text-sm rounded-full transition-colors cursor-pointer min-h-[42px] border border-cl-border bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover shadow-sm`,
@@ -937,32 +937,32 @@ const MultiSelectDropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;bottom&quot; (default)
+                dropdownSide=&quot;bottom&quot; (default)
               </DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
                   options={staticOptions}
                   value={posBotValue}
                   onValueChange={setPosBotValue}
-                  dropdownPosition="bottom"
+                  dropdownSide="bottom"
                   placeholder="Opens below..."
-                  maxDisplayedChips={2}
+                  maxVisible={2}
                   classes={c.dropdown}
                 />
               </div>
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;top&quot;
+                dropdownSide=&quot;top&quot;
               </DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
                   options={staticOptions}
                   value={posTopValue}
                   onValueChange={setPosTopValue}
-                  dropdownPosition="top"
+                  dropdownSide="top"
                   placeholder="Opens above..."
-                  maxDisplayedChips={2}
+                  maxVisible={2}
                   classes={c.dropdown}
                 />
               </div>
@@ -980,15 +980,15 @@ const MultiSelectDropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced bottom)
+                forceDropdownSide (forced bottom)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectDropdown
                   options={staticOptions}
                   value={forceBotValue}
                   onValueChange={setForceBotValue}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   placeholder="Always opens below..."
                   classes={c.dropdown}
                 />
@@ -996,15 +996,15 @@ const MultiSelectDropdownDemo = () => {
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced top)
+                forceDropdownSide (forced top)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectDropdown
                   options={staticOptions}
                   value={forceTopValue}
                   onValueChange={setForceTopValue}
-                  dropdownPosition="top"
-                  forceDropdownPosition
+                  dropdownSide="top"
+                  forceDropdownSide
                   placeholder="Always opens above..."
                   classes={c.dropdown}
                 />
@@ -1013,22 +1013,22 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          When forceDropdownPosition is true, the dropdown will always open in
+          When forceDropdownSide is true, the dropdown will always open in
           the specified direction regardless of available viewport space.
         </div>
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition + lockScroll
+                forceDropdownSide + lockScroll
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectDropdown
                   options={staticOptions}
                   value={forceLockValue}
                   onValueChange={setForceLockValue}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   lockScroll
                   placeholder="Forced bottom + scroll locked"
                   classes={c.dropdown}
@@ -1038,7 +1038,7 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Combining forceDropdownPosition with lockScroll prevents the page from
+          Combining forceDropdownSide with lockScroll prevents the page from
           scrolling while the dropdown is open, ensuring the menu stays anchored
           in place.
         </div>
@@ -1091,7 +1091,7 @@ const MultiSelectDropdownDemo = () => {
               onValueChange={setKeepMountedValue}
               keepMounted
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -1101,7 +1101,7 @@ const MultiSelectDropdownDemo = () => {
       {/* ─── Custom Dropdown Gap ─────────────────────────────────────────── */}
       <Section
         title="Custom Dropdown Gap"
-        description="Control the gap between the trigger and dropdown with dropdownGap (pixels). Default is 4."
+        description="Control the gap between the trigger and dropdown with dropdownOffset (pixels). Default is 4."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col">
@@ -1113,7 +1113,7 @@ const MultiSelectDropdownDemo = () => {
                   options={staticOptions}
                   value={[]}
                   onValueChange={() => {}}
-                  dropdownGap={0}
+                  dropdownOffset={0}
                   placeholder="No gap..."
                   classes={c.dropdown}
                 />
@@ -1126,9 +1126,9 @@ const MultiSelectDropdownDemo = () => {
                   options={staticOptions}
                   value={customGapValue}
                   onValueChange={setCustomGapValue}
-                  dropdownGap={16}
+                  dropdownOffset={16}
                   placeholder="Large gap..."
-                  maxDisplayedChips={2}
+                  maxVisible={2}
                   classes={c.dropdown}
                 />
               </div>
@@ -1151,7 +1151,7 @@ const MultiSelectDropdownDemo = () => {
               onValueChange={setZIndexValue}
               dropdownZIndex={9999}
               placeholder="Select (z-index: 9999)..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -1173,7 +1173,7 @@ const MultiSelectDropdownDemo = () => {
               placeholder="Focus or blur me..."
               onFocus={(event) => setFocusMessage(`Dropdown focused: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
               onBlur={(event) => setFocusMessage(`Dropdown blurred: ${event.type} on <${event.target.tagName.toLowerCase()}>`)}
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -1201,7 +1201,7 @@ const MultiSelectDropdownDemo = () => {
               value={customKeyDownValue}
               onValueChange={setCustomKeyDownValue}
               placeholder="Try pressing 'x'..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               onKeyDown={(e) => {
                 if (e.key === "x" || e.key === "X") {
                   e.preventDefault();
@@ -1239,7 +1239,7 @@ const MultiSelectDropdownDemo = () => {
                   onValueChange={setClassNameDemoValue}
                   placeholder="Select fruits..."
                   className={"opacity-95"}
-                  maxDisplayedChips={2}
+                  maxVisible={2}
                   classes={c.dropdown}
                 />
               </div>
@@ -1253,7 +1253,7 @@ const MultiSelectDropdownDemo = () => {
                   onValueChange={setClassNameStyleValue}
                   placeholder="Select fruits..."
                   style={{ maxWidth: "320px", margin: "0 auto" }}
-                  maxDisplayedChips={2}
+                  maxVisible={2}
                   classes={c.dropdown}
                 />
               </div>
@@ -1269,7 +1269,7 @@ const MultiSelectDropdownDemo = () => {
                   onValueChange={setAriaLabelDemoValue}
                   placeholder="Select fruits..."
                   aria-label="Fruit options"
-                  maxDisplayedChips={2}
+                  maxVisible={2}
                   classes={c.dropdown}
                 />
               </div>
@@ -1291,7 +1291,7 @@ const MultiSelectDropdownDemo = () => {
               value={darkThemeValue}
               onValueChange={(values) => setDarkThemeValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger:
@@ -1328,7 +1328,7 @@ const MultiSelectDropdownDemo = () => {
               value={purpleThemeValue}
               onValueChange={(values) => setPurpleThemeValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus`,
@@ -1362,7 +1362,7 @@ const MultiSelectDropdownDemo = () => {
               value={greenCheckboxValue}
               onValueChange={(values) => setGreenCheckboxValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 itemControl: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input`,
@@ -1385,7 +1385,7 @@ const MultiSelectDropdownDemo = () => {
               value={orangeCheckboxValue}
               onValueChange={(values) => setOrangeCheckboxValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 itemControl:
@@ -1409,7 +1409,7 @@ const MultiSelectDropdownDemo = () => {
               value={customIconValue}
               onValueChange={(values) => setCustomIconValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               checkboxIcon={
                 <svg
                   className="w-3 h-3"
@@ -1469,13 +1469,13 @@ const MultiSelectDropdownDemo = () => {
       {/* ─── Empty Options ───────────────────────────────────────────────── */}
       <Section
         title="Empty Options"
-        description="When no options are available, noResultsContent is shown."
+        description="When no options are available, emptyContent is shown."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-wrap gap-8">
             <div className="w-full sm:max-w-72">
-              <DemoLabel isDarkMode={dark}>Default noResultsContent</DemoLabel>
+              <DemoLabel isDarkMode={dark}>Default emptyContent</DemoLabel>
               <MultiSelectDropdown
                 options={[]}
                 value={[]}
@@ -1485,13 +1485,13 @@ const MultiSelectDropdownDemo = () => {
               />
             </div>
             <div className="w-full sm:max-w-72">
-              <DemoLabel isDarkMode={dark}>Custom noResultsContent</DemoLabel>
+              <DemoLabel isDarkMode={dark}>Custom emptyContent</DemoLabel>
               <MultiSelectDropdown
                 options={[]}
                 value={[]}
                 onValueChange={() => {}}
                 placeholder="Custom empty..."
-                noResultsContent={
+                emptyContent={
                   <span className="flex flex-col items-center gap-1 py-2">
                     <span
                       className={`text-lg text-cl-text-tertiary`}
@@ -1527,8 +1527,8 @@ const MultiSelectDropdownDemo = () => {
               value={[]}
               onValueChange={() => {}}
               placeholder="Select fruits..."
-              maxDisplayedChips={3}
-              ChevronIcon={CustomChevronIcon}
+              maxVisible={3}
+              chevronIcon={<CustomChevronIcon className="w-4 h-4" />}
               classes={c.dropdown}
             />
           </div>

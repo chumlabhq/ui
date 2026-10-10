@@ -636,7 +636,7 @@ const CascadingDropdownDemo = () => {
               onValueChange={(val) => setAsyncSingleValue(val)}
               loadChildren={handleLoadChildren}
               placeholder="Select region and country..."
-              loadingText="Loading countries..."
+              loadingContent="Loading countries..."
               classes={{
                 ...c.cascading,
                 subContent: `${c.cascading.subContent} max-h-64 overflow-y-auto`,
@@ -669,7 +669,7 @@ const CascadingDropdownDemo = () => {
               loadChildren={handleLoadChildren}
               placeholder="Select region and countries..."
               closeOnSelect={false}
-              loadingText="Loading countries..."
+              loadingContent="Loading countries..."
               classes={{
                 ...c.cascading,
                 subContent: `${c.cascading.subContent} max-h-64 overflow-y-auto`,
@@ -702,7 +702,7 @@ const CascadingDropdownDemo = () => {
               loadChildren={handleLoadChildrenAsync}
               placeholder="Select region and country..."
               loading={isPrefetchLoading}
-              loadingText="Loading regions..."
+              loadingContent="Loading regions..."
               classes={{
                 ...c.cascading,
                 subContent: `${c.cascading.subContent} max-h-64 overflow-y-auto`,
@@ -748,8 +748,8 @@ const CascadingDropdownDemo = () => {
               loadChildren={handleLoadChildrenAsync}
               placeholder="Click to load regions..."
               loading={isLoadOnOpenLoading}
-              loadingText="Loading regions..."
-              noResultsContent={
+              loadingContent="Loading regions..."
+              emptyContent={
                 hasLoadOnOpenLoaded
                   ? "No regions found"
                   : "Click to load regions"
@@ -1032,7 +1032,7 @@ const CascadingDropdownDemo = () => {
               value={leftPositionValue}
               onValueChange={(val) => setLeftPositionValue(val)}
               placeholder="Select category..."
-              submenuPosition="left"
+              submenuSide="left"
               classes={{
                 ...c.cascading,
                 subContent: `${c.cascading.subContent} mr-1 ml-0`,
@@ -1122,7 +1122,7 @@ const CascadingDropdownDemo = () => {
               submenuSearchPlaceholder="Search countries..."
               searchMenu={asyncSearchRegions}
               searchSubmenu={asyncSearchCountries}
-              searchDebounceMs={300}
+              searchDebounce={300}
             />
           </div>
         </DemoWrapper>
@@ -1145,15 +1145,15 @@ const CascadingDropdownDemo = () => {
               showSubmenuSearch
               menuSearchPlaceholder="Search categories..."
               submenuSearchPlaceholder="Filter items..."
-              SearchIcon={({ className }) => (
-                <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+              searchIcon={
+                <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 shrink-0 text-cl-accent">
                   <path
                     fillRule="evenodd"
                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={{
                 searchControl: `flex items-center gap-2 px-3 py-2.5 border-b-2 border border-cl-border-input-focus bg-cl-accent-surface`,
                 searchInput: `flex-1 bg-transparent text-sm focus:outline-none text-cl-text placeholder:text-cl-text-tertiary`,
@@ -1184,15 +1184,15 @@ const CascadingDropdownDemo = () => {
               showSubmenuSearch
               menuSearchPlaceholder="Search categories..."
               submenuSearchPlaceholder="Filter items..."
-              SearchIcon={({ className }) => (
-                <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+              searchIcon={
+                <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 shrink-0 text-cl-accent">
                   <path
                     fillRule="evenodd"
                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={{
                 searchControl: `flex items-center gap-2 px-3 py-2.5 bg-cl-accent-surface border-b border-cl-border-input-focus`,
                 searchInput: `flex-1 bg-transparent text-sm focus:outline-none text-cl-accent placeholder:text-cl-text-tertiary`,
@@ -1451,7 +1451,7 @@ const CascadingDropdownDemo = () => {
       {/* ─── Loading State (Parent) ─────────────────────────────────────── */}
       <Section
         title="Loading State (Parent)"
-        description="Show a loading indicator in the main menu while options are fetched. Uses the loading prop and custom loadingText."
+        description="Show a loading indicator in the main menu while options are fetched. Uses the loading prop and custom loadingContent."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1460,7 +1460,7 @@ const CascadingDropdownDemo = () => {
             value={{}}
             onValueChange={() => {}}
             loading
-            loadingText="Fetching categories..."
+            loadingContent="Fetching categories..."
             placeholder="Loading example..."
             classes={{
               ...c.cascading,
@@ -1473,7 +1473,7 @@ const CascadingDropdownDemo = () => {
       {/* ─── Shimmer Loading ──────────────────────────────────────────────── */}
       <Section
         title="Shimmer Loading (Custom Content)"
-        description="Use loadingText with ReactNode to render a shimmer skeleton inside the menu."
+        description="Use loadingContent with ReactNode to render a shimmer skeleton inside the menu."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1482,7 +1482,7 @@ const CascadingDropdownDemo = () => {
             value={{}}
             onValueChange={() => {}}
             loading
-            loadingText={
+            loadingContent={
               <div className="space-y-3 p-3">
                 {/* Skeleton bars sit on top of the menu surface, so they need
                     a contrasting tint — bg-cl-bg-elevated would be invisible

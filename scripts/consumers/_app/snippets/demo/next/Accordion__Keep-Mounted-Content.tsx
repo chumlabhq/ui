@@ -16,7 +16,7 @@ export default function AccordionExample() {
     >
       <AccordionItem value="fm-1">
         <AccordionTrigger>Always in DOM</AccordionTrigger>
-        <AccordionContent forceMount>
+        <AccordionContent keepMounted>
           This content is always rendered (check DOM inspector). It uses aria-hidden when collapsed.
         </AccordionContent>
       </AccordionItem>

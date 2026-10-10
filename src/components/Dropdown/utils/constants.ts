@@ -13,7 +13,7 @@ export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
   item:
     "flex items-center justify-between px-3 py-2.5 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text hover:bg-cl-bg-hover first:rounded-t-cl-md last:rounded-b-cl-md data-[highlighted]:bg-cl-bg-hover",
   icon:
-    "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
+    "inline-flex w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
   clearTrigger:
     "absolute right-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-cl-bg-hover cursor-pointer text-cl-text-tertiary",

@@ -67,7 +67,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       closeIcon: closeIconProp,
       showHeader = true,
       showOverlay = true,
-      preventOutsideClick = false,
+      closeOnOverlayClick = true,
       closeOnEscape = true,
       lockScroll = true,
       trapFocus = true,
@@ -235,7 +235,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
     const handleOverlayClick = useCallback(
       (event: React.MouseEvent<HTMLDivElement>) => {
-        if (preventOutsideClick) {
+        if (!closeOnOverlayClick) {
           event.preventDefault();
           event.stopPropagation();
           return;
@@ -244,7 +244,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           handleClose();
         }
       },
-      [preventOutsideClick, handleClose],
+      [closeOnOverlayClick, handleClose],
     );
 
     const handleContentClick = useCallback((event: React.MouseEvent) => {

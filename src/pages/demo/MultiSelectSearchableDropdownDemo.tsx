@@ -241,7 +241,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={countryValue}
               onValueChange={(values) => setCountryValue(values)}
               placeholder="Select countries..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="Select countries"
             />
@@ -262,10 +262,10 @@ const MultiSelectSearchableDropdownDemo = () => {
               onValueChange={(values) => setAsyncValue(values)}
               placeholder="Search countries..."
               searchOptions={handleAsyncSearch}
-              searchDebounceMs={300}
-              maxDisplayedChips={2}
-              loadingText="Searching countries..."
-              noResultsContent="No countries found"
+              searchDebounce={300}
+              maxVisible={2}
+              loadingContent="Searching countries..."
+              emptyContent="No countries found"
               classes={c.dropdown}
               aria-label="Search countries"
             />
@@ -292,10 +292,10 @@ const MultiSelectSearchableDropdownDemo = () => {
               searchOptions={handleAsyncSearch}
               loadInitialOptions={handleLoadInitialOptions}
               loadInitialOnOpen
-              searchDebounceMs={300}
-              maxDisplayedChips={2}
-              loadingText="Loading..."
-              noResultsContent="No countries found"
+              searchDebounce={300}
+              maxVisible={2}
+              loadingContent="Loading..."
+              emptyContent="No countries found"
               classes={c.dropdown}
               aria-label="Select or search countries"
             />
@@ -322,7 +322,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={labelValue}
               onValueChange={(values) => setLabelValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -364,7 +364,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onValueChange={(values) => setDisabledValue(values)}
               disabled
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed`,
@@ -392,7 +392,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               error
               errorMessage="Please select at least one option"
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger: `${c.dropdown.trigger} border border-cl-error focus:ring-cl-error`,
@@ -417,7 +417,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={descriptionValue}
               onValueChange={(values) => setDescriptionValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -438,7 +438,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={successValue}
               onValueChange={(values) => setSuccessValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               success={successValue.length > 0}
               successMessage="Selection saved successfully"
               classes={{
@@ -464,7 +464,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onValueChange={(values) => setNoSearchValue(values)}
               showSearch={false}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="Select fruits no search"
             />
@@ -488,7 +488,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 open={controlledOpen}
                 onOpenChange={setControlledOpen}
                 placeholder="Controlled dropdown..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
                 aria-label="Controlled dropdown"
               />
@@ -528,7 +528,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={scrollUnlockedValue}
               onValueChange={(values) => setScrollUnlockedValue(values)}
               placeholder="Default (scrollable)"
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="Scroll unlocked dropdown"
             />
@@ -540,7 +540,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onValueChange={(values) => setScrollLockValue(values)}
               placeholder="lockScroll enabled"
               lockScroll
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="Scroll locked dropdown"
             />
@@ -558,14 +558,14 @@ const MultiSelectSearchableDropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;bottom&quot; (default)
+                dropdownSide=&quot;bottom&quot; (default)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
                   value={posBotValue}
                   onValueChange={setPosBotValue}
-                  dropdownPosition="bottom"
+                  dropdownSide="bottom"
                   placeholder="Opens below..."
                   classes={c.dropdown}
                 />
@@ -573,14 +573,14 @@ const MultiSelectSearchableDropdownDemo = () => {
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;top&quot;
+                dropdownSide=&quot;top&quot;
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
                   value={posTopValue}
                   onValueChange={setPosTopValue}
-                  dropdownPosition="top"
+                  dropdownSide="top"
                   placeholder="Opens above..."
                   classes={c.dropdown}
                 />
@@ -599,15 +599,15 @@ const MultiSelectSearchableDropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced bottom)
+                forceDropdownSide (forced bottom)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
                   value={forceBotValue}
                   onValueChange={setForceBotValue}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   placeholder="Always opens below..."
                   classes={c.dropdown}
                 />
@@ -615,15 +615,15 @@ const MultiSelectSearchableDropdownDemo = () => {
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced top)
+                forceDropdownSide (forced top)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
                   value={forceTopValue}
                   onValueChange={setForceTopValue}
-                  dropdownPosition="top"
-                  forceDropdownPosition
+                  dropdownSide="top"
+                  forceDropdownSide
                   placeholder="Always opens above..."
                   classes={c.dropdown}
                 />
@@ -632,22 +632,22 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          When forceDropdownPosition is true, the dropdown will always open in
+          When forceDropdownSide is true, the dropdown will always open in
           the specified direction regardless of available viewport space.
         </div>
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition + lockScroll
+                forceDropdownSide + lockScroll
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
                   value={forceLockValue}
                   onValueChange={setForceLockValue}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   lockScroll
                   placeholder="Forced bottom + scroll locked"
                   classes={c.dropdown}
@@ -657,7 +657,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Combining forceDropdownPosition with lockScroll prevents the page from
+          Combining forceDropdownSide with lockScroll prevents the page from
           scrolling while the dropdown is open, ensuring the menu stays anchored
           in place.
         </div>
@@ -678,7 +678,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 value={variantDefaultValue}
                 onValueChange={(values) => setVariantDefaultValue(values)}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
                 aria-label="Default variant"
               />
@@ -692,7 +692,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 value={variantBorderlessValue}
                 onValueChange={(values) => setVariantBorderlessValue(values)}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 transition-colors cursor-pointer min-h-[42px] bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover`,
@@ -711,7 +711,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 value={variantBottomValue}
                 onValueChange={(values) => setVariantBottomValue(values)}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-0 border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus`,
@@ -730,7 +730,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 value={variantGhostValue}
                 onValueChange={(values) => setVariantGhostValue(values)}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover`,
@@ -749,7 +749,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 value={variantPillValue}
                 onValueChange={(values) => setVariantPillValue(values)}
                 placeholder="Select..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={{
                   ...c.dropdown,
  trigger: `flex items-center gap-2 px-4 py-2 text-sm rounded-full transition-colors cursor-pointer min-h-[42px] border border-cl-border bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover shadow-sm`,
@@ -776,7 +776,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={darkThemeValue}
               onValueChange={(values) => setDarkThemeValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger:
@@ -819,7 +819,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={purpleThemeValue}
               onValueChange={(values) => setPurpleThemeValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus`,
@@ -856,7 +856,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={greenCheckboxValue}
               onValueChange={(values) => setGreenCheckboxValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 itemControl: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input`,
@@ -880,7 +880,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={orangeCheckboxValue}
               onValueChange={(values) => setOrangeCheckboxValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={{
                 ...c.dropdown,
                 itemControl:
@@ -905,7 +905,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={customIconValue}
               onValueChange={(values) => setCustomIconValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               checkboxIcon={
                 <svg
                   className="w-3 h-3"
@@ -941,7 +941,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 setUncontrolledChange(JSON.stringify({ values, options }))
               }
               placeholder="Select fruits..."
-              maxDisplayedChips={3}
+              maxVisible={3}
               classes={c.dropdown}
               aria-label="Uncontrolled fruits"
             />
@@ -986,7 +986,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 ])
               }
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
             />
           </div>
@@ -1031,7 +1031,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 ])
               }
               placeholder="Press keys while open..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="KeyDown demo"
             />
@@ -1071,7 +1071,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={classNameValue}
               onValueChange={(values) => setClassNameValue(values)}
               placeholder="Styled root..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               className="my-custom-dropdown"
               style={{
                 border: `2px dashed #818cf8`,
@@ -1102,7 +1102,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               value={ariaLabelValue}
               onValueChange={(values) => setAriaLabelValue(values)}
               placeholder="Select countries..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="Country selection without visible label"
             />
@@ -1128,7 +1128,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onValueChange={(values) => setKeepMountedValue(values)}
               keepMounted
               placeholder="Keep mounted..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="Keep mounted demo"
             />
@@ -1155,7 +1155,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 onValueChange={(values) => setPortalValue(values)}
                 portalContainer={portalEl}
                 placeholder="Custom portal target..."
-                maxDisplayedChips={2}
+                maxVisible={2}
                 classes={c.dropdown}
                 aria-label="Portal container demo"
               />
@@ -1177,7 +1177,7 @@ const MultiSelectSearchableDropdownDemo = () => {
       {/* ─── Custom Dropdown Gap ───────────────────────────────────────────── */}
       <Section
         title="Custom Dropdown Gap"
-        description="Adjust the spacing between the trigger and dropdown list using dropdownGap."
+        description="Adjust the spacing between the trigger and dropdown list using dropdownOffset."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1190,7 +1190,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                   value={gapValue}
                   onValueChange={(values) => setGapValue(values)}
                   placeholder="Gap: 4px..."
-                  maxDisplayedChips={1}
+                  maxVisible={1}
                   classes={c.dropdown}
                   aria-label="Default gap"
                 />
@@ -1203,9 +1203,9 @@ const MultiSelectSearchableDropdownDemo = () => {
                   options={staticOptions}
                   value={gapValue2}
                   onValueChange={(values) => setGapValue2(values)}
-                  dropdownGap={16}
+                  dropdownOffset={16}
                   placeholder="Gap: 16px..."
-                  maxDisplayedChips={1}
+                  maxVisible={1}
                   classes={c.dropdown}
                   aria-label="Large gap"
                 />
@@ -1229,7 +1229,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onValueChange={(values) => setZIndexValue(values)}
               dropdownZIndex={9999}
               placeholder="z-index: 9999..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               classes={c.dropdown}
               aria-label="Custom z-index"
             />
@@ -1255,7 +1255,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onValueChange={(values) => setFullWidthValue(values)}
               fullWidth
               placeholder="Full width dropdown..."
-              maxDisplayedChips={3}
+              maxVisible={3}
               classes={c.dropdown}
               aria-label="Full width"
             />
@@ -1288,7 +1288,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               <div className="w-56">
                 <MultiSelectSearchableDropdown
                   options={[]}
-                  noResultsContent={
+                  emptyContent={
                     <div className="flex flex-col items-center gap-1 py-2">
                       <span className="text-lg">🍎</span>
                       <span
@@ -1329,10 +1329,10 @@ const MultiSelectSearchableDropdownDemo = () => {
                   : undefined
               }
               placeholder="Pick countries..."
-              maxDisplayedChips={2}
+              maxVisible={2}
               fullWidth
               keepMounted
-              dropdownGap={8}
+              dropdownOffset={8}
               dropdownZIndex={100}
               searchPlaceholder="Filter countries..."
               onFocus={() => setCombinedFocusCount((n) => n + 1)}

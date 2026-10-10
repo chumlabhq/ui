@@ -21,7 +21,7 @@ export default function MultiSelectDropdownExample() {
         value={customIconValue}
         onValueChange={(values) => setCustomIconValue(values)}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         checkboxIcon={
           <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
             <path

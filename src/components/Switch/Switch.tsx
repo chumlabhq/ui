@@ -46,7 +46,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       unstyled = false,
       checkedIcon,
       uncheckedIcon,
-      transitionDuration,
+      animationDuration,
       transitionTimingFunction,
       renderLabel,
       renderDescription,
@@ -101,14 +101,14 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
     const transitionStyle = useMemo(() => {
       if (prefersReducedMotion) return { transitionDuration: "0ms" };
-      if (!transitionDuration && !transitionTimingFunction) return undefined;
+      if (!animationDuration && !transitionTimingFunction) return undefined;
       return {
-        transitionDuration: transitionDuration
-          ? `${transitionDuration}ms`
+        transitionDuration: animationDuration
+          ? `${animationDuration}ms`
           : undefined,
         transitionTimingFunction: transitionTimingFunction,
       };
-    }, [transitionDuration, transitionTimingFunction, prefersReducedMotion]);
+    }, [animationDuration, transitionTimingFunction, prefersReducedMotion]);
 
     const hasLabelContent =
       label || description || renderLabel || renderDescription;

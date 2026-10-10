@@ -13,7 +13,7 @@ export default function TimePickerExample() {
       <TimePicker
         value={dropdownTopVal}
         onValueChange={(v) => setDropdownTopVal(v)}
-        dropdownPosition="bottom"
+        dropdownSide="bottom"
         placeholder="Opens below..."
         classes={
           {
@@ -50,7 +50,7 @@ export default function TimePickerExample() {
         }
       />
       <TimePicker
-        dropdownPosition="top"
+        dropdownSide="top"
         placeholder="Opens above..."
         classes={
           {
@@ -89,8 +89,8 @@ export default function TimePickerExample() {
       <TimePicker
         value={forceBotVal}
         onValueChange={(v) => setForceBotVal(v)}
-        dropdownPosition="bottom"
-        forceDropdownPosition
+        dropdownSide="bottom"
+        forceDropdownSide
         placeholder="Always opens below..."
         classes={
           {
@@ -129,8 +129,8 @@ export default function TimePickerExample() {
       <TimePicker
         value={forceTopVal}
         onValueChange={(v) => setForceTopVal(v)}
-        dropdownPosition="top"
-        forceDropdownPosition
+        dropdownSide="top"
+        forceDropdownSide
         placeholder="Always opens above..."
         classes={
           {
@@ -169,8 +169,8 @@ export default function TimePickerExample() {
       <TimePicker
         value={forceLockVal}
         onValueChange={(v) => setForceLockVal(v)}
-        dropdownPosition="bottom"
-        forceDropdownPosition
+        dropdownSide="bottom"
+        forceDropdownSide
         lockScroll
         placeholder="Forced bottom + scroll locked"
         classes={

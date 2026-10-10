@@ -12,7 +12,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
  * Component: CircularLoader
  *
- * Purpose: Spinning circle loading indicator with configurable size, color, speed.
+ * Purpose: Spinning circle loading indicator with configurable size, color, duration.
  *
  * Reference: LOADER.ai.md (this directory), src/pages/demo/LoaderDemo.tsx
  */
@@ -21,7 +21,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
     {
       size = 20,
       thickness = 2,
-      speed = 0.75,
+      animationDuration = 750,
       trackColor,
       reduceMotion = "auto",
       classes: classesProp,
@@ -62,7 +62,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
 
     const loaderStyle: CSSProperties = {
       "--loader-size": `${size}px`,
-      "--loader-speed": `${speed}s`,
+      "--loader-duration": `${animationDuration}ms`,
       "--loader-track": trackBg,
       ...style,
     } as CSSProperties;

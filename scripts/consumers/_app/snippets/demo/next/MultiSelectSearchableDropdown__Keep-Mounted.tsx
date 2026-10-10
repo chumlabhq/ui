@@ -24,7 +24,7 @@ export default function MultiSelectSearchableDropdownExample() {
         onValueChange={(values) => setKeepMountedValue(values)}
         keepMounted
         placeholder="Keep mounted..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
             root: "",

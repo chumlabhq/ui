@@ -222,7 +222,7 @@ export default function TableExample() {
                 expandable
                 expandedRowIds={ids}
                 onExpandedRowIdsChange={setIds}
-                ExpandIcon={ChevronIcon}
+                renderExpandIcon={(state) => <ChevronIcon {...state} />}
                 renderExpandedRow={(row) => (
                   <div
                     className="px-6 py-4 bg-cl-accent-surface border-l-2 border-cl-border-input-focus"

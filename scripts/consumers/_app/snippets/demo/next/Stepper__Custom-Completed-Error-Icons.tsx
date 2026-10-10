@@ -43,8 +43,8 @@ export default function StepperExample() {
       }
       value={customIconStep}
       onValueChange={(id) => setCustomIconStep(id as number)}
-      completedIcon={StarIcon}
-      errorIcon={WarningIcon}
+      completedIcon={<StarIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+      errorIcon={<WarningIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
       getStepStatus={errorGetStatus}
       isStepClickable={() => true}
       classes={

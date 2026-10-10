@@ -1,14 +1,14 @@
-import type { DrawerClasses, DrawerDirection } from "./types.js";
+import type { DrawerClasses, DrawerSide } from "./types.js";
 import { structuralOnly } from "../../../utils/classLayers.js";
 
-export const DEFAULT_DIRECTION: DrawerDirection = "left";
+export const DEFAULT_SIDE: DrawerSide = "left";
 export const DEFAULT_SIZE = "300px";
 export const DEFAULT_OVERLAY_COLOR = "black";
 // Subtle scrim — keeps the page chrome (sidebar, toolbar) visible behind
 // the drawer instead of blanking it out on a small screen.
 export const DEFAULT_OVERLAY_OPACITY = 0.32;
 export const DEFAULT_OVERLAY_BLUR = 0;
-export const DEFAULT_DURATION = 300;
+export const DEFAULT_ANIMATION_DURATION = 300;
 export const DEFAULT_SWIPE_THRESHOLD = 0.4;
 export const DEFAULT_SNAP_POINT_INDEX = 0;
 export const SWIPE_DEADZONE = 10;

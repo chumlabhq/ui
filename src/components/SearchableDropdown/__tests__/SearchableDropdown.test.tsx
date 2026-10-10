@@ -312,7 +312,7 @@ describe('SearchableDropdown - Search Functionality', () => {
   it('should show no results message when no options match', async () => {
     const user = userEvent.setup();
 
-    render(<SearchableDropdown options={fruitOptions} noResultsContent="Nothing found" />);
+    render(<SearchableDropdown options={fruitOptions} emptyContent="Nothing found" />);
 
     await user.click(screen.getByRole('combobox'));
     await waitForDropdownOpen();
@@ -372,7 +372,7 @@ describe('SearchableDropdown - Async Search', () => {
     render(
       <SearchableDropdown
         searchOptions={handleSearch}
-        searchDebounceMs={100}
+        searchDebounce={100}
       />
     );
 
@@ -706,7 +706,7 @@ describe('SearchableDropdown - Empty State', () => {
     render(
       <SearchableDropdown
         options={[]}
-        noResultsContent="Nothing here"
+        emptyContent="Nothing here"
       />
     );
 
@@ -981,7 +981,7 @@ describe('SearchableDropdown - Custom Icons', () => {
     render(
       <SearchableDropdown
         options={fruitOptions}
-        ChevronIcon={() => <span data-testid="custom-chevron">V</span>}
+        chevronIcon={<span data-testid="custom-chevron">V</span>}
       />
     );
 
@@ -1010,7 +1010,7 @@ describe('SearchableDropdown - Custom Icons', () => {
       <SearchableDropdown
         options={fruitOptions}
         value="apple"
-        CheckIcon={() => <span data-testid="custom-check">OK</span>}
+        selectedIcon={<span data-testid="custom-check">OK</span>}
       />
     );
 
@@ -1045,7 +1045,7 @@ describe('SearchableDropdown - Position & Portal', () => {
     render(
       <SearchableDropdown
         options={fruitOptions}
-        dropdownPosition="top"
+        dropdownSide="top"
       />
     );
 

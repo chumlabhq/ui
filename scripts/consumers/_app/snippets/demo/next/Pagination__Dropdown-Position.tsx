@@ -23,7 +23,7 @@ export default function PaginationExample() {
             }
           }
           showRowsPerPage
-          dropdownPosition="top"
+          dropdownSide="top"
           classes={
             {
                             ...({
@@ -59,7 +59,7 @@ export default function PaginationExample() {
               }
             }
             showRowsPerPage
-            dropdownPosition="bottom"
+            dropdownSide="bottom"
             classes={
               {
                                 ...({

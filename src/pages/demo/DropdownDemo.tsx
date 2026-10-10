@@ -1099,7 +1099,7 @@ const DropdownDemo = () => {
                 value={customChevronValue}
                 onValueChange={(v) => setCustomChevronValue(v)}
                 placeholder="Select a fruit..."
-                ChevronIcon={CustomChevronIcon}
+                chevronIcon={<CustomChevronIcon className="w-4 h-4" />}
                 classes={c.dropdown}
               />
             </div>
@@ -1240,14 +1240,14 @@ const DropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;bottom&quot; (default)
+                dropdownSide=&quot;bottom&quot; (default)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
                   options={fruitOptions}
                   value={posBotValue}
                   onValueChange={(v) => setPosBotValue(v)}
-                  dropdownPosition="bottom"
+                  dropdownSide="bottom"
                   placeholder="Opens below..."
                   classes={c.dropdown}
                 />
@@ -1255,14 +1255,14 @@ const DropdownDemo = () => {
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                dropdownPosition=&quot;top&quot;
+                dropdownSide=&quot;top&quot;
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
                   options={fruitOptions}
                   value={posTopValue}
                   onValueChange={(v) => setPosTopValue(v)}
-                  dropdownPosition="top"
+                  dropdownSide="top"
                   placeholder="Opens above..."
                   classes={c.dropdown}
                 />
@@ -1281,15 +1281,15 @@ const DropdownDemo = () => {
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced bottom)
+                forceDropdownSide (forced bottom)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
                   options={fruitOptions}
                   value={forceBotValue}
                   onValueChange={(v) => setForceBotValue(v)}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   placeholder="Always opens below..."
                   classes={c.dropdown}
                 />
@@ -1297,15 +1297,15 @@ const DropdownDemo = () => {
             </div>
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition (forced top)
+                forceDropdownSide (forced top)
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
                   options={fruitOptions}
                   value={forceTopValue}
                   onValueChange={(v) => setForceTopValue(v)}
-                  dropdownPosition="top"
-                  forceDropdownPosition
+                  dropdownSide="top"
+                  forceDropdownSide
                   placeholder="Always opens above..."
                   classes={c.dropdown}
                 />
@@ -1314,22 +1314,22 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          When forceDropdownPosition is true, the dropdown will always open in
+          When forceDropdownSide is true, the dropdown will always open in
           the specified direction regardless of available viewport space.
         </div>
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div className="w-full space-y-8">
             <div>
               <DemoLabel isDarkMode={dark}>
-                forceDropdownPosition + lockScroll
+                forceDropdownSide + lockScroll
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
                   options={fruitOptions}
                   value={forceLockValue}
                   onValueChange={(v) => setForceLockValue(v)}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   lockScroll
                   placeholder="Forced bottom + scroll locked"
                   classes={c.dropdown}
@@ -1339,7 +1339,7 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Combining forceDropdownPosition with lockScroll prevents the page from
+          Combining forceDropdownSide with lockScroll prevents the page from
           scrolling while the dropdown is open, ensuring the menu stays anchored
           in place.
         </div>
@@ -1465,7 +1465,7 @@ const DropdownDemo = () => {
       {/* ─── Custom Dropdown Gap ─────────────────────────────────────────── */}
       <Section
         title="Custom Dropdown Gap"
-        description="Control the gap between the trigger and dropdown with the dropdownGap prop (in pixels). Default is 4px."
+        description="Control the gap between the trigger and dropdown with the dropdownOffset prop (in pixels). Default is 4px."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col">
@@ -1475,7 +1475,7 @@ const DropdownDemo = () => {
               <div className="w-full sm:max-w-64 mt-2">
                 <Dropdown
                   options={fruitOptions}
-                  dropdownGap={0}
+                  dropdownOffset={0}
                   placeholder="No gap..."
                   classes={c.dropdown}
                 />
@@ -1488,7 +1488,7 @@ const DropdownDemo = () => {
                   options={fruitOptions}
                   value={customGapValue}
                   onValueChange={(v) => setCustomGapValue(v)}
-                  dropdownGap={16}
+                  dropdownOffset={16}
                   placeholder="Large gap..."
                   classes={c.dropdown}
                 />
@@ -1525,7 +1525,7 @@ const DropdownDemo = () => {
       {/* ─── Custom Clear Icon ───────────────────────────────────────────── */}
       <Section
         title="Custom Clear Icon"
-        description="Replace the default clear icon with a custom icon component via the ClearIcon prop."
+        description="Replace the default clear icon with a custom icon via the clearIcon prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1536,7 +1536,7 @@ const DropdownDemo = () => {
               onValueChange={(v) => setCustomClearIconValue(v)}
               clearable
               placeholder="Select a fruit..."
-              ClearIcon={() => (
+              clearIcon={
                 <svg
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -1549,7 +1549,7 @@ const DropdownDemo = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={c.dropdown}
             />
           </div>
@@ -1559,7 +1559,7 @@ const DropdownDemo = () => {
       {/* ─── Custom Check Icon ───────────────────────────────────────────── */}
       <Section
         title="Custom Check Icon"
-        description="Replace the default check icon with a custom icon component via the CheckIcon prop. Here a star replaces the checkmark."
+        description="Replace the default check icon with a custom icon via the selectedIcon prop. Here a star replaces the checkmark."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1569,19 +1569,16 @@ const DropdownDemo = () => {
               value={customCheckIconValue}
               onValueChange={(v) => setCustomCheckIconValue(v)}
               placeholder="Select a fruit..."
-              CheckIcon={({ className }) => (
+              selectedIcon={
                 <svg
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className={
-                    className ||
-                    `w-4 h-4 shrink-0 text-cl-warning`
-                  }
+                  className="w-4 h-4 shrink-0 text-cl-warning"
                   aria-hidden="true"
                 >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-              )}
+              }
               classes={{
                 ...c.dropdown,
                 itemIndicator: `w-4 h-4 shrink-0 text-cl-warning`,
@@ -1759,7 +1756,7 @@ const DropdownDemo = () => {
               <Dropdown
                 options={[]}
                 placeholder="Custom empty..."
-                noResultsContent={
+                emptyContent={
                   <span className="flex flex-col items-center gap-1 py-2">
                     <span
                       className={`text-lg text-cl-text-tertiary`}
@@ -1795,12 +1792,12 @@ const DropdownDemo = () => {
               defaultValue="apple"
               clearable
               placeholder="Select a fruit..."
-              ChevronIcon={CustomChevronIcon}
-              CheckIcon={({ className }) => (
+              chevronIcon={<CustomChevronIcon className="w-4 h-4" />}
+              selectedIcon={
                 <svg
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className={className}
+                  className="w-4 h-4 shrink-0 text-cl-accent"
                   aria-hidden="true"
                 >
                   <path
@@ -1809,7 +1806,7 @@ const DropdownDemo = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              )}
+              }
               classes={c.dropdown}
             />
           </div>

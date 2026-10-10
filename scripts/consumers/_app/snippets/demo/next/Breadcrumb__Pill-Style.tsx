@@ -21,7 +21,7 @@ export default function BreadcrumbExample() {
   return (
     <Breadcrumb
       items={longItems}
-      maxVisibleItems={4}
+      maxVisible={4}
       classes={
         { ...({
           list: "flex flex-wrap items-center gap-2",

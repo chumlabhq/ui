@@ -109,7 +109,7 @@ export default function TextAreaExample() {
               setMessage("");
             }
           }
-          endIconLabel="Send message"
+          endIconAriaLabel="Send message"
           classes={
             {
               control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",
@@ -137,7 +137,7 @@ export default function TextAreaExample() {
           placeholder="Click the icon to attach..."
           startIcon={<FileIcon className="text-cl-text-tertiary hover:text-cl-text-secondary" />}
           onStartIconClick={() => setLastAction("Attach file clicked")}
-          startIconLabel="Attach file"
+          startIconAriaLabel="Attach file"
           classes={
             {
               control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus",

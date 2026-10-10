@@ -48,7 +48,7 @@ export default function DropdownExample() {
           value={customChevronValue}
           onValueChange={(v) => setCustomChevronValue(v)}
           placeholder="Select a fruit..."
-          ChevronIcon={CustomChevronIcon}
+          chevronIcon={<CustomChevronIcon className="w-4 h-4" />}
           classes={
             {
               root: "w-full",

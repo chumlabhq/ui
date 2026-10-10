@@ -61,9 +61,9 @@
       "description": "React.ReactNode — Content shown when the table has no data.",
       "x-tsType": "ReactNode"
     },
-    "ariaLabel": {
+    "aria-label": {
       "type": "string",
-      "description": "Accessible label for the table.",
+      "description": "The grid's accessible name; pinned parts append \" - Pinned columns\" and so on.",
       "default": "Data table"
     },
     "caption": {
@@ -262,17 +262,17 @@
       "description": "Inline styles applied to the root container.",
       "x-tsType": "CSSProperties | undefined"
     },
-    "PinIcon": {
+    "pinIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom pin icon component (unpinned state).",
-      "x-tsType": "ComponentType<IconProps> | undefined"
+      "description": "ReactNode — Replaces the pin button's glyph. Rendered as given; also used for pinned columns unless `pinnedIcon` is set.",
+      "x-tsType": "ReactNode"
     },
-    "PinnedIcon": {
+    "pinnedIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom pin icon component (pinned state).",
-      "x-tsType": "ComponentType<IconProps> | undefined"
+      "description": "ReactNode — Replaces the pin button's glyph on a pinned column. Rendered as given.",
+      "x-tsType": "ReactNode"
     },
-    "shimmerRowCount": {
+    "shimmerCount": {
       "type": "number",
       "description": "Number of shimmer rows to display while loading.",
       "default": 10
@@ -364,10 +364,10 @@
       "description": "Map of column ID to filter options configuration.",
       "x-tsType": "Record<string, { options: { label: string; value: string; }[]; multi?: boolean | undefined; }> | undefined"
     },
-    "FilterIcon": {
+    "renderFilterIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom filter icon component.",
-      "x-tsType": "ComponentType<{ active: boolean; className?: string | undefined; }> | undefined"
+      "description": "(state: { active: boolean; className: string }) => ReactNode — Draws the column filter button's icon. `active` is true while the column has a filter applied.",
+      "x-tsType": "((state: { active: boolean; className: string; }) => ReactNode) | undefined"
     },
     "renderColumnFilter": {
       "type": "object",
@@ -396,10 +396,10 @@
       "description": "(row: TData) => ReactNode — Render function for expanded row content.",
       "x-tsType": "((row: TData) => ReactNode) | undefined"
     },
-    "ExpandIcon": {
+    "renderExpandIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom expand icon component.",
-      "x-tsType": "ComponentType<{ expanded: boolean; className?: string | undefined; }> | undefined"
+      "description": "(state: { expanded: boolean; className: string }) => ReactNode — Draws the row expand button's icon, which can change with `expanded`.",
+      "x-tsType": "((state: { expanded: boolean; className: string; }) => ReactNode) | undefined"
     },
     "expandColumnPosition": {
       "type": "string",
@@ -615,24 +615,24 @@
       "description": "Which end of the search field the icon sits at, or `none`.",
       "default": "start"
     },
-    "CheckboxIcon": {
+    "renderCheckboxIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom checkbox component for multi-row selection.",
-      "x-tsType": "ComponentType<{ checked: boolean; indeterminate?: boolean | undefined; className?: string | undefined; }> | undefined"
+      "description": "(state: { checked: boolean; indeterminate: boolean; className?: string }) => ReactNode — Draws the multi-row selection checkboxes in place of the native box.",
+      "x-tsType": "((state: { checked: boolean; indeterminate: boolean; className?: string | undefined; }) => ReactNode) | undefined"
     },
     "checkboxColor": {
       "type": "string",
       "description": "Simple color customization for the default checkbox."
     },
-    "DragHandleIcon": {
+    "dragHandleIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom drag handle icon component.",
-      "x-tsType": "ComponentType<IconProps> | undefined"
+      "description": "ReactNode — Replaces the drag handle's glyph. Rendered as given.",
+      "x-tsType": "ReactNode"
     },
-    "SearchIcon": {
+    "searchIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom search icon component.",
-      "x-tsType": "ComponentType<IconProps> | undefined"
+      "description": "ReactNode — Replaces the search field's magnifier. Rendered inside a box carrying `classes.searchIcon`, which positions it in the field.",
+      "x-tsType": "ReactNode"
     },
     "onSearchClear": {
       "type": "object",

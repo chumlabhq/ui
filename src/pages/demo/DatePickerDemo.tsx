@@ -1569,7 +1569,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              dropdownPosition=&quot;bottom&quot; (default, auto-flips)
+              dropdownSide=&quot;bottom&quot; (default, auto-flips)
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -1580,7 +1580,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                 <DatePicker
                   value={forceBotDate}
                   onValueChange={(d) => setForceBotDate(d)}
-                  dropdownPosition="bottom"
+                  dropdownSide="bottom"
                   placeholder="Opens below..."
                   classes={c.datepicker}
                 />
@@ -1589,7 +1589,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              forceDropdownPosition (forced bottom, no auto-flip)
+              forceDropdownSide (forced bottom, no auto-flip)
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -1600,8 +1600,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                 <DatePicker
                   value={forceTopDate}
                   onValueChange={(d) => setForceTopDate(d)}
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   placeholder="Always opens below..."
                   classes={c.datepicker}
                 />
@@ -1610,7 +1610,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              forceDropdownPosition (forced top, no auto-flip)
+              forceDropdownSide (forced top, no auto-flip)
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -1619,8 +1619,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  dropdownPosition="top"
-                  forceDropdownPosition
+                  dropdownSide="top"
+                  forceDropdownSide
                   placeholder="Always opens above..."
                   classes={c.datepicker}
                 />
@@ -1629,7 +1629,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              forceDropdownPosition + lockScroll
+              forceDropdownSide + lockScroll
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -1638,8 +1638,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  dropdownPosition="bottom"
-                  forceDropdownPosition
+                  dropdownSide="bottom"
+                  forceDropdownSide
                   lockScroll
                   placeholder="Forced bottom + scroll locked"
                   classes={c.datepicker}

@@ -1,5 +1,6 @@
 import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
 import type { Fixtures } from "./types.js";
+import { CrossGlyph } from "./_icons.js";
 import { RtlBoundary } from "./_harness.js";
 import { OPTIONS } from "./_data.js";
 import { neverResolves, resolvesTo, settleAsync } from "./_async.js";
@@ -20,6 +21,11 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
     note: "Highlight state has no prop; arrow-down is the only way in.",
     act: (c, ui) => ui.keyDown(c.querySelector("[role='combobox'], button"), "ArrowDown"),
   },
+  {
+    name: "open-with-selection-custom-clear-icon",
+    props: { options: OPTIONS, defaultOpen: true, defaultValue: ["a"], clearable: true, clearIcon: <CrossGlyph /> },
+    note: "Passes a real SVG in place of the default clear glyph; icon-slots holds it to MultiSelectSearchableDropdown/open-with-selection's box and position.",
+  },
   { name: "open-empty", props: { options: [], defaultOpen: true } },
   { name: "loading", props: { options: OPTIONS, loading: true, defaultOpen: true } },
   { name: "error", props: { options: OPTIONS, label: "Fruit", error: true, errorMessage: "Required" } },
@@ -27,7 +33,7 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
   { name: "disabled", props: { options: OPTIONS, disabled: true } },
   { name: "open-search", props: { options: OPTIONS, defaultOpen: true, showSearch: true } },
   { name: "multi-value", props: { options: OPTIONS, defaultOpen: true, defaultValue: ["a", "b"], clearable: true, showSelectedChips: true } },
-  { name: "chips-overflow", props: { options: OPTIONS, defaultValue: ["a", "b", "c"], showSelectedChips: true, maxDisplayedChips: 1 }, note: "moreCount needs more selections than maxDisplayedChips." },
+  { name: "chips-overflow", props: { options: OPTIONS, defaultValue: ["a", "b", "c"], showSelectedChips: true, maxVisible: 1 }, note: "moreCount needs more selections than maxVisible." },
   // Both branches of the option source, which is now a discriminated union:
   // passing `options` AND `searchOptions` no longer typechecks, because
   // useMultiSelectDropdown drops `options` once searchOptions is a function.

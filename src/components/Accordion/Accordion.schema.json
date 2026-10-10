@@ -386,10 +386,10 @@
           "type": "ReactNode",
           "description": "Content rendered inside this element."
         },
-        "forceMount": {
-          "type": "boolean | undefined",
-          "description": "Keeps the panel mounted while collapsed, so an exit animation or a measurement has a node to read.",
-          "default": false
+        "keepMounted": {
+          "type": "boolean | \"visited\" | undefined",
+          "description": "When the panel's children are in the DOM. `\"visited\"` (default): from the first expand onward. `true`: always, even before the first expand, so an exit animation or a measurement has a node to read. `false`: only while expanded — they unmount each time it collapses.",
+          "default": "visited"
         },
         "animationDuration": {
           "type": "number | undefined",
@@ -407,11 +407,6 @@
         "lazyLoad": {
           "type": "boolean | undefined",
           "description": "Delays rendering the panel's children until it is first expanded.",
-          "default": false
-        },
-        "unmountOnClose": {
-          "type": "boolean | undefined",
-          "description": "Unmounts the panel's children again each time it collapses.",
           "default": false
         },
         "onOpenStart": {

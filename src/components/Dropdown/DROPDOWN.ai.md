@@ -59,7 +59,7 @@ export default function Example() {
 | `clearable` | Only works when a value is selected. Adds a clear button and allows deselect via click. |
 | `loadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<DropdownOption[]>`. |
 | `loadOnOpen` | Only works when `loadOptions` is provided. |
-| `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
+| `forceDropdownSide` | Only meaningful with `dropdownSide`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOption`, `placeholder`), which never reaches the DOM. |
 | `name` | Renders a hidden `<input>` for native form submission. |
@@ -116,7 +116,7 @@ export default function Example() {
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `clearable` | boolean | `false` | Shows a clear button to deselect the current value. |
-| `noResultsContent` | object | `"No options available"` | React.ReactNode - Content shown when no options are available. |
+| `emptyContent` | object | `"No options available"` | React.ReactNode - Content shown when no options are available. |
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `showSelectedIcon` | boolean | `true` | Whether to show a check icon next to the selected option. |
 | `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected option indicator. |
@@ -133,20 +133,19 @@ export default function Example() {
 | `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
-| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownSide` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
 | `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
-| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `dropdownOffset` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
 | `renderTrigger` | object | — | (triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder). |
-| `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
-| `CheckIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom check icon component. |
-| `ClearIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom clear icon component. |
-| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
+| `chevronIcon` | object | — | ReactNode — Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open. |
+| `clearIcon` | object | — | ReactNode — Replaces the clear button's glyph. Rendered as given. |
+| `loadingContent` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
 
 ## Styling Guide
 
@@ -359,7 +358,7 @@ const [value, setValue] = useState<string | null>(null);
 |---------|-------|-----|
 | Dropdown clipped by parent overflow | Not using portal | Default behavior uses portal — ensure `portalContainer` is not set to a clipped container |
 | Styles look wrong after setting one class | `classes` replaces per slot, not merges | Provide full class string for each slot you override |
-| Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownPosition={true}` to lock direction |
+| Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownSide={true}` to lock direction |
 | Options don't load on open | Missing `loadOnOpen` prop | Add `loadOnOpen` alongside `loadOptions` |
 | Controlled value doesn't update | Missing `onValueChange` | Always pair `value` with `onValueChange` |
 | Clear button not visible | `clearable` not set | Add `clearable` prop |
@@ -384,7 +383,7 @@ const [value, setValue] = useState<string | null>(null);
 | Rich content | `title="With Custom Content"` | option.content with JSX |
 | Async loading | `title="Async Data Fetching with Shimmer"` | loadOnOpen + loadOptions |
 | Custom themes | `title="Custom Theme Examples"` | Multiple themed styles |
-| Force position | `forceDropdownPosition` | Forced top/bottom |
+| Force position | `forceDropdownSide` | Forced top/bottom |
 | Lock scroll | `lockScroll` | Scroll lock + force position |
 | Form integration | `title="Form Integration (onBlur / onFocus)"` | onBlur, onFocus callbacks |
 | All features | `title="Combined: All Features"` | Every prop on one dropdown |

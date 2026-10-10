@@ -877,7 +877,7 @@ describe('Dropdown - Empty State', () => {
     render(
       <Dropdown 
         options={[]}
-        noResultsContent={<div>Custom empty state</div>}
+        emptyContent={<div>Custom empty state</div>}
         id="test"
       />
     );
@@ -1149,7 +1149,7 @@ describe('Dropdown - Custom Icons', () => {
     render(
       <Dropdown 
         options={fruitOptions}
-        ChevronIcon={CustomChevron}
+        chevronIcon={<CustomChevron />}
         showChevron
       />
     );
@@ -1177,7 +1177,7 @@ describe('Dropdown - Custom Icons', () => {
       <Dropdown 
         options={fruitOptions}
         value="apple"
-        CheckIcon={CustomCheck}
+        selectedIcon={<CustomCheck />}
       />
     );
     
@@ -1214,7 +1214,7 @@ describe('Dropdown - Position & Portal', () => {
   it('should set correct position attribute', async () => {
     const user = userEvent.setup();
     
-    render(<Dropdown options={fruitOptions} dropdownPosition="top" />);
+    render(<Dropdown options={fruitOptions} dropdownSide="top" />);
     
     await user.click(screen.getByRole('combobox'));
     await waitForDropdownOpen();

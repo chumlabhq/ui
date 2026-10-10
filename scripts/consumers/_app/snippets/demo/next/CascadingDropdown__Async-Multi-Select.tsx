@@ -122,7 +122,7 @@ export default function CascadingDropdownExample() {
           loadChildren={handleLoadChildren}
           placeholder="Select region and countries..."
           closeOnSelect={false}
-          loadingText="Loading countries..."
+          loadingContent="Loading countries..."
           classes={
             {
                            ...({

@@ -19,7 +19,7 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
   (
     {
       children,
-      max,
+      maxVisible,
       size = "md",
       showCountTooltip = false,
       countTooltip,
@@ -33,7 +33,7 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
     ref,
   ) => {
     const effectiveMax =
-      max != null && Number.isFinite(max) && max > 0 ? Math.floor(max) : undefined;
+      maxVisible != null && Number.isFinite(maxVisible) && maxVisible > 0 ? Math.floor(maxVisible) : undefined;
 
     const mergedClasses: Required<CountryFlagGroupClasses> = useMemo(
       () => ({

@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode, HTMLAttributes } from "react";
+import type { ReactNode, HTMLAttributes } from "react";
 
 export interface IconProps {
   className?: string;
@@ -83,12 +83,15 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   /** Visible text before the rows-per-page select. Not the select's accessible name. Default: `"Show"`. */
   rowsPerPagePrefix?: string;
   dropdownAriaLabel?: string;
-  dropdownPosition?: "top" | "bottom";
+  dropdownSide?: "top" | "bottom";
   dropdownZIndex?: number;
-  dropdownGap?: number;
-  dropdownIcon?: ComponentType<IconProps> | ReactNode;
-  prevIcon?: ComponentType<IconProps> | ReactNode;
-  nextIcon?: ComponentType<IconProps> | ReactNode;
+  dropdownOffset?: number;
+  /** Replaces the rows-per-page select's chevron. Rendered as given; `classes.rowsPerPage.icon` styles the default one. */
+  dropdownIcon?: ReactNode;
+  /** Replaces the previous-page arrow. Rendered as given; `classes.navIcon` styles the default one. */
+  prevIcon?: ReactNode;
+  /** Replaces the next-page arrow. Rendered as given; `classes.navIcon` styles the default one. */
+  nextIcon?: ReactNode;
   renderEllipsis?: (props: EllipsisRenderProps) => ReactNode;
   renderPageInfo?: (props: PageInfoRenderProps) => ReactNode;
   sectionOrder?: SectionName[];

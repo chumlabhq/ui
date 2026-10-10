@@ -15,7 +15,7 @@ const fixtures: Fixtures<typeof TabPanel> = [
   { name: "vertical", props: { tabs: TABS, orientation: "vertical" } },
   { name: "second-active", props: { tabs: TABS, defaultValue: "two" } },
   { name: "with-tooltips", props: { tabs: TABS.map((t) => ({ ...t, tooltip: "Tip" })), showTooltips: true } },
-  { name: "kept-mounted", props: { tabs: TABS, keepMounted: true } },
+  { name: "kept-mounted", props: { tabs: TABS, keepMounted: "visited" } },
   {
     name: "inactive-count",
     props: {

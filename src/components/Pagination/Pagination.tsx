@@ -6,7 +6,6 @@ import {
   useMemo,
   useId,
   forwardRef,
-  isValidElement,
   memo,
   Fragment,
 } from "react";
@@ -29,27 +28,13 @@ import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDow
 import { mergeSlot } from "../../utils/mergeSlot.js";
 
 function renderIcon(
-  icon: React.ComponentType<IconProps> | React.ReactNode | undefined,
+  icon: React.ReactNode,
   DefaultIcon: React.ComponentType<IconProps>,
   iconClassName: string | undefined,
   defaultClassName: string,
 ) {
-  const finalClassName = iconClassName || defaultClassName;
-
-  if (!icon) {
-    return <DefaultIcon className={finalClassName} />;
-  }
-
-  if (isValidElement(icon)) {
-    return icon;
-  }
-
-  if (typeof icon === "function") {
-    const IconComponent = icon as React.ComponentType<IconProps>;
-    return <IconComponent className={finalClassName} />;
-  }
-
-  return <DefaultIcon className={finalClassName} />;
+  if (icon != null && icon !== false) return icon;
+  return <DefaultIcon className={iconClassName || defaultClassName} />;
 }
 
 const RowSelectorPortal = memo(function RowSelectorPortal({
@@ -190,9 +175,9 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       rowsPerPageSuffix = "rows",
       rowsPerPagePrefix = "Show",
       dropdownAriaLabel = "Rows per page",
-      dropdownPosition = "top",
+      dropdownSide = "top",
       dropdownZIndex: dropdownZIndexProp,
-      dropdownGap = 4,
+      dropdownOffset = 4,
       dropdownIcon,
       prevIcon,
       nextIcon,
@@ -413,9 +398,9 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
             {isDropdownOpen && (
               <RowSelectorPortal
                 triggerRef={triggerRef}
-                direction={dropdownPosition === "top" ? "up" : "down"}
+                direction={dropdownSide === "top" ? "up" : "down"}
                 zIndex={dropdownZIndex}
-                gap={dropdownGap}
+                gap={dropdownOffset}
                 dropdownClassName={mergedClasses.rowsPerPage.content}
                 optionClassName={mergedClasses.rowsPerPage.item}
                 listboxId={listboxId}

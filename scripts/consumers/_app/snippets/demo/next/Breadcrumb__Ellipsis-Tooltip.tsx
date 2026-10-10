@@ -21,7 +21,7 @@ export default function BreadcrumbExample() {
   return (
     <Breadcrumb
       items={longItems}
-      maxVisibleItems={3}
+      maxVisible={3}
       showTooltips
       ellipsisTooltip="Show hidden items"
       ellipsisTooltipProps={{ side: "top", delayDuration: 200 }}

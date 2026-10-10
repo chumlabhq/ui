@@ -25,7 +25,7 @@ export default function MultiSelectSearchableDropdownExample() {
             value={gapValue}
             onValueChange={(values) => setGapValue(values)}
             placeholder="Gap: 4px..."
-            maxDisplayedChips={1}
+            maxVisible={1}
             classes={
               {
                 root: "",
@@ -50,9 +50,9 @@ export default function MultiSelectSearchableDropdownExample() {
             options={staticOptions}
             value={gapValue2}
             onValueChange={(values) => setGapValue2(values)}
-            dropdownGap={16}
+            dropdownOffset={16}
             placeholder="Gap: 16px..."
-            maxDisplayedChips={1}
+            maxVisible={1}
             classes={
               {
                 root: "",

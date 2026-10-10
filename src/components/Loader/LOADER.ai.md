@@ -52,7 +52,7 @@ export default function Example() {
 |------|------|---------|-------------|
 | `size` | number | `20` | Width and height in pixels. |
 | `thickness` | number | `2` | Stroke width of track and arc. |
-| `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
+| `animationDuration` | number | `750` | One animation cycle, in milliseconds. Lower is faster. |
 | `trackColor` | string | `"currentColor"` | Background track color, painted at 20% opacity by the `track` slot. |
 | `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -64,7 +64,7 @@ export default function Example() {
 |------|------|---------|-------------|
 | `height` | number | `4` | Height of the bar in pixels. |
 | `width` | string \| number | `"100%"` | Width of the bar (CSS value). |
-| `speed` | number | `1.5` | Animation duration in seconds. |
+| `animationDuration` | number | `1500` | One animation cycle, in milliseconds. Lower is faster. |
 | `trackColor` | string | `"color-mix(in srgb, currentColor 20%, transparent)"` | Background track color. Defaults to the bar's colour at 20%, painted on the track only, so the bar keeps full strength. |
 | `borderRadius` | number | `9999` | Border radius in pixels. |
 | `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
@@ -78,7 +78,7 @@ export default function Example() {
 | `size` | number | `8` | Diameter of each dot in pixels. |
 | `gap` | number | `4` | Gap between dots in pixels. |
 | `count` | number | `3` | Number of dots. |
-| `speed` | number | `1.4` | Full animation cycle duration in seconds. |
+| `animationDuration` | number | `1400` | One animation cycle, in milliseconds. Lower is faster. |
 | `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -88,7 +88,7 @@ export default function Example() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | number | `40` | Diameter of the circle in pixels. |
-| `speed` | number | `1.5` | Animation duration in seconds. |
+| `animationDuration` | number | `1500` | One animation cycle, in milliseconds. Lower is faster. |
 | `rings` | number | `2` | Number of ripple rings. |
 | `reduceMotion` | `true` \| `false` \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -104,7 +104,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | --- | --- | --- |
 | `size` | `number \| undefined` | Width and height in pixels. Default: 20 |
 | `thickness` | `number \| undefined` | Stroke width of track and arc. Default: 2 |
-| `speed` | `number \| undefined` | Animation duration in seconds (lower = faster). Default: 0.75 |
+| `animationDuration` | `number \| undefined` | One spin, in milliseconds (lower = faster). Default: 750 |
 | `trackColor` | `string \| undefined` | Background track color. Default: currentColor at 20% opacity |
 | `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
 | `classes` | `CircularLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
@@ -116,7 +116,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | --- | --- | --- |
 | `height` | `number \| undefined` | Height of the bar in pixels. Default: 4 |
 | `width` | `string \| number \| undefined` | Width of the bar (CSS value). Default: "100%" |
-| `speed` | `number \| undefined` | Animation duration in seconds. Default: 1.5 |
+| `animationDuration` | `number \| undefined` | One animation cycle, in milliseconds. Default: 1500 |
 | `trackColor` | `string \| undefined` | Background track color. Default: currentColor at 20%, painted on the track only, so the bar keeps full strength |
 | `borderRadius` | `number \| undefined` | Border radius in pixels. Default: 9999 (pill) |
 | `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
@@ -130,7 +130,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `size` | `number \| undefined` | Diameter of each dot in pixels. Default: 8 |
 | `gap` | `number \| undefined` | Gap between dots in pixels. Default: 4 |
 | `count` | `number \| undefined` | Number of dots. Default: 3 |
-| `speed` | `number \| undefined` | Full animation cycle duration in seconds. Default: 1.4 |
+| `animationDuration` | `number \| undefined` | One full bounce cycle, in milliseconds. Default: 1400 |
 | `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
 | `classes` | `DotLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
 | `unstyled` | `boolean \| undefined` | Removes all default styling. |
@@ -140,7 +140,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Prop | Type | Description |
 | --- | --- | --- |
 | `size` | `number \| undefined` | Diameter of the circle in pixels. Default: 40 |
-| `speed` | `number \| undefined` | Animation duration in seconds. Default: 1.5 |
+| `animationDuration` | `number \| undefined` | One animation cycle, in milliseconds. Default: 1500 |
 | `rings` | `number \| undefined` | Number of ripple rings. Default: 2 |
 | `reduceMotion` | `boolean \| "auto" \| undefined` | Controls motion preferences. `"auto"` respects the user's OS setting. |
 | `classes` | `PulseLoaderClasses \| undefined` | CSS class overrides for sub-elements. |
@@ -167,7 +167,7 @@ consumer can retune it from a stylesheet without passing props:
 | Variable | Set from | Used by |
 |----------|----------|---------|
 | `--loader-size` | `size` | the root's width and height |
-| `--loader-speed` | `speed` | the spin's `animation-duration` |
+| `--loader-duration` | `animationDuration` | the spin's `animation-duration` |
 | `--loader-track` | `trackColor` | the track circle's stroke |
 
 ### `size` is a raw pixel number, and the spin is wider than it
@@ -210,7 +210,7 @@ Presentational: a loader is `role="status"` and takes no keyboard input.
 | All variants | `title="Basic Usage"` |
 | Sizes | `title="Circular — Sizes"` |
 | Colors | `title="Circular — Colors"` |
-| Speed | `title="Circular — Speed"` |
+| Animation duration | `title="Circular — Animation Duration"` |
 
 | File | Contains |
 |------|----------|

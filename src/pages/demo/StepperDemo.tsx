@@ -93,25 +93,25 @@ const checkoutSteps: Step[] = [
     id: "account",
     label: "Account",
     description: "Create your account",
-    icon: UserIcon,
+    icon: <UserIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
   {
     id: "payment",
     label: "Payment",
     description: "Add payment method",
-    icon: CreditCardIcon,
+    icon: <CreditCardIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
   {
     id: "shipping",
     label: "Shipping",
     description: "Set delivery address",
-    icon: TruckIcon,
+    icon: <TruckIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
   {
     id: "confirm",
     label: "Confirm",
     description: "Review your order",
-    icon: CheckCircleIcon,
+    icon: <CheckCircleIcon className="w-4 h-4 sm:w-5 sm:h-5" />,
   },
 ];
 
@@ -159,8 +159,8 @@ const tooltipConfigSteps: Step[] = [
 ];
 
 const perStepIconSteps: Step[] = [
-  { id: 1, label: "Upload", completedIcon: ThumbsUpIcon },
-  { id: 2, label: "Validate", errorIcon: WarningIcon },
+  { id: 1, label: "Upload", completedIcon: <ThumbsUpIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
+  { id: 2, label: "Validate", errorIcon: <WarningIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> },
   { id: 3, label: "Publish" },
 ];
 
@@ -564,8 +564,8 @@ const StepperDemo = () => {
             ]}
             value={customIconStep}
             onValueChange={(id) => setCustomIconStep(id as number)}
-            completedIcon={StarIcon}
-            errorIcon={WarningIcon}
+            completedIcon={<StarIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            errorIcon={<WarningIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
             getStepStatus={errorGetStatus}
             isStepClickable={() => true}
             classes={c.stepper}

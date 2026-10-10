@@ -975,7 +975,7 @@ describe("Toast Escape layering", () => {
 
     rerender(
       <Harness>
-        <Drawer open onOpenChange={onOpenChange} aria-label="Panel" duration={0}>
+        <Drawer open onOpenChange={onOpenChange} aria-label="Panel" animationDuration={0}>
           <DrawerBody>Panel</DrawerBody>
         </Drawer>
       </Harness>

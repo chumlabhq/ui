@@ -25,7 +25,7 @@ describe("useMultiSelectDropdown – async searchOptions", () => {
     const searchOptions = vi.fn().mockResolvedValue(asyncResults);
 
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, searchDebounce: 0 })
     );
 
     act(() => result.current.setSearchQuery("foo"));
@@ -42,7 +42,7 @@ describe("useMultiSelectDropdown – async searchOptions", () => {
   it("calls searchOptions only once for the last query (debounce cancels prior calls)", async () => {
     const searchOptions = vi.fn().mockResolvedValue([]);
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, searchDebounce: 0 })
     );
 
     // Fire multiple rapid updates — only the last should produce a call
@@ -61,7 +61,7 @@ describe("useMultiSelectDropdown – async searchOptions", () => {
     const asyncResults: MultiSelectOption[] = [{ value: "x", label: "X" }];
     const searchOptions = vi.fn().mockResolvedValue(asyncResults);
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], searchOptions, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, searchDebounce: 0 })
     );
 
     act(() => result.current.setSearchQuery("foo"));
@@ -81,7 +81,7 @@ describe("useMultiSelectDropdown – async searchOptions", () => {
     const onLoadError = vi.fn();
 
     const { result } = renderHook(() =>
-      useMultiSelectDropdown({ options: [], searchOptions, onLoadError, searchDebounceMs: 0 })
+      useMultiSelectDropdown({ options: [], searchOptions, onLoadError, searchDebounce: 0 })
     );
 
     act(() => result.current.setSearchQuery("fail"));
@@ -105,7 +105,7 @@ describe("useMultiSelectDropdown – async searchOptions", () => {
         searchOptions,
         initialOptions: initialOpts,
         defaultValue: ["saved"],
-        searchDebounceMs: 0,
+        searchDebounce: 0,
       })
     );
 
@@ -249,7 +249,7 @@ describe("useMultiSelectDropdown – loadInitialOnOpen", () => {
         searchOptions,
         loadInitialOptions,
         loadInitialOnOpen: true,
-        searchDebounceMs: 60_000, // large debounce so timer doesn't fire
+        searchDebounce: 60_000, // large debounce so timer doesn't fire
       })
     );
 

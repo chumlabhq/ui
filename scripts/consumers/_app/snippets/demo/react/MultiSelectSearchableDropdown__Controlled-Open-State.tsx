@@ -26,7 +26,7 @@ export default function MultiSelectSearchableDropdownExample() {
           open={controlledOpen}
           onOpenChange={setControlledOpen}
           placeholder="Controlled dropdown..."
-          maxDisplayedChips={2}
+          maxVisible={2}
           classes={
             {
               root: "",

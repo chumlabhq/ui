@@ -20,8 +20,8 @@ export interface FieldWrapperProps {
   endIcon?: ReactNode;
   onStartIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   onEndIconClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  startIconLabel?: string;
-  endIconLabel?: string;
+  startIconAriaLabel?: string;
+  endIconAriaLabel?: string;
   clearable?: boolean;
   onClearClick?: () => void;
   clearLabel?: string;
@@ -84,8 +84,8 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       endIcon,
       onStartIconClick,
       onEndIconClick,
-      startIconLabel,
-      endIconLabel,
+      startIconAriaLabel,
+      endIconAriaLabel,
       clearable = false,
       onClearClick,
       clearLabel = "Clear",
@@ -178,7 +178,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
                 className={cn("inline-flex shrink-0 cursor-pointer")}
                 onClick={onStartIconClick}
                 disabled={isDisabled || loading}
-                aria-label={startIconLabel}
+                aria-label={startIconAriaLabel}
               >
                 {startIcon}
               </button>
@@ -212,7 +212,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
                 className={cn("inline-flex shrink-0 cursor-pointer")}
                 onClick={onEndIconClick}
                 disabled={isDisabled || loading}
-                aria-label={endIconLabel}
+                aria-label={endIconAriaLabel}
               >
                 {endIcon}
               </button>

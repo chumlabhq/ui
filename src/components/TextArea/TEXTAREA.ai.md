@@ -51,8 +51,8 @@ export default function Example() {
 | `showCount` | Requires `maxLength` to be set |
 | `autoResize` | Overrides manual `resize` CSS. Sets `overflow: hidden` and `resize: none`. |
 | `size` | Sets the control's padding and type: 28/40/52px fields, 30/42/54 with the border. Emits `data-size` as well, for CSS that wants it |
-| `onStartIconClick` | Requires `startIconLabel` for accessibility |
-| `onEndIconClick` | Requires `endIconLabel` for accessibility |
+| `onStartIconClick` | Requires `startIconAriaLabel` for accessibility |
+| `onEndIconClick` | Requires `endIconAriaLabel` for accessibility |
 
 ---
 
@@ -89,8 +89,8 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 | `endIcon` | object | — | React.ReactNode — Icon rendered after the textarea. |
 | `onStartIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void — Makes startIcon a clickable button, called with the native click event. |
 | `onEndIconClick` | object | — | (event: MouseEvent<HTMLButtonElement>) => void — Makes endIcon a clickable button, called with the native click event. |
-| `startIconLabel` | string | — | Accessible label for startIcon when clickable. Required with onStartIconClick. |
-| `endIconLabel` | string | — | Accessible label for endIcon when clickable. Required with onEndIconClick. |
+| `startIconAriaLabel` | string | — | Accessible label for startIcon when clickable. Required with onStartIconClick. |
+| `endIconAriaLabel` | string | — | Accessible label for endIcon when clickable. Required with onEndIconClick. |
 | `onValueChange` | object | — | (value: string) => void — Fires with the current string value when the value changes. |
 | `clearable` | boolean | `false` | Show a built-in clear button when the textarea has a value. |
 | `onClear` | object | — | () => void — Callback when the clear button is clicked. |
@@ -228,7 +228,7 @@ A native `<textarea>`: the browser owns text entry and selection.
 - `aria-invalid` set on error
 - `aria-describedby` links error, success, description, and count
 - `aria-required` set when required
-- Icon buttons get `aria-label` via `startIconLabel` / `endIconLabel`
+- Icon buttons get `aria-label` via `startIconAriaLabel` / `endIconAriaLabel`
 - Character count has `role="status"` and `aria-live="polite"`
 
 ---

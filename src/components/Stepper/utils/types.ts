@@ -1,5 +1,4 @@
 import type {
-  ComponentType,
   ReactNode,
   CSSProperties,
   ReactElement,
@@ -56,12 +55,12 @@ export interface Step {
   label?: ReactNode;
   /** A second line under the label, for detail that does not fit the name. */
   description?: ReactNode;
-  /** Replaces the number in the indicator while the step is pending or active. */
-  icon?: ComponentType<IconProps> | ReactNode;
-  /** Replaces the default check once the step is complete. */
-  completedIcon?: ComponentType<IconProps> | ReactNode;
-  /** Replaces the indicator's content when the step reports an error. */
-  errorIcon?: ComponentType<IconProps> | ReactNode;
+  /** Replaces the number in the indicator while the step is pending or active. Rendered as given. */
+  icon?: ReactNode;
+  /** Replaces the default check once the step is complete. Rendered as given. */
+  completedIcon?: ReactNode;
+  /** Replaces the indicator's content when the step reports an error. Rendered as given. */
+  errorIcon?: ReactNode;
   /** Blocks navigation to this step and drops it from the tab order. */
   disabled?: boolean;
   /** Text, or a config, shown when the step's indicator is hovered or focused. */
@@ -170,8 +169,10 @@ export interface StepperProps {
   showConnectors?: boolean;
   /** Where each step's label sits: under its indicator, or after it (`end`). */
   labelPosition?: "bottom" | "end";
-  completedIcon?: ComponentType<IconProps> | ReactNode;
-  errorIcon?: ComponentType<IconProps> | ReactNode;
+  /** Replaces every step's completed check. Rendered as given; a step's own `completedIcon` wins. */
+  completedIcon?: ReactNode;
+  /** Replaces every step's error mark. Rendered as given; a step's own `errorIcon` wins. */
+  errorIcon?: ReactNode;
   fullWidth?: boolean;
   "aria-label"?: string;
   showTooltips?: boolean;

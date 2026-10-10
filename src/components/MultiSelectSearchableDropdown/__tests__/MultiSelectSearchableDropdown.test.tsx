@@ -218,12 +218,12 @@ describe("MultiSelectSearchableDropdown", () => {
       );
     });
 
-    it("shows '+N' when more items selected than maxDisplayedChips", () => {
+    it("shows '+N' when more items selected than maxVisible", () => {
       render(
         <MultiSelectSearchableDropdown
           options={options}
           defaultValue={["apple", "banana", "cherry", "date"]}
-          maxDisplayedChips={2}
+          maxVisible={2}
         />
       );
       expect(screen.getByText("+2")).toBeInTheDocument();
@@ -493,13 +493,13 @@ describe("MultiSelectSearchableDropdown", () => {
       expect(screen.getByText("Loading...")).toBeInTheDocument();
     });
 
-    it("renders custom loadingText when loading", () => {
+    it("renders custom loadingContent when loading", () => {
       render(
         <MultiSelectSearchableDropdown
           options={options}
           loading
           open
-          loadingText="Fetching..."
+          loadingContent="Fetching..."
         />
       );
       expect(screen.getByText("Fetching...")).toBeInTheDocument();

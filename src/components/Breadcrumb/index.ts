@@ -9,7 +9,7 @@ export type {
   TooltipSide,
   TooltipAlign,
   IconPosition,
-  DropdownPosition,
+  DropdownSide,
 } from "./utils/types.js";
 
 export {

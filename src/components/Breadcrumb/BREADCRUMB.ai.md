@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Pass an `items` array of `{ id, label }` objects. The last item is treated as the active page. Use `maxVisibleItems` to collapse long trails into a dropdown. Works out-of-the-box with zero configuration beyond `items`.
+Pass an `items` array of `{ id, label }` objects. The last item is treated as the active page. Use `maxVisible` to collapse long trails into a dropdown. Works out-of-the-box with zero configuration beyond `items`.
 
 ---
 
@@ -51,12 +51,12 @@ This renders correctly with no additional props, classes, or setup. The last ite
 | Prop | Constraint |
 |------|-----------|
 | `items` | **Required.** Must have at least one item. Last item is always treated as the active/current page. |
-| `maxVisibleItems` | When total items exceed this, middle items collapse into an ellipsis dropdown. First item and last N-1 items remain visible. |
+| `maxVisible` | When total items exceed this, middle items collapse into an ellipsis dropdown. First item and last N-1 items remain visible. |
 | `separator` vs `separatorIcon` | `separator` (ReactNode) takes priority. `separatorIcon` (Component) is only used if `separator` is not provided. |
 | `href` on items | Renders the item as `<a>` instead of `<button>`. Disabled items always render as `<button>` regardless of `href`. |
 | `item.onClick` | Per-item click overrides the global `onItemClick`. Both can coexist — per-item runs first. |
 | `showTooltips` | Enables tooltips globally. Individual items still need `tooltip` content set. |
-| `dropdownPosition` | Only affects the collapsed items dropdown, not individual items. Options: top, bottom, left, right. |
+| `dropdownSide` | Only affects the collapsed items dropdown, not individual items. Options: top, bottom, left, right. |
 
 ---
 
@@ -82,7 +82,7 @@ This renders correctly with no additional props, classes, or setup. The last ite
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `items` **(required)** | array | — | List of breadcrumb items to render. |
-| `maxVisibleItems` | number | `4` | Maximum visible items before collapsing into an ellipsis dropdown. |
+| `maxVisible` | number | `4` | Maximum visible items before collapsing into an ellipsis dropdown. |
 | `separator` | object | — | React.ReactNode — Custom separator between breadcrumb items. |
 | `onItemClick` | object | — | (item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked. |
 | `aria-label` | string | — | Accessible label for the breadcrumb nav element. |
@@ -90,16 +90,16 @@ This renders correctly with no additional props, classes, or setup. The last ite
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | CSSProperties — Inline styles for the root element. |
-| `separatorIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom separator icon component. |
-| `ellipsisIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom ellipsis icon component. |
+| `separatorIcon` | object | — | ReactNode — Replaces the default chevron between items. Rendered as given; `iconSize` sizes the default one. `separator` takes precedence. |
+| `ellipsisIcon` | object | — | ReactNode — Replaces the collapsed-items button's glyph. Rendered as given; `iconSize` sizes the default one. |
 | `iconSize` | number \| string | `16` | Size of breadcrumb icons. |
 | `showTooltips` | boolean | `true` | Enables tooltips on breadcrumb items. |
-| `tooltipPosition` | `"top"` \| `"right"` \| `"bottom"` \| `"left"` | `"bottom"` | Default tooltip position for all items. |
+| `tooltipSide` | `"top"` \| `"right"` \| `"bottom"` \| `"left"` | `"bottom"` | Default tooltip position for all items. |
 | `tooltipOffset` | number | `4` | Default tooltip offset in pixels. |
 | `defaultTooltipProps` | object | — | Default tooltip configuration for all items. |
 | `ellipsisTooltip` | object | — | React.ReactNode — Tooltip content for the ellipsis button. |
 | `ellipsisTooltipProps` | object | — | Tooltip configuration for the ellipsis button. |
-| `dropdownPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"top"` | Position of the overflow dropdown. |
+| `dropdownSide` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"top"` | Position of the overflow dropdown. |
 | `dropdownZIndex` | number | `50` | Z-index of the overflow dropdown. |
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the dropdown. |
 | `keepMounted` | boolean | `false` | Keeps the collapsed-items menu mounted while closed. |
@@ -265,7 +265,7 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
 ```tsx
 <Breadcrumb
   items={deepPath}
-  maxVisibleItems={3}
+  maxVisible={3}
   onDropdownOpenChange={(open) => console.log("Dropdown:", open ? "opened" : "closed")}
   onItemClick={(item) => router.push(item.href ?? "/")}
 />
@@ -301,8 +301,8 @@ const items: BreadcrumbItem[] = [
 // String separator
 <Breadcrumb items={items} separator={<span className="mx-1 text-gray-400">/</span>} />
 
-// Custom itemIcon component
-<Breadcrumb items={items} separatorIcon={ArrowRightIcon} iconSize={14} />
+// Custom separator icon: an element, rendered as given (iconSize sizes only the default chevron)
+<Breadcrumb items={items} separatorIcon={<ArrowRightIcon size={14} />} />
 ```
 
 ### Loading state
@@ -351,8 +351,8 @@ const items: BreadcrumbItem[] = [
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Last item is clickable | Expected behavior — it renders as a span, not interactive | Active item has `cursor-default`. Style it with `item` and a `data-[state=active]:` variant. |
-| Truncation not working | Items count ≤ `maxVisibleItems` | Reduce `maxVisibleItems` or add more items. |
-| Dropdown appears off-screen | Default position doesn't fit viewport | Change `dropdownPosition` to `"bottom"`, `"left"`, or `"right"`. |
+| Truncation not working | Items count ≤ `maxVisible` | Reduce `maxVisible` or add more items. |
+| Dropdown appears off-screen | Default position doesn't fit viewport | Change `dropdownSide` to `"bottom"`, `"left"`, or `"right"`. |
 | Custom separator not showing | Passed `separator` as string, not ReactNode | Wrap in JSX: `separator={<span>/</span>}` not `separator="/"`. |
 | Icons missing in dropdown items | Icons are included — check if CSS hides them | Icons from collapsed items render in the dropdown by default. |
 | Per-item onClick not firing | Item is disabled | Disabled items prevent all click handlers. |
@@ -368,7 +368,7 @@ const items: BreadcrumbItem[] = [
 | Feature | Search for | What you'll find |
 |---------|-----------|------------------|
 | Minimal example | `title="Basic Usage"` | 4-item trail, onItemClick |
-| Collapsed trail | `title="Truncation (maxVisibleItems)"` | maxVisibleItems with dropdown |
+| Collapsed trail | `title="Truncation (maxVisible)"` | maxVisible with dropdown |
 | Item icons | `title="With Icons"` | icon + iconPosition props |
 | Icons in dropdown | `title="Icons + Truncation"` | Icons preserved in collapsed menu |
 | Custom ReactNode items | `title="Custom Content"` | content prop with badges |

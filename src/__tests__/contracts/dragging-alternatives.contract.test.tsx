@@ -41,7 +41,7 @@ describe("dragging alternatives contract", () => {
   describe("Table column resize", () => {
     it("exposes the handle to the keyboard", () => {
       render(
-        <Table columns={COLUMNS} data={DATA} resizable ariaLabel="t" />,
+        <Table columns={COLUMNS} data={DATA} resizable aria-label="t" />,
       );
       const handle = document.querySelector("[data-resize-handle]") as HTMLElement;
       expect(handle, "no resize handle rendered").not.toBeNull();
@@ -57,7 +57,7 @@ describe("dragging alternatives contract", () => {
           data={DATA}
           resizable
           onColumnSizingChange={onColumnSizingChange}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const handle = document.querySelector("[data-resize-handle]") as HTMLElement;
@@ -80,7 +80,7 @@ describe("dragging alternatives contract", () => {
           data={DATA}
           resizable
           onColumnSizingChange={onColumnSizingChange}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const handle = document.querySelector("[data-resize-handle]") as HTMLElement;
@@ -95,7 +95,7 @@ describe("dragging alternatives contract", () => {
           data={DATA}
           resizable
           onColumnSizingChange={onColumnSizingChange}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const handle2 = document.querySelector("[data-resize-handle]") as HTMLElement;
@@ -108,7 +108,7 @@ describe("dragging alternatives contract", () => {
   describe("Table row reorder", () => {
     it("exposes the handle to the keyboard", () => {
       render(
-        <Table columns={COLUMNS} data={DATA} reorderable ariaLabel="t" />,
+        <Table columns={COLUMNS} data={DATA} reorderable aria-label="t" />,
       );
       const handles = screen.getAllByRole("button", { name: /Reorder row/ });
       expect(handles).toHaveLength(DATA.length);
@@ -122,7 +122,7 @@ describe("dragging alternatives contract", () => {
           data={DATA}
           reorderable
           onRowReorder={onRowReorder}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const handles = screen.getAllByRole("button", { name: /Reorder row/ });
@@ -142,7 +142,7 @@ describe("dragging alternatives contract", () => {
           data={DATA}
           reorderable
           onRowReorder={onRowReorder}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const handles = screen.getAllByRole("button", { name: /Reorder row/ });

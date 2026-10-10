@@ -9,8 +9,8 @@ const flags = ["US", "GB", "FR"].map((code) => (
 
 const fixtures: Fixtures<typeof CountryFlagGroup> = [
   { name: "default", props: {}, children: flags },
-  { name: "capped", props: { max: 2 }, children: flags, note: "Drives the surplus count." },
-  { name: "with-tooltips", props: { max: 2, showCountTooltip: true }, children: flags },
+  { name: "capped", props: { maxVisible: 2 }, children: flags, note: "Drives the surplus count." },
+  { name: "with-tooltips", props: { maxVisible: 2, showCountTooltip: true }, children: flags },
   {
     name: "mixed-loading",
     props: {},

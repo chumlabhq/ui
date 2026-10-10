@@ -448,7 +448,7 @@
       "description": "Z-index of the calendar popup.",
       "default": 50
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -457,12 +457,12 @@
       "description": "Vertical placement of the calendar popup.",
       "default": "bottom"
     },
-    "forceDropdownPosition": {
+    "forceDropdownSide": {
       "type": "boolean",
-      "description": "Locks the calendar to the specified dropdownPosition without auto-flipping.",
+      "description": "Locks the calendar to the specified dropdownSide without auto-flipping.",
       "default": false
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap in pixels between trigger and calendar popup.",
       "default": 4

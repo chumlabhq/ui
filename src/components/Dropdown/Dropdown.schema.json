@@ -126,7 +126,7 @@
       "description": "Shows a clear button to deselect the current value.",
       "default": false
     },
-    "noResultsContent": {
+    "emptyContent": {
       "type": "object",
       "description": "React.ReactNode - Content shown when no options are available.",
       "default": "No options available",
@@ -260,7 +260,7 @@
       "description": "Locks body scroll while the dropdown is open.",
       "default": false
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -269,7 +269,7 @@
       "description": "Vertical placement of the dropdown relative to the trigger.",
       "default": "bottom"
     },
-    "forceDropdownPosition": {
+    "forceDropdownSide": {
       "type": "boolean",
       "description": "Locks the dropdown to the specified position without auto-flipping.",
       "default": false
@@ -279,7 +279,7 @@
       "description": "Z-index of the dropdown popup.",
       "default": 50
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap in pixels between trigger and dropdown popup.",
       "default": 4
@@ -313,23 +313,17 @@
       "description": "(triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOption, placeholder).",
       "x-tsType": "((triggerProps: DropdownTriggerRenderProps, state: DropdownTriggerState) => ReactNode) | undefined"
     },
-    "ChevronIcon": {
+    "chevronIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined",
-      "x-defaultSource": "ChevronDownIcon"
+      "description": "ReactNode — Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open.",
+      "x-tsType": "ReactNode"
     },
-    "CheckIcon": {
+    "clearIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom check icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the clear button's glyph. Rendered as given.",
+      "x-tsType": "ReactNode"
     },
-    "ClearIcon": {
-      "type": "object",
-      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom clear icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; style?: CSSProperties | undefined; }> | undefined"
-    },
-    "loadingText": {
+    "loadingContent": {
       "type": "object",
       "description": "React.ReactNode - Text shown during async loading.",
       "default": "Loading...",

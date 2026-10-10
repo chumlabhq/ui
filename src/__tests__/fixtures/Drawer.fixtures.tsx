@@ -47,7 +47,7 @@ const fixtures: Fixtures<typeof Drawer> = [
           <Drawer
             open={open}
             onOpenChange={setOpen}
-            direction="bottom"
+            side="bottom"
             swipeable
             aria-label="Swipeable sheet"
           >
@@ -68,7 +68,7 @@ const fixtures: Fixtures<typeof Drawer> = [
           <Drawer
             open
             onOpenChange={() => {}}
-            direction="bottom"
+            side="bottom"
             modal={false}
             swipeable
             snapPoints={[0.3, 0.6, 0.9]}
@@ -105,11 +105,11 @@ const fixtures: Fixtures<typeof Drawer> = [
     props: { open: true, swipeable: true },
     children: <><DrawerHeader title="Drawer" /><DrawerCloseButton />Body</>,
   },
-  { name: "open-left", props: { open: true, direction: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
+  { name: "open-left", props: { open: true, side: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader title="Drawer" />Body</> },
   {
     name: "open-rtl",
-    props: { open: true, direction: "left" },
+    props: { open: true, side: "left" },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     children: <><DrawerHeader title="Drawer" />Body</>,
     note: "`side` is physical (left/right), not logical (start/end), so nothing here mirrors — which is the finding."

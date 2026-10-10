@@ -1,5 +1,6 @@
 import { SearchableDropdown } from "../../components/SearchableDropdown/index.js";
 import type { Fixtures } from "./types.js";
+import { ChevronGlyph, CrossGlyph, SearchGlyph } from "./_icons.js";
 import { RtlBoundary } from "./_harness.js";
 import { OPTIONS } from "./_data.js";
 import { neverResolves, resolvesTo, settleAsync } from "./_async.js";
@@ -26,6 +27,21 @@ const fixtures: Fixtures<typeof SearchableDropdown> = [
   { name: "success", props: { options: OPTIONS, label: "Fruit", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { options: OPTIONS, disabled: true } },
   { name: "open-search", props: { options: OPTIONS, defaultOpen: true, showSearch: true } },
+  {
+    name: "open-custom-chevron-icon",
+    props: { options: OPTIONS, defaultOpen: true, chevronIcon: <ChevronGlyph /> },
+    note: "Passes a real SVG in place of the default chevron; icon-slots holds it to SearchableDropdown/open's box and position.",
+  },
+  {
+    name: "open-with-selection-custom-clear-icon",
+    props: { options: OPTIONS, defaultOpen: true, defaultValue: "a", clearable: true, clearIcon: <CrossGlyph /> },
+    note: "Passes a real SVG in place of the default clear glyph; icon-slots holds it to SearchableDropdown/open-with-selection's box and position.",
+  },
+  {
+    name: "open-search-custom-search-icon",
+    props: { options: OPTIONS, defaultOpen: true, showSearch: true, searchIcon: <SearchGlyph /> },
+    note: "Passes a real SVG in place of the default search magnifier; icon-slots holds it to SearchableDropdown/open-search's box and position.",
+  },
   // Both branches of the option source, which is now a discriminated union:
   // passing `options` AND `searchOptions` no longer typechecks, because useDropdown
   // drops `options` entirely once searchOptions is a function.

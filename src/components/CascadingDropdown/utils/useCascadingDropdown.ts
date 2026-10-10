@@ -24,7 +24,7 @@ export const useCascadingDropdown = ({
   showSubmenuSearch = false,
   searchMenu,
   searchSubmenu,
-  searchDebounceMs = 300,
+  searchDebounce = 300,
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
   const [internalValue, setInternalValue] = useControllableState<CascadingValue>({
     value,
@@ -83,10 +83,10 @@ export const useCascadingDropdown = ({
             setIsMenuSearching(false);
           }
         });
-    }, searchDebounceMs);
+    }, searchDebounce);
 
     return () => clearTimeout(timer);
-  }, [hasActiveMenuSearch, menuSearchQuery, searchMenu, searchDebounceMs]);
+  }, [hasActiveMenuSearch, menuSearchQuery, searchMenu, searchDebounce]);
 
   const activeSubmenuParent = useMemo(
     () => (activeSubmenu ? options.find((opt) => opt.value === activeSubmenu) ?? null : null),
@@ -121,10 +121,10 @@ export const useCascadingDropdown = ({
             setIsSubmenuSearching(false);
           }
         });
-    }, searchDebounceMs);
+    }, searchDebounce);
 
     return () => clearTimeout(timer);
-  }, [hasActiveSubmenuSearch, submenuSearchQuery, searchSubmenu, searchDebounceMs, activeSubmenuParent]);
+  }, [hasActiveSubmenuSearch, submenuSearchQuery, searchSubmenu, searchDebounce, activeSubmenuParent]);
 
   const isMenuAsync = !!searchMenu;
   const filteredOptions = useMemo(() => {

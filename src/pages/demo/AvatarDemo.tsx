@@ -671,7 +671,7 @@ const AvatarDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <AvatarGroup max={3}>
+              <AvatarGroup maxVisible={3}>
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
                 <Avatar
@@ -693,7 +693,7 @@ const AvatarDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <AvatarGroup max={3} total={50}>
+              <AvatarGroup maxVisible={3} total={50}>
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
                 <Avatar
@@ -713,7 +713,7 @@ const AvatarDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <AvatarGroup max={2} showTooltip>
+              <AvatarGroup maxVisible={2} showTooltip>
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
                 <Avatar
@@ -807,7 +807,7 @@ const AvatarDemo = () => {
               className="overflow-visible"
             >
               <AvatarGroup
-                max={2}
+                maxVisible={2}
                 renderSurplus={(count) => (
                   <span
                     className={`ml-2 text-xs font-medium text-cl-text-secondary`}

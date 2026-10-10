@@ -75,7 +75,7 @@ test.describe("CascadingDropdown submenu placement", () => {
     }
   }
 
-  test("opens on the side `submenuPosition` asks for when it fits", async ({ page }) => {
+  test("opens on the side `submenuSide` asks for when it fits", async ({ page }) => {
     await page.setViewportSize({ width: 1024, height: 900 });
     await gotoFixture(page, "CascadingDropdown", "open-submenu-left");
     await page.locator(SURFACE).waitFor({ state: "attached" });

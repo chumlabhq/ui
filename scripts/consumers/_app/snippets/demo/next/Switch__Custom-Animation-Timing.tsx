@@ -12,7 +12,7 @@ export default function SwitchExample() {
         label="Slow transition (500ms)"
         checked={animationSwitch}
         onCheckedChange={setAnimationSwitch}
-        transitionDuration={500}
+        animationDuration={500}
         transitionTimingFunction="ease-in-out"
         classes={
           {
@@ -27,7 +27,7 @@ export default function SwitchExample() {
         label="Bouncy transition"
         checked={animationSwitchBouncy}
         onCheckedChange={setAnimationSwitchBouncy}
-        transitionDuration={300}
+        animationDuration={300}
         transitionTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
         classes={
           {

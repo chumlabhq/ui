@@ -26,7 +26,7 @@ export default function MultiSelectSearchableDropdownExample() {
           setUncontrolledChange(JSON.stringify({ values, options }))
         }
         placeholder="Select fruits..."
-        maxDisplayedChips={3}
+        maxVisible={3}
         classes={
           {
             root: "",

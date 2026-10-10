@@ -153,12 +153,12 @@
     {
       "component": "Table",
       "title": "Star Selection (Favorites)",
-      "reason": "code-less by decision: the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs"
+      "reason": "code-less by decision: the same renderCheckboxIcon prop as Custom Checkbox Selection; only the icon differs"
     },
     {
       "component": "Table",
       "title": "Checkbox with Star Icon Inside",
-      "reason": "code-less by decision: the same CheckboxIcon prop as Custom Checkbox Selection; only the icon differs"
+      "reason": "code-less by decision: the same renderCheckboxIcon prop as Custom Checkbox Selection; only the icon differs"
     },
     {
       "component": "Table",
@@ -178,7 +178,7 @@
     {
       "component": "Table",
       "title": "Row Expansion (Plus/Minus Icons)",
-      "reason": "code-less by decision: the same ExpandIcon prop as Row Expansion (Custom Chevron Icons); only the icon differs"
+      "reason": "code-less by decision: the same renderExpandIcon prop as Row Expansion (Custom Chevron Icons); only the icon differs"
     },
     {
       "component": "Table",
@@ -213,7 +213,7 @@
     {
       "component": "Table",
       "title": "Row Drag & Drop (Number Handle with Reorder History)",
-      "reason": "code-less by decision: the same DragHandleIcon and onRowReorder as Row Drag & Drop (Custom Arrow Icons); only the handle and the history readout differ"
+      "reason": "code-less by decision: the same dragHandleIcon and onRowReorder as Row Drag & Drop (Custom Arrow Icons); only the handle and the history readout differ"
     },
     {
       "component": "Table",
@@ -238,7 +238,7 @@
     {
       "component": "Table",
       "title": "Built-in Search (Custom Filter Icon on Right)",
-      "reason": "code-less by decision: SearchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
+      "reason": "code-less by decision: searchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
     },
     {
       "component": "Table",
@@ -253,7 +253,7 @@
     {
       "component": "Table",
       "title": "Column Filters (Chip Tags Style)",
-      "reason": "code-less by decision: renderColumnFilter and FilterIcon together; each has its own snippet"
+      "reason": "code-less by decision: renderColumnFilter and renderFilterIcon together; each has its own snippet"
     },
     {
       "component": "Table",

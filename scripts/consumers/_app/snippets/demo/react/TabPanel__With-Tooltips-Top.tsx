@@ -84,7 +84,7 @@ export default function TabPanelExample() {
       value={tooltipTopTab}
       onValueChange={setTooltipTopTab}
       showTooltips={true}
-      tooltipPosition="top"
+      tooltipSide="top"
       tooltipOffset={4}
       classes={
         {

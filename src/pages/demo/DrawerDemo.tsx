@@ -188,7 +188,7 @@ const DrawerDemo = () => {
               <Drawer
                 open={directions[dir].open}
                 onOpenChange={directions[dir].onOpenChange}
-                direction={dir}
+                side={dir}
                 size={dir === "top" || dir === "bottom" ? "250px" : "320px"}
               >
                 {renderDrawerContent(
@@ -325,7 +325,7 @@ const DrawerDemo = () => {
           open={nonModal.open}
           onOpenChange={nonModal.onOpenChange}
           modal={false}
-          direction="right"
+          side="right"
           lockScroll={false}
         >
           {renderDrawerContent(
@@ -350,7 +350,7 @@ const DrawerDemo = () => {
         <Drawer
           open={customDuration.open}
           onOpenChange={customDuration.onOpenChange}
-          duration={600}
+          animationDuration={600}
         >
           {renderDrawerContent("Slow Animation", customDuration.onClose)}
         </Drawer>
@@ -371,7 +371,7 @@ const DrawerDemo = () => {
           open={swipeable.open}
           onOpenChange={swipeable.onOpenChange}
           swipeable
-          direction="bottom"
+          side="bottom"
           size="300px"
         >
           {renderDrawerContent("Swipe Down to Close", swipeable.onClose)}
@@ -400,7 +400,7 @@ const DrawerDemo = () => {
           open={snapPoints.open}
           onOpenChange={snapPoints.onOpenChange}
           swipeable
-          direction="bottom"
+          side="bottom"
           size="85vh"
           snapPoints={[0.3, 0.6, 1]}
           snapPointIndex={snapIndex}
@@ -569,7 +569,7 @@ const DrawerDemo = () => {
         <Drawer
           open={classesDemo.open}
           onOpenChange={classesDemo.onOpenChange}
-          direction="right"
+          side="right"
           size="360px"
           classes={{
             overlay: `fixed inset-0 transition-opacity bg-cl-accent/30`,
@@ -642,7 +642,7 @@ const DrawerDemo = () => {
         <Drawer
           open={formDrawer.open}
           onOpenChange={formDrawer.onOpenChange}
-          direction="right"
+          side="right"
           size="400px"
         >
           <div className={c.panel}>

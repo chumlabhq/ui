@@ -141,7 +141,7 @@ export interface ClockFaceProps {
   /** Text for the cancel button. Default: "Cancel". */
   cancelText?: string;
   /** Text for the OK button. Default: "OK". */
-  okText?: string;
+  confirmText?: string;
 }
 
 type OmittedHTMLProps = "children" | "color" | "onBlur" | "defaultValue";
@@ -230,13 +230,13 @@ export interface TimePickerProps
   /** Lock body scroll when dropdown is open. Default: `false`. */
   lockScroll?: boolean;
   /** Position of the dropdown relative to the trigger. Default: `"bottom"`. */
-  dropdownPosition?: "top" | "bottom";
-  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
-  forceDropdownPosition?: boolean;
+  dropdownSide?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownSide without auto-flipping. */
+  forceDropdownSide?: boolean;
   /** Z-index for the dropdown. Default: `50`. */
   dropdownZIndex?: number;
   /** Gap between trigger and dropdown in pixels. Default: `4`. */
-  dropdownGap?: number;
+  dropdownOffset?: number;
   /** Keep dropdown DOM mounted when closed (dropdown mode only). Default: `false`. */
   keepMounted?: boolean;
   /** Custom container element for the dropdown portal. Defaults to `document.body`. */
@@ -262,7 +262,7 @@ export interface TimePickerProps
   /** Text for the clock cancel button. Default: `"Cancel"`. */
   cancelText?: string;
   /** Text for the clock OK button. Default: `"OK"`. */
-  okText?: string;
+  confirmText?: string;
 }
 
 export interface UseTimePickerProps {

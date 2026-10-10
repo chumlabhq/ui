@@ -22,7 +22,7 @@ export default function BreadcrumbExample() {
   return (
     <Breadcrumb
       items={longItems}
-      maxVisibleItems={3}
+      maxVisible={3}
       classes={
         {
                     ...({

@@ -50,7 +50,7 @@ export default function DrawerExample() {
       <Drawer
         open={formDrawer.open}
         onOpenChange={formDrawer.onOpenChange}
-        direction="right"
+        side="right"
         size="400px"
       >
         <div className="flex flex-col h-full bg-cl-bg text-cl-text">

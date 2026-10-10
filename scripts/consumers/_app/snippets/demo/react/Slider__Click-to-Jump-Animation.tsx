@@ -25,7 +25,7 @@ export default function SliderExample() {
         <Slider
           value={animFast}
           onValueChange={(v) => setAnimFast(v as number)}
-          transitionDuration={100}
+          animationDuration={100}
           marks={ratingMarks}
           min={1}
           max={5}
@@ -76,7 +76,7 @@ export default function SliderExample() {
         <Slider
           value={animSlow}
           onValueChange={(v) => setAnimSlow(v as number)}
-          transitionDuration={600}
+          animationDuration={600}
           marks={ratingMarks}
           min={1}
           max={5}
@@ -102,7 +102,7 @@ export default function SliderExample() {
         <Slider
           value={animOff}
           onValueChange={(v) => setAnimOff(v as number)}
-          transitionDuration={0}
+          animationDuration={0}
           marks={ratingMarks}
           min={1}
           max={5}

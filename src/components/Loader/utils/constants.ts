@@ -8,7 +8,7 @@ import type {
 
 export const DEFAULT_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> = {
   root: "inline-flex shrink-0 text-cl-accent h-(--loader-size) w-(--loader-size)",
-  control: "h-full w-full animate-spin [animation-duration:var(--loader-speed)]",
+  control: "h-full w-full animate-spin [animation-duration:var(--loader-duration)]",
   track: "opacity-20",
   range: "",
 };

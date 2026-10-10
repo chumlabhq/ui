@@ -25,7 +25,7 @@ export default function MultiSelectSearchableDropdownExample() {
         value={countryValue}
         onValueChange={(values) => setCountryValue(values)}
         placeholder="Select countries..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
             root: "",

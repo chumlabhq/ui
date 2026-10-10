@@ -7,7 +7,7 @@ interface BreadcrumbItemContentProps {
 }
 
 function BreadcrumbItemContent({ item, iconClassName }: BreadcrumbItemContentProps) {
-  const position = item.iconPosition ?? (item.icon ? "left" : undefined);
+  const position = item.iconPosition ?? (item.icon ? "start" : undefined);
 
   const icon = item.icon != null && (
     <span className={cn(iconClassName) || undefined} aria-hidden="true">
@@ -17,9 +17,9 @@ function BreadcrumbItemContent({ item, iconClassName }: BreadcrumbItemContentPro
 
   return (
     <>
-      {position === "left" && icon}
+      {position === "start" && icon}
       <span>{item.content || item.label}</span>
-      {position === "right" && icon}
+      {position === "end" && icon}
     </>
   );
 }

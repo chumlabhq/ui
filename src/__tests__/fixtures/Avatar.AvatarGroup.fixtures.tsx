@@ -19,7 +19,7 @@ const fixtures: Fixtures<typeof AvatarGroup> = [
   { name: "stack", props: { layout: "stack" }, children: faces },
   { name: "grid", props: { layout: "grid" }, children: faces },
   { name: "inline", props: { layout: "inline" }, children: faces },
-  { name: "with-surplus", props: { layout: "stack", max: 2 }, children: faces },
+  { name: "with-surplus", props: { layout: "stack", maxVisible: 2 }, children: faces },
 ];
 
 export default fixtures;

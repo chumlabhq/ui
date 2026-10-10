@@ -1016,7 +1016,7 @@ describe("useDropdown – onLoadError", () => {
     const onLoadError = vi.fn();
 
     const { result } = renderHook(() =>
-      useDropdown({ options, searchOptions, onLoadError, searchDebounceMs: 0, defaultOpen: true }),
+      useDropdown({ options, searchOptions, onLoadError, searchDebounce: 0, defaultOpen: true }),
     );
 
     act(() => { result.current.setSearchQuery("apple"); });
@@ -1101,7 +1101,7 @@ describe("useDropdown – async mode (searchOptions)", () => {
     const searchOptions = vi.fn().mockResolvedValue(searchResults);
 
     const { result } = renderHook(() =>
-      useDropdown({ options, searchOptions, searchDebounceMs: 0, defaultOpen: true }),
+      useDropdown({ options, searchOptions, searchDebounce: 0, defaultOpen: true }),
     );
 
     act(() => { result.current.setSearchQuery("avo"); });
@@ -1115,7 +1115,7 @@ describe("useDropdown – async mode (searchOptions)", () => {
   it("isSearching becomes true when searchQuery is set (async mode)", () => {
     const searchOptions = vi.fn().mockResolvedValue([]);
     const { result } = renderHook(() =>
-      useDropdown({ options, searchOptions, searchDebounceMs: 300, defaultOpen: true }),
+      useDropdown({ options, searchOptions, searchDebounce: 300, defaultOpen: true }),
     );
 
     act(() => { result.current.setSearchQuery("ban"); });
@@ -1134,7 +1134,7 @@ describe("useDropdown – async mode (searchOptions)", () => {
         options,
         searchOptions,
         initialOptions: asyncInitial,
-        searchDebounceMs: 0,
+        searchDebounce: 0,
         defaultOpen: true,
       }),
     );

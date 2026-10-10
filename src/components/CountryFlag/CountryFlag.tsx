@@ -27,7 +27,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
  * - Pass `code` as lowercase two-letter ISO 3166-1 alpha-2
  * - Use `size` for presets (xs-2xl) or pixel number
  * - Use `fallback` for custom error UI
- * - Use `<CountryFlagGroup max={N}>` for overflow grouping
+ * - Use `<CountryFlagGroup maxVisible={N}>` for overflow grouping
  *
  * Reference:
  * - COUNTRYFLAG.ai.md (this directory) — full AI knowledge doc

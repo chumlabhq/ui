@@ -48,7 +48,7 @@ export default function Example() {
 | `checked` + `onCheckedChange` | Controlled mode. |
 | `defaultChecked` | Uncontrolled mode. Cannot combine with `checked`. |
 | `checkedIcon` / `uncheckedIcon` | ReactNode rendered inside the thumb. |
-| `transitionDuration` | Respects `reduceMotion` — set to 0ms when motion reduced. |
+| `animationDuration` | Respects `reduceMotion` — set to 0ms when motion reduced. |
 
 ---
 
@@ -177,7 +177,7 @@ A `<button role="switch">`, not a checkbox — which is why `Enter` activates it
 | `loaderSize` | number | `16` | Size of the default loader in pixels. |
 | `checkedIcon` | object | — | React.ReactNode — Icon displayed inside the thumb when checked. |
 | `uncheckedIcon` | object | — | React.ReactNode — Icon displayed inside the thumb when unchecked. |
-| `transitionDuration` | number | — | Duration of the toggle transition in milliseconds. |
+| `animationDuration` | number | — | Duration of the toggle transition in milliseconds. |
 | `transitionTimingFunction` | string | — | CSS timing function for the toggle transition. |
 | `renderLabel` | object | — | (props: SwitchRenderProps) => ReactNode — Custom label render function. |
 | `renderDescription` | object | — | (props: SwitchRenderProps) => ReactNode — Custom description render function. |

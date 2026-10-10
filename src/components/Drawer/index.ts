@@ -6,7 +6,7 @@ export { default as DrawerCloseButton } from "./components/DrawerCloseButton.js"
 
 export type {
   DrawerProps,
-  DrawerDirection,
+  DrawerSide,
   DrawerClasses,
   DrawerHeaderProps,
   DrawerBodyProps,
@@ -17,12 +17,12 @@ export type {
 export {
   DEFAULT_DRAWER_CLASSES,
   UNSTYLED_DRAWER_CLASSES,
-  DEFAULT_DIRECTION,
+  DEFAULT_SIDE,
   DEFAULT_SIZE,
   DEFAULT_OVERLAY_COLOR,
   DEFAULT_OVERLAY_OPACITY,
   DEFAULT_OVERLAY_BLUR,
-  DEFAULT_DURATION,
+  DEFAULT_ANIMATION_DURATION,
   DEFAULT_SWIPE_THRESHOLD,
   DEFAULT_SNAP_POINT_INDEX,
 } from "./utils/constants.js";

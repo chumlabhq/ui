@@ -316,9 +316,9 @@
           "type": "ReactNode",
           "description": "Avatar elements to group."
         },
-        "max": {
+        "maxVisible": {
           "type": "number | undefined",
-          "description": "Maximum visible avatars before showing a surplus count."
+          "description": "How many avatars to show before the rest collapse into a surplus count."
         },
         "size": {
           "type": "AvatarSize | undefined",

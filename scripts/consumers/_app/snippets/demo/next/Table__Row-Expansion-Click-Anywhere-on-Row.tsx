@@ -227,7 +227,7 @@ export default function TableExample() {
                 expandOnRowClick
                 expandedRowIds={ids}
                 onExpandedRowIdsChange={setIds}
-                ExpandIcon={SmallChevron}
+                renderExpandIcon={(state) => <SmallChevron {...state} />}
                 renderExpandedRow={(row) => (
                   <div
                     className={"px-6 py-4 bg-cl-bg-hover"}

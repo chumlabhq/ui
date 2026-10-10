@@ -1150,7 +1150,7 @@ const AccordionDemo = () => {
       {/* ─── Lazy Loading & Unmount ─────────────────────────────────────── */}
       <Section
         title="Lazy Loading & Unmount on Close"
-        description="Use lazyLoad to defer rendering until first open, or unmountOnClose to remove from DOM when closed."
+        description="Use lazyLoad to defer rendering until first open, or keepMounted={false} to remove from DOM when closed."
         isDarkMode={dark}
       >
         <div className="space-y-4">
@@ -1175,13 +1175,13 @@ const AccordionDemo = () => {
             <p
               className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
-              unmountOnClose (removed from DOM when closed)
+              keepMounted={false} (removed from DOM when closed)
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion selectionMode="single" collapsible classes={c.accordion}>
                 <AccordionItem value="unmount-1">
                   <AccordionTrigger>Unmount on Close</AccordionTrigger>
-                  <AccordionContent unmountOnClose>
+                  <AccordionContent keepMounted={false}>
                     This content is removed from the DOM when closed.
                   </AccordionContent>
                 </AccordionItem>
@@ -1418,15 +1418,15 @@ const AccordionDemo = () => {
 
       {/* ─── Force Mount ──────────────────────────────────────────────── */}
       <Section
-        title="Force Mount Content"
-        description="Use forceMount to always render content in the DOM, even when collapsed (useful for SEO or form fields)."
+        title="Keep Mounted Content"
+        description="Use keepMounted to always render content in the DOM, even when collapsed (useful for SEO or form fields)."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion selectionMode="single" collapsible classes={c.accordion}>
             <AccordionItem value="fm-1">
               <AccordionTrigger>Always in DOM</AccordionTrigger>
-              <AccordionContent forceMount>
+              <AccordionContent keepMounted>
                 This content is always rendered (check DOM inspector). It uses
                 aria-hidden when collapsed.
               </AccordionContent>

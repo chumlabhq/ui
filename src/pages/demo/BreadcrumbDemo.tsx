@@ -85,7 +85,7 @@ const itemsWithIcons: BreadcrumbItem[] = [
     id: "annual-report",
     label: "Annual Report",
     icon: <DocumentIcon className="w-4 h-4" />,
-    iconPosition: "right",
+    iconPosition: "end",
   },
 ];
 
@@ -219,19 +219,19 @@ const BreadcrumbDemo = () => {
       </Section>
 
       <Section
-        title="Truncation (maxVisibleItems)"
-        description="When items exceed maxVisibleItems, middle items collapse into an accessible dropdown."
+        title="Truncation (maxVisible)"
+        description="When items exceed maxVisible, middle items collapse into an accessible dropdown."
         isDarkMode={dark}
       >
         <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              maxVisibleItems=3
+              maxVisible=3
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Breadcrumb
                 items={longItems}
-                maxVisibleItems={3}
+                maxVisible={3}
                 classes={{
                   ...c.breadcrumb,
                   ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
@@ -244,12 +244,12 @@ const BreadcrumbDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              maxVisibleItems=4
+              maxVisible=4
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Breadcrumb
                 items={longItems}
-                maxVisibleItems={4}
+                maxVisible={4}
                 classes={{
                   ...c.breadcrumb,
                   ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
@@ -272,7 +272,7 @@ const BreadcrumbDemo = () => {
       {/* ─── Icons ──────────────────────────────────────────────────────── */}
       <Section
         title="With Icons"
-        description="Items can have icons (defaults to left position). Use iconPosition to control placement."
+        description="Items can have icons (at the start of the label by default). Use iconPosition to control placement."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -317,10 +317,10 @@ const BreadcrumbDemo = () => {
                 id: "current",
                 label: "Current Page",
                 icon: <DocumentIcon className="w-4 h-4" />,
-                iconPosition: "right",
+                iconPosition: "end",
               },
             ]}
-            maxVisibleItems={3}
+            maxVisible={3}
             classes={{
               ...c.breadcrumb,
               ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
@@ -447,7 +447,7 @@ const BreadcrumbDemo = () => {
           <Breadcrumb
             items={itemsWithTooltips}
             showTooltips
-            tooltipPosition="bottom"
+            tooltipSide="bottom"
             classes={{ ...c.breadcrumb, itemIcon: c.breadcrumbExtra.icon }}
             onItemClick={handleItemClick}
           />
@@ -463,7 +463,7 @@ const BreadcrumbDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Breadcrumb
             items={longItems}
-            maxVisibleItems={3}
+            maxVisible={3}
             showTooltips
             ellipsisTooltip="Show hidden items"
             ellipsisTooltipProps={{ side: "top", delayDuration: 200 }}
@@ -513,7 +513,7 @@ const BreadcrumbDemo = () => {
                   { id: "components", label: "Components" },
                   { id: "breadcrumb", label: "Breadcrumb" },
                 ]}
-                maxVisibleItems={3}
+                maxVisible={3}
                 classes={{
                   ...c.breadcrumb,
                   ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
@@ -537,13 +537,13 @@ const BreadcrumbDemo = () => {
           {(["top", "bottom", "left", "right"] as const).map((pos) => (
             <div key={pos}>
               <p className={`text-xs font-medium mb-2 ${c.label}`}>
-                dropdownPosition=&quot;{pos}&quot;
+                dropdownSide=&quot;{pos}&quot;
               </p>
               <DemoWrapper isDarkMode={dark} layout="block">
                 <Breadcrumb
                   items={longItems}
-                  maxVisibleItems={3}
-                  dropdownPosition={pos}
+                  maxVisible={3}
+                  dropdownSide={pos}
                   classes={{
                     ...c.breadcrumb,
                     ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,
@@ -565,7 +565,7 @@ const BreadcrumbDemo = () => {
       {/* ─── Custom Separator ───────────────────────────────────────────── */}
       <Section
         title="Custom Separator"
-        description="Replace the default chevron with any ReactNode or a custom icon component."
+        description="Replace the default chevron with any ReactNode, through separator or separatorIcon."
         isDarkMode={dark}
       >
         <div className="space-y-4">
@@ -593,7 +593,7 @@ const BreadcrumbDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="block">
               <Breadcrumb
                 items={basicItems}
-                separatorIcon={ArrowIcon}
+                separatorIcon={<ArrowIcon style={{ width: 16, height: 16 }} />}
                 classes={c.breadcrumb}
                 onItemClick={handleItemClick}
               />
@@ -617,7 +617,7 @@ const BreadcrumbDemo = () => {
               <DemoWrapper isDarkMode={dark} layout="block">
                 <Breadcrumb
                   items={longItems}
-                  maxVisibleItems={3}
+                  maxVisible={3}
                   iconSize={size}
                   classes={{
                     ...c.breadcrumb,
@@ -642,7 +642,7 @@ const BreadcrumbDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Breadcrumb
             items={longItems}
-            maxVisibleItems={4}
+            maxVisible={4}
             classes={{ ...c.pill, itemIcon: "shrink-0" }}
             onItemClick={handleItemClick}
           />
@@ -709,10 +709,10 @@ const BreadcrumbDemo = () => {
                 tooltip: "Currently viewing",
                 tooltipProps: { side: "bottom" },
                 icon: <DocumentIcon className="w-4 h-4" />,
-                iconPosition: "right",
+                iconPosition: "end",
               },
             ]}
-            maxVisibleItems={3}
+            maxVisible={3}
             showTooltips
             ellipsisTooltip="Show 3 hidden items"
             defaultTooltipProps={{ delayDuration: 150 }}
@@ -737,7 +737,7 @@ const BreadcrumbDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Breadcrumb
             items={longItems}
-            maxVisibleItems={3}
+            maxVisible={3}
             classes={{
               ...c.breadcrumb,
               ellipsisTrigger: c.breadcrumbExtra.ellipsisButton,

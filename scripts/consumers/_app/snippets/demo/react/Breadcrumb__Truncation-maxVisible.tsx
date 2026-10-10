@@ -20,7 +20,7 @@ export default function BreadcrumbExample() {
     <>
       <Breadcrumb
         items={longItems}
-        maxVisibleItems={3}
+        maxVisible={3}
         classes={
           {
                           ...({
@@ -38,7 +38,7 @@ export default function BreadcrumbExample() {
       />
       <Breadcrumb
         items={longItems}
-        maxVisibleItems={4}
+        maxVisible={4}
         classes={
           {
                           ...({

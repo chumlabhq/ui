@@ -51,7 +51,6 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
   classes,
   showSelectedIcon,
   selectedIcon,
-  CheckIconComponent,
   onSelect,
   onHover,
 }: {
@@ -63,10 +62,6 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
   classes: Required<DropdownClasses>;
   showSelectedIcon: boolean;
   selectedIcon?: ReactNode;
-  CheckIconComponent: React.ComponentType<{
-    className?: string;
-    style?: CSSProperties;
-  }>;
   onSelect: (option: DropdownOption) => void;
   onHover: (index: number) => void;
 }) {
@@ -103,7 +98,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || (
-          <CheckIconComponent className={cn(classes.itemIndicator) || undefined} />
+          <CheckIconDefault className={cn(classes.itemIndicator) || undefined} />
         ))}
     </div>
   );
@@ -220,7 +215,7 @@ const DropdownContent = memo(function DropdownContent({
  *
  * Behavior:
  * - Portal-rendered popup (never clipped by overflow ancestors)
- * - Auto-flips position when insufficient viewport space (disable with `forceDropdownPosition`)
+ * - Auto-flips position when insufficient viewport space (disable with `forceDropdownSide`)
  * - Full keyboard navigation with type-ahead search
  * - Async option loading with shimmer states
  *
@@ -250,7 +245,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       successMessage,
       required = false,
       clearable = false,
-      noResultsContent = "No options available",
+      emptyContent = "No options available",
       showChevron = true,
       showSelectedIcon = true,
       selectedIcon,
@@ -260,7 +255,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       loadOnOpen = false,
       onLoadError,
       shimmerCount = 5,
-      loadingText = "Loading...",
+      loadingContent = "Loading...",
       unstyled = false,
       classes: classesProp,
       className,
@@ -268,19 +263,18 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       keepMounted = false,
       portalContainer,
       lockScroll = false,
-      dropdownPosition = "bottom",
-      forceDropdownPosition = false,
+      dropdownSide = "bottom",
+      forceDropdownSide = false,
       dropdownZIndex: dropdownZIndexProp,
-      dropdownGap = 4,
+      dropdownOffset = 4,
       typeaheadTimeout = 500,
       "aria-label": ariaLabel,
       onBlur,
       onFocus,
       onKeyDown: onKeyDownProp,
       renderTrigger,
-      ChevronIcon = ChevronDownIcon,
-      CheckIcon: CheckIconProp = CheckIconDefault,
-      ClearIcon: ClearIconProp = ClearIconDefault,
+      chevronIcon,
+      clearIcon,
     } = props;
 
     const dropdownZIndex = useLayer(dropdownZIndexProp);
@@ -361,7 +355,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       typeaheadTimeout,
       label,
       "aria-label": ariaLabel,
-      loadingText,
+      loadingContent,
     });
 
     const loading = externalLoading || isLoadingOptions;
@@ -558,10 +552,19 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                   : placeholder}
               </span>
               {showChevron && (
-                <ChevronIcon
-                  className={cn(mergedClasses.icon) || undefined}
-                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-                />
+                chevronIcon ? (
+                  <span
+                    className={mergedClasses.icon || undefined}
+                    style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                  >
+                    {chevronIcon}
+                  </span>
+                ) : (
+                  <ChevronDownIcon
+                    className={cn(mergedClasses.icon) || undefined}
+                    style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                  />
+                )
               )}
             </button>
           )}
@@ -577,7 +580,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 triggerNode?.focus({ preventScroll: true });
               }}
             >
-              <ClearIconProp />
+              {clearIcon ?? <ClearIconDefault />}
             </button>
           )}
 
@@ -585,10 +588,10 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             triggerElement={triggerNode}
             isOpen={isOpen}
             keepMounted={keepMounted}
-            position={dropdownPosition}
-            forcePosition={forceDropdownPosition}
+            position={dropdownSide}
+            forcePosition={forceDropdownSide}
             zIndex={dropdownZIndex}
-            gap={dropdownGap}
+            gap={dropdownOffset}
             portalContainer={portalContainer}
             classes={mergedClasses}
             listboxId={listboxId}
@@ -606,7 +609,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 />
               ) : displayOptions.length === 0 ? (
                 <div role="status" className={mergedClasses.empty || undefined}>
-                  {noResultsContent}
+                  {emptyContent}
                 </div>
               ) : null
             }
@@ -624,7 +627,6 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                     classes={mergedClasses}
                     showSelectedIcon={showSelectedIcon}
                     selectedIcon={selectedIcon}
-                    CheckIconComponent={CheckIconProp}
                     onSelect={handleOptionSelect}
                     onHover={setFocusedIndex}
                   />

@@ -78,7 +78,7 @@ export default function Example() {
 | `renderThumb` | object | — | (props: SliderThumbRenderProps) => ReactNode — Custom thumb content renderer. |
 | `renderMark` | object | — | (props: SliderMarkRenderProps) => ReactNode — Custom mark dot renderer. |
 | `markDotSize` | number | `6` | Size of mark dots in pixels. |
-| `transitionDuration` | number | `200` | Duration in ms of the click-to-jump animation when the user clicks a mark or any point on the track. Set to 0 to disable. The animation is automatically suppressed during an active drag so the thumb tracks the cursor 1:1. |
+| `animationDuration` | number | `200` | Duration in ms of the click-to-jump animation when the user clicks a mark or any point on the track. Set to 0 to disable. The animation is automatically suppressed during an active drag so the thumb tracks the cursor 1:1. |
 | `id` | string | — | HTML id attribute. |
 | `name` | string | — | Form field name attribute. |
 | `label` | object | — | React.ReactNode — Label displayed above the slider. |

@@ -79,7 +79,7 @@ export interface TabPanelProps {
   showZeroCount?: boolean;
   alwaysShowLabels?: boolean;
   showTooltips?: boolean;
-  tooltipPosition?: TooltipPosition;
+  tooltipSide?: TooltipPosition;
   tooltipOffset?: number;
   disabled?: boolean;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
@@ -94,8 +94,12 @@ export interface TabPanelProps {
   classes?: TabPanelClasses;
   className?: string;
   style?: CSSProperties;
-  forceMount?: boolean;
-  keepMounted?: boolean;
+  /**
+   * Which panels' content is in the DOM. `false` (default): the active panel
+   * only. `"visited"`: every panel opened so far stays mounted. `true`: every
+   * panel, including ones never opened.
+   */
+  keepMounted?: boolean | "visited";
 }
 
 export interface ResolvedClasses {

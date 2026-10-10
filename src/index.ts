@@ -131,7 +131,7 @@ export { default as DrawerFooter } from "./components/Drawer/components/DrawerFo
 export { default as DrawerCloseButton } from "./components/Drawer/components/DrawerCloseButton.js";
 export type {
   DrawerProps,
-  DrawerDirection,
+  DrawerSide,
   DrawerClasses,
   DrawerHeaderProps,
   DrawerBodyProps,

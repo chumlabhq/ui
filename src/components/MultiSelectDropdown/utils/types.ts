@@ -51,7 +51,7 @@ export interface MultiSelectDropdownClasses {
   loadingIcon?: string;
   /** The wider of the two shapes in a skeleton row, standing in for the label. */
   loadingBar?: string;
-  /** The `+N` chip standing in for selections past `maxDisplayedChips`. */
+  /** The `+N` chip standing in for selections past `maxVisible`. */
   count?: string;
 }
 
@@ -85,14 +85,14 @@ export interface MultiSelectDropdownBaseProps {
   success?: boolean;
   successMessage?: ReactNode;
   required?: boolean;
-  noResultsContent?: ReactNode;
+  emptyContent?: ReactNode;
   clearable?: boolean;
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
   onLoadError?: (error: unknown) => void;
   shimmerCount?: number;
-  maxDisplayedChips?: number;
+  maxVisible?: number;
   showSelectedChips?: boolean;
   checkboxIcon?: ReactNode;
   unstyled?: boolean;
@@ -105,11 +105,11 @@ export interface MultiSelectDropdownBaseProps {
   onOpenChange?: (open: boolean) => void;
   keepMounted?: boolean;
   portalContainer?: HTMLElement | null;
-  dropdownPosition?: "top" | "bottom";
-  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
-  forceDropdownPosition?: boolean;
+  dropdownSide?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownSide without auto-flipping. */
+  forceDropdownSide?: boolean;
   dropdownZIndex?: number;
-  dropdownGap?: number;
+  dropdownOffset?: number;
   /** Timeout in milliseconds for keyboard typeahead matching. */
   typeaheadTimeout?: number;
   "aria-label"?: string;
@@ -118,9 +118,11 @@ export interface MultiSelectDropdownBaseProps {
   /** Fires when the trigger takes focus, with the native focus event. */
   onFocus?: (event: FocusEvent<HTMLElement>) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
-  ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
-  loadingText?: ReactNode;
-  ClearIcon?: React.ComponentType<{ className?: string }>;
+  /** Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open. */
+  chevronIcon?: ReactNode;
+  loadingContent?: ReactNode;
+  /** Replaces the clear-all button's glyph. Rendered as given. */
+  clearIcon?: ReactNode;
   renderTrigger?: (
     triggerProps: MultiSelectDropdownTriggerRenderProps,
     state: MultiSelectDropdownTriggerState,

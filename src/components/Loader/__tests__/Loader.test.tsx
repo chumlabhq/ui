@@ -37,10 +37,10 @@ describe("CircularLoader", () => {
     expect(loader.style.getPropertyValue("--loader-size")).toBe("48px");
   });
 
-  it("applies custom speed via CSS variable", () => {
-    render(<CircularLoader speed={2} />);
+  it("applies a custom animationDuration via CSS variable", () => {
+    render(<CircularLoader animationDuration={2000} />);
     const loader = screen.getByRole("status");
-    expect(loader.style.getPropertyValue("--loader-speed")).toBe("2s");
+    expect(loader.style.getPropertyValue("--loader-duration")).toBe("2000ms");
   });
 
   it("applies custom trackColor via CSS variable", () => {

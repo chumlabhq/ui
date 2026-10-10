@@ -123,10 +123,10 @@ export default function MultiSelectSearchableDropdownExample() {
         searchOptions={handleAsyncSearch}
         loadInitialOptions={handleLoadInitialOptions}
         loadInitialOnOpen
-        searchDebounceMs={300}
-        maxDisplayedChips={2}
-        loadingText="Loading..."
-        noResultsContent="No countries found"
+        searchDebounce={300}
+        maxVisible={2}
+        loadingContent="Loading..."
+        emptyContent="No countries found"
         classes={
           {
             root: "",

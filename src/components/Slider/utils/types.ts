@@ -119,7 +119,7 @@ export interface SliderProps
    * animation is automatically suppressed during an active drag so the
    * thumb tracks the cursor 1:1. Default: 200
    */
-  transitionDuration?: number;
+  animationDuration?: number;
 
   id?: string;
   name?: string;

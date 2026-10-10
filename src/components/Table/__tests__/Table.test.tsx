@@ -129,9 +129,9 @@ describe("Table", () => {
       expect(screen.getByText("alice@example.com")).toBeInTheDocument();
     });
 
-    it("applies ariaLabel to region", () => {
+    it("applies aria-label to region", () => {
       render(
-        <Table columns={columns} data={data} ariaLabel="Users table" />
+        <Table columns={columns} data={data} aria-label="Users table" />
       );
 
       expect(screen.getByRole("region", { name: "Users table" })).toBeInTheDocument();
@@ -368,22 +368,22 @@ describe("Table", () => {
       expect(screen.queryByText("Alice")).not.toBeInTheDocument();
     });
 
-    it("respects shimmerRowCount", () => {
+    it("respects shimmerCount", () => {
       const { container: _container } = render(
-        <Table columns={columns} data={data} loading shimmerRowCount={5} />
+        <Table columns={columns} data={data} loading shimmerCount={5} />
       );
 
-      // shimmerRowCount=5 means 5 shimmer rows rendered + 1 default = 6
+      // shimmerCount=5 means 5 shimmer rows rendered + 1 default = 6
       const shimmerContainer = screen.getByRole("status");
       expect(shimmerContainer).toBeInTheDocument();
     });
 
-    it("renders correct number of shimmer rows for given shimmerRowCount", () => {
+    it("renders correct number of shimmer rows for given shimmerCount", () => {
       render(
-        <Table columns={columns} data={data} loading shimmerRowCount={3} />
+        <Table columns={columns} data={data} loading shimmerCount={3} />
       );
 
-      // TableShimmer renders 1 header row + shimmerRowCount data rows
+      // TableShimmer renders 1 header row + shimmerCount data rows
       const shimmerStatus = screen.getByRole("status");
       // The shimmer status container children: 1 header + 3 data = 4 child divs
       expect(shimmerStatus.children.length).toBe(4);
@@ -1785,7 +1785,7 @@ describe("Table – additional coverage", () => {
   describe("maxWidth / maxHeight / minHeight styles", () => {
     it("applies maxWidth as number to container style", () => {
       const { container } = render(
-        <Table columns={columns} data={data} maxWidth={800} ariaLabel="t" />,
+        <Table columns={columns} data={data} maxWidth={800} aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect((region as HTMLElement).style.maxWidth).toBe("800px");
@@ -1793,7 +1793,7 @@ describe("Table – additional coverage", () => {
 
     it("applies maxWidth as string to container style", () => {
       const { container } = render(
-        <Table columns={columns} data={data} maxWidth="50vw" ariaLabel="t" />,
+        <Table columns={columns} data={data} maxWidth="50vw" aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect((region as HTMLElement).style.maxWidth).toBe("50vw");
@@ -1801,7 +1801,7 @@ describe("Table – additional coverage", () => {
 
     it("applies maxHeight as number", () => {
       const { container } = render(
-        <Table columns={columns} data={data} maxHeight={400} ariaLabel="t" />,
+        <Table columns={columns} data={data} maxHeight={400} aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect((region as HTMLElement).style.maxHeight).toBe("400px");
@@ -1809,7 +1809,7 @@ describe("Table – additional coverage", () => {
 
     it("applies maxHeight as string", () => {
       const { container } = render(
-        <Table columns={columns} data={data} maxHeight="60vh" ariaLabel="t" />,
+        <Table columns={columns} data={data} maxHeight="60vh" aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect((region as HTMLElement).style.maxHeight).toBe("60vh");
@@ -1817,7 +1817,7 @@ describe("Table – additional coverage", () => {
 
     it("applies minHeight as number", () => {
       const { container } = render(
-        <Table columns={columns} data={data} minHeight={200} ariaLabel="t" />,
+        <Table columns={columns} data={data} minHeight={200} aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect((region as HTMLElement).style.minHeight).toBe("200px");
@@ -1825,7 +1825,7 @@ describe("Table – additional coverage", () => {
 
     it("applies minHeight as string", () => {
       const { container } = render(
-        <Table columns={columns} data={data} minHeight="20rem" ariaLabel="t" />,
+        <Table columns={columns} data={data} minHeight="20rem" aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect((region as HTMLElement).style.minHeight).toBe("20rem");
@@ -1835,7 +1835,7 @@ describe("Table – additional coverage", () => {
   describe("hideVerticalScrollbar / hideHorizontalScrollbar", () => {
     it("applies hideVerticalScrollbar class", () => {
       const { container } = render(
-        <Table columns={columns} data={data} hideVerticalScrollbar ariaLabel="t" />,
+        <Table columns={columns} data={data} hideVerticalScrollbar aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect(region).toBeInTheDocument();
@@ -1843,7 +1843,7 @@ describe("Table – additional coverage", () => {
 
     it("applies hideHorizontalScrollbar class", () => {
       const { container } = render(
-        <Table columns={columns} data={data} hideHorizontalScrollbar ariaLabel="t" />,
+        <Table columns={columns} data={data} hideHorizontalScrollbar aria-label="t" />,
       );
       const region = container.querySelector("[data-table-container]");
       expect(region).toBeInTheDocument();
@@ -1851,7 +1851,7 @@ describe("Table – additional coverage", () => {
 
     it("applies both scrollbar classes", () => {
       const { container } = render(
-        <Table columns={columns} data={data} hideVerticalScrollbar hideHorizontalScrollbar ariaLabel="t" />,
+        <Table columns={columns} data={data} hideVerticalScrollbar hideHorizontalScrollbar aria-label="t" />,
       );
       expect(container.querySelector("[data-table-container]")).toBeInTheDocument();
     });
@@ -1867,7 +1867,7 @@ describe("Table – additional coverage", () => {
           getRowId={(row) => (row as Person).id}
           selectionMode="multiple"
           onSelectedRowIdsChange={onSelectedRowIdsChange}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       expect(screen.getAllByRole("checkbox").length).toBeGreaterThan(0);
@@ -1881,7 +1881,7 @@ describe("Table – additional coverage", () => {
           columns={columns}
           data={data}
           resizable
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       expect(screen.getByRole("region")).toBeInTheDocument();
@@ -1895,7 +1895,7 @@ describe("Table – additional coverage", () => {
           data={data}
           resizable
           onColumnSizingChange={onColumnSizingChange}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       expect(screen.getByRole("region")).toBeInTheDocument();
@@ -1909,7 +1909,7 @@ describe("Table – additional coverage", () => {
           columns={columns}
           data={data}
           reorderable
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const handles = screen.getAllByRole("button", { name: /Reorder row/ });
@@ -1923,7 +1923,7 @@ describe("Table – additional coverage", () => {
           data={data}
           reorderable
           dragColumnPosition="end"
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       expect(screen.getAllByRole("button", { name: /Reorder row/ }).length).toBe(data.length);
@@ -1941,7 +1941,7 @@ describe("Table – additional coverage", () => {
             name: { options: [{ value: "Alice", label: "Alice" }] },
           }}
           onColumnFiltersChange={onColumnFiltersChange}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const filterBtn = screen.getByLabelText("Filter name");
@@ -1962,7 +1962,7 @@ describe("Table – additional coverage", () => {
           data={data}
           selectionMode="multiple"
           selectAllMode="page"
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       expect(screen.getAllByRole("checkbox").length).toBeGreaterThan(0);
@@ -1980,7 +1980,7 @@ describe("Table – additional coverage", () => {
           responsiveBreakpoint={9999}
           renderMobileCard={(row) => <div data-testid="mobile-card">{(row as Person).name}</div>}
           onContextMenu={onContextMenu}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const cards = screen.getAllByTestId("mobile-card");
@@ -1999,7 +1999,7 @@ describe("Table – additional coverage", () => {
           data={data}
           columnVisibility={{ age: false }}
           onColumnVisibilityChange={onColumnVisibilityChange}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       expect(screen.queryByText("Age")).not.toBeInTheDocument();
@@ -2019,7 +2019,7 @@ describe("Table – additional coverage", () => {
             name: { options: [{ value: "a", label: "A" }] },
           }}
           renderColumnFilter={renderColumnFilter}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const filterBtn = screen.getByLabelText("Filter name");
@@ -2037,7 +2037,7 @@ describe("Table – additional coverage", () => {
           data={data}
           showSearch
           onSearchClear={onSearchClear}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const searchInput = screen.getByLabelText("Search table");
@@ -2063,7 +2063,7 @@ describe("Table – additional coverage", () => {
               multi: false,
             },
           }}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       const filterBtn = screen.getByLabelText("Filter name");
@@ -2088,7 +2088,7 @@ describe("Table – additional coverage", () => {
           columns={groupedColumns}
           data={data}
           groupBy={["name"]}
-          ariaLabel="t"
+          aria-label="t"
         />,
       );
       expect(screen.getByRole("region")).toBeInTheDocument();

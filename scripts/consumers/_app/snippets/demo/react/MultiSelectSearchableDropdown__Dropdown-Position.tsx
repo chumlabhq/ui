@@ -27,7 +27,7 @@ export default function MultiSelectSearchableDropdownExample() {
               options={staticOptions}
               value={posBotValue}
               onValueChange={setPosBotValue}
-              dropdownPosition="bottom"
+              dropdownSide="bottom"
               placeholder="Opens below..."
               classes={
                 {
@@ -51,7 +51,7 @@ export default function MultiSelectSearchableDropdownExample() {
               options={staticOptions}
               value={posTopValue}
               onValueChange={setPosTopValue}
-              dropdownPosition="top"
+              dropdownSide="top"
               placeholder="Opens above..."
               classes={
                 {
@@ -77,8 +77,8 @@ export default function MultiSelectSearchableDropdownExample() {
               options={staticOptions}
               value={forceBotValue}
               onValueChange={setForceBotValue}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               placeholder="Always opens below..."
               classes={
                 {
@@ -102,8 +102,8 @@ export default function MultiSelectSearchableDropdownExample() {
               options={staticOptions}
               value={forceTopValue}
               onValueChange={setForceTopValue}
-              dropdownPosition="top"
-              forceDropdownPosition
+              dropdownSide="top"
+              forceDropdownSide
               placeholder="Always opens above..."
               classes={
                 {
@@ -129,8 +129,8 @@ export default function MultiSelectSearchableDropdownExample() {
               options={staticOptions}
               value={forceLockValue}
               onValueChange={setForceLockValue}
-              dropdownPosition="bottom"
-              forceDropdownPosition
+              dropdownSide="bottom"
+              forceDropdownSide
               lockScroll
               placeholder="Forced bottom + scroll locked"
               classes={

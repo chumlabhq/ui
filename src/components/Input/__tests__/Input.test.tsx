@@ -340,7 +340,7 @@ describe("Input", () => {
           aria-label="test"
           startIcon={<span>L</span>}
           onStartIconClick={onClick}
-          startIconLabel="Search"
+          startIconAriaLabel="Search"
         />
       );
       await user.click(screen.getByRole("button", { name: "Search" }));
@@ -356,7 +356,7 @@ describe("Input", () => {
           aria-label="test"
           endIcon={<span>T</span>}
           onEndIconClick={onClick}
-          endIconLabel="Clear"
+          endIconAriaLabel="Clear"
         />
       );
       await user.click(screen.getByRole("button", { name: "Clear" }));
@@ -375,7 +375,7 @@ describe("Input", () => {
           aria-label="test"
           startIcon={<span data-testid="icon">L</span>}
           onStartIconClick={() => {}}
-          startIconLabel="Search"
+          startIconAriaLabel="Search"
         />
       );
       const button = screen.getByRole("button");
@@ -434,7 +434,7 @@ describe("Input", () => {
           aria-label="test"
           startIcon={<span>L</span>}
           onStartIconClick={() => {}}
-          startIconLabel="Search"
+          startIconAriaLabel="Search"
         />
       );
       await user.tab();
@@ -448,7 +448,7 @@ describe("Input", () => {
           aria-label="test"
           endIcon={<span>T</span>}
           onEndIconClick={() => {}}
-          endIconLabel="Clear"
+          endIconAriaLabel="Clear"
         />
       );
       await user.tab();
@@ -464,7 +464,7 @@ describe("Input", () => {
           aria-label="test"
           startIcon={<span>L</span>}
           onStartIconClick={onClick}
-          startIconLabel="Search"
+          startIconAriaLabel="Search"
         />
       );
       await user.tab();
@@ -480,7 +480,7 @@ describe("Input", () => {
           aria-label="test"
           startIcon={<span>L</span>}
           onStartIconClick={onClick}
-          startIconLabel="Search"
+          startIconAriaLabel="Search"
         />
       );
       await user.tab();
@@ -496,7 +496,7 @@ describe("Input", () => {
           aria-label="test"
           endIcon={<span>T</span>}
           onEndIconClick={onClick}
-          endIconLabel="Clear"
+          endIconAriaLabel="Clear"
         />
       );
       await user.tab();
@@ -536,10 +536,10 @@ describe("Input", () => {
           aria-label="test"
           startIcon={<span>S</span>}
           onStartIconClick={() => {}}
-          startIconLabel="Search"
+          startIconAriaLabel="Search"
           endIcon={<span>X</span>}
           onEndIconClick={() => {}}
-          endIconLabel="Clear input"
+          endIconAriaLabel="Clear input"
         />
       );
       expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument();
@@ -708,7 +708,7 @@ describe("Input", () => {
           disabled
           startIcon={<span>S</span>}
           onStartIconClick={() => {}}
-          startIconLabel="Search"
+          startIconAriaLabel="Search"
         />
       );
       const button = screen.getByRole("button", { name: "Search" });
@@ -722,7 +722,7 @@ describe("Input", () => {
           loading
           endIcon={<span>X</span>}
           onEndIconClick={() => {}}
-          endIconLabel="Clear"
+          endIconAriaLabel="Clear"
         />
       );
       const button = screen.getByRole("button", { name: "Clear" });

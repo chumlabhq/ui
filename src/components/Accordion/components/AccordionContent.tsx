@@ -10,7 +10,7 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
   (
     {
       children,
-      forceMount = false,
+      keepMounted = "visited",
       animationDuration: propAnimationDuration,
       animationEasing: propAnimationEasing,
       onOpenStart,
@@ -20,7 +20,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       className,
       asChild = false,
       lazyLoad = false,
-      unmountOnClose = false,
       ...rest
     },
     ref,
@@ -168,9 +167,9 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
     const combinedRef = mergeRefs(ref, contentNodeRef);
 
     const shouldRender = (() => {
-      if (forceMount) return true;
+      if (keepMounted === true) return true;
       if (item.isExpanded) return true;
-      if (unmountOnClose) return false;
+      if (keepMounted === false) return false;
       if (lazyLoad && !hasBeenOpened) return false;
       if (isClosing) return true;
       return hasBeenOpened;

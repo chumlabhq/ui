@@ -26,7 +26,7 @@ export default function MultiSelectSearchableDropdownExample() {
           onValueChange={(values) => setPortalValue(values)}
           portalContainer={portalEl}
           placeholder="Custom portal target..."
-          maxDisplayedChips={2}
+          maxVisible={2}
           classes={
             {
               root: "",

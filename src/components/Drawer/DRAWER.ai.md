@@ -55,7 +55,7 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `direction` | `"left"`, `"right"` (default), `"top"`, `"bottom"` |
+| `side` | `"left"` (default), `"right"`, `"top"`, `"bottom"` |
 | `snapPoints` | Array of percentages (0-1). Requires `swipeable={true}`. |
 | `trapFocus` | Defaults `true` when `modal={true}`. |
 | `keepMounted` | Keeps DOM alive when closed. Uses `inert` to hide. |
@@ -73,12 +73,12 @@ export default function Example() {
 | `onOpenChange` | object | — | (open: boolean) => void — Callback when the drawer's open state changes. |
 | `zIndex` | number | `9999` | Z-index of the drawer overlay and panel. |
 | `children` | object | — | React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter). |
-| `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | Direction from which the drawer slides in. |
+| `side` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | The edge the drawer slides in from. |
 | `size` | string | `"300px"` | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
 | `overlayColor` | string | `"black"` | Background color of the overlay. |
 | `overlayOpacity` | number | `0.32` | How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so overlayBlur is not diluted. |
 | `overlayBlur` | number | `0` | Backdrop blur in pixels for the overlay. |
-| `duration` | number | `300` | Animation duration in milliseconds. |
+| `animationDuration` | number | `300` | Open and close animation length, in milliseconds. |
 | `lockScroll` | boolean | `true` | Locks body scroll when the drawer is open. |
 | `closeOnOverlayClick` | boolean | `true` | Closes the drawer when the overlay is clicked. |
 | `closeOnEscape` | boolean | `true` | Enables closing via the Escape key. |
@@ -140,5 +140,5 @@ export default function Example() {
 |------|----------|
 | `Drawer.tsx` | Main component with portal, focus trap, swipe |
 | `components/` | DrawerHeader, DrawerBody, DrawerFooter, DrawerCloseButton |
-| `utils/types.ts` | DrawerProps, DrawerClasses, DrawerDirection |
+| `utils/types.ts` | DrawerProps, DrawerClasses, DrawerSide |
 | `utils/constants.ts` | DEFAULT + UNSTYLED classes |

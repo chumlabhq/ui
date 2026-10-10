@@ -94,9 +94,9 @@ export default function PaginationExample() {
             }
           }
           showRowsPerPage
-          prevIcon={ArrowLeftIcon}
-          nextIcon={ArrowRightIcon}
-          dropdownIcon={CaretDownIcon}
+          prevIcon={<ArrowLeftIcon className="w-5 h-5 text-cl-accent" />}
+          nextIcon={<ArrowRightIcon className="w-5 h-5 text-cl-accent" />}
+          dropdownIcon={<CaretDownIcon className="w-4 h-4" />}
           classes={
             {
                             ...({

@@ -7,8 +7,6 @@ import {
   useRef,
   useEffect,
   useMemo,
-  isValidElement,
-  type ComponentType,
   type ReactNode,
   type KeyboardEvent,
   type FocusEvent,
@@ -16,7 +14,6 @@ import {
 import type {
   StepperProps,
   StepStatus,
-  IconProps,
   StepTooltipConfig,
   StepperTooltipDefaults,
   StepperClasses,
@@ -39,40 +36,6 @@ import {
 import { structuralOnly, motionSafeClasses } from "../../utils/classLayers.js";
 
 const EMPTY_TOOLTIP_DEFAULTS: StepperTooltipDefaults = {};
-
-const REACT_MEMO_TYPE = Symbol.for("react.memo");
-const REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
-
-// Type guard isolates the unsafe assertion to a single, named, documented
-// place. React's exotic component types (memo, forwardRef) carry $$typeof
-// at runtime but aren't structurally assignable to ComponentType from
-// ReactNode — so the guard does the runtime check, and the cast is the
-// minimum needed once the check has narrowed the value.
-function isExoticIconComponent(
-  value: unknown,
-): value is ComponentType<IconProps> {
-  if (typeof value !== "object" || value === null) return false;
-  if (!("$$typeof" in value)) return false;
-  const sym = (value as { $$typeof: symbol }).$$typeof;
-  return sym === REACT_MEMO_TYPE || sym === REACT_FORWARD_REF_TYPE;
-}
-
-const renderIcon = (
-  icon: ComponentType<IconProps> | ReactNode | undefined,
-  className: string,
-): ReactNode => {
-  if (!icon) return null;
-  if (typeof icon === "function") {
-    const IconComp = icon as ComponentType<IconProps>;
-    return <IconComp className={className} />;
-  }
-  if (isValidElement(icon)) return icon;
-  if (isExoticIconComponent(icon)) {
-    const IconComp = icon;
-    return <IconComp className={className} />;
-  }
-  return null;
-};
 
 const defaultGetStepStatus = (
   _stepId: string | number,
@@ -113,8 +76,8 @@ interface StepItemInternalProps {
   showLabels: boolean;
   showDescriptions: boolean;
   showConnectors: boolean;
-  completedIcon?: ComponentType<IconProps> | ReactNode;
-  errorIcon?: ComponentType<IconProps> | ReactNode;
+  completedIcon?: ReactNode;
+  errorIcon?: ReactNode;
   onStepClick: (stepId: string | number) => void;
   onStepKeyDown: (e: KeyboardEvent<HTMLElement>, index: number) => void;
   setStepRef: (index: number, el: HTMLElement | null) => void;
@@ -179,17 +142,17 @@ const StepItem = memo(function StepItem({
   const getIndicatorContent = (): ReactNode => {
     if (status === "completed") {
       const icon = step.completedIcon || completedIcon;
-      if (icon) return renderIcon(icon, iconClassName);
+      if (icon) return icon;
       if (variant === "dot") return <DotIcon className={iconClassName} />;
       return <CheckIcon className={iconClassName} />;
     }
     if (status === "error") {
       const icon = step.errorIcon || errorIcon;
-      if (icon) return renderIcon(icon, iconClassName);
+      if (icon) return icon;
       return <ErrorIcon className={iconClassName} />;
     }
     if (variant === "icon" && step.icon) {
-      return renderIcon(step.icon, iconClassName);
+      return step.icon;
     }
     if (variant === "dot") {
       return <DotIcon className={iconClassName} />;

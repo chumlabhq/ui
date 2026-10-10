@@ -27,15 +27,15 @@
           },
           "icon": {
             "type": "object",
-            "description": "React.ComponentType | React.ReactNode — Custom icon for the step."
+            "description": "ReactNode — Replaces the number in the indicator while the step is pending or active. Rendered as given."
           },
           "completedIcon": {
             "type": "object",
-            "description": "React.ComponentType | React.ReactNode — Icon shown when step is completed."
+            "description": "ReactNode — Replaces the default check once the step is complete. Rendered as given."
           },
           "errorIcon": {
             "type": "object",
-            "description": "React.ComponentType | React.ReactNode — Icon shown when step has an error."
+            "description": "ReactNode — Replaces the indicator's content when the step reports an error. Rendered as given."
           },
           "disabled": {
             "type": "boolean",
@@ -140,13 +140,13 @@
     },
     "completedIcon": {
       "type": "object",
-      "description": "React.ComponentType | React.ReactNode — Default icon for completed steps.",
-      "x-tsType": "ReactNode | ComponentType<IconProps>"
+      "description": "ReactNode — Replaces every step's completed check. Rendered as given; a step's own `completedIcon` wins.",
+      "x-tsType": "ReactNode"
     },
     "errorIcon": {
       "type": "object",
-      "description": "React.ComponentType | React.ReactNode — Default icon for error steps.",
-      "x-tsType": "ReactNode | ComponentType<IconProps>"
+      "description": "ReactNode — Replaces every step's error mark. Rendered as given; a step's own `errorIcon` wins.",
+      "x-tsType": "ReactNode"
     },
     "fullWidth": {
       "type": "boolean",

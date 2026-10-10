@@ -20,7 +20,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
   (
     {
       children,
-      max,
+      maxVisible,
       size = DEFAULT_SIZE,
       shape,
       bordered,
@@ -48,8 +48,8 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
     const effectiveShape = shape ?? DEFAULT_SHAPE;
 
     const effectiveMax =
-      max != null && Number.isFinite(max) && max > 0
-        ? Math.floor(max)
+      maxVisible != null && Number.isFinite(maxVisible) && maxVisible > 0
+        ? Math.floor(maxVisible)
         : undefined;
 
     const { visibleChildren, remainingChildren, remainingCount, totalCount } =

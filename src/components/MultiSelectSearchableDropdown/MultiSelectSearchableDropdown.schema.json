@@ -121,13 +121,13 @@
       "description": "Placeholder text for the search input.",
       "default": "Search..."
     },
-    "noResultsContent": {
+    "emptyContent": {
       "type": "object",
       "description": "React.ReactNode - Content shown when no options match the search.",
       "default": "No options found",
       "x-tsType": "ReactNode"
     },
-    "loadingText": {
+    "loadingContent": {
       "type": "object",
       "description": "React.ReactNode - Text shown during async loading.",
       "default": "Loading...",
@@ -162,7 +162,7 @@
       "description": "(query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`.",
       "x-tsType": "(query: string) => Promise<MultiSelectOption[]>"
     },
-    "searchDebounceMs": {
+    "searchDebounce": {
       "type": "number",
       "description": "Debounce delay in milliseconds for the search callback.",
       "default": 300
@@ -198,7 +198,7 @@
       "description": "(error: unknown) => void - Called when async loading or search fails.",
       "x-tsType": "((error: unknown) => void) | undefined"
     },
-    "maxDisplayedChips": {
+    "maxVisible": {
       "type": "number",
       "description": "Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that.",
       "default": 3
@@ -324,7 +324,7 @@
       "description": "HTMLElement | null - Portal target for the dropdown popup.",
       "x-tsType": "HTMLElement | null | undefined"
     },
-    "dropdownPosition": {
+    "dropdownSide": {
       "type": "string",
       "enum": [
         "top",
@@ -333,7 +333,7 @@
       "description": "Vertical placement of the dropdown relative to the trigger.",
       "default": "bottom"
     },
-    "forceDropdownPosition": {
+    "forceDropdownSide": {
       "type": "boolean",
       "description": "Locks the dropdown to the specified position without auto-flipping.",
       "default": false
@@ -343,7 +343,7 @@
       "description": "Z-index of the dropdown popup.",
       "default": 50
     },
-    "dropdownGap": {
+    "dropdownOffset": {
       "type": "number",
       "description": "Gap in pixels between trigger and dropdown popup.",
       "default": 4
@@ -377,10 +377,10 @@
       "description": "(event: React.KeyboardEvent) => void - Fires on keydown events.",
       "x-tsType": "((event: KeyboardEvent<Element>) => void) | undefined"
     },
-    "ClearIcon": {
+    "clearIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string }> - Custom clear icon component.",
-      "x-tsType": "ComponentType<{ className?: string | undefined; }> | undefined"
+      "description": "ReactNode — Replaces the clear button's glyph. Rendered as given.",
+      "x-tsType": "ReactNode"
     },
     "renderTrigger": {
       "type": "object",

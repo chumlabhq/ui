@@ -1125,7 +1125,7 @@ describe("ClockFace", () => {
     });
 
     it("uses custom button text", () => {
-      render(<ClockFace {...defaultProps} cancelText="Abort" okText="Apply" />);
+      render(<ClockFace {...defaultProps} cancelText="Abort" confirmText="Apply" />);
       expect(screen.getByText("Abort")).toBeInTheDocument();
       expect(screen.getByText("Apply")).toBeInTheDocument();
     });

@@ -25,7 +25,7 @@ export default function MultiSelectSearchableDropdownExample() {
         value={labelValue}
         onValueChange={(values) => setLabelValue(values)}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
             root: "",

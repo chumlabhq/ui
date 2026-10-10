@@ -42,7 +42,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       showZeroCount = false,
       alwaysShowLabels = true,
       showTooltips = true,
-      tooltipPosition = "bottom",
+      tooltipSide = "bottom",
       tooltipOffset = 4,
       disabled = false,
       reduceMotion = "auto",
@@ -53,7 +53,6 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       classes: classesProp,
       className,
       style,
-      forceMount = false,
       keepMounted = false,
     },
     ref,
@@ -328,7 +327,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
                   <Tooltip
                     key={tab.id}
                     content={tab.tooltip}
-                    side={tooltipPosition}
+                    side={tooltipSide}
                     sideOffset={tooltipOffset}
                     disabled={isActive}
                   >
@@ -346,9 +345,9 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
             const hasBeenActivated = activatedTabs.has(tab.id);
 
             const shouldRenderContent =
-              forceMount ||
+              keepMounted === true ||
               isActive ||
-              (keepMounted && hasBeenActivated);
+              (keepMounted === "visited" && hasBeenActivated);
 
             return (
               <div

@@ -98,7 +98,7 @@ const TimeOption = memo(function TimeOption({
  * - Use `<TimePicker />` for any time selection need
  * - Minimum: `value` + `onValueChange` for controlled, or no props for uncontrolled
  * - Use `mode="clock"` for an analog clock face; default is the dropdown list
- * - Use `forceDropdownPosition` to lock dropdown direction without auto-flipping
+ * - Use `forceDropdownSide` to lock dropdown direction without auto-flipping
  *
  * Behavior:
  * - Dropdown: filterable list with keyboard navigation (Arrow, Enter, Escape)
@@ -145,10 +145,10 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       defaultOpen = false,
       onOpenChange,
       lockScroll = false,
-      dropdownPosition = "bottom",
-      forceDropdownPosition = false,
+      dropdownSide = "bottom",
+      forceDropdownSide = false,
       dropdownZIndex: dropdownZIndexProp,
-      dropdownGap = 4,
+      dropdownOffset = 4,
       keepMounted = false,
       portalContainer,
       classes: classesProp,
@@ -159,7 +159,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       onCancel,
       onConfirm,
       cancelText,
-      okText,
+      confirmText,
         ...restProps
     },
     ref,
@@ -506,7 +506,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       triggerElRef,
       dropdownContentRef,
       isOpen,
-      { side: dropdownPosition, gap: dropdownGap, forceSide: forceDropdownPosition },
+      { side: dropdownSide, gap: dropdownOffset, forceSide: forceDropdownSide },
     );
 
     const shouldRenderDropdown = mode === "dropdown"
@@ -518,9 +518,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         ref={dropdownContentRef}
         trigger={triggerElRef}
         isOpen={isOpen}
-        side={dropdownPosition}
-        forceSide={forceDropdownPosition}
-        gap={dropdownGap}
+        side={dropdownSide}
+        forceSide={forceDropdownSide}
+        gap={dropdownOffset}
         zIndex={dropdownZIndex}
         portalContainer={portalContainer}
         // Clock mode remounts on every open to reset its selection mode,
@@ -530,7 +530,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         {...(mode === "dropdown"
           ? {
               className: mergedClasses.content,
-              "data-position": dropdownCoords?.side ?? dropdownPosition,
+              "data-position": dropdownCoords?.side ?? dropdownSide,
             }
           : {
               id: clockPopupId,
@@ -590,7 +590,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             minTime={minTime}
             maxTime={maxTime}
             cancelText={cancelText}
-            okText={okText}
+            confirmText={confirmText}
           />
         ) : null}
       </MenuSurface>

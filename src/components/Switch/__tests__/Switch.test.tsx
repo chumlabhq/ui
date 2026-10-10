@@ -372,8 +372,8 @@ describe("Switch Component", () => {
   });
 
   describe("Custom Transition Styles", () => {
-    it("applies transitionDuration when provided", () => {
-      render(<Switch transitionDuration={500} aria-label="Toggle" />);
+    it("applies animationDuration when provided", () => {
+      render(<Switch animationDuration={500} aria-label="Toggle" />);
       const switchEl = screen.getByRole("switch");
       expect(switchEl.style.transitionDuration).toBe("500ms");
     });

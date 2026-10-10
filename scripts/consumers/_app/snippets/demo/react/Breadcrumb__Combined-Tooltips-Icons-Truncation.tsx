@@ -69,11 +69,11 @@ export default function BreadcrumbExample() {
             tooltip: "Currently viewing",
             tooltipProps: { side: "bottom" },
             icon: <DocumentIcon className="w-4 h-4" />,
-            iconPosition: "right"
+            iconPosition: "end"
           }
         ]
       }
-      maxVisibleItems={3}
+      maxVisible={3}
       showTooltips
       ellipsisTooltip="Show 3 hidden items"
       defaultTooltipProps={{ delayDuration: 150 }}

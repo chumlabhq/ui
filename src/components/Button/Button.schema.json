@@ -52,7 +52,7 @@
       "description": "Shows a loading spinner and disables interaction.",
       "default": false
     },
-    "loadingText": {
+    "loadingContent": {
       "type": "object",
       "description": "React.ReactNode — Text displayed alongside the loading spinner.",
       "x-tsType": "ReactNode"

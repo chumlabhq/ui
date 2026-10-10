@@ -58,7 +58,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `clearable` | Shows the clear button in the trigger when a value is set. Defaults to `true`. |
 | `open` + `onOpenChange` | Controlled open state -- both are needed together. |
 | `outsideDaysSelectable` | Only works when `showOutsideDays` is `true` (default). |
-| `dropdownPosition` | Set to `"top"` or `"bottom"`. Use `forceDropdownPosition` to prevent auto-flipping. |
+| `dropdownSide` | Set to `"top"` or `"bottom"`. Use `forceDropdownSide` to prevent auto-flipping. |
 
 ---
 
@@ -97,8 +97,8 @@ These props have dependencies -- using them wrong causes silent bugs:
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `selectionMode` | `"single"` \| `"range"` \| `"multiple"` | `"single"` | Selection mode: single date, date range, or multiple dates. |
-| `value` | — | — | Controlled selected value. Type depends on mode: Date \| null (single), DateRange \| null (range), Date[] \| null (multiple). |
-| `onValueChange` | object | — | Callback when the selected value changes. Signature depends on mode. |
+| `value` | — | — | Controlled selected value. Type depends on `selectionMode`: Date \| null (single), DateRange \| null (range), Date[] \| null (multiple). |
+| `onValueChange` | object | — | Callback when the selected value changes. Signature depends on `selectionMode`. |
 | `onClear` | object | — | () => void — Called when the clear button is clicked. |
 | `onMonthChange` | object | — | (month: Date) => void — Called when the displayed month changes. |
 | `open` | boolean | — | Controlled open state of the calendar popup. |
@@ -152,9 +152,9 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `portalContainer` | object | — | HTMLElement \| null — Portal container for the calendar popup. |
 | `lockScroll` | boolean | `false` | Locks body scroll when the calendar is open. |
 | `dropdownZIndex` | number | `50` | Z-index of the calendar popup. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the calendar popup. |
-| `forceDropdownPosition` | boolean | `false` | Locks the calendar to the specified dropdownPosition without auto-flipping. |
-| `dropdownGap` | number | `4` | Gap in pixels between trigger and calendar popup. |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the calendar popup. |
+| `forceDropdownSide` | boolean | `false` | Locks the calendar to the specified dropdownSide without auto-flipping. |
+| `dropdownOffset` | number | `4` | Gap in pixels between trigger and calendar popup. |
 | `keepMounted` | boolean | `false` | Keep the calendar DOM mounted when closed. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 
@@ -411,7 +411,7 @@ import { fr } from "date-fns/locale";
 | Wrong `onValueChange` type | Selection mode mismatch | Ensure `value` and `onValueChange` types match the `selectionMode` |
 | Presets not showing | `showPresets` not set | Add `showPresets` to the component |
 | Outside days not clickable | `outsideDaysSelectable` set to `false` | Set `outsideDaysSelectable={true}` |
-| Calendar flips position unexpectedly | Auto-flip behavior | Set `forceDropdownPosition={true}` |
+| Calendar flips position unexpectedly | Auto-flip behavior | Set `forceDropdownSide={true}` |
 | Markers not visible | `showMarkerIndicator` is `false` | Set `showMarkerIndicator={true}` (it defaults to `true`) |
 | Clear button missing | `clearable={false}` or no value | Ensure `clearable` is `true` and a value is selected |
 | Styles wrong after overriding one slot | `classes` replaces, not merges | Include all needed classes in your override string |
@@ -458,7 +458,7 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Event callbacks | `title="Event Callbacks"` | `onValueChange`, `onMonthChange`, `onOpenChange`, `onClear` |
 | Classes system | `title="Classes System"` | Per-slot class customization |
 | Scroll behavior | `title="Scroll Behavior"` | `lockScroll` prop |
-| Dropdown position | `title="Dropdown Position"` | `dropdownPosition`, `forceDropdownPosition` |
+| Dropdown position | `title="Dropdown Position"` | `dropdownSide`, `forceDropdownSide` |
 | Custom icons | `title="Custom Icons"` | Icon override props |
 | Reduce motion | `title="Reduce Motion"` | `reduceMotion` prop |
 

@@ -180,12 +180,11 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Prop | Type | Description |
 | --- | --- | --- |
 | `children` | `ReactNode` | Content rendered inside this element. |
-| `forceMount` | `boolean \| undefined` | Keeps the panel mounted while collapsed, so an exit animation or a measurement has a node to read. |
+| `keepMounted` | `boolean \| "visited" \| undefined` | When the panel's children are in the DOM. `"visited"` (default): from the first expand onward. `true`: always, even before the first expand, so an exit animation or a measurement has a node to read. `false`: only while expanded — they unmount each time it collapses. |
 | `animationDuration` | `number \| undefined` | Expand and collapse duration in milliseconds. |
 | `animationEasing` | `string \| undefined` | CSS easing function for the expand and collapse transition. |
 | `asChild` | `boolean \| undefined` | Render the passed child instead of the default element, keeping behaviour, ARIA and props. |
 | `lazyLoad` | `boolean \| undefined` | Delays rendering the panel's children until it is first expanded. |
-| `unmountOnClose` | `boolean \| undefined` | Unmounts the panel's children again each time it collapses. |
 | `onOpenStart` | `(() => void) \| undefined` | Fires when the expand transition begins. |
 | `onOpenEnd` | `(() => void) \| undefined` | Fires when the expand transition finishes. |
 | `onCloseStart` | `(() => void) \| undefined` | Fires when the collapse transition begins. |
@@ -443,6 +442,15 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 </Accordion>
 ```
 
+### Keeping content mounted
+
+`AccordionContent`'s `keepMounted` takes three values: `"visited"` (default) mounts the panel's children on the first expand and keeps them, `true` mounts them from the start (an exit animation or a measurement has a node to read), and `false` unmounts them each time the panel collapses.
+
+```tsx
+<AccordionContent keepMounted>{/* in the DOM before the first expand */}</AccordionContent>
+<AccordionContent keepMounted={false}>{/* gone whenever collapsed */}</AccordionContent>
+```
+
 ### Persist to localStorage
 
 ```tsx
@@ -604,7 +612,7 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Imperative API | `title="Imperative Ref API"` | `expandAll`, `collapseAll`, `toggle`, `focusItem` |
 | Animation config | `title="Animation Customization"` | Custom duration, easing, lifecycle callbacks |
 | Accessibility | `title="Screen Reader Announcements"` | `announceExpanded`, `headingLevel` |
-| Content rendering | `title="Lazy Loading & Unmount on Close"` | `lazyLoad`, `forceMount`, `unmountOnClose` |
+| Content rendering | `title="Lazy Loading & Unmount on Close"`, `title="Keep Mounted Content"` | `lazyLoad`, `keepMounted` |
 | Loading skeleton | `title="Shimmer Options"` | `AccordionShimmer` component |
 
 **Source files:**

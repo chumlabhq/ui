@@ -58,7 +58,7 @@ interface ThumbProps {
   orientation: "horizontal" | "vertical";
   inverted: boolean;
   isDragging: boolean;
-  transitionDuration: number;
+  animationDuration: number;
   classes: Required<SliderClasses>;
   showTooltip: boolean;
   tooltipAlways: boolean;
@@ -81,7 +81,7 @@ function Thumb({
   orientation,
   inverted,
   isDragging,
-  transitionDuration,
+  animationDuration,
   classes,
   showTooltip,
   tooltipAlways,
@@ -101,9 +101,9 @@ function Thumb({
   const thumbSize = 20;
 
   const positionTransition =
-    isDragging || transitionDuration <= 0
+    isDragging || animationDuration <= 0
       ? "none"
-      : `left ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`;
+      : `left ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`;
 
   const thumbStyle: CSSProperties = isHorizontal
     ? {
@@ -222,7 +222,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       renderThumb,
       renderMark,
       markDotSize = 6,
-      transitionDuration = 200,
+      animationDuration = 200,
       id,
       name,
       label,
@@ -480,9 +480,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             ? { right: `${rangeStart}%`, left: `${100 - rangeEnd}%` }
             : { left: `${rangeStart}%`, right: `${100 - rangeEnd}%` }),
           transition:
-            isDragging || transitionDuration <= 0
+            isDragging || animationDuration <= 0
               ? "none"
-              : `left ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1), right ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
+              : `left ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1), right ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
         }
       : {
           position: "absolute",
@@ -492,9 +492,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             ? { top: `${rangeStart}%`, bottom: `${100 - rangeEnd}%` }
             : { bottom: `${rangeStart}%`, top: `${100 - rangeEnd}%` }),
           transition:
-            isDragging || transitionDuration <= 0
+            isDragging || animationDuration <= 0
               ? "none"
-              : `top ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
+              : `top ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
         };
 
     // Reserve space: thumb overhang, mark labels below, always-visible tooltips above
@@ -679,7 +679,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 orientation={orientation}
                 inverted={inverted}
                 isDragging={isDragging && activeThumb === 0}
-                transitionDuration={transitionDuration}
+                animationDuration={animationDuration}
                 classes={mc}
                 showTooltip={showTooltip}
                 tooltipAlways={tooltipAlways}
@@ -702,7 +702,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 orientation={orientation}
                 inverted={inverted}
                 isDragging={isDragging && activeThumb === 1}
-                transitionDuration={transitionDuration}
+                animationDuration={animationDuration}
                 classes={mc}
                 showTooltip={showTooltip}
                 tooltipAlways={tooltipAlways}
@@ -727,7 +727,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               orientation={orientation}
               inverted={inverted}
               isDragging={isDragging && activeThumb === 0}
-              transitionDuration={transitionDuration}
+              animationDuration={animationDuration}
               classes={mc}
               showTooltip={showTooltip}
               tooltipAlways={tooltipAlways}

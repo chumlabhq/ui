@@ -24,7 +24,7 @@ export default function MultiSelectSearchableDropdownExample() {
         onValueChange={(values) => setFullWidthValue(values)}
         fullWidth
         placeholder="Full width dropdown..."
-        maxDisplayedChips={3}
+        maxVisible={3}
         classes={
           {
             root: "",

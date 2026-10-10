@@ -79,13 +79,14 @@ export interface SearchableDropdownBaseProps {
   searchPlaceholder?: string;
   /** Custom aria-label for the search input. Defaults to "Search options". */
   searchInputAriaLabel?: string;
-  noResultsContent?: ReactNode;
+  emptyContent?: ReactNode;
   showChevron?: boolean;
   showSelectedIcon?: boolean;
+  /** Replaces the selected option's check mark. Rendered as given; `classes.itemIndicator` styles the default one. */
   selectedIcon?: ReactNode;
   fullWidth?: boolean;
   loading?: boolean;
-  searchDebounceMs?: number;
+  searchDebounce?: number;
   onLoadError?: (error: unknown) => void;
   shimmerCount?: number;
   classes?: SearchableDropdownClasses;
@@ -93,11 +94,11 @@ export interface SearchableDropdownBaseProps {
   style?: CSSProperties;
   keepMounted?: boolean;
   portalContainer?: HTMLElement | null;
-  dropdownPosition?: "top" | "bottom";
-  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
-  forceDropdownPosition?: boolean;
+  dropdownSide?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownSide without auto-flipping. */
+  forceDropdownSide?: boolean;
   dropdownZIndex?: number;
-  dropdownGap?: number;
+  dropdownOffset?: number;
   typeaheadTimeout?: number;
   unstyled?: boolean;
   lockScroll?: boolean;
@@ -111,11 +112,13 @@ export interface SearchableDropdownBaseProps {
     triggerProps: SearchableDropdownTriggerRenderProps,
     state: SearchableDropdownTriggerState,
   ) => ReactNode;
-  ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
-  CheckIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
-  ClearIcon?: React.ComponentType<{ className?: string }>;
-  SearchIcon?: React.ComponentType<{ className?: string }>;
-  loadingText?: ReactNode;
+  /** Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open. */
+  chevronIcon?: ReactNode;
+  /** Replaces the clear button's glyph. Rendered as given. */
+  clearIcon?: ReactNode;
+  /** Replaces the search field's magnifier. Rendered as given; `classes.searchIcon` styles the default one. */
+  searchIcon?: ReactNode;
+  loadingContent?: ReactNode;
 }
 
 /**

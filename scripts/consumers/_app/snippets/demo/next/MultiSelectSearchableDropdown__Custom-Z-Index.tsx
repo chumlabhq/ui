@@ -24,7 +24,7 @@ export default function MultiSelectSearchableDropdownExample() {
         onValueChange={(values) => setZIndexValue(values)}
         dropdownZIndex={9999}
         placeholder="z-index: 9999..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
             root: "",

@@ -220,8 +220,13 @@ export interface AccordionContentProps
   extends HTMLAttributes<HTMLDivElement>, AnimationCallbacks {
   /** Content rendered inside this element. */
   children: ReactNode;
-  /** Keeps the panel mounted while collapsed, so an exit animation or a measurement has a node to read. */
-  forceMount?: boolean;
+  /**
+   * When the panel's children are in the DOM. `"visited"` (default): from the
+   * first expand onward. `true`: always, even before the first expand, so an
+   * exit animation or a measurement has a node to read. `false`: only while
+   * expanded — they unmount each time it collapses.
+   */
+  keepMounted?: boolean | "visited";
   /** Expand and collapse duration in milliseconds. */
   animationDuration?: number;
   /** CSS easing function for the expand and collapse transition. */
@@ -230,8 +235,6 @@ export interface AccordionContentProps
   asChild?: boolean;
   /** Delays rendering the panel's children until it is first expanded. */
   lazyLoad?: boolean;
-  /** Unmounts the panel's children again each time it collapses. */
-  unmountOnClose?: boolean;
 }
 
 export interface AccordionDispatchValue {

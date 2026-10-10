@@ -23,7 +23,7 @@ export default function MultiSelectDropdownExample() {
         value={darkThemeValue}
         onValueChange={(values) => setDarkThemeValue(values)}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
                         ...({

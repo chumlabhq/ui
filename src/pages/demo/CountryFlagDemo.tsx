@@ -297,7 +297,7 @@ const CountryFlagDemo = () => {
               max=3 with surplus count
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <CountryFlagGroup size={48} max={3} classes={c.flagGroup}>
+              <CountryFlagGroup size={48} maxVisible={3} classes={c.flagGroup}>
                 <CountryFlag code="us" className="rounded-[3px]" />
                 <CountryFlag code="gb" className="rounded-[3px]" />
                 <CountryFlag code="jp" className="rounded-[3px]" />
@@ -313,7 +313,7 @@ const CountryFlagDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="block">
               <CountryFlagGroup
                 size={48}
-                max={2}
+                maxVisible={2}
                 showCountTooltip
                 classes={c.flagGroup}
               >
@@ -358,7 +358,7 @@ const CountryFlagDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="block">
               <CountryFlagGroup
                 size={48}
-                max={2}
+                maxVisible={2}
                 classes={c.flagGroup}
                 renderSurplus={(count) => (
                   <span

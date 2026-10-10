@@ -27,7 +27,7 @@ export default function MultiSelectSearchableDropdownExample() {
         error
         errorMessage="Please select at least one option"
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
                         ...({

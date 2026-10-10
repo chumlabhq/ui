@@ -200,7 +200,7 @@ export default function TableExample() {
           onSortingChange={handleServerSortingChange}
           manualSorting
           loading={serverLoading}
-          shimmerRowCount={5}
+          shimmerCount={5}
           getRowId={(row) => row.id}
           classes={s}
         />

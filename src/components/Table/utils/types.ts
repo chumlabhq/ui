@@ -1,4 +1,4 @@
-import type { ReactNode, ComponentType, CSSProperties } from "react";
+import type { ReactNode, CSSProperties } from "react";
 import type {
   ColumnDef,
   Table as TanstackTable,
@@ -164,7 +164,8 @@ export interface TableProps<TData> {
   /** Fires with whether the pointer is over the header row. */
   onHeaderHoverChange?: (isOverHeader: boolean) => void;
   emptyContent?: ReactNode;
-  ariaLabel?: string;
+  /** The grid's accessible name; pinned parts append " - Pinned columns" and so on. Default: `"Data table"`. */
+  "aria-label"?: string;
   /** Accessible caption for the table, rendered as a visually hidden <caption> element. */
   caption?: string;
   getRowId?: (row: TData) => string;
@@ -190,9 +191,11 @@ export interface TableProps<TData> {
   unstyled?: boolean;
   /** Inline styles applied to the root container. */
   style?: CSSProperties;
-  PinIcon?: ComponentType<IconProps>;
-  PinnedIcon?: ComponentType<IconProps>;
-  shimmerRowCount?: number;
+  /** Replaces the pin button's glyph. Rendered as given; also used for pinned columns unless `pinnedIcon` is set. */
+  pinIcon?: ReactNode;
+  /** Replaces the pin button's glyph on a pinned column. Rendered as given. */
+  pinnedIcon?: ReactNode;
+  shimmerCount?: number;
   className?: string;
   children?: ReactNode;
 
@@ -227,8 +230,8 @@ export interface TableProps<TData> {
   filterable?: boolean;
   /** Columns that should show a filter icon in the header. Maps column ID to filter options. */
   filterableColumns?: Record<string, { options: { label: string; value: string }[]; multi?: boolean }>;
-  /** Custom filter icon component. Receives `active` boolean when the column has active filters. */
-  FilterIcon?: ComponentType<{ active: boolean; className?: string }>;
+  /** Draws the column filter button's icon. `active` is true while the column has a filter applied. */
+  renderFilterIcon?: (state: { active: boolean; className: string }) => ReactNode;
   /** Render custom filter dropdown content for a column. Receives column ID, current values, and setter. */
   renderColumnFilter?: (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode;
 
@@ -240,8 +243,8 @@ export interface TableProps<TData> {
   onExpandedRowIdsChange?: (expandedRowIds: string[]) => void;
   /** Render function for expanded row content. */
   renderExpandedRow?: (row: TData) => ReactNode;
-  /** Custom expand icon component. Receives `expanded` boolean. */
-  ExpandIcon?: ComponentType<{ expanded: boolean; className?: string }>;
+  /** Draws the row expand button's icon, which can change with `expanded` (a plus that becomes a minus). */
+  renderExpandIcon?: (state: { expanded: boolean; className: string }) => ReactNode;
   /** Which end of the row the expand column sits at. `start` is the first column. Defaults to `"start"`. */
   expandColumnPosition?: "start" | "end";
   /** Make the entire row clickable to toggle expansion instead of just the icon. */
@@ -339,14 +342,14 @@ export interface TableProps<TData> {
   /** Which end of the search field the icon sits at, or `"none"`. Defaults to `"start"`. */
   searchIconPosition?: "start" | "end" | "none";
 
-  /** Custom checkbox component for multi-row selection. */
-  CheckboxIcon?: ComponentType<{ checked: boolean; indeterminate?: boolean; className?: string }>;
+  /** Draws the multi-row selection checkboxes in place of the native box. */
+  renderCheckboxIcon?: (state: { checked: boolean; indeterminate: boolean; className?: string }) => ReactNode;
   /** Simple color customization for the default checkbox. */
   checkboxColor?: string;
-  /** Custom drag handle icon component. */
-  DragHandleIcon?: ComponentType<IconProps>;
-  /** Custom search icon component. */
-  SearchIcon?: ComponentType<IconProps>;
+  /** Replaces the drag handle's glyph. Rendered as given. */
+  dragHandleIcon?: ReactNode;
+  /** Replaces the search field's magnifier. Rendered inside a box carrying `classes.searchIcon`, which positions it in the field. */
+  searchIcon?: ReactNode;
   /** Callback when the search clear button is clicked. */
   onSearchClear?: () => void;
 

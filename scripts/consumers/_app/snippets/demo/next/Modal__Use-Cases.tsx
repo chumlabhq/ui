@@ -42,7 +42,7 @@ export default function ModalExample() {
         open={confirmDeleteOpen}
         onOpenChange={setConfirmDeleteOpen}
         showHeader={false}
-        preventOutsideClick
+        closeOnOverlayClick={false}
         closeOnEscape={false}
         classes={{ body: "p-6" }}
       >

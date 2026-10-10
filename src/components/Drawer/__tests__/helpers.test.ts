@@ -1,10 +1,10 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 import {
-  getDirectionStyles,
+  getSideStyles,
   getClosingDelta,
   getTransformString,
-  isHorizontalDirection,
+  isHorizontalSide,
   getTouchAction,
   pushDrawer,
   popDrawer,
@@ -12,13 +12,13 @@ import {
   usePrefersReducedMotion,
 } from "../utils/helpers.js";
 
-describe("getDirectionStyles", () => {
+describe("getSideStyles", () => {
   const size = "400px";
   const fraction = 1; // fully open → closedPercent = 0
   const duration = 300;
 
   it("returns correct styles for 'left' direction", () => {
-    const styles = getDirectionStyles("left", size, fraction, duration);
+    const styles = getSideStyles("left", size, fraction, duration);
     expect(styles.top).toBe(0);
     expect(styles.left).toBe(0);
     expect(styles.height).toBe("100vh");
@@ -28,7 +28,7 @@ describe("getDirectionStyles", () => {
   });
 
   it("returns correct styles for 'right' direction", () => {
-    const styles = getDirectionStyles("right", size, fraction, duration);
+    const styles = getSideStyles("right", size, fraction, duration);
     expect(styles.top).toBe(0);
     expect(styles.right).toBe(0);
     expect(styles.height).toBe("100vh");
@@ -37,7 +37,7 @@ describe("getDirectionStyles", () => {
   });
 
   it("returns correct styles for 'top' direction", () => {
-    const styles = getDirectionStyles("top", size, fraction, duration);
+    const styles = getSideStyles("top", size, fraction, duration);
     expect(styles.top).toBe(0);
     expect(styles.left).toBe(0);
     expect(styles.width).toBe("100vw");
@@ -46,7 +46,7 @@ describe("getDirectionStyles", () => {
   });
 
   it("returns correct styles for 'bottom' direction", () => {
-    const styles = getDirectionStyles("bottom", size, fraction, duration);
+    const styles = getSideStyles("bottom", size, fraction, duration);
     expect(styles.bottom).toBe(0);
     expect(styles.left).toBe(0);
     expect(styles.width).toBe("100vw");
@@ -56,11 +56,11 @@ describe("getDirectionStyles", () => {
 
   it("reflects fraction in the transform value", () => {
     // fraction = 0 → closedPercent = 100 (fully closed)
-    const closedStyles = getDirectionStyles("right", size, 0, duration);
+    const closedStyles = getSideStyles("right", size, 0, duration);
     expect(String(closedStyles.transform)).toContain("100%");
 
     // fraction = 1 → closedPercent = 0 (fully open)
-    const openStyles = getDirectionStyles("right", size, 1, duration);
+    const openStyles = getSideStyles("right", size, 1, duration);
     expect(String(openStyles.transform)).toContain("0%");
   });
 });
@@ -105,21 +105,21 @@ describe("getTransformString", () => {
   });
 });
 
-describe("isHorizontalDirection", () => {
+describe("isHorizontalSide", () => {
   it("returns true for 'left'", () => {
-    expect(isHorizontalDirection("left")).toBe(true);
+    expect(isHorizontalSide("left")).toBe(true);
   });
 
   it("returns true for 'right'", () => {
-    expect(isHorizontalDirection("right")).toBe(true);
+    expect(isHorizontalSide("right")).toBe(true);
   });
 
   it("returns false for 'top'", () => {
-    expect(isHorizontalDirection("top")).toBe(false);
+    expect(isHorizontalSide("top")).toBe(false);
   });
 
   it("returns false for 'bottom'", () => {
-    expect(isHorizontalDirection("bottom")).toBe(false);
+    expect(isHorizontalSide("bottom")).toBe(false);
   });
 });
 

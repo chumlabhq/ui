@@ -31,7 +31,7 @@ export default function MultiSelectSearchableDropdownExample() {
             ])
           }
           placeholder="Press keys while open..."
-          maxDisplayedChips={2}
+          maxVisible={2}
           classes={
             {
               root: "",

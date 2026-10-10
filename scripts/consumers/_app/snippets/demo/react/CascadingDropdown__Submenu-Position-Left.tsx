@@ -46,7 +46,7 @@ export default function CascadingDropdownExample() {
         value={leftPositionValue}
         onValueChange={(val) => setLeftPositionValue(val)}
         placeholder="Select category..."
-        submenuPosition="left"
+        submenuSide="left"
         classes={
           {
                          ...({

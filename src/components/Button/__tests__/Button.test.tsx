@@ -90,9 +90,9 @@ describe("Button", () => {
       expect(button).toHaveAttribute("data-loading", "true");
     });
 
-    it("displays loadingText when provided", () => {
+    it("displays loadingContent when provided", () => {
       render(
-        <Button loading loadingText="Please wait...">
+        <Button loading loadingContent="Please wait...">
           Submit
         </Button>
       );

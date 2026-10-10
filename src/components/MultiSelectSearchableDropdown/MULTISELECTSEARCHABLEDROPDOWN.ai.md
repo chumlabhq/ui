@@ -58,12 +58,12 @@ export default function Example() {
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
 | `searchOptions` | Async search function. Replaces local filtering when provided. |
 | `loadInitialOptions` | Requires `loadInitialOnOpen={true}` to trigger on open. |
-| `searchDebounceMs` | Only applies to `searchOptions`. Default: `300`. |
+| `searchDebounce` | Only applies to `searchOptions`. Default: `300`. |
 | `showSearch` | Default `true`. Set `false` to hide search input. |
-| `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
+| `forceDropdownSide` | Only meaningful with `dropdownSide`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `showSelectedChips` | Default `true`. Set `false` for count-only display. |
-| `maxDisplayedChips` | Truncates chips with "+N more" badge. |
+| `maxVisible` | Truncates chips with "+N more" badge. |
 | `name` | Renders hidden inputs for form submission. |
 | `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOptions`, `placeholder`), which never reaches the DOM. |
 
@@ -107,20 +107,20 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `required` | boolean | `false` | Marks the field as required. |
 | `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
 | `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search input. |
-| `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options match the search. |
-| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
+| `emptyContent` | object | `"No options found"` | React.ReactNode - Content shown when no options match the search. |
+| `loadingContent` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `clearable` | boolean | `false` | Shows a clear button to deselect all values. |
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading state. |
 | `searchOptions` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
-| `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
+| `searchDebounce` | number | `300` | Debounce delay in milliseconds for the search callback. |
 | `initialOptions` | array | `[]` | Options to display before any search is performed. Async branch only (`searchOptions`). |
 | `loadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
 | `loadInitialOnOpen` | boolean | `false` | When true, calls loadInitialOptions each time the dropdown opens. Requires `loadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
-| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
+| `maxVisible` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
 | `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -132,17 +132,17 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `defaultOpen` | boolean | `false` | Whether the dropdown is initially open (uncontrolled). |
 | `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
-| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownSide` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
 | `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
-| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `dropdownOffset` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
-| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
+| `clearIcon` | object | — | ReactNode — Replaces the clear button's glyph. Rendered as given. |
 | `renderTrigger` | object | — | (triggerProps: MultiSelectSearchableDropdownTriggerRenderProps, state: MultiSelectSearchableDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder). |
 | `searchInputAriaLabel` | string | `"Search options"` | Accessible label for the search input. |
 
@@ -225,7 +225,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
     const res = await fetch(`/api/search?q=${query}`);
     return res.json();
   }}
-  searchDebounceMs={300}
+  searchDebounce={300}
   placeholder="Search..."
 />
 ```
@@ -245,8 +245,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 ```tsx
 <MultiSelectSearchableDropdown
   options={options}
-  dropdownPosition="top"
-  forceDropdownPosition
+  dropdownSide="top"
+  forceDropdownSide
   lockScroll
 />
 ```
@@ -289,7 +289,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
-| Dropdown opens in wrong direction | Auto-flip | Use `forceDropdownPosition` |
+| Dropdown opens in wrong direction | Auto-flip | Use `forceDropdownSide` |
 | Search not working | Using `options` prop with `searchOptions` | `searchOptions` replaces local filtering |
 | Async results not appearing | `searchOptions` not returning array | Must return `Promise<MultiSelectOption[]>` |
 | Options don't load on open | Missing `loadInitialOnOpen` | Add alongside `loadInitialOptions` |
@@ -330,7 +330,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ## Selected-chip strip
 
-The strip **wraps**; it does not clip. `maxDisplayedChips` (default 3) caps how
+The strip **wraps**; it does not clip. `maxVisible` (default 3) caps how
 many chips render and the rest collapse into a count, so the strip cannot
 overflow its trigger and there is nothing for a clip to protect against.
 

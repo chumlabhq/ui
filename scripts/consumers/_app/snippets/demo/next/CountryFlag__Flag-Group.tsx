@@ -20,7 +20,7 @@ export default function CountryFlagExample() {
       </CountryFlagGroup>
       <CountryFlagGroup
         size={48}
-        max={3}
+        maxVisible={3}
         classes={
           {
             root: "flex items-center -space-x-1.5",
@@ -37,7 +37,7 @@ export default function CountryFlagExample() {
       </CountryFlagGroup>
       <CountryFlagGroup
         size={48}
-        max={2}
+        maxVisible={2}
         showCountTooltip
         classes={
           {
@@ -72,7 +72,7 @@ export default function CountryFlagExample() {
       </div>
       <CountryFlagGroup
         size={48}
-        max={2}
+        maxVisible={2}
         classes={
           {
             root: "flex items-center -space-x-1.5",

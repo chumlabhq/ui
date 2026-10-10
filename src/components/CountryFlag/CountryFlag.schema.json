@@ -158,7 +158,7 @@
           "type": "ReactNode",
           "description": "Content rendered inside this element."
         },
-        "max": {
+        "maxVisible": {
           "type": "number | undefined",
           "description": "How many flags to show before the rest are collapsed into a surplus count."
         },

@@ -58,10 +58,10 @@ export default function Example() {
 | `open` requires `onOpenChange` | Controlled open state — both needed together. |
 | `loadOptions` | Requires `loadOnOpen={true}` to trigger. Returns `Promise<MultiSelectOption[]>`. |
 | `loadOnOpen` | Only works when `loadOptions` is provided. |
-| `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
+| `forceDropdownSide` | Only meaningful with `dropdownSide`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while open. Default: `false`. |
 | `showSelectedChips` | Default `true`. Set `false` to show count-only display. |
-| `maxDisplayedChips` | Truncates chips with "+N more" badge. |
+| `maxVisible` | Truncates chips with "+N more" badge. |
 | `clearable` | Shows clear button when values are selected. |
 | `name` | Renders hidden `<input>` elements for native form submission. |
 | `renderTrigger` | `renderTrigger(triggerProps, state)` replaces the default `<button>`. Spread `triggerProps` onto a `<button>`: it is exactly what the default trigger renders, ref and `type="button"` included. Draw from `state` (`isOpen`, `selectedOptions`, `placeholder`), which never reaches the DOM. |
@@ -109,7 +109,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `success` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
-| `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
+| `emptyContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
 | `clearable` | boolean | `false` | Shows a clear button to deselect all values. |
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
@@ -118,7 +118,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `loadOnOpen` | boolean | `false` | When true, calls loadOptions each time the dropdown opens. Requires `loadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
-| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
+| `maxVisible` | number | `3` | Maximum number of selected chips displayed before showing a count. The chip strip WRAPS and does not clip: with this cap the strip cannot overflow, so clipping it bought nothing and cost hit area — a 24px remove target inside a 20px clipped row is only 24x20 to a pointer. Decided 2026-09-11; the two components diverged silently before that. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
 | `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
@@ -131,18 +131,18 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
 | `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
 | `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
-| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
-| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownSide` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
 | `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
-| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `dropdownOffset` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
-| `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
-| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
-| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
+| `chevronIcon` | object | — | ReactNode — Replaces the trigger's chevron. Rendered inside a box carrying `classes.icon`, which turns it over while the menu is open. |
+| `loadingContent` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
+| `clearIcon` | object | — | ReactNode — Replaces the clear button's glyph. Rendered as given. |
 | `renderTrigger` | object | — | (triggerProps: MultiSelectDropdownTriggerRenderProps, state: MultiSelectDropdownTriggerState) => ReactNode - Custom render function for the trigger element. Spread triggerProps onto a <button>; draw from state (isOpen, selectedOptions, placeholder). |
 
 ## Styling Guide
@@ -245,8 +245,8 @@ const [values, setValues] = useState<string[]>([]);
 ```tsx
 <MultiSelectDropdown
   options={options}
-  dropdownPosition="top"
-  forceDropdownPosition
+  dropdownSide="top"
+  forceDropdownSide
   lockScroll
 />
 ```
@@ -288,7 +288,7 @@ const [values, setValues] = useState<string[]>([]);
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string for each slot |
-| Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownPosition` |
+| Dropdown opens in wrong direction | Auto-flip chose different position | Use `forceDropdownSide` |
 | Options don't load on open | Missing `loadOnOpen` prop | Add `loadOnOpen` alongside `loadOptions` |
 | Controlled value not updating | Missing `onValueChange` | Pair `value` with `onValueChange` |
 | Chips not showing | `showSelectedChips={false}` | Set to `true` (default) |
@@ -311,7 +311,7 @@ const [values, setValues] = useState<string[]>([]);
 | Count-only | `title="Without Chips (Count Only)"` |
 | Style variants | `title="Style Variants"` |
 | Position control | `title="Dropdown Position"` |
-| Force position | `forceDropdownPosition` |
+| Force position | `forceDropdownSide` |
 | Scroll lock | `title="Scroll Lock"` |
 | Form integration | `title="Form Integration (onBlur / onFocus)"` |
 | Custom themes | `title="Dark Theme"`, `title="Blue Theme"` |
@@ -335,7 +335,7 @@ const [values, setValues] = useState<string[]>([]);
 
 ## Selected-chip strip
 
-The strip **wraps**; it does not clip. `maxDisplayedChips` (default 3) caps how
+The strip **wraps**; it does not clip. `maxVisible` (default 3) caps how
 many chips render and the rest collapse into a count, so the strip cannot
 overflow its trigger and there is nothing for a clip to protect against.
 

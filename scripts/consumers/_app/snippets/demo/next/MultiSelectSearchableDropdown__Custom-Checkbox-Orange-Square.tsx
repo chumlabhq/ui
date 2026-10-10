@@ -23,7 +23,7 @@ export default function MultiSelectSearchableDropdownExample() {
         value={orangeCheckboxValue}
         onValueChange={(values) => setOrangeCheckboxValue(values)}
         placeholder="Select fruits..."
-        maxDisplayedChips={2}
+        maxVisible={2}
         classes={
           {
                         ...({

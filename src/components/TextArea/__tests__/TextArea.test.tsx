@@ -305,7 +305,7 @@ describe("TextArea", () => {
     it("calls onStartIconClick when start icon clicked", async () => {
       const user = userEvent.setup();
       const onClick = vi.fn();
-      render(<TextArea aria-label="test" startIcon={<span>S</span>} onStartIconClick={onClick} startIconLabel="Format" />);
+      render(<TextArea aria-label="test" startIcon={<span>S</span>} onStartIconClick={onClick} startIconAriaLabel="Format" />);
       await user.click(screen.getByRole("button", { name: "Format" }));
       expect(onClick).toHaveBeenCalledTimes(1);
       expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
@@ -314,7 +314,7 @@ describe("TextArea", () => {
     it("calls onEndIconClick when end icon clicked", async () => {
       const user = userEvent.setup();
       const onClick = vi.fn();
-      render(<TextArea aria-label="test" endIcon={<span>E</span>} onEndIconClick={onClick} endIconLabel="Send" />);
+      render(<TextArea aria-label="test" endIcon={<span>E</span>} onEndIconClick={onClick} endIconAriaLabel="Send" />);
       await user.click(screen.getByRole("button", { name: "Send" }));
       expect(onClick).toHaveBeenCalledTimes(1);
       expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
@@ -395,10 +395,10 @@ describe("TextArea", () => {
           aria-label="test"
           startIcon={<span>S</span>}
           onStartIconClick={() => {}}
-          startIconLabel="Format"
+          startIconAriaLabel="Format"
           endIcon={<span>E</span>}
           onEndIconClick={() => {}}
-          endIconLabel="Send"
+          endIconAriaLabel="Send"
         />
       );
       expect(screen.getByRole("button", { name: "Format" })).toBeInTheDocument();
@@ -561,12 +561,12 @@ describe("TextArea", () => {
 
   describe("Disabled Icon Buttons", () => {
     it("disables icon button when textarea is disabled", () => {
-      render(<TextArea label="Msg" disabled startIcon={<span>S</span>} onStartIconClick={() => {}} startIconLabel="Format" />);
+      render(<TextArea label="Msg" disabled startIcon={<span>S</span>} onStartIconClick={() => {}} startIconAriaLabel="Format" />);
       expect(screen.getByRole("button", { name: "Format" })).toBeDisabled();
     });
 
     it("disables icon button when textarea is loading", () => {
-      render(<TextArea label="Msg" loading endIcon={<span>E</span>} onEndIconClick={() => {}} endIconLabel="Send" />);
+      render(<TextArea label="Msg" loading endIcon={<span>E</span>} onEndIconClick={() => {}} endIconAriaLabel="Send" />);
       expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
     });
   });

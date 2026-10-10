@@ -41,7 +41,7 @@ export default function BreadcrumbExample() {
             { id: "breadcrumb", label: "Breadcrumb" }
           ]
         }
-        maxVisibleItems={3}
+        maxVisible={3}
         classes={
           {
                           ...({

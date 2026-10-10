@@ -963,7 +963,7 @@ const TimePickerDemo = () => {
       {/* ─── 24. Clock i18n (Custom Button Text) ─────────────────────────── */}
       <Section
         title="Clock i18n (Custom Button Text)"
-        description="Override Cancel/OK button text for localization using cancelText and okText props."
+        description="Override Cancel/OK button text for localization using cancelText and confirmText props."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
@@ -973,7 +973,7 @@ const TimePickerDemo = () => {
               onValueChange={(v) => setClockI18n(v)}
               mode="clock"
               cancelText="Abbrechen"
-              okText="Fertig"
+              confirmText="Fertig"
               classes={c.timepicker}
             />
             <span className={`text-sm ${c.text}`}>
@@ -1028,64 +1028,64 @@ const TimePickerDemo = () => {
       >
         <div className="space-y-4">
           <div>
-            <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;bottom&quot; (default, auto-flips)</DemoLabel>
+            <DemoLabel isDarkMode={dark}>dropdownSide=&quot;bottom&quot; (default, auto-flips)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
                 value={dropdownTopVal}
                 onValueChange={(v) => setDropdownTopVal(v)}
-                dropdownPosition="bottom"
+                dropdownSide="bottom"
                 placeholder="Opens below..."
                 classes={c.timepicker}
               />
             </DemoWrapper>
           </div>
           <div>
-            <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;top&quot; (auto-flips)</DemoLabel>
+            <DemoLabel isDarkMode={dark}>dropdownSide=&quot;top&quot; (auto-flips)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
-                dropdownPosition="top"
+                dropdownSide="top"
                 placeholder="Opens above..."
                 classes={c.timepicker}
               />
             </DemoWrapper>
           </div>
           <div>
-            <DemoLabel isDarkMode={dark}>forceDropdownPosition (forced bottom, no auto-flip)</DemoLabel>
+            <DemoLabel isDarkMode={dark}>forceDropdownSide (forced bottom, no auto-flip)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
                 value={forceBotVal}
                 onValueChange={(v) => setForceBotVal(v)}
-                dropdownPosition="bottom"
-                forceDropdownPosition
+                dropdownSide="bottom"
+                forceDropdownSide
                 placeholder="Always opens below..."
                 classes={c.timepicker}
               />
             </DemoWrapper>
           </div>
           <div>
-            <DemoLabel isDarkMode={dark}>forceDropdownPosition (forced top, no auto-flip)</DemoLabel>
+            <DemoLabel isDarkMode={dark}>forceDropdownSide (forced top, no auto-flip)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
                 value={forceTopVal}
                 onValueChange={(v) => setForceTopVal(v)}
-                dropdownPosition="top"
-                forceDropdownPosition
+                dropdownSide="top"
+                forceDropdownSide
                 placeholder="Always opens above..."
                 classes={c.timepicker}
               />
             </DemoWrapper>
           </div>
           <p className={`text-xs ${c.text}`}>
-            When <code className="font-mono">forceDropdownPosition</code> is true, the dropdown will always open in the specified direction regardless of available viewport space.
+            When <code className="font-mono">forceDropdownSide</code> is true, the dropdown will always open in the specified direction regardless of available viewport space.
           </p>
           <div>
-            <DemoLabel isDarkMode={dark}>forceDropdownPosition + lockScroll</DemoLabel>
+            <DemoLabel isDarkMode={dark}>forceDropdownSide + lockScroll</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
                 value={forceLockVal}
                 onValueChange={(v) => setForceLockVal(v)}
-                dropdownPosition="bottom"
-                forceDropdownPosition
+                dropdownSide="bottom"
+                forceDropdownSide
                 lockScroll
                 placeholder="Forced bottom + scroll locked"
                 classes={c.timepicker}
@@ -1093,7 +1093,7 @@ const TimePickerDemo = () => {
             </DemoWrapper>
           </div>
           <p className={`text-xs ${c.text}`}>
-            Combining <code className="font-mono">forceDropdownPosition</code> with <code className="font-mono">lockScroll</code> prevents the page from scrolling while the dropdown is open, ensuring the menu stays anchored in place.
+            Combining <code className="font-mono">forceDropdownSide</code> with <code className="font-mono">lockScroll</code> prevents the page from scrolling while the dropdown is open, ensuring the menu stays anchored in place.
           </p>
         </div>
       </Section>
@@ -1135,7 +1135,7 @@ const TimePickerDemo = () => {
       {/* ─── 27. Custom Dropdown Gap ────────────────────────────────────── */}
       <Section
         title="Custom Dropdown Gap"
-        description="Control the gap between the trigger and dropdown with the dropdownGap prop (in pixels). Default is 4px."
+        description="Control the gap between the trigger and dropdown with the dropdownOffset prop (in pixels). Default is 4px."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col" className="overflow-visible">
@@ -1144,7 +1144,7 @@ const TimePickerDemo = () => {
               <DemoLabel isDarkMode={dark}>No gap (0px)</DemoLabel>
               <TimePicker
                 defaultValue={null}
-                dropdownGap={0}
+                dropdownOffset={0}
                 placeholder="No gap..."
                 classes={c.timepicker}
               />
@@ -1154,7 +1154,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={gapLargeVal}
                 onValueChange={(v) => setGapLargeVal(v)}
-                dropdownGap={16}
+                dropdownOffset={16}
                 placeholder="Large gap..."
                 classes={c.timepicker}
               />
@@ -1450,7 +1450,7 @@ const TimePickerDemo = () => {
           "Provide a label or aria-label for accessibility.",
           "Use format='12h' for consumer-facing UIs and '24h' for technical/admin UIs.",
           "Use defaultValue for simple uncontrolled forms that don't need external state.",
-          "Use cancelText/okText for i18n instead of wrapping the component.",
+          "Use cancelText/confirmText for i18n instead of wrapping the component.",
           "Pass clearable={false} on time fields that must keep a value; the clear button is on by default.",
           "Use portalContainer to render the dropdown inside a specific container (e.g. a modal).",
         ]}

@@ -22,7 +22,7 @@ export default function SearchableDropdownExample() {
         <SearchableDropdown
           options={[]}
           placeholder="Custom empty..."
-          noResultsContent={
+          emptyContent={
             <span className="flex flex-col items-center gap-1 py-2">
               <span className="text-lg text-cl-text-tertiary">🔍</span>
               <span className="text-sm text-cl-text-secondary">Nothing here yet</span>

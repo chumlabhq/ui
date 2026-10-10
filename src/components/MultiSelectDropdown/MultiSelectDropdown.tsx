@@ -117,7 +117,7 @@ const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
  *
  * Behavior:
  * - Portal-rendered popup (never clipped by overflow ancestors)
- * - Auto-flips position when insufficient viewport space (disable with `forceDropdownPosition`)
+ * - Auto-flips position when insufficient viewport space (disable with `forceDropdownSide`)
  * - Full keyboard navigation with arrow keys, Enter/Space to toggle
  * - Chips display with optional count-only mode
  *
@@ -146,7 +146,7 @@ const MultiSelectDropdown = forwardRef<
       success = false,
       successMessage,
       required = false,
-      noResultsContent = "No options found",
+      emptyContent = "No options found",
       clearable = false,
       showChevron = true,
       fullWidth = false,
@@ -155,8 +155,8 @@ const MultiSelectDropdown = forwardRef<
       loadOnOpen = false,
       onLoadError,
       shimmerCount = 5,
-      loadingText = "Loading...",
-      maxDisplayedChips = 3,
+      loadingContent = "Loading...",
+      maxVisible = 3,
       showSelectedChips = true,
       checkboxIcon,
       unstyled = false,
@@ -171,15 +171,15 @@ const MultiSelectDropdown = forwardRef<
       onBlur,
       onFocus,
       onKeyDown: onKeyDownProp,
-      ChevronIcon: ChevronIconProp = ChevronDownIcon,
-      ClearIcon: ClearIconProp = ClearIconDefault,
+      chevronIcon,
+      clearIcon,
       renderTrigger,
       keepMounted = false,
       portalContainer,
-      dropdownPosition = "bottom",
-      forceDropdownPosition = false,
+      dropdownSide = "bottom",
+      forceDropdownSide = false,
       dropdownZIndex: dropdownZIndexProp,
-      dropdownGap = 4,
+      dropdownOffset = 4,
       typeaheadTimeout = 500,
     },
     ref,
@@ -273,7 +273,7 @@ const MultiSelectDropdown = forwardRef<
     const loading = externalLoading || isLoadingOptions;
 
     const statusMessage = loading
-      ? loadingText
+      ? loadingContent
       : isOpen
         ? `${displayOptions.length} option${displayOptions.length === 1 ? "" : "s"} available`
         : selectedOptions.length > 0
@@ -410,8 +410,8 @@ const MultiSelectDropdown = forwardRef<
     };
     const hasRootStyle = Object.keys(rootStyle).length > 0;
 
-    const displayedChips = selectedOptions.slice(0, maxDisplayedChips);
-    const remainingCount = selectedOptions.length - maxDisplayedChips;
+    const displayedChips = selectedOptions.slice(0, maxVisible);
+    const remainingCount = selectedOptions.length - maxVisible;
 
     // One object for both triggers. The custom one was handed its own copy of
     // this list in three components, and the copies drifted: `type="button"`
@@ -519,10 +519,19 @@ const MultiSelectDropdown = forwardRef<
                 )}
               </span>
               {showChevron && (
-                <ChevronIconProp
-                  className={cn(mergedClasses.icon) || undefined}
-                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-                />
+                chevronIcon ? (
+                  <span
+                    className={mergedClasses.icon || undefined}
+                    style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                  >
+                    {chevronIcon}
+                  </span>
+                ) : (
+                  <ChevronDownIcon
+                    className={cn(mergedClasses.icon) || undefined}
+                    style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                  />
+                )
               )}
             </button>
           )}
@@ -538,7 +547,7 @@ const MultiSelectDropdown = forwardRef<
                 triggerNode?.focus({ preventScroll: true });
               }}
             >
-              <ClearIconProp className="w-4 h-4" />
+              {clearIcon ?? <ClearIconDefault className="w-4 h-4" />}
             </button>
           )}
 
@@ -546,10 +555,10 @@ const MultiSelectDropdown = forwardRef<
             triggerElement={triggerNode}
             isOpen={isOpen}
             keepMounted={keepMounted}
-            position={dropdownPosition}
-            forcePosition={forceDropdownPosition}
+            position={dropdownSide}
+            forcePosition={forceDropdownSide}
             zIndex={dropdownZIndex}
-            gap={dropdownGap}
+            gap={dropdownOffset}
             portalContainer={portalContainer}
             classes={mergedClasses}
             listboxId={listboxId}
@@ -568,7 +577,7 @@ const MultiSelectDropdown = forwardRef<
                 />
               ) : displayOptions.length === 0 ? (
                 <div role="status" className={mergedClasses.empty || undefined}>
-                  {noResultsContent}
+                  {emptyContent}
                 </div>
               ) : null
             }

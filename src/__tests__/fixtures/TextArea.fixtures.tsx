@@ -21,10 +21,10 @@ const fixtures: Fixtures<typeof TextArea> = [
     props: {
       label: "Bio",
       startIcon: <span>S</span>,
-      startIconLabel: "Format",
+      startIconAriaLabel: "Format",
       onStartIconClick: () => {},
       endIcon: <span>E</span>,
-      endIconLabel: "Expand",
+      endIconAriaLabel: "Expand",
       onEndIconClick: () => {},
     },
     note: "Icons only become buttons with a click handler, so the keyboard-activation tests need this pair.",

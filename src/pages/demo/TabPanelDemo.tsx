@@ -461,7 +461,7 @@ const TabPanelDemo = () => {
       {/* ─── 4. With Icons (Left) ────────────────────────────────────────── */}
       <Section
         title="With Icons (Left)"
-        description="Tabs with leading icon components using iconPosition='left' (default)."
+        description="Tabs with leading icon components using iconPosition='start' (default)."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -510,7 +510,7 @@ const TabPanelDemo = () => {
       {/* ─── 5. With Icons (Right) ───────────────────────────────────────── */}
       <Section
         title="With Icons (Right)"
-        description="Tabs with trailing icon components using iconPosition='right'."
+        description="Tabs with trailing icon components using iconPosition='end'."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -620,7 +620,7 @@ const TabPanelDemo = () => {
             value={tooltipTab}
             onValueChange={setTooltipTab}
             showTooltips={true}
-            tooltipPosition="bottom"
+            tooltipSide="bottom"
             tooltipOffset={4}
             classes={c.tabs.icon}
           >
@@ -644,7 +644,7 @@ const TabPanelDemo = () => {
             value={tooltipTopTab}
             onValueChange={setTooltipTopTab}
             showTooltips={true}
-            tooltipPosition="top"
+            tooltipSide="top"
             tooltipOffset={4}
             classes={c.tabs.icon}
           >
@@ -1158,15 +1158,15 @@ const TabPanelDemo = () => {
 
       {/* ─── 27. Force Mount (All Panels) ────────────────────────────────── */}
       <Section
-        title="Force Mount (All Panels)"
-        description="With forceMount, every tab panel is rendered into the DOM regardless of whether it is active. Useful when panels contain forms or other stateful content that must persist across tab switches."
+        title="Keep Mounted (All Panels)"
+        description="With keepMounted, every tab panel is rendered into the DOM regardless of whether it is active. Useful when panels contain forms or other stateful content that must persist across tab switches."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <TabPanel
             tabs={basicTabs}
             defaultValue="home"
-            forceMount
+            keepMounted
             classes={c.tabs.underline}
           >
             {(tab: Tab) => (
@@ -1182,15 +1182,15 @@ const TabPanelDemo = () => {
 
       {/* ─── 28. Keep Mounted (Lazy Persist) ─────────────────────────────── */}
       <Section
-        title="Keep Mounted (Lazy Persist)"
-        description="With keepMounted, a tab panel stays in the DOM once it has been activated at least once. Panels that have never been visited are not rendered, saving initial mount cost while preserving state after the first visit."
+        title="Keep Mounted Once Visited"
+        description="With keepMounted set to &quot;visited&quot;, a tab panel stays in the DOM once it has been activated at least once. Panels that have never been visited are not rendered, saving initial mount cost while preserving state after the first visit."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <TabPanel
             tabs={basicTabs}
             defaultValue="home"
-            keepMounted
+            keepMounted="visited"
             classes={c.tabs.pill}
           >
             {(tab: Tab) => (

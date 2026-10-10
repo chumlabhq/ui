@@ -41,7 +41,7 @@ export default function DrawerExample() {
       <Drawer
         open={classesDemo.open}
         onOpenChange={classesDemo.onOpenChange}
-        direction="right"
+        side="right"
         size="360px"
         classes={
           {

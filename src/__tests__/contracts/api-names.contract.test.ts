@@ -6,7 +6,11 @@
  * named for nothing it controls, loaders spelled as events. A2b renamed the
  * prefixed booleans (`enable…`, `disable…`, `is…`), the props that called a
  * mode or a layout a `variant` or a `type`, and the `left`/`right` position
- * values, which are now `start`/`end`. Nothing is
+ * values, which are now `start`/`end`. A2c unified concept names (one word for
+ * the visible-items cap, the edge a popup opens on, its offset, keeping
+ * content mounted) and turned the PascalCase icon props into camelCase
+ * ReactNode props, or `render…Icon` functions where the glyph itself changes
+ * with state. Nothing is
  * published, so there are no aliases and no deprecations — the old name is
  * simply gone. A name that comes back anywhere, in a type, a demo, a snippet a
  * consumer copies or the docs the codegen product reads, is a second API for
@@ -117,6 +121,43 @@ const TOMBSTONES: Tombstone[] = [
   { old: "mode", now: "selectionMode", components: ["DatePicker"], scope: "narrow" },
   { old: "DatePickerMode", now: "DatePickerSelectionMode", components: ["DatePicker"], scope: "word" },
   { old: "dotSize", now: "size", components: ["DotLoader"], scope: "word" },
+
+  // A2c
+  { old: "noResultsContent", now: "emptyContent", components: DROPDOWNS, scope: "word" },
+  { old: "maxDisplayedChips", now: "maxVisible", components: ["MultiSelectDropdown", "MultiSelectSearchableDropdown"], scope: "word" },
+  { old: "maxVisibleItems", now: "maxVisible", components: ["Breadcrumb"], scope: "word" },
+  { old: "max", now: "maxVisible", components: ["AvatarGroup", "CountryFlagGroup"], scope: "narrow" },
+  { old: "searchDebounceMs", now: "searchDebounce", components: ["SearchableDropdown", "MultiSelectSearchableDropdown", "CascadingDropdown"], scope: "word" },
+  { old: "duration", now: "animationDuration", components: ["Drawer"], scope: "narrow" },
+  { old: "transitionDuration", now: "animationDuration", components: ["Slider", "Switch"], scope: "component" },
+  { old: "speed", now: "animationDuration", components: ["CircularLoader", "LinearLoader", "DotLoader", "PulseLoader"], scope: "component" },
+  { old: "dropdownPosition", now: "dropdownSide", components: [...DROPDOWNS, "DatePicker", "TimePicker", "InternationalPhoneInput", "Breadcrumb", "Pagination"], scope: "word" },
+  { old: "forceDropdownPosition", now: "forceDropdownSide", components: ["DatePicker", "Dropdown", "InternationalPhoneInput", "MultiSelectDropdown", "MultiSelectSearchableDropdown", "SearchableDropdown", "TimePicker"], scope: "word" },
+  { old: "tooltipPosition", now: "tooltipSide", components: ["Breadcrumb", "TabPanel"], scope: "word" },
+  { old: "submenuPosition", now: "submenuSide", components: ["CascadingDropdown"], scope: "word" },
+  { old: "direction", now: "side", components: ["Drawer"], scope: "narrow" },
+  { old: "DrawerDirection", now: "DrawerSide", components: ["Drawer"], scope: "word" },
+  { old: "DropdownPosition", now: "DropdownSide", components: ["Breadcrumb"], scope: "word" },
+  { old: "dropdownGap", now: "dropdownOffset", components: ["CascadingDropdown", "DatePicker", "Dropdown", "InternationalPhoneInput", "MultiSelectDropdown", "MultiSelectSearchableDropdown", "Pagination", "SearchableDropdown", "TimePicker"], scope: "word" },
+  { old: "forceMount", now: "keepMounted", components: ["AccordionContent", "TabPanel"], scope: "word" },
+  { old: "unmountOnClose", now: "keepMounted", components: ["AccordionContent"], scope: "word" },
+  { old: "preventOutsideClick", now: "closeOnOverlayClick", components: ["Modal"], scope: "word" },
+  { old: "ariaLabel", now: "aria-label", components: ["Table"], scope: "component" },
+  { old: "startIconLabel", now: "startIconAriaLabel", components: ["Input", "TextArea"], scope: "word" },
+  { old: "endIconLabel", now: "endIconAriaLabel", components: ["Input", "TextArea"], scope: "word" },
+  { old: "shimmerRowCount", now: "shimmerCount", components: ["Table"], scope: "word" },
+  { old: "loadingText", now: "loadingContent", components: ["Button", ...DROPDOWNS], scope: "word" },
+  { old: "okText", now: "confirmText", components: ["TimePicker"], scope: "word" },
+  { old: "ClearIcon", now: "clearIcon", components: DROPDOWNS, scope: "narrow" },
+  { old: "SearchIcon", now: "searchIcon", components: ["CascadingDropdown", "SearchableDropdown", "Table"], scope: "narrow" },
+  { old: "ChevronIcon", now: "chevronIcon", components: ["Dropdown", "MultiSelectDropdown", "SearchableDropdown"], scope: "narrow" },
+  { old: "CheckIcon", now: "selectedIcon", components: ["Dropdown", "SearchableDropdown"], scope: "narrow" },
+  { old: "PinIcon", now: "pinIcon", components: ["Table"], scope: "narrow" },
+  { old: "PinnedIcon", now: "pinnedIcon", components: ["Table"], scope: "narrow" },
+  { old: "FilterIcon", now: "renderFilterIcon", components: ["Table"], scope: "narrow" },
+  { old: "ExpandIcon", now: "renderExpandIcon", components: ["Table"], scope: "narrow" },
+  { old: "CheckboxIcon", now: "renderCheckboxIcon", components: ["Table"], scope: "narrow" },
+  { old: "DragHandleIcon", now: "dragHandleIcon", components: ["Table"], scope: "narrow" },
 ];
 
 interface ValueTombstone {
@@ -127,6 +168,14 @@ interface ValueTombstone {
   /** The prop's whole union now, read by the compiler. */
   now: string[];
 }
+
+/**
+ * Old values on a field of an item the component takes in an array, not on a
+ * prop: Breadcrumb's `items[].iconPosition`. They are read as object keys
+ * (`iconPosition: "left"`) in the component's directory and fixtures, in any
+ * file that renders the component, and in its generated docs and snippets.
+ */
+const ITEM_VALUE_TOMBSTONES = [{ component: "Breadcrumb", key: "iconPosition", old: ["left", "right"] }];
 
 const VALUE_TOMBSTONES: ValueTombstone[] = [
   { component: "AccordionTrigger", prop: "iconPosition", old: ["left", "right"], now: ["start", "end", "none"] },
@@ -142,6 +191,7 @@ const VALUE_TOMBSTONES: ValueTombstone[] = [
   { component: "Accordion", prop: "selectionMode", old: [], now: ["single", "multiple"] },
   { component: "DatePicker", prop: "selectionMode", old: [], now: ["single", "range", "multiple"] },
   { component: "Toast", prop: "variant", old: [], now: ["success", "warning", "error", "info"] },
+  { component: "Drawer", prop: "side", old: [], now: ["left", "right", "top", "bottom"] },
 ];
 
 /**
@@ -154,6 +204,30 @@ const EXCEPTIONS: { old: string; file: string; line: RegExp; reason: string }[] 
     file: "src/components/Table/Table.tsx",
     line: /onExpandedChange: \(updater\)/,
     reason: "TanStack Table's own option, which Table adapts into onExpandedRowIdsChange",
+  },
+  ...["src/components/Avatar/AVATAR.ai.md", "llms-full.txt"].map((file) => ({
+    old: "max",
+    file,
+    line: /Maximum count before showing `max\+`\. Inside an `AvatarGroup`/,
+    reason: "AvatarGroupCount's own max, a 99+ cap that stays max; its description names the AvatarGroup it sits in",
+  })),
+  ...["src/components/Switch/Switch.tsx", "src/components/Switch/__tests__/Switch.test.tsx"].map((file) => ({
+    old: "transitionDuration",
+    file,
+    line: /transitionDuration: |style\.transitionDuration/,
+    reason: "the CSS property of that name, which animationDuration sets on the thumb",
+  })),
+  ...(["forceMount", "unmountOnClose"] as const).map((old) => ({
+    old,
+    file: "src/components/Accordion/__tests__/Accordion.test.tsx",
+    line: new RegExp(`${old}(: |=\\$)|\`${old}\`|forceMount wins|keeps every old`),
+    reason: "the merge's own test: each old combination, mapped to keepMounted, against the mount states HEAD produced for it",
+  })),
+  {
+    old: "forceMount",
+    file: "src/components/TabPanel/__tests__/TabPanel.test.tsx",
+    line: /forceMount(: |=\$)|`forceMount`|keeps every old/,
+    reason: "the merge's own test: each old combination, mapped to keepMounted, against the mount states HEAD produced for it",
   },
 ];
 
@@ -174,6 +248,11 @@ for (const [exp, dir] of Object.entries({
   AccordionTrigger: "Accordion",
   AvatarGroup: "Avatar",
   DotLoader: "Loader",
+  CircularLoader: "Loader",
+  LinearLoader: "Loader",
+  PulseLoader: "Loader",
+  AccordionContent: "Accordion",
+  CountryFlagGroup: "CountryFlag",
 })) DIR_OF[exp] = dir;
 
 /** The fixture file for an export: `<Dir>.fixtures.tsx`, or `<Dir>.<Export>.fixtures.tsx` for a sub-export. */
@@ -372,6 +451,17 @@ interface Hit {
 
 const excused = new Map<(typeof EXCEPTIONS)[number], number>(EXCEPTIONS.map((e) => [e, 0]));
 
+/** Whether a line is a named exception for `old` in `path`; counts the use. */
+function excuseLine(old: string, path: string, line: string): boolean {
+  for (const e of EXCEPTIONS) {
+    if (e.old === old && e.file === path && e.line.test(line)) {
+      excused.set(e, excused.get(e)! + 1);
+      return true;
+    }
+  }
+  return false;
+}
+
 function isExcused(old: string, path: string, text: string, line: number): boolean {
   for (const e of EXCEPTIONS) {
     if (e.old !== old || e.file !== path) continue;
@@ -523,16 +613,17 @@ function scan(): Hit[] {
         // A sibling export that keeps the name (AvatarBadge's `variant` beside
         // AvatarGroup's) narrows it to the lines that name this component.
         const keptBySibling = siblingsOf(c).some((s) => propNames(s).has(t.old));
-        const named = (text: string) =>
+        const named = (text: string, file: string) =>
           text
             .split("\n")
             .filter((l) => !keptBySibling || new RegExp(`(?<![\\w$])${c}(?![\\w$])`).test(l))
+            .filter((l) => !excuseLine(t.old, file, l))
             .reduce((n, l) => n + [...l.matchAll(new RegExp(`\`${t.old}\``, "g"))].length, 0);
         const aimd = SOURCES.find((s) => s.group === "aimd" && s.path.startsWith(`${SRC}/${dir}/`));
         const docText = (text: string, heading: RegExp) => (narrow ? text : mdSection(text, heading));
-        if (aimd && named(docText(aimd.text, /^## All Props/))) add(`${aimd.path} \`${t.old}\` ×${named(docText(aimd.text, /^## All Props/))}`, "aimd");
-        const llms = docText(llmsSection(c), /^### All Props/);
-        if (named(llms)) add(`llms-full.txt ${c} \`${t.old}\` ×${named(llms)}`, "llms");
+        if (aimd && named(docText(aimd.text, /^## All Props/), aimd.path)) add(`${aimd.path} \`${t.old}\` ×${named(docText(aimd.text, /^## All Props/), aimd.path)}`, "aimd");
+        const llms = docText(llmsSection(dir), /^### All Props/);
+        if (named(llms, "llms-full.txt")) add(`llms-full.txt ${c} \`${t.old}\` ×${named(llms, "llms-full.txt")}`, "llms");
       } else {
         for (const line of wordHits(llmsSection(c), t.old)) add(`llms-full.txt ## ${c} +${line}`, "llms");
       }
@@ -601,6 +692,27 @@ function scan(): Hit[] {
           if (attr.test(raw)) add(`${g.path} <${v.component} ${label}>`, g.path.startsWith("componentDocs") ? "componentDocs" : "snippets");
     }
   }
+  for (const v of ITEM_VALUE_TOMBSTONES) {
+    const dir = DIR_OF[v.component];
+    const subpath = `@chumlab/ui/${dir.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase()}`;
+    for (const old of v.old) {
+      const label = `${v.component} items[].${v.key}="${old}"`;
+      const add = (where: string, group: Hit["group"]) => hits.push({ old: label, components: v.component, where, group });
+      const re = new RegExp(`(?<![\\w$.])${v.key}\\s*:\\s*\\\\?["']${old}\\\\?["']`);
+      for (const s of SOURCES) {
+        if (GENERATED_FILES.has(s.path)) continue;
+        const text = s.path === "llms-full.txt" ? llmsSection(dir) : s.text;
+        const inScope =
+          s.path.startsWith(`${SRC}/${dir}/`) || s.path === fixtureFileOf(v.component) || s.path === "llms-full.txt" ||
+          new RegExp(`<${v.component}(?![\\w.])`).test(text);
+        if (!inScope) continue;
+        text.split("\n").forEach((l, i) => { if (re.test(l)) add(`${s.path}:${i + 1}`, s.group); });
+      }
+      for (const g of GENERATED_STRINGS)
+        if ((g.text.includes(subpath) || g.path.startsWith(`componentDocs.${dir}.`)) && re.test(g.text))
+          add(g.path, g.path.startsWith("componentDocs") ? "componentDocs" : "snippets");
+    }
+  }
   return hits;
 }
 
@@ -622,7 +734,7 @@ for (const v of VALUE_TOMBSTONES)
     console.log(`  ${`${v.component}.${v.prop}="${old}"`.padEnd(44)} hits=${mine.length}`);
   }
 
-describe("API names: A2a's and A2b's old names and values are gone", () => {
+describe("API names: A2a's, A2b's and A2c's old names and values are gone", () => {
   it("reads attributes on the named tag only, outside expressions", () => {
     const text = `<Checkbox checked onValueChange={set} /> <CheckboxGroup onValueChange={x} />
       <Switch onCheckedChange={() => ({ onValueChange: 1 })} label="a > b" />`;
@@ -687,6 +799,107 @@ describe("API names: A2a's and A2b's old names and values are gone", () => {
       return !sym || checker.typeToString(checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(sym, at))) !== "boolean";
     });
     expect(wrong.map(([c, p]) => `${c}.${p}`)).toEqual([]);
+  });
+
+  /** An exported type's member, by the compiler: `Step.icon`, `BreadcrumbItem.iconPosition`. */
+  const memberType = (dir: string, typeName: string, member: string): ts.Type | null => {
+    const sf = program.getSourceFile(`${SRC}/${dir}/index.ts`)!;
+    const exp = checker.getExportsOfModule(checker.getSymbolAtLocation(sf)!).find((s) => s.name === typeName);
+    if (!exp) return null;
+    const sym = exp.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exp) : exp;
+    const prop = checker.getDeclaredTypeOfSymbol(sym).getProperty(member);
+    return prop ? checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(prop, sf)) : null;
+  };
+  const propType = (c: string, p: string): ts.Type | null => {
+    const { type, at } = propsTypeOf(c);
+    const members = type.isUnion() ? type.types.map((x) => x.getProperty(p)).filter(Boolean) : [type.getProperty(p)];
+    return members[0] ? checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(members[0], at)) : null;
+  };
+  const show = (x: ts.Type | null) => (x ? checker.typeToString(x, undefined, ts.TypeFormatFlags.NoTruncation) : "(missing)");
+  /** ReactNode, as the checker prints it — read off a prop known to be one. */
+  const REACT_NODE = show(propType("Button", "startIcon"));
+  /** A member that can be rendered as a component: a ComponentType in any form. */
+  const isComponentLike = (x: ts.Type): boolean =>
+    (x.isUnion() ? x.types : [x]).some((m) => m.getConstructSignatures().length > 0 || m.getCallSignatures().length > 0);
+
+  /** Each icon prop A2c touched, and its shape: rendered as given, or a render function of its state. */
+  const ICON_SHAPES: [component: string, prop: string, shape: "node" | string[]][] = [
+    ...DROPDOWNS.map((c): [string, string, "node"] => [c, "clearIcon", "node"]),
+    ["CascadingDropdown", "searchIcon", "node"], ["SearchableDropdown", "searchIcon", "node"], ["Table", "searchIcon", "node"],
+    ["Dropdown", "chevronIcon", "node"], ["MultiSelectDropdown", "chevronIcon", "node"], ["SearchableDropdown", "chevronIcon", "node"],
+    ["Dropdown", "selectedIcon", "node"], ["SearchableDropdown", "selectedIcon", "node"],
+    ["Table", "pinIcon", "node"], ["Table", "pinnedIcon", "node"], ["Table", "dragHandleIcon", "node"],
+    ["Table", "renderFilterIcon", ["active", "className"]],
+    ["Table", "renderExpandIcon", ["expanded", "className"]],
+    ["Table", "renderCheckboxIcon", ["checked", "indeterminate", "className"]],
+    ["Breadcrumb", "separatorIcon", "node"], ["Breadcrumb", "ellipsisIcon", "node"],
+    ["Pagination", "prevIcon", "node"], ["Pagination", "nextIcon", "node"], ["Pagination", "dropdownIcon", "node"],
+    ["Stepper", "completedIcon", "node"], ["Stepper", "errorIcon", "node"],
+  ];
+
+  it("each icon prop is a ReactNode, or a render function of the state it shows", () => {
+    const wrong = ICON_SHAPES.flatMap(([c, p, shape]) => {
+      const x = propType(c, p);
+      if (!x) return [`${c}.${p}: missing`];
+      if (shape === "node") return show(x) === REACT_NODE ? [] : [`${c}.${p}: ${show(x)}, want ReactNode`];
+      const sig = x.getCallSignatures()[0];
+      const arg = sig?.getParameters()[0];
+      const argType = arg && checker.getTypeOfSymbolAtLocation(arg, propsTypeOf(c).at);
+      const missing = shape.filter((k) => !argType?.getProperty(k));
+      return sig && !missing.length ? [] : [`${c}.${p}: ${show(x)}, want (state: { ${shape.join(", ")} }) => ReactNode`];
+    });
+    const stepItems = ["icon", "completedIcon", "errorIcon"]
+      .map((m) => [m, show(memberType("Stepper", "Step", m))] as const)
+      .filter(([, s]) => s !== REACT_NODE)
+      .map(([m, s]) => `Step.${m}: ${s}, want ReactNode`);
+    console.log(`API_ICONS checked=${ICON_SHAPES.length + 3} wrong=${wrong.length + stepItems.length} (ReactNode is ${REACT_NODE.slice(0, 40)}…)`);
+    expect([...wrong, ...stepItems]).toEqual([]);
+  });
+
+  it("no icon prop on any export still takes a component", () => {
+    const offenders: string[] = [];
+    for (const dir of [...new Set(Object.values(DIR_OF))]) {
+      const sf = program.getSourceFile(`${SRC}/${dir}/index.ts`);
+      if (!sf) continue;
+      for (const exp of checker.getExportsOfModule(checker.getSymbolAtLocation(sf)!)) {
+        if (!/^[A-Z]/.test(exp.name)) continue;
+        DIR_OF[exp.name] ??= dir;
+        let props: Set<string>;
+        try {
+          props = propNames(exp.name);
+        } catch {
+          continue;
+        }
+        for (const p of props) {
+          // Callbacks named for an icon (`onStartIconClick`) are events, not icons.
+          if (!/Icon/.test(p) || /^(render|on[A-Z])/.test(p)) continue;
+          const x = propType(exp.name, p);
+          if (x && isComponentLike(x)) offenders.push(`${exp.name}.${p}: ${show(x)}`);
+        }
+      }
+    }
+    console.log(`API_NO_COMPONENT_ICONS offenders=${offenders.length}`);
+    expect(offenders).toEqual([]);
+  });
+
+  it("Breadcrumb items take start or end", () => {
+    const x = memberType("Breadcrumb", "BreadcrumbItem", "iconPosition");
+    const values = x ? (x.isUnion() ? x.types : [x]).filter((u) => u.isStringLiteral()).map((u) => (u as ts.StringLiteralType).value).sort() : [];
+    expect(values).toEqual(["end", "start"]);
+  });
+
+  it("the unified concept props have the types they promise", () => {
+    const EXPECT: [string, string, string][] = [
+      ...["MultiSelectDropdown", "MultiSelectSearchableDropdown", "Breadcrumb", "AvatarGroup", "CountryFlagGroup"].map((c): [string, string, string] => [c, "maxVisible", "number"]),
+      ...["SearchableDropdown", "MultiSelectSearchableDropdown", "CascadingDropdown"].map((c): [string, string, string] => [c, "searchDebounce", "number"]),
+      ...["Drawer", "Slider", "Switch", "CircularLoader", "LinearLoader", "DotLoader", "PulseLoader"].map((c): [string, string, string] => [c, "animationDuration", "number"]),
+      ["AccordionContent", "keepMounted", 'boolean | "visited"'],
+      ["TabPanel", "keepMounted", 'boolean | "visited"'],
+      ["Modal", "closeOnOverlayClick", "boolean"],
+    ];
+    const wrong = EXPECT.filter(([c, p, want]) => show(propType(c, p)) !== want).map(([c, p, want]) => `${c}.${p}: ${show(propType(c, p))}, want ${want}`);
+    console.log(`API_CONCEPT_TYPES checked=${EXPECT.length} wrong=${wrong.length}`);
+    expect(wrong).toEqual([]);
   });
 
   it("callbacks receive what their names promise", () => {

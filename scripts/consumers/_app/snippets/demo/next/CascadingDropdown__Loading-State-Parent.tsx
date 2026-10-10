@@ -9,7 +9,7 @@ export default function CascadingDropdownExample() {
       value={{}}
       onValueChange={() => {}}
       loading
-      loadingText="Fetching categories..."
+      loadingContent="Fetching categories..."
       placeholder="Loading example..."
       classes={
         {

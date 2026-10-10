@@ -11,7 +11,7 @@ export default function TabPanelExample() {
     <TabPanel
       tabs={basicTabs}
       defaultValue="home"
-      keepMounted
+      keepMounted="visited"
       classes={
         {
           root: "w-full",

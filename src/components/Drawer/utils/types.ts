@@ -1,13 +1,13 @@
 import type { HTMLAttributes, ReactNode, RefObject } from "react";
 
-export type DrawerDirection = "left" | "right" | "top" | "bottom";
+export type DrawerSide = "left" | "right" | "top" | "bottom";
 
 export interface DrawerClasses {
   /** The fixed layer the panel and its scrim share. */
   root?: string;
   /** The scrim over the page behind. */
   overlay?: string;
-  /** The panel itself, which is the element the `direction` slides. */
+  /** The panel itself, which is the element that slides in from `side`. */
   content?: string;
   /** The drag handle's hit area at the panel's leading edge. Rendered only when `swipeable`. */
   handle?: string;
@@ -20,7 +20,7 @@ export interface DrawerClasses {
  *
  * @example
  * ```tsx
- * <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">...</Drawer>
+ * <Drawer open={isOpen} onOpenChange={setIsOpen} side="right">...</Drawer>
  * ```
  */
 export interface DrawerProps
@@ -34,8 +34,8 @@ export interface DrawerProps
   /** CSS z-index for the drawer layer. */
   zIndex?: number;
   children?: ReactNode;
-  /** Slide-in direction. Not `side` or `placement`. */
-  direction?: DrawerDirection;
+  /** The edge the drawer slides in from. Not `direction` or `placement`. Default: `"left"`. */
+  side?: DrawerSide;
   size?: string;
   overlayColor?: string;
   /**
@@ -45,7 +45,8 @@ export interface DrawerProps
    */
   overlayOpacity?: number;
   overlayBlur?: number;
-  duration?: number;
+  /** Open and close animation length, in milliseconds. Default: 300. */
+  animationDuration?: number;
   lockScroll?: boolean;
   closeOnOverlayClick?: boolean;
   /** Enables closing via the Escape key. Default: `true`. */
