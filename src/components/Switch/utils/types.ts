@@ -16,7 +16,7 @@ export interface SwitchClasses {
   /** The line holding the label group and the track, which is what `labelPosition` reorders. */
   row?: string;
   /** The label and description stacked together, so they move as one. */
-  labelGroup?: string;
+  group?: string;
   /** Label element */
   label?: string;
   /** Description span element */

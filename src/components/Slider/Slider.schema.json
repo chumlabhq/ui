@@ -216,10 +216,10 @@
         "thumb": {
           "type": "string"
         },
-        "valueText": {
+        "value": {
           "type": "string"
         },
-        "marker": {
+        "mark": {
           "type": "string"
         },
         "message": {

@@ -27,7 +27,7 @@ export interface MultiSelectDropdownClasses {
   /** Selected chip styling */
   chip?: string;
   /** Chip remove button */
-  chipRemove?: string;
+  chipRemoveTrigger?: string;
   /** The message shown when there are no options. */
   empty?: string;
   /** Label element */
@@ -43,12 +43,12 @@ export interface MultiSelectDropdownClasses {
   /** One row of the skeleton. It shared `loading` with the container above it. */
   loadingItem?: string;
   /**
-   * The two skeleton shapes inside a `loadingItem`. Their styling was a
-   * call-site literal in MultiSelectDropdownShimmer, which has no `classes`
-   * prop — routed through this bag rather than giving the sub-component a
-   * second way in.
+   * The square in each skeleton row, standing in for the row's `itemControl`.
+   * It and `loadingBar` were call-site literals in MultiSelectDropdownShimmer,
+   * which has no `classes` prop — routed through this bag rather than giving
+   * the sub-component a second way in.
    */
-  loadingIcon?: string;
+  loadingItemControl?: string;
   /** The wider of the two shapes in a skeleton row, standing in for the label. */
   loadingBar?: string;
   /** The `+N` chip standing in for selections past `maxVisible`. */

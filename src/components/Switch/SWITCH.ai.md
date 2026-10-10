@@ -96,7 +96,7 @@ If you want the track itself to react, the attribute is the hook:
 |------|---------|
 | `root` | Outer container. Carries every data attribute above. |
 | `row` | The line holding the label group and the track, which is what `labelPosition` reorders. |
-| `labelGroup` | The label and description stacked together, so they move as one. |
+| `group` | The label and description stacked together, so they move as one. |
 | `label` | The label element. |
 | `description` | The description under the label. |
 | `control` | The track the thumb slides along. |

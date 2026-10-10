@@ -11,6 +11,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
@@ -318,7 +319,7 @@ const Submenu = memo(function Submenu({
  * - CASCADINGDROPDOWN.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/CascadingDropdownDemo.tsx — live demo
  */
-const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
+const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
   (
     {
       options = [],
@@ -612,9 +613,11 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
         (triggerRef as MutableRefObject<HTMLButtonElement | null>).current = node as HTMLButtonElement | null;
+        setRef(ref, node as HTMLButtonElement | null);
       },
-      [],
+      [ref],
     );
+    const mergedTriggerRef = useMemo(() => mergeRefs(triggerRef, ref), [ref]);
 
     const fullWidthClass = fullWidth ? "w-full" : "";
     const displayValue = getDisplayValue();
@@ -669,7 +672,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
     return (
       <div
-        ref={ref}
         className={cn(mergedClasses.control, fullWidthClass, className) || undefined}
         style={style}
         data-disabled={disabled || undefined}
@@ -701,7 +703,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
             )
           ) : (
             <button
-              ref={triggerRef}
+              ref={mergedTriggerRef}
               {...triggerProps}
               className={mergedClasses.trigger || undefined}
             >

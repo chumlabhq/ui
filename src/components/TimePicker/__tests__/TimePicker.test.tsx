@@ -583,10 +583,10 @@ describe("ClockFace", () => {
     clockNumber: UNSTYLED_TIMEPICKER_CLASSES.clockNumber,
     clockCenter: UNSTYLED_TIMEPICKER_CLASSES.clockCenter,
     footer: UNSTYLED_TIMEPICKER_CLASSES.footer,
-    cancelButton: UNSTYLED_TIMEPICKER_CLASSES.cancelButton,
-    confirmButton: UNSTYLED_TIMEPICKER_CLASSES.confirmButton,
+    cancelTrigger: UNSTYLED_TIMEPICKER_CLASSES.cancelTrigger,
+    confirmTrigger: UNSTYLED_TIMEPICKER_CLASSES.confirmTrigger,
     row: UNSTYLED_TIMEPICKER_CLASSES.row,
-    periodButton: UNSTYLED_TIMEPICKER_CLASSES.periodButton,
+    periodTrigger: UNSTYLED_TIMEPICKER_CLASSES.periodTrigger,
   };
 
   const defaultProps = {
@@ -1654,10 +1654,10 @@ describe("ClockFace (additional coverage)", () => {
     clockNumber: UNSTYLED_TIMEPICKER_CLASSES.clockNumber,
     clockCenter: UNSTYLED_TIMEPICKER_CLASSES.clockCenter,
     footer: UNSTYLED_TIMEPICKER_CLASSES.footer,
-    cancelButton: UNSTYLED_TIMEPICKER_CLASSES.cancelButton,
-    confirmButton: UNSTYLED_TIMEPICKER_CLASSES.confirmButton,
+    cancelTrigger: UNSTYLED_TIMEPICKER_CLASSES.cancelTrigger,
+    confirmTrigger: UNSTYLED_TIMEPICKER_CLASSES.confirmTrigger,
     row: UNSTYLED_TIMEPICKER_CLASSES.row,
-    periodButton: UNSTYLED_TIMEPICKER_CLASSES.periodButton,
+    periodTrigger: UNSTYLED_TIMEPICKER_CLASSES.periodTrigger,
   };
 
   const defaultProps = {

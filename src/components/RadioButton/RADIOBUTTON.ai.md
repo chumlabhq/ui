@@ -113,6 +113,16 @@ Native `<input type="radio">` elements in a group, so the browser owns the rovin
 
 ---
 
+## Ref API
+
+`RadioButton`'s ref lands on its `<input type="radio">`, as Checkbox's does, so `ref.current.focus()` focuses the radio and a form library can register it. `className` and the other HTML attributes still go on the `<label>`. `RadioGroup`'s ref is the group's root `<div>`.
+
+```tsx
+const ref = useRef<HTMLInputElement>(null);
+<RadioButton ref={ref} value="a" label="Apple" />
+// ref.current is the <input type="radio">
+```
+
 ## Accessibility
 
 - Native `<input type="radio">` — browser handles arrow key navigation

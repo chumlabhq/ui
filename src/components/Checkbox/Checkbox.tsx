@@ -123,7 +123,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const mergedClasses: Required<CheckboxClasses> = useMemo(
       () => ({
         root: mergeSlot(baseClasses.root, classesProp?.root),
-        labelGroup: mergeSlot(baseClasses.labelGroup, classesProp?.labelGroup),
+        group: mergeSlot(baseClasses.group, classesProp?.group),
         label: mergeSlot(baseClasses.label, classesProp?.label),
         description: mergeSlot(baseClasses.description, classesProp?.description),
         control: mergeSlot(cn(baseClasses.control, stateClassName), classesProp?.control),
@@ -236,7 +236,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           </span>
 
           {(label || description) && (
-            <span className={mergedClasses.labelGroup || undefined}>
+            <span className={mergedClasses.group || undefined}>
               {label && (
                 <span className={mergedClasses.label || undefined}>
                   {label}

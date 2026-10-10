@@ -53,7 +53,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   empty:
     "flex items-center justify-center py-12 text-cl-text-tertiary",
   pinIcon: "text-cl-text-tertiary w-4 h-4",
-  pinButton:
+  pinTrigger:
     "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover cursor-pointer",
   loading:
     "w-full border rounded-cl-md overflow-hidden border-cl-border",
@@ -66,7 +66,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     "h-full w-full rounded animate-pulse bg-cl-bg-skeleton",
   control: "",
   sortIcon: "shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-item-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
-  filterButton:
+  filterTrigger:
     "shrink-0 ml-1 cursor-pointer transition-opacity opacity-50 hover:opacity-100 data-[active]:opacity-100",
   filterContent: "",
   filterHeader:
@@ -81,7 +81,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     "w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[selected]:hover:bg-cl-accent-bg",
   filterItemControl:
     "w-4 h-4 rounded border flex items-center justify-center shrink-0 border-cl-border-input data-[selected]:bg-cl-accent data-[selected]:border-cl-accent",
-  expandButton: "",
+  expandTrigger: "",
   pinnedRightRegion: "",
   pinnedRightList: "",
   input:

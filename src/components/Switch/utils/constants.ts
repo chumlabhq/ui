@@ -16,7 +16,7 @@ export { CSS_VARS as SWITCH_CSS_VARS };
 export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   root: "flex flex-col",
   row: "flex items-center gap-3",
-  labelGroup: "flex flex-col",
+  group: "flex flex-col",
   label: "text-sm font-medium text-cl-text cursor-pointer data-[disabled]:cursor-not-allowed",
   description: "text-xs text-cl-text-tertiary",
   // The track's colours and the thumb's travel, on `data-state` — the

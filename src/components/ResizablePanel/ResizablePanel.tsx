@@ -294,7 +294,6 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
     return (
       <div
         {...rest}
-        ref={ref}
         id={panelId}
         className={cn(mergedClasses.root, className)}
         style={
@@ -312,6 +311,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       >
         {children}
         <div
+          ref={ref}
           role="separator"
           tabIndex={disabled ? -1 : 0}
           aria-orientation={isVertical ? "horizontal" : "vertical"}

@@ -22,7 +22,7 @@ export default function DatePickerExample() {
               input: "flex-1 text-left truncate",
               label: "block text-[13px] font-medium mb-1.5 text-cl-text-secondary",
               header: "flex items-center justify-between mb-4",
-              navButton: "p-1.5 rounded-cl-md transition-colors text-cl-text-chrome-quiet hover:text-cl-text hover:bg-cl-bg-hover",
+              navTrigger: "p-1.5 rounded-cl-md transition-colors text-cl-text-chrome-quiet hover:text-cl-text hover:bg-cl-bg-hover",
               weekday: "text-xs font-semibold text-center py-2 uppercase tracking-wide text-cl-text-tertiary",
               weekNumber: "text-xs flex items-center justify-center text-cl-text-tertiary",
               footer: "flex justify-center pt-4 mt-4 border-t border-cl-border",

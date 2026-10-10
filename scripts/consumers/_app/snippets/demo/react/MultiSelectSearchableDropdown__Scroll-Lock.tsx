@@ -34,7 +34,7 @@ export default function MultiSelectSearchableDropdownExample() {
               loading: "px-3 py-4 text-sm text-center text-cl-text-secondary",
               label: "block text-sm font-medium mb-1 text-cl-text-secondary",
               chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-              chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+              chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
             }
           }
           aria-label="Scroll unlocked dropdown"
@@ -58,7 +58,7 @@ export default function MultiSelectSearchableDropdownExample() {
               loading: "px-3 py-4 text-sm text-center text-cl-text-secondary",
               label: "block text-sm font-medium mb-1 text-cl-text-secondary",
               chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-              chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+              chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
             }
           }
           aria-label="Scroll locked dropdown"

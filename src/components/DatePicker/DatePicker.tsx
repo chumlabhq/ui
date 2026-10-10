@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { useLayer } from "../../utils/layers.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
 import { cycleTabWithin } from "../../utils/focusUtils.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -444,7 +445,7 @@ const loadMarkerTooltip = () =>
  *
  * @see DATEPICKER.ai.md for full usage guide, props, styling, and patterns.
  */
-const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
+const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
   (
     {
       selectionMode = "single",
@@ -536,7 +537,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       content: mergeSlot(baseClasses.content, classesProp?.content),
       header: mergeSlot(baseClasses.header, classesProp?.header),
       row: mergeSlot(baseClasses.row, classesProp?.row),
-      navButton: mergeSlot(baseClasses.navButton, classesProp?.navButton),
+      navTrigger: mergeSlot(baseClasses.navTrigger, classesProp?.navTrigger),
       listRow: mergeSlot(baseClasses.listRow, classesProp?.listRow),
       list: mergeSlot(baseClasses.list, classesProp?.list),
       listHeader: mergeSlot(baseClasses.listHeader, classesProp?.listHeader),
@@ -568,6 +569,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const mergedTriggerRef = useMemo(() => mergeRefs(triggerRef, ref), [ref]);
     const calendarRef = useRef<HTMLDivElement>(null);
 
     const {
@@ -836,7 +838,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     return (
       <div
-        ref={ref}
         {...rest}
         className={cn(mergedClasses.root, fullWidthClass, className)}
         data-disabled={disabled || undefined}
@@ -861,7 +862,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           className="relative"
         >
           <button
-            ref={triggerRef}
+            ref={mergedTriggerRef}
             type="button"
             id={triggerId}
             role="combobox"
@@ -963,7 +964,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                               type="button"
                               aria-label="Previous year"
                               onClick={() => handleYearSelect(monthYear - 1)}
-                              className={mergedClasses.navButton}
+                              className={mergedClasses.navTrigger}
                             >
                               {prevYearIcon || (
                                 <DoubleChevronLeftIcon className="w-4 h-4" />
@@ -973,7 +974,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                               type="button"
                               aria-label="Previous month"
                               onClick={() => handleMonthNavigation("prev")}
-                              className={mergedClasses.navButton}
+                              className={mergedClasses.navTrigger}
                             >
                               {prevMonthIcon || (
                                 <ChevronLeftIcon className="w-4 h-4" />
@@ -1011,7 +1012,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                               type="button"
                               aria-label="Next month"
                               onClick={() => handleMonthNavigation("next")}
-                              className={mergedClasses.navButton}
+                              className={mergedClasses.navTrigger}
                             >
                               {nextMonthIcon || (
                                 <ChevronRightIcon className="w-4 h-4" />
@@ -1021,7 +1022,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                               type="button"
                               aria-label="Next year"
                               onClick={() => handleYearSelect(monthYear + 1)}
-                              className={mergedClasses.navButton}
+                              className={mergedClasses.navTrigger}
                             >
                               {nextYearIcon || (
                                 <DoubleChevronRightIcon className="w-4 h-4" />

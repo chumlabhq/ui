@@ -83,7 +83,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       () => ({
         root: mergeSlot(baseClasses.root, classesProp?.root),
         row: mergeSlot(baseClasses.row, classesProp?.row),
-        labelGroup: mergeSlot(baseClasses.labelGroup, classesProp?.labelGroup),
+        group: mergeSlot(baseClasses.group, classesProp?.group),
         label: mergeSlot(baseClasses.label, classesProp?.label),
         description: mergeSlot(baseClasses.description, classesProp?.description),
         control: mergeSlot(baseClasses.control, classesProp?.control),
@@ -127,7 +127,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       >
         <div className={mergedClasses.row || undefined}>
           {hasLabelContent && (
-            <div className={mergedClasses.labelGroup || undefined}>
+            <div className={mergedClasses.group || undefined}>
               {renderLabel
                 ? renderLabel(renderProps)
                 : label && (

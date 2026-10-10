@@ -128,7 +128,7 @@
         "row": {
           "type": "string"
         },
-        "labelGroup": {
+        "group": {
           "type": "string"
         },
         "label": {

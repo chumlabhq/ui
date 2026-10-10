@@ -67,7 +67,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
     track: mergeSlot(baseClasses.track, classesProp?.track ?? providerClasses?.track),
     title: mergeSlot(baseClasses.title, classesProp?.title ?? providerClasses?.title),
     description: mergeSlot(baseClasses.description, classesProp?.description ?? providerClasses?.description),
-    indicator: mergeSlot(baseClasses.indicator, classesProp?.indicator ?? providerClasses?.indicator),
+    range: mergeSlot(baseClasses.range, classesProp?.range ?? providerClasses?.range),
     closeTrigger: mergeSlot(baseClasses.closeTrigger, classesProp?.closeTrigger ?? providerClasses?.closeTrigger),
     icon: mergeSlot(baseClasses.icon, classesProp?.icon ?? providerClasses?.icon),
   }), [classesProp, providerClasses, baseClasses]);
@@ -207,7 +207,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
         <div className={mergedClasses.track || undefined}>
           <div
             className={cn(
-                            mergedClasses.indicator,
+                            mergedClasses.range,
             )}
             style={progressAnimationStyle}
           />

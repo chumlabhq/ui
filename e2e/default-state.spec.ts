@@ -786,7 +786,7 @@ test("a disabled item paints differently from an enabled one, in both themes", a
  *
  * TimePicker's clock marks the selected hours/minutes field and the selected
  * AM/PM button `aria-pressed` and `data-active`, and its `clockHours`,
- * `clockMinutes` and `periodButton` slots styled neither: both buttons in each
+ * `clockMinutes` and `periodTrigger` slots styled neither: both buttons in each
  * pair measured 1:1, so only a screen reader could tell AM from PM.
  *
  * - The population is read from the code: every element a render graph puts

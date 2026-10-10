@@ -33,7 +33,7 @@ export default function MultiSelectSearchableDropdownExample() {
             loading: "px-3 py-4 text-sm text-center text-cl-text-secondary",
             label: "block text-sm font-medium mb-1 text-cl-text-secondary",
             chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-            chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+            chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
           }),
                         trigger:
                           "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px]",
@@ -50,7 +50,7 @@ export default function MultiSelectSearchableDropdownExample() {
                           "w-4 h-4 shrink-0 border border-white/30 rounded flex items-center justify-center",
                         searchIcon: "w-4 h-4 shrink-0 text-white/60",
                         chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-white/[0.10] text-white rounded-cl-md shrink-0 max-w-[100px]",
-                        chipRemove:
+                        chipRemoveTrigger:
                           "w-3 h-3 shrink-0 cursor-pointer text-white/70 hover:text-white",
                         count:
                           "inline-flex items-center px-2 py-0.5 text-xs bg-white/[0.10] text-white/80 rounded-cl-md shrink-0",

@@ -24,7 +24,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   range: "rounded-full bg-cl-accent data-[disabled]:opacity-50",
   thumb:
     "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-  valueText:
+  value:
     // `text-cl-text`, not `text-white`: the panel token is white in the light
     // theme, so a white label on it is a 1:1 tooltip.
     "absolute px-2 py-1 text-xs font-medium text-cl-text bg-cl-bg-panel rounded-cl-md shadow-sm whitespace-nowrap pointer-events-none",
@@ -32,9 +32,9 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
    * The dot. It is clickable — the control jumps to a mark when you hit one —
    * so it says so.
    */
-  marker: "rounded-full bg-cl-bg-panel border-2 border-cl-border-input cursor-pointer data-[disabled]:cursor-not-allowed",
+  mark: "rounded-full bg-cl-bg-panel border-2 border-cl-border-input cursor-pointer data-[disabled]:cursor-not-allowed",
   /**
-   * The label under the dot, which used to render with `marker`.
+   * The label under the dot, which used to render with `mark`.
    *
    * One class was doing both jobs, so every mark label inherited
    * `rounded-full`, `bg-cl-bg-panel` and `border-2` and came out as a pill

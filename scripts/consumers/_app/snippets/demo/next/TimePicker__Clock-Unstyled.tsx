@@ -30,10 +30,10 @@ export default function TimePickerExample() {
             clockNumber: "absolute text-sm font-medium cursor-pointer select-none text-cl-text-secondary text-xs text-cl-text-tertiary",
             clockCenter: "fill-cl-accent",
             footer: "flex items-center justify-end gap-2 mt-4",
-            cancelButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md text-cl-text-secondary",
-            confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent",
+            cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md text-cl-text-secondary",
+            confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent",
             row: "flex flex-col gap-1 ml-3",
-            periodButton: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer text-cl-text-secondary"
+            periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer text-cl-text-secondary"
           }
         }
       />

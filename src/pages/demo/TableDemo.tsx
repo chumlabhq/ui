@@ -567,7 +567,7 @@ function getTableClasses() {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover`,
+    pinTrigger: `ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover`,
     pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
@@ -587,7 +587,7 @@ function getPaginationClasses() {
     selectorOption: `w-full px-2 py-1 text-left text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium`,
     pageButton: `px-2 py-1 text-sm text-cl-text-tertiary hover:text-cl-text data-[active]:text-cl-accent-hover`,
     activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-accent-hover bg-cl-accent-bg border border-cl-border-input-focus`,
-    navButton: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-tertiary hover:text-cl-text`,
+    navTrigger: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-tertiary hover:text-cl-text`,
     ellipsis: "px-2 text-cl-text-tertiary",
     label: `text-sm text-cl-text-secondary`,
   };
@@ -2281,7 +2281,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               ...s,
               root: `${s.container} overflow-x-auto`,
               pinnedRegion: "shrink-0 sticky left-0 z-30 bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
-              pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15`,
+              pinTrigger: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15`,
               pinIcon: "text-cl-text-tertiary",
             }}
           />
@@ -2366,7 +2366,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   item: pClasses.selectorOption,
                 },
                 item: pClasses.pageButton,
-                navButton: pClasses.navButton,
+                navTrigger: pClasses.navTrigger,
                 ellipsis: pClasses.ellipsis,
                 label: pClasses.label,
               }}
@@ -2396,7 +2396,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 item: darkPaginationOptionStyle,
               },
               item: darkPaginationPageStyle,
-              navButton: darkPaginationNavStyle,
+              navTrigger: darkPaginationNavStyle,
               row: darkPaginationNavContainerStyle,
               list: darkPaginationPageContainerStyle,
               ellipsis: darkPaginationEllipsisStyle,
@@ -3567,7 +3567,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   getRowId={(row) => row.id}
                   classes={{
                     ...s,
-                    expandButton: "text-cl-accent",
+                    expandTrigger: "text-cl-accent",
                   }}
                 />
               );
@@ -3732,7 +3732,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   getRowId={(row) => row.id}
                   classes={{
                     ...s,
-                    expandButton: "text-cl-accent",
+                    expandTrigger: "text-cl-accent",
                   }}
                 />
               );
@@ -3825,7 +3825,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  expandButton: "text-cl-accent hover:text-cl-accent",
+                  expandTrigger: "text-cl-accent hover:text-cl-accent",
                 }}
               />
               <div
@@ -3926,7 +3926,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     ...s,
                     ...s,
                     item: `${s.row} select-none`,
-                    expandButton: "",
+                    expandTrigger: "",
                   }}
                 />
               );
@@ -6566,7 +6566,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   }}
                   classes={{
                     ...s,
-                    filterButton: "text-cl-accent",
+                    filterTrigger: "text-cl-accent",
                   }}
                 />
               );
@@ -6928,7 +6928,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 )}
                 classes={{
                   ...s,
-                  filterButton: "text-cl-accent",
+                  filterTrigger: "text-cl-accent",
                   filterContent: `rounded-cl-lg border shadow-2xl bg-cl-bg border-cl-border-input-focus`,
                 }}
               />

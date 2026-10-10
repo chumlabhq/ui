@@ -266,6 +266,16 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ---
 
+## Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<MultiSelectSearchableDropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
+
 ## Accessibility
 
 - `role="combobox"` with full ARIA attributes on trigger

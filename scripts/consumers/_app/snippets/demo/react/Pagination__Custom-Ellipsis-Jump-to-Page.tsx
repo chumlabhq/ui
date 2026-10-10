@@ -98,7 +98,7 @@ export default function PaginationExample() {
           classes={
             {
               root: "flex flex-wrap items-center gap-2",
-              navButton: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
+              navTrigger: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
               ellipsis: "px-2 select-none text-cl-text-tertiary",
               rowsPerPage: {
                 trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text",
@@ -131,7 +131,7 @@ export default function PaginationExample() {
               {
                                  ...({
                  root: "flex flex-wrap items-center gap-2",
-                 navButton: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
+                 navTrigger: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
                  ellipsis: "px-2 select-none text-cl-text-tertiary",
                  rowsPerPage: {
                    trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text",
@@ -144,7 +144,7 @@ export default function PaginationExample() {
                  pageInfo: "flex items-center"
                }),
                                  root: "flex flex-wrap items-center gap-1",
-              navButton: "p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text-secondary",
+              navTrigger: "p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text-secondary",
               item: "w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover",
                                  list: "flex items-center gap-1",
                                  navIcon: "w-4 h-4 text-cl-text-secondary"
@@ -171,7 +171,7 @@ export default function PaginationExample() {
               {
                                 ...({
                 root: "flex flex-wrap items-center gap-2",
-                navButton: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
+                navTrigger: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
                 ellipsis: "px-2 select-none text-cl-text-tertiary",
                 rowsPerPage: {
                   trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text",
@@ -184,7 +184,7 @@ export default function PaginationExample() {
                 pageInfo: "flex items-center"
               }),
                                 root: "flex items-center",
-                                navButton: "p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary",
+                                navTrigger: "p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary",
                                 item: "min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border data-[active]:border-cl-accent data-[active]:hover:text-cl-accent-hover",
                                 list: "flex items-center gap-0.5",
                                 navIcon: "w-4 h-4"

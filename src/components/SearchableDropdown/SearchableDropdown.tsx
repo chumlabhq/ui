@@ -29,7 +29,7 @@ import {
   UNSTYLED_SEARCHABLEDROPDOWN_CLASSES,
 } from "./utils/constants.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
-import { mergeRefs } from "../../utils/mergeRefs.js";
+import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -232,7 +232,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
  * - src/pages/demo/SearchableDropdownDemo.tsx — live demo
  */
 const SearchableDropdown = forwardRef<
-  HTMLDivElement,
+  HTMLButtonElement,
   SearchableDropdownProps
 >((props, forwardedRef) => {
   const {
@@ -508,15 +508,17 @@ const SearchableDropdown = forwardRef<
   const mergedTriggerRef = useCallback(
     (node: HTMLButtonElement | null) => {
       setTriggerNode(node);
+      setRef(forwardedRef, node);
     },
-    [],
+    [forwardedRef],
   );
 
   const renderTriggerRefCallback = useCallback(
     (node: HTMLElement | null) => {
       setTriggerNode(node);
+      setRef(forwardedRef, node as HTMLButtonElement | null);
     },
-    [],
+    [forwardedRef],
   );
 
   const triggerProps = {
@@ -545,7 +547,6 @@ const SearchableDropdown = forwardRef<
 
   return (
     <div
-      ref={forwardedRef}
       className={rootClassName}
       style={hasRootStyle ? rootStyle : undefined}
       data-disabled={disabled || undefined}

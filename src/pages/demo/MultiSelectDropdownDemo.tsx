@@ -215,7 +215,7 @@ const getClasses = () => ({
     label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
     description: `text-xs mb-1 text-cl-text-secondary`,
     chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text`,
-    chipRemove: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent`,
+    chipRemoveTrigger: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent`,
   } satisfies MultiSelectDropdownClasses,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
@@ -1305,7 +1305,7 @@ const MultiSelectDropdownDemo = () => {
                 itemControl:
                   "w-4 h-4 shrink-0 border border-white/30 rounded flex items-center justify-center",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-white/[0.10] text-white rounded-cl-md shrink-0 max-w-[100px]",
-                chipRemove:
+                chipRemoveTrigger:
                   "w-3 h-3 shrink-0 cursor-pointer text-white/70 hover:text-white",
                 count:
                   "inline-flex items-center px-2 py-0.5 text-xs bg-white/[0.10] text-white/80 rounded-cl-md shrink-0",
@@ -1339,7 +1339,7 @@ const MultiSelectDropdownDemo = () => {
                 icon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent`,
                 itemControl: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input-focus`,
                 chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-text`,
-                chipRemove: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent`,
+                chipRemoveTrigger: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent`,
                 count: `inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-accent/10 text-cl-text`,
                 label: `block text-sm font-medium mb-1 text-cl-accent`,
                 message: `text-sm mt-1 text-cl-accent`,

@@ -119,7 +119,7 @@
         "root": {
           "type": "string"
         },
-        "labelGroup": {
+        "group": {
           "type": "string"
         },
         "label": {

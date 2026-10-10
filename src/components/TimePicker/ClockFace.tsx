@@ -534,7 +534,7 @@ export function ClockFace({
             <button
               type="button"
               className={[
-                cls.periodButton,
+                cls.periodTrigger,
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -549,7 +549,7 @@ export function ClockFace({
             <button
               type="button"
               className={[
-                cls.periodButton,
+                cls.periodTrigger,
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -622,7 +622,7 @@ export function ClockFace({
       <div className={cls.footer}>
         <button
           type="button"
-          className={cls.cancelButton}
+          className={cls.cancelTrigger}
           onClick={onCancel}
           disabled={disabled}
         >
@@ -630,7 +630,7 @@ export function ClockFace({
         </button>
         <button
           type="button"
-          className={cls.confirmButton}
+          className={cls.confirmTrigger}
           onClick={onConfirm}
           disabled={disabled || !isCurrentTimeInRange}
         >

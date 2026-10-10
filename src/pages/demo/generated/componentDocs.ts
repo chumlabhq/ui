@@ -3423,7 +3423,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Root container wrapping checkbox and label."
           },
           {
-            "name": "labelGroup",
+            "name": "group",
             "type": "string",
             "required": false,
             "description": "Container for the label and description text."
@@ -4493,7 +4493,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Month navigation container"
           },
           {
-            "name": "navButton",
+            "name": "navTrigger",
             "type": "string",
             "required": false,
             "description": "Navigation button (prev/next month/year)"
@@ -8253,7 +8253,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Selected chip styling"
           },
           {
-            "name": "chipRemove",
+            "name": "chipRemoveTrigger",
             "type": "string",
             "required": false,
             "description": "Chip remove button"
@@ -8301,10 +8301,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "One row of the skeleton. It shared `loading` with the container above it."
           },
           {
-            "name": "loadingIcon",
+            "name": "loadingItemControl",
             "type": "string",
             "required": false,
-            "description": "The two skeleton shapes inside a `loadingItem`. Their styling was a call-site literal in MultiSelectDropdownShimmer, which has no `classes` prop — routed through this bag rather than giving the sub-component a second way in."
+            "description": "The square in each skeleton row, standing in for the row's `itemControl`. It and `loadingBar` were call-site literals in MultiSelectDropdownShimmer, which has no `classes` prop — routed through this bag rather than giving the sub-component a second way in."
           },
           {
             "name": "loadingBar",
@@ -8888,7 +8888,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Selected chip"
           },
           {
-            "name": "chipRemove",
+            "name": "chipRemoveTrigger",
             "type": "string",
             "required": false,
             "description": "Chip remove button"
@@ -9726,7 +9726,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "One page-number button."
           },
           {
-            "name": "navButton",
+            "name": "navTrigger",
             "type": "string",
             "required": false,
             "description": "Prev/next buttons"
@@ -11358,13 +11358,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Draggable thumb(s)"
           },
           {
-            "name": "valueText",
+            "name": "value",
             "type": "string",
             "required": false,
             "description": "Value tooltip above the thumb"
           },
           {
-            "name": "marker",
+            "name": "mark",
             "type": "string",
             "required": false,
             "description": "Mark tick container"
@@ -12332,7 +12332,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "The line holding the label group and the track, which is what `labelPosition` reorders."
           },
           {
-            "name": "labelGroup",
+            "name": "group",
             "type": "string",
             "required": false,
             "description": "The label and description stacked together, so they move as one."
@@ -13241,7 +13241,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Pin icon (unpinned state)."
           },
           {
-            "name": "pinButton",
+            "name": "pinTrigger",
             "type": "string",
             "required": false,
             "description": "Pin button (unpinned state)."
@@ -13283,7 +13283,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Sort direction indicator icon."
           },
           {
-            "name": "filterButton",
+            "name": "filterTrigger",
             "type": "string",
             "required": false,
             "description": "Filter icon button in header."
@@ -13325,7 +13325,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "The checkbox on that row."
           },
           {
-            "name": "expandButton",
+            "name": "expandTrigger",
             "type": "string",
             "required": false,
             "description": "Expand/collapse icon button."
@@ -14970,13 +14970,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Actions row (Cancel / OK)."
           },
           {
-            "name": "cancelButton",
+            "name": "cancelTrigger",
             "type": "string",
             "required": false,
             "description": "Cancel button."
           },
           {
-            "name": "confirmButton",
+            "name": "confirmTrigger",
             "type": "string",
             "required": false,
             "description": "OK button."
@@ -14988,7 +14988,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "AM/PM toggle container."
           },
           {
-            "name": "periodButton",
+            "name": "periodTrigger",
             "type": "string",
             "required": false,
             "description": "Individual AM or PM button."
@@ -15228,7 +15228,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "\"success\" | \"warning\" | \"error\" | \"info\"",
         "required": false,
         "default": "\"info\"",
-        "description": "Which status this is, choosing the colour and the indicator glyph."
+        "description": "Which status this is, choosing the colour and the status glyph."
       },
       {
         "name": "message",
@@ -15447,7 +15447,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "track",
             "type": "string",
             "required": false,
-            "description": "The auto-dismiss progress groove that `indicator` fills."
+            "description": "The auto-dismiss progress groove that `range` fills."
           },
           {
             "name": "title",
@@ -15462,10 +15462,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Description text element"
           },
           {
-            "name": "indicator",
+            "name": "range",
             "type": "string",
             "required": false,
-            "description": "The status glyph at the leading edge, which is what distinguishes the types apart from colour."
+            "description": "The fill inside `track`, which shrinks as the auto-dismiss timer runs."
           },
           {
             "name": "closeTrigger",
@@ -15497,7 +15497,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "variant",
             "type": "ToastVariant",
             "required": false,
-            "description": "Which status this is, choosing the colour and the indicator glyph."
+            "description": "Which status this is, choosing the colour and the status glyph."
           },
           {
             "name": "message",
@@ -15539,7 +15539,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "icon",
             "type": "ReactNode",
             "required": false,
-            "description": "Replaces the variant's default indicator glyph."
+            "description": "Replaces the variant's default status glyph."
           },
           {
             "name": "showCloseButton",

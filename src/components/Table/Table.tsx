@@ -299,7 +299,7 @@ function TableInner<TData>(
   const unpinnedTableClassName = mergeSlot(base.list, classesProp?.list);
   const emptyClassName = mergeSlot(base.empty, classesProp?.empty);
   const pinIconClassName = mergeSlot(base.pinIcon, classesProp?.pinIcon);
-  const pinButtonClassName = mergeSlot(base.pinButton, classesProp?.pinButton);
+  const pinButtonClassName = mergeSlot(base.pinTrigger, classesProp?.pinTrigger);
   const shimmerClassName = mergeSlot(base.loading, classesProp?.loading);
   const shimmerRowClassName = mergeSlot(base.loadingRow, classesProp?.loadingRow);
   const shimmerCellClassName = mergeSlot(base.loadingItem, classesProp?.loadingItem);
@@ -307,7 +307,7 @@ function TableInner<TData>(
   const checkboxClassName = mergeSlot(base.control, classesProp?.control);
   const checkboxCellClassName = mergeSlot(base.cell, classesProp?.cell);
   const sortIconClassName = mergeSlot(base.sortIcon, classesProp?.sortIcon);
-  const expandIconClassName = mergeSlot(base.expandButton, classesProp?.expandButton);
+  const expandIconClassName = mergeSlot(base.expandTrigger, classesProp?.expandTrigger);
   const pinnedRightContainerClassName = mergeSlot(base.pinnedRightRegion, classesProp?.pinnedRightRegion);
   const pinnedRightTableClassName = mergeSlot(base.pinnedRightList, classesProp?.pinnedRightList);
   const editInputClassName = mergeSlot(base.input, classesProp?.input);
@@ -318,7 +318,7 @@ function TableInner<TData>(
   const groupHeaderClassName = mergeSlot(base.groupLabel, classesProp?.groupLabel);
   const resizeHandleClassName = mergeSlot(base.resizeHandle, classesProp?.resizeHandle);
   const resizeIndicatorClassName = mergeSlot(base.resizeIndicator, classesProp?.resizeIndicator);
-  const filterIconClassName = mergeSlot(base.filterButton, classesProp?.filterButton);
+  const filterIconClassName = mergeSlot(base.filterTrigger, classesProp?.filterTrigger);
   const filterDropdownClassName = mergeSlot(base.filterContent, classesProp?.filterContent);
   const loadingMoreClassName = mergeSlot(base.loadingFooter, classesProp?.loadingFooter);
   const searchInputClassName = mergeSlot(base.searchInput, classesProp?.searchInput);

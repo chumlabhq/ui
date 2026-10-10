@@ -40,7 +40,7 @@ export default function MultiSelectDropdownExample() {
               label: "block text-sm font-medium mb-1 text-cl-text-secondary",
               description: "text-xs mb-1 text-cl-text-secondary",
               chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-              chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+              chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
             }
           }
         />

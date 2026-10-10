@@ -18,14 +18,14 @@ export interface ToastClasses {
    * button. Style `root` for the toast's outer box and this for its contents.
    */
   body?: string;
-  /** The auto-dismiss progress groove that `indicator` fills. */
+  /** The auto-dismiss progress groove that `range` fills. */
   track?: string;
   /** The message line, which is the toast's accessible name. */
   title?: string;
   /** Description text element */
   description?: string;
-  /** The status glyph at the leading edge, which is what distinguishes the types apart from colour. */
-  indicator?: string;
+  /** The fill inside `track`, which shrinks as the auto-dismiss timer runs. */
+  range?: string;
   /** The dismiss button. */
   closeTrigger?: string;
   /** Icon wrapper element */
@@ -38,7 +38,7 @@ export interface ToastClasses {
 export interface ToastConfig {
   /** Identifies the toast so it can be dismissed by name later; generated when omitted. */
   id: string;
-  /** Which status this is, choosing the colour and the indicator glyph. */
+  /** Which status this is, choosing the colour and the status glyph. */
   variant?: ToastVariant;
   /** The main line, and the toast's accessible name. */
   message?: ReactNode;
@@ -52,7 +52,7 @@ export interface ToastConfig {
   showProgress?: boolean;
   /** Overrides that bar's colour. */
   progressColor?: string;
-  /** Replaces the variant's default indicator glyph. */
+  /** Replaces the variant's default status glyph. */
   icon?: ReactNode;
   /** Renders the dismiss button. */
   showCloseButton?: boolean;

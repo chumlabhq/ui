@@ -107,7 +107,7 @@ export interface DatePickerClasses {
   /** Month navigation container */
   row?: string;
   /** Navigation button (prev/next month/year) */
-  navButton?: string;
+  navTrigger?: string;
   /** Multi-month grid wrapper */
   listRow?: string;
   /** Single month grid */

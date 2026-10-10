@@ -23,7 +23,7 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
     itemIndicator: "w-full h-full",
     chip:
       "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-bg text-cl-accent-hover",
-    chipRemove:
+    chipRemoveTrigger:
       "inline-flex items-center justify-center min-w-6 min-h-6 -my-1 -mr-1 shrink-0 cursor-pointer hover:bg-cl-accent-bg-hover appearance-none border-0 bg-transparent rounded-cl-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
     empty:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
@@ -38,7 +38,7 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
     loading: "px-3 py-2 bg-cl-bg-hover",
     loadingItem:
       "px-3 py-2 bg-cl-bg-hover flex items-center gap-2",
-    loadingIcon: "w-4 h-4 bg-cl-bg-skeleton rounded animate-pulse",
+    loadingItemControl: "w-4 h-4 bg-cl-bg-skeleton rounded animate-pulse",
     loadingBar: "flex-1 h-4 bg-cl-bg-skeleton rounded animate-pulse",
     count:
       "inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-item-hover text-cl-text-secondary",

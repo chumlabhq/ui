@@ -248,7 +248,7 @@ const SliderDemo = () => {
                 markDotSize={10}
                 classes={{
                   ...c.slider,
-                  marker: `rounded-full bg-cl-bg-hover`,
+                  mark: `rounded-full bg-cl-bg-hover`,
                 }}
               />
             </div>

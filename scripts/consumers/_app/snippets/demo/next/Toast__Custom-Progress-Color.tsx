@@ -28,15 +28,15 @@ function ToastTrigger() {
           toast.toast({
             variant: "info",
             message: "Gradient progress",
-            description: "Using classes.progress prop",
+            description: "Using classes.range prop",
             classes: {
-              indicator:
+              range:
                 "bg-linear-to-r from-cl-accent via-cl-warning to-cl-error"
             }
           })
         }
       >
-        Gradient (classes.progress)
+        Gradient (classes.range)
       </Button>
       <Button
         className="px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-panel border border-cl-border-input text-cl-text hover:bg-cl-bg-hover"

@@ -14,7 +14,7 @@ export default function PaginationExample() {
         {
                     ...({
           root: "flex flex-wrap items-center gap-2",
-          navButton: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
+          navTrigger: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary",
           ellipsis: "px-2 select-none text-cl-text-tertiary",
           rowsPerPage: {
             trigger: "flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text",
@@ -26,7 +26,7 @@ export default function PaginationExample() {
           label: "text-sm text-cl-text-secondary",
           pageInfo: "flex items-center"
         }),
-                    navButton: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary",
+                    navTrigger: "p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary",
                     item: "px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-cl-on-accent data-[active]:hover:bg-cl-accent/90 hover:text-cl-text"
                   }
       }

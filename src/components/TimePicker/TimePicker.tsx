@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import { useLayer } from "../../utils/layers.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
 import type { TimePickerProps, TimePickerClasses, TimeValue, ClockFaceClasses } from "./utils/types.js";
 import {
   DEFAULT_TIMEPICKER_CLASSES,
@@ -109,7 +110,7 @@ const TimeOption = memo(function TimeOption({
  * - TIMEPICKER.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/TimePickerDemo.tsx — live demo
  */
-const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
+const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
   (
     {
       value: valueProp,
@@ -200,10 +201,10 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       clockNumber: mergeSlot(baseClasses.clockNumber, classesProp?.clockNumber),
       clockCenter: mergeSlot(baseClasses.clockCenter, classesProp?.clockCenter),
       footer: mergeSlot(baseClasses.footer, classesProp?.footer),
-      cancelButton: mergeSlot(baseClasses.cancelButton, classesProp?.cancelButton),
-      confirmButton: mergeSlot(baseClasses.confirmButton, classesProp?.confirmButton),
+      cancelTrigger: mergeSlot(baseClasses.cancelTrigger, classesProp?.cancelTrigger),
+      confirmTrigger: mergeSlot(baseClasses.confirmTrigger, classesProp?.confirmTrigger),
       row: mergeSlot(baseClasses.row, classesProp?.row),
-      periodButton: mergeSlot(baseClasses.periodButton, classesProp?.periodButton),
+      periodTrigger: mergeSlot(baseClasses.periodTrigger, classesProp?.periodTrigger),
     }), [classesProp, baseClasses]);
 
     // Fetched at mount when the clock mode is asked for, and null until it
@@ -223,10 +224,10 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       clockNumber: mergedClasses.clockNumber,
       clockCenter: mergedClasses.clockCenter,
       footer: mergedClasses.footer,
-      cancelButton: mergedClasses.cancelButton,
-      confirmButton: mergedClasses.confirmButton,
+      cancelTrigger: mergedClasses.cancelTrigger,
+      confirmTrigger: mergedClasses.confirmTrigger,
       row: mergedClasses.row,
-      periodButton: mergedClasses.periodButton,
+      periodTrigger: mergedClasses.periodTrigger,
     }), [mergedClasses]);
 
     const optionClasses = useMemo(() => ({
@@ -286,6 +287,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const dropdownContentRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const mergedInputRef = useMemo(() => mergeRefs(inputRef, ref), [ref]);
     // Tracks whether a mousedown on the trigger is in progress so the
     // blur handler can skip its close — the click handler will handle it.
     const isTriggerMouseDownRef = useRef(false);
@@ -600,7 +602,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 
     return (
       <div
-        ref={ref}
         {...restProps}
         className={[mergedClasses.root, className, fullWidth ? "w-full" : ""]
           .filter(Boolean)
@@ -641,7 +642,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             data-open={isOpen || undefined}
           >
             <input
-              ref={inputRef}
+              ref={mergedInputRef}
               id={triggerId}
               type="text"
               role="combobox"

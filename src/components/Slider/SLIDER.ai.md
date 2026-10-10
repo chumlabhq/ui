@@ -129,6 +129,16 @@ override silently drops the rest.
 
 ---
 
+## Ref API
+
+The ref lands on the thumb, the `role="slider"` element a keyboard user tabs to and moves with the arrow keys, so `ref.current.focus()` focuses the control. A range slider has two thumbs; the ref is the first one, the thumb for `value[0]`.
+
+```tsx
+const ref = useRef<HTMLDivElement>(null);
+<Slider ref={ref} defaultValue={[20, 80]} aria-label="Price" />
+// ref.current is the thumb for 20
+```
+
 ## Accessibility
 
 - `role="slider"` on each thumb with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`

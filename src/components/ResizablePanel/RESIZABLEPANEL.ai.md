@@ -71,6 +71,16 @@ The handle is `role="separator"` and focusable, so resizing never requires a dra
 
 ---
 
+## Ref API
+
+The ref lands on the handle, the `role="separator"` element a keyboard user tabs to and resizes with the arrow keys, so `ref.current.focus()` focuses it. `className`, `style` and the other HTML attributes still go on the panel itself.
+
+```tsx
+const ref = useRef<HTMLDivElement>(null);
+<ResizablePanel ref={ref} aria-label="Resize sidebar">…</ResizablePanel>
+// ref.current is the separator
+```
+
 ## Accessibility
 
 - `role="separator"` on the drag handle

@@ -10,12 +10,12 @@
   "description": "[data-status]",
   "separator": "[data-next-status], [data-status]",
   "count": "span",
-  "marker": "[data-state]",
+  "mark": "[data-state]",
   "clockDisplay": "[data-state]",
-  "periodButton": "button",
+  "periodTrigger": "button",
   "clockNumber": "[data-selected], [data-disabled]",
   "presetTrigger": "button",
-  "pinButton": "button",
+  "pinTrigger": "button",
   "countrySelect.item": "[role=\"option\"]",
   "message": "[role=\"alert\"], [role=\"status\"], [data-invalid], [data-valid]"
 }

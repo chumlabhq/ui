@@ -302,7 +302,7 @@ describe("classes override contract", () => {
      *
      * Planted by reducing `mergeSlot` to a plain `cn`, which is the state the
      * library shipped in. 26 of the 33 components go red and the failures name
-     * the sites: `chipRemove: \`hover:text-cl-accent-hover\` survives a
+     * the sites: `chipRemoveTrigger: \`hover:text-cl-accent-hover\` survives a
      * consumer's \`text-[rgb(1,2,3)]\``, `clearTrigger:
      * \`dark:hover:text-cl-text\` survives a consumer's \`text-[rgb(1,2,3)]\``,
      * and so on — the slot, the library token that won, and the consumer token

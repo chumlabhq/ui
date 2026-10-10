@@ -47,10 +47,10 @@ export default function TimePickerExample() {
                clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary data-[disabled]:cursor-not-allowed",
                clockCenter: "fill-cl-accent",
                footer: "flex items-center justify-end gap-2 mt-4",
-               cancelButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
-               confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
+               cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
+               confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
                row: "flex flex-col gap-1 ml-3",
-               periodButton: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover"
+               periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover"
              }),
                              itemIndicator: "w-4 h-4 shrink-0 text-cl-warning"
                            }
@@ -93,10 +93,10 @@ export default function TimePickerExample() {
                clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary data-[disabled]:cursor-not-allowed",
                clockCenter: "fill-cl-accent",
                footer: "flex items-center justify-end gap-2 mt-4",
-               cancelButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
-               confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
+               cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
+               confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
                row: "flex flex-col gap-1 ml-3",
-               periodButton: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover"
+               periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover"
              }
           }
         />

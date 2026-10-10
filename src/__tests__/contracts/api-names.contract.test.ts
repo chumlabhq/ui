@@ -10,7 +10,9 @@
  * the visible-items cap, the edge a popup opens on, its offset, keeping
  * content mounted) and turned the PascalCase icon props into camelCase
  * ReactNode props, or `render…Icon` functions where the glyph itself changes
- * with state. Nothing is
+ * with state. A2d gave the `classes` slots one vocabulary: a clickable part is
+ * a `*Trigger`, and a part another component already names takes that name
+ * (`range`, `value`, `mark`, `group`). Nothing is
  * published, so there are no aliases and no deprecations — the old name is
  * simply gone. A name that comes back anywhere, in a type, a demo, a snippet a
  * consumer copies or the docs the codegen product reads, is a second API for
@@ -177,6 +179,44 @@ interface ValueTombstone {
  */
 const ITEM_VALUE_TOMBSTONES = [{ component: "Breadcrumb", key: "iconPosition", old: ["left", "right"] }];
 
+interface SlotTombstone {
+  old: string;
+  now: string;
+  /** The exports whose `classes` had the old key. */
+  components: string[];
+  /**
+   * `word` where no other export or file uses the name for anything else, so
+   * the word anywhere in the population is the tombstone. `component` where it
+   * is also English or another export's slot — TabPanel keeps its `indicator`,
+   * DatePicker its `markers`, a spec its local `valueText` — so a hit counts
+   * only in the component's directory, its llms-full section, its componentDocs
+   * classes and component-index anatomy, and as a key of a `classes` object
+   * handed to its tags (inline, or a same-file object the attribute names), to
+   * a `toast(…)` call, or in its own fixtures' `props`.
+   */
+  scope: "word" | "component";
+}
+
+/** A2d: one vocabulary for slots. A clickable part is a `*Trigger`; the rest take the name their siblings already use. */
+const SLOT_TOMBSTONES: SlotTombstone[] = [
+  { old: "cancelButton", now: "cancelTrigger", components: ["TimePicker"], scope: "word" },
+  { old: "confirmButton", now: "confirmTrigger", components: ["TimePicker"], scope: "word" },
+  { old: "periodButton", now: "periodTrigger", components: ["TimePicker"], scope: "word" },
+  { old: "navButton", now: "navTrigger", components: ["DatePicker", "Pagination"], scope: "word" },
+  { old: "expandButton", now: "expandTrigger", components: ["Table"], scope: "word" },
+  { old: "filterButton", now: "filterTrigger", components: ["Table"], scope: "word" },
+  { old: "pinButton", now: "pinTrigger", components: ["Table"], scope: "word" },
+  { old: "chipRemove", now: "chipRemoveTrigger", components: ["MultiSelectDropdown", "MultiSelectSearchableDropdown"], scope: "word" },
+  // api-decisions said `loading`, the name nine others use, but MultiSelectDropdown
+  // already had `loading` for the skeleton container; this is the square in each
+  // skeleton row, standing in for the row's `itemControl`.
+  { old: "loadingIcon", now: "loadingItemControl", components: ["MultiSelectDropdown"], scope: "word" },
+  { old: "indicator", now: "range", components: ["Toast", "ToastProvider"], scope: "component" },
+  { old: "valueText", now: "value", components: ["Slider"], scope: "component" },
+  { old: "marker", now: "mark", components: ["Slider"], scope: "component" },
+  { old: "labelGroup", now: "group", components: ["Checkbox", "Switch"], scope: "word" },
+];
+
 const VALUE_TOMBSTONES: ValueTombstone[] = [
   { component: "AccordionTrigger", prop: "iconPosition", old: ["left", "right"], now: ["start", "end", "none"] },
   { component: "TabPanel", prop: "iconPosition", old: ["left", "right"], now: ["start", "end"] },
@@ -229,6 +269,12 @@ const EXCEPTIONS: { old: string; file: string; line: RegExp; reason: string }[] 
     line: /forceMount(: |=\$)|`forceMount`|keeps every old/,
     reason: "the merge's own test: each old combination, mapped to keepMounted, against the mount states HEAD produced for it",
   },
+  {
+    old: "chipRemove",
+    file: "ai/system-state.json",
+    line: /"description": "Increased MultiSelectDropdown chipRemove from w-3 h-3/,
+    reason: "the fix log's dated record of FIX-RESP-CHIP, which names the slot as it was called then",
+  },
 ];
 
 /**
@@ -253,6 +299,7 @@ for (const [exp, dir] of Object.entries({
   PulseLoader: "Loader",
   AccordionContent: "Accordion",
   CountryFlagGroup: "CountryFlag",
+  ToastProvider: "Toast",
 })) DIR_OF[exp] = dir;
 
 /** The fixture file for an export: `<Dir>.fixtures.tsx`, or `<Dir>.<Export>.fixtures.tsx` for a sub-export. */
@@ -713,7 +760,97 @@ function scan(): Hit[] {
           add(g.path, g.path.startsWith("componentDocs") ? "componentDocs" : "snippets");
     }
   }
+  for (const t of SLOT_TOMBSTONES) {
+    const label = `classes.${t.old}`;
+    const add = (where: string, group: Hit["group"]) => hits.push({ old: label, components: t.components.join(", "), where, group });
+
+    for (const c of t.components) if (classKeysOf(c)?.has(t.old)) add(`${c} classes type`, "types");
+    for (const dir of new Set(t.components.map((c) => DIR_OF[c]))) {
+      if (COMPONENT_DOCS[dir]?.classes.some((m) => m.keys.some((k) => k.name === t.old))) add(`componentDocs ${dir}.classes`, "componentDocs");
+      const entry = indexEntries.find((e) => e.name === dir) as { anatomy?: unknown } | undefined;
+      if (entry && new RegExp(`"${t.old}":`).test(JSON.stringify(entry.anatomy ?? {}))) add(`ai/component-index.json ${dir}.anatomy`, "ai-index");
+    }
+
+    if (t.scope === "word") {
+      for (const s of SOURCES)
+        for (const line of wordHits(s.text, t.old))
+          if (!isExcused(t.old, s.path, s.text, line)) add(`${s.path}:${line}`, s.group);
+      continue;
+    }
+
+    const dirs = [...new Set(t.components.map((c) => `${SRC}/${DIR_OF[c]}/`))];
+    for (const s of SOURCES) {
+      if (dirs.some((d) => s.path.startsWith(d))) {
+        for (const line of wordHits(s.text, t.old))
+          if (!isExcused(t.old, s.path, s.text, line)) add(`${s.path}:${line}`, s.group);
+        continue;
+      }
+      if (GENERATED_FILES.has(s.path)) continue;
+      if (s.path === "llms-full.txt") {
+        for (const dir of new Set(t.components.map((c) => DIR_OF[c])))
+          for (const line of wordHits(llmsSection(dir), t.old)) add(`llms-full.txt ## ${dir} +${line}`, "llms");
+        continue;
+      }
+      for (const line of classesKeyHits(s.text, t.components, t.old)) add(`${s.path}:${line} classes`, s.group);
+      // A fixture hands `classes` through its `props` object, not a tag.
+      if (t.components.some((c) => s.path === fixtureFileOf(c)))
+        for (const m of s.text.matchAll(/(?<![\w$.])classes\s*:\s*\{/g))
+          for (const k of braced(s.text, m.index! + m[0].length - 1).matchAll(new RegExp(`(?<![\\w$.])["']?${t.old}["']?\\s*:`, "g")))
+            add(`${s.path}:${s.text.slice(0, m.index! + m[0].length - 1 + k.index!).split("\n").length} fixture classes`, s.group);
+      if (t.components.includes("Toast"))
+        for (const line of toastCallKeyHits(s.text, t.old)) add(`${s.path}:${line} toast(…{ ${t.old} })`, s.group);
+    }
+    for (const g of GENERATED_STRINGS)
+      if (classesKeyHits(g.text, t.components, t.old).length || (t.components.includes("Toast") && toastCallKeyHits(g.text, t.old).length))
+        add(`${g.path} classes`, g.path.startsWith("componentDocs") ? "componentDocs" : "snippets");
+  }
   return hits;
+}
+
+/** The keys of a component's `classes` prop, by the compiler; null when it has none. */
+function classKeysOf(exportName: string): Set<string> | null {
+  const { type, at } = propsTypeOf(exportName);
+  const members = type.isUnion() ? type.types.map((t) => t.getProperty("classes")).filter(Boolean) : [type.getProperty("classes")];
+  if (!members[0]) return null;
+  const classes = checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(members[0]!, at));
+  return new Set(checker.getPropertiesOfType(classes).map((s) => s.getName()));
+}
+
+/** The balanced `{…}` starting at `open`, as text. */
+function braced(text: string, open: number): string {
+  let depth = 0;
+  for (let i = open; i < text.length; i++) {
+    if (text[i] === "{") depth++;
+    else if (text[i] === "}" && --depth === 0) return text.slice(open, i + 1);
+  }
+  return text.slice(open);
+}
+
+/**
+ * Lines where `key` is a key of a `classes` object handed to one of the
+ * components' tags: written inline (`classes={{ key: … }}`), or a same-file
+ * object the attribute names (`classes={sliderClasses}`,
+ * `classes={{ ...base, … }}`, `classes={dark ? a : b}`), followed one level.
+ */
+function classesKeyHits(text: string, components: string[], key: string): number[] {
+  const keyRe = new RegExp(`(?<![\\w$.])["']?${key}["']?\\s*:`, "g");
+  const lines = new Set<number>();
+  const scanObject = (open: number) => {
+    for (const k of braced(text, open).matchAll(keyRe)) lines.add(text.slice(0, open + k.index!).split("\n").length);
+  };
+  for (const c of components)
+    for (const m of text.matchAll(new RegExp(`<${c}(?![\\w.])`, "g"))) {
+      const start = m.index! + m[0].length;
+      const { raw, attrs } = jsxAttributes(text.slice(m.index!), c)[0];
+      const attr = /(?:^|\s)classes\s*=\s*\{/.exec(raw);
+      if (!attrs.includes("classes") || !attr) continue;
+      const open = start + attr.index + attr[0].length - 1;
+      scanObject(open);
+      for (const id of new Set(braced(text, open).match(/[A-Za-z_$][\w$]*/g) ?? []))
+        for (const decl of text.matchAll(new RegExp(`(?<![\\w$.])${id.replace(/\$/g, "\\$")}\\s*(?::[^=;{]+)?=\\s*\\{`, "g")))
+          scanObject(decl.index! + decl[0].length - 1);
+    }
+  return [...lines];
 }
 
 const HITS = scan();
@@ -733,8 +870,13 @@ for (const v of VALUE_TOMBSTONES)
     const mine = HITS.filter((h) => h.old === `${v.prop}="${old}"` && h.components === v.component);
     console.log(`  ${`${v.component}.${v.prop}="${old}"`.padEnd(44)} hits=${mine.length}`);
   }
+console.log(`API_SLOTS tombstones=${SLOT_TOMBSTONES.length} owners=${SLOT_TOMBSTONES.reduce((n, t) => n + t.components.length, 0)}`);
+for (const t of SLOT_TOMBSTONES) {
+  const mine = HITS.filter((h) => h.old === `classes.${t.old}` && h.components === t.components.join(", "));
+  console.log(`  ${t.old.padEnd(24)} → ${t.now.padEnd(24)} ${t.components.join(", ").padEnd(48)} ${t.scope.padEnd(9)} hits=${mine.length}`);
+}
 
-describe("API names: A2a's, A2b's and A2c's old names and values are gone", () => {
+describe("API names: A2a's, A2b's, A2c's and A2d's old names and values are gone", () => {
   it("reads attributes on the named tag only, outside expressions", () => {
     const text = `<Checkbox checked onValueChange={set} /> <CheckboxGroup onValueChange={x} />
       <Switch onCheckedChange={() => ({ onValueChange: 1 })} label="a > b" />`;
@@ -756,6 +898,28 @@ describe("API names: A2a's, A2b's and A2c's old names and values are gone", () =
       t.components.filter((c) => !propNames(c).has(t.now)).map((c) => `${c}.${t.now}`),
     );
     expect(missing).toEqual([]);
+  });
+
+  it("every renamed slot is a key of its components' classes, and the old key is not", () => {
+    const wrong = SLOT_TOMBSTONES.flatMap((t) =>
+      t.components.flatMap((c) => {
+        const keys = classKeysOf(c);
+        return [
+          ...(keys?.has(t.now) ? [] : [`${c}.classes.${t.now} missing`]),
+          ...(keys?.has(t.old) ? [`${c}.classes.${t.old} still there`] : []),
+        ];
+      }),
+    );
+    console.log(`API_SLOT_KEYS checked=${SLOT_TOMBSTONES.reduce((n, t) => n + t.components.length, 0)} wrong=${wrong.length}`);
+    expect(wrong).toEqual([]);
+  });
+
+  it("reads a slot key off the classes object a tag is handed, and no other", () => {
+    const text = `const dark = { indicator: "a" };
+      const tabs = { indicator: "b" };
+      <Toast classes={{ ...dark, title: "c" }} /> <TabPanel classes={tabs} />
+      <Toast classes={{ indicator: "d" }} />`;
+    expect(classesKeyHits(text, ["Toast"], "indicator").sort()).toEqual([1, 4]);
   });
 
   /**

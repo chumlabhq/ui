@@ -11,7 +11,7 @@ export interface CheckboxClasses {
   /** Root container wrapping checkbox and label. */
   root?: string;
   /** Container for the label and description text. */
-  labelGroup?: string;
+  group?: string;
   /** Label text element. */
   label?: string;
   /** Description text below the label. */

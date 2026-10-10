@@ -35,7 +35,7 @@ function getTableClasses() {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
+    pinTrigger: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
     pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
@@ -262,7 +262,7 @@ export default function TableExample() {
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  expandButton: "text-cl-accent"
+                  expandTrigger: "text-cl-accent"
                 }}
               />
             );

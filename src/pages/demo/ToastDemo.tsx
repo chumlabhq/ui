@@ -277,7 +277,7 @@ const ToastDemoContent = ({
 
       <Section
         title="Custom Progress Color"
-        description="Customize the progress bar with progressColor (inline style) or classes.progress (Tailwind classes)."
+        description="Customize the progress bar with progressColor (inline style) or classes.range (Tailwind classes)."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
@@ -300,15 +300,15 @@ const ToastDemoContent = ({
               toast.toast({
                 variant: "info",
                 message: "Gradient progress",
-                description: "Using classes.progress prop",
+                description: "Using classes.range prop",
                 classes: {
-                  indicator:
+                  range:
                     "bg-linear-to-r from-cl-accent via-cl-warning to-cl-error",
                 },
               })
             }
           >
-            Gradient (classes.progress)
+            Gradient (classes.range)
           </Button>
           <Button
             className={c.btn}

@@ -26,9 +26,9 @@ export interface SliderClasses {
   /** Draggable thumb(s) */
   thumb?: string;
   /** Value tooltip above the thumb */
-  valueText?: string;
+  value?: string;
   /** Mark tick container */
-  marker?: string;
+  mark?: string;
   /** The text under a mark's dot, when `showMarkLabels` is set. */
   markLabel?: string;
   /** Error message */

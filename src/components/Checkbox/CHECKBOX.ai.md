@@ -113,7 +113,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | Slot | Element |
 |------|---------|
 | `root` | The container wrapping the box and its label. Carries every data attribute. |
-| `labelGroup` | The label and description stacked together. |
+| `group` | The label and description stacked together. |
 | `label` | The label text. |
 | `description` | The description under the label. |
 | `control` | The indicator box itself. |
@@ -169,7 +169,7 @@ root
     ├── control [contains hidden input + itemIndicator]
     │   ├── (hidden native input)
     │   └── itemIndicator (check / indeterminate / unchecked)
-    └── labelGroup
+    └── group
         ├── label (text)
         └── description (text)
 message / message (below)

@@ -186,7 +186,7 @@
         "pinIcon": {
           "type": "string"
         },
-        "pinButton": {
+        "pinTrigger": {
           "type": "string"
         },
         "loading": {
@@ -210,13 +210,13 @@
         "filterInput": {
           "type": "string"
         },
-        "filterButton": {
+        "filterTrigger": {
           "type": "string"
         },
         "filterContent": {
           "type": "string"
         },
-        "expandButton": {
+        "expandTrigger": {
           "type": "string"
         },
         "pinnedRightRegion": {

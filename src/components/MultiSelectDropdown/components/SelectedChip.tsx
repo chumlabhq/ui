@@ -19,7 +19,7 @@ export const SelectedChip = memo(function SelectedChip({
       <span
         role="button"
         tabIndex={0}
-        className={classes?.chipRemove || undefined}
+        className={classes?.chipRemoveTrigger || undefined}
         aria-label={`Remove ${option.label}`}
         onClick={(e) => {
           e.stopPropagation();

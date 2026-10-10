@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from "react";
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, Ref } from "react";
 import type { SliderProps, SliderClasses, SliderValue } from "./utils/types.js";
 import {
   DEFAULT_SLIDER_CLASSES,
@@ -68,6 +68,8 @@ interface ThumbProps {
   ariaLabel?: string;
   ariaLabelledBy?: string;
   ariaValueText?: string;
+  /** The Slider's own ref, which lands on the first thumb. */
+  thumbRef?: Ref<HTMLDivElement>;
   onPointerDown: (e: React.PointerEvent, index: number) => void;
   onKeyDown: (e: ReactKeyboardEvent, index: number) => void;
 }
@@ -91,6 +93,7 @@ function Thumb({
   ariaLabel,
   ariaLabelledBy,
   ariaValueText,
+  thumbRef,
   onPointerDown,
   onKeyDown,
 }: ThumbProps) {
@@ -142,6 +145,7 @@ function Thumb({
 
   return (
     <div
+      ref={thumbRef}
       role="slider"
       tabIndex={disabled ? -1 : 0}
       aria-valuenow={value}
@@ -177,7 +181,7 @@ function Thumb({
         : null}
       {tooltipVisible && (
         <div
-          className={classes.valueText || undefined}
+          className={classes.value || undefined}
           style={{ position: "absolute", ...tooltipStyle }}
           role="tooltip"
         >
@@ -291,8 +295,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         track: mergeSlot(baseClasses.track, classesProp?.track),
         range: mergeSlot(baseClasses.range, classesProp?.range),
         thumb: mergeSlot(baseClasses.thumb, classesProp?.thumb),
-        valueText: mergeSlot(baseClasses.valueText, classesProp?.valueText),
-        marker: mergeSlot(baseClasses.marker, classesProp?.marker),
+        value: mergeSlot(baseClasses.value, classesProp?.value),
+        mark: mergeSlot(baseClasses.mark, classesProp?.mark),
         markLabel: mergeSlot(baseClasses.markLabel, classesProp?.markLabel),
         message: mergeSlot(baseClasses.message, classesProp?.message),
       }),
@@ -529,7 +533,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
     return (
       <div
-        ref={ref}
         className={cn(mc.root, className) || undefined}
         style={style}
         data-disabled={disabled || undefined}
@@ -612,7 +615,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                   </div>
                 ) : (
                   <div
-                    className={mc.marker || undefined}
+                    className={mc.mark || undefined}
                     data-state={inRange ? "active" : undefined}
                     data-disabled={disabled || undefined}
                     style={{
@@ -672,6 +675,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               <Thumb
                 value={values[0]}
                 index={0}
+                thumbRef={ref}
                 min={min}
                 max={max}
                 step={step}
@@ -720,6 +724,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             <Thumb
               value={values[0]}
               index={0}
+              thumbRef={ref}
               min={min}
               max={max}
               step={step}

@@ -65,7 +65,7 @@ export interface TableClasses {
   /** Pin icon (unpinned state). */
   pinIcon?: string;
   /** Pin button (unpinned state). */
-  pinButton?: string;
+  pinTrigger?: string;
   /** Shimmer container. */
   loading?: string;
   /** Shimmer row. */
@@ -80,7 +80,7 @@ export interface TableClasses {
   sortIcon?: string;
   /** Filter input field for column filters. */
   /** Filter icon button in header. */
-  filterButton?: string;
+  filterTrigger?: string;
   /** Filter dropdown container. */
   filterContent?: string;
   /**
@@ -97,7 +97,7 @@ export interface TableClasses {
   /** The checkbox on that row. */
   filterItemControl?: string;
   /** Expand/collapse icon button. */
-  expandButton?: string;
+  expandTrigger?: string;
   /** Right-pinned column container. */
   pinnedRightRegion?: string;
   /** The `<table>` element for right-pinned columns. */

@@ -700,8 +700,8 @@ describe("Table", () => {
         />
       );
 
-      const expandButton = screen.getAllByRole("button", { name: /expand row/i })[0];
-      await user.click(expandButton);
+      const expandTrigger = screen.getAllByRole("button", { name: /expand row/i })[0];
+      await user.click(expandTrigger);
 
       expect(screen.getByText("Details for Alice")).toBeInTheDocument();
 
@@ -1762,7 +1762,7 @@ describe("Table Icons", () => {
 
   describe("FilterIcon", () => {
     // ADR 002 R4: `active` is a state the icon reports, not a class it picks.
-    // The opacity now lives in `filterButton`'s default as a data-variant, so
+    // The opacity now lives in `filterTrigger`'s default as a data-variant, so
     // a consumer overriding that key keeps control of both states.
     it("marks itself active", () => {
       const { container } = render(<FilterIcon className="test" active={true} />);

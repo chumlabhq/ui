@@ -381,6 +381,16 @@ const searchCountries = async (query: string) => {
 
 ---
 
+## Ref API
+
+The ref lands on the trigger, the menu `<button>` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<CascadingDropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
+
 ## Accessibility
 
 - `role="menu"` on dropdown container, `role="menuitem"` / `role="menuitemcheckbox"` / `role="menuitemradio"` on items

@@ -27,7 +27,7 @@ export interface PaginationClasses {
   /** One page-number button. */
   item?: string;
   /** Prev/next buttons */
-  navButton?: string;
+  navTrigger?: string;
   /** Ellipsis elements */
   ellipsis?: string;
   /**

@@ -220,7 +220,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       row: mergeSlot(baseClasses.row, classesProp?.row),
       list: mergeSlot(baseClasses.list, classesProp?.list),
       item: mergeSlot(baseClasses.item, classesProp?.item),
-      navButton: mergeSlot(baseClasses.navButton, classesProp?.navButton),
+      navTrigger: mergeSlot(baseClasses.navTrigger, classesProp?.navTrigger),
       ellipsis: mergeSlot(baseClasses.ellipsis, classesProp?.ellipsis),
       rowsPerPage: composeClasses(baseClasses.rowsPerPage, classesProp?.rowsPerPage),
       label: mergeSlot(baseClasses.label, classesProp?.label),
@@ -439,7 +439,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           type="button"
           onClick={handlePrevPage}
           disabled={isFirstPage}
-          className={cn(mergedClasses.navButton)}
+          className={cn(mergedClasses.navTrigger)}
           aria-label={prevAriaLabel}
           data-disabled={isFirstPage || undefined}
         >
@@ -487,7 +487,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           type="button"
           onClick={handleNextPage}
           disabled={isLastPage}
-          className={cn(mergedClasses.navButton)}
+          className={cn(mergedClasses.navTrigger)}
           aria-label={nextAriaLabel}
           data-disabled={isLastPage || undefined}
         >

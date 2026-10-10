@@ -158,12 +158,12 @@ root (row, flex flex-wrap)
 │   └── label ("rows")
 ├── pageInfo (custom render slot)
 └── row (navigation controls)
-    ├── navButton (prev)
+    ├── navTrigger (prev)
     │   └── navIcon
     ├── list
     │   ├── item [data-state=active]
     │   └── ellipsis
-    └── navButton (next)
+    └── navTrigger (next)
         └── navIcon
 ```
 
@@ -171,7 +171,7 @@ root (row, flex flex-wrap)
 |------------------------|-------------|-------|
 | Root layout | `root` | Controls flex direction and gap |
 | Page buttons | `item` | Inactive and active styles |
-| Prev/next buttons | `navButton` | Shared for both |
+| Prev/next buttons | `navTrigger` | Shared for both |
 | Ellipsis dots | `ellipsis` | Or use `renderEllipsis` for custom |
 | Rows dropdown trigger | `rowsPerPage.trigger` | |
 | Dropdown panel | `rowsPerPage.content` | Portal-rendered |
@@ -191,7 +191,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
   onValueChange={setPage}
   classes={{
     root: "flex flex-wrap items-center gap-1",
-    navButton: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
+    navTrigger: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
     item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600 data-[state=active]:shadow-md data-[state=active]:bg-blue-600 data-[state=active]:border-blue-600 data-[state=active]:text-white",
     list: "flex items-center gap-1",
     navIcon: "w-4 h-4",

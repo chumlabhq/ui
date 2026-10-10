@@ -5,12 +5,12 @@ interface MultiSelectDropdownShimmerProps {
   className?: string;
   itemClassName?: string;
   /**
-   * Fed from MultiSelectDropdown's `loadingIcon` / `loadingBar`. The shimmer
+   * Fed from MultiSelectDropdown's `loadingItemControl` / `loadingBar`. The shimmer
    * takes className props rather than a `classes` bag of its own: it is a
    * sub-component, and two routes to style one component's output would
    * diverge.
    */
-  iconClassName?: string;
+  itemControlClassName?: string;
   barClassName?: string;
 }
 
@@ -18,7 +18,7 @@ const MultiSelectDropdownShimmer = memo(function MultiSelectDropdownShimmer({
   count = 5,
   className = "",
   itemClassName = "",
-  iconClassName = "",
+  itemControlClassName = "",
   barClassName = "",
 }: MultiSelectDropdownShimmerProps) {
   return (
@@ -30,7 +30,7 @@ const MultiSelectDropdownShimmer = memo(function MultiSelectDropdownShimmer({
           role="presentation"
           aria-hidden="true"
         >
-          <div className={iconClassName} />
+          <div className={itemControlClassName} />
           <div className={barClassName} />
         </div>
       ))}

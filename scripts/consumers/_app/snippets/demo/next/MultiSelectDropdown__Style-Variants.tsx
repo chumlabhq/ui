@@ -40,7 +40,7 @@ export default function MultiSelectDropdownExample() {
                 label: "block text-sm font-medium mb-1 text-cl-text-secondary",
                 description: "text-xs mb-1 text-cl-text-secondary",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-                chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+                chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
               }
             }
           />
@@ -63,7 +63,7 @@ export default function MultiSelectDropdownExample() {
                 label: "block text-sm font-medium mb-1 text-cl-text-secondary",
                 description: "text-xs mb-1 text-cl-text-secondary",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-                chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+                chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
               }),
                               trigger: "flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 transition-colors cursor-pointer min-h-[42px] bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover",
                               value:
@@ -90,7 +90,7 @@ export default function MultiSelectDropdownExample() {
                 label: "block text-sm font-medium mb-1 text-cl-text-secondary",
                 description: "text-xs mb-1 text-cl-text-secondary",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-                chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+                chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
               }),
                               trigger: "flex items-center gap-2 w-full px-1 py-2 text-sm border-0 border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus",
                               value:
@@ -117,7 +117,7 @@ export default function MultiSelectDropdownExample() {
                 label: "block text-sm font-medium mb-1 text-cl-text-secondary",
                 description: "text-xs mb-1 text-cl-text-secondary",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-                chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+                chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
               }),
                               trigger: "flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover",
                               value:
@@ -144,7 +144,7 @@ export default function MultiSelectDropdownExample() {
                  label: "block text-sm font-medium mb-1 text-cl-text-secondary",
                  description: "text-xs mb-1 text-cl-text-secondary",
                  chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent-surface text-cl-text",
-                 chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
+                 chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
                }),
               trigger: "flex items-center gap-2 px-4 py-2 text-sm rounded-full transition-colors cursor-pointer min-h-[42px] border border-cl-border bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover shadow-sm",
                                value:

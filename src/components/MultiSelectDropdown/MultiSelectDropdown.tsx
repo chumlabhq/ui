@@ -16,7 +16,7 @@ import {
   UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
 } from "./utils/constants.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
-import { mergeRefs } from "../../utils/mergeRefs.js";
+import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -126,7 +126,7 @@ const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
  * - src/pages/demo/MultiSelectDropdownDemo.tsx — live demo
  */
 const MultiSelectDropdown = forwardRef<
-  HTMLDivElement,
+  HTMLButtonElement,
   MultiSelectDropdownProps
 >(
   (
@@ -203,7 +203,7 @@ const MultiSelectDropdown = forwardRef<
         itemControl: mergeSlot(baseClasses.itemControl, classesProp?.itemControl),
         itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
         chip: mergeSlot(baseClasses.chip, classesProp?.chip),
-        chipRemove: mergeSlot(baseClasses.chipRemove, classesProp?.chipRemove),
+        chipRemoveTrigger: mergeSlot(baseClasses.chipRemoveTrigger, classesProp?.chipRemoveTrigger),
         empty: mergeSlot(baseClasses.empty, classesProp?.empty),
         clearTrigger: mergeSlot(baseClasses.clearTrigger, classesProp?.clearTrigger),
         label: mergeSlot(baseClasses.label, classesProp?.label),
@@ -211,7 +211,7 @@ const MultiSelectDropdown = forwardRef<
         description: mergeSlot(baseClasses.description, classesProp?.description),
         loading: mergeSlot(baseClasses.loading, classesProp?.loading),
         loadingItem: mergeSlot(baseClasses.loadingItem, classesProp?.loadingItem),
-        loadingIcon: mergeSlot(baseClasses.loadingIcon, classesProp?.loadingIcon),
+        loadingItemControl: mergeSlot(baseClasses.loadingItemControl, classesProp?.loadingItemControl),
         loadingBar: mergeSlot(baseClasses.loadingBar, classesProp?.loadingBar),
         count: mergeSlot(baseClasses.count, classesProp?.count),
       }),
@@ -355,10 +355,10 @@ const MultiSelectDropdown = forwardRef<
 
     const mergedTriggerRef = useMemo(
       () =>
-        mergeRefs(triggerRef, (node: HTMLButtonElement | null) => {
+        mergeRefs(triggerRef, ref, (node: HTMLButtonElement | null) => {
           setTriggerNode(node);
         }),
-      [setTriggerNode],
+      [setTriggerNode, ref],
     );
 
     const handleClear = useCallback(() => {
@@ -370,8 +370,9 @@ const MultiSelectDropdown = forwardRef<
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
         setTriggerNode(node);
+        setRef(ref, node as HTMLButtonElement | null);
       },
-      [setTriggerNode],
+      [setTriggerNode, ref],
     );
 
     const handleRemoveOptionAndFocus = useCallback(
@@ -442,7 +443,6 @@ const MultiSelectDropdown = forwardRef<
 
     return (
       <div
-        ref={ref}
         className={rootClassName}
         style={hasRootStyle ? rootStyle : undefined}
         data-disabled={disabled || undefined}
@@ -572,7 +572,7 @@ const MultiSelectDropdown = forwardRef<
                   count={shimmerCount}
                   className={mergedClasses.loading || undefined}
                   itemClassName={mergedClasses.loadingItem || undefined}
-                  iconClassName={mergedClasses.loadingIcon || undefined}
+                  itemControlClassName={mergedClasses.loadingItemControl || undefined}
                   barClassName={mergedClasses.loadingBar || undefined}
                 />
               ) : displayOptions.length === 0 ? (

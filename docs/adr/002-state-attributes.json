@@ -21,13 +21,13 @@
     },
     {
       "component": "Table",
-      "part": "pinButton",
+      "part": "pinTrigger",
       "key": "pinIconHover",
       "replacement": "a Tailwind hover:/focus-visible: variant on the part; no attribute needed"
     },
     {
       "component": "Table",
-      "part": "pinButton",
+      "part": "pinTrigger",
       "key": "pinnedPinIconHover",
       "replacement": "a Tailwind hover:/focus-visible: variant on the part; no attribute needed"
     },
@@ -370,7 +370,7 @@
     },
     {
       "component": "Slider",
-      "part": "marker",
+      "part": "mark",
       "attribute": "data-state",
       "values": [
         "active"
@@ -673,7 +673,7 @@
     },
     {
       "component": "Table",
-      "part": "pinButton",
+      "part": "pinTrigger",
       "attribute": "data-state",
       "values": [
         "active"
@@ -726,7 +726,7 @@
     },
     {
       "component": "TimePicker",
-      "part": "periodButton",
+      "part": "periodTrigger",
       "attribute": "data-state",
       "values": [
         "active"

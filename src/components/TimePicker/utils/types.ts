@@ -77,13 +77,13 @@ export interface TimePickerClasses {
   /** Actions row (Cancel / OK). */
   footer?: string;
   /** Cancel button. */
-  cancelButton?: string;
+  cancelTrigger?: string;
   /** OK button. */
-  confirmButton?: string;
+  confirmTrigger?: string;
   /** AM/PM toggle container. */
   row?: string;
   /** Individual AM or PM button. */
-  periodButton?: string;
+  periodTrigger?: string;
 }
 
 /** Subset of TimePickerClasses relevant to ClockFace. */
@@ -105,10 +105,10 @@ export type ClockFaceClasses = Pick<
   
   | "clockCenter"
   | "footer"
-  | "cancelButton"
-  | "confirmButton"
+  | "cancelTrigger"
+  | "confirmTrigger"
   | "row"
-  | "periodButton"
+  | "periodTrigger"
   
 >;
 

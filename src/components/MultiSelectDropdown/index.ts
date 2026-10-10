@@ -9,7 +9,7 @@ export { default as MultiSelectDropdown } from "./MultiSelectDropdown.js";
  */
 // MultiSelectDropdownShimmer is INTERNAL: it is never rendered without
 // MultiSelectDropdown, nothing imports it standalone, and its styling arrives
-// through the parent's `loadingIcon` / `loadingBar` keys. Un-exported rather
+// through the parent's `loadingItemControl` / `loadingBar` keys. Un-exported rather
 // than given a second styling route — free pre-1.0, and it shrinks the API.
 export type {
   MultiSelectOption,

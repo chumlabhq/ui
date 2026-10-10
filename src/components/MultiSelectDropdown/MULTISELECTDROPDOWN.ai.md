@@ -191,7 +191,7 @@ root
 ├── description
 └── control
     └── trigger (role="combobox")
-    │   ├── chips (chip + chipRemove) or value
+    │   ├── chips (chip + chipRemoveTrigger) or value
     │   ├── count (+N more)
     │   ├── clearTrigger
     │   └── icon
@@ -203,7 +203,7 @@ root
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Trigger button | `trigger` | Contains chips/text |
-| Selected chips | `chip`, `chipRemove` | Individual chip + X button |
+| Selected chips | `chip`, `chipRemoveTrigger` | Individual chip + X button |
 | Dropdown panel | `content` | Portal-rendered |
 | Option row | `item` | |
 | Checkbox | `itemControl`, `itemIndicator` | |
@@ -264,6 +264,16 @@ const [values, setValues] = useState<string[]>([]);
 | `Tab` | Closes the menu and moves focus on. |
 
 ---
+
+## Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<MultiSelectDropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
 
 ## Accessibility
 

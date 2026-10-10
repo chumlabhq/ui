@@ -220,7 +220,7 @@ override silently drops the rest.
 | Calendar/clear icons | `icon`, `clearTrigger` | Icons inside trigger |
 | Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
 | Calendar popover | `content` | Outer container of calendar |
-| Month/year navigation | `header`, `row`, `navButton` | Calendar header area |
+| Month/year navigation | `header`, `row`, `navTrigger` | Calendar header area |
 | Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem` | Month/year selectors — the selected option carries `data-selected` |
 | Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
 | Day cells | `item` | Individual calendar days |
@@ -387,6 +387,16 @@ import { fr } from "date-fns/locale";
 | `Tab` | Cycles within the panel, which is `role="dialog" aria-modal="true"` and traps focus in both directions. |
 
 ---
+
+## Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<DatePicker ref={ref} label="Date" />
+// ref.current is the trigger <button>
+```
 
 ## Accessibility
 

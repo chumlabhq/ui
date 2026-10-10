@@ -25,7 +25,7 @@ export const SHAPE_CLASS_MAP: Record<CheckboxShape, string> = {
 
 export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   root: "data-[loading]:opacity-50 data-[loading]:pointer-events-none data-[disabled]:opacity-50",
-  labelGroup: "flex flex-col",
+  group: "flex flex-col",
   label: "text-sm font-medium text-cl-text",
   description: "text-xs text-cl-text-tertiary",
   // The checked, indeterminate, error and success fills are NOT here. They were

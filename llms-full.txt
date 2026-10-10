@@ -2205,6 +2205,16 @@ const searchCountries = async (query: string) => {
 
 ---
 
+### Ref API
+
+The ref lands on the trigger, the menu `<button>` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<CascadingDropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
+
 ---
 
 ## Checkbox
@@ -2314,7 +2324,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | Slot | Element |
 |------|---------|
 | `root` | The container wrapping the box and its label. Carries every data attribute. |
-| `labelGroup` | The label and description stacked together. |
+| `group` | The label and description stacked together. |
 | `label` | The label text. |
 | `description` | The description under the label. |
 | `control` | The indicator box itself. |
@@ -2369,7 +2379,7 @@ root
     ├── control [contains hidden input + itemIndicator]
     │   ├── (hidden native input)
     │   └── itemIndicator (check / indeterminate / unchecked)
-    └── labelGroup
+    └── group
         ├── label (text)
         └── description (text)
 message / message (below)
@@ -2943,7 +2953,7 @@ override silently drops the rest.
 | Calendar/clear icons | `icon`, `clearTrigger` | Icons inside trigger |
 | Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
 | Calendar popover | `content` | Outer container of calendar |
-| Month/year navigation | `header`, `row`, `navButton` | Calendar header area |
+| Month/year navigation | `header`, `row`, `navTrigger` | Calendar header area |
 | Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem` | Month/year selectors — the selected option carries `data-selected` |
 | Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
 | Day cells | `item` | Individual calendar days |
@@ -3110,6 +3120,16 @@ import { fr } from "date-fns/locale";
 | `Tab` | Cycles within the panel, which is `role="dialog" aria-modal="true"` and traps focus in both directions. |
 
 ---
+
+### Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<DatePicker ref={ref} label="Date" />
+// ref.current is the trigger <button>
+```
 
 ---
 
@@ -3544,6 +3564,16 @@ const [value, setValue] = useState<string | null>(null);
 | Printable characters | Type-ahead within `typeaheadTimeout` of the last keystroke. |
 
 ---
+
+### Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<Dropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
 
 ---
 
@@ -4798,7 +4828,7 @@ root
 ├── description
 └── control
     └── trigger (role="combobox")
-    │   ├── chips (chip + chipRemove) or value
+    │   ├── chips (chip + chipRemoveTrigger) or value
     │   ├── count (+N more)
     │   ├── clearTrigger
     │   └── icon
@@ -4810,7 +4840,7 @@ root
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Trigger button | `trigger` | Contains chips/text |
-| Selected chips | `chip`, `chipRemove` | Individual chip + X button |
+| Selected chips | `chip`, `chipRemoveTrigger` | Individual chip + X button |
 | Dropdown panel | `content` | Portal-rendered |
 | Option row | `item` | |
 | Checkbox | `itemControl`, `itemIndicator` | |
@@ -4871,6 +4901,16 @@ const [values, setValues] = useState<string[]>([]);
 | `Tab` | Closes the menu and moves focus on. |
 
 ---
+
+### Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<MultiSelectDropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
 
 ### Selected-chip strip
 
@@ -5147,6 +5187,16 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 | Printable characters | Types into the search box and filters the list. |
 
 ---
+
+### Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<MultiSelectSearchableDropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
 
 ### Selected-chip strip
 
@@ -5507,12 +5557,12 @@ root (row, flex flex-wrap)
 │   └── label ("rows")
 ├── pageInfo (custom render slot)
 └── row (navigation controls)
-    ├── navButton (prev)
+    ├── navTrigger (prev)
     │   └── navIcon
     ├── list
     │   ├── item [data-state=active]
     │   └── ellipsis
-    └── navButton (next)
+    └── navTrigger (next)
         └── navIcon
 ```
 
@@ -5520,7 +5570,7 @@ root (row, flex flex-wrap)
 |------------------------|-------------|-------|
 | Root layout | `root` | Controls flex direction and gap |
 | Page buttons | `item` | Inactive and active styles |
-| Prev/next buttons | `navButton` | Shared for both |
+| Prev/next buttons | `navTrigger` | Shared for both |
 | Ellipsis dots | `ellipsis` | Or use `renderEllipsis` for custom |
 | Rows dropdown trigger | `rowsPerPage.trigger` | |
 | Dropdown panel | `rowsPerPage.content` | Portal-rendered |
@@ -5540,7 +5590,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
   onValueChange={setPage}
   classes={{
     root: "flex flex-wrap items-center gap-1",
-    navButton: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
+    navTrigger: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
     item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600 data-[state=active]:shadow-md data-[state=active]:bg-blue-600 data-[state=active]:border-blue-600 data-[state=active]:text-white",
     list: "flex items-center gap-1",
     navIcon: "w-4 h-4",
@@ -5736,6 +5786,16 @@ Native `<input type="radio">` elements in a group, so the browser owns the rovin
 
 ---
 
+### Ref API
+
+`RadioButton`'s ref lands on its `<input type="radio">`, as Checkbox's does, so `ref.current.focus()` focuses the radio and a form library can register it. `className` and the other HTML attributes still go on the `<label>`. `RadioGroup`'s ref is the group's root `<div>`.
+
+```tsx
+const ref = useRef<HTMLInputElement>(null);
+<RadioButton ref={ref} value="a" label="Apple" />
+// ref.current is the <input type="radio">
+```
+
 ---
 
 ## ResizablePanel
@@ -5802,6 +5862,16 @@ The handle is `role="separator"` and focusable, so resizing never requires a dra
 | `Escape` | Abandons the resize and restores the size it started at. |
 
 ---
+
+### Ref API
+
+The ref lands on the handle, the `role="separator"` element a keyboard user tabs to and resizes with the arrow keys, so `ref.current.focus()` focuses it. `className`, `style` and the other HTML attributes still go on the panel itself.
+
+```tsx
+const ref = useRef<HTMLDivElement>(null);
+<ResizablePanel ref={ref} aria-label="Resize sidebar">…</ResizablePanel>
+// ref.current is the separator
+```
 
 ---
 
@@ -6093,6 +6163,16 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 
 ---
 
+### Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<SearchableDropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
+
 ---
 
 ## Slider
@@ -6217,6 +6297,16 @@ override silently drops the rest.
 | `Home`, `End` | Jumps to the minimum or maximum. |
 
 ---
+
+### Ref API
+
+The ref lands on the thumb, the `role="slider"` element a keyboard user tabs to and moves with the arrow keys, so `ref.current.focus()` focuses the control. A range slider has two thumbs; the ref is the first one, the thumb for `value[0]`.
+
+```tsx
+const ref = useRef<HTMLDivElement>(null);
+<Slider ref={ref} defaultValue={[20, 80]} aria-label="Price" />
+// ref.current is the thumb for 20
+```
 
 ---
 
@@ -6598,7 +6688,7 @@ If you want the track itself to react, the attribute is the hook:
 |------|---------|
 | `root` | Outer container. Carries every data attribute above. |
 | `row` | The line holding the label group and the track, which is what `labelPosition` reorders. |
-| `labelGroup` | The label and description stacked together, so they move as one. |
+| `group` | The label and description stacked together, so they move as one. |
 | `label` | The label element. |
 | `description` | The description under the label. |
 | `control` | The track the thumb slides along. |
@@ -7594,8 +7684,8 @@ override silently drops the rest.
 | Clock face circle | `clockFace` |
 | Clock numbers | `clockNumber` |
 | Clock hand | `clockHand`, `clockHandLine`, `clockHandDot` |
-| AM/PM buttons | `periodButton` |
-| OK/Cancel buttons | `confirmButton`, `cancelButton` |
+| AM/PM buttons | `periodTrigger` |
+| OK/Cancel buttons | `confirmTrigger`, `cancelTrigger` |
 
 #### Dark mode
 
@@ -7663,6 +7753,16 @@ const [time, setTime] = useState<string | null>(null);
 | `Tab` | Cycles within the open panel. |
 
 ---
+
+### Ref API
+
+The ref lands on the trigger, which for TimePicker is the typed text `<input role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field.
+
+```tsx
+const ref = useRef<HTMLInputElement>(null);
+<TimePicker ref={ref} label="Time" />
+// ref.current is the trigger <input>
+```
 
 ---
 
@@ -7796,7 +7896,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
-| `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the indicator glyph. |
+| `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the status glyph. |
 | `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
 | `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
@@ -7851,7 +7951,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 |------|---------|
 | `root` | The toast surface — the coloured card the whole notice sits on. |
 | `body` | The padded row inside `root` holding the icon, the message and the close button. |
-| `indicator` | The status glyph at the leading edge, which is what distinguishes the variants. |
+| `range` | The fill inside `track`, which shrinks as the auto-dismiss timer runs. |
 | `icon` | The icon wrapper. |
 | `title` | The message line, which is the toast's accessible name. |
 | `description` | The description under it. |

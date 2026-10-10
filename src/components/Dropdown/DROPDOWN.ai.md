@@ -334,6 +334,16 @@ const [value, setValue] = useState<string | null>(null);
 
 ---
 
+## Ref API
+
+The ref lands on the trigger, the `<button role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field. With `renderTrigger`, it is the element your trigger attaches `triggerProps.ref` to.
+
+```tsx
+const ref = useRef<HTMLButtonElement>(null);
+<Dropdown ref={ref} options={options} />
+// ref.current is the trigger <button>
+```
+
 ## Accessibility
 
 - Trigger: `role="combobox"` with `aria-expanded`, `aria-haspopup="listbox"`, `aria-controls`

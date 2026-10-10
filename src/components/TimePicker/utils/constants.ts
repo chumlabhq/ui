@@ -44,12 +44,12 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "absolute text-sm font-medium cursor-pointer select-none transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
   clockCenter: "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
-  cancelButton:
+  cancelTrigger:
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-item-hover cursor-pointer",
-  confirmButton:
+  confirmTrigger:
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent cursor-pointer",
   row: "flex flex-col gap-1 ml-3",
-  periodButton:
+  periodTrigger:
     "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-item-hover data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:hover:bg-cl-accent-bg-hover",
 };
 

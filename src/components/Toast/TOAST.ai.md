@@ -147,7 +147,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
-| `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the indicator glyph. |
+| `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the status glyph. |
 | `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
 | `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
@@ -202,7 +202,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 |------|---------|
 | `root` | The toast surface — the coloured card the whole notice sits on. |
 | `body` | The padded row inside `root` holding the icon, the message and the close button. |
-| `indicator` | The status glyph at the leading edge, which is what distinguishes the variants. |
+| `range` | The fill inside `track`, which shrinks as the auto-dismiss timer runs. |
 | `icon` | The icon wrapper. |
 | `title` | The message line, which is the toast's accessible name. |
 | `description` | The description under it. |

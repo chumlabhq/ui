@@ -30,7 +30,7 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
    */
   item:
     "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-chrome data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:border-cl-accent data-[active]:hover:bg-cl-accent-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
-  navButton:
+  navTrigger:
     "p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
   ellipsis: "px-2 select-none text-cl-text-tertiary",
   rowsPerPage: {

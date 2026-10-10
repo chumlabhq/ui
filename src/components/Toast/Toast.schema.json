@@ -16,7 +16,7 @@
         "error",
         "info"
       ],
-      "description": "Which status this is, choosing the colour and the indicator glyph.",
+      "description": "Which status this is, choosing the colour and the status glyph.",
       "default": "info"
     },
     "message": {
@@ -99,7 +99,7 @@
         "description": {
           "type": "string"
         },
-        "indicator": {
+        "range": {
           "type": "string"
         },
         "closeTrigger": {

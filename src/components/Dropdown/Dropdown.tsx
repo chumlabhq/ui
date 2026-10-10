@@ -33,7 +33,7 @@ import {
   UNSTYLED_DROPDOWN_CLASSES,
 } from "./utils/constants.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
-import { mergeRefs } from "../../utils/mergeRefs.js";
+import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -223,7 +223,7 @@ const DropdownContent = memo(function DropdownContent({
  * - DROPDOWN.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/DropdownDemo.tsx — live demo
  */
-const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
+const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
   (props, forwardedRef) => {
     const {
       options = [],
@@ -467,15 +467,17 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const mergedTriggerRef = useCallback(
       (node: HTMLButtonElement | null) => {
         setTriggerNode(node);
+        setRef(forwardedRef, node);
       },
-      [],
+      [forwardedRef],
     );
 
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
         setTriggerNode(node);
+        setRef(forwardedRef, node as HTMLButtonElement | null);
       },
-      [],
+      [forwardedRef],
     );
 
     // One object for both triggers. The custom one was handed its own copy of
@@ -508,7 +510,6 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     return (
       <div
-        ref={forwardedRef}
         className={rootClassName}
         style={hasRootStyle ? rootStyle : undefined}
         data-disabled={disabled || undefined}

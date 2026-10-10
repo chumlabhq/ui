@@ -361,12 +361,12 @@ describe("MultiSelectDropdown", () => {
 
     it("renders two skeleton shapes inside each item, styled from the parent", () => {
       // ADR 002: the shapes' styling moved to MultiSelectDropdown's
-      // `loadingIcon` / `loadingBar` keys, so the shimmer no longer hardcodes
+      // `loadingItemControl` / `loadingBar` keys, so the shimmer no longer hardcodes
       // it — the classes arrive as props from the parent's bag.
       const { container } = render(
-        <MultiSelectDropdownShimmer count={1} iconClassName="probe-icon" barClassName="probe-bar" />,
+        <MultiSelectDropdownShimmer count={1} itemControlClassName="probe-control" barClassName="probe-bar" />,
       );
-      expect(container.querySelectorAll(".probe-icon")).toHaveLength(1);
+      expect(container.querySelectorAll(".probe-control")).toHaveLength(1);
       expect(container.querySelectorAll(".probe-bar")).toHaveLength(1);
     });
 

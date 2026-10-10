@@ -401,7 +401,7 @@
         "root": {
           "control": {},
           "itemIndicator": {},
-          "labelGroup": {
+          "group": {
             "description": {},
             "label": {}
           },
@@ -553,7 +553,7 @@
             },
             "header": {
               "monthSelect": {},
-              "navButton": {},
+              "navTrigger": {},
               "row": {},
               "yearSelect": {}
             },
@@ -1093,7 +1093,7 @@
           "message": {},
           "trigger": {
             "chip": {
-              "chipRemove": {}
+              "chipRemoveTrigger": {}
             },
             "clearTrigger": {},
             "icon": {},
@@ -1198,7 +1198,7 @@
           "searchIcon": {},
           "trigger": {
             "chip": {
-              "chipRemove": {}
+              "chipRemoveTrigger": {}
             },
             "clearTrigger": {},
             "icon": {},
@@ -1330,7 +1330,7 @@
       "anatomy": {
         "root": {
           "label": {},
-          "navButton": {},
+          "navTrigger": {},
           "navIcon": {},
           "pageInfo": {},
           "row": {
@@ -1595,10 +1595,10 @@
           "label": {},
           "message": {},
           "track": {
-            "marker": {},
+            "mark": {},
             "range": {},
             "thumb": {
-              "valueText": {}
+              "value": {}
             }
           }
         }
@@ -1729,7 +1729,7 @@
             "control": {
               "thumb": {}
             },
-            "labelGroup": {
+            "group": {
               "description": {},
               "label": {}
             }
@@ -1872,7 +1872,7 @@
               "item": {
                 "cell": {
                   "control": {},
-                  "expandButton": {},
+                  "expandTrigger": {},
                   "input": {}
                 },
                 "dragHandle": {}
@@ -1882,9 +1882,9 @@
             "groupLabel": {},
             "header": {
               "headerCell": {
-                "filterButton": {},
+                "filterTrigger": {},
                 "filterContent": {},
-                "pinButton": {},
+                "pinTrigger": {},
                 "sortIcon": {}
               }
             }
@@ -2101,7 +2101,7 @@
         "root": {
           "content": {
             "clockDisplay": {
-              "periodButton": {},
+              "periodTrigger": {},
               "row": {}
             },
             "clockFace": {
@@ -2110,8 +2110,8 @@
             },
             "empty": {},
             "footer": {
-              "cancelButton": {},
-              "confirmButton": {}
+              "cancelTrigger": {},
+              "confirmTrigger": {}
             },
             "list": {
               "item": {
@@ -2176,7 +2176,7 @@
           "closeTrigger": {},
           "description": {},
           "icon": {},
-          "indicator": {},
+          "range": {},
           "title": {}
         }
       }

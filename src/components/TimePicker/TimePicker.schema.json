@@ -285,16 +285,16 @@
         "footer": {
           "type": "string"
         },
-        "cancelButton": {
+        "cancelTrigger": {
           "type": "string"
         },
-        "confirmButton": {
+        "confirmTrigger": {
           "type": "string"
         },
         "row": {
           "type": "string"
         },
-        "periodButton": {
+        "periodTrigger": {
           "type": "string"
         }
       },

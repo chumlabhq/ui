@@ -212,7 +212,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
 RadioGroup.displayName = "RadioGroup";
 
-const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
+const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
     {
       value,
@@ -306,7 +306,6 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
 
     return (
       <label
-        ref={ref}
         htmlFor={radioId}
         className={cn(mergedClasses.root, className) || undefined}
         style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
@@ -326,6 +325,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
           data-valid={ctx.valid || undefined}
         >
           <input
+            ref={ref}
             type="radio"
             id={radioId}
             name={ctx.name}

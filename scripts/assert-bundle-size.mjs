@@ -1064,7 +1064,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.07,
+      kb: 12.09,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1075,7 +1075,13 @@ const DECLARED_BREACHES = new Map([
         "after paint.\n\n" +
         "12.03 -> 12.07 on 2026-09-10: the trigger gained the disabled and error " +
         "variants the library-wide audit added everywhere. A conformance fix, " +
-        "not a feature.",
+        "not a feature.\n\n" +
+        "12.07 -> 12.09 on 2026-10-10, A2d refs (exclusive 12,344 -> 12,378 B " +
+        "gzipped, +34 B). The slot renames are 0 B here: built with every A2d " +
+        "rename and the old ref, DatePicker measured 12,344 B, identical to " +
+        "HEAD. All +34 B is the ref moving from the root `<div>` to the trigger " +
+        "`<button>`, merged with the trigger's own ref, so `ref.current.focus()` " +
+        "focuses the field and a form library can focus it on an error.",
     },
   ],
   [

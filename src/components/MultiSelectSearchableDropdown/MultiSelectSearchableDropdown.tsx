@@ -3,7 +3,7 @@ import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
-import { mergeRefs } from "../../utils/mergeRefs.js";
+import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types.js";
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown.js";
@@ -167,7 +167,7 @@ const SelectedChip = memo(function SelectedChip({
             onRemove(option.value);
           }
         }}
-        className={classes.chipRemove || undefined}
+        className={classes.chipRemoveTrigger || undefined}
         aria-label={`Remove ${option.label}`}
       >
         <XIcon className="w-3 h-3" />
@@ -200,7 +200,7 @@ const SelectedChip = memo(function SelectedChip({
  * - src/pages/demo/MultiSelectSearchableDropdownDemo.tsx — live demo
  */
 const MultiSelectSearchableDropdown = forwardRef<
-  HTMLDivElement,
+  HTMLButtonElement,
   MultiSelectSearchableDropdownProps
 >(
   (
@@ -284,7 +284,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         itemControl: mergeSlot(baseClasses.itemControl, classesProp?.itemControl),
         itemIndicator: mergeSlot(baseClasses.itemIndicator, classesProp?.itemIndicator),
         chip: mergeSlot(baseClasses.chip, classesProp?.chip),
-        chipRemove: mergeSlot(baseClasses.chipRemove, classesProp?.chipRemove),
+        chipRemoveTrigger: mergeSlot(baseClasses.chipRemoveTrigger, classesProp?.chipRemoveTrigger),
         empty: mergeSlot(baseClasses.empty, classesProp?.empty),
         clearTrigger: mergeSlot(baseClasses.clearTrigger, classesProp?.clearTrigger),
         loading: mergeSlot(baseClasses.loading, classesProp?.loading),
@@ -456,10 +456,10 @@ const MultiSelectSearchableDropdown = forwardRef<
 
     const mergedTriggerRef = useMemo(
       () =>
-        mergeRefs(triggerRef, (node: HTMLButtonElement | null) => {
+        mergeRefs(triggerRef, ref, (node: HTMLButtonElement | null) => {
           setTriggerNode(node);
         }),
-      [setTriggerNode],
+      [setTriggerNode, ref],
     );
 
     const handleClear = useCallback(() => {
@@ -471,8 +471,9 @@ const MultiSelectSearchableDropdown = forwardRef<
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
         setTriggerNode(node);
+        setRef(ref, node as HTMLButtonElement | null);
       },
-      [setTriggerNode],
+      [setTriggerNode, ref],
     );
 
     const handleRemoveOptionAndFocus = useCallback(
@@ -544,7 +545,6 @@ const MultiSelectSearchableDropdown = forwardRef<
 
     return (
       <div
-        ref={ref}
         className={rootClassName}
         style={hasRootStyle ? rootStyle : undefined}
         data-disabled={disabled || undefined}

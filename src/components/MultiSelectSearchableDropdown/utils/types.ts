@@ -40,7 +40,7 @@ export interface MultiSelectSearchableDropdownClasses {
   /** Selected chip */
   chip?: string;
   /** Chip remove button */
-  chipRemove?: string;
+  chipRemoveTrigger?: string;
   /** The message shown when the search matches nothing. */
   empty?: string;
   /** The button clearing every selection at once. */

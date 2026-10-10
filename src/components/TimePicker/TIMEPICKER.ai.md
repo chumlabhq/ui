@@ -177,8 +177,8 @@ override silently drops the rest.
 | Clock face circle | `clockFace` |
 | Clock numbers | `clockNumber` |
 | Clock hand | `clockHand`, `clockHandLine`, `clockHandDot` |
-| AM/PM buttons | `periodButton` |
-| OK/Cancel buttons | `confirmButton`, `cancelButton` |
+| AM/PM buttons | `periodTrigger` |
+| OK/Cancel buttons | `confirmTrigger`, `cancelTrigger` |
 
 ### Dark mode
 
@@ -246,6 +246,16 @@ const [time, setTime] = useState<string | null>(null);
 | `Tab` | Cycles within the open panel. |
 
 ---
+
+## Ref API
+
+The ref lands on the trigger, which for TimePicker is the typed text `<input role="combobox">` a keyboard user tabs to, so `ref.current.focus()` focuses the field — which is what a form library calls on the first invalid field.
+
+```tsx
+const ref = useRef<HTMLInputElement>(null);
+<TimePicker ref={ref} label="Time" />
+// ref.current is the trigger <input>
+```
 
 ## Accessibility
 

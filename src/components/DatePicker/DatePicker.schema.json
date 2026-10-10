@@ -377,7 +377,7 @@
         "row": {
           "type": "string"
         },
-        "navButton": {
+        "navTrigger": {
           "type": "string"
         },
         "listRow": {
