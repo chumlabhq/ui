@@ -168,6 +168,8 @@ const MultiSelectDropdown = forwardRef<
       defaultOpen,
       onOpenChange,
       "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       onBlur,
       onFocus,
       onKeyDown: onKeyDownProp,
@@ -221,11 +223,11 @@ const MultiSelectDropdown = forwardRef<
     const generatedId = useId();
     const dropdownId = id || generatedId;
     const listboxId = `${dropdownId}-listbox`;
-    const triggerId = `${dropdownId}-trigger`;
+    const triggerId = id ?? `${dropdownId}-trigger`;
     const labelId = `${dropdownId}-label`;
     const valueId = `${dropdownId}-value`;
 
-  useAccessibleNameWarning("MultiSelectDropdown", { label, "aria-label": ariaLabel });
+  useAccessibleNameWarning("MultiSelectDropdown", { label, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy });
     const errorId = `${dropdownId}-error`;
 
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -425,9 +427,9 @@ const MultiSelectDropdown = forwardRef<
       "aria-haspopup": "listbox" as const,
       "aria-controls": listboxId,
       "aria-activedescendant": activeDescendantId,
-      ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger }),
+      ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy, hasValueElement: !renderTrigger }),
       "aria-invalid": (error || undefined) as boolean | undefined,
-      "aria-describedby": error && errorMessage ? errorId : undefined,
+      "aria-describedby": [ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
       "aria-required": (required || undefined) as boolean | undefined,
       disabled,
       onClick: handleToggle,

@@ -11,9 +11,9 @@ recorded there because they belong next to the code that implements them.
 | | count |
 | --- | --- |
 | Components audited | 58 |
-| Library-authored props across the public surface | 1130 |
-| With no demo | 282 (25%) |
-| With no fixture | 622 (55%) |
+| Library-authored props across the public surface | 1140 |
+| With no demo | 293 (26%) |
+| With no fixture | 632 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -80,10 +80,10 @@ listed here with no demo anywhere fails the generator.
 | AvatarGroupCount | 14 | 278 | 9 | 11 | 0 | `size`, `shape`, `asChild` |
 | AvatarGroupShimmer | 9 | 280 | 2 | 8 | 0 | `reduceMotion`, `asChild` |
 | AvatarShimmer | 6 | 280 | 2 | 1 | 0 | `unstyled` |
-| Breadcrumb | 24 | 277 | 10 | 16 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
+| Breadcrumb | 23 | 277 | 10 | 15 | 0 | `unstyled`, `portalContainer`, `keepMounted` |
 | Button | 24 | 292 | 1 | 12 | 0 | — |
 | ButtonGroup | 2 | 279 | 1 | 0 | 0 | — |
-| CascadingDropdown | 58 | 2 | 24 | 27 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` |
+| CascadingDropdown | 60 | 2 | 26 | 29 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` |
 | Checkbox | 21 | 303 | 2 | 10 | 0 | `reduceMotion` |
 | CircularLoader | 7 | 280 | 3 | 2 | 0 | `reduceMotion`, `unstyled` |
 | CountryFlag | 13 | 278 | 3 | 8 | 0 | `unstyled` |
@@ -97,7 +97,7 @@ listed here with no demo anywhere fails the generator.
 | DrawerCloseButton | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerFooter | 1 | 279 | 1 | 1 | 0 | — |
 | DrawerHeader | 1 | 279 | 1 | 1 | 0 | — |
-| Dropdown | 49 | 2 | 4 | 25 | 0 | `unstyled` |
+| Dropdown | 51 | 2 | 6 | 27 | 0 | `unstyled` |
 | Input | 26 | 307 | 2 | 10 | 0 | `unstyled` |
 | InputLabel | 4 | 0 | 0 | 4 | 0 | — |
 | InternationalPhoneInput | 48 | 296 | 9 | 33 | 0 | `unstyled`, `portalContainer` |
@@ -106,8 +106,8 @@ listed here with no demo anywhere fails the generator.
 | ModalBody | 2 | 2 | 2 | 2 | 0 | — |
 | ModalFooter | 2 | 2 | 2 | 2 | 0 | — |
 | ModalHeader | 2 | 2 | 2 | 2 | 0 | — |
-| MultiSelectDropdown | 50 | 2 | 10 | 24 | 0 | `unstyled` |
-| MultiSelectSearchableDropdown | 55 | 2 | 13 | 28 | 0 | `unstyled` |
+| MultiSelectDropdown | 52 | 2 | 12 | 26 | 0 | `unstyled` |
+| MultiSelectSearchableDropdown | 57 | 2 | 15 | 30 | 0 | `unstyled` |
 | OtpInput | 30 | 277 | 3 | 14 | 0 | `unstyled` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | — |
 | Pagination | 31 | 278 | 6 | 21 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` |
@@ -115,8 +115,8 @@ listed here with no demo anywhere fails the generator.
 | RadioButton | 8 | 279 | 1 | 3 | 0 | `size` |
 | RadioGroup | 21 | 275 | 5 | 5 | 0 | `unstyled`, `reduceMotion` |
 | ResizablePanel | 14 | 279 | 2 | 11 | 0 | `reduceMotion`, `unstyled` |
-| SearchableDropdown | 56 | 2 | 6 | 29 | 0 | `unstyled` |
-| Slider | 35 | 274 | 4 | 18 | 0 | `unstyled` |
+| SearchableDropdown | 58 | 2 | 8 | 31 | 0 | `unstyled` |
+| Slider | 36 | 273 | 5 | 19 | 0 | `unstyled` |
 | Slot | 1 | 279 | 1 | 1 | 0 | — |
 | Stepper | 30 | 2 | 5 | 17 | 0 | `reduceMotion`, `unstyled` |
 | Switch | 28 | 277 | 6 | 11 | 0 | `reduceMotion` |

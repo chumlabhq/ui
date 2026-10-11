@@ -52,7 +52,7 @@ This renders correctly with no additional props, classes, or setup. The last ite
 |------|-----------|
 | `items` | **Required.** Must have at least one item. Last item is always treated as the active/current page. |
 | `maxVisible` | When total items exceed this, middle items collapse into an ellipsis dropdown. First item and last N-1 items remain visible. |
-| `separator` vs `separatorIcon` | `separator` (ReactNode) takes priority. `separatorIcon` (Component) is only used if `separator` is not provided. |
+| `separator` | One prop for text or an icon between items, rendered as given. `iconSize` sizes only the default chevron. |
 | `href` on items | Renders the item as `<a>` instead of `<button>`. Disabled items always render as `<button>` regardless of `href`. |
 | `item.onClick` | Per-item click overrides the global `onItemClick`. Both can coexist — per-item runs first. |
 | `showTooltips` | Enables tooltips globally. Individual items still need `tooltip` content set. |
@@ -83,14 +83,13 @@ This renders correctly with no additional props, classes, or setup. The last ite
 |------|------|---------|-------------|
 | `items` **(required)** | array | — | List of breadcrumb items to render. |
 | `maxVisible` | number | `4` | Maximum visible items before collapsing into an ellipsis dropdown. |
-| `separator` | object | — | React.ReactNode — Custom separator between breadcrumb items. |
+| `separator` | object | — | ReactNode — Replaces the default chevron between items: text or an icon, rendered as given. `iconSize` sizes the default one. |
 | `onItemClick` | object | — | (item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked. |
 | `aria-label` | string | — | Accessible label for the breadcrumb nav element. |
 | `classes` | object | — | CSS class overrides for breadcrumb sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | CSSProperties — Inline styles for the root element. |
-| `separatorIcon` | object | — | ReactNode — Replaces the default chevron between items. Rendered as given; `iconSize` sizes the default one. `separator` takes precedence. |
 | `ellipsisIcon` | object | — | ReactNode — Replaces the collapsed-items button's glyph. Rendered as given; `iconSize` sizes the default one. |
 | `iconSize` | number \| string | `16` | Size of breadcrumb icons. |
 | `showTooltips` | boolean | `true` | Enables tooltips on breadcrumb items. |
@@ -301,8 +300,8 @@ const items: BreadcrumbItem[] = [
 // String separator
 <Breadcrumb items={items} separator={<span className="mx-1 text-gray-400">/</span>} />
 
-// Custom separator icon: an element, rendered as given (iconSize sizes only the default chevron)
-<Breadcrumb items={items} separatorIcon={<ArrowRightIcon size={14} />} />
+// An icon goes through the same prop, rendered as given (iconSize sizes only the default chevron)
+<Breadcrumb items={items} separator={<ArrowRightIcon size={14} />} />
 ```
 
 ### Loading state

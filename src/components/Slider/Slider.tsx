@@ -64,9 +64,10 @@ interface ThumbProps {
   tooltipAlways: boolean;
   formatTooltip: (v: number) => string;
   renderThumb?: SliderProps["renderThumb"];
-  sliderId: string;
+  id: string;
   ariaLabel?: string;
   ariaLabelledBy?: string;
+  ariaDescribedBy?: string;
   ariaValueText?: string;
   /** The Slider's own ref, which lands on the first thumb. */
   thumbRef?: Ref<HTMLDivElement>;
@@ -89,9 +90,10 @@ function Thumb({
   tooltipAlways,
   formatTooltip,
   renderThumb,
-  sliderId,
+  id,
   ariaLabel,
   ariaLabelledBy,
+  ariaDescribedBy,
   ariaValueText,
   thumbRef,
   onPointerDown,
@@ -156,7 +158,8 @@ function Thumb({
       aria-disabled={disabled || undefined}
       aria-label={ariaLabel ?? (index === 0 ? "Minimum" : "Maximum")}
       aria-labelledby={ariaLabelledBy}
-      id={`${sliderId}-thumb-${index}`}
+      aria-describedby={ariaDescribedBy}
+      id={id}
       className={thumbClassName || undefined}
       style={{
         position: "absolute",
@@ -244,6 +247,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       style,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedByProp,
       "aria-valuetext": ariaValueText,
       ...rest
     },
@@ -251,6 +255,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
   ) => {
     const generatedId = useId();
     const sliderId = id || generatedId;
+    const thumbIdOf = (index: number) => (index === 0 && id ? id : `${sliderId}-thumb-${index}`);
     const labelId = `${sliderId}-label`;
     const descriptionId = `${sliderId}-description`;
     const errorId = `${sliderId}-error`;
@@ -525,6 +530,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
     const ariaDescribedBy =
       [
+        ariaDescribedByProp,
         description ? descriptionId : null,
         error && errorMessage ? errorId : null,
       ]
@@ -545,7 +551,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         {label && (
           <label
             id={labelId}
-            htmlFor={`${sliderId}-thumb-0`}
+            htmlFor={thumbIdOf(0)}
             className={mc.label || undefined}
           >
             {label}
@@ -565,7 +571,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           className={cn(mc.control) || undefined}
           style={{ position: "relative", overflow: "visible", ...wrapperStyle, ...(loading ? { opacity: 0.5, pointerEvents: "none" } : {}) }}
           onPointerDown={handleTrackPointerDown}
-          aria-describedby={ariaDescribedBy}
           data-orientation={orientation}
           data-disabled={disabled || undefined}
         >
@@ -689,7 +694,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 tooltipAlways={tooltipAlways}
                 formatTooltip={formatTooltip}
                 renderThumb={renderThumb}
-                sliderId={sliderId}
+                id={thumbIdOf(0)}
+                ariaDescribedBy={ariaDescribedBy}
                 ariaLabel={ariaLabel}
                 ariaLabelledBy={label ? labelId : ariaLabelledBy}
                 ariaValueText={ariaValueText}
@@ -712,7 +718,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 tooltipAlways={tooltipAlways}
                 formatTooltip={formatTooltip}
                 renderThumb={renderThumb}
-                sliderId={sliderId}
+                id={thumbIdOf(1)}
+                ariaDescribedBy={ariaDescribedBy}
                 ariaLabel={ariaLabel}
                 ariaLabelledBy={label ? labelId : ariaLabelledBy}
                 ariaValueText={ariaValueText}
@@ -738,7 +745,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               tooltipAlways={tooltipAlways}
               formatTooltip={formatTooltip}
               renderThumb={renderThumb}
-              sliderId={sliderId}
+              id={thumbIdOf(0)}
+                ariaDescribedBy={ariaDescribedBy}
               ariaLabel={ariaLabel}
               ariaLabelledBy={label ? labelId : ariaLabelledBy}
               ariaValueText={ariaValueText}

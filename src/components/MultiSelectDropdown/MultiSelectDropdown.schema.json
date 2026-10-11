@@ -59,7 +59,8 @@
     },
     "id": {
       "type": "string",
-      "description": "HTML id attribute for the trigger element."
+      "description": "HTML id attribute for the trigger element.",
+      "x-defaultSource": "`${dropdownId}-trigger`"
     },
     "name": {
       "type": "string",

@@ -164,11 +164,14 @@ describe("ResizablePanel", () => {
     });
 
     it("separator has aria-controls pointing to panel id", () => {
-      renderPanel({ id: "my-panel" });
-      expect(screen.getByRole("separator")).toHaveAttribute(
-        "aria-controls",
-        "my-panel",
-      );
+      renderPanel({ id: "my-handle" });
+      const sep = screen.getByRole("separator");
+      // A consumer's id names the separator, the control; the panel keeps its
+      // own id, which the separator controls (A2e routing).
+      expect(sep).toHaveAttribute("id", "my-handle");
+      const panelId = sep.getAttribute("aria-controls");
+      expect(panelId).toBeTruthy();
+      expect(document.getElementById(panelId!)).toBe(sep.parentElement);
     });
 
     it("disabled separator has aria-disabled and tabIndex=-1", () => {

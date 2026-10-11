@@ -23,7 +23,9 @@
     "2026-10-10, `demo-coverage`: 1137 → 1135. A2a removed Accordion's onExpandedChange(event) and Toast's onRemove from the public API.",
     "2026-10-10, `demo-coverage`: 1135 → 1134. A2b folded Modal's disableAnimation into its existing reduceMotion; every other A2b prop was renamed one for one.",
     "2026-10-10, `demo-coverage`: 1134 → 1130. A2c merged AccordionContent's forceMount and unmountOnClose into one keepMounted (−1), removed TabPanel's forceMount into its existing keepMounted (−1), and folded the Dropdown and SearchableDropdown CheckIcon into their existing selectedIcon (−2); every other A2c prop was renamed one for one.",
-    "2026-10-10, `fixture-gap`: 150 → 148. A2c merged AccordionContent's forceMount and unmountOnClose, both unfixtured markup, into one keepMounted that has fixtures. The rank moves and the twelve icon fixtures are attributed in docs/adr/002-fixture-gap.json."
+    "2026-10-10, `fixture-gap`: 150 → 148. A2c merged AccordionContent's forceMount and unmountOnClose, both unfixtured markup, into one keepMounted that has fixtures. The rank moves and the twelve icon fixtures are attributed in docs/adr/002-fixture-gap.json.",
+    "2026-10-11, `demo-coverage`: 1130 → 1140. A2e declared `aria-labelledby` and `aria-describedby` on the five dropdowns (+10) and `aria-describedby` on Slider (+1), so they route to the trigger and the thumbs; it removed Breadcrumb's `separatorIcon` into `separator` (−1).",
+    "2026-10-11, `fixture-gap`: 148 → 147. Breadcrumb's `separator` gained the fixture `separatorIcon` had; attributed in docs/adr/002-fixture-gap.json."
   ],
   "$secondsNote": "Wall-clock per gate on a green run, for the slowdown check in run-all-gates. The multiple is DERIVED, not chosen: across green runs the widest healthy spread for one gate was unit+contracts at 88s to 149s, a factor of 1.69, with e2e:demo-contrast at 1.24 and the rest at or under 1.25. Under memory pressure the same gates ran e2e:icon-bounds 436->948 (2.17), e2e:visual 296->926 (3.13), e2e:a11y-full 352->1431 (4.07) and e2e:demo-contrast 70->624 (8.9). So healthy tops out at 1.69 and the mildest pressure observed is 2.17; 2.0 sits between them and is the only round number that does. Gates under 10s are exempt, because 1s to 3s is a factor of three and means nothing.",
   "$runWas": "green",
@@ -32,8 +34,8 @@
   "populations": {
     "doc-truth": 15,
     "snippet-shape": 728,
-    "demo-coverage": 1130,
-    "fixture-gap": 148,
+    "demo-coverage": 1140,
+    "fixture-gap": 147,
     "component-docs": 30,
     "library-build+bundle": 1162,
     "unit+contracts": 4879,

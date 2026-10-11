@@ -1836,7 +1836,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "ReactNode",
         "required": false,
         "default": null,
-        "description": "React.ReactNode — Custom separator between breadcrumb items."
+        "description": "ReactNode — Replaces the default chevron between items: text or an icon, rendered as given. `iconSize` sizes the default one."
       },
       {
         "name": "onItemClick",
@@ -1872,13 +1872,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "CSSProperties — Inline styles for the root element."
-      },
-      {
-        "name": "separatorIcon",
-        "type": "ReactNode",
-        "required": false,
-        "default": null,
-        "description": "ReactNode — Replaces the default chevron between items. Rendered as given; `iconSize` sizes the default one. `separator` takes precedence."
       },
       {
         "name": "ellipsisIcon",
@@ -2576,7 +2569,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "id",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "`${dropdownId}-trigger`",
         "description": "HTML id attribute."
       },
       {
@@ -2897,13 +2890,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "root",
             "type": "string",
             "required": false,
-            "description": "Root container div"
+            "description": "The root: label, description, the control and the message. `className` lands here too."
           },
           {
             "name": "control",
             "type": "string",
             "required": false,
-            "description": "The trigger box showing the current selection."
+            "description": "The box around the trigger and the clear button, which the menu anchors to."
           },
           {
             "name": "trigger",
@@ -4180,7 +4173,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "id",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "`${datePickerId}-trigger`",
         "description": "HTML id attribute."
       },
       {
@@ -5410,7 +5403,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "id",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "`${dropdownId}-trigger`",
         "description": "HTML id attribute for the trigger element."
       },
       {
@@ -7869,7 +7862,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "id",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "`${dropdownId}-trigger`",
         "description": "HTML id attribute for the trigger element."
       },
       {
@@ -8469,7 +8462,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "id",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "`${dropdownId}-trigger`",
         "description": "HTML id attribute for the trigger element."
       },
       {
@@ -10475,7 +10468,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "id",
         "type": "string",
         "required": false,
-        "default": null,
+        "default": "`${dropdownId}-trigger`",
         "description": "HTML id attribute for the component."
       },
       {

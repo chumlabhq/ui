@@ -877,7 +877,7 @@ const ResizablePanelDemo = () => {
       {/* ─── Custom ID ────────────────────────────────────────────────── */}
       <Section
         title="Custom ID"
-        description="Use the id prop for deterministic IDs useful for SSR and testing. When omitted, a unique ID is auto-generated via useId()."
+        description="The id prop names the resize handle, the control a test or a label reaches, so it is deterministic for SSR and testing. The panel keeps an auto-generated ID, which the handle points at with aria-controls."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>

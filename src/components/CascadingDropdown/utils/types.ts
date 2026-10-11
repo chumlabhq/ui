@@ -30,9 +30,9 @@ export interface CascadingValue {
 }
 
 export interface CascadingDropdownClasses {
-  /** Root container div */
+  /** The root: label, description, the control and the message. `className` lands here too. */
   root?: string;
-  /** The trigger box showing the current selection. */
+  /** The box around the trigger and the clear button, which the menu anchors to. */
   control?: string;
   /** Trigger button */
   trigger?: string;
@@ -172,6 +172,10 @@ interface CascadingDropdownBaseProps {
   /** Accessible label for the submenu search input. */
   submenuSearchAriaLabel?: string;
   "aria-label"?: string;
+  /** Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. */
+  "aria-labelledby"?: string;
+  /** Lands on the trigger, joined with the component's own error message. */
+  "aria-describedby"?: string;
 }
 
 /**
@@ -224,6 +228,7 @@ export interface CascadingDropdownTriggerRenderProps {
   "aria-invalid": boolean | undefined;
   "aria-describedby": string | undefined;
   "aria-label": string | undefined;
+  "aria-labelledby": string | undefined;
   disabled: boolean;
   onClick: () => void;
   /**

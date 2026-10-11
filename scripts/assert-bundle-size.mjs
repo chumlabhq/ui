@@ -943,6 +943,31 @@ const LIBRARY_TOTAL_HISTORY = [
       "name lengths. Every other entry byte-identical. Measured against a " +
       "build of cd48847c.",
   },
+  {
+    kb: 156.41,
+    commit: "(uncommitted)",
+    date: "2026-10-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.17 KB over the record (measured 156.09 -> 156.41 KB; " +
+      "159,834 -> 160,163 B gzipped, +329 B), 81 files held. A2e routing: " +
+      "id/aria-* reach the primary control (a11y correctness). DatePicker " +
+      "+64 B (12,378 -> 12,442), its declared breach raised 12.09 -> 12.15 in " +
+      "the same move. MultiSelectSearchableDropdown +53 B (7,302 -> 7,355), " +
+      "Dropdown +51 B (6,248 -> 6,299), MultiSelectDropdown +49 B " +
+      "(7,030 -> 7,079), CascadingDropdown +38 B (9,506 -> 9,544): id is the " +
+      "trigger's own, aria-labelledby/-describedby reach it. RadioButton +36 B " +
+      "(3,272 -> 3,308): id and aria-* on the input, not the label. OtpInput " +
+      "+32 B (3,217 -> 3,249): aria-* on the group. Slider +27 B " +
+      "(5,689 -> 5,716): id and aria-describedby on the thumbs. ResizablePanel " +
+      "+25 B (2,316 -> 2,341): id and aria-* on the separator. Input +8 B, " +
+      "TextArea +6 B: the consumer's aria-describedby joined, not overwritten. " +
+      "TimePicker -48 B (8,368 -> 8,320): its aria-label and aria-labelledby " +
+      "read once from props instead of twice from restProps. Breadcrumb -11 B " +
+      "(4,698 -> 4,687): separatorIcon removed. InternationalPhoneInput -1 B. " +
+      "Every other entry byte-identical. Code only: the slice's comments were " +
+      "deleted before measuring. Measured against a build of ea7c4101.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1064,7 +1089,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.09,
+      kb: 12.15,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1081,7 +1106,12 @@ const DECLARED_BREACHES = new Map([
         "rename and the old ref, DatePicker measured 12,344 B, identical to " +
         "HEAD. All +34 B is the ref moving from the root `<div>` to the trigger " +
         "`<button>`, merged with the trigger's own ref, so `ref.current.focus()` " +
-        "focuses the field and a form library can focus it on an error.",
+        "focuses the field and a form library can focus it on an error.\n\n" +
+        "12.09 -> 12.15 on 2026-10-11, A2e routing (exclusive 12,378 -> 12,442 B " +
+        "gzipped, +64 B): id/aria-* reach the primary control (a11y correctness). " +
+        "The trigger takes the consumer's id, aria-label, aria-labelledby and " +
+        "aria-describedby, which were spread onto the role-less root `<div>`; " +
+        "the description joins the trigger's own error id.",
     },
   ],
   [

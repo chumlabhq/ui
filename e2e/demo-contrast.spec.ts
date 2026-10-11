@@ -155,7 +155,10 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // shape table of the event payload it passed (26 cells, measured HEAD vs now).
   "accordion": 921,
   "avatar": 1084,
-  "breadcrumb": 514,
+  // A2e, 514 -> 512: the API Reference lost the separate icon prop's row (4
+  // cells and its 2 code spans), folded into separator, whose rewritten
+  // description gained one code span (517 -> 512 measured HEAD vs now).
+  "breadcrumb": 512,
   "button": 445,
   "cascading-dropdown": 732,
   "checkbox": 411,

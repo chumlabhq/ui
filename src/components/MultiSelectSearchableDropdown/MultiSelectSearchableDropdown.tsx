@@ -247,6 +247,8 @@ const MultiSelectSearchableDropdown = forwardRef<
       defaultOpen,
       onOpenChange,
       "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       portalContainer,
       dropdownSide = "bottom",
       forceDropdownSide = false,
@@ -303,11 +305,11 @@ const MultiSelectSearchableDropdown = forwardRef<
     const generatedId = useId();
     const dropdownId = id || name || generatedId;
     const listboxId = `${dropdownId}-listbox`;
-    const triggerId = `${dropdownId}-trigger`;
+    const triggerId = id ?? `${dropdownId}-trigger`;
     const labelId = `${dropdownId}-label`;
     const valueId = `${dropdownId}-value`;
 
-  useAccessibleNameWarning("MultiSelectSearchableDropdown", { label, "aria-label": ariaLabel });
+  useAccessibleNameWarning("MultiSelectSearchableDropdown", { label, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy });
     const errorId = `${dropdownId}-error`;
 
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -528,9 +530,9 @@ const MultiSelectSearchableDropdown = forwardRef<
       "aria-haspopup": "listbox" as const,
       "aria-controls": listboxId,
       "aria-activedescendant": showSearch ? undefined : activeDescendantId,
-      ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger }),
+      ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy, hasValueElement: !renderTrigger }),
       "aria-invalid": (error || undefined) as boolean | undefined,
-      "aria-describedby": error && errorMessage ? errorId : undefined,
+      "aria-describedby": [ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
       "aria-required": (required || undefined) as boolean | undefined,
       disabled,
       onClick: handleToggle,

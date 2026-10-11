@@ -161,6 +161,9 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       onConfirm,
       cancelText,
       confirmText,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
         ...restProps
     },
     ref,
@@ -266,18 +269,17 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     // hint. ACCESSIBILITY.md records that gap; this is the warning it needed.
     useAccessibleNameWarning("TimePicker", {
       label,
-      // Off `restProps`: neither attribute has a prop of its own here, and both
-      // are spread onto the input.
-      "aria-label": (restProps as Record<string, unknown>)["aria-label"],
-      "aria-labelledby": (restProps as Record<string, unknown>)["aria-labelledby"],
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
     });
     const clockPopupId = `${dropdownId}-clock`;
-    const triggerId = `${dropdownId}-trigger`;
+    const triggerId = id ?? `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;
     const descriptionId = `${dropdownId}-description`;
     const successId = `${dropdownId}-success`;
 
     const describedByParts = [
+      ariaDescribedBy,
       description ? descriptionId : null,
       error && errorMessage ? errorId : null,
       success && successMessage && !error ? successId : null,
@@ -664,7 +666,8 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
                   : undefined
               }
               aria-autocomplete={mode === "dropdown" ? "list" : "none"}
-              aria-label={!label ? restProps["aria-label"] : undefined}
+              aria-label={!label ? ariaLabel : undefined}
+              aria-labelledby={ariaLabelledBy}
               aria-invalid={error || undefined}
               aria-describedby={describedBy}
               aria-required={required || undefined}

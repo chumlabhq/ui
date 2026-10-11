@@ -147,6 +147,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     const ariaDescribedBy =
       [
+        rest["aria-describedby"],
         description ? descriptionId : null,
         error && errorMessage ? errorId : null,
         !error && success && successMessage ? successId : null,

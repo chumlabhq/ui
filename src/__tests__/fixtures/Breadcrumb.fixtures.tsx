@@ -19,7 +19,7 @@ const fixtures: Fixtures<typeof Breadcrumb> = [
   },
   {
     name: "custom-separator-icon",
-    props: { items: CRUMBS, separatorIcon: <SlashGlyph /> },
+    props: { items: CRUMBS, separator: <SlashGlyph /> },
     note: "Passes a real SVG in place of the default separator chevron; icon-slots holds it to Breadcrumb/default's box and position.",
   },
   {

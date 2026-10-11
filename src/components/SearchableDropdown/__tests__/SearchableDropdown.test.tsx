@@ -66,7 +66,9 @@ describe('SearchableDropdown - Basic Rendering', () => {
 
     const label = screen.getByText('Favorite Fruit');
     expect(label).toBeInTheDocument();
-    expect(label).toHaveAttribute('for', 'fruit-dropdown-trigger');
+    // The consumer's id is the trigger's own (A2e routing).
+    expect(label).toHaveAttribute('for', 'fruit-dropdown');
+    expect(screen.getByRole('combobox')).toHaveAttribute('id', 'fruit-dropdown');
   });
 
   it('should render required indicator', () => {

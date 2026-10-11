@@ -458,7 +458,7 @@ describe("Breadcrumb", () => {
         <span data-testid="custom-sep-icon" style={style}>&gt;</span>
       );
 
-      render(<Breadcrumb items={items} separatorIcon={<CustomSeparator />} />);
+      render(<Breadcrumb items={items} separator={<CustomSeparator />} />);
 
       const seps = screen.getAllByTestId("custom-sep-icon");
       expect(seps.length).toBe(2);

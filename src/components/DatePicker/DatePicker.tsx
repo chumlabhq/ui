@@ -511,6 +511,9 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       open: openProp,
       defaultOpen = false,
       onOpenChange,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       ...rest
     },
     ref,
@@ -559,11 +562,11 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
 
     const generatedId = useId();
     const datePickerId = id || name || generatedId;
-    const triggerId = `${datePickerId}-trigger`;
+    const triggerId = id ?? `${datePickerId}-trigger`;
     const labelId = `${datePickerId}-label`;
     const valueId = `${datePickerId}-value`;
 
-  useAccessibleNameWarning("DatePicker", { label });
+  useAccessibleNameWarning("DatePicker", { label, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy });
     const calendarId = `${datePickerId}-calendar`;
     const errorId = `${datePickerId}-error`;
 
@@ -869,9 +872,9 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             aria-expanded={isOpen}
             aria-haspopup="dialog"
             aria-controls={calendarId}
-            {...comboboxNameProps({ valueId, labelId, hasLabel: !!label })}
+            {...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy })}
             aria-invalid={error || undefined}
-            aria-describedby={error && errorMessage ? errorId : undefined}
+            aria-describedby={[ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined}
             aria-required={required || undefined}
             disabled={disabled}
             onClick={handleToggle}

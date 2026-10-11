@@ -242,10 +242,16 @@ test.describe("ResizablePanel Component", () => {
       await expect(separator).toHaveAttribute("aria-label");
     });
 
-    test("separator has aria-controls referencing panel id", async ({ page }) => {
+    test("separator takes the id and has aria-controls referencing the panel", async ({ page }) => {
       const customIdSection = page.locator("section").filter({ hasText: "Custom ID" });
       const separator = customIdSection.getByRole("separator");
-      await expect(separator).toHaveAttribute("aria-controls", "my-resizable");
+      // A consumer's id names the separator, the control; the panel keeps its
+      // own id, which the separator controls (A2e routing).
+      await expect(separator).toHaveAttribute("id", "my-resizable");
+      const panelId = await separator.getAttribute("aria-controls");
+      expect(panelId).toBeTruthy();
+      await expect(customIdSection.locator(`[id="${panelId}"]`)).toHaveCount(1);
+      expect(await separator.evaluate((el, id) => el.parentElement?.id === id, panelId)).toBe(true);
     });
 
     test("separator aria-valuetext describes pixels", async ({ page }) => {

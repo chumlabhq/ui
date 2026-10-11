@@ -380,6 +380,8 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       menuSearchAriaLabel = "Search menu",
       submenuSearchAriaLabel = "Search submenu",
       "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
     },
     ref,
   ) => {
@@ -431,7 +433,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
     const dropdownId = id || name || generatedId;
     const menuId = `${dropdownId}-menu`;
     const submenuId = `${dropdownId}-submenu`;
-    const triggerId = `${dropdownId}-trigger`;
+    const triggerId = id ?? `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -656,8 +658,9 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       "aria-haspopup": "true" as const,
       "aria-controls": isOpen ? menuId : undefined,
       "aria-invalid": (error || undefined) as boolean | undefined,
-      "aria-describedby": error && errorMessage ? errorId : undefined,
+      "aria-describedby": [ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
       "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
       disabled,
       onClick: handleToggle,
       onMouseDown: focusTriggerOnMouseDown,
@@ -672,7 +675,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
 
     return (
       <div
-        className={cn(mergedClasses.control, fullWidthClass, className) || undefined}
+        className={cn(mergedClasses.root, fullWidthClass, className) || undefined}
         style={style}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
@@ -693,7 +696,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
 
         <div
           ref={containerRef}
-          className={cn(mergedClasses.root) || undefined}
+          className={cn(mergedClasses.control) || undefined}
         >
           {renderTrigger ? (
             // eslint-disable-next-line react-hooks/refs -- ref callback is intentionally passed to render prop for consumer to attach

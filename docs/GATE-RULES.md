@@ -289,6 +289,17 @@ Two lessons, and the second is the one that generalises further:
   check can be satisfied by scenery, the name is the only thing still claiming
   it works.
 
+## API conventions are a contract, not a habit
+
+The twelve prop conventions, the shared slot vocabulary, the routing rules and
+every named exception are in [ADR 008](adr/008-api-conventions.md). Four
+contracts hold them: `api-conventions` (seven rules read off the types),
+`api-names` (every renamed name, tombstoned), `refs` and `prop-routing`. A new
+prop that breaks a rule fails there; an exception is named with its reason in
+the contract and fails the moment it no longer applies. A2a–A2d renamed 145
+props, 17 slots and 10 refs to these rules, and nothing would otherwise have
+stopped the 146th.
+
 ## Definition of done (every task)
 
 Compiles and typechecks; matches existing conventions; no narration comments; no

@@ -207,7 +207,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       unstyled = false,
       className,
       style,
-      separatorIcon,
       ellipsisIcon,
       iconSize = 16,
       showTooltips = true,
@@ -481,10 +480,10 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const renderSeparator = useCallback(
       (key: string) => (
         <li key={key} role="presentation" aria-hidden="true" className={mergedClasses.separator || undefined}>
-          {separator || separatorIcon || <ChevronRightIcon {...iconSizeProps} />}
+          {separator || <ChevronRightIcon {...iconSizeProps} />}
         </li>
       ),
-      [separator, mergedClasses.separator, separatorIcon, iconSizeProps],
+      [separator, mergedClasses.separator, iconSizeProps],
     );
 
     const renderItem = useCallback(

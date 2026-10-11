@@ -285,6 +285,8 @@ const SearchableDropdown = forwardRef<
     dropdownOffset = 4,
     typeaheadTimeout = 500,
     "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    "aria-describedby": ariaDescribedBy,
     onBlur,
     onFocus,
     onKeyDown: onKeyDownProp,
@@ -330,11 +332,11 @@ const SearchableDropdown = forwardRef<
   const generatedId = useId();
   const dropdownId = id || generatedId;
   const listboxId = `${dropdownId}-listbox`;
-  const triggerId = `${dropdownId}-trigger`;
+  const triggerId = id ?? `${dropdownId}-trigger`;
   const labelId = `${dropdownId}-label`;
   const valueId = `${dropdownId}-value`;
 
-  useAccessibleNameWarning("SearchableDropdown", { label, "aria-label": ariaLabel });
+  useAccessibleNameWarning("SearchableDropdown", { label, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy });
   const errorId = `${dropdownId}-error`;
   const statusId = `${dropdownId}-status`;
 
@@ -530,9 +532,9 @@ const SearchableDropdown = forwardRef<
     "aria-controls": listboxId,
     "aria-activedescendant": showSearch ? undefined : activeDescendantId,
     "aria-invalid": (error || undefined) as boolean | undefined,
-    "aria-describedby": error && errorMessage ? errorId : undefined,
+    "aria-describedby": [ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
     "aria-required": (required || undefined) as boolean | undefined,
-    ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, hasValueElement: !renderTrigger }),
+    ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy, hasValueElement: !renderTrigger }),
     disabled,
     onClick: handleToggle,
     onKeyDown: handleKeyDownWithPassthrough,

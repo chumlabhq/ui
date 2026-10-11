@@ -113,6 +113,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const ariaDescribedBy =
       [
+        rest["aria-describedby"],
         description ? descriptionId : null,
         error && errorMessage ? errorId : null,
         !error && success && successMessage ? successId : null,

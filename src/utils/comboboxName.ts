@@ -32,6 +32,12 @@ export interface ComboboxNameOptions {
   /** The consumer's `aria-label`, used when there is no visible label. */
   ariaLabel?: string;
   /**
+   * The consumer's `aria-labelledby`. It wins over everything else, as it does
+   * over a `<label>` on a native control: it is the consumer naming the field
+   * on purpose, usually by a heading the component cannot see.
+   */
+  ariaLabelledBy?: string;
+  /**
    * Whether the element `valueId` names is actually rendered.
    *
    * `renderTrigger` replaces the library's trigger, and the value span goes
@@ -48,11 +54,13 @@ export function comboboxNameProps({
   labelId,
   hasLabel,
   ariaLabel,
+  ariaLabelledBy,
   hasValueElement,
 }: ComboboxNameOptions): {
   "aria-labelledby"?: string;
   "aria-label"?: string;
 } {
+  if (ariaLabelledBy) return { "aria-labelledby": ariaLabelledBy, ...(ariaLabel ? { "aria-label": ariaLabel } : {}) };
   if (hasLabel) return { "aria-labelledby": labelId };
   if (ariaLabel) return { "aria-label": ariaLabel };
   // No label, no aria-label and no value element: the control is unnamed, and

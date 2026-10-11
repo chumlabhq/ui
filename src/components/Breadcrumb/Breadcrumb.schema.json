@@ -114,7 +114,7 @@
     },
     "separator": {
       "type": "object",
-      "description": "React.ReactNode — Custom separator between breadcrumb items.",
+      "description": "ReactNode — Replaces the default chevron between items: text or an icon, rendered as given. `iconSize` sizes the default one.",
       "x-tsType": "ReactNode"
     },
     "onItemClick": {
@@ -176,11 +176,6 @@
       "type": "object",
       "description": "CSSProperties — Inline styles for the root element.",
       "x-tsType": "CSSProperties | undefined"
-    },
-    "separatorIcon": {
-      "type": "object",
-      "description": "ReactNode — Replaces the default chevron between items. Rendered as given; `iconSize` sizes the default one. `separator` takes precedence.",
-      "x-tsType": "ReactNode"
     },
     "ellipsisIcon": {
       "type": "object",

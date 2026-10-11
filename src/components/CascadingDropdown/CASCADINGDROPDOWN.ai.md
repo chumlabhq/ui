@@ -92,7 +92,7 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 - `aria-expanded` on trigger and menu items with children
 - `aria-checked` on submenu items
 
-DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > submenuItem*)`
+DOM nesting: `root > control > trigger + portal(menu > menuItem* + submenu > submenuItem*)`
 
 ---
 
@@ -202,22 +202,23 @@ override silently drops the rest.
 
 ```
 root
-└── control
-    ├── label
-    ├── description
-    ├── trigger [icon, clearTrigger, selectedContent]
-    ├── errorMessage / successMessage
-    └── portal
-        ├── content
-        │   ├── searchControl [searchIcon + searchInput]
-        │   ├── item* [itemIcon]
-        │   ├── empty
-        │   ├── loading
-        │   └── loading > loadingItem*
-        └── subPositioner            (its own portal, anchored to the open item)
-            └── subContent
-                ├── subSearchControl [subSearchIcon + subSearchInput]
-                └── subItem* [itemControl data-state=checked, itemIndicator]
+├── label
+├── description
+├── control
+│   ├── trigger [icon, selectedContent]
+│   └── clearTrigger
+├── errorMessage / successMessage
+└── portal
+    ├── content
+    │   ├── searchControl [searchIcon + searchInput]
+    │   ├── item* [itemIcon]
+    │   ├── empty
+    │   ├── loading
+    │   └── loading > loadingItem*
+    └── subPositioner            (its own portal, anchored to the open item)
+        └── subContent
+            ├── subSearchControl [subSearchIcon + subSearchInput]
+            └── subItem* [itemControl data-state=checked, itemIndicator]
 ```
 
 **`subPositioner` changed meaning in 0.1.0.** It used to be an

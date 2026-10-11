@@ -54,7 +54,7 @@ export default function BreadcrumbExample() {
       />
       <Breadcrumb
         items={basicItems}
-        separatorIcon={<ArrowIcon style={{ width: 16, height: 16 }} />}
+        separator={<ArrowIcon style={{ width: 16, height: 16 }} />}
         classes={
           {
             list: "flex flex-wrap items-center gap-1",

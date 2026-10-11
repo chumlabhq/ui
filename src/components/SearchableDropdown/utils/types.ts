@@ -103,6 +103,10 @@ export interface SearchableDropdownBaseProps {
   unstyled?: boolean;
   lockScroll?: boolean;
   "aria-label"?: string;
+  /** Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. */
+  "aria-labelledby"?: string;
+  /** Lands on the trigger, joined with the component's own error message. */
+  "aria-describedby"?: string;
   /** Fires when the trigger loses focus, with the native focus event. */
   onBlur?: (event: FocusEvent<HTMLElement>) => void;
   /** Fires when the trigger takes focus, with the native focus event. */

@@ -565,7 +565,7 @@ const BreadcrumbDemo = () => {
       {/* ─── Custom Separator ───────────────────────────────────────────── */}
       <Section
         title="Custom Separator"
-        description="Replace the default chevron with any ReactNode, through separator or separatorIcon."
+        description="Replace the default chevron with any ReactNode, text or an icon, through separator."
         isDarkMode={dark}
       >
         <div className="space-y-4">
@@ -588,12 +588,12 @@ const BreadcrumbDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Arrow icon (separatorIcon prop)
+              Arrow icon (separator prop)
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Breadcrumb
                 items={basicItems}
-                separatorIcon={<ArrowIcon style={{ width: 16, height: 16 }} />}
+                separator={<ArrowIcon style={{ width: 16, height: 16 }} />}
                 classes={c.breadcrumb}
                 onItemClick={handleItemClick}
               />

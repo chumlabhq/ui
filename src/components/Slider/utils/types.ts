@@ -139,5 +139,7 @@ export interface SliderProps
 
   "aria-label"?: string;
   "aria-labelledby"?: string;
+  /** Lands on the thumbs, joined with the description and the error message. */
+  "aria-describedby"?: string;
   "aria-valuetext"?: string;
 }

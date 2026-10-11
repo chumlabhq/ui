@@ -52,7 +52,8 @@
     },
     "id": {
       "type": "string",
-      "description": "HTML id attribute for the component."
+      "description": "HTML id attribute for the component.",
+      "x-defaultSource": "`${dropdownId}-trigger`"
     },
     "name": {
       "type": "string",

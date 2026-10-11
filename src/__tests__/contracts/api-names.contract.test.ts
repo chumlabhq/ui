@@ -12,7 +12,8 @@
  * ReactNode props, or `render…Icon` functions where the glyph itself changes
  * with state. A2d gave the `classes` slots one vocabulary: a clickable part is
  * a `*Trigger`, and a part another component already names takes that name
- * (`range`, `value`, `mark`, `group`). Nothing is
+ * (`range`, `value`, `mark`, `group`). A2e folded Breadcrumb's `separatorIcon`
+ * into `separator`, which takes text or an icon. Nothing is
  * published, so there are no aliases and no deprecations — the old name is
  * simply gone. A name that comes back anywhere, in a type, a demo, a snippet a
  * consumer copies or the docs the codegen product reads, is a second API for
@@ -160,6 +161,9 @@ const TOMBSTONES: Tombstone[] = [
   { old: "ExpandIcon", now: "renderExpandIcon", components: ["Table"], scope: "narrow" },
   { old: "CheckboxIcon", now: "renderCheckboxIcon", components: ["Table"], scope: "narrow" },
   { old: "DragHandleIcon", now: "dragHandleIcon", components: ["Table"], scope: "narrow" },
+
+  // A2e
+  { old: "separatorIcon", now: "separator", components: ["Breadcrumb"], scope: "word" },
 ];
 
 interface ValueTombstone {
@@ -876,7 +880,7 @@ for (const t of SLOT_TOMBSTONES) {
   console.log(`  ${t.old.padEnd(24)} → ${t.now.padEnd(24)} ${t.components.join(", ").padEnd(48)} ${t.scope.padEnd(9)} hits=${mine.length}`);
 }
 
-describe("API names: A2a's, A2b's, A2c's and A2d's old names and values are gone", () => {
+describe("API names: A2a's to A2e's old names and values are gone", () => {
   it("reads attributes on the named tag only, outside expressions", () => {
     const text = `<Checkbox checked onValueChange={set} /> <CheckboxGroup onValueChange={x} />
       <Switch onCheckedChange={() => ({ onValueChange: 1 })} label="a > b" />`;
@@ -996,7 +1000,7 @@ describe("API names: A2a's, A2b's, A2c's and A2d's old names and values are gone
     ["Table", "renderFilterIcon", ["active", "className"]],
     ["Table", "renderExpandIcon", ["expanded", "className"]],
     ["Table", "renderCheckboxIcon", ["checked", "indeterminate", "className"]],
-    ["Breadcrumb", "separatorIcon", "node"], ["Breadcrumb", "ellipsisIcon", "node"],
+    ["Breadcrumb", "separator", "node"], ["Breadcrumb", "ellipsisIcon", "node"],
     ["Pagination", "prevIcon", "node"], ["Pagination", "nextIcon", "node"], ["Pagination", "dropdownIcon", "node"],
     ["Stepper", "completedIcon", "node"], ["Stepper", "errorIcon", "node"],
   ];

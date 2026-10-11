@@ -82,6 +82,7 @@ export type DropdownSide = "top" | "bottom" | "left" | "right";
 export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "className" | "style" | "aria-label"> {
   items: BreadcrumbItem[];
   maxVisible?: number;
+  /** Replaces the default chevron between items: text or an icon, rendered as given. `iconSize` sizes the default one. */
   separator?: ReactNode;
   onItemClick?: (item: BreadcrumbItem) => void;
   "aria-label"?: string;
@@ -89,8 +90,6 @@ export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "clas
   unstyled?: boolean;
   className?: string;
   style?: CSSProperties;
-  /** Replaces the default chevron between items. Rendered as given; `iconSize` sizes the default one. `separator` takes precedence when both are set. */
-  separatorIcon?: ReactNode;
   /** Replaces the collapsed-items button's glyph. Rendered as given; `iconSize` sizes the default one. */
   ellipsisIcon?: ReactNode;
   iconSize?: number | string;

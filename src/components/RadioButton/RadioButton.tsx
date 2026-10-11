@@ -224,6 +224,10 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       uncheckedIcon,
       classes: classesProp,
       className,
+      id: idProp,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       ...rest
     },
     ref,
@@ -236,7 +240,7 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     const unstyled = ctx.unstyled;
 
     const generatedId = useId();
-    const radioId = rest.id || generatedId;
+    const radioId = idProp || generatedId;
 
     const baseClassesRaw = unstyled ? UNSTYLED_RADIO_CLASSES : DEFAULT_RADIO_CLASSES;
     const baseClasses = motionSafeClasses(
@@ -328,6 +332,9 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             ref={ref}
             type="radio"
             id={radioId}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
             name={ctx.name}
             value={value}
             checked={isChecked}

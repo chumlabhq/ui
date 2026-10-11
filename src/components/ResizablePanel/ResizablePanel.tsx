@@ -51,6 +51,8 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       className,
       style,
       id: idProp,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       ...rest
     } = props;
 
@@ -68,7 +70,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
     }), [classesProp, baseClasses]);
 
     const generatedId = useId();
-    const panelId = idProp ?? generatedId;
+    const panelId = generatedId;
 
     const clampedDefault = Math.max(minValue, Math.min(maxValue, defaultValue));
 
@@ -313,6 +315,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         <div
           ref={ref}
           role="separator"
+          id={idProp}
           tabIndex={disabled ? -1 : 0}
           aria-orientation={isVertical ? "horizontal" : "vertical"}
           aria-valuenow={roundedSize}
@@ -320,6 +323,8 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
           aria-valuemax={maxValue}
           aria-valuetext={`${roundedSize} pixels`}
           aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
           aria-disabled={disabled || undefined}
           aria-controls={panelId}
           onPointerDown={handlePointerDown}
