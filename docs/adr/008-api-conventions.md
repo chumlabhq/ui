@@ -12,12 +12,13 @@ Numbered 008, not 007: 007 is the dark-variant endpoint.
 
 ## Why
 
-The A1 audit walked 1,300 own props on 104 exports and found 145 that broke a
-convention the rest of the library already followed, plus 17 slot names and 10
-ref targets. A2a–A2d renamed every one. Nothing is published, so each rename
-replaced the old name outright: no aliases, no deprecations. This records the
-conventions themselves, so the next prop is held to them rather than to
-whichever neighbour its author read last.
+The public surface is 1,308 own props on 106 exports, as the conventions
+contract walks it (`api-conventions.contract.test.ts`, 2026-10-11). The A1 audit
+found 145 props that broke a convention the rest of the library already
+followed, plus 17 slot names and 10 ref targets. A2a–A2d renamed every one.
+Nothing is published, so each rename replaced the old name outright: no aliases,
+no deprecations. This records the conventions themselves, so the next prop is
+held to them rather than to whichever neighbour its author read last.
 
 ## The twelve rules
 
@@ -126,7 +127,9 @@ What the routing contract still excuses, each scheduled for A2f and each failing
 the moment it is fixed: root routing on Checkbox, Input, TextArea,
 AccordionContent, Modal, Drawer and Tooltip; attributes not spread on the three
 shimmers, Modal's parts, the two label helpers, Toast, Stepper, Table,
-AccordionItem and TabPanel, and Modal's and Drawer's own ids;
+AccordionItem and TabPanel, Tooltip's `id`, `aria-label`, `aria-labelledby` and
+`aria-describedby` (its content takes `className` alone), and Modal's and
+Drawer's own ids;
 InternationalPhoneInput's composite naming. DatePicker's `name`, which renders no
 field, is reported and not yet scheduled.
 

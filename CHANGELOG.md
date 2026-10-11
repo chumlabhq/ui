@@ -59,7 +59,7 @@ branch or a local link, these are the changes that will reach you.
   TimePicker's exclusive cost falls from 10.50 KB to 7.93 and DatePicker's from 12.59 to
   12.03 — TimePicker is under its ceiling, DatePicker is 0.03 KB over it. The subtree is absent from the server HTML and
   from the first client render, exactly like a portal, and arrives on a later render; if you
-  render `variant="clock"` or `showPresets` you may see one frame without it.
+  render `mode="clock"` or `showPresets` you may see one frame without it.
 
 - **`dark:` variants are down to six**, from 361 before the retirement began and 76 at the
   start of this pass. Interface text moved onto two new tokens (`--cl-text-chrome`,
@@ -81,7 +81,7 @@ none is a bug fix that happened to move behaviour.
   `subPositioner` is still the key for that element and still defaults to `z-[9999]`, but it
   is the portal root rather than an absolutely-positioned wrapper, so positioning utilities
   written on it (`left-full`, `top-0`, `absolute`) no longer have any effect — the
-  coordinates are inline styles. `submenuPosition` picks the preferred side and the side
+  coordinates are inline styles. `submenuSide` picks the preferred side and the side
   actually used is published as `data-side`.
 - **Error messages are painted in the error colour.** Every component's `message` class
   carried `text-cl-error text-cl-success` unconditionally, so the merge kept the last one and
@@ -185,7 +185,413 @@ none is a bug fix that happened to move behaviour.
   a render-time branch on the environment; the default storage is resolved when a value is
   actually read or written. Passing your own `storage` in a `StorageConfig` is unchanged.
 
+#### API names for 0.1.0
+
+The last pass before publishing made the API consistent with itself: 145 props, 17
+`classes` slots and 10 ref targets were renamed or moved to twelve conventions, written down
+in `docs/adr/008-api-conventions.md`. Nothing was published under the old names, so there are
+no aliases and no deprecation warnings: each old name below is simply gone, and
+`api-names.contract` fails if one comes back. If you built against a branch, rename as the
+tables say.
+
+- **Callbacks that answer a native event now pass it.** `onFocus` and `onBlur` on the five
+  dropdowns, and `onBlur` on `TimePicker`, receive the `FocusEvent`; `onStartIconClick` and
+  `onEndIconClick` on `Input` and `TextArea` receive the `MouseEvent`; `Avatar`'s `onLoad`
+  and `onError` receive the image's own event. They were called with no argument.
+- **`Toast` has one dismiss callback, `onDismiss(id)`.** `onRemove(id)` and `onDismiss()`
+  were two names for closing a toast.
+- **`Table`'s `onPinnedColumnsChange` receives the whole new `pinnedColumns` array**, with the
+  column added or removed; `onPinColumn(columnId)` left the consumer to rebuild it.
+- **The loaders' `speed` (seconds) is `animationDuration` (milliseconds).** Defaults convert
+  exactly: `CircularLoader` 750, `LinearLoader` 1500, `DotLoader` 1400, `PulseLoader` 1500.
+  The CSS custom property is `--loader-duration`, not `--loader-speed`.
+- **`keepMounted` takes `boolean | "visited"` on `AccordionContent` (default `"visited"`) and
+  `TabPanel` (default `false`):** `true` keeps the content mounted always, `false` unmounts
+  it when closed, `"visited"` mounts it on first open and keeps it. Every other
+  `keepMounted` stays a boolean.
+- **Icon props are camelCase and take a `ReactNode`, rendered as given.** Where the glyph
+  itself changes with state, the prop is a render function of that state:
+  `renderExpandIcon`, `renderFilterIcon` and `renderCheckboxIcon` on `Table`. `Pagination`'s
+  `prevIcon`, `nextIcon` and `dropdownIcon`, `Stepper`'s `completedIcon` and `errorIcon` and
+  each step's `icon`, `completedIcon` and `errorIcon`, and `Breadcrumb`'s `ellipsisIcon` take
+  a `ReactNode` only; none takes a component any more.
+- **Refs land on the element a keyboard user operates**, so `ref.current.focus()` focuses the
+  field and a form library can focus it on an error. `Dropdown`, `SearchableDropdown`,
+  `MultiSelectDropdown`, `MultiSelectSearchableDropdown`, `CascadingDropdown` and
+  `DatePicker`: the trigger `<button>` (with `renderTrigger`, the element you attach
+  `triggerProps.ref` to). `TimePicker`: its trigger `<input>`. `Slider`: the thumb, the first
+  one on a range slider. `ResizablePanel`: the separator. `RadioButton`: its
+  `<input type="radio">`. Each ref was the root element before (`RadioButton`'s, the
+  `<label>`).
+- **`id` and ARIA reach the primary control.** This breaks anything that selects
+  `#<id>-trigger`:
+  - On the five dropdowns, `id` is the trigger's own id. It used to become
+    `` `${id}-trigger` `` on the trigger, and no element carried the id you passed.
+  - `DatePicker` puts `id`, `aria-label`, `aria-labelledby` and `aria-describedby` on its
+    trigger `<button>`, and `TimePicker` on its `<input>`. Both spread them onto the root
+    `<div>`.
+  - The five dropdowns take `aria-labelledby` and `aria-describedby` and put them on the
+    trigger. A consumer's `aria-labelledby` wins over `label` and `aria-label`, as it does on a
+    native control. A consumer's `aria-describedby` is joined with the component's own error
+    and description ids, not replaced by them.
+  - `Slider`'s `id` names the first thumb, and `<label for>` follows it.
+  - `ResizablePanel`'s `id` names the separator; the panel keeps a generated id that the
+    separator's `aria-controls` points at.
+  - `CascadingDropdown`'s `classes.root` styles the root element, where `className` lands,
+    and `classes.control` the box around the trigger. They were swapped. Both default to
+    `relative`, so only an override moves.
+- **`Toast`'s `dismissOnEscape` is `closeOnEscape`**, the name `Modal` and `Drawer` already
+  used. A standalone `Toast` defaults to `false`; `ToastProvider` defaults to `true` and sets it
+  on the newest toast only.
+- **`renderTrigger` takes `(triggerProps, state)`** on `Dropdown`, `SearchableDropdown`,
+  `MultiSelectDropdown`, `MultiSelectSearchableDropdown` and `CascadingDropdown`.
+  `triggerProps` is exactly what the default trigger puts on its element: spread it onto
+  yours. The state you draw from (`isOpen`, the selection, `placeholder`) arrives as the
+  second argument. It used to sit inside the first, where spreading it put stray attributes
+  on the DOM.
+- **`TimePicker` is `clearable` by default**, matching `DatePicker`. Pass `clearable={false}`
+  for the old behaviour.
+
+##### Accordion
+
+| Old | New | Note |
+|---|---|---|
+| `onExpandedChange` | `onValueChange` | `onValueChange(value)`, value first; AccordionItem keeps its own `onExpandedChange(expanded)` |
+| `AccordionExpandEvent` | — | type removed; `onValueChange` reports the same change |
+| `type` | `selectionMode` |  |
+| `AccordionType` | `AccordionSelectionMode` | type |
+| `data-type` | `data-selection-mode` | data attribute |
+
+##### AccordionContent
+
+| Old | New | Note |
+|---|---|---|
+| `forceMount` | `keepMounted` | `keepMounted: boolean \| "visited"`, default `"visited"` |
+| `unmountOnClose` | `keepMounted` | `unmountOnClose` ≡ `keepMounted={false}` |
+
+##### AccordionTrigger
+
+| Old | New | Note |
+|---|---|---|
+| `iconPosition="left" \| "right"` | `iconPosition="start" \| "end" \| "none"` | values |
+
+##### AvatarGroup
+
+| Old | New | Note |
+|---|---|---|
+| `variant` | `layout` |  |
+| `GroupVariant` | `AvatarGroupLayout` | type |
+| `max` | `maxVisible` |  |
+
+##### Breadcrumb
+
+| Old | New | Note |
+|---|---|---|
+| `maxVisibleItems` | `maxVisible` |  |
+| `dropdownPosition` | `dropdownSide` |  |
+| `tooltipPosition` | `tooltipSide` |  |
+| `DropdownPosition` | `DropdownSide` | type |
+| `separatorIcon` | `separator` | `separator` takes text or an icon |
+| `items[].iconPosition: "left" \| "right"` | `items[].iconPosition: "start" \| "end"` | values |
+
+##### Button
+
+| Old | New | Note |
+|---|---|---|
+| `loadingText` | `loadingContent` |  |
+| `loaderPosition="left" \| "right"` | `loaderPosition="start" \| "end"` | values |
+
+##### CascadingDropdown
+
+| Old | New | Note |
+|---|---|---|
+| `onLoadChildren` | `loadChildren` |  |
+| `onMenuSearch` | `searchMenu` |  |
+| `onSubmenuSearch` | `searchSubmenu` |  |
+| `noResultsContent` | `emptyContent` |  |
+| `searchDebounceMs` | `searchDebounce` |  |
+| `dropdownPosition` | `dropdownSide` |  |
+| `submenuPosition` | `submenuSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `loadingText` | `loadingContent` |  |
+| `ClearIcon` | `clearIcon` | a `ReactNode`, rendered as given |
+| `SearchIcon` | `searchIcon` | a `ReactNode`, rendered as given |
+
+##### Checkbox
+
+| Old | New | Note |
+|---|---|---|
+| `onValueChange` | `onCheckedChange` | receives the new `checked` |
+| `classes.labelGroup` | `classes.group` | slot |
+
+##### CircularLoader
+
+| Old | New | Note |
+|---|---|---|
+| `speed` | `animationDuration` | seconds → milliseconds; default 750 |
+
+##### CountryFlagGroup
+
+| Old | New | Note |
+|---|---|---|
+| `max` | `maxVisible` |  |
+
+##### DatePicker
+
+| Old | New | Note |
+|---|---|---|
+| `mode` | `selectionMode` |  |
+| `DatePickerMode` | `DatePickerSelectionMode` | type |
+| `dropdownPosition` | `dropdownSide` |  |
+| `forceDropdownPosition` | `forceDropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `classes.navButton` | `classes.navTrigger` | slot |
+
+##### DotLoader
+
+| Old | New | Note |
+|---|---|---|
+| `dotSize` | `size` |  |
+| `speed` | `animationDuration` | seconds → milliseconds; default 1400 |
+
+##### Drawer
+
+| Old | New | Note |
+|---|---|---|
+| `activeSnapPointIndex` | `snapPointIndex` | pairs with `onSnapPointIndexChange` |
+| `duration` | `animationDuration` | milliseconds; Toast's `duration` (display time) is unchanged |
+| `direction` | `side` | values unchanged: `left`, `right`, `top`, `bottom`; `data-direction` → `data-side` |
+| `DrawerDirection` | `DrawerSide` | type |
+
+##### Dropdown
+
+| Old | New | Note |
+|---|---|---|
+| `onLoadOptions` | `loadOptions` | a loader returns data, so it takes no `on` |
+| `noResultsContent` | `emptyContent` |  |
+| `dropdownPosition` | `dropdownSide` |  |
+| `forceDropdownPosition` | `forceDropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `loadingText` | `loadingContent` |  |
+| `ClearIcon` | `clearIcon` | a `ReactNode`, rendered as given |
+| `ChevronIcon` | `chevronIcon` | a `ReactNode`, rendered as given |
+| `CheckIcon` | `selectedIcon` | folded into the existing `selectedIcon` |
+
+##### Input
+
+| Old | New | Note |
+|---|---|---|
+| `startIconLabel` | `startIconAriaLabel` |  |
+| `endIconLabel` | `endIconAriaLabel` |  |
+
+##### InternationalPhoneInput
+
+| Old | New | Note |
+|---|---|---|
+| `onPasteDetected` | `onPasteDetect` |  |
+| `enablePasteDetection` | `pasteDetection` |  |
+| `dropdownPosition` | `dropdownSide` |  |
+| `forceDropdownPosition` | `forceDropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+
+##### LinearLoader
+
+| Old | New | Note |
+|---|---|---|
+| `speed` | `animationDuration` | seconds → milliseconds; default 1500 |
+
+##### Modal
+
+| Old | New | Note |
+|---|---|---|
+| `disableAnimation` | `reduceMotion` | folded into the existing `reduceMotion: boolean \| "auto"` |
+| `preventOutsideClick` | `closeOnOverlayClick` | inverted; default `true` |
+
+##### MultiSelectDropdown
+
+| Old | New | Note |
+|---|---|---|
+| `onLoadOptions` | `loadOptions` | a loader returns data, so it takes no `on` |
+| `noResultsContent` | `emptyContent` |  |
+| `maxDisplayedChips` | `maxVisible` |  |
+| `dropdownPosition` | `dropdownSide` |  |
+| `forceDropdownPosition` | `forceDropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `loadingText` | `loadingContent` |  |
+| `ClearIcon` | `clearIcon` | a `ReactNode`, rendered as given |
+| `ChevronIcon` | `chevronIcon` | a `ReactNode`, rendered as given |
+| `classes.chipRemove` | `classes.chipRemoveTrigger` | slot |
+| `classes.loadingIcon` | `classes.loadingItemControl` | the skeleton row's square, standing in for `itemControl` |
+
+##### MultiSelectSearchableDropdown
+
+| Old | New | Note |
+|---|---|---|
+| `onLoadInitialOptions` | `loadInitialOptions` |  |
+| `onSearch` | `searchOptions` |  |
+| `noResultsContent` | `emptyContent` |  |
+| `maxDisplayedChips` | `maxVisible` |  |
+| `searchDebounceMs` | `searchDebounce` |  |
+| `dropdownPosition` | `dropdownSide` |  |
+| `forceDropdownPosition` | `forceDropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `loadingText` | `loadingContent` |  |
+| `ClearIcon` | `clearIcon` | a `ReactNode`, rendered as given |
+| `classes.chipRemove` | `classes.chipRemoveTrigger` | slot |
+
+##### Pagination
+
+| Old | New | Note |
+|---|---|---|
+| `showLabel` | `rowsPerPagePrefix` | the visible text before the rows-per-page control |
+| `rowsPerPageLabel` | `rowsPerPageSuffix` | the visible text after it |
+| `dropdownPosition` | `dropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `classes.navButton` | `classes.navTrigger` | slot |
+
+##### PulseLoader
+
+| Old | New | Note |
+|---|---|---|
+| `speed` | `animationDuration` | seconds → milliseconds; default 1500 |
+
+##### SearchableDropdown
+
+| Old | New | Note |
+|---|---|---|
+| `onLoadInitialOptions` | `loadInitialOptions` |  |
+| `onSearch` | `searchOptions` |  |
+| `noResultsContent` | `emptyContent` |  |
+| `searchDebounceMs` | `searchDebounce` |  |
+| `dropdownPosition` | `dropdownSide` |  |
+| `forceDropdownPosition` | `forceDropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `loadingText` | `loadingContent` |  |
+| `ClearIcon` | `clearIcon` | a `ReactNode`, rendered as given |
+| `SearchIcon` | `searchIcon` | a `ReactNode`, rendered as given |
+| `ChevronIcon` | `chevronIcon` | a `ReactNode`, rendered as given |
+| `CheckIcon` | `selectedIcon` | folded into the existing `selectedIcon` |
+
+##### Slider
+
+| Old | New | Note |
+|---|---|---|
+| `transitionDuration` | `animationDuration` |  |
+| `classes.valueText` | `classes.value` | slot |
+| `classes.marker` | `classes.mark` | slot |
+
+##### Stepper
+
+| Old | New | Note |
+|---|---|---|
+| `labelPosition="right"` | `labelPosition="end" \| "bottom"` | values |
+
+##### Switch
+
+| Old | New | Note |
+|---|---|---|
+| `onValueChange` | `onCheckedChange` | receives the new `checked`; `value` stays form data |
+| `transitionDuration` | `animationDuration` |  |
+| `classes.labelGroup` | `classes.group` | slot |
+
+##### TabPanel
+
+| Old | New | Note |
+|---|---|---|
+| `tooltipPosition` | `tooltipSide` |  |
+| `forceMount` | `keepMounted` | folded into `keepMounted`, which gains `"visited"`; default `false` |
+| `iconPosition="left" \| "right"` | `iconPosition="start" \| "end"` | values |
+
+##### Table
+
+| Old | New | Note |
+|---|---|---|
+| `onSelectionChange` | `onSelectedRowIdsChange` |  |
+| `onExpandedChange` | `onExpandedRowIdsChange` | receives the expanded row ids |
+| `onPinColumn` | `onPinnedColumnsChange` | receives the whole new `pinnedColumns` array, not one id and a flag |
+| `isPopupOpen` | `popupOpen` |  |
+| `onCursorPosition` | `onCursorPositionChange` |  |
+| `onCursorOverHeader` | `onHeaderHoverChange` |  |
+| `isFloatingActionsHovered` | `floatingActionsHovered` |  |
+| `enableColumnFilters` | `filterable` |  |
+| `enableColumnResizing` | `resizable` |  |
+| `enableRowDragDrop` | `reorderable` |  |
+| `enableCopyOnClick` | `copyOnClick` |  |
+| `enableInfiniteScroll` | `infiniteScroll` |  |
+| `density` | `size` | `compact`/`comfortable`/`spacious` → `sm`/`md`/`lg` |
+| `data-density` | `data-size` | data attribute |
+| `ariaLabel` | `aria-label` | the native attribute, through rest props |
+| `shimmerRowCount` | `shimmerCount` |  |
+| `SearchIcon` | `searchIcon` | a `ReactNode`, rendered as given |
+| `PinIcon` | `pinIcon` | a `ReactNode`, rendered as given |
+| `PinnedIcon` | `pinnedIcon` | a `ReactNode`, rendered as given |
+| `FilterIcon` | `renderFilterIcon` | `renderFilterIcon({ active, className })` |
+| `ExpandIcon` | `renderExpandIcon` | `renderExpandIcon({ expanded, className })` |
+| `CheckboxIcon` | `renderCheckboxIcon` | `renderCheckboxIcon({ checked, indeterminate, className })` |
+| `DragHandleIcon` | `dragHandleIcon` | a `ReactNode`, rendered as given |
+| `expandColumnPosition="left" \| "right"` | `expandColumnPosition="start" \| "end"` | values |
+| `dragColumnPosition="left" \| "right"` | `dragColumnPosition="start" \| "end"` | values |
+| `searchIconPosition="left" \| "right"` | `searchIconPosition="start" \| "end" \| "none"` | values |
+| `size="compact" \| "comfortable" \| "spacious"` | `size="sm" \| "md" \| "lg"` | values |
+| `classes.expandButton` | `classes.expandTrigger` | slot |
+| `classes.filterButton` | `classes.filterTrigger` | slot |
+| `classes.pinButton` | `classes.pinTrigger` | slot |
+
+##### TextArea
+
+| Old | New | Note |
+|---|---|---|
+| `startIconLabel` | `startIconAriaLabel` |  |
+| `endIconLabel` | `endIconAriaLabel` |  |
+
+##### TimePicker
+
+| Old | New | Note |
+|---|---|---|
+| `variant` | `mode` |  |
+| `TimePickerVariant` | `TimePickerMode` | type |
+| `dropdownPosition` | `dropdownSide` |  |
+| `forceDropdownPosition` | `forceDropdownSide` |  |
+| `dropdownGap` | `dropdownOffset` |  |
+| `okText` | `confirmText` |  |
+| `classes.cancelButton` | `classes.cancelTrigger` | slot |
+| `classes.confirmButton` | `classes.confirmTrigger` | slot |
+| `classes.periodButton` | `classes.periodTrigger` | slot |
+
+##### Toast
+
+| Old | New | Note |
+|---|---|---|
+| `onRemove` | `onDismiss` | merged with the old `onDismiss()` into one `onDismiss(id)` |
+| `type` | `variant` | also in `toast({ variant })` options |
+| `ToastType` | `ToastVariant` | type |
+| `data-toast-type` | `data-variant` | data attribute |
+| `classes.indicator` | `classes.range` | the auto-dismiss progress fill |
+
+##### ToastProvider
+
+| Old | New | Note |
+|---|---|---|
+| `classes.indicator` | `classes.range` | the auto-dismiss progress fill |
+
+##### Tooltip
+
+| Old | New | Note |
+|---|---|---|
+| `disableHoverableContent` | `hoverableContent` | inverted; default `true` |
+
 ### Removed
+
+- `showClearButton` on `DatePicker`. Use `clearable`, which defaults to `true`.
+- `separatorIcon` on `Breadcrumb`. `separator` takes text or an icon, rendered as given.
+- `CheckIcon` on `Dropdown` and `SearchableDropdown`. Use the existing `selectedIcon`.
+- `Accordion`'s root `onExpandedChange(event)` and its `AccordionExpandEvent` type.
+  `onValueChange(value)` reports the same change. `AccordionItem`'s own
+  `onExpandedChange(expanded)` is unchanged.
+- `onRemove` on `Toast`, merged into `onDismiss(id)`.
+- `disableAnimation` on `Modal`, folded into `reduceMotion`.
+- `forceMount` and `unmountOnClose` on `AccordionContent`, and `forceMount` on `TabPanel`,
+  folded into `keepMounted`.
 
 - `TabButton`, exported from `@chumlab/ui/tab-panel`. It could not be called: its props
   interface was never exported, and it needs `index`, `isActive`, `isTabbable` and
@@ -220,6 +626,22 @@ none is a bug fix that happened to move behaviour.
   types remain exported, because they still appear in their parent's public types.
 
 ### Fixed
+
+- **A consumer's `id` and ARIA reached the wrong element on ten components.**
+  - `RadioButton` rendered your `id` twice, on its `<label>` and its `<input>`, and put
+    `aria-*` on the label. They go on the input now.
+  - `DatePicker` and `TimePicker` put `aria-label`, `aria-labelledby` and `aria-describedby`
+    on a `<div>` with no role, which no screen reader announces. `TimePicker` also put
+    `aria-label` on both the `<div>` and its input. They go on the trigger now.
+  - `Slider` put its description and error ids on the track's wrapper, so neither was read on
+    the thumb. They go on the thumbs now.
+  - `ResizablePanel` put `id` and `aria-*` on the panel, not the separator a keyboard user
+    focuses.
+  - `OtpInput` put `aria-*` on its root `<div>`, beside the `role="group"` that assistive tech
+    announces. They go on the group now, and `aria-label` wins over `groupAriaLabel`.
+  - `Input` and `TextArea` overwrote a consumer's `aria-describedby` with their own ids
+    whenever they had any. The two are joined now.
+  - The five dropdowns dropped `aria-labelledby` and `aria-describedby` entirely.
 
 - **Three places read refs the way only one React major passes them.** The peer range is
   `^18.0.0 || ^19.0.0`, and React 18 keeps `ref` out of props. On 18, `CascadingDropdown`'s
