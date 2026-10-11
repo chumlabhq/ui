@@ -6562,6 +6562,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Accessible label for the country dropdown."
       },
       {
+        "name": "numberAriaLabel",
+        "type": "string",
+        "required": false,
+        "default": "\"Number\"",
+        "description": "Accessible name of the number input. The group carries the field's name (`label`, `aria-label` or `aria-labelledby`); this names the part, so no label is announced twice."
+      },
+      {
         "name": "selectedIcon",
         "type": "ReactNode",
         "required": false,
@@ -7584,7 +7591,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": false,
         "default": "\"\"",
-        "description": "Additional CSS class for the dialog content panel."
+        "description": "Additional classes for the root, the outer fixed layer, with `classes.root`. Style the dialog surface with `classes.content`."
+      },
+      {
+        "name": "style",
+        "type": "CSSProperties",
+        "required": false,
+        "default": null,
+        "description": "Inline styles for the root, the outer fixed layer."
       },
       {
         "name": "contentStyle",
@@ -7592,6 +7606,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "Inline styles for the dialog content panel."
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "The dialog element's id."
       }
     ],
     "subComponents": [
@@ -9299,13 +9320,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "(index: number, length: number) => string - Function to generate aria-label for each input."
-      },
-      {
-        "name": "groupAriaLabel",
-        "type": "string",
-        "required": false,
-        "default": "\"One-time password input\"",
-        "description": "Accessible label for the input group."
       },
       {
         "name": "classes",
@@ -12535,6 +12549,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "React.ReactNode — Content shown when the table has no data."
       },
       {
+        "name": "id",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "The region's id."
+      },
+      {
         "name": "caption",
         "type": "string",
         "required": false,
@@ -15214,7 +15235,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": true,
         "default": null,
-        "description": "Unique identifier for the toast."
+        "description": "Unique identifier for the toast, rendered as its root's id."
       },
       {
         "name": "variant",
@@ -15876,6 +15897,20 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "CSS class for the trigger wrapper element."
+      },
+      {
+        "name": "style",
+        "type": "CSSProperties",
+        "required": false,
+        "default": null,
+        "description": "Inline styles for the trigger wrapper element, with `className`."
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "The trigger wrapper element's id."
       },
       {
         "name": "classes",

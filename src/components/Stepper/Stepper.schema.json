@@ -157,6 +157,14 @@
       "type": "string",
       "description": "Accessible label for the stepper."
     },
+    "aria-labelledby": {
+      "type": "string",
+      "description": "Ids of the elements that name the navigation; wins over `aria-label`."
+    },
+    "aria-describedby": {
+      "type": "string",
+      "description": "Ids of the elements that describe the navigation."
+    },
     "showTooltips": {
       "type": "boolean",
       "description": "Whether to show tooltips on steps.",

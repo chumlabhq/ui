@@ -27,7 +27,7 @@
  *            form library is installed; the registration is reproduced.
  *
  * Left out: Accordion's imperative handle (`AccordionRef`), Tooltip's ref to its
- * content, and the label helpers and the toast provider, which take no ref.
+ * trigger wrapper, and the label helpers and the toast provider, which take no ref.
  */
 import { createRef, type ReactElement, type Ref } from "react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

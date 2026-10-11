@@ -11,14 +11,18 @@
     "2026-10-10, A2c (concept names and icon props): 150 → 148. The −2 is AccordionContent's `forceMount` and `unmountOnClose`, merged into one `keepMounted: boolean | \"visited\"` that has fixtures — the whole of \"the component itself\" 45 → 43. Renames carry their rank with them (`loadingText` → `loadingContent` ×4, `noResultsContent` → `emptyContent` ×5, `preventOutsideClick` → `closeOnOverlayClick`). Two icon props changed rank because their type changed, not because markup was added: Stepper `completedIcon` and `errorIcon` were ComponentTypes the component instantiated and are now ReactNodes rendered as given, so they read as a slot the fixtures never fill — slot 49 → 51, none-of-the-above 38 → 36. Props with no fixture fell 638 → 621, −17: twelve icon props filled by the A2c `*-custom-*-icon` fixtures (Dropdown chevron/clear, SearchableDropdown chevron/clear/search, MultiSelectDropdown chevron/clear, MultiSelectSearchableDropdown clear, CascadingDropdown clear/search, Breadcrumb ellipsis/separator — at HEAD these were renders-content, passes-through or logic-only, so outside `rendersMarkup`), three merged into `keepMounted` (the two above and TabPanel `forceMount`), and Dropdown and SearchableDropdown `CheckIcon`, folded into `selectedIcon`. Those fixtures are held to the default icon's box by e2e/icon-slots.spec.ts.",
     "2026-10-11, A2e (routing; Breadcrumb `separatorIcon` folded into `separator`): 148 → 147. Breadcrumb's `separator` was unfixtured markup (none-of-the-above 36 → 35); the `custom-separator-icon` fixture that drew `separatorIcon` now passes the same glyph through `separator`, so it has a fixture and `separatorIcon` is gone. Props with no fixture rose 621 → 631, +10, none of them markup: `aria-labelledby` and `aria-describedby` newly declared on the five dropdowns (+10, renders-content), and Slider's newly declared `aria-describedby` (+1, passes-through), less Slider's `id`, which now names the thumb rather than passing through to the root (−1, attribute-only)."
   ],
+  "$basisChanges": [
+    "2026-10-11, A2f (routing): hand-edited, not re-recorded. propsWithoutFixture 631 → 639, rendersMarkup holds at 147. +13 newly declared attribute props with no fixture, none rendering markup: InternationalPhoneInput `numberAriaLabel`; Modal `style` and `id`; Stepper `aria-labelledby` and `aria-describedby`; TabPanel `aria-describedby`; Toast `aria-label`, `aria-labelledby` and `aria-describedby`; Tooltip `id`, `aria-label`, `aria-labelledby` and `aria-describedby`. −5: OtpInput `groupAriaLabel` (folded into `aria-label`), and InputLabel's and TextAreaLabel's `htmlFor` and `className`, now inherited from the label element's attributes rather than declared by the shared label helper. One rank move with no new markup: Tooltip `truncate`, whose un-overflowed branch now carries the consumer's `id` and `aria-*` on its span like the trigger wrapper does, reads as an ARIA attribute (markup with none of the above 35 → 34, an ARIA attribute 0 → 1)."
+  ],
   "recordedOn": "2026-10-11",
   "fixtures": 414,
-  "propsWithoutFixture": 631,
+  "propsWithoutFixture": 639,
   "rendersMarkup": 147,
   "byRank": {
     "a slot the fixtures never fill": 51,
     "a classes key": 18,
-    "markup with none of the above": 35,
+    "an ARIA attribute": 1,
+    "markup with none of the above": 34,
     "the component itself, present or absent": 43
   }
 }

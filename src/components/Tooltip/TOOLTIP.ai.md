@@ -84,6 +84,11 @@ export default function Example() {
 | `asChild` | boolean | `false` | When true, the trigger renders as the child element instead of wrapping it. |
 | `triggerDisplay` | string | `"inline-flex"` | CSS display property for the trigger wrapper. |
 | `className` | string | — | CSS class for the trigger wrapper element. |
+| `style` | object | — | Inline styles for the trigger wrapper element, with `className`. |
+| `id` | string | — | The trigger wrapper element's id. |
+| `aria-label` | string | — | Accessible name of the trigger wrapper element. |
+| `aria-labelledby` | string | — | Ids of the elements that name the trigger wrapper element. |
+| `aria-describedby` | string | — | Ids of the elements that describe the trigger; joined with the tooltip's own id while it is open. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `contentStyle` | object | — | Inline styles applied to the tooltip content element. |

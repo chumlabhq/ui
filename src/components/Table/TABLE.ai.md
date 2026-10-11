@@ -97,6 +97,9 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onHeaderHoverChange` | object | — | (isOverHeader: boolean) => void — Fires with whether the pointer is over the header row. |
 | `emptyContent` | object | — | React.ReactNode — Content shown when the table has no data. |
 | `aria-label` | string | `"Data table"` | The grid's accessible name; pinned parts append " - Pinned columns" and so on. |
+| `id` | string | — | The region's id. |
+| `aria-labelledby` | string | — | Ids of the elements that name the region; wins over `aria-label`. |
+| `aria-describedby` | string | — | Ids of the elements that describe the region. |
 | `caption` | string | — | Accessible caption rendered as a visually hidden <caption> element. |
 | `getRowId` | object | — | (row: TData) => string — Function to derive a unique row ID. |
 | `selectedRowId` | string \| null | — | ID of the currently selected row (single selection). |

@@ -811,16 +811,16 @@ describe("Drawer", () => {
   });
 
   describe("className", () => {
-    it("applies className to the panel element", () => {
-      renderDrawer({ className: "my-custom-class" });
-      const panel = screen.getByRole("dialog");
-      expect(panel.className).toContain("my-custom-class");
-    });
-
-    it("does not apply className to the root wrapper", () => {
+    it("applies className to the root, the outer fixed layer", () => {
       renderDrawer({ className: "my-custom-class" });
       const root = screen.getByRole("dialog").parentElement!;
-      expect(root.className).not.toContain("my-custom-class");
+      expect(root.className).toContain("my-custom-class");
+    });
+
+    it("does not apply className to the panel, which classes.content styles", () => {
+      renderDrawer({ className: "my-custom-class" });
+      const panel = screen.getByRole("dialog");
+      expect(panel.className).not.toContain("my-custom-class");
     });
   });
 

@@ -69,6 +69,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       unstyled = false,
       reduceMotion = "auto",
       className,
+      style,
       ...rest
     },
     ref,
@@ -177,6 +178,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <div
         className={cn(mergedClasses.root, className) || undefined}
+        style={style}
         data-disabled={disabled || undefined}
         data-readonly={readOnly || undefined}
         data-error={error || undefined}

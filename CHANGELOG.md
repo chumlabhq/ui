@@ -251,6 +251,18 @@ tables say.
   on the DOM.
 - **`TimePicker` is `clearable` by default**, matching `DatePicker`. Pass `clearable={false}`
   for the old behaviour.
+- **`Modal`, `Drawer`: `className` and `style` land on the root** (the outer fixed layer,
+  with `classes.root`); style the dialog surface with `classes.content`. `className` used to
+  style the dialog, and `style` was dropped (`Modal`) or replaced by the layer's z-index
+  (`Drawer`). `id` and `aria-*` land on the `role="dialog"` element.
+- **`Checkbox`, `Input`, `TextArea`: `style` lands on the root, with `className`.** It went to
+  the native field (`TextArea` dropped it). On `Checkbox` it replaced the hidden input's own
+  positioning, so passing `style` uncovered the native box.
+- **`AccordionContent`: `className` lands on the region**, the element that animates, not
+  the wrapper inside it. Put padding in `classes.content` or `classes.body`: padding on the
+  animated element makes it stick and then snap. Your `style` now merges with the panel's own
+  instead of replacing its animation.
+- **`Tooltip`: `style` lands on the trigger wrapper, with `className`.** It was dropped.
 
 ##### Accordion
 
@@ -439,6 +451,12 @@ tables say.
 | `ClearIcon` | `clearIcon` | a `ReactNode`, rendered as given |
 | `classes.chipRemove` | `classes.chipRemoveTrigger` | slot |
 
+##### OtpInput
+
+| Old | New | Note |
+|---|---|---|
+| `groupAriaLabel` | `aria-label` | names the `role="group"`; same default, "One-time password input" |
+
 ##### Pagination
 
 | Old | New | Note |
@@ -592,6 +610,8 @@ tables say.
 - `disableAnimation` on `Modal`, folded into `reduceMotion`.
 - `forceMount` and `unmountOnClose` on `AccordionContent`, and `forceMount` on `TabPanel`,
   folded into `keepMounted`.
+- `groupAriaLabel` on `OtpInput`. Use `aria-label`, which names the group and keeps the same
+  default.
 
 - `TabButton`, exported from `@chumlab/ui/tab-panel`. It could not be called: its props
   interface was never exported, and it needs `index`, `isActive`, `isTabbable` and
@@ -627,6 +647,28 @@ tables say.
 
 ### Fixed
 
+- **A consumer's `id` and ARIA reached no element, or two, on seventeen exports.**
+  - `AccordionShimmer`, `AvatarShimmer` and `AvatarGroupShimmer` kept their own status name
+    and dropped yours. They spread their attributes now; `aria-label` replaces the default.
+  - `ModalHeader`, `ModalBody` and `ModalFooter` took `className` and children alone. They
+    spread their attributes now.
+  - `InputLabel` and `TextAreaLabel` took `label`, `required`, `htmlFor` and `className`
+    alone. They take every `<label>` attribute now.
+  - `Toast` dropped `aria-*`; its `id` was a data attribute only. The status root takes all
+    four now.
+  - `Stepper`'s navigation took `aria-label` alone, and `Table`'s region too; `TabPanel`'s
+    tablist took no `aria-describedby` and its root no `id`. They take them now.
+  - `AccordionItem`'s `aria-describedby` reaches its trigger, the button a screen reader
+    announces.
+  - `Modal` dropped your `id`, and `Drawer` replaced it with its own on the outer layer. It
+    lands on the dialog now.
+  - `Tooltip` dropped `id` and `aria-*`. They land on the trigger wrapper, where `className`
+    does; your `aria-describedby` is joined with the tooltip's own id while it is open.
+  - `InternationalPhoneInput` put `aria-label` on its group and its number input, so the name
+    was announced twice, and put `aria-labelledby` and `aria-describedby` on the input. The
+    group takes all three now. The number input is named by the new `numberAriaLabel`
+    (default "Number"), so a screen reader hears the field's name, then "Number". Its own
+    error and description stay on the input.
 - **A consumer's `id` and ARIA reached the wrong element on ten components.**
   - `RadioButton` rendered your `id` twice, on its `<label>` and its `<input>`, and put
     `aria-*` on the label. They go on the input now.

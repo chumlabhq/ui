@@ -50,6 +50,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       renderTab: renderTabProp,
       "aria-label": ariaLabel = "Tabs",
       "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       classes: classesProp,
       className,
       style,
@@ -281,6 +282,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       <TabPanelContext.Provider value={contextValue}>
         <div
           ref={ref}
+          id={id}
           className={[resolvedClasses.root, className].filter(Boolean).join(" ") || undefined}
           style={style}
           data-disabled={disabled || undefined}
@@ -291,6 +293,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
             role="tablist"
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
             aria-orientation={orientation}
             className={resolvedClasses.list || undefined}
           >

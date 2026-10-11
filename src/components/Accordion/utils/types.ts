@@ -320,7 +320,7 @@ export interface AccordionShimmerClasses {
   body?: string;
 }
 
-export interface AccordionShimmerProps {
+export interface AccordionShimmerProps extends HTMLAttributes<HTMLDivElement> {
   /** Whether to stop the shimmer animation. `"auto"` follows the OS reduced-motion setting. */
   reduceMotion?: boolean | "auto";
   /** Class overrides for this component's slots. */

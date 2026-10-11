@@ -118,6 +118,7 @@ There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |
 | `aria-labelledby` | string | — | ID of the element that labels the tab list. |
+| `aria-describedby` | string | — | Ids of the elements that describe the tab list. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | Inline styles applied to the root element. |

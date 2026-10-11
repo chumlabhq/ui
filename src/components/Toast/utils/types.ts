@@ -85,6 +85,9 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
    *  so a consumer's class wins on conflict. Every other component already
    *  accepted this; Toast was the one that did not. */
   className?: string;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
 }
 
 /**

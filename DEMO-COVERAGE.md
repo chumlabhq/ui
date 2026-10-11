@@ -11,9 +11,9 @@ recorded there because they belong next to the code that implements them.
 | | count |
 | --- | --- |
 | Components audited | 58 |
-| Library-authored props across the public surface | 1140 |
-| With no demo | 293 (26%) |
-| With no fixture | 632 (55%) |
+| Library-authored props across the public surface | 1149 |
+| With no demo | 307 (27%) |
+| With no fixture | 640 (56%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -72,7 +72,7 @@ listed here with no demo anywhere fails the generator.
 | Accordion | 31 | 271 | 9 | 19 | 0 | `asChild`, `unstyled` |
 | AccordionContent | 10 | 279 | 4 | 8 | 0 | `asChild` |
 | AccordionItem | 6 | 277 | 3 | 5 | 0 | `asChild` |
-| AccordionShimmer | 11 | 2 | 7 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` |
+| AccordionShimmer | 11 | 278 | 7 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` |
 | AccordionTrigger | 10 | 277 | 2 | 9 | 0 | — |
 | Avatar | 21 | 278 | 2 | 12 | 0 | `asChild` |
 | AvatarBadge | 15 | 278 | 6 | 9 | 0 | `variant`, `asChild` |
@@ -99,16 +99,16 @@ listed here with no demo anywhere fails the generator.
 | DrawerHeader | 1 | 279 | 1 | 1 | 0 | — |
 | Dropdown | 51 | 2 | 6 | 27 | 0 | `unstyled` |
 | Input | 26 | 307 | 2 | 10 | 0 | `unstyled` |
-| InputLabel | 4 | 0 | 0 | 4 | 0 | — |
-| InternationalPhoneInput | 48 | 296 | 9 | 33 | 0 | `unstyled`, `portalContainer` |
+| InputLabel | 2 | 280 | 0 | 2 | 0 | — |
+| InternationalPhoneInput | 49 | 296 | 10 | 34 | 0 | `unstyled`, `portalContainer` |
 | LinearLoader | 8 | 280 | 3 | 4 | 0 | `reduceMotion`, `unstyled` |
-| Modal | 39 | 2 | 12 | 26 | 0 | `unstyled` |
-| ModalBody | 2 | 2 | 2 | 2 | 0 | — |
-| ModalFooter | 2 | 2 | 2 | 2 | 0 | — |
-| ModalHeader | 2 | 2 | 2 | 2 | 0 | — |
+| Modal | 41 | 2 | 14 | 28 | 0 | `unstyled` |
+| ModalBody | 2 | 278 | 2 | 2 | 0 | — |
+| ModalFooter | 2 | 278 | 2 | 2 | 0 | — |
+| ModalHeader | 2 | 278 | 2 | 2 | 0 | — |
 | MultiSelectDropdown | 52 | 2 | 12 | 26 | 0 | `unstyled` |
 | MultiSelectSearchableDropdown | 57 | 2 | 15 | 30 | 0 | `unstyled` |
-| OtpInput | 30 | 277 | 3 | 14 | 0 | `unstyled` |
+| OtpInput | 29 | 277 | 3 | 13 | 0 | `unstyled` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | — |
 | Pagination | 31 | 278 | 6 | 21 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` |
 | PulseLoader | 6 | 280 | 4 | 3 | 0 | `reduceMotion`, `unstyled` |
@@ -118,13 +118,13 @@ listed here with no demo anywhere fails the generator.
 | SearchableDropdown | 58 | 2 | 8 | 31 | 0 | `unstyled` |
 | Slider | 36 | 273 | 5 | 19 | 0 | `unstyled` |
 | Slot | 1 | 279 | 1 | 1 | 0 | — |
-| Stepper | 30 | 2 | 5 | 17 | 0 | `reduceMotion`, `unstyled` |
+| Stepper | 32 | 2 | 7 | 19 | 0 | `reduceMotion`, `unstyled` |
 | Switch | 28 | 277 | 6 | 11 | 0 | `reduceMotion` |
-| TabPanel | 25 | 2 | 6 | 15 | 0 | `reduceMotion`, `unstyled` |
+| TabPanel | 26 | 2 | 7 | 16 | 0 | `reduceMotion`, `unstyled` |
 | TextArea | 25 | 293 | 1 | 6 | 0 | `unstyled` |
-| TextAreaLabel | 4 | 0 | 0 | 4 | 0 | — |
+| TextAreaLabel | 2 | 280 | 0 | 2 | 0 | — |
 | TimePicker | 45 | 276 | 2 | 24 | 0 | `portalContainer` |
-| Toast | 21 | 2 | 21 | 9 | 0 | `variant`, `unstyled` |
+| Toast | 24 | 2 | 24 | 12 | 0 | `variant`, `unstyled` |
 | ToastProvider | 12 | 0 | 10 | 10 | 0 | `unstyled` |
-| Tooltip | 32 | 2 | 9 | 19 | 0 | `unstyled`, `portalContainer` |
+| Tooltip | 37 | 2 | 14 | 23 | 0 | `unstyled`, `portalContainer` |
 

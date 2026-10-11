@@ -168,6 +168,9 @@ function TableInner<TData>(
     onHeaderHoverChange,
     emptyContent,
     "aria-label": tableLabel = "Data table",
+    id,
+    "aria-labelledby": ariaLabelledBy,
+    "aria-describedby": ariaDescribedBy,
     caption,
     getRowId,
     selectedRowId,
@@ -1939,8 +1942,11 @@ function TableInner<TData>(
           `${containerClassName} ${className ?? ""}`.trim() || undefined
         }
         style={{ overflow: "hidden", ...containerStyle, ...styleProp }}
+        id={id}
         role="region"
         aria-label={tableLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
         data-table-container
         data-mobile-view
       >
@@ -2117,8 +2123,11 @@ function TableInner<TData>(
         undefined
       }
       style={{ overflow: "hidden", ...containerStyle, ...styleProp }}
+      id={id}
       role="region"
       aria-label={tableLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       data-table-container
       data-striped={striped || undefined}
       data-size={size}

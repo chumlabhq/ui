@@ -146,7 +146,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `id` **(required)** | string | — | Unique identifier for the toast. |
+| `id` **(required)** | string | — | Unique identifier for the toast, rendered as its root's id. |
 | `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the status glyph. |
 | `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
@@ -161,6 +161,9 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | `style` | object | — | Inline styles applied to the toast element. |
 | `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
 | `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
+| `aria-label` | string | — | Accessible name of the toast's status region. |
+| `aria-labelledby` | string | — | Ids of the elements that name the toast's status region. |
+| `aria-describedby` | string | — | Ids of the elements that describe the toast's status region. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 

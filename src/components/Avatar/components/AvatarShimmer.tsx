@@ -25,6 +25,8 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
       style,
       animate = true,
       reduceMotion = "auto",
+      "aria-label": ariaLabel,
+      ...rest
     },
     ref,
   ) => {
@@ -39,6 +41,7 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
 
     return (
       <div
+        {...rest}
         ref={ref}
         className={cn(
           motionSafe(cn(rootClass, className) ?? "", !shouldAnimate),
@@ -50,7 +53,7 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
           ...style,
         }}
         role="status"
-        aria-label="Loading avatar"
+        aria-label={ariaLabel ?? "Loading avatar"}
       />
     );
   },
@@ -78,6 +81,8 @@ export const AvatarGroupShimmer = forwardRef<
       style,
       showCount = false,
       asChild = false,
+      "aria-label": ariaLabel,
+      ...rest
     },
     ref,
   ) => {
@@ -110,11 +115,12 @@ export const AvatarGroupShimmer = forwardRef<
 
     return (
       <Comp
+        {...rest}
         ref={ref}
         className={cn(AVATAR_GROUP_SHIMMER_CLASSES.root, className)}
         style={style}
         role="status"
-        aria-label="Loading avatar group"
+        aria-label={ariaLabel ?? "Loading avatar group"}
       >
         {Array.from({ length: count }).map((_, index) => (
           <div

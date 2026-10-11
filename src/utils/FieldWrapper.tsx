@@ -1,4 +1,4 @@
-import { forwardRef, type MouseEvent, type ReactNode } from "react";
+import { forwardRef, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { FieldLabel } from "./FieldLabel.js";
 import { CircularLoader } from "../components/Loader/index.js";
 import { cn } from "./cn.js";
@@ -33,6 +33,7 @@ export interface FieldWrapperProps {
   loaderSize?: number;
   fullWidth?: boolean;
   className?: string;
+  style?: CSSProperties;
   wrapperClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
@@ -97,6 +98,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       loaderSize = 16,
       fullWidth = false,
       className,
+      style,
       wrapperClassName,
       labelClassName,
       errorClassName,
@@ -130,6 +132,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
         ref={ref}
         data-slot="container"
         className={cn(fullWidth && "w-full", loading && "opacity-50 pointer-events-none", className) || undefined}
+        style={style}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}
         data-valid={showSuccess || undefined}

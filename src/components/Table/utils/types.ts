@@ -166,6 +166,12 @@ export interface TableProps<TData> {
   emptyContent?: ReactNode;
   /** The grid's accessible name; pinned parts append " - Pinned columns" and so on. Default: `"Data table"`. */
   "aria-label"?: string;
+  /** The region's id. */
+  id?: string;
+  /** Ids of the elements that name the region; wins over `aria-label`. */
+  "aria-labelledby"?: string;
+  /** Ids of the elements that describe the region. */
+  "aria-describedby"?: string;
   /** Accessible caption for the table, rendered as a visually hidden <caption> element. */
   caption?: string;
   getRowId?: (row: TData) => string;

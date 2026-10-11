@@ -561,14 +561,15 @@ describe("Modal", () => {
   });
 
   describe("Custom Classes", () => {
-    it("applies custom className to the content panel", () => {
+    it("applies custom className to the root, not the content panel", () => {
       render(
         <Modal open onOpenChange={() => {}} className="custom-modal">
           <p>Content</p>
         </Modal>
       );
 
-      expect(screen.getByRole("dialog")).toHaveClass("custom-modal");
+      expect(screen.getByRole("dialog").closest("[data-modal-root]")).toHaveClass("custom-modal");
+      expect(screen.getByRole("dialog")).not.toHaveClass("custom-modal");
     });
 
     it("applies custom classes via the classes prop", () => {

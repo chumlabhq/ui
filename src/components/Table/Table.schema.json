@@ -66,6 +66,18 @@
       "description": "The grid's accessible name; pinned parts append \" - Pinned columns\" and so on.",
       "default": "Data table"
     },
+    "id": {
+      "type": "string",
+      "description": "The region's id."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "description": "Ids of the elements that name the region; wins over `aria-label`."
+    },
+    "aria-describedby": {
+      "type": "string",
+      "description": "Ids of the elements that describe the region."
+    },
     "caption": {
       "type": "string",
       "description": "Accessible caption rendered as a visually hidden <caption> element."

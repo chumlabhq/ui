@@ -13,7 +13,8 @@
  * with state. A2d gave the `classes` slots one vocabulary: a clickable part is
  * a `*Trigger`, and a part another component already names takes that name
  * (`range`, `value`, `mark`, `group`). A2e folded Breadcrumb's `separatorIcon`
- * into `separator`, which takes text or an icon. Nothing is
+ * into `separator`, which takes text or an icon, and A2f folded OtpInput's
+ * `groupAriaLabel` into `aria-label`, which names the group. Nothing is
  * published, so there are no aliases and no deprecations — the old name is
  * simply gone. A name that comes back anywhere, in a type, a demo, a snippet a
  * consumer copies or the docs the codegen product reads, is a second API for
@@ -164,6 +165,9 @@ const TOMBSTONES: Tombstone[] = [
 
   // A2e
   { old: "separatorIcon", now: "separator", components: ["Breadcrumb"], scope: "word" },
+
+  // A2f
+  { old: "groupAriaLabel", now: "aria-label", components: ["OtpInput"], scope: "word" },
 ];
 
 interface ValueTombstone {

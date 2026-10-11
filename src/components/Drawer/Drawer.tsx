@@ -98,6 +98,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       defaultSnapPointIndex = DEFAULT_SNAP_POINT_INDEX,
       onSnapPointIndexChange,
       className,
+      style,
+      id,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
@@ -595,9 +597,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                       : "pointer-events-none"
                     : "pointer-events-none"),
                 mergedClasses.root,
+                className,
               ) || undefined
             }
-            style={{ zIndex }}
+            style={{ ...style, zIndex }}
             data-state={isOpen ? "open" : "closed"}
             data-side={side}
             aria-hidden={isHiddenMounted || undefined}
@@ -647,6 +650,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
             <div
               ref={mergedPanelRef}
+              id={id}
               role="dialog"
               aria-modal={modal || undefined}
               aria-label={ariaLabel}
@@ -668,7 +672,6 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                     (visualOpen
                       ? "pointer-events-auto"
                       : "pointer-events-none"),
-                  className,
                 ) || undefined
               }
               style={{

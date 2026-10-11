@@ -124,6 +124,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
 | `countrySearchPlaceholder` | string | `"Search countries..."` | Placeholder text for the country search input. |
 | `countryDropdownAriaLabel` | string | `"Select country"` | Accessible label for the country dropdown. |
+| `numberAriaLabel` | string | `"Number"` | Accessible name of the number input. The group carries the field's name (`label`, `aria-label` or `aria-labelledby`); this names the part, so no label is announced twice. |
 | `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected country indicator. |
 | `flagSize` | number | `22` | Pixel width of the flag rendered in the trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. Defaults to 22. |
 | `renderCountryOption` | object | — | (props: CountryOptionRenderProps) => ReactNode - Custom render function for country options. |

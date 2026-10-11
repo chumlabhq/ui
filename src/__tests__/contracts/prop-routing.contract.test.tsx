@@ -103,6 +103,12 @@ interface Case {
   render: (p: Probe, ref: { current: unknown }) => ReactElement;
   /** The root, where it is not the first element rendered or the ref target. */
   root?: (control: Element) => Element | null;
+  /**
+   * Where a consumer's `aria-describedby` is documented to go, where that is not
+   * the named element: AccordionItem hands it to its trigger, the button a
+   * screen reader announces, rather than its role-less container.
+   */
+  describedBy?: (root: Element) => Element | null;
   /** The control, where the export takes no element ref. */
   control?: (root: Element) => Element | null;
 }
@@ -118,7 +124,12 @@ const inOpenDrawer = (node: ReactNode) => <Drawer open aria-label="Drawer">{node
 
 const CASES: Case[] = [
   { id: "Accordion/Accordion", rootSlot: true, control: (root) => root, render: (p) => <Accordion {...spread(p)} selectionMode="single">{null}</Accordion> },
-  { id: "Accordion/AccordionItem", container: true, render: (p, ref) => <Accordion selectionMode="single"><AccordionItem {...spread(p)} ref={r(ref)} value="i">x</AccordionItem></Accordion> },
+  {
+    id: "Accordion/AccordionItem",
+    container: true,
+    render: (p, ref) => <Accordion selectionMode="single"><AccordionItem {...spread(p)} ref={r(ref)} value="i"><AccordionTrigger>T</AccordionTrigger></AccordionItem></Accordion>,
+    describedBy: (root) => root.querySelector("button"),
+  },
   { id: "Accordion/AccordionTrigger", render: (p, ref) => inAccordion(<AccordionTrigger {...spread(p)} ref={r(ref)}>Title</AccordionTrigger>), root: (c) => c },
   { id: "Accordion/AccordionContent", container: true, render: (p, ref) => inAccordion(<AccordionContent {...spread(p)} ref={r(ref)}>Body</AccordionContent>) },
   { id: "Accordion/AccordionShimmer", container: true, rootSlot: true, render: (p, ref) => <AccordionShimmer {...spread(p)} ref={r(ref)} /> },
@@ -139,7 +150,7 @@ const CASES: Case[] = [
   { id: "CountryFlag/CountryFlagShimmer", container: true, rootSlot: true, render: (p, ref) => <CountryFlagShimmer {...spread(p)} ref={r(ref)} /> },
   { id: "CountryFlag/CountryFlagGroupShimmer", container: true, render: (p, ref) => <CountryFlagGroupShimmer {...spread(p)} ref={r(ref)} /> },
   { id: "DatePicker/DatePicker", name: true, rootSlot: true, render: (p, ref) => <DatePicker {...spread(p)} ref={r(ref)} /> },
-  { id: "Drawer/Drawer", container: true, rootSlot: true, render: (p, ref) => <Drawer {...spread(p)} ref={r(ref)} open>Body</Drawer> },
+  { id: "Drawer/Drawer", rootSlot: true, render: (p, ref) => <Drawer {...spread(p)} ref={r(ref)} open>Body</Drawer>, root: (c) => c.parentElement },
   { id: "Drawer/DrawerHeader", container: true, render: (p, ref) => inOpenDrawer(<DrawerHeader {...spread(p)} ref={r(ref)}>Head</DrawerHeader>) },
   { id: "Drawer/DrawerBody", container: true, render: (p, ref) => inOpenDrawer(<DrawerBody {...spread(p)} ref={r(ref)}>Body</DrawerBody>) },
   { id: "Drawer/DrawerFooter", container: true, render: (p, ref) => inOpenDrawer(<DrawerFooter {...spread(p)} ref={r(ref)}>Foot</DrawerFooter>) },
@@ -152,7 +163,7 @@ const CASES: Case[] = [
   { id: "Loader/LinearLoader", container: true, rootSlot: true, render: (p, ref) => <LinearLoader {...spread(p)} ref={r(ref)} /> },
   { id: "Loader/DotLoader", container: true, rootSlot: true, render: (p, ref) => <DotLoader {...spread(p)} ref={r(ref)} /> },
   { id: "Loader/PulseLoader", container: true, rootSlot: true, render: (p, ref) => <PulseLoader {...spread(p)} ref={r(ref)} /> },
-  { id: "Modal/Modal", container: true, rootSlot: true, render: (p, ref) => <Modal {...spread(p)} ref={r(ref)} open>Body</Modal> },
+  { id: "Modal/Modal", rootSlot: true, render: (p, ref) => <Modal {...spread(p)} ref={r(ref)} open>Body</Modal>, root: (c) => c.closest("[data-modal-root]") },
   { id: "Modal/ModalHeader", container: true, render: (p, ref) => inOpenModal(<ModalHeader {...spread(p)} ref={r(ref)}>Head</ModalHeader>) },
   { id: "Modal/ModalBody", container: true, render: (p, ref) => inOpenModal(<ModalBody {...spread(p)} ref={r(ref)}>Body</ModalBody>) },
   { id: "Modal/ModalFooter", container: true, render: (p, ref) => inOpenModal(<ModalFooter {...spread(p)} ref={r(ref)}>Foot</ModalFooter>) },
@@ -184,45 +195,14 @@ const CASES: Case[] = [
 // ── Named exceptions ───────────────────────────────────────────────────────
 
 /**
- * A routing miss known and scheduled, by case and check. One that excuses
- * nothing fails its case, so each falls out the moment it is fixed. A2e fixed
- * the control routing (the A2d ref targets, RadioButton, OtpInput's group and
- * the fields' aria-describedby); what remains is scheduled for A2f, before
- * publish.
+ * A routing miss known and named, by case and check. One that excuses nothing
+ * fails its case, so each falls out the moment it is fixed. A2e fixed the
+ * control routing (the A2d ref targets, RadioButton, OtpInput's group and the
+ * fields' aria-describedby); A2f fixed root routing on seven components and
+ * the attributes seventeen exports dropped or rendered twice.
  */
-const A2F_ROOT = "fixed in A2f (root routing): ";
-const A2F_SPREAD = "fixed in A2f (not spread): ";
 const on = (id: string, checks: Check[], reason: string) => checks.map((check) => ({ id, check, reason }));
-const ALL_ARIA: Check[] = ["id", "aria-label", "aria-labelledby", "aria-describedby"];
 const EXCEPTIONS: { id: string; check: Check; reason: string }[] = [
-  ...on("Checkbox/Checkbox", ["style"], `${A2F_ROOT}style goes to the native input, className to the root`),
-  ...on("Input/Input", ["style"], `${A2F_ROOT}style goes to the native input, className to the root`),
-  ...on("TextArea/TextArea", ["style"], `${A2F_ROOT}style is dropped while className reaches the root`),
-  ...on("Accordion/AccordionContent", ["className"], `${A2F_ROOT}className lands on the inner wrapper, not the region`),
-  ...on("Modal/Modal", ["style", "classes.root"], `${A2F_ROOT}className is on the dialog, classes.root on the portal wrapper, style on neither`),
-  ...on("Drawer/Drawer", ["style", "classes.root"], `${A2F_ROOT}className is on the dialog, classes.root on the portal wrapper, style on neither`),
-  ...on("Tooltip/Tooltip", ["style"], `${A2F_ROOT}style is dropped while className reaches the content`),
-  ...on("Modal/Modal", ["id"], `${A2F_SPREAD}the dialog keeps its generated id`),
-  ...on("Drawer/Drawer", ["id"], `${A2F_SPREAD}the dialog keeps its generated id`),
-  ...on("Tooltip/Tooltip", ALL_ARIA, `${A2F_SPREAD}the content takes className alone`),
-  ...on("Modal/ModalHeader", ["style", ...ALL_ARIA], `${A2F_SPREAD}takes className and children alone`),
-  ...on("Modal/ModalBody", ["style", ...ALL_ARIA], `${A2F_SPREAD}takes className and children alone`),
-  ...on("Modal/ModalFooter", ["style", ...ALL_ARIA], `${A2F_SPREAD}takes className and children alone`),
-  ...on("Input/InputLabel", ["style", ...ALL_ARIA], `${A2F_SPREAD}a label helper typed with label, required, htmlFor and className only`),
-  ...on("TextArea/TextAreaLabel", ["style", ...ALL_ARIA], `${A2F_SPREAD}a label helper typed with label, required, htmlFor and className only`),
-  ...on("Accordion/AccordionShimmer", ALL_ARIA, `${A2F_SPREAD}the status region keeps its own name and drops the consumer's`),
-  ...on("Avatar/AvatarShimmer", ALL_ARIA, `${A2F_SPREAD}the status region keeps its own name and drops the consumer's`),
-  ...on("Avatar/AvatarGroupShimmer", ALL_ARIA, `${A2F_SPREAD}the status region keeps its own name and drops the consumer's`),
-  ...on("Toast/Toast", ALL_ARIA, `${A2F_SPREAD}\`id\` is the toast's key, and the status region drops the consumer's ARIA`),
-  ...on("Accordion/AccordionItem", ["aria-describedby"], `${A2F_SPREAD}overwritten by the item's own`),
-  ...on("Stepper/Stepper", ["aria-labelledby", "aria-describedby"], `${A2F_SPREAD}the navigation takes aria-label alone`),
-  ...on("Table/Table", ["id", "aria-labelledby", "aria-describedby"], `${A2F_SPREAD}the region takes aria-label alone`),
-  ...on("TabPanel/TabPanel", ["id", "aria-describedby"], `${A2F_SPREAD}the tablist takes aria-label and aria-labelledby alone`),
-  ...on(
-    "InternationalPhoneInput/InternationalPhoneInput",
-    ["aria-label", "aria-labelledby", "aria-describedby"],
-    "fixed in A2f: a composite whose group should carry the name; aria-label lands on the group and the input both, the others on the input",
-  ),
   ...on(
     "DatePicker/DatePicker",
     ["name"],
@@ -304,7 +284,9 @@ function misses(c: Case): Miss[] {
   one("id", all('[id="probe-id"]'), control);
   one("aria-label", all('[aria-label="Probe name"]'), named);
   one("aria-labelledby", all("[aria-labelledby]").filter((e) => tokens(e, "aria-labelledby").includes("probe-labelledby")), named);
-  one("aria-describedby", all("[aria-describedby]").filter((e) => tokens(e, "aria-describedby").includes("probe-describedby")), named);
+  const describedTarget = c.describedBy ? c.describedBy(root) : named;
+  if (!describedTarget) out.push({ check: "aria-describedby", text: "the documented aria-describedby target was not rendered" });
+  else one("aria-describedby", all("[aria-describedby]").filter((e) => tokens(e, "aria-describedby").includes("probe-describedby")), describedTarget);
   if (c.name) {
     const withName = all('[name="probe-name"]');
     if (!withName.length) out.push({ check: "name", text: "name rendered nowhere" });

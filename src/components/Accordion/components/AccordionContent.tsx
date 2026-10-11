@@ -18,6 +18,7 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       onCloseStart,
       onCloseEnd,
       className,
+      style,
       asChild = false,
       lazyLoad = false,
       ...rest
@@ -188,10 +189,9 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
     // component has now had three times, and the third time a consumer
     // reintroduced it through a slot the library invited them to style.
     //
-    // The clipper is internal now. Nothing a consumer can name lands on it, so
-    // padding on `content` or `body` is inside the animated region where it is
-    // clipped correctly.
-    const panelClassName = cn(config.classes.content, className);
+    // No slot lands on the clipper, so padding on `content` or `body` is inside
+    // the animated region where it is clipped correctly.
+    const panelClassName = cn(config.classes.content);
 
     const contentStyle: React.CSSProperties = {
       overflow: "hidden",
@@ -227,8 +227,9 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
         data-state={item.isExpanded ? "open" : "closed"}
         data-disabled={item.disabled || undefined}
         data-orientation={config.orientation}
-        style={contentStyle}
         {...rest}
+        className={className || undefined}
+        style={{ ...contentStyle, ...style }}
       >
         {asChild ? (
           children

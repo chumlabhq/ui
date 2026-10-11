@@ -219,13 +219,22 @@
     },
     "className": {
       "type": "string",
-      "description": "Additional CSS class for the dialog content panel.",
+      "description": "Additional classes for the root, the outer fixed layer, with `classes.root`. Style the dialog surface with `classes.content`.",
       "default": ""
+    },
+    "style": {
+      "type": "object",
+      "description": "Inline styles for the root, the outer fixed layer.",
+      "x-tsType": "CSSProperties | undefined"
     },
     "contentStyle": {
       "type": "object",
       "description": "Inline styles for the dialog content panel.",
       "x-tsType": "CSSProperties | undefined"
+    },
+    "id": {
+      "type": "string",
+      "description": "The dialog element's id."
     },
     "aria-label": {
       "type": "string",

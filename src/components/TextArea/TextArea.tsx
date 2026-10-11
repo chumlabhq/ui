@@ -74,6 +74,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       loaderSize = 16,
       fullWidth = false,
       className,
+      style,
       classes: classesProp,
       unstyled = false,
       readOnly,
@@ -228,6 +229,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         loaderSize={loaderSize}
         fullWidth={fullWidth}
         className={cn(mergedClasses.root, fullWidth && "w-full", className)}
+        style={style}
         wrapperClassName={mergedClasses.control}
         labelClassName={mergedClasses.label}
         errorClassName={mergedClasses.message}

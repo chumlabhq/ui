@@ -90,7 +90,9 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       classes: classesProp,
       unstyled = false,
       className = "",
+      style,
       contentStyle,
+      id,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
@@ -302,14 +304,16 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       <ModalContext.Provider value={contextValue}>
         <div
           id={modalId}
-          className={unstyled ? mergedClasses.root : [
+          className={unstyled ? [mergedClasses.root, className].filter(Boolean).join(" ") : [
             shouldAnimate && "transition-opacity",
             isOpen ? "opacity-100" : "opacity-0",
             mergedClasses.root,
+            className,
           ]
             .filter(Boolean)
             .join(" ")}
           style={{
+            ...style,
             zIndex,
             transitionDuration: `${effectiveDuration}ms`,
             pointerEvents: isOpen ? undefined : "none",
@@ -350,6 +354,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           >
             <div
               ref={mergedContentRef}
+              id={id}
               role="dialog"
               aria-modal="true"
               // The header is what renders the title and the description, so a
@@ -366,7 +371,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 showHeader && hasDescription ? descriptionId : ariaDescribedBy
               }
               tabIndex={-1}
-              className={unstyled ? [mergedClasses.content, className].filter(Boolean).join(" ") : [
+              className={unstyled ? mergedClasses.content || undefined : [
                 // Full-screen anchors the panel to the viewport directly
                 // (position: fixed inset-0 with !important) so it bypasses
                 // the container's flex/centered layout. Otherwise the
@@ -375,7 +380,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 // its own content — covering only the area its content
                 // happens to occupy instead of the whole viewport.
                 mergedClasses.content,
-                className,
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -434,9 +438,9 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
 Modal.displayName = "Modal";
 
 export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
-  ({ children, className = "" }, ref) => {
+  ({ children, className = "", ...rest }, ref) => {
     return (
-      <div ref={ref} className={className} data-modal-header>
+      <div {...rest} ref={ref} className={className} data-modal-header>
         {children}
       </div>
     );
@@ -446,9 +450,9 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
 ModalHeader.displayName = "ModalHeader";
 
 export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
-  ({ children, className = "" }, ref) => {
+  ({ children, className = "", ...rest }, ref) => {
     return (
-      <div ref={ref} className={className} data-modal-body>
+      <div {...rest} ref={ref} className={className} data-modal-body>
         {children}
       </div>
     );
@@ -458,9 +462,9 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
 ModalBody.displayName = "ModalBody";
 
 export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
-  ({ children, className = "" }, ref) => {
+  ({ children, className = "", ...rest }, ref) => {
     return (
-      <div ref={ref} className={className} data-modal-footer>
+      <div {...rest} ref={ref} className={className} data-modal-footer>
         {children}
       </div>
     );

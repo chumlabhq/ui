@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties, RefObject } from "react";
+import type { ReactNode, CSSProperties, HTMLAttributes, RefObject } from "react";
 
 /** CSS class overrides for modal sub-elements. */
 export interface ModalClasses {
@@ -107,10 +107,14 @@ export interface ModalProps {
   classes?: ModalClasses;
   /** Removes all default styling, rendering a plain dialog. */
   unstyled?: boolean;
-  /** Additional CSS class for the dialog content panel. */
+  /** Additional classes for the root, the outer fixed layer, with `classes.root`. Style the dialog surface with `classes.content`. */
   className?: string;
+  /** Inline styles for the root, the outer fixed layer. */
+  style?: CSSProperties;
   /** Inline styles for the dialog content panel. */
   contentStyle?: CSSProperties;
+  /** The dialog element's id. */
+  id?: string;
   /** Accessible label for the modal dialog. */
   "aria-label"?: string;
   /** ID of the element that labels the modal dialog. */
@@ -120,7 +124,7 @@ export interface ModalProps {
 }
 
 /** Props for the ModalHeader compound component. */
-export interface ModalHeaderProps {
+export interface ModalHeaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Content rendered inside this element. */
   children: ReactNode;
   /** Additional classes for the root element. */
@@ -128,7 +132,7 @@ export interface ModalHeaderProps {
 }
 
 /** Props for the ModalBody compound component. */
-export interface ModalBodyProps {
+export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {
   /** Content rendered inside this element. */
   children: ReactNode;
   /** Additional classes for the root element. */
@@ -136,7 +140,7 @@ export interface ModalBodyProps {
 }
 
 /** Props for the ModalFooter compound component. */
-export interface ModalFooterProps {
+export interface ModalFooterProps extends HTMLAttributes<HTMLDivElement> {
   /** Content rendered inside this element. */
   children: ReactNode;
   /** Additional classes for the root element. */

@@ -128,8 +128,10 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `zIndex` | number | — | CSS z-index for the modal layer. |
 | `classes` | object | — | CSS class overrides for modal sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain dialog. |
-| `className` | string | `""` | Additional CSS class for the dialog content panel. |
+| `className` | string | `""` | Additional classes for the root, the outer fixed layer, with `classes.root`. Style the dialog surface with `classes.content`. |
+| `style` | object | — | Inline styles for the root, the outer fixed layer. |
 | `contentStyle` | object | — | Inline styles for the dialog content panel. |
+| `id` | string | — | The dialog element's id. |
 | `aria-label` | string | — | Accessible label for the modal dialog. |
 | `aria-labelledby` | string | — | ID of the element that labels the modal dialog. |
 | `aria-describedby` | string | — | ID of the element that describes the modal dialog. |

@@ -91,6 +91,7 @@ export interface TabPanelProps {
   ) => ReactNode;
   "aria-label"?: string;
   "aria-labelledby"?: string;
+  "aria-describedby"?: string;
   classes?: TabPanelClasses;
   className?: string;
   style?: CSSProperties;

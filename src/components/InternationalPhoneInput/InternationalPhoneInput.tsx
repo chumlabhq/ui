@@ -139,6 +139,7 @@ const InternationalPhoneInput = forwardRef<
       countryDropdownPlaceholder = "Country",
       countrySearchPlaceholder = "Search countries...",
       countryDropdownAriaLabel = "Select country",
+      numberAriaLabel = "Number",
       selectedIcon,
       flagSize = 22,
       renderCountryOption,
@@ -159,6 +160,7 @@ const InternationalPhoneInput = forwardRef<
       onBlur,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": groupDescribedBy,
       ...rest
     },
     ref,
@@ -589,8 +591,9 @@ const InternationalPhoneInput = forwardRef<
           className={cn(mergedClasses.control) || undefined}
           data-slot="wrapper"
           role="group"
-          aria-labelledby={label ? labelId : undefined}
-          aria-label={!label ? (ariaLabel || "Phone number input") : undefined}
+          aria-labelledby={ariaLabelledBy ?? (label ? labelId : undefined)}
+          aria-label={label ? undefined : ariaLabel || "Phone number input"}
+          aria-describedby={groupDescribedBy}
         >
           <SearchableDropdown
             options={dropdownOptions}
@@ -637,8 +640,7 @@ const InternationalPhoneInput = forwardRef<
             aria-invalid={displayError || undefined}
             aria-describedby={ariaDescribedBy}
             aria-required={required || undefined}
-            aria-label={!label ? ariaLabel : undefined}
-            aria-labelledby={!label ? ariaLabelledBy : undefined}
+            aria-label={numberAriaLabel}
             className={mergedClasses.input || undefined}
             data-slot="input"
             data-disabled={disabled || undefined}

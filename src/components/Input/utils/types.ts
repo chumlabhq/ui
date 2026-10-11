@@ -1,6 +1,6 @@
-import type { InputHTMLAttributes, MouseEvent, ReactNode } from "react";
+import type { InputHTMLAttributes, LabelHTMLAttributes, MouseEvent, ReactNode } from "react";
 
-export interface InputLabelProps {
+export interface InputLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
   /** The label's content. */
   label: ReactNode;
   /** Marks the field required and draws the required indicator. */

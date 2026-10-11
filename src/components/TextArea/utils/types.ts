@@ -1,6 +1,6 @@
-import type { MouseEvent, TextareaHTMLAttributes, ReactNode } from "react";
+import type { LabelHTMLAttributes, MouseEvent, TextareaHTMLAttributes, ReactNode } from "react";
 
-export interface TextAreaLabelProps {
+export interface TextAreaLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
   /** The label's content. */
   label: ReactNode;
   /** Marks the field required and draws the required indicator. */

@@ -175,6 +175,8 @@ export interface StepperProps {
   errorIcon?: ReactNode;
   fullWidth?: boolean;
   "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
   showTooltips?: boolean;
   tooltipDefaults?: StepperTooltipDefaults;
   /** Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. */

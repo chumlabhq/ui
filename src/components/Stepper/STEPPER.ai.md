@@ -137,6 +137,8 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `errorIcon` | object | — | ReactNode — Replaces every step's error mark. Rendered as given; a step's own `errorIcon` wins. |
 | `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
 | `aria-label` | string | — | Accessible label for the stepper. |
+| `aria-labelledby` | string | — | Ids of the elements that name the navigation; wins over `aria-label`. |
+| `aria-describedby` | string | — | Ids of the elements that describe the navigation. |
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
 | `tooltipDefaults` | object | `{}` | Default tooltip configuration applied to all step tooltips. |
 | `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |

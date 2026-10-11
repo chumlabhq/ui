@@ -28,6 +28,8 @@ const AccordionShimmer = forwardRef<HTMLDivElement, AccordionShimmerProps>(
       style,
       showContent = false,
       asChild = false,
+      "aria-label": ariaLabel,
+      ...rest
     },
     ref,
   ) => {
@@ -54,11 +56,12 @@ const AccordionShimmer = forwardRef<HTMLDivElement, AccordionShimmerProps>(
 
     return (
       <Comp
+        {...rest}
         ref={ref}
         className={cn(c.root, variantClasses.root, className)}
         style={style}
         role="status"
-        aria-label={`Loading ${count} accordion items`}
+        aria-label={ariaLabel ?? `Loading ${count} accordion items`}
         aria-busy="true"
       >
         {items.map((index) => (

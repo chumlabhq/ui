@@ -156,6 +156,27 @@
       "type": "string",
       "description": "CSS class for the trigger wrapper element."
     },
+    "style": {
+      "type": "object",
+      "description": "Inline styles for the trigger wrapper element, with `className`.",
+      "x-tsType": "CSSProperties | undefined"
+    },
+    "id": {
+      "type": "string",
+      "description": "The trigger wrapper element's id."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible name of the trigger wrapper element."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "description": "Ids of the elements that name the trigger wrapper element."
+    },
+    "aria-describedby": {
+      "type": "string",
+      "description": "Ids of the elements that describe the trigger; joined with the tooltip's own id while it is open."
+    },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for sub-elements.",

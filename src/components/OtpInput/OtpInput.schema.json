@@ -144,11 +144,6 @@
       "description": "(index: number, length: number) => string - Function to generate aria-label for each input.",
       "x-tsType": "((index: number, length: number) => string) | undefined"
     },
-    "groupAriaLabel": {
-      "type": "string",
-      "description": "Accessible label for the input group.",
-      "default": "One-time password input"
-    },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for sub-elements.",

@@ -217,6 +217,11 @@
       "description": "Accessible label for the country dropdown.",
       "default": "Select country"
     },
+    "numberAriaLabel": {
+      "type": "string",
+      "description": "Accessible name of the number input. The group carries the field's name (`label`, `aria-label` or `aria-labelledby`); this names the part, so no label is announced twice.",
+      "default": "Number"
+    },
     "selectedIcon": {
       "type": "object",
       "description": "React.ReactNode - Custom icon for the selected country indicator.",

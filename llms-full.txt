@@ -3904,6 +3904,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
 | `countrySearchPlaceholder` | string | `"Search countries..."` | Placeholder text for the country search input. |
 | `countryDropdownAriaLabel` | string | `"Select country"` | Accessible label for the country dropdown. |
+| `numberAriaLabel` | string | `"Number"` | Accessible name of the number input. The group carries the field's name (`label`, `aria-label` or `aria-labelledby`); this names the part, so no label is announced twice. |
 | `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected country indicator. |
 | `flagSize` | number | `22` | Pixel width of the flag rendered in the trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. Defaults to 22. |
 | `renderCountryOption` | object | — | (props: CountryOptionRenderProps) => ReactNode - Custom render function for country options. |
@@ -4431,8 +4432,10 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 | `zIndex` | number | — | CSS z-index for the modal layer. |
 | `classes` | object | — | CSS class overrides for modal sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain dialog. |
-| `className` | string | `""` | Additional CSS class for the dialog content panel. |
+| `className` | string | `""` | Additional classes for the root, the outer fixed layer, with `classes.root`. Style the dialog surface with `classes.content`. |
+| `style` | object | — | Inline styles for the root, the outer fixed layer. |
 | `contentStyle` | object | — | Inline styles for the dialog content panel. |
+| `id` | string | — | The dialog element's id. |
 | `aria-label` | string | — | Accessible label for the modal dialog. |
 | `aria-labelledby` | string | — | ID of the element that labels the modal dialog. |
 | `aria-describedby` | string | — | ID of the element that describes the modal dialog. |
@@ -5314,7 +5317,6 @@ DOM nesting: `root > label + description + control > (group > input…) + separa
 | `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
 | `validate` | object | — | (char: string) => boolean - Custom validation function for each character. |
 | `inputAriaLabel` | object | — | (index: number, length: number) => string - Function to generate aria-label for each input. |
-| `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 
@@ -6441,6 +6443,8 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `errorIcon` | object | — | ReactNode — Replaces every step's error mark. Rendered as given; a step's own `errorIcon` wins. |
 | `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
 | `aria-label` | string | — | Accessible label for the stepper. |
+| `aria-labelledby` | string | — | Ids of the elements that name the navigation; wins over `aria-label`. |
+| `aria-describedby` | string | — | Ids of the elements that describe the navigation. |
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
 | `tooltipDefaults` | object | `{}` | Default tooltip configuration applied to all step tooltips. |
 | `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
@@ -6878,6 +6882,9 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onHeaderHoverChange` | object | — | (isOverHeader: boolean) => void — Fires with whether the pointer is over the header row. |
 | `emptyContent` | object | — | React.ReactNode — Content shown when the table has no data. |
 | `aria-label` | string | `"Data table"` | The grid's accessible name; pinned parts append " - Pinned columns" and so on. |
+| `id` | string | — | The region's id. |
+| `aria-labelledby` | string | — | Ids of the elements that name the region; wins over `aria-label`. |
+| `aria-describedby` | string | — | Ids of the elements that describe the region. |
 | `caption` | string | — | Accessible caption rendered as a visually hidden <caption> element. |
 | `getRowId` | object | — | (row: TData) => string — Function to derive a unique row ID. |
 | `selectedRowId` | string \| null | — | ID of the currently selected row (single selection). |
@@ -7172,6 +7179,7 @@ There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |
 | `aria-labelledby` | string | — | ID of the element that labels the tab list. |
+| `aria-describedby` | string | — | Ids of the elements that describe the tab list. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | Inline styles applied to the root element. |
@@ -7895,7 +7903,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `id` **(required)** | string | — | Unique identifier for the toast. |
+| `id` **(required)** | string | — | Unique identifier for the toast, rendered as its root's id. |
 | `variant` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Which status this is, choosing the colour and the status glyph. |
 | `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
@@ -7910,6 +7918,9 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | `style` | object | — | Inline styles applied to the toast element. |
 | `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
 | `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
+| `aria-label` | string | — | Accessible name of the toast's status region. |
+| `aria-labelledby` | string | — | Ids of the elements that name the toast's status region. |
+| `aria-describedby` | string | — | Ids of the elements that describe the toast's status region. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 
@@ -8071,6 +8082,11 @@ export default function Example() {
 | `asChild` | boolean | `false` | When true, the trigger renders as the child element instead of wrapping it. |
 | `triggerDisplay` | string | `"inline-flex"` | CSS display property for the trigger wrapper. |
 | `className` | string | — | CSS class for the trigger wrapper element. |
+| `style` | object | — | Inline styles for the trigger wrapper element, with `className`. |
+| `id` | string | — | The trigger wrapper element's id. |
+| `aria-label` | string | — | Accessible name of the trigger wrapper element. |
+| `aria-labelledby` | string | — | Ids of the elements that name the trigger wrapper element. |
+| `aria-describedby` | string | — | Ids of the elements that describe the trigger; joined with the tooltip's own id while it is open. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `contentStyle` | object | — | Inline styles applied to the tooltip content element. |

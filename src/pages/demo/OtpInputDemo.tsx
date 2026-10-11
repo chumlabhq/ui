@@ -559,7 +559,7 @@ const OtpInputDemo = () => {
             inputAriaLabel={(index, len) =>
               `Code field ${index + 1} out of ${len}`
             }
-            groupAriaLabel="Verification code entry"
+            aria-label="Verification code entry"
             label="Custom a11y labels"
             classes={c.otp}
           />

@@ -1,20 +1,17 @@
-import type { ReactNode } from "react";
+import type { LabelHTMLAttributes, ReactNode } from "react";
 
-export interface FieldLabelProps {
+export interface FieldLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
   label: ReactNode;
   required?: boolean;
-  htmlFor?: string;
-  className?: string;
 }
 
 export const FieldLabel = ({
   label,
   required = false,
-  htmlFor,
-  className,
+  ...rest
 }: FieldLabelProps) => {
   return (
-    <label htmlFor={htmlFor} className={className}>
+    <label {...rest}>
       {label}
       {required && <span aria-hidden="true">*</span>}
     </label>

@@ -474,6 +474,8 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       errorIcon,
       fullWidth = false,
       "aria-label": ariaLabel = "Progress",
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       showTooltips = false,
       tooltipDefaults = EMPTY_TOOLTIP_DEFAULTS,
       indicatorSize: indicatorSizeProp,
@@ -746,6 +748,8 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
         id={stepperId}
         role="navigation"
         aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
         className={cn(fullWidth && "w-full", mergedClasses.root, className)}
         style={style}
         data-orientation={orientation}

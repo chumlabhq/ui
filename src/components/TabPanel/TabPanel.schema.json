@@ -163,6 +163,10 @@
       "type": "string",
       "description": "ID of the element that labels the tab list."
     },
+    "aria-describedby": {
+      "type": "string",
+      "description": "Ids of the elements that describe the tab list."
+    },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for sub-elements.",

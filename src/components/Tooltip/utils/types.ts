@@ -55,6 +55,11 @@ export interface TooltipBaseProps {
   asChild?: boolean;
   triggerDisplay?: CSSProperties["display"];
   className?: string;
+  style?: CSSProperties;
+  id?: string;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
   classes?: TooltipClasses;
   unstyled?: boolean;
   contentStyle?: CSSProperties;

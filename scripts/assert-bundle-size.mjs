@@ -968,6 +968,38 @@ const LIBRARY_TOTAL_HISTORY = [
       "Every other entry byte-identical. Code only: the slice's comments were " +
       "deleted before measuring. Measured against a build of ea7c4101.",
   },
+  {
+    kb: 156.77,
+    commit: "(uncommitted)",
+    date: "2026-10-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.36 KB (160,163 -> 160,535 B gzipped, +372 B), 81 files " +
+      "held. A2f routing: className, style and classes.root share one root, " +
+      "and id/aria-* reach the element they name (a11y correctness). Per " +
+      "chunk: Tooltip +81 B (4,492 -> 4,573; shared, so Tooltip's exclusive " +
+      "moves +2 B): style, id and aria-* on the trigger wrapper, the " +
+      "consumer's aria-describedby joined with the tooltip's id. Table +78 B " +
+      "(16,727 -> 16,805 exclusive), its declared breach raised 16.35 -> " +
+      "16.41 in the same move: id, aria-labelledby and aria-describedby on " +
+      "both region renders. Stepper +36 B: aria-labelledby and " +
+      "aria-describedby on the navigation. Toast +32 B: id, aria-label, " +
+      "aria-labelledby and aria-describedby on the status root. Modal +32 B: " +
+      "className and style on the outer layer, id on the dialog, the parts " +
+      "spread their attributes. Accordion +29 B: AccordionContent's className " +
+      "on the region and style merged, the shimmer spreads its attributes. " +
+      "Avatar +25 B: both shimmers spread theirs. InternationalPhoneInput " +
+      "+23 B: the group takes the name and description, the input " +
+      "numberAriaLabel. Drawer +22 B: className and style on the outer " +
+      "layer, id on the dialog. TabPanel +17 B: id on the root, " +
+      "aria-describedby on the tablist. TextArea +14 B, Input +10 B, " +
+      "FieldWrapper +3 B: style on the field root. Checkbox +9 B: style on " +
+      "the root, off the native input. OtpInput -9 B: groupAriaLabel folded " +
+      "into aria-label. Breadcrumb -1 B, CountryFlagGroup -1 B, ButtonGroup " +
+      "+1 B: minifier noise, no source change. Chunk deltas sum to +401 B; " +
+      "the concatenation gzips the shared names once, hence +372 B. No " +
+      "comments added. Measured against a build of 6affdbee.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1021,8 +1053,12 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.35,
-      why: "2026-10-10, A2a API renames: 16.32 -> 16.35 (exclusive 16,715 -> 16,742 B gzipped, +27 B). " +
+      kb: 16.41,
+      why: "2026-10-11, A2f routing: 16.35 -> 16.41 (exclusive 16,727 -> 16,805 B gzipped, +78 B). " +
+        "A consumer's id, aria-labelledby and aria-describedby reach the region, which took " +
+        "aria-label alone and dropped the rest; both region renders (desktop and mobile card " +
+        "view) carry them. " +
+        "2026-10-10, A2a API renames: 16.32 -> 16.35 (exclusive 16,715 -> 16,742 B gzipped, +27 B). " +
         "The renames themselves are 0 B: built with every A2a name and the old pin call, Table " +
         "measured 16,715 B, identical to HEAD. All +27 B is onPinnedColumnsChange receiving the " +
         "full new pinnedColumns array (the column appended or filtered out) instead of one id and " +

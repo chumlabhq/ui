@@ -12,13 +12,14 @@ Numbered 008, not 007: 007 is the dark-variant endpoint.
 
 ## Why
 
-The public surface is 1,308 own props on 106 exports, as the conventions
-contract walks it (`api-conventions.contract.test.ts`, 2026-10-11). The A1 audit
-found 145 props that broke a convention the rest of the library already
-followed, plus 17 slot names and 10 ref targets. A2a–A2d renamed every one.
-Nothing is published, so each rename replaced the old name outright: no aliases,
-no deprecations. This records the conventions themselves, so the next prop is
-held to them rather than to whichever neighbour its author read last.
+The public surface is 1,320 own props on 106 exports, as the conventions
+contract walks it (`api-conventions.contract.test.ts`, 2026-10-11, after A2f
+declared the attributes it routes). The A1 audit found 145 props that broke a
+convention the rest of the library already followed, plus 17 slot names and 10
+ref targets. A2a–A2d renamed every one. Nothing is published, so each rename
+replaced the old name outright: no aliases, no deprecations. This records the
+conventions themselves, so the next prop is held to them rather than to
+whichever neighbour its author read last.
 
 ## The twelve rules
 
@@ -123,15 +124,18 @@ Held at runtime for every component export by `prop-routing.contract`:
   member inputs, or the hidden input that submits a custom control's value.
 - **No id is rendered twice**, the consumer's or the component's own.
 
-What the routing contract still excuses, each scheduled for A2f and each failing
-the moment it is fixed: root routing on Checkbox, Input, TextArea,
-AccordionContent, Modal, Drawer and Tooltip; attributes not spread on the three
-shimmers, Modal's parts, the two label helpers, Toast, Stepper, Table,
-AccordionItem and TabPanel, Tooltip's `id`, `aria-label`, `aria-labelledby` and
-`aria-describedby` (its content takes `className` alone), and Modal's and
-Drawer's own ids;
-InternationalPhoneInput's composite naming. DatePicker's `name`, which renders no
-field, is reported and not yet scheduled.
+A2f fixed what A2e found. Modal's and Drawer's root is the outer fixed layer,
+which carries the z-index: `className` and `style` land there with
+`classes.root`, `classes.content` styles the dialog surface, and `id` and
+`aria-*` land on the `role="dialog"` element. Checkbox, Input and TextArea take
+`style` on the root with `className`, AccordionContent takes `className` on its
+region, and Tooltip takes `style`, `id` and `aria-*` on the trigger wrapper with
+`className`. InternationalPhoneInput's group carries the name and the
+consumer's description; its number input is named by `numberAriaLabel`
+(default "Number"), so no label is announced twice. AccordionItem hands a
+consumer's `aria-describedby` to its trigger, the button a screen reader
+announces. What the routing contract still excuses: DatePicker's `name`, which
+renders no field, reported and not yet scheduled.
 
 ## Named exceptions ("doesn't fit")
 
@@ -164,7 +168,7 @@ and are recorded here for review.
 | Toast | `duration` | 12 | Display time, not an animation. |
 | `portalContainer`, `<part>ZIndex` | — | 12 | Consistent `<part>` prefixes where a component owns several layers. |
 | Accordion | ref → `AccordionRef` | 11 | An imperative handle, by design. |
-| Tooltip | ref → content | 11 | The trigger is the consumer's child; the content is the only element it owns. |
+| Tooltip | ref → the trigger wrapper | 11 | The trigger is the consumer's child; the wrapper `<span>` around it is the element Tooltip owns, where `className` and `style` land. |
 | InputLabel, TextAreaLabel, ToastProvider | no ref | 11 | No element of their own to ref. |
 
 ## What the contracts check, and what they leave to review

@@ -95,6 +95,11 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       asChild = false,
       triggerDisplay = "inline-flex",
       className,
+      style,
+      id,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       classes: classesProp,
       unstyled = false,
       contentStyle,
@@ -417,7 +422,16 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     if (!shouldShowTooltip) {
       return truncate ? (
-        <span className={className || undefined}>{triggerContent}</span>
+        <span
+          id={id}
+          className={className || undefined}
+          style={style}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+        >
+          {triggerContent}
+        </span>
       ) : (
         <>{children}</>
       );
@@ -606,8 +620,11 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           tabIndex={triggerIsInteractive ? undefined : 0}
-          style={{ display: triggerDisplay }}
-          aria-describedby={isOpen ? tooltipId : undefined}
+          id={id}
+          style={{ display: triggerDisplay, ...style }}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={[ariaDescribedBy, isOpen ? tooltipId : undefined].filter(Boolean).join(" ") || undefined}
         >
           {triggerContent}
         </span>

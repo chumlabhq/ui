@@ -58,7 +58,6 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       renderInput,
       validate,
       inputAriaLabel,
-      groupAriaLabel = "One-time password input",
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
@@ -362,7 +361,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           className={cn(mergedClasses.control) || undefined}
           onPaste={handlePaste}
           role="group"
-          aria-label={ariaLabel ?? groupAriaLabel}
+          aria-label={ariaLabel ?? "One-time password input"}
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
         >

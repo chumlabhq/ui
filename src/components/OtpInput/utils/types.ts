@@ -82,7 +82,6 @@ export interface OtpInputProps
   renderInput?: (props: OtpInputRenderProps) => ReactNode;
   validate?: (char: string) => boolean;
   inputAriaLabel?: (index: number, length: number) => string;
-  groupAriaLabel?: string;
   classes?: OtpInputClasses;
   unstyled?: boolean;
 }

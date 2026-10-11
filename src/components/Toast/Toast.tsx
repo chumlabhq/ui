@@ -43,6 +43,9 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   style,
   className,
   closeAriaLabel = "Close notification",
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
+  "aria-describedby": ariaDescribedBy,
 }, ref) {
   const deadlineRef = useRef<number>(0);
   const remainingRef = useRef<number>(duration);
@@ -148,7 +151,11 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
         if (typeof ref === "function") ref(node);
         else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
+      id={id}
       role={toastRole}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       aria-live={toastRole === "alert" ? "assertive" : "polite"}
       aria-atomic="true"
       className={cn(
