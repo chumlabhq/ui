@@ -17,6 +17,7 @@ import userEvent from "@testing-library/user-event";
 import { TimePicker } from "../index.js";
 import { fixturesFor } from "../../../__tests__/fixtures/index.js";
 import { setReducedMotion } from "../../../test/matchMedia.js";
+import { lazyLoaded } from "../../../test/lazyLoads.js";
 
 const bounded = fixturesFor("TimePicker").find((f) => f.name === "open-bounded");
 
@@ -45,8 +46,9 @@ describe("TimePicker clock face state", () => {
   for (const mode of ["hours", "minutes"] as const) {
     it(`marks every disabled ${mode} number aria-disabled, and no enabled one`, async () => {
       render(<TimePicker {...propsFor(mode)} />);
-      // The popover mounts a frame after `defaultOpen`; `findBy` waits for it rather than assuming it.
-      await screen.findByRole("slider");
+      // The face is a lazy half: wait on its load, not on `findBy`'s second.
+      await lazyLoaded();
+      screen.getByRole("slider");
       if (mode === "minutes") await userEvent.setup().click(screen.getByRole("button", { name: "00" }));
       const numbers = numbersOf();
       expect(numbers.length, "no clock numbers rendered").toBeGreaterThan(0);
@@ -61,7 +63,7 @@ describe("TimePicker clock face state", () => {
   for (const [mode, expected] of [["hours", ["9", "17"]], ["minutes", ["0", "0"]]] as const) {
     it(`reports the bounded range on its slider, in ${mode}`, async () => {
       render(<TimePicker {...propsFor(mode)} />);
-      await screen.findByRole("slider");
+      await lazyLoaded();
       if (mode === "minutes") await userEvent.setup().click(screen.getByRole("button", { name: "00" }));
       const slider = screen.getByRole("slider");
       const enabled = numbersOf()
@@ -105,7 +107,8 @@ describe("TimePicker 12-hour clock bounds", () => {
       render(
         <TimePicker mode="clock" format="12h" defaultOpen minTime={c.minTime} maxTime={c.maxTime} defaultValue={c.value} />,
       );
-      const slider = await screen.findByRole("slider");
+      await lazyLoaded();
+      const slider = screen.getByRole("slider");
       const hours = numbersOf();
       expect(hours.map((el) => Number(el.textContent)).sort((a, b) => a - b)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
       const enabled = hours.filter((el) => !el.hasAttribute("data-disabled")).map((el) => Number(el.textContent));

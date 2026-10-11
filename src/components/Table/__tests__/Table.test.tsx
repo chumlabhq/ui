@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { Table } from "../index.js";
 import type { ColumnDef } from "@tanstack/react-table";
 import { setReducedMotion } from "../../../test/matchMedia.js";
+import { lazyLoaded } from "../../../test/lazyLoads.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.
@@ -1259,9 +1260,10 @@ describe("Table", () => {
       });
       await user.click(filterButtons[0]);
 
-      // Awaited, not queried straight away: the panel is a chunk of its own
-      // now (see FilterPanel), so it lands on the render after the click.
-      const filterContent = await screen.findByRole("dialog");
+      // The panel is a lazy half (see FilterPanel) that lands on the render
+      // after its chunk, so the wait is on that load rather than on a clock.
+      await lazyLoaded();
+      const filterContent = screen.getByRole("dialog");
       expect(filterContent).toHaveAttribute("data-table-filter-content");
       expect(filterContent?.textContent).toContain("Filter");
     });
@@ -1287,6 +1289,7 @@ describe("Table", () => {
         name: /filter/i,
       });
       await user.click(filterButtons[0]);
+      await lazyLoaded();
 
       const filterContent = document.querySelector("[data-table-filter-content]");
       expect(filterContent, "the filter dropdown did not open").not.toBeNull();
@@ -1946,10 +1949,12 @@ describe("Table – additional coverage", () => {
       );
       const filterBtn = screen.getByLabelText("Filter name");
       await userEvent.click(filterBtn);
+      await lazyLoaded();
       // Use getAllByText and pick the one inside the filter dropdown (button element)
       const options = screen.getAllByText("Alice");
       const filterOption = options.find((el) => el.closest("button") && el.closest("[data-table-filter-content]"));
-      if (filterOption) await userEvent.click(filterOption);
+      expect(filterOption, "the filter dropdown did not open").toBeDefined();
+      await userEvent.click(filterOption!);
       expect(onColumnFiltersChange).toHaveBeenCalled();
     });
   });
@@ -2024,6 +2029,7 @@ describe("Table – additional coverage", () => {
       );
       const filterBtn = screen.getByLabelText("Filter name");
       await userEvent.click(filterBtn);
+      await lazyLoaded();
       expect(renderColumnFilter).toHaveBeenCalled();
     });
   });
@@ -2068,10 +2074,12 @@ describe("Table – additional coverage", () => {
       );
       const filterBtn = screen.getByLabelText("Filter name");
       await userEvent.click(filterBtn);
+      await lazyLoaded();
       expect(document.querySelector("[data-table-filter-content]")).toBeInTheDocument();
       const aliceOptions = screen.getAllByText("Alice");
       const aliceBtn = aliceOptions.find((el) => el.closest("[data-table-filter-content]"));
-      if (aliceBtn) await userEvent.click(aliceBtn);
+      expect(aliceBtn, "no Alice option in the filter dropdown").toBeDefined();
+      await userEvent.click(aliceBtn!);
       // dropdown should close after single select
       expect(document.querySelector("[data-table-filter-content]")).not.toBeInTheDocument();
     });

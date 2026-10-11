@@ -1,9 +1,9 @@
 /**
- * Every lazy load a component has started and not yet finished, for the
- * contract tier.
+ * Every lazy load a component has started and not yet finished.
  *
- * `./setup.contracts.ts` mocks `useLazyComponent` so that each `load`
- * it is handed goes through `trackLoad`, and `applyAct` waits on `settled`. The
+ * `./setup.ts` mocks `useLazyComponent` so that each `load` it is handed goes
+ * through `trackLoad`, for every test tier. `applyAct` waits on
+ * `loadsSettled`, and a unit test waits on `lazyLoaded`. The
  * wait is on the component's own promise — the one its effect is waiting on —
  * not on the module behind it: a load is free to do more than import, and the
  * module resolving first is not the load finishing. Waiting on the module was
@@ -14,7 +14,16 @@
  * `__tests__` and `test/`, so none of it can reach `dist/`.
  */
 
+import { act } from "@testing-library/react";
+
 const pending = new Set<Promise<unknown>>();
+
+/**
+ * Taken when setup imports this module, before any test fakes the clock: an
+ * injected delay is real time, so a test on fake timers that never advances
+ * them still sees its load arrive late rather than never.
+ */
+const realSetTimeout = globalThis.setTimeout;
 
 /**
  * A delay injected in front of every load, for the self-check that proves the
@@ -39,7 +48,7 @@ export function trackLoad<T>(load: () => Promise<T>): () => Promise<T> {
   if (!tracked) {
     tracked = () => {
       const delay = delayMs;
-      const promise = (delay > 0 ? new Promise((resolve) => setTimeout(resolve, delay)).then(load) : load()) as Promise<T>;
+      const promise = (delay > 0 ? new Promise((resolve) => realSetTimeout(resolve, delay)).then(load) : load()) as Promise<T>;
       pending.add(promise);
       void promise.finally(() => pending.delete(promise)).catch(() => {});
       return promise;
@@ -61,3 +70,16 @@ export async function loadsSettled(flush: () => Promise<void>): Promise<void> {
     await flush();
   }
 }
+
+/**
+ * Until every lazy half the test has asked for has loaded and rendered.
+ *
+ * A panel behind `useLazyComponent` lands on a render after its own `load`
+ * settles, so a query for it is a race against the chunk. `findBy*`'s default
+ * second was the tolerance nobody chose: under a loaded run the DatePicker
+ * presets, the TimePicker clock face and the Table filter panel each missed
+ * it. This waits on the load the component's effect is waiting on, then lets
+ * React render what arrived. Await it after whatever opens the panel, before
+ * the query.
+ */
+export const lazyLoaded = () => loadsSettled(() => act(async () => {}));

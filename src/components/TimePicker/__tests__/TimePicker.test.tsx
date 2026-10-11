@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, act as rtlAct } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { lazyLoaded } from "../../../test/lazyLoads.js";
 import { TimePicker } from "../index.js";
 import { ClockFace } from "../ClockFace.js";
 import { UNSTYLED_TIMEPICKER_CLASSES } from "../utils/constants.js";
@@ -467,6 +468,7 @@ describe("TimePicker", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
+      await lazyLoaded();
 
       const cancelBtn = screen.getByText("Cancel");
       await user.click(cancelBtn);
@@ -489,6 +491,7 @@ describe("TimePicker", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
+      await lazyLoaded();
 
       const okBtn = screen.getByText("OK");
       await user.click(okBtn);
@@ -2004,6 +2007,7 @@ describe("TimePicker (additional coverage)", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
+      await lazyLoaded();
 
       // Find the clock face slider via document (it's in a portal but attached to document.body)
       const slider = document.querySelector('[role="slider"]') as HTMLElement;
@@ -2032,6 +2036,7 @@ describe("TimePicker (additional coverage)", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
+      await lazyLoaded();
 
       // Find the clock face slider via document (it's in a portal)
       const slider = document.querySelector('[role="slider"]') as HTMLElement;
@@ -2060,6 +2065,7 @@ describe("TimePicker (additional coverage)", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
+      await lazyLoaded();
 
       // Immediately click OK without touching anything → should use parsed "14:30"
       await user.click(screen.getByText("OK"));
@@ -2163,6 +2169,7 @@ describe("TimePicker (additional coverage)", () => {
 
       const input = screen.getByRole("combobox");
       await user.click(input);
+      await lazyLoaded();
 
       await user.click(screen.getByText("OK"));
 

@@ -6,6 +6,7 @@ import type { DatePickerProps } from "../index.js";
 import { formatDate } from "../utils.js";
 
 import { setReducedMotion } from "../../../test/matchMedia.js";
+import { lazyLoaded } from "../../../test/lazyLoads.js";
 
 // The stub answers nothing by default, so every file that renders a
 // motion-aware component states the preference it is testing under.
@@ -27,10 +28,15 @@ async function flushPositionFrames() {
   });
 }
 
-/** Helper: open the calendar and wait for it to become visible. */
+/**
+ * Helper: open the calendar and wait for it to become visible, presets
+ * included. The presets panel is a lazy half that starts loading when the
+ * calendar mounts, so the wait is on its load, not on a frame count.
+ */
 async function openCalendar(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByRole("combobox"));
   await flushPositionFrames();
+  await lazyLoaded();
 }
 
 describe("DatePicker", () => {
@@ -256,18 +262,14 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
       /**
-       * `findByRole`, not `getByRole`, and that is the whole of the eight
-       * failures filed against this case.
-       *
-       * `getByRole` does not retry: using it here asserted that the 32ms
-       * `flushPositionFrames` advances is always enough for the presets to
-       * mount, which is a tolerance nobody chose. Under a loaded parallel run
-       * it is not, and the query threw — every recorded failure is at this
-       * line, not at an assertion below it, so nothing about the selection was
-       * ever in doubt. `findByRole` waits for the condition instead of
-       * asserting a frame count.
+       * The presets are a lazy half, and every recorded failure of this case
+       * (nine, KNOWN-FLAKES.md) was this query reaching them before their
+       * chunk did. `getByRole` straight after the frames asserted 32ms was
+       * enough; `findByRole` asserted its default second was. Both were a
+       * clock. `openCalendar` now waits on the presets' own load, so the
+       * query runs once they are there.
        */
-      await user.click(await screen.findByRole("button", { name: "Today" }));
+      await user.click(screen.getByRole("button", { name: "Today" }));
       await flushPositionFrames();
 
       /**
@@ -296,9 +298,7 @@ describe("DatePicker", () => {
       render(<DatePicker selectionMode="range" showPresets placeholder="Pick a range" />);
 
       await openCalendar(user);
-      // findByRole for the reason given above: the presets mount a frame after
-      // the calendar, and a non-retrying query asserts a frame count nobody chose.
-      await user.click(await screen.findByRole("button", { name: "Last 7 Days" }));
+      await user.click(screen.getByRole("button", { name: "Last 7 Days" }));
 
       expect(screen.queryByText("Pick a range")).not.toBeInTheDocument();
       // formatDateRange joins the two dates, so a separator proves both landed.
@@ -318,9 +318,7 @@ describe("DatePicker", () => {
       );
 
       await openCalendar(user);
-      // findByRole for the reason given above: the presets mount a frame after
-      // the calendar, and a non-retrying query asserts a frame count nobody chose.
-      await user.click(await screen.findByRole("button", { name: "Today" }));
+      await user.click(screen.getByRole("button", { name: "Today" }));
 
       expect(onValueChange).toHaveBeenCalledTimes(1);
       expect(screen.getByText("Stays empty")).toBeInTheDocument();

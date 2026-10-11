@@ -66,6 +66,12 @@ beforeEach(() => setReducedMotion(false));
  * detection of a genuinely hung test in 95 files to fix one.
  *
  * Nothing here asserts anything different. A timeout is not an assertion.
+ *
+ * G3 (2026-10-12): the composition test measured above now renders each
+ * fixture once rather than once per slot — DatePicker 3.4s → 0.2s alone. The
+ * conflict and variant sweeps still render per slot and are now the heaviest
+ * (CascadingDropdown's variant sweep 4.9s alone), so the limit stays; it has
+ * not been re-derived for them.
  */
 vi.setConfig({ testTimeout: 90_000 });
 
@@ -78,6 +84,28 @@ const candidates = COMPONENTS.filter((c) => c.supports.classes && c.defaults);
  * is how the version this replaced came to assert on 3 slots out of 340.
  */
 const exercised = { composed: 0, conflicts: 0, variants: 0 };
+
+/**
+ * Elements that carry two slots' overrides, named with the reason. One that
+ * excuses nothing fails at the end of the suite, so the list cannot outlive
+ * what it describes.
+ */
+const SHARED_ELEMENTS: { component: string; slots: [string, string]; reason: string }[] = [
+  {
+    component: "Breadcrumb",
+    slots: ["item", "link"],
+    reason: "By design: an item that is a link renders one <a>, painted from both slots (`linkAndItem`, Breadcrumb.tsx).",
+  },
+  {
+    component: "Table",
+    slots: ["cell", "headerCell"],
+    reason:
+      "A DEFECT, not a fit: the header <th> of a checkbox, expand or drag column takes `cell` beside `headerCell`, " +
+      "joined as strings rather than merged (Table.tsx:1251), so a consumer's body-cell classes reach a header. " +
+      "Reported in G3, which changes no component; excused until it is fixed",
+  },
+];
+const sharedUsed = new Set<string>();
 
 const tokensOf = (value: unknown) =>
   typeof value === "string"
@@ -116,12 +144,26 @@ describe("classes override contract", () => {
         ([, v]) => typeof v === "string" && v.trim(),
       );
 
-      const renderWithOverride = async (key: string) => {
+      /**
+       * One marker per slot, all passed at once, so each fixture renders once
+       * for every slot rather than once per slot. Rendering per slot was ~730
+       * DatePicker calendars for this one test, and the 90s below was raised
+       * for it. Distinct markers also make a second fault visible that one
+       * sentinel could not: a slot's override landing on another slot's
+       * element.
+       */
+      const markers = new Map(slotsWithDefaults.map(([key], i) => [key, `ovr-slot-${i}`]));
+      const slotOf = new Map([...markers].map(([key, marker]) => [marker, key]));
+
+      it("a slot keeps its default classes when a consumer overrides it", async () => {
         const session = fixtureSession();
-        const seen: { cls: Set<string> }[] = [];
+        const classes = Object.fromEntries(markers);
+        const landed = new Map<string, Set<string>[]>();
+        const leaks = new Set<string>();
+
         for (const f of fixtures) {
           const element = (
-            <Component {...props} {...f.props} classes={{ [key]: SENTINEL }}>
+            <Component {...props} {...f.props} classes={classes}>
               {f.children as React.ReactNode}
             </Component>
           );
@@ -129,34 +171,41 @@ describe("classes override contract", () => {
             (f.wrap ? f.wrap(element) : element) as React.ReactElement,
           );
           await session.act(f, container);
-          for (const el of document.body.querySelectorAll(`.${SENTINEL}`)) {
-            seen.push({ cls: new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean)) });
+          for (const el of document.body.querySelectorAll('[class*="ovr-slot-"]')) {
+            const cls = new Set((el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean));
+            const slots = [...cls].flatMap((t) => slotOf.get(t) ?? []).sort();
+            const shared = SHARED_ELEMENTS.find(
+              (e) => e.component === name && slots.length === 2 && e.slots.every((k) => slots.includes(k)),
+            );
+            if (shared) sharedUsed.add(`${shared.component}:${shared.slots.join("+")}`);
+            else if (slots.length > 1) leaks.add(`${slots.join(" + ")} on one <${el.tagName.toLowerCase()}> in ${f.name}`);
+            for (const key of slots) landed.set(key, [...(landed.get(key) ?? []), cls]);
           }
           session.unmount();
         }
-        return seen;
-      };
 
-      it("a slot keeps its default classes when a consumer overrides it", async () => {
-        const notComposed: string[] = [];
-        let covered = 0;
-
-        for (const [key, value] of slotsWithDefaults) {
+        // At least one element the consumer's value landed on keeps one of
+        // the slot's default tokens. Composition, stated positively. Not every
+        // element: a variant can replace a slot's defaults outright (Accordion's
+        // `item` is "" in one variant), and these are the component's default
+        // map, not the variant's. A slot whose marker never landed rendered in
+        // no fixture.
+        const notComposed = slotsWithDefaults.flatMap(([key, value]) => {
           const tokens = tokensOf(value);
-          const rendered = await renderWithOverride(key);
-          if (rendered.length === 0) continue; // the slot never rendered in any fixture
-          covered += 1;
-          // At least one default token must still be on the element the
-          // consumer's value landed on. Composition, stated positively.
-          const composed = rendered.some((r) => tokens.some((t) => r.cls.has(t)));
-          if (!composed) notComposed.push(`${key} (kept none of ${tokens.length} default tokens)`);
-        }
+          const sets = landed.get(key);
+          if (!sets) return [];
+          return sets.some((cls) => tokens.some((t) => cls.has(t)))
+            ? []
+            : [`${key} (kept none of ${tokens.length} default tokens)`];
+        });
 
-        exercised.composed += covered;
+        exercised.composed += landed.size;
         expect(
-          notComposed,
-          `${name}: a consumer override replaced the library default instead of composing with it: ${notComposed.join("; ")}`,
-        ).toEqual([]);
+          { leaks: [...leaks], notComposed },
+          `${name}: a consumer override must land on its own slot alone and compose with that ` +
+            "slot's defaults. leaks: one element carried two slots' overrides. notComposed: the " +
+            "override replaced the library default instead of composing with it",
+        ).toEqual({ leaks: [], notComposed: [] });
       });
 
       it("a conflicting consumer class beats the library's", async () => {
@@ -409,7 +458,14 @@ describe("classes override contract", () => {
 
   it("asserted on a real number of slots, across the suite", () => {
     // The figures this replaced: 3 slots of 340, 35 of 38 components silent.
+    console.log(
+      `OVERRIDES composed=${exercised.composed} (floor >200) conflicts=${exercised.conflicts} (floor >20) variants=${exercised.variants}`,
+    );
     expect(exercised.composed, "no slot anywhere composed an override").toBeGreaterThan(200);
     expect(exercised.conflicts, "no conflicting override was exercised anywhere").toBeGreaterThan(20);
+    expect(
+      SHARED_ELEMENTS.map((e) => `${e.component}:${e.slots.join("+")}`).filter((k) => !sharedUsed.has(k)),
+      "SHARED_ELEMENTS entries that excused nothing — remove them",
+    ).toEqual([]);
   });
 });
