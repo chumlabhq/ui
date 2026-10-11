@@ -36,74 +36,10 @@
  */
 import { describe, expect, it } from "vitest";
 import ts from "typescript";
-import { existsSync } from "node:fs";
 import { resolve } from "node:path";
-import index from "../../../ai/component-index.json";
-
-const SRC = "src/components";
-const DIRS = (index as { components: { name: string }[] }).components.map((c) => c.name);
-
-const OPTIONS: ts.CompilerOptions = {
-  jsx: ts.JsxEmit.ReactJSX,
-  target: ts.ScriptTarget.ESNext,
-  moduleResolution: ts.ModuleResolutionKind.Bundler,
-  module: ts.ModuleKind.ESNext,
-  strict: true,
-  skipLibCheck: true,
-  esModuleInterop: true,
-};
+import { OPTIONS, componentViews, viewsOf, type PropsView } from "../../test/propsWalk.js";
 
 // ── What the rules read ────────────────────────────────────────────────────
-
-interface Prop {
-  name: string;
-  type: ts.Type;
-}
-
-interface PropsView {
-  /** `Dir/Export`, so two directories' `CheckIcon` stay apart. */
-  id: string;
-  props: Prop[];
-  checker: ts.TypeChecker;
-  at: ts.Node;
-}
-
-/** Own props of every component export of the given index files. */
-function viewsOf(program: ts.Program, files: { file: string; dir: string }[]): PropsView[] {
-  const checker = program.getTypeChecker();
-  const views: PropsView[] = [];
-  for (const { file, dir } of files) {
-    const sf = program.getSourceFile(file);
-    if (!sf) throw new Error(`${file} is not in the program`);
-    for (const exp of checker.getExportsOfModule(checker.getSymbolAtLocation(sf)!)) {
-      // A React context is callable in React 19's types, but it is a provider,
-      // not a component with a props API of ours.
-      if (!/^[A-Z]/.test(exp.name) || /Context$/.test(exp.name)) continue;
-      const sym = exp.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exp) : exp;
-      const at = sym.valueDeclaration ?? sym.declarations?.[0];
-      if (!at) continue;
-      const sig = checker.getTypeOfSymbolAtLocation(sym, at).getCallSignatures()[0];
-      const param = sig?.getParameters()[0];
-      if (!param) continue;
-      const propsType = checker.getTypeOfSymbolAtLocation(param, at);
-      const members = propsType.isUnion()
-        ? propsType.types.flatMap((t) => checker.getPropertiesOfType(t))
-        : checker.getPropertiesOfType(propsType);
-      const seen = new Map<string, Prop>();
-      for (const m of members) {
-        if (seen.has(m.name)) continue;
-        const own = (m.declarations ?? []).some((d) => {
-          const path = d.getSourceFile().fileName;
-          return !path.includes("/node_modules/") && !program.isSourceFileDefaultLibrary(d.getSourceFile());
-        });
-        if (!own) continue;
-        seen.set(m.name, { name: m.name, type: checker.getTypeOfSymbolAtLocation(m, at) });
-      }
-      views.push({ id: `${dir}/${exp.name}`, props: [...seen.values()], checker, at });
-    }
-  }
-  return views;
-}
 
 const nonNull = (v: PropsView, t: ts.Type) => v.checker.getNonNullableType(t);
 const members = (t: ts.Type) => (t.isUnion() ? t.types : [t]);
@@ -285,9 +221,7 @@ const EXCEPTIONS: { rule: Rule; id: string; prop: string; reason: string }[] = [
 
 // ── The population ─────────────────────────────────────────────────────────
 
-const FILES = DIRS.map((dir) => ({ file: `${SRC}/${dir}/index.ts`, dir })).filter((f) => existsSync(f.file));
-const program = ts.createProgram(FILES.map((f) => f.file), OPTIONS);
-const VIEWS = viewsOf(program, FILES);
+const VIEWS = componentViews();
 const FINDINGS = check(VIEWS);
 
 const used = new Map(EXCEPTIONS.map((e) => [e, 0]));

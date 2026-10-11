@@ -17,33 +17,42 @@
  */
 import { describe, expect, it } from "vitest";
 import { renderToString } from "react-dom/server";
-import { COMPONENTS } from "./registry.js";
+import { COMPONENTS, expectRanAsDeclared } from "./registry.js";
 
 describe("SSR contract", () => {
+  const ran = { keepMounted: [] as string[], open: [] as string[] };
+
   it("runs without a DOM", () => {
     // If this fails the whole suite is meaningless — see the docblock.
     expect(typeof document).toBe("undefined");
     expect(typeof window).toBe("undefined");
   });
 
-  describe.each(COMPONENTS)("$name", ({ Component, props, supports, wrap }) => {
+  describe.each(COMPONENTS)("$name", ({ name, Component, props, supports, wrap }) => {
     const mount = (node: React.ReactNode) => (wrap ? wrap(node) : node);
     it("renders to string with default props", () => {
       expect(() => renderToString(mount(<Component {...props} />) as React.ReactElement)).not.toThrow();
     });
 
     it.runIf(supports.keepMounted)("renders to string with keepMounted", () => {
+      ran.keepMounted.push(name);
       expect(() =>
         renderToString(mount(<Component {...props} keepMounted />) as React.ReactElement),
       ).not.toThrow();
     });
 
     it.runIf(supports.open)("renders to string while open", () => {
+      ran.open.push(name);
       expect(() =>
         renderToString(
           mount(<Component {...props} open onOpenChange={() => {}} />) as React.ReactElement,
         ),
       ).not.toThrow();
     });
+  });
+
+  it("ran the gated tests for every component whose type declares the prop", () => {
+    expectRanAsDeclared("ssr", "keepMounted", COMPONENTS, ran.keepMounted);
+    expectRanAsDeclared("ssr", "open", COMPONENTS, ran.open);
   });
 });

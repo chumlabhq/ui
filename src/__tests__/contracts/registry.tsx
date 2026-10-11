@@ -15,6 +15,8 @@
  * omission.
  */
 import type { ComponentType, ReactNode } from "react";
+import { expect, inject } from "vitest";
+import type { Capability } from "../../test/capabilities.global.js";
 import {
   EXPORT_ALIAS,
   REQUIRED_PROPS,
@@ -27,7 +29,6 @@ import index from "../../../ai/component-index.json";
 interface IndexEntry {
   name: string;
   path: string;
-  props: string[];
 }
 
 const entries = (index as { components: IndexEntry[] }).components;
@@ -85,39 +86,13 @@ const constantSources = {
   }) as Record<string, string>),
 };
 
-/** Props-interface source, for deciding what a sub-component actually accepts. */
-const typeSources = {
-  ...(import.meta.glob("../../components/*/utils/types.ts", {
-    eager: true,
-    query: "?raw",
-    import: "default",
-  }) as Record<string, string>),
-  ...(import.meta.glob("../../components/*/types.ts", {
-    eager: true,
-    query: "?raw",
-    import: "default",
-  }) as Record<string, string>),
-};
-
 /**
- * Whether `owner` declares `prop`, read from `interface <Owner>Props`.
- *
- * A sub-component does not necessarily share its parent's API:
- * CountryFlagGroupProps declares no `unstyled`, so inheriting the index entry's
- * `supports` would have the contract assert behaviour for a prop that does not
- * exist.
+ * `Dir/Export` → the capability props its props type declares, read by the
+ * compiler in `src/test/capabilities.global.ts`. A sub-component's API is its
+ * own: CountryFlagGroupProps declares no `unstyled`, and AvatarShimmerProps no
+ * `asChild` that AvatarProps does.
  */
-const declaresProp = (component: string, owner: string, prop: string): boolean => {
-  for (const [path, source] of Object.entries(typeSources)) {
-    if (!path.startsWith(`../../components/${component}/`)) continue;
-    const block = new RegExp(
-      `export interface ${owner}Props[^{]*\\{([\\s\\S]*?)\\n\\}`,
-    ).exec(source);
-    if (!block) continue;
-    if (new RegExp(`^\\s*${prop}\\??:`, "m").test(block[1])) return true;
-  }
-  return false;
-};
+const declared = inject("declaredCapabilities");
 
 /** `DEFAULT_RADIO_CLASSES` -> `RadioButton`, from the type annotation. */
 const owners = (component: string): Map<string, string> => {
@@ -161,7 +136,9 @@ export interface ComponentUnderContract {
   allTokenCounts: Map<string, number>;
   /** Parent context this component cannot render without. */
   wrap?: (node: ReactNode) => ReactNode;
-  /** Whether the index records these props on the component. */
+  /** `Dir/Export` of the component, as the props-type walk names it. */
+  typeId: string;
+  /** Whether the component's props type declares these props. */
   supports: {
     asChild: boolean;
     unstyled: boolean;
@@ -227,14 +204,6 @@ export const COMPONENTS: ComponentUnderContract[] = entries.flatMap((entry) => {
     ]),
   );
   const counts = countAllTokens(modules);
-  const props = entry.props;
-  const supports = {
-    asChild: props.includes("asChild"),
-    unstyled: props.includes("unstyled"),
-    open: props.includes("open"),
-    keepMounted: props.includes("keepMounted"),
-    classes: props.includes("classes"),
-  };
 
   const resolve = (exportName: string) => {
     const exported = barrel[exportName] ?? barrel.default;
@@ -256,6 +225,11 @@ export const COMPONENTS: ComponentUnderContract[] = entries.flatMap((entry) => {
     // `Index/Owner` for the extras. A bare owner name would collide whenever a
     // sub-component shares the index name, which RadioButton does.
     const name = isPrimary ? entry.name : `${entry.name}/${owner}`;
+    const typeId = `${entry.name}/${exportName}`;
+    if (!declared[typeId]) {
+      throw new Error(`the props-type walk found no ${typeId} for ${name}`);
+    }
+    const has = (capability: Capability) => declared[typeId].includes(capability);
     return {
       name,
       indexName: entry.name,
@@ -266,22 +240,45 @@ export const COMPONENTS: ComponentUnderContract[] = entries.flatMap((entry) => {
       defaults: values,
       unstyled: unstyled.get(constantName.replace("DEFAULT_", "")) ?? null,
       allTokenCounts: counts,
-      // `unstyled` and `classes` are read from the owner's own Props interface
-      // rather than the index entry: a sub-component's API is its own
-      // (CountryFlagGroupProps declares no `unstyled`), and the index is stale
-      // enough to have missed Loader's `classes` entirely (GATE-HONESTY §1.6).
+      typeId,
       supports: {
-        ...supports,
-        unstyled:
-          declaresProp(entry.name, owner, "unstyled") ||
-          (isPrimary && supports.unstyled),
-        classes:
-          declaresProp(entry.name, owner, "classes") ||
-          (isPrimary && supports.classes),
+        asChild: has("asChild"),
+        unstyled: has("unstyled"),
+        open: has("open"),
+        keepMounted: has("keepMounted"),
+        classes: has("classes"),
       },
     };
   });
 });
+
+/**
+ * The floor under a test gated on a capability: the entries whose props type
+ * declares it, read from the walk rather than from `supports`, against the
+ * entries the test actually ran for. Prints both and fails naming any entry on
+ * one side only, so a flag that stops matching the types cannot turn a test
+ * into a skip that passes in every run.
+ */
+export function expectRanAsDeclared(
+  contract: string,
+  capability: Capability,
+  population: ComponentUnderContract[],
+  ran: string[],
+) {
+  const expected = population
+    .filter((c) => declared[c.typeId].includes(capability))
+    .map((c) => c.name);
+  console.log(
+    `CAPABILITY ${contract} ${capability} expected=${expected.length} ran=${ran.length} skipped=${population.length - ran.length}`,
+  );
+  expect(
+    {
+      missing: expected.filter((n) => !ran.includes(n)),
+      unexpected: ran.filter((n) => !expected.includes(n)),
+    },
+    `${contract}: the "${capability}" tests must run for exactly the components whose props type declares it`,
+  ).toEqual({ missing: [], unexpected: [] });
+}
 
 /** Every class token in a subtree, deduplicated. */
 export const classTokens = (root: Element | null): Set<string> => {

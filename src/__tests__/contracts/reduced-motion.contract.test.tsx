@@ -14,7 +14,7 @@
  */
 import { describe, expect, it, beforeEach } from "vitest";
 
-import { COMPONENTS } from "./registry.js";
+import { COMPONENTS, expectRanAsDeclared } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
 import { fixtureSession } from "../fixtures/_act.contract.js";
 import { isMotion } from "../../utils/classLayers.js";
@@ -91,6 +91,7 @@ const motionOf = (tokens: Set<string>) => [...tokens];
 
 describe("reduced motion contract", () => {
   beforeEach(() => setReducedMotion(false));
+  const ran = { motion: [] as string[], unstyled: [] as string[] };
 
   it("the stub refuses to answer a query no test has declared", () => {
     // If this regresses, every assertion below silently becomes "no preference"
@@ -153,6 +154,7 @@ describe("reduced motion contract", () => {
     });
 
     it.runIf(declaresMotion)("animates when motion is allowed", async () => {
+      ran.motion.push(component.name);
       const moving = motionOf(await tokensUnder(component, fixtures, false));
       expect(
         moving.length,
@@ -173,6 +175,7 @@ describe("reduced motion contract", () => {
     it.runIf(component.supports.unstyled)(
       "composes with unstyled rather than fighting it",
       async () => {
+      ran.unstyled.push(component.name);
       // Motion is decorative under ADR 001, so `unstyled` removes it too. The
       // two must not depend on each other: either alone, or both together, must
       // leave nothing moving.
@@ -203,6 +206,16 @@ describe("reduced motion contract", () => {
       ).toEqual([]);
       },
     );
+  });
+
+  it("ran the gated tests for every component whose type declares the prop", () => {
+    // `declaresMotion` is read from the defaults, not from a props type, so
+    // it has no independent count to hold it to; it is printed beside the one
+    // that does.
+    console.log(
+      `CAPABILITY reduced-motion motion (from the defaults) ran=${ran.motion.length} skipped=${candidates.length - ran.motion.length}`,
+    );
+    expectRanAsDeclared("reduced-motion", "unstyled", candidates, ran.unstyled);
   });
 });
 

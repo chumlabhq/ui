@@ -22,18 +22,42 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 /**
- * What a full run collects. A floor, not a target: a run that collects fewer
- * files than this has lost some, and a lost file is indistinguishable from a
- * passing one in every summary vitest prints. Raise it when tests are added —
- * `node scripts/run-vitest.mjs` prints the current numbers on every run.
+ * How many tests a full run collects. A floor, not a target: raise it when
+ * tests are added — `node scripts/run-vitest.mjs` prints the current number on
+ * every run.
+ *
+ * Files have no constant. Each project's include globs are listed before the
+ * run (`vitest list --filesOnly`, which globs and runs nothing), and every
+ * matched file must report. A lost file is indistinguishable from a passing
+ * one in every summary vitest prints, and a constant only noticed the loss once
+ * it outgrew the slack: when a forks worker failed to start, the run reported
+ * 106 of 107 files and cleared a floor of 92.
  */
-const SUITE_FLOOR = { files: 92, tests: 4749 };
+const SUITE_FLOOR = { tests: 4749 };
 
 const args = process.argv.slice(2).filter((a) => a !== "--self-check");
 const selfCheck = process.argv.includes("--self-check");
 
 /** A path or a `-t` filter means a subset, and a subset has no floor. */
 const filtered = args.some((a) => !a.startsWith("-")) || args.includes("-t");
+
+/** Every file the projects' include globs match for these arguments, as `project:path`. */
+function matchedFiles(extra) {
+  const dir = mkdtempSync(join(tmpdir(), "vitest-list-"));
+  const jsonPath = join(dir, "files.json");
+  const result = spawnSync(
+    "npx",
+    // A `-t` filter narrows tests, not files, so it is left off the listing.
+    ["vitest", "list", "--filesOnly", `--json=${jsonPath}`, ...extra.filter((a, i) => a !== "-t" && extra[i - 1] !== "-t")],
+    { cwd: ROOT, stdio: "pipe" },
+  );
+  const listed = existsSync(jsonPath) ? JSON.parse(readFileSync(jsonPath, "utf8")) : null;
+  rmSync(dir, { recursive: true, force: true });
+  if (!listed) {
+    throw new Error(`vitest list wrote no file list (exit ${result.status}):\n${result.stderr}`);
+  }
+  return listed.map((f) => `${f.projectName}:${f.file.replace(`${ROOT}/`, "")}`);
+}
 
 function runVitest(extra, { inherit = true } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "vitest-reconcile-"));
@@ -91,8 +115,14 @@ if (selfCheck) {
   process.exit(ok ? 0 : 1);
 }
 
+const expected = matchedFiles(args);
 const { report, status } = runVitest(args);
 const problems = [];
+/** Matched files that reported no test: never loaded, or loaded and collected nothing. */
+const reported = new Set(
+  (report?.modules ?? []).filter((m) => m.tests > 0).map((m) => `${m.project}:${m.file}`),
+);
+const missing = expected.filter((f) => !reported.has(f));
 
 if (!report) {
   problems.push(`no reconciliation was written (vitest exited ${status})`);
@@ -103,10 +133,11 @@ if (!report) {
       `${report.collected - report.executed} collected test(s) never reported a result`,
     );
   }
-  if (!filtered && report.files < SUITE_FLOOR.files) {
+  if (missing.length > 0) {
     problems.push(
-      `collected ${report.files} files, floor ${SUITE_FLOOR.files} — a file that stops being ` +
-        "collected reads exactly like a file whose tests all passed",
+      `${missing.length} matched file(s) reported no result — a file that stops reporting ` +
+        "reads exactly like a file whose tests all passed:",
+      ...missing.map((f) => `    ${f}`),
     );
   }
   if (!filtered && report.collected < SUITE_FLOOR.tests) {
@@ -122,9 +153,12 @@ if (report) {
   process.stdout.write(
     `  files ${report.files}  collected ${report.collected}  executed ${report.executed}  ` +
       `${Object.entries(report.byState).sort().map(([k, v]) => `${k}=${v}`).join(" ")}` +
-      `${filtered ? "  (subset — floor not applied)" : `  floor ${SUITE_FLOOR.files}/${SUITE_FLOOR.tests}`}\n`,
+      `${filtered ? "  (subset — test floor not applied)" : `  test floor ${SUITE_FLOOR.tests}`}\n`,
   );
 }
+process.stdout.write(
+  `  files expected ${expected.length}, reported ${expected.length - missing.length}, missing ${missing.length}\n`,
+);
 for (const problem of problems) process.stdout.write(`  ${problem}\n`);
 process.stdout.write(
   problems.length === 0

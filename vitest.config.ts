@@ -73,6 +73,9 @@ export default defineConfig({
           // The second file tracks every lazy load so a fixture's act can wait
           // for the component's own pending loads; see src/test/lazyLoads.ts.
           setupFiles: ["./src/test/setup.ts", "./src/test/setup.contracts.ts"],
+          // Reads every export's props type once and provides the capability
+          // flags the registry gates tests on; see src/test/capabilities.global.ts.
+          globalSetup: ["./src/test/capabilities.global.ts"],
           include: [CONTRACTS],
           isolate: true,
           // These sweeps render every fixture of every component, and the

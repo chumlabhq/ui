@@ -16,6 +16,10 @@ import type { Reporter, TestCase, TestModule } from "vitest/node";
  *   reporter's own structures rather than scraped from printed text
  * - collected against executed, because a test that is collected and never
  *   reports a result is not a pass
+ * - every file it heard from, with its test count, so `scripts/run-vitest.mjs`
+ *   can name a matched file that never reported: a worker that fails to start
+ *   leaves no entry for its file, and one that dies leaves an entry with no
+ *   tests
  * - a machine-readable twin for `scripts/run-vitest.mjs`, which owns the
  *   verdict: a reporter cannot set vitest's exit code, and a gate that scrapes
  *   its own console output breaks the first time someone rewords a line
@@ -38,13 +42,17 @@ export default class VitestReconcileReporter implements Reporter {
     const rows: Row[] = [];
     const byState = new Map<string, number>();
     const byProject = new Map<string, number>();
+    const modules: { file: string; project: string; tests: number }[] = [];
     let collected = 0;
 
     for (const module of testModules) {
       const file = module.moduleId.replace(`${process.cwd()}/`, "");
       const project = module.project.name ?? "?";
+      const entry = { file, project, tests: 0 };
+      modules.push(entry);
       for (const test of module.children.allTests() as Iterable<TestCase>) {
         collected += 1;
+        entry.tests += 1;
         const state = test.result().state;
         byState.set(state, (byState.get(state) ?? 0) + 1);
         byProject.set(project, (byProject.get(project) ?? 0) + 1);
@@ -100,6 +108,7 @@ export default class VitestReconcileReporter implements Reporter {
             byProject: Object.fromEntries(byProject),
             notPassed,
             notPassedTests: rows,
+            modules,
           },
           null,
           2,
