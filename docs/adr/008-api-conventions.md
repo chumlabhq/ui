@@ -114,9 +114,18 @@ Held at runtime for every component export by `prop-routing.contract`:
   A slot is named for what it styles.
 - **`id`, `aria-label`, `aria-labelledby` and `aria-describedby` land on the
   primary control**, the ref target from rule 11, and on no other element. A
-  consumer's `aria-describedby` is joined with the component's own description
-  and error ids; a consumer's `aria-labelledby` wins over `label` and
-  `aria-label`, as it does on a native control.
+  consumer's `aria-describedby` comes first and is joined with the component's
+  own description and error ids, never replacing them; a consumer's
+  `aria-labelledby` wins over `label`, `title` and `aria-label`, as it does on a
+  native control. The contract reads the computed name and description, not
+  where an attribute sits.
+- **A component whose root has no role** (a generic `div` or `span`) forwards
+  `id`, `aria-label`, `aria-labelledby` and `aria-describedby` to the element
+  the user focuses or operates, because a name on a `generic` is prohibited and
+  a description on an element nobody focuses is read by nothing. AccordionItem
+  forwards them to its trigger, and Tooltip to the child it wraps when that
+  child takes focus; a Tooltip around text keeps them on its wrapper, which is
+  then the focusable element.
 - **A composite whose primary element is a group** (`group`, `radiogroup`,
   `tablist`) is named and described as the group; its members carry their own
   names.
@@ -129,12 +138,15 @@ which carries the z-index: `className` and `style` land there with
 `classes.root`, `classes.content` styles the dialog surface, and `id` and
 `aria-*` land on the `role="dialog"` element. Checkbox, Input and TextArea take
 `style` on the root with `className`, AccordionContent takes `className` on its
-region, and Tooltip takes `style`, `id` and `aria-*` on the trigger wrapper with
-`className`. InternationalPhoneInput's group carries the name and the
+region, and Tooltip takes `style` on the trigger wrapper with `className`.
+InternationalPhoneInput's group carries the name and the
 consumer's description; its number input is named by `numberAriaLabel`
-(default "Number"), so no label is announced twice. AccordionItem hands a
-consumer's `aria-describedby` to its trigger, the button a screen reader
-announces. What the routing contract still excuses: DatePicker's `name`, which
+(default "Number"), so no label is announced twice. A2g applied the role-less
+root rule to Tooltip and AccordionItem, and the precedence rule to Modal (its
+`title` beat a consumer's `aria-labelledby`, its `description` replaced a
+consumer's `aria-describedby`), Slider (`label` beat `aria-labelledby`), and
+Checkbox, Switch and RadioGroup (a consumer's `aria-describedby` replaced their
+description and error ids). What the routing contract still excuses: DatePicker's `name`, which
 renders no field, reported and not yet scheduled.
 
 ## Named exceptions ("doesn't fit")

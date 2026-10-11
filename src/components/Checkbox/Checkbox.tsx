@@ -70,6 +70,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       reduceMotion = "auto",
       className,
       style,
+      "aria-describedby": ariaDescribedBy,
       ...rest
     },
     ref,
@@ -169,6 +170,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, mergedClasses.itemIndicator, iconSize]);
 
     const describedBy = [
+      ariaDescribedBy,
       description ? descriptionId : null,
       error && errorMessage ? errorId : null,
     ]

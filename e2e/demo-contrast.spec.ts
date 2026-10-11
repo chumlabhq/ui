@@ -179,7 +179,7 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "modal": 491,
   "multi-select-dropdown": 684,
   "multi-select-searchable-dropdown": 707,
-  // A2f, 433 -> 429: the API Reference lost the groupAriaLabel row (4 cells),
+  // A2f, 433 -> 429: the API Reference lost the group-name prop's row (4 cells),
   // folded into aria-label (measured A2e vs now; no other change on the page).
   "otp-input": 429,
   "pagination": 634,

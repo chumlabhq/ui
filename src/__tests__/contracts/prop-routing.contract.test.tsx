@@ -32,7 +32,7 @@
  */
 import { createRef, type CSSProperties, type ReactElement, type ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { cleanup, render } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import index from "../../../ai/component-index.json";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent, AccordionShimmer } from "../../components/Accordion/index.js";
 import { Avatar, AvatarGroup, AvatarGroupCount, AvatarBadge, AvatarShimmer, AvatarGroupShimmer } from "../../components/Avatar/index.js";
@@ -104,11 +104,12 @@ interface Case {
   /** The root, where it is not the first element rendered or the ref target. */
   root?: (control: Element) => Element | null;
   /**
-   * Where a consumer's `aria-describedby` is documented to go, where that is not
-   * the named element: AccordionItem hands it to its trigger, the button a
-   * screen reader announces, rather than its role-less container.
+   * What a screen reader reads on the focused control, for an export whose root
+   * has no role: its naming attributes belong on the element the user focuses,
+   * so the case focuses the control and asserts the computed accessible name
+   * and description rather than where an attribute sits.
    */
-  describedBy?: (root: Element) => Element | null;
+  computed?: { role: string; name: string; description: string };
   /** The control, where the export takes no element ref. */
   control?: (root: Element) => Element | null;
 }
@@ -128,7 +129,8 @@ const CASES: Case[] = [
     id: "Accordion/AccordionItem",
     container: true,
     render: (p, ref) => <Accordion selectionMode="single"><AccordionItem {...spread(p)} ref={r(ref)} value="i"><AccordionTrigger>T</AccordionTrigger></AccordionItem></Accordion>,
-    describedBy: (root) => root.querySelector("button"),
+    control: (first) => first.querySelector("button"),
+    computed: { role: "button", name: "Labelled", description: "Described" },
   },
   { id: "Accordion/AccordionTrigger", render: (p, ref) => inAccordion(<AccordionTrigger {...spread(p)} ref={r(ref)}>Title</AccordionTrigger>), root: (c) => c },
   { id: "Accordion/AccordionContent", container: true, render: (p, ref) => inAccordion(<AccordionContent {...spread(p)} ref={r(ref)}>Body</AccordionContent>) },
@@ -189,7 +191,12 @@ const CASES: Case[] = [
   { id: "TextArea/TextAreaLabel", control: (root) => root, render: (p) => <TextAreaLabel {...spread(p)} label="Notes" /> },
   { id: "TimePicker/TimePicker", name: true, rootSlot: true, render: (p, ref) => <TimePicker {...spread(p)} ref={r(ref)} /> },
   { id: "Toast/Toast", container: true, rootSlot: true, render: (p, ref) => <Toast {...spread(p)} ref={r(ref)} id="probe-id" message="Saved" onDismiss={() => {}} /> },
-  { id: "Tooltip/Tooltip", container: true, render: (p, ref) => <Tooltip {...spread(p)} ref={r(ref)} content="tip" open><button type="button">trigger</button></Tooltip> },
+  {
+    id: "Tooltip/Tooltip",
+    render: (p, ref) => <Tooltip {...spread(p)} ref={r(ref)} content="tip" open><button type="button">trigger</button></Tooltip>,
+    control: (first) => first.querySelector("button"),
+    computed: { role: "button", name: "Labelled", description: "Described tip" },
+  },
 ];
 
 // ── Named exceptions ───────────────────────────────────────────────────────
@@ -230,7 +237,7 @@ const all = (sel: string) => [...document.querySelectorAll(sel)];
 const tokens = (el: Element, attr: string) => (el.getAttribute(attr) ?? "").split(/\s+/);
 const FIELD_TAGS = new Set(["INPUT", "SELECT", "TEXTAREA"]);
 
-type Check = "root" | "className" | "style" | "classes.root" | "control" | "id" | "aria-label" | "aria-labelledby" | "aria-describedby" | "name" | "ids";
+type Check = "root" | "className" | "style" | "classes.root" | "control" | "id" | "aria-label" | "aria-labelledby" | "aria-describedby" | "computed" | "name" | "ids";
 interface Miss {
   check: Check;
   text: string;
@@ -284,9 +291,31 @@ function misses(c: Case): Miss[] {
   one("id", all('[id="probe-id"]'), control);
   one("aria-label", all('[aria-label="Probe name"]'), named);
   one("aria-labelledby", all("[aria-labelledby]").filter((e) => tokens(e, "aria-labelledby").includes("probe-labelledby")), named);
-  const describedTarget = c.describedBy ? c.describedBy(root) : named;
-  if (!describedTarget) out.push({ check: "aria-describedby", text: "the documented aria-describedby target was not rendered" });
-  else one("aria-describedby", all("[aria-describedby]").filter((e) => tokens(e, "aria-describedby").includes("probe-describedby")), describedTarget);
+  one("aria-describedby", all("[aria-describedby]").filter((e) => tokens(e, "aria-describedby").includes("probe-describedby")), named);
+  if (c.computed) {
+    act(() => (control as HTMLElement).focus());
+    const focused = document.activeElement;
+    // Read through Testing Library's role query, which computes the accessible
+    // name and description the way the accname spec does and hands both to
+    // these matchers.
+    let got = null as { name: string; description: string } | null;
+    screen.queryAllByRole(c.computed.role, {
+      name: (name, el) => {
+        if (el === focused) got = { name, description: got?.description ?? "" };
+        return true;
+      },
+      description: (description, el) => {
+        if (el === focused) got = { name: got?.name ?? "", description };
+        return true;
+      },
+    });
+    if (focused !== control || !got || got.name !== c.computed.name || got.description !== c.computed.description) {
+      out.push({
+        check: "computed",
+        text: `focused ${describeEl(focused)} reads name "${got?.name}" and description "${got?.description}", want "${c.computed.name}" and "${c.computed.description}"`,
+      });
+    }
+  }
   if (c.name) {
     const withName = all('[name="probe-name"]');
     if (!withName.length) out.push({ check: "name", text: "name rendered nowhere" });
@@ -331,4 +360,102 @@ describe("prop routing: root, control and ids", () => {
     );
     for (const [id, m] of red) console.log(`  ${id}\n    ${m.map((x) => `${excused(id, x) ? "excused " : "OPEN    "}${x.text}`).join("\n    ")}`);
   });
+});
+
+// ── Consumer naming wins ───────────────────────────────────────────────────
+
+/**
+ * A consumer's `aria-labelledby` wins over the component's own label or title,
+ * and a consumer's `aria-describedby` joins the component's own description and
+ * error ids instead of replacing them, as on a native control. Read from the
+ * computed name and description of the element ADR 008 names, not from where an
+ * attribute sits: Modal put the consumer's id in the markup and still read its
+ * own title, because its title id won the same attribute.
+ *
+ * Each case renders twice. Without the consumer's props it records which of its
+ * own texts the component describes the element with; with them, every one of
+ * those must still be there, after the consumer's.
+ */
+const OWN = { label: "Own label", description: "Own description", error: true, errorMessage: "Own error" };
+const OWN_TEXT = /Own (label|title|description|error|caption|message)/g;
+const CONSUMER = { "aria-labelledby": "consumer-name", "aria-describedby": "consumer-desc" };
+const ROLES = ["checkbox", "switch", "textbox", "group", "slider", "radiogroup", "combobox", "button", "dialog", "status", "region"];
+const one_ = [{ value: "a", label: "Apple" }];
+
+interface Naming {
+  id: string;
+  render: (consumer: object) => ReactElement;
+  /** The element ADR 008 names: the control, or the group or dialog. */
+  target: (root: Element) => Element | null;
+}
+const control = (sel: string) => (root: Element) => root.querySelector(sel);
+const NAMING: Naming[] = [
+  { id: "Checkbox", render: (x) => <Checkbox {...OWN} {...x} />, target: control("input") },
+  { id: "Switch", render: (x) => <Switch {...OWN} {...x} />, target: control('[role="switch"]') },
+  { id: "Input", render: (x) => <Input {...OWN} {...x} />, target: control("input") },
+  { id: "TextArea", render: (x) => <TextArea {...OWN} {...x} />, target: control("textarea") },
+  { id: "InternationalPhoneInput", render: (x) => <InternationalPhoneInput {...OWN} {...x} />, target: control('[role="group"]') },
+  { id: "OtpInput", render: (x) => <OtpInput {...OWN} {...x} />, target: control('[role="group"]') },
+  { id: "Slider", render: (x) => <Slider defaultValue={40} {...OWN} {...x} />, target: control('[role="slider"]') },
+  { id: "RadioGroup", render: (x) => <RadioGroup {...OWN} {...x}><RadioButton value="a" label="A" /></RadioGroup>, target: control('[role="radiogroup"]') },
+  { id: "Dropdown", render: (x) => <Dropdown options={one_} {...OWN} {...x} />, target: control("button") },
+  { id: "SearchableDropdown", render: (x) => <SearchableDropdown options={one_} {...OWN} {...x} />, target: control('[role="combobox"]') },
+  { id: "MultiSelectDropdown", render: (x) => <MultiSelectDropdown options={one_} {...OWN} {...x} />, target: control('[role="combobox"]') },
+  { id: "MultiSelectSearchableDropdown", render: (x) => <MultiSelectSearchableDropdown options={one_} {...OWN} {...x} />, target: control('[role="combobox"]') },
+  { id: "CascadingDropdown", render: (x) => <CascadingDropdown options={one_} {...OWN} {...x} />, target: control("button[aria-haspopup]") },
+  { id: "DatePicker", render: (x) => <DatePicker {...OWN} {...x} />, target: control("button") },
+  { id: "TimePicker", render: (x) => <TimePicker {...OWN} {...x} />, target: control("input") },
+  { id: "Toast", render: (x) => <Toast id="t" message="Own message" description="Own description" onDismiss={() => {}} {...x} />, target: control('[role="status"], [role="alert"]') },
+  { id: "Table", render: (x) => <Table data={[]} columns={[]} caption="Own caption" {...x} />, target: control('[role="region"]') },
+  { id: "Modal", render: (x) => <Modal open title="Own title" description="Own description" {...x}>Body</Modal>, target: () => document.querySelector('[role="dialog"]') },
+  { id: "Drawer", render: (x) => <Drawer open {...x}><DrawerHeader>Own title</DrawerHeader>Body</Drawer>, target: () => document.querySelector('[role="dialog"]') },
+];
+
+/** The computed name and description of one element, through the role query. */
+function computed(el: Element) {
+  let got = { name: "", description: "", found: false };
+  for (const role of ROLES) {
+    screen.queryAllByRole(role, {
+      hidden: true,
+      name: (name, e) => {
+        if (e === el) got = { ...got, name, found: true };
+        return true;
+      },
+      description: (description, e) => {
+        if (e === el) got = { ...got, description, found: true };
+        return true;
+      },
+    });
+  }
+  return got;
+}
+
+function read(n: Naming, consumer: object) {
+  const { container } = render(
+    <>
+      <span id="consumer-name">Consumer name</span>
+      <span id="consumer-desc">Consumer description</span>
+      <div>{n.render(consumer)}</div>
+    </>,
+  );
+  const el = n.target(container.lastElementChild!);
+  const got = el ? computed(el) : null;
+  cleanup();
+  return got;
+}
+
+describe("prop routing: a consumer's naming wins over the component's own", () => {
+  for (const n of NAMING) {
+    it(n.id, () => {
+      const alone = read(n, {});
+      const joined = read(n, CONSUMER);
+      expect(alone?.found && joined?.found, `${n.id}: the named element was not found or has no role this reads`).toBe(true);
+      const own = [...new Set(alone!.description.match(OWN_TEXT) ?? [])];
+      expect(joined!.name, `${n.id}: a consumer's aria-labelledby lost to the component's own name`).toBe("Consumer name");
+      expect(
+        { startsWithConsumer: joined!.description.startsWith("Consumer description"), lost: own.filter((t) => !joined!.description.includes(t)) },
+        `${n.id}: description "${joined!.description}" alone "${alone!.description}"; a consumer's aria-describedby must come first and join the component's own, not replace it`,
+      ).toEqual({ startsWithConsumer: true, lost: [] });
+    });
+  }
 });

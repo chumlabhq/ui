@@ -407,7 +407,7 @@ describe("Tooltip", () => {
       });
     });
 
-    it("trigger has aria-describedby pointing to tooltip when open", async () => {
+    it("the focusable trigger is described by the tooltip when open, not its wrapper", async () => {
       render(
         <Tooltip content="Described by" defaultOpen>
           <button>Trigger</button>
@@ -416,8 +416,9 @@ describe("Tooltip", () => {
 
       await waitFor(() => {
         const tooltip = screen.getByRole("tooltip");
-        const trigger = screen.getByText("Trigger").closest("span");
+        const trigger = screen.getByRole("button", { name: "Trigger" });
         expect(trigger).toHaveAttribute("aria-describedby", tooltip.id);
+        expect(trigger.closest("span")).not.toHaveAttribute("aria-describedby");
       });
     });
 
@@ -428,7 +429,7 @@ describe("Tooltip", () => {
         </Tooltip>
       );
 
-      const trigger = screen.getByText("Trigger").closest("span");
+      const trigger = screen.getByRole("button", { name: "Trigger" });
       expect(trigger).not.toHaveAttribute("aria-describedby");
     });
 

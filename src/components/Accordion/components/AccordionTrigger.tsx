@@ -144,6 +144,8 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       onKeyDown: handleKeyDown,
       "aria-expanded": item.isExpanded,
       "aria-controls": item.contentId,
+      "aria-label": item.ariaLabel,
+      "aria-labelledby": item.ariaLabelledBy,
       "aria-describedby": ariaDescribedBy ?? item.descriptionId,
       disabled: item.disabled,
       "data-state": dataState,

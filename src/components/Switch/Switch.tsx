@@ -54,6 +54,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       reduceMotion = "auto",
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       ...buttonProps
     },
     ref,
@@ -177,7 +178,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={
-              [descriptionId, error && errorMessage ? errorId : undefined]
+              [ariaDescribedBy, descriptionId, error && errorMessage ? errorId : undefined]
                 .filter(Boolean)
                 .join(" ") || undefined
             }

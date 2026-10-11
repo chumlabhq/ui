@@ -536,6 +536,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       ]
         .filter(Boolean)
         .join(" ") || undefined;
+    const labelledBy = ariaLabelledBy ?? (label ? labelId : undefined);
 
     return (
       <div
@@ -697,7 +698,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 id={thumbIdOf(0)}
                 ariaDescribedBy={ariaDescribedBy}
                 ariaLabel={ariaLabel}
-                ariaLabelledBy={label ? labelId : ariaLabelledBy}
+                ariaLabelledBy={labelledBy}
                 ariaValueText={ariaValueText}
                 onPointerDown={handleThumbPointerDown}
                 onKeyDown={handleKeyDown}
@@ -721,7 +722,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 id={thumbIdOf(1)}
                 ariaDescribedBy={ariaDescribedBy}
                 ariaLabel={ariaLabel}
-                ariaLabelledBy={label ? labelId : ariaLabelledBy}
+                ariaLabelledBy={labelledBy}
                 ariaValueText={ariaValueText}
                 onPointerDown={handleThumbPointerDown}
                 onKeyDown={handleKeyDown}
@@ -748,7 +749,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               id={thumbIdOf(0)}
                 ariaDescribedBy={ariaDescribedBy}
               ariaLabel={ariaLabel}
-              ariaLabelledBy={label ? labelId : ariaLabelledBy}
+              ariaLabelledBy={labelledBy}
               ariaValueText={ariaValueText}
               onPointerDown={handleThumbPointerDown}
               onKeyDown={handleKeyDown}

@@ -263,6 +263,17 @@ tables say.
   animated element makes it stick and then snap. Your `style` now merges with the panel's own
   instead of replacing its animation.
 - **`Tooltip`: `style` lands on the trigger wrapper, with `className`.** It was dropped.
+- **`Tooltip`: `id`, `aria-label`, `aria-labelledby` and `aria-describedby` land on the child
+  it wraps** when that child takes focus (a button, a link, a component that renders one), and
+  so does the tooltip's own `aria-describedby`. They sat on the wrapper `<span>`, which has no
+  role, so the focused button was announced with no description. Each joins the child's own:
+  your `id` and labels win where you pass them, and descriptions are listed child's first, then
+  yours, then the tooltip's. A tooltip around plain text keeps them on its wrapper, which is
+  then the element that takes focus. `asChild` joins the child's `aria-describedby` instead of
+  replacing it.
+- **`AccordionItem`: `id`, `aria-label` and `aria-labelledby` land on its trigger**, as
+  `aria-describedby` already did. They sat on the item's `<div>`, which has no role. Your `id`
+  becomes the trigger's id, and the panel's `aria-labelledby` follows it.
 
 ##### Accordion
 
@@ -647,6 +658,13 @@ tables say.
 
 ### Fixed
 
+- **A consumer's name and description now win over the component's own.**
+  - `Modal`'s `title` beat your `aria-labelledby`, and its `description` replaced your
+    `aria-describedby`. Your `aria-labelledby` wins now, and your `aria-describedby` comes
+    first, joined with the description.
+  - `Slider`'s `label` beat your `aria-labelledby`. Yours wins now.
+  - `Checkbox`, `Switch` and `RadioGroup` dropped their own description and error from the
+    description when you passed `aria-describedby`. Yours comes first now, joined with theirs.
 - **A consumer's `id` and ARIA reached no element, or two, on seventeen exports.**
   - `AccordionShimmer`, `AvatarShimmer` and `AvatarGroupShimmer` kept their own status name
     and dropped yours. They spread their attributes now; `aria-label` replaces the default.
@@ -662,8 +680,8 @@ tables say.
     announces.
   - `Modal` dropped your `id`, and `Drawer` replaced it with its own on the outer layer. It
     lands on the dialog now.
-  - `Tooltip` dropped `id` and `aria-*`. They land on the trigger wrapper, where `className`
-    does; your `aria-describedby` is joined with the tooltip's own id while it is open.
+  - `Tooltip` dropped `id` and `aria-*`. They land on the element that takes focus (see
+    Changed); your `aria-describedby` is joined with the tooltip's own id while it is open.
   - `InternationalPhoneInput` put `aria-label` on its group and its number input, so the name
     was announced twice, and put `aria-labelledby` and `aria-describedby` on the input. The
     group takes all three now. The number input is named by the new `numberAriaLabel`

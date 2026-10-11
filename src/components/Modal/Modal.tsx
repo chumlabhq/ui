@@ -366,9 +366,9 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 ariaLabel ??
                 (!showHeader && typeof title === "string" ? title : undefined)
               }
-              aria-labelledby={showHeader && hasTitle ? titleId : ariaLabelledBy}
+              aria-labelledby={ariaLabelledBy ?? (showHeader && hasTitle ? titleId : undefined)}
               aria-describedby={
-                showHeader && hasDescription ? descriptionId : ariaDescribedBy
+                [ariaDescribedBy, showHeader && hasDescription && descriptionId].filter(Boolean).join(" ") || undefined
               }
               tabIndex={-1}
               className={unstyled ? mergedClasses.content || undefined : [

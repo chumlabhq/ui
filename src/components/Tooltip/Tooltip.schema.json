@@ -163,19 +163,19 @@
     },
     "id": {
       "type": "string",
-      "description": "The trigger wrapper element's id."
+      "description": "Id of the element that takes focus: the child it wraps, or the wrapper around plain text. Wins over the child's own."
     },
     "aria-label": {
       "type": "string",
-      "description": "Accessible name of the trigger wrapper element."
+      "description": "Accessible name of the element that takes focus: the child it wraps, or the wrapper around plain text. Wins over the child's own."
     },
     "aria-labelledby": {
       "type": "string",
-      "description": "Ids of the elements that name the trigger wrapper element."
+      "description": "Ids of the elements that name the element that takes focus: the child it wraps, or the wrapper around plain text. Wins over the child's own."
     },
     "aria-describedby": {
       "type": "string",
-      "description": "Ids of the elements that describe the trigger; joined with the tooltip's own id while it is open."
+      "description": "Ids of the elements that describe the element that takes focus: the child it wraps, or the wrapper around plain text; joined after the child's own and before the tooltip's id while it is open."
     },
     "classes": {
       "type": "object",

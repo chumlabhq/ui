@@ -716,6 +716,18 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "The description's id, referenced by `aria-describedby`."
           },
           {
+            "name": "ariaLabel",
+            "type": "string",
+            "required": false,
+            "description": "The item's `aria-label`, read by its trigger."
+          },
+          {
+            "name": "ariaLabelledBy",
+            "type": "string",
+            "required": false,
+            "description": "The item's `aria-labelledby`, read by its trigger."
+          },
+          {
             "name": "onToggle",
             "type": "(isExpanded: boolean) => void",
             "required": false,
@@ -15910,7 +15922,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "The trigger wrapper element's id."
+        "description": "Id of the element that takes focus: the child it wraps, or the wrapper around plain text. Wins over the child's own."
       },
       {
         "name": "classes",

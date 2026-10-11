@@ -7,8 +7,11 @@ import {
   useId,
   forwardRef,
   isValidElement,
+  cloneElement,
 } from "react";
 import type { ReactElement, Ref } from "react";
+
+type Naming = Partial<Record<"id" | "aria-label" | "aria-labelledby" | "aria-describedby", string>>;
 import { createPortal } from "react-dom";
 import { LAYERS } from "../../utils/layers.js";
 import { cn } from "../../utils/scopedCn.js";
@@ -586,6 +589,14 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         : null
       : tooltipElement;
 
+    const naming = (own: Naming): Naming => ({
+      id: id ?? own.id,
+      "aria-label": ariaLabel ?? own["aria-label"],
+      "aria-labelledby": ariaLabelledBy ?? own["aria-labelledby"],
+      "aria-describedby":
+        [own["aria-describedby"], ariaDescribedBy, isOpen && tooltipId].filter(Boolean).join(" ") || undefined,
+    });
+
     if (asChild && isValidElement(children)) {
       return (
         <TooltipAsChildTrigger
@@ -597,13 +608,14 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onBlur={handleBlur}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          isOpen={isOpen}
-          tooltipId={tooltipId}
+          naming={naming((children as ReactElement<Naming>).props)}
           triggerClassName={mergedClasses.trigger}
           tooltipContent={tooltipContent}
         />
       );
     }
+
+    const onChild = triggerIsInteractive && !truncate && isValidElement(children);
 
     return (
       <>
@@ -620,13 +632,12 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           tabIndex={triggerIsInteractive ? undefined : 0}
-          id={id}
           style={{ display: triggerDisplay, ...style }}
-          aria-label={ariaLabel}
-          aria-labelledby={ariaLabelledBy}
-          aria-describedby={[ariaDescribedBy, isOpen ? tooltipId : undefined].filter(Boolean).join(" ") || undefined}
+          {...(onChild ? {} : naming({}))}
         >
-          {triggerContent}
+          {onChild
+            ? cloneElement(children as ReactElement<Naming>, naming((children as ReactElement<Naming>).props))
+            : triggerContent}
         </span>
         {tooltipContent}
       </>

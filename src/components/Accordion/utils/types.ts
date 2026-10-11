@@ -292,6 +292,10 @@ export interface AccordionItemContextValue {
   contentId: string;
   /** The description's id, referenced by `aria-describedby`. */
   descriptionId?: string;
+  /** The item's `aria-label`, read by its trigger. */
+  ariaLabel?: string;
+  /** The item's `aria-labelledby`, read by its trigger. */
+  ariaLabelledBy?: string;
   /** Fires when this item's expanded state changes. */
   onToggle?: (isExpanded: boolean) => void;
 }

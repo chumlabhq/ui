@@ -13,8 +13,7 @@ interface TooltipAsChildTriggerProps {
   onBlur: () => void;
   onTouchStart: () => void;
   onTouchEnd: () => void;
-  isOpen: boolean;
-  tooltipId: string;
+  naming: Record<string, unknown>;
   triggerClassName?: string;
   tooltipContent: React.ReactNode;
 }
@@ -28,8 +27,7 @@ export function TooltipAsChildTrigger({
   onBlur,
   onTouchStart,
   onTouchEnd,
-  isOpen,
-  tooltipId,
+  naming,
   triggerClassName,
   tooltipContent,
 }: TooltipAsChildTriggerProps) {
@@ -83,7 +81,7 @@ export function TooltipAsChildTrigger({
               | undefined
           )?.(e);
         },
-        "aria-describedby": isOpen ? tooltipId : undefined,
+        ...naming,
         className: cn(
           child.props.className as string | undefined,
           triggerClassName,

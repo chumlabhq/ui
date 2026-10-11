@@ -12,6 +12,9 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     className,
     asChild = false,
     onExpandedChange,
+    id,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
     "aria-describedby": ariaDescribedBy,
     ...rest
   }, ref) => {
@@ -22,7 +25,7 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
     const disabled = itemDisabled ?? config.disabled;
 
-    const triggerId = `${config.accordionId}-trigger-${value}`;
+    const triggerId = id ?? `${config.accordionId}-trigger-${value}`;
     const contentId = `${config.accordionId}-content-${value}`;
     const isPending = context.pendingItem === value;
 
@@ -44,9 +47,11 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
         // Only set descriptionId when explicitly provided — auto-generating
         // an ID that points to a non-existent DOM element is an a11y anti-pattern
         descriptionId: ariaDescribedBy,
+        ariaLabel,
+        ariaLabelledBy,
         onToggle: resolvedCallback,
       }),
-      [value, disabled, isExpanded, triggerId, contentId, ariaDescribedBy, resolvedCallback]
+      [value, disabled, isExpanded, triggerId, contentId, ariaDescribedBy, ariaLabel, ariaLabelledBy, resolvedCallback]
     );
 
     const dataState = isExpanded ? "open" : "closed";

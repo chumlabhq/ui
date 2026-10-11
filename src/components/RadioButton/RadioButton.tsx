@@ -81,6 +81,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       reduceMotion = "auto",
       children,
       className,
+      "aria-describedby": ariaDescribedBy,
       ...rest
     },
     ref,
@@ -132,6 +133,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     );
 
     const describedBy = [
+      ariaDescribedBy,
       description ? descriptionId : null,
       error && errorMessage ? errorId : null,
     ]

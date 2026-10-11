@@ -1000,6 +1000,30 @@ const LIBRARY_TOTAL_HISTORY = [
       "the concatenation gzips the shared names once, hence +372 B. No " +
       "comments added. Measured against a build of 6affdbee.",
   },
+  {
+    kb: 156.92,
+    commit: "(uncommitted)",
+    date: "2026-10-11",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.15 KB (160,535 -> 160,691 B gzipped, +156 B), 81 files " +
+      "held. A2g naming: a consumer's name and description reach the element " +
+      "a screen reader announces, and win over the component's own. Per " +
+      "chunk: Tooltip +54 B (4,573 -> 4,627; shared, Tooltip's exclusive " +
+      "unchanged): id and aria-* land on the child it wraps when that child " +
+      "takes focus, joined with the child's own and the tooltip's id; the " +
+      "asChild path joins instead of replacing. Accordion +44 B (exclusive " +
+      "9,401 -> 9,448), its declared breach raised 9.22 -> 9.23 in the same " +
+      "move: AccordionItem's id, aria-label and aria-labelledby reach its " +
+      "trigger. Checkbox +16 B, Switch +10 B, RadioButton +12 B: a consumer's " +
+      "aria-describedby joins the description and error ids. Slider +5 B: a " +
+      "consumer's aria-labelledby wins over label. Modal +4 B: a consumer's " +
+      "aria-labelledby wins over title, aria-describedby joins the " +
+      "description. Breadcrumb +2 B, CountryFlag +1 B, CountryFlagGroup +1 B, " +
+      "Stepper +1 B, TabPanel +1 B: no source change, the shared Tooltip " +
+      "import's minified names. No comments added to shipped code. Measured " +
+      "against a build of 5a873af5.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1153,8 +1177,11 @@ const DECLARED_BREACHES = new Map([
   [
     "Accordion",
     {
-      kb: 9.22,
-      why: "Composed, and still 1.22 over. Its own chunk is 0.52 KB; the rest " +
+      kb: 9.23,
+      why: "2026-10-11, A2g naming: 9.22 -> 9.23 (exclusive 9,401 -> 9,448 B gzipped, +47 B). " +
+        "AccordionItem's id, aria-label and aria-labelledby reach its trigger, the button a " +
+        "screen reader announces, instead of its role-less container. " +
+        "Composed, and still 1.22 over. Its own chunk is 0.52 KB; the rest " +
         "is AccordionContent and useAccordionStateManager in sibling chunks " +
         "nothing else reaches. It shipped four sub-components against a " +
         "Button's 6 KB ceiling until the shape rule gained a positive test for " +
