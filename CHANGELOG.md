@@ -28,6 +28,12 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- **`CascadingDropdown`: `submenuSide` takes `"start"` or `"end"`, not `"left"` or `"right"`.**
+  `"end"` (the default) opens a submenu toward the end of the line: the right in a
+  left-to-right page, the left in a right-to-left one, read from the closest `dir` attribute
+  when the submenu opens. `submenuSide="right"` becomes `"end"` and `"left"` becomes
+  `"start"`. RTL is still unsupported in 0.1.0; the values are logical so that supporting it
+  later needs no second rename.
 - **`Pagination`: the rows-per-page select is named by its visible text.** Its only name was
   the number it showed ("10"), so a screen reader announced "10, button" with nothing to say
   what it changes. The trigger is a `combobox` now, labelled by `rowsPerPagePrefix` and
@@ -341,6 +347,7 @@ tables say.
 | `searchDebounceMs` | `searchDebounce` |  |
 | `dropdownPosition` | `dropdownSide` |  |
 | `submenuPosition` | `submenuSide` |  |
+| `submenuSide="right"` / `"left"` | `submenuSide="end"` / `"start"` | logical; `"end"` is the default |
 | `dropdownGap` | `dropdownOffset` |  |
 | `loadingText` | `loadingContent` |  |
 | `ClearIcon` | `clearIcon` | a `ReactNode`, rendered as given |
@@ -664,6 +671,13 @@ tables say.
 
 ### Fixed
 
+- **`Pagination`'s rows-per-page icon rotates while the menu is open**, as the dropdown
+  chevrons do. The rotation was written and never reached the icon. A custom `dropdownIcon`
+  rotates too: it is wrapped in a span that carries the icon slot's classes, as `Dropdown`
+  wraps `chevronIcon`.
+- **`Table`'s checkbox, expand and drag header cells no longer take `classes.cell`.** They
+  took the body-cell slot beside `classes.headerCell`, so your body-cell classes reached
+  those headers. They take `headerCell` only now.
 - **`Dropdown`, `SearchableDropdown`, `MultiSelectDropdown`, `MultiSelectSearchableDropdown`,
   `CascadingDropdown` and `DatePicker` announce their `description`.** It was on screen and
   never in the trigger's `aria-describedby`. It joins now, after yours and before the error

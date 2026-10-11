@@ -1046,6 +1046,25 @@ const LIBRARY_TOTAL_HISTORY = [
       "InternationalPhoneInput). Every other entry byte-identical. No comments " +
       "added to shipped code. Measured against a build of ae9b2b11.",
   },
+  {
+    kb: 157.09,
+    commit: "(uncommitted)",
+    date: "2026-10-12",
+    attribution: "attributed",
+    reason:
+      "DECREASE, -0.02 KB (160,881 -> 160,865 B gzipped, -16 B), 81 files " +
+      "held. L13: CascadingDropdown's submenuSide is logical, and classes reach " +
+      "the element they name. Exclusive, HEAD 356b6f16 -> slice: " +
+      "CascadingDropdown +56 B (9,549 -> 9,605): \"start\" | \"end\" resolved " +
+      "against the closest dir when the submenu opens (utils/side.ts). Table " +
+      "-40 B (16,765 from 16,805), its declared breach lowered 16.41 -> 16.37 in " +
+      "the same move: the checkbox, expand and drag header cells take headerCell " +
+      "only, never the body cell slot, and the three flags that chose it are " +
+      "gone. Pagination -28 B (4,143 -> 4,115): the rows-per-page icon takes the " +
+      "icon slot plus rotate-180 while open; the dead rotation class string is " +
+      "gone. Every other entry byte-identical. No comments added to shipped " +
+      "code. Measured against a build of 356b6f16.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1099,8 +1118,10 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.41,
-      why: "2026-10-11, A2f routing: 16.35 -> 16.41 (exclusive 16,727 -> 16,805 B gzipped, +78 B). " +
+      kb: 16.37,
+      why: "2026-10-12, L13: 16.41 -> 16.37 (exclusive 16,805 -> 16,765 B gzipped, -40 B). The " +
+        "checkbox, expand and drag header cells stopped taking the body-cell slot. " +
+        "2026-10-11, A2f routing: 16.35 -> 16.41 (exclusive 16,727 -> 16,805 B gzipped, +78 B). " +
         "A consumer's id, aria-labelledby and aria-describedby reach the region, which took " +
         "aria-label alone and dropped the rest; both region renders (desktop and mobile card " +
         "view) carry them. " +

@@ -211,12 +211,6 @@ const EXCEPTIONS: { rule: Rule; id: string; prop: string; reason: string }[] = [
     ([id, prop]) => ({ rule: "physical-side" as const, id, prop, reason: "a floating layer's side of its anchor, one of four physical edges, as Floating UI and Radix name it" }),
   ),
   { rule: "physical-side", id: "Drawer/Drawer", prop: "side", reason: "the viewport edge the drawer enters from, physical by decision (A2c kept the four edges)" },
-  {
-    rule: "physical-side",
-    id: "CascadingDropdown/CascadingDropdown",
-    prop: "submenuSide",
-    reason: "A DEFECT, not a fit: a submenu opens toward the inline end and should flip in RTL, so this wants start | end. Out of A2e's scope (routing); the exception goes stale when it is fixed",
-  },
 ];
 
 // ── The population ─────────────────────────────────────────────────────────

@@ -2726,10 +2726,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "submenuSide",
-        "type": "\"right\" | \"left\"",
+        "type": "\"start\" | \"end\"",
         "required": false,
-        "default": "\"right\"",
-        "description": "Horizontal position of submenus."
+        "default": "\"end\"",
+        "description": "The side submenus open on, logical: `\"end\"` is the right in a left-to-right page and the left in a right-to-left one, read from the closest `dir` attribute when the submenu opens, else the document's. RTL is not supported in 0.1.0; the values are logical so they need no rename when it is."
       },
       {
         "name": "dropdownSide",

@@ -151,7 +151,9 @@ own `description` into their trigger's `aria-describedby` (consumer's first, the
 the description, then the error), named Pagination's rows-per-page select by
 its visible prefix and suffix, with its number as the value, and gave
 DatePicker's `name` a field: hidden inputs carrying the ISO value. The routing
-contract excuses nothing.
+contract excuses nothing. L13 made CascadingDropdown's `submenuSide`
+logical (`"start"` | `"end"`, read against the closest `dir`), which retired
+the conventions contract's one defect row.
 
 ## Named exceptions ("doesn't fit")
 
@@ -175,7 +177,6 @@ and are recorded here for review.
 | Table | `onCursorPositionChange`, `onHeaderHoverChange` | 5 | Notification only: a pointer cannot be controlled. |
 | Tooltip `side`; Breadcrumb and TabPanel `tooltipSide`; Breadcrumb `dropdownSide` | — | 8 | A floating layer's side of its anchor, one of four physical edges. |
 | Drawer | `side` | 8 | The viewport edge the drawer enters from, physical by decision. |
-| CascadingDropdown | `submenuSide` | 8 | **A defect, not a fit:** a submenu opens toward the inline end and should flip in RTL, so it wants `start` / `end`. Excused until it is fixed. |
 | InternationalPhoneInput | `validationMessage` | 7 | The built-in validation's fallback text; the consumer's `errorMessage` wins. |
 | CircularLoader, PulseLoader, Drawer | `size` | 8 | A number or a CSS length, not the scale. |
 | Part sizes (`loaderSize`, `flagSize`, `iconSize`, `markDotSize`, …) | — | 8 | The size of a part in px. |

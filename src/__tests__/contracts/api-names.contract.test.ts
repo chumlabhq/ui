@@ -240,6 +240,7 @@ const VALUE_TOMBSTONES: ValueTombstone[] = [
   { component: "DatePicker", prop: "selectionMode", old: [], now: ["single", "range", "multiple"] },
   { component: "Toast", prop: "variant", old: [], now: ["success", "warning", "error", "info"] },
   { component: "Drawer", prop: "side", old: [], now: ["left", "right", "top", "bottom"] },
+  { component: "CascadingDropdown", prop: "submenuSide", old: ["left", "right"], now: ["start", "end"] },
 ];
 
 /**

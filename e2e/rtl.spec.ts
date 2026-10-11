@@ -178,14 +178,6 @@ test.describe("right-to-left", () => {
     expect(seen.surface!.left).toBeGreaterThanOrEqual(0);
     expect(seen.surface!.right).toBeLessThanOrEqual(seen.viewport);
 
-    test.skip(
-      true,
-      `RTL is not supported in 0.1.0 (ACCESSIBILITY.md). Measured: the submenu opened to the ` +
-        `${seen.side} of an item at [${seen.anchor!.left}..${seen.anchor!.right}] with room on ` +
-        `both sides. The flip works — the LTR near-edge fixtures prove it picks the other side ` +
-        `when this one cannot hold it — but its only input is available space.`,
-    );
-
     expect(
       seen.side,
       `the submenu opened to the ${seen.side} of an item at ` +

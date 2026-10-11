@@ -135,7 +135,7 @@ DOM nesting: `root > control > trigger + portal(menu > menuItem* + submenu > sub
 | `selectedIcon` | object | — | React.ReactNode — Custom icon for selected items. |
 | `checkboxIcon` | object | — | React.ReactNode — Custom checkbox icon for multi-select. |
 | `fullWidth` | boolean | `false` | Stretches the dropdown to fill its container width. |
-| `submenuSide` | `"right"` \| `"left"` | `"right"` | Horizontal position of submenus. |
+| `submenuSide` | `"start"` \| `"end"` | `"end"` | The side submenus open on, logical: `"end"` is the right in a left-to-right page and the left in a right-to-left one, read from the closest `dir` attribute when the submenu opens, else the document's. RTL is not supported in 0.1.0; the values are logical so they need no rename when it is. |
 | `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Vertical position of the dropdown. |
 | `closeOnSelect` | boolean | `true` | Closes the dropdown after an item is selected. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -228,8 +228,12 @@ the submenu's own portal, positioned by `useAnchoredPosition` — the same
 clamp-and-flip every other floating surface in the package uses. Positioning
 utilities on this key no longer do anything: `top`, `left` and `position` are
 inline styles, and inline wins. Everything else it carried still applies; the
-default value (`z-[9999]`) is unchanged. Use `submenuSide` to choose a side;
-the side actually used, after any flip, is on the element as `data-side`.
+default value (`z-[9999]`) is unchanged. Use `submenuSide` to choose a side:
+`"end"` (the default) or `"start"`, logical, so `"end"` opens right in a
+left-to-right page and left in a right-to-left one, read from the closest `dir`
+attribute when the submenu opens. RTL is not supported in 0.1.0; the values are
+logical so that supporting it later needs no rename. The physical side actually
+used, after any flip, is on the element as `data-side`.
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|

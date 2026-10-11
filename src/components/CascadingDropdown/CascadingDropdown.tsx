@@ -1,4 +1,5 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useCallback } from "react";
+import { physicalSide } from "./utils/side.js";
 import { useLayer } from "../../utils/layers.js";
 import type { ReactNode, KeyboardEvent, MutableRefObject, RefObject } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types.js";
@@ -355,7 +356,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       selectedIcon,
       checkboxIcon,
       fullWidth = false,
-      submenuSide = "right",
+      submenuSide = "end",
       dropdownSide = "bottom",
       closeOnSelect = true,
       classes: classesProp,
@@ -836,7 +837,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
                   key={openSubmenuParent.value}
                   menuId={submenuId}
                   anchor={submenuAnchorRef}
-                  side={submenuSide === "right" ? "right" : "left"}
+                  side={physicalSide(submenuSide, containerRef.current)}
                   zIndex={dropdownZIndex}
                   portalContainer={portalContainer}
                   parent={openSubmenuParent}

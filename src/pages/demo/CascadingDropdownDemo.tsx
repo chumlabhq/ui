@@ -1019,10 +1019,10 @@ const CascadingDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Submenu Position: Left ─────────────────────────────────────── */}
+      {/* ─── Submenu Side: Start ────────────────────────────────────────── */}
       <Section
-        title="Submenu Position: Left"
-        description="Submenu opens to the left of the parent menu."
+        title="Submenu Side: Start"
+        description="Submenu opens toward the start of the line: the left in a left-to-right page, the right in a right-to-left one. The default, end, is the other side."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1032,7 +1032,7 @@ const CascadingDropdownDemo = () => {
               value={leftPositionValue}
               onValueChange={(val) => setLeftPositionValue(val)}
               placeholder="Select category..."
-              submenuSide="left"
+              submenuSide="start"
               classes={{
                 ...c.cascading,
                 subContent: `${c.cascading.subContent} mr-1 ml-0`,

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CascadingDropdown } from "../index.js";
+import { physicalSide } from "../utils/side.js";
 import type { CascadingOption } from "../utils/types.js";
 
 import { setReducedMotion } from "../../../test/matchMedia.js";
@@ -593,13 +594,13 @@ describe("CascadingDropdown — loading state", () => {
   });
 });
 
-describe("CascadingDropdown — submenuSide left", () => {
-  it("renders the submenu through the anchored surface when submenuSide='left'", async () => {
+describe("CascadingDropdown — submenuSide start", () => {
+  it("renders the submenu through the anchored surface when submenuSide='start'", async () => {
     const user = userEvent.setup();
     render(
       <CascadingDropdown
         options={nestedOptions}
-        submenuSide="left"
+        submenuSide="start"
       />
     );
 
@@ -675,5 +676,36 @@ describe("CascadingDropdown focus callbacks", () => {
     await user.click(screen.getByRole("button", { name: "Outside" }));
     expect(onFocus).toHaveBeenCalledWith(expect.objectContaining({ type: "focus", target: trigger }));
     expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur", target: trigger }));
+  });
+});
+
+describe("CascadingDropdown — submenuSide is logical", () => {
+  const inside = (dir: string | null) => {
+    const wrapper = document.createElement("div");
+    if (dir) wrapper.setAttribute("dir", dir);
+    const el = document.createElement("div");
+    wrapper.appendChild(el);
+    document.body.appendChild(wrapper);
+    return el;
+  };
+
+  it.each([
+    ["end", "ltr", "right"],
+    ["start", "ltr", "left"],
+    ["end", "rtl", "left"],
+    ["start", "rtl", "right"],
+  ] as const)("%s in %s opens to the %s, read from the closest dir", (side, dir, expected) => {
+    expect(physicalSide(side, inside(dir))).toBe(expected);
+  });
+
+  it("falls back to the document's direction when no ancestor sets one", () => {
+    const el = inside(null);
+    document.documentElement.dir = "rtl";
+    try {
+      expect(physicalSide("end", el)).toBe("left");
+    } finally {
+      document.documentElement.dir = "";
+    }
+    expect(physicalSide("end", el)).toBe("right");
   });
 });

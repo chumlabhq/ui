@@ -150,7 +150,7 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
       defaultOpen: true,
       keepMounted: true,
       showSubmenuSearch: true,
-      submenuSide: "left",
+      submenuSide: "start",
     },
     wrap: (node) => <div style={{ width: 260, marginLeft: "auto" }}>{node}</div>,
     note: "submenuSide honoured when the preferred side has room; the side is a layout answer and jsdom has none.",
@@ -328,10 +328,10 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     props: { options: NESTED, defaultOpen: true, keepMounted: true, showSubmenuSearch: true },
     wrap: (node) => (
       <RtlBoundary>
-        <div style={{ width: 260, marginRight: "auto" }}>{node}</div>
+        <div style={{ width: 260, margin: "0 auto" }}>{node}</div>
       </RtlBoundary>
     ),
-    note: "The submenu's side is the one thing in the package that already flips; RTL is where it should flip the other way first.",
+    note: "Centred, so either side has room: the side it opens on is the one `submenuSide` resolves to, not the one that fits.",
     act: openSubmenu,
   },
 ];

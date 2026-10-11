@@ -337,6 +337,27 @@ describe("Pagination", () => {
       expect(trigger).toHaveAttribute("aria-controls", screen.getByRole("listbox").id);
     });
 
+    it("rotates its chevron while open, like the dropdown chevrons", async () => {
+      const user = userEvent.setup();
+      renderWithDropdown();
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
+      const icon = trigger.querySelector("svg")!;
+      expect(icon).not.toHaveClass("rotate-180");
+      await user.click(trigger);
+      expect(icon).toHaveClass("rotate-180");
+    });
+
+    it("rotates a custom dropdownIcon while open too", async () => {
+      const user = userEvent.setup();
+      renderWithDropdown({ dropdownIcon: <span data-testid="custom-caret">v</span> });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
+      const rotated = () => screen.getByTestId("custom-caret").closest(".rotate-180");
+      expect(rotated()).toBeNull();
+      await user.click(trigger);
+      expect(rotated()).not.toBeNull();
+      expect(trigger.contains(rotated())).toBe(true);
+    });
+
     it("uses custom dropdownAriaLabel", async () => {
       const user = userEvent.setup();
       renderWithDropdown({ dropdownAriaLabel: "Zeilen pro Seite" });
@@ -703,7 +724,9 @@ describe("Pagination", () => {
 
       const trigger = screen.getByRole("combobox", { name: "Show rows" });
       const caret = screen.getByTestId("custom-caret");
-      expect(caret.parentElement).toBe(trigger);
+      // Inside the icon slot's span, which carries the rotation, as Dropdown
+      // wraps its chevronIcon.
+      expect(caret.parentElement?.parentElement).toBe(trigger);
       expect(trigger.querySelector("svg")).toBeNull();
     });
 

@@ -1228,10 +1228,6 @@ function TableInner<TData>(
       const isSortableColumn = sortable && header.column.getCanSort();
       const sortDir = header.column.getIsSorted();
 
-      const isCheckboxColumn = columnId === "__selection";
-      const isExpandColumn = columnId === "__expand";
-      const isDragColumn = columnId === "__dragHandle";
-
       const headerStyle: React.CSSProperties = {};
       const hasFilter = filterableColumns && filterableColumns[columnId];
       if (resizable && header.column.getCanResize()) {
@@ -1248,7 +1244,7 @@ function TableInner<TData>(
         <th
           key={header.id}
           colSpan={header.colSpan > 1 ? header.colSpan : undefined}
-          className={`group/header ${headerCellClassName} ${isCheckboxColumn || isExpandColumn || isDragColumn ? checkboxCellClassName : ""} ${sizeClass}`}
+          className={`group/header ${headerCellClassName} ${sizeClass}`}
           role="columnheader"
           aria-sort={getSortDirection(header.column.getIsSorted())}
           data-pinned={isPinned || undefined}
@@ -1421,7 +1417,6 @@ function TableInner<TData>(
       pinnedIcon,
       sortable,
       sortIconClassName,
-      checkboxCellClassName,
       sizeClass,
       resizable,
       resizeHandleClassName,

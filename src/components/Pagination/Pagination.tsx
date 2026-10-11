@@ -351,11 +351,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       }
     }, [safeCurrentPage, safeTotalPages, resolvedOnPageChange]);
 
-    const dropdownIconClass = cn(
-      "w-3 h-3 transition-transform duration-200",
-      isDropdownOpen && "rotate-180",
-      mergedClasses.rowsPerPage.icon,
-    );
+    const dropdownIconClass = cn(mergedClasses.rowsPerPage.icon, isDropdownOpen && "rotate-180") || undefined;
 
     const isFirstPage = safeCurrentPage <= 1;
     const isLastPage = safeCurrentPage >= safeTotalPages;
@@ -392,11 +388,10 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               aria-controls={isDropdownOpen ? listboxId : undefined}
             >
               <span>{rowsPerPage}</span>
-              {renderIcon(
-                dropdownIcon,
-                ChevronDownIcon,
-                mergedClasses.rowsPerPage.icon,
-                dropdownIconClass,
+              {dropdownIcon != null && dropdownIcon !== false ? (
+                <span className={dropdownIconClass}>{dropdownIcon}</span>
+              ) : (
+                <ChevronDownIcon className={dropdownIconClass} />
               )}
             </button>
 

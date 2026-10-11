@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { CascadingDropdown, CascadingOption, CascadingValue } from "@chumlab/ui/cascading-dropdown";
 
@@ -48,7 +46,7 @@ export default function CascadingDropdownExample() {
         value={leftPositionValue}
         onValueChange={(val) => setLeftPositionValue(val)}
         placeholder="Select category..."
-        submenuSide="left"
+        submenuSide="start"
         classes={
           {
                          ...({

@@ -94,6 +94,40 @@ test.describe("CascadingDropdown submenu placement", () => {
     expect(placed.surfaceRight).toBeLessThanOrEqual(placed.anchorLeft);
   });
 
+  /**
+   * `submenuSide` is logical: "end" is the side text runs towards, so the right
+   * in LTR and the left in RTL. Both anchors have room on the side asked for,
+   * so the measured edge is the resolution and not a flip.
+   */
+  for (const { fixture, dir, side } of [
+    { fixture: "open-submenu-near-left", dir: "ltr", side: "right" },
+    { fixture: "open-submenu-rtl", dir: "rtl", side: "left" },
+  ]) {
+    test(`"end" opens to the ${side} in ${dir}`, async ({ page }) => {
+      await page.setViewportSize({ width: 1024, height: 900 });
+      await gotoFixture(page, "CascadingDropdown", fixture);
+      await page.locator(SURFACE).waitFor({ state: "attached" });
+
+      const placed = await page.evaluate((selector) => {
+        const surface = document.querySelector(selector)!;
+        const item = document.querySelector('[role="menuitem"][aria-expanded="true"]')!;
+        const box = surface.getBoundingClientRect();
+        const anchor = item.getBoundingClientRect();
+        return {
+          direction: getComputedStyle(item).direction,
+          side: surface.getAttribute("data-side"),
+          surface: [box.left, box.right],
+          anchor: [anchor.left, anchor.right],
+        };
+      }, SURFACE);
+
+      expect(placed.direction).toBe(dir);
+      expect(placed.side, `submenu at [${placed.surface}] against an item at [${placed.anchor}]`).toBe(side);
+      if (side === "right") expect(placed.surface[0]).toBeGreaterThanOrEqual(placed.anchor[1]);
+      else expect(placed.surface[1]).toBeLessThanOrEqual(placed.anchor[0]);
+    });
+  }
+
   test("flips to the left when the right side cannot hold it", async ({ page }) => {
     await page.setViewportSize({ width: 1024, height: 900 });
     await gotoFixture(page, "CascadingDropdown", "open-submenu-near-right");

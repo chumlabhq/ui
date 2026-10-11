@@ -136,7 +136,7 @@ interface CascadingDropdownBaseProps {
   selectedIcon?: ReactNode;
   checkboxIcon?: ReactNode;
   fullWidth?: boolean;
-  submenuSide?: "right" | "left";
+  submenuSide?: "start" | "end";
   dropdownSide?: "top" | "bottom";
   closeOnSelect?: boolean;
   classes?: CascadingDropdownClasses;

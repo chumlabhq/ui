@@ -96,14 +96,6 @@ const SHARED_ELEMENTS: { component: string; slots: [string, string]; reason: str
     slots: ["item", "link"],
     reason: "By design: an item that is a link renders one <a>, painted from both slots (`linkAndItem`, Breadcrumb.tsx).",
   },
-  {
-    component: "Table",
-    slots: ["cell", "headerCell"],
-    reason:
-      "A DEFECT, not a fit: the header <th> of a checkbox, expand or drag column takes `cell` beside `headerCell`, " +
-      "joined as strings rather than merged (Table.tsx:1251), so a consumer's body-cell classes reach a header. " +
-      "Reported in G3, which changes no component; excused until it is fixed",
-  },
 ];
 const sharedUsed = new Set<string>();
 
