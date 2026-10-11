@@ -1024,6 +1024,28 @@ const LIBRARY_TOTAL_HISTORY = [
       "import's minified names. No comments added to shipped code. Measured " +
       "against a build of 5a873af5.",
   },
+  {
+    kb: 157.11,
+    commit: "(uncommitted)",
+    date: "2026-10-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.19 KB (160,691 -> 160,881 B gzipped, +190 B), 81 files " +
+      "held. L12 naming/form: DatePicker name submitted nothing (documented " +
+      "prop, silent no-op); description joins aria-describedby. Exclusive, " +
+      "HEAD ae9b2b11 -> slice: DatePicker +127 B (12,442 -> 12,569), its " +
+      "declared breach raised 12.15 -> 12.27 in the same move: hidden inputs " +
+      "carry the ISO value for name (about 109 B) and the description joins " +
+      "the trigger's aria-describedby (about 18 B). Pagination +83 B " +
+      "(4,060 -> 4,143): the rows-per-page trigger is a combobox named by its " +
+      "prefix and suffix, \"Rows per page\" when both are empty. Description " +
+      "joins aria-describedby: MultiSelectDropdown +22 B (7,079 -> 7,101), " +
+      "Dropdown +18 B (6,299 -> 6,317), MultiSelectSearchableDropdown +18 B " +
+      "(7,355 -> 7,373), CascadingDropdown +5 B (9,544 -> 9,549), " +
+      "SearchableDropdown +1 B exclusive (its chunk +20 B, shared with " +
+      "InternationalPhoneInput). Every other entry byte-identical. No comments " +
+      "added to shipped code. Measured against a build of ae9b2b11.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1149,7 +1171,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.15,
+      kb: 12.27,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1171,7 +1193,14 @@ const DECLARED_BREACHES = new Map([
         "gzipped, +64 B): id/aria-* reach the primary control (a11y correctness). " +
         "The trigger takes the consumer's id, aria-label, aria-labelledby and " +
         "aria-describedby, which were spread onto the role-less root `<div>`; " +
-        "the description joins the trigger's own error id.",
+        "the description joins the trigger's own error id.\n\n" +
+        "12.15 -> 12.27 on 2026-10-12, L12 naming/form (exclusive 12,442 -> " +
+        "12,569 B gzipped, +127 B): DatePicker name submitted nothing (documented " +
+        "prop, silent no-op); description joins aria-describedby. Hidden inputs " +
+        "carry the ISO value (single, range interval, one per date in multiple " +
+        "mode), about 109 B; the description id joins the trigger's " +
+        "aria-describedby, about 18 B. Reusing toDateString instead of a new " +
+        "format call saved 14 B; a join-built range string saved none.",
     },
   ],
   [

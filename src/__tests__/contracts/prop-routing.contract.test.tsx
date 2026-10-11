@@ -206,16 +206,10 @@ const CASES: Case[] = [
  * fails its case, so each falls out the moment it is fixed. A2e fixed the
  * control routing (the A2d ref targets, RadioButton, OtpInput's group and the
  * fields' aria-describedby); A2f fixed root routing on seven components and
- * the attributes seventeen exports dropped or rendered twice.
+ * the attributes seventeen exports dropped or rendered twice. L12 retired the
+ * last: DatePicker's `name` submits its value through a hidden input.
  */
-const on = (id: string, checks: Check[], reason: string) => checks.map((check) => ({ id, check, reason }));
-const EXCEPTIONS: { id: string; check: Check; reason: string }[] = [
-  ...on(
-    "DatePicker/DatePicker",
-    ["name"],
-    "found by A2e: DatePicker declares `name` but renders no field, so it submits nothing in a form. Reported, not yet scheduled",
-  ),
-];
+const EXCEPTIONS: { id: string; check: Check; reason: string }[] = [];
 
 // ── The population ─────────────────────────────────────────────────────────
 
@@ -458,4 +452,54 @@ describe("prop routing: a consumer's naming wins over the component's own", () =
       ).toEqual({ startsWithConsumer: true, lost: [] });
     });
   }
+});
+
+// ── A combobox trigger carries its own name and description ────────────────
+
+/**
+ * The precedence block above checks that a component keeps the texts it already
+ * describes the element with. It cannot see a text the component never wired:
+ * the five dropdowns and DatePicker rendered their `description` and left it out
+ * of the trigger's `aria-describedby`, so it was on screen and never announced.
+ * Here the expected description is spelled out, in ADR 008's order: the
+ * consumer's, then the component's description, then its error message.
+ */
+const DESCRIBED: Naming[] = NAMING.filter((n) =>
+  ["Dropdown", "SearchableDropdown", "MultiSelectDropdown", "MultiSelectSearchableDropdown", "CascadingDropdown", "DatePicker"].includes(n.id),
+);
+
+describe("prop routing: a combobox trigger is described by its own description", () => {
+  for (const n of DESCRIBED) {
+    it(n.id, () => {
+      const described = [false, true].map((error) => {
+        const got = read({ ...n, render: (x) => n.render({ error, ...x }) }, CONSUMER);
+        return got?.description;
+      });
+      expect(described, `${n.id}: description with error off, then on`).toEqual([
+        "Consumer description Own description",
+        "Consumer description Own description Own error",
+      ]);
+    });
+  }
+});
+
+describe("prop routing: the rows-per-page select is named by its visible text", () => {
+  it("Pagination", () => {
+    const named = (props: object) => {
+      render(<Pagination totalPages={10} showRowsPerPage rowsPerPage={10} {...props} />);
+      const el = document.querySelector('[aria-haspopup="listbox"]');
+      const got = el ? { role: el.getAttribute("role"), name: computed(el).name } : null;
+      cleanup();
+      return got;
+    };
+    expect([
+      named({}),
+      named({ rowsPerPagePrefix: "", rowsPerPageSuffix: "per page" }),
+      named({ rowsPerPagePrefix: "", rowsPerPageSuffix: "" }),
+    ]).toEqual([
+      { role: "combobox", name: "Show rows" },
+      { role: "combobox", name: "per page" },
+      { role: "combobox", name: "Rows per page" },
+    ]);
+  });
 });

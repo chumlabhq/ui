@@ -320,6 +320,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
 
   useAccessibleNameWarning("Dropdown", { label, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy });
     const errorId = `${dropdownId}-error`;
+    const descriptionId = `${dropdownId}-description`;
     const statusId = `${dropdownId}-status`;
 
     const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);
@@ -494,7 +495,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       "aria-controls": listboxId,
       "aria-activedescendant": activeDescendantId,
       "aria-invalid": (error || undefined) as boolean | undefined,
-      "aria-describedby": [ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
+      "aria-describedby": [ariaDescribedBy, description && descriptionId, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
       "aria-required": (required || undefined) as boolean | undefined,
       ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy, hasValueElement: !renderTrigger }),
       disabled,
@@ -532,7 +533,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         )}
 
         {description && (
-          <div className={mergedClasses.description || undefined}>{description}</div>
+          <div id={descriptionId} className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div className={mergedClasses.control || undefined}>

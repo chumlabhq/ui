@@ -307,24 +307,41 @@ describe("Pagination", () => {
       expect(screen.getByText("lignes")).toBeInTheDocument();
     });
 
-    it("names the rows-per-page select by its value, never by the prefix or suffix text", () => {
+    it("names the rows-per-page select by its visible prefix and suffix, and its value is its content", () => {
       const { unmount } = renderWithDropdown();
-      const byDefault = screen.getByRole("button", { expanded: false, name: "25" });
-      expect(byDefault).toHaveAccessibleName("25");
+      const byDefault = screen.getByRole("combobox", { expanded: false, name: "Show rows" });
+      expect(byDefault).toHaveTextContent("25");
       expect(byDefault).toHaveAttribute("aria-haspopup", "listbox");
       unmount();
 
-      renderWithDropdown({ rowsPerPagePrefix: "Afficher", rowsPerPageSuffix: "lignes" });
-      const translated = screen.getByRole("button", { expanded: false, name: "25" });
-      expect(translated).toHaveAccessibleName("25");
-      expect(translated).not.toHaveAttribute("aria-labelledby");
+      const { unmount: unmountTranslated } = renderWithDropdown({ rowsPerPagePrefix: "Afficher", rowsPerPageSuffix: "lignes" });
+      expect(screen.getByRole("combobox", { name: "Afficher lignes" })).toHaveTextContent("25");
+      unmountTranslated();
+
+      renderWithDropdown({ rowsPerPagePrefix: "", rowsPerPageSuffix: "" });
+      const unlabelled = screen.getByRole("combobox", { name: "Rows per page" });
+      expect(unlabelled).not.toHaveAttribute("aria-labelledby");
+    });
+
+    it("carries a combobox's popup state: expanded, a listbox popup, and the listbox it controls while open", async () => {
+      const user = userEvent.setup();
+      renderWithDropdown();
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(trigger).toHaveAttribute("aria-haspopup", "listbox");
+      expect(trigger).not.toHaveAttribute("aria-controls");
+
+      await user.click(trigger);
+
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(trigger).toHaveAttribute("aria-controls", screen.getByRole("listbox").id);
     });
 
     it("uses custom dropdownAriaLabel", async () => {
       const user = userEvent.setup();
       renderWithDropdown({ dropdownAriaLabel: "Zeilen pro Seite" });
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       await user.click(trigger);
 
       expect(screen.getByRole("listbox", { name: "Zeilen pro Seite" })).toBeInTheDocument();
@@ -334,7 +351,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       expect(trigger).toHaveAttribute("aria-expanded", "false");
 
       await user.click(trigger);
@@ -348,7 +365,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       const { props } = renderWithDropdown();
 
-      await user.click(screen.getByRole("button", { name: "25" }));
+      await user.click(screen.getByRole("combobox", { name: "Show rows" }));
       await user.click(screen.getByRole("option", { name: "50" }));
 
       expect(props.onRowsPerPageChange).toHaveBeenCalledWith(50);
@@ -359,7 +376,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      await user.click(screen.getByRole("button", { name: "25" }));
+      await user.click(screen.getByRole("combobox", { name: "Show rows" }));
 
       const selected = screen.getByRole("option", { name: "25" });
       expect(selected).toHaveAttribute("aria-selected", "true");
@@ -374,7 +391,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       expect(trigger).not.toHaveAttribute("aria-controls");
 
       await user.click(trigger);
@@ -388,7 +405,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       await user.click(trigger);
       expect(screen.getByRole("listbox")).toBeInTheDocument();
 
@@ -402,7 +419,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       trigger.focus();
 
       await user.keyboard("{ArrowDown}");
@@ -422,7 +439,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       const { props } = renderWithDropdown();
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       trigger.focus();
 
       await user.keyboard("{ArrowDown}");
@@ -437,7 +454,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       trigger.focus();
 
       await user.keyboard("{ArrowDown}");
@@ -453,7 +470,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      const trigger = screen.getByRole("button", { name: "25" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       trigger.focus();
 
       await user.keyboard("{ArrowDown}");
@@ -467,7 +484,7 @@ describe("Pagination", () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
-      await user.click(screen.getByRole("button", { name: "25" }));
+      await user.click(screen.getByRole("combobox", { name: "Show rows" }));
       expect(screen.getByRole("listbox")).toBeInTheDocument();
 
       await user.click(document.body);
@@ -499,8 +516,9 @@ describe("Pagination", () => {
         </div>
       );
 
-      await user.click(screen.getByRole("button", { name: "25" }));
-      await user.click(screen.getByRole("button", { name: "50" }));
+      const [first, second] = screen.getAllByRole("combobox", { name: "Show rows" });
+      await user.click(first);
+      await user.click(second);
 
       const allOptions = screen.getAllByRole("option");
       const ids = allOptions.map((opt) => opt.id);
@@ -683,7 +701,7 @@ describe("Pagination", () => {
         />
       );
 
-      const trigger = screen.getByRole("button", { name: "10" });
+      const trigger = screen.getByRole("combobox", { name: "Show rows" });
       const caret = screen.getByTestId("custom-caret");
       expect(caret.parentElement).toBe(trigger);
       expect(trigger.querySelector("svg")).toBeNull();

@@ -241,6 +241,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const triggerRef = useRef<HTMLButtonElement>(null);
 
     const listboxId = `${instanceId}-listbox`;
+    const rowsLabelledBy =
+      [rowsPerPagePrefix && `${instanceId}-prefix`, rowsPerPageSuffix && `${instanceId}-suffix`].filter(Boolean).join(" ") || undefined;
 
     const getOptionId = useCallback(
       (index: number) => `${instanceId}-option-${index}`,
@@ -365,7 +367,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const selectorSection =
       showRowsPerPage && rowsPerPage !== undefined ? (
         <div className={mergedClasses.rowsPerPage.root}>
-          <span className={mergedClasses.label}>{rowsPerPagePrefix}</span>
+          <span id={`${instanceId}-prefix`} className={mergedClasses.label}>{rowsPerPagePrefix}</span>
           <div className={cn(mergedClasses.rowsPerPage.positioner)}>
             <button
               ref={triggerRef}
@@ -382,6 +384,9 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               }}
               onKeyDown={!isDropdownOpen ? handleDropdownKeyDown : undefined}
               className={cn(mergedClasses.rowsPerPage.trigger)}
+              role="combobox"
+              aria-labelledby={rowsLabelledBy}
+              aria-label={rowsLabelledBy ? undefined : "Rows per page"}
               aria-expanded={isDropdownOpen}
               aria-haspopup="listbox"
               aria-controls={isDropdownOpen ? listboxId : undefined}
@@ -419,7 +424,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               />
             )}
           </div>
-          <span className={mergedClasses.label}>{rowsPerPageSuffix}</span>
+          <span id={`${instanceId}-suffix`} className={mergedClasses.label}>{rowsPerPageSuffix}</span>
         </div>
       ) : null;
 

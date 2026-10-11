@@ -435,6 +435,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
     const submenuId = `${dropdownId}-submenu`;
     const triggerId = id ?? `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;
+    const descriptionId = `${dropdownId}-description`;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -658,7 +659,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       "aria-haspopup": "true" as const,
       "aria-controls": isOpen ? menuId : undefined,
       "aria-invalid": (error || undefined) as boolean | undefined,
-      "aria-describedby": [ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
+      "aria-describedby": [ariaDescribedBy, description && descriptionId, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       disabled,
@@ -691,7 +692,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         )}
 
         {description && (
-          <div className={mergedClasses.description || undefined}>{description}</div>
+          <div id={descriptionId} className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div

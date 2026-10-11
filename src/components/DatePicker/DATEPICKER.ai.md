@@ -124,7 +124,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
 | `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
 | `id` | string | — | HTML id attribute. |
-| `name` | string | — | Form field name. |
+| `name` | string | — | Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order; `""` when nothing is selected. Nothing is submitted while disabled. |
 | `placeholder` | string | — | Placeholder text for the trigger input. |
 | `disabled` | boolean | `false` | Disables the date picker. |
 | `error` | boolean | `false` | Displays error state. |

@@ -28,6 +28,12 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- **`Pagination`: the rows-per-page select is named by its visible text.** Its only name was
+  the number it showed ("10"), so a screen reader announced "10, button" with nothing to say
+  what it changes. The trigger is a `combobox` now, labelled by `rowsPerPagePrefix` and
+  `rowsPerPageSuffix` ("Show rows"), with the number as its value; with both empty it is named
+  "Rows per page". A test that found it as `getByRole("button", { name: "10" })` finds it as
+  `getByRole("combobox", { name: "Show rows" })`.
 - **`classes` now composes with a component's own defaults instead of replacing them.**
   Passing `classes={{ trigger: "px-6" }}` used to discard everything the library had put on
   that slot — including `cursor-pointer` and the focus ring, so any overridden interactive
@@ -658,6 +664,16 @@ tables say.
 
 ### Fixed
 
+- **`Dropdown`, `SearchableDropdown`, `MultiSelectDropdown`, `MultiSelectSearchableDropdown`,
+  `CascadingDropdown` and `DatePicker` announce their `description`.** It was on screen and
+  never in the trigger's `aria-describedby`. It joins now, after yours and before the error
+  message.
+- **`DatePicker`'s `name` submits its value.** It was declared and documented as the form
+  field name and submitted nothing. A hidden input now carries the selection: a single date
+  as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an
+  unpicked side left empty; multiple dates as one entry per date under the same name, in date
+  order; `""` when nothing is selected. Nothing is submitted while disabled, as with a native
+  field. Form reset is not handled.
 - **A consumer's name and description now win over the component's own.**
   - `Modal`'s `title` beat your `aria-labelledby`, and its `description` replaced your
     `aria-describedby`. Your `aria-labelledby` wins now, and your `aria-describedby` comes

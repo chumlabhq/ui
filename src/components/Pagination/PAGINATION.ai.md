@@ -85,8 +85,8 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `defaultValue` | number | `1` | Initial page number for uncontrolled usage. |
 | `onRowsPerPageChange` | object | — | (rows: number) => void - Fires when the rows-per-page value changes. |
 | `showRowsPerPage` | boolean | `false` | Whether to show the rows-per-page selector. |
-| `rowsPerPageSuffix` | string | `"rows"` | Visible text after the rows-per-page select ("Show 10 rows"). Not the select's accessible name. |
-| `rowsPerPagePrefix` | string | `"Show"` | Visible text before the rows-per-page select. Not the select's accessible name. |
+| `rowsPerPageSuffix` | string | `"rows"` | Visible text after the rows-per-page select ("Show 10 rows"). With the prefix, it names the select; with both empty the select is named "Rows per page". |
+| `rowsPerPagePrefix` | string | `"Show"` | Visible text before the rows-per-page select. With the suffix, it names the select; the number is its value. |
 | `dropdownAriaLabel` | string | `"Rows per page"` | Accessible label for the rows-per-page dropdown. |
 | `dropdownSide` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |

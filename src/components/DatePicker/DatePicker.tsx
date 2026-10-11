@@ -47,6 +47,7 @@ import {
   getYear,
   getMonth,
   isSameDay,
+  toDateString,
 } from "./utils.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
@@ -435,6 +436,8 @@ DayCell.displayName = "DayCell";
 const loadPresets = () =>
   import("./PresetsPanel.js").then((module) => module.PresetsPanel);
 
+const isoDate = (date: Date | null | undefined) => (date ? toDateString(date) : "");
+
 const loadMarkerTooltip = () =>
   import("./MarkerTooltip.js").then((module) => module.MarkerTooltip);
 
@@ -569,6 +572,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
   useAccessibleNameWarning("DatePicker", { label, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy });
     const calendarId = `${datePickerId}-calendar`;
     const errorId = `${datePickerId}-error`;
+    const descriptionId = `${datePickerId}-description`;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -857,8 +861,14 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         )}
 
         {description && (
-          <div className={mergedClasses.description || undefined}>{description}</div>
+          <div id={descriptionId} className={mergedClasses.description || undefined}>{description}</div>
         )}
+
+        {name &&
+          (multipleValue?.length
+            ? [...multipleValue].sort((a, b) => +a - +b).map(toDateString)
+            : [rangeValue && (rangeValue.start || rangeValue.end) ? `${isoDate(rangeValue.start)}/${isoDate(rangeValue.end)}` : isoDate(singleValue)]
+          ).map((date, i) => <input key={i} type="hidden" name={name} value={date} disabled={disabled} />)}
 
         <div
           ref={containerRef}
@@ -874,7 +884,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             aria-controls={calendarId}
             {...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy })}
             aria-invalid={error || undefined}
-            aria-describedby={[ariaDescribedBy, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined}
+            aria-describedby={[ariaDescribedBy, description && descriptionId, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined}
             aria-required={required || undefined}
             disabled={disabled}
             onClick={handleToggle}

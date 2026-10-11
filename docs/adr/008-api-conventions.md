@@ -146,8 +146,12 @@ root rule to Tooltip and AccordionItem, and the precedence rule to Modal (its
 `title` beat a consumer's `aria-labelledby`, its `description` replaced a
 consumer's `aria-describedby`), Slider (`label` beat `aria-labelledby`), and
 Checkbox, Switch and RadioGroup (a consumer's `aria-describedby` replaced their
-description and error ids). What the routing contract still excuses: DatePicker's `name`, which
-renders no field, reported and not yet scheduled.
+description and error ids). L12 joined the five dropdowns' and DatePicker's
+own `description` into their trigger's `aria-describedby` (consumer's first, then
+the description, then the error), named Pagination's rows-per-page select by
+its visible prefix and suffix, with its number as the value, and gave
+DatePicker's `name` a field: hidden inputs carrying the ISO value. The routing
+contract excuses nothing.
 
 ## Named exceptions ("doesn't fit")
 

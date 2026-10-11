@@ -4193,7 +4193,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Form field name."
+        "description": "Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order; `\"\"` when nothing is selected. Nothing is submitted while disabled."
       },
       {
         "name": "placeholder",
@@ -9572,14 +9572,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": false,
         "default": "\"rows\"",
-        "description": "Visible text after the rows-per-page select (\"Show 10 rows\"). Not the select's accessible name."
+        "description": "Visible text after the rows-per-page select (\"Show 10 rows\"). With the prefix, it names the select; with both empty the select is named \"Rows per page\"."
       },
       {
         "name": "rowsPerPagePrefix",
         "type": "string",
         "required": false,
         "default": "\"Show\"",
-        "description": "Visible text before the rows-per-page select. Not the select's accessible name."
+        "description": "Visible text before the rows-per-page select. With the suffix, it names the select; the number is its value."
       },
       {
         "name": "dropdownAriaLabel",

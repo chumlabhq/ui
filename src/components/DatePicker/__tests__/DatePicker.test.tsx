@@ -2137,3 +2137,46 @@ describe("lockScroll — preventScroll and preventKeyScroll handler branches", (
     expect(keydownNonScroll.defaultPrevented).toBe(false);
   });
 });
+
+describe("DatePicker form submission", () => {
+  const day = (iso: string) => new Date(`${iso}T12:00:00`);
+  const submitted = (picker: React.ReactElement) => {
+    const { container } = render(<form>{picker}</form>);
+    return [...new FormData(container.querySelector("form")!).entries()];
+  };
+
+  it("submits a single date as YYYY-MM-DD", () => {
+    expect(submitted(<DatePicker name="when" value={day("2025-03-09")} />)).toEqual([["when", "2025-03-09"]]);
+  });
+
+  it("submits an empty value when nothing is selected, as a native empty field does", () => {
+    expect(submitted(<DatePicker name="when" value={null} />)).toEqual([["when", ""]]);
+  });
+
+  it("submits a range as one ISO 8601 interval", () => {
+    expect(
+      submitted(<DatePicker name="when" selectionMode="range" value={{ start: day("2025-03-09"), end: day("2025-03-15") }} />),
+    ).toEqual([["when", "2025-03-09/2025-03-15"]]);
+  });
+
+  it("leaves the unpicked side of a range empty", () => {
+    expect(
+      submitted(<DatePicker name="when" selectionMode="range" value={{ start: day("2025-03-09"), end: null }} />),
+    ).toEqual([["when", "2025-03-09/"]]);
+  });
+
+  it("submits one entry per date in multiple mode, in date order", () => {
+    expect(
+      submitted(<DatePicker name="when" selectionMode="multiple" value={[day("2025-03-15"), day("2025-03-09")]} />),
+    ).toEqual([["when", "2025-03-09"], ["when", "2025-03-15"]]);
+  });
+
+  it("submits nothing while disabled, as a native disabled field", () => {
+    expect(submitted(<DatePicker name="when" value={day("2025-03-09")} disabled />)).toEqual([]);
+  });
+
+  it("renders no field without a name", () => {
+    const { container } = render(<DatePicker value={day("2025-03-09")} />);
+    expect(container.querySelector('input[type="hidden"]')).toBeNull();
+  });
+});
