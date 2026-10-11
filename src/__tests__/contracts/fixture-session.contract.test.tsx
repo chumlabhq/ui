@@ -11,7 +11,10 @@
  *   rendered, and once its test has finished it refuses to render again. A
  *   timed-out test kept running and its global `cleanup()` failed 75 of the
  *   tests after it in one full run.
+ * - The next test starts with no `act` scope open. A timed-out test is often
+ *   suspended inside one, and a render nested in it commits nothing.
  */
+import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { contractActTools, fixtureSession } from "../fixtures/_act.contract.js";
 import { fixturesFor } from "../fixtures/index.js";
@@ -70,5 +73,39 @@ describe("fixture session", () => {
     expect(() => finished!.render(<div data-late />)).toThrow(/after its test finished/);
     expect(document.body.innerHTML).toBe(before);
     expect(document.body.querySelector("[data-late]")).toBeNull();
+  });
+
+  // A timed-out test, as the next test sees it: its body is still suspended
+  // inside a settle's `act` scope when vitest moves on. Not awaited on purpose.
+  let abandoned: Promise<unknown> | null = null;
+  let stepsAfterFinish = 0;
+
+  it("leaves an act in flight, the way a timed-out test does", () => {
+    const session = fixtureSession();
+    const { container } = session.render(<div data-abandoned />);
+    abandoned = session
+      .act(
+        {
+          name: "abandoned",
+          act: async (_c, ui) => {
+            await ui.settle(200);
+            stepsAfterFinish += 1;
+            await ui.settle();
+            stepsAfterFinish += 1;
+          },
+        },
+        container,
+      )
+      .catch((error: unknown) => error);
+  });
+
+  it("starts the next test with no act scope open, so its render commits", async () => {
+    const { container } = render(<div data-next />);
+    expect(
+      container.querySelector("[data-next]"),
+      "this render committed nothing: it opened inside the last test's act scope",
+    ).not.toBeNull();
+    expect(String(await abandoned)).toMatch(/after its test finished/);
+    expect(stepsAfterFinish, "the abandoned act ran a step after its test finished").toBe(1);
   });
 });

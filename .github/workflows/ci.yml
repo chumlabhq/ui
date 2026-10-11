@@ -52,6 +52,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # The snippets project mounts every generated snippet against the built
+      # package: vitest.config.ts aliases each `@chumlab/ui/*` export to its
+      # file in dist/, and mount.snippets.tsx:124 fails when dist/ is absent.
+      # dist/ is gitignored, so a checkout has none. The snippets themselves are
+      # tracked, and nothing in test:run reads the site build, so this is the
+      # only build it needs. postbuild:lib's bundle and packaging assertions
+      # run with it.
+      - run: npm run build:lib
       - run: npm run test:run
 
   e2e:

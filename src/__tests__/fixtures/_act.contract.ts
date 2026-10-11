@@ -114,14 +114,29 @@ const timedTools = (fixture: string): ActTools => {
 export const applyAct = async (
   fixture: Pick<Fixture, "act"> & { name?: string },
   container: HTMLElement,
-  options: { waitForLazy?: boolean } = {},
+  options: { waitForLazy?: boolean; beforeStep?: () => void } = {},
 ) => {
   const name = fixture.name ?? "(unnamed)";
-  if (fixture.act) await fixture.act(container, timedTools(name));
-  await contractActTools.settle();
+  const before = options.beforeStep ?? (() => {});
+  const timed = timedTools(name);
+  const tools = Object.fromEntries(
+    Object.entries(timed).map(([key, step]) => [
+      key,
+      (...args: unknown[]) => {
+        before();
+        return (step as (...a: unknown[]) => unknown)(...args);
+      },
+    ]),
+  ) as unknown as ActTools;
+  const settle = () => {
+    before();
+    return contractActTools.settle();
+  };
+  if (fixture.act) await fixture.act(container, tools);
+  await settle();
   if (options.waitForLazy === false) return;
   const start = performance.now();
-  await loadsSettled(() => contractActTools.settle());
+  await loadsSettled(settle);
   report(name, "lazy loads", performance.now() - start);
 };
 
@@ -135,14 +150,25 @@ export const applyAct = async (
  * of the 76 tests after it in `state-replacement`, and a planted 2.5 s stall
  * reproduced the same 70.
  *
- * So a session unmounts only what it rendered, and checks before every render
- * and act that its own test is still the one running; once that test has
- * finished — passed, failed or timed out — it removes its own DOM and stops.
+ * So a session unmounts only what it rendered, and checks before every render,
+ * act and act step that its own test is still the one running; once that test
+ * has finished — passed, failed or timed out — it removes its own DOM and stops.
+ *
+ * A timed-out test is also suspended inside an `act` scope whenever its last
+ * step was a settle, and React keeps one scope stack per module, not per test.
+ * The next test's render opened a scope inside it, the two closed out of
+ * order, and React restored a queue that never flushed again: every later
+ * render in the file committed nothing. CL1's full run failed 35 tests in
+ * `overrides.contract` that way, after one DatePicker sweep overran its 90 s.
+ * So the test's finish waits for the act in flight to close. Its next step
+ * stops it, and the next test starts with no scope open.
  */
 export function fixtureSession() {
   const token = { open: true };
-  onTestFinished(() => {
+  let inFlight: Promise<unknown> = Promise.resolve();
+  onTestFinished(async () => {
     token.open = false;
+    await inFlight.catch(() => {});
   });
   const mounted: RenderResult[] = [];
 
@@ -167,7 +193,9 @@ export function fixtureSession() {
     },
     async act(fixture: Parameters<typeof applyAct>[0], container: HTMLElement, options?: Parameters<typeof applyAct>[2]) {
       guard("act");
-      await applyAct(fixture, container, options);
+      const run = applyAct(fixture, container, { ...options, beforeStep: () => guard("act step") });
+      inFlight = run;
+      await run;
       guard("act");
     },
     /**
