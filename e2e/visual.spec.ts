@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { readdirSync, existsSync, readFileSync, statSync } from "node:fs";
 import { gotoFixture, fixturePath } from "./_nav";
 import { decodePng, inkOf } from "./_png";

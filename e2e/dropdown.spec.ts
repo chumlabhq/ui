@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 
 test.describe("Dropdown Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {

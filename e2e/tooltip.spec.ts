@@ -1,6 +1,6 @@
 import { gotoFixture } from "./_nav";
 import { skipWithoutTabTraversal } from "./_helpers";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 
 test.describe("Tooltip Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {

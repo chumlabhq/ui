@@ -1,6 +1,6 @@
 import { gotoFixture } from "./_nav";
 import { skipWithoutTouchEvents } from "./_helpers";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { injectAxe, checkA11y } from "axe-playwright";
 
 async function waitForStepperVisible(page: import("@playwright/test").Page) {

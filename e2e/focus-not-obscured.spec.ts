@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./_test";
 import { gotoFixtureIndex } from "./_nav";
 import { focusFindings } from "./_clip";
 

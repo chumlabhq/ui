@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
 
 test.describe("Accordion Component - Cross-Browser Tests", () => {

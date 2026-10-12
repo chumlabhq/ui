@@ -1,20 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
 
-/**
- * Razorpay's checkout script, unreachable in every Chromium project.
- *
- * `index.html` loads it with `defer`, and DOMContentLoaded waits for deferred
- * scripts, so every navigation in the suite — `load` and `domcontentloaded`
- * alike — waited on checkout.razorpay.com answering. Holding that host for 35s
- * timed out both the Pagination spec's wait and _nav.ts's. No fixture or demo
- * under test uses the checkout, so the name is made to fail to resolve and the
- * script errors at once rather than whenever the network answers. Firefox and
- * WebKit are in no gate and take no Chromium switches.
- */
-const CHROMIUM = {
-  launchOptions: { args: ["--host-resolver-rules=MAP checkout.razorpay.com ~NOTFOUND"] },
-};
-
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -75,7 +60,7 @@ export default defineConfig({
       // The painted-contrast sweep runs here too: it walks the same 367 fixture
       // pages, twice each for the two themes, which is the same shape of cost.
       testMatch: /(accessibility-full|contrast-painted|default-state)\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"], ...CHROMIUM },
+      use: { ...devices["Desktop Chrome"] },
     },
     /**
      * Visual baselines. Its own project for the same reason `a11y-full` is:
@@ -86,12 +71,12 @@ export default defineConfig({
     {
       name: "visual",
       testMatch: /visual\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"], ...CHROMIUM },
+      use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "chromium",
       testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"], ...CHROMIUM },
+      use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "firefox",
@@ -107,7 +92,7 @@ export default defineConfig({
     {
       name: "Mobile Chrome",
       testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
-      use: { ...devices["Pixel 5"], ...CHROMIUM },
+      use: { ...devices["Pixel 5"] },
     },
     {
       name: "Mobile Safari",

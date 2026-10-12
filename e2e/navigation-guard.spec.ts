@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { gotoFixture, gotoGuarded, fixturePath } from "./_nav";
 
 /**

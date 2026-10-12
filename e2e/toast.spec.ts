@@ -1,6 +1,6 @@
 import { gotoFixture } from "./_nav";
 import { skipWithoutTouchEvents } from "./_helpers";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
 
 const TOAST_SELECTOR = "[data-toast-id]";

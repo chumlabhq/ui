@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { MEASURE_DOCUMENT, underFloor } from "./_contrast-measure";
 import { EXEMPT, demoPages, demoRoutes, outsideDemo } from "./_demo-routes";
 

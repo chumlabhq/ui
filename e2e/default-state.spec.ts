@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import ts from "typescript";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./_test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { PAINT_HELPERS } from "./_contrast-measure";
 import { BUTTON_SIZE_CLASSES } from "../src/components/Button/utils/constants";

@@ -1,5 +1,5 @@
 import { gotoFixture } from "./_nav";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { injectAxe, checkA11y } from "axe-playwright";
 
 async function waitForSwitchVisible(page: import("@playwright/test").Page) {

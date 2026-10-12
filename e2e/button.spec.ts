@@ -1,5 +1,5 @@
 import { gotoFixture } from "./_nav";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
 import { watchClicks, skipWithoutTouchEvents } from "./_helpers";
 

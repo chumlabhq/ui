@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
 import { injectAxe } from "axe-playwright";
 import { gotoFixture, gotoGuarded } from "./_nav";

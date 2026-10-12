@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./_test";
 import { injectAxe, getViolations } from "axe-playwright";
 import { gotoFixtureIndex } from "./_nav";
 import { readFileSync } from "node:fs";
