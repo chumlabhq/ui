@@ -132,6 +132,10 @@ Held at runtime for every component export by `prop-routing.contract`:
 - **`name` lands only on fields inside the component**: the control, a group's
   member inputs, or the hidden input that submits a custom control's value.
 - **No id is rendered twice**, the consumer's or the component's own.
+- **Every id reference resolves**: `aria-controls`, `aria-labelledby`,
+  `aria-describedby`, `aria-activedescendant` and `for` name an element in the
+  document, closed and open. A popup's or panel's `aria-controls` is set only
+  while it is rendered (L14).
 
 A2f fixed what A2e found. Modal's and Drawer's root is the outer fixed layer,
 which carries the z-index: `className` and `style` land there with

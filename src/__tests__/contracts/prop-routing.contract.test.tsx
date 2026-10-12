@@ -31,7 +31,7 @@
  * element of its own).
  */
 import { createRef, type CSSProperties, type ReactElement, type ReactNode } from "react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, inject, it } from "vitest";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import index from "../../../ai/component-index.json";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent, AccordionShimmer } from "../../components/Accordion/index.js";
@@ -132,7 +132,11 @@ const CASES: Case[] = [
     control: (first) => first.querySelector("button"),
     computed: { role: "button", name: "Labelled", description: "Described" },
   },
-  { id: "Accordion/AccordionTrigger", render: (p, ref) => inAccordion(<AccordionTrigger {...spread(p)} ref={r(ref)}>Title</AccordionTrigger>), root: (c) => c },
+  {
+    id: "Accordion/AccordionTrigger",
+    render: (p, ref) => inAccordion(<><AccordionTrigger {...spread(p)} ref={r(ref)}>Title</AccordionTrigger><AccordionContent>Body</AccordionContent></>),
+    root: (c) => c,
+  },
   { id: "Accordion/AccordionContent", container: true, render: (p, ref) => inAccordion(<AccordionContent {...spread(p)} ref={r(ref)}>Body</AccordionContent>) },
   { id: "Accordion/AccordionShimmer", container: true, rootSlot: true, render: (p, ref) => <AccordionShimmer {...spread(p)} ref={r(ref)} /> },
   { id: "Avatar/Avatar", container: true, rootSlot: true, render: (p, ref) => <Avatar {...spread(p)} ref={r(ref)} name="Ada Lovelace" /> },
@@ -501,5 +505,90 @@ describe("prop routing: the rows-per-page select is named by its visible text", 
       { role: "combobox", name: "per page" },
       { role: "combobox", name: "Rows per page" },
     ]);
+  });
+});
+
+// ── Every id reference resolves ────────────────────────────────────────────
+
+/**
+ * An IDREF that names an element nobody rendered is announced as nothing at
+ * best and breaks the relationship it claims at worst: four dropdowns pointed
+ * `aria-controls` at a listbox that exists only while open. Every routing case
+ * is rendered closed, and the ones whose props type declares `open` again
+ * open, and every id-reference attribute in the document must resolve.
+ *
+ * The floor is the count measured when this landed (L14), so a change that
+ * quietly stops rendering the references cannot pass by checking fewer.
+ */
+const IDREF_ATTRS = ["aria-controls", "aria-labelledby", "aria-describedby", "aria-activedescendant", "for"];
+const IDREFS_FLOOR = 153;
+const declaredOpen = inject("declaredCapabilities");
+
+/**
+ * A dangling reference known and named, by case, state and attribute. One that
+ * excuses nothing fails, so it falls out the moment it is fixed.
+ */
+const IDREF_EXCEPTIONS: { id: string; state: string; attr: string; reason: string }[] = [
+  {
+    id: "Accordion/AccordionTrigger",
+    state: "closed",
+    attr: "aria-labelledby",
+    reason:
+      "A DEFECT, found by L14: a consumer id on AccordionTrigger replaces the trigger's id, and the panel's " +
+      "aria-labelledby still names the item's generated trigger id. An id on AccordionItem reaches the trigger " +
+      "and the panel follows it. Reported, not fixed in L14 (a different cause from the closed-popup aria-controls)",
+  },
+];
+const idrefExcused = new Set<string>();
+const idrefs = { checked: 0, dangling: [] as string[] };
+
+function checkIdrefs(id: string, state: string, node: ReactElement) {
+  render(
+    <>
+      {node}
+      <span id="probe-labelledby">Labelled</span>
+      <span id="probe-describedby">Described</span>
+    </>,
+  );
+  const found: string[] = [];
+  for (const attr of IDREF_ATTRS) {
+    for (const el of document.querySelectorAll(`[${attr}]`)) {
+      for (const ref of (el.getAttribute(attr) ?? "").split(/\s+/).filter(Boolean)) {
+        idrefs.checked += 1;
+        if (document.getElementById(ref)) continue;
+        const excuse = IDREF_EXCEPTIONS.find((e) => e.id === id && e.state === state && e.attr === attr);
+        if (excuse) idrefExcused.add(`${id}:${state}:${attr}`);
+        else found.push(`${id} ${state}: ${attr}="${ref}" on ${describeEl(el)}`);
+      }
+    }
+  }
+  cleanup();
+  return found;
+}
+
+describe("prop routing: every id reference resolves", () => {
+  for (const c of CASES) {
+    it(c.id, () => {
+      const p = { ...PROBE, ...(c.name ? { name: "probe-name" } : {}) } as Probe;
+      const ref = createRef<unknown>();
+      const found = checkIdrefs(c.id, "closed", c.render(p, ref));
+      if (declaredOpen[c.id]?.includes("open")) {
+        found.push(...checkIdrefs(c.id, "open", c.render({ ...p, open: true, onOpenChange: () => {} } as Probe, createRef())));
+      }
+      idrefs.dangling.push(...found);
+      expect(found, `${c.id}: id references that name no element in the document`).toEqual([]);
+    });
+  }
+
+  it("checked a real number of references", () => {
+    console.log(
+      `IDREFS checked ${idrefs.checked} (floor ${IDREFS_FLOOR}), dangling ${idrefs.dangling.length}, excused ${idrefExcused.size}`,
+    );
+    for (const d of idrefs.dangling) console.log(`  ${d}`);
+    expect(idrefs.checked).toBeGreaterThanOrEqual(IDREFS_FLOOR);
+    expect(
+      IDREF_EXCEPTIONS.map((e) => `${e.id}:${e.state}:${e.attr}`).filter((k) => !idrefExcused.has(k)),
+      "IDREF_EXCEPTIONS entries that excused nothing — remove them",
+    ).toEqual([]);
   });
 });

@@ -530,7 +530,7 @@ const SearchableDropdown = forwardRef<
     role: "combobox" as const,
     "aria-expanded": isOpen,
     "aria-haspopup": "listbox" as const,
-    "aria-controls": listboxId,
+    "aria-controls": isOpen ? listboxId : undefined,
     "aria-activedescendant": showSearch ? undefined : activeDescendantId,
     "aria-invalid": (error || undefined) as boolean | undefined,
     "aria-describedby": [ariaDescribedBy, description && descriptionId, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined,

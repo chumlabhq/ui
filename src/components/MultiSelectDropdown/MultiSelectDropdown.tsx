@@ -426,7 +426,7 @@ const MultiSelectDropdown = forwardRef<
       role: "combobox" as const,
       "aria-expanded": isOpen,
       "aria-haspopup": "listbox" as const,
-      "aria-controls": listboxId,
+      "aria-controls": isOpen ? listboxId : undefined,
       "aria-activedescendant": activeDescendantId,
       ...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy, hasValueElement: !renderTrigger }),
       "aria-invalid": (error || undefined) as boolean | undefined,

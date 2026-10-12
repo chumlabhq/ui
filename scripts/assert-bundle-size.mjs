@@ -1065,6 +1065,27 @@ const LIBRARY_TOTAL_HISTORY = [
       "gone. Every other entry byte-identical. No comments added to shipped " +
       "code. Measured against a build of 356b6f16.",
   },
+  {
+    kb: 157.14,
+    commit: "(uncommitted)",
+    date: "2026-10-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.05 KB (160,865 -> 160,907 B gzipped, +42 B), 81 files " +
+      "held. L14 idrefs: aria-controls names only an element that is rendered. " +
+      "Dropdown, SearchableDropdown, MultiSelectDropdown, " +
+      "MultiSelectSearchableDropdown and DatePicker set it on the trigger only " +
+      "while open; AccordionTrigger only while its item is expanded. Per chunk " +
+      "(HEAD 61df3dc1 -> slice): AccordionShimmer +9 B (8,946 -> 8,955, which " +
+      "holds AccordionTrigger; Accordion exclusive 9,448 -> 9,457, its declared " +
+      "breach raised 9.23 -> 9.24), SearchableDropdown +6 B, " +
+      "MultiSelectSearchableDropdown +3 B, MultiSelectDropdown +2 B, Dropdown " +
+      "+2 B, index.js +3 B, DatePicker -1 B, and -1 to -3 B on five entry " +
+      "files. Chunks sum to +19 B; the total gzips the library as one " +
+      "concatenation, which does not add per file. No comments added to " +
+      "shipped code. " +
+      "Measured against a build of 61df3dc1.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1227,8 +1248,10 @@ const DECLARED_BREACHES = new Map([
   [
     "Accordion",
     {
-      kb: 9.23,
-      why: "2026-10-11, A2g naming: 9.22 -> 9.23 (exclusive 9,401 -> 9,448 B gzipped, +47 B). " +
+      kb: 9.24,
+      why: "2026-10-12, L14 idrefs: 9.23 -> 9.24 (exclusive 9,448 -> 9,457 B gzipped, +9 B): " +
+        "AccordionTrigger sets aria-controls only while its item is expanded. " +
+        "2026-10-11, A2g naming: 9.22 -> 9.23 (exclusive 9,401 -> 9,448 B gzipped, +47 B). " +
         "AccordionItem's id, aria-label and aria-labelledby reach its trigger, the button a " +
         "screen reader announces, instead of its role-less container. " +
         "Composed, and still 1.22 over. Its own chunk is 0.52 KB; the rest " +

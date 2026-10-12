@@ -301,7 +301,12 @@ test.describe("SearchableDropdown Component - Cross-Browser Tests", () => {
 
       await expect(trigger).toHaveAttribute("aria-haspopup", "listbox");
       await expect(trigger).toHaveAttribute("aria-expanded", "false");
-      await expect(trigger).toHaveAttribute("aria-controls");
+      // Closed, there is no listbox for aria-controls to name (L14).
+      await expect(trigger).not.toHaveAttribute("aria-controls");
+      await trigger.click();
+      const controls = await trigger.getAttribute("aria-controls");
+      expect(controls).toBeTruthy();
+      await expect(page.locator(`[id="${controls}"]`)).toHaveAttribute("role", "listbox");
     });
 
     test("should update aria-expanded when opened", async ({ page }) => {

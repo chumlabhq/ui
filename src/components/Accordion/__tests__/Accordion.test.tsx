@@ -613,13 +613,17 @@ describe("Accordion", () => {
   });
 
   describe("Accessibility", () => {
-    it("associates trigger with content via aria-controls", () => {
+    it("associates trigger with content via aria-controls while expanded, and names nothing while collapsed", async () => {
+      const user = userEvent.setup();
       renderAccordion({ selectionMode: "single", id: "test-accordion" });
 
-      const trigger = screen.getByText("Item 1").closest("button");
-      const controlsId = trigger?.getAttribute("aria-controls");
+      const trigger = screen.getByText("Item 1").closest("button")!;
+      expect(trigger).not.toHaveAttribute("aria-controls");
 
+      await user.click(trigger);
+      const controlsId = trigger.getAttribute("aria-controls");
       expect(controlsId).toBeTruthy();
+      expect(document.getElementById(controlsId!)).not.toBeNull();
     });
 
     it("sets aria-labelledby on content region", async () => {

@@ -161,7 +161,7 @@ export interface MultiSelectDropdownTriggerRenderProps {
   role: "combobox";
   "aria-expanded": boolean;
   "aria-haspopup": "listbox";
-  "aria-controls": string;
+  "aria-controls": string | undefined;
   "aria-activedescendant": string | undefined;
   "aria-invalid": boolean | undefined;
   "aria-describedby": string | undefined;

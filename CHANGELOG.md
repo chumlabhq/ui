@@ -671,6 +671,12 @@ tables say.
 
 ### Fixed
 
+- **`aria-controls` no longer names an element that is not rendered.** `Dropdown`,
+  `SearchableDropdown`, `MultiSelectDropdown` and `MultiSelectSearchableDropdown` pointed
+  their trigger's `aria-controls` at a listbox that exists only while open, `DatePicker` at
+  its calendar, and `AccordionTrigger` at a panel that is not rendered while collapsed. Each
+  sets it only while open or expanded now. The `renderTrigger` props of the four dropdowns
+  type `aria-controls` as `string | undefined` to match.
 - **`Pagination`'s rows-per-page icon rotates while the menu is open**, as the dropdown
   chevrons do. The rotation was written and never reached the icon. A custom `dropdownIcon`
   rotates too: it is wrapped in a span that carries the icon slot's classes, as `Dropdown`

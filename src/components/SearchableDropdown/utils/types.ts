@@ -137,7 +137,7 @@ export interface SearchableDropdownTriggerRenderProps {
   role: "combobox";
   "aria-expanded": boolean;
   "aria-haspopup": "listbox";
-  "aria-controls": string;
+  "aria-controls": string | undefined;
   "aria-activedescendant"?: string;
   "aria-invalid"?: boolean;
   "aria-describedby"?: string;

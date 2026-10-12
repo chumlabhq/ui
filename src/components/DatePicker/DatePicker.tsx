@@ -881,7 +881,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             role="combobox"
             aria-expanded={isOpen}
             aria-haspopup="dialog"
-            aria-controls={calendarId}
+            aria-controls={isOpen ? calendarId : undefined}
             {...comboboxNameProps({ valueId, labelId, hasLabel: !!label, ariaLabel, ariaLabelledBy })}
             aria-invalid={error || undefined}
             aria-describedby={[ariaDescribedBy, description && descriptionId, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined}
