@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 58 |
 | Library-authored props across the public surface | 1149 |
 | With no demo | 307 (27%) |
-| With no fixture | 640 (56%) |
+| With no fixture | 639 (56%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 4 |
 | Tier-A demonstrated canonically (once, for the library) | 52 |
@@ -110,7 +110,7 @@ listed here with no demo anywhere fails the generator.
 | MultiSelectSearchableDropdown | 57 | 2 | 15 | 30 | 0 | `unstyled` |
 | OtpInput | 29 | 277 | 3 | 13 | 0 | `unstyled` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | — |
-| Pagination | 31 | 278 | 6 | 21 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` |
+| Pagination | 31 | 278 | 6 | 20 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` |
 | PulseLoader | 6 | 280 | 4 | 3 | 0 | `reduceMotion`, `unstyled` |
 | RadioButton | 8 | 279 | 1 | 3 | 0 | `size` |
 | RadioGroup | 21 | 275 | 5 | 5 | 0 | `unstyled`, `reduceMotion` |

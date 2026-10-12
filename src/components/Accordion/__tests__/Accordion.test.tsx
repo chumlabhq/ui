@@ -626,6 +626,20 @@ describe("Accordion", () => {
       expect(document.getElementById(controlsId!)).not.toBeNull();
     });
 
+    it("names the panel by a consumer id passed to AccordionTrigger, as it does for one passed to AccordionItem", () => {
+      render(
+        <Accordion selectionMode="single" defaultValue="item-1">
+          <AccordionItem value="item-1">
+            <AccordionTrigger id="my-trigger">Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      expect(screen.getByText("Item 1").closest("button")).toHaveAttribute("id", "my-trigger");
+      expect(screen.getByRole("region", { hidden: true })).toHaveAttribute("aria-labelledby", "my-trigger");
+    });
+
     it("sets aria-labelledby on content region", async () => {
       const user = userEvent.setup();
       renderAccordion({ selectionMode: "single", id: "test-accordion" });

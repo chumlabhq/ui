@@ -711,3 +711,170 @@ test.describe("Pagination (fixtures)", () => {
     await expect(page.locator(`${NAV} button[aria-current="page"]`)).toHaveText("5");
   });
 });
+
+/**
+ * Pagination keeps prev, its pages and next on one row by showing fewer pages,
+ * never by wrapping: a wrapped list dropped prev and next to the middle of its
+ * two lines, out of line with the numbers. The steps, in order: fewer siblings
+ * down to none, compact spacing, compact padding, and a scrolling page list.
+ *
+ * Every case reads the same things off the rendered row: the vertical centres
+ * of prev, every visible list item and next; the row's and the list's
+ * overflow; every target's box; the visible items left to right; and the step
+ * the row reached, from what is painted — the list's gap, a page button's
+ * padding and whether the list scrolls — with the number of pages shown.
+ */
+test.describe("Pagination fits one row", () => {
+  type Seen = {
+    spread: number;
+    row: [number, number];
+    list: [number, number];
+    step: string;
+    current: string | null;
+    currentInList: boolean;
+    navOnScreen: boolean;
+    host: { nav: number; left: number; right: number };
+    targets: { label: string; w: number; h: number }[];
+    sequence: string[];
+  };
+
+  const read = (page: import("@playwright/test").Page): Promise<Seen> =>
+    page.evaluate(() => {
+      const prev = document.querySelector('[data-fixture] button[aria-label="Previous page"]') as HTMLElement;
+      const next = document.querySelector('[data-fixture] button[aria-label="Next page"]') as HTMLElement;
+      const row = prev.parentElement!;
+      const list = prev.nextElementSibling as HTMLElement;
+      const nav = row.closest("nav")!;
+      const box = (el: Element) => el.getBoundingClientRect();
+      const mid = (el: Element) => box(el).top + box(el).height / 2;
+      const items = Array.from(list.children).filter((el) => box(el).width > 0 && box(el).height > 0);
+      const pages = items.filter((el) => el.tagName === "BUTTON") as HTMLElement[];
+      const mids = [prev, ...items, next].map(mid);
+      const lb = box(list);
+      const within = (el: Element, left: number, right: number) => box(el).left >= left - 1 && box(el).right <= right + 1;
+      const current = list.querySelector('[aria-current="page"]');
+      const listStyle = getComputedStyle(list);
+      const scrolls = listStyle.overflowX === "auto" && list.scrollWidth > list.clientWidth;
+      const mode = scrolls
+        ? "scroll"
+        : parseFloat(getComputedStyle(pages[0]).paddingLeft) < 12
+          ? "compact-padding"
+          : parseFloat(listStyle.columnGap) < 8
+            ? "compact-spacing"
+            : "normal";
+      const hb = box(nav.parentElement!);
+      const nb = box(nav);
+      return {
+        spread: Math.round((Math.max(...mids) - Math.min(...mids)) * 100) / 100,
+        row: [row.scrollWidth, row.clientWidth],
+        list: [list.scrollWidth, list.clientWidth],
+        step: `${mode}:${pages.length}`,
+        current: current?.textContent ?? null,
+        currentInList: !!current && within(current, lb.left, lb.right),
+        navOnScreen: within(prev, 0, window.innerWidth) && within(next, 0, window.innerWidth),
+        host: { nav: Math.round(nb.width), left: Math.round(nb.left - hb.left), right: Math.round(hb.right - nb.right) },
+        targets: [prev, ...pages, next].map((el) => ({
+          label: el.getAttribute("aria-label") ?? "",
+          w: Math.round(box(el).width * 100) / 100,
+          h: Math.round(box(el).height * 100) / 100,
+        })),
+        sequence: items
+          .slice()
+          .sort((a, b) => Math.round(mid(a) / 8) - Math.round(mid(b) / 8) || box(a).left - box(b).left)
+          .map((el) => (el.tagName === "BUTTON" ? el.textContent ?? "" : "…")),
+      };
+    });
+
+  /**
+   * Every pair of neighbouring visible numbers: a gap needs exactly one
+   * ellipsis between them, consecutive numbers none.
+   */
+  const ellipsisPairs = (sequence: string[]) => {
+    const pairs: string[] = [];
+    const wrong: string[] = [];
+    let last: number | null = null;
+    let between = 0;
+    for (const token of sequence) {
+      if (token === "…") {
+        between++;
+        continue;
+      }
+      const n = Number(token);
+      if (last !== null) {
+        const label = `${last}${between ? "…" : ","}${n}`;
+        pairs.push(label);
+        if (n - last > 1 ? between !== 1 : between !== 0) wrong.push(label);
+      }
+      last = n;
+      between = 0;
+    }
+    return { pairs, wrong };
+  };
+
+  const expectOneRow = (seen: Seen, name: string, current: string) => {
+    const { pairs, wrong } = ellipsisPairs(seen.sequence);
+    console.log(`PAGINATION_FIT ${name} step=${seen.step} row=${seen.row.join("/")} list=${seen.list.join("/")} pairs=${pairs.join(" ")}`);
+    console.log(`PAGINATION_TARGETS ${name} ${seen.targets.map((t) => `${t.label} ${t.w}x${t.h}`).join(" | ")}`);
+    for (const t of seen.targets) {
+      expect.soft(Math.min(t.w, t.h), `${t.label} is ${t.w}x${t.h}, under WCAG 2.5.8's 24x24`).toBeGreaterThanOrEqual(24);
+    }
+    expect.soft(seen.spread, "prev, the visible items and next are not on one row").toBeLessThanOrEqual(2);
+    expect.soft(seen.row[0], `the row overflows: ${seen.row.join(" > ")}`).toBeLessThanOrEqual(seen.row[1]);
+    expect.soft(seen.navOnScreen, "prev or next is off-screen").toBe(true);
+    expect.soft(seen.current).toBe(current);
+    expect.soft(seen.currentInList, "the current page is outside the list's visible box").toBe(true);
+    expect.soft(wrong, `ellipsis rule broken in ${seen.sequence.join(" ")}`).toEqual([]);
+  };
+
+  const CASES = [
+    { fixture: "middle", width: 320, current: "5", step: "compact-spacing:3" },
+    { fixture: "middle", width: 375, current: "5", step: "normal:3" },
+    { fixture: "three-digit", width: 320, current: "118", step: "compact-padding:3" },
+    { fixture: "sibling-count-2", width: 320, current: "15", step: "compact-spacing:3" },
+    { fixture: "sibling-count-2", width: 375, current: "15", step: "normal:3" },
+    { fixture: "default", width: 375, current: "1", step: "normal:5" },
+  ];
+
+  for (const c of CASES) {
+    test(`${c.fixture} at ${c.width}px reaches ${c.step}: one row, no overflow, the current page shows`, async ({ page }) => {
+      await page.setViewportSize({ width: c.width, height: 700 });
+      await gotoFixture(page, "Pagination", c.fixture);
+      const seen = await read(page);
+      expectOneRow(seen, `${c.fixture}@${c.width}`, c.current);
+      expect.soft(seen.list[0], `the page list overflows: ${seen.list.join(" > ")}`).toBeLessThanOrEqual(seen.list[1]);
+      expect(seen.step).toBe(c.step);
+    });
+  }
+
+  test("five pages at 375px show every page", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 700 });
+    await gotoFixture(page, "Pagination", "default");
+    expect((await read(page)).sequence).toEqual(["1", "2", "3", "4", "5"]);
+  });
+
+  test("a 240 px container: the page list scrolls, prev and next stay on the row, the current page is in view", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 700 });
+    await gotoFixture(page, "Pagination", "narrow");
+    const seen = await read(page);
+    expectOneRow(seen, "narrow@240", "118");
+    expect(seen.step).toBe("scroll:3");
+  });
+
+  test("a centred flex host sizes Pagination to its content, and it grows back when the host widens", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 700 });
+    await gotoFixture(page, "Pagination", "centred");
+    const narrow = await read(page);
+    expectOneRow(narrow, "centred@320", "5");
+    console.log(`PAGINATION_HOST centred@320 ${JSON.stringify(narrow.host)}`);
+    expect.soft(narrow.host.nav, "the nav collapsed in its host").toBeGreaterThan(200);
+    expect.soft(Math.abs(narrow.host.left - narrow.host.right), "not centred in its host").toBeLessThanOrEqual(1);
+    expect(narrow.step).toBe("compact-spacing:3");
+
+    await page.setViewportSize({ width: 1024, height: 700 });
+    await expect.poll(async () => (await read(page)).step).toBe("normal:5");
+    const wide = await read(page);
+    expectOneRow(wide, "centred@1024", "5");
+    console.log(`PAGINATION_HOST centred@1024 ${JSON.stringify(wide.host)}`);
+    expect(Math.abs(wide.host.left - wide.host.right), "not centred in its host").toBeLessThanOrEqual(1);
+  });
+});

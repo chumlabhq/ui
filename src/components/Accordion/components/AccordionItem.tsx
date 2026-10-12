@@ -1,5 +1,5 @@
-import { forwardRef, useMemo, useEffect, useRef } from "react";
-import { useAccordionConfig, useAccordionContext, useIsItemExpanded, AccordionItemContext } from "../utils/context.js";
+import { forwardRef, useMemo, useEffect, useRef, useState } from "react";
+import { useAccordionConfig, useAccordionContext, useIsItemExpanded, AccordionItemContext, AccordionTriggerIdContext } from "../utils/context.js";
 import { Slot } from "../../../utils/Slot.js";
 import type { AccordionItemProps, AccordionItemContextValue } from "../utils/types.js";
 import { cn } from "../../../utils/scopedCn.js";
@@ -25,7 +25,8 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
     const disabled = itemDisabled ?? config.disabled;
 
-    const triggerId = id ?? `${config.accordionId}-trigger-${value}`;
+    const [triggerIdOverride, setTriggerIdOverride] = useState<string>();
+    const triggerId = triggerIdOverride ?? id ?? `${config.accordionId}-trigger-${value}`;
     const contentId = `${config.accordionId}-content-${value}`;
     const isPending = context.pendingItem === value;
 
@@ -60,18 +61,20 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
     return (
       <AccordionItemContext.Provider value={itemContextValue}>
-        <Comp
-          ref={ref}
-          className={cn(config.classes.item, className) || undefined}
-          data-state={dataState}
-          data-disabled={disabled || undefined}
-          data-pending={isPending || undefined}
-          data-orientation={config.orientation}
-          data-value={value}
-          {...rest}
-        >
-          {children}
-        </Comp>
+        <AccordionTriggerIdContext.Provider value={setTriggerIdOverride}>
+          <Comp
+            ref={ref}
+            className={cn(config.classes.item, className) || undefined}
+            data-state={dataState}
+            data-disabled={disabled || undefined}
+            data-pending={isPending || undefined}
+            data-orientation={config.orientation}
+            data-value={value}
+            {...rest}
+          >
+            {children}
+          </Comp>
+        </AccordionTriggerIdContext.Provider>
       </AccordionItemContext.Provider>
     );
   }

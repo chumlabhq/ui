@@ -4,9 +4,11 @@ import {
   useRef,
   useCallback,
   useMemo,
+  useContext,
   type KeyboardEvent,
 } from "react";
-import { useAccordionConfig, useAccordionDispatch, useAccordionItemContext } from "../utils/context.js";
+import { useAccordionConfig, useAccordionDispatch, useAccordionItemContext, AccordionTriggerIdContext } from "../utils/context.js";
+import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect.js";
 import { ChevronDownIcon } from "../utils/icons.js";
 import { Slot } from "../../../utils/Slot.js";
 import { mergeRefs } from "../../../utils/mergeRefs.js";
@@ -37,6 +39,12 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     const buttonRef = useRef<HTMLButtonElement | null>(null);
 
     const { registerItem, unregisterItem } = dispatch;
+
+    const setTriggerId = useContext(AccordionTriggerIdContext);
+    useIsomorphicLayoutEffect(() => {
+      setTriggerId?.(rest.id);
+      return () => setTriggerId?.(undefined);
+    }, [setTriggerId, rest.id]);
 
     useEffect(() => {
       const button = buttonRef.current;

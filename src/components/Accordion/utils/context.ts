@@ -82,6 +82,8 @@ export function useAccordionConfig(): AccordionConfigValue {
 
 export const AccordionItemContext = createContext<AccordionItemContextValue | null>(null);
 
+export const AccordionTriggerIdContext = createContext<((id: string | undefined) => void) | null>(null);
+
 export function useAccordionItemContext(): AccordionItemContextValue {
   const context = useContext(AccordionItemContext);
   if (!context) {

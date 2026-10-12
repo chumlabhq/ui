@@ -28,6 +28,15 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- **`Pagination` keeps prev, its pages and next on one row by showing fewer pages.** The page
+  list no longer wraps. `siblingCount` is now the most sibling pages shown: when the row would
+  overflow the space its host gives it (measured on the component and its host, not the
+  window), siblings step down to 0, leaving the first, current and last pages with ellipses;
+  then the list's gap and the ellipsis padding tighten from 8 px to 4 px; then the page
+  buttons' padding from 12 px to 8 px, with a 24 px minimum width; and if that still does not
+  fit, the page list scrolls inside the row while prev and next stay on it, with the current
+  page scrolled into view. The `<nav>` no longer grows past its host. The server and first
+  render show the full set; the step-down runs after mount.
 - **`CascadingDropdown`: `submenuSide` takes `"start"` or `"end"`, not `"left"` or `"right"`.**
   `"end"` (the default) opens a submenu toward the end of the line: the right in a
   left-to-right page, the left in a right-to-left one, read from the closest `dir` attribute
@@ -671,6 +680,10 @@ tables say.
 
 ### Fixed
 
+- **A consumer `id` on `AccordionTrigger` now names its panel.** The id became the trigger's
+  id, but the panel's `aria-labelledby` still named the item's generated trigger id, which no
+  element carried. The panel follows the trigger's id now, as it already did for an `id`
+  passed to `AccordionItem`.
 - **`aria-controls` no longer names an element that is not rendered.** `Dropdown`,
   `SearchableDropdown`, `MultiSelectDropdown` and `MultiSelectSearchableDropdown` pointed
   their trigger's `aria-controls` at a listbox that exists only while open, `DatePicker` at

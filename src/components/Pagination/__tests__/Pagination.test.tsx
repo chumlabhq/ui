@@ -1,5 +1,6 @@
+import { StrictMode } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Pagination } from "../index.js";
 import { DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "../utils/constants.js";
@@ -802,5 +803,122 @@ describe("Pagination", () => {
 
       expect(screen.getByRole("button", { name: "Page 1" })).toHaveAttribute("aria-current", "page");
     });
+  });
+});
+
+/**
+ * The step-down, with layout supplied: jsdom measures every box as zero, so the
+ * list's content width is computed from what it renders (a page button 36 px,
+ * 28 px at compact padding; an ellipsis 30 px, 22 px compact; the gap from the
+ * list's own style) and the widths the list and the host offer are set per
+ * test. For the middle fixture (page 5 of 20) that makes the full set 288 px,
+ * siblings at 0 200 px, compact spacing 168 px and compact padding 144 px. A
+ * ResizeObserver stand-in hands each test the callback the component
+ * registers.
+ */
+describe("Pagination fits one row by showing fewer pages", () => {
+  let listWidth = 1000;
+  let hostWidth = 1000;
+  let resize: (() => void) | undefined;
+  const pages = () => screen.getAllByRole("button", { name: /^Page / }).map((b) => b.textContent);
+  const list = () => screen.getByRole("button", { name: "Page 1" }).parentElement!;
+  const page1 = () => screen.getByRole("button", { name: "Page 1" });
+
+  beforeEach(() => {
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(cb: () => void) {
+          resize = cb;
+        }
+        observe() {}
+        disconnect() {}
+      },
+    );
+    vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockImplementation(function (this: HTMLElement) {
+      if (!this.querySelector(":scope > button")) return 0;
+      const gap = parseFloat(this.style.columnGap) || 8;
+      const items = Array.from(this.children) as HTMLElement[];
+      const widths = items.map((el) =>
+        el.tagName === "BUTTON" ? (el.style.paddingInline ? 28 : 36) : el.style.paddingInline ? 22 : 30,
+      );
+      return widths.reduce((a, b) => a + b, 0) + gap * (items.length - 1);
+    });
+    vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
+      if (this.querySelector(":scope > nav")) return hostWidth;
+      return this.querySelector(":scope > button") ? listWidth : 0;
+    });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    listWidth = 1000;
+    hostWidth = 1000;
+    resize = undefined;
+  });
+
+  const renderMiddle = () => render(<Pagination defaultValue={5} totalPages={20} />);
+
+  it("shows siblingCount pages either side when they fit", () => {
+    renderMiddle();
+    expect(pages()).toEqual(["1", "4", "5", "6", "20"]);
+    expect(list().style.columnGap).toBe("");
+  });
+
+  it("steps siblings down to 0 when the full set overflows", () => {
+    listWidth = 250;
+    renderMiddle();
+    expect(pages()).toEqual(["1", "5", "20"]);
+    expect(list().style.columnGap).toBe("");
+  });
+
+  it("takes one step per measurement under StrictMode, which runs mount effects twice", () => {
+    listWidth = 250;
+    render(
+      <StrictMode>
+        <Pagination defaultValue={5} totalPages={20} />
+      </StrictMode>,
+    );
+    expect(pages()).toEqual(["1", "5", "20"]);
+    expect(list().style.columnGap).toBe("");
+  });
+
+  it("tightens the spacing once siblings are at 0 and the set still overflows", () => {
+    listWidth = 180;
+    renderMiddle();
+    expect(pages()).toEqual(["1", "5", "20"]);
+    expect(list().style.columnGap).toBe("4px");
+    expect(page1().style.paddingInline).toBe("");
+  });
+
+  it("tightens the page buttons' padding after the spacing, keeping a 24 px minimum", () => {
+    listWidth = 150;
+    renderMiddle();
+    expect(list().style.columnGap).toBe("4px");
+    expect(page1().style.paddingInline).toBe("8px");
+    expect(page1().style.minWidth).toBe("24px");
+    expect(list().style.overflowX).toBe("");
+  });
+
+  it("lets the list scroll when even compact padding overflows", () => {
+    listWidth = 120;
+    renderMiddle();
+    expect(pages()).toEqual(["1", "5", "20"]);
+    expect(page1().style.paddingInline).toBe("8px");
+    expect(list().style.overflowX).toBe("auto");
+  });
+
+  it("returns to the full set when its host grows", () => {
+    listWidth = 120;
+    hostWidth = 260;
+    renderMiddle();
+    expect(list().style.overflowX).toBe("auto");
+    listWidth = 1000;
+    hostWidth = 1000;
+    act(() => resize!());
+    expect(pages()).toEqual(["1", "4", "5", "6", "20"]);
+    expect(list().style.columnGap).toBe("");
+    expect(page1().style.paddingInline).toBe("");
   });
 });

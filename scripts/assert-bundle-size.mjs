@@ -1086,6 +1086,40 @@ const LIBRARY_TOTAL_HISTORY = [
       "shipped code. " +
       "Measured against a build of 61df3dc1.",
   },
+  {
+    kb: 157.58,
+    commit: "(uncommitted)",
+    date: "2026-10-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.44 KB (160,907 -> 161,360 B gzipped, +453 B), 81 files " +
+      "held. L15 pagination fit: Pagination keeps prev, its pages and next on " +
+      "one row at phone widths, by fewer siblings, then compact spacing, then " +
+      "compact padding, then a scrolling list. Pagination exclusive 4,115 -> " +
+      "4,588 B (+473 B). A JS step-down was chosen over a CSS container-query " +
+      "variant (+177 B) that collapses the nav to 0 px in flex and centred " +
+      "hosts. The parked step-down (v0) measured +401 B exclusive and +366 B " +
+      "total against this HEAD; the other +72 B exclusive (+87 B total) fix " +
+      "three defects the acceptance spec found: a StrictMode double step, a " +
+      "centred host overflowing instead of stepping down, and page buttons " +
+      "shrinking instead of the list scrolling. Measured with the L15 " +
+      "Accordion change reversed. No comments added to shipped code. " +
+      "Measured against a build of d082d87d.",
+  },
+  {
+    kb: 157.64,
+    commit: "(uncommitted)",
+    date: "2026-10-12",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.07 KB (161,360 -> 161,428 B gzipped, +68 B), 81 files " +
+      "held; the slice as a whole is 160,907 -> 161,428 B, 157.14 -> 157.64 KB. " +
+      "L15 accordion trigger id: a consumer id on AccordionTrigger left the " +
+      "panel's aria-labelledby dangling. The trigger reports its id to its " +
+      "item, and the panel follows it. Accordion exclusive 9,457 -> 9,510 B " +
+      "(+53 B), its declared breach raised 9.24 -> 9.29. No comments added to " +
+      "shipped code. Measured against a build of d082d87d.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1248,8 +1282,11 @@ const DECLARED_BREACHES = new Map([
   [
     "Accordion",
     {
-      kb: 9.24,
-      why: "2026-10-12, L14 idrefs: 9.23 -> 9.24 (exclusive 9,448 -> 9,457 B gzipped, +9 B): " +
+      kb: 9.29,
+      why: "2026-10-12, L15 accordion trigger id: 9.24 -> 9.29 (exclusive 9,457 -> 9,510 B gzipped, +53 B): " +
+        "a consumer id on AccordionTrigger left the panel's aria-labelledby dangling; the trigger " +
+        "reports its id to its item and the panel follows it. " +
+        "2026-10-12, L14 idrefs: 9.23 -> 9.24 (exclusive 9,448 -> 9,457 B gzipped, +9 B): " +
         "AccordionTrigger sets aria-controls only while its item is expanded. " +
         "2026-10-11, A2g naming: 9.22 -> 9.23 (exclusive 9,401 -> 9,448 B gzipped, +47 B). " +
         "AccordionItem's id, aria-label and aria-labelledby reach its trigger, the button a " +

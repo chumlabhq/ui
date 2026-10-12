@@ -9509,7 +9509,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": "1",
-        "description": "Number of sibling page buttons to show on each side of the current page."
+        "description": "The most sibling page buttons shown on each side of the current page. When the page row would overflow its container, Pagination shows fewer, down to none, keeping the first, current and last pages with ellipses between; then it tightens the list's spacing; then the page buttons' padding; and if even that does not fit, the page list scrolls inside the row while prev and next stay on it. The server and first render show the full set."
       },
       {
         "name": "rowsPerPage",

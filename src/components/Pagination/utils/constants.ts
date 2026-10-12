@@ -6,9 +6,9 @@ export const DEFAULT_ROW_OPTIONS = [5, 10, 25, 50, 100] as const;
 export const DEFAULT_VISIBLE_PAGE_COUNT = 3;
 
 export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
-  root: "flex flex-wrap items-center gap-2 data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
-  row: "flex items-center gap-2",
-  list: "flex flex-wrap items-center gap-2",
+  root: "flex flex-wrap items-center gap-2 max-w-full data-[disabled]:opacity-50 data-[disabled]:pointer-events-none",
+  row: "flex items-center gap-2 min-w-0 max-w-full",
+  list: "flex items-center gap-2 min-w-0",
   /**
    * The selected page, which the component announced three ways and painted
    * none of.

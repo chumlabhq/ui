@@ -5459,6 +5459,29 @@ export default function Example() {
 
 ---
 
+### Narrow containers
+
+Prev, the page list and next always share one row; the list never wraps.
+`siblingCount` is the most sibling pages shown. When the row would overflow
+the space its host gives it, measured with a `ResizeObserver` on the
+component's own `<nav>` and on its host (so a narrow sidebar or a centred
+footer counts, not just a narrow window), Pagination steps down, one step per
+measurement:
+
+1. Fewer siblings, down to 0: the first page, the current page and the last
+   page, with ellipses between.
+2. Compact spacing: the list's gap and the ellipsis padding go from 8 px to
+   4 px.
+3. Compact padding: the page buttons' horizontal padding goes from 12 px to
+   8 px, with a 24 px minimum width, so every button keeps at least a
+   24 × 24 px target.
+4. If that still does not fit, the page list scrolls horizontally inside the
+   row; prev and next stay on it, and the current page is scrolled into view.
+
+The `<nav>` never grows past its host. When the host grows, Pagination starts
+again from `siblingCount`. The server and the first client render show the
+full set, so there is no hydration mismatch; the step-down runs after mount.
+
 ### Data Attributes (for CSS selectors and testing)
 
 - `data-disabled` — on prev/next buttons when at boundary
@@ -5481,7 +5504,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `totalPages` **(required)** | number | — | Total number of pages. |
-| `siblingCount` | number | `1` | Number of sibling page buttons to show on each side of the current page. |
+| `siblingCount` | number | `1` | The most sibling page buttons shown on each side of the current page. When the page row would overflow its container, Pagination shows fewer, down to none, keeping the first, current and last pages with ellipses between; then it tightens the list's spacing; then the page buttons' padding; and if even that does not fit, the page list scrolls inside the row while prev and next stay on it. The server and first render show the full set. |
 | `rowsPerPage` | number | — | Current number of rows displayed per page. |
 | `rowOptions` | array | — | Available row-per-page options for the selector. |
 | `disabled` | boolean | — | Disables the entire pagination control. |

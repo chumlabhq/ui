@@ -62,7 +62,7 @@ export interface PaginationClasses {
 export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onChange"> {
   /** Total number of pages. */
   totalPages: number;
-  /** Number of page buttons shown on each side of the current page. Default: 1. */
+  /** The most page buttons shown on each side of the current page; fewer when the row would overflow its container. Default: 1. */
   siblingCount?: number;
   /** Number of rows displayed per page (used by page-info display). */
   rowsPerPage?: number;

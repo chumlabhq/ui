@@ -528,17 +528,7 @@ const declaredOpen = inject("declaredCapabilities");
  * A dangling reference known and named, by case, state and attribute. One that
  * excuses nothing fails, so it falls out the moment it is fixed.
  */
-const IDREF_EXCEPTIONS: { id: string; state: string; attr: string; reason: string }[] = [
-  {
-    id: "Accordion/AccordionTrigger",
-    state: "closed",
-    attr: "aria-labelledby",
-    reason:
-      "A DEFECT, found by L14: a consumer id on AccordionTrigger replaces the trigger's id, and the panel's " +
-      "aria-labelledby still names the item's generated trigger id. An id on AccordionItem reaches the trigger " +
-      "and the panel follows it. Reported, not fixed in L14 (a different cause from the closed-popup aria-controls)",
-  },
-];
+const IDREF_EXCEPTIONS: { id: string; state: string; attr: string; reason: string }[] = [];
 const idrefExcused = new Set<string>();
 const idrefs = { checked: 0, dangling: [] as string[] };
 

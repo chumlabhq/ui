@@ -26,6 +26,8 @@ import { useMenuNavigation } from "../../utils/menu/useMenuNavigation.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 
 function renderIcon(
   icon: React.ReactNode,
@@ -334,9 +336,45 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const handleDropdownKeyDown = onMenuKeyDown;
 
+    const navRef = useRef<HTMLElement>(null);
+    const listRef = useRef<HTMLDivElement>(null);
+    const mergedNavRef = useMemo(() => mergeRefs(navRef, ref), [ref]);
+    const [fit, setFit] = useState<number | null>(null);
+    const fitRef = useRef(fit);
+    fitRef.current = fit;
+    const step = fit ?? 0;
+    const shownSiblings = Math.max(fit ?? siblingCount, 0);
+    const stepDown = () => {
+      const list = listRef.current;
+      const rendered = fitRef.current;
+      if (!list) return;
+      if (list.scrollWidth > list.clientWidth && rendered !== -3) setFit(Math.max((rendered ?? siblingCount) - 1, -3));
+      const current = rendered === -3 && list.querySelector("[aria-current]");
+      if (current) {
+        const l = list.getBoundingClientRect();
+        const c = current.getBoundingClientRect();
+        list.scrollLeft += c.left - l.left - (l.width - c.width) / 2;
+      }
+    };
+    useIsomorphicLayoutEffect(stepDown);
+    useEffect(() => {
+      const nav = navRef.current;
+      const host = nav?.parentElement;
+      if (!nav || !host || typeof ResizeObserver === "undefined") return;
+      let width = host.clientWidth;
+      const observer = new ResizeObserver(() => {
+        if (host.clientWidth > width) setFit(null);
+        else stepDown();
+        width = host.clientWidth;
+      });
+      observer.observe(nav);
+      observer.observe(host);
+      return () => observer.disconnect();
+    }, [siblingCount]);
+
     const visiblePages = useMemo(
-      () => getVisiblePages(safeTotalPages, safeCurrentPage, siblingCount),
-      [safeTotalPages, safeCurrentPage, siblingCount],
+      () => getVisiblePages(safeTotalPages, safeCurrentPage, shownSiblings),
+      [safeTotalPages, safeCurrentPage, shownSiblings],
     );
 
     const handlePrevPage = useCallback(() => {
@@ -446,7 +484,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           {renderIcon(prevIcon, ChevronLeftIcon, mergedClasses.navIcon, "w-5 h-5")}
         </button>
 
-        <div className={cn(mergedClasses.list)}>
+        <div ref={listRef} className={cn(mergedClasses.list)} style={step < 0 ? { columnGap: 4, overflowX: step < -2 ? "auto" : undefined } : undefined}>
           {visiblePages.map((item, index) =>
             item === "ellipsis" ? (
               renderEllipsis ? (
@@ -460,6 +498,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 <span
                   key={`ellipsis-${index}`}
                   className={mergedClasses.ellipsis}
+                  style={step < 0 ? { paddingInline: 4 } : undefined}
                   aria-hidden="true"
                 >
                   &hellip;
@@ -476,6 +515,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 aria-current={safeCurrentPage === item ? "page" : undefined}
                 data-state={safeCurrentPage === item ? "active" : undefined}
                 data-active={safeCurrentPage === item || undefined}
+                style={step < -1 ? { paddingInline: 8, minWidth: 24, flexShrink: 0 } : undefined}
               >
                 {item}
               </button>
@@ -504,7 +544,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     return (
       <nav
-        ref={ref as React.Ref<HTMLElement>}
+        ref={mergedNavRef}
         aria-label={paginationAriaLabel}
         aria-disabled={disabled || undefined}
         data-disabled={disabled || undefined}
