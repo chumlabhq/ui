@@ -697,6 +697,11 @@ tables say.
   720px window — could not be reached or seen. It is capped to the space on the side it opens
   toward, opening toward the larger one when neither holds it, and the keyboard-focused item is
   scrolled into view. Submenus still open beside their item from a scrolled menu.
+- **CascadingDropdown keyboard focus enters and leaves submenus.** ArrowRight, Enter or Space on
+  a parent moves focus to the submenu's first enabled item, and ArrowLeft or Escape returns it
+  to the parent.
+- **TimePicker's clock no longer declares the focused input inert.** It is a non-modal dialog
+  tied to the input, which keeps focus.
 - **Table, Modal and Drawer keep the keyboard-focused cell or control in view.** Arrow keys in
   Table's grid, and Tab inside a Modal or a modal Drawer, moved focus without scrolling it into
   view, in every engine: a cell past the edge of a narrow table, or a control below the fold of

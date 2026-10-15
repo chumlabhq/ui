@@ -1162,6 +1162,25 @@ const LIBRARY_TOTAL_HISTORY = [
       "161,446 B, -37. No declared breach moved. No comments added to " +
       "src/components. Measured against a build of 6ae96a3b.",
   },
+  {
+    kb: 157.82,
+    commit: "(uncommitted)",
+    date: "2026-10-15",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.09 KB (161,518 -> 161,607 B gzipped, +89 B), 82 files " +
+      "held. L17: keyboard focus enters and leaves submenus (APG menu); " +
+      "exactly one tab stop across levels. Exclusive: CascadingDropdown " +
+      "9,539 -> 9,668 B (+129 B: the first enabled child is highlighted on " +
+      "keyboard entry, a pointer flag keeps hover from moving focus, the " +
+      "focus effect reaches into the submenu only when it has a highlighted " +
+      "item, the top level gives up its tab " +
+      "stop while a submenu item holds it); +190 B in the first shape, cut by " +
+      "folding the entry into openSubmenuFor and keeping the flag out of the " +
+      "hook. TimePicker 8,314 -> 8,304 B (-10 B, the clock no longer declares " +
+      "aria-modal). No declared breach moved. No comments added to " +
+      "src/components. Measured against a build of a9e48f31.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

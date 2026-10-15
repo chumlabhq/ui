@@ -258,9 +258,9 @@ export const useCascadingDropdown = ({
 
   /** Opens a parent's submenu, fetching its children if they are not in yet. */
   const openSubmenuFor = useCallback(
-    (option: CascadingOption) => {
+    (option: CascadingOption, enter?: boolean) => {
       setActiveSubmenu(option.value);
-      setSubmenuFocusedIndex(-1);
+      setSubmenuFocusedIndex(enter ? Math.max(0, (loadedChildren[option.value] || option.children || []).findIndex((child) => !child.disabled)) : -1);
       setSubmenuSearchQuery("");
       setAsyncSubmenuResults(null);
 
@@ -410,8 +410,7 @@ export const useCascadingDropdown = ({
       // it with nothing highlighted, which is what `openSubmenuFor` does — the
       // difference is the point, not an inconsistency.
       if (isParentOption(option)) {
-        openSubmenuFor(option);
-        setSubmenuFocusedIndex(0);
+        openSubmenuFor(option, true);
         return;
       }
       handleMenuItemClick(option);
@@ -446,10 +445,7 @@ export const useCascadingDropdown = ({
           event.preventDefault();
           if (!isOpen || focusedIndex < 0) return;
           const option = filteredOptions[focusedIndex];
-          if (option?.children && option.children.length > 0) {
-            setActiveSubmenu(option.value);
-            setSubmenuFocusedIndex(0);
-          }
+          if (option && isParentOption(option)) openSubmenuFor(option, true);
           return;
         }
         case "ArrowLeft":
@@ -487,6 +483,8 @@ export const useCascadingDropdown = ({
       handleClose,
       menuNav,
       submenuNav,
+      isParentOption,
+      openSubmenuFor,
     ]
   );
 

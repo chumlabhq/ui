@@ -15191,7 +15191,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "`aria-invalid` when `message` is set",
       "`aria-describedby` connects description, error, and success messages",
       "`aria-pressed` on clock AM/PM and hours/minutes toggle buttons",
-      "Clock variant uses `role=\"dialog\"` with `aria-modal=\"true\"`",
+      "Clock variant is a non-modal `role=\"dialog\"`: focus stays in the input, which points at it with `aria-haspopup=\"dialog\"`, `aria-expanded` and `aria-controls`",
       "Clock face uses `role=\"slider\"` with arrow key navigation",
       "Keyboard: Tab to focus, Arrow keys to navigate options, Enter to select, Escape to close",
       "`prefers-reduced-motion` support via `reduceMotion` prop",

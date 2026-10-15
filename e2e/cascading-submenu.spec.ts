@@ -1,4 +1,4 @@
-import { test, expect } from "./_test";
+import { test, expect, type Page } from "./_test";
 import { gotoFixture } from "./_nav";
 
 /**
@@ -148,5 +148,73 @@ test.describe("CascadingDropdown submenu placement", () => {
     // the right is the failure this cannot allow.
     expect(placed.side).toBe("left");
     expect(placed.surfaceRight).toBeLessThanOrEqual(placed.anchorLeft);
+  });
+});
+
+/**
+ * DOM focus follows the keyboard into a submenu and back out.
+ *
+ * The submenu's items carried a roving `tabIndex` and `data-highlighted`, and
+ * nothing ever focused one: ArrowRight, Enter and Space opened the submenu and
+ * moved the highlight while focus stayed on the parent item, so the item a
+ * screen reader announced was not the item the arrows were moving. Measured in
+ * chromium, firefox and webkit before the fix: after ArrowRight the active
+ * element was still "Fruit", and "Fruit" and "Apple" were both tab stops.
+ *
+ * APG menu pattern: Enter, Space and ArrowRight on an item with a submenu open
+ * it and move focus to its first item; ArrowLeft and Escape close it and
+ * return focus to the parent item. Pointer hover moves no DOM focus.
+ */
+test.describe("CascadingDropdown submenu keyboard focus", () => {
+  const active = (page: Page) =>
+    page.evaluate(() => {
+      const el = document.activeElement;
+      return {
+        label: (el?.textContent ?? "").trim(),
+        inSubmenu: !!el?.closest("[data-cascading-submenu]"),
+        stops: [...document.querySelectorAll('[role^="menuitem"][tabindex="0"]')].map((s) => (s.textContent ?? "").trim()),
+      };
+    });
+
+  for (const key of ["ArrowRight", "Enter", "Space"]) {
+    test(`${key} on a parent moves focus to the submenu's first item; ArrowLeft and Escape return it`, async ({ page }) => {
+      await gotoFixture(page, "CascadingDropdown", "closed");
+      await page.locator("[data-fixture] button[aria-haspopup]").first().focus();
+      await page.keyboard.press("ArrowDown");
+      await expect(page.locator('[role="menuitem"]', { hasText: "Fruit" })).toBeFocused();
+
+      await page.keyboard.press(key);
+      const entered = await active(page);
+      console.log(`SUBMENU_FOCUS ${key}: "${entered.label}" inSubmenu=${entered.inSubmenu} stops=${JSON.stringify(entered.stops)}`);
+      await expect(page.locator(`${SURFACE} [role^="menuitem"]`, { hasText: "Apple" })).toBeFocused();
+      expect(entered.stops, "exactly one tab stop, on the focused item").toEqual(["Apple"]);
+
+      await page.keyboard.press("ArrowLeft");
+      await expect(page.locator(SURFACE)).toHaveCount(0);
+      await expect(page.locator('[role="menuitem"]', { hasText: "Fruit" })).toBeFocused();
+      const left = await active(page);
+      console.log(`SUBMENU_FOCUS ${key} then ArrowLeft: "${left.label}" stops=${JSON.stringify(left.stops)}`);
+      expect(left.stops).toEqual(["Fruit"]);
+
+      await page.keyboard.press(key);
+      await expect(page.locator(`${SURFACE} [role^="menuitem"]`, { hasText: "Apple" })).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(page.locator(SURFACE)).toHaveCount(0);
+      await expect(page.locator('[role="menu"]').first(), "Escape in the submenu closed the whole menu").toBeVisible();
+      await expect(page.locator('[role="menuitem"]', { hasText: "Fruit" })).toBeFocused();
+      console.log(`SUBMENU_FOCUS ${key} then Escape: "${(await active(page)).label}"`);
+    });
+  }
+
+  test("pointer hover opens the submenu and moves no DOM focus into it", async ({ page }) => {
+    await gotoFixture(page, "CascadingDropdown", "closed");
+    await page.locator("[data-fixture] button[aria-haspopup]").first().click();
+    await page.locator('[role="menuitem"]', { hasText: "Fruit" }).hover();
+    const apple = page.locator(`${SURFACE} [role^="menuitem"]`, { hasText: "Apple" });
+    await apple.hover();
+    await expect(apple).toHaveAttribute("data-highlighted");
+    const hovered = await active(page);
+    console.log(`SUBMENU_FOCUS hover: "${hovered.label}" inSubmenu=${hovered.inSubmenu}`);
+    expect(hovered.inSubmenu, "hover moved DOM focus into the submenu").toBe(false);
   });
 });

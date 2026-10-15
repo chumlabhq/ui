@@ -138,9 +138,6 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
       tabIndex={isTabStop ? 0 : -1}
       aria-haspopup={hasSubmenu ? "menu" : undefined}
       aria-expanded={hasSubmenu ? isSubmenuOpen : undefined}
-      // The submenu's items are a roving group with no tab stop of their own:
-      // navigation is state-driven and DOM focus stays out here. This is what
-      // points at them, and it only resolves while the submenu exists.
       aria-controls={hasSubmenu && isSubmenuOpen ? submenuId : undefined}
       aria-checked={!hasSubmenu ? isSelected : undefined}
       aria-disabled={option.disabled}
@@ -559,6 +556,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
     // menu item it opens from.
 
     const menuSearchRef = useRef<HTMLInputElement>(null);
+    const pointerRef = useRef(false);
 
     /**
      * Moves the focus the roving tabindex was only pretending to move.
@@ -580,14 +578,18 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       const menu = menuRef.current;
       if (!menu) return;
 
-      if (showMenuSearch) {
-        if (!inMenuSurface(document.activeElement)) {
+      const active = document.activeElement;
+      const submenu = document.getElementById(submenuId);
+      const into = !pointerRef.current && submenu?.querySelector<HTMLElement>('[role^="menuitem"][data-highlighted]');
+      if (!into && submenu?.contains(active)) return;
+
+      if (showMenuSearch && !into) {
+        if (!inMenuSurface(active)) {
           if (menuSearchRef.current) focusAndReveal(menuSearchRef.current);
         }
         return;
       }
 
-      const active = document.activeElement;
       // Paging or filtering can unmount the item that had focus, dropping the
       // browser back to <body>; that is our own re-render, not the user leaving.
       const ours =
@@ -597,13 +599,14 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         inMenuSurface(active);
       if (!ours) return;
 
-      const item = menu.querySelector<HTMLElement>('[role^="menuitem"][data-highlighted]');
+      const item = into || menu.querySelector<HTMLElement>('[role^="menuitem"][data-highlighted]');
       if (item && item !== active) focusAndReveal(item);
-    }, [isOpen, focusedIndex, showMenuSearch, inMenuSurface]);
+    }, [isOpen, focusedIndex, showMenuSearch, inMenuSurface, submenuId, submenuFocusedIndex, loadingChildren]);
 
     const combinedKeyDown = useCallback(
       (event: KeyboardEvent) => {
         onKeyDownProp?.(event);
+        pointerRef.current = false;
         if (!event.defaultPrevented) {
           handleKeyDown(event);
         }
@@ -653,7 +656,9 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         (option.value === internalValue.root || getSelectedValuesForParent(option.value).length > 0),
     );
     const tabStopIndex =
-      focusedIndex >= 0
+      submenuFocusedIndex >= 0
+        ? -1
+        : focusedIndex >= 0
         ? focusedIndex
         : selectedIndex >= 0
           ? selectedIndex
@@ -765,6 +770,9 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
               keepMounted={keepMounted}
               fitAvailableHeight
               onKeyDown={combinedKeyDown}
+              onPointerMove={() => {
+                pointerRef.current = true;
+              }}
               // Announced even though it is no longer the menu: the search
               // field is portalled content and needs a container that says what
               // it belongs to (portal-semantics.contract).

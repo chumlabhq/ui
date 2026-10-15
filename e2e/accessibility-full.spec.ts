@@ -1,4 +1,4 @@
-import { test, expect } from "./_test";
+import { test, expect, type Page } from "./_test";
 import { injectAxe, getViolations } from "axe-playwright";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { markPortalRoots, PORTAL_MARK } from "./_portals.js";
@@ -97,6 +97,57 @@ const FATAL = new Set(["critical", "serious", "moderate"]);
  * report it would still be reported.
  */
 
+/**
+ * Focus is inside every open `aria-modal` element.
+ *
+ * `aria-modal="true"` tells assistive technology that everything outside the
+ * element is inert. TimePicker's clock declared it and left focus in the input
+ * that opened it, so the one control the user was on was, to a screen reader,
+ * outside the document. axe does not check it: every attribute is valid. Step 4
+ * of L17 measured it in all three engines, by click and by keyboard.
+ *
+ * Open means rendered and visible (`Modal/closed-kept-mounted` is in the DOM
+ * at `visibility: hidden`) and not under `inert` or `aria-hidden` (a closed
+ * kept-mounted Drawer). Read once focus has been unchanged for a frame, so an
+ * overlay's open-time focus, which runs in the frame after it mounts, has
+ * landed before the question is asked.
+ */
+async function modalFocus(page: Page): Promise<{ open: boolean; inside: boolean; active: string }> {
+  await page.evaluate(() => {
+    delete (window as { __clModalFocus?: Element | null }).__clModalFocus;
+  });
+  await page.waitForFunction(
+    () => {
+      const w = window as { __clModalFocus?: Element | null };
+      const steady = w.__clModalFocus === document.activeElement;
+      w.__clModalFocus = document.activeElement;
+      return steady;
+    },
+    undefined,
+    { polling: "raf", timeout: 10_000 },
+  );
+  return page.evaluate(() => {
+    const open = [...document.querySelectorAll('[aria-modal="true"]')].filter(
+      (d) => d.checkVisibility({ visibilityProperty: true }) && !d.closest('[inert], [aria-hidden="true"]'),
+    );
+    const active = document.activeElement;
+    return {
+      open: open.length > 0,
+      inside: open.some((d) => d.contains(active)),
+      active: active ? `<${active.tagName.toLowerCase()}${active.getAttribute("role") ? ` role=${active.getAttribute("role")}` : ""}>` : "none",
+    };
+  });
+}
+
+/**
+ * Fixtures with an open `aria-modal` element, measured over the whole index:
+ * 44 in L16's scan, which counted `Modal/closed-kept-mounted` by its box and
+ * the three TimePicker clocks. Without the hidden Modal it is 43, and 40 once
+ * the clocks stopped declaring it. A sweep that finds fewer has stopped
+ * opening the overlays it is meant to check.
+ */
+const ARIA_MODAL_FLOOR = 40;
+
 interface Finding {
   component: string;
   fixture: string;
@@ -126,6 +177,8 @@ test.describe("accessibility (full sweep)", () => {
     const auditedFixtures: string[] = [];
     let portalled = 0;
     const actFailures: string[] = [];
+    let modalsOpen = 0;
+    const focusOutside: string[] = [];
 
     for (const path of paths) {
       const [, , component, fixture] = path.split("/");
@@ -187,6 +240,9 @@ test.describe("accessibility (full sweep)", () => {
           }),
         800,
       );
+      const modal = await modalFocus(page);
+      if (modal.open) modalsOpen += 1;
+      if (modal.open && !modal.inside) focusOutside.push(`${component}/${fixture} (focus on ${modal.active})`);
       await injectAxe(page);
 
       // Scoped to the fixture and its portals, so the harness page's own markup
@@ -254,6 +310,11 @@ test.describe("accessibility (full sweep)", () => {
     // not in the state its name claims, and a record built from it would be a
     // record of the wrong page.
     expect(actFailures, "these fixtures never reached their acted state").toEqual([]);
+
+    console.log(`ARIA_MODAL aria-modal open ${modalsOpen}, focus inside ${modalsOpen - focusOutside.length} (floor ${ARIA_MODAL_FLOOR})`);
+    for (const line of focusOutside) console.log(`ARIA_MODAL_OUTSIDE ${line}`);
+    expect(modalsOpen, "fewer fixtures opened an aria-modal element than the floor").toBeGreaterThanOrEqual(ARIA_MODAL_FLOOR);
+    expect(focusOutside, "an open aria-modal element declares the focused control inert").toEqual([]);
 
     const key = (f: Finding) => `${f.component}/${f.fixture}`;
 
@@ -368,6 +429,46 @@ test.describe("accessibility (full sweep)", () => {
    * and requires both halves: the widened scope reports it, and the scope this
    * replaced does not.
    */
+  /**
+   * The aria-modal check, planted: it has to see focus outside an open
+   * `aria-modal` element, see it inside once it moves there, and not count one
+   * that is in the DOM but hidden.
+   */
+  test("the aria-modal check sees focus outside an open modal", async ({ page }) => {
+    await gotoFixture(page, "Button", "default");
+    expect(await modalFocus(page), "a page with no modal").toMatchObject({ open: false, inside: false });
+
+    await page.evaluate(() => {
+      const hidden = document.createElement("div");
+      hidden.setAttribute("role", "dialog");
+      hidden.setAttribute("aria-modal", "true");
+      hidden.style.visibility = "hidden";
+      hidden.append(document.createElement("button"));
+      document.body.append(hidden);
+    });
+    expect(await modalFocus(page), "a hidden aria-modal element counted as open").toMatchObject({ open: false });
+
+    await page.evaluate(() => {
+      const planted = document.createElement("div");
+      planted.setAttribute("role", "dialog");
+      planted.setAttribute("aria-modal", "true");
+      planted.setAttribute("data-planted", "");
+      const button = document.createElement("button");
+      button.textContent = "Inside";
+      planted.append(button);
+      document.body.append(planted);
+      document.querySelector<HTMLElement>("[data-fixture] button")?.focus();
+    });
+    const outside = await modalFocus(page);
+    console.log(`ARIA_MODAL_PLANT focus outside: ${JSON.stringify(outside)}`);
+    expect(outside, "focus outside the planted modal was not reported").toMatchObject({ open: true, inside: false });
+
+    await page.locator("[data-planted] button").focus();
+    const inside = await modalFocus(page);
+    console.log(`ARIA_MODAL_PLANT focus inside: ${JSON.stringify(inside)}`);
+    expect(inside, "focus inside the planted modal was reported outside").toMatchObject({ open: true, inside: true });
+  });
+
   test("the audit reaches inside a portal", async ({ page }) => {
     await gotoFixture(page, "Dropdown", "open");
     await page.locator("[role='listbox']").waitFor({ state: "attached" });

@@ -59,8 +59,10 @@ const scoped = (roots: string[]): string =>
  *     `inert` under an `aria-hidden` root; `Modal/closed-kept-mounted` is
  *     `visibility: hidden`. Focus enters neither.
  *   - Only the two panels whose open-time focus scrolls them. TimePicker's
- *     open clock is `aria-modal` too and leaves focus in its input (three
+ *     open clock was `aria-modal` too and left focus in its input (three
  *     fixtures), so waiting on every `aria-modal` waited on it until timeout.
+ *     It is non-modal since L17; whether focus is inside every open
+ *     `aria-modal` is the a11y-full sweep's own check, not this wait's.
  */
 export async function initialFocusLanded(page: Page): Promise<void> {
   await page.evaluate(() => {

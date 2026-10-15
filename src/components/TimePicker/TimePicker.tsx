@@ -539,7 +539,6 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
           : {
               id: clockPopupId,
               role: "dialog",
-              "aria-modal": true,
               "aria-label": typeof label === "string" ? label : "Select time",
             })}
       >
