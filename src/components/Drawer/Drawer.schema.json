@@ -156,7 +156,7 @@
     },
     "swipeThreshold": {
       "type": "number",
-      "description": "Minimum swipe distance in pixels to trigger close.",
+      "description": "How far a swipe has to travel to close the drawer, as a fraction of the panel's size along the swipe (0.4 is 40% of its height for a top or bottom sheet, of its width for a side drawer). A fast enough fling closes it at any distance.",
       "default": 0.4
     },
     "snapPoints": {

@@ -22,7 +22,7 @@ import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons.js";
 import { useClockFace } from "./useClockFace.js";
-import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep } from "./utils.js";
+import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep, isMinutesInRange, timeValueToMinutes } from "./utils.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 
 import { cn } from "../../utils/scopedCn.js";
@@ -245,8 +245,10 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       defaultValue: defaultValue ?? null,
     });
 
+    const [rangeError, setRangeError] = useState(false);
     const handleValueChange = useCallback(
       (time: string | null, timeValue: TimeValue | null) => {
+        setRangeError(false);
         setValueState(time);
         onValueChange?.(time, timeValue);
       },
@@ -340,6 +342,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     }, [hookHandleOpen, setIsOpen]);
 
     const handleInputChange = useCallback((newValue: string) => {
+      setRangeError(false);
       hookHandleInputChange(newValue);
       if (!isOpen) {
         setIsOpen(true);
@@ -359,6 +362,13 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       inputRef.current?.focus({ preventScroll: true });
     }, [handleValueChange, onClear]);
 
+    const refuseOutOfRange = useCallback(() => {
+      const typed = parseTimeInput(inputValue, format);
+      const refused = !!typed && !isMinutesInRange(timeValueToMinutes(typed, format), format, minTime, maxTime);
+      if (refused) setRangeError(true);
+      return refused;
+    }, [inputValue, format, minTime, maxTime]);
+
     const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
       if (disabled) return;
 
@@ -369,11 +379,12 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
             handleOptionSelect(displayOptions[focusedIndex]);
             return;
           }
-          hookHandleKeyDown(event);
+          if (refuseOutOfRange()) event.preventDefault();
+          else hookHandleKeyDown(event);
           handleClose();
           return;
         case "Tab":
-          hookHandleKeyDown(event);
+          if (!refuseOutOfRange()) hookHandleKeyDown(event);
           handleClose();
           return;
         case "Escape":
@@ -386,14 +397,14 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
           event.preventDefault();
           if (!isOpen) {
             handleOpen();
-            setFocusedIndex(0);
+            if (mode === "dropdown") setFocusedIndex(0);
             return;
           }
           break;
       }
 
-      hookHandleKeyDown(event);
-    }, [disabled, isOpen, focusedIndex, displayOptions, hookHandleKeyDown, handleOptionSelect, handleClose, handleOpen, setFocusedIndex]);
+      if (mode === "dropdown") hookHandleKeyDown(event);
+    }, [disabled, isOpen, focusedIndex, displayOptions, hookHandleKeyDown, handleOptionSelect, handleClose, handleOpen, setFocusedIndex, refuseOutOfRange, mode]);
 
     useEffect(() => {
       if (isOpen) {
@@ -465,7 +476,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
           const active = document.activeElement;
           if (containerRef.current?.contains(active)) return;
           if (dropdownContentRef.current?.contains(active)) return;
-          handleBlur();
+          if (!refuseOutOfRange()) handleBlur();
           handleClose();
           onBlur?.(event);
         });
@@ -609,7 +620,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
           .join(" ")}
         style={style}
         data-disabled={disabled || undefined}
-        data-error={error || undefined}
+        data-error={error || rangeError || undefined}
         data-open={isOpen || undefined}
         data-loading={loading || undefined}
         data-valid={(!error && success) || undefined}
@@ -638,7 +649,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
             className={mergedClasses.trigger}
             style={fullWidth && !unstyled ? { width: "100%" } : undefined}
             data-disabled={disabled || undefined}
-            data-error={error || undefined}
+            data-error={error || rangeError || undefined}
             data-valid={(!error && success) || undefined}
             data-open={isOpen || undefined}
           >
@@ -667,7 +678,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
               aria-autocomplete={mode === "dropdown" ? "list" : "none"}
               aria-label={!label ? ariaLabel : undefined}
               aria-labelledby={ariaLabelledBy}
-              aria-invalid={error || undefined}
+              aria-invalid={error || rangeError || undefined}
               aria-describedby={describedBy}
               aria-required={required || undefined}
               value={inputValue}

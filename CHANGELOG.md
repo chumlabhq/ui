@@ -710,6 +710,13 @@ tables say.
 - **TimePicker's keyboard documentation describes what the keyboard does (documentation).** Every
   time, including ones the clock cannot set, is typed into the input; the clock is a pointer
   affordance and takes no focus.
+- **TimePicker typed times respect `minTime` and `maxTime`, in the clock and the list variant.** A
+  time outside them is no longer committed: the field keeps the text, shows its error state with
+  `aria-invalid`, and `onValueChange` is not called. A time off `minuteStep` is still accepted;
+  the step is the increment the list and the clock offer.
+- **TimePicker's arrow keys no longer move a hidden highlight in the clock variant.** `ArrowDown`
+  opens the clock and neither arrow does anything else, so `Enter` commits what was typed rather
+  than a time from a list that was never shown.
 - **Table, Modal and Drawer keep the keyboard-focused cell or control in view.** Arrow keys in
   Table's grid, and Tab inside a Modal or a modal Drawer, moved focus without scrolling it into
   view, in every engine: a cell past the edge of a narrow table, or a control below the fold of
@@ -864,3 +871,9 @@ tables say.
   couple of pixels beside its trigger until the next scroll or resize.
 - Escape closes a Dropdown from anywhere inside it, not only from the trigger.
 - Focus reaches the surface on open, on every open rather than the first.
+
+### Fixed (documentation)
+
+- **Drawer `swipeThreshold` is a fraction of the panel, not pixels.** The docs said "minimum swipe
+  distance in pixels"; the default `0.4` closes the drawer once a swipe covers 40% of the panel's
+  size along the swipe, and a fast enough fling closes it at any distance.

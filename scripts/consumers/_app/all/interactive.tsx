@@ -41,7 +41,7 @@ export function DrawerDemo() {
         Open drawer
       </button>
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerHeader title="Drawer" />
+        <DrawerHeader>Drawer</DrawerHeader>
         <p>Body</p>
       </Drawer>
     </>

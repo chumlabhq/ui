@@ -1202,6 +1202,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "existing comment in Drawer.tsx corrected, which ships no bytes. " +
       "Measured against a build of 645da56b.",
   },
+  {
+    kb: 158.11,
+    commit: "(uncommitted)",
+    date: "2026-10-16",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.10 KB (161,805 -> 161,905 B gzipped, +100 B), 82 files " +
+      "held. L19: TimePicker's typed times respect minTime and maxTime in " +
+      "both variants, and its arrow keys move no hidden highlight in the " +
+      "clock variant. Exclusive: TimePicker 8,304 -> 8,401 B (+97 B): an " +
+      "out-of-range check before each of the three commit paths (Enter, Tab, " +
+      "blur), the error state it sets and clears, aria-invalid and data-error " +
+      "reading it, and two clock-mode guards in the key handler. No other " +
+      "chunk moved; the remaining +3 B is the whole-library gzip. No declared " +
+      "breach moved. No comments added to src/components. Measured against a " +
+      "build of ba020987.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

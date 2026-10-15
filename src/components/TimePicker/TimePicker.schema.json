@@ -44,11 +44,11 @@
     },
     "minTime": {
       "type": "string",
-      "description": "Minimum selectable time (e.g. '09:00')."
+      "description": "Minimum selectable time (e.g. '09:00'). A typed time before it is not committed, and the field shows its error state with aria-invalid."
     },
     "maxTime": {
       "type": "string",
-      "description": "Maximum selectable time (e.g. '17:00')."
+      "description": "Maximum selectable time (e.g. '17:00'). A typed time after it is not committed, and the field shows its error state with aria-invalid."
     },
     "name": {
       "type": "string",

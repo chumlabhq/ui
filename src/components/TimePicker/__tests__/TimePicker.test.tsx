@@ -501,6 +501,76 @@ describe("TimePicker", () => {
     });
   });
 
+  // A typed time outside minTime/maxTime is refused in both variants: the
+  // clock and the list never offered it, and typing was the one way around
+  // them. The step is only the increment the list and the clock offer.
+  describe.each(["dropdown", "clock"] as const)("Typed time bounds (%s)", (mode) => {
+    const setup = () => {
+      const onValueChange = vi.fn();
+      render(<TimePicker mode={mode} format="24h" minTime="09:00" maxTime="17:00" defaultValue="10:00" onValueChange={onValueChange} />);
+      return { onValueChange, input: screen.getByRole("combobox") };
+    };
+
+    it("does not commit a time after maxTime on Enter, and marks the field invalid", async () => {
+      const user = userEvent.setup();
+      const { onValueChange, input } = setup();
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, "20:00{Enter}");
+      expect(onValueChange).not.toHaveBeenCalled();
+      expect(input).toHaveValue("20:00");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("does not commit a time before minTime on Tab", async () => {
+      const user = userEvent.setup();
+      const { onValueChange, input } = setup();
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, "08:15");
+      await user.tab();
+      expect(onValueChange).not.toHaveBeenCalled();
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("commits an in-range time off the minute step", async () => {
+      const user = userEvent.setup();
+      const { onValueChange, input } = setup();
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, "10:07{Enter}");
+      expect(onValueChange).toHaveBeenCalledWith("10:07", { hours: 10, minutes: 7 });
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("clears the error once an in-range time is committed", async () => {
+      const user = userEvent.setup();
+      const { onValueChange, input } = setup();
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, "20:00{Enter}");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+      await user.clear(input);
+      await user.type(input, "16:30{Enter}");
+      expect(onValueChange).toHaveBeenCalledWith("16:30", { hours: 16, minutes: 30 });
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+  });
+
+  describe("Clock mode arrow keys", () => {
+    it("move no highlight through the unrendered list: Enter commits what was typed", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(<TimePicker mode="clock" format="24h" minuteStep={15} onValueChange={onValueChange} />);
+      const input = screen.getByRole("combobox");
+      await user.click(input);
+      await user.type(input, "16{ArrowDown}{ArrowDown}");
+      expect(input).not.toHaveAttribute("aria-activedescendant");
+      await user.keyboard("{Enter}");
+      expect(onValueChange).toHaveBeenCalledWith("16:00", { hours: 16, minutes: 0 });
+    });
+  });
+
   describe("Paste handling", () => {
     it("handles paste event on the input", async () => {
       const onValueChange = vi.fn();

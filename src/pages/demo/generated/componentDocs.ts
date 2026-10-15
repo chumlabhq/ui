@@ -5153,7 +5153,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": "0.4",
-        "description": "Minimum swipe distance in pixels to trigger close."
+        "description": "How far a swipe has to travel to close the drawer, as a fraction of the panel's size along the swipe (0.4 is 40% of its height for a top or bottom sheet, of its width for a side drawer). A fast enough fling closes it at any distance."
       },
       {
         "name": "snapPoints",
@@ -14565,14 +14565,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Minimum selectable time (e.g. '09:00')."
+        "description": "Minimum selectable time (e.g. '09:00'). A typed time before it is not committed, and the field shows its error state with aria-invalid."
       },
       {
         "name": "maxTime",
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Maximum selectable time (e.g. '17:00')."
+        "description": "Maximum selectable time (e.g. '17:00'). A typed time after it is not committed, and the field shows its error state with aria-invalid."
       },
       {
         "name": "name",
@@ -15134,7 +15134,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-error",
         "values": [],
-        "when": "when error"
+        "when": "when error || rangeError"
       },
       {
         "name": "data-highlighted",
@@ -15202,7 +15202,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "rows": [
         {
           "keys": "Typing",
-          "description": "Sets the time: `hh:mm` on a 24-hour picker, `hh:mm am` or `hh:mm pm` on a 12-hour one, committed on `Enter`, `Tab` or leaving the field. Any minute can be typed, not only the `minuteStep` ones the list and the clock offer. Typing opens the panel; `Space` is a character, the one between the time and AM/PM."
+          "description": "Sets the time: `hh:mm` on a 24-hour picker, `hh:mm am` or `hh:mm pm` on a 12-hour one, committed on `Enter`, `Tab` or leaving the field. Any minute can be typed, not only the `minuteStep` ones the list and the clock offer: the step is the increment offered, not a constraint. A time outside `minTime` and `maxTime` is not committed: the field keeps the text, shows its error state with `aria-invalid`, and `onValueChange` is not called. Typing opens the panel; `Space` is a character, the one between the time and AM/PM."
         },
         {
           "keys": "`Backspace`",
@@ -15222,11 +15222,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`ArrowDown`, `ArrowUp`",
-          "description": "Opens the dropdown list and moves through its times. On the clock variant, `ArrowDown` opens the clock."
+          "description": "Opens the dropdown list and moves through its times. On the clock variant, `ArrowDown` opens the clock and neither key does anything else: there is no list to move through, so nothing is highlighted and `Enter` commits what was typed."
         },
         {
           "keys": "`Home`, `End`",
-          "description": "Jumps to the first or last time in the dropdown list."
+          "description": "Jumps to the first or last time in the dropdown list. On the clock variant they move the caret."
         },
         {
           "keys": "`ArrowLeft`, `ArrowRight`, `PageUp`, `PageDown`",

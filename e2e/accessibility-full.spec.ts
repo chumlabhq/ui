@@ -148,6 +148,32 @@ async function modalFocus(page: Page): Promise<{ open: boolean; inside: boolean;
  */
 const ARIA_MODAL_FLOOR = 40;
 
+/**
+ * Every rendered DrawerHeader and ModalHeader has text.
+ *
+ * DrawerHeader and ModalHeader take their heading as children and extend
+ * `HTMLAttributes`, so `<DrawerHeader title="Drawer" />` typechecks and renders
+ * an empty header with a tooltip — nine Drawer fixtures and the consumer
+ * matrix's app did exactly that, two of them visual subjects, so the drawer
+ * pictures had no heading at all. An empty header also names nothing: the
+ * panel's `aria-labelledby` points at it.
+ */
+const headerTexts = (page: Page) =>
+  page.evaluate(() =>
+    [...document.querySelectorAll("[data-drawer-header], [data-modal-header]")].map((h) => ({
+      kind: h.hasAttribute("data-drawer-header") ? "DrawerHeader" : "ModalHeader",
+      text: (h.textContent ?? "").trim(),
+    })),
+  );
+
+/**
+ * Headers rendered across the fixture index, L19: 24 on 490 pages. The source
+ * holds 68 header elements across fixtures, demos, the consumer app and the
+ * .ai.md examples, ten of them in fixture files; `TallDrawer` renders one for
+ * eight fixtures and Modal's own `title` renders the rest.
+ */
+const HEADERS_FLOOR = 24;
+
 interface Finding {
   component: string;
   fixture: string;
@@ -179,6 +205,8 @@ test.describe("accessibility (full sweep)", () => {
     const actFailures: string[] = [];
     let modalsOpen = 0;
     const focusOutside: string[] = [];
+    let headersChecked = 0;
+    const emptyHeaders: string[] = [];
 
     for (const path of paths) {
       const [, , component, fixture] = path.split("/");
@@ -243,6 +271,10 @@ test.describe("accessibility (full sweep)", () => {
       const modal = await modalFocus(page);
       if (modal.open) modalsOpen += 1;
       if (modal.open && !modal.inside) focusOutside.push(`${component}/${fixture} (focus on ${modal.active})`);
+      for (const header of await headerTexts(page)) {
+        headersChecked += 1;
+        if (!header.text) emptyHeaders.push(`${component}/${fixture} (${header.kind})`);
+      }
       await injectAxe(page);
 
       // Scoped to the fixture and its portals, so the harness page's own markup
@@ -315,6 +347,11 @@ test.describe("accessibility (full sweep)", () => {
     for (const line of focusOutside) console.log(`ARIA_MODAL_OUTSIDE ${line}`);
     expect(modalsOpen, "fewer fixtures opened an aria-modal element than the floor").toBeGreaterThanOrEqual(ARIA_MODAL_FLOOR);
     expect(focusOutside, "an open aria-modal element declares the focused control inert").toEqual([]);
+
+    console.log(`HEADERS headers checked ${headersChecked}, empty ${emptyHeaders.length} (floor ${HEADERS_FLOOR})`);
+    for (const line of emptyHeaders) console.log(`HEADERS_EMPTY ${line}`);
+    expect(headersChecked, "fewer headers rendered than the floor").toBeGreaterThanOrEqual(HEADERS_FLOOR);
+    expect(emptyHeaders, "a DrawerHeader or ModalHeader rendered with no text — pass the heading as children").toEqual([]);
 
     const key = (f: Finding) => `${f.component}/${f.fixture}`;
 
@@ -467,6 +504,22 @@ test.describe("accessibility (full sweep)", () => {
     const inside = await modalFocus(page);
     console.log(`ARIA_MODAL_PLANT focus inside: ${JSON.stringify(inside)}`);
     expect(inside, "focus inside the planted modal was reported outside").toMatchObject({ open: true, inside: true });
+  });
+
+  test("the header check sees an empty header", async ({ page }) => {
+    await gotoFixture(page, "Drawer", "open");
+    const before = await headerTexts(page);
+    expect(before.length, "Drawer/open rendered no header to check").toBeGreaterThan(0);
+    await page.evaluate(() => {
+      const empty = document.createElement("div");
+      empty.setAttribute("data-drawer-header", "");
+      empty.setAttribute("title", "Drawer");
+      document.body.append(empty);
+    });
+    const after = await headerTexts(page);
+    console.log(`HEADERS_PLANT before ${JSON.stringify(before)} after +${after.length - before.length}, empty ${after.filter((h) => !h.text).length}`);
+    const emptyCount = (list: { text: string }[]) => list.filter((h) => !h.text).length;
+    expect(emptyCount(after) - emptyCount(before), "the planted title-only header was not seen as empty").toBe(1);
   });
 
   test("the audit reaches inside a portal", async ({ page }) => {

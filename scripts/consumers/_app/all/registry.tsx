@@ -230,7 +230,7 @@ export const VARIANTS: Entry[] = [
     name: "Drawer__open",
     node: (
       <Drawer open>
-        <DrawerHeader title="Drawer" />
+        <DrawerHeader>Drawer</DrawerHeader>
         <p>Body</p>
       </Drawer>
     ),

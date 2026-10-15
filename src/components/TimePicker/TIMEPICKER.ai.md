@@ -42,7 +42,7 @@ export default function Example() {
 | `mode` | `"dropdown"` (default) shows a list; `"clock"` shows an analog clock face. |
 | `format` | `"24h"` (default) or `"12h"`. Affects display, parsing, and option generation. |
 | `minuteStep` | Clamped to 1-60. Invalid values (0, NaN, negatives) are auto-corrected. |
-| `minTime` / `maxTime` | Format: `"HH:MM"`. Dims/disables out-of-range options in both variants. |
+| `minTime` / `maxTime` | Format: `"HH:MM"`. Dims/disables out-of-range options in both variants, and a typed time outside them is not committed: the field shows its error state with `aria-invalid`. |
 | `keepMounted` | Only affects dropdown variant. Clock always remounts to reset selection mode. |
 | `open` + `onOpenChange` | For controlled open state. Don't mix with `defaultOpen`. |
 | `value` + `onValueChange` | For controlled mode. Don't mix with `defaultValue`. |
@@ -78,8 +78,8 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `onBlur` | object | — | (event: FocusEvent<HTMLInputElement>) => void — Fires once focus has left the whole time picker, with the input's native blur event. |
 | `format` | `"12h"` \| `"24h"` | `"24h"` | Time display format. |
 | `minuteStep` | number | `15` | Minute interval for dropdown options and clock snapping. Clamped to 1-60. |
-| `minTime` | string | — | Minimum selectable time (e.g. '09:00'). |
-| `maxTime` | string | — | Maximum selectable time (e.g. '17:00'). |
+| `minTime` | string | — | Minimum selectable time (e.g. '09:00'). A typed time before it is not committed, and the field shows its error state with aria-invalid. |
+| `maxTime` | string | — | Maximum selectable time (e.g. '17:00'). A typed time after it is not committed, and the field shows its error state with aria-invalid. |
 | `name` | string | — | Name for the hidden input for form submission. |
 | `placeholder` | string | — | Placeholder text for the input. |
 | `disabled` | boolean | `false` | Disables the component. |
@@ -237,13 +237,13 @@ const [time, setTime] = useState<string | null>(null);
 
 | Key | Behaviour |
 |-----|-----------|
-| Typing | Sets the time: `hh:mm` on a 24-hour picker, `hh:mm am` or `hh:mm pm` on a 12-hour one, committed on `Enter`, `Tab` or leaving the field. Any minute can be typed, not only the `minuteStep` ones the list and the clock offer. Typing opens the panel; `Space` is a character, the one between the time and AM/PM. |
+| Typing | Sets the time: `hh:mm` on a 24-hour picker, `hh:mm am` or `hh:mm pm` on a 12-hour one, committed on `Enter`, `Tab` or leaving the field. Any minute can be typed, not only the `minuteStep` ones the list and the clock offer: the step is the increment offered, not a constraint. A time outside `minTime` and `maxTime` is not committed: the field keeps the text, shows its error state with `aria-invalid`, and `onValueChange` is not called. Typing opens the panel; `Space` is a character, the one between the time and AM/PM. |
 | `Backspace` | Deleting the whole value and committing it clears the time. So does the clear button, which `Tab` reaches. |
 | `Enter` | In the dropdown list, picks the highlighted time. Otherwise commits what was typed and closes the panel. |
 | `Tab` | Commits what was typed, closes the panel and moves to the next control. |
 | `Escape` | Closes the panel; focus stays in the input, which is where it was. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
-| `ArrowDown`, `ArrowUp` | Opens the dropdown list and moves through its times. On the clock variant, `ArrowDown` opens the clock. |
-| `Home`, `End` | Jumps to the first or last time in the dropdown list. |
+| `ArrowDown`, `ArrowUp` | Opens the dropdown list and moves through its times. On the clock variant, `ArrowDown` opens the clock and neither key does anything else: there is no list to move through, so nothing is highlighted and `Enter` commits what was typed. |
+| `Home`, `End` | Jumps to the first or last time in the dropdown list. On the clock variant they move the caret. |
 | `ArrowLeft`, `ArrowRight`, `PageUp`, `PageDown` | Move the caret in the input. The clock is a pointer affordance: focus stays in the input while it is open, its face takes no keyboard focus, and its own handling of the arrow keys, `PageUp`, `PageDown`, `Home` and `End` is not reachable from the keyboard. Every time the clock can set can be typed. |
 
 ---

@@ -94,7 +94,7 @@ export default function Example() {
 | `keepMounted` | boolean | `false` | Keep the drawer DOM mounted when closed. |
 | `modal` | boolean | `true` | Whether the drawer behaves as a modal dialog. |
 | `swipeable` | boolean | `false` | Enables swipe-to-close gesture. |
-| `swipeThreshold` | number | `0.4` | Minimum swipe distance in pixels to trigger close. |
+| `swipeThreshold` | number | `0.4` | How far a swipe has to travel to close the drawer, as a fraction of the panel's size along the swipe (0.4 is 40% of its height for a top or bottom sheet, of its width for a side drawer). A fast enough fling closes it at any distance. |
 | `snapPoints` | array | — | Array of snap point positions (0-1) for the drawer panel. |
 | `snapPointIndex` | number | — | Controlled index into `snapPoints`. Pairs with `defaultSnapPointIndex` and `onSnapPointIndexChange`. |
 | `defaultSnapPointIndex` | number | `0` | Initial snap point index for uncontrolled usage. |

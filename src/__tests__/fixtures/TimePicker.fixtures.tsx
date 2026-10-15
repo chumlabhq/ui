@@ -16,6 +16,7 @@ const fixtures: Fixtures<typeof TimePicker> = [
   },
   { name: "open-clock-12h", props: { defaultOpen: true, mode: "clock", format: "12h", defaultValue: "09:30" }, note: "The period toggle only exists on a 12-hour clock." },
   { name: "open-bounded", props: { defaultOpen: true, mode: "clock", minTime: "09:00", maxTime: "17:00", defaultValue: "10:00" }, note: "Disabled clock numbers need a bounded range." },
+  { name: "bounded", props: { minTime: "09:00", maxTime: "17:00", defaultValue: "10:00" }, note: "The list variant with a range, closed, for typing outside it." },
   { name: "open-no-matches", props: { defaultOpen: true, minTime: "23:59", maxTime: "23:59" } },
   {
     name: "open-keyboard-focus",

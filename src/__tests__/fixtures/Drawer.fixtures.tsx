@@ -16,7 +16,7 @@ const fixtures: Fixtures<typeof Drawer> = [
       <Toggle label="Open Drawer">
         {(open, setOpen) => (
           <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerHeader title="Test drawer" />
+            <DrawerHeader>Test drawer</DrawerHeader>
             <DrawerCloseButton />
             <button type="button">Inside</button>
           </Drawer>
@@ -31,7 +31,7 @@ const fixtures: Fixtures<typeof Drawer> = [
       <Toggle label="Open Drawer">
         {(open, setOpen) => (
           <Drawer open={open} onOpenChange={setOpen} modal={false}>
-            <DrawerHeader title="Non-modal drawer" />
+            <DrawerHeader>Non-modal drawer</DrawerHeader>
             <button type="button">Inside</button>
           </Drawer>
         )}
@@ -52,7 +52,7 @@ const fixtures: Fixtures<typeof Drawer> = [
             swipeable
             aria-label="Swipeable sheet"
           >
-            <DrawerHeader title="Sheet" />
+            <DrawerHeader>Sheet</DrawerHeader>
             Body
           </Drawer>
         )}
@@ -76,7 +76,7 @@ const fixtures: Fixtures<typeof Drawer> = [
             snapPointIndex={index}
             aria-label="Snapping sheet"
           >
-            <DrawerHeader title="Sheet" />
+            <DrawerHeader>Sheet</DrawerHeader>
             Body
           </Drawer>
         )}
@@ -91,7 +91,7 @@ const fixtures: Fixtures<typeof Drawer> = [
     // classes at all — not even `cursor-pointer`. Every other fixture that
     // carries one starts closed, so `an enabled control affords a pointer` had
     // nothing to look at and could not fail for the defect it was written for.
-    children: <><DrawerHeader title="Drawer" /><DrawerCloseButton />Body</>,
+    children: <><DrawerHeader>Drawer</DrawerHeader><DrawerCloseButton />Body</>,
   },
   /**
    * Props-only, so the contract tier can reach it.
@@ -104,9 +104,9 @@ const fixtures: Fixtures<typeof Drawer> = [
   {
     name: "open-swipeable",
     props: { open: true, swipeable: true },
-    children: <><DrawerHeader title="Drawer" /><DrawerCloseButton />Body</>,
+    children: <><DrawerHeader>Drawer</DrawerHeader><DrawerCloseButton />Body</>,
   },
-  { name: "open-left", props: { open: true, side: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
+  { name: "open-left", props: { open: true, side: "left" }, children: <><DrawerHeader>Drawer</DrawerHeader>Body</> },
   {
     name: "tall-left",
     props: {},
@@ -135,12 +135,12 @@ const fixtures: Fixtures<typeof Drawer> = [
     note: "data-autofocus on the last control, below the fold of a tall panel.",
     render: () => <TallDrawer side="right" autoFocusLast />,
   },
-  { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader title="Drawer" />Body</> },
+  { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader>Drawer</DrawerHeader>Body</> },
   {
     name: "open-rtl",
     props: { open: true, side: "left" },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
-    children: <><DrawerHeader title="Drawer" />Body</>,
+    children: <><DrawerHeader>Drawer</DrawerHeader>Body</>,
     note: "`side` is physical (left/right), not logical (start/end), so nothing here mirrors — which is the finding."
   },
 ];

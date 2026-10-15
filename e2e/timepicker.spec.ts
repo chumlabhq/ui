@@ -88,3 +88,59 @@ for (const clock of ["open", "closed"] as const) {
     console.log(`CLOCK_KEYBOARD clock ${clock}: ${set.join(" ")}`);
   });
 }
+
+/**
+ * A typed time obeys minTime and maxTime, in both variants.
+ *
+ * Both accepted any time typed into the field: `20:00` on a 09:00-17:00 picker
+ * was committed and passed to `onValueChange`, though neither the list nor the
+ * clock offers it. It is refused now — the text stays for the user to correct,
+ * the field shows its error state with `aria-invalid`, and the value is
+ * unchanged. A time off the minute step is still committed: the step is the
+ * increment the list and the clock offer, not a constraint.
+ */
+for (const fixture of ["bounded", "open-bounded"]) {
+  test(`TimePicker/${fixture}: typed times outside minTime and maxTime are refused, off-step times are kept`, async ({ page }) => {
+    await gotoFixture(page, "TimePicker", fixture);
+    const input = page.locator('[data-fixture] input[role="combobox"]');
+    const submitted = () => input.evaluate((el) => (el as HTMLInputElement).value);
+    const results: string[] = [];
+    for (const { keys, commit, value, invalid } of [
+      { keys: "20:00", commit: "Enter", value: "20:00", invalid: true },
+      { keys: "08:15", commit: "Tab", value: "08:15", invalid: true },
+      { keys: "10:07", commit: "Enter", value: "10:07", invalid: false },
+    ]) {
+      await input.focus();
+      await page.keyboard.press("ControlOrMeta+a");
+      await page.keyboard.type(keys);
+      await page.keyboard.press(commit);
+      await expect(input).toHaveValue(value);
+      if (invalid) await expect(input).toHaveAttribute("aria-invalid", "true");
+      else await expect(input).not.toHaveAttribute("aria-invalid");
+      results.push(`${keys}+${commit} -> "${await submitted()}" invalid=${await input.getAttribute("aria-invalid")}`);
+    }
+    // Refused means nothing reached the form: the field reverts to the last
+    // committed time when it is left with garbage, and that is still 10:07.
+    await input.focus();
+    await page.keyboard.press("ControlOrMeta+a");
+    await page.keyboard.type("99");
+    await page.keyboard.press("Enter");
+    await expect(input).toHaveValue("10:07");
+    console.log(`CLOCK_BOUNDS ${fixture}: ${results.join("; ")}; garbage reverts to "10:07"`);
+  });
+}
+
+for (const keys of [["ArrowDown", "ArrowDown"], ["ArrowUp"]]) {
+  test(`TimePicker/open-clock: ${keys.join(", ")} leave nothing highlighted, so Enter commits the typed time`, async ({ page }) => {
+    await gotoFixture(page, "TimePicker", "open-clock");
+    const input = page.locator('[data-fixture] input[role="combobox"]');
+    await input.focus();
+    await page.keyboard.press("ControlOrMeta+a");
+    await page.keyboard.type("16");
+    for (const key of keys) await page.keyboard.press(key);
+    await expect(input).not.toHaveAttribute("aria-activedescendant");
+    await page.keyboard.press("Enter");
+    console.log(`CLOCK_ARROWS open-clock: typed "16", ${keys.join(", ")}, Enter -> "${await input.inputValue()}"`);
+    await expect(input).toHaveValue("16:00");
+  });
+}
