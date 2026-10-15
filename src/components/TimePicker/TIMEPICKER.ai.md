@@ -237,13 +237,14 @@ const [time, setTime] = useState<string | null>(null);
 
 | Key | Behaviour |
 |-----|-----------|
-| `Enter`, `Space` | Opens the panel from the trigger, and picks the focused time. |
-| `ArrowDown`, `ArrowUp` | Moves through the options in the focused column. On the clock face the same keys move the hand by one step. |
-| `ArrowLeft`, `ArrowRight` | Moves between the hour, minute, second and meridiem columns. |
-| `Home`, `End` | Jumps to the first or last option in the column. |
-| `PageUp`, `PageDown` | Moves by the larger step on the clock face. |
-| `Escape` | Closes the panel and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
-| `Tab` | Cycles within the open panel. |
+| Typing | Sets the time: `hh:mm` on a 24-hour picker, `hh:mm am` or `hh:mm pm` on a 12-hour one, committed on `Enter`, `Tab` or leaving the field. Any minute can be typed, not only the `minuteStep` ones the list and the clock offer. Typing opens the panel; `Space` is a character, the one between the time and AM/PM. |
+| `Backspace` | Deleting the whole value and committing it clears the time. So does the clear button, which `Tab` reaches. |
+| `Enter` | In the dropdown list, picks the highlighted time. Otherwise commits what was typed and closes the panel. |
+| `Tab` | Commits what was typed, closes the panel and moves to the next control. |
+| `Escape` | Closes the panel; focus stays in the input, which is where it was. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
+| `ArrowDown`, `ArrowUp` | Opens the dropdown list and moves through its times. On the clock variant, `ArrowDown` opens the clock. |
+| `Home`, `End` | Jumps to the first or last time in the dropdown list. |
+| `ArrowLeft`, `ArrowRight`, `PageUp`, `PageDown` | Move the caret in the input. The clock is a pointer affordance: focus stays in the input while it is open, its face takes no keyboard focus, and its own handling of the arrow keys, `PageUp`, `PageDown`, `Home` and `End` is not reachable from the keyboard. Every time the clock can set can be typed. |
 
 ---
 
@@ -267,8 +268,8 @@ const ref = useRef<HTMLInputElement>(null);
 - `aria-describedby` connects description, error, and success messages
 - `aria-pressed` on clock AM/PM and hours/minutes toggle buttons
 - Clock variant is a non-modal `role="dialog"`: focus stays in the input, which points at it with `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls`
-- Clock face uses `role="slider"` with arrow key navigation
-- Keyboard: Tab to focus, Arrow keys to navigate options, Enter to select, Escape to close
+- Clock face uses `role="slider"`; it is a pointer surface that takes no keyboard focus, and the input is the keyboard path to every time it can set
+- Keyboard: type the time into the input; in the dropdown list, arrow keys move through the times and Enter picks one; Escape closes the panel
 - `prefers-reduced-motion` support via `reduceMotion` prop
 - **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
   `prefers-reduced-motion` setting. `true` always reduces motion. `false` always

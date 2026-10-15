@@ -1181,6 +1181,27 @@ const LIBRARY_TOTAL_HISTORY = [
       "aria-modal). No declared breach moved. No comments added to " +
       "src/components. Measured against a build of a9e48f31.",
   },
+  {
+    kb: 158.01,
+    commit: "(uncommitted)",
+    date: "2026-10-15",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.19 KB (161,607 -> 161,805 B gzipped, +198 B), 82 files " +
+      "held. L18: sheet content scrolls by touch (drag starts from handle or " +
+      "header, sticky handle); initial focus re-revealed while content " +
+      "settles (ResizeObserver, e.g. a late web font). Exclusive: Drawer " +
+      "6,096 -> 6,287 B (+191 B). Per piece, measured by cutting each from " +
+      "the built chunk: the ResizeObserver re-reveal 70 B and its cleanup " +
+      "8 B; the drag-start rule (touch on a top or bottom sheet starts only " +
+      "from the handle or header) 24 B; the header grip, its touch-action " +
+      "style 18 B and the context flag 9 B; the sticky handle classes 15 B; " +
+      "the handle's touch-action 11 B; the rest is the sheet panel's " +
+      "touch-action moving from pan-x to auto and dependency arrays. No " +
+      "declared breach moved. No comments added to src/components; one " +
+      "existing comment in Drawer.tsx corrected, which ships no bytes. " +
+      "Measured against a build of 645da56b.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

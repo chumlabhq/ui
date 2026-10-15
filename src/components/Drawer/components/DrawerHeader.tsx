@@ -4,7 +4,7 @@ import { useDrawerContext } from "../utils/context.js";
 import { cn } from "../../../utils/scopedCn.js";
 
 const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
-  ({ children, className, id: idProp, ...rest }, ref) => {
+  ({ children, className, id: idProp, style, ...rest }, ref) => {
     const context = useDrawerContext();
     const id = idProp ?? context?.titleId;
 
@@ -23,6 +23,7 @@ const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
         ref={ref}
         id={id}
         className={cn(className) || undefined}
+        style={context?.swipeGrip ? { touchAction: "none", ...style } : style}
         data-drawer-header
         {...rest}
       >

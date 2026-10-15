@@ -117,6 +117,13 @@ const fixtures: Fixtures<typeof Drawer> = [
   { name: "tall-top", props: {}, render: () => <TallDrawer side="top" /> },
   { name: "tall-bottom", props: {}, render: () => <TallDrawer side="bottom" /> },
   {
+    name: "tall-swipeable-top",
+    props: {},
+    note: "A swipeable sheet whose content scrolls along the axis it dismisses on: the drag has to start on the handle or the header.",
+    render: () => <TallDrawer side="top" swipeable />,
+  },
+  { name: "tall-swipeable-bottom", props: {}, render: () => <TallDrawer side="bottom" swipeable /> },
+  {
     name: "tall-initial-focus",
     props: {},
     note: "initialFocus aims at the last control, below the fold of a tall panel.",

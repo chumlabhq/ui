@@ -30,7 +30,7 @@ export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
    * two that make it a handle rather than decoration.
    */
   handle:
-    "flex items-center justify-center h-5 shrink-0 select-none cursor-grab active:cursor-grabbing",
+    "sticky top-0 bg-inherit flex items-center justify-center h-5 shrink-0 select-none cursor-grab active:cursor-grabbing",
   handleBar: "block h-1 w-9 rounded-full bg-cl-border-input",
 };
 

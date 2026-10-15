@@ -265,16 +265,18 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         const panel = panelRef.current;
         if (!panel) return;
 
+        let observer: ResizeObserver | undefined;
         const timer = requestAnimationFrame(() => {
-          if (initialFocus?.current) {
-            focusAndReveal(initialFocus.current);
-            return;
-          }
-
-          const autoFocusEl =
-            panel.querySelector<HTMLElement>("[data-autofocus]");
-          if (autoFocusEl) {
-            focusAndReveal(autoFocusEl);
+          const target =
+            initialFocus?.current ?? panel.querySelector<HTMLElement>("[data-autofocus]");
+          if (target) {
+            focusAndReveal(target);
+            if (typeof ResizeObserver === "undefined") return;
+            observer = new ResizeObserver(() => {
+              if (document.activeElement === target) focusAndReveal(target);
+              else observer?.disconnect();
+            });
+            for (const child of panel.children) observer.observe(child);
             return;
           }
 
@@ -287,7 +289,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           panel.focus({ preventScroll: true });
         });
 
-        return () => cancelAnimationFrame(timer);
+        return () => {
+          cancelAnimationFrame(timer);
+          observer?.disconnect();
+        };
       }
     }, [isOpen, modal, initialFocus, mounted]);
 
@@ -382,7 +387,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         // Secondary and middle buttons do not drag anything.
         if (e.button !== 0) return;
         /**
-         * A mouse drags from the handle; a finger drags from anywhere.
+         * A mouse drags from the handle; a finger drags from anywhere on a
+         * side drawer, and from the handle or the header on a top or bottom
+         * sheet, whose content scrolls along the same axis it dismisses on.
          *
          * Swipe-to-dismiss is a touch gesture and the whole panel is the
          * target for it. A mouse is different: the panel is full of text, and
@@ -392,7 +399,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
          * coarse pointers because that would leave the handle rendered on a
          * desktop where nothing it advertises works.
          */
-        if (e.pointerType === "mouse" && !(e.target as Element).closest?.("[data-drawer-handle]")) {
+        const mouse = e.pointerType === "mouse";
+        if ((mouse || !isHorizontalSide(side)) && !(e.target as Element).closest?.(mouse ? "[data-drawer-handle]" : "[data-drawer-handle], [data-drawer-header]")) {
           return;
         }
 
@@ -412,7 +420,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         // button held.
         (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
       },
-      [swipeable, isOpen],
+      [swipeable, isOpen, side],
     );
 
     const handlePanelPointerMove = useCallback(
@@ -568,8 +576,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     );
 
     const contextValue = useMemo(
-      () => ({ onClose: handleClose, titleId, registerTitle: setHasTitle }),
-      [handleClose, titleId, setHasTitle],
+      () => ({ onClose: handleClose, titleId, registerTitle: setHasTitle, swipeGrip: swipeable && !isHorizontalSide(side) }),
+      [handleClose, titleId, setHasTitle, swipeable, side],
     );
 
     if (!hydrated) return null;
@@ -700,6 +708,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               {swipeable && (
                 <div
                   className={mergedClasses.handle || undefined}
+                  style={{ touchAction: "none" }}
                   data-drawer-handle
                   aria-hidden="true"
                 >

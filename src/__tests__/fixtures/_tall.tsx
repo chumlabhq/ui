@@ -1,4 +1,4 @@
-import { useRef, type Ref } from "react";
+import { useRef, useState, type Ref } from "react";
 import Drawer from "../../components/Drawer/Drawer.js";
 import DrawerBody from "../../components/Drawer/components/DrawerBody.js";
 import DrawerCloseButton from "../../components/Drawer/components/DrawerCloseButton.js";
@@ -21,11 +21,12 @@ export function TallContent({ autoFocusLast = false, lastRef }: { autoFocusLast?
   );
 }
 
-export function TallDrawer({ side, initialFocusLast = false, autoFocusLast = false }: { side: "left" | "right" | "top" | "bottom"; initialFocusLast?: boolean; autoFocusLast?: boolean }) {
+export function TallDrawer({ side, initialFocusLast = false, autoFocusLast = false, swipeable = false }: { side: "left" | "right" | "top" | "bottom"; initialFocusLast?: boolean; autoFocusLast?: boolean; swipeable?: boolean }) {
   const last = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(true);
   return (
-    <Drawer open onOpenChange={() => {}} side={side} initialFocus={initialFocusLast ? last : undefined}>
-      <DrawerHeader title="Tall drawer" />
+    <Drawer open={open} onOpenChange={setOpen} side={side} initialFocus={initialFocusLast ? last : undefined} swipeable={swipeable}>
+      <DrawerHeader>Tall drawer</DrawerHeader>
       <DrawerCloseButton />
       <DrawerBody>
         <TallContent lastRef={last} autoFocusLast={autoFocusLast} />

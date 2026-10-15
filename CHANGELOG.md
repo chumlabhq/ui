@@ -702,6 +702,14 @@ tables say.
   to the parent.
 - **TimePicker's clock no longer declares the focused input inert.** It is a non-modal dialog
   tied to the input, which keeps focus.
+- **Drawer top and bottom sheets scroll by touch again, and swipe-to-dismiss keeps working.** The
+  dismiss drag starts from the handle or the header, and the handle stays in reach while the
+  content scrolls.
+- **Drawer initial focus is revealed once the panel's content settles.** A control below the fold
+  stays in view when a web font or late content changes the layout after the drawer opens.
+- **TimePicker's keyboard documentation describes what the keyboard does (documentation).** Every
+  time, including ones the clock cannot set, is typed into the input; the clock is a pointer
+  affordance and takes no focus.
 - **Table, Modal and Drawer keep the keyboard-focused cell or control in view.** Arrow keys in
   Table's grid, and Tab inside a Modal or a modal Drawer, moved focus without scrolling it into
   view, in every engine: a cell past the edge of a narrow table, or a control below the fold of

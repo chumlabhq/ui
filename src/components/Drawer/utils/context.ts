@@ -13,6 +13,7 @@ export interface DrawerContextValue {
    * rendered a drawer with no header, which happened to be an RTL one.
    */
   registerTitle: (present: boolean) => void;
+  swipeGrip: boolean;
 }
 
 export const DrawerContext = createContext<DrawerContextValue | null>(null);

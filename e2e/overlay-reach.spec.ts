@@ -88,14 +88,63 @@ for (const vp of VIEWPORTS) {
       });
     }
 
+    /**
+     * Initial focus is revealed once the panel's content has its final size.
+     *
+     * The reveal ran in the frame after the panel mounted, while the web font
+     * was still loading: the 40 paragraphs rewrapped when Geist arrived, the
+     * body grew 1728 -> 1920px, and the control the reveal had scrolled to
+     * 696..720 sat at 888..912 in a 720px window. Chromium and Firefox usually
+     * repair that with scroll anchoring; WebKit does not, and Chromium did not
+     * once under load, which is how this case failed in L17's gates. Holding
+     * the font until focus has landed reproduces it on demand: WebKit every
+     * time, Chromium intermittently. Holding every frame 300ms does not — the
+     * font then lands before the reveal runs — and is kept as the stand-in the
+     * slow-machine failure was first reported against.
+     */
+    const CONDITIONS = [
+      { name: "", setup: async () => {} },
+      {
+        name: " with every frame held 300ms",
+        setup: (page: Page) =>
+          page.addInitScript(() => {
+            const raf = window.requestAnimationFrame.bind(window);
+            window.requestAnimationFrame = (cb) => (setTimeout(() => raf(cb), 300), 0) as unknown as number;
+          }),
+      },
+      {
+        name: " with the web font held until focus lands",
+        setup: async (page: Page) => {
+          let release!: () => void;
+          const held = new Promise<void>((resolve) => (release = resolve));
+          await page.route(/\.(woff2?|ttf|otf)(\?|$)/, async (route) => {
+            await held;
+            await route.continue();
+          });
+          return release;
+        },
+      },
+    ];
     for (const fixture of ["tall-initial-focus", "tall-autofocus"]) {
-      test(`Drawer/${fixture}: initial focus below the fold is brought into view`, async ({ page }) => {
-        await gotoFixture(page, "Drawer", fixture);
-        await expect(page.getByRole("button", { name: "Last action" })).toBeFocused();
-        const s = await seen(page);
-        console.log(`OVERLAY_REACH ${vp.width}x${vp.height} Drawer/${fixture} initial: "${s.label}" at ${s.at} visible=${s.visible}`);
-        expect(s.visible).toBe(true);
-      });
+      for (const condition of CONDITIONS) {
+        test(`Drawer/${fixture}: initial focus below the fold is brought into view${condition.name}`, async ({ page }) => {
+          const release = await condition.setup(page);
+          await gotoFixture(page, "Drawer", fixture);
+          await expect(page.getByRole("button", { name: "Last action" })).toBeFocused();
+          if (release) {
+            // Landed means the layout changed, not `document.fonts.status`:
+            // WebKit reports "loaded" while the font request is still held. The
+            // extra frame is WebKit's: it scrolls at its next rendering update.
+            const before = await page.locator("[data-drawer-panel]").evaluate((p) => p.scrollHeight);
+            release();
+            await page.waitForFunction((h) => document.querySelector("[data-drawer-panel]")!.scrollHeight !== h, before, { polling: "raf" });
+            await page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
+          }
+          const s = await seen(page);
+          console.log(`OVERLAY_REACH ${vp.width}x${vp.height} Drawer/${fixture}${condition.name} initial: "${s.label}" at ${s.at} visible=${s.visible}`);
+          expect(s.visible).toBe(true);
+        });
+      }
     }
 
     for (const fixture of ["open-long", "open-long-low"]) {

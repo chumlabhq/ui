@@ -72,7 +72,7 @@ export function isHorizontalSide(side: DrawerSide): boolean {
 }
 
 export function getTouchAction(side: DrawerSide): string {
-  return isHorizontalSide(side) ? "pan-y" : "pan-x";
+  return isHorizontalSide(side) ? "pan-y" : "auto";
 }
 
 const drawerStack: string[] = [];

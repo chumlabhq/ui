@@ -100,6 +100,90 @@ test.describe("Drawer", () => {
     });
   });
 
+  /**
+   * A top or bottom sheet scrolls by touch, and dismisses from its handle.
+   *
+   * Both sheets carried `touch-action: pan-x`, which hands every vertical
+   * gesture to the page: a finger in the content of a tall bottom sheet
+   * scrolled nothing (scrollTop 0 after a 150px drag), and on a top sheet,
+   * where "more content" and "dismiss" are the same direction, every vertical
+   * drag closed it. Measured with real touch input in Mobile Chrome.
+   *
+   * The browser decides touch-action at touchstart, before the page knows the
+   * direction or the scroll position, and a pan it has started cannot be taken
+   * back — so the sheet leaves its content to the browser and starts the
+   * dismiss drag only from the handle or the header, which take
+   * `touch-action: none`.
+   */
+  test.describe("Sheet touch", () => {
+    for (const side of ["top", "bottom"] as const) {
+      const fixture = `tall-swipeable-${side}`;
+      const dismiss = side === "bottom" ? 1 : -1;
+
+      test(`${fixture}: a touch drag in the content scrolls it, and one on the handle dismisses`, async ({ page }, info) => {
+        test.skip(info.project.name !== "Mobile Chrome", "real touch input through CDP");
+        await gotoFixture(page, "Drawer", fixture);
+        const panel = page.locator(DIALOG);
+        await expect(panel).toBeVisible();
+        await page.waitForFunction(() => getComputedStyle(document.querySelector("[data-drawer-panel]")!).transform === "matrix(1, 0, 0, 1, 0, 0)", undefined, { polling: "raf" });
+        const cdp = await page.context().newCDPSession(page);
+        const drag = async (x: number, y: number, dy: number) => {
+          await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
+          for (let i = 1; i <= 12; i++) await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x, y: y + (dy * i) / 12 }] });
+          await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+        };
+
+        const box = (await panel.boundingBox())!;
+        const x = box.x + box.width / 2;
+        // Finger up: toward more content on both sheets.
+        await drag(x, box.y + box.height / 2, -150);
+        await expect.poll(() => panel.evaluate((p) => p.scrollTop), { message: "a drag in the content did not scroll it" }).toBeGreaterThan(0);
+        const scrolled = await panel.evaluate((p) => Math.round(p.scrollTop));
+        await expect(panel, "a drag in the content dismissed the sheet").toBeVisible();
+
+        const handle = (await panel.locator("[data-drawer-handle]").boundingBox())!;
+        await drag(x, handle.y + handle.height / 2, 150 * dismiss);
+        console.log(`SHEET_TOUCH ${fixture}: content drag scrollTop=${scrolled}, open after; handle drag dismissed`);
+        await expect(panel, "a drag on the handle did not dismiss the sheet").toHaveCount(0);
+      });
+
+      test(`${fixture}: content takes touch, the handle and header start the drag`, async ({ page }) => {
+        await gotoFixture(page, "Drawer", fixture);
+        const panel = page.locator(DIALOG);
+        await expect(panel).toBeVisible();
+        const actions = await panel.evaluate((p) => ({
+          panel: getComputedStyle(p).touchAction,
+          handle: getComputedStyle(p.querySelector("[data-drawer-handle]")!).touchAction,
+          header: getComputedStyle(p.querySelector("[data-drawer-header]")!).touchAction,
+        }));
+        expect(actions).toEqual({ panel: "auto", handle: "none", header: "none" });
+
+        // The drag-start rule, through synthetic touch pointers: the engines
+        // differ in how they deliver real touch, the rule does not. Capture is
+        // a no-op because a synthetic pointer is not an active one.
+        const dragFrom = (selector: string) =>
+          panel.evaluate((p, { selector, dy }) => {
+            Element.prototype.setPointerCapture = () => {};
+            Element.prototype.releasePointerCapture = () => {};
+            const el = p.querySelector(selector)!;
+            const r = el.getBoundingClientRect();
+            const at = (type: string, y: number, buttons: number) =>
+              el.dispatchEvent(new PointerEvent(type, { bubbles: true, pointerId: 7, pointerType: "touch", isPrimary: true, button: 0, buttons, clientX: r.left + 20, clientY: y }));
+            const y0 = r.top + Math.min(10, r.height / 2);
+            at("pointerdown", y0, 1);
+            for (let i = 1; i <= 6; i++) at("pointermove", y0 + (dy * i) / 6, 1);
+            at("pointerup", y0 + dy, 0);
+          }, { selector, dy: 200 * dismiss });
+
+        await dragFrom("p");
+        await expect(panel, "a touch drag that started in the content dismissed the sheet").toBeVisible();
+        await dragFrom("[data-drawer-header]");
+        await expect(panel, "a touch drag on the header did not dismiss the sheet").toHaveCount(0);
+        console.log(`SHEET_RULE ${fixture}: ${JSON.stringify(actions)}; content drag kept it open, header drag dismissed`);
+      });
+    }
+  });
+
   test.describe("Accessibility", () => {
     test("passes an axe audit", async ({ page }) => {
       await gotoFixture(page, "Drawer", "open");

@@ -57,6 +57,7 @@ export default function Example() {
 |------|-----------|
 | `side` | `"left"` (default), `"right"`, `"top"`, `"bottom"` |
 | `snapPoints` | Array of percentages (0-1). Requires `swipeable={true}`. |
+| `swipeable` | By touch, a `left` or `right` drawer is dragged from anywhere on it. A `top` or `bottom` sheet is dragged from its handle or its `DrawerHeader`, because its content scrolls along the axis it dismisses on. A mouse drags from the handle on every side. |
 | `trapFocus` | Defaults `true` when `modal={true}`. |
 | `keepMounted` | Keeps DOM alive when closed. Uses `inert` to hide. |
 

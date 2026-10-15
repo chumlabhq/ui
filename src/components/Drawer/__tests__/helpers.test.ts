@@ -129,9 +129,11 @@ describe("getTouchAction", () => {
     expect(getTouchAction("right")).toBe("pan-y");
   });
 
-  it("returns 'pan-x' for vertical drawers (top/bottom)", () => {
-    expect(getTouchAction("top")).toBe("pan-x");
-    expect(getTouchAction("bottom")).toBe("pan-x");
+  // A sheet's content scrolls along the axis it dismisses on, so the panel
+  // leaves touch to the browser and the drag starts from the handle or header.
+  it("returns 'auto' for vertical drawers (top/bottom)", () => {
+    expect(getTouchAction("top")).toBe("auto");
+    expect(getTouchAction("bottom")).toBe("auto");
   });
 });
 

@@ -884,10 +884,24 @@ describe("Drawer", () => {
       expect(panel.style.touchAction).toBe("pan-y");
     });
 
-    it("sets touch-action to pan-x for top/bottom side", () => {
+    it("leaves touch to the browser on a top/bottom sheet, so its content scrolls", () => {
       renderDrawer({ swipeable: true, side: "bottom" });
       const panel = screen.getByRole("dialog");
-      expect(panel.style.touchAction).toBe("pan-x");
+      expect(panel.style.touchAction).toBe("auto");
+    });
+
+    it("gives the handle, and a sheet's header, touch-action none", () => {
+      renderDrawer({ swipeable: true, side: "bottom" });
+      const handle = document.querySelector<HTMLElement>("[data-drawer-handle]")!;
+      const header = document.querySelector<HTMLElement>("[data-drawer-header]")!;
+      expect(handle.style.touchAction).toBe("none");
+      expect(header.style.touchAction).toBe("none");
+    });
+
+    it("leaves a side drawer's header to the browser", () => {
+      renderDrawer({ swipeable: true, side: "left" });
+      const header = document.querySelector<HTMLElement>("[data-drawer-header]")!;
+      expect(header.style.touchAction).toBeFalsy();
     });
 
     it("does not set touch-action when not swipeable", () => {
@@ -926,6 +940,33 @@ describe("Drawer", () => {
       });
 
       expect(onOpenChange).toHaveBeenCalled();
+    });
+
+    // A finger on a sheet's content is scrolling it; only the handle or the
+    // header starts the dismiss drag.
+    it("dismisses a bottom sheet on a touch drag from the header, not from the content", async () => {
+      const onOpenChange = vi.fn();
+      renderDrawer({ swipeable: true, side: "bottom", onOpenChange });
+      const panel = screen.getByRole("dialog");
+      Object.defineProperty(panel, "offsetHeight", { value: 300, configurable: true });
+
+      const dragFrom = async (el: Element) => {
+        await act(async () => {
+          el.dispatchEvent(createPointerEvent("pointerdown", 200, 300));
+        });
+        await act(async () => {
+          el.dispatchEvent(createPointerEvent("pointermove", 200, 500));
+        });
+        await act(async () => {
+          el.dispatchEvent(createPointerEvent("pointerup", 200, 500));
+        });
+      };
+
+      await dragFrom(screen.getByRole("button", { name: "First" }));
+      expect(onOpenChange).not.toHaveBeenCalled();
+
+      await dragFrom(document.querySelector("[data-drawer-header]")!);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
     });
   });
 
