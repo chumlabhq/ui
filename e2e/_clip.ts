@@ -45,7 +45,7 @@ export async function focusFindings(page: Page): Promise<FocusFindings> {
   const roots = ["[data-fixture]", ...(portals > 0 ? [`[${PORTAL_MARK}]`] : [])];
 
   return page.evaluate(
-    ({ selector, boundaries }) => {
+    async ({ selector, boundaries }) => {
       const isBoundary = (el: Element) => boundaries.some((b) => el.matches(b));
       const clipAncestor = (el: Element): HTMLElement | null => {
         let n = el.parentElement;
@@ -76,9 +76,18 @@ export async function focusFindings(page: Page): Promise<FocusFindings> {
         (el) => clipAncestor(el) !== null,
       );
       const bad: string[] = [];
+      // The scroll a focus causes is not always done by the time `focus()`
+      // returns. Chromium and Firefox scroll inside the call; WebKit scrolls at
+      // its next rendering update, so a rect read straight after `focus()` is
+      // the pre-scroll rect there — which is how this reported the DatePicker
+      // month menu as obscured in WebKit when a keyboard user sees every month.
+      // One animation frame is the named condition: the callback runs after the
+      // rendering update that performs the scroll, in all three engines.
+      const settled = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       for (const el of targets) {
         el.focus();
-        // Read after focus, so any scrolling the browser did is included.
+        await settled();
+        // Read after the scroll has settled, so whatever the browser did is included.
         const anc = clipAncestor(el)!;
         const a = el.getBoundingClientRect();
         const c = anc.getBoundingClientRect();

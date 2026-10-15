@@ -45,6 +45,7 @@ import {
   copyToClipboard,
 } from "./utils.js";
 import TableShimmer from "./TableShimmer.js";
+import { focusAndReveal } from "../../utils/focusAndReveal.js";
 import type { FilterPanelProps } from "./FilterPanel.js";
 import {
   DEFAULT_TABLE_CLASSES,
@@ -1045,7 +1046,7 @@ function TableInner<TData>(
     const td = containerRef.current?.querySelector<HTMLElement>(
       'td[data-highlighted="true"]',
     );
-    if (!td?.contains(document.activeElement)) td?.focus({ preventScroll: true });
+    if (td && !td.contains(document.activeElement)) focusAndReveal(td);
   }, [focusedCell]);
 
   const isRowSelected = useCallback(

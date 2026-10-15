@@ -1,5 +1,5 @@
 import { expect, test } from "./_test";
-import { gotoFixtureIndex } from "./_nav";
+import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { focusFindings } from "./_clip";
 
 /**
@@ -87,8 +87,8 @@ test("focus is never entirely obscured by a clipping ancestor", async ({ page })
 test("the check notices an obscured focus, and clears a scrollable one", async ({ page }) => {
   await page.goto("/__fixtures", { waitUntil: "domcontentloaded" });
 
-  const result = await page.evaluate(() => {
-    const measure = (overflow: string) => {
+  const result = await page.evaluate(async () => {
+    const measure = async (overflow: string) => {
       const host = document.createElement("div");
       host.setAttribute("data-fixture", "");
       host.style.cssText = "position:fixed;top:0;left:0;width:100px;height:40px";
@@ -104,6 +104,9 @@ test("the check notices an obscured focus, and clears a scrollable one", async (
       document.body.appendChild(host);
       const last = strip.lastElementChild as HTMLElement;
       last.focus();
+      // After one frame, as `_clip.ts` reads: WebKit performs the focus scroll
+      // at its next rendering update rather than inside `focus()`.
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       const a = last.getBoundingClientRect();
       const c = strip.getBoundingClientRect();
       const visible =
@@ -113,14 +116,15 @@ test("the check notices an obscured focus, and clears a scrollable one", async (
       host.remove();
       return { visible, scrolled };
     };
-    return { clip: measure("clip"), hidden: measure("hidden") };
+    return { clip: await measure("clip"), hidden: await measure("hidden") };
   });
 
   // `clip` cannot scroll, so focus lands somewhere entirely invisible.
   expect(result.clip.visible, "overflow:clip should leave the focused control obscured").toBe(false);
   expect(result.clip.scrolled).toBe(0);
   // `hidden` scrolls on focus, which is why the static version of this check
-  // reported a failure that did not exist.
+  // reported a failure that did not exist. Every engine scrolls it; WebKit does
+  // so a frame after `focus()`, which a synchronous read took for "never".
   expect(result.hidden.visible, "overflow:hidden should scroll the focused control into view").toBe(true);
   expect(result.hidden.scrolled).toBeGreaterThan(0);
 });
@@ -250,3 +254,154 @@ test("the clipping-ancestor rule and the scope both hold", async ({ page }) => {
   expect(portal.n, "a portalled control is in scope").toBeGreaterThan(0);
   expect(portal.bad.length, "and is measured against its real clipping ancestor").toBeGreaterThan(0);
 });
+
+/**
+ * A roving focus that moves without scrolling leaves its target out of sight.
+ *
+ * The walk above focuses every control once, by script, which is not what a
+ * keyboard user does: they arrow from item to item, and the component moves
+ * focus. Table's grid did that with `focus({ preventScroll: true })` and
+ * nothing after it, so in every engine the focused cell could sit outside its
+ * scroll region — 6 of 8 steps across the 320px grid. Each case arrows through
+ * a container that is asserted to overflow, so a pass cannot come from a list
+ * too short to hide anything.
+ */
+const ROVING = [
+  { component: "Table", fixture: "keyboard-grid", width: 320, start: "[data-fixture] tbody td", key: "ArrowRight", steps: 8 },
+] as const;
+
+const focusState = () =>
+  new Promise<{ label: string; overflowing: boolean; inside: boolean }>((resolve) =>
+    requestAnimationFrame(() => {
+      const el = document.activeElement as HTMLElement;
+      let c = el.parentElement;
+      while (c && c !== document.body) {
+        const o = getComputedStyle(c);
+        if (/auto|scroll|hidden/.test(o.overflowX + o.overflowY)) break;
+        c = c.parentElement;
+      }
+      const a = el.getBoundingClientRect();
+      const b = (c ?? document.body).getBoundingClientRect();
+      resolve({
+        label: (el.textContent ?? "").trim().slice(0, 16),
+        overflowing: !!c && c !== document.body && (c.scrollWidth > c.clientWidth + 1 || c.scrollHeight > c.clientHeight + 1),
+        inside: Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0,
+      });
+    }),
+  );
+
+for (const r of ROVING) {
+  test(`${r.component}/${r.fixture}: arrowing keeps the focused item in view`, async ({ page }) => {
+    await page.setViewportSize({ width: r.width, height: 720 });
+    await gotoFixture(page, r.component, r.fixture);
+    await page.locator(r.start).first().focus();
+    const seen = new Set<string>();
+    const hidden: string[] = [];
+    let overflowing = false;
+    for (let i = 0; i < r.steps; i++) {
+      await page.keyboard.press(r.key);
+      const s = await page.evaluate(focusState);
+      seen.add(s.label);
+      overflowing ||= s.overflowing;
+      if (!s.inside) hidden.push(`step ${i + 1} "${s.label}"`);
+    }
+    console.log(`ROVING_REVEAL ${r.component}/${r.fixture} steps=${r.steps} items=${seen.size} hidden=${hidden.length}`);
+    expect(overflowing, "the container never overflowed, so nothing could be hidden").toBe(true);
+    expect(seen.size, "focus did not move between items").toBeGreaterThan(2);
+    expect(hidden, "focused by the keyboard and left outside its scroll container").toEqual([]);
+  });
+
+  test(`${r.component}/${r.fixture}: a visible target does not scroll the page`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await gotoFixture(page, r.component, r.fixture);
+    // A page that can scroll, scrolled, with the target still on screen: a
+    // reveal that moved the window here would be the jump preventScroll was
+    // presumably there to avoid.
+    await page.evaluate(() => {
+      const spacer = document.createElement("div");
+      spacer.style.height = "3000px";
+      document.body.appendChild(spacer);
+      window.scrollTo(0, 40);
+    });
+    await page.locator(r.start).first().focus({ timeout: 5000 });
+    const before = await page.evaluate(() => window.scrollY);
+    expect(before, "the page must be scrolled for this to mean anything").toBeGreaterThan(0);
+    await page.keyboard.press(r.key);
+    const s = await page.evaluate(focusState);
+    const after = await page.evaluate(() => window.scrollY);
+    console.log(`ROVING_SCROLLY ${r.component}/${r.fixture} ${before} -> ${after} (target "${s.label}" in view ${s.inside})`);
+    expect(s.inside).toBe(true);
+    expect(after, "window.scrollY moved for a target already in view").toBe(before);
+  });
+}
+
+/**
+ * A focus trap moves every Tab itself, so the browser's own Tab scroll never
+ * happens.
+ *
+ * `cycleTabWithin` calls `preventDefault` on each Tab inside a Modal, a modal
+ * Drawer and the DatePicker calendar, then focuses the next control with
+ * `preventScroll: true`. In a dialog taller than the viewport that left the
+ * focused control outside the box that scrolls it, in every engine. Both
+ * cases put the long content in a consumer-style scrolling box: the Drawer
+ * panel does not scroll, and the Modal positioner meant to cannot either —
+ * `relative` overrides its `fixed`, so `inset-0` never bounds its height and a
+ * tall dialog simply runs off the viewport (reported separately; no reveal can
+ * reach content that nothing scrolls to).
+ */
+const TRAPS = [
+  { component: "Modal", fixture: "open", scrollBox: true },
+  { component: "Drawer", fixture: "open", scrollBox: true },
+] as const;
+
+for (const t of TRAPS) {
+  test(`${t.component}/${t.fixture}: Tab through a tall dialog keeps focus on screen`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 600 });
+    await gotoFixture(page, t.component, t.fixture);
+    const dialog = page.locator('[role="dialog"]').first();
+    await expect(dialog).toBeVisible();
+    await dialog.evaluate((d, scrollBox) => {
+      const box = document.createElement("div");
+      if (scrollBox) box.style.cssText = "max-height:240px;overflow:auto";
+      for (let i = 0; i < 30; i++) {
+        const b = document.createElement("button");
+        b.textContent = `filler ${i}`;
+        b.style.cssText = "display:block;height:40px";
+        box.appendChild(b);
+      }
+      d.appendChild(box);
+    }, t.scrollBox);
+    const offScreen: string[] = [];
+    const seen = new Set<string>();
+    for (let i = 0; i < 25; i++) {
+      await page.keyboard.press("Tab");
+      const s = await page.evaluate(
+        () =>
+          new Promise<{ label: string; visible: boolean }>((resolve) =>
+            requestAnimationFrame(() => {
+              const el = document.activeElement as HTMLElement;
+              const a = el.getBoundingClientRect();
+              let visible = a.bottom > 0 && a.top < innerHeight;
+              // Up to the dialog's fixed layer and no further: an open dialog
+              // locks the page with `overflow: hidden` on a body that is ~48px
+              // tall on a fixture page, which clips nothing (see `_clip.ts`).
+              for (let c = el.parentElement; c && c !== document.body && visible; c = c.parentElement) {
+                const o = getComputedStyle(c);
+                if (/auto|scroll|hidden/.test(o.overflowY)) {
+                  const r = c.getBoundingClientRect();
+                  visible = a.bottom > r.top && a.top < r.bottom;
+                }
+                if (o.position === "fixed") break;
+              }
+              resolve({ label: (el.textContent ?? "").trim().slice(0, 12), visible });
+            }),
+          ),
+      );
+      seen.add(s.label);
+      if (!s.visible) offScreen.push(`Tab ${i + 1} "${s.label}"`);
+    }
+    console.log(`TRAP_REVEAL ${t.component}/${t.fixture} tabs=25 controls=${seen.size} offscreen=${offScreen.length}`);
+    expect(seen.size, "Tab did not move through the dialog").toBeGreaterThan(20);
+    expect(offScreen, "Tab moved focus to a control the user cannot see").toEqual([]);
+  });
+}

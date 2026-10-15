@@ -1,3 +1,5 @@
+import { focusAndReveal } from "./focusAndReveal.js";
+
 const FOCUSABLE_SELECTOR = [
   'a[href]:not([tabindex="-1"])',
   'button:not([disabled]):not([tabindex="-1"])',
@@ -72,14 +74,12 @@ export function cycleTabWithin(
   // Focus already outside the container — WebKit's Tab order can put it on
   // <body> — so re-enter at the end the user was heading towards.
   if (current === -1) {
-    (event.shiftKey ? focusable[focusable.length - 1] : focusable[0]).focus({
-      preventScroll: true,
-    });
+    focusAndReveal(event.shiftKey ? focusable[focusable.length - 1] : focusable[0]);
     return;
   }
 
   const next = event.shiftKey
     ? (current - 1 + focusable.length) % focusable.length
     : (current + 1) % focusable.length;
-  focusable[next].focus({ preventScroll: true });
+  focusAndReveal(focusable[next]);
 }

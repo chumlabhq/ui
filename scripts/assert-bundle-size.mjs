@@ -1120,6 +1120,25 @@ const LIBRARY_TOTAL_HISTORY = [
       "(+53 B), its declared breach raised 9.24 -> 9.29. No comments added to " +
       "shipped code. Measured against a build of d082d87d.",
   },
+  {
+    kb: 157.7,
+    commit: "(uncommitted)",
+    date: "2026-10-15",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.06 KB (161,428 -> 161,483 B gzipped, +55 B), 81 -> 82 " +
+      "files. X2 focus reveal: Table's grid and the focus trap behind Modal, " +
+      "Drawer and the DatePicker calendar moved focus with preventScroll and " +
+      "never scrolled the target into view, so a cell past a narrow table's " +
+      "edge or a control below a scrolling dialog body took focus out of sight " +
+      "in every engine. Both now call one helper, utils/focusAndReveal (the " +
+      "82nd file), which keeps preventScroll and follows it with " +
+      "scrollIntoView at nearest. Table exclusive 16,766 -> 16,791 B (+25 B), " +
+      "its declared breach raised 16.37 -> 16.40; DatePicker 12,568 B, Drawer " +
+      "6,063 B and Modal 4,281 -> 4,280 B exclusive held, the helper being " +
+      "shared through focusUtils. No comments added to src/components. " +
+      "Measured against a build of a3508960.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1173,8 +1192,11 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.37,
-      why: "2026-10-12, L13: 16.41 -> 16.37 (exclusive 16,805 -> 16,765 B gzipped, -40 B). The " +
+      kb: 16.4,
+      why: "2026-10-15, X2 focus reveal: 16.37 -> 16.40 (exclusive 16,766 -> 16,791 B gzipped, +25 B). " +
+        "The grid's roving focus goes through focusAndReveal, so the focused cell is scrolled into " +
+        "its region instead of left past the edge of a narrow table. " +
+        "2026-10-12, L13: 16.41 -> 16.37 (exclusive 16,805 -> 16,765 B gzipped, -40 B). The " +
         "checkbox, expand and drag header cells stopped taking the body-cell slot. " +
         "2026-10-11, A2f routing: 16.35 -> 16.41 (exclusive 16,727 -> 16,805 B gzipped, +78 B). " +
         "A consumer's id, aria-labelledby and aria-describedby reach the region, which took " +

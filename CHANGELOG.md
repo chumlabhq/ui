@@ -680,6 +680,10 @@ tables say.
 
 ### Fixed
 
+- **Table, Modal and Drawer keep the keyboard-focused cell or control in view.** Arrow keys in
+  Table's grid, and Tab inside a Modal or a modal Drawer, moved focus without scrolling it into
+  view, in every engine: a cell past the edge of a narrow table, or a control below the fold of
+  a scrolling dialog body, took focus out of sight.
 - **A consumer `id` on `AccordionTrigger` now names its panel.** The id became the trigger's
   id, but the panel's `aria-labelledby` still named the item's generated trigger id, which no
   element carried. The panel follows the trigger's id now, as it already did for an `id`
