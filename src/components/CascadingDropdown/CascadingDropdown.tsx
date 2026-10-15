@@ -12,6 +12,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { focusAndReveal } from "../../utils/focusAndReveal.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 import {
@@ -91,6 +92,7 @@ const SubmenuItem = memo(function SubmenuItem({
 interface MenuItemProps {
   option: CascadingOption;
   isFocused: boolean;
+  isTabStop: boolean;
   isSelected: boolean;
   hasSubmenu: boolean;
   isSubmenuOpen: boolean;
@@ -113,6 +115,7 @@ interface MenuItemProps {
 const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuItem({
   option,
   isFocused,
+  isTabStop,
   isSelected,
   hasSubmenu,
   isSubmenuOpen,
@@ -132,7 +135,7 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
       ref={ref}
       id={`${dropdownId}-option-${index}`}
       role={hasSubmenu ? "menuitem" : "menuitemradio"}
-      tabIndex={isFocused ? 0 : -1}
+      tabIndex={isTabStop ? 0 : -1}
       aria-haspopup={hasSubmenu ? "menu" : undefined}
       aria-expanded={hasSubmenu ? isSubmenuOpen : undefined}
       // The submenu's items are a roving group with no tab stop of their own:
@@ -579,7 +582,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
 
       if (showMenuSearch) {
         if (!inMenuSurface(document.activeElement)) {
-          menuSearchRef.current?.focus({ preventScroll: true });
+          if (menuSearchRef.current) focusAndReveal(menuSearchRef.current);
         }
         return;
       }
@@ -594,8 +597,8 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         inMenuSurface(active);
       if (!ours) return;
 
-      const item = menu.querySelector<HTMLElement>('[role^="menuitem"][tabindex="0"]');
-      if (item && item !== active) item.focus({ preventScroll: true });
+      const item = menu.querySelector<HTMLElement>('[role^="menuitem"][data-highlighted]');
+      if (item && item !== active) focusAndReveal(item);
     }, [isOpen, focusedIndex, showMenuSearch, inMenuSurface]);
 
     const combinedKeyDown = useCallback(
@@ -643,6 +646,18 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
     // is rendered once rather than per item.
     const openSubmenuParent =
       filteredOptions.find((option) => option.value === activeSubmenu) ?? null;
+
+    const selectedIndex = filteredOptions.findIndex(
+      (option) =>
+        !option.disabled &&
+        (option.value === internalValue.root || getSelectedValuesForParent(option.value).length > 0),
+    );
+    const tabStopIndex =
+      focusedIndex >= 0
+        ? focusedIndex
+        : selectedIndex >= 0
+          ? selectedIndex
+          : filteredOptions.findIndex((option) => !option.disabled);
 
     // One object for both triggers. The custom one was handed its own copy of
     // this list in three components, and the copies drifted: `type="button"`
@@ -748,6 +763,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
               zIndex={dropdownZIndex}
               portalContainer={portalContainer}
               keepMounted={keepMounted}
+              fitAvailableHeight
               onKeyDown={combinedKeyDown}
               // Announced even though it is no longer the menu: the search
               // field is portalled content and needs a container that says what
@@ -812,6 +828,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
                           ref={submenuOpen ? submenuAnchorRef : undefined}
                           option={option}
                           isFocused={index === focusedIndex}
+                          isTabStop={index === tabStopIndex}
                           isSelected={
                             !hasSubmenu && internalValue.root === option.value
                           }

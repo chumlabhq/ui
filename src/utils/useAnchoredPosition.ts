@@ -53,6 +53,7 @@ export function useAnchoredPosition(
     margin,
     forceSide,
     clampOnlyWhenTriggerVisible,
+    fit,
   } = options;
 
   // Destructured rather than depending on `options`, which callers write as an
@@ -68,10 +69,10 @@ export function useAnchoredPosition(
         triggerEl.getBoundingClientRect(),
         floatingEl.getBoundingClientRect(),
         readViewport(),
-        { side, gap, margin, forceSide, clampOnlyWhenTriggerVisible },
+        { side, gap, margin, forceSide, clampOnlyWhenTriggerVisible, fit },
       ),
     );
-  }, [trigger, floating, side, gap, margin, forceSide, clampOnlyWhenTriggerVisible]);
+  }, [trigger, floating, side, gap, margin, forceSide, clampOnlyWhenTriggerVisible, fit]);
 
   // Coalesced to one frame. A capture-phase scroll listener fires for every
   // nested scroller on the way up, and Dropdown was the only copy that batched

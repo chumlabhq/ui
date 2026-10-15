@@ -1139,6 +1139,29 @@ const LIBRARY_TOTAL_HISTORY = [
       "shared through focusUtils. No comments added to src/components. " +
       "Measured against a build of a3508960.",
   },
+  {
+    kb: 157.73,
+    commit: "(uncommitted)",
+    date: "2026-10-15",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.03 KB (161,483 -> 161,518 B gzipped, +35 B), 82 files " +
+      "held. L16 overlay reach: menus fit the viewport; one shared positioner " +
+      "(anchored-position contract). computeAnchoredPosition gained `fit`, " +
+      "which caps a surface to the space on the side it opens toward, and " +
+      "CascadingDropdown's top-level menu uses it instead of a positioner of " +
+      "its own; its items are a roving tab stop (exactly one tabIndex 0). " +
+      "shared/useMenuNavigation, which holds the positioner, 2,863 -> 2,985 B " +
+      "(+122 B, in no entry's exclusive). Exclusive: CascadingDropdown 9,605 " +
+      "-> 9,539 (-66 B; -127 before the tab stop), Modal 4,280 -> 4,183 " +
+      "(-97 B, its positioner's conflicting classes removed), Drawer 6,063 -> " +
+      "6,096 (+33 B, the panel scrolls and initial focus is revealed), " +
+      "TimePicker -6, OtpInput -3, Breadcrumb +2, MultiSelectDropdown -2, " +
+      "DatePicker -1, MultiSelectSearchableDropdown -1, " +
+      "InternationalPhoneInput +1. Without the tab stop the total was " +
+      "161,446 B, -37. No declared breach moved. No comments added to " +
+      "src/components. Measured against a build of 6ae96a3b.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

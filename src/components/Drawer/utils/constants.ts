@@ -17,7 +17,7 @@ export const VELOCITY_THRESHOLD = 0.5;
 export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
   root: "z-999999",
   overlay: "fixed inset-0 transition-opacity",
-  content: "fixed z-999999",
+  content: "fixed z-999999 overflow-y-auto",
   /**
    * The grab handle, rendered only when `swipeable`, and split across two keys.
    *

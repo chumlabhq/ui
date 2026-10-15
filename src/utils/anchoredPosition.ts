@@ -43,6 +43,16 @@ export interface AnchoredPositionOptions {
    * near the top over unrelated content.
    */
   clampOnlyWhenTriggerVisible?: boolean;
+  /**
+   * Caps the floating element to the space on the side it opens toward.
+   *
+   * For a surface that can be taller than the viewport — a long menu. Without
+   * it a 960px menu that fits neither side is pinned to the top margin, over
+   * its own trigger, with its end below the viewport and nothing to scroll.
+   * With it, the side with more room is used when neither fits, and
+   * `maxHeight` says how tall the element may be; the caller scrolls inside.
+   */
+  fit?: boolean;
 }
 
 export interface AnchoredPosition {
@@ -52,6 +62,8 @@ export interface AnchoredPosition {
   width: number;
   /** The side actually used, after any flip. */
   side: AnchoredSide;
+  /** With `fit`: the height available on that side, inside the margin. */
+  maxHeight?: number;
 }
 
 const OPPOSITE: Record<AnchoredSide, AnchoredSide> = {
@@ -132,7 +144,15 @@ export function computeAnchoredPosition(
     margin = 8,
     forceSide = false,
     clampOnlyWhenTriggerVisible = false,
+    fit = false,
   } = options;
+
+  const space = (s: AnchoredSide): number =>
+    s === "top"
+      ? trigger.top - gap
+      : s === "bottom"
+        ? viewport.height - trigger.top - trigger.height - gap
+        : viewport.height - margin;
 
   // Flip only when the preferred side cannot hold the element AND the opposite
   // one can. Flipping into a side that is just as short trades one clipped edge
@@ -141,14 +161,19 @@ export function computeAnchoredPosition(
   if (!forceSide && !fits(preferred, trigger, floating, viewport, gap)) {
     if (fits(OPPOSITE[preferred], trigger, floating, viewport, gap)) {
       side = OPPOSITE[preferred];
+    } else if (fit && space(OPPOSITE[preferred]) > space(preferred)) {
+      side = OPPOSITE[preferred];
     }
   }
+
+  const maxHeight = fit ? Math.max(0, space(side) - margin) : undefined;
+  const height = Math.min(floating.height, maxHeight ?? Infinity);
 
   let top: number;
   let left: number;
   switch (side) {
     case "top":
-      top = trigger.top - floating.height - gap;
+      top = trigger.top - height - gap;
       left = trigger.left;
       break;
     case "bottom":
@@ -181,7 +206,7 @@ export function computeAnchoredPosition(
   const clamp = !clampOnlyWhenTriggerVisible || isVisible(trigger, viewport);
   if (clamp) {
     left = clampAxis(left, width, viewport.width);
-    top = clampAxis(top, floating.height, viewport.height);
+    top = clampAxis(top, height, viewport.height);
   }
 
   // Applied last, to coordinates that are already viewport-relative. The
@@ -192,5 +217,6 @@ export function computeAnchoredPosition(
     left: left + viewport.offsetLeft,
     width: trigger.width,
     side,
+    maxHeight,
   };
 }

@@ -7,12 +7,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   trigger:
     "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
   value: "flex-1 text-left truncate",
-  // No overflow-y-auto on the menu itself — submenus pop out to the side
-  // as `position: absolute` children of menu items, and `overflow: auto`
-  // on the menu container would clip those submenu panels. Long menus
-  // grow naturally; the SUBMENU (which has no further children) is the
-  // one that gets bounded with max-h + scroll below.
-  content: "min-w-full sm:min-w-[200px] rounded-cl-md shadow-lg bg-cl-bg-panel border border-cl-border",
+  content: "min-w-full sm:min-w-[200px] overflow-y-auto rounded-cl-md shadow-lg bg-cl-bg-panel border border-cl-border",
   // first:rounded-t / last:rounded-b so the hover/selected/focused bg
   // tucks under the menu's rounded corners on the top and bottom items
   // — without these, hover paints into the corner gap and looks like a

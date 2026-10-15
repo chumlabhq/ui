@@ -11,6 +11,7 @@ import { createPortal } from "react-dom";
 import { LAYERS, OverlayLayerContext } from "../../utils/layers.js";
 import type { DrawerProps, DrawerClasses } from "./utils/types.js";
 import { cycleTabWithin } from "../../utils/focusUtils.js";
+import { focusAndReveal } from "../../utils/focusAndReveal.js";
 import {
   getSideStyles,
   getFocusableElements,
@@ -266,14 +267,14 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
         const timer = requestAnimationFrame(() => {
           if (initialFocus?.current) {
-            initialFocus.current.focus({ preventScroll: true });
+            focusAndReveal(initialFocus.current);
             return;
           }
 
           const autoFocusEl =
             panel.querySelector<HTMLElement>("[data-autofocus]");
           if (autoFocusEl) {
-            autoFocusEl.focus({ preventScroll: true });
+            focusAndReveal(autoFocusEl);
             return;
           }
 

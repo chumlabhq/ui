@@ -223,6 +223,28 @@ describe("computeAnchoredPosition", () => {
     });
   });
 
+  describe("fit: a surface taller than the viewport", () => {
+    // A 960px menu in an 800px viewport fits neither side. Unfitted, it is
+    // pinned to the top margin, over its own trigger, with its end off screen.
+    it("opens below when there is more room below, capped to that room", () => {
+      const r = computeAnchoredPosition(rect({ top: 100 }), rect({ height: 960 }), VIEWPORT, { gap: 4, margin: 8, fit: true });
+      expect(r).toEqual({ top: 144, left: 8, width: 100, side: "bottom", maxHeight: 648 });
+    });
+
+    it("opens above when there is more room above, ending at the trigger", () => {
+      const r = computeAnchoredPosition(rect({ top: 600 }), rect({ height: 960 }), VIEWPORT, { gap: 4, margin: 8, fit: true });
+      expect(r).toEqual({ top: 8, left: 8, width: 100, side: "top", maxHeight: 588 });
+      expect(r.top + r.maxHeight!).toBe(600 - 4);
+    });
+
+    it("leaves a surface that fits where it was", () => {
+      const fitted = computeAnchoredPosition(rect({ top: 100, left: 200 }), rect({ height: 200 }), VIEWPORT, { gap: 4, fit: true });
+      const plain = computeAnchoredPosition(rect({ top: 100, left: 200 }), rect({ height: 200 }), VIEWPORT, { gap: 4 });
+      expect({ ...fitted, maxHeight: undefined }).toEqual({ ...plain, maxHeight: undefined });
+      expect(fitted.maxHeight).toBe(800 - 140 - 4 - 8);
+    });
+  });
+
   it("reports the trigger width, not the clamping width", () => {
     // Callers size the floating element to the trigger; the wider value is only
     // used to decide where the right edge lands.

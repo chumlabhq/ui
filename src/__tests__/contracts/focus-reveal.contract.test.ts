@@ -32,14 +32,6 @@ type Exception = { calls: number; reason: string };
  * Targets that cannot be inside a scroll container.
  */
 const OUT_OF_ANY_SCROLLER: Record<string, Exception> = {
-  "components/CascadingDropdown/CascadingDropdown.tsx|menuSearchRef.current": {
-    calls: 1,
-    reason: "The top-level menu has no overflow by design (constants.ts, `content`) and is position: fixed; nothing scrolls around its search field.",
-  },
-  "components/CascadingDropdown/CascadingDropdown.tsx|item": {
-    calls: 1,
-    reason: "A top-level menu item, in the same uncapped fixed menu. Measured: no scrolling ancestor in any engine.",
-  },
   "components/SearchableDropdown/SearchableDropdown.tsx|searchInputRef.current": {
     calls: 1,
     reason: "The search field sits above the `max-h-60 overflow-y-auto` list, in a panel whose height is not capped.",
@@ -72,9 +64,13 @@ const RETURNS_TO_ACTIVATED: Record<string, Exception> = {
   "components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx|triggerNode": { calls: 1, reason: "Returns focus to the trigger that opened the menu." },
   "components/SearchableDropdown/SearchableDropdown.tsx|triggerNode": { calls: 2, reason: "Returns focus to the trigger that opened the menu." },
   "components/Drawer/Drawer.tsx|el": { calls: 1, reason: "Returns focus to the element that opened the drawer; the scroll lock held the page where it was." },
-  "components/Drawer/Drawer.tsx|initialFocus.current": { calls: 1, reason: "Initial focus as the panel slides in. Not measured: a reveal during the transition is unproven." },
-  "components/Drawer/Drawer.tsx|autoFocusEl": { calls: 1, reason: "Initial focus as the panel slides in. Not measured: a reveal during the transition is unproven." },
-  "components/Drawer/Drawer.tsx|focusable[0]": { calls: 1, reason: "Initial focus as the panel slides in. Not measured: a reveal during the transition is unproven." },
+  "components/Drawer/Drawer.tsx|focusable[0]": {
+    calls: 1,
+    reason:
+      "The panel's first focusable control, at the top of a panel that opens at scrollTop 0. Measured with " +
+      "40 lines of content in all four sides, at 1280x720 and 375x667, in chromium, firefox and webkit: in view " +
+      "every time (the close button at 2-18px, 369-438px in a bottom sheet).",
+  },
   "components/Table/Table.tsx|editReturnRef.current": { calls: 1, reason: "Returns focus to the cell whose editor just closed, which is where the user already is." },
   "components/TimePicker/TimePicker.tsx|inputRef.current": { calls: 2, reason: "Focuses the input beside the clear button just clicked, or the input the user just opened." },
   "utils/menu/focusTriggerOnMouseDown.ts|trigger": { calls: 1, reason: "The trigger under the pointer, focused on mousedown." },

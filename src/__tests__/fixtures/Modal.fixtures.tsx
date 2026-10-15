@@ -1,6 +1,7 @@
 import { Modal } from "../../components/Modal/index.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
+import { TallContent } from "./_tall.js";
 
 const fixtures: Fixtures<typeof Modal> = [
   { name: "open", props: { open: true, title: "Title", description: "Description" }, children: "Body" },
@@ -10,5 +11,11 @@ const fixtures: Fixtures<typeof Modal> = [
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true, title: "Title" }, children: "Body" },
   { name: "open-no-header", props: { open: true, title: "Title", showHeader: false }, children: "Body" },
   { name: "open-no-overlay", props: { open: true, title: "Title", showOverlay: false }, children: "Body" },
+  {
+    name: "tall",
+    props: { open: true, title: "Title", description: "Description" },
+    children: <TallContent />,
+    note: "Content taller than the viewport, with a control at the end: the dialog has to scroll for it to be reachable.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

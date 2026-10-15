@@ -28,6 +28,9 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- Modal takes its documented width (w-full max-w-lg, with the positioner's gutters) instead of
+  shrinking to its content; a short Modal is wider than before, and its shadow is no longer
+  clipped.
 - **`Pagination` keeps prev, its pages and next on one row by showing fewer pages.** The page
   list no longer wraps. `siblingCount` is now the most sibling pages shown: when the row would
   overflow the space its host gives it (measured on the component and its host, not the
@@ -680,6 +683,20 @@ tables say.
 
 ### Fixed
 
+- **Modal content taller than the viewport scrolls.** The positioner carried both `fixed` and
+  `relative`; `relative` won, so the positioner grew with its content and nothing scrolled. A
+  dialog taller than the window ran off both edges, and its title and its last controls could
+  be reached neither by scrolling nor by Tab. It is bounded by the viewport now and scrolls its
+  content, as `MODAL.ai.md` documented.
+- **Drawer content taller than the viewport scrolls.** The panel is fixed at the viewport's
+  height (or `size`) and had no overflow, so anything past its edge — a long `DrawerBody`, its
+  footer, its last controls — could not be reached. The panel scrolls now, and `initialFocus`
+  or `data-autofocus` on a control below the fold brings it into view.
+- **CascadingDropdown's menu fits the viewport and scrolls.** The top-level menu had no height
+  cap: a long one ran past the bottom of the window, and its last items — 19 to 24 of 24 in a
+  720px window — could not be reached or seen. It is capped to the space on the side it opens
+  toward, opening toward the larger one when neither holds it, and the keyboard-focused item is
+  scrolled into view. Submenus still open beside their item from a scrolled menu.
 - **Table, Modal and Drawer keep the keyboard-focused cell or control in view.** Arrow keys in
   Table's grid, and Tab inside a Modal or a modal Drawer, moved focus without scrolling it into
   view, in every engine: a cell past the edge of a narrow table, or a control below the fold of

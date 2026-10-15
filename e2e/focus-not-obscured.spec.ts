@@ -342,15 +342,13 @@ for (const r of ROVING) {
  * `cycleTabWithin` calls `preventDefault` on each Tab inside a Modal, a modal
  * Drawer and the DatePicker calendar, then focuses the next control with
  * `preventScroll: true`. In a dialog taller than the viewport that left the
- * focused control outside the box that scrolls it, in every engine. Both
- * cases put the long content in a consumer-style scrolling box: the Drawer
- * panel does not scroll, and the Modal positioner meant to cannot either —
- * `relative` overrides its `fixed`, so `inset-0` never bounds its height and a
- * tall dialog simply runs off the viewport (reported separately; no reveal can
- * reach content that nothing scrolls to).
+ * focused control outside the box that scrolls it, in every engine. The Modal
+ * case is a real tall dialog, scrolled by the Modal's own positioner. The
+ * Drawer case keeps a consumer-style scrolling box inside the panel, which is
+ * the trap reveal's other shape: a scroller the library did not render.
  */
 const TRAPS = [
-  { component: "Modal", fixture: "open", scrollBox: true },
+  { component: "Modal", fixture: "tall", scrollBox: false },
   { component: "Drawer", fixture: "open", scrollBox: true },
 ] as const;
 

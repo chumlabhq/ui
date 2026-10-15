@@ -40,6 +40,13 @@ const DISABLED_TOP = [
   { value: "veg", label: "Veg", disabled: true, children: [{ value: "c", label: "Carrot" }] },
 ];
 
+/** Twenty-four top-level items, one of them a parent near the end: taller than a 720px viewport. */
+const LONG = Array.from({ length: 24 }, (_, i) =>
+  i === 21
+    ? { value: `item-${i + 1}`, label: `Item ${i + 1}`, children: [{ value: "sub-a", label: "Sub A" }, { value: "sub-b", label: "Sub B" }] }
+    : { value: `item-${i + 1}`, label: `Item ${i + 1}` },
+);
+
 /** The menu is portalled from a layout effect, so it is absent until effects flush. */
 const settle = (_c: HTMLElement, ui: ActTools) => ui.settle();
 
@@ -112,6 +119,20 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
   },
   { name: "labelled", props: { options: NESTED, label: "Produce", description: "Pick one." } },
   { name: "open", props: { options: NESTED, defaultOpen: true, keepMounted: true }, act: settle },
+  {
+    name: "open-long",
+    props: { options: LONG, defaultOpen: true, keepMounted: true },
+    wrap: (node) => <div style={{ width: 240 }}>{node}</div>,
+    act: settle,
+    note: "A top-level menu taller than the viewport, with a submenu near its end: the menu has to fit the space and scroll. 240px wide, so the submenu has room beside it.",
+  },
+  {
+    name: "open-long-low",
+    props: { options: LONG, defaultOpen: true, keepMounted: true },
+    wrap: (node) => <div style={{ paddingTop: "75vh", width: 240 }}>{node}</div>,
+    act: settle,
+    note: "The same menu from a trigger near the bottom of the viewport, where the space is above it.",
+  },
   {
     name: "open-search",
     props: { options: NESTED, defaultOpen: true, keepMounted: true, showMenuSearch: true, showSubmenuSearch: true },

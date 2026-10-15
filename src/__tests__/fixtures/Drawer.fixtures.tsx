@@ -5,6 +5,7 @@ import { IndexPicker, Toggle } from "./_harness.js";
 import type { Fixtures } from "./types.js";
 import { RtlBoundary } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
+import { TallDrawer } from "./_tall.js";
 
 const fixtures: Fixtures<typeof Drawer> = [
   {
@@ -106,6 +107,27 @@ const fixtures: Fixtures<typeof Drawer> = [
     children: <><DrawerHeader title="Drawer" /><DrawerCloseButton />Body</>,
   },
   { name: "open-left", props: { open: true, side: "left" }, children: <><DrawerHeader title="Drawer" />Body</> },
+  {
+    name: "tall-left",
+    props: {},
+    note: "Content taller than the viewport, with a control at the end: the panel has to scroll for it to be reachable.",
+    render: () => <TallDrawer side="left" />,
+  },
+  { name: "tall-right", props: {}, render: () => <TallDrawer side="right" /> },
+  { name: "tall-top", props: {}, render: () => <TallDrawer side="top" /> },
+  { name: "tall-bottom", props: {}, render: () => <TallDrawer side="bottom" /> },
+  {
+    name: "tall-initial-focus",
+    props: {},
+    note: "initialFocus aims at the last control, below the fold of a tall panel.",
+    render: () => <TallDrawer side="right" initialFocusLast />,
+  },
+  {
+    name: "tall-autofocus",
+    props: {},
+    note: "data-autofocus on the last control, below the fold of a tall panel.",
+    render: () => <TallDrawer side="right" autoFocusLast />,
+  },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader title="Drawer" />Body</> },
   {
     name: "open-rtl",

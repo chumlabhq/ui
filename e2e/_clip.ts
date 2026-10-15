@@ -37,12 +37,64 @@ const FOCUSABLE = [
 const scoped = (roots: string[]): string =>
   roots.flatMap((root) => FOCUSABLE.map((t) => `${root} ${t}`)).join(",");
 
+/**
+ * An open Drawer's or Modal's own initial focus has landed: the active element
+ * is inside the panel and has not changed for one frame.
+ *
+ * Both move focus in on the frame after they mount, and that move scrolls the
+ * panel. A sweep that arrives in between focuses the first control, then the
+ * open-time focus lands — `data-autofocus` on a control below the fold scrolls
+ * the panel to its bottom — and the read one frame later finds the first
+ * control scrolled out. That is how `Drawer/tall-autofocus` reported its Close
+ * button obscured under load and passed alone; arriving the moment the panel
+ * mounts reproduced it in 2 of 5 runs, and in 5 of 5 with every frame held
+ * 300ms. No user can focus a control before the dialog has finished opening,
+ * so the measurement waits for it.
+ *
+ * Checked after the portals are marked, so a panel that mounts between the
+ * fixture's first commit and the mark is waited for too. A page with no open
+ * panel passes at once. Two things narrow "open", both measured over every
+ * fixture (44 with an `aria-modal` element in a box):
+ *   - A closed panel can still be in the DOM. `Drawer/closed-kept-mounted` is
+ *     `inert` under an `aria-hidden` root; `Modal/closed-kept-mounted` is
+ *     `visibility: hidden`. Focus enters neither.
+ *   - Only the two panels whose open-time focus scrolls them. TimePicker's
+ *     open clock is `aria-modal` too and leaves focus in its input (three
+ *     fixtures), so waiting on every `aria-modal` waited on it until timeout.
+ */
+export async function initialFocusLanded(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    delete (window as { __clInitialFocus?: Element | null }).__clInitialFocus;
+  });
+  await page.waitForFunction(
+    () => {
+      const w = window as { __clInitialFocus?: Element | null };
+      const open = [
+        ...document.querySelectorAll('[data-drawer-panel][aria-modal="true"], [data-modal-container] > [role="dialog"]'),
+      ].filter(
+        (d) =>
+          d.checkVisibility({ visibilityProperty: true }) &&
+          !d.closest('[inert], [aria-hidden="true"]'),
+      );
+      if (open.length === 0) return true;
+      const active = document.activeElement;
+      const inside = open.some((d) => d.contains(active));
+      const steady = inside && w.__clInitialFocus === active;
+      w.__clInitialFocus = inside ? active : null;
+      return steady;
+    },
+    undefined,
+    { polling: "raf", timeout: 10_000 },
+  );
+}
+
 export async function focusFindings(page: Page): Promise<FocusFindings> {
   // The library portals every overlay to `document.body`, so a fixture-scoped
   // walk sees a drawer, a modal or a menu exactly never. Same reason, and the
   // same helper, as the axe sweep.
   const portals = await markPortalRoots(page);
   const roots = ["[data-fixture]", ...(portals > 0 ? [`[${PORTAL_MARK}]`] : [])];
+  await initialFocusLanded(page);
 
   return page.evaluate(
     async ({ selector, boundaries }) => {

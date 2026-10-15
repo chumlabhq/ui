@@ -477,7 +477,7 @@ function PickAmountStep({
           rows={3}
           maxLength={500}
           placeholder="Optional. Short and specific is best."
-          className="w-full px-3 py-2.5 bg-cl-bg-elevated text-cl-text placeholder:text-cl-text-disabled rounded-md outline-none resize-none leading-snug text-[14px]"
+          className="w-full px-3 py-2.5 bg-cl-bg-elevated text-cl-text placeholder:text-cl-text-disabled rounded-md outline-none resize-none text-[14px] leading-snug"
           style={{ border: "0.5px solid var(--border-faint)" }}
         />
       </div>
