@@ -330,6 +330,13 @@ const euCountries = [
 
 ---
 
+## Forms
+
+- **Submitted value.** With `name`, it submits two entries: `{name}_country`, the ISO country code, and `{name}`, the dial code followed by the digits (`+442071234567`; just the dial code when no number is typed).
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled country and number to `defaultValue` (or the default country and no number), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled InternationalPhoneInput is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** `required` is enforced by the number field itself: empty, it blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled and `form`.** A disabled InternationalPhoneInput still submits its value. `form` reaches the submitted values as well as the number field.
+
 ## Keyboard Interactions
 
 The number itself is a native `<input>`. The country selector is a listbox with its own keys.

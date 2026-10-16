@@ -26,7 +26,7 @@ export const useCascadingDropdown = ({
   searchSubmenu,
   searchDebounce = 300,
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
-  const [internalValue, setInternalValue] = useControllableState<CascadingValue>({
+  const [internalValue, setInternalValue, resetValue] = useControllableState<CascadingValue>({
     value,
     defaultValue: defaultValue ?? {},
     onChange: () => {
@@ -554,6 +554,7 @@ export const useCascadingDropdown = ({
       isMenuSearching,
       isSubmenuSearching,
       getFilteredSubmenuOptions,
+      resetValue,
     }),
     [
       isOpen,
@@ -582,6 +583,7 @@ export const useCascadingDropdown = ({
       isMenuSearching,
       isSubmenuSearching,
       getFilteredSubmenuOptions,
+      resetValue,
     ]
   );
 };

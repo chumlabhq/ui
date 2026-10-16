@@ -1,4 +1,4 @@
-import { forwardRef, createContext, useContext, useId, useMemo, useCallback } from "react";
+import { forwardRef, createContext, useContext, useId, useMemo, useCallback, useRef } from "react";
 import type {
   RadioButtonProps,
   RadioButtonClasses,
@@ -17,6 +17,8 @@ import {
   UNSTYLED_RADIO_GROUP_CLASSES,
 } from "./utils/constants.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { useFormReset } from "../../utils/FormValue.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -25,6 +27,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
 
 interface RadioGroupContextValue {
   name?: string;
+  required?: boolean;
   selectedValue: string;
   onSelect: (value: string) => void;
   disabled?: boolean;
@@ -105,11 +108,14 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const descriptionId = `${groupId}-description`;
     const errorId = `${groupId}-error`;
 
-    const [selectedValue, setSelectedValue] = useControllableState({
+    const [selectedValue, setSelectedValue, resetSelected] = useControllableState({
       value: controlledValue,
       defaultValue,
       onChange: onValueChange,
     });
+    const groupRef = useRef<HTMLDivElement>(null);
+    const mergedGroupRef = useMemo(() => mergeRefs(groupRef, ref), [ref]);
+    useFormReset(groupRef, resetSelected);
 
     const handleSelect = useCallback(
       (value: string) => {
@@ -143,6 +149,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const ctxValue = useMemo<RadioGroupContextValue>(
       () => ({
         name,
+        required,
         selectedValue,
         onSelect: handleSelect,
         // A loading group disables its radios so they can't be operated by
@@ -156,13 +163,13 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         onFocus,
         onBlur,
       }),
-      [name, selectedValue, handleSelect, disabled, loading, error, success, size, unstyled, prefersReducedMotion, onFocus, onBlur],
+      [name, required, selectedValue, handleSelect, disabled, loading, error, success, size, unstyled, prefersReducedMotion, onFocus, onBlur],
     );
 
     return (
       <RadioGroupContext.Provider value={ctxValue}>
         <div
-          ref={ref}
+          ref={mergedGroupRef}
           role="radiogroup"
           aria-labelledby={label ? labelId : undefined}
           aria-describedby={describedBy || undefined}
@@ -339,6 +346,7 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             aria-describedby={ariaDescribedBy}
             name={ctx.name}
             value={value}
+            required={ctx.required || undefined}
             checked={isChecked}
             disabled={isDisabled}
             onChange={handleChange}

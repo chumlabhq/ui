@@ -683,6 +683,20 @@ tables say.
 
 ### Fixed
 
+- **A form reset restores every field's uncontrolled value.** Dropdown, SearchableDropdown,
+  MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, DatePicker, TimePicker,
+  Switch, Slider, OtpInput, InternationalPhoneInput, Input and TextArea kept the changed value
+  on screen and in FormData after a `type="reset"` button or `form.reset()`; Checkbox and
+  RadioGroup reset their native input but went on painting the changed state. Each now returns
+  to its `defaultValue` (or `defaultChecked`, or empty) and submits it. A controlled field keeps
+  the value you pass and calls nothing, as a controlled React `<input>` does.
+- **`required` now blocks a form's submit and moves focus to the field.** Dropdown,
+  SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown,
+  DatePicker, TimePicker, Switch, OtpInput and RadioGroup drew an asterisk and set
+  `aria-required`, and an empty one submitted anyway. The browser's own validation now stops the
+  submit and focuses the field's visible control; a multi-value field needs at least one value.
+  Submitted values are unchanged, field by field and mode by mode. A Slider always holds a
+  value, so `required` never blocks one.
 - **Modal content taller than the viewport scrolls.** The positioner carried both `fixed` and
   `relative`; `relative` won, so the positioner grew with its content and nothing scrolled. A
   dialog taller than the window ran off both edges, and its title and its last controls could

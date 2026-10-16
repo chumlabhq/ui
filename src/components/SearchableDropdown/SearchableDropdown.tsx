@@ -29,6 +29,7 @@ import {
   UNSTYLED_SEARCHABLEDROPDOWN_CLASSES,
 } from "./utils/constants.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
+import { FormValue } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 
@@ -361,6 +362,7 @@ const SearchableDropdown = forwardRef<
     handleClear,
     handleOptionSelect,
     handleKeyDown,
+    resetValue,
   } = useDropdown({
     options,
     value,
@@ -685,11 +687,11 @@ const SearchableDropdown = forwardRef<
       </div>
 
       {name && (
-        <input
-          type="hidden"
-          name={name}
-          value={selectedOption ? (currentValue ?? "") : ""}
-          aria-hidden="true"
+        <FormValue
+          entries={[[name, selectedOption ? (currentValue ?? "") : ""]]}
+          required={required && !disabled}
+          onReset={resetValue}
+          focusTarget={triggerNode}
         />
       )}
 

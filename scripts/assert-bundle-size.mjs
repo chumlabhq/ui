@@ -1219,6 +1219,40 @@ const LIBRARY_TOTAL_HISTORY = [
       "breach moved. No comments added to src/components. Measured against a " +
       "build of ba020987.",
   },
+  {
+    kb: 159.41,
+    commit: "(uncommitted)",
+    date: "2026-10-16",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +1.30 KB (161,905 -> 163,232 B gzipped, +1,327 B), 82 -> 83 " +
+      "files. L20 forms: a form reset restores fields' uncontrolled values, " +
+      "and `required` blocks a form's submit and focuses the field. Every rise " +
+      "fixes a failure measured at HEAD (fc11ddaf) in Chromium, Firefox and " +
+      "WebKit. New shared chunk FormValue, 760 B standalone: the reset " +
+      "listener 145 B (its cancelled-reset guard 27 B), the validity probe " +
+      "for a value that is non-empty when empty 99 B, the focus redirect 52 B, " +
+      "required/disabled/form 25 B, hidden from AT and Tab 65 B, the noop " +
+      "onChange 16 B, the rest module scaffold; useFormReset folded into it " +
+      "saved 224 B. useControllableState +52 B, the reset it returns. Own " +
+      "chunks, each with its HEAD failure: Dropdown +53 B, SearchableDropdown " +
+      "+61 B, MultiSelectDropdown +60 B, MultiSelectSearchableDropdown +64 B, " +
+      "DatePicker +74 B, TimePicker +50 B, OtpInput +68 B — required and empty " +
+      "submitted, and reset left the changed value on screen and in FormData. " +
+      "CascadingDropdown +95 B — both, and its empty value is `{}`, so it " +
+      "needs the validity probe. Switch +105 B — both, plus `form` reached the " +
+      "button but not the submitted value. Slider +103 B — reset left the " +
+      "changed value (required is moot: it is never empty). " +
+      "InternationalPhoneInput +30 B — reset left the changed number, and " +
+      "`form` never reached its submitted values. RadioButton +95 B — required " +
+      "submitted (the radios carried no `required`), and reset restored the " +
+      "native radio while the group painted the changed one. Checkbox +37 B — " +
+      "reset restored the native box while it painted the changed state. Input " +
+      "+35 B, TextArea +33 B — reset left the changed text on screen and in " +
+      "FormData. FormData is identical to HEAD across 68 configurations. " +
+      "DatePicker's declared breach moved with it (below). No comments added " +
+      "to src/components or src/utils. Measured against a build of fc11ddaf.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1349,7 +1383,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.27,
+      kb: 12.34,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1378,7 +1412,14 @@ const DECLARED_BREACHES = new Map([
         "carry the ISO value (single, range interval, one per date in multiple " +
         "mode), about 109 B; the description id joins the trigger's " +
         "aria-describedby, about 18 B. Reusing toDateString instead of a new " +
-        "format call saved 14 B; a join-built range string saved none.",
+        "format call saved 14 B; a join-built range string saved none.\n\n" +
+        "12.27 -> 12.34 on 2026-10-16, L20 forms (exclusive 12,567 -> 12,639 B " +
+        "gzipped, +72 B): an empty `required` DatePicker submitted, and a form " +
+        "reset left the changed date on screen and in FormData. The hidden " +
+        "inputs became the shared FormValue control, which takes part in " +
+        "validation and listens for the form's reset; the bytes here are the " +
+        "call, its reset and focus wiring. Submitted values are unchanged in " +
+        "every mode.",
     },
   ],
   [

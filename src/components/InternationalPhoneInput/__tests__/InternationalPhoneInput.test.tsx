@@ -251,7 +251,7 @@ describe("InternationalPhoneInput", () => {
           defaultValue={{ countryCode: "US", phoneNumber: "2025551234" }}
         />
       );
-      const hiddenInputs = document.querySelectorAll("input[type='hidden']");
+      const hiddenInputs = document.querySelectorAll("input[aria-hidden='true']");
       expect(hiddenInputs.length).toBe(2); // country + full number
     });
   });
@@ -483,7 +483,7 @@ describe("InternationalPhoneInput", () => {
         />
       );
 
-      const hiddenInputs = document.querySelectorAll("input[type='hidden']");
+      const hiddenInputs = document.querySelectorAll("input[aria-hidden='true']");
       expect(hiddenInputs.length).toBe(2);
 
       const names = Array.from(hiddenInputs).map((i) =>

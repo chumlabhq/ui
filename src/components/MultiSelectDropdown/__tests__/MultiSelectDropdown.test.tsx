@@ -753,7 +753,7 @@ describe("MultiSelectDropdown", () => {
       );
 
       const hiddenInput = document.querySelector(
-        'input[type="hidden"][name="fruits"]'
+        'input[aria-hidden="true"][name="fruits"]'
       ) as HTMLInputElement;
       expect(hiddenInput).toBeInTheDocument();
       expect(hiddenInput.value).toBe("apple,cherry");
@@ -767,7 +767,7 @@ describe("MultiSelectDropdown", () => {
         />
       );
 
-      const hiddenInput = document.querySelector('input[type="hidden"]');
+      const hiddenInput = document.querySelector('input[aria-hidden="true"]');
       expect(hiddenInput).not.toBeInTheDocument();
     });
 
@@ -785,7 +785,7 @@ describe("MultiSelectDropdown", () => {
       await user.click(screen.getByText("Banana"));
 
       const hiddenInput = document.querySelector(
-        'input[type="hidden"][name="fruits"]'
+        'input[aria-hidden="true"][name="fruits"]'
       ) as HTMLInputElement;
       expect(hiddenInput.value).toBe("apple,banana");
     });

@@ -3,6 +3,7 @@ import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
+import { FormValue } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types.js";
@@ -335,6 +336,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       handleOptionToggle,
       handleRemoveOption,
       handleKeyDown,
+      resetValue,
     } = useMultiSelectDropdown({
       options,
       value,
@@ -735,7 +737,12 @@ const MultiSelectSearchableDropdown = forwardRef<
         </div>
 
         {name && (
-          <input type="hidden" name={name} value={selectedOptions.map((o) => o.value).join(",")} aria-hidden="true" />
+          <FormValue
+            entries={[[name, selectedOptions.map((o) => o.value).join(",")]]}
+            required={required && !disabled}
+            onReset={resetValue}
+            focusTarget={triggerRef}
+          />
         )}
 
         <div id={`${dropdownId}-status`} role="status" aria-live="polite" aria-atomic="true" style={SR_ONLY_STYLE}>{statusMessage}</div>

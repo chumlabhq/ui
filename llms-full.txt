@@ -2195,6 +2195,13 @@ const searchCountries = async (query: string) => {
 
 ---
 
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, the value object as JSON (`{"fruit":"a"}`), or `{}` when nothing is selected.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or `{}`), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled CascadingDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` CascadingDropdown needs at least one selection: with none, it blocks the form's submit with the browser's own "fill out this field" message and moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled CascadingDropdown still submits its value.
+
 ### Keyboard Interactions
 
 | Key | Behaviour |
@@ -2494,6 +2501,12 @@ const someChecked = items.some(Boolean);
 ```
 
 ---
+
+### Forms
+
+- **Submitted value.** With `name`, it submits `value` (default `"on"`) when checked, and nothing when unchecked — the input is native.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled checkbox to `defaultChecked`, on screen as well as in the submitted value, and the submitted value with it. Like a native input it fires no change callback: `onCheckedChange` is not called. A controlled Checkbox is left alone: it keeps the `checked` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` Checkbox must be checked: unchecked, it blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
 
 ### Keyboard Interactions
 
@@ -3112,6 +3125,13 @@ import { fr } from "date-fns/locale";
 
 ---
 
+### Forms
+
+- **Submitted value.** With `name`, it submits the formats in the `name` row above: `YYYY-MM-DD` for a single date, one `YYYY-MM-DD/YYYY-MM-DD` interval for a range, one entry per date (sorted) for multiple dates, and an empty string when nothing is picked.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no date), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled DatePicker is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` DatePicker blocks the form's submit, and the browser's validation moves focus to the trigger. Multiple-date mode needs at least one date. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled DatePicker submits nothing.
+
 ### Keyboard Interactions
 
 | Key | Behaviour |
@@ -3556,6 +3576,13 @@ const [value, setValue] = useState<string | null>(null);
 
 ---
 
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, the selected option's `value`, or an empty string when nothing is selected.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled Dropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` Dropdown blocks the form's submit, and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled Dropdown still submits its value.
+
 ### Keyboard Interactions
 
 | Key | Behaviour |
@@ -3778,6 +3805,12 @@ const [show, setShow] = useState(false);
 ```
 
 ---
+
+### Forms
+
+- **Submitted value.** With `name`, it submits the text, from the native input.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled input to `defaultValue` (or empty), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled Input is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` Input blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
 
 ### Keyboard Interactions
 
@@ -4114,6 +4147,13 @@ const euCountries = [
 ```
 
 ---
+
+### Forms
+
+- **Submitted value.** With `name`, it submits two entries: `{name}_country`, the ISO country code, and `{name}`, the dial code followed by the digits (`+442071234567`; just the dial code when no number is typed).
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled country and number to `defaultValue` (or the default country and no number), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled InternationalPhoneInput is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** `required` is enforced by the number field itself: empty, it blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled and `form`.** A disabled InternationalPhoneInput still submits its value. `form` reaches the submitted values as well as the number field.
 
 ### Keyboard Interactions
 
@@ -4898,6 +4938,13 @@ const [values, setValues] = useState<string[]>([]);
 
 ---
 
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, the selected values joined with commas (`a,c`), or an empty string when none is selected.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled MultiSelectDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` MultiSelectDropdown needs at least one value: with none, it blocks the form's submit and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled MultiSelectDropdown still submits its value.
+
 ### Keyboard Interactions
 
 | Key | Behaviour |
@@ -5183,6 +5230,13 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ---
 
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, the selected values joined with commas (`a,c`), or an empty string when none is selected.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled MultiSelectSearchableDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` MultiSelectSearchableDropdown needs at least one value: with none, it blocks the form's submit and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled MultiSelectSearchableDropdown still submits its value.
+
 ### Keyboard Interactions
 
 | Key | Behaviour |
@@ -5396,6 +5450,13 @@ filter is now derived from the same pattern, so all four agree.
   what the browser does with the attribute.
 
 ---
+
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, the digits entered so far, or an empty string.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled code to `defaultValue` (or empty), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled OtpInput is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` OtpInput blocks the form's submit, and the browser's validation moves focus to the first digit. A partly filled code counts as filled. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled OtpInput submits nothing.
 
 ### Keyboard Interactions
 
@@ -5804,6 +5865,12 @@ export default function Example() {
 // Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
 ```
 
+### Forms
+
+- **Submitted value.** With `name`, it submits the checked radio's `value` under the group's `name`, and nothing when none is checked — the radios are native.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled group to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled RadioGroup is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` RadioGroup puts `required` on its radios: with none checked, it blocks the form's submit and the browser focuses the first radio. The field shows an error state only when you pass `error` and `errorMessage`.
+
 ### Keyboard Interactions
 
 Native `<input type="radio">` elements in a group, so the browser owns the roving focus.
@@ -6179,6 +6246,13 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 
 ---
 
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, the selected option's `value`, or an empty string when nothing is selected or the value matches no option.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled SearchableDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` SearchableDropdown blocks the form's submit, and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled SearchableDropdown still submits its value.
+
 ### Keyboard Interactions
 
 | Key | Behaviour |
@@ -6316,6 +6390,13 @@ override silently drops the rest.
 
 // Passing only `thumb: "data-[disabled]:…"` drops the base and the other 1 states.
 ```
+
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry with the number, or `{name}[0]` and `{name}[1]` for a range; with no value set it submits `min`.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled slider to `defaultValue` (or `min`), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled Slider is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A Slider always holds a value, so `required` never blocks a submit. When validation stops a form elsewhere, focus goes to the first thumb. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled Slider still submits its value.
 
 ### Keyboard Interactions
 
@@ -6748,6 +6829,13 @@ override silently drops the rest.
 
 // Passing only `control: "data-[disabled]:…"` drops the base and the other 2 states.
 ```
+
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, `value` (default `"on"`) when on, or an empty string when off.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled switch to `defaultChecked`, and the submitted value with it. Like a native input it fires no change callback: `onCheckedChange` is not called. A controlled Switch is left alone: it keeps the `checked` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` Switch must be on, like a required checkbox: off, it blocks the form's submit and the browser's validation moves focus to the switch. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled and `form`.** A disabled Switch submits nothing. `form` reaches the submitted value as well as the button.
 
 ### Keyboard Interactions
 
@@ -7537,6 +7625,12 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
 
 ---
 
+### Forms
+
+- **Submitted value.** With `name`, it submits the text, from the native textarea.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled textarea to `defaultValue` (or empty), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled TextArea is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` TextArea blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
+
 ### Keyboard Interactions
 
 A native `<textarea>`: the browser owns text entry and selection.
@@ -7775,6 +7869,13 @@ const [time, setTime] = useState<string | null>(null);
 ```
 
 ---
+
+### Forms
+
+- **Submitted value.** With `name`, it submits one entry, the time as the field holds it (`09:30`, or `2:30 PM` in 12-hour format), or an empty string when there is none.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled time to `defaultValue` (or no time), clearing any out-of-range error from a typed time, and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled TimePicker is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` TimePicker blocks the form's submit, and the browser's validation moves focus to the time input. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled TimePicker still submits its value.
 
 ### Keyboard Interactions
 

@@ -253,6 +253,13 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ---
 
+## Forms
+
+- **Submitted value.** With `name`, it submits one entry, the selected values joined with commas (`a,c`), or an empty string when none is selected.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled MultiSelectSearchableDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` MultiSelectSearchableDropdown needs at least one value: with none, it blocks the form's submit and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled MultiSelectSearchableDropdown still submits its value.
+
 ## Keyboard Interactions
 
 | Key | Behaviour |

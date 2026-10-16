@@ -313,4 +313,5 @@ export interface UseCascadingDropdownReturn {
   isSubmenuSearching: boolean;
   /** Filtered submenu options for the active submenu parent. */
   getFilteredSubmenuOptions: (parent: CascadingOption) => CascadingOption[];
+  resetValue: () => void;
 }

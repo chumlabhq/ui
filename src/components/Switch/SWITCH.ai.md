@@ -126,6 +126,13 @@ override silently drops the rest.
 // Passing only `control: "data-[disabled]:…"` drops the base and the other 2 states.
 ```
 
+## Forms
+
+- **Submitted value.** With `name`, it submits one entry, `value` (default `"on"`) when on, or an empty string when off.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled switch to `defaultChecked`, and the submitted value with it. Like a native input it fires no change callback: `onCheckedChange` is not called. A controlled Switch is left alone: it keeps the `checked` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` Switch must be on, like a required checkbox: off, it blocks the form's submit and the browser's validation moves focus to the switch. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled and `form`.** A disabled Switch submits nothing. `form` reaches the submitted value as well as the button.
+
 ## Keyboard Interactions
 
 A `<button role="switch">`, not a checkbox — which is why `Enter` activates it as well as `Space`.

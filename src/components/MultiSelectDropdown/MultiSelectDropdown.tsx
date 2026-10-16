@@ -16,6 +16,7 @@ import {
   UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
 } from "./utils/constants.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
+import { FormValue } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -249,6 +250,7 @@ const MultiSelectDropdown = forwardRef<
       handleOptionToggle,
       handleRemoveOption,
       handleKeyDown,
+      resetValue,
     } = useMultiSelectDropdown({
       options,
       value,
@@ -605,11 +607,11 @@ const MultiSelectDropdown = forwardRef<
         </div>
 
         {name && (
-          <input
-            type="hidden"
-            name={name}
-            value={selectedOptions.map((o) => o.value).join(",")}
-            aria-hidden="true"
+          <FormValue
+            entries={[[name, selectedOptions.map((o) => o.value).join(",")]]}
+            required={required && !disabled}
+            onReset={resetValue}
+            focusTarget={triggerRef}
           />
         )}
 

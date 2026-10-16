@@ -118,6 +118,13 @@ override silently drops the rest.
 // Passing only `thumb: "data-[disabled]:…"` drops the base and the other 1 states.
 ```
 
+## Forms
+
+- **Submitted value.** With `name`, it submits one entry with the number, or `{name}[0]` and `{name}[1]` for a range; with no value set it submits `min`.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled slider to `defaultValue` (or `min`), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled Slider is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A Slider always holds a value, so `required` never blocks a submit. When validation stops a form elsewhere, focus goes to the first thumb. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled Slider still submits its value.
+
 ## Keyboard Interactions
 
 | Key | Behaviour |

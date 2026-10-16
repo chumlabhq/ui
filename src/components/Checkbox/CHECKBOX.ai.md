@@ -281,6 +281,12 @@ const someChecked = items.some(Boolean);
 
 ---
 
+## Forms
+
+- **Submitted value.** With `name`, it submits `value` (default `"on"`) when checked, and nothing when unchecked — the input is native.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled checkbox to `defaultChecked`, on screen as well as in the submitted value, and the submitted value with it. Like a native input it fires no change callback: `onCheckedChange` is not called. A controlled Checkbox is left alone: it keeps the `checked` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` Checkbox must be checked: unchecked, it blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
+
 ## Keyboard Interactions
 
 A native `<input type="checkbox">`, so the browser owns this — `Enter` deliberately does nothing, as it does not on any checkbox.

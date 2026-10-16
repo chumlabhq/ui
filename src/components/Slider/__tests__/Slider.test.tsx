@@ -355,7 +355,7 @@ describe("Slider", () => {
         <Slider name="price" defaultValue={[10, 90]} />
       );
 
-      const inputs = container.querySelectorAll('input[type="hidden"]');
+      const inputs = container.querySelectorAll('input[aria-hidden="true"]');
       expect(inputs).toHaveLength(2);
       expect(inputs[0]).toHaveAttribute("name", "price[0]");
       expect(inputs[0]).toHaveAttribute("value", "10");
@@ -767,7 +767,7 @@ describe("Slider", () => {
         <Slider name="volume" defaultValue={42} />
       );
 
-      const input = container.querySelector('input[type="hidden"]');
+      const input = container.querySelector('input[aria-hidden="true"]');
       expect(input).toHaveAttribute("name", "volume");
       expect(input).toHaveAttribute("value", "42");
     });
@@ -775,7 +775,7 @@ describe("Slider", () => {
     it("does not create hidden input when name is not provided", () => {
       const { container } = render(<Slider defaultValue={42} />);
 
-      const input = container.querySelector('input[type="hidden"]');
+      const input = container.querySelector('input[aria-hidden="true"]');
       expect(input).not.toBeInTheDocument();
     });
   });

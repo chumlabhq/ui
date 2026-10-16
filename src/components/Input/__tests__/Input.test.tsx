@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { FormEvent } from "react";
 import { Input, InputLabel } from "../index.js";
@@ -754,7 +754,7 @@ describe("Input", () => {
       expect(submitted!.get("email")).toBe("a@b.com");
     });
 
-    it("keeps its value through a native form reset", async () => {
+    it("restores its default through a native form reset", async () => {
       const user = userEvent.setup();
 
       render(
@@ -770,12 +770,7 @@ describe("Input", () => {
 
       await user.click(screen.getByRole("button", { name: "Reset" }));
 
-      // Characterises a real limitation rather than the desired behaviour.
-      // `defaultValue` seeds internal state that then drives `value`, so the
-      // input is controlled from React's side and the browser's reset is
-      // overwritten on the next render. Consumers who need reset must lift the
-      // value and clear it themselves.
-      expect(input).toHaveValue("changed@b.com");
+      await waitFor(() => expect(input).toHaveValue("a@b.com"));
     });
 
     it("blocks submission when required and empty", async () => {

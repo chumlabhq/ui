@@ -20,6 +20,7 @@ import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { useFormReset } from "../../utils/FormValue.js";
 
 import { motionSafeClasses, structuralOnly } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -102,7 +103,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const isDisabled = disabled;
     const isInteractive = !isDisabled && !readOnly && !loading;
 
-    const [currentValue, setCurrentValue] = useControllableState({
+    const [currentValue, setCurrentValue, resetValue] = useControllableState({
       value: value !== undefined ? String(value) : undefined,
       defaultValue: (defaultValue as string) ?? "",
       onChange: onValueChange,
@@ -111,6 +112,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const internalRef = useRef<HTMLInputElement | null>(null);
     const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
+    useFormReset(internalRef, resetValue, rest.form);
 
     const ariaDescribedBy =
       [

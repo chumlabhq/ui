@@ -375,6 +375,13 @@ import { fr } from "date-fns/locale";
 
 ---
 
+## Forms
+
+- **Submitted value.** With `name`, it submits the formats in the `name` row above: `YYYY-MM-DD` for a single date, one `YYYY-MM-DD/YYYY-MM-DD` interval for a range, one entry per date (sorted) for multiple dates, and an empty string when nothing is picked.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no date), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled DatePicker is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` DatePicker blocks the form's submit, and the browser's validation moves focus to the trigger. Multiple-date mode needs at least one date. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled DatePicker submits nothing.
+
 ## Keyboard Interactions
 
 | Key | Behaviour |

@@ -181,6 +181,13 @@ filter is now derived from the same pattern, so all four agree.
 
 ---
 
+## Forms
+
+- **Submitted value.** With `name`, it submits one entry, the digits entered so far, or an empty string.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled code to `defaultValue` (or empty), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled OtpInput is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` OtpInput blocks the form's submit, and the browser's validation moves focus to the first digit. A partly filled code counts as filled. The field shows an error state only when you pass `error` and `errorMessage`.
+- **Disabled.** A disabled OtpInput submits nothing.
+
 ## Keyboard Interactions
 
 | Key | Behaviour |

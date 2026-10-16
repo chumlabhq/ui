@@ -264,4 +264,5 @@ export interface UseMultiSelectDropdownReturn {
   handleOptionToggle: (option: MultiSelectOption) => void;
   handleRemoveOption: (optionValue: string) => void;
   handleKeyDown: (event: React.KeyboardEvent) => void;
+  resetValue: () => void;
 }

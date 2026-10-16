@@ -442,7 +442,7 @@ describe("Switch Component", () => {
     it("renders hidden input when name is provided", () => {
       render(<Switch name="notifications" aria-label="Toggle" />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toBeInTheDocument();
       expect(hidden).toHaveAttribute("name", "notifications");
     });
@@ -450,35 +450,35 @@ describe("Switch Component", () => {
     it("sends empty string value when unchecked", () => {
       render(<Switch name="notifications" checked={false} aria-label="Toggle" />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toHaveAttribute("value", "");
     });
 
     it("sends value when checked", () => {
       render(<Switch name="notifications" checked={true} value="yes" aria-label="Toggle" />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toHaveAttribute("value", "yes");
     });
 
     it("sends default value 'on' when checked without custom value", () => {
       render(<Switch name="notifications" checked={true} aria-label="Toggle" />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toHaveAttribute("value", "on");
     });
 
     it("does not render hidden input when name is not provided", () => {
       render(<Switch aria-label="Toggle" />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).not.toBeInTheDocument();
     });
 
     it("disables hidden input when switch is disabled", () => {
       render(<Switch name="notifications" disabled aria-label="Toggle" />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toBeDisabled();
     });
 
@@ -486,7 +486,7 @@ describe("Switch Component", () => {
       const user = userEvent.setup();
       render(<Switch name="notifications" aria-label="Toggle" />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toHaveAttribute("value", "");
 
       await user.click(screen.getByRole("switch"));

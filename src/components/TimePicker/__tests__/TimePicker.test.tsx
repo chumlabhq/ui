@@ -308,7 +308,8 @@ describe("TimePicker", () => {
 
       const hidden = container.querySelector('input[name="meeting_time"]');
       expect(hidden).toBeInTheDocument();
-      expect(hidden).toHaveAttribute("type", "hidden");
+      expect(hidden).toHaveAttribute("aria-hidden", "true");
+      expect(hidden).toHaveAttribute("tabindex", "-1");
       expect(hidden).toHaveValue("09:00");
     });
   });

@@ -211,6 +211,12 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
 
 ---
 
+## Forms
+
+- **Submitted value.** With `name`, it submits the text, from the native textarea.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled textarea to `defaultValue` (or empty), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled TextArea is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` TextArea blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
+
 ## Keyboard Interactions
 
 A native `<textarea>`: the browser owns text entry and selection.

@@ -42,6 +42,7 @@ import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
+import { FormValue } from "../../utils/FormValue.js";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,
@@ -341,6 +342,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       handleOptionSelect,
       handleClear,
       handleKeyDown,
+      resetValue,
     } = useDropdown({
       options,
       value,
@@ -639,11 +641,11 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         </div>
 
         {name && (
-          <input
-            type="hidden"
-            name={name}
-            value={currentValue ?? ""}
-            aria-hidden="true"
+          <FormValue
+            entries={[[name, currentValue ?? ""]]}
+            required={required && !disabled}
+            onReset={resetValue}
+            focusTarget={triggerNode}
           />
         )}
 

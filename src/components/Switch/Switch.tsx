@@ -1,7 +1,9 @@
-import { useId, useMemo, forwardRef, useCallback } from "react";
+import { useId, useMemo, useRef, forwardRef, useCallback } from "react";
 import type { SwitchProps, SwitchClasses, SwitchRenderProps } from "./utils/types.js";
 import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constants.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { FormValue } from "../../utils/FormValue.js";
+import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
@@ -66,7 +68,9 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const descriptionId =
       description || renderDescription ? `${switchId}-description` : undefined;
 
-    const [isChecked, setIsChecked] = useControllableState({
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const mergedRef = useMemo(() => mergeRefs(buttonRef, ref), [ref]);
+    const [isChecked, setIsChecked, resetChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
       onChange: onCheckedChange,
@@ -162,7 +166,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           )}
 
           <button
-            ref={ref}
+            ref={mergedRef}
             type="button"
             id={switchId}
             role="switch"
@@ -236,11 +240,13 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           )}
 
           {name && (
-            <input
-              type="hidden"
-              name={name}
-              value={isChecked ? value : ""}
+            <FormValue
+              entries={[[name, isChecked ? value : ""]]}
+              required={required}
               disabled={disabled}
+              form={buttonProps.form}
+              onReset={resetChecked}
+              focusTarget={buttonRef}
             />
           )}
         </div>

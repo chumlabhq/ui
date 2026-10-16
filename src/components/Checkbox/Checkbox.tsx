@@ -11,6 +11,7 @@ import {
 } from "./utils/constants.js";
 import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { useFormReset } from "../../utils/FormValue.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -92,11 +93,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const internalRef = useRef<HTMLInputElement>(null);
     const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
 
-    const [isChecked, setIsChecked] = useControllableState({
+    const [isChecked, setIsChecked, resetChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
       onChange: onCheckedChange,
     });
+    useFormReset(internalRef, resetChecked, rest.form);
 
     useEffect(() => {
       if (internalRef.current) {

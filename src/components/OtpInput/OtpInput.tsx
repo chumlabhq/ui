@@ -12,6 +12,7 @@ import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { FormValue } from "../../utils/FormValue.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -74,7 +75,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
 
-    const [value, setValue] = useControllableState({
+    const [value, setValue, resetValue] = useControllableState({
       value: controlledValue,
       defaultValue: defaultValue ?? "",
       onChange: onValueChange,
@@ -83,12 +84,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const fireChange = setValue;
 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+    const firstCellRef = useRef<HTMLInputElement | null>(null);
     const lastCompletedRef = useRef<string>("");
 
     const mergedRef = useMemo(
       () =>
         mergeRefs(ref, (node: HTMLInputElement | null) => {
           inputRefs.current[0] = node;
+          firstCellRef.current = node;
         }),
       [ref],
     );
@@ -367,7 +370,15 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         >
           {renderInputs()}
         </div>
-        {name && <input type="hidden" name={name} value={value} disabled={disabled} />}
+        {name && (
+          <FormValue
+            entries={[[name, value]]}
+            required={required}
+            disabled={disabled}
+            onReset={resetValue}
+            focusTarget={firstCellRef}
+          />
+        )}
         {error && errorMessage && (
           <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>{errorMessage}</div>
         )}

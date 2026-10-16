@@ -51,7 +51,7 @@ export function useDatePicker(props: UseDatePickerProps) {
   // and the picker tracks its own selection (seeded by `defaultValue`), the
   // same way `isOpen` works below. onValueChange still fires either way, and
   // is invoked from the handlers so its two-argument shape is preserved.
-  const [currentValue, setCurrentValue] = useControllableState<
+  const [currentValue, setCurrentValue, resetValue] = useControllableState<
     Date | DateRange | Date[] | null
   >({
     value,
@@ -547,5 +547,6 @@ export function useDatePicker(props: UseDatePickerProps) {
     goToToday,
     handleKeyDown,
     handleCalendarKeyDown,
+    resetValue,
   };
 }

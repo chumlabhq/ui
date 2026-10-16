@@ -32,7 +32,7 @@ export function useMultiSelectDropdown({
     onChange: onOpenChange,
   });
 
-  const [currentValues, setCurrentValues] = useControllableState<string[]>({
+  const [currentValues, setCurrentValues, resetValue] = useControllableState<string[]>({
     value,
     defaultValue: defaultValue ?? [],
   });
@@ -245,5 +245,6 @@ export function useMultiSelectDropdown({
     handleOptionToggle,
     handleRemoveOption,
     handleKeyDown,
+    resetValue,
   };
 }

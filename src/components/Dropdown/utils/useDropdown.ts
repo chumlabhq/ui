@@ -41,7 +41,7 @@ export const useDropdown = ({
   typeaheadTimeout = 500,
   loadingContent = "Loading...",
 }: UseDropdownProps) => {
-  const [currentValue, setCurrentValue] = useControllableState<string | null>({
+  const [currentValue, setCurrentValue, resetValue] = useControllableState<string | null>({
     value: valueProp,
     defaultValue: defaultValue ?? null,
     onChange: (newValue) => {
@@ -328,5 +328,6 @@ export const useDropdown = ({
     handleOptionSelect,
     handleClear,
     handleKeyDown,
+    resetValue,
   };
 };

@@ -459,7 +459,7 @@ describe("MultiSelectSearchableDropdown", () => {
           defaultValue={["apple", "banana"]}
         />
       );
-      const hiddenInput = document.querySelector('input[type="hidden"]');
+      const hiddenInput = document.querySelector('input[aria-hidden="true"]');
       expect(hiddenInput).toBeInTheDocument();
       expect(hiddenInput).toHaveAttribute("name", "fruits");
     });
@@ -473,7 +473,7 @@ describe("MultiSelectSearchableDropdown", () => {
         />
       );
       const hiddenInput = document.querySelector(
-        'input[type="hidden"]'
+        'input[aria-hidden="true"]'
       ) as HTMLInputElement;
       expect(hiddenInput.value).toBe("apple,cherry");
     });

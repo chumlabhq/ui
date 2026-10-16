@@ -44,6 +44,7 @@ interface UseDropdownReturn {
   handleClear: (event: React.SyntheticEvent) => void;
   handleOptionSelect: (option: SearchableDropdownOption) => void;
   handleKeyDown: (event: React.KeyboardEvent) => void;
+  resetValue: () => void;
 }
 
 export function useDropdown({
@@ -71,7 +72,7 @@ export function useDropdown({
   // it and are declared before the hook runs.
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
-  const [currentValue, setCurrentValue] = useControllableState<string | null>({
+  const [currentValue, setCurrentValue, resetValue] = useControllableState<string | null>({
     value: valueProp,
     defaultValue: defaultValue ?? null,
     onChange: (newValue) => {
@@ -382,5 +383,6 @@ export function useDropdown({
     handleClear,
     handleOptionSelect,
     handleKeyDown,
+    resetValue,
   };
 }

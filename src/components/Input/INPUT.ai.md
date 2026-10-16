@@ -203,6 +203,12 @@ const [show, setShow] = useState(false);
 
 ---
 
+## Forms
+
+- **Submitted value.** With `name`, it submits the text, from the native input.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled input to `defaultValue` (or empty), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled Input is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** An empty `required` Input blocks the form's submit and the browser focuses it. The field shows an error state only when you pass `error` and `errorMessage`.
+
 ## Keyboard Interactions
 
 A native `<input>`: the browser owns text entry, selection and the clear affordance.

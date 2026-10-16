@@ -15,6 +15,7 @@ import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusAndReveal } from "../../utils/focusAndReveal.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
+import { FormValue } from "../../utils/FormValue.js";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -471,6 +472,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       isMenuSearching,
       isSubmenuSearching,
       getFilteredSubmenuOptions,
+      resetValue,
     } = useCascadingDropdown({
       options,
       value,
@@ -901,11 +903,12 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         </div>
 
         {name && (
-          <input
-            type="hidden"
-            name={name}
-            value={JSON.stringify(internalValue)}
-            aria-hidden="true"
+          <FormValue
+            entries={[[name, JSON.stringify(internalValue)]]}
+            required={required && !disabled}
+            missing={Object.values(internalValue).every((v) => (Array.isArray(v) ? v.length === 0 : !v))}
+            onReset={resetValue}
+            focusTarget={triggerRef}
           />
         )}
 

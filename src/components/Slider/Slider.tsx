@@ -15,6 +15,8 @@ import {
 } from "./utils/constants.js";
 import { isBrowser } from "../../utils/isBrowser.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { FormValue } from "../../utils/FormValue.js";
+import { setRef } from "../../utils/mergeRefs.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
@@ -260,7 +262,15 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
     const descriptionId = `${sliderId}-description`;
     const errorId = `${sliderId}-error`;
 
-    const [currentValue, setCurrentValue] = useControllableState<SliderValue>({
+    const firstThumbRef = useRef<HTMLDivElement>(null);
+    const mergedThumbRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        firstThumbRef.current = node;
+        setRef(ref, node);
+      },
+      [ref],
+    );
+    const [currentValue, setCurrentValue, resetValue] = useControllableState<SliderValue>({
       value: valueProp,
       defaultValue: defaultValue ?? min,
       onChange: onValueChange,
@@ -681,7 +691,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               <Thumb
                 value={values[0]}
                 index={0}
-                thumbRef={ref}
+                thumbRef={mergedThumbRef}
                 min={min}
                 max={max}
                 step={step}
@@ -732,7 +742,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             <Thumb
               value={values[0]}
               index={0}
-              thumbRef={ref}
+              thumbRef={mergedThumbRef}
               min={min}
               max={max}
               step={step}
@@ -757,16 +767,18 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           )}
         </div>
 
-        {/* Hidden inputs for form submission */}
-        {name &&
-          (isRangeMode ? (
-            <>
-              <input type="hidden" name={`${name}[0]`} value={values[0]} />
-              <input type="hidden" name={`${name}[1]`} value={values[1]} />
-            </>
-          ) : (
-            <input type="hidden" name={name} value={values[0]} />
-          ))}
+        {name && (
+          <FormValue
+            entries={
+              isRangeMode
+                ? [[`${name}[0]`, String(values[0])], [`${name}[1]`, String(values[1])]]
+                : [[name, String(values[0])]]
+            }
+            required={required && !disabled}
+            onReset={resetValue}
+            focusTarget={firstThumbRef}
+          />
+        )}
 
         {error && errorMessage && (
           <div id={errorId} role="alert" data-invalid className={mc.message || undefined}>

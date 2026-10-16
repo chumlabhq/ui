@@ -36,6 +36,7 @@ import { CountryFlag } from "../CountryFlag/index.js";
 import { SearchableDropdown } from "../SearchableDropdown/index.js";
 import type { SearchableDropdownOption } from "../SearchableDropdown/index.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { FormValue } from "../../utils/FormValue.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -219,7 +220,7 @@ const InternationalPhoneInput = forwardRef<
       resolveInitialPhone(value, defaultValue, defaultCountry, sortedCountries),
     );
 
-    const [selectedCountryCode, setSelectedCountryCode] =
+    const [selectedCountryCode, setSelectedCountryCode, resetCountryCode] =
       useControllableState<string>({
         value: value?.countryCode
           ? findCountryByCode(value.countryCode, sortedCountries)?.value
@@ -227,7 +228,7 @@ const InternationalPhoneInput = forwardRef<
         defaultValue: initialCountry,
       });
 
-    const [phoneInput, setPhoneInput] = useControllableState<string>({
+    const [phoneInput, setPhoneInput, resetPhoneInput] = useControllableState<string>({
       value: value
         ? formatPhoneNumber(
             value.phoneNumber,
@@ -664,24 +665,23 @@ const InternationalPhoneInput = forwardRef<
         </div>
 
         {name && (
-          <>
-            <input
-              type="hidden"
-              name={`${name}_country`}
-              value={selectedCountryCode}
-              aria-hidden="true"
-            />
-            <input
-              type="hidden"
-              name={name}
-              value={
+          <FormValue
+            entries={[
+              [`${name}_country`, selectedCountryCode],
+              [
+                name,
                 selectedCountry
                   ? `${selectedCountry.dialCode}${getDigitsOnly(phoneInput)}`
-                  : getDigitsOnly(phoneInput)
-              }
-              aria-hidden="true"
-            />
-          </>
+                  : getDigitsOnly(phoneInput),
+              ],
+            ]}
+            form={rest.form}
+            onReset={() => {
+              if (!resetCountryCode()) return;
+              resetPhoneInput();
+              setHasValidationError(false);
+            }}
+          />
         )}
 
         <div

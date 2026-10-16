@@ -18,6 +18,7 @@ import {
 } from "./utils/constants.js";
 import { useTimePicker } from "./useTimePicker.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { FormValue } from "../../utils/FormValue.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons.js";
@@ -240,7 +241,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
 
-    const [value, setValueState] = useControllableState<string | null>({
+    const [value, setValueState, resetValue] = useControllableState<string | null>({
       value: valueProp,
       defaultValue: defaultValue ?? null,
     });
@@ -626,7 +627,14 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         data-valid={(!error && success) || undefined}
       >
         {name ? (
-          <input type="hidden" name={name} value={value ?? ""} readOnly tabIndex={-1} aria-hidden />
+          <FormValue
+            entries={[[name, value ?? ""]]}
+            required={required && !disabled}
+            onReset={() => {
+              if (resetValue()) setRangeError(false);
+            }}
+            focusTarget={inputRef}
+          />
         ) : null}
         {label && (
           <label htmlFor={triggerId} className={mergedClasses.label}>

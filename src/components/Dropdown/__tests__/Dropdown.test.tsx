@@ -948,7 +948,7 @@ describe('Dropdown - Form Integration', () => {
       />
     );
     
-    const hiddenInput = container.querySelector('input[type="hidden"]');
+    const hiddenInput = container.querySelector('input[aria-hidden="true"]');
     expect(hiddenInput).toHaveAttribute('name', 'fruit');
     expect(hiddenInput).toHaveValue('banana');
   });
@@ -966,7 +966,7 @@ describe('Dropdown - Form Integration', () => {
     const cherryOption = await screen.findByRole('option', { name: 'Cherry' });
     await user.click(cherryOption);
     
-    const hiddenInput = container.querySelector('input[type="hidden"]');
+    const hiddenInput = container.querySelector('input[aria-hidden="true"]');
     expect(hiddenInput).toHaveValue('cherry');
   });
 
@@ -1438,7 +1438,7 @@ describe('Dropdown - Form Name Hidden Input', () => {
       />
     );
 
-    const hiddenInput = container.querySelector('input[type="hidden"]');
+    const hiddenInput = container.querySelector('input[aria-hidden="true"]');
     expect(hiddenInput).toHaveAttribute('name', 'fruit');
     expect(hiddenInput).toHaveValue('');
   });
@@ -1451,7 +1451,7 @@ describe('Dropdown - Form Name Hidden Input', () => {
       />
     );
 
-    const hiddenInput = container.querySelector('input[type="hidden"]');
+    const hiddenInput = container.querySelector('input[aria-hidden="true"]');
     expect(hiddenInput).not.toBeInTheDocument();
   });
 

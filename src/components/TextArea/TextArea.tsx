@@ -21,6 +21,7 @@ import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { useFormReset } from "../../utils/FormValue.js";
 
 import { motionSafeClasses, structuralOnly } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -125,7 +126,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       [classesProp, baseClasses, sizeClasses],
     );
 
-    const [currentValue, setCurrentValue] = useControllableState({
+    const [currentValue, setCurrentValue, resetValue] = useControllableState({
       value: value !== undefined ? String(value) : undefined,
       defaultValue: (defaultValue as string) ?? "",
       onChange: onValueChange,
@@ -134,6 +135,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     const internalRef = useRef<HTMLTextAreaElement | null>(null);
     const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
+    useFormReset(internalRef, resetValue, rest.form);
 
     const adjustHeight = useCallback(() => {
       const el = internalRef.current;

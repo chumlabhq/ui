@@ -10,6 +10,7 @@ import {
 } from "react";
 import { useLayer } from "../../utils/layers.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
+import { FormValue } from "../../utils/FormValue.js";
 import { cycleTabWithin } from "../../utils/focusUtils.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -598,6 +599,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       goToToday,
       handleKeyDown,
       handleCalendarKeyDown,
+      resetValue,
     } = useDatePicker({
       selectionMode,
       value,
@@ -864,11 +866,18 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
           <div id={descriptionId} className={mergedClasses.description || undefined}>{description}</div>
         )}
 
-        {name &&
-          (multipleValue?.length
-            ? [...multipleValue].sort((a, b) => +a - +b).map(toDateString)
-            : [rangeValue && (rangeValue.start || rangeValue.end) ? `${isoDate(rangeValue.start)}/${isoDate(rangeValue.end)}` : isoDate(singleValue)]
-          ).map((date, i) => <input key={i} type="hidden" name={name} value={date} disabled={disabled} />)}
+        {name && (
+          <FormValue
+            entries={(multipleValue?.length
+              ? [...multipleValue].sort((a, b) => +a - +b).map(toDateString)
+              : [rangeValue && (rangeValue.start || rangeValue.end) ? `${isoDate(rangeValue.start)}/${isoDate(rangeValue.end)}` : isoDate(singleValue)]
+            ).map((date) => [name, date] as const)}
+            required={required}
+            disabled={disabled}
+            onReset={resetValue}
+            focusTarget={triggerRef}
+          />
+        )}
 
         <div
           ref={containerRef}

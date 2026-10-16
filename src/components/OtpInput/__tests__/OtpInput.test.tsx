@@ -897,7 +897,7 @@ describe("OtpInput", () => {
     it("renders hidden input with name and value for form submission", () => {
       render(<OtpInput name="otp-code" value="1234" length={4} />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toBeInTheDocument();
       expect(hidden).toHaveAttribute("name", "otp-code");
       expect(hidden).toHaveAttribute("value", "1234");
@@ -906,14 +906,14 @@ describe("OtpInput", () => {
     it("does not render hidden input when name is not provided", () => {
       render(<OtpInput value="1234" length={4} />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).not.toBeInTheDocument();
     });
 
     it("hidden input is disabled when OtpInput is disabled", () => {
       render(<OtpInput name="otp-code" value="1234" length={4} disabled />);
 
-      const hidden = document.querySelector('input[type="hidden"]');
+      const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toBeInTheDocument();
       expect(hidden).toBeDisabled();
     });
@@ -923,11 +923,11 @@ describe("OtpInput", () => {
         <OtpInput name="otp-code" value="12" length={4} />
       );
 
-      expect(document.querySelector('input[type="hidden"]')).toHaveAttribute("value", "12");
+      expect(document.querySelector('input[aria-hidden="true"]')).toHaveAttribute("value", "12");
 
       rerender(<OtpInput name="otp-code" value="1234" length={4} />);
 
-      expect(document.querySelector('input[type="hidden"]')).toHaveAttribute("value", "1234");
+      expect(document.querySelector('input[aria-hidden="true"]')).toHaveAttribute("value", "1234");
     });
   });
 });

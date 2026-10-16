@@ -101,6 +101,12 @@ export default function Example() {
 // Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
 ```
 
+## Forms
+
+- **Submitted value.** With `name`, it submits the checked radio's `value` under the group's `name`, and nothing when none is checked — the radios are native.
+- **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled group to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled RadioGroup is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
+- **Required.** A `required` RadioGroup puts `required` on its radios: with none checked, it blocks the form's submit and the browser focuses the first radio. The field shows an error state only when you pass `error` and `errorMessage`.
+
 ## Keyboard Interactions
 
 Native `<input type="radio">` elements in a group, so the browser owns the roving focus.
