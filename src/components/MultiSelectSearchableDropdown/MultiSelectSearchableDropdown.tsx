@@ -739,7 +739,8 @@ const MultiSelectSearchableDropdown = forwardRef<
         {name && (
           <FormValue
             entries={[[name, selectedOptions.map((o) => o.value).join(",")]]}
-            required={required && !disabled}
+            required={required}
+            disabled={disabled}
             onReset={resetValue}
             focusTarget={triggerRef}
           />

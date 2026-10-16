@@ -905,7 +905,8 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         {name && (
           <FormValue
             entries={[[name, JSON.stringify(internalValue)]]}
-            required={required && !disabled}
+            required={required}
+            disabled={disabled}
             missing={Object.values(internalValue).every((v) => (Array.isArray(v) ? v.length === 0 : !v))}
             onReset={resetValue}
             focusTarget={triggerRef}

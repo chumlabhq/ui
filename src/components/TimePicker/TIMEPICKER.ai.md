@@ -238,7 +238,7 @@ const [time, setTime] = useState<string | null>(null);
 - **Submitted value.** With `name`, it submits one entry, the time as the field holds it (`09:30`, or `2:30 PM` in 12-hour format), or an empty string when there is none.
 - **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled time to `defaultValue` (or no time), clearing any out-of-range error from a typed time, and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled TimePicker is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
 - **Required.** An empty `required` TimePicker blocks the form's submit, and the browser's validation moves focus to the time input. The field shows an error state only when you pass `error` and `errorMessage`.
-- **Disabled.** A disabled TimePicker still submits its value.
+- **Disabled.** A disabled TimePicker submits nothing, as a disabled native control doesn't.
 
 ## Keyboard Interactions
 

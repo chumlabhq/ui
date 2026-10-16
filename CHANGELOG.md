@@ -15,6 +15,12 @@ branch or a local link, these are the changes that will reach you.
 
 ### Added
 
+- `useControllableState` (`@chumlab/ui`) returns a third element, `reset()`, which puts an
+  uncontrolled value back to its default, does nothing when controlled, and returns whether it
+  applied. The exported field hooks return `resetValue` with the same behaviour:
+  `useCascadingDropdown` (`@chumlab/ui/cascading-dropdown`), `useMultiSelectDropdown`
+  (`@chumlab/ui/multi-select-dropdown` and `@chumlab/ui/multi-select-searchable-dropdown`) and
+  `useSearchableDropdown` (`@chumlab/ui/searchable-dropdown`). Both are what a form reset uses.
 - 30 components, each with a subpath export (`@chumlab/ui/button`,
   `@chumlab/ui/date-picker`, …) alongside the root barrel. ESM and CJS, with declarations
   for both.
@@ -28,6 +34,11 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- A disabled field no longer submits its value, as a disabled native control doesn't.
+  Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown,
+  CascadingDropdown, TimePicker, Slider and InternationalPhoneInput did; a server reading the
+  form now receives no entry for them, as it already did for DatePicker, Switch, OtpInput,
+  RadioGroup, Checkbox, Input and TextArea.
 - Modal takes its documented width (w-full max-w-lg, with the positioner's gutters) instead of
   shrinking to its content; a short Modal is wider than before, and its shadow is no longer
   clipped.
@@ -683,6 +694,10 @@ tables say.
 
 ### Fixed
 
+- **OtpInput: clicking a filled cell and typing replaces its digit in WebKit.** The cell
+  selects its digit on focus, and WebKit then placed its own click caret after the click,
+  collapsing that selection; with one character allowed, the typed digit was refused and focus
+  stayed put. Chromium and Firefox kept the selection. A filled cell now keeps it.
 - **A form reset restores every field's uncontrolled value.** Dropdown, SearchableDropdown,
   MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, DatePicker, TimePicker,
   Switch, Slider, OtpInput, InternationalPhoneInput, Input and TextArea kept the changed value

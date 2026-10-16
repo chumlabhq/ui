@@ -689,7 +689,8 @@ const SearchableDropdown = forwardRef<
       {name && (
         <FormValue
           entries={[[name, selectedOption ? (currentValue ?? "") : ""]]}
-          required={required && !disabled}
+          required={required}
+          disabled={disabled}
           onReset={resetValue}
           focusTarget={triggerNode}
         />

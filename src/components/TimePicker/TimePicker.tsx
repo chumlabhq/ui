@@ -629,7 +629,8 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         {name ? (
           <FormValue
             entries={[[name, value ?? ""]]}
-            required={required && !disabled}
+            required={required}
+            disabled={disabled}
             onReset={() => {
               if (resetValue()) setRangeError(false);
             }}

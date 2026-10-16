@@ -119,9 +119,8 @@ const FIELDS: Field[] = [
     name: "OtpInput",
     focus: "[role=group] input >> nth=0",
     change: async (page) => {
-      // fill(), not click-and-type: WebKit leaves the caret at 0 in a filled
-      // cell, and the typed digit is dropped (a separate OtpInput finding).
-      await page.locator(`${FORM} [role=group] input`).first().fill("9");
+      await page.locator(`${FORM} [role=group] input`).first().click();
+      await page.keyboard.type("9");
     },
   },
   {

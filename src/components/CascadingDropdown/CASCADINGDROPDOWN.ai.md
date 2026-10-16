@@ -377,7 +377,7 @@ const searchCountries = async (query: string) => {
 - **Submitted value.** With `name`, it submits one entry, the value object as JSON (`{"fruit":"a"}`), or `{}` when nothing is selected.
 - **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or `{}`), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled CascadingDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
 - **Required.** A `required` CascadingDropdown needs at least one selection: with none, it blocks the form's submit with the browser's own "fill out this field" message and moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
-- **Disabled.** A disabled CascadingDropdown still submits its value.
+- **Disabled.** A disabled CascadingDropdown submits nothing, as a disabled native control doesn't.
 
 ## Keyboard Interactions
 

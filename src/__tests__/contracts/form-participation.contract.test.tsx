@@ -15,6 +15,9 @@
  * is listed with the reason, and the reason is re-proved: it must render no
  * form control at all. A new field with `name` and no fixture fails here.
  *
+ * L21 adds the disabled row: a disabled native control is left out of
+ * FormData, and eight of these fields submitted their value anyway.
+ *
  * Focus is not asserted in jsdom, which moves none on an invalid submit;
  * `forms.spec.ts` asserts where it lands in three engines.
  */
@@ -41,7 +44,7 @@ const NOT_FIELDS: Record<string, { reason: string; render: () => ReactElement }>
   },
 };
 
-const counts = { checked: 0, reset: 0, required: 0 };
+const counts = { checked: 0, reset: 0, required: 0, disabled: 0 };
 
 const mount = (fixture: FormFixture, props: Record<string, unknown>) => {
   let submits = 0;
@@ -116,6 +119,13 @@ describe("form participation", () => {
         expect(formEntries(form)).toEqual(fixture.formData);
       });
 
+      it("disabled, so not in FormData", async () => {
+        const { form } = mount(fixture, { [keys.defaultValue]: fixture.initial, disabled: true });
+        await ui.settle();
+        expect(formEntries(form)).toEqual([]);
+        counts.disabled += 1;
+      });
+
       it(fixture.blocks ? "required and empty blocks the submit" : "is never empty, so required never blocks", async () => {
         const { form, submits } = mount(fixture, { required: true });
         await ui.settle();
@@ -136,6 +146,6 @@ describe("form participation", () => {
 
 afterAll(() => {
   console.log(
-    `form fields checked ${counts.checked} (floor ${FLOOR}), reset ok ${counts.reset}, required ok ${counts.required}`,
+    `form fields checked ${counts.checked} (floor ${FLOOR}), reset ok ${counts.reset}, required ok ${counts.required}, disabled ok ${counts.disabled}`,
   );
 });

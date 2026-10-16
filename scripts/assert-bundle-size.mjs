@@ -1253,6 +1253,25 @@ const LIBRARY_TOTAL_HISTORY = [
       "DatePicker's declared breach moved with it (below). No comments added " +
       "to src/components or src/utils. Measured against a build of fc11ddaf.",
   },
+  {
+    kb: 159.44,
+    commit: "(uncommitted)",
+    date: "2026-10-16",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.04 KB (163,232 -> 163,271 B gzipped, +39 B), 83 files " +
+      "held. L21: OtpInput replaces a filled cell's digit on click-and-type in " +
+      "WebKit, and a disabled field submits nothing. Own chunks: OtpInput " +
+      "+20 B, a mouseup handler that keeps a filled cell's selection (WebKit " +
+      "collapsed it after the click, so the typed digit was refused); " +
+      "InternationalPhoneInput +3 B, Dropdown +2 B, CascadingDropdown +1 B, " +
+      "MultiSelectSearchableDropdown +1 B, TimePicker 0, SearchableDropdown 0, " +
+      "Slider -2 B — each passes `disabled` to the shared FormValue in place " +
+      "of `required && !disabled`, so a disabled field leaves FormData as a " +
+      "disabled native control does; MultiSelectDropdown unmoved. The rest " +
+      "is the whole-library gzip. No declared breach moved. No comments added " +
+      "to src/components or src/utils. Measured against a build of fbe73dab.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

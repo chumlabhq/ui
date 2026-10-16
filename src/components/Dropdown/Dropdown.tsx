@@ -643,7 +643,8 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         {name && (
           <FormValue
             entries={[[name, currentValue ?? ""]]}
-            required={required && !disabled}
+            required={required}
+            disabled={disabled}
             onReset={resetValue}
             focusTarget={triggerNode}
           />

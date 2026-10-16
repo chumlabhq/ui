@@ -774,7 +774,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 ? [[`${name}[0]`, String(values[0])], [`${name}[1]`, String(values[1])]]
                 : [[name, String(values[0])]]
             }
-            required={required && !disabled}
+            required={required}
+            disabled={disabled}
             onReset={resetValue}
             focusTarget={firstThumbRef}
           />

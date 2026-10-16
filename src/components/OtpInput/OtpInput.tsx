@@ -297,6 +297,9 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleChange(index, e.target.value),
           onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(index, e),
           onFocus: handleFocus,
+          onMouseUp: (e: React.MouseEvent<HTMLInputElement>) => {
+            if (e.currentTarget.value) e.preventDefault();
+          },
           onPaste: allowPaste ? undefined : (e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault(),
           disabled: disabled || loading,
           maxLength: 1,

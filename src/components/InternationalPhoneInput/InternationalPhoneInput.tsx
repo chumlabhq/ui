@@ -675,6 +675,7 @@ const InternationalPhoneInput = forwardRef<
                   : getDigitsOnly(phoneInput),
               ],
             ]}
+            disabled={disabled}
             form={rest.form}
             onReset={() => {
               if (!resetCountryCode()) return;

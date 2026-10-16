@@ -285,7 +285,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 - **Submitted value.** With `name`, it submits one entry, the selected option's `value`, or an empty string when nothing is selected or the value matches no option.
 - **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled SearchableDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
 - **Required.** An empty `required` SearchableDropdown blocks the form's submit, and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
-- **Disabled.** A disabled SearchableDropdown still submits its value.
+- **Disabled.** A disabled SearchableDropdown submits nothing, as a disabled native control doesn't.
 
 ## Keyboard Interactions
 

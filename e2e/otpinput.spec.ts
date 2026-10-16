@@ -77,4 +77,23 @@ test.describe("OtpInput (fixtures)", () => {
     // honouring it.
     await expect(inputs.nth(2)).toBeFocused();
   });
+
+  /**
+   * L21. The cell selects its digit on focus, and WebKit then places its own
+   * click caret after the click event — a late `selectionchange` collapsed
+   * the selection from 0–1 to 1–1, so with `maxLength={1}` the typed digit was
+   * refused and focus stayed put. Chromium and Firefox kept the selection.
+   */
+  test("replaces a filled cell's digit when it is clicked and typed into", async ({ page }) => {
+    await gotoFixture(page, "OtpInput", "with-value");
+
+    const inputs = page.locator(INPUTS);
+    await expect(inputs.nth(1)).toHaveValue("2");
+    await inputs.nth(1).click();
+    await page.keyboard.type("9");
+
+    await expect(inputs.nth(1)).toHaveValue("9");
+    await expect(inputs.nth(0)).toHaveValue("1");
+    await expect(inputs.nth(2)).toBeFocused();
+  });
 });
