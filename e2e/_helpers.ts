@@ -75,3 +75,67 @@ export function skipWithoutTabTraversal(
       "on; focusability itself is asserted with a direct .focus() elsewhere",
   );
 }
+
+/**
+ * The keys that move the caret to the start and to the end of a text field,
+ * on the engine and platform actually running.
+ *
+ * Measured in a bare `<input>` on macOS: Home and End move the caret in
+ * chromium; firefox and webkit leave it where it was, as the macOS text system
+ * does, and all three honour Meta+ArrowLeft and Meta+ArrowRight. A spec that
+ * presses Home and reads `selectionStart === 0` was asserting Chromium's
+ * keyboard model, and failed in the other two engines on a component that was
+ * behaving exactly as the platform does.
+ *
+ * Decided by trying the keys in a probe field, once per page, rather than by
+ * browser name: on Linux and Windows, Home and End are the answer in every
+ * engine, and a name check would get that wrong.
+ */
+const caretKeysByPage = new WeakMap<Page, { start: string; end: string }>();
+
+export async function caretKeys(page: Page): Promise<{ start: string; end: string }> {
+  const known = caretKeysByPage.get(page);
+  if (known) return known;
+  const tryKeys = async (keys: string[], edge: "start" | "end") => {
+    for (const key of keys) {
+      await page.evaluate(() => {
+        const w = window as unknown as { __caretReturn?: Element | null };
+        w.__caretReturn = document.activeElement;
+        const probe = document.createElement("input");
+        probe.setAttribute("data-caret-probe", "");
+        probe.value = "abcdef";
+        probe.style.cssText = "position:fixed;left:0;top:0;opacity:0;pointer-events:none";
+        document.body.append(probe);
+        probe.focus();
+        probe.setSelectionRange(3, 3);
+      });
+      await page.keyboard.press(key);
+      const landed = await page.evaluate((at) => {
+        const probe = document.querySelector<HTMLInputElement>("[data-caret-probe]")!;
+        const ok = probe.selectionStart === (at === "start" ? 0 : probe.value.length);
+        probe.remove();
+        const back = (window as unknown as { __caretReturn?: Element | null }).__caretReturn;
+        if (back instanceof HTMLElement) back.focus({ preventScroll: true });
+        return ok;
+      }, edge);
+      if (landed) return key;
+    }
+    throw new Error(`none of ${keys.join(", ")} moved the caret in a probe field`);
+  };
+  const keys = {
+    start: await tryKeys(["Home", "Meta+ArrowLeft", "Control+a"], "start"),
+    end: await tryKeys(["End", "Meta+ArrowRight", "Control+e"], "end"),
+  };
+  caretKeysByPage.set(page, keys);
+  return keys;
+}
+
+/** Moves the caret in the focused text field to its start. */
+export async function caretToStart(page: Page): Promise<void> {
+  await page.keyboard.press((await caretKeys(page)).start);
+}
+
+/** Moves the caret in the focused text field to its end. */
+export async function caretToEnd(page: Page): Promise<void> {
+  await page.keyboard.press((await caretKeys(page)).end);
+}

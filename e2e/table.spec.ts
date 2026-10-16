@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import ts from "typescript";
 import { test, expect, type Page, type Locator } from "./_test";
 import { gotoFixture } from "./_nav";
+import { caretKeys, caretToEnd, caretToStart, skipWithoutTabTraversal } from "./_helpers";
 import { demoPages } from "./_demo-routes";
 
 /**
@@ -249,8 +250,10 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
         const { cell } = await open(surface);
         // On an act fixture the editor is already open, and an input's value is not innerText.
         const before = await read(cell).then((r) => r.value ?? r.text);
+        // Measured before the editor opens: the probe borrows focus.
+        await caretKeys(page);
         await cell.dblclick();
-        await page.keyboard.press("End");
+        await caretToEnd(page);
         await page.keyboard.press("ArrowLeft");
         await page.keyboard.type("Q");
         const typed = await read(cell);
@@ -349,27 +352,9 @@ test.describe("Table grid keys", () => {
     const expectArrows = ["ArrowLeft@2,2->[2,1]", "ArrowRight@2,2->[2,3]", "ArrowUp@2,2->[1,2]", "ArrowDown@2,2->[3,2]", "ArrowLeft@0,0->[0,0]", "ArrowUp@0,0->[0,0]", "ArrowRight@4,3->[4,3]", "ArrowDown@4,3->[4,3]"];
     row("arrows move one cell and stop at the edges", arrows.join(" ") === expectArrows.join(" "), arrows.join(" "));
 
-    // ── header controls: tab order, activation, and the keys left alone ──
-    const describe = () =>
-      page.evaluate(() => {
-        const el = document.activeElement as HTMLElement | null;
-        if (!el || !el.closest("[data-fixture]")) return "(left the fixture)";
-        const where = el.closest("thead") ? "thead" : el.closest("tbody") ? "tbody" : "other";
-        return `${where}:${el.tagName.toLowerCase()}[${el.getAttribute("aria-label") ?? el.textContent?.trim().slice(0, 20) ?? ""}]`;
-      });
+    // ── header controls: activation, and the keys left alone (their tab order is its own test, below) ──
     for (const fixture of ["sortable", "filterable", "pinned-column"]) {
       await gotoFixture(page, "Table", fixture);
-      await page.locator("body").click({ position: { x: 1, y: 1 } });
-      const order: string[] = [];
-      for (let i = 0; i < 14; i += 1) {
-        await page.keyboard.press("Tab");
-        const d = await describe();
-        order.push(d);
-        if (d === "(left the fixture)" && order.length > 1) break;
-      }
-      console.log(`TABLE_TAB_ORDER ${fixture}: ${order.join(" > ")}`);
-      row(`${fixture}: Tab reaches the header controls`, order.some((o) => o.startsWith("thead:button")), order.join(" > "));
-
       const control = page.locator("[data-fixture] thead button").first();
       if (!(await control.count())) {
         row(`${fixture}: has a header control to test`, false, "none found");
@@ -403,29 +388,30 @@ test.describe("Table grid keys", () => {
       }
     }
 
-    // ── text fields keep Home and End for the caret ──
+    // ── text fields keep the caret keys: Home and End, or what the platform uses instead ──
     await gotoFixture(page, "Table", "editable");
+    const caretKeyNames = await caretKeys(page);
     const editable = page.locator("[data-fixture] tbody td").first();
     await editable.focus();
     await page.keyboard.press("Enter");
     const editor = page.locator("[data-fixture] tbody input");
     await expect(editor).toBeFocused();
     const caret = () => editor.evaluate((el: HTMLInputElement) => [el.selectionStart, el.value.length, el === document.activeElement]);
-    await page.keyboard.press("Home");
+    await caretToStart(page);
     const home = await caret();
-    await page.keyboard.press("End");
+    await caretToEnd(page);
     const end = await caret();
-    row("cell editor: Home and End move the caret, the editor stays open", home[0] === 0 && home[2] === true && end[0] === end[1] && end[2] === true, `Home ${JSON.stringify(home)} End ${JSON.stringify(end)}`);
+    row(`cell editor: ${caretKeyNames.start} and ${caretKeyNames.end} move the caret, the editor stays open`, home[0] === 0 && home[2] === true && end[0] === end[1] && end[2] === true, `${caretKeyNames.start} ${JSON.stringify(home)} ${caretKeyNames.end} ${JSON.stringify(end)}`);
     await page.keyboard.press("Escape");
 
     await gotoFixture(page, "Table", "with-search");
     const search = page.locator("[data-fixture] input").first();
     await search.fill("abc");
-    await page.keyboard.press("Home");
+    await caretToStart(page);
     const sHome = await search.evaluate((el: HTMLInputElement) => [el.selectionStart, el === document.activeElement]);
-    await page.keyboard.press("End");
+    await caretToEnd(page);
     const sEnd = await search.evaluate((el: HTMLInputElement) => [el.selectionStart, el === document.activeElement]);
-    row("built-in search: Home and End move the caret", sHome[0] === 0 && sHome[1] === true && sEnd[0] === 3 && sEnd[1] === true, `Home ${JSON.stringify(sHome)} End ${JSON.stringify(sEnd)}`);
+    row(`built-in search: ${caretKeyNames.start} and ${caretKeyNames.end} move the caret`, sHome[0] === 0 && sHome[1] === true && sEnd[0] === 3 && sEnd[1] === true, `${caretKeyNames.start} ${JSON.stringify(sHome)} ${caretKeyNames.end} ${JSON.stringify(sEnd)}`);
 
     // ── the controls inside cells, on the demo's live sections ──
     await page.goto("/table", { waitUntil: "networkidle" });
@@ -501,5 +487,39 @@ test.describe("Table grid keys", () => {
     console.log(`TABLE_GRID_KEYS rows=${rows.length} failing=${failing.length}`);
     for (const r of failing) console.log(`  FAILING ${r.name}: ${r.detail}`);
     expect(failing.map((r) => `${r.name}: ${r.detail}`)).toEqual([]);
+  });
+
+  /**
+   * Tab reaches the header controls.
+   *
+   * Its own test, not a row of the one above, so that the engine whose Tab does
+   * not reach buttons at all skips it with the reason rather than failing on
+   * the platform: in webkit the order read `tbody:td[Ada] > (left the fixture)`
+   * on all three fixtures.
+   */
+  test("Tab reaches the header controls", async ({ page, browserName }) => {
+    skipWithoutTabTraversal(test, browserName);
+    const describe = () =>
+      page.evaluate(() => {
+        const el = document.activeElement as HTMLElement | null;
+        if (!el || !el.closest("[data-fixture]")) return "(left the fixture)";
+        const where = el.closest("thead") ? "thead" : el.closest("tbody") ? "tbody" : "other";
+        return `${where}:${el.tagName.toLowerCase()}[${el.getAttribute("aria-label") ?? el.textContent?.trim().slice(0, 20) ?? ""}]`;
+      });
+    const missing: string[] = [];
+    for (const fixture of ["sortable", "filterable", "pinned-column"]) {
+      await gotoFixture(page, "Table", fixture);
+      await page.locator("body").click({ position: { x: 1, y: 1 } });
+      const order: string[] = [];
+      for (let i = 0; i < 14; i += 1) {
+        await page.keyboard.press("Tab");
+        const d = await describe();
+        order.push(d);
+        if (d === "(left the fixture)" && order.length > 1) break;
+      }
+      console.log(`TABLE_TAB_ORDER ${fixture}: ${order.join(" > ")}`);
+      if (!order.some((o) => o.startsWith("thead:button"))) missing.push(`${fixture}: ${order.join(" > ")}`);
+    }
+    expect(missing, "Tab never reached a header control").toEqual([]);
   });
 });

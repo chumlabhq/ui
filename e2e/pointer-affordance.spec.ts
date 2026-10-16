@@ -1,5 +1,5 @@
 import { expect, test } from "./_test";
-import { gotoFixtureIndex } from "./_nav";
+import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { markPortalRoots, PORTAL_MARK } from "./_portals.js";
 
 /**
@@ -87,7 +87,80 @@ const REMOVED_FROM_PAGE = '[aria-hidden="true"],[role="presentation"],[role="non
 
 type Finding = { fixture: string; detail: string };
 
-test("everything clickable declares a cursor", async ({ page }) => {
+/**
+ * Text-entry controls, which WebKit draws with the text cursor while computing
+ * `auto` for them.
+ *
+ * Measured on this Mac in a bare page, no stylesheet: chromium and firefox
+ * compute `text` on `<textarea>` and on `<input>` of type text, search, email,
+ * url, tel, password and number; webkit computes `auto` on every one of them
+ * and still shows the I-beam, because `auto` is the UA's own choice and its
+ * choice over editable text is the text cursor. A `<button>` computes
+ * `default` in all three. So `auto` is accepted here, and only here: on these
+ * controls, in WebKit. Anywhere else it is the failure it always was — the
+ * HEAD sweep in webkit reported exactly these 100 controls and nothing else.
+ */
+const TEXT_ENTRY_TYPES = ["text", "search", "email", "url", "tel", "password", "number"];
+
+type SweepArgs = {
+  scopes: string[];
+  interactive: string;
+  allowed: string[];
+  surfaces: string;
+  removed: string;
+  autoOnTextEntry: boolean;
+  textEntryTypes: string[];
+};
+
+/** The in-page check, shared by the sweep and its plant. */
+const sweepCursors = ({ scopes, interactive, allowed, surfaces, removed, autoOnTextEntry, textEntryTypes }: SweepArgs) => {
+  const reactProps = (el: Element): Record<string, unknown> | null => {
+    const key = Object.keys(el).find((k) => k.startsWith("__reactProps$"));
+    return key ? ((el as unknown as Record<string, unknown>)[key] as Record<string, unknown>) : null;
+  };
+  const selector = scopes.map((s) => `${s} *`).join(",");
+  const bad: string[] = [];
+  let bound = 0;
+  let seen = 0;
+
+  for (const el of document.querySelectorAll<HTMLElement>(selector)) {
+    const props = reactProps(el);
+    const hasHandler = !!props && (typeof props.onClick === "function" || typeof props.onPointerDown === "function");
+    if (hasHandler) bound += 1;
+    const byRole = el.matches(interactive);
+    if (!hasHandler && !byRole) continue;
+    // The library's own markup only, and not a dismissal surface.
+    if (!el.classList.contains("cl-s")) continue;
+    // The dismissal chain is the surface AND the wrappers around it: a
+    // modal's positioner takes `onClick` to stop the click reaching the
+    // overlay, which is the same not-an-invitation as the panel itself.
+    if (el.matches(surfaces) || el.querySelector(surfaces)) continue;
+    if (el.closest(removed)) continue;
+    // An element nobody can reach makes no promise about the pointer.
+    // `disabled` is only a property on form controls, so the ARIA and
+    // data forms are checked too — `ResizablePanel`'s separator is a div
+    // and reported as a finding until this looked at `aria-disabled`.
+    if ((el as HTMLInputElement).disabled) continue;
+    if (el.getAttribute("aria-disabled") === "true" || el.hasAttribute("data-disabled")) continue;
+    const style = getComputedStyle(el);
+    if (style.pointerEvents === "none" || style.display === "none" || style.visibility === "hidden") continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) continue;
+
+    seen += 1;
+    const textEntry =
+      el instanceof HTMLTextAreaElement || (el instanceof HTMLInputElement && textEntryTypes.includes(el.type));
+    if (!allowed.includes(style.cursor) && !(autoOnTextEntry && textEntry && style.cursor === "auto")) {
+      bad.push(
+        `<${el.tagName.toLowerCase()}${el.getAttribute("role") ? ` role=${el.getAttribute("role")}` : ""}> ` +
+          `cursor=${style.cursor} ${hasHandler ? "(handler)" : "(role)"} "${(el.textContent ?? "").trim().slice(0, 20)}"`,
+      );
+    }
+  }
+  return { bad, bound, seen };
+};
+
+test("everything clickable declares a cursor", async ({ page, browserName }) => {
   test.setTimeout(1_800_000);
   await gotoFixtureIndex(page);
   const paths = await page.locator("[data-fixture-index] li a").evaluateAll((els) =>
@@ -139,53 +212,15 @@ test("everything clickable declares a cursor", async ({ page }) => {
     const portals = await markPortalRoots(page);
     const roots = ["[data-fixture]", ...(portals > 0 ? [`[${PORTAL_MARK}]`] : [])];
 
-    const r = await page.evaluate(
-      ({ scopes, interactive, allowed, surfaces, removed }) => {
-        const reactProps = (el: Element): Record<string, unknown> | null => {
-          const key = Object.keys(el).find((k) => k.startsWith("__reactProps$"));
-          return key ? ((el as unknown as Record<string, unknown>)[key] as Record<string, unknown>) : null;
-        };
-        const selector = scopes.map((s) => `${s} *`).join(",");
-        const bad: string[] = [];
-        let bound = 0;
-        let seen = 0;
-
-        for (const el of document.querySelectorAll<HTMLElement>(selector)) {
-          const props = reactProps(el);
-          const hasHandler = !!props && (typeof props.onClick === "function" || typeof props.onPointerDown === "function");
-          if (hasHandler) bound += 1;
-          const byRole = el.matches(interactive);
-          if (!hasHandler && !byRole) continue;
-          // The library's own markup only, and not a dismissal surface.
-          if (!el.classList.contains("cl-s")) continue;
-          // The dismissal chain is the surface AND the wrappers around it: a
-          // modal's positioner takes `onClick` to stop the click reaching the
-          // overlay, which is the same not-an-invitation as the panel itself.
-          if (el.matches(surfaces) || el.querySelector(surfaces)) continue;
-          if (el.closest(removed)) continue;
-          // An element nobody can reach makes no promise about the pointer.
-          // `disabled` is only a property on form controls, so the ARIA and
-          // data forms are checked too — `ResizablePanel`'s separator is a div
-          // and reported as a finding until this looked at `aria-disabled`.
-          if ((el as HTMLInputElement).disabled) continue;
-          if (el.getAttribute("aria-disabled") === "true" || el.hasAttribute("data-disabled")) continue;
-          const style = getComputedStyle(el);
-          if (style.pointerEvents === "none" || style.display === "none" || style.visibility === "hidden") continue;
-          const rect = el.getBoundingClientRect();
-          if (rect.width === 0 || rect.height === 0) continue;
-
-          seen += 1;
-          if (!allowed.includes(style.cursor)) {
-            bad.push(
-              `<${el.tagName.toLowerCase()}${el.getAttribute("role") ? ` role=${el.getAttribute("role")}` : ""}> ` +
-                `cursor=${style.cursor} ${hasHandler ? "(handler)" : "(role)"} "${(el.textContent ?? "").trim().slice(0, 20)}"`,
-            );
-          }
-        }
-        return { bad, bound, seen };
-      },
-      { scopes: roots, interactive: INTERACTIVE, allowed: [...MEANINGFUL], surfaces: NOT_AN_INVITATION, removed: REMOVED_FROM_PAGE },
-    );
+    const r = await page.evaluate(sweepCursors, {
+      scopes: roots,
+      interactive: INTERACTIVE,
+      allowed: [...MEANINGFUL],
+      surfaces: NOT_AN_INVITATION,
+      removed: REMOVED_FROM_PAGE,
+      autoOnTextEntry: browserName === "webkit",
+      textEntryTypes: TEXT_ENTRY_TYPES,
+    });
 
     handlerBound += r.bound;
     checked += r.seen;
@@ -209,4 +244,42 @@ test("everything clickable declares a cursor", async ({ page }) => {
     findings.map((f) => `${f.fixture}: ${f.detail}`),
     "these act on a click and show the default cursor, so nothing on screen says they can be used",
   ).toEqual([]);
+});
+
+/**
+ * The WebKit allowance is for text entry, not for `auto`.
+ *
+ * A planted `cursor: auto` button has to fail in every engine, WebKit
+ * included, and a planted text input has to pass in every engine — `text` in
+ * chromium and firefox, `auto` in webkit.
+ */
+test("a cursor: auto button still fails, a text input passes", async ({ page, browserName }) => {
+  await gotoFixture(page, "Button", "default");
+  await page.evaluate(() => {
+    const host = document.querySelector("[data-fixture]")!;
+    const button = document.createElement("button");
+    button.className = "cl-s";
+    button.style.cursor = "auto";
+    button.textContent = "Planted";
+    const input = document.createElement("input");
+    input.className = "cl-s";
+    input.type = "text";
+    host.append(button, input);
+  });
+  const r = await page.evaluate(sweepCursors, {
+    scopes: ["[data-fixture]"],
+    interactive: INTERACTIVE,
+    allowed: [...MEANINGFUL],
+    surfaces: NOT_AN_INVITATION,
+    removed: REMOVED_FROM_PAGE,
+    autoOnTextEntry: browserName === "webkit",
+    textEntryTypes: TEXT_ENTRY_TYPES,
+  });
+  const cursors = await page.evaluate(() => {
+    const host = document.querySelector("[data-fixture]")!;
+    return [...host.querySelectorAll(":scope > button.cl-s:last-of-type, :scope > input.cl-s")].map((e) => `${e.tagName.toLowerCase()}=${getComputedStyle(e).cursor}`);
+  });
+  console.log(`POINTER_AFFORDANCE_PLANT ${browserName}: ${cursors.join(" ")}; findings ${JSON.stringify(r.bad)}`);
+  expect(r.bad.some((b) => b.startsWith("<button> cursor=auto") && b.includes("Planted")), "the planted cursor: auto button was accepted").toBe(true);
+  expect(r.bad.some((b) => b.startsWith("<input")), "the planted text input was reported").toBe(false);
 });
