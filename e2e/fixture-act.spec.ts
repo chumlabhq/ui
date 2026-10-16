@@ -19,12 +19,14 @@ import { gotoFixtureIndex } from "./_nav";
  * Almost all of them only flush: `settle` exists because jsdom needs an effects
  * pass before a portal that mounts in a layout effect is in the DOM, and a
  * browser has already committed it by the time the act runs. Declaring them is
- * what keeps "no-op" meaning something for the other 35.
+ * what keeps "no-op" meaning something for the rest.
  */
 const DECLARED = new Map([
   ...[
     "CascadingDropdown/disabled-top-level",
     "CascadingDropdown/open",
+    "CascadingDropdown/open-long",
+    "CascadingDropdown/open-long-low",
     "CascadingDropdown/open-search",
     "CascadingDropdown/open-search-custom-search-icon",
     "CascadingDropdown/open-empty",

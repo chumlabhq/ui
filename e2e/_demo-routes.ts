@@ -160,3 +160,57 @@ export function demoPages(): Array<{ file: string; routes: string[] }> {
       };
     });
 }
+
+/**
+ * Sections whose content arrives after the page is ready, by route: the
+ * section's heading, exactly as it renders.
+ *
+ * /table's Server-Side example renders a loading table and fetches its rows
+ * and its category list from dummyjson.com (answered from `e2e/fixtures/` by
+ * `_test.ts`) in an effect. The page heading is up before either lands, so a
+ * scan that waited on the heading alone read the table with or without its
+ * rows: 5342 or 5482 elements on the same tree.
+ */
+export const LATE_SECTIONS: Readonly<Record<string, string>> = {
+  table: "Server-Side (Real API: dummyjson.com)",
+};
+
+/**
+ * What a ready page has not finished painting, by name; empty once it has.
+ * Runs in the page, so it is self-contained.
+ *
+ * Images. A lazy image below the fold is not loaded until it is scrolled near,
+ * and engines differ on which images that applies to: on /country-flag the
+ * "invalid code" flag resolves to `data:,` in an `<img loading="lazy">`.
+ * Chromium fired its error at once and swapped in the "??" fallback; Firefox
+ * and WebKit held the image until scrolled to, so the fallback a reader sees
+ * there was never on the page that was measured (454 elements in Chromium,
+ * 453 in the other two, 2026-10-16). So every lazy image is switched to eager
+ * — what scrolling to it would do — and the page waits until each has loaded,
+ * or failed and been replaced: an image that is complete with no pixels is
+ * still waiting for its component to swap it out.
+ *
+ * Late sections. For a route in LATE_SECTIONS, its section has rows, no
+ * loading table, and a filter for the category column, which appears only once
+ * the category list has landed.
+ */
+export function paintPending(section: string | null): string[] {
+  const pending: string[] = [];
+  for (const img of document.images) {
+    if (img.loading === "lazy") img.loading = "eager";
+    const name = `<img src="${(img.getAttribute("src") ?? "").slice(0, 60)}">`;
+    if (!img.complete) pending.push(`${name} has not loaded`);
+    else if (img.naturalWidth === 0) pending.push(`${name} failed and is still shown`);
+  }
+  if (section !== null) {
+    const heading = [...document.querySelectorAll("main section h2")].find((h) => h.textContent?.trim() === section);
+    const root = heading?.closest("section");
+    if (!root) pending.push(`no section headed "${section}"`);
+    else {
+      if (root.querySelector('[role="status"][aria-label="Loading table data"]')) pending.push(`"${section}" is still loading`);
+      else if (!root.querySelector("tbody tr")) pending.push(`"${section}" has no rows`);
+      if (!root.querySelector('[aria-label="Filter category"]')) pending.push(`"${section}" has no category filter yet`);
+    }
+  }
+  return pending;
+}

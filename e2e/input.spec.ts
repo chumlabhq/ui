@@ -143,10 +143,16 @@ test.describe("Input Keyboard Navigation", () => {
      * Chromium, a `<pre>` in Mobile Safari, an input in WebKit — and under
      * matrix load it landed on nothing at all and `:focus` failed to resolve,
      * which is the only run in which the test said anything.
+     *
+     * In `<main>`, and asserted rather than skipped. The skip read
+     * `input:visible` once the first match was visible, and the first match
+     * is the docs header's search box, outside `<main>`, up before the page's
+     * chunk renders: it counted 1 and skipped in 9 of 12 loads across the three
+     * engines (2026-10-16), and 67 once the page had rendered. The page never
+     * renders fewer than two, so the second input is waited for, not counted.
      */
-    const inputs = page.locator("input:visible");
-    await expect(inputs.first()).toBeVisible();
-    if ((await inputs.count()) < 2) test.skip(true, "the page renders one visible input");
+    const inputs = page.locator("main input:visible");
+    await expect(inputs.nth(1), "the page renders at least two visible inputs").toBeVisible();
 
     await inputs.first().focus();
     const from = await page.evaluate(() => document.activeElement?.outerHTML?.slice(0, 60) ?? null);

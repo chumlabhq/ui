@@ -1,6 +1,6 @@
 import { test, expect } from "./_test";
 import { MEASURE_DOCUMENT, underFloor } from "./_contrast-measure";
-import { EXEMPT, demoPages, demoRoutes, outsideDemo } from "./_demo-routes";
+import { EXEMPT, LATE_SECTIONS, demoPages, demoRoutes, outsideDemo, paintPending } from "./_demo-routes";
 
 /**
  * Contrast as painted, over the demo PAGES.
@@ -35,9 +35,11 @@ import { EXEMPT, demoPages, demoRoutes, outsideDemo } from "./_demo-routes";
  *
  * The total moves between runs — 41289 and 41429 on two runs of the same tree,
  * then 47727 and 47867 once the routes were complete. That was put down to the
- * dropdown pages' country lists; measured per page it is /table alone, whose
- * server-side example fetches its rows from dummyjson.com after the page
- * renders (see MEASURED_FLOOR). Findings are what this asserts on; `measured`
+ * dropdown pages' country lists; measured per page it was /table alone, whose
+ * server-side example fetched its rows from dummyjson.com after the page
+ * rendered (see MEASURED_FLOOR). Since X4 those rows come from `e2e/fixtures/`
+ * and the page waits for them, and the total is 48238 in all three engines.
+ * Findings are what this asserts on; `measured`
  * is held per page against MEASURED_FLOOR, which catches a page measured half
  * rendered, and in total against a floor for a scan that walks nothing.
  *
@@ -140,8 +142,13 @@ const readiness = (final: boolean) => {
  * waits for.
  * That remote fetch, not the dropdown pages' country lists, is what moved the
  * total between runs: the five dropdown pages measured identically all three
- * times. Pages fed by remote APIs (dummyjson.com, the country list) will fail
- * here if those APIs are down, which is the scan saying it measured less.
+ * times.
+ *
+ * X4, 2026-10-16: no page depends on a remote host any more. `_test.ts`
+ * answers dummyjson.com and its images from `e2e/fixtures/`, and the scan
+ * waits for what arrives late (`paintPending`: lazy images, /table's fetched
+ * rows). Every page then measured the same count in Chromium, Firefox and
+ * WebKit, both themes (48238 each); the two floors below that moved say why.
  */
 const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "introduction": 78,
@@ -162,7 +169,11 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "button": 445,
   "cascading-dropdown": 732,
   "checkbox": 411,
-  "country-flag": 454,
+  // X4, 454 -> 455, 2026-10-16: lazy images are now loaded before measuring.
+  // Chromium already showed the "invalid code" fallback ("??"), which Firefox
+  // and WebKit held back until scrolled to (453); all three now also show the
+  // Custom Base Path example's "US" fallback, whose /assets/flags image 404s.
+  "country-flag": 455,
   "date-picker": 975,
   "drawer": 418,
   // A2c, 746 -> 744: the API Reference lost the CheckIcon row (4 cells), folded
@@ -190,7 +201,10 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "stepper": 682,
   "switch": 423,
   "tab-panel": 677,
-  "table": 5342,
+  // X4, 5342 -> 5543, 2026-10-16: the Server-Side example's rows are the 24
+  // fixture products (10 a page) and its category filter, waited for, where
+  // 5342 was the cold read with dummyjson.com's rows not yet landed.
+  "table": 5543,
   "text-area": 504,
   "time-picker": 871,
   // A2a, 564 -> 562: the API Reference lost the onRemove row (4 cells) and the
@@ -309,6 +323,15 @@ test("decides the text floor on the unrounded ratio, both directions", async ({ 
  * once, so the first planted delay read "re-read also short" instead of
  * naming the element.
  */
+/**
+ * Whether the page has finished painting what arrives after it is ready —
+ * lazy images and LATE_SECTIONS (see `paintPending`). A function built from
+ * the source for the same CSP reason as `measuresAtLeast` below.
+ */
+const painted = new Function("section", `return (${paintPending})(section).length === 0;`) as (
+  section: string | null,
+) => boolean;
+
 const measuresAtLeast = new Function(
   "floor",
   `return ${MEASURE_DOCUMENT}.filter((r) => !r.unmeasurable).length >= floor;`,
@@ -376,6 +399,7 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
     const left = () => ({ timeout: Math.max(1, deadline - Date.now()) });
     const reached = await page
       .waitForFunction(readiness, false, left())
+      .then(() => page.waitForFunction(painted, LATE_SECTIONS[route] ?? null, left()))
       .then(() =>
         page.waitForFunction(measuresAtLeast, floor, left()),
       )
@@ -417,15 +441,25 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
       );
       const started = Date.now();
       await page.goto(`/${route}`, { waitUntil: "networkidle" });
+      const section = LATE_SECTIONS[route] ?? null;
       const ready = await page
         .waitForFunction(readiness, false, { timeout: READY_TIMEOUT_MS })
-        .then((handle) => handle.jsonValue() as Promise<{ expanded: number }>, () => null);
+        .then((handle) => handle.jsonValue() as Promise<{ expanded: number }>)
+        .then(
+          (report) =>
+            page
+              .waitForFunction(painted, section, { timeout: Math.max(1, READY_TIMEOUT_MS - (Date.now() - started)) })
+              .then(() => report),
+          () => null,
+        )
+        .catch(() => null);
       const readyMs = Date.now() - started;
       if (!ready) {
         const report = await page.evaluate(readiness, true);
         const why = [
           ...(report?.heading ? [] : ["no page heading in <main>, or the Suspense fallback still up"]),
           ...(report?.pending ?? []),
+          ...(await page.evaluate(paintPending, section)),
         ];
         notReady.push(`${route} (${theme}) not ready after ${READY_TIMEOUT_MS}ms: ${why.join("; ")}`);
         continue;
