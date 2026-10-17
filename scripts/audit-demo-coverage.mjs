@@ -163,6 +163,32 @@ const LEFT_UNDEMONSTRATED = new Map([
 ]);
 
 /**
+ * The real bucket: props with no demo that are a demo gap.
+ *
+ * `No demo` counts every authored prop no demo passes, and most of them are not
+ * gaps a demo could close. Four kinds are left out, each by a rule:
+ *   - `children`, the content of the component, which a demo passes between
+ *     the tags (counted above when it does) and which is never a feature;
+ *   - passthroughs, which reach the DOM as given: `id`, `className`, `style`,
+ *     `role` and `aria-*`. `name` is not one: a field's form name is a feature;
+ *   - the props demonstrated once for the library, `CANONICAL`;
+ *   - the props left undemonstrated with a reason, `LEFT_UNDEMONSTRATED`, by
+ *     name on every component that declares them.
+ * What remains is a ratchet: `ratchets["props-without-demo"]` in
+ * docs/adr/002-gate-populations.json, checked by `--check` below.
+ */
+const REAL_EXCLUDED = [
+  ["children", (name) => name === "children"],
+  ["passthrough", (name) => /^(id|className|style|role|aria-.+)$/.test(name)],
+  ["canonical", (name) => CANONICAL.has(name)],
+  ["left", (name) => LEFT_UNDEMONSTRATED.has(name)],
+];
+const excludedAs = (name) => REAL_EXCLUDED.find(([, rule]) => rule(name))?.[0] ?? null;
+
+const POPULATIONS = join(ROOT, "docs/adr/002-gate-populations.json");
+const RATCHET = "props-without-demo";
+
+/**
  * One root: the package entry. "Reachable from the package root" is the test
  * ADR 002's closeout used to settle what is public, and it is the right scope
  * here too — the per-component `index.ts` files also export icons, contexts and
@@ -250,7 +276,11 @@ for (const rootPath of roots) {
     const name = exported.getName();
     const resolved = exported.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(exported) : exported;
     // FAULT 1: only exported components, never exported *Props types.
-    if (!(resolved.flags & (ts.SymbolFlags.Function | ts.SymbolFlags.Variable | ts.SymbolFlags.Class))) continue;
+    // FAULT 8: `export default memo(Table)` resolves to a symbol flagged
+    // `Property` — the default export is a property of the module — so a filter
+    // on Function, Variable and Class dropped Table and its 103 props from the
+    // audit entirely. `propsTypeOf` below is what decides it is a component.
+    if (!(resolved.flags & (ts.SymbolFlags.Function | ts.SymbolFlags.Variable | ts.SymbolFlags.Class | ts.SymbolFlags.Property))) continue;
 
     const propsType = propsTypeOf(resolved);
     if (!propsType) continue;
@@ -337,17 +367,33 @@ for (const file of readdirSync(demoDir).filter((f) => f.endsWith(".tsx"))) {
         else if (ts.isJsxSpreadAttribute(attribute)) record(tag, "…spread");
       }
     }
+    // FAULT 10: `children` is passed between the tags, never as an attribute,
+    // so reading attributes alone counted it as never demonstrated 23 times.
+    // An element with anything but whitespace between its tags passes it.
+    if (
+      ts.isJsxElement(node) &&
+      node.children.some((child) => !(ts.isJsxText(child) && child.containsOnlyTriviaWhiteSpaces))
+    ) {
+      record(node.openingElement.tagName.getText(source), "children");
+    }
     // `useToast().show({ title, variant, … })` — the config object is Toast's
     // only public surface, so its keys count as usage.
+    //
+    // FAULT 9: the shorthand methods take the message first and the options
+    // second, `toast.success("Saved", { duration })`, and `toast(…)` is a
+    // method too. Reading only `arguments[0]`, and no `toast`, counted 14 of
+    // Toast's props as undemonstrated while the page passed every one. Every
+    // argument that is an object literal carries options.
     if (
       ts.isCallExpression(node) &&
       ts.isPropertyAccessExpression(node.expression) &&
-      /^(show|success|error|warning|info)$/.test(node.expression.name.getText(source)) &&
-      node.arguments.length > 0 &&
-      ts.isObjectLiteralExpression(node.arguments[0])
+      /^(show|toast|success|error|warning|info)$/.test(node.expression.name.getText(source))
     ) {
-      for (const property of node.arguments[0].properties) {
-        if (property.name) record("Toast", property.name.getText(source));
+      for (const argument of node.arguments) {
+        if (!ts.isObjectLiteralExpression(argument)) continue;
+        for (const property of argument.properties) {
+          if (property.name) record("Toast", property.name.getText(source));
+        }
       }
     }
     ts.forEachChild(node, visit);
@@ -431,7 +477,8 @@ function documentedProps(component) {
 
 const components = [...surface.keys()].sort();
 const rows = [];
-let totals = { props: 0, noDemo: 0, noFixture: 0, phantom: 0, demoedUndocumented: 0 };
+let totals = { props: 0, noDemo: 0, noFixture: 0, phantom: 0, demoedUndocumented: 0, realNoDemo: 0 };
+const excludedTotals = Object.fromEntries(REAL_EXCLUDED.map(([kind]) => [kind, 0]));
 const tierAGaps = [];
 const canonical = [];
 const left = [];
@@ -461,6 +508,12 @@ for (const component of components) {
   const noDemo = authored.filter(([name]) => !demoed.has(name));
   const noFixture = authored.filter(([name]) => !fixtured.has(name));
   const undocumented = authored.filter(([name]) => demoed.has(name) && !documented.has(name));
+  const realNoDemo = noDemo.filter(([name]) => excludedAs(name) === null).map(([name]) => name);
+  for (const [name] of noDemo) {
+    const kind = excludedAs(name);
+    if (kind) excludedTotals[kind] += 1;
+  }
+  totals.realNoDemo += realNoDemo.length;
 
   totals.props += authored.length;
   totals.noDemo += noDemo.length;
@@ -481,6 +534,8 @@ for (const component of components) {
     props: authored.length,
     inherited: props.size - authored.length,
     noDemo: noDemo.length,
+    realNoDemo,
+    noDemoProps: noDemo.map(([name]) => name),
     noFixture: noFixture.length,
     phantom: componentPhantoms.length,
     tierA: noDemo.filter(([, i]) => i.tier === "A").map(([n]) => n),
@@ -505,7 +560,7 @@ const canonicalUnproven = [...CANONICAL.keys()].filter(
 
 const derivation = {
   generatedFrom: components.length,
-  totals, rows, tierAGaps, canonical, left, phantoms, tierConflicts, canonicalUnproven,
+  totals, excludedTotals, rows, tierAGaps, canonical, left, phantoms, tierConflicts, canonicalUnproven,
 };
 if (canonicalUnproven.length > 0 && !JSON_ONLY) {
   process.stderr.write(
@@ -544,6 +599,7 @@ lines.push(`| Demonstrated but undocumented | ${totals.demoedUndocumented} |`);
 lines.push(`| Tier-A demonstrated canonically (once, for the library) | ${canonical.length} |`);
 lines.push(`| Tier-A left undemonstrated with a recorded reason | ${left.length} |`);
 lines.push(`| **Tier-A gaps (a whole mode, no demo, no reason)** | **${tierAGaps.length}** |`);
+lines.push(`| **Real: no demo, and a demo gap** | **${totals.realNoDemo}** |`);
 lines.push("");
 lines.push("`No demo` counts a prop on the component that declares it. A mode shared by 30");
 lines.push("components is one idea, so the three tier-A rows split it: demonstrated once,");
@@ -560,6 +616,24 @@ if (tierConflicts.length > 0) {
   for (const conflict of tierConflicts) lines.push(`- ${conflict}`);
   lines.push("");
 }
+
+lines.push("## Real: no demo, and a demo gap");
+lines.push("");
+lines.push("`No demo` less the props no demo is owed, each kind by its rule. What remains is a");
+lines.push(`ratchet, \`ratchets["${RATCHET}"]\` in docs/adr/002-gate-populations.json: it fails`);
+lines.push("when it rises, and when it falls without the record being lowered in the same change.");
+lines.push("");
+lines.push("| Left out | Props | Rule |");
+lines.push("| --- | --- | --- |");
+const RULE_TEXT = {
+  children: "the component's content, passed between the tags (counted as demoed where a demo does)",
+  passthrough: "`id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given",
+  canonical: "demonstrated once for the library; see below",
+  left: "left undemonstrated with a reason, by name; see below",
+};
+for (const [kind] of REAL_EXCLUDED) lines.push(`| ${kind} | ${excludedTotals[kind]} | ${RULE_TEXT[kind]} |`);
+lines.push(`| **real** | **${totals.realNoDemo}** | everything else |`);
+lines.push("");
 
 lines.push("## Tier-A gaps");
 lines.push("");
@@ -610,12 +684,13 @@ if (phantoms.length > 0) {
 
 lines.push("## Per component");
 lines.push("");
-lines.push("| Component | Props | Inherited | No demo | No fixture | Phantom | Tier-A gaps |");
-lines.push("| --- | --- | --- | --- | --- | --- | --- |");
+lines.push("| Component | Props | Inherited | No demo | Real | No fixture | Phantom | Tier-A gaps | Real props with no demo |");
+lines.push("| --- | --- | --- | --- | --- | --- | --- | --- | --- |");
 for (const row of rows) {
   lines.push(
-    `| ${row.component} | ${row.props} | ${row.inherited} | ${row.noDemo} | ${row.noFixture} | ` +
-      `${row.phantom} | ${row.tierA.length ? row.tierA.map((n) => `\`${n}\``).join(", ") : "—"} |`,
+    `| ${row.component} | ${row.props} | ${row.inherited} | ${row.noDemo} | ${row.realNoDemo.length} | ${row.noFixture} | ` +
+      `${row.phantom} | ${row.tierA.length ? row.tierA.map((n) => `\`${n}\``).join(", ") : "—"} | ` +
+      `${row.realNoDemo.length ? row.realNoDemo.map((n) => `\`${n}\``).join(", ") : "—"} |`,
   );
 }
 lines.push("");
@@ -623,10 +698,38 @@ lines.push("");
 const rendered = `${lines.join("\n")}\n`;
 
 if (CHECK) {
+  /**
+   * The ratchet holds both ways, as the bundle ledger does. A rise is a prop a
+   * demo now owes. A fall that leaves the record where it was is slack the next
+   * rise spends without anyone seeing it, so the record is lowered in the same
+   * change that closed the gap.
+   */
+  const recorded = JSON.parse(readFileSync(POPULATIONS, "utf8")).ratchets?.[RATCHET]?.value;
+  if (typeof recorded !== "number") {
+    process.stderr.write(`✗ docs/adr/002-gate-populations.json records no ratchets["${RATCHET}"].value\n`);
+    process.exit(1);
+  }
+  if (totals.realNoDemo > recorded) {
+    const owed = rows.flatMap((r) => r.realNoDemo.map((n) => `${r.component}.${n}`));
+    process.stderr.write(
+      `✗ ${RATCHET} rose: ${totals.realNoDemo} real props have no demo, recorded ${recorded}. ` +
+        "Demo the new prop, or exclude it by one of the rules in DEMO-COVERAGE.md.\n" +
+        `  real props with no demo: ${owed.join(", ")}\n`,
+    );
+    process.exit(1);
+  }
+  if (totals.realNoDemo < recorded) {
+    process.stderr.write(
+      `✗ ${RATCHET} fell to ${totals.realNoDemo} and the record still says ${recorded}. ` +
+        `Lower ratchets["${RATCHET}"].value in docs/adr/002-gate-populations.json in this change.\n`,
+    );
+    process.exit(1);
+  }
   const committed = existsSync(REPORT) ? readFileSync(REPORT, "utf8") : null;
   if (committed === rendered) {
     process.stdout.write(
-      `✓ DEMO-COVERAGE.md matches the source (${totals.props} props, ${tierAGaps.length} tier-A gaps)\n`,
+      `✓ DEMO-COVERAGE.md matches the source (${totals.props} props, ${tierAGaps.length} tier-A gaps)\n` +
+        `✓ ${RATCHET} (real) holds at ${totals.realNoDemo}, recorded ${recorded}\n`,
     );
     process.exit(0);
   }
@@ -641,5 +744,5 @@ if (CHECK) {
 writeFileSync(REPORT, rendered, "utf8");
 process.stdout.write(
   `✓ DEMO-COVERAGE.md: ${components.length} components, ${totals.props} props, ` +
-    `${totals.noDemo} undemoed, ${tierAGaps.length} tier-A gaps, ${totals.phantom} phantoms\n`,
+    `${totals.noDemo} undemoed (${totals.realNoDemo} real), ${tierAGaps.length} tier-A gaps, ${totals.phantom} phantoms\n`,
 );

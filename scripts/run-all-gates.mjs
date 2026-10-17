@@ -8,12 +8,12 @@
 // command before any gate runs.
 //
 //   npm run gates          everything
-//   npm run gates:fast     the eleven that finish in under ~90s each
+//   npm run gates:fast     the twelve that finish in under ~90s each
 //   npm run gates:record   update the population record
 //
 // THE SPLIT, because the full run is too long to sit through:
 //
-//   per slice   `npm run gates:fast` — ~2 minutes, eleven gates. It catches
+//   per slice   `npm run gates:fast` — ~2 minutes, twelve gates. It catches
 //               every drift class that does not need a browser: types,
 //               generated files out of step, docs naming something that does
 //               not exist, a schema default that is not the code's, a
@@ -99,6 +99,9 @@ const GATES = [
     pop: /collected (\d+)/ },
   { id: "demo-coverage", cmd: "node scripts/audit-demo-coverage.mjs --check",
     claims: { script: "audit-demo-coverage.mjs" }, pop: /\((\d+) props/ },
+  { id: "demo-scenarios", claims: { vitest: "contracts" },
+    cmd: "npx vitest run --project=contracts src/__tests__/contracts/demo-scenarios.contract.test.ts",
+    pop: /DEMO_SCENARIOS cells (\d+)/ },
   { id: "fixture-gap", cmd: "node scripts/audit-fixture-gap.mjs --check",
     claims: { script: "audit-fixture-gap.mjs" }, pop: /holds at (\d+) props/ },
   { id: "component-docs", cmd: "node scripts/build-component-docs.mjs --check",
@@ -409,6 +412,9 @@ if (RECORD) {
     $units: record.$units ?? {},
     $basisChanges: record.$basisChanges ?? [],
     $secondsNote: record.$secondsNote ?? "",
+    // Ratchets are lowered by hand in the change that earns it, and checked by
+    // the gate that owns each one; a re-record must not reset or drop them.
+    ratchets: record.ratchets ?? {},
     $runWas: failedSoFar() ? "NOT green — some gates failed and were not recorded" : "green",
     recordedOn: new Date().toISOString().slice(0, 10),
     tookMinutes: Number(((Date.now() - started) / 60000).toFixed(1)),

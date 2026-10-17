@@ -13,17 +13,20 @@
   ],
   "$basisChanges": [
     "2026-10-11, A2f (routing): hand-edited, not re-recorded. propsWithoutFixture 631 → 639, rendersMarkup holds at 147. +13 newly declared attribute props with no fixture, none rendering markup: InternationalPhoneInput `numberAriaLabel`; Modal `style` and `id`; Stepper `aria-labelledby` and `aria-describedby`; TabPanel `aria-describedby`; Toast `aria-label`, `aria-labelledby` and `aria-describedby`; Tooltip `id`, `aria-label`, `aria-labelledby` and `aria-describedby`. −5: OtpInput `groupAriaLabel` (folded into `aria-label`), and InputLabel's and TextAreaLabel's `htmlFor` and `className`, now inherited from the label element's attributes rather than declared by the shared label helper. One rank move with no new markup: Tooltip `truncate`, whose un-overflowed branch now carries the consumer's `id` and `aria-*` on its span like the trigger wrapper does, reads as an ARIA attribute (markup with none of the above 35 → 34, an ARIA attribute 0 → 1).",
-    "2026-10-12, L13 (Pagination dropdownIcon rotates): rank move only, rendersMarkup held at 147. `Pagination.dropdownIcon` went from \"a slot the fixtures never fill\" (51 → 50) to \"markup with none of the above\" (34 → 35): it used to reach the DOM through `renderIcon`, which the audit reads as a slot; it now renders in JSX inside the span that carries the icon slot and the rotation. Still unfixtured either way; no prop gained or lost a fixture."
+    "2026-10-12, L13 (Pagination dropdownIcon rotates): rank move only, rendersMarkup held at 147. `Pagination.dropdownIcon` went from \"a slot the fixtures never fill\" (51 → 50) to \"markup with none of the above\" (34 → 35): it used to reach the DOM through `renderIcon`, which the audit reads as a slot; it now renders in JSX inside the span that carries the icon slot and the rotation. Still unfixtured either way; no prop gained or lost a fixture.",
+    "2026-10-17, G6 (the demo audit now reads Table): hand-edited, not re-recorded. `export default memo(Table)` resolves to a Property-flagged symbol, which audit-demo-coverage.mjs dropped, so this audit never saw Table either. propsWithoutFixture 639 → 705: HEAD measured 638 (the record had carried 639 since A2f, a field the check does not compare), plus Table’s 67 props with no fixture; no other prop moved. rendersMarkup 147 → 165, all 18 Table’s: a new role 0 → 3 (showHeader, floatingActions, children), a new interactive element 0 → 1 (renderColumnFilter), markup with none of the above 35 → 41 (emptyContent, caption, renderFilterIcon, renderExpandIcon, dragHandleIcon, searchIcon), the component itself 43 → 48 (onRowClick, floatingActionsHovered, popupOpen, expandOnRowClick, copyOnClick), a slot the fixtures never fill 50 → 53 (pinIcon, pinnedIcon, loadingMoreContent). The 147 other props are identical, prop for prop."
   ],
   "recordedOn": "2026-10-11",
   "fixtures": 414,
-  "propsWithoutFixture": 639,
-  "rendersMarkup": 147,
+  "propsWithoutFixture": 705,
+  "rendersMarkup": 165,
   "byRank": {
-    "a slot the fixtures never fill": 50,
+    "a slot the fixtures never fill": 53,
     "a classes key": 18,
+    "a new role": 3,
+    "a new interactive element": 1,
     "an ARIA attribute": 1,
-    "markup with none of the above": 35,
-    "the component itself, present or absent": 43
+    "markup with none of the above": 41,
+    "the component itself, present or absent": 48
   }
 }

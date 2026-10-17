@@ -1,0 +1,4031 @@
+{
+  "$comment": "Each public component x scenario: where a reader sees it, why it does not apply, or which slice owes it. Checked by src/__tests__/contracts/demo-scenarios.contract.test.ts against the demo pages' AST (src/test/demoScenarios.ts). A shown cell cites a section by its exact title, so editing a page around it does not make it stale; renaming the section does.",
+  "$vocabulary": {
+    "shown": "{ page: the demo file, section: the <Section> title exactly } — the scenario's predicate must hold on that section",
+    "na": "{ probe, reason } — probe is one of no-prop:<names>, no-name, no-async, imperative, overlay-content, not-focusable, inline-fixed, re-checked against the props walk",
+    "gap": "{ reason, slice } — slice is D12a (forms), D12b (phone width), D12c (failing data), D12d (uncontrolled, long content) or D12e (composition); fails once a section shows it"
+  },
+  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario.",
+  "components": {
+    "Accordion": {
+      "default": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Variants"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Accordion declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Accordion declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Accordion declares no success."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Controlled Mode (Single)"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Shimmer Options"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Prevent Close Guard"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Non-Collapsible (Single Mode)"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Avatar": {
+      "default": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Sizes"
+        }
+      },
+      "disabled": {
+        "na": {
+          "probe": "no-prop:disabled",
+          "reason": "Avatar declares no disabled."
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Avatar declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Avatar declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Avatar declares no success."
+        }
+      },
+      "controlled": {
+        "na": {
+          "probe": "no-prop:value,checked,open",
+          "reason": "Avatar declares no value or checked or open."
+        }
+      },
+      "uncontrolled": {
+        "na": {
+          "probe": "no-prop:defaultValue,defaultChecked,defaultOpen",
+          "reason": "Avatar declares no defaultValue or defaultChecked or defaultOpen."
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Loading & Shimmer"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Image Error Handling"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Avatar Group"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "AvatarDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Breadcrumb": {
+      "default": {
+        "shown": {
+          "page": "BreadcrumbDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "Breadcrumb declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "BreadcrumbDemo.tsx",
+          "section": "Disabled Items"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Breadcrumb declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Breadcrumb declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Breadcrumb declares no success."
+        }
+      },
+      "controlled": {
+        "na": {
+          "probe": "no-prop:value,checked,open",
+          "reason": "Breadcrumb declares no value or checked or open."
+        }
+      },
+      "uncontrolled": {
+        "na": {
+          "probe": "no-prop:defaultValue,defaultChecked,defaultOpen",
+          "reason": "Breadcrumb declares no defaultValue or defaultChecked or defaultOpen."
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "BreadcrumbDemo.tsx",
+          "section": "Truncation (maxVisible)"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "BreadcrumbDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "BreadcrumbDemo.tsx",
+          "section": "Colored Theme"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "BreadcrumbDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Button": {
+      "default": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Sizes"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Button declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Button declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Button declares no success."
+        }
+      },
+      "controlled": {
+        "na": {
+          "probe": "no-prop:value,checked,open",
+          "reason": "Button declares no value or checked or open."
+        }
+      },
+      "uncontrolled": {
+        "na": {
+          "probe": "no-prop:defaultValue,defaultChecked,defaultOpen",
+          "reason": "Button declares no defaultValue or defaultChecked or defaultOpen."
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Form Integration"
+        }
+      },
+      "reset": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Form Integration"
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-prop:required",
+          "reason": "Button declares no required."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-prop:required",
+          "reason": "Button declares no required."
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Loading States"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Stacked Drawers"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "CascadingDropdown": {
+      "default": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "CascadingDropdown declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "CascadingDropdown declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Required Field"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Uncontrolled with Default Value"
+        }
+      },
+      "submit": {
+        "gap": {
+          "reason": "No <form> on the page submits it.",
+          "slice": "D12a"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Loading State (Parent)"
+        }
+      },
+      "empty": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Fully Async - Load on Open"
+        }
+      },
+      "failing": {
+        "gap": {
+          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
+          "slice": "D12c"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Fixed Size with Text Wrap"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Async Single-Select"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Style Variants"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Checkbox": {
+      "default": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Sizes"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Checkbox declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Controlled Mode"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "submit": {
+        "gap": {
+          "reason": "No <form> on the page submits it.",
+          "slice": "D12a"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "No form on the page has a reset button.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "No form on the page validates it.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Login Form"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "CountryFlag": {
+      "default": {
+        "shown": {
+          "page": "CountryFlagDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "CountryFlagDemo.tsx",
+          "section": "Sizes"
+        }
+      },
+      "disabled": {
+        "na": {
+          "probe": "no-prop:disabled",
+          "reason": "CountryFlag declares no disabled."
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "CountryFlag declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "CountryFlag declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "CountryFlag declares no success."
+        }
+      },
+      "controlled": {
+        "na": {
+          "probe": "no-prop:value,checked,open",
+          "reason": "CountryFlag declares no value or checked or open."
+        }
+      },
+      "uncontrolled": {
+        "na": {
+          "probe": "no-prop:defaultValue,defaultChecked,defaultOpen",
+          "reason": "CountryFlag declares no defaultValue or defaultChecked or defaultOpen."
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "CountryFlagDemo.tsx",
+          "section": "Loading & Shimmer"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "shown": {
+          "page": "CountryFlagDemo.tsx",
+          "section": "Error Fallback"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "CountryFlagDemo.tsx",
+          "section": "Flag Group"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Custom Country Rendering"
+        }
+      },
+      "keyboard": {
+        "na": {
+          "probe": "not-focusable",
+          "reason": "Not focusable: no keyboard interaction to describe."
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "CountryFlagDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "CountryFlagDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "DatePicker": {
+      "default": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Date Range Selection"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "DatePicker declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Controlled Mode"
+        }
+      },
+      "uncontrolled": {
+        "gap": {
+          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
+          "slice": "D12d"
+        }
+      },
+      "submit": {
+        "gap": {
+          "reason": "No <form> on the page submits it.",
+          "slice": "D12a"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Drawer": {
+      "default": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Custom Size"
+        }
+      },
+      "disabled": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "gap": {
+          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
+          "slice": "D12d"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Form Drawer (Real-World)"
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Snap Points"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Form Drawer (Real-World)"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Dropdown": {
+      "default": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "Dropdown declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Dropdown declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Uncontrolled (defaultValue)"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Native Form Participation"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Async Data Fetching with Shimmer"
+        }
+      },
+      "empty": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Empty Options"
+        }
+      },
+      "failing": {
+        "gap": {
+          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
+          "slice": "D12c"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Async Data Fetching with Shimmer"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Form Drawer (Real-World)"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Custom Theme Examples"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Input": {
+      "default": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Size Variants"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Disabled & Read-Only"
+        }
+      },
+      "readOnly": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Disabled & Read-Only"
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Validation States"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Validation States"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Icons"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Clearable"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Login Form"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "No form on the page has a reset button.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Login Form"
+        }
+      },
+      "validation": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Login Form"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Login Form"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Custom Themes"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "InternationalPhoneInput": {
+      "default": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "InternationalPhoneInput declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Read-Only State"
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Validation States"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Validation States"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Uncontrolled Mode"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Form Semantics"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Form Semantics"
+        }
+      },
+      "validation": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Form Semantics"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-prop:?",
+          "reason": "InternationalPhoneInput declares no ?."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "The 240-country list is the component's own; no section shows a consumer's long content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Checkout Form"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Custom Color Themes"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Loader": {
+      "default": {
+        "shown": {
+          "page": "LoaderDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "LoaderDemo.tsx",
+          "section": "All Variants"
+        }
+      },
+      "disabled": {
+        "na": {
+          "probe": "no-prop:disabled",
+          "reason": "Loader declares no disabled."
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Loader declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Loader declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Loader declares no success."
+        }
+      },
+      "controlled": {
+        "na": {
+          "probe": "no-prop:value,checked,open",
+          "reason": "Loader declares no value or checked or open."
+        }
+      },
+      "uncontrolled": {
+        "na": {
+          "probe": "no-prop:defaultValue,defaultChecked,defaultOpen",
+          "reason": "Loader declares no defaultValue or defaultChecked or defaultOpen."
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "LoaderDemo.tsx",
+          "section": "In Context"
+        }
+      },
+      "keyboard": {
+        "na": {
+          "probe": "not-focusable",
+          "reason": "Not focusable: no keyboard interaction to describe."
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "LoaderDemo.tsx",
+          "section": "Circular — Colors"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "LoaderDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Modal": {
+      "default": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Size & Position"
+        }
+      },
+      "disabled": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "gap": {
+          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
+          "slice": "D12d"
+        }
+      },
+      "submit": {
+        "gap": {
+          "reason": "No <form> on the page submits it.",
+          "slice": "D12a"
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "overlay-content",
+          "reason": "An overlay whose content is the consumer's: the state belongs to what is put inside it."
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Size & Position"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Nested Modals"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "MultiSelectDropdown": {
+      "default": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "MultiSelectDropdown declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "MultiSelectDropdown declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "gap": {
+          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
+          "slice": "D12d"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Native Form Participation"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Async Data Fetching with Shimmer"
+        }
+      },
+      "empty": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Empty Options"
+        }
+      },
+      "failing": {
+        "gap": {
+          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
+          "slice": "D12c"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "State Variations"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "With Custom Content"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Style Variants"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "MultiSelectSearchableDropdown": {
+      "default": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "MultiSelectSearchableDropdown declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "MultiSelectSearchableDropdown declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Uncontrolled"
+        }
+      },
+      "submit": {
+        "gap": {
+          "reason": "No <form> on the page submits it.",
+          "slice": "D12a"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Async Search"
+        }
+      },
+      "empty": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Empty State (No Options)"
+        }
+      },
+      "failing": {
+        "gap": {
+          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
+          "slice": "D12c"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "With Custom Content"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Async Search"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Style Variants"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "OtpInput": {
+      "default": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "OtpInput declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "OtpInput declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Controlled Mode"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Uncontrolled with Default Value"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Form Integration"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Pagination": {
+      "default": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "Pagination declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Pagination declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Pagination declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Pagination declares no success."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "gap": {
+          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
+          "slice": "D12d"
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Boundary Conditions"
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Many Pages & Sibling Count"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "With Pagination"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Data-Attribute Styling"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "RadioButton": {
+      "default": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Sizes"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "RadioButton declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Controlled Mode"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "submit": {
+        "gap": {
+          "reason": "No <form> on the page submits it.",
+          "slice": "D12a"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "No form on the page has a reset button.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "No form on the page validates it.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "ResizablePanel": {
+      "default": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Bottom Resize (Vertical)"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "ResizablePanel declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "ResizablePanel declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "ResizablePanel declares no success."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Controlled State"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Uncontrolled (defaultValue)"
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Controlled State"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Custom Styling (classes)"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "SearchableDropdown": {
+      "default": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "SearchableDropdown declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Disabled State"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "SearchableDropdown declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Uncontrolled (defaultValue)"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Native Form Participation"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "State Variations"
+        }
+      },
+      "empty": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Empty Options"
+        }
+      },
+      "failing": {
+        "gap": {
+          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
+          "slice": "D12c"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "With Custom Content"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Custom Theme Examples"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Slider": {
+      "default": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Vertical"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Slider declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Label & Description"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Controlled"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Uncontrolled (defaultValue)"
+        }
+      },
+      "submit": {
+        "gap": {
+          "reason": "No <form> on the page submits it.",
+          "slice": "D12a"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Controlled State"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Custom Styling"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Stepper": {
+      "default": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Icon Variant with Descriptions"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Globally Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Stepper declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Stepper declares no success."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Uncontrolled Usage"
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Custom Styling"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Switch": {
+      "default": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "na": {
+          "probe": "no-prop:variant,size",
+          "reason": "Switch declares no variant or size."
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Disabled States"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Switch declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Error State"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Uncontrolled Switch"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Form Semantics"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Prevent Close Guard"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "CSS Custom Properties (Theming)"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "TabPanel": {
+      "default": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Vertical Orientation"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Disabled Tab"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "TabPanel declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "TabPanel declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "TabPanel declares no success."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Underlined Style"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Uncontrolled (defaultValue)"
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "classes Record"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Table": {
+      "default": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Sizes"
+        }
+      },
+      "disabled": {
+        "na": {
+          "probe": "no-prop:disabled",
+          "reason": "Table declares no disabled."
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Table declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Table declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Table declares no success."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Column Sorting"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Empty State (Fully Customizable)"
+        }
+      },
+      "failing": {
+        "gap": {
+          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
+          "slice": "D12c"
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Horizontal Scroll (Many Columns)"
+        }
+      },
+      "phoneWidth": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Mobile Card Layout"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "With Pagination"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Striped Rows (Custom Colors)"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "TextArea": {
+      "default": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Size Variants"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Disabled & Read-Only"
+        }
+      },
+      "readOnly": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Disabled & Read-Only"
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Validation States"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Validation States"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Icons"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Clearable"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Contact Form"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "No form on the page has a reset button.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Contact Form"
+        }
+      },
+      "validation": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Contact Form"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Auto Resize"
+        }
+      },
+      "phoneWidth": {
+        "na": {
+          "probe": "inline-fixed",
+          "reason": "Inline, with no surface of its own: nothing to place against the viewport or to overflow it."
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Contact Form"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Custom Themes"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "TimePicker": {
+      "default": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Clock Variant (24h)"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "TimePicker declares no readOnly."
+        }
+      },
+      "error": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Label, Required & Error States"
+        }
+      },
+      "success": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Success State"
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "uncontrolled": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Uncontrolled (defaultValue)"
+        }
+      },
+      "submit": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Native Form Field & Lifecycle Callbacks"
+        }
+      },
+      "reset": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "required": {
+        "gap": {
+          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
+          "slice": "D12a"
+        }
+      },
+      "validation": {
+        "gap": {
+          "reason": "The library resets and validates this field since L20; only the demo is missing.",
+          "slice": "D12a"
+        }
+      },
+      "loading": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Loading State"
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "\"Scroll Behavior\" is about lockScroll; no section shows a long time list or long labels.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Classes System"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Toast": {
+      "default": {
+        "shown": {
+          "page": "ToastDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "ToastDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "disabled": {
+        "na": {
+          "probe": "no-prop:disabled",
+          "reason": "Toast declares no disabled."
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Toast declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Toast declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Toast declares no success."
+        }
+      },
+      "controlled": {
+        "na": {
+          "probe": "imperative",
+          "reason": "Driven through toast() calls, with no value or open state to control."
+        }
+      },
+      "uncontrolled": {
+        "na": {
+          "probe": "imperative",
+          "reason": "Driven through toast() calls, with no value or open state to control."
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "gap": {
+          "reason": "No section shows long labels or content.",
+          "slice": "D12d"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "gap": {
+          "reason": "No section composes it with another Chumlab component.",
+          "slice": "D12e"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "ToastDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "ToastDemo.tsx",
+          "section": "Custom Styling"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "ToastDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    },
+    "Tooltip": {
+      "default": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "variants": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Positions"
+        }
+      },
+      "disabled": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Disabled"
+        }
+      },
+      "readOnly": {
+        "na": {
+          "probe": "no-prop:readOnly",
+          "reason": "Tooltip declares no readOnly."
+        }
+      },
+      "error": {
+        "na": {
+          "probe": "no-prop:error",
+          "reason": "Tooltip declares no error."
+        }
+      },
+      "success": {
+        "na": {
+          "probe": "no-prop:success",
+          "reason": "Tooltip declares no success."
+        }
+      },
+      "controlled": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Controlled State"
+        }
+      },
+      "uncontrolled": {
+        "gap": {
+          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
+          "slice": "D12d"
+        }
+      },
+      "submit": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "reset": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "required": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "validation": {
+        "na": {
+          "probe": "no-name",
+          "reason": "Not a form field: it is not in the form-participation population, so no form submits, resets or validates it."
+        }
+      },
+      "loading": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "empty": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "failing": {
+        "na": {
+          "probe": "no-async",
+          "reason": "No data source: nothing it renders loads, searches or can fail."
+        }
+      },
+      "longContent": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Text Wrapping (Word Wrap)"
+        }
+      },
+      "phoneWidth": {
+        "gap": {
+          "reason": "No section shows it in a 320–375px frame.",
+          "slice": "D12b"
+        }
+      },
+      "composition": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Basic Usage"
+        }
+      },
+      "keyboard": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Keyboard Interactions"
+        }
+      },
+      "theming": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Custom Styling"
+        }
+      },
+      "darkMode": {
+        "shown": {
+          "page": "ThemingDemo.tsx",
+          "section": "Light & dark out of the box"
+        }
+      },
+      "ssr": {
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Copy and paste"
+        }
+      }
+    }
+  }
+}
