@@ -134,24 +134,59 @@ export async function focusFindings(page: Page): Promise<FocusFindings> {
       // returns. Chromium and Firefox scroll inside the call; WebKit scrolls at
       // its next rendering update, so a rect read straight after `focus()` is
       // the pre-scroll rect there — which is how this reported the DatePicker
-      // month menu as obscured in WebKit when a keyboard user sees every month.
-      // One animation frame is the named condition: the callback runs after the
-      // rendering update that performs the scroll, in all three engines.
-      const settled = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      // month menu as obscured in WebKit when a keyboard user sees every month
+      // (January sat at scrollTop 126, 85px above the menu, until the frame
+      // after focus; measured 2026-10-17).
+      //
+      // One animation frame covered that and assumed nothing moves after it. A
+      // container that animates its way to the control does, so the condition
+      // is every scroll container of the control, and the document, holding the
+      // same scrollTop and scrollLeft across two consecutive frames. Sampled
+      // from the first frame on, not from `focus()`: WebKit has not scrolled
+      // yet at the call, so a still pair there would be the pre-scroll position.
+      // Capped at a second, and a container still moving then is an error
+      // naming it, not a read of whichever frame the wait gave up on.
+      const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      const scrollers = (el: Element): Element[] => {
+        const found: Element[] = [];
+        for (let n = el.parentElement; n; n = n.parentElement) {
+          const o = getComputedStyle(n);
+          if (/hidden|auto|scroll/.test(o.overflowX + o.overflowY)) found.push(n);
+        }
+        if (document.scrollingElement) found.push(document.scrollingElement);
+        return found;
+      };
+      const positions = (els: Element[]) => els.map((s) => `${s.scrollTop},${s.scrollLeft}`).join("|");
+      const name = (el: Element) =>
+        `<${el.tagName.toLowerCase()}> "${el.getAttribute("aria-label") ?? (el.textContent ?? "").trim().slice(0, 16)}"`;
+      const settled = async (el: Element) => {
+        const containers = scrollers(el);
+        const start = performance.now();
+        await frame();
+        let previous = positions(containers);
+        for (;;) {
+          await frame();
+          const current = positions(containers);
+          if (current === previous) return;
+          if (performance.now() - start > 1000) {
+            throw new Error(
+              `${name(el)} was still scrolling 1000ms after focus: ${previous} -> ${current} across ` +
+                containers.map((s) => (s === document.scrollingElement ? "document" : s.tagName.toLowerCase())).join(", "),
+            );
+          }
+          previous = current;
+        }
+      };
       for (const el of targets) {
         el.focus();
-        await settled();
+        await settled(el);
         // Read after the scroll has settled, so whatever the browser did is included.
         const anc = clipAncestor(el)!;
         const a = el.getBoundingClientRect();
         const c = anc.getBoundingClientRect();
         const w = Math.min(a.right, c.right) - Math.max(a.left, c.left);
         const h = Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top);
-        if (w <= 0 || h <= 0) {
-          bad.push(
-            `<${el.tagName.toLowerCase()}> "${el.getAttribute("aria-label") ?? (el.textContent ?? "").trim().slice(0, 16)}"`,
-          );
-        }
+        if (w <= 0 || h <= 0) bad.push(name(el));
       }
       return { n: targets.length, bad };
     },

@@ -1,6 +1,7 @@
 import { expect, test } from "./_test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { focusFindings } from "./_clip";
+import { clippedFixtures } from "./_clipped-fixtures";
 
 /**
  * SC 2.4.11 Focus Not Obscured (Minimum), AA in WCAG 2.2. axe ships no rule for
@@ -27,20 +28,53 @@ test("focus is never entirely obscured by a clipping ancestor", async ({ page })
     els.map((e) => new URL((e as HTMLAnchorElement).href).pathname),
   );
 
-  let withClipper = 0;
+  const expected = clippedFixtures();
+  const swept: string[] = [];
   let focused = 0;
   const obscured: string[] = [];
 
   for (const path of paths) {
+    const id = path.replace("/__fixtures/", "");
     await page.goto(path, { waitUntil: "domcontentloaded" });
-    await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
+    /**
+     * The act, the harness's holds-still answer, and the fonts, before anything
+     * is focused.
+     *
+     * This read each fixture as soon as `[data-fixture]` was attached, and a
+     * fixture whose act opens the surface the clipper is in was swept or not by
+     * timing: the six CascadingDropdown submenu fixtures, DatePicker's month
+     * menu and Table's cell editor were read with their act still pending in
+     * 1, 21 and 4 of three Chromium runs, 40 in Firefox and 41 in WebKit, so the
+     * population read 95, 94, 95, 90 and 88 (measured 2026-10-17). A fixture
+     * with no act reports a terminal act at mount, so the act alone is not
+     * enough; `data-fixture-still` is the harness's answer that the document has
+     * stopped changing. No catch: a fixture that never settles is named here
+     * rather than swept in whatever state it had reached.
+     */
+    await page
+      .waitForFunction(
+        () => {
+          const main = document.querySelector("main[data-fixture-act]");
+          const act = main?.getAttribute("data-fixture-act");
+          const still = main?.getAttribute("data-fixture-still");
+          return act && act !== "pending" && still && still !== "pending" ? act : null;
+        },
+        undefined,
+        { timeout: 30000 },
+      )
+      .catch((error: Error) => {
+        throw new Error(`${id} never reported a settled act and a still document: ${error.message}`);
+      });
+    await page.evaluate(() => document.fonts.ready.then(() => undefined));
     const r = await focusFindings(page);
-    if (r.n > 0) withClipper += 1;
+    if (r.n > 0) swept.push(id);
     focused += r.n;
-    for (const b of r.bad) obscured.push(`${path.replace("/__fixtures/", "")}: ${b}`);
+    for (const b of r.bad) obscured.push(`${id}: ${b}`);
   }
 
-  console.log(`FOCUS_OBSCURED fixturesWithClipper=${withClipper} focused=${focused} obscured=${obscured.length}`);
+  console.log(
+    `FOCUS_OBSCURED fixtures ${swept.length} (expected ${expected.length}), focused ${focused}, obscured ${obscured.length}`,
+  );
   /**
    * The findings go to stdout, not only into the assertion's diff.
    *
@@ -53,19 +87,22 @@ test("focus is never entirely obscured by a clipping ancestor", async ({ page })
    */
   for (const o of [...new Set(obscured)]) console.log(`FOCUS_OBSCURED_FINDING ${o}`);
   /**
-   * A walk that found no clipping ancestors is not a pass.
+   * A walk that missed a fixture is not a pass.
    *
-   * The floor is 50 against a measured 78, 78 and 77 over three runs. It read
-   * 104 until the scope was fixed, and that figure counted the index nav and
-   * the page chrome on every fixture page, because five of the six focusable
-   * clauses were never scoped to anything — so the fall to 77-78 is the gate
-   * measuring the library instead of the harness, not coverage lost. The floor
-   * is well below the measurement because the count moves by one between runs:
-   * a fixture whose overlay is still opening contributes no focusable child
-   * yet. That is a reason to keep the assertion a floor rather than an
-   * equality, not a number to chase.
+   * The floor was a count, 50, against what the sweep itself found, so a
+   * fixture read before its surface opened lowered the measurement and nothing
+   * noticed: it moved by up to seven between runs and every run passed. The
+   * floor is now the other reading, `_clipped-fixtures.ts`, which takes the
+   * fixtures from source and the clippers from the components, and each one it
+   * names that the sweep did not reach is named here.
    */
-  expect(withClipper, "no fixture had a focusable child inside a clipping ancestor").toBeGreaterThan(50);
+  expect(expected.length, "the static read found no clipped fixtures: the reader broke, not the library").toBeGreaterThan(50);
+  const missing = expected.filter((id) => !swept.includes(id));
+  expect(
+    missing,
+    `FOCUS_OBSCURED fixtures ${swept.length} is below the ${expected.length} expected: ` +
+      "these render a focusable inside a clipping ancestor and the sweep focused nothing in them",
+  ).toEqual([]);
   expect(
     [...new Set(obscured)],
     "these are entirely outside their clipping ancestor AFTER taking focus — a " +
@@ -104,8 +141,10 @@ test("the check notices an obscured focus, and clears a scrollable one", async (
       document.body.appendChild(host);
       const last = strip.lastElementChild as HTMLElement;
       last.focus();
-      // After one frame, as `_clip.ts` reads: WebKit performs the focus scroll
-      // at its next rendering update rather than inside `focus()`.
+      // After one frame: WebKit performs the focus scroll at its next rendering
+      // update rather than inside `focus()`, and nothing here animates after
+      // it. `_clip.ts` waits for every scroll container to hold still, which is
+      // planted below.
       await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
       const a = last.getBoundingClientRect();
       const c = strip.getBoundingClientRect();
@@ -253,6 +292,75 @@ test("the clipping-ancestor rule and the scope both hold", async ({ page }) => {
   // the gate was in for every overlay the library has.
   expect(portal.n, "a portalled control is in scope").toBeGreaterThan(0);
   expect(portal.bad.length, "and is measured against its real clipping ancestor").toBeGreaterThan(0);
+});
+
+/**
+ * The plant for when the read happens: a container that is still scrolling
+ * after focus.
+ *
+ * The read used to wait one animation frame, which is when WebKit's own focus
+ * scroll has landed, and assumed nothing moves after it. A scroller that
+ * animates its way to the focused control does: Pagination/narrow's list was
+ * still moving after that frame in one Chromium run (measured 2026-10-17). This
+ * strip does it on purpose. On focus it jumps to the far end, then scrolls back
+ * over six frames until the control is in view, so a read one frame after
+ * focus finds the control entirely outside the strip, and a read after the
+ * strip has held still finds it in view. Revert `_clip.ts` to the one-frame
+ * read and the first assertion reports it.
+ *
+ * The second strip never stops, and the read has to say so rather than measure
+ * whichever frame it gave up on.
+ */
+test("the read waits for every scroll container to hold still", async ({ page }) => {
+  await page.goto("/__fixtures", { waitUntil: "domcontentloaded" });
+
+  const plant = (forever: boolean) =>
+    page.evaluate((runaway) => {
+      for (const stale of document.querySelectorAll("[data-clip-plant]")) stale.remove();
+      const host = document.createElement("div");
+      host.setAttribute("data-clip-plant", "");
+      host.setAttribute("data-fixture", "plant");
+      host.style.cssText = "position:absolute;top:0;left:0;width:100px;height:40px";
+      const strip = document.createElement("div");
+      strip.style.cssText = "position:relative;width:100px;height:40px;overflow:hidden;white-space:nowrap";
+      const spacer = document.createElement("span");
+      spacer.style.cssText = "display:inline-block;width:1000px";
+      const button = document.createElement("button");
+      button.textContent = "late";
+      button.style.cssText = "display:inline-block;width:80px";
+      strip.append(spacer, button);
+      host.appendChild(strip);
+      document.body.appendChild(host);
+
+      const w = window as { __latePlant?: number[] };
+      w.__latePlant = [];
+      button.addEventListener("focus", () => {
+        const end = strip.scrollWidth - strip.clientWidth;
+        let frame = 0;
+        const step = () => {
+          frame += 1;
+          strip.scrollLeft = runaway ? (frame % 2) * end : Math.round((end * (frame - 1)) / 6);
+          w.__latePlant!.push(strip.scrollLeft);
+          if (runaway || frame <= 6) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, forever);
+
+  await plant(false);
+  const late = await focusFindings(page);
+  const moved = await page.evaluate(() => (window as { __latePlant?: number[] }).__latePlant ?? []);
+  // The plant has to be late to prove anything: it starts out of view and is
+  // still moving three frames after focus.
+  expect(moved[0], "the strip starts the scroll from the far end").toBe(0);
+  expect(new Set(moved.slice(0, 4)).size, "the strip is still scrolling three frames after focus").toBe(4);
+  expect(late.n).toBe(1);
+  expect(late.bad, "read once the strip has stopped, the control is in view").toEqual([]);
+
+  await plant(true);
+  await expect(focusFindings(page), "a scroller that never stops fails the read").rejects.toThrow(
+    /still scrolling 1000ms after focus/,
+  );
 });
 
 /**
