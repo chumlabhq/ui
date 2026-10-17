@@ -17,6 +17,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 const getClasses = () => ({
   switch: {
@@ -626,6 +627,19 @@ const SwitchDemo = () => {
               </Button>
             </div>
           </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with the switch off: a required switch must be on, like a required checkbox, so the submit is blocked and focus moves to the switch.">
+            <Switch name="terms" label="Accept the terms" required />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

@@ -28,6 +28,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 // Opt-in real validation via @chumlab/ui/phone-validators (libphonenumber-js).
 const anyValidPhoneValidator = createLibphonenumberValidator({
@@ -1573,6 +1574,19 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           </DemoWrapper>
         </Section>
       </div>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with no number: the number field blocks the submit and the browser focuses it. It submits two entries, phone_country and phone.">
+            <InternationalPhoneInput name="phone" label="Phone" required />
+          </FormDemo>
+        </DemoWrapper>
+      </Section>
 
       <ComponentDocs name="InternationalPhoneInput" />
 

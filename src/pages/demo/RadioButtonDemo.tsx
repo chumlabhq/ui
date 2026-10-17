@@ -16,6 +16,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 import { useTheme } from "./ThemeContext.js";
 
 const CheckCircleIcon = ({ className }: { className?: string }) => (
@@ -672,6 +673,22 @@ const RadioButtonDemo = () => {
             <RadioButton value="option-b" label="Option B" classes={c.radio} />
             <RadioButton value="option-c" label="Option C" classes={c.radio} />
           </RadioGroup>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with none chosen: the radios carry required, so the submit is blocked and the browser focuses the first radio.">
+            <RadioGroup name="plan" label="Plan" required>
+              <RadioButton value="basic" label="Basic" />
+              <RadioButton value="pro" label="Pro" />
+            </RadioGroup>
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

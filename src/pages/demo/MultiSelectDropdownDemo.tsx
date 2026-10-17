@@ -20,6 +20,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 
 /**
@@ -1556,6 +1557,19 @@ const MultiSelectDropdownDemo = () => {
               classes={c.dropdown}
             />
           </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits the values joined with commas.">
+            <MultiSelectDropdown name="fruits" label="Fruits" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

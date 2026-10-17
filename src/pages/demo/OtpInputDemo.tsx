@@ -17,6 +17,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 const getClasses = () => ({
   otp: {
@@ -583,6 +584,19 @@ const OtpInputDemo = () => {
             label="Pre-filled (uncontrolled)"
             classes={c.otp}
           />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with no digits: the browser blocks the submit and focuses the first digit. A partly filled code counts as filled.">
+            <OtpInput name="code" label="Code" required />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

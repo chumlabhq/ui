@@ -94,7 +94,6 @@ const SHARED_ACROSS_SECTIONS = new Set([
   "PaginationDemo.tsx:value",
   "PaginationDemo.tsx:rowsPerPage",
   "SliderDemo.tsx:range",
-  "SliderDemo.tsx:opacity",
   "SliderDemo.tsx:price",
   "TableDemo.tsx:selectedRowId",
   "TableDemo.tsx:floatingActionsHovered",

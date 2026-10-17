@@ -12,14 +12,14 @@ recorded there because they belong next to the code that implements them.
 | --- | --- |
 | Components audited | 59 |
 | Library-authored props across the public surface | 1252 |
-| With no demo | 290 (23%) |
+| With no demo | 287 (23%) |
 | With no fixture | 706 (56%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 7 |
 | Tier-A demonstrated canonically (once, for the library) | 53 |
 | Tier-A left undemonstrated with a recorded reason | 20 |
 | **Tier-A gaps (a whole mode, no demo, no reason)** | **0** |
-| **Real: no demo, and a demo gap** | **135** |
+| **Real: no demo, and a demo gap** | **132** |
 
 `No demo` counts a prop on the component that declares it. A mode shared by 30
 components is one idea, so the three tier-A rows split it: demonstrated once,
@@ -49,7 +49,7 @@ when it rises, and when it falls without the record being lowered in the same ch
 | passthrough | 76 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
 | canonical | 53 | demonstrated once for the library; see below |
 | left | 20 | left undemonstrated with a reason, by name; see below |
-| **real** | **135** | everything else |
+| **real** | **132** | everything else |
 
 ## Tier-A gaps
 
@@ -98,14 +98,14 @@ listed here with no demo anywhere fails the generator.
 | Breadcrumb | 23 | 277 | 10 | 4 | 15 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `ellipsisIcon`, `tooltipOffset`, `dropdownZIndex`, `ellipsisAriaLabel` |
 | Button | 24 | 292 | 0 | 0 | 12 | 0 | — | — |
 | ButtonGroup | 2 | 279 | 0 | 0 | 0 | 0 | — | — |
-| CascadingDropdown | 60 | 2 | 26 | 16 | 29 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` | `onLoadError`, `open`, `defaultOpen`, `onOpenChange`, `onBlur`, `onFocus`, `onKeyDown`, `name`, `shimmerCount`, `clearable`, `dropdownZIndex`, `dropdownOffset`, `clearIcon`, `renderTrigger`, `menuSearchAriaLabel`, `submenuSearchAriaLabel` |
+| CascadingDropdown | 60 | 2 | 25 | 15 | 29 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` | `onLoadError`, `open`, `defaultOpen`, `onOpenChange`, `onBlur`, `onFocus`, `onKeyDown`, `shimmerCount`, `clearable`, `dropdownZIndex`, `dropdownOffset`, `clearIcon`, `renderTrigger`, `menuSearchAriaLabel`, `submenuSearchAriaLabel` |
 | Checkbox | 21 | 303 | 2 | 1 | 10 | 0 | `reduceMotion` | `indeterminateIcon` |
 | CircularLoader | 7 | 280 | 3 | 1 | 2 | 0 | `reduceMotion`, `unstyled` | `classes` |
 | CountryFlag | 13 | 278 | 3 | 2 | 8 | 0 | `unstyled` | `onLoad`, `onError` |
 | CountryFlagGroup | 8 | 279 | 2 | 2 | 4 | 0 | — | `countTooltip`, `surplusTooltipContent` |
 | CountryFlagGroupShimmer | 6 | 280 | 3 | 2 | 6 | 0 | `reduceMotion` | `aspectRatio`, `animate` |
 | CountryFlagShimmer | 6 | 280 | 4 | 3 | 2 | 0 | `unstyled` | `classes`, `aspectRatio`, `animate` |
-| DatePicker | 62 | 276 | 13 | 9 | 33 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `defaultValue`, `defaultOpen`, `todayAction`, `name`, `showCalendarIcon`, `monthDropdownSelectedIcon`, `yearDropdownSelectedIcon`, `dropdownZIndex`, `dropdownOffset` |
+| DatePicker | 62 | 276 | 12 | 8 | 33 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `defaultValue`, `defaultOpen`, `todayAction`, `showCalendarIcon`, `monthDropdownSelectedIcon`, `yearDropdownSelectedIcon`, `dropdownZIndex`, `dropdownOffset` |
 | DotLoader | 7 | 280 | 4 | 2 | 3 | 0 | `reduceMotion`, `unstyled` | `animationDuration`, `classes` |
 | Drawer | 30 | 278 | 6 | 4 | 19 | 0 | `unstyled`, `portalContainer` | `defaultOpen`, `zIndex`, `overlayColor`, `swipeThreshold` |
 | DrawerBody | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
@@ -122,7 +122,7 @@ listed here with no demo anywhere fails the generator.
 | ModalFooter | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalHeader | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | MultiSelectDropdown | 52 | 2 | 12 | 8 | 26 | 0 | `unstyled` | `defaultValue`, `clearable`, `onLoadError`, `defaultOpen`, `typeaheadTimeout`, `loadingContent`, `clearIcon`, `renderTrigger` |
-| MultiSelectSearchableDropdown | 57 | 2 | 15 | 11 | 30 | 0 | `unstyled` | `name`, `shimmerCount`, `clearable`, `showChevron`, `loading`, `onLoadError`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
+| MultiSelectSearchableDropdown | 57 | 2 | 14 | 10 | 30 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `onLoadError`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
 | OtpInput | 29 | 277 | 3 | 1 | 13 | 0 | `unstyled` | `inputPattern` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | 0 | — | — |
 | Pagination | 31 | 278 | 6 | 2 | 20 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` | `defaultValue`, `dropdownOffset` |

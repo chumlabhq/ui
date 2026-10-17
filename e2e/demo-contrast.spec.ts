@@ -177,10 +177,12 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "button": 439,
   // D11, 2026-10-17, 732 -> 714 (HEAD 741 -> now 714): Class overrides (117) became Anatomy (90).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "cascading-dropdown": 714,
+  // D12a, 2026-10-17, 714 -> 723 (HEAD 714 -> now 723): the new In a form (9).
+  "cascading-dropdown": 723,
   // D11, 2026-10-17, 411 -> 404 (HEAD 412 -> now 404): Class overrides (35) became Anatomy (27).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "checkbox": 404,
+  // D12a, 2026-10-17, 404 -> 412 (HEAD 404 -> now 412): the new In a form (8).
+  "checkbox": 412,
   // X4, 454 -> 455, 2026-10-16: lazy images are now loaded before measuring.
   // Chromium already showed the "invalid code" fallback ("??"), which Firefox
   // and WebKit held back until scrolled to (453); all three now also show the
@@ -190,20 +192,24 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "country-flag": 433,
   // D11, 2026-10-17, 975 -> 952 (HEAD 981 -> now 952): Class overrides (119) became Anatomy (90).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "date-picker": 952,
+  // D12a, 2026-10-17, 952 -> 965 (HEAD 952 -> now 965): the new In a form (13).
+  "date-picker": 965,
   "drawer": 418,
   // A2c, 746 -> 744: the API Reference lost the CheckIcon row (4 cells), folded
   // into selectedIcon, and the rewritten icon descriptions gained one code span
   // (747 -> 744 measured HEAD vs now).
   // D11, 2026-10-17, 744 -> 727 (HEAD 744 -> now 727): Class overrides (71) became Anatomy (54).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "dropdown": 727,
+  // D12a, 2026-10-17, 727 -> 736 (HEAD 727 -> now 736): the new In a form (9).
+  "dropdown": 736,
   // D11, 2026-10-17, 530 -> 520 (HEAD 530 -> now 520): Class overrides (43) became Anatomy (33).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "input": 520,
+  // D12a, 2026-10-17, 520 -> 528 (HEAD 520 -> now 528): the new In a form (8).
+  "input": 528,
   // D11, 2026-10-17, 946 -> 940 (HEAD 954 -> now 940): Class overrides (61) became Anatomy (47).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "international-phone-input": 940,
+  // D12a, 2026-10-17, 940 -> 952 (HEAD 940 -> now 952): the new In a form (12).
+  "international-phone-input": 952,
   // L11, 426 -> 425: the In Context "Processing" button is now disabled while
   // it loads, and an inactive control's label is exempt from 1.4.3.
   // D11, 2026-10-17, 425 -> 399 (HEAD 425 -> now 399): Class overrides (62) became Anatomy (36).
@@ -211,39 +217,49 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "loader": 399,
   // A2b, 495 -> 491: the API Reference lost the animation-off boolean's row (4
   // cells), folded into the reduceMotion row above it (measured HEAD vs now).
-  "modal": 491,
+  // D12a, 2026-10-17, 491 -> 501 (HEAD 497 -> now 501): the new Form in a modal (4).
+  "modal": 501,
   // D11, 2026-10-17, 684 -> 664 (HEAD 687 -> now 664): Class overrides (101) became Anatomy (78).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "multi-select-dropdown": 664,
+  // D12a, 2026-10-17, 664 -> 673 (HEAD 664 -> now 673): the new In a form (9).
+  "multi-select-dropdown": 673,
   // D11, 2026-10-17, 707 -> 685 (HEAD 709 -> now 685): Class overrides (102) became Anatomy (78).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "multi-select-searchable-dropdown": 685,
+  // D12a, 2026-10-17, 685 -> 694 (HEAD 685 -> now 694): the new In a form (9); the onFocus/onBlur section
+  // that was titled Form Integration is renamed Focus and blur events, 5 rows before and after.
+  "multi-select-searchable-dropdown": 694,
   // A2f, 433 -> 429: the API Reference lost the group-name prop's row (4 cells),
   // folded into aria-label (measured A2e vs now; no other change on the page).
   // D11, 2026-10-17, 429 -> 420 (HEAD 429 -> now 420): Class overrides (40) became Anatomy (31).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "otp-input": 420,
+  // D12a, 2026-10-17, 420 -> 428 (HEAD 420 -> now 428): the new In a form (8); the page's own Form Integration
+  // section is unchanged at 8 rows.
+  "otp-input": 428,
   // D11, 2026-10-17, 634 -> 626 (HEAD 637 -> now 626): Class overrides (48) became Anatomy (37).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   "pagination": 626,
   // D11, 2026-10-17, 476 -> 465 (HEAD 476 -> now 465): Class overrides (48) and the old Anatomy (3) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "radio-button": 465,
+  // D12a, 2026-10-17, 465 -> 475 (HEAD 465 -> now 475): the new In a form (10).
+  "radio-button": 475,
   // D11, 2026-10-17, 359 -> 356 (HEAD 359 -> now 356): Class overrides (15) became Anatomy (12).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   "resizable-panel": 356,
   // D11, 2026-10-17, 755 -> 736 (HEAD 756 -> now 736): Class overrides (83) became Anatomy (63).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "searchable-dropdown": 736,
+  // D12a, 2026-10-17, 736 -> 745 (HEAD 736 -> now 745): the new In a form (9).
+  "searchable-dropdown": 745,
   // D11, 2026-10-17, 545 -> 534 (HEAD 546 -> now 534): Class overrides (52) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "slider": 534,
+  // D12a, 2026-10-17, 534 -> 536 (HEAD 534 -> now 536): Form Integration (6) became In a form (8).
+  "slider": 536,
   // D11, 2026-10-17, 682 -> 673 (HEAD 685 -> now 673): Class overrides (54) became Anatomy (42).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   "stepper": 673,
   // D11, 2026-10-17, 423 -> 413 (HEAD 423 -> now 413): Class overrides (44) became Anatomy (34).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "switch": 413,
+  // D12a, 2026-10-17, 413 -> 421 (HEAD 413 -> now 421): the new In a form (8).
+  "switch": 421,
   // D11, 2026-10-17, 677 -> 632 (HEAD 678 -> now 632): Class overrides (76) became Anatomy (30).
   // The dropped Type and Default columns carried no information (string, — on every slot); TabPanel's duplicate ResolvedClasses listing removed.
   "tab-panel": 632,
@@ -255,10 +271,12 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "table": 5499,
   // D11, 2026-10-17, 504 -> 496 (HEAD 504 -> now 496): Class overrides (36) became Anatomy (28).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "text-area": 496,
+  // D12a, 2026-10-17, 496 -> 504 (HEAD 496 -> now 504): the new In a form (8).
+  "text-area": 504,
   // D11, 2026-10-17, 871 -> 862 (HEAD 893 -> now 862): Class overrides (127) became Anatomy (96).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "time-picker": 862,
+  // D12a, 2026-10-17, 862 -> 871 (HEAD 862 -> now 871): the new In a form (9).
+  "time-picker": 871,
   // A2a, 564 -> 562: the API Reference lost the onRemove row (4 cells) and the
   // rewritten onDismiss(id) description gained two `id` code spans.
   // D11, 2026-10-17, 562 -> 560 (HEAD 563 -> now 560): Class overrides (43) became Anatomy (40).

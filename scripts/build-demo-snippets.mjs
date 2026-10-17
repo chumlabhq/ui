@@ -240,7 +240,10 @@ function pageSymbols(sf) {
     // `ColumnDef` comes from @tanstack/react-table, which anyone using Table
     // has installed. Treating it as unavailable cost 18 Table snippets.
     else if (peerOf(raw)) spec = raw;
-    else if (raw.startsWith(".") && !/components\//.test(raw)) {
+    // A page-local module, or one of the shared demo helpers in ./components
+    // imported by its own path (FormDemo). The ./components barrel is the
+    // site's chrome — Section, DemoWrapper — and is not.
+    else if (raw.startsWith(".") && (!/components\//.test(raw) || /^\.\/components\/(?!index\b)\w+(\.js)?$/.test(raw))) {
       // A page-local module. Its exports are not public, so a snippet can only
       // carry one by inlining it; `localExport` decides whether that is possible.
       const nb = st.importClause.namedBindings;
@@ -363,6 +366,22 @@ function localExport(name, info) {
   const exported = root.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
   if (!exported) return { reason: `${where}, which declares \`${info.exported}\` but does not export it` };
 
+  /**
+   * What the helper imports, and where a snippet gets it: react's own exports,
+   * and the library's components by their public subpath. Anything else is
+   * this site's and the helper cannot travel.
+   */
+  const portable = new Map(); // name → public specifier
+  for (const st of msf.statements) {
+    if (!ts.isImportDeclaration(st) || !st.importClause) continue;
+    const from = st.moduleSpecifier.getText(msf).slice(1, -1);
+    const lib = /components\/([A-Za-z0-9]+)\/index(?:\.js)?$/.exec(from);
+    const spec = from === "react" ? "react" : lib ? subpathOf(lib[1]) : null;
+    if (!spec) continue;
+    const nb = st.importClause.namedBindings;
+    if (nb && ts.isNamedImports(nb)) nb.elements.forEach((e) => portable.set(e.name.text, spec));
+  }
+  const carried = new Map(); // specifier → names
   const needed = new Set();
   const queue = [root];
   while (queue.length) {
@@ -385,6 +404,12 @@ function localExport(name, info) {
     const types = new Set();
     for (const id of [...freeIdentifiers([node], msf, types), ...types]) {
       if (id === "meta" || id === "import") continue;
+      if (portable.has(id)) {
+        const spec = portable.get(id);
+        if (!carried.has(spec)) carried.set(spec, new Set());
+        carried.get(spec).add(id);
+        continue;
+      }
       if (moduleImports.has(id)) return { reason: `${where}, which imports \`${id}\` from ${moduleImports.get(id)}` };
       const d = moduleDecls.get(id);
       if (d) queue.push(d);
@@ -393,7 +418,7 @@ function localExport(name, info) {
   const text = msf.statements
     .filter((st) => needed.has(st))
     .map((st) => st.getText(msf).replace(/^export\s+/, ""));
-  return { inline: text };
+  return { inline: text, imports: carried };
 }
 
 /**
@@ -1339,6 +1364,10 @@ function build(section, sf, symbols, classes, componentName) {
       const local = localExport(id, symbols.localImports.get(id));
       if (local.reason) return { reason: local.reason };
       for (const text of local.inline) if (!inlined.includes(text)) inlined.push(text);
+      for (const [spec, names] of local.imports ?? []) {
+        if (!importsUsed.has(spec)) importsUsed.set(spec, new Set());
+        for (const n of names) importsUsed.get(spec).add(n);
+      }
       continue;
     }
 

@@ -22,6 +22,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 
 /**
@@ -1834,6 +1835,19 @@ const CascadingDropdownDemo = () => {
           max-height with overflow-y-auto for scrolling long lists. Long labels
           wrap naturally using leading-snug.
         </div>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with nothing selected: the browser blocks it with its own &quot;fill out this field&quot; message and moves focus to the trigger. It submits the selection as JSON.">
+            <CascadingDropdown name="produce" label="Produce" required options={[{ value: "fruit", label: "Fruit", children: [{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }] }, { value: "veg", label: "Veg", children: [{ value: "c", label: "Carrot" }] }]} />
+          </FormDemo>
+        </DemoWrapper>
       </Section>
 
       <ComponentDocs name="CascadingDropdown" />

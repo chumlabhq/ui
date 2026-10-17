@@ -15,6 +15,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 import { useTheme } from "./ThemeContext.js";
 
 const HeartIcon = ({ className }: { className?: string }) => (
@@ -587,6 +588,19 @@ const CheckboxDemo = () => {
             size="md"
             shape="circle"
           />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit unchecked: a required checkbox must be checked, so the submit is blocked and the browser focuses it.">
+            <Checkbox name="terms" label="Accept the terms" required />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

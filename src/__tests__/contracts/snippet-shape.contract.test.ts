@@ -143,8 +143,12 @@ describe("snippet shape contract", () => {
      * 2026-10-09, L10: 778 -> 783. Table's five Footer sections: they were
      * code-less while Table nested their footer rows inside a cell of its own;
      * L10 renders a footer of rows directly in <tfoot>, so they now show code.
+     * 2026-10-17, D12a: 783 -> 798. An "In a form" section with code on the 15
+     * form-field pages and Modal's "Form in a modal" (+16), less Slider's
+     * "Form Integration", which the In a form section replaces (-1). The shared
+     * FormDemo helper travels into each snippet with its react and library imports.
      */
-    const RECORDED = 783;
+    const RECORDED = 798;
     const count = every.length;
     console.log(
       `SNIPPET_COUNT snippets=${count} recorded=${RECORDED} ` +

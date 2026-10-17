@@ -7,6 +7,7 @@ import { Modal,
   useModal } from "../../components/Modal/index.js";
 import { Button } from "../../components/Button/index.js";
 import { Switch } from "../../components/Switch/index.js";
+import { Input } from "../../components/Input/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -20,6 +21,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 // Buttons follow the home-page CTA system: primary = the inverse-fg pill
 // (the "Browse components" treatment), secondary = an elevated-surface
@@ -95,6 +97,7 @@ const ModalDemo = () => {
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
+  const [formModalOpen, setFormModalOpen] = useState(false);
   const [basicOpen, setBasicOpen] = useState(false);
   const [bareOpen, setBareOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -1549,6 +1552,24 @@ const ModalDemo = () => {
             a separate prop, so a modal that should dim but not lock, or lock but
             not restore, is one prop away.
           </p>
+        </Modal>
+      </Section>
+
+      {/* ─── Form in a modal ──────────────────────────────────────────────── */}
+      <Section
+        title="Form in a modal"
+        description="The overlay most forms live in. An empty required submit is stopped, and the browser moves focus to the field, inside the dialog."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <Button className={c.btnPrimary} onClick={() => setFormModalOpen(true)}>
+            Open the form
+          </Button>
+        </DemoWrapper>
+        <Modal open={formModalOpen} onOpenChange={setFormModalOpen} title="Contact us">
+          <FormDemo onEmpty="Submit with the email empty: the browser blocks the submit and focuses the email field, which is inside the dialog's focus trap.">
+            <Input name="email" type="email" label="Email" required />
+          </FormDemo>
         </Modal>
       </Section>
 

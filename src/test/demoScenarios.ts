@@ -118,13 +118,42 @@ function attrsOf(opening: ts.JsxOpeningLikeElement, sf: ts.SourceFile): Map<stri
  * element: Toast has no JSX form a page renders, and the keys of the object it
  * is handed, in any argument position, are its props.
  */
+/**
+ * The demo helpers that render a real `<form>` around what they are given,
+ * by tag, with the source of the form they render.
+ *
+ * FormDemo puts every form field's "In a form" section in one `<form>` with a
+ * Submit and a Reset; the page's own AST shows `<FormDemo>`, not `<form>`. So
+ * a helper counts as a form only when its own JSX renders one — read from
+ * src/pages/demo/components, not listed — and the submit, reset and
+ * validation predicates read that form's source together with what the page
+ * puts inside it.
+ */
+let FORM_HELPERS: Map<string, string> | null = null;
+export function formHelpers(): Map<string, string> {
+  if (FORM_HELPERS) return FORM_HELPERS;
+  FORM_HELPERS = new Map();
+  const dir = join(ROOT, "src/pages/demo/components");
+  for (const file of readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+    const sf = ts.createSourceFile(file, readFileSync(join(dir, file), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    for (const st of sf.statements) {
+      if (!ts.isFunctionDeclaration(st) || !st.name || !st.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
+      let form: ts.JsxElement | null = null;
+      const v = (n: ts.Node) => { if (!form && ts.isJsxElement(n) && n.openingElement.tagName.getText(sf) === "form") form = n; ts.forEachChild(n, v); };
+      v(st);
+      if (form) FORM_HELPERS.set(st.name.text, (form as ts.JsxElement).getText(sf));
+    }
+  }
+  return FORM_HELPERS;
+}
+
 function elementsIn(node: ts.Node, sf: ts.SourceFile): { elements: Element[]; forms: ts.JsxElement[] } {
   const elements: Element[] = [];
   const forms: ts.JsxElement[] = [];
   const visit = (n: ts.Node) => {
     if (ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) {
       const tag = n.tagName.getText(sf);
-      if (tag === "form" && ts.isJsxOpeningElement(n)) forms.push(n.parent);
+      if ((tag === "form" || formHelpers().has(tag)) && ts.isJsxOpeningElement(n)) forms.push(n.parent);
       elements.push({ tag, attrs: attrsOf(n, sf), node: ts.isJsxOpeningElement(n) ? n.parent : n });
     }
     if (ts.isCallExpression(n)) {
@@ -332,7 +361,8 @@ const enclosingForms = (s: Section, c: Component) =>
   s.forms.filter((f) => own(s, c).some((e) =>
     (e.node.pos >= f.pos && e.node.end <= f.end) || (isOverlay(c) && f.pos >= e.node.pos && f.end <= e.node.end)));
 
-const formHas = (s: Section, form: ts.JsxElement, re: RegExp) => re.test(form.getText(s.source));
+const formHas = (s: Section, form: ts.JsxElement, re: RegExp) =>
+  re.test(form.getText(s.source) + (formHelpers().get(form.openingElement.tagName.getText(s.source)) ?? ""));
 
 const SUBMIT = /type=["{]?["']?submit|onSubmit=|requestSubmit\(/;
 const CONSTRAINT = /^(required|pattern|minLength|maxLength|min|max)$/;

@@ -5,7 +5,7 @@
     "na": "{ probe, reason } — probe is one of no-prop:<names>, no-name, no-async, imperative, overlay-content, not-focusable, inline-fixed, re-checked against the props walk",
     "gap": "{ reason, slice } — slice is D12a (forms), D12b (phone width), D12c (failing data), D12d (uncontrolled, long content) or D12e (composition); fails once a section shows it"
   },
-  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario.",
+  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario. D12a, 2026-10-17: the 46 D12a cells are shown, by the In a form section on each form field page and Modal's Form in a modal (396 shown, 213 n/a, 51 gap).",
   "components": {
     "Accordion": {
       "default": {
@@ -593,27 +593,27 @@
         }
       },
       "submit": {
-        "gap": {
-          "reason": "No <form> on the page submits it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -727,27 +727,27 @@
         }
       },
       "submit": {
-        "gap": {
-          "reason": "No <form> on the page submits it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "In a form"
         }
       },
       "reset": {
-        "gap": {
-          "reason": "No form on the page has a reset button.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "No form on the page validates it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "CheckboxDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -995,27 +995,27 @@
         }
       },
       "submit": {
-        "gap": {
-          "reason": "No <form> on the page submits it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "In a form"
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -1269,21 +1269,21 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -1403,9 +1403,9 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "No form on the page has a reset button.",
-          "slice": "D12a"
+        "shown": {
+          "page": "InputDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
@@ -1537,9 +1537,9 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
@@ -1799,9 +1799,9 @@
         }
       },
       "submit": {
-        "gap": {
-          "reason": "No <form> on the page submits it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Form in a modal"
         }
       },
       "reset": {
@@ -1939,21 +1939,21 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -2067,27 +2067,27 @@
         }
       },
       "submit": {
-        "gap": {
-          "reason": "No <form> on the page submits it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -2207,21 +2207,21 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -2469,27 +2469,27 @@
         }
       },
       "submit": {
-        "gap": {
-          "reason": "No <form> on the page submits it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "In a form"
         }
       },
       "reset": {
-        "gap": {
-          "reason": "No form on the page has a reset button.",
-          "slice": "D12a"
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "No form on the page validates it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -2743,21 +2743,21 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -2871,27 +2871,27 @@
         }
       },
       "submit": {
-        "gap": {
-          "reason": "No <form> on the page submits it.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "In a form"
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SliderDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -3145,21 +3145,21 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "SwitchDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {
@@ -3547,9 +3547,9 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "No form on the page has a reset button.",
-          "slice": "D12a"
+        "shown": {
+          "page": "TextAreaDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
@@ -3681,21 +3681,21 @@
         }
       },
       "reset": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "In a form"
         }
       },
       "required": {
-        "gap": {
-          "reason": "`required` is shown outside a <form>: nothing shows it blocking a submit.",
-          "slice": "D12a"
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "In a form"
         }
       },
       "validation": {
-        "gap": {
-          "reason": "The library resets and validates this field since L20; only the demo is missing.",
-          "slice": "D12a"
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "In a form"
         }
       },
       "loading": {

@@ -20,6 +20,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 
 /**
@@ -960,9 +961,9 @@ const MultiSelectSearchableDropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Form Integration ──────────────────────────────────────────────── */}
+      {/* ─── Focus and blur events ─────────────────────────────────────────── */}
       <Section
-        title="Form Integration"
+        title="Focus and blur events"
         description="Use onBlur and onFocus handlers for form validation and event tracking."
         isDarkMode={dark}
       >
@@ -1364,6 +1365,19 @@ const MultiSelectSearchableDropdownDemo = () => {
               Selected: {combinedValue.join(", ")}
             </p>
           )}
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits the values joined with commas.">
+            <MultiSelectSearchableDropdown name="fruits" label="Fruits" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

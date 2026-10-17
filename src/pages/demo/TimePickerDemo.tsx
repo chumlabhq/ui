@@ -17,6 +17,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 const getClasses = () => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
@@ -1409,6 +1410,19 @@ const TimePickerDemo = () => {
               </ul>
             </div>
           </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with no time: the browser blocks the submit and moves focus to the time input. It submits the time as the field holds it.">
+            <TimePicker name="time" label="Time" required />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

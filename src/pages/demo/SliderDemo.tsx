@@ -18,6 +18,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -76,7 +77,6 @@ const SliderDemo = () => {
   const [price2, setPrice2] = useState<SliderValue>([200, 800]);
   const [temp, setTemp] = useState(22);
   const [opacity, setOpacity] = useState(80);
-  const [opacity2, setOpacity2] = useState(80);
   const [animFast, setAnimFast] = useState(3);
   const [animDefault, setAnimDefault] = useState(3);
   const [animSlow, setAnimSlow] = useState(3);
@@ -660,21 +660,15 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      <Section title="Form Integration" description="Hidden inputs are rendered when name is set. The value is submitted with the form." isDarkMode={dark}>
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full sm:max-w-sm space-y-3">
-            <Slider
-              name="brightness"
-              label="Brightness"
-              value={opacity2}
-              onValueChange={(v) => setOpacity2(v as number)}
-              required
-              classes={c.slider}
-              showTooltip
-              formatTooltip={(v) => `${v}%`}
-            />
-            <div className={c.note}>Hidden input: <code>name="brightness" value="{opacity}"</code></div>
-          </div>
+          <FormDemo onEmpty="A Slider always holds a value, so required never blocks the submit. A range submits price[0] and price[1].">
+            <Slider name="price" label="Price" min={0} max={100} defaultValue={[20, 80]} required />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

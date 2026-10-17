@@ -20,6 +20,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 
 /**
@@ -1689,6 +1690,19 @@ const SearchableDropdownDemo = () => {
           custom chevron and check icons, and a custom search placeholder, all
           working together seamlessly.
         </div>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with nothing selected: the browser blocks the submit and moves focus to the trigger. It submits the selected value.">
+            <SearchableDropdown name="fruit" label="Fruit" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
+          </FormDemo>
+        </DemoWrapper>
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}

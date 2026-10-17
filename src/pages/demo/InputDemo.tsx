@@ -19,6 +19,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 const Icon = ({
   d,
@@ -1269,6 +1270,19 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
       </div>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit empty: the browser blocks the submit and focuses the field. A malformed address is blocked the same way.">
+            <Input name="email" type="email" label="Email" required />
+          </FormDemo>
+        </DemoWrapper>
+      </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Input" />

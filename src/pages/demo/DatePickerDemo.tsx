@@ -20,6 +20,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 import {
   subDays,
   addDays,
@@ -1699,6 +1700,21 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               classes={c.datepicker}
             />
           </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit with no day: the browser blocks the submit and moves focus to the trigger. A day submits YYYY-MM-DD, a range one YYYY-MM-DD/YYYY-MM-DD interval, and multiple dates one entry each.">
+            <DatePicker name="day" label="Day" required />
+            <DatePicker name="stay" label="Stay" selectionMode="range" />
+            <DatePicker name="days" label="Days" selectionMode="multiple" />
+          </FormDemo>
         </DemoWrapper>
       </Section>
 

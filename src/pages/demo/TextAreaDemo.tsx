@@ -19,6 +19,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { FormDemo } from "./components/FormDemo.js";
 
 const MessageIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -959,6 +960,19 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
       </div>
+
+      {/* ─── In a form ───────────────────────────────────────────────────── */}
+      <Section
+        title="In a form"
+        description="A real form: the field with name and required, Submit and Reset, and the FormData the browser built, read back."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <FormDemo onEmpty="Submit empty: the browser blocks the submit and focuses the field.">
+            <TextArea name="message" label="Message" required />
+          </FormDemo>
+        </DemoWrapper>
+      </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="TextArea" />
