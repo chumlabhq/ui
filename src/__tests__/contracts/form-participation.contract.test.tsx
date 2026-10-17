@@ -31,6 +31,7 @@ import { setReducedMotion } from "../../test/matchMedia.js";
 import { Avatar } from "../../components/Avatar/index.js";
 import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
 import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
+import { DatePicker } from "../../components/DatePicker/index.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);
@@ -174,6 +175,44 @@ describe("multi-value fields submit one entry per value", () => {
       expect(new FormData(view.container.querySelector("form")!).getAll("f")).toEqual(["Smith, J", "Doe"]);
     });
   }
+});
+
+/**
+ * An empty multi-value field submits no entry.
+ *
+ * A native <select multiple> with nothing selected leaves its name out of
+ * FormData, and the two multi-selects have done the same since L23. DatePicker
+ * in multiple mode submitted `f=`, one empty string, which a server reads as a
+ * date it cannot parse. L25 routes it through FormValue's empty-entries path.
+ */
+describe("an empty multi-value field submits no entry", () => {
+  const OPTS = [{ value: "a", label: "A" }];
+  const empty = async (field: ReactElement) => {
+    const view = render(<form>{field}</form>);
+    await ui.settle();
+    return [...new FormData(view.container.querySelector("form")!).keys()];
+  };
+  it("a native <select multiple> with nothing selected submits nothing", async () => {
+    expect(await empty(<select multiple name="f"><option value="a">A</option></select>)).toEqual([]);
+  });
+  for (const [id, field] of [
+    ["DatePicker selectionMode=multiple", <DatePicker key="d" name="f" label="Days" selectionMode="multiple" />],
+    ["MultiSelectDropdown", <MultiSelectDropdown key="m" name="f" label="M" options={OPTS} />],
+    ["MultiSelectSearchableDropdown", <MultiSelectSearchableDropdown key="s" name="f" label="M" options={OPTS} />],
+  ] as const) {
+    it(`${id}, empty, submits no entry`, async () => {
+      expect(await empty(field)).toEqual([]);
+    });
+  }
+  it("DatePicker selectionMode=multiple, empty and required, still blocks the submit", async () => {
+    const view = render(
+      <form>
+        <DatePicker name="f" label="Days" selectionMode="multiple" required />
+      </form>,
+    );
+    await ui.settle();
+    expect(view.container.querySelector("form")!.checkValidity()).toBe(false);
+  });
 });
 
 afterAll(() => {

@@ -466,7 +466,11 @@ function documentedProps(component) {
       const next = text.indexOf("\n## ", at + heading.length);
       const section = text.slice(at, next === -1 ? undefined : next);
       for (const [, cell] of section.matchAll(/^\|\s*([^|]+?)\s*\|/gm)) {
-        const match = /^`([a-zA-Z][\w-]*)`$/.exec(cell.trim());
+        // A required prop's row reads `name` **(required)**, as
+        // generate-ai-md-props writes it. Matching the bare name alone read
+        // four documented props as undocumented: Accordion's selectionMode,
+        // CascadingDropdown's options, RadioGroup's and Tooltip's children.
+        const match = /^`([a-zA-Z][\w-]*)`(?: \*\*\(required\)\*\*)?$/.exec(cell.trim());
         if (match) documented.add(match[1]);
       }
       at = text.indexOf(heading, at + heading.length);

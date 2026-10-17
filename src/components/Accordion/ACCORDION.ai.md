@@ -111,6 +111,8 @@ These props have dependencies — using them wrong causes silent bugs:
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
+| `defaultValue` | — | — | Initial expanded item for uncontrolled usage: a string with `selectionMode="single"`, a string[] with `"multiple"`. Use `value` instead for controlled usage. |
+| `onValueChange` | — | — | Fires when the expanded items change: with a string, or null when the last item closes, for `selectionMode="single"`; with a string[] for `"multiple"`. Not `onChange`. |
 | `expandOnPrint` | boolean | `false` | Expands all items when printing. |
 | `storageKey` | string \| object | — | Key or config for persisting expanded state to storage. |
 | `onKeyDown` | object | — | (event: KeyboardEvent, itemValue: string \| null) => void |

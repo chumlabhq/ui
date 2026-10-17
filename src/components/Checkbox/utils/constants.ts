@@ -43,7 +43,7 @@ export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   // which is the single token that does what `bg-white dark:bg-cl-bg-elevated`
   // used to, without a seventh `dark:` variant.
   control:
-    "inline-flex items-center justify-center border-2 transition-colors cursor-pointer bg-cl-bg-input border-cl-border-input data-[disabled]:cursor-not-allowed has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent has-[:focus-visible]:ring-offset-cl-bg",
+    "shrink-0 inline-flex items-center justify-center border-2 transition-colors cursor-pointer bg-cl-bg-input border-cl-border-input data-[disabled]:cursor-not-allowed has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent has-[:focus-visible]:ring-offset-cl-bg",
   itemIndicator: "",
   message: "text-sm data-[invalid]:text-cl-error data-[valid]:text-cl-success",
 };

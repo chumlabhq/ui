@@ -187,6 +187,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `searchIcon` | object | — | ReactNode — Replaces the search field's magnifier. Rendered inside a box carrying `classes.searchIcon`, which positions it in the field. |
 | `onSearchClear` | object | — | () => void — Callback when the search clear button is clicked. |
 | `loadingMoreContent` | object | — | React.ReactNode — Custom content for the loading more indicator. |
+| `ref` | — | — | React.Ref<HTMLDivElement> — the table's outer container `<div>`, the element `className` and `style` land on. |
 
 ## Styling Guide
 

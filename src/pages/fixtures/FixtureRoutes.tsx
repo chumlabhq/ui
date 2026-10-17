@@ -3,6 +3,7 @@ import FixtureIndex from "./FixtureIndex.js";
 import FixtureRoute from "./FixtureRoute.js";
 import FormRoute from "./FormRoute.js";
 import OpenCloseRoute from "./OpenCloseRoute.js";
+import ControlSizeRoute from "./ControlSizeRoute.js";
 
 /**
  * The dev-only fixture subtree, in one module so App.tsx needs exactly one
@@ -18,6 +19,7 @@ export default function FixtureRoutes() {
       <Route index element={<FixtureIndex />} />
       <Route path="forms/:field" element={<FormRoute />} />
       <Route path="open-close/:component" element={<OpenCloseRoute />} />
+      <Route path="control-size/:component" element={<ControlSizeRoute />} />
       <Route path=":component/:fixture" element={<FixtureRoute />} />
     </Routes>
   );

@@ -607,7 +607,7 @@ const CheckboxDemo = () => {
       {/* ─── Long labels ─────────────────────────────────────────────────── */}
       <Section
         title="Long labels"
-        description="The label wraps beside the box, and the box does not keep its size: it narrows from 20 px to 14 px here, and to 11 px on a 360 px screen. A library defect, owed to L24."
+        description="The label wraps beside the box, and the box keeps its 20 px size, here and on a 360 px screen."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">

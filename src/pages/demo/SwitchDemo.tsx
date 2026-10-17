@@ -646,7 +646,7 @@ const SwitchDemo = () => {
       {/* ─── Long labels ─────────────────────────────────────────────────── */}
       <Section
         title="Long labels"
-        description="The label wraps beside the track, and the track does not keep its size: it narrows from 36 px to 22 px here, and to 17 px on a 360 px screen. A library defect, owed to L24."
+        description="The label wraps beside the track, and the track keeps its 36 px width, here and on a 360 px screen."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">

@@ -41,6 +41,9 @@
       "description": "Initial open state for uncontrolled usage.",
       "default": false
     },
+    "defaultValue": {
+      "description": "Initial selection for uncontrolled usage. Type depends on `selectionMode`: Date | null (single), DateRange | null (range), Date[] | null (multiple). Use `value` instead for controlled usage."
+    },
     "onOpenChange": {
       "type": "object",
       "description": "(open: boolean) => void",
@@ -230,7 +233,7 @@
     },
     "name": {
       "type": "string",
-      "description": "Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order; `\"\"` when nothing is selected. Nothing is submitted while disabled."
+      "description": "Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order. With nothing selected, single and range submit `\"\"` and multiple submits no entry, as a native `<select multiple>` does. Nothing is submitted while disabled."
     },
     "placeholder": {
       "type": "string",

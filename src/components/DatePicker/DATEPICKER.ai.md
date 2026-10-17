@@ -103,6 +103,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `onMonthChange` | object | — | (month: Date) => void — Called when the displayed month changes. |
 | `open` | boolean | — | Controlled open state of the calendar popup. |
 | `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
+| `defaultValue` | — | — | Initial selection for uncontrolled usage. Type depends on `selectionMode`: Date \| null (single), DateRange \| null (range), Date[] \| null (multiple). Use `value` instead for controlled usage. |
 | `onOpenChange` | object | — | (open: boolean) => void |
 | `minDate` | object | — | Date — Earliest selectable date. |
 | `maxDate` | object | — | Date — Latest selectable date. |
@@ -124,7 +125,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
 | `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
 | `id` | string | — | HTML id attribute. |
-| `name` | string | — | Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order; `""` when nothing is selected. Nothing is submitted while disabled. |
+| `name` | string | — | Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order. With nothing selected, single and range submit `""` and multiple submits no entry, as a native `<select multiple>` does. Nothing is submitted while disabled. |
 | `placeholder` | string | — | Placeholder text for the trigger input. |
 | `disabled` | boolean | `false` | Disables the date picker. |
 | `error` | boolean | `false` | Displays error state. |
@@ -377,7 +378,7 @@ import { fr } from "date-fns/locale";
 
 ## Forms
 
-- **Submitted value.** With `name`, it submits the formats in the `name` row above: `YYYY-MM-DD` for a single date, one `YYYY-MM-DD/YYYY-MM-DD` interval for a range, one entry per date (sorted) for multiple dates, and an empty string when nothing is picked.
+- **Submitted value.** With `name`, it submits the formats in the `name` row above: `YYYY-MM-DD` for a single date, one `YYYY-MM-DD/YYYY-MM-DD` interval for a range, one entry per date (sorted) for multiple dates, and, with nothing picked, an empty string for a single date or a range and no entry at all for multiple dates, as a native `<select multiple>` does.
 - **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no date), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled DatePicker is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
 - **Required.** An empty `required` DatePicker blocks the form's submit, and the browser's validation moves focus to the trigger. Multiple-date mode needs at least one date. The field shows an error state only when you pass `error` and `errorMessage`.
 - **Disabled.** A disabled DatePicker submits nothing.

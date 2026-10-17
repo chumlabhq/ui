@@ -15,7 +15,7 @@ recorded there because they belong next to the code that implements them.
 | With no demo | 269 (21%) |
 | With no fixture | 706 (56%) |
 | Phantom claims (documented, absent from the type) | 0 |
-| Demonstrated but undocumented | 8 |
+| Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 53 |
 | Tier-A left undemonstrated with a recorded reason | 20 |
 | **Tier-A gaps (a whole mode, no demo, no reason)** | **0** |

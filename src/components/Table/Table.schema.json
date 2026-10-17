@@ -655,6 +655,9 @@
       "type": "object",
       "description": "React.ReactNode — Custom content for the loading more indicator.",
       "x-tsType": "ReactNode"
+    },
+    "ref": {
+      "description": "React.Ref<HTMLDivElement> — the table's outer container `<div>`, the element `className` and `style` land on."
     }
   },
   "required": []

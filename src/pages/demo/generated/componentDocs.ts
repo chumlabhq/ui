@@ -351,6 +351,20 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Expands all items on initial render."
       },
       {
+        "name": "defaultValue",
+        "type": "—",
+        "required": false,
+        "default": null,
+        "description": "Initial expanded item for uncontrolled usage: a string with `selectionMode=\"single\"`, a string[] with `\"multiple\"`. Use `value` instead for controlled usage."
+      },
+      {
+        "name": "onValueChange",
+        "type": "—",
+        "required": false,
+        "default": null,
+        "description": "Fires when the expanded items change: with a string, or null when the last item closes, for `selectionMode=\"single\"`; with a string[] for `\"multiple\"`. Not `onChange`."
+      },
+      {
         "name": "expandOnPrint",
         "type": "boolean",
         "required": false,
@@ -4836,6 +4850,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Initial open state for uncontrolled usage."
       },
       {
+        "name": "defaultValue",
+        "type": "—",
+        "required": false,
+        "default": null,
+        "description": "Initial selection for uncontrolled usage. Type depends on `selectionMode`: Date | null (single), DateRange | null (range), Date[] | null (multiple). Use `value` instead for controlled usage."
+      },
+      {
         "name": "onOpenChange",
         "type": "((open: boolean) => void)",
         "required": false,
@@ -4987,7 +5008,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order; `\"\"` when nothing is selected. Nothing is submitted while disabled."
+        "description": "Form field name. Submits the selection through hidden inputs: a single date as `YYYY-MM-DD`; a range as one ISO 8601 interval, `YYYY-MM-DD/YYYY-MM-DD`, with an unpicked side left empty; multiple dates as one entry per date under this name, in date order. With nothing selected, single and range submit `\"\"` and multiple submits no entry, as a native `<select multiple>` does. Nothing is submitted while disabled."
       },
       {
         "name": "placeholder",
@@ -15554,6 +15575,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "React.ReactNode — Custom content for the loading more indicator."
+      },
+      {
+        "name": "ref",
+        "type": "—",
+        "required": false,
+        "default": null,
+        "description": "React.Ref<HTMLDivElement> — the table's outer container `<div>`, the element `className` and `style` land on."
       }
     ],
     "subComponents": [],

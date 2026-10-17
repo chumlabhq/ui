@@ -25,11 +25,11 @@ const PAGES = [
   "resizable-panel", "stepper", "switch", "tab-panel", "time-picker", "toast",
 ];
 
-/** Findings the library owes, by page: the control that shrinks beside a long label. */
-const EXPECTED_FINDINGS: Record<string, { slice: string; what: RegExp }> = {
-  checkbox: { slice: "L24", what: /^the control narrows from 20px/ },
-  switch: { slice: "L24", what: /^the control narrows from 36px/ },
-};
+/**
+ * Findings the library owes, by page: the control that shrinks beside a long
+ * label. Empty since L25 gave Checkbox's box and Switch's track `shrink-0`.
+ */
+const EXPECTED_FINDINGS: Record<string, { slice: string; what: RegExp }> = {};
 
 interface Measure {
   pageOverflow: number;

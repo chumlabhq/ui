@@ -876,8 +876,8 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
 
         {name && (
           <FormValue
-            entries={(multipleValue?.length
-              ? [...multipleValue].sort((a, b) => +a - +b).map(toDateString)
+            entries={(selectionMode === "multiple"
+              ? [...(multipleValue ?? [])].sort((a, b) => +a - +b).map(toDateString)
               : [rangeValue && (rangeValue.start || rangeValue.end) ? `${isoDate(rangeValue.start)}/${isoDate(rangeValue.end)}` : isoDate(singleValue)]
             ).map((date) => [name, date] as const)}
             required={required}

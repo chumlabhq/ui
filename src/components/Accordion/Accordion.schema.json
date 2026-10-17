@@ -223,6 +223,12 @@
       "description": "Expands all items on initial render.",
       "default": false
     },
+    "defaultValue": {
+      "description": "Initial expanded item for uncontrolled usage: a string with `selectionMode=\"single\"`, a string[] with `\"multiple\"`. Use `value` instead for controlled usage."
+    },
+    "onValueChange": {
+      "description": "Fires when the expanded items change: with a string, or null when the last item closes, for `selectionMode=\"single\"`; with a string[] for `\"multiple\"`. Not `onChange`."
+    },
     "expandOnPrint": {
       "type": "boolean",
       "description": "Expands all items when printing.",

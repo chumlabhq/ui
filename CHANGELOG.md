@@ -34,6 +34,7 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- DatePicker in multiple mode with no dates submits no entry, as a native multiple control does; it submitted an empty string.
 - MultiSelectDropdown and MultiSelectSearchableDropdown submit one entry per selected value, as a native
   <select multiple> does; they submitted one comma-joined entry, which split any value containing a comma.
   Read them with FormData.getAll(name).
