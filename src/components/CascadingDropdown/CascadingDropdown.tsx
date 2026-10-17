@@ -1,7 +1,7 @@
-import { useRef, useEffect, useId, forwardRef, memo, useMemo, useCallback } from "react";
+import { useRef, useEffect, useId, forwardRef, memo, useMemo, useCallback, useState } from "react";
 import { physicalSide } from "./utils/side.js";
 import { useLayer } from "../../utils/layers.js";
-import type { ReactNode, KeyboardEvent, MutableRefObject, RefObject } from "react";
+import type { ReactNode, KeyboardEvent, RefObject } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types.js";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
@@ -13,7 +13,7 @@ import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusAndReveal } from "../../utils/focusAndReveal.js";
-import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
+import { setRef } from "../../utils/mergeRefs.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 import { FormValue } from "../../utils/FormValue.js";
 import {
@@ -297,6 +297,29 @@ const Submenu = memo(function Submenu({
   );
 });
 
+type RenderTrigger = NonNullable<CascadingDropdownProps["renderTrigger"]>;
+
+/**
+ * `renderTrigger`, called by a component rather than inline.
+ *
+ * A render prop is a component in all but name, and calling it inline handed
+ * the trigger's handlers to a plain function during the parent's render: the
+ * hooks lint reads that as a function that may call them there, and the key
+ * handler writes `pointerRef`. As props of an element they are what they are,
+ * handlers React calls on events. Nothing reaches the DOM from this layer.
+ */
+function CustomTrigger({
+  render,
+  triggerProps,
+  state,
+}: {
+  render: RenderTrigger;
+  triggerProps: Parameters<RenderTrigger>[0];
+  state: Parameters<RenderTrigger>[1];
+}) {
+  return <>{render(triggerProps, state)}</>;
+}
+
 /**
  * Component: CascadingDropdown
  *
@@ -440,7 +463,14 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
     const descriptionId = `${dropdownId}-description`;
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLButtonElement>(null);
+    /**
+     * The trigger as state, as Dropdown keeps it: set by the one callback ref
+     * both triggers take, so a render that needs the element — the submenu's
+     * side is read from the direction it sits in — has the committed node and
+     * re-runs when it changes. A ref was read during render for that, which
+     * is a read React does not track.
+     */
+    const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     /** The menu item the open submenu anchors to. */
     const submenuAnchorRef = useRef<HTMLDivElement>(null);
@@ -502,10 +532,10 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
     const prevOpenRef = useRef(false);
     useEffect(() => {
       if (prevOpenRef.current && !isOpen) {
-        triggerRef.current?.focus();
+        triggerNode?.focus();
       }
       prevOpenRef.current = isOpen;
-    }, [isOpen]);
+    }, [isOpen, triggerNode]);
 
     /**
      * The menu and its submenu, which is no longer inside it.
@@ -595,7 +625,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       // Paging or filtering can unmount the item that had focus, dropping the
       // browser back to <body>; that is our own re-render, not the user leaving.
       const ours =
-        active === triggerRef.current ||
+        active === triggerNode ||
         active === null ||
         active === document.body ||
         inMenuSurface(active);
@@ -603,7 +633,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
 
       const item = into || menu.querySelector<HTMLElement>('[role^="menuitem"][data-highlighted]');
       if (item && item !== active) focusAndReveal(item);
-    }, [isOpen, focusedIndex, showMenuSearch, inMenuSurface, submenuId, submenuFocusedIndex, loadingChildren]);
+    }, [isOpen, focusedIndex, showMenuSearch, inMenuSurface, submenuId, submenuFocusedIndex, loadingChildren, triggerNode]);
 
     const combinedKeyDown = useCallback(
       (event: KeyboardEvent) => {
@@ -622,14 +652,13 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       }
     }, [onValueChange]);
 
-    const renderTriggerRefCallback = useCallback(
+    const triggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
-        (triggerRef as MutableRefObject<HTMLButtonElement | null>).current = node as HTMLButtonElement | null;
+        setTriggerNode(node);
         setRef(ref, node as HTMLButtonElement | null);
       },
       [ref],
     );
-    const mergedTriggerRef = useMemo(() => mergeRefs(triggerRef, ref), [ref]);
 
     const fullWidthClass = fullWidth ? "w-full" : "";
     const displayValue = getDisplayValue();
@@ -723,14 +752,14 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
           className={cn(mergedClasses.control) || undefined}
         >
           {renderTrigger ? (
-            // eslint-disable-next-line react-hooks/refs -- ref callback is intentionally passed to render prop for consumer to attach
-            renderTrigger(
-              { ...triggerProps, ref: renderTriggerRefCallback },
-              { isOpen, displayValue, placeholder },
-            )
+            <CustomTrigger
+              render={renderTrigger}
+              triggerProps={{ ...triggerProps, ref: triggerRefCallback }}
+              state={{ isOpen, displayValue, placeholder }}
+            />
           ) : (
             <button
-              ref={mergedTriggerRef}
+              ref={triggerRefCallback}
               {...triggerProps}
               className={mergedClasses.trigger || undefined}
             >
@@ -753,7 +782,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
               onClick={(e) => {
                 e.stopPropagation();
                 handleClear();
-                triggerRef.current?.focus({ preventScroll: true });
+                triggerNode?.focus({ preventScroll: true });
               }}
             >
               {clearIcon ?? <ClearIconDefault className="w-4 h-4" />}
@@ -763,7 +792,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
           {(isOpen || keepMounted) && (
             <MenuSurface
               ref={menuRef}
-              trigger={triggerRef}
+              trigger={triggerNode}
               isOpen={isOpen}
               side={dropdownSide}
               gap={dropdownOffset}
@@ -864,7 +893,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
                   key={openSubmenuParent.value}
                   menuId={submenuId}
                   anchor={submenuAnchorRef}
-                  side={physicalSide(submenuSide, containerRef.current)}
+                  side={physicalSide(submenuSide, triggerNode)}
                   zIndex={dropdownZIndex}
                   portalContainer={portalContainer}
                   parent={openSubmenuParent}
@@ -909,7 +938,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
             disabled={disabled}
             missing={Object.values(internalValue).every((v) => (Array.isArray(v) ? v.length === 0 : !v))}
             onReset={resetValue}
-            focusTarget={triggerRef}
+            focusTarget={triggerNode}
           />
         )}
 

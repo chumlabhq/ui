@@ -71,8 +71,11 @@ export interface DrawerProps
 }
 
 export interface DrawerHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  // Required, as ModalHeader's is: the header is what names the drawer, and
+  // `<DrawerHeader title="…" />` put the text in a tooltip attribute and
+  // rendered an empty header.
   /** Content rendered inside this element. */
-  children?: ReactNode;
+  children: ReactNode;
 }
 
 export interface DrawerBodyProps extends HTMLAttributes<HTMLDivElement> {

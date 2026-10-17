@@ -34,6 +34,8 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- DrawerHeader requires children, matching ModalHeader; a title attribute with no children
+  rendered an empty header.
 - A disabled field no longer submits its value, as a disabled native control doesn't.
   Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown,
   CascadingDropdown, TimePicker, Slider and InternationalPhoneInput did; a server reading the

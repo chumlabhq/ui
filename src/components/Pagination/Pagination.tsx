@@ -340,8 +340,11 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const listRef = useRef<HTMLDivElement>(null);
     const mergedNavRef = useMemo(() => mergeRefs(navRef, ref), [ref]);
     const [fit, setFit] = useState<number | null>(null);
+    // The fit the last commit rendered, for the ResizeObserver below, whose
+    // callback outlives the render it was created in. Written in the layout
+    // effect rather than during render: a render React discards would
+    // otherwise leave it holding a fit that was never on screen.
     const fitRef = useRef(fit);
-    fitRef.current = fit;
     const step = fit ?? 0;
     const shownSiblings = Math.max(fit ?? siblingCount, 0);
     const stepDown = () => {
@@ -356,7 +359,10 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         list.scrollLeft += c.left - l.left - (l.width - c.width) / 2;
       }
     };
-    useIsomorphicLayoutEffect(stepDown);
+    useIsomorphicLayoutEffect(() => {
+      fitRef.current = fit;
+      stepDown();
+    });
     useEffect(() => {
       const nav = navRef.current;
       const host = nav?.parentElement;

@@ -56,7 +56,7 @@ const OUT_OF_ANY_SCROLLER: Record<string, Exception> = {
  * the decision is visible rather than implicit.
  */
 const RETURNS_TO_ACTIVATED: Record<string, Exception> = {
-  "components/CascadingDropdown/CascadingDropdown.tsx|triggerRef.current": { calls: 1, reason: "Returns focus to the trigger that opened the menu." },
+  "components/CascadingDropdown/CascadingDropdown.tsx|triggerNode": { calls: 1, reason: "Returns focus to the trigger that opened the menu." },
   "components/Dropdown/Dropdown.tsx|triggerNode": { calls: 2, reason: "Returns focus to the trigger that opened the menu." },
   "components/MultiSelectDropdown/MultiSelectDropdown.tsx|triggerRef.current": { calls: 2, reason: "Returns focus to the trigger after close or a chip removal." },
   "components/MultiSelectDropdown/MultiSelectDropdown.tsx|triggerNode": { calls: 1, reason: "Returns focus to the trigger that opened the menu." },
