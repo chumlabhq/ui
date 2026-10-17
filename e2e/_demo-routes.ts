@@ -203,9 +203,17 @@ export const LATE_SECTIONS: Readonly<Record<string, string>> = {
  * Late sections. For a route in LATE_SECTIONS, its section has rows, no
  * loading table, and a filter for the category column, which appears only once
  * the category list has landed.
+ *
+ * A demo's own load. A section that loads after the page renders, as Table's
+ * When loading fails does through useFakeLoader, marks itself
+ * `data-demo-loading` while the load is in flight: measured before it lands,
+ * /table read 9 elements in that section rather than 21.
  */
 export function paintPending(section: string | null): string[] {
   const pending: string[] = [];
+  for (const el of document.querySelectorAll("main [data-demo-loading]")) {
+    pending.push(`"${el.closest("section")?.querySelector("h2")?.textContent?.trim() ?? "a section"}" is still loading its own data`);
+  }
   for (const img of document.images) {
     if (img.loading === "lazy") img.loading = "eager";
     const name = `<img src="${(img.getAttribute("src") ?? "").slice(0, 60)}">`;

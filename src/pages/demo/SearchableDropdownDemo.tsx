@@ -23,6 +23,7 @@ import {
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
 
 /**
  * The async examples' data source: a static country list, filtered here and
@@ -281,8 +282,15 @@ const warmTheme = {
   noResults: "px-3 py-4 text-sm text-cl-warning text-center",
 };
 
+/** What a good search of the cities returns; declared here so its identity holds across renders. */
+const CITY_LIST = ["Amsterdam", "Barcelona", "Berlin", "Dublin", "Lisbon", "London", "Lyon", "Madrid", "Paris", "Prague", "Rome", "Vienna"];
+const answerCities = (query: string) =>
+  CITY_LIST.filter((city) => city.toLowerCase().includes(query.toLowerCase())).map((city) => ({ value: city.toLowerCase(), label: city }));
+
 const SearchableDropdownDemo = () => {
+  const [languageMounts, setLanguageMounts] = useState(0);
   const { isDarkMode: dark } = useTheme();
+  const cities = useFakeLoader(answerCities, "Couldn't search the cities. Type again to retry.");
   const c = getClasses();
 
   const [basicValue, setBasicValue] = useState<string | null>(null);
@@ -1703,6 +1711,58 @@ const SearchableDropdownDemo = () => {
           <FormDemo onEmpty="Submit with nothing selected: the browser blocks the submit and moves focus to the trigger. It submits the selected value.">
             <SearchableDropdown name="fruit" label="Fruit" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── When loading fails ──────────────────────────────────────────── */}
+      <Section
+        title="When loading fails"
+        description="A load that rejects reaches onLoadError, which sets error and errorMessage; the field announces the message. Typing again searches again. Make the next load fail, be slow (loadingContent shows) or return nothing (emptyContent shows); each applies to one load."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-sm space-y-4">
+            <SearchableDropdown
+              label="City"
+              placeholder="Search cities"
+              searchOptions={cities.load}
+              onLoadError={cities.onLoadError}
+              error={cities.error !== null}
+              errorMessage={cities.error}
+              loadingContent="Searching…"
+              emptyContent="No cities match."
+            />
+            <NextLoadControl loader={cities} />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Starts open ─────────────────────────────────────────────────── */}
+      <Section
+        title="Starts open"
+        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Show it open mounts it here, so the docs page does not open a list, and move focus into it, as it loads."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-xs space-y-3">
+            <Button
+              className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+              onClick={() => setLanguageMounts((n) => n + 1)}
+            >
+              Show it open
+            </Button>
+            {languageMounts > 0 && (
+              <SearchableDropdown key={languageMounts}
+                label="Language"
+                options={[
+                  { value: "en", label: "English" },
+                  { value: "fr", label: "French" },
+                  { value: "de", label: "German" },
+                ]}
+                defaultOpen
+              />
+            )}
+          </div>
         </DemoWrapper>
       </Section>
 

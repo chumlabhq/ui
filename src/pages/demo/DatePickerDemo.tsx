@@ -62,6 +62,7 @@ const getClasses = () => ({
 });
 
 const DatePickerDemo = () => {
+  const [checkoutMounts, setCheckoutMounts] = useState(0);
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
@@ -1716,6 +1717,48 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             <DatePicker name="stay" label="Stay" selectionMode="range" />
             <DatePicker name="days" label="Days" selectionMode="multiple" />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Uncontrolled ────────────────────────────────────────────────── */}
+      <Section
+        title="Uncontrolled"
+        description="defaultValue sets the first date and defaultOpen opens the calendar on first render; after that each picker keeps its own state, with none in the page."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex w-full flex-col gap-4 sm:flex-row">
+            <div className="w-full sm:max-w-xs">
+              <DatePicker label="Check-in" defaultValue={new Date(2026, 9, 20)} />
+            </div>
+            <div className="w-full sm:max-w-xs space-y-3">
+              <Button
+                className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+                onClick={() => setCheckoutMounts((n) => n + 1)}
+              >
+                Show it open
+              </Button>
+              {checkoutMounts > 0 && (
+                <DatePicker key={checkoutMounts} label="Check-out" defaultOpen />
+              )}
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="The label and the description wrap above the field, which keeps its width."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-xs">
+            <DatePicker
+              label="The first day you can start working at the new office"
+              description="Pick a weekday at least two weeks from today, so the equipment can be ordered."
+            />
+          </div>
         </DemoWrapper>
       </Section>
 

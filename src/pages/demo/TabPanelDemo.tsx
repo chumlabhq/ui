@@ -1227,6 +1227,28 @@ const TabPanelDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="Each tab name stays on one line, and the tab row scrolls sideways (overflow-x-auto); the page itself does not."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-md">
+            <TabPanel
+              tabs={[
+                { id: "overview", label: "Overview" },
+                { id: "history", label: "Order history and returns" },
+                { id: "preferences", label: "Communication preferences" },
+                { id: "security", label: "Security and signed-in devices" },
+              ]}
+            >
+              {(tab) => <p className="pt-4 text-sm text-cl-text-secondary">{tab.label}</p>}
+            </TabPanel>
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section

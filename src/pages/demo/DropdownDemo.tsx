@@ -23,6 +23,7 @@ import {
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
 
 /**
  * The async examples' data source: a static country list, filtered here and
@@ -287,8 +288,18 @@ const getMinimalTheme = () => ({
   noResults: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
 });
 
+/** What a good load of the warehouses returns; declared here so its identity holds across renders. */
+const answerWarehouses = () => [
+  { value: "ams", label: "Amsterdam" },
+  { value: "bcn", label: "Barcelona" },
+  { value: "dub", label: "Dublin" },
+  { value: "lyo", label: "Lyon" },
+];
+
 const DropdownDemo = () => {
+  const [sizeMounts, setSizeMounts] = useState(0);
   const { isDarkMode: dark } = useTheme();
+  const warehouses = useFakeLoader(answerWarehouses, "Couldn't load the warehouses. Open the list again to retry.");
   const c = getClasses();
   const minimalTheme = getMinimalTheme();
 
@@ -1830,6 +1841,59 @@ const DropdownDemo = () => {
           <FormDemo onEmpty="Submit with nothing selected: the browser blocks the submit and moves focus to the trigger. It submits the selected value.">
             <Dropdown name="fruit" label="Fruit" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── When loading fails ──────────────────────────────────────────── */}
+      <Section
+        title="When loading fails"
+        description="A load that rejects reaches onLoadError, which sets error and errorMessage; the field announces the message. Opening the list again loads again. Make the next load fail, be slow (loadingContent shows) or return nothing (emptyContent shows); each applies to one load."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-sm space-y-4">
+            <Dropdown
+              label="Warehouse"
+              placeholder="Choose a warehouse"
+              loadOptions={warehouses.load}
+              loadOnOpen
+              onLoadError={warehouses.onLoadError}
+              error={warehouses.error !== null}
+              errorMessage={warehouses.error}
+              loadingContent="Loading warehouses…"
+              emptyContent="No warehouses to show."
+            />
+            <NextLoadControl loader={warehouses} />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Starts open ─────────────────────────────────────────────────── */}
+      <Section
+        title="Starts open"
+        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Show it open mounts it here, so the docs page does not open a list, and move focus into it, as it loads."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-xs space-y-3">
+            <Button
+              className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+              onClick={() => setSizeMounts((n) => n + 1)}
+            >
+              Show it open
+            </Button>
+            {sizeMounts > 0 && (
+              <Dropdown key={sizeMounts}
+                label="Size"
+                options={[
+                  { value: "s", label: "Small" },
+                  { value: "m", label: "Medium" },
+                  { value: "l", label: "Large" },
+                ]}
+                defaultOpen
+              />
+            )}
+          </div>
         </DemoWrapper>
       </Section>
 

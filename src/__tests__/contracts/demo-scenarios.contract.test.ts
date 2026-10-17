@@ -95,6 +95,41 @@ describe("demo scenarios: each rule has a plant", () => {
     red("frame naming no preview", run(matrix, { index: gone }).errors, /^Pagination\.phoneWidth: "At phone width" .* the phoneWidth predicate does not hold on it$/);
   });
 
+  it("a failing section whose loader cannot reject", () => {
+    // The section's loader is `warehouses`, from useFakeLoader; with its
+    // declaration out of reach, nothing it is handed can reject.
+    const plain: Section[] = index.map((s) =>
+      s.page === "DropdownDemo.tsx" && s.title === "When loading fails"
+        ? { ...s, declarations: new Map([...s.declarations].filter(([name]) => name !== "warehouses")) }
+        : s,
+    );
+    red("loader that cannot reject", run(matrix, { index: plain }).errors, /^Dropdown\.failing: "When loading fails" .* the failing predicate does not hold on it$/);
+  });
+
+  it("an uncontrolled section that hands the component the page's state", () => {
+    const fed: Section[] = index.map((s) =>
+      s.page === "PaginationDemo.tsx" && s.title === "Uncontrolled"
+        ? { ...s, elements: s.elements.map((e) => (e.tag === "Pagination" ? { ...e, attrs: new Map([...e.attrs, ["value", "{page}"]]) } : e)) }
+        : s,
+    );
+    red("uncontrolled fed by state", run(matrix, { index: fed }).errors, /^Pagination\.uncontrolled: "Uncontrolled" .* the uncontrolled predicate does not hold on it$/);
+  });
+
+  it("an overlay mounted open with nothing in its section to mount it", () => {
+    const unmounted: Section[] = index.map((s) =>
+      s.page === "ModalDemo.tsx" && s.title === "Uncontrolled" ? { ...s, setters: new Map() } : s,
+    );
+    red("overlay never mounted", run(matrix, { index: unmounted }).errors, /^Modal\.uncontrolled: .* no trigger in the section that sets its open state$/);
+  });
+
+  it("a section titled long with no long text in it", () => {
+    // Button's Basic Usage, retitled, with the real Long labels section gone.
+    const retitled: Section[] = index
+      .filter((s) => !(s.page === "ButtonDemo.tsx" && s.title === "Long labels"))
+      .map((s) => (s.page === "ButtonDemo.tsx" && s.title === "Basic Usage" ? { ...s, title: "Long labels" } : s));
+    red("long title, short text", run(matrix, { index: retitled }).errors, /^Button\.longContent: "Long labels" .* the longContent predicate does not hold on it$/);
+  });
+
   it("an n/a whose probe goes stale", () => {
     // Accordion's read-only n/a is `no-prop:readOnly`; give it the prop.
     const grown: Component[] = components.map((c) =>

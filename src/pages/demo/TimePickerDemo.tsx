@@ -199,6 +199,8 @@ const StarCheckIcon = ({ className }: { className?: string }) => (
 );
 
 const TimePickerDemo = () => {
+  const [meetingMounts, setMeetingMounts] = useState(0);
+  const [typedPickup, setTypedPickup] = useState<string | null>("10:00");
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
@@ -370,7 +372,7 @@ const TimePickerDemo = () => {
       {/* ─── 4. Min/Max Time ─────────────────────────────────────────────── */}
       <Section
         title="Min / Max Time"
-        description="Constrain selectable times to a specific range (09:00 - 17:00)."
+        description="minTime and maxTime bound the times on offer (09:00 to 17:00): the list dims the ones outside and they cannot be picked. A time typed outside them is not committed: the field keeps the text and shows its error state with aria-invalid, and onValueChange is not called."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
@@ -780,7 +782,7 @@ const TimePickerDemo = () => {
       {/* ─── 18. Clock Min/Max ───────────────────────────────────────────── */}
       <Section
         title="Clock Min / Max Time"
-        description="Min/max constraints apply to the clock variant too. Out-of-range numbers are dimmed, and OK is disabled if the current selection falls outside the range."
+        description="The bounds apply to the clock variant too: numbers outside them are dimmed, and OK is disabled while the selection falls outside the range. A time typed into the field outside them is not committed: the field shows its error state with aria-invalid."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
@@ -1424,6 +1426,67 @@ const TimePickerDemo = () => {
           <FormDemo onEmpty="Submit with no time: the browser blocks the submit and moves focus to the time input. It submits the time as the field holds it.">
             <TimePicker name="time" label="Time" required />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Typed times outside the range ───────────────────────────────── */}
+      <Section
+        title="Typed times outside the range"
+        description="Type 18:30 and press Enter: it is outside 09:00 to 17:00, so the field keeps the text and shows its error state with aria-invalid, and the committed time stays 10:00. A time inside the range but off the 15-minute step, such as 09:07, is committed: the step is what the list offers, not a rule."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-xs space-y-2">
+            <TimePicker
+              label="Pickup time"
+              description="Open 09:00 to 17:00."
+              minTime="09:00"
+              maxTime="17:00"
+              minuteStep={15}
+              defaultValue="10:00"
+              onValueChange={(time) => setTypedPickup(time)}
+            />
+            <p className="text-sm text-cl-text-secondary" role="status" data-demo-action>
+              Committed: {typedPickup ?? "none"}
+            </p>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Starts open ─────────────────────────────────────────────────── */}
+      <Section
+        title="Starts open"
+        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Show it open mounts it here, so the docs page does not open a list, and move focus into it, as it loads."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-xs space-y-3">
+            <Button
+              className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+              onClick={() => setMeetingMounts((n) => n + 1)}
+            >
+              Show it open
+            </Button>
+            {meetingMounts > 0 && (
+              <TimePicker key={meetingMounts} label="Meeting time" defaultOpen />
+            )}
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="The label and the description wrap above the field, which keeps its width."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-xs">
+            <TimePicker
+              label="Latest time the courier may ring the doorbell"
+              description="After this, the parcel is left with a neighbour or taken back to the depot."
+            />
+          </div>
         </DemoWrapper>
       </Section>
 

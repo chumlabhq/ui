@@ -1006,6 +1006,21 @@ const ButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="The label wraps inside the button, which grows taller rather than wider than its container."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-[16rem] space-y-3">
+            <Button className="border border-cl-border bg-cl-bg-elevated text-cl-text">
+              Download the full quarterly report as a PDF (12 MB)
+            </Button>
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Button" />
 

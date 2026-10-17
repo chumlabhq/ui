@@ -24,6 +24,8 @@ import {
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
+import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
+import { Button } from "../../components/Button/index.js";
 
 /**
  * The async examples' data source: a static country list, filtered here and
@@ -434,7 +436,19 @@ const getBlueClasses = (): CascadingDropdownClasses => ({
 
 const getPurpleClasses = getBlueClasses;
 
+/** The menu; each department's teams load when it is opened. */
+const DEPARTMENTS = [
+  { value: "design", label: "Design", hasChildren: true },
+  { value: "engineering", label: "Engineering", hasChildren: true },
+  { value: "sales", label: "Sales", hasChildren: true },
+];
+/** What a good load of a department's teams returns; declared here so its identity holds across renders. */
+const answerTeams = (parent: { value: string; label: string }) =>
+  ["North", "South", "Platform"].map((team) => ({ value: `${parent.value}-${team.toLowerCase()}`, label: `${parent.label} ${team}` }));
+
 const CascadingDropdownDemo = () => {
+  const [categoryMounts, setCategoryMounts] = useState(0);
+  const teams = useFakeLoader(answerTeams, "Couldn't load that department's teams. Point at it again to retry.");
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
@@ -1847,6 +1861,58 @@ const CascadingDropdownDemo = () => {
           <FormDemo onEmpty="Submit with nothing selected: the browser blocks it with its own &quot;fill out this field&quot; message and moves focus to the trigger. It submits the selection as JSON.">
             <CascadingDropdown name="produce" label="Produce" required options={[{ value: "fruit", label: "Fruit", children: [{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }] }, { value: "veg", label: "Veg", children: [{ value: "c", label: "Carrot" }] }]} />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── When loading fails ──────────────────────────────────────────── */}
+      <Section
+        title="When loading fails"
+        description="A loadChildren that rejects reaches onLoadError, which sets error and errorMessage; the field announces the message. Pointing at the department again loads again. Make the next load fail, be slow (loadingContent shows) or return nothing (emptyContent shows); each applies to one load."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-sm space-y-4">
+            <CascadingDropdown
+              label="Team"
+              placeholder="Choose a team"
+              options={DEPARTMENTS}
+              loadChildren={teams.load}
+              onLoadError={teams.onLoadError}
+              error={teams.error !== null}
+              errorMessage={teams.error}
+              loadingContent="Loading teams…"
+              emptyContent="No teams in this department."
+            />
+            <NextLoadControl loader={teams} />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Starts open ─────────────────────────────────────────────────── */}
+      <Section
+        title="Starts open"
+        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Show it open mounts it here, so the docs page does not open a list, and move focus into it, as it loads."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-xs space-y-3">
+            <Button
+              className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+              onClick={() => setCategoryMounts((n) => n + 1)}
+            >
+              Show it open
+            </Button>
+            {categoryMounts > 0 && (
+              <CascadingDropdown key={categoryMounts}
+                label="Category"
+                options={[
+                  { value: "fruit", label: "Fruit", children: [{ value: "apple", label: "Apple" }, { value: "pear", label: "Pear" }] },
+                  { value: "veg", label: "Vegetables", children: [{ value: "carrot", label: "Carrot" }, { value: "leek", label: "Leek" }] },
+                ]}
+                defaultOpen
+              />
+            )}
+          </div>
         </DemoWrapper>
       </Section>
 

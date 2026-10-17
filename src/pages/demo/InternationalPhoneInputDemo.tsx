@@ -1589,6 +1589,22 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="The label and the description wrap; the country button and the number keep their row."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-sm">
+            <InternationalPhoneInput
+              label="Mobile number the courier can call on the day of delivery"
+              description="Used only for this delivery, and deleted once the parcel has been signed for."
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section
         title="At phone width"

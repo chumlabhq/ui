@@ -23,6 +23,7 @@ import {
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
 
 /**
  * The async examples' data source: a static country list, filtered here and
@@ -227,7 +228,17 @@ const getClasses = () => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
+/** What a good load of the toppings returns; declared here so its identity holds across renders. */
+const answerToppings = () => [
+  { value: "basil", label: "Basil" },
+  { value: "mushroom", label: "Mushroom" },
+  { value: "olive", label: "Olive" },
+  { value: "pepper", label: "Pepper" },
+];
+
 const MultiSelectDropdownDemo = () => {
+  const [sauceMounts, setSauceMounts] = useState(0);
+  const toppings = useFakeLoader(answerToppings, "Couldn't load the toppings. Open the list again to retry.");
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
@@ -1571,6 +1582,72 @@ const MultiSelectDropdownDemo = () => {
           <FormDemo onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits one entry per selected value, as a native multiple select does.">
             <MultiSelectDropdown name="fruits" label="Fruits" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── When loading fails ──────────────────────────────────────────── */}
+      <Section
+        title="When loading fails"
+        description="A load that rejects reaches onLoadError, which sets error and errorMessage; the field announces the message. Opening the list again loads again. Make the next load fail, be slow (loadingContent shows) or return nothing (emptyContent shows); each applies to one load."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-sm space-y-4">
+            <MultiSelectDropdown
+              label="Toppings"
+              placeholder="Choose toppings"
+              loadOptions={toppings.load}
+              loadOnOpen
+              onLoadError={toppings.onLoadError}
+              error={toppings.error !== null}
+              errorMessage={toppings.error}
+              loadingContent="Loading toppings…"
+              emptyContent="No toppings to show."
+            />
+            <NextLoadControl loader={toppings} />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Uncontrolled ────────────────────────────────────────────────── */}
+      <Section
+        title="Uncontrolled"
+        description="defaultValue sets the first selection and defaultOpen opens the list on first render; after that each keeps its own state, with none in the page."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex w-full flex-col gap-4 sm:flex-row">
+            <div className="w-full sm:max-w-xs">
+              <MultiSelectDropdown
+                label="Toppings"
+                options={[
+                  { value: "basil", label: "Basil" },
+                  { value: "olive", label: "Olive" },
+                  { value: "pepper", label: "Pepper" },
+                ]}
+                defaultValue={["olive", "basil"]}
+              />
+            </div>
+            <div className="w-full sm:max-w-xs space-y-3">
+              <Button
+                className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+                onClick={() => setSauceMounts((n) => n + 1)}
+              >
+                Show it open
+              </Button>
+              {sauceMounts > 0 && (
+                <MultiSelectDropdown key={sauceMounts}
+                  label="Sauces"
+                  options={[
+                    { value: "pesto", label: "Pesto" },
+                    { value: "tomato", label: "Tomato" },
+                    { value: "white", label: "White" },
+                  ]}
+                  defaultOpen
+                />
+              )}
+            </div>
+          </div>
         </DemoWrapper>
       </Section>
 

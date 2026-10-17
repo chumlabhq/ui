@@ -942,6 +942,26 @@ const ResizablePanelDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="The text wraps to the panel's width as you drag the edge, and scrolls inside the panel once it is taller than it (overflow-y-auto on the content)."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <ResizablePanel
+            defaultValue={260}
+            minValue={160}
+            maxValue={480}
+            classes={{ root: "h-48 rounded-cl-md border border-cl-border bg-cl-bg-elevated" }}
+          >
+            <div className="h-full overflow-y-auto p-4 text-sm text-cl-text-secondary">
+              Release notes for version 4.2: saved filters now sync across devices, exports include hidden columns when you ask for them, and the activity feed groups repeated edits by the same person into a single entry.
+            </div>
+          </ResizablePanel>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section

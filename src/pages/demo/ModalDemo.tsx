@@ -95,6 +95,7 @@ const ZOOM_MAX = 200;
 const ZOOM_STEP = 25;
 
 const ModalDemo = () => {
+  const [noticeMounts, setNoticeMounts] = useState(0);
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
@@ -1521,6 +1522,32 @@ const ModalDemo = () => {
 
 
 
+
+      {/* ─── Uncontrolled ────────────────────────────────────────────────── */}
+      <Section
+        title="Uncontrolled"
+        description="Uncontrolled: mount it open, and it closes itself (its close button, Escape, the overlay). Use this for a dialog that appears once, such as an announcement or a route's dialog; use open/onOpenChange when the page needs to open it again or know its state."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <Button
+            className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+            onClick={() => setNoticeMounts((n) => n + 1)}
+          >
+            Show it
+          </Button>
+          {noticeMounts > 0 && (
+            <Modal
+              key={noticeMounts}
+              defaultOpen
+              title="Scheduled maintenance"
+              description="The dashboard is read-only on Sunday from 02:00 to 04:00 UTC."
+            >
+              <p className="text-sm text-cl-text-secondary">Edits made before then are kept.</p>
+            </Modal>
+          )}
+        </DemoWrapper>
+      </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
 

@@ -604,6 +604,20 @@ const CheckboxDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="The label wraps beside the box, and the box does not keep its size: it narrows from 20 px to 14 px here, and to 11 px on a 360 px screen. A library defect, owed to L24."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-sm space-y-3">
+            <Checkbox label="Email me when someone replies to a discussion I started or mentions me, at most once a day" />
+            <Checkbox label="Share anonymous usage data, which helps us decide what to build next" />
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Checkbox" />
 

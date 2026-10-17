@@ -1549,6 +1549,30 @@ const AccordionDemo = () => {
         </div>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="Each trigger and its content wrap onto as many lines as they need; the chevron keeps its place at the right edge."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-md">
+            <Accordion selectionMode="single" defaultValue="address">
+              <AccordionItem value="address">
+                <AccordionTrigger>Can I change the delivery address after the order has left the warehouse?</AccordionTrigger>
+                <AccordionContent>
+                  Yes, until the courier collects the parcel from the depot. After that, the courier's own redirection service is the only way to change it, and it may charge for the change.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="refund">
+                <AccordionTrigger>How long does a refund take to reach a card issued outside the European Union?</AccordionTrigger>
+                <AccordionContent>Five to ten working days after we receive the return.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Accordion" />
 

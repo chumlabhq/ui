@@ -147,8 +147,14 @@ describe("snippet shape contract", () => {
      * form-field pages and Modal's "Form in a modal" (+16), less Slider's
      * "Form Integration", which the In a form section replaces (-1). The shared
      * FormDemo helper travels into each snippet with its react and library imports.
+     * 2026-10-17, D12cd: 798 -> 827. 29 new sections with code: When loading fails on
+     * the five dropdowns and Table (6, A; the useFakeLoader helper travels into each),
+     * Typed times outside the range on TimePicker (1, B), Uncontrolled on DatePicker,
+     * Drawer, Modal, MultiSelectDropdown, Pagination and Tooltip and Starts open on
+     * CascadingDropdown, Dropdown, SearchableDropdown and TimePicker (10, C), and Long
+     * labels on 12 pages (12, D).
      */
-    const RECORDED = 798;
+    const RECORDED = 827;
     const count = every.length;
     console.log(
       `SNIPPET_COUNT snippets=${count} recorded=${RECORDED} ` +

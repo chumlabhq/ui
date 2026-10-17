@@ -5,7 +5,7 @@
     "na": "{ probe, reason } — probe is one of no-prop:<names>, no-name, no-async, imperative, overlay-content, not-focusable, inline-fixed, re-checked against the props walk",
     "gap": "{ reason, slice } — slice is D12a (forms), D12b (phone width), D12c (failing data), D12d (uncontrolled, long content) or D12e (composition), or a library slice (L24) where the demo waits on a library fix; fails once a section shows it"
   },
-  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario. D12a, 2026-10-17: the 46 D12a cells are shown, by the In a form section on each form field page and Modal's Form in a modal (396 shown, 213 n/a, 51 gap). D12b, 2026-10-17: the 17 phone-width cells are shown, each by an At phone width section whose PhoneFrame loads the component's /preview route at 360 px (413 shown, 213 n/a, 34 gap). CascadingDropdown's stays a gap, owed by L24: its menu is wider than the viewport at that width.",
+  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario. D12a, 2026-10-17: the 46 D12a cells are shown, by the In a form section on each form field page and Modal's Form in a modal (396 shown, 213 n/a, 51 gap). D12b, 2026-10-17: the 17 phone-width cells are shown, each by an At phone width section whose PhoneFrame loads the component's /preview route at 360 px (413 shown, 213 n/a, 34 gap). CascadingDropdown's stays a gap, owed by L24: its menu is wider than the viewport at that width. D12cd, 2026-10-17: 22 cells shown — the 6 failing cells by When loading fails sections on a loader that can reject (useFakeLoader), the 6 uncontrolled by Uncontrolled sections whose component holds its own value, and 10 of 12 long-content cells by Long labels sections (435 shown, 213 n/a, 12 gap). Checkbox's and Switch's long content stay gaps, owed by L24: their control shrinks beside a wrapped label.",
   "components": {
     "Accordion": {
       "default": {
@@ -99,9 +99,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "AccordionDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -501,9 +501,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "ButtonDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -629,9 +629,9 @@
         }
       },
       "failing": {
-        "gap": {
-          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
-          "slice": "D12c"
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "When loading fails"
         }
       },
       "longContent": {
@@ -770,8 +770,8 @@
       },
       "longContent": {
         "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+          "reason": "Beside a label that wraps, the box does not keep its size: 20 x 20 px with a short label, 13.6 px wide in a 384 px column and 11.1 px at a 360 px viewport, because its `control` class has no `shrink-0` (RadioButton's has). The Long labels section shows it; L24 fixes the box.",
+          "slice": "L24"
         }
       },
       "phoneWidth": {
@@ -989,9 +989,9 @@
         }
       },
       "uncontrolled": {
-        "gap": {
-          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
-          "slice": "D12d"
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Uncontrolled"
         }
       },
       "submit": {
@@ -1037,9 +1037,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -1123,9 +1123,9 @@
         }
       },
       "uncontrolled": {
-        "gap": {
-          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
-          "slice": "D12d"
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "Uncontrolled"
         }
       },
       "submit": {
@@ -1299,9 +1299,9 @@
         }
       },
       "failing": {
-        "gap": {
-          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
-          "slice": "D12c"
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "When loading fails"
         }
       },
       "longContent": {
@@ -1573,9 +1573,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "The 240-country list is the component's own; no section shows a consumer's long content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -1793,9 +1793,9 @@
         }
       },
       "uncontrolled": {
-        "gap": {
-          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
-          "slice": "D12d"
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "Uncontrolled"
         }
       },
       "submit": {
@@ -1927,9 +1927,9 @@
         }
       },
       "uncontrolled": {
-        "gap": {
-          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
-          "slice": "D12d"
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "Uncontrolled"
         }
       },
       "submit": {
@@ -1969,9 +1969,9 @@
         }
       },
       "failing": {
-        "gap": {
-          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
-          "slice": "D12c"
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "When loading fails"
         }
       },
       "longContent": {
@@ -2103,9 +2103,9 @@
         }
       },
       "failing": {
-        "gap": {
-          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
-          "slice": "D12c"
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "When loading fails"
         }
       },
       "longContent": {
@@ -2329,9 +2329,9 @@
         }
       },
       "uncontrolled": {
-        "gap": {
-          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
-          "slice": "D12d"
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "Uncontrolled"
         }
       },
       "submit": {
@@ -2511,9 +2511,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "RadioButtonDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -2645,9 +2645,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -2773,9 +2773,9 @@
         }
       },
       "failing": {
-        "gap": {
-          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
-          "slice": "D12c"
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "When loading fails"
         }
       },
       "longContent": {
@@ -3047,9 +3047,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -3182,8 +3182,8 @@
       },
       "longContent": {
         "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+          "reason": "Beside a label that wraps, the track does not keep its size: 36 x 20 px with a short label, 22.4 px wide in a 384 px column and 16.5 px at a 360 px viewport, because its `control` class has no `shrink-0`. The Long labels section shows it; L24 fixes the track.",
+          "slice": "L24"
         }
       },
       "phoneWidth": {
@@ -3315,9 +3315,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -3443,9 +3443,9 @@
         }
       },
       "failing": {
-        "gap": {
-          "reason": "Its loader cannot be made to fail on demand; only a real network failure shows the error.",
-          "slice": "D12c"
+        "shown": {
+          "page": "TableDemo.tsx",
+          "section": "When loading fails"
         }
       },
       "longContent": {
@@ -3717,9 +3717,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "\"Scroll Behavior\" is about lockScroll; no section shows a long time list or long labels.",
-          "slice": "D12d"
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -3851,9 +3851,9 @@
         }
       },
       "longContent": {
-        "gap": {
-          "reason": "No section shows long labels or content.",
-          "slice": "D12d"
+        "shown": {
+          "page": "ToastDemo.tsx",
+          "section": "Long labels"
         }
       },
       "phoneWidth": {
@@ -3937,9 +3937,9 @@
         }
       },
       "uncontrolled": {
-        "gap": {
-          "reason": "No section passes defaultValue, defaultChecked or defaultOpen.",
-          "slice": "D12d"
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "Uncontrolled"
         }
       },
       "submit": {

@@ -62,18 +62,18 @@ interface Expect {
   /** Clicked first, for a component whose popup starts closed. */
   open?: string;
   /** A tall overlay: its last control, and what scrolls to reach it. */
-  reach?: { last: string; scroller: "the overlay" | "the content" };
+  reach?: { last: string; scroller: "the overlay" | "the content"; heading: string };
 }
 
 const EXPECT: Record<string, Expect> = {
   "Breadcrumb/phone": { shows: "nav[aria-label=Breadcrumb]", open: "nav[aria-label=Breadcrumb] button" },
   "DatePicker/phone": { shows: "[role=dialog] [role=grid]" },
   "Drawer/phone": { shows: "[role=dialog]" },
-  "Drawer/long-sheet": { shows: "[role=dialog]", reach: { last: "Place the order", scroller: "the content" } },
+  "Drawer/long-sheet": { shows: "[role=dialog]", reach: { last: "Place the order", scroller: "the content", heading: "Your order" } },
   "Dropdown/phone": { shows: "[role=listbox]" },
   "InternationalPhoneInput/phone": { shows: "input[aria-label=Number]", open: "[aria-label='Select country']" },
   "Modal/phone": { shows: "[role=dialog]" },
-  "Modal/tall": { shows: "[role=dialog]", reach: { last: "Accept the terms", scroller: "the overlay" } },
+  "Modal/tall": { shows: "[role=dialog]", reach: { last: "Accept the terms", scroller: "the overlay", heading: "Terms of service" } },
   "MultiSelectDropdown/phone": { shows: "[role=listbox]" },
   "MultiSelectSearchableDropdown/phone": { shows: "[role=listbox]" },
   "OtpInput/phone": { shows: "[role=group] input" },
@@ -114,7 +114,7 @@ const inView = (frame: Frame, name: string) =>
 test("every phone-width frame loads its preview at 360 px, inside the screen", async ({ page }) => {
   test.setTimeout(300_000);
   const frames = phoneFrames();
-  const counts = { frames: frames.length, loaded: 0, overflow: 0, outside: 0, reachable: 0 };
+  const counts = { frames: frames.length, loaded: 0, overflow: 0, outside: 0, reachable: 0, focusTaken: 0 };
   const problems: string[] = [];
 
   for (const f of frames) {
@@ -139,6 +139,12 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
     await expect(inner.locator("[data-route-404]"), `${f.route}: the frame shows the not-found page`).toHaveCount(0);
     await expect(inner.locator(want.shows).first(), `${f.route}: ${want.shows} is not visible`).toBeVisible({ timeout: 10_000 });
     counts.loaded += 1;
+    // Loading took no focus from the docs page: a preview opened by
+    // defaultOpen focuses its list, and the frame holds that until used.
+    if ((await page.evaluate(() => document.activeElement?.tagName)) === "IFRAME") {
+      counts.focusTaken += 1;
+      problems.push(`${f.route}: loading the frame moved the docs page's focus into it`);
+    }
 
     const width = await inner.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
     if (width.client !== WIDTH) problems.push(`${f.route}: the document is ${width.client} px wide, not ${WIDTH}`);
@@ -163,7 +169,7 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
 
     let reach = "n/a";
     if (want.reach) {
-      const { last, scroller } = want.reach;
+      const { last, scroller, heading } = want.reach;
       // What scrolls: the nearest ancestor of the last control that overflows.
       const scrolls = await inner.getByRole("button", { name: last, exact: true }).evaluate((el) => {
         const dialog = el.closest("[role=dialog]")!;
@@ -178,7 +184,12 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
       });
       const atFirst = await inView(inner, last);
       const button = inner.getByRole("button", { name: last, exact: true });
-      // By Tab, from the dialog's first control.
+      // By Tab, from the dialog's first control. A reader's click in the frame
+      // comes first: until then the preview takes no focus (PreviewRoute).
+      // The frame just below the site's fixed header, which otherwise covers
+      // its top edge, where the dialog's heading is.
+      await figure.evaluate((el) => window.scrollBy(0, el.getBoundingClientRect().top - 80));
+      await inner.locator("[role=dialog]").getByText(heading, { exact: true }).click();
       await inner.locator("[role=dialog] button").first().focus();
       let byTab = false;
       for (let i = 0; i < 12 && !byTab; i += 1) {
@@ -218,7 +229,7 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
   const overlays = Object.values(EXPECT).filter((e) => e.reach).length;
   console.log(
     `DEMO_PHONE frames ${counts.frames} (floor ${FLOOR}), loaded ${counts.loaded}, overflow ${counts.overflow}, ` +
-      `popups outside ${counts.outside}, overlays reachable ${counts.reachable}`,
+      `popups outside ${counts.outside}, overlays reachable ${counts.reachable}, focus taken ${counts.focusTaken}`,
   );
   for (const p of problems) console.log(`DEMO_PHONE_PROBLEM ${p}`);
   expect(counts.frames, "fewer frames than the floor: the walk lost pages").toBeGreaterThanOrEqual(FLOOR);

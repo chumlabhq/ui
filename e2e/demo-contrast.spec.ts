@@ -166,7 +166,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // shape table of the event payload it passed (26 cells, measured HEAD vs now).
   // D11, 2026-10-17, 921 -> 915 (HEAD 932 -> now 915): Class overrides (96) and the old Anatomy (3) became Anatomy (82).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "accordion": 915,
+  // D12cd, 2026-10-17, 915 -> 921 (HEAD 915 -> now 921): D Long labels (6).
+  "accordion": 921,
   // D11, 2026-10-17, 1084 -> 1060 (HEAD 1084 -> now 1060): Class overrides (59) and the old Anatomy (3) became Anatomy (38).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   "avatar": 1060,
@@ -180,15 +181,18 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "breadcrumb": 504,
   // D11, 2026-10-17, 445 -> 439 (HEAD 447 -> now 439): Class overrides (23) and the old Anatomy (3) became Anatomy (18).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "button": 439,
+  // D12cd, 2026-10-17, 439 -> 443 (HEAD 439 -> now 443): D Long labels (4).
+  "button": 443,
   // D11, 2026-10-17, 732 -> 714 (HEAD 741 -> now 714): Class overrides (117) became Anatomy (90).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 714 -> 723 (HEAD 714 -> now 723): the new In a form (9).
-  "cascading-dropdown": 723,
+  // D12cd, 2026-10-17, 723 -> 737 (HEAD 723 -> now 737): A When loading fails (10), C Starts open (4).
+  "cascading-dropdown": 737,
   // D11, 2026-10-17, 411 -> 404 (HEAD 412 -> now 404): Class overrides (35) became Anatomy (27).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 404 -> 412 (HEAD 404 -> now 412): the new In a form (8).
-  "checkbox": 412,
+  // D12cd, 2026-10-17, 412 -> 417 (HEAD 412 -> now 417): D Long labels (5).
+  "checkbox": 417,
   // X4, 454 -> 455, 2026-10-16: lazy images are now loaded before measuring.
   // Chromium already showed the "invalid code" fallback ("??"), which Firefox
   // and WebKit held back until scrolled to (453); all three now also show the
@@ -201,10 +205,12 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12a, 2026-10-17, 952 -> 965 (HEAD 952 -> now 965): the new In a form (13).
   // D12b, 2026-10-17, 965 -> 968 (HEAD 965 -> now 968): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "date-picker": 968,
+  // D12cd, 2026-10-17, 968 -> 980 (HEAD 968 -> now 980): C Uncontrolled (6), D Long labels (6).
+  "date-picker": 980,
   // D12b, 2026-10-17, 418 -> 431 (HEAD 425 -> now 431): the new At phone width and Long sheet (3 each): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "drawer": 431,
+  // D12cd, 2026-10-17, 431 -> 435 (HEAD 431 -> now 435): C Uncontrolled (4).
+  "drawer": 435,
   // A2c, 746 -> 744: the API Reference lost the CheckIcon row (4 cells), folded
   // into selectedIcon, and the rewritten icon descriptions gained one code span
   // (747 -> 744 measured HEAD vs now).
@@ -213,7 +219,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12a, 2026-10-17, 727 -> 736 (HEAD 727 -> now 736): the new In a form (9).
   // D12b, 2026-10-17, 736 -> 739 (HEAD 736 -> now 739): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "dropdown": 739,
+  // D12cd, 2026-10-17, 739 -> 753 (HEAD 739 -> now 753): A When loading fails (10), C Starts open (4).
+  "dropdown": 753,
   // D11, 2026-10-17, 530 -> 520 (HEAD 530 -> now 520): Class overrides (43) became Anatomy (33).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 520 -> 528 (HEAD 520 -> now 528): the new In a form (8).
@@ -223,7 +230,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12a, 2026-10-17, 940 -> 952 (HEAD 940 -> now 952): the new In a form (12).
   // D12b, 2026-10-17, 952 -> 955 (HEAD 952 -> now 955): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "international-phone-input": 955,
+  // D12cd, 2026-10-17, 955 -> 964 (HEAD 955 -> now 964): D Long labels (8, and 1 the new field portals).
+  "international-phone-input": 964,
   // L11, 426 -> 425: the In Context "Processing" button is now disabled while
   // it loads, and an inactive control's label is exempt from 1.4.3.
   // D11, 2026-10-17, 425 -> 399 (HEAD 425 -> now 399): Class overrides (62) became Anatomy (36).
@@ -234,20 +242,23 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12a, 2026-10-17, 491 -> 501 (HEAD 497 -> now 501): the new Form in a modal (4).
   // D12b, 2026-10-17, 501 -> 507 (HEAD 501 -> now 507): the new At phone width and Taller than the screen (3 each): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "modal": 507,
+  // D12cd, 2026-10-17, 507 -> 511 (HEAD 507 -> now 511): C Uncontrolled (4).
+  "modal": 511,
   // D11, 2026-10-17, 684 -> 664 (HEAD 687 -> now 664): Class overrides (101) became Anatomy (78).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 664 -> 673 (HEAD 664 -> now 673): the new In a form (9).
   // D12b, 2026-10-17, 673 -> 676 (HEAD 673 -> now 676): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "multi-select-dropdown": 676,
+  // D12cd, 2026-10-17, 676 -> 695 (HEAD 676 -> now 695): A When loading fails (10), C Uncontrolled (9).
+  "multi-select-dropdown": 695,
   // D11, 2026-10-17, 707 -> 685 (HEAD 709 -> now 685): Class overrides (102) became Anatomy (78).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 685 -> 694 (HEAD 685 -> now 694): the new In a form (9); the onFocus/onBlur section
   // that was titled Form Integration is renamed Focus and blur events, 5 rows before and after.
   // D12b, 2026-10-17, 694 -> 697 (HEAD 694 -> now 697): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "multi-select-searchable-dropdown": 697,
+  // D12cd, 2026-10-17, 697 -> 707 (HEAD 697 -> now 707): A When loading fails (10).
+  "multi-select-searchable-dropdown": 707,
   // A2f, 433 -> 429: the API Reference lost the group-name prop's row (4 cells),
   // folded into aria-label (measured A2e vs now; no other change on the page).
   // D11, 2026-10-17, 429 -> 420 (HEAD 429 -> now 420): Class overrides (40) became Anatomy (31).
@@ -261,22 +272,26 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12b, 2026-10-17, 626 -> 629 (HEAD 626 -> now 629): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "pagination": 629,
+  // D12cd, 2026-10-17, 629 -> 639 (HEAD 629 -> now 639): C Uncontrolled (10).
+  "pagination": 639,
   // D11, 2026-10-17, 476 -> 465 (HEAD 476 -> now 465): Class overrides (48) and the old Anatomy (3) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 465 -> 475 (HEAD 465 -> now 475): the new In a form (10).
-  "radio-button": 475,
+  // D12cd, 2026-10-17, 475 -> 481 (HEAD 475 -> now 481): D Long labels (6).
+  "radio-button": 481,
   // D11, 2026-10-17, 359 -> 356 (HEAD 359 -> now 356): Class overrides (15) became Anatomy (12).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12b, 2026-10-17, 356 -> 359 (HEAD 356 -> now 359): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "resizable-panel": 359,
+  // D12cd, 2026-10-17, 359 -> 363 (HEAD 359 -> now 363): D Long labels (4).
+  "resizable-panel": 363,
   // D11, 2026-10-17, 755 -> 736 (HEAD 756 -> now 736): Class overrides (83) became Anatomy (63).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 736 -> 745 (HEAD 736 -> now 745): the new In a form (9).
   // D12b, 2026-10-17, 745 -> 748 (HEAD 745 -> now 748): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "searchable-dropdown": 748,
+  // D12cd, 2026-10-17, 748 -> 762 (HEAD 748 -> now 762): A When loading fails (10), C Starts open (4).
+  "searchable-dropdown": 762,
   // D11, 2026-10-17, 545 -> 534 (HEAD 546 -> now 534): Class overrides (52) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 534 -> 536 (HEAD 534 -> now 536): Form Integration (6) became In a form (8).
@@ -285,22 +300,26 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12b, 2026-10-17, 673 -> 676 (HEAD 673 -> now 676): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "stepper": 676,
+  // D12cd, 2026-10-17, 676 -> 687 (HEAD 676 -> now 687): D Long labels (11).
+  "stepper": 687,
   // D11, 2026-10-17, 423 -> 413 (HEAD 423 -> now 413): Class overrides (44) became Anatomy (34).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 413 -> 421 (HEAD 413 -> now 421): the new In a form (8).
-  "switch": 421,
+  // D12cd, 2026-10-17, 421 -> 425 (HEAD 421 -> now 425): D Long labels (4).
+  "switch": 425,
   // D11, 2026-10-17, 677 -> 632 (HEAD 678 -> now 632): Class overrides (76) became Anatomy (30).
   // The dropped Type and Default columns carried no information (string, — on every slot); TabPanel's duplicate ResolvedClasses listing removed.
   // D12b, 2026-10-17, 632 -> 635 (HEAD 632 -> now 635): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "tab-panel": 635,
+  // D12cd, 2026-10-17, 635 -> 643 (HEAD 635 -> now 643): D Long labels (8).
+  "tab-panel": 643,
   // X4, 5342 -> 5543, 2026-10-16: the Server-Side example's rows are the 24
   // fixture products (10 a page) and its category filter, waited for, where
   // 5342 was the cold read with dummyjson.com's rows not yet landed.
   // D11, 2026-10-17, 5543 -> 5499 (HEAD 5543 -> now 5499): Class overrides (199) became Anatomy (155).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "table": 5499,
+  // D12cd, 2026-10-17, 5499 -> 5520 (HEAD 5499 -> now 5520): A When loading fails (21), measured once its own load lands (paintPending).
+  "table": 5520,
   // D11, 2026-10-17, 504 -> 496 (HEAD 504 -> now 496): Class overrides (36) became Anatomy (28).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 496 -> 504 (HEAD 496 -> now 504): the new In a form (8).
@@ -310,18 +329,21 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12a, 2026-10-17, 862 -> 871 (HEAD 862 -> now 871): the new In a form (9).
   // D12b, 2026-10-17, 871 -> 874 (HEAD 871 -> now 874): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "time-picker": 874,
+  // D12cd, 2026-10-17, 874 -> 891 (HEAD 874 -> now 891): B Typed times outside the range (6, and 1 it portals), C Starts open (4), D Long labels (5, and 1 it portals).
+  "time-picker": 891,
   // A2a, 564 -> 562: the API Reference lost the onRemove row (4 cells) and the
   // rewritten onDismiss(id) description gained two `id` code spans.
   // D11, 2026-10-17, 562 -> 560 (HEAD 563 -> now 560): Class overrides (43) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12b, 2026-10-17, 560 -> 563 (HEAD 560 -> now 563): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "toast": 563,
+  // D12cd, 2026-10-17, 563 -> 567 (HEAD 563 -> now 567): D Long labels (4).
+  "toast": 567,
   // 426 -> 423, 2026-10-08: the three gradient-with-arrow examples were removed (an arrow cannot take a gradient).
   // D12b, 2026-10-17, 423 -> 432 (HEAD 429 -> now 432): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
-  "tooltip": 432,
+  // D12cd, 2026-10-17, 432 -> 437 (HEAD 432 -> now 437): C Uncontrolled (4, and its open tooltip's 1).
+  "tooltip": 437,
   // D12b, 2026-10-17: the pages the phone-width frames load, one per preview
   // example, measured on their own. Each read the same count in both themes,
   // with no findings, in a Chromium scan with the spec's measurement.

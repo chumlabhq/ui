@@ -825,6 +825,28 @@ const StepperDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="Each label stays on one line, and the steps scroll sideways inside their row (the list's overflow-x-auto); the page itself does not."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-lg">
+            <Stepper
+              steps={[
+                { id: "details", label: "Your contact details", description: "Name, email and phone number" },
+                { id: "address", label: "Delivery address and time slot", description: "Where and when it should arrive" },
+                { id: "payment", label: "Payment and billing address", description: "Card, invoice or bank transfer" },
+                { id: "review", label: "Review everything and place the order", description: "Nothing is charged until this step" },
+              ]}
+              value={1}
+              showDescriptions
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section

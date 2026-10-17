@@ -1092,6 +1092,27 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="Press the button: the message and the description wrap inside the toast, which stays within the screen's width."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <Button
+            className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+            onClick={() =>
+              toast.info("Your export of 12,480 rows is ready, and the download link is valid for the next seven days", {
+                description: "We also emailed the link to the address on your account, in case you close this page before it finishes.",
+                duration: Infinity,
+              })
+            }
+          >
+            Show a long toast
+          </Button>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section
         title="At phone width"

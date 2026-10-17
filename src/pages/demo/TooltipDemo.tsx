@@ -704,6 +704,21 @@ const TooltipDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Uncontrolled ────────────────────────────────────────────────── */}
+      <Section
+        title="Uncontrolled"
+        description="defaultOpen shows the tooltip on first render; after that it opens on hover and focus and closes on its own, with no state in the page."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="pt-10">
+            <Tooltip content="Saved to your library" defaultOpen>
+              <Button className="border border-cl-border bg-cl-bg-elevated text-cl-text">Save</Button>
+            </Tooltip>
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section
         title="At phone width"

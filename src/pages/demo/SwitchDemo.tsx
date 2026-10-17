@@ -643,6 +643,19 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Long labels ─────────────────────────────────────────────────── */}
+      <Section
+        title="Long labels"
+        description="The label wraps beside the track, and the track does not keep its size: it narrows from 36 px to 22 px here, and to 17 px on a 360 px screen. A library defect, owed to L24."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full max-w-sm space-y-3">
+            <Switch label="Pause all notifications outside working hours, including mentions and direct messages" />
+          </div>
+        </DemoWrapper>
+      </Section>
+
       <ComponentDocs name="Switch" />
 
       {/* ── Accessibility ──────────────────────────────────────────────── */}

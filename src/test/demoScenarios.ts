@@ -148,6 +148,28 @@ export function formHelpers(): Map<string, string> {
   return FORM_HELPERS;
 }
 
+/**
+ * The demo helpers whose loads can be made to reject, by name: an exported
+ * function in src/pages/demo/components whose own source rejects or throws.
+ * `useFakeLoader` is one; a section whose component is handed one of its loads
+ * can fail on demand, though the page's AST shows only the call.
+ */
+let LOADER_HELPERS: string[] | null = null;
+export function loaderHelpers(): string[] {
+  if (LOADER_HELPERS) return LOADER_HELPERS;
+  LOADER_HELPERS = [];
+  const dir = join(ROOT, "src/pages/demo/components");
+  for (const file of readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+    const sf = ts.createSourceFile(file, readFileSync(join(dir, file), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    for (const st of sf.statements) {
+      if (!ts.isFunctionDeclaration(st) || !st.name || !st.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
+      if (REJECTS.test(st.getText(sf))) LOADER_HELPERS.push(st.name.text);
+    }
+  }
+  return LOADER_HELPERS;
+}
+const REJECTS = /Promise\.reject|\breject\(|throw new Error/;
+
 function elementsIn(node: ts.Node, sf: ts.SourceFile): { elements: Element[]; forms: ts.JsxElement[] } {
   const elements: Element[] = [];
   const forms: ts.JsxElement[] = [];
@@ -320,6 +342,33 @@ function ownReach(s: Section, c: Component): ts.Node[] {
   }
   return collect;
 }
+/**
+ * Text of at least LONG_TEXT characters in the component or what it is
+ * handed: a label, an option, a message. Thirty is long for the shortest
+ * kind, a tab or a step ("Security and signed-in devices" is 30).
+ */
+const LONG_TEXT = 30;
+/** Props and keys whose string a reader sees; a className is not text. */
+const TEXT_PROPS = /^(label|description|content|title|message|errorMessage|successMessage|placeholder|emptyContent|loadingContent|children)$/;
+const readerText = (n: ts.Node, sf: ts.SourceFile): string => {
+  if (ts.isJsxText(n)) return n.getText(sf);
+  if (!ts.isStringLiteral(n) && !ts.isNoSubstitutionTemplateLiteral(n)) return "";
+  const at = ts.isJsxExpression(n.parent) ? n.parent.parent : n.parent;
+  if (ts.isJsxAttribute(at) && TEXT_PROPS.test(at.name.getText(sf))) return n.text;
+  // An item's text: a key of an object in a list (options, steps, tabs) or
+  // handed to a call (a toast's options). Not a class map's slot, whose keys
+  // (`label`, `title`) are the same words.
+  if (ts.isPropertyAssignment(at) && TEXT_PROPS.test(at.name.getText(sf))) {
+    const holder = at.parent.parent;
+    if (ts.isArrayLiteralExpression(holder) || ts.isCallExpression(holder)) return n.text;
+  }
+  // A toast's message, its first argument.
+  if (ts.isCallExpression(at) && at.arguments[0] === n) return n.text;
+  return "";
+};
+const hasLongText = (s: Section, c: Component) =>
+  ownReach(s, c).some((n) => readerText(n, s.source).replace(/\s+/g, " ").trim().length >= LONG_TEXT);
+
 /** Elements in the section and in what it reaches. */
 const reachedElements = (s: Section) => [s.elements, ...reach(s).slice(1).map((n) => elementsIn(n, s.source).elements)].flat();
 const hasAttr = (els: Element[], re: RegExp) => els.some((e) => [...e.attrs.keys()].some((k) => re.test(k)));
@@ -398,8 +447,12 @@ export const PREDICATES: Record<Scenario, (s: Section, c: Component) => boolean>
   success: (s, c) =>
     hasAttr(own(s, c), /^(success|successMessage)$/) || (own(s, c).length > 0 && objectKey(s, /^status$/, /"(success|completed)"/)),
   controlled: (s, c) => hasAttr(own(s, c), /^(value|checked|open|expanded|sorting|pagination|selectedRowIds|activeStep)$/),
+  // The component holds the shown value itself: a `default*` prop on an
+  // element that takes none of the props that would hand it the page's state
+  // instead (`value`, `open`, `checked` beside their on*Change).
   uncontrolled: (s, c) => {
-    if (hasAttr(own(s, c), /^default(Value|Checked|Open)$/)) return true;
+    const held = controlledProps(c);
+    if (own(s, c).some((e) => [...e.attrs.keys()].some((k) => /^default(Value|Checked|Open)$/.test(k)) && held.every((p) => !e.attrs.has(p)))) return true;
     // A component with no `default*` prop is uncontrolled when its controlled
     // props are left off: Table sorts and pages on its own state.
     if ([...c.props].some((p) => /^default[A-Z]/.test(p))) return false;
@@ -431,14 +484,19 @@ export const PREDICATES: Record<Scenario, (s: Section, c: Component) => boolean>
   // that fails only when the network does is not one.
   failing: (s, c) =>
     own(s, c).length > 0 &&
-    (/Promise\.reject|\breject\(|throw new Error/.test(reachText(s)) ||
+    (REJECTS.test(reachText(s)) ||
+      loaderHelpers().some((h) => new RegExp(`\\b${h}\\(`).test(reachText(s))) ||
       own(s, c).some((e) => /invalid|"xx"|"zz"/.test(`${e.attrs.get("src") ?? ""}${e.attrs.get("code") ?? ""}`) &&
         (e.attrs.has("fallback") || e.attrs.has("onError") || e.attrs.has("name")))),
   // "Scroll" is not in the title rule: both "Scroll Behavior" sections are
   // about lockScroll, the page behind an open popup.
+  // A title that says so is not enough on its own: the long text (or the large
+  // count) has to be there, in the component or handed to it.
   longContent: (s, c) =>
     own(s, c).length > 0 &&
-    (/\b(long|overflow\w*|truncat\w*|many|text wrap\w*)\b/i.test(s.title) ||
+    ((/\b(long|overflow\w*|truncat\w*|many|text wrap\w*)\b/i.test(s.title) &&
+      // Long text, or a count of ten or more where the long thing is a count.
+      (hasLongText(s, c) || attrValue(own(s, c), /^(totalPages|count|max)$/, /^\{\s*[1-9]\d+\s*\}$/))) ||
       hasAttr(own(s, c), /^(maxVisible|truncate|maxHeight|maxLines|autoResize|maxRows)$/) ||
       // Ten or more of something, inside the component or handed to it: its
       // own generated rows, or an options list. Another component's rows in
@@ -509,11 +567,43 @@ export function hasTrigger(s: Section, c: Component): boolean {
   return found;
 }
 
+/**
+ * An overlay the page mounts on demand, open by `defaultOpen`: inside
+ * `{flag && <Modal defaultOpen …>}` (or a ternary), where `flag` is page state
+ * whose setter a handler in the same section calls. The page holds whether it
+ * is mounted, never whether it is open.
+ */
+export function mountedOnDemand(s: Section, c: Component): boolean {
+  return own(s, c).some((e) => {
+    if (!e.attrs.has("defaultOpen")) return false;
+    for (let n: ts.Node | undefined = e.node.parent; n && n !== s.node; n = n.parent) {
+      if (!ts.isJsxExpression(n) || !n.expression) continue;
+      const x = n.expression;
+      const cond = ts.isBinaryExpression(x) ? x.left : ts.isConditionalExpression(x) ? x.condition : null;
+      if (!cond) continue;
+      const text = cond.getText(s.source);
+      const setters = [...s.setters].filter(([, state]) => new RegExp(`\\b${state}\\b`).test(text)).map(([setter]) => setter);
+      let called = false;
+      const visit = (m: ts.Node) => {
+        if (called) return;
+        if (ts.isJsxAttribute(m) && /^on[A-Z]/.test(m.name.getText(s.source)) && m.initializer) {
+          const body = m.initializer.getText(s.source);
+          if (setters.some((set) => new RegExp(`\\b${set}\\(`).test(body))) called = true;
+        }
+        ts.forEachChild(m, visit);
+      };
+      visit(s.node);
+      if (called) return true;
+    }
+    return false;
+  });
+}
+
 export function holds(scenario: Scenario, s: Section, c: Component): boolean {
   if (!PREDICATES[scenario](s, c)) return false;
   // A framed preview opens its overlay itself, and has a button behind it to
   // open it again; demo-phone.spec opens and reaches it in the frame.
-  if (isOverlay(c) && !s.block && scenario !== "darkMode" && !framed(s, c) && !hasTrigger(s, c)) return false;
+  if (isOverlay(c) && !s.block && scenario !== "darkMode" && !framed(s, c) && !hasTrigger(s, c) && !mountedOnDemand(s, c)) return false;
   return true;
 }
 
@@ -656,7 +746,9 @@ export function checkMatrix(matrix: Matrix, ctx: Context) {
         // "Text Wrapping" — does not show this component's long content.
         const scope = scenario === "composition" ? ctx.index : ctx.index.filter((s) => s.page === `${c.dir}Demo.tsx`);
         const passing = scope.find((s) => holds(scenario, s, c));
-        if (passing) errors.push(`${id}: recorded as a gap, and "${passing.title}" on ${passing.page} shows it — record it as shown`);
+        // A gap a library slice owes may have a section showing the defect:
+        // the page shows what happens today, and says so, until the fix lands.
+        if (passing && !(typeof slice === "string" && /^L\d+$/.test(slice))) errors.push(`${id}: recorded as a gap, and "${passing.title}" on ${passing.page} shows it — record it as shown`);
       }
     }
   }

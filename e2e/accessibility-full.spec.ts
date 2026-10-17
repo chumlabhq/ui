@@ -4,6 +4,7 @@ import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { markPortalRoots, PORTAL_MARK } from "./_portals.js";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { previewRoutes } from "../src/test/previewExamples";
 
 /**
  * Which fixture may carry which rule, recorded with a reason and ratcheting
@@ -173,6 +174,9 @@ const headerTexts = (page: Page) =>
  * eight fixtures and Modal's own `title` renders the rest.
  */
 const HEADERS_FLOOR = 24;
+
+/** The /preview pages the phone-width frames load: 19 at D12b. */
+const PREVIEW_FLOOR = 19;
 
 interface Finding {
   component: string;
@@ -520,6 +524,69 @@ test.describe("accessibility (full sweep)", () => {
     console.log(`HEADERS_PLANT before ${JSON.stringify(before)} after +${after.length - before.length}, empty ${after.filter((h) => !h.text).length}`);
     const emptyCount = (list: { text: string }[]) => list.filter((h) => !h.text).length;
     expect(emptyCount(after) - emptyCount(before), "the planted title-only header was not seen as empty").toBe(1);
+  });
+
+  /**
+   * The /preview pages the docs pages' phone-width frames load, each audited
+   * as a page of its own: the example in `main[data-preview]` and whatever it
+   * portals, by the same rules as the fixtures.
+   *
+   * They are the site's own pages, in every build, and a reader sees them in
+   * the frames; the fixture sweep above never loads them. Nothing is waived:
+   * a finding here fails, and none is recorded.
+   */
+  test("audits every /preview page", async ({ page }) => {
+    const routes = previewRoutes();
+    const findings: Array<{ route: string; id: string; impact: string; target: string; html: string }> = [];
+    let audited = 0;
+    let portalled = 0;
+    for (const route of routes) {
+      await page.goto(route, { waitUntil: "domcontentloaded" });
+      const main = page.locator(`main[data-preview="${route.replace(/^\/preview\//, "")}"]`);
+      await main.waitFor({ state: "attached", timeout: 15000 });
+      await expect(page.locator("[data-route-404]"), `${route} answered the not-found page`).toHaveCount(0);
+      // The example is up once main holds more than its hidden heading.
+      await page.waitForFunction((sel) => (document.querySelector(sel)?.children.length ?? 0) > 1, `main[data-preview="${route.replace(/^\/preview\//, "")}"]`, { timeout: 15000 });
+      // Settled, as for the fixtures: axe reads painted colours.
+      await page.evaluate(
+        (cap) =>
+          new Promise<void>((done) => {
+            const finite = document
+              .getAnimations()
+              .filter((a) => Number.isFinite(a.effect?.getComputedTiming().endTime ?? Infinity))
+              .map((a) => a.finished.catch(() => undefined));
+            const timer = setTimeout(done, cap);
+            void Promise.all(finite).then(() => {
+              clearTimeout(timer);
+              done();
+            });
+          }),
+        800,
+      );
+      await injectAxe(page);
+      const portals = await markPortalRoots(page);
+      portalled += portals > 0 ? 1 : 0;
+      const include = [["main[data-preview]"], ...(portals > 0 ? [[`[${PORTAL_MARK}]`]] : [])];
+      const violations = await getViolations(page, { include }, AXE_OPTIONS);
+      audited += 1;
+      for (const v of violations) {
+        if (!FATAL.has(v.impact ?? "")) continue;
+        for (const node of v.nodes) {
+          findings.push({
+            route,
+            id: v.id,
+            impact: v.impact ?? "",
+            target: String(node.target[0] ?? "").slice(0, 120),
+            html: node.html.replace(/\s+/g, " ").slice(0, 160),
+          });
+        }
+      }
+    }
+    console.log(`AXE_PREVIEW pages=${audited} (floor ${PREVIEW_FLOOR}) portalled=${portalled} violations=${findings.length}`);
+    for (const f of findings) console.log(`AXE_PREVIEW_FINDING ${f.route} ${f.id} (${f.impact}) ${f.target} :: ${f.html}`);
+    expect(audited, "fewer /preview pages audited than the floor").toBeGreaterThanOrEqual(PREVIEW_FLOOR);
+    expect(audited).toBe(routes.length);
+    expect(findings.map((f) => `${f.route} ${f.id} ${f.target}`), "an axe finding on a /preview page; none is waived").toEqual([]);
   });
 
   test("the audit reaches inside a portal", async ({ page }) => {

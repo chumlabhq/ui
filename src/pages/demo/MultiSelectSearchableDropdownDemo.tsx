@@ -23,6 +23,7 @@ import {
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
 
 /**
  * The async examples' data source: a static country list, filtered here and
@@ -83,7 +84,13 @@ const getClasses = () => ({
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
+/** What a good search of the skills returns; declared here so its identity holds across renders. */
+const SKILL_LIST = ["CSS", "Figma", "GraphQL", "Go", "Node.js", "Python", "React", "Rust", "SQL", "TypeScript"];
+const answerSkills = (query: string) =>
+  SKILL_LIST.filter((skill) => skill.toLowerCase().includes(query.toLowerCase())).map((skill) => ({ value: skill.toLowerCase(), label: skill }));
+
 const MultiSelectSearchableDropdownDemo = () => {
+  const skills = useFakeLoader(answerSkills, "Couldn't search the skills. Type again to retry.");
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
@@ -1379,6 +1386,29 @@ const MultiSelectSearchableDropdownDemo = () => {
           <FormDemo onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits one entry per selected value, as a native multiple select does.">
             <MultiSelectSearchableDropdown name="fruits" label="Fruits" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── When loading fails ──────────────────────────────────────────── */}
+      <Section
+        title="When loading fails"
+        description="A load that rejects reaches onLoadError, which sets error and errorMessage; the field announces the message. Typing again searches again. Make the next load fail, be slow (loadingContent shows) or return nothing (emptyContent shows); each applies to one load."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full sm:max-w-sm space-y-4">
+            <MultiSelectSearchableDropdown
+              label="Skills"
+              placeholder="Search skills"
+              searchOptions={skills.load}
+              onLoadError={skills.onLoadError}
+              error={skills.error !== null}
+              errorMessage={skills.error}
+              loadingContent="Searching…"
+              emptyContent="No skills match."
+            />
+            <NextLoadControl loader={skills} />
+          </div>
         </DemoWrapper>
       </Section>
 

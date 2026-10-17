@@ -16,6 +16,7 @@ import type { SortingState } from "../../components/Table/index.js";
 import { Button } from "../../components/Button/index.js";
 import { Input } from "../../components/Input/index.js";
 import { useTheme } from "./ThemeContext.js";
+import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
 import {
   DocsHero,
   Section,
@@ -1133,9 +1134,53 @@ function ServerApiDemo({
   );
 }
 
+interface Order {
+  id: string;
+  customer: string;
+  total: string;
+}
+/** What a good load of the orders returns; declared here so its identity holds across renders. */
+const answerOrders = (): Order[] => [
+  { id: "1042", customer: "Ada Lovelace", total: "€120.00" },
+  { id: "1043", customer: "Grace Hopper", total: "€86.50" },
+  { id: "1044", customer: "Katherine Johnson", total: "€240.10" },
+];
+const orderColumns: ColumnDef<Order>[] = [
+  { accessorKey: "id", header: "Order" },
+  { accessorKey: "customer", header: "Customer" },
+  { accessorKey: "total", header: "Total" },
+];
+
 const TableDemo = () => {
   const [emptyAction, setEmptyAction] = useState<string | null>(null);
   const { isDarkMode: dark } = useTheme();
+  const orders = useFakeLoader(answerOrders, "Couldn't load the orders.");
+  const [orderRows, setOrderRows] = useState<Order[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [orderAttempt, setOrderAttempt] = useState(0);
+  useEffect(() => {
+    let live = true;
+    orders
+      .load()
+      .then((rows) => {
+        if (live) setOrderRows(rows);
+      })
+      .catch((error: unknown) => {
+        if (!live) return;
+        setOrderRows([]);
+        orders.onLoadError(error);
+      })
+      .finally(() => {
+        if (live) setOrdersLoading(false);
+      });
+    return () => {
+      live = false;
+    };
+  }, [orders.load, orders.onLoadError, orderAttempt]);
+  const reloadOrders = () => {
+    setOrdersLoading(true);
+    setOrderAttempt((n) => n + 1);
+  };
   const s = getTableClasses();
   const pClasses = getPaginationClasses();
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
@@ -3749,7 +3794,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              expandColumnPosition="right"
+              expandColumnPosition="end"
             </code>
             . Down arrow that rotates 180 degrees on expand. Expanded row shows
             an avatar card with a right border accent.
@@ -5325,7 +5370,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            dragColumnPosition="right"
+            dragColumnPosition="end"
           </code>
           . Useful when the left side is reserved for selection checkboxes or
           row numbers.
@@ -7723,6 +7768,43 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           </code>{" "}
           object.
         </p>
+      </Section>
+
+      {/* ─── When loading fails ──────────────────────────────────────────── */}
+      <Section
+        title="When loading fails"
+        description="Server-side data the page fetches itself: while it loads, loading shows the shimmer rows; when the fetch rejects, emptyContent carries the error, announced, with a Try again button. Make the next load fail, be slow or return nothing, then reload."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-full space-y-4" data-demo-loading={ordersLoading || undefined}>
+            <Table
+              columns={orderColumns}
+              data={orderRows}
+              loading={ordersLoading}
+              shimmerCount={3}
+              getRowId={(row) => row.id}
+              emptyContent={
+                orders.error ? (
+                  <div role="alert" className="space-y-3 py-4 text-center">
+                    <p className="text-sm text-cl-text">{orders.error}</p>
+                    <Button onClick={reloadOrders} className="border border-cl-border bg-cl-bg-elevated text-cl-text">
+                      Try again
+                    </Button>
+                  </div>
+                ) : (
+                  "No orders yet."
+                )
+              }
+            />
+            <div className="flex flex-wrap items-start gap-4">
+              <NextLoadControl loader={orders} />
+              <Button onClick={reloadOrders} className="border border-cl-border bg-cl-bg-elevated text-cl-text">
+                Reload
+              </Button>
+            </div>
+          </div>
+        </DemoWrapper>
       </Section>
 
       <ComponentDocs name="Table" />

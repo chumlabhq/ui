@@ -999,6 +999,17 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Uncontrolled ────────────────────────────────────────────────── */}
+      <Section
+        title="Uncontrolled"
+        description="defaultValue sets the first page; after that the pagination keeps its own, with no state in the page."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <Pagination defaultValue={3} totalPages={12} />
+        </DemoWrapper>
+      </Section>
+
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section
         title="At phone width"
