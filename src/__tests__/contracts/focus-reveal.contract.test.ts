@@ -56,7 +56,7 @@ const OUT_OF_ANY_SCROLLER: Record<string, Exception> = {
  * the decision is visible rather than implicit.
  */
 const RETURNS_TO_ACTIVATED: Record<string, Exception> = {
-  "components/CascadingDropdown/CascadingDropdown.tsx|triggerNode": { calls: 1, reason: "Returns focus to the trigger that opened the menu." },
+  "components/CascadingDropdown/CascadingDropdown.tsx|triggerNode": { calls: 2, reason: "Returns focus to the trigger that opened the menu; on close, with no reveal (L24)." },
   "components/Dropdown/Dropdown.tsx|triggerNode": { calls: 2, reason: "Returns focus to the trigger that opened the menu." },
   "components/MultiSelectDropdown/MultiSelectDropdown.tsx|triggerRef.current": { calls: 2, reason: "Returns focus to the trigger after close or a chip removal." },
   "components/MultiSelectDropdown/MultiSelectDropdown.tsx|triggerNode": { calls: 1, reason: "Returns focus to the trigger that opened the menu." },
@@ -74,6 +74,14 @@ const RETURNS_TO_ACTIVATED: Record<string, Exception> = {
   "components/Table/Table.tsx|editReturnRef.current": { calls: 1, reason: "Returns focus to the cell whose editor just closed, which is where the user already is." },
   "components/TimePicker/TimePicker.tsx|inputRef.current": { calls: 2, reason: "Focuses the input beside the clear button just clicked, or the input the user just opened." },
   "utils/menu/focusTriggerOnMouseDown.ts|trigger": { calls: 1, reason: "The trigger under the pointer, focused on mousedown." },
+  // L24: focus returned on close, by preventScroll and deliberately not revealed.
+  "components/DatePicker/DatePicker.tsx|(trigger ?? previousActiveElement.current)": { calls: 1, reason: "Returns focus to the trigger on close. Closing never scrolls the page (L24, open-close.spec.ts): a trigger off screen stays where it is until the reader moves focus on." },
+  "components/DatePicker/DatePicker.tsx|triggerRef.current": { calls: 1, reason: "Returns focus to the trigger on Escape from a calendar open since mount. Closing never scrolls the page (L24, open-close.spec.ts): a trigger off screen stays where it is until the reader moves focus on." },
+  "components/Modal/Modal.tsx|previousActiveElement.current": { calls: 1, reason: "Returns focus to the element that opened the dialog. Closing never scrolls the page (L24, open-close.spec.ts): a trigger off screen stays where it is until the reader moves focus on." },
+  "components/Table/Table.tsx|filterTriggerRef.current": { calls: 1, reason: "Returns focus to the filter button when its panel closes. Closing never scrolls the page (L24, open-close.spec.ts): a trigger off screen stays where it is until the reader moves focus on." },
+  "components/Pagination/Pagination.tsx|triggerRef.current": { calls: 1, reason: "Returns focus to the rows-per-page trigger on close. Closing never scrolls the page (L24, open-close.spec.ts): a trigger off screen stays where it is until the reader moves focus on." },
+  "components/Breadcrumb/Breadcrumb.tsx|ellipsisButtonRef.current": { calls: 2, reason: "Returns focus to the ellipsis when its menu closes. Closing never scrolls the page (L24, open-close.spec.ts): a trigger off screen stays where it is until the reader moves focus on." },
+  "components/Toast/components/ToastProvider.tsx|previousFocusRef.current": { calls: 1, reason: "Returns focus to where it was before the notification took it. Closing never scrolls the page (L24, open-close.spec.ts): a trigger off screen stays where it is until the reader moves focus on." },
 };
 
 const EXCEPTIONS: Record<string, Exception> = { ...OUT_OF_ANY_SCROLLER, ...RETURNS_TO_ACTIVATED };

@@ -288,7 +288,6 @@ const answerCities = (query: string) =>
   CITY_LIST.filter((city) => city.toLowerCase().includes(query.toLowerCase())).map((city) => ({ value: city.toLowerCase(), label: city }));
 
 const SearchableDropdownDemo = () => {
-  const [languageMounts, setLanguageMounts] = useState(0);
   const { isDarkMode: dark } = useTheme();
   const cities = useFakeLoader(answerCities, "Couldn't search the cities. Type again to retry.");
   const c = getClasses();
@@ -1740,28 +1739,20 @@ const SearchableDropdownDemo = () => {
       {/* ─── Starts open ─────────────────────────────────────────────────── */}
       <Section
         title="Starts open"
-        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Show it open mounts it here, so the docs page does not open a list, and move focus into it, as it loads."
+        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Open on load, it takes no focus and does not scroll the page: focus moves into it once you use it."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-full sm:max-w-xs space-y-3">
-            <Button
-              className="border border-cl-border bg-cl-bg-elevated text-cl-text"
-              onClick={() => setLanguageMounts((n) => n + 1)}
-            >
-              Show it open
-            </Button>
-            {languageMounts > 0 && (
-              <SearchableDropdown key={languageMounts}
-                label="Language"
-                options={[
-                  { value: "en", label: "English" },
-                  { value: "fr", label: "French" },
-                  { value: "de", label: "German" },
-                ]}
-                defaultOpen
-              />
-            )}
+          <div className="w-full sm:max-w-xs">
+            <SearchableDropdown
+              label="Language"
+              options={[
+                { value: "en", label: "English" },
+                { value: "fr", label: "French" },
+                { value: "de", label: "German" },
+              ]}
+              defaultOpen
+            />
           </div>
         </DemoWrapper>
       </Section>

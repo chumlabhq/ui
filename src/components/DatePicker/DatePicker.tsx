@@ -683,15 +683,20 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
     }, [isOpen, handleClose]);
 
     const previousActiveElement = useRef<HTMLElement | null>(null);
+    const openSinceMount = useRef(isOpen);
 
     useEffect(() => {
-      if (!isOpen) return;
+      if (!isOpen) {
+        openSinceMount.current = false;
+        return;
+      }
 
       const active = document.activeElement;
       previousActiveElement.current = active instanceof HTMLElement ? active : null;
       // Captured now rather than read in the cleanup: the ref may point at a
       // different node by then, and this is the trigger that was open.
       const trigger = triggerRef.current;
+      const sinceMount = openSinceMount.current;
 
       // The grid is positioned before it is visible, so focus waits for the
       // same frame the panel becomes measurable in.
@@ -701,6 +706,8 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         const rovingCell = panel.querySelector<HTMLElement>(
           '[role="gridcell"][tabindex="0"]:not([disabled])',
         );
+        if (sinceMount) return;
+        panel.setAttribute("aria-modal", "true");
         (rovingCell ?? panel).focus();
       }, 10);
 
@@ -712,7 +719,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         // The trigger, not `previousActiveElement`, is the destination: this is
         // a popup owned by a trigger, and a pointer user can open it without
         // ever focusing anything, in which case the recorded element is <body>.
-        (trigger ?? previousActiveElement.current)?.focus?.();
+        if (!sinceMount) (trigger ?? previousActiveElement.current)?.focus?.({ preventScroll: true });
       };
     }, [isOpen]);
 
@@ -732,7 +739,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       // leaving, so the roving cell reclaims it. Any other element outside the
       // panel means focus genuinely left, and is left alone.
       const active = document.activeElement;
-      if (panel.contains(active) || active === null || active === document.body) {
+      if (panel.contains(active) || ((active === null || active === document.body) && !openSinceMount.current)) {
         cell.focus();
       }
     }, [isOpen, focusedDate]);
@@ -741,6 +748,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === "Escape") {
           event.preventDefault();
+          if (openSinceMount.current) triggerRef.current?.focus({ preventScroll: true });
           handleClose();
           return;
         }
@@ -949,7 +957,6 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
               style={{ width: "max-content" }}
               id={calendarId}
               role="dialog"
-              aria-modal="true"
               tabIndex={-1}
               onKeyDown={handlePanelKeyDown}
               aria-label={`${selectionMode === "single" ? "Date" : selectionMode === "range" ? "Date range" : "Multiple dates"} picker`}

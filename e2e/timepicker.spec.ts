@@ -11,6 +11,10 @@ import { gotoFixture } from "./_nav";
  * inert, so the control the user was on was declared out of reach. The input
  * already says what it opens — `aria-haspopup="dialog"`, `aria-expanded` and
  * `aria-controls` — so the clock is tied to it and claims no modality.
+ *
+ * Open at mount (`defaultOpen`), it takes no focus at all since L24, like a
+ * native <select>: the reader enters the field, and from then on the clock is
+ * tied to the focused input like any other open.
  */
 const CLOCKS = ["open-clock", "open-clock-12h", "open-bounded"];
 
@@ -20,9 +24,10 @@ for (const fixture of CLOCKS) {
     const input = page.locator('[data-fixture] input[role="combobox"]');
     const clock = page.getByRole("dialog");
 
-    const check = async (how: string) => {
+    const check = async (how: string, focused = true) => {
       await expect(clock).toBeVisible();
-      await expect(input).toBeFocused();
+      if (focused) await expect(input).toBeFocused();
+      else expect(await page.evaluate(() => document.activeElement === document.body), "a clock open at mount took the focus").toBe(true);
       const state = await clock.evaluate((el) => {
         const field = document.querySelector('[data-fixture] input[role="combobox"]')!;
         return {
@@ -38,7 +43,8 @@ for (const fixture of CLOCKS) {
       expect(state).toMatchObject({ controls: state.id, haspopup: "dialog", expanded: "true" });
     };
 
-    await check("defaultOpen");
+    await check("defaultOpen", false);
+    await input.focus();
     await page.keyboard.press("Escape");
     await expect(clock).toHaveCount(0);
     await input.click();

@@ -1272,6 +1272,35 @@ const LIBRARY_TOTAL_HISTORY = [
       "is the whole-library gzip. No declared breach moved. No comments added " +
       "to src/components or src/utils. Measured against a build of fbe73dab.",
   },
+  {
+    kb: 159.52,
+    commit: "(uncommitted)",
+    date: "2026-10-17",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.08 KB on the record (163,271 -> 163,352 B gzipped), +125 B " +
+      "on a build of c03c0f93 (163,227 B), 83 files held. L24: opening and " +
+      "closing a popup never move the page (open-close.spec.ts). Own chunks: " +
+      "DatePicker +84 B — a calendar open at mount takes no focus and claims " +
+      "aria-modal only once focus moves into it, its focus return on close " +
+      "takes preventScroll and is skipped for a calendar open since mount, and " +
+      "Escape from one hands focus to the trigger itself; CascadingDropdown " +
+      "+26 B — the trigger return takes preventScroll, a menu open at mount " +
+      "leaves its search field alone, and the menu drops `min-w-full`, which on " +
+      "a fixed popup resolved to the viewport and ran 8 px past a phone screen; " +
+      "MultiSelectSearchableDropdown +19 B, TimePicker +19 B, SearchableDropdown " +
+      "+10 B — the search field or input takes focus only when the reader opens " +
+      "the list; Breadcrumb +13 B (two returns), Pagination +9 B, Table +4 B — " +
+      "focus returned on close takes preventScroll; Modal -1 B and Toast 0 B " +
+      "own, +10 B and +12 B exclusive, the same in their shared chunks. The " +
+      "shared positioner clamps a left or right placement by the popup's own " +
+      "width rather than its anchor's, which pulled CascadingDropdown's submenu " +
+      "over its item once the menu stopped filling a phone screen (Dropdown +2 B " +
+      "and MultiSelectDropdown +1 B own are the same chunk's rehash). The rest " +
+      "is the whole-library gzip. DatePicker's declared breach moved with it " +
+      "(below). No comments added to src/components or src/utils. Measured " +
+      "against a build of c03c0f93.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1402,7 +1431,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.34,
+      kb: 12.42,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1438,7 +1467,12 @@ const DECLARED_BREACHES = new Map([
         "inputs became the shared FormValue control, which takes part in " +
         "validation and listens for the form's reset; the bytes here are the " +
         "call, its reset and focus wiring. Submitted values are unchanged in " +
-        "every mode.",
+        "every mode.\n\n" +
+        "12.34 -> 12.42 on 2026-10-17, L24 open/close (exclusive 12,638 -> " +
+        "12,721 B gzipped, +83 B): defaultOpen moved focus into the calendar, " +
+        "and its focus return scrolled the page 2,791 px on every close with the " +
+        "trigger off screen. A calendar open at mount takes no focus and claims " +
+        "aria-modal only once focus moves in; the return takes preventScroll.",
     },
   ],
   [

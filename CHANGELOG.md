@@ -699,6 +699,26 @@ tables say.
 
 ### Fixed
 
+- **`defaultOpen` no longer moves focus or scrolls the page on mount.** A popup open at mount
+  (`defaultOpen`, or `open` already true) now leaves focus where it was, as a native `<select>`
+  or `<dialog open>` does; focus moves into it once the reader opens it. SearchableDropdown and
+  MultiSelectSearchableDropdown focused their search field, TimePicker its input,
+  CascadingDropdown its menu search, and DatePicker its calendar, scrolling the page by the
+  distance to the field (2,791 px on a test page; 15,084 px on its docs page). A DatePicker
+  calendar open at mount also no longer claims `aria-modal` until focus moves into it. Modal and
+  a modal Drawer are dialogs and still take focus when they mount open, as the APG dialog
+  pattern requires, but without scrolling the page behind them.
+- **Closing a popup no longer scrolls the page.** Focus returns to the trigger with
+  `preventScroll`, so a trigger off screen stays where it is. CascadingDropdown scrolled to its
+  trigger on every close (13,210 px on its docs page, losing the click that closed it);
+  DatePicker, Modal, Table's filter panel, Pagination's rows-per-page list, Breadcrumb's
+  collapsed menu and Toast's focus return did the same.
+- **CascadingDropdown's menu fits a phone-width screen.** Below `sm`, `min-w-full` on the fixed
+  menu resolved to the viewport's width, so from its 8 px margin it ran 8 px past the right edge
+  at 320, 360 and 375 px. The menu now takes its trigger's width, as the other menus do; from
+  `sm` up it keeps its 200 px minimum. Its submenu now opens beside its item when there is room,
+  rather than over it: the shared positioner clamped a left or right placement by its anchor's
+  width, which put a 70 px submenu over a 238 px item at 375 px.
 - **OtpInput: clicking a filled cell and typing replaces its digit in WebKit.** The cell
   selects its digit on focus, and WebKit then placed its own click caret after the click,
   collapsing that selection; with one character allowed, the typed digit was refused and focus

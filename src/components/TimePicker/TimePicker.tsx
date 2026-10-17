@@ -407,10 +407,10 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       if (mode === "dropdown") hookHandleKeyDown(event);
     }, [disabled, isOpen, focusedIndex, displayOptions, hookHandleKeyDown, handleOptionSelect, handleClose, handleOpen, setFocusedIndex, refuseOutOfRange, mode]);
 
+    const openSinceMount = useRef(isOpen);
     useEffect(() => {
-      if (isOpen) {
-        inputRef.current?.focus({ preventScroll: true });
-      }
+      if (!isOpen) openSinceMount.current = false;
+      else if (!openSinceMount.current) inputRef.current?.focus({ preventScroll: true });
     }, [isOpen]);
 
     useEffect(() => {

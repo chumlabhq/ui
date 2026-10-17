@@ -18,8 +18,8 @@ import { demoPages } from "./_demo-routes";
  *   - the component is visible, and every popup it has open lies inside the
  *     360 px viewport: getBoundingClientRect, not scrollWidth, since a fixed
  *     popup adds nothing to scrollWidth and clips unseen. That is how
- *     CascadingDropdown's menu, 8 px wider than the viewport, went unnoticed;
- *     it has no frame until L24 fixes it;
+ *     CascadingDropdown's menu, 8 px wider than the viewport, went unnoticed
+ *     until L24 fixed it and gave it a frame;
  *   - for the two tall overlays, the last control is out of view at first and
  *     is reached both by Tab and by scrolling, and seen.
  *
@@ -67,6 +67,7 @@ interface Expect {
 
 const EXPECT: Record<string, Expect> = {
   "Breadcrumb/phone": { shows: "nav[aria-label=Breadcrumb]", open: "nav[aria-label=Breadcrumb] button" },
+  "CascadingDropdown/phone": { shows: "[role=menu]" },
   "DatePicker/phone": { shows: "[role=dialog] [role=grid]" },
   "Drawer/phone": { shows: "[role=dialog]" },
   "Drawer/long-sheet": { shows: "[role=dialog]", reach: { last: "Place the order", scroller: "the content", heading: "Your order" } },
@@ -90,7 +91,7 @@ const EXPECT: Record<string, Expect> = {
 /** The sentence the Modal section promises, which the frame is held to. */
 const MODAL_TALL = "The dialog scrolls inside the overlay, and the last control can be reached by Tab and by scrolling.";
 
-const FLOOR = 19;
+const FLOOR = 20;
 const WIDTH = 360;
 
 /** Popups open in the frame, with their boxes; dialogs may run past the bottom, since the tall ones scroll. */

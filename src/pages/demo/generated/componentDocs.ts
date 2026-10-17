@@ -3697,7 +3697,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "`aria-checked` on selectable submenu items",
       "`aria-haspopup=\"true\"` on trigger",
       "`aria-label` for search inputs (configurable via `menuSearchAriaLabel`, `submenuSearchAriaLabel`)",
-      "Focus management: focus moves into menu on open, returns to trigger on close",
+      "Focus management: focus moves into the menu when the reader opens it, and returns to the trigger on close without scrolling the page. A menu open at mount (`defaultOpen`) takes no focus.",
       "Hidden `<input>` for form integration with `name` prop"
     ],
     "keyboard": {
@@ -5723,7 +5723,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "**Keyboard:** Arrow keys navigate days, Home/End jump to the bounds of the week (honouring `weekStartsOn`), PageUp/PageDown change months, Shift+PageUp/PageDown change years, Enter/Space selects a day, Escape closes the calendar. Disabled days are stepped over rather than focused. The month and year menus are listboxes: arrows, Home/End, Enter to choose, Escape to close.",
       "**Naming:** the trigger is named by `label`, and falls back to the element showing the selected date or placeholder — `combobox` is not a name-from-content role. The clear control is a real `<button>` beside the trigger, not a `role=\"button\"` span inside it.",
       "**ARIA:** Trigger has `aria-expanded` + `aria-haspopup`, calendar grid uses `role=\"grid\"`, day cells use `role=\"gridcell\"` with `aria-selected`/`aria-disabled`/`aria-current=\"date\"`",
-      "**Focus management:** Focus moves to the selected day (or today) on open, follows the roving tabindex as you navigate, and returns to the trigger on close. The panel is `role=\"dialog\" aria-modal=\"true\"` and traps Tab in both directions.",
+      "**Focus management:** Focus moves to the selected day (or today) when the reader opens the calendar, follows the roving tabindex as you navigate, and returns to the trigger on close without scrolling the page. The panel is `role=\"dialog\"`, `aria-modal=\"true\"` once it holds the focus, and traps Tab in both directions. A calendar open at mount (`defaultOpen`, or `open` already true) takes no focus and does not scroll the page, like a native `<select>`; focus moves in the next time the reader opens it.",
       "**Reduced motion:** `reduceMotion` defaults to `\"auto\"`, which follows the OS `prefers-reduced-motion` setting. `true` always reduces motion. `false` always animates — **including for a user who has asked their OS for less motion**, so pass it only when you know more than the OS setting does. The value governs the decorative classes as well as the animation timings."
     ],
     "keyboard": {

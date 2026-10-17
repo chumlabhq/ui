@@ -146,8 +146,14 @@ async function modalFocus(page: Page): Promise<{ open: boolean; inside: boolean;
  * the three TimePicker clocks. Without the hidden Modal it is 43, and 40 once
  * the clocks stopped declaring it. A sweep that finds fewer has stopped
  * opening the overlays it is meant to check.
+ *
+ * 23 at L24 (42 measured at D12cd): a DatePicker calendar open at mount takes
+ * no focus and so no longer claims `aria-modal`, which was a claim of inertness
+ * with the focus outside; 20 of DatePicker's fixtures open that way.
+ * `DatePicker/keyboard-focus` now opens from its trigger and still makes the
+ * claim, and overlay-focus.contract holds a trigger-opened calendar to it.
  */
-const ARIA_MODAL_FLOOR = 40;
+const ARIA_MODAL_FLOOR = 23;
 
 /**
  * Every rendered DrawerHeader and ModalHeader has text.
@@ -175,8 +181,8 @@ const headerTexts = (page: Page) =>
  */
 const HEADERS_FLOOR = 24;
 
-/** The /preview pages the phone-width frames load: 19 at D12b. */
-const PREVIEW_FLOOR = 19;
+/** The /preview pages the phone-width frames load: 19 at D12b, 20 at L24 (CascadingDropdown/phone). */
+const PREVIEW_FLOOR = 20;
 
 interface Finding {
   component: string;

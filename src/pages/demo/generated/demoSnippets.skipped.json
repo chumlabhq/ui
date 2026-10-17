@@ -76,6 +76,11 @@
       "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
     },
     {
+      "component": "CascadingDropdown",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
       "component": "DatePicker",
       "title": "At phone width",
       "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"

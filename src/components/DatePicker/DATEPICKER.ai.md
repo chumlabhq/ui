@@ -412,7 +412,7 @@ const ref = useRef<HTMLButtonElement>(null);
   selected date or placeholder — `combobox` is not a name-from-content role. The clear
   control is a real `<button>` beside the trigger, not a `role="button"` span inside it.
 - **ARIA:** Trigger has `aria-expanded` + `aria-haspopup`, calendar grid uses `role="grid"`, day cells use `role="gridcell"` with `aria-selected`/`aria-disabled`/`aria-current="date"`
-- **Focus management:** Focus moves to the selected day (or today) on open, follows the roving tabindex as you navigate, and returns to the trigger on close. The panel is `role="dialog" aria-modal="true"` and traps Tab in both directions.
+- **Focus management:** Focus moves to the selected day (or today) when the reader opens the calendar, follows the roving tabindex as you navigate, and returns to the trigger on close without scrolling the page. The panel is `role="dialog"`, `aria-modal="true"` once it holds the focus, and traps Tab in both directions. A calendar open at mount (`defaultOpen`, or `open` already true) takes no focus and does not scroll the page, like a native `<select>`; focus moves in the next time the reader opens it.
 - **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
   `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
   animates — **including for a user who has asked their OS for less motion**, so

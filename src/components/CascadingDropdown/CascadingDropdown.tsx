@@ -532,7 +532,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
     const prevOpenRef = useRef(false);
     useEffect(() => {
       if (prevOpenRef.current && !isOpen) {
-        triggerNode?.focus();
+        triggerNode?.focus({ preventScroll: true });
       }
       prevOpenRef.current = isOpen;
     }, [isOpen, triggerNode]);
@@ -589,6 +589,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
 
     const menuSearchRef = useRef<HTMLInputElement>(null);
     const pointerRef = useRef(false);
+    const openSinceMount = useRef(isOpen);
 
     /**
      * Moves the focus the roving tabindex was only pretending to move.
@@ -606,7 +607,10 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
      * itself, which is the APG menu-button pattern.
      */
     useEffect(() => {
-      if (!isOpen) return;
+      if (!isOpen) {
+        openSinceMount.current = false;
+        return;
+      }
       const menu = menuRef.current;
       if (!menu) return;
 
@@ -616,7 +620,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       if (!into && submenu?.contains(active)) return;
 
       if (showMenuSearch && !into) {
-        if (!inMenuSurface(active)) {
+        if (!inMenuSurface(active) && !openSinceMount.current) {
           if (menuSearchRef.current) focusAndReveal(menuSearchRef.current);
         }
         return;

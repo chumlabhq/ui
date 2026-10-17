@@ -193,7 +193,7 @@ export function computeAnchoredPosition(
   // The floating element can be wider than its trigger — a menu with longer
   // labels than the control that opens it. Clamping by the trigger's width, as
   // most copies did, leaves the overhang off screen.
-  const width = Math.max(trigger.width, floating.width);
+  const width = side === "left" || side === "right" ? floating.width : Math.max(trigger.width, floating.width);
 
   const clampAxis = (value: number, size: number, extent: number) => {
     const limit = extent - size - margin;

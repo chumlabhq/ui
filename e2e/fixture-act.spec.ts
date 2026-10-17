@@ -40,11 +40,6 @@ const DECLARED = new Map([
     "SearchableDropdown/async-initial-load-empty",
   ].map((fixture) => [fixture, "flushes effects; the browser has already committed"] as const),
   [
-    "DatePicker/marker-tooltip",
-    "the tooltip is already open: the calendar focuses a day on mount and the " +
-      "marker tooltip now shows on focus as well as hover, so hovering it adds nothing",
-  ],
-  [
     "Table/pin-hover",
     ":hover is not a state script can dispatch, in any browser. The pin control " +
       "is asserted in table.spec.ts with a real page.hover()",

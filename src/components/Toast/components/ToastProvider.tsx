@@ -43,7 +43,7 @@ export const ToastProvider = ({
 
   const restoreFocus = useCallback(() => {
     if (previousFocusRef.current && previousFocusRef.current.isConnected) {
-      previousFocusRef.current.focus();
+      previousFocusRef.current.focus({ preventScroll: true });
       previousFocusRef.current = null;
     }
   }, []);

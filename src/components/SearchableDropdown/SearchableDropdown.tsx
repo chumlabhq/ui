@@ -131,8 +131,10 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
     }
   }, [isOpen, focusedIndex, dropdownId]);
 
+  const openSinceMount = useRef(isOpen);
   useEffect(() => {
-    if (isOpen && showSearch && searchInputRef.current) {
+    if (!isOpen) openSinceMount.current = false;
+    else if (showSearch && !openSinceMount.current && searchInputRef.current) {
       searchInputRef.current.focus({ preventScroll: true });
     }
   }, [isOpen, showSearch, searchInputRef]);

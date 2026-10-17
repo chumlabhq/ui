@@ -296,7 +296,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     useEffect(() => {
       if (!isDropdownOpen && shouldRestoreFocusRef.current) {
         shouldRestoreFocusRef.current = false;
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
       }
     }, [isDropdownOpen]);
 

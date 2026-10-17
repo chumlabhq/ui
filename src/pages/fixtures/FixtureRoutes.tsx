@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import FixtureIndex from "./FixtureIndex.js";
 import FixtureRoute from "./FixtureRoute.js";
 import FormRoute from "./FormRoute.js";
+import OpenCloseRoute from "./OpenCloseRoute.js";
 
 /**
  * The dev-only fixture subtree, in one module so App.tsx needs exactly one
@@ -16,6 +17,7 @@ export default function FixtureRoutes() {
     <Routes>
       <Route index element={<FixtureIndex />} />
       <Route path="forms/:field" element={<FormRoute />} />
+      <Route path="open-close/:component" element={<OpenCloseRoute />} />
       <Route path=":component/:fixture" element={<FixtureRoute />} />
     </Routes>
   );

@@ -174,14 +174,14 @@ test("an uncontrolled Modal and Drawer mount open, close themselves, and mount o
 });
 
 /**
- * defaultOpen, mounted on demand. Opened as the page loads, these moved the
- * page's focus into the middle of the page, and two scrolled it: /date-picker
- * loaded 15,084 px down, and a first press on /cascading-dropdown jumped
- * 13,210 px to the open menu's trigger (CascadingDropdown returns focus to its
- * trigger without preventScroll; owed to L24). So each page loads with nothing
- * open, at the top, and Show it open mounts the component open.
+ * defaultOpen, open as the page loads. D12cd mounted these on demand, behind a
+ * Show it open button: open on load, they moved the page's focus into the
+ * middle of the page, and two scrolled it — /date-picker loaded 15,084 px
+ * down, and a first press on /cascading-dropdown jumped 13,210 px. L24 fixed
+ * both in the library (open-close.spec.ts), so each page now loads with the
+ * example open, at the top, with focus where the browser left it.
  */
-test("each Show it open example loads closed and mounts open", async ({ page }) => {
+test("each Starts open example is open on load and leaves the page where it was", async ({ page }) => {
   const EXAMPLES: Array<[route: string, section: string]> = [
     ["dropdown", "Starts open"],
     ["searchable-dropdown", "Starts open"],
@@ -193,15 +193,12 @@ test("each Show it open example loads closed and mounts open", async ({ page }) 
   let ok = 0;
   for (const [route, title] of EXAMPLES) {
     await page.goto(`/${route}`, { waitUntil: "networkidle" });
-    expect(await page.evaluate(() => scrollY), `${route}: the page loaded scrolled`).toBe(0);
     const section = sectionOf(page, title);
-    await section.scrollIntoViewIfNeeded();
-    await expect(section.locator('[aria-expanded="true"]'), `${route}: something in "${title}" is open before Show it open`).toHaveCount(0);
-    await section.getByRole("button", { name: "Show it open", exact: true }).click();
-    await expect(section.locator('[aria-expanded="true"]'), `${route}: Show it open did not mount it open`).toHaveCount(1);
-    await page.keyboard.press("Escape");
+    await expect(section.locator('[aria-expanded="true"]'), `${route}: "${title}" is not open on load`).toHaveCount(1);
+    expect(await page.evaluate(() => scrollY), `${route}: the page loaded scrolled`).toBe(0);
+    expect(await page.evaluate(() => document.activeElement === document.body), `${route}: loading moved focus`).toBe(true);
     ok += 1;
-    console.log(`DEMO_DEFAULT_OPEN /${route} "${title}" loaded-closed=true mounted-open=true`);
+    console.log(`DEMO_DEFAULT_OPEN /${route} "${title}" open-on-load=true scrollY=0 focus=body`);
   }
   console.log(`DEMO_DEFAULT_OPEN examples ${EXAMPLES.length}, ok ${ok}`);
   expect(ok).toBe(EXAMPLES.length);

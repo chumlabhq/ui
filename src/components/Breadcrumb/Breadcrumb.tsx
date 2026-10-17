@@ -335,7 +335,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         if (e.key === "Escape") {
           e.preventDefault();
           setDropdownOpen(false);
-          ellipsisButtonRef.current?.focus();
+          ellipsisButtonRef.current?.focus({ preventScroll: true });
         }
       };
       document.addEventListener("keydown", handleEscape);
@@ -456,7 +456,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     useEffect(() => {
       if (!isDropdownOpen && shouldRestoreFocusRef.current) {
         shouldRestoreFocusRef.current = false;
-        ellipsisButtonRef.current?.focus();
+        ellipsisButtonRef.current?.focus({ preventScroll: true });
       }
     }, [isDropdownOpen]);
 

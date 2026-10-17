@@ -229,7 +229,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
         return () => {
           clearTimeout(timer);
           if (restoreFocus && previousActiveElement.current?.focus) {
-            previousActiveElement.current.focus();
+            previousActiveElement.current.focus({ preventScroll: true });
           }
         };
       }

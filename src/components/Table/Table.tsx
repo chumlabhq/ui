@@ -393,7 +393,7 @@ function TableInner<TData>(
   // hover the table re-renders for.
   const closeFilterPanel = useCallback(() => {
     setFilterDropdownState(null);
-    filterTriggerRef.current?.focus();
+    filterTriggerRef.current?.focus({ preventScroll: true });
   }, []);
 
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);

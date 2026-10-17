@@ -62,7 +62,6 @@ const getClasses = () => ({
 });
 
 const DatePickerDemo = () => {
-  const [checkoutMounts, setCheckoutMounts] = useState(0);
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
 
@@ -1731,16 +1730,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             <div className="w-full sm:max-w-xs">
               <DatePicker label="Check-in" defaultValue={new Date(2026, 9, 20)} />
             </div>
-            <div className="w-full sm:max-w-xs space-y-3">
-              <Button
-                className="border border-cl-border bg-cl-bg-elevated text-cl-text"
-                onClick={() => setCheckoutMounts((n) => n + 1)}
-              >
-                Show it open
-              </Button>
-              {checkoutMounts > 0 && (
-                <DatePicker key={checkoutMounts} label="Check-out" defaultOpen />
-              )}
+            <div className="w-full sm:max-w-xs">
+              <DatePicker label="Check-out" defaultOpen />
             </div>
           </div>
         </DemoWrapper>

@@ -411,7 +411,7 @@ const ref = useRef<HTMLButtonElement>(null);
 - `aria-checked` on selectable submenu items
 - `aria-haspopup="true"` on trigger
 - `aria-label` for search inputs (configurable via `menuSearchAriaLabel`, `submenuSearchAriaLabel`)
-- Focus management: focus moves into menu on open, returns to trigger on close
+- Focus management: focus moves into the menu when the reader opens it, and returns to the trigger on close without scrolling the page. A menu open at mount (`defaultOpen`) takes no focus.
 - Hidden `<input>` for form integration with `name` prop
 
 ---

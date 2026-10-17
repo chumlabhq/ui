@@ -237,7 +237,6 @@ const answerToppings = () => [
 ];
 
 const MultiSelectDropdownDemo = () => {
-  const [sauceMounts, setSauceMounts] = useState(0);
   const toppings = useFakeLoader(answerToppings, "Couldn't load the toppings. Open the list again to retry.");
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
@@ -1628,24 +1627,16 @@ const MultiSelectDropdownDemo = () => {
                 defaultValue={["olive", "basil"]}
               />
             </div>
-            <div className="w-full sm:max-w-xs space-y-3">
-              <Button
-                className="border border-cl-border bg-cl-bg-elevated text-cl-text"
-                onClick={() => setSauceMounts((n) => n + 1)}
-              >
-                Show it open
-              </Button>
-              {sauceMounts > 0 && (
-                <MultiSelectDropdown key={sauceMounts}
-                  label="Sauces"
-                  options={[
-                    { value: "pesto", label: "Pesto" },
-                    { value: "tomato", label: "Tomato" },
-                    { value: "white", label: "White" },
-                  ]}
-                  defaultOpen
-                />
-              )}
+            <div className="w-full sm:max-w-xs">
+              <MultiSelectDropdown
+                label="Sauces"
+                options={[
+                  { value: "pesto", label: "Pesto" },
+                  { value: "tomato", label: "Tomato" },
+                  { value: "white", label: "White" },
+                ]}
+                defaultOpen
+              />
             </div>
           </div>
         </DemoWrapper>

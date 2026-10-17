@@ -5,7 +5,7 @@
     "na": "{ probe, reason } — probe is one of no-prop:<names>, no-name, no-async, imperative, overlay-content, not-focusable, inline-fixed, re-checked against the props walk",
     "gap": "{ reason, slice } — slice is D12a (forms), D12b (phone width), D12c (failing data), D12d (uncontrolled, long content) or D12e (composition), or a library slice (L24) where the demo waits on a library fix; fails once a section shows it"
   },
-  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario. D12a, 2026-10-17: the 46 D12a cells are shown, by the In a form section on each form field page and Modal's Form in a modal (396 shown, 213 n/a, 51 gap). D12b, 2026-10-17: the 17 phone-width cells are shown, each by an At phone width section whose PhoneFrame loads the component's /preview route at 360 px (413 shown, 213 n/a, 34 gap). CascadingDropdown's stays a gap, owed by L24: its menu is wider than the viewport at that width. D12cd, 2026-10-17: 22 cells shown — the 6 failing cells by When loading fails sections on a loader that can reject (useFakeLoader), the 6 uncontrolled by Uncontrolled sections whose component holds its own value, and 10 of 12 long-content cells by Long labels sections (435 shown, 213 n/a, 12 gap). Checkbox's and Switch's long content stay gaps, owed by L24: their control shrinks beside a wrapped label.",
+  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario. D12a, 2026-10-17: the 46 D12a cells are shown, by the In a form section on each form field page and Modal's Form in a modal (396 shown, 213 n/a, 51 gap). D12b, 2026-10-17: the 17 phone-width cells are shown, each by an At phone width section whose PhoneFrame loads the component's /preview route at 360 px (413 shown, 213 n/a, 34 gap). CascadingDropdown's stays a gap, owed by L24: its menu is wider than the viewport at that width. D12cd, 2026-10-17: 22 cells shown — the 6 failing cells by When loading fails sections on a loader that can reject (useFakeLoader), the 6 uncontrolled by Uncontrolled sections whose component holds its own value, and 10 of 12 long-content cells by Long labels sections (435 shown, 213 n/a, 12 gap). Checkbox's and Switch's long content stay gaps, owed by L24: their control shrinks beside a wrapped label. L24, 2026-10-17: CascadingDropdown's phone-width cell is shown, by an At phone width section, once its menu fits a 360 px viewport (436 shown, 213 n/a, 11 gap).",
   "components": {
     "Accordion": {
       "default": {
@@ -641,9 +641,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "Its menu is 8 px wider than a 360 px viewport: `min-w-full` below `sm:` on a fixed popup resolves to the viewport's width, from a left of 8 px (utils/constants.ts). A frame would show the clip; L24 fixes the menu, then a PhoneFrame shows it.",
-          "slice": "L24"
+        "shown": {
+          "page": "CascadingDropdownDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {

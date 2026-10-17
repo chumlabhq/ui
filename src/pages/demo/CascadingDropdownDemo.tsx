@@ -25,7 +25,7 @@ import {
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
-import { Button } from "../../components/Button/index.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 /**
  * The async examples' data source: a static country list, filtered here and
@@ -447,7 +447,6 @@ const answerTeams = (parent: { value: string; label: string }) =>
   ["North", "South", "Platform"].map((team) => ({ value: `${parent.value}-${team.toLowerCase()}`, label: `${parent.label} ${team}` }));
 
 const CascadingDropdownDemo = () => {
-  const [categoryMounts, setCategoryMounts] = useState(0);
   const teams = useFakeLoader(answerTeams, "Couldn't load that department's teams. Point at it again to retry.");
   const { isDarkMode: dark } = useTheme();
   const c = getClasses();
@@ -1891,29 +1890,32 @@ const CascadingDropdownDemo = () => {
       {/* ─── Starts open ─────────────────────────────────────────────────── */}
       <Section
         title="Starts open"
-        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Show it open mounts it here, so the docs page does not open a list, and move focus into it, as it loads."
+        description="defaultOpen opens it when it mounts; after that it opens and closes on its own, with no state in the page holding it. Open on load, it takes no focus and does not scroll the page: focus moves into it once you use it."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-full sm:max-w-xs space-y-3">
-            <Button
-              className="border border-cl-border bg-cl-bg-elevated text-cl-text"
-              onClick={() => setCategoryMounts((n) => n + 1)}
-            >
-              Show it open
-            </Button>
-            {categoryMounts > 0 && (
-              <CascadingDropdown key={categoryMounts}
-                label="Category"
-                options={[
-                  { value: "fruit", label: "Fruit", children: [{ value: "apple", label: "Apple" }, { value: "pear", label: "Pear" }] },
-                  { value: "veg", label: "Vegetables", children: [{ value: "carrot", label: "Carrot" }, { value: "leek", label: "Leek" }] },
-                ]}
-                defaultOpen
-              />
-            )}
+          <div className="w-full sm:max-w-xs">
+            <CascadingDropdown
+              label="Category"
+              options={[
+                { value: "fruit", label: "Fruit", children: [{ value: "apple", label: "Apple" }, { value: "pear", label: "Pear" }] },
+                { value: "veg", label: "Vegetables", children: [{ value: "carrot", label: "Carrot" }, { value: "leek", label: "Leek" }] },
+              ]}
+              defaultOpen
+            />
           </div>
         </DemoWrapper>
+      </Section>
+
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/CascadingDropdown/phone"
+          lookFor="The open menu sits under the field and fits the screen's width."
+        />
       </Section>
 
       <ComponentDocs name="CascadingDropdown" />

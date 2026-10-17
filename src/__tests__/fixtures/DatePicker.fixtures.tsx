@@ -55,9 +55,11 @@ const fixtures: Fixtures<typeof DatePicker> = [
   },
   {
     name: "keyboard-focus",
-    props: { defaultOpen: true, value: D },
-    note: "Arrow-keys the grid so a day carries data-highlighted. Uses the component's own keyboard handling; touches no focus management.",
+    props: { value: D },
+    note: "Opens the calendar from its trigger, then arrow-keys the grid so a day carries data-highlighted. Opened by the reader, not by defaultOpen: since L24 a calendar open at mount takes no focus, so the keyboard user this fixture stands for is never in it.",
     act: async (c, ui) => {
+      ui.click(c.querySelector('[aria-haspopup="dialog"]'));
+      await ui.settle(50);
       // The day cell, not the grid. `onKeyDown` is on each DayCell, and an
       // event dispatched at the grid travels upward, away from it — so this
       // fixture moved no highlight in either tier until the browser tier

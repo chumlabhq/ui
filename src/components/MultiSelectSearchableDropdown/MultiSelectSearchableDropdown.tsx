@@ -376,8 +376,10 @@ const MultiSelectSearchableDropdown = forwardRef<
     // No timer: the effect runs after the portal has committed, so the input
     // exists by the time this reads the ref. A delay guessed in milliseconds
     // loses the focus on any frame slower than the guess.
+    const openSinceMount = useRef(isOpen);
     useEffect(() => {
-      if (isOpen && showSearch && searchInputRef.current) {
+      if (!isOpen) openSinceMount.current = false;
+      else if (showSearch && !openSinceMount.current && searchInputRef.current) {
         searchInputRef.current.focus({ preventScroll: true });
       }
     }, [isOpen, showSearch]);

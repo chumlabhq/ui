@@ -12,6 +12,11 @@
  * Asserted for all three together rather than per component, because they now
  * share `cycleTabWithin`: a regression in the shared helper should fail
  * everywhere at once, and a component that stops using it should fail here.
+ *
+ * DatePicker is opened from its trigger. Since L24 a calendar open at mount
+ * (`defaultOpen`, or `open` already true) takes no focus, like a native
+ * <select> or <dialog open>, so it makes no `aria-modal` claim until focus
+ * moves into it; the last test holds it to that.
  */
 import { useState } from "react";
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
@@ -87,7 +92,10 @@ const SURFACES: Surface[] = [
     name: "DatePicker",
     closes: true,
     open: async () => {
-      render(<DatePicker selectionMode="single" value={new Date(2026, 0, 15)} defaultOpen />);
+      const { container } = render(<DatePicker selectionMode="single" value={new Date(2026, 0, 15)} />);
+      await act(async () => {
+        fireEvent.click(container.querySelector('[aria-haspopup="dialog"]')!);
+      });
       await act(async () => {
         vi.advanceTimersByTime(50);
       });
@@ -172,5 +180,21 @@ describe("overlay focus contract", () => {
       });
       expect(dialog(), "Escape did not close the dialog").toBeNull();
     });
+
+    it("declares aria-modal once it holds the focus", async () => {
+      await open();
+      expect(dialog()!.getAttribute("aria-modal")).toBe("true");
+    });
+  });
+
+  it("a DatePicker open at mount takes no focus and claims no aria-modal", async () => {
+    render(<DatePicker selectionMode="single" value={new Date(2026, 0, 15)} defaultOpen />);
+    await act(async () => {
+      vi.advanceTimersByTime(50);
+    });
+    const panel = dialog();
+    expect(panel, "no dialog rendered").not.toBeNull();
+    expect(panel!.contains(active()), "a calendar open at mount took the focus").toBe(false);
+    expect(panel!.hasAttribute("aria-modal"), "aria-modal claimed with the focus outside").toBe(false);
   });
 });

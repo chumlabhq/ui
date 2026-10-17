@@ -163,6 +163,20 @@ describe("computeAnchoredPosition", () => {
       expect(r.left).toBe(1000 - 300 - 8);
     });
 
+    it("clamps a side placement by its own width, not its anchor's", () => {
+      // CascadingDropdown's submenu at 375 px, measured in L24: a 70 px submenu
+      // beside a 238 px item fits on the right, and was pulled back to x 129,
+      // over its item, because the clamp used the item's width.
+      const r = computeAnchoredPosition(
+        rect({ top: 538, left: 25, width: 238 }),
+        rect({ width: 70, height: 100 }),
+        { width: 375, height: 667, offsetTop: 0, offsetLeft: 0 },
+        { side: "right", gap: 4, margin: 8 },
+      );
+      expect(r.side).toBe("right");
+      expect(r.left).toBe(25 + 238 + 4);
+    });
+
     it("keeps the leading edge visible when the element exceeds the viewport", () => {
       const r = computeAnchoredPosition(
         rect({ top: 100, left: 100 }),
