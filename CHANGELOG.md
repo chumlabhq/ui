@@ -34,6 +34,9 @@ branch or a local link, these are the changes that will reach you.
 
 ### Changed
 
+- MultiSelectDropdown and MultiSelectSearchableDropdown submit one entry per selected value, as a native
+  <select multiple> does; they submitted one comma-joined entry, which split any value containing a comma.
+  Read them with FormData.getAll(name).
 - DrawerHeader requires children, matching ModalHeader; a title attribute with no children
   rendered an empty header.
 - A disabled field no longer submits its value, as a disabled native control doesn't.

@@ -173,8 +173,10 @@ const CASES: Case[] = [
   { id: "Modal/ModalHeader", container: true, render: (p, ref) => inOpenModal(<ModalHeader {...spread(p)} ref={r(ref)}>Head</ModalHeader>) },
   { id: "Modal/ModalBody", container: true, render: (p, ref) => inOpenModal(<ModalBody {...spread(p)} ref={r(ref)}>Body</ModalBody>) },
   { id: "Modal/ModalFooter", container: true, render: (p, ref) => inOpenModal(<ModalFooter {...spread(p)} ref={r(ref)}>Foot</ModalFooter>) },
-  { id: "MultiSelectDropdown/MultiSelectDropdown", name: true, rootSlot: true, render: (p, ref) => <MultiSelectDropdown {...spread(p)} ref={r(ref)} options={OPTIONS} /> },
-  { id: "MultiSelectSearchableDropdown/MultiSelectSearchableDropdown", name: true, rootSlot: true, render: (p, ref) => <MultiSelectSearchableDropdown {...spread(p)} ref={r(ref)} options={OPTIONS} /> },
+  // Selected, since the name lands on one hidden input per selected value (L23):
+  // empty, a multi-select submits nothing, as a native <select multiple> does.
+  { id: "MultiSelectDropdown/MultiSelectDropdown", name: true, rootSlot: true, render: (p, ref) => <MultiSelectDropdown {...spread(p)} ref={r(ref)} options={OPTIONS} defaultValue={[OPTIONS[0].value]} /> },
+  { id: "MultiSelectSearchableDropdown/MultiSelectSearchableDropdown", name: true, rootSlot: true, render: (p, ref) => <MultiSelectSearchableDropdown {...spread(p)} ref={r(ref)} options={OPTIONS} defaultValue={[OPTIONS[0].value]} /> },
   { id: "OtpInput/OtpInput", name: true, rootSlot: true, render: (p, ref) => <OtpInput {...spread(p)} ref={r(ref)} /> },
   { id: "Pagination/Pagination", container: true, rootSlot: true, render: (p, ref) => <Pagination {...spread(p)} ref={r(ref)} defaultValue={1} totalPages={3} /> },
   { id: "RadioButton/RadioGroup", container: true, name: true, rootSlot: true, render: (p, ref) => <RadioGroup {...spread(p)} ref={r(ref)}><RadioButton value="a" label="A" /></RadioGroup> },

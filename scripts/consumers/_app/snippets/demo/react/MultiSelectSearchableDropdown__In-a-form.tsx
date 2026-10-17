@@ -39,7 +39,7 @@ function FormDemo({ children, onEmpty }: { children: ReactNode; onEmpty: string 
 export default function MultiSelectSearchableDropdownExample() {
   return (
     <FormDemo
-      onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits the values joined with commas."
+      onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits one entry per selected value, as a native multiple select does."
     >
       <MultiSelectSearchableDropdown
         name="fruits"

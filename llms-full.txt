@@ -4940,7 +4940,7 @@ const [values, setValues] = useState<string[]>([]);
 
 ### Forms
 
-- **Submitted value.** With `name`, it submits one entry, the selected values joined with commas (`a,c`), or an empty string when none is selected.
+- **Submitted value.** With `name`, it submits one entry per selected value under that name, in option order (`a`, then `c`), as a native `<select multiple>` does, and nothing when none is selected. Read them with `FormData.getAll(name)`: a value containing a comma comes back whole.
 - **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled MultiSelectDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
 - **Required.** A `required` MultiSelectDropdown needs at least one value: with none, it blocks the form's submit and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
 - **Disabled.** A disabled MultiSelectDropdown submits nothing, as a disabled native control doesn't.
@@ -5232,7 +5232,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 
 ### Forms
 
-- **Submitted value.** With `name`, it submits one entry, the selected values joined with commas (`a,c`), or an empty string when none is selected.
+- **Submitted value.** With `name`, it submits one entry per selected value under that name, in option order (`a`, then `c`), as a native `<select multiple>` does, and nothing when none is selected. Read them with `FormData.getAll(name)`: a value containing a comma comes back whole.
 - **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled selection to `defaultValue` (or no selection), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled MultiSelectSearchableDropdown is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
 - **Required.** A `required` MultiSelectSearchableDropdown needs at least one value: with none, it blocks the form's submit and the browser's validation moves focus to the trigger. The field shows an error state only when you pass `error` and `errorMessage`.
 - **Disabled.** A disabled MultiSelectSearchableDropdown submits nothing, as a disabled native control doesn't.

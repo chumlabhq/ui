@@ -49,9 +49,11 @@ export function FormValue({ entries, required, disabled, form, missing, onReset,
     node.setCustomValidity(message);
   });
 
+  const inputs: ReadonlyArray<readonly [name: string | undefined, value: string]> = entries.length ? entries : [[undefined, ""]];
+
   return (
     <>
-      {entries.map(([name, value], index) => (
+      {inputs.map(([name, value], index) => (
         <input
           key={index}
           ref={index ? undefined : ref}

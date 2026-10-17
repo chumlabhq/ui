@@ -29,6 +29,8 @@ import { FORM_FIXTURES, formEntries, valueProps, type FormFixture } from "../fix
 import { contractActTools as ui } from "../fixtures/_act.contract.js";
 import { setReducedMotion } from "../../test/matchMedia.js";
 import { Avatar } from "../../components/Avatar/index.js";
+import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
+import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);
@@ -140,6 +142,36 @@ describe("form participation", () => {
         }
         counts.required += 1;
       });
+    });
+  }
+});
+
+/**
+ * A value containing a comma comes back whole.
+ *
+ * L23 measured both multi-selects submitting one entry with the values joined
+ * by commas: `["Smith, J", "Doe"]` reached the server as `Smith, J,Doe`, and
+ * `getAll` returned one string that any split read as three values. A native
+ * <select multiple> submits one entry per value, so a value is never parsed.
+ */
+describe("multi-value fields submit one entry per value", () => {
+  const PEOPLE = [
+    { value: "Smith, J", label: "Smith, J" },
+    { value: "Doe", label: "Doe" },
+    { value: "Roe", label: "Roe" },
+  ];
+  for (const [id, Field] of [
+    ["MultiSelectDropdown", MultiSelectDropdown],
+    ["MultiSelectSearchableDropdown", MultiSelectSearchableDropdown],
+  ] as const) {
+    it(`${id}: a value containing a comma round-trips intact, in option order`, async () => {
+      const view = render(
+        <form>
+          <Field name="f" label="People" options={PEOPLE} defaultValue={["Doe", "Smith, J"]} />
+        </form>,
+      );
+      await ui.settle();
+      expect(new FormData(view.container.querySelector("form")!).getAll("f")).toEqual(["Smith, J", "Doe"]);
     });
   }
 });

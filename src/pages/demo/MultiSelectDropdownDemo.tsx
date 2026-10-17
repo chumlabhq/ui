@@ -1567,7 +1567,7 @@ const MultiSelectDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <FormDemo onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits the values joined with commas.">
+          <FormDemo onEmpty="Submit with nothing selected: a required field needs one value, so the submit is blocked and focus moves to the trigger. It submits one entry per selected value, as a native multiple select does.">
             <MultiSelectDropdown name="fruits" label="Fruits" required options={[{ value: "a", label: "Apple" }, { value: "b", label: "Banana" }, { value: "c", label: "Cherry" }]} />
           </FormDemo>
         </DemoWrapper>

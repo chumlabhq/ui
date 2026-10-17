@@ -743,7 +743,7 @@ describe("MultiSelectDropdown", () => {
   });
 
   describe("Form submission", () => {
-    it("renders hidden input with name and selected values", () => {
+    it("renders one hidden input per selected value", () => {
       render(
         <MultiSelectDropdown
           options={options}
@@ -752,11 +752,10 @@ describe("MultiSelectDropdown", () => {
         />
       );
 
-      const hiddenInput = document.querySelector(
+      const hiddenInputs = document.querySelectorAll<HTMLInputElement>(
         'input[aria-hidden="true"][name="fruits"]'
-      ) as HTMLInputElement;
-      expect(hiddenInput).toBeInTheDocument();
-      expect(hiddenInput.value).toBe("apple,cherry");
+      );
+      expect([...hiddenInputs].map((input) => input.value)).toEqual(["apple", "cherry"]);
     });
 
     it("does not render hidden input when name is not provided", () => {
@@ -784,10 +783,10 @@ describe("MultiSelectDropdown", () => {
       await user.click(screen.getByRole("combobox"));
       await user.click(screen.getByText("Banana"));
 
-      const hiddenInput = document.querySelector(
+      const hiddenInputs = document.querySelectorAll<HTMLInputElement>(
         'input[aria-hidden="true"][name="fruits"]'
-      ) as HTMLInputElement;
-      expect(hiddenInput.value).toBe("apple,banana");
+      );
+      expect([...hiddenInputs].map((input) => input.value)).toEqual(["apple", "banana"]);
     });
   });
 

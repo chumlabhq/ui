@@ -738,7 +738,7 @@ const MultiSelectSearchableDropdown = forwardRef<
 
         {name && (
           <FormValue
-            entries={[[name, selectedOptions.map((o) => o.value).join(",")]]}
+            entries={selectedOptions.map((o) => [name, o.value] as const)}
             required={required}
             disabled={disabled}
             onReset={resetValue}

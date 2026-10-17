@@ -64,13 +64,13 @@ const PAGES: Page_[] = [
   {
     route: "multi-select-dropdown", section: "In a form", focus: "[role=combobox]",
     fill: async (form, page) => { await pick(form, page, "[role=combobox]", "Banana"); await page.getByRole("option", { name: "Cherry", exact: true }).click(); await page.keyboard.press("Escape"); },
-    submits: [/^fruits=b,c$/],
+    submits: [/^fruits=b$/, /^fruits=c$/],
     defaultShown: async (form) => expect(form).not.toContainText("Cherry"),
   },
   {
     route: "multi-select-searchable-dropdown", section: "In a form", focus: "[role=combobox]",
     fill: async (form, page) => { await pick(form, page, "[role=combobox]", "Banana"); await page.getByRole("option", { name: "Cherry", exact: true }).click(); await page.keyboard.press("Escape"); },
-    submits: [/^fruits=b,c$/],
+    submits: [/^fruits=b$/, /^fruits=c$/],
     defaultShown: async (form) => expect(form).not.toContainText("Cherry"),
   },
   {

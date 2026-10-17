@@ -100,8 +100,9 @@ export const FORM_FIXTURES: FormFixture[] = [
     render: (p) => <MultiSelectDropdown options={OPTIONS} label="Fruit" {...p} />,
     valueProp: "value",
     initial: ["a", "c"],
-    formData: ["f=a,c"],
-    empty: ["f="],
+    // One entry per value, as a native <select multiple>; none when nothing is chosen.
+    formData: ["f=a", "f=c"],
+    empty: [],
     blocks: true,
     change: (c, ui) => pickOption(c, ui, "Banana"),
   },
@@ -110,8 +111,9 @@ export const FORM_FIXTURES: FormFixture[] = [
     render: (p) => <MultiSelectSearchableDropdown options={OPTIONS} label="Fruit" {...p} />,
     valueProp: "value",
     initial: ["a", "c"],
-    formData: ["f=a,c"],
-    empty: ["f="],
+    // One entry per value, as a native <select multiple>; none when nothing is chosen.
+    formData: ["f=a", "f=c"],
+    empty: [],
     blocks: true,
     change: (c, ui) => pickOption(c, ui, "Banana"),
   },

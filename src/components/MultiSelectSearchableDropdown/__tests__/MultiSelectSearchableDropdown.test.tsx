@@ -464,7 +464,7 @@ describe("MultiSelectSearchableDropdown", () => {
       expect(hiddenInput).toHaveAttribute("name", "fruits");
     });
 
-    it("hidden input value reflects selected options joined by comma", () => {
+    it("renders one hidden input per selected value", () => {
       render(
         <MultiSelectSearchableDropdown
           options={options}
@@ -472,10 +472,10 @@ describe("MultiSelectSearchableDropdown", () => {
           defaultValue={["apple", "cherry"]}
         />
       );
-      const hiddenInput = document.querySelector(
-        'input[aria-hidden="true"]'
-      ) as HTMLInputElement;
-      expect(hiddenInput.value).toBe("apple,cherry");
+      const hiddenInputs = document.querySelectorAll<HTMLInputElement>(
+        'input[aria-hidden="true"][name="fruits"]'
+      );
+      expect([...hiddenInputs].map((input) => input.value)).toEqual(["apple", "cherry"]);
     });
   });
 
