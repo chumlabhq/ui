@@ -25,6 +25,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const CloseIcon = () => (
   <svg
@@ -716,6 +717,28 @@ const DrawerDemo = () => {
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Drawer/phone"
+          lookFor="The 300 px panel covers most of the screen and leaves a strip of the page beside it."
+        />
+      </Section>
+
+      {/* ─── Long sheet ──────────────────────────────────────────────────── */}
+      <Section
+        title="Long sheet"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Drawer/long-sheet"
+          lookFor="Its content scrolls by touch, and the sheet drags from its handle or its header."
+        />
+      </Section>
+
       <ComponentDocs name="Drawer" />
 
       <DocControlledPattern

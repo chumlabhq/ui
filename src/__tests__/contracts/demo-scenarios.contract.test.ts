@@ -86,6 +86,15 @@ describe("demo scenarios: each rule has a plant", () => {
     red("overlay without a trigger", run(matrix, { index: untriggered }).errors, /^Modal\.default: .* no trigger in the section that sets its open state$/);
   });
 
+  it("a phone frame whose route names no preview", () => {
+    const gone: Section[] = index.map((s) =>
+      s.page === "PaginationDemo.tsx" && s.title === "At phone width"
+        ? { ...s, elements: s.elements.map((e) => (e.tag === "PhoneFrame" ? { ...e, attrs: new Map([...e.attrs, ["route", '"/preview/Pagination/gone"']]) } : e)) }
+        : s,
+    );
+    red("frame naming no preview", run(matrix, { index: gone }).errors, /^Pagination\.phoneWidth: "At phone width" .* the phoneWidth predicate does not hold on it$/);
+  });
+
   it("an n/a whose probe goes stale", () => {
     // Accordion's read-only n/a is `no-prop:readOnly`; give it the prop.
     const grown: Component[] = components.map((c) =>

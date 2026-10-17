@@ -15,6 +15,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -701,6 +702,17 @@ const TooltipDemo = () => {
             <Button className={c.trigger}>Inspect trigger</Button>
           </Tooltip>
         </DemoWrapper>
+      </Section>
+
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Tooltip/phone"
+          lookFor="The tooltip opens above its trigger and stays inside the screen."
+        />
       </Section>
 
       <ComponentDocs name="Tooltip" />

@@ -19,6 +19,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const ArrowLeftIcon = ({ className }: { className?: string }) => (
   <svg
@@ -996,6 +997,17 @@ const PaginationDemo = () => {
               : "onValueChange has not fired yet — pick a page."}
           </p>
         </DemoWrapper>
+      </Section>
+
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Pagination/phone"
+          lookFor="Page 118 of 240 steps down to the first page, the current one and the last, with previous and next on the same row."
+        />
       </Section>
 
       <ComponentDocs name="Pagination" />

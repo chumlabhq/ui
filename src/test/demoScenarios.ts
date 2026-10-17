@@ -18,6 +18,7 @@ import { join } from "node:path";
 import { OPTIONS, viewsOf, type PropsView } from "./propsWalk.js";
 import { COMPONENT_DOCS } from "../pages/demo/generated/componentDocs.js";
 import { FORM_FIXTURES } from "../__tests__/fixtures/_forms.js";
+import { previewExamples } from "./previewExamples.js";
 
 const ROOT = process.cwd();
 const DEMO_DIR = join(ROOT, "src/pages/demo");
@@ -354,6 +355,19 @@ const controlledProps = (c: Component) =>
 const PHONE_WIDTH = /max-w-\[3[0-7]\dpx\]|\bw-\[3[0-7]\dpx\]|(maxWidth|width):\s*["']?3[0-7]\d(px)?\b/;
 
 /**
+ * A `PhoneFrame` in the section whose route names the component and an
+ * example its preview file renders. The frame loads that route in a 360 px
+ * iframe; a route naming no example would show the not-found page.
+ */
+let PREVIEWS: Map<string, Set<string>> | null = null;
+const framed = (s: Section, c: Component) =>
+  s.elements.some((e) => {
+    if (e.tag !== "PhoneFrame") return false;
+    const [, component, example] = /^["'{`]*\/preview\/([A-Za-z]+)\/([a-z0-9-]+)["'}`]*$/.exec(e.attrs.get("route") ?? "") ?? [];
+    return component === c.dir && !!(PREVIEWS ??= previewExamples()).get(component)?.has(example);
+  });
+
+/**
  * The forms the component takes part in: one that encloses it, or, for an
  * overlay, one inside it — a form in a drawer is the drawer's form scenario.
  */
@@ -434,7 +448,9 @@ export const PREDICATES: Record<Scenario, (s: Section, c: Component) => boolean>
         (ts.isArrayLiteralExpression(n) && n.elements.length >= 10))),
   // A frame at phone width around the component: an enclosing element held to
   // 300-379px. The component's own width is not a phone, it is a narrow input.
+  // Or a PhoneFrame, whose iframe gives the component a 360 px viewport.
   phoneWidth: (s, c) =>
+    framed(s, c) ||
     s.elements.some((frame) => !c.tags.includes(frame.tag) &&
       PHONE_WIDTH.test(`${frame.attrs.get("className") ?? ""} ${frame.attrs.get("style") ?? ""}`) &&
       own(s, c).some((e) => e !== frame && e.node.pos >= frame.node.pos && e.node.end <= frame.node.end)),
@@ -495,7 +511,9 @@ export function hasTrigger(s: Section, c: Component): boolean {
 
 export function holds(scenario: Scenario, s: Section, c: Component): boolean {
   if (!PREDICATES[scenario](s, c)) return false;
-  if (isOverlay(c) && !s.block && scenario !== "darkMode" && !hasTrigger(s, c)) return false;
+  // A framed preview opens its overlay itself, and has a button behind it to
+  // open it again; demo-phone.spec opens and reaches it in the frame.
+  if (isOverlay(c) && !s.block && scenario !== "darkMode" && !framed(s, c) && !hasTrigger(s, c)) return false;
   return true;
 }
 
@@ -562,7 +580,8 @@ export interface Context {
   gapRatchet: number;
 }
 
-export const SLICES = /^D12[a-e]$/;
+/** The D12 demo slices, or a library slice (`L24`) for a gap a demo cannot close until the library changes. */
+export const SLICES = /^(D12[a-e]|L\d+)$/;
 
 /**
  * Every rule of `docs/demo-scenarios.json`, as the list of what breaks it.
@@ -630,7 +649,7 @@ export function checkMatrix(matrix: Matrix, ctx: Context) {
         tally.gap += 1;
         const { reason, slice } = (cell as { gap: { reason?: unknown; slice?: unknown } }).gap;
         if (typeof reason !== "string" || reason.trim() === "") errors.push(`${id}: a gap needs a reason`);
-        if (typeof slice !== "string" || !SLICES.test(slice)) errors.push(`${id}: a gap needs a slice, D12a to D12e, not ${JSON.stringify(slice ?? null)}`);
+        if (typeof slice !== "string" || !SLICES.test(slice)) errors.push(`${id}: a gap needs a slice, D12a to D12e or a library slice Ln, not ${JSON.stringify(slice ?? null)}`);
         // Searched on the component's own page, where its scenarios are
         // demonstrated; composition is by nature on any page. A section on
         // another page that merely contains it — a Button inside a tooltip's

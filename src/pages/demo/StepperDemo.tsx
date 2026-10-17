@@ -21,6 +21,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const UserIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -825,6 +826,17 @@ const StepperDemo = () => {
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Stepper/phone"
+          lookFor="The four steps scroll sideways inside their row; the page itself does not."
+        />
+      </Section>
+
       <ComponentDocs name="Stepper" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}

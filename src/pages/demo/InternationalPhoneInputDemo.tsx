@@ -29,6 +29,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 // Opt-in real validation via @chumlab/ui/phone-validators (libphonenumber-js).
 const anyValidPhoneValidator = createLibphonenumberValidator({
@@ -1586,6 +1587,17 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
             <InternationalPhoneInput name="phone" label="Phone" required />
           </FormDemo>
         </DemoWrapper>
+      </Section>
+
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/InternationalPhoneInput/phone"
+          lookFor="The country button and the number share one row; the country list opens below them, inside the screen."
+        />
       </Section>
 
       <ComponentDocs name="InternationalPhoneInput" />

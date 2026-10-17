@@ -159,6 +159,44 @@ describe("snippet shape contract", () => {
   });
 
   /**
+   * A phone-width frame shows no code, and only a frame says so.
+   *
+   * A `PhoneFrame` section is the component its page already shows, loaded at
+   * a 360 px viewport: its code is the page's other sections. Each one is
+   * code-less by decision, with one reason, and the generator lists it in
+   * demoSnippets.skipped.json. Both ways: a frame section without the reason
+   * has dropped its exemption, and the reason on a section with no frame is an
+   * exemption excusing nothing.
+   */
+  it("shows no code in a phone-width frame, and claims that only for one", () => {
+    const REASON = "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above";
+    const skipped = (JSON.parse(readFileSync("src/pages/demo/generated/demoSnippets.skipped.json", "utf8")) as {
+      sections: Array<{ component: string; title: string; reason: string }>;
+    }).sections;
+    const claimed = skipped.filter((s) => s.reason === REASON).map((s) => `${s.component}/${s.title}`);
+    const framed: string[] = [];
+    for (const file of readdirSync("src/pages/demo").filter((f) => /Demo\.tsx$/.test(f))) {
+      const sf = ts.createSourceFile(file, readFileSync(join("src/pages/demo", file), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const visit = (n: ts.Node) => {
+        if (ts.isJsxElement(n) && n.openingElement.tagName.getText(sf) === "Section" && n.getText(sf).includes("<PhoneFrame")) {
+          const title = n.openingElement.attributes.properties.find(
+            (a): a is ts.JsxAttribute => ts.isJsxAttribute(a) && a.name.getText(sf) === "title",
+          )?.initializer;
+          framed.push(`${file.replace(/Demo\.tsx$/, "")}/${title && ts.isStringLiteral(title) ? title.text : "?"}`);
+        }
+        ts.forEachChild(n, visit);
+      };
+      visit(sf);
+    }
+    const unexempt = framed.filter((k) => !claimed.includes(k));
+    const stale = claimed.filter((k) => !framed.includes(k));
+    console.log(`SNIPPET_PHONE_FRAMES framed=${framed.length} exempt=${claimed.length} unexempt=${unexempt.length} stale=${stale.length}`);
+    expect(unexempt.sort(), "a PhoneFrame section without its code-less reason: put it back").toEqual([]);
+    expect(stale.sort(), "the phone-frame reason on a section with no PhoneFrame excuses nothing; delete it").toEqual([]);
+    expect(framed.length, "no PhoneFrame section found: the walk read nothing").toBeGreaterThan(0);
+  });
+
+  /**
    * One theming method: a token whose value switches per theme. The demo pages
    * also carried a second, a ternary on the theme flag (`dark ? "…" : "…"`),
    * and the snippet generator folds every one of those to its light branch, so

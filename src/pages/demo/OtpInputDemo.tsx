@@ -18,6 +18,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const getClasses = () => ({
   otp: {
@@ -601,6 +602,17 @@ const OtpInputDemo = () => {
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/OtpInput/phone"
+          lookFor="All six cells fit on one row."
+        />
+      </Section>
+
       <ComponentDocs name="OtpInput" />
 
       <DocControlledPattern

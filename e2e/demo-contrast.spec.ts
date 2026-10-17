@@ -1,6 +1,6 @@
 import { test, expect } from "./_test";
 import { MEASURE_DOCUMENT, underFloor } from "./_contrast-measure";
-import { EXEMPT, LATE_SECTIONS, demoPages, demoRoutes, outsideDemo, paintPending } from "./_demo-routes";
+import { EXEMPT, LATE_SECTIONS, demoPages, demoPreviewRoutes, demoRoutes, outsideDemo, paintPending } from "./_demo-routes";
 
 /**
  * Contrast as painted, over the demo PAGES.
@@ -47,8 +47,12 @@ import { EXEMPT, LATE_SECTIONS, demoPages, demoRoutes, outsideDemo, paintPending
  * layout in App.tsx, read from its JSX. A one-line regex read 33 of 37 and the
  * four it missed were measured by nothing. What is left out — the site pages,
  * the fixtures, the catch-all — is printed on every run.
+ *
+ * And every /preview route the docs pages' phone-width frames load, each
+ * measured as a page of its own, so what a frame shows is measured without
+ * walking iframes.
  */
-const ROUTES = demoRoutes();
+const ROUTES = [...demoRoutes(), ...demoPreviewRoutes()];
 
 /**
  * CPU throttle, for proving the wait rather than for the gate.
@@ -171,7 +175,9 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // description gained one code span (517 -> 512 measured HEAD vs now).
   // D11, 2026-10-17, 512 -> 501 (HEAD 512 -> now 501): Class overrides (47) became Anatomy (36).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "breadcrumb": 501,
+  // D12b, 2026-10-17, 501 -> 504 (HEAD 501 -> now 504): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "breadcrumb": 504,
   // D11, 2026-10-17, 445 -> 439 (HEAD 447 -> now 439): Class overrides (23) and the old Anatomy (3) became Anatomy (18).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   "button": 439,
@@ -193,15 +199,21 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D11, 2026-10-17, 975 -> 952 (HEAD 981 -> now 952): Class overrides (119) became Anatomy (90).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 952 -> 965 (HEAD 952 -> now 965): the new In a form (13).
-  "date-picker": 965,
-  "drawer": 418,
+  // D12b, 2026-10-17, 965 -> 968 (HEAD 965 -> now 968): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "date-picker": 968,
+  // D12b, 2026-10-17, 418 -> 431 (HEAD 425 -> now 431): the new At phone width and Long sheet (3 each): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "drawer": 431,
   // A2c, 746 -> 744: the API Reference lost the CheckIcon row (4 cells), folded
   // into selectedIcon, and the rewritten icon descriptions gained one code span
   // (747 -> 744 measured HEAD vs now).
   // D11, 2026-10-17, 744 -> 727 (HEAD 744 -> now 727): Class overrides (71) became Anatomy (54).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 727 -> 736 (HEAD 727 -> now 736): the new In a form (9).
-  "dropdown": 736,
+  // D12b, 2026-10-17, 736 -> 739 (HEAD 736 -> now 739): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "dropdown": 739,
   // D11, 2026-10-17, 530 -> 520 (HEAD 530 -> now 520): Class overrides (43) became Anatomy (33).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 520 -> 528 (HEAD 520 -> now 528): the new In a form (8).
@@ -209,7 +221,9 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D11, 2026-10-17, 946 -> 940 (HEAD 954 -> now 940): Class overrides (61) became Anatomy (47).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 940 -> 952 (HEAD 940 -> now 952): the new In a form (12).
-  "international-phone-input": 952,
+  // D12b, 2026-10-17, 952 -> 955 (HEAD 952 -> now 955): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "international-phone-input": 955,
   // L11, 426 -> 425: the In Context "Processing" button is now disabled while
   // it loads, and an inactive control's label is exempt from 1.4.3.
   // D11, 2026-10-17, 425 -> 399 (HEAD 425 -> now 399): Class overrides (62) became Anatomy (36).
@@ -218,51 +232,69 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // A2b, 495 -> 491: the API Reference lost the animation-off boolean's row (4
   // cells), folded into the reduceMotion row above it (measured HEAD vs now).
   // D12a, 2026-10-17, 491 -> 501 (HEAD 497 -> now 501): the new Form in a modal (4).
-  "modal": 501,
+  // D12b, 2026-10-17, 501 -> 507 (HEAD 501 -> now 507): the new At phone width and Taller than the screen (3 each): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "modal": 507,
   // D11, 2026-10-17, 684 -> 664 (HEAD 687 -> now 664): Class overrides (101) became Anatomy (78).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 664 -> 673 (HEAD 664 -> now 673): the new In a form (9).
-  "multi-select-dropdown": 673,
+  // D12b, 2026-10-17, 673 -> 676 (HEAD 673 -> now 676): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "multi-select-dropdown": 676,
   // D11, 2026-10-17, 707 -> 685 (HEAD 709 -> now 685): Class overrides (102) became Anatomy (78).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 685 -> 694 (HEAD 685 -> now 694): the new In a form (9); the onFocus/onBlur section
   // that was titled Form Integration is renamed Focus and blur events, 5 rows before and after.
-  "multi-select-searchable-dropdown": 694,
+  // D12b, 2026-10-17, 694 -> 697 (HEAD 694 -> now 697): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "multi-select-searchable-dropdown": 697,
   // A2f, 433 -> 429: the API Reference lost the group-name prop's row (4 cells),
   // folded into aria-label (measured A2e vs now; no other change on the page).
   // D11, 2026-10-17, 429 -> 420 (HEAD 429 -> now 420): Class overrides (40) became Anatomy (31).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 420 -> 428 (HEAD 420 -> now 428): the new In a form (8); the page's own Form Integration
   // section is unchanged at 8 rows.
-  "otp-input": 428,
+  // D12b, 2026-10-17, 428 -> 431 (HEAD 428 -> now 431): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "otp-input": 431,
   // D11, 2026-10-17, 634 -> 626 (HEAD 637 -> now 626): Class overrides (48) became Anatomy (37).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "pagination": 626,
+  // D12b, 2026-10-17, 626 -> 629 (HEAD 626 -> now 629): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "pagination": 629,
   // D11, 2026-10-17, 476 -> 465 (HEAD 476 -> now 465): Class overrides (48) and the old Anatomy (3) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 465 -> 475 (HEAD 465 -> now 475): the new In a form (10).
   "radio-button": 475,
   // D11, 2026-10-17, 359 -> 356 (HEAD 359 -> now 356): Class overrides (15) became Anatomy (12).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "resizable-panel": 356,
+  // D12b, 2026-10-17, 356 -> 359 (HEAD 356 -> now 359): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "resizable-panel": 359,
   // D11, 2026-10-17, 755 -> 736 (HEAD 756 -> now 736): Class overrides (83) became Anatomy (63).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 736 -> 745 (HEAD 736 -> now 745): the new In a form (9).
-  "searchable-dropdown": 745,
+  // D12b, 2026-10-17, 745 -> 748 (HEAD 745 -> now 748): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "searchable-dropdown": 748,
   // D11, 2026-10-17, 545 -> 534 (HEAD 546 -> now 534): Class overrides (52) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 534 -> 536 (HEAD 534 -> now 536): Form Integration (6) became In a form (8).
   "slider": 536,
   // D11, 2026-10-17, 682 -> 673 (HEAD 685 -> now 673): Class overrides (54) became Anatomy (42).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "stepper": 673,
+  // D12b, 2026-10-17, 673 -> 676 (HEAD 673 -> now 676): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "stepper": 676,
   // D11, 2026-10-17, 423 -> 413 (HEAD 423 -> now 413): Class overrides (44) became Anatomy (34).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 413 -> 421 (HEAD 413 -> now 421): the new In a form (8).
   "switch": 421,
   // D11, 2026-10-17, 677 -> 632 (HEAD 678 -> now 632): Class overrides (76) became Anatomy (30).
   // The dropped Type and Default columns carried no information (string, — on every slot); TabPanel's duplicate ResolvedClasses listing removed.
-  "tab-panel": 632,
+  // D12b, 2026-10-17, 632 -> 635 (HEAD 632 -> now 635): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "tab-panel": 635,
   // X4, 5342 -> 5543, 2026-10-16: the Server-Side example's rows are the 24
   // fixture products (10 a page) and its category filter, waited for, where
   // 5342 was the cold read with dummyjson.com's rows not yet landed.
@@ -276,14 +308,42 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D11, 2026-10-17, 871 -> 862 (HEAD 893 -> now 862): Class overrides (127) became Anatomy (96).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 862 -> 871 (HEAD 862 -> now 871): the new In a form (9).
-  "time-picker": 871,
+  // D12b, 2026-10-17, 871 -> 874 (HEAD 871 -> now 874): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "time-picker": 874,
   // A2a, 564 -> 562: the API Reference lost the onRemove row (4 cells) and the
   // rewritten onDismiss(id) description gained two `id` code spans.
   // D11, 2026-10-17, 562 -> 560 (HEAD 563 -> now 560): Class overrides (43) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "toast": 560,
+  // D12b, 2026-10-17, 560 -> 563 (HEAD 560 -> now 563): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "toast": 563,
   // 426 -> 423, 2026-10-08: the three gradient-with-arrow examples were removed (an arrow cannot take a gradient).
-  "tooltip": 423,
+  // D12b, 2026-10-17, 423 -> 432 (HEAD 429 -> now 432): the new At phone width (3): its heading and the frame's caption;
+  // the frame's content is the /preview route's, measured on its own below.
+  "tooltip": 432,
+  // D12b, 2026-10-17: the pages the phone-width frames load, one per preview
+  // example, measured on their own. Each read the same count in both themes,
+  // with no findings, in a Chromium scan with the spec's measurement.
+  "preview/Breadcrumb/phone": 4,
+  "preview/DatePicker/phone": 47,
+  "preview/Drawer/phone": 7,
+  "preview/Drawer/long-sheet": 34,
+  "preview/Dropdown/phone": 11,
+  "preview/InternationalPhoneInput/phone": 6,
+  "preview/Modal/phone": 6,
+  "preview/Modal/tall": 29,
+  "preview/MultiSelectDropdown/phone": 15,
+  "preview/MultiSelectSearchableDropdown/phone": 15,
+  "preview/OtpInput/phone": 3,
+  "preview/Pagination/phone": 7,
+  "preview/ResizablePanel/phone": 2,
+  "preview/SearchableDropdown/phone": 13,
+  "preview/Stepper/phone": 9,
+  "preview/TabPanel/phone": 7,
+  "preview/TimePicker/phone": 99,
+  "preview/Toast/phone": 4,
+  "preview/Tooltip/phone": 3,
 };
 
 /**

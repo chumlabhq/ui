@@ -43,10 +43,10 @@
       "since": "2026-10-17, G6: D12 measured 135 by hand; the audit now derives it; 2026-10-17, D12a: 135 → 132, `name` now demonstrated on CascadingDropdown, DatePicker and MultiSelectSearchableDropdown by their In a form sections"
     },
     "demo-scenarios-gap": {
-      "value": 51,
+      "value": 34,
       "checkedBy": "src/__tests__/contracts/demo-scenarios.contract.test.ts",
       "counts": "cells of docs/demo-scenarios.json recorded as gap",
-      "since": "2026-10-17, G6: D12 graded 81; the predicates add the 12 `required` cells D12 graded without a <form>, InternationalPhoneInput and TimePicker long content (its only long list is its own; the cited section is about lockScroll), and the 2 long-content n/a no fixed probe holds for; 2026-10-17, D12a: 97 → 51, the 46 D12a cells closed by the In a form sections on the 15 form-field pages and Modal's Form in a modal"
+      "since": "2026-10-17, G6: D12 graded 81; the predicates add the 12 `required` cells D12 graded without a <form>, InternationalPhoneInput and TimePicker long content (its only long list is its own; the cited section is about lockScroll), and the 2 long-content n/a no fixed probe holds for; 2026-10-17, D12a: 97 → 51, the 46 D12a cells closed by the In a form sections on the 15 form-field pages and Modal's Form in a modal; 2026-10-17, D12b: 51 → 34, the 17 phone-width cells closed by the At phone width sections (a PhoneFrame on each page); CascadingDropdown's phone width stays a gap, owed by L24"
     }
   },
   "$runWas": "green",

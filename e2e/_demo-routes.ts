@@ -1,6 +1,7 @@
 import ts from "typescript";
 import { readFileSync, readdirSync } from "node:fs";
 import { basename } from "node:path";
+import { previewRoutes } from "../src/test/previewExamples";
 
 /**
  * Which routes are demo pages, and which demo pages have a route.
@@ -137,11 +138,20 @@ export function outsideDemo(): Array<{ path: string; reason: string }> {
       path: r.path!,
       reason: r.path!.startsWith("/__fixtures")
         ? "fixtures, which contrast-painted measures"
-        : r.path === "/*"
+        : r.path!.startsWith("/preview/")
+          ? "the pattern; each registered preview is measured by its own route"
+          : r.path === "/*"
           ? "the not-found catch-all"
           : "outside the docs layout (site page)",
     }));
 }
+
+/**
+ * The preview pages the docs pages' phone-width frames load, without a leading
+ * slash: one per example the preview files register, so a frame's content is
+ * measured as a page of its own rather than through its iframe.
+ */
+export const demoPreviewRoutes = (): string[] => previewRoutes().map((r) => r.replace(/^\//, ""));
 
 /** Each demo page file, and the routes that render it — read from the files, not the walk. */
 export function demoPages(): Array<{ file: string; routes: string[] }> {

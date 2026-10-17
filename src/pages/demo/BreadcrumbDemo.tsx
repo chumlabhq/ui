@@ -17,6 +17,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const HomeIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -763,6 +764,17 @@ const BreadcrumbDemo = () => {
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Breadcrumb/phone"
+          lookFor="The trail keeps its first crumb and its last two, folds the rest into the ellipsis and wraps onto a second line; the ellipsis opens the folded crumbs inside the screen."
+        />
+      </Section>
+
       <ComponentDocs name="Breadcrumb" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}

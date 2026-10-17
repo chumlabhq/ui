@@ -17,6 +17,7 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -1227,6 +1228,17 @@ const TabPanelDemo = () => {
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/TabPanel/phone"
+          lookFor="The tab row scrolls sideways inside itself; the page itself does not."
+        />
+      </Section>
+
       <ComponentDocs name="TabPanel" />
 
       {/* ─── Tab Object Props ────────────────────────────────────────────── */}

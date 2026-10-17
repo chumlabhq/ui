@@ -18,6 +18,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const getClasses = () => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`,
@@ -1427,6 +1428,17 @@ const TimePickerDemo = () => {
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/TimePicker/phone"
+          lookFor="The list of times opens below the field, inside the screen."
+        />
+      </Section>
+
       <ComponentDocs name="TimePicker" />
 
       {/* ─── 39. Controlled Pattern ──────────────────────────────────────── */}

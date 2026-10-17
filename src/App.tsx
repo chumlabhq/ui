@@ -64,6 +64,8 @@ const StylingDemo = lazy(() => import("./pages/demo/StylingDemo.js"));
 const ThemingDemo = lazy(() => import("./pages/demo/ThemingDemo.js"));
 const AnimationDemo = lazy(() => import("./pages/demo/AnimationDemo.js"));
 const AiLlmDemo = lazy(() => import("./pages/demo/AiLlmDemo.js"));
+/** One demo example per page with no site chrome, for the docs pages' phone-width frames. */
+const PreviewRoute = lazy(() => import("./pages/demo/previews/PreviewRoute.js"));
 
 const App = () => {
   useScrollToTop();
@@ -132,6 +134,14 @@ const App = () => {
           still in `src/pages/playground` and is not reachable from any route,
           so it neither renders nor enters the bundle. `docs/playground-removal.md`
           is the restore list. Both paths fall through to the catch-all below. */}
+      <Route
+        path="/preview/:component/:example"
+        element={
+          <Suspense fallback={null}>
+            <PreviewRoute />
+          </Suspense>
+        }
+      />
       {FixtureRoutes && (
         <Route
           path="__fixtures/*"

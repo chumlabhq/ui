@@ -3,9 +3,9 @@
   "$vocabulary": {
     "shown": "{ page: the demo file, section: the <Section> title exactly } — the scenario's predicate must hold on that section",
     "na": "{ probe, reason } — probe is one of no-prop:<names>, no-name, no-async, imperative, overlay-content, not-focusable, inline-fixed, re-checked against the props walk",
-    "gap": "{ reason, slice } — slice is D12a (forms), D12b (phone width), D12c (failing data), D12d (uncontrolled, long content) or D12e (composition); fails once a section shows it"
+    "gap": "{ reason, slice } — slice is D12a (forms), D12b (phone width), D12c (failing data), D12d (uncontrolled, long content) or D12e (composition), or a library slice (L24) where the demo waits on a library fix; fails once a section shows it"
   },
-  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario. D12a, 2026-10-17: the 46 D12a cells are shown, by the In a form section on each form field page and Modal's Form in a modal (396 shown, 213 n/a, 51 gap).",
+  "$basis": "2026-10-17, G6: from D12's hand-graded 660 cells, each re-checked by the predicates. 350 shown, 213 n/a, 97 gap; D12 had 364, 215 and 81. The 16 cells moved to gap: 12 `required` cells D12 graded without a <form>; InternationalPhoneInput long content (its only long list is its own) and TimePicker long content (the cited \"Scroll Behavior\" is about lockScroll); DatePicker and ResizablePanel long content, n/a in D12, where no fixed probe holds. 14 shown cells cite a different section from D12's line, because D12's line was outside any <Section> or its AST lacks the scenario. D12a, 2026-10-17: the 46 D12a cells are shown, by the In a form section on each form field page and Modal's Form in a modal (396 shown, 213 n/a, 51 gap). D12b, 2026-10-17: the 17 phone-width cells are shown, each by an At phone width section whose PhoneFrame loads the component's /preview route at 360 px (413 shown, 213 n/a, 34 gap). CascadingDropdown's stays a gap, owed by L24: its menu is wider than the viewport at that width.",
   "components": {
     "Accordion": {
       "default": {
@@ -373,9 +373,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "BreadcrumbDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -642,8 +642,8 @@
       },
       "phoneWidth": {
         "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+          "reason": "Its menu is 8 px wider than a 360 px viewport: `min-w-full` below `sm:` on a fixed popup resolves to the viewport's width, from a left of 8 px (utils/constants.ts). A frame would show the clip; L24 fixes the menu, then a PhoneFrame shows it.",
+          "slice": "L24"
         }
       },
       "composition": {
@@ -1043,9 +1043,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "DatePickerDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -1177,9 +1177,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "DrawerDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -1311,9 +1311,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "DropdownDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -1579,9 +1579,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "InternationalPhoneInputDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -1847,9 +1847,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "ModalDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -1981,9 +1981,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "MultiSelectDropdownDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -2115,9 +2115,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "MultiSelectSearchableDropdownDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -2249,9 +2249,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "OtpInputDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -2383,9 +2383,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "PaginationDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -2651,9 +2651,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "ResizablePanelDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -2785,9 +2785,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "SearchableDropdownDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -3053,9 +3053,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "StepperDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -3321,9 +3321,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "TabPanelDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -3723,9 +3723,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "TimePickerDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -3857,9 +3857,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "ToastDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {
@@ -3991,9 +3991,9 @@
         }
       },
       "phoneWidth": {
-        "gap": {
-          "reason": "No section shows it in a 320–375px frame.",
-          "slice": "D12b"
+        "shown": {
+          "page": "TooltipDemo.tsx",
+          "section": "At phone width"
         }
       },
       "composition": {

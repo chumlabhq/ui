@@ -170,7 +170,7 @@ export default defineConfig(({ mode }) => {
     server: {
       headers: {
         "X-Content-Type-Options": "nosniff",
-        "X-Frame-Options": "DENY",
+        "X-Frame-Options": "SAMEORIGIN",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
         // Third-party allowlist:
@@ -181,10 +181,11 @@ export default defineConfig(({ mode }) => {
         //     but `connect-src https:` is left wide-open for now.
         //   * Local chumlab-be (http://localhost:5000) - dev-server-only
         //     headers, so this never reaches production responses.
-        // The site frames nothing of its own and is framed by nobody: the one
-        // same-origin iframe was the playground preview, which is gone.
-        // Restoring it needs script-src blob: and frame-src/frame-ancestors
-        // 'self' back (docs/playground-removal.md).
+        // The site frames only itself: the docs pages' phone-width frames
+        // (PhoneFrame) load the site's own /preview routes, hence frame-src and
+        // frame-ancestors 'self' and X-Frame-Options SAMEORIGIN. Same origin
+        // only; framing by any other origin stays blocked. Restoring the
+        // playground preview also needs script-src blob: (docs/playground-removal.md).
         "Content-Security-Policy":
           "default-src 'self'; " +
           "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; " +
@@ -192,8 +193,8 @@ export default defineConfig(({ mode }) => {
           "font-src 'self'; " +
           "img-src 'self' https: data:; " +
           "connect-src 'self' https: http://localhost:5050; " +
-          "frame-src https://api.razorpay.com https://checkout.razorpay.com; " +
-          "frame-ancestors 'none'",
+          "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com; " +
+          "frame-ancestors 'self'",
         "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
       },
     },

@@ -71,6 +71,31 @@
       "reason": "no demo wrapper in the section"
     },
     {
+      "component": "Breadcrumb",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "DatePicker",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Drawer",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Drawer",
+      "title": "Long sheet",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Dropdown",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
       "component": "GettingStarted",
       "title": "Prerequisites",
       "reason": "no demo wrapper in the section"
@@ -86,6 +111,11 @@
       "reason": "no demo wrapper in the section"
     },
     {
+      "component": "InternationalPhoneInput",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
       "component": "Introduction",
       "title": "What's inside",
       "reason": "no demo wrapper in the section"
@@ -99,6 +129,51 @@
       "component": "Introduction",
       "title": "Who it's for",
       "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "Modal",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Modal",
+      "title": "Taller than the screen",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "OtpInput",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Pagination",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "ResizablePanel",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "SearchableDropdown",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Stepper",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
     },
     {
       "component": "Styling",
@@ -129,6 +204,11 @@
       "component": "Styling",
       "title": "Where floating content renders",
       "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "TabPanel",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
     },
     {
       "component": "Table",
@@ -279,6 +359,21 @@
       "component": "Theming",
       "title": "Custom palettes",
       "reason": "no demo wrapper in the section"
+    },
+    {
+      "component": "TimePicker",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Toast",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+    },
+    {
+      "component": "Tooltip",
+      "title": "At phone width",
+      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
     }
   ],
   "droppedClassesKeys": []

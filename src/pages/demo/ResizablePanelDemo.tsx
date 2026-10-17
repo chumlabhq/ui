@@ -17,6 +17,7 @@ import {
 } from "./components/index.js";
 import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const getClasses = () => ({
   panel: {
@@ -942,6 +943,17 @@ const ResizablePanelDemo = () => {
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/ResizablePanel/phone"
+          lookFor="Drag the edge: the panel stops at its maxValue of 320 px, inside the screen."
+        />
+      </Section>
+
       <ComponentDocs name="ResizablePanel" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}

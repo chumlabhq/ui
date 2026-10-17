@@ -30,6 +30,7 @@ import {
   startOfWeek,
 } from "date-fns";
 import { fr, de } from "date-fns/locale";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 const getClasses = () => ({
   datepicker: {
@@ -1719,6 +1720,17 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/DatePicker/phone"
+          lookFor="The calendar opens below the field and fits the screen's width."
+        />
+      </Section>
+
       <ComponentDocs name="DatePicker" />
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}

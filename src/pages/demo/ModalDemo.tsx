@@ -22,6 +22,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
+import { PhoneFrame } from "./components/PhoneFrame.js";
 
 // Buttons follow the home-page CTA system: primary = the inverse-fg pill
 // (the "Browse components" treatment), secondary = an elevated-surface
@@ -1571,6 +1572,28 @@ const ModalDemo = () => {
             <Input name="email" type="email" label="Email" required />
           </FormDemo>
         </Modal>
+      </Section>
+
+      {/* ─── At phone width ──────────────────────────────────────────────── */}
+      <Section
+        title="At phone width"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Modal/phone"
+          lookFor="The dialog takes the screen's width, less a margin on each side."
+        />
+      </Section>
+
+      {/* ─── Taller than the screen ──────────────────────────────────────── */}
+      <Section
+        title="Taller than the screen"
+        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      >
+        <PhoneFrame
+          route="/preview/Modal/tall"
+          lookFor="The dialog scrolls inside the overlay, and the last control can be reached by Tab and by scrolling."
+        />
       </Section>
 
       <ComponentDocs name="Modal" />
