@@ -16,6 +16,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -206,7 +207,7 @@ const MultiSelectSearchableDropdownDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="MultiSelectSearchableDropdown" />
+      <ComponentAnatomy name="MultiSelectSearchableDropdown" />
 
       {/* ─── Basic Usage ──────────────────────────────────────────────────── */}
       <Section
@@ -1396,6 +1397,8 @@ const MultiSelectSearchableDropdownDemo = () => {
           "Do not hide selected state from assistive tech.",
         ]}
       />
+
+      <CopyPasteBlock name="MultiSelectSearchableDropdown" />
     </div>
   );
 };

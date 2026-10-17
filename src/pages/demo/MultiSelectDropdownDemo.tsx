@@ -16,6 +16,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -343,7 +344,7 @@ const MultiSelectDropdownDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="MultiSelectDropdown" />
+      <ComponentAnatomy name="MultiSelectDropdown" />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -1588,6 +1589,8 @@ const MultiSelectDropdownDemo = () => {
           "Do not overload chips with primary navigation actions.",
         ]}
       />
+
+      <CopyPasteBlock name="MultiSelectDropdown" />
     </div>
   );
 };

@@ -21,6 +21,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -152,7 +153,7 @@ const DrawerDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Drawer" />
+      <ComponentAnatomy name="Drawer" />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -688,6 +689,32 @@ const DrawerDemo = () => {
         </Drawer>
       </Section>
 
+      {/* ─── The focus behaviours, and turning them off ───────────────────── */}
+      <Section
+        title="Focus trapping and restoration"
+        description="A Drawer keeps Tab inside itself while it is open and returns focus to whatever opened it when it closes. Both are on by default and both can be turned off — for a non-modal panel that should not steal the keyboard, or one opened from a control that will no longer exist when it closes."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <Button className={c.btnPrimary} onClick={untrapped.onOpen}>
+            Open without focus trap or restore
+          </Button>
+          <p className="mt-3 text-sm text-cl-text-secondary">
+            Tab out of it — the focus ring walks into the page behind, which it
+            cannot do in the drawer above. Close it and focus does not come back
+            to this button.
+          </p>
+        </DemoWrapper>
+        <Drawer
+          open={untrapped.open}
+          onOpenChange={untrapped.onOpenChange}
+          trapFocus={false}
+          restoreFocus={false}
+        >
+          {renderDrawerContent("No trap, no restore", untrapped.onClose)}
+        </Drawer>
+      </Section>
+
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
       <ComponentDocs name="Drawer" />
 
@@ -717,31 +744,8 @@ const DrawerDemo = () => {
         ]}
       />
 
-      {/* ─── The focus behaviours, and turning them off ───────────────────── */}
-      <Section
-        title="Focus trapping and restoration"
-        description="A Drawer keeps Tab inside itself while it is open and returns focus to whatever opened it when it closes. Both are on by default and both can be turned off — for a non-modal panel that should not steal the keyboard, or one opened from a control that will no longer exist when it closes."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <Button className={c.btnPrimary} onClick={untrapped.onOpen}>
-            Open without focus trap or restore
-          </Button>
-          <p className="mt-3 text-sm text-cl-text-secondary">
-            Tab out of it — the focus ring walks into the page behind, which it
-            cannot do in the drawer above. Close it and focus does not come back
-            to this button.
-          </p>
-        </DemoWrapper>
-        <Drawer
-          open={untrapped.open}
-          onOpenChange={untrapped.onOpenChange}
-          trapFocus={false}
-          restoreFocus={false}
-        >
-          {renderDrawerContent("No trap, no restore", untrapped.onClose)}
-        </Drawer>
-      </Section>
+      <CopyPasteBlock name="Drawer" />
+
     </div>
   );
 };

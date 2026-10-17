@@ -16,6 +16,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -418,7 +419,7 @@ const SearchableDropdownDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="SearchableDropdown" />
+      <ComponentAnatomy name="SearchableDropdown" />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -1720,6 +1721,8 @@ const SearchableDropdownDemo = () => {
           "Do not use duplicate option values.",
         ]}
       />
+
+      <CopyPasteBlock name="SearchableDropdown" />
     </div>
   );
 };

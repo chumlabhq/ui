@@ -24,6 +24,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -258,7 +259,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
 
       <SetupNote />
 
-      <CopyPasteBlock name="InternationalPhoneInput" />
+      <ComponentAnatomy name="InternationalPhoneInput" />
 
       <div className="space-y-8">
         <Section
@@ -1600,6 +1601,8 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           "Do not assume one mask fits all countries.",
         ]}
       />
+
+      <CopyPasteBlock name="InternationalPhoneInput" />
     </div>
   );
 };

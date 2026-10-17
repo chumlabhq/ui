@@ -35,11 +35,38 @@ export interface DataAttributeDoc {
   when: string;
 }
 
+export interface PartLine {
+  code: string;
+  /** `required`, `optional`, or empty for a closing tag. */
+  mark: string;
+}
+
+export interface SlotDoc {
+  /** The component the slot belongs to, `Accordion` or `AccordionShimmer`. */
+  part: string;
+  slot: string;
+  /** The element(s) its class is applied to, read from the source. */
+  element: string;
+  description: string;
+}
+
+export interface PartsDoc {
+  /** A consumer must place a second public tag for it to work. */
+  composing: boolean;
+  why: string | null;
+  /** The required tag tree, for a composing component only. */
+  tree: PartLine[] | null;
+  /** Optional sub-tags inside the component's own tag. */
+  usage: PartLine[] | null;
+  slots: SlotDoc[];
+}
+
 export interface ComponentDoc {
   name: string;
   subpath: string;
   summary: string;
   anatomy: string;
+  parts: PartsDoc;
   props: PropDoc[];
   subComponents: { name: string; props: PropDoc[] }[];
   classes: { map: string; keys: MemberDoc[] }[];
@@ -57,6 +84,159 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/accordion",
     "summary": "A vertically stacked set of collapsible sections. Each item has a clickable trigger that toggles its content panel.",
     "anatomy": "<Accordion>\n  <AccordionItem>\n    <AccordionTrigger />\n    <AccordionContent />\n  </AccordionItem>\n</Accordion>",
+    "parts": {
+      "composing": true,
+      "why": "Accordion alone renders an empty container; its parts throw outside it.",
+      "tree": [
+        {
+          "code": "<Accordion>",
+          "mark": "required"
+        },
+        {
+          "code": "  <AccordionItem>",
+          "mark": "required"
+        },
+        {
+          "code": "    <AccordionTrigger />",
+          "mark": "required"
+        },
+        {
+          "code": "    <AccordionContent />",
+          "mark": "required"
+        },
+        {
+          "code": "  </AccordionItem>",
+          "mark": ""
+        },
+        {
+          "code": "</Accordion>",
+          "mark": ""
+        }
+      ],
+      "usage": null,
+      "slots": [
+        {
+          "part": "Accordion",
+          "slot": "root",
+          "element": "Slot, div",
+          "description": "The accordion's outer element."
+        },
+        {
+          "part": "Accordion",
+          "slot": "item",
+          "element": "Slot, div",
+          "description": "Each item's wrapper. Carries the variant's border treatment."
+        },
+        {
+          "part": "Accordion",
+          "slot": "trigger",
+          "element": "Slot, button",
+          "description": "The `<button>` inside each item's heading."
+        },
+        {
+          "part": "Accordion",
+          "slot": "itemText",
+          "element": "span",
+          "description": "The trigger's label text."
+        },
+        {
+          "part": "Accordion",
+          "slot": "body",
+          "element": "div",
+          "description": "The padded region inside the panel that holds the content."
+        },
+        {
+          "part": "Accordion",
+          "slot": "content",
+          "element": "div",
+          "description": "The animating panel. It is the grid whose row goes 0fr to 1fr."
+        },
+        {
+          "part": "Accordion",
+          "slot": "icon",
+          "element": "span",
+          "description": "The wrapper around the expand/collapse indicator."
+        },
+        {
+          "part": "Accordion",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "The chevron glyph itself, inside the `icon` slot. Style `icon` to reach the wrapper and this to reach the glyph alone."
+        },
+        {
+          "part": "Accordion",
+          "slot": "description",
+          "element": "span",
+          "description": "The optional line under the trigger's label."
+        },
+        {
+          "part": "Accordion",
+          "slot": "itemIcon",
+          "element": "span",
+          "description": "An icon rendered before the label, when one is passed."
+        },
+        {
+          "part": "Accordion",
+          "slot": "triggerActions",
+          "element": "span",
+          "description": "The slot after the label for controls that are not the trigger itself."
+        },
+        {
+          "part": "Accordion",
+          "slot": "header",
+          "element": "h1–h6",
+          "description": "The heading element the trigger sits inside."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "root",
+          "element": "Slot, div",
+          "description": "The placeholder's outer element."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "item",
+          "element": "div",
+          "description": "Each placeholder row."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "trigger",
+          "element": "div",
+          "description": "The bar standing in for a trigger."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "itemText",
+          "element": "div",
+          "description": "The bar standing in for the label."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "titleBar",
+          "element": "div",
+          "description": "The title placeholder bar."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "descriptionBar",
+          "element": "div",
+          "description": "The description placeholder bars, in the trigger and in the body."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "icon",
+          "element": "div",
+          "description": "The block standing in for the indicator."
+        },
+        {
+          "part": "AccordionShimmer",
+          "slot": "body",
+          "element": "div",
+          "description": "The block standing in for an expanded panel, shown only when `showContent` is set."
+        }
+      ]
+    },
     "props": [
       {
         "name": "selectionMode",
@@ -901,6 +1081,74 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/avatar",
     "summary": "A circular (or shaped) user representation showing an image, initials derived from a name, or custom fallback content. Includes group stacking, status indicators, notification badges, tooltips, and shimmer loading.",
     "anatomy": "<Avatar />\n<AvatarGroup>\n  <Avatar />\n</AvatarGroup>",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Avatar",
+          "slot": "root",
+          "element": "Slot, div",
+          "description": "Root container."
+        },
+        {
+          "part": "Avatar",
+          "slot": "control",
+          "element": "div",
+          "description": "Inner wrapper around image/initials/fallback."
+        },
+        {
+          "part": "Avatar",
+          "slot": "image",
+          "element": "img",
+          "description": "The `<img>` element."
+        },
+        {
+          "part": "Avatar",
+          "slot": "fallback",
+          "element": "span",
+          "description": "Initials text element."
+        },
+        {
+          "part": "Avatar",
+          "slot": "status",
+          "element": "span",
+          "description": "Status indicator dot."
+        },
+        {
+          "part": "Avatar",
+          "slot": "loading",
+          "element": "AvatarShimmer",
+          "description": "The skeleton's own bag — `AvatarShimmer` is a component, not a part."
+        },
+        {
+          "part": "AvatarGroup",
+          "slot": "root",
+          "element": "Slot, div",
+          "description": "Group container."
+        },
+        {
+          "part": "AvatarGroup",
+          "slot": "item",
+          "element": "div",
+          "description": "Individual avatar wrapper within the group."
+        },
+        {
+          "part": "AvatarGroup",
+          "slot": "surplus",
+          "element": "Slot, div",
+          "description": "Surplus count indicator."
+        },
+        {
+          "part": "AvatarShimmer",
+          "slot": "root",
+          "element": "div",
+          "description": "The placeholder element itself, which carries the size, shape and pulse."
+        }
+      ]
+    },
     "props": [
       {
         "name": "name",
@@ -1828,6 +2076,74 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/breadcrumb",
     "summary": "A navigation trail showing the user's current location in a hierarchy. Supports truncation with a dropdown for collapsed items, custom separators, icons, links, tooltips, and full style customization.",
     "anatomy": "<Breadcrumb />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Breadcrumb",
+          "slot": "root",
+          "element": "nav",
+          "description": "Root container (nav element)"
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "list",
+          "element": "ol",
+          "description": "Breadcrumb list (ol element)"
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "item",
+          "element": "span, button, a",
+          "description": "Non-active breadcrumb item"
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "link",
+          "element": "a",
+          "description": "Item rendered as anchor (has href)"
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "separator",
+          "element": "li",
+          "description": "Separator element"
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "itemIcon",
+          "element": "span",
+          "description": "An item's icon."
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "ellipsis",
+          "element": "li",
+          "description": "Ellipsis container (li)"
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "ellipsisTrigger",
+          "element": "button",
+          "description": "The button standing in for the items that did not fit."
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "content",
+          "element": "div",
+          "description": "The menu those collapsed items open into."
+        },
+        {
+          "part": "Breadcrumb",
+          "slot": "collapsedItem",
+          "element": "button",
+          "description": "One item inside that menu."
+        }
+      ]
+    },
     "props": [
       {
         "name": "items",
@@ -2208,6 +2524,38 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/button",
     "summary": "A polymorphic, accessible button that renders as `<button>`, `<a>`, or `<span>`. Provides structural defaults (padding, focus ring, disabled state) — visual theme is applied via `className`. Supports icons with animations, loading states, tooltips, and grouping.",
     "anatomy": "<ButtonGroup>\n  <Button />\n</ButtonGroup>",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Button",
+          "slot": "root",
+          "element": "Slot, a, span, button",
+          "description": "Root button/anchor/span element."
+        },
+        {
+          "part": "Button",
+          "slot": "itemText",
+          "element": "span",
+          "description": "Inner content wrapper."
+        },
+        {
+          "part": "Button",
+          "slot": "icon",
+          "element": "span",
+          "description": "Leading icon wrapper."
+        },
+        {
+          "part": "Button",
+          "slot": "loading",
+          "element": "span",
+          "description": "Loader/spinner wrapper."
+        }
+      ]
+    },
     "props": [
       {
         "name": "children",
@@ -2492,6 +2840,170 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/cascading-dropdown",
     "summary": "A multi-level dropdown menu with nested submenus. Supports single and multi-select per level, async data loading, and search with debounce.",
     "anatomy": "<CascadingDropdown />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "CascadingDropdown",
+          "slot": "root",
+          "element": "div",
+          "description": "The root: label, description, the control and the message. `className` lands here too."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "control",
+          "element": "div",
+          "description": "The box around the trigger and the clear button, which the menu anchors to."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "trigger",
+          "element": "button",
+          "description": "Trigger button"
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "value",
+          "element": "span",
+          "description": "The trigger\\'s value/placeholder text."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "content",
+          "element": "div",
+          "description": "The first-level menu surface."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "item",
+          "element": "div",
+          "description": "One row in the first-level menu."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "subContent",
+          "element": "div",
+          "description": "A submenu surface."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "subPositioner",
+          "element": "div",
+          "description": "The wrapper that anchors a submenu beside its parent row, and flips it when there is no room."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "subItem",
+          "element": "div",
+          "description": "One row inside a submenu."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element"
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the control."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "description",
+          "element": "div",
+          "description": "The helper line under the label."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "icon",
+          "element": "svg",
+          "description": "The chevron on the trigger."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "itemIcon",
+          "element": "svg",
+          "description": "An icon inside a menu row."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "The check shown on a selected row."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "itemControl",
+          "element": "span",
+          "description": "The checkbox drawn on a row when the level allows multiple selection."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "empty",
+          "element": "div",
+          "description": "The message shown when a level has no options."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "loading",
+          "element": "div",
+          "description": "Loading message"
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "clearTrigger",
+          "element": "button",
+          "description": "The button clearing the whole selection."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "loadingItem",
+          "element": "div",
+          "description": "One placeholder row while a level's options load."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "searchControl",
+          "element": "div",
+          "description": "Search input wrapper in the main menu (contains icon + input)."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "searchInput",
+          "element": "input",
+          "description": "The search `<input>` element in the main menu."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "searchIcon",
+          "element": "svg",
+          "description": "Search icon in the main menu search input."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "subSearchControl",
+          "element": "div",
+          "description": "Search input wrapper in submenus. Falls back to `searchInput` if not set."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "subSearchInput",
+          "element": "input",
+          "description": "The search `<input>` element in submenus. Falls back to `searchInputElement` if not set."
+        },
+        {
+          "part": "CascadingDropdown",
+          "slot": "subSearchIcon",
+          "element": "svg",
+          "description": "Search icon in submenu search inputs. Falls back to `searchIcon` if not set."
+        }
+      ]
+    },
     "props": [
       {
         "name": "options",
@@ -3232,6 +3744,56 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/checkbox",
     "summary": "A customizable checkbox with label, description, indeterminate state, custom icons, sizes, shapes, and accessible via native `<input>`.",
     "anatomy": "<Checkbox />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Checkbox",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container wrapping checkbox and label."
+        },
+        {
+          "part": "Checkbox",
+          "slot": "group",
+          "element": "span",
+          "description": "Container for the label and description text."
+        },
+        {
+          "part": "Checkbox",
+          "slot": "label",
+          "element": "span",
+          "description": "Label text element."
+        },
+        {
+          "part": "Checkbox",
+          "slot": "description",
+          "element": "span",
+          "description": "Description text below the label."
+        },
+        {
+          "part": "Checkbox",
+          "slot": "control",
+          "element": "span",
+          "description": "The checkbox indicator box."
+        },
+        {
+          "part": "Checkbox",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "The check/indeterminate icon inside the indicator."
+        },
+        {
+          "part": "Checkbox",
+          "slot": "message",
+          "element": "div",
+          "description": "Error message element."
+        }
+      ]
+    },
     "props": [
       {
         "name": "label",
@@ -3568,6 +4130,62 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/country-flag",
     "summary": "Renders a country flag image from a two-letter ISO country code. Supports sizes, tooltips, grouping, shimmer loading, and error fallback.",
     "anatomy": "<CountryFlag />\n<CountryFlagGroup>\n  <CountryFlag />\n</CountryFlagGroup>",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "CountryFlag",
+          "slot": "root",
+          "element": "span",
+          "description": "The element the flag sits in, which is what carries the size."
+        },
+        {
+          "part": "CountryFlag",
+          "slot": "loading",
+          "element": "CountryFlagShimmer",
+          "description": "The skeleton's own bag — `CountryFlagShimmer` is a component, not a part."
+        },
+        {
+          "part": "CountryFlag",
+          "slot": "image",
+          "element": "img",
+          "description": "The flag graphic itself."
+        },
+        {
+          "part": "CountryFlag",
+          "slot": "fallback",
+          "element": "span",
+          "description": "What is shown instead when the code has no flag or the image fails."
+        },
+        {
+          "part": "CountryFlagGroup",
+          "slot": "root",
+          "element": "div",
+          "description": "The overlapping row of flags."
+        },
+        {
+          "part": "CountryFlagGroup",
+          "slot": "item",
+          "element": "span",
+          "description": "Each flag in that row, which is where the stack margin lives."
+        },
+        {
+          "part": "CountryFlagGroup",
+          "slot": "count",
+          "element": "div",
+          "description": "The `+N` disc closing the row when there are more flags than `maxVisible`."
+        },
+        {
+          "part": "CountryFlagShimmer",
+          "slot": "root",
+          "element": "span",
+          "description": "The placeholder disc shown in a flag's place while it loads."
+        }
+      ]
+    },
     "props": [
       {
         "name": "code",
@@ -3991,6 +4609,182 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/date-picker",
     "summary": "A full-featured date picker supporting single, range, and multiple date selection with calendar popover, presets, markers, locale support, and keyboard navigation.",
     "anatomy": "<DatePicker />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "DatePicker",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "trigger",
+          "element": "button",
+          "description": "Trigger button"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "input",
+          "element": "span",
+          "description": "Text input inside trigger"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "triggerActions",
+          "element": "div",
+          "description": "The trigger's clear/calendar icon row."
+        },
+        {
+          "part": "DatePicker",
+          "slot": "icon",
+          "element": "svg",
+          "description": "Calendar icon in trigger"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "clearTrigger",
+          "element": "button",
+          "description": "Clear button in trigger"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "label",
+          "element": "label",
+          "description": "Label above trigger"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "message",
+          "element": "div",
+          "description": "Error message below trigger"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "description",
+          "element": "div",
+          "description": "Description text below label"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "content",
+          "element": "div",
+          "description": "Calendar popover container"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "header",
+          "element": "div",
+          "description": "Calendar header (month/year nav)"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "row",
+          "element": "div",
+          "description": "Month navigation container"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "navTrigger",
+          "element": "button",
+          "description": "Navigation button (prev/next month/year)"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "listRow",
+          "element": "div",
+          "description": "Multi-month grid wrapper"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "list",
+          "element": "div",
+          "description": "Single month grid"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "listHeader",
+          "element": "div",
+          "description": "Weekday header row"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "weekday",
+          "element": "div",
+          "description": "Individual weekday label"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "item",
+          "element": "div, button",
+          "description": "Calendar day cell"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "weekNumber",
+          "element": "div",
+          "description": "Week number column"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "presetGroup",
+          "element": "div",
+          "description": "Preset buttons container"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "presetTrigger",
+          "element": "button",
+          "description": "Individual preset button"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "footer",
+          "element": "div",
+          "description": "Calendar footer"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "todayTrigger",
+          "element": "button",
+          "description": "Today button in footer"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "markerIndicator",
+          "element": "span",
+          "description": "Marker indicator dot"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "monthSelect",
+          "element": "button",
+          "description": "Month select button"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "yearSelect",
+          "element": "button",
+          "description": "Year select button"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "subContent",
+          "element": "div",
+          "description": "Generic dropdown menu"
+        },
+        {
+          "part": "DatePicker",
+          "slot": "subItem",
+          "element": "button",
+          "description": "Dropdown item"
+        }
+      ]
+    },
     "props": [
       {
         "name": "selectionMode",
@@ -4972,6 +5766,73 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/drawer",
     "summary": "A sliding panel overlay with focus trapping, scroll lock, swipe-to-close, snap points, stacked drawer support, and keyboard navigation.",
     "anatomy": "<Drawer>\n  <DrawerHeader>\n    <DrawerCloseButton />\n  </DrawerHeader>\n  <DrawerBody />\n  <DrawerFooter />\n</Drawer>",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": [
+        {
+          "code": "<Drawer>",
+          "mark": ""
+        },
+        {
+          "code": "  <DrawerHeader>",
+          "mark": "optional"
+        },
+        {
+          "code": "    <DrawerCloseButton />",
+          "mark": "optional"
+        },
+        {
+          "code": "  </DrawerHeader>",
+          "mark": ""
+        },
+        {
+          "code": "  <DrawerBody />",
+          "mark": "optional"
+        },
+        {
+          "code": "  <DrawerFooter />",
+          "mark": "optional"
+        },
+        {
+          "code": "</Drawer>",
+          "mark": ""
+        }
+      ],
+      "slots": [
+        {
+          "part": "Drawer",
+          "slot": "root",
+          "element": "div",
+          "description": "The fixed layer the panel and its scrim share."
+        },
+        {
+          "part": "Drawer",
+          "slot": "overlay",
+          "element": "div",
+          "description": "The scrim over the page behind."
+        },
+        {
+          "part": "Drawer",
+          "slot": "content",
+          "element": "div",
+          "description": "The panel itself, which is the element that slides in from `side`."
+        },
+        {
+          "part": "Drawer",
+          "slot": "handle",
+          "element": "div",
+          "description": "The drag handle's hit area at the panel's leading edge. Rendered only when `swipeable`."
+        },
+        {
+          "part": "Drawer",
+          "slot": "handleBar",
+          "element": "span",
+          "description": "The bar drawn inside the handle, which is the part a pointer user sees."
+        }
+      ]
+    },
     "props": [
       {
         "name": "open",
@@ -5361,6 +6222,110 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/dropdown",
     "summary": "A single-select dropdown (combobox) with portal rendering, keyboard navigation, async loading, and full style customization.",
     "anatomy": "<Dropdown />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Dropdown",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container element"
+        },
+        {
+          "part": "Dropdown",
+          "slot": "control",
+          "element": "div",
+          "description": "The trigger box showing the current selection."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "trigger",
+          "element": "button",
+          "description": "Trigger button (combobox)"
+        },
+        {
+          "part": "Dropdown",
+          "slot": "value",
+          "element": "span",
+          "description": "The selected option's text inside the trigger, or the placeholder."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "content",
+          "element": "div",
+          "description": "Dropdown popup container (portal)"
+        },
+        {
+          "part": "Dropdown",
+          "slot": "list",
+          "element": "div",
+          "description": "The scrolling list inside the popup."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "item",
+          "element": "div",
+          "description": "One option row."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "icon",
+          "element": "span, svg",
+          "description": "The chevron on the trigger."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "The check shown on the selected row."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "clearTrigger",
+          "element": "button",
+          "description": "The button clearing the selection."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "empty",
+          "element": "div",
+          "description": "The message shown when there are no options."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element"
+        },
+        {
+          "part": "Dropdown",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the control."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "description",
+          "element": "div",
+          "description": "The helper line under the label."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "loading",
+          "element": "div",
+          "description": "The container holding the skeleton rows while options load."
+        },
+        {
+          "part": "Dropdown",
+          "slot": "loadingItem",
+          "element": "div",
+          "description": "One of those skeleton rows."
+        }
+      ]
+    },
     "props": [
       {
         "name": "options",
@@ -5992,6 +6957,68 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/input",
     "summary": "A production-grade text input with labels, icons, prefix/suffix, clearable, character count, validation states, and full form integration.",
     "anatomy": "<Input />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Input",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container (label + input row + error/success)"
+        },
+        {
+          "part": "Input",
+          "slot": "control",
+          "element": "div",
+          "description": "The box around the input and its addons, which is where the border and focus ring live."
+        },
+        {
+          "part": "Input",
+          "slot": "label",
+          "element": "FieldLabel",
+          "description": "Label element"
+        },
+        {
+          "part": "Input",
+          "slot": "description",
+          "element": "div",
+          "description": "Helper/description text"
+        },
+        {
+          "part": "Input",
+          "slot": "input",
+          "element": "input",
+          "description": "Native <input> element"
+        },
+        {
+          "part": "Input",
+          "slot": "prefix",
+          "element": "span",
+          "description": "Prefix addon"
+        },
+        {
+          "part": "Input",
+          "slot": "suffix",
+          "element": "span",
+          "description": "Suffix addon"
+        },
+        {
+          "part": "Input",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the field."
+        },
+        {
+          "part": "Input",
+          "slot": "count",
+          "element": "div",
+          "description": "Character count display"
+        }
+      ]
+    },
     "props": [
       {
         "name": "label",
@@ -6341,6 +7368,92 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/international-phone-input",
     "summary": "Phone number input with country code selection, automatic formatting, paste detection, copy formats, and full style customization.",
     "anatomy": "<InternationalPhoneInput />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "root",
+          "element": "div",
+          "description": "Outer container div"
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element"
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "control",
+          "element": "div",
+          "description": "The bordered box holding the country trigger and the number field."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "input",
+          "element": "input",
+          "description": "Phone number input element"
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the control."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "countrySelect",
+          "element": "SearchableDropdown",
+          "description": "The country picker is a `SearchableDropdown`, so this takes that component's own classes object rather than a class string."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "itemRow",
+          "element": "div",
+          "description": "The option row IPI renders into the child's `item` slot. These are IPI's own parts, not the dropdown's: SearchableDropdown has no itemRow/itemIcon/ itemText, and adding them would grow that component's API for one caller."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "itemIcon",
+          "element": "CountryFlag",
+          "description": "The flag inside one row of the country list."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "itemText",
+          "element": "span",
+          "description": "Country name and dial code inside one row."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "triggerRow",
+          "element": "div",
+          "description": "The selected country shown on the trigger."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "flag",
+          "element": "CountryFlag",
+          "description": "The flag shown in the control itself, for the selected country."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "value",
+          "element": "span",
+          "description": "The typed number inside the control."
+        },
+        {
+          "part": "InternationalPhoneInput",
+          "slot": "description",
+          "element": "div",
+          "description": "The helper line under the label, above the control."
+        }
+      ]
+    },
     "props": [
       {
         "name": "value",
@@ -7024,6 +8137,74 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/loader",
     "summary": "Animated loading indicators. Four variants: CircularLoader, LinearLoader, DotLoader, PulseLoader.",
     "anatomy": "<CircularLoader />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "CircularLoader",
+          "slot": "root",
+          "element": "div",
+          "description": "Root wrapper element."
+        },
+        {
+          "part": "CircularLoader",
+          "slot": "control",
+          "element": "svg",
+          "description": "SVG element."
+        },
+        {
+          "part": "CircularLoader",
+          "slot": "track",
+          "element": "circle",
+          "description": "Background track circle."
+        },
+        {
+          "part": "CircularLoader",
+          "slot": "range",
+          "element": "circle",
+          "description": "Foreground arc circle."
+        },
+        {
+          "part": "DotLoader",
+          "slot": "root",
+          "element": "div",
+          "description": "Root wrapper element."
+        },
+        {
+          "part": "DotLoader",
+          "slot": "range",
+          "element": "span",
+          "description": "Individual dot element."
+        },
+        {
+          "part": "LinearLoader",
+          "slot": "root",
+          "element": "div",
+          "description": "Root wrapper element."
+        },
+        {
+          "part": "LinearLoader",
+          "slot": "range",
+          "element": "div",
+          "description": "Animated bar element."
+        },
+        {
+          "part": "PulseLoader",
+          "slot": "root",
+          "element": "div",
+          "description": "Root wrapper element."
+        },
+        {
+          "part": "PulseLoader",
+          "slot": "range",
+          "element": "span",
+          "description": "Core dot element."
+        }
+      ]
+    },
     "props": [],
     "subComponents": [
       {
@@ -7359,6 +8540,101 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/modal",
     "summary": "Accessible dialog overlay with focus trapping, scroll lock, nested modals, animations, and full keyboard navigation.",
     "anatomy": "<Modal>\n  <ModalHeader />\n  <ModalBody />\n  <ModalFooter />\n</Modal>",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": [
+        {
+          "code": "<Modal>",
+          "mark": ""
+        },
+        {
+          "code": "  <ModalHeader />",
+          "mark": "optional"
+        },
+        {
+          "code": "  <ModalBody />",
+          "mark": "optional"
+        },
+        {
+          "code": "  <ModalFooter />",
+          "mark": "optional"
+        },
+        {
+          "code": "</Modal>",
+          "mark": ""
+        }
+      ],
+      "slots": [
+        {
+          "part": "Modal",
+          "slot": "root",
+          "element": "div",
+          "description": "Root fixed-position wrapper."
+        },
+        {
+          "part": "Modal",
+          "slot": "overlay",
+          "element": "div",
+          "description": "Backdrop overlay."
+        },
+        {
+          "part": "Modal",
+          "slot": "positioner",
+          "element": "div",
+          "description": "Scroll/centering container."
+        },
+        {
+          "part": "Modal",
+          "slot": "content",
+          "element": "div",
+          "description": "Dialog content panel."
+        },
+        {
+          "part": "Modal",
+          "slot": "header",
+          "element": "div",
+          "description": "Header section."
+        },
+        {
+          "part": "Modal",
+          "slot": "title",
+          "element": "div",
+          "description": "Title element."
+        },
+        {
+          "part": "Modal",
+          "slot": "description",
+          "element": "div",
+          "description": "Description element."
+        },
+        {
+          "part": "Modal",
+          "slot": "icon",
+          "element": "span",
+          "description": "Header icon wrapper."
+        },
+        {
+          "part": "Modal",
+          "slot": "closeTrigger",
+          "element": "button",
+          "description": "Close button."
+        },
+        {
+          "part": "Modal",
+          "slot": "closeIcon",
+          "element": "svg",
+          "description": "Close icon inside the close button."
+        },
+        {
+          "part": "Modal",
+          "slot": "body",
+          "element": "div",
+          "description": "Body content area."
+        }
+      ]
+    },
     "props": [
       {
         "name": "open",
@@ -7862,6 +9138,146 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/multi-select-dropdown",
     "summary": "A multi-select dropdown with chip display, checkbox options, async loading, and full style customization.",
     "anatomy": "<MultiSelectDropdown />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container element"
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "control",
+          "element": "div",
+          "description": "The trigger box holding the chips."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "trigger",
+          "element": "button",
+          "description": "Trigger button"
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "value",
+          "element": "span",
+          "description": "The chip strip inside the trigger. It wraps rather than clipping, so a chip's remove button keeps its full 24px hit area."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "content",
+          "element": "div",
+          "description": "Dropdown menu container"
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "list",
+          "element": "div",
+          "description": "The scrolling list inside the menu."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "item",
+          "element": "div",
+          "description": "One option row."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "icon",
+          "element": "span, svg",
+          "description": "The chevron on the trigger."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "itemControl",
+          "element": "span",
+          "description": "The checkbox drawn on each row."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "The check inside that checkbox when the row is selected."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "chip",
+          "element": "span",
+          "description": "Selected chip styling"
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "chipRemoveTrigger",
+          "element": "span",
+          "description": "Chip remove button"
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "empty",
+          "element": "div",
+          "description": "The message shown when there are no options."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element"
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the control."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "description",
+          "element": "div",
+          "description": "Description/helper text"
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "clearTrigger",
+          "element": "button",
+          "description": "The button clearing every selection at once."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "loading",
+          "element": "div",
+          "description": "The container holding the skeleton rows while options load."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "loadingItem",
+          "element": "div",
+          "description": "One row of the skeleton. It shared `loading` with the container above it."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "loadingItemControl",
+          "element": "div",
+          "description": "The square in each skeleton row, standing in for the row's `itemControl`. It and `loadingBar` were call-site literals in MultiSelectDropdownShimmer, which has no `classes` prop — routed through this bag rather than giving the sub-component a second way in."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "loadingBar",
+          "element": "div",
+          "description": "The wider of the two shapes in a skeleton row, standing in for the label."
+        },
+        {
+          "part": "MultiSelectDropdown",
+          "slot": "count",
+          "element": "span",
+          "description": "The `+N` chip standing in for selections past `maxVisible`."
+        }
+      ]
+    },
     "props": [
       {
         "name": "options",
@@ -8462,6 +9878,152 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/multi-select-searchable-dropdown",
     "summary": "A multi-select dropdown with built-in search, chip display, async search/prefetch, checkbox options, and full style customization.",
     "anatomy": "<MultiSelectSearchableDropdown />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container element"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "control",
+          "element": "div",
+          "description": "The trigger box holding the chips."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "trigger",
+          "element": "button",
+          "description": "Trigger button"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "value",
+          "element": "span",
+          "description": "The chip strip inside the trigger. It wraps rather than clipping, so a chip's remove button keeps its full 24px hit area."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "content",
+          "element": "div",
+          "description": "Dropdown content (portaled, background, border, shadow)"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "list",
+          "element": "div",
+          "description": "The scrolling list inside the popup."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "item",
+          "element": "div",
+          "description": "One option row."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "icon",
+          "element": "svg",
+          "description": "The chevron on the trigger."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "itemControl",
+          "element": "span",
+          "description": "The checkbox drawn on each row."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "The check inside that checkbox when the row is selected."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "chip",
+          "element": "span",
+          "description": "Selected chip"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "chipRemoveTrigger",
+          "element": "span",
+          "description": "Chip remove button"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "empty",
+          "element": "div",
+          "description": "The message shown when the search matches nothing."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "clearTrigger",
+          "element": "button",
+          "description": "The button clearing every selection at once."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "loading",
+          "element": "div",
+          "description": "Loading message"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "loadingItem",
+          "element": "div",
+          "description": "One row of the skeleton. It shared `loading` with the container above it."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the control."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "description",
+          "element": "div",
+          "description": "The helper line under the label."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "searchControl",
+          "element": "div",
+          "description": "The search field's row inside the popup, holding the input and its icon."
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "searchInput",
+          "element": "input",
+          "description": "Search input wrapper"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "searchIcon",
+          "element": "svg",
+          "description": "Search icon"
+        },
+        {
+          "part": "MultiSelectSearchableDropdown",
+          "slot": "count",
+          "element": "span",
+          "description": "The `+N` chip standing in for selections past `maxVisible`."
+        }
+      ]
+    },
     "props": [
       {
         "name": "options",
@@ -9143,6 +10705,62 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/otp-input",
     "summary": "A one-time password input with per-character fields, keyboard navigation, paste support, grouping, and validation.",
     "anatomy": "<OtpInput />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "OtpInput",
+          "slot": "root",
+          "element": "div",
+          "description": "The field and everything labelling it."
+        },
+        {
+          "part": "OtpInput",
+          "slot": "control",
+          "element": "div",
+          "description": "The row of boxes."
+        },
+        {
+          "part": "OtpInput",
+          "slot": "group",
+          "element": "div",
+          "description": "One run of boxes when `groups` splits the code up."
+        },
+        {
+          "part": "OtpInput",
+          "slot": "input",
+          "element": "input",
+          "description": "A single character box."
+        },
+        {
+          "part": "OtpInput",
+          "slot": "label",
+          "element": "label",
+          "description": "The label above the row."
+        },
+        {
+          "part": "OtpInput",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the row."
+        },
+        {
+          "part": "OtpInput",
+          "slot": "separator",
+          "element": "span",
+          "description": "What is drawn between two groups."
+        },
+        {
+          "part": "OtpInput",
+          "slot": "description",
+          "element": "div",
+          "description": "The helper line under the label."
+        }
+      ]
+    },
     "props": [
       {
         "name": "length",
@@ -9496,6 +11114,74 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/pagination",
     "summary": "Accessible page navigation with page buttons, rows-per-page selector, custom ellipsis, page info display, section reordering, i18n, and full style customization.",
     "anatomy": "<Pagination />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Pagination",
+          "slot": "root",
+          "element": "nav",
+          "description": "Outer nav container"
+        },
+        {
+          "part": "Pagination",
+          "slot": "row",
+          "element": "div",
+          "description": "The line holding the page list, the rows-per-page selector and the page info."
+        },
+        {
+          "part": "Pagination",
+          "slot": "list",
+          "element": "div",
+          "description": "The `<ul>` of page numbers."
+        },
+        {
+          "part": "Pagination",
+          "slot": "item",
+          "element": "button",
+          "description": "One page-number button."
+        },
+        {
+          "part": "Pagination",
+          "slot": "navTrigger",
+          "element": "button",
+          "description": "Prev/next buttons"
+        },
+        {
+          "part": "Pagination",
+          "slot": "ellipsis",
+          "element": "span",
+          "description": "Ellipsis elements"
+        },
+        {
+          "part": "Pagination",
+          "slot": "rowsPerPage",
+          "element": "span, svg, div, button",
+          "description": "The rows-per-page selector's own slots. Pagination builds this markup inline rather than rendering a Dropdown, so the slots are named here instead of being taken from that component's classes object."
+        },
+        {
+          "part": "Pagination",
+          "slot": "label",
+          "element": "span",
+          "description": "The text beside the rows-per-page selector."
+        },
+        {
+          "part": "Pagination",
+          "slot": "navIcon",
+          "element": "DefaultIcon",
+          "description": "The chevron inside a prev or next button."
+        },
+        {
+          "part": "Pagination",
+          "slot": "pageInfo",
+          "element": "div",
+          "description": "Page info section wrapper"
+        }
+      ]
+    },
     "props": [
       {
         "name": "totalPages",
@@ -9874,6 +11560,81 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/radio-button",
     "summary": "A radio button group with labels, descriptions, custom icons, sizes, orientations, and validation states.",
     "anatomy": "<RadioGroup>\n  <RadioButton />\n</RadioGroup>",
+    "parts": {
+      "composing": true,
+      "why": "RadioButton throws outside a RadioGroup, and a RadioGroup without one offers no choice.",
+      "tree": [
+        {
+          "code": "<RadioGroup>",
+          "mark": "required"
+        },
+        {
+          "code": "  <RadioButton />",
+          "mark": "required"
+        },
+        {
+          "code": "</RadioGroup>",
+          "mark": ""
+        }
+      ],
+      "usage": null,
+      "slots": [
+        {
+          "part": "RadioButton",
+          "slot": "root",
+          "element": "div, label",
+          "description": "Root label container wrapping radio and text."
+        },
+        {
+          "part": "RadioButton",
+          "slot": "label",
+          "element": "span",
+          "description": "Label text element."
+        },
+        {
+          "part": "RadioButton",
+          "slot": "description",
+          "element": "span",
+          "description": "Description text below the label."
+        },
+        {
+          "part": "RadioButton",
+          "slot": "control",
+          "element": "span",
+          "description": "The radio indicator circle."
+        },
+        {
+          "part": "RadioButton",
+          "slot": "itemIndicator",
+          "element": "span",
+          "description": "The inner dot/icon inside the indicator."
+        },
+        {
+          "part": "RadioGroup",
+          "slot": "root",
+          "element": "div, label",
+          "description": "Root container."
+        },
+        {
+          "part": "RadioGroup",
+          "slot": "label",
+          "element": "span",
+          "description": "Group label text."
+        },
+        {
+          "part": "RadioGroup",
+          "slot": "description",
+          "element": "span",
+          "description": "Group description text."
+        },
+        {
+          "part": "RadioGroup",
+          "slot": "message",
+          "element": "div",
+          "description": "Error message element."
+        }
+      ]
+    },
     "props": [
       {
         "name": "value",
@@ -10252,6 +12013,26 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/resizable-panel",
     "summary": "A draggable resizable panel with constraints, keyboard resizing, Escape to cancel, and WAI-ARIA separator semantics.",
     "anatomy": "<ResizablePanel />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "ResizablePanel",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container div that wraps children and the handle"
+        },
+        {
+          "part": "ResizablePanel",
+          "slot": "handle",
+          "element": "div",
+          "description": "The drag handle. It is also the keyboard target, so shrinking it here shrinks the hit area."
+        }
+      ]
+    },
     "props": [
       {
         "name": "value",
@@ -10440,6 +12221,128 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/searchable-dropdown",
     "summary": "A single-select dropdown with built-in search input, async search/prefetch, portal rendering, keyboard navigation, and full style customization.",
     "anatomy": "<SearchableDropdown />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "SearchableDropdown",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container element"
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "control",
+          "element": "div",
+          "description": "The trigger box showing the current selection."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "trigger",
+          "element": "button",
+          "description": "Trigger button (combobox)"
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "value",
+          "element": "span",
+          "description": "The selected option's text inside the trigger, or the placeholder."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "content",
+          "element": "div",
+          "description": "Dropdown popup container (portal)"
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "list",
+          "element": "div",
+          "description": "The scrolling list inside the popup."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "item",
+          "element": "div",
+          "description": "One option row."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "icon",
+          "element": "span, svg",
+          "description": "The chevron on the trigger."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "The check shown on the selected row."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "clearTrigger",
+          "element": "button",
+          "description": "The button clearing the selection."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "empty",
+          "element": "div",
+          "description": "The message shown when the search matches nothing."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element"
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the control."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "description",
+          "element": "div",
+          "description": "The helper line under the label."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "searchControl",
+          "element": "div",
+          "description": "The search field's row inside the popup, holding the input and its icon."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "searchInput",
+          "element": "input",
+          "description": "Search input area wrapper"
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "searchIcon",
+          "element": "svg",
+          "description": "Search icon element"
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "loading",
+          "element": "div",
+          "description": "The container holding the skeleton rows while options load."
+        },
+        {
+          "part": "SearchableDropdown",
+          "slot": "loadingItem",
+          "element": "div",
+          "description": "One of those skeleton rows."
+        }
+      ]
+    },
     "props": [
       {
         "name": "options",
@@ -11103,6 +13006,80 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/slider",
     "summary": "A range slider with single and dual-thumb modes, marks, tooltips, vertical orientation, and full keyboard navigation.",
     "anatomy": "<Slider />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Slider",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container"
+        },
+        {
+          "part": "Slider",
+          "slot": "label",
+          "element": "label",
+          "description": "Label above the slider"
+        },
+        {
+          "part": "Slider",
+          "slot": "description",
+          "element": "p",
+          "description": "Description below the label"
+        },
+        {
+          "part": "Slider",
+          "slot": "control",
+          "element": "div",
+          "description": "Horizontal/vertical wrapper around track + thumbs"
+        },
+        {
+          "part": "Slider",
+          "slot": "track",
+          "element": "div",
+          "description": "Full-length track background"
+        },
+        {
+          "part": "Slider",
+          "slot": "range",
+          "element": "div",
+          "description": "Filled portion of the track"
+        },
+        {
+          "part": "Slider",
+          "slot": "thumb",
+          "element": "div",
+          "description": "Draggable thumb(s)"
+        },
+        {
+          "part": "Slider",
+          "slot": "value",
+          "element": "div",
+          "description": "Value tooltip above the thumb"
+        },
+        {
+          "part": "Slider",
+          "slot": "mark",
+          "element": "div",
+          "description": "Mark tick container"
+        },
+        {
+          "part": "Slider",
+          "slot": "markLabel",
+          "element": "span",
+          "description": "The text under a mark's dot, when `showMarkLabels` is set."
+        },
+        {
+          "part": "Slider",
+          "slot": "message",
+          "element": "div",
+          "description": "Error message"
+        }
+      ]
+    },
     "props": [
       {
         "name": "value",
@@ -11515,6 +13492,80 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/stepper",
     "summary": "A step progress indicator with numbered/icon/dot variants, horizontal/vertical layouts, clickable steps, tooltips, and keyboard navigation.",
     "anatomy": "<Stepper />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Stepper",
+          "slot": "root",
+          "element": "div",
+          "description": "Root navigation container"
+        },
+        {
+          "part": "Stepper",
+          "slot": "list",
+          "element": "ol",
+          "description": "The <ol> list wrapping all steps"
+        },
+        {
+          "part": "Stepper",
+          "slot": "item",
+          "element": "li",
+          "description": "The `<li>` wrapping one step: indicator, text and the separator that follows it."
+        },
+        {
+          "part": "Stepper",
+          "slot": "trigger",
+          "element": "button, div",
+          "description": "The clickable region of a step — indicator and text together — when the step is navigable."
+        },
+        {
+          "part": "Stepper",
+          "slot": "itemIndicator",
+          "element": "div",
+          "description": "The numbered or icon-bearing circle."
+        },
+        {
+          "part": "Stepper",
+          "slot": "indicatorTrigger",
+          "element": "button",
+          "description": "The indicator when it is its own button, which is the `dot` and `icon` variants."
+        },
+        {
+          "part": "Stepper",
+          "slot": "itemIcon",
+          "element": "svg",
+          "description": "The icon inside the indicator, when one replaces the number."
+        },
+        {
+          "part": "Stepper",
+          "slot": "row",
+          "element": "div",
+          "description": "The flex row holding the indicator beside its text, for the horizontal orientations."
+        },
+        {
+          "part": "Stepper",
+          "slot": "itemText",
+          "element": "span",
+          "description": "Label and description together, so they can be aligned as one block."
+        },
+        {
+          "part": "Stepper",
+          "slot": "description",
+          "element": "span",
+          "description": "Step description text"
+        },
+        {
+          "part": "Stepper",
+          "slot": "separator",
+          "element": "div",
+          "description": "The connector drawn between one step and the next."
+        }
+      ]
+    },
     "props": [
       {
         "name": "steps",
@@ -12135,6 +14186,68 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/switch",
     "summary": "A toggle switch for binary on/off states with labels, validation, loading, custom icons, and WAI-ARIA switch semantics.",
     "anatomy": "<Switch />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Switch",
+          "slot": "root",
+          "element": "div",
+          "description": "Outer container div"
+        },
+        {
+          "part": "Switch",
+          "slot": "row",
+          "element": "div",
+          "description": "The line holding the label group and the track, which is what `labelPosition` reorders."
+        },
+        {
+          "part": "Switch",
+          "slot": "group",
+          "element": "div",
+          "description": "The label and description stacked together, so they move as one."
+        },
+        {
+          "part": "Switch",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element"
+        },
+        {
+          "part": "Switch",
+          "slot": "description",
+          "element": "span",
+          "description": "Description span element"
+        },
+        {
+          "part": "Switch",
+          "slot": "control",
+          "element": "button",
+          "description": "The track the thumb slides along."
+        },
+        {
+          "part": "Switch",
+          "slot": "thumb",
+          "element": "span",
+          "description": "Thumb (handle) span element"
+        },
+        {
+          "part": "Switch",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the row."
+        },
+        {
+          "part": "Switch",
+          "slot": "loading",
+          "element": "svg",
+          "description": "The spinner shown on the thumb while the change is in flight."
+        }
+      ]
+    },
     "props": [
       {
         "name": "className",
@@ -12482,6 +14595,272 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/table",
     "summary": "A feature-rich data table with sorting, filtering, selection, pinned columns, row expansion, drag-and-drop, inline editing, column resizing, infinite scroll, and full style customization. Built on TanStack Table.",
     "anatomy": "<Table />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Table",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container wrapping the entire table region."
+        },
+        {
+          "part": "Table",
+          "slot": "list",
+          "element": "table",
+          "description": "The `<table>` element itself."
+        },
+        {
+          "part": "Table",
+          "slot": "header",
+          "element": "div, thead",
+          "description": "The `<thead>` element."
+        },
+        {
+          "part": "Table",
+          "slot": "headerRow",
+          "element": "tr",
+          "description": "The `<tr>` inside `header`. Style `header` to reach the `<thead>` and this to reach the row alone."
+        },
+        {
+          "part": "Table",
+          "slot": "headerCell",
+          "element": "th",
+          "description": "Individual `<th>` elements."
+        },
+        {
+          "part": "Table",
+          "slot": "headerCellText",
+          "element": "div",
+          "description": "The content wrapper inside each header cell."
+        },
+        {
+          "part": "Table",
+          "slot": "body",
+          "element": "tbody",
+          "description": "The `<tbody>` element."
+        },
+        {
+          "part": "Table",
+          "slot": "item",
+          "element": "button, tr, div",
+          "description": "Each `<tr>` in the body."
+        },
+        {
+          "part": "Table",
+          "slot": "cell",
+          "element": "td, div",
+          "description": "Individual `<td>` elements."
+        },
+        {
+          "part": "Table",
+          "slot": "pinnedRegion",
+          "element": "div",
+          "description": "Container for pinned columns."
+        },
+        {
+          "part": "Table",
+          "slot": "pinnedList",
+          "element": "table",
+          "description": "The `<table>` element for pinned columns."
+        },
+        {
+          "part": "Table",
+          "slot": "scrollRegion",
+          "element": "div",
+          "description": "Container for unpinned (scrollable) columns."
+        },
+        {
+          "part": "Table",
+          "slot": "empty",
+          "element": "div",
+          "description": "The empty-state wrapper."
+        },
+        {
+          "part": "Table",
+          "slot": "pinIcon",
+          "element": "svg",
+          "description": "Pin icon (unpinned state)."
+        },
+        {
+          "part": "Table",
+          "slot": "pinTrigger",
+          "element": "button",
+          "description": "Pin button (unpinned state)."
+        },
+        {
+          "part": "Table",
+          "slot": "loading",
+          "element": "div",
+          "description": "Shimmer container."
+        },
+        {
+          "part": "Table",
+          "slot": "loadingRow",
+          "element": "div",
+          "description": "Shimmer row."
+        },
+        {
+          "part": "Table",
+          "slot": "loadingItem",
+          "element": "div",
+          "description": "Shimmer cell."
+        },
+        {
+          "part": "Table",
+          "slot": "loadingBar",
+          "element": "div",
+          "description": "Shimmer bar animation."
+        },
+        {
+          "part": "Table",
+          "slot": "control",
+          "element": "input",
+          "description": "Checkbox input for row selection."
+        },
+        {
+          "part": "Table",
+          "slot": "sortIcon",
+          "element": "button",
+          "description": "Sort direction indicator icon."
+        },
+        {
+          "part": "Table",
+          "slot": "filterTrigger",
+          "element": "button",
+          "description": "Filter icon button in header."
+        },
+        {
+          "part": "Table",
+          "slot": "filterContent",
+          "element": "div",
+          "description": "Filter dropdown container."
+        },
+        {
+          "part": "Table",
+          "slot": "filterHeader",
+          "element": "div",
+          "description": "The column-filter panel's parts. A selected row carries `data-selected` rather than a second set of classes."
+        },
+        {
+          "part": "Table",
+          "slot": "filterLabel",
+          "element": "span",
+          "description": "The heading naming the column being filtered."
+        },
+        {
+          "part": "Table",
+          "slot": "filterClearTrigger",
+          "element": "button",
+          "description": "The button dropping that column's filter."
+        },
+        {
+          "part": "Table",
+          "slot": "filterItem",
+          "element": "button",
+          "description": "One value row in the filter panel."
+        },
+        {
+          "part": "Table",
+          "slot": "filterItemControl",
+          "element": "div",
+          "description": "The checkbox on that row."
+        },
+        {
+          "part": "Table",
+          "slot": "expandTrigger",
+          "element": "button",
+          "description": "Expand/collapse icon button."
+        },
+        {
+          "part": "Table",
+          "slot": "pinnedRightRegion",
+          "element": "div",
+          "description": "Right-pinned column container."
+        },
+        {
+          "part": "Table",
+          "slot": "pinnedRightList",
+          "element": "table",
+          "description": "The `<table>` element for right-pinned columns."
+        },
+        {
+          "part": "Table",
+          "slot": "input",
+          "element": "input",
+          "description": "Inline edit input field. A text field, so it takes the field boundary (`--cl-border-input`) and the field hover and focus treatment."
+        },
+        {
+          "part": "Table",
+          "slot": "dragHandle",
+          "element": "button",
+          "description": "Drag handle for row reordering."
+        },
+        {
+          "part": "Table",
+          "slot": "footer",
+          "element": "div, tfoot",
+          "description": "The `<tfoot>` element."
+        },
+        {
+          "part": "Table",
+          "slot": "searchControl",
+          "element": "div",
+          "description": "The box around the search field. It shared `searchInput` with the <input> inside it — the same split already made in CascadingDropdown, SearchableDropdown and MultiSelectSearchableDropdown."
+        },
+        {
+          "part": "Table",
+          "slot": "searchIcon",
+          "element": "span, svg",
+          "description": "The search box's icon and clear button. Both search boxes — the desktop one and the mobile card one — render these, and which side the control sits on is `data-side` on `searchControl` rather than a second set of classes."
+        },
+        {
+          "part": "Table",
+          "slot": "clearTrigger",
+          "element": "button",
+          "description": "The button emptying the search field."
+        },
+        {
+          "part": "Table",
+          "slot": "searchInput",
+          "element": "input",
+          "description": "The search field itself."
+        },
+        {
+          "part": "Table",
+          "slot": "mobileCard",
+          "element": "div",
+          "description": "Mobile card layout wrapper."
+        },
+        {
+          "part": "Table",
+          "slot": "groupLabel",
+          "element": "tr",
+          "description": "Group header row."
+        },
+        {
+          "part": "Table",
+          "slot": "resizeHandle",
+          "element": "div",
+          "description": "Column resize handle."
+        },
+        {
+          "part": "Table",
+          "slot": "resizeIndicator",
+          "element": "div",
+          "description": "The bar drawn inside `resizeHandle` while a column is being resized. Carries `data-resizing` for the duration of the drag."
+        },
+        {
+          "part": "Table",
+          "slot": "loadingFooter",
+          "element": "div",
+          "description": "Loading more indicator for infinite scroll."
+        }
+      ]
+    },
     "props": [
       {
         "name": "columns",
@@ -13664,6 +16043,62 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/tab-panel",
     "summary": "Accessible tab panel with icons, badges, tooltips, vertical orientation, keep-mounted panels, and roving tabindex.",
     "anatomy": "<TabPanel />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "TabPanel",
+          "slot": "root",
+          "element": "div",
+          "description": "Root container"
+        },
+        {
+          "part": "TabPanel",
+          "slot": "list",
+          "element": "div",
+          "description": "The tablist strip holding every tab button."
+        },
+        {
+          "part": "TabPanel",
+          "slot": "item",
+          "element": "button",
+          "description": "One tab button."
+        },
+        {
+          "part": "TabPanel",
+          "slot": "itemText",
+          "element": "span",
+          "description": "The tab's label text, so it can be hidden at narrow widths without hiding the icon."
+        },
+        {
+          "part": "TabPanel",
+          "slot": "itemIcon",
+          "element": "span",
+          "description": "The icon inside a tab."
+        },
+        {
+          "part": "TabPanel",
+          "slot": "count",
+          "element": "span",
+          "description": "Count badge base"
+        },
+        {
+          "part": "TabPanel",
+          "slot": "indicator",
+          "element": "span",
+          "description": "Active tab indicator element"
+        },
+        {
+          "part": "TabPanel",
+          "slot": "content",
+          "element": "div",
+          "description": "The panel below the strip, showing the active tab's children."
+        }
+      ]
+    },
     "props": [
       {
         "name": "tabs",
@@ -14119,6 +16554,56 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/textarea",
     "summary": "A production-grade multi-line text input with auto-resize, character count, validation states, icons, and full form integration.",
     "anatomy": "<TextArea />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "TextArea",
+          "slot": "root",
+          "element": "div",
+          "description": "Outermost container (same element as className)"
+        },
+        {
+          "part": "TextArea",
+          "slot": "control",
+          "element": "div",
+          "description": "The box around the textarea, which is where the border and focus ring live."
+        },
+        {
+          "part": "TextArea",
+          "slot": "label",
+          "element": "FieldLabel",
+          "description": "Label element"
+        },
+        {
+          "part": "TextArea",
+          "slot": "description",
+          "element": "div",
+          "description": "Helper/description text"
+        },
+        {
+          "part": "TextArea",
+          "slot": "input",
+          "element": "textarea",
+          "description": "The `<textarea>` itself."
+        },
+        {
+          "part": "TextArea",
+          "slot": "message",
+          "element": "div",
+          "description": "The error or hint line under the field."
+        },
+        {
+          "part": "TextArea",
+          "slot": "count",
+          "element": "div",
+          "description": "Character count display"
+        }
+      ]
+    },
     "props": [
       {
         "name": "label",
@@ -14517,6 +17002,194 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/time-picker",
     "summary": "A time input with dropdown list or analog clock variant, smart parsing, 12/24-hour formats, min/max constraints, clearable, keyboard navigation, and full accessibility.",
     "anatomy": "<TimePicker />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "TimePicker",
+          "slot": "root",
+          "element": "div",
+          "description": "Outermost container."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "label",
+          "element": "label",
+          "description": "Label element."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "control",
+          "element": "div",
+          "description": "Relative-positioned wrapper around trigger + dropdown."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "trigger",
+          "element": "div",
+          "description": "Combobox trigger container."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "input",
+          "element": "input",
+          "description": "Text input element."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "icon",
+          "element": "span, svg",
+          "description": "End icon wrapper / chevron."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clearTrigger",
+          "element": "button, svg",
+          "description": "Clear icon button."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "content",
+          "element": "MenuSurface",
+          "description": "Dropdown panel (listbox)."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "list",
+          "element": "div",
+          "description": "Scrollable option list wrapper."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "item",
+          "element": "div",
+          "description": "Individual option."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "itemIndicator",
+          "element": "svg",
+          "description": "Check-mark icon inside a selected option."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "empty",
+          "element": "div",
+          "description": "\"No matching times\" message."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "message",
+          "element": "div",
+          "description": "Error message element."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "description",
+          "element": "div",
+          "description": "Description element."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockContent",
+          "element": "div",
+          "description": "Clock mode outermost container."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockDisplay",
+          "element": "div",
+          "description": "Hours / minutes display row."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockHours",
+          "element": "button",
+          "description": "Hours button in the display."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockMinutes",
+          "element": "button",
+          "description": "Minutes button in the display."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockSeparator",
+          "element": "span",
+          "description": "Colon separator in the display."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockFace",
+          "element": "div",
+          "description": "Circular clock face."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockHand",
+          "element": "svg",
+          "description": "SVG hand overlay."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockHandLine",
+          "element": "line",
+          "description": "SVG line of the hand."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockHandDot",
+          "element": "div",
+          "description": "Dot at the tip of the hand."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockNumber",
+          "element": "div",
+          "description": "Number label on the clock face."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "clockCenter",
+          "element": "circle",
+          "description": "Center dot of the clock."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "footer",
+          "element": "div",
+          "description": "Actions row (Cancel / OK)."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "cancelTrigger",
+          "element": "button",
+          "description": "Cancel button."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "confirmTrigger",
+          "element": "button",
+          "description": "OK button."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "row",
+          "element": "div",
+          "description": "AM/PM toggle container."
+        },
+        {
+          "part": "TimePicker",
+          "slot": "periodTrigger",
+          "element": "button",
+          "description": "Individual AM or PM button."
+        }
+      ]
+    },
     "props": [
       {
         "name": "value",
@@ -15245,6 +17918,75 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/toast",
     "summary": "A notification system for displaying brief messages. Supports multiple variants, positions, progress bars, custom content, and auto-dismiss.",
     "anatomy": "<ToastProvider />",
+    "parts": {
+      "composing": true,
+      "why": "useToast() throws outside a ToastProvider, and toasts render inside it.",
+      "tree": [
+        {
+          "code": "<ToastProvider>",
+          "mark": "required"
+        },
+        {
+          "code": "  {/* your app: call useToast() anywhere inside it */}",
+          "mark": ""
+        },
+        {
+          "code": "</ToastProvider>",
+          "mark": ""
+        }
+      ],
+      "usage": null,
+      "slots": [
+        {
+          "part": "Toast",
+          "slot": "root",
+          "element": "div",
+          "description": "The toast surface — the coloured card the whole notice sits on."
+        },
+        {
+          "part": "Toast",
+          "slot": "body",
+          "element": "div",
+          "description": "The padded row inside `root` that holds the icon, the message and the close button. Style `root` for the toast's outer box and this for its contents."
+        },
+        {
+          "part": "Toast",
+          "slot": "track",
+          "element": "div",
+          "description": "The auto-dismiss progress groove that `range` fills."
+        },
+        {
+          "part": "Toast",
+          "slot": "title",
+          "element": "p",
+          "description": "The message line, which is the toast's accessible name."
+        },
+        {
+          "part": "Toast",
+          "slot": "description",
+          "element": "p",
+          "description": "Description text element"
+        },
+        {
+          "part": "Toast",
+          "slot": "range",
+          "element": "div",
+          "description": "The fill inside `track`, which shrinks as the auto-dismiss timer runs."
+        },
+        {
+          "part": "Toast",
+          "slot": "closeTrigger",
+          "element": "button",
+          "description": "The dismiss button."
+        },
+        {
+          "part": "Toast",
+          "slot": "icon",
+          "element": "span",
+          "description": "Icon wrapper element"
+        }
+      ]
+    },
     "props": [
       {
         "name": "id",
@@ -15724,6 +18466,32 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "subpath": "@chumlab/ui/tooltip",
     "summary": "Accessible tooltip with configurable positioning, delays, rich content, arrows, shadows, truncation, and full dark mode support.",
     "anatomy": "<Tooltip />",
+    "parts": {
+      "composing": false,
+      "why": null,
+      "tree": null,
+      "usage": null,
+      "slots": [
+        {
+          "part": "Tooltip",
+          "slot": "trigger",
+          "element": "span, TooltipAsChildTrigger",
+          "description": "Trigger wrapper element"
+        },
+        {
+          "part": "Tooltip",
+          "slot": "content",
+          "element": "div",
+          "description": "Tooltip content container"
+        },
+        {
+          "part": "Tooltip",
+          "slot": "arrow",
+          "element": "svg",
+          "description": "Arrow SVG element"
+        }
+      ]
+    },
     "props": [
       {
         "name": "children",

@@ -18,6 +18,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -601,7 +602,7 @@ const CascadingDropdownDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="CascadingDropdown" />
+      <ComponentAnatomy name="CascadingDropdown" />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -1864,6 +1865,8 @@ const CascadingDropdownDemo = () => {
           "Do not use duplicate values across sibling options.",
         ]}
       />
+
+      <CopyPasteBlock name="CascadingDropdown" />
     </div>
   );
 };

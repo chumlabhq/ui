@@ -24,6 +24,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -1666,7 +1667,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
 
       <SetupNote />
 
-      <CopyPasteBlock name="Table" />
+      <ComponentAnatomy name="Table" />
 
       <Section title="Basic Usage" description="A simple table with columns and data — no classes prop, using the built-in default styles." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
@@ -7753,6 +7754,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           "Do not omit text alternatives for icon-only actions.",
         ]}
       />
+
+      <CopyPasteBlock name="Table" />
     </div>
   );
 };

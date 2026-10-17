@@ -29,6 +29,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, readdirSync
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import { slotElements } from "./slot-elements.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CHECK = process.argv.includes("--check");
@@ -161,6 +162,105 @@ function tagsOf(name) {
   };
   visit(sf);
   return tags;
+}
+
+/** ── the parts a page draws: a tag tree, a usage pattern, the slots ──────
+ *
+ * The narrow rule. A component COMPOSES only when a consumer must place a
+ * second public tag for it to work: Accordion does nothing without
+ * AccordionItem, AccordionTrigger and AccordionContent; RadioButton throws
+ * outside a RadioGroup; useToast() throws outside a ToastProvider. Those get a
+ * tag tree with each tag marked required or optional.
+ *
+ * Sub-tags that are optional do not make a component compose: Modal renders a
+ * title and children with none of ModalHeader, ModalBody and ModalFooter, and
+ * Drawer its children with none of DrawerHeader and the rest. Those get a
+ * short usage pattern, every part marked optional. Sibling exports placed on
+ * their own (AvatarGroup, ButtonGroup, CountryFlagGroup) are neither.
+ *
+ * Declared here, with the reason, and re-proved at runtime by
+ * demo-anatomy.contract: the evidence is the throw or the empty render, so a
+ * component that stops needing its parts fails there rather than keeping a
+ * tree it no longer needs.
+ */
+const COMPOSING = {
+  Accordion: {
+    required: ["Accordion", "AccordionItem", "AccordionTrigger", "AccordionContent"],
+    why: "Accordion alone renders an empty container; its parts throw outside it.",
+  },
+  RadioButton: {
+    required: ["RadioGroup", "RadioButton"],
+    why: "RadioButton throws outside a RadioGroup, and a RadioGroup without one offers no choice.",
+  },
+  Toast: {
+    required: ["ToastProvider"],
+    why: "useToast() throws outside a ToastProvider, and toasts render inside it.",
+    wraps: "your app: call useToast() anywhere inside it",
+  },
+};
+
+/** The maps the public `classes` props are typed with, in the order declared. */
+function classesPropMaps(name) {
+  const maps = new Set();
+  for (const file of walkSource(join(SRC, name))) {
+    if (!/types\.tsx?$/.test(file)) continue;
+    const sf = parse(file);
+    const visit = (node) => {
+      if (ts.isPropertySignature(node) && node.name.getText(sf) === "classes" && node.type) {
+        for (const m of node.type.getText(sf).matchAll(/\b(\w+Classes)\b/g)) maps.add(m[1]);
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return maps;
+}
+
+/** A tag line of an anatomy, with its tag, for marking. */
+const tagOfLine = (line) => /<\/?([A-Z]\w*)/.exec(line)?.[1] ?? null;
+
+function partsOf(name, anatomy, classes) {
+  const lines = (anatomy ?? "").split("\n").filter(Boolean);
+  const declared = COMPOSING[name];
+  let tree = null;
+  let usage = null;
+  if (declared) {
+    if (declared.wraps) {
+      const [root] = declared.required;
+      tree = [
+        { code: `<${root}>`, mark: "required" },
+        { code: `  {/* ${declared.wraps} */}`, mark: "" },
+        { code: `</${root}>`, mark: "" },
+      ];
+    } else {
+      tree = lines.map((line) => {
+        const tag = tagOfLine(line);
+        const closing = /^\s*<\//.test(line);
+        return { code: line, mark: closing || !tag ? "" : declared.required.includes(tag) ? "required" : "optional" };
+      });
+    }
+  } else if (lines.length > 1 && tagOfLine(lines[0]) === name && /^\s+</.test(lines[1])) {
+    // Optional sub-tags inside the component's own tag.
+    usage = lines.map((line, i) => ({
+      code: line,
+      mark: i === 0 || /^\s*<\//.test(line) || !tagOfLine(line) ? "" : "optional",
+    }));
+  }
+  const maps = classesPropMaps(name);
+  const slots = [];
+  for (const map of classes.filter((c) => maps.has(c.map))) {
+    const others = [...maps].filter((m) => m !== map.map);
+    const elements = slotElements(join(SRC, name), map.map, map.keys.map((k) => k.name), others);
+    for (const key of map.keys) {
+      slots.push({
+        part: map.map.replace(/Classes$/, ""),
+        slot: key.name,
+        element: (elements[key.name] ?? []).join(", "),
+        description: key.description,
+      });
+    }
+  }
+  return { composing: !!declared, why: declared?.why ?? null, tree, usage, slots };
 }
 
 /** ── the API reference, from the schema ───────────────────────────────── */
@@ -603,14 +703,16 @@ for (const name of COMPONENTS) {
     subComponents.push({ name: branch.title, props: propsFrom(branch.properties, branch.required) });
   }
 
+  const classes = classesOf(name);
   docs.push({
     name,
     subpath,
     summary,
     anatomy,
+    parts: partsOf(name, anatomy, classes),
     props,
     subComponents,
-    classes: classesOf(name),
+    classes,
     shapes: shapesOf(name),
     dataAttributes: dataAttributesOf(name, schema),
     cssVariables: cssVariablesOf(name),
@@ -665,11 +767,38 @@ export interface DataAttributeDoc {
   when: string;
 }
 
+export interface PartLine {
+  code: string;
+  /** \`required\`, \`optional\`, or empty for a closing tag. */
+  mark: string;
+}
+
+export interface SlotDoc {
+  /** The component the slot belongs to, \`Accordion\` or \`AccordionShimmer\`. */
+  part: string;
+  slot: string;
+  /** The element(s) its class is applied to, read from the source. */
+  element: string;
+  description: string;
+}
+
+export interface PartsDoc {
+  /** A consumer must place a second public tag for it to work. */
+  composing: boolean;
+  why: string | null;
+  /** The required tag tree, for a composing component only. */
+  tree: PartLine[] | null;
+  /** Optional sub-tags inside the component's own tag. */
+  usage: PartLine[] | null;
+  slots: SlotDoc[];
+}
+
 export interface ComponentDoc {
   name: string;
   subpath: string;
   summary: string;
   anatomy: string;
+  parts: PartsDoc;
   props: PropDoc[];
   subComponents: { name: string; props: PropDoc[] }[];
   classes: { map: string; keys: MemberDoc[] }[];
@@ -768,7 +897,6 @@ const RENDERED_MARKDOWN = /\*\*[^*]+\*\*|`[^`]+`/g;
 const sectionsOf = (doc) => [
   "Anatomy",
   ...(doc.props.length || doc.subComponents.length ? ["API Reference"] : []),
-  ...(doc.classes.length ? ["Class overrides"] : []),
   ...(doc.dataAttributes.length ? ["Data attributes"] : []),
   ...(doc.shapes.length ? ["Types"] : []),
   ...(doc.cssVariables.length ? ["CSS custom properties"] : []),

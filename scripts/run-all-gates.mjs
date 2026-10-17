@@ -8,12 +8,12 @@
 // command before any gate runs.
 //
 //   npm run gates          everything
-//   npm run gates:fast     the twelve that finish in under ~90s each
+//   npm run gates:fast     the thirteen that finish in under ~90s each
 //   npm run gates:record   update the population record
 //
 // THE SPLIT, because the full run is too long to sit through:
 //
-//   per slice   `npm run gates:fast` — ~2 minutes, twelve gates. It catches
+//   per slice   `npm run gates:fast` — ~2 minutes, thirteen gates. It catches
 //               every drift class that does not need a browser: types,
 //               generated files out of step, docs naming something that does
 //               not exist, a schema default that is not the code's, a
@@ -102,6 +102,10 @@ const GATES = [
   { id: "demo-scenarios", claims: { vitest: "contracts" },
     cmd: "npx vitest run --project=contracts src/__tests__/contracts/demo-scenarios.contract.test.ts",
     pop: /DEMO_SCENARIOS cells (\d+)/ },
+  // Every page's skeleton, and every page's anatomy against the types.
+  { id: "demo-skeleton", claims: { vitest: "contracts" },
+    cmd: "npx vitest run --project=contracts src/__tests__/contracts/demo-skeleton.contract.test.tsx src/__tests__/contracts/demo-anatomy.contract.test.tsx",
+    pop: /DEMO_SKELETON pages (\d+)/ },
   { id: "fixture-gap", cmd: "node scripts/audit-fixture-gap.mjs --check",
     claims: { script: "audit-fixture-gap.mjs" }, pop: /holds at (\d+) props/ },
   { id: "component-docs", cmd: "node scripts/build-component-docs.mjs --check",

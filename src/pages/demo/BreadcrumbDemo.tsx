@@ -13,6 +13,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -202,7 +203,7 @@ const BreadcrumbDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Breadcrumb" />
+      <ComponentAnatomy name="Breadcrumb" />
 
       <Section
         title="Basic Usage"
@@ -791,6 +792,8 @@ const BreadcrumbDemo = () => {
           "Do not render duplicate links to the same destination without clear reason.",
         ]}
       />
+
+      <CopyPasteBlock name="Breadcrumb" />
     </div>
   );
 };

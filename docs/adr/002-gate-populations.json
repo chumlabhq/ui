@@ -15,7 +15,8 @@
     "e2e:demo-contrast": "demo PAGES walked, NOT colour pairs measured. It was keyed to rows until 2026-09-12 and read 41289/41429/41445/41461/41585 on consecutive green runs, because the dropdown pages fetch country lists and the row count moves with network timing. Pages is the coverage figure; rows never were one. Do not compare any number here to a row count.",
     "e2e:rest": "tests collected across the 32 specs no other gate claims",
     "e2e:pointer-affordance": "library-rendered elements that act on a click — by a React onClick/onPointerDown read off the node's props, or by an interactive role — excluding dismissal surfaces and disabled controls",
-    "demo-scenarios": "cells of docs/demo-scenarios.json checked: the 30 public components (from the root barrel) x the 22 scenarios"
+    "demo-scenarios": "cells of docs/demo-scenarios.json checked: the 30 public components (from the root barrel) x the 22 scenarios",
+    "demo-skeleton": "component pages whose top-level order is checked against the skeleton (header > setup > anatomy > examples > reference > patterns > copy and paste); the same run renders each page anatomy against the types"
   },
   "$basisChanges": [
     "2026-09-12, `e2e:demo-contrast`: rows to pages. See `$units`.",
@@ -29,7 +30,8 @@
     "2026-10-11, `demo-coverage`: 1140 → 1149. A2f declared the attributes it now routes: Modal `style` and `id` (+2), Tooltip `style`, `id`, `aria-label`, `aria-labelledby` and `aria-describedby` (+5), Toast's three `aria-*` (+3), Stepper `aria-labelledby` and `aria-describedby` (+2), TabPanel `aria-describedby` (+1) and InternationalPhoneInput `numberAriaLabel` (+1); it folded OtpInput's `groupAriaLabel` into `aria-label` (−1), and InputLabel's and TextAreaLabel's `htmlFor` and `className` are now inherited from the label element's attributes rather than declared (−4). Table's new `id` and `aria-*` are not counted: the audit reads no props from Table's generic type.",
     "2026-10-11, `fixture-gap`: 148 → 147. Breadcrumb's `separator` gained the fixture `separatorIcon` had; attributed in docs/adr/002-fixture-gap.json.",
     "2026-10-17, `demo-coverage`: 1149 → 1252, hand-edited, not re-recorded. G6 fixed the audit: `export default memo(Table)` resolves to a symbol flagged Property, which the component filter dropped, so Table and its 103 authored props were never counted (+103). No other prop moved. With no demo 307 → 290: +15 Table, −14 Toast (the options of `toast.success(\"…\", { … })` and `toast(…)` now count, in any argument position), −18 children (passed between the tags, now counted where a demo does).",
-    "2026-10-17, `demo-scenarios`: new, 660 cells (30 components × 22 scenarios), hand-added."
+    "2026-10-17, `demo-scenarios`: new, 660 cells (30 components × 22 scenarios), hand-added.",
+    "2026-10-17, `demo-skeleton`: new, 30 component pages (floor 30), hand-added."
   ],
   "$secondsNote": "Wall-clock per gate on a green run, for the slowdown check in run-all-gates. The multiple is DERIVED, not chosen: across green runs the widest healthy spread for one gate was unit+contracts at 88s to 149s, a factor of 1.69, with e2e:demo-contrast at 1.24 and the rest at or under 1.25. Under memory pressure the same gates ran e2e:icon-bounds 436->948 (2.17), e2e:visual 296->926 (3.13), e2e:a11y-full 352->1431 (4.07) and e2e:demo-contrast 70->624 (8.9). So healthy tops out at 1.69 and the mildest pressure observed is 2.17; 2.0 sits between them and is the only round number that does. Gates under 10s are exempt, because 1s to 3s is a factor of three and means nothing.",
   "ratchets": {
@@ -64,7 +66,8 @@
     "e2e:demo-contrast": 33,
     "e2e:rest": 464,
     "e2e:pointer-affordance": 2085,
-    "demo-scenarios": 660
+    "demo-scenarios": 660,
+    "demo-skeleton": 30
   },
   "seconds": {
     "typecheck": 29,

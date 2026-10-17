@@ -16,6 +16,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -223,7 +224,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
 
       <SetupNote />
 
-      <CopyPasteBlock name="DatePicker" />
+      <ComponentAnatomy name="DatePicker" />
 
       <Section
         title="Basic Usage"
@@ -1731,6 +1732,8 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           "Do not rely on placeholder alone for the accessible name.",
         ]}
       />
+
+      <CopyPasteBlock name="DatePicker" />
     </div>
   );
 };

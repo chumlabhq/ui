@@ -16,6 +16,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -146,7 +147,7 @@ const ModalDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Modal" />
+      <ComponentAnatomy name="Modal" />
 
       {/* ─── Basic ───────────────────────────────────────────────────────── */}
       <Section
@@ -1519,34 +1520,6 @@ const ModalDemo = () => {
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}
 
-      <ComponentDocs name="Modal" />
-
-      <DocControlledPattern
-        isDarkMode={dark}
-        summary="Use `open` with `onOpenChange` (and title/description props) for controlled visibility. Nesting levels are bounded—design flows that avoid deep modal stacks."
-      />
-      <DocEdgeCases
-        isDarkMode={dark}
-        items={[
-          "Route changes while open should close or confirm to avoid orphaned focus.",
-          "iOS Safari viewport and scroll quirks—test with fixed positioning.",
-          "Nested modals must manage focus return and z-index deliberately.",
-        ]}
-      />
-      <DocDoDont
-        isDarkMode={dark}
-        dos={[
-          "Provide `aria-labelledby` / `aria-describedby` for title and description.",
-          "Trap focus and restore on close.",
-          "Close on Escape when appropriate and documented.",
-        ]}
-        donts={[
-          "Do not exceed `maxNestingLevel` in production flows.",
-          "Do not render essential page actions only inside a dismissed modal.",
-          "Do not remove visible focus outlines.",
-        ]}
-      />
-
       {/* ─── The three things a Modal does besides render ─────────────────── */}
       <Section
         title="Turning off what a Modal does for you"
@@ -1578,6 +1551,36 @@ const ModalDemo = () => {
           </p>
         </Modal>
       </Section>
+
+      <ComponentDocs name="Modal" />
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `open` with `onOpenChange` (and title/description props) for controlled visibility. Nesting levels are bounded—design flows that avoid deep modal stacks."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Route changes while open should close or confirm to avoid orphaned focus.",
+          "iOS Safari viewport and scroll quirks—test with fixed positioning.",
+          "Nested modals must manage focus return and z-index deliberately.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `aria-labelledby` / `aria-describedby` for title and description.",
+          "Trap focus and restore on close.",
+          "Close on Escape when appropriate and documented.",
+        ]}
+        donts={[
+          "Do not exceed `maxNestingLevel` in production flows.",
+          "Do not render essential page actions only inside a dismissed modal.",
+          "Do not remove visible focus outlines.",
+        ]}
+      />
+
+      <CopyPasteBlock name="Modal" />
 
     </div>
   );

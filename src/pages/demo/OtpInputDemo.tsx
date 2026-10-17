@@ -13,6 +13,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -58,7 +59,7 @@ const OtpInputDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="OtpInput" />
+      <ComponentAnatomy name="OtpInput" />
 
       <Section
         title="Basic Usage"
@@ -613,6 +614,8 @@ const OtpInputDemo = () => {
           "Do not shrink hit targets below accessible size on mobile.",
         ]}
       />
+
+      <CopyPasteBlock name="OtpInput" />
     </div>
   );
 };

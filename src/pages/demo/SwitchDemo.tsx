@@ -13,6 +13,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -127,7 +128,7 @@ const SwitchDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Switch" />
+      <ComponentAnatomy name="Switch" />
 
       <Section
         title="Basic Usage"
@@ -657,6 +658,8 @@ const SwitchDemo = () => {
           "Do not omit focus styles when customizing.",
         ]}
       />
+
+      <CopyPasteBlock name="Switch" />
     </div>
   );
 };

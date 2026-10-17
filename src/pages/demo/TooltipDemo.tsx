@@ -11,6 +11,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -85,7 +86,7 @@ const TooltipDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Tooltip" />
+      <ComponentAnatomy name="Tooltip" />
 
       <Section
         title="Basic Usage"
@@ -731,6 +732,8 @@ const TooltipDemo = () => {
           "Do not block pointer events on the trigger.",
         ]}
       />
+
+      <CopyPasteBlock name="Tooltip" />
 
     </div>
   );

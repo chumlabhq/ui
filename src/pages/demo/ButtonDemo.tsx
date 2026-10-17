@@ -11,6 +11,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -218,7 +219,7 @@ const ButtonDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Button" />
+      <ComponentAnatomy name="Button" />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -1035,6 +1036,8 @@ const ButtonDemo = () => {
           "Do not omit focus styles in custom themes.",
         ]}
       />
+
+      <CopyPasteBlock name="Button" />
     </div>
   );
 };

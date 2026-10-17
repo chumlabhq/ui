@@ -11,6 +11,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -185,7 +186,7 @@ const ResizablePanelDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="ResizablePanel" />
+      <ComponentAnatomy name="ResizablePanel" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -970,6 +971,8 @@ const ResizablePanelDemo = () => {
           "Do not block critical content behind a zero-size panel.",
         ]}
       />
+
+      <CopyPasteBlock name="ResizablePanel" />
     </div>
   );
 };

@@ -514,54 +514,31 @@ describe("doc truth contract", () => {
    * diff someone reviews; raising a count is not.
    */
   /**
-   * Anatomy is for composition, and only for composition.
+   * A tag tree is for composition, and only for composition — by the narrow rule.
    *
-   * The section's promise is "the parts this component composes". For
-   * `<Tooltip />`, `<Button />` or `<ToastProvider />` it renders the
-   * component's own name in a box and tells the reader nothing — while
-   * implying the parts ARE that element, when the parts they can reach are the
-   * `classes` slots in the very next section. Six of eight audited pages were
-   * in that state.
-   *
-   * Both directions, so this is a rule rather than a gap: a composing
-   * component must carry an anatomy, and a single-element one must not have a
-   * multi-element one invented for it.
-   */
-  /**
    * THE RULE, in one sentence:
    *
-   *   A component has an Anatomy when one of its exports takes another of its
-   *   exports as a child, so the consumer has to write that nesting themselves.
+   *   A component composes when a consumer must place a second public tag for
+   *   it to work.
    *
-   * It is about OUR parts nesting, not about a component having several
-   * exports and not about a component wrapping the consumer's own tree.
+   * Accordion does nothing without AccordionItem, AccordionTrigger and
+   * AccordionContent, which throw outside it; RadioButton throws outside a
+   * RadioGroup; useToast() throws outside a ToastProvider. Those three get a
+   * tag tree on the page, each tag marked required or optional.
    *
-   * That boundary was judged twice and inconsistently before this. `Avatar` was
-   * admitted and `Input` refused on what looked like the same shape — both
-   * export a second component, both are placed by the consumer. They are not
-   * the same shape: `AvatarGroup` takes `Avatar` as a CHILD, while `InputLabel`
-   * stands BESIDE a field and never inside `Input` (with `Input` you pass
-   * `label` and do not reach for it at all). One is a nesting, the other a
-   * pairing, and only the nesting is something an anatomy can draw.
+   * The old rule was "one of its exports takes another as a child", and it drew
+   * a tree for Avatar, Button, CountryFlag, Drawer and Modal. None of them needs
+   * a second tag: AvatarGroup, ButtonGroup and CountryFlagGroup are siblings a
+   * consumer may place on their own, and Modal and Drawer render their title and
+   * children with none of their sub-tags. A required tree tells a reader to write
+   * tags they do not need. The two with optional sub-tags inside their own tag
+   * get a usage pattern instead, every part marked optional.
    *
-   * Three components sit just outside it, each for its own reason, and each is
-   * asserted below so the boundary cannot drift back:
-   *   TabPanel — `TabButton` is exported, but its props interface is not, and
-   *     it needs `index`, `isActive`, `isTabbable` and `setTabRef` from
-   *     TabPanel's own roving-focus state. The export is incidental; a consumer
-   *     cannot place one.
-   *   Toast — the thing nested inside `ToastProvider` is the consumer's app,
-   *     not another Toast export. Wrapping the app IS the fact a first-time
-   *     reader gets wrong, and it belongs in Quick Answer and Basic Usage,
-   *     where it is. Admitting it here would also admit `Tooltip` and
-   *     `ResizablePanel`, which wrap a trigger and a panel — and a heading
-   *     promising parts that shows one is what this section was cut back for.
-   *   Input / TextArea — the pairing above.
+   * The generator declares the three (`COMPOSING` in build-component-docs.mjs),
+   * and demo-anatomy.contract re-proves each by its throw or empty render, and
+   * renders every page's anatomy to check what it shows.
    */
-  it("gives an anatomy to the components that compose, and only those", () => {
-    /** A nesting: a line that opens one of our tags, indented under another. */
-    const nests = (anatomy: string) =>
-      (anatomy ?? "").split("\n").some((line) => /^\s+<[A-Z]/.test(line));
+  it("gives a tag tree to the components that compose, and only those", () => {
     const tags = (anatomy: string) => (anatomy.match(/<[A-Za-z]/g) ?? []).length;
 
     const wrong: string[] = [];
@@ -574,38 +551,29 @@ describe("doc truth contract", () => {
         "generator found no example to read",
     ).toEqual([]);
 
-    // The rule, applied. `ComponentDocs` renders the section for exactly these.
     const composing = Object.entries(COMPONENT_DOCS)
-      .filter(([, doc]) => nests(doc.anatomy ?? ""))
+      .filter(([, doc]) => doc.parts.composing)
       .map(([name]) => name)
       .sort();
-
     expect(
       composing,
-      "the components whose exports nest inside one another — change this list only with the " +
-        "example that changed, never on its own",
-    ).toEqual([
-      "Accordion",
-      "Avatar",
-      "Button",
-      "CountryFlag",
-      "Drawer",
-      "Modal",
-      "RadioButton",
-    ]);
-
-    // And the other direction, named: these look like they might and do not.
-    for (const name of ["Input", "TextArea", "TabPanel", "Toast", "Tooltip", "Slider"]) {
-      expect(composing, `${name} is not a composing component — see the rule above`).not.toContain(name);
+      "the components a consumer must assemble — change this list only with the evidence that changed",
+    ).toEqual(["Accordion", "RadioButton", "Toast"]);
+    for (const name of composing) {
+      expect(COMPONENT_DOCS[name].parts.tree, `${name} composes and has no tag tree`).not.toBeNull();
     }
 
-    // A single-element anatomy exists in the data and is deliberately NOT given
-    // a section. This holds the rule to something rather than nothing.
-    const singles = Object.entries(COMPONENT_DOCS)
-      .filter(([, doc]) => tags(doc.anatomy ?? "") === 1)
+    // Optional sub-tags inside the component's own tag: a usage pattern, never a tree.
+    const optional = Object.entries(COMPONENT_DOCS)
+      .filter(([, doc]) => doc.parts.usage)
       .map(([name]) => name)
       .sort();
-    expect(singles.length, "no single-element anatomy found — the rule has nothing to apply to").toBeGreaterThan(5);
+    expect(optional, "the components whose sub-tags are optional").toEqual(["Drawer", "Modal"]);
+
+    // And the other direction, named: these look like they might and do not.
+    for (const name of ["Avatar", "Button", "CountryFlag", "Drawer", "Modal", "Input", "TextArea", "TabPanel", "Tooltip", "Slider"]) {
+      expect(COMPONENT_DOCS[name].parts.tree, `${name} does not compose — see the rule above`).toBeNull();
+    }
   });
 
   it("renders no empty description", () => {

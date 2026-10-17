@@ -16,6 +16,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -136,7 +137,7 @@ const AvatarDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Avatar" />
+      <ComponentAnatomy name="Avatar" />
 
       <Section
         title="Basic Usage"
@@ -1377,6 +1378,8 @@ const AvatarDemo = () => {
           "Do not load huge unoptimized images without size constraints.",
         ]}
       />
+
+      <CopyPasteBlock name="Avatar" />
     </div>
   );
 };

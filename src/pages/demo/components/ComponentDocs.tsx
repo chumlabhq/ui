@@ -7,12 +7,15 @@ import {
   COMPONENT_DOCS,
   type ComponentDoc,
   type MemberDoc,
+  type PartLine,
   type PropDoc,
 } from "../generated/componentDocs.js";
 
 /**
- * The four reference sections every component page carries: Anatomy, API
- * Reference, Accessibility and Keyboard Interactions.
+ * The reference sections every component page carries after its examples:
+ * API Reference, then Data attributes, Types and CSS custom properties where
+ * the component has them, then Keyboard Interactions and Accessibility. The
+ * page's Anatomy is `ComponentAnatomy`, before the examples.
  *
  * Read out of `generated/componentDocs.ts`, which is built from the same
  * schemas and .ai.md files `doc-truth.contract` gates. The pages used to carry
@@ -50,36 +53,8 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
   const doc: ComponentDoc | undefined = COMPONENT_DOCS[name];
   if (!doc) return null;
 
-  /**
-   * Anatomy is for COMPOSITION, so a component that composes nothing does not
-   * get one.
-   *
-   * Six of the eight pages audited rendered `<Tooltip />`, `<Button />`,
-   * `<ToastProvider />` — the component's own name, in a box, under a heading
-   * promising to show its parts. That is worse than absent: it implies the
-   * parts are the element, when the parts a consumer can reach are the
-   * `classes` slots, which have their own section directly below. Accordion
-   * and Avatar keep theirs, because they have a real tree to show.
-   *
-   * `doc-truth.contract` holds both halves of this — a composing component
-   * must have one, a single-element one must not — so it stays a rule rather
-   * than a gap someone fills in later.
-   */
-  const composes = (doc.anatomy.match(/<[A-Za-z]/g) ?? []).length > 1;
-
   return (
     <>
-      {composes && (
-        <Section
-          title="Anatomy"
-          description="The parts this component composes, taken from its own example — so it cannot describe a composition the code does not use."
-        >
-          <pre className={preClass} {...scrollableCode}>
-            <code>{doc.anatomy}</code>
-          </pre>
-        </Section>
-      )}
-
       <Section
         title="API Reference"
         description={`Generated from ${doc.name}.schema.json. Required props are marked with an asterisk. Standard HTML and ARIA attributes are forwarded to the underlying element and are not listed.`}
@@ -101,22 +76,6 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           </div>
         ))}
       </Section>
-
-      {doc.classes.length > 0 && (
-        <Section
-          title="Class overrides"
-          description="Every slot the classes prop accepts, read off the *Classes interfaces. A slot with no description has none on its type either."
-        >
-          {doc.classes.map((map) => (
-            <div key={map.map} className="mt-6 first:mt-0">
-              <h3 className="font-mono text-[13px] text-fg mb-3">{map.map}</h3>
-              <div className={cardClass}>
-                <PropsTable>{memberRows(map.keys)}</PropsTable>
-              </div>
-            </div>
-          ))}
-        </Section>
-      )}
 
       {doc.dataAttributes.length > 0 && (
         <Section
@@ -193,20 +152,6 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
         </Section>
       )}
 
-      {doc.accessibility.length > 0 && (
-        <Section title="Accessibility">
-          <div className={cardClass}>
-            <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-fg-secondary">
-              {doc.accessibility.map((line) => (
-                <li key={line}>
-                  <Inline text={line} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Section>
-      )}
-
       {doc.keyboard && (
         <Section title="Keyboard Interactions">
           {doc.keyboard.note && (
@@ -244,7 +189,120 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           )}
         </Section>
       )}
+      {doc.accessibility.length > 0 && (
+        <Section title="Accessibility">
+          <div className={cardClass}>
+            <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-fg-secondary">
+              {doc.accessibility.map((line) => (
+                <li key={line}>
+                  <Inline text={line} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Section>
+      )}
+
     </>
+  );
+};
+
+/** A tree or usage line, its mark set in the margin where a reader scans for it. */
+const partLines = (lines: PartLine[]) => {
+  const width = Math.max(...lines.map((line) => line.code.length));
+  return lines.map((line, i) => (
+    <span key={i} className="block">
+      {line.code.padEnd(width + 4)}
+      {line.mark && <span className="text-fg-tertiary">{`// ${line.mark}`}</span>}
+    </span>
+  ));
+};
+
+/**
+ * The page's Anatomy, before its examples.
+ *
+ * Every page gets the parts-and-slots table: each `classes` key, the element
+ * its class is applied to, and the key's own JSDoc, all generated from the
+ * types and the source (`scripts/build-component-docs.mjs`). A slot list
+ * written by hand beside the types is a second copy that drifts.
+ *
+ * Only a component a consumer must assemble gets a tag tree, each tag marked
+ * required or optional: Accordion, RadioButton and Toast, by the rule the
+ * generator states. One whose sub-tags are optional, as Modal's are, gets a
+ * usage pattern instead, every part marked optional — drawing a required tree
+ * for it would tell a reader to write tags it does not need.
+ *
+ * `doc` replaces the generated entry, which is how demo-anatomy.contract plants
+ * a table that disagrees with the types.
+ */
+export const ComponentAnatomy: FC<{ name: string; doc?: ComponentDoc }> = ({ name, doc: override }) => {
+  const doc = override ?? COMPONENT_DOCS[name];
+  if (!doc) return null;
+  const { parts } = doc;
+  const multipart = new Set(parts.slots.map((slot) => slot.part)).size > 1;
+
+  return (
+    <Section
+      title="Anatomy"
+      description="The tags you write and the parts each classes key styles, generated from the types and the source."
+    >
+      {parts.tree && (
+        <div data-anatomy="tree" className="space-y-3">
+          <h3 className="font-mono text-[13px] text-fg">Tag tree</h3>
+          {parts.why && <p className="text-[13px] text-fg-secondary max-w-[680px]">{parts.why}</p>}
+          <pre className={preClass} {...scrollableCode}>
+            <code>{partLines(parts.tree)}</code>
+          </pre>
+        </div>
+      )}
+
+      {parts.usage && (
+        <div data-anatomy="usage" className="space-y-3">
+          <h3 className="font-mono text-[13px] text-fg">Usage pattern</h3>
+          <p className="text-[13px] text-fg-secondary max-w-[680px]">
+            {`${doc.name} works on its own. These parts are optional, for when you want its layout.`}
+          </p>
+          <pre className={preClass} {...scrollableCode}>
+            <code>{partLines(parts.usage)}</code>
+          </pre>
+        </div>
+      )}
+
+      {parts.slots.length > 0 && (
+        <div data-anatomy="slots" className="space-y-3">
+          <h3 className="font-mono text-[13px] text-fg">Parts and slots</h3>
+          <div className="code-scroll overflow-x-auto w-full min-w-0">
+            <table className="w-full table-fixed text-left min-w-[600px]">
+              <colgroup>
+                <col className="w-[26%]" />
+                <col className="w-[20%]" />
+                <col className="w-[54%]" />
+              </colgroup>
+              <thead>
+                <tr className="text-fg-tertiary rule rule-b">
+                  <th className="px-4 py-2 eyebrow">Slot</th>
+                  <th className="px-4 py-2 eyebrow">Element</th>
+                  <th className="px-4 py-2 eyebrow">Styles</th>
+                </tr>
+              </thead>
+              <tbody>
+                {parts.slots.map((slot) => (
+                  <tr key={`${slot.part}.${slot.slot}`} data-slot={`${slot.part}.${slot.slot}`} className="rule rule-t">
+                    <td className="px-4 py-2 font-mono text-[13px] align-top break-words" style={{ color: "var(--accent)" }}>
+                      {multipart ? `${slot.part}.${slot.slot}` : slot.slot}
+                    </td>
+                    <td className="px-4 py-2 font-mono text-xs align-top break-words text-fg-secondary">{slot.element}</td>
+                    <td className="px-4 py-2 text-[13px] align-top text-fg-secondary">
+                      <Inline text={slot.description} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </Section>
   );
 };
 

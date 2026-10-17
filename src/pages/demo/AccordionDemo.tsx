@@ -24,6 +24,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
   CodeBlock,
@@ -183,7 +184,7 @@ const AccordionDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Accordion" />
+      <ComponentAnatomy name="Accordion" />
 
       {/* ─── Basic (Single Mode) ────────────────────────────────────────── */}
       <Section
@@ -1578,6 +1579,8 @@ const AccordionDemo = () => {
           "Do not use duplicate item `value` strings across items.",
         ]}
       />
+
+      <CopyPasteBlock name="Accordion" />
     </div>
   );
 };

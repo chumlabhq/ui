@@ -15,6 +15,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -61,7 +62,7 @@ const CountryFlagDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="CountryFlag" />
+      <ComponentAnatomy name="CountryFlag" />
 
       <Section
         title="Basic Usage"
@@ -554,6 +555,8 @@ const CountryFlagDemo = () => {
           "Do not rely on color alone for state—pair with labels where needed.",
         ]}
       />
+
+      <CopyPasteBlock name="CountryFlag" />
     </div>
   );
 };

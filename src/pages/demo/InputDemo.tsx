@@ -15,6 +15,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -294,7 +295,7 @@ const InputDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Input" />
+      <ComponentAnatomy name="Input" />
 
       <div className="space-y-8">
         <Section
@@ -1299,6 +1300,8 @@ const InputDemo = () => {
           "Do not block paste for arbitrary security—prefer server validation.",
         ]}
       />
+
+      <CopyPasteBlock name="Input" />
     </div>
   );
 };

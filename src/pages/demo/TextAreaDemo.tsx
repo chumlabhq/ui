@@ -15,6 +15,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -199,7 +200,7 @@ const TextAreaDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="TextArea" />
+      <ComponentAnatomy name="TextArea" />
 
       <div className="space-y-8">
         <Section
@@ -989,6 +990,8 @@ const TextAreaDemo = () => {
           "Do not rely on placeholder for the accessible name.",
         ]}
       />
+
+      <CopyPasteBlock name="TextArea" />
     </div>
   );
 };

@@ -2,16 +2,15 @@
   "Accordion": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
+    "CSS custom properties",
     "Accessibility",
     "Keyboard Interactions"
   ],
   "Avatar": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "CSS custom properties",
@@ -21,7 +20,6 @@
   "Breadcrumb": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -30,7 +28,6 @@
   "Button": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -38,7 +35,6 @@
   "CascadingDropdown": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -47,7 +43,6 @@
   "Checkbox": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -55,7 +50,6 @@
   "CountryFlag": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -64,7 +58,6 @@
   "DatePicker": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -73,7 +66,6 @@
   "Drawer": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -81,7 +73,6 @@
   "Dropdown": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -90,7 +81,6 @@
   "Input": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -98,7 +88,6 @@
   "InternationalPhoneInput": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -107,7 +96,6 @@
   "Loader": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "CSS custom properties",
     "Accessibility",
@@ -116,7 +104,6 @@
   "Modal": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -124,7 +111,6 @@
   "MultiSelectDropdown": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -132,7 +118,6 @@
   "MultiSelectSearchableDropdown": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -141,7 +126,6 @@
   "OtpInput": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -149,7 +133,6 @@
   "Pagination": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -157,7 +140,6 @@
   "RadioButton": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -165,7 +147,6 @@
   "ResizablePanel": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "CSS custom properties",
     "Accessibility",
@@ -174,15 +155,14 @@
   "SearchableDropdown": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
+    "Types",
     "Accessibility",
     "Keyboard Interactions"
   ],
   "Slider": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -191,7 +171,6 @@
   "Stepper": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -200,15 +179,14 @@
   "Switch": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
+    "CSS custom properties",
     "Accessibility",
     "Keyboard Interactions"
   ],
   "Table": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -216,7 +194,6 @@
   "TabPanel": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -225,7 +202,6 @@
   "TextArea": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Accessibility",
     "Keyboard Interactions"
@@ -233,7 +209,6 @@
   "TimePicker": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -242,7 +217,6 @@
   "Toast": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Data attributes",
     "Types",
     "Accessibility",
@@ -251,7 +225,6 @@
   "Tooltip": [
     "Anatomy",
     "API Reference",
-    "Class overrides",
     "Accessibility",
     "Keyboard Interactions"
   ]

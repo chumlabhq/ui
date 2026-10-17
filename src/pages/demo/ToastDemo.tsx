@@ -12,6 +12,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -111,7 +112,7 @@ const ToastDemoContent = ({
 
       <SetupNote />
 
-      <CopyPasteBlock name="Toast" />
+      <ComponentAnatomy name="Toast" />
 
       <Section
         title="Basic Usage"
@@ -1119,6 +1120,8 @@ const ToastDemoContent = ({
           "Do not put essential-only content exclusively in a dismissed toast.",
         ]}
       />
+
+      <CopyPasteBlock name="Toast" />
 
     </div>
   );

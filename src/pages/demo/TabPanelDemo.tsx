@@ -13,6 +13,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -333,7 +334,7 @@ const TabPanelDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="TabPanel" />
+      <ComponentAnatomy name="TabPanel" />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -1257,6 +1258,8 @@ const TabPanelDemo = () => {
           "Do not hide focus outlines on tab triggers.",
         ]}
       />
+
+      <CopyPasteBlock name="TabPanel" />
     </div>
   );
 };

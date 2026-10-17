@@ -12,6 +12,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -107,7 +108,7 @@ const RadioButtonDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="RadioButton" />
+      <ComponentAnatomy name="RadioButton" />
 
       <Section
         title="Basic Usage"
@@ -709,6 +710,8 @@ const RadioButtonDemo = () => {
           "Do not mix different color variants in the same radio group without clear purpose.",
         ]}
       />
+
+      <CopyPasteBlock name="RadioButton" />
     </div>
   );
 };

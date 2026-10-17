@@ -17,6 +17,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -254,7 +255,7 @@ const StepperDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Stepper" />
+      <ComponentAnatomy name="Stepper" />
 
       <Section
         title="Basic Usage"
@@ -853,6 +854,8 @@ const StepperDemo = () => {
           "Do not hide errors that block progression without messaging.",
         ]}
       />
+
+      <CopyPasteBlock name="Stepper" />
     </div>
   );
 };

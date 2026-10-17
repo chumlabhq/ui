@@ -15,7 +15,7 @@
 import ts from "typescript";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { OPTIONS, viewsOf } from "./propsWalk.js";
+import { OPTIONS, viewsOf, type PropsView } from "./propsWalk.js";
 import { COMPONENT_DOCS } from "../pages/demo/generated/componentDocs.js";
 import { FORM_FIXTURES } from "../__tests__/fixtures/_forms.js";
 
@@ -51,7 +51,7 @@ export interface Component {
  * makes public. Read from `src/index.ts`, not from `ai/component-index.json`,
  * which is written by hand.
  */
-export function publicComponents(): Component[] {
+export function publicViews(): { dirs: string[]; views: PropsView[] } {
   const rootFile = join(ROOT, "src/index.ts");
   const root = readFileSync(rootFile, "utf8");
   const dirs = [...new Set([...root.matchAll(/from "\.\/components\/([A-Za-z]+)[/"]/g)].map((m) => m[1]))].sort();
@@ -61,7 +61,11 @@ export function publicComponents(): Component[] {
   const exported = new Set(
     checker.getExportsOfModule(checker.getSymbolAtLocation(program.getSourceFile(rootFile)!)!).map((s) => s.name),
   );
-  const views = viewsOf(program, files).filter((v) => exported.has(v.id.split("/")[1]));
+  return { dirs, views: viewsOf(program, files).filter((v) => exported.has(v.id.split("/")[1])) };
+}
+
+export function publicComponents(): Component[] {
+  const { dirs, views } = publicViews();
   return dirs.map((dir) => {
     const own = views.filter((v) => v.id.startsWith(`${dir}/`));
     return {

@@ -11,6 +11,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -100,7 +101,7 @@ const CheckboxDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Checkbox" />
+      <ComponentAnatomy name="Checkbox" />
 
       <Section
         title="Basic Usage"
@@ -619,6 +620,8 @@ const CheckboxDemo = () => {
           "Do not rely on color alone for error state.",
         ]}
       />
+
+      <CopyPasteBlock name="Checkbox" />
     </div>
   );
 };

@@ -14,6 +14,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -116,7 +117,7 @@ const SliderDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Slider" />
+      <ComponentAnatomy name="Slider" />
 
       <Section title="Basic Usage" description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation (arrow keys). No custom classes needed." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -741,6 +742,8 @@ const SliderDemo = () => {
           "Do not forget to set height on vertical sliders.",
         ]}
       />
+
+      <CopyPasteBlock name="Slider" />
     </div>
   );
 };

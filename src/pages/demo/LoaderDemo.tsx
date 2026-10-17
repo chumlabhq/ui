@@ -12,6 +12,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -43,7 +44,7 @@ const LoaderDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Loader" />
+      <ComponentAnatomy name="Loader" />
 
       <Section
         title="Basic Usage"
@@ -579,6 +580,8 @@ const LoaderDemo = () => {
           "Do not use Pulse loaders in tight inline spaces — they need room.",
         ]}
       />
+
+      <CopyPasteBlock name="Loader" />
     </div>
   );
 };

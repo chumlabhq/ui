@@ -15,6 +15,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -246,7 +247,7 @@ const PaginationDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="Pagination" />
+      <ComponentAnatomy name="Pagination" />
 
       <Section
         title="Basic Usage"
@@ -1026,6 +1027,8 @@ const PaginationDemo = () => {
           "Do not generate thousands of page buttons without ellipsis.",
         ]}
       />
+
+      <CopyPasteBlock name="Pagination" />
     </div>
   );
 };

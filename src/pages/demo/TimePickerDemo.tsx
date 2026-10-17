@@ -13,6 +13,7 @@ import {
   DocEdgeCases,
   DocDoDont,
   ComponentDocs,
+  ComponentAnatomy,
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
@@ -276,7 +277,7 @@ const TimePickerDemo = () => {
 
       <SetupNote />
 
-      <CopyPasteBlock name="TimePicker" />
+      <ComponentAnatomy name="TimePicker" />
 
       <Section
         title="Basic Usage"
@@ -1463,6 +1464,8 @@ const TimePickerDemo = () => {
           "Don't assume clock variant allows out-of-range times — minTime/maxTime are enforced on both variants.",
         ]}
       />
+
+      <CopyPasteBlock name="TimePicker" />
     </div>
   );
 };

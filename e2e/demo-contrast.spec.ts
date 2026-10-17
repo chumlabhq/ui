@@ -160,56 +160,110 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   "guides/ai-llm": 86,
   // A2a, 947 -> 921: the API Reference lost the root onExpandedChange row and the
   // shape table of the event payload it passed (26 cells, measured HEAD vs now).
-  "accordion": 921,
-  "avatar": 1084,
+  // D11, 2026-10-17, 921 -> 915 (HEAD 932 -> now 915): Class overrides (96) and the old Anatomy (3) became Anatomy (82).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "accordion": 915,
+  // D11, 2026-10-17, 1084 -> 1060 (HEAD 1084 -> now 1060): Class overrides (59) and the old Anatomy (3) became Anatomy (38).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "avatar": 1060,
   // A2e, 514 -> 512: the API Reference lost the separate icon prop's row (4
   // cells and its 2 code spans), folded into separator, whose rewritten
   // description gained one code span (517 -> 512 measured HEAD vs now).
-  "breadcrumb": 512,
-  "button": 445,
-  "cascading-dropdown": 732,
-  "checkbox": 411,
+  // D11, 2026-10-17, 512 -> 501 (HEAD 512 -> now 501): Class overrides (47) became Anatomy (36).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "breadcrumb": 501,
+  // D11, 2026-10-17, 445 -> 439 (HEAD 447 -> now 439): Class overrides (23) and the old Anatomy (3) became Anatomy (18).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "button": 439,
+  // D11, 2026-10-17, 732 -> 714 (HEAD 741 -> now 714): Class overrides (117) became Anatomy (90).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "cascading-dropdown": 714,
+  // D11, 2026-10-17, 411 -> 404 (HEAD 412 -> now 404): Class overrides (35) became Anatomy (27).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "checkbox": 404,
   // X4, 454 -> 455, 2026-10-16: lazy images are now loaded before measuring.
   // Chromium already showed the "invalid code" fallback ("??"), which Firefox
   // and WebKit held back until scrolled to (453); all three now also show the
   // Custom Base Path example's "US" fallback, whose /assets/flags image 404s.
-  "country-flag": 455,
-  "date-picker": 975,
+  // D11, 2026-10-17, 455 -> 433 (HEAD 455 -> now 433): Class overrides (52) and the old Anatomy (3) became Anatomy (33).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "country-flag": 433,
+  // D11, 2026-10-17, 975 -> 952 (HEAD 981 -> now 952): Class overrides (119) became Anatomy (90).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "date-picker": 952,
   "drawer": 418,
   // A2c, 746 -> 744: the API Reference lost the CheckIcon row (4 cells), folded
   // into selectedIcon, and the rewritten icon descriptions gained one code span
   // (747 -> 744 measured HEAD vs now).
-  "dropdown": 744,
-  "input": 530,
-  "international-phone-input": 946,
+  // D11, 2026-10-17, 744 -> 727 (HEAD 744 -> now 727): Class overrides (71) became Anatomy (54).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "dropdown": 727,
+  // D11, 2026-10-17, 530 -> 520 (HEAD 530 -> now 520): Class overrides (43) became Anatomy (33).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "input": 520,
+  // D11, 2026-10-17, 946 -> 940 (HEAD 954 -> now 940): Class overrides (61) became Anatomy (47).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "international-phone-input": 940,
   // L11, 426 -> 425: the In Context "Processing" button is now disabled while
   // it loads, and an inactive control's label is exempt from 1.4.3.
-  "loader": 425,
+  // D11, 2026-10-17, 425 -> 399 (HEAD 425 -> now 399): Class overrides (62) became Anatomy (36).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "loader": 399,
   // A2b, 495 -> 491: the API Reference lost the animation-off boolean's row (4
   // cells), folded into the reduceMotion row above it (measured HEAD vs now).
   "modal": 491,
-  "multi-select-dropdown": 684,
-  "multi-select-searchable-dropdown": 707,
+  // D11, 2026-10-17, 684 -> 664 (HEAD 687 -> now 664): Class overrides (101) became Anatomy (78).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "multi-select-dropdown": 664,
+  // D11, 2026-10-17, 707 -> 685 (HEAD 709 -> now 685): Class overrides (102) became Anatomy (78).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "multi-select-searchable-dropdown": 685,
   // A2f, 433 -> 429: the API Reference lost the group-name prop's row (4 cells),
   // folded into aria-label (measured A2e vs now; no other change on the page).
-  "otp-input": 429,
-  "pagination": 634,
-  "radio-button": 476,
-  "resizable-panel": 359,
-  "searchable-dropdown": 755,
-  "slider": 545,
-  "stepper": 682,
-  "switch": 423,
-  "tab-panel": 677,
+  // D11, 2026-10-17, 429 -> 420 (HEAD 429 -> now 420): Class overrides (40) became Anatomy (31).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "otp-input": 420,
+  // D11, 2026-10-17, 634 -> 626 (HEAD 637 -> now 626): Class overrides (48) became Anatomy (37).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "pagination": 626,
+  // D11, 2026-10-17, 476 -> 465 (HEAD 476 -> now 465): Class overrides (48) and the old Anatomy (3) became Anatomy (40).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "radio-button": 465,
+  // D11, 2026-10-17, 359 -> 356 (HEAD 359 -> now 356): Class overrides (15) became Anatomy (12).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "resizable-panel": 356,
+  // D11, 2026-10-17, 755 -> 736 (HEAD 756 -> now 736): Class overrides (83) became Anatomy (63).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "searchable-dropdown": 736,
+  // D11, 2026-10-17, 545 -> 534 (HEAD 546 -> now 534): Class overrides (52) became Anatomy (40).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "slider": 534,
+  // D11, 2026-10-17, 682 -> 673 (HEAD 685 -> now 673): Class overrides (54) became Anatomy (42).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "stepper": 673,
+  // D11, 2026-10-17, 423 -> 413 (HEAD 423 -> now 413): Class overrides (44) became Anatomy (34).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "switch": 413,
+  // D11, 2026-10-17, 677 -> 632 (HEAD 678 -> now 632): Class overrides (76) became Anatomy (30).
+  // The dropped Type and Default columns carried no information (string, — on every slot); TabPanel's duplicate ResolvedClasses listing removed.
+  "tab-panel": 632,
   // X4, 5342 -> 5543, 2026-10-16: the Server-Side example's rows are the 24
   // fixture products (10 a page) and its category filter, waited for, where
   // 5342 was the cold read with dummyjson.com's rows not yet landed.
-  "table": 5543,
-  "text-area": 504,
-  "time-picker": 871,
+  // D11, 2026-10-17, 5543 -> 5499 (HEAD 5543 -> now 5499): Class overrides (199) became Anatomy (155).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "table": 5499,
+  // D11, 2026-10-17, 504 -> 496 (HEAD 504 -> now 496): Class overrides (36) became Anatomy (28).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "text-area": 496,
+  // D11, 2026-10-17, 871 -> 862 (HEAD 893 -> now 862): Class overrides (127) became Anatomy (96).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "time-picker": 862,
   // A2a, 564 -> 562: the API Reference lost the onRemove row (4 cells) and the
   // rewritten onDismiss(id) description gained two `id` code spans.
-  "toast": 562,
+  // D11, 2026-10-17, 562 -> 560 (HEAD 563 -> now 560): Class overrides (43) became Anatomy (40).
+  // The dropped Type and Default columns carried no information (string, — on every slot).
+  "toast": 560,
   // 426 -> 423, 2026-10-08: the three gradient-with-arrow examples were removed (an arrow cannot take a gradient).
   "tooltip": 423,
 };
