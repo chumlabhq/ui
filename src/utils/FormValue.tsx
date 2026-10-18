@@ -61,8 +61,11 @@ export function FormValue({ entries, required, disabled, form, missing, onReset,
           value={value}
           onChange={noop}
           onFocus={(event) => {
-            const target = focusTarget && "current" in focusTarget ? focusTarget.current : focusTarget;
-            if (target && target !== event.currentTarget) target.focus();
+            const input = event.currentTarget;
+            setTimeout(() => {
+              const target = focusTarget && "current" in focusTarget ? focusTarget.current : focusTarget;
+              if (target && target !== input && document.activeElement === input) target.focus();
+            });
           }}
           required={!index && blocks ? true : undefined}
           disabled={disabled || undefined}

@@ -23,7 +23,7 @@ function computeInputValue(
   return { inputValue: "", lastValid: "" };
 }
 
-export function useTimePicker({
+export function useTimePickerState({
   value,
   format,
   minuteStep,
@@ -31,7 +31,7 @@ export function useTimePicker({
   maxTime,
   disabled,
   onValueChange,
-}: UseTimePickerProps): UseTimePickerReturn {
+}: UseTimePickerProps): UseTimePickerReturn & { discardTyped: () => void } {
   const safeStep = clampMinuteStep(minuteStep);
   const [inputValue, setInputValue] = useState(() => computeInputValue(value, format).inputValue);
   // Owned here rather than by `useMenuNavigation`: the callbacks below reset
@@ -39,6 +39,7 @@ export function useTimePicker({
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const isTypingRef = useRef(false);
   const prevFormatRef = useRef(format);
+  const [discards, setDiscards] = useState(0);
 
   const [lastValidValue, setLastValidValue] = useState(() => computeInputValue(value, format).lastValid);
 
@@ -75,7 +76,7 @@ export function useTimePicker({
     if (isTypingRef.current) return;
     setInputValue(computed.inputValue);
     setLastValidValue(computed.lastValid);
-  }, [value, format]);
+  }, [value, format, discards]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const displayOptions = useMemo(() => {
@@ -204,6 +205,11 @@ export function useTimePicker({
     [disabled, focusedIndex, commitValue, onMenuKeyDown],
   );
 
+  const discardTyped = useCallback(() => {
+    isTypingRef.current = false;
+    setDiscards((n) => n + 1);
+  }, []);
+
   return {
     inputValue,
     focusedIndex,
@@ -216,5 +222,11 @@ export function useTimePicker({
     handleOptionSelect,
     handleKeyDown,
     handleBlur,
+    discardTyped,
   };
+}
+
+export function useTimePicker(props: UseTimePickerProps): UseTimePickerReturn {
+  const { discardTyped: _discardTyped, ...hook } = useTimePickerState(props);
+  return hook;
 }

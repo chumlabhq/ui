@@ -1301,6 +1301,29 @@ const LIBRARY_TOTAL_HISTORY = [
       "(below). No comments added to src/components or src/utils. Measured " +
       "against a build of c03c0f93.",
   },
+  {
+    kb: 159.62,
+    commit: "(uncommitted)",
+    date: "2026-10-18",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.10 KB on the record (163,342 -> 163,454 B gzipped, +112 B " +
+      "on a build of 7a8e667d), 83 files held. L27: a form's reset is final, " +
+      "and every refused submit focuses the field. Own chunks: TimePicker +88 B " +
+      "— a reset discards the typed text the field holds (an internal " +
+      "useTimePickerState returns the discard; the public useTimePicker's " +
+      "return is unchanged) and a blur that began before the reset commits " +
+      "nothing, where the Reset click's blur committed the old text after it; " +
+      "FormValue +26 B — the hidden input hands focus to the field's control a " +
+      "task later, once the browser's own focus step is over, so the input " +
+      "blurs and firefox closes its validation message, which kept firefox " +
+      "from focusing the field on any later refused submit. The other 24 files " +
+      "that moved, +1 to +5 B each (DatePicker +5, RadioButton +5, TextArea +3, " +
+      "the searchable dropdowns +3), import FormValue's chunk by a hashed name " +
+      "that changed with it. The rest is the whole-library gzip. No declared " +
+      "breach moved. No comments added to src/components or src/utils. " +
+      "Measured against a build of 7a8e667d.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

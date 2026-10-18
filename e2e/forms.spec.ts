@@ -252,3 +252,78 @@ test.describe("Form fields in a native form", () => {
     });
   }
 });
+
+/**
+ * A form's reset is final, and every refused submit focuses the field.
+ *
+ * L27 step 0 measured both in three engines.
+ *
+ * Reset: clicking a Reset button blurs the field first (pointerdown, then
+ * focusout, then click, then reset), and TimePicker commits its typed text two
+ * frames after a blur. Text typed and not yet committed survived the reset,
+ * since the reset could not reach it, and the blur then committed it: f=14:45
+ * after Reset in every engine. Committed text lost the same race under load
+ * (2 of 10 at a 6x CPU throttle in chromium). No other field commits on blur,
+ * and none lost a reset in 10 trials per engine.
+ *
+ * Refused submits: in firefox, a field that submits through a hidden input was
+ * focused on the first refused submit only. Firefox's validation message stays
+ * open until its element blurs, and the field's control took focus inside the
+ * browser's own focus step, so that element never blurred; while the message
+ * was open, firefox skipped the focus step, and where the message covered the
+ * Submit button the next click never reached the page.
+ *
+ * Each row reads the field only after the evidence: the reset event, a task
+ * behind the reset's own handler and the frames the blur's commit runs in; the
+ * browser's `invalid` event for each refused submit.
+ */
+test.describe("A form's reset and its refused submits", () => {
+  for (const typed of ["committed with Enter", "left uncommitted"] as const) {
+    test(`TimePicker: a Reset click restores the default after a time ${typed}`, async ({ page }) => {
+      await open(page, "TimePicker", "uncontrolled");
+      const documented = JSON.parse(await attr(page, "data-documented")) as string[];
+      const before = await shown(page);
+      const input = page.locator(`${FORM} input[role=combobox]`);
+      await input.fill("14:45");
+      await input.press(typed === "committed with Enter" ? "Enter" : "Escape");
+      await expect.poll(() => shown(page)).toBe("input 14:45");
+      await page.locator(`${FORM} button[type=reset]`).click();
+      await expect(page.locator(FORM)).toHaveAttribute("data-resets", "1");
+      await page.evaluate(
+        () =>
+          new Promise((r) =>
+            setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(r))))),
+          ),
+      );
+      expect(await shown(page), "the Reset click's blur put the typed time back").toBe(before);
+      expect(await formData(page)).toEqual(documented);
+    });
+  }
+
+  for (const [field, control] of [
+    ["Dropdown", "[role=combobox]"],
+    ["Input", "input[name=f]"],
+  ] as const) {
+    test(`${field}: three refused submits in a row each focus the field`, async ({ page }) => {
+      await open(page, field, "required");
+      await page.locator(FORM).evaluate((f) => {
+        const g = f as HTMLFormElement & { invalids?: number };
+        g.invalids = 0;
+        f.addEventListener("invalid", () => (g.invalids = (g.invalids ?? 0) + 1), true);
+      });
+      const invalids = () => page.locator(FORM).evaluate((f) => (f as HTMLFormElement & { invalids?: number }).invalids ?? 0);
+      const submit = page.locator(`${FORM} button[type=submit]`);
+      const landed: string[] = [];
+      for (let i = 1; i <= 3; i++) {
+        const refused = await invalids();
+        await submit.focus();
+        await submit.click();
+        await expect.poll(invalids, { message: `${field}: submit ${i} was not refused` }).toBeGreaterThan(refused);
+        await expect(page.locator(`${FORM} ${control}`).first(), `${field}: refused submit ${i} left focus off the field`).toBeFocused();
+        landed.push(await page.evaluate(() => document.activeElement?.getAttribute("role") ?? document.activeElement?.tagName.toLowerCase() ?? ""));
+      }
+      await expect(page.locator(FORM)).toHaveAttribute("data-submits", "0");
+      console.log(`FORMS_REFUSED ${field}: ${landed.join(", ")}`);
+    });
+  }
+});

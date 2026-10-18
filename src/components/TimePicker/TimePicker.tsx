@@ -16,7 +16,7 @@ import {
   DEFAULT_TIMEPICKER_CLASSES,
   UNSTYLED_TIMEPICKER_CLASSES,
 } from "./utils/constants.js";
-import { useTimePicker } from "./useTimePicker.js";
+import { useTimePickerState } from "./useTimePicker.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { FormValue } from "../../utils/FormValue.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -296,6 +296,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     // Tracks whether a mousedown on the trigger is in progress so the
     // blur handler can skip its close — the click handler will handle it.
     const isTriggerMouseDownRef = useRef(false);
+    const resetsRef = useRef(0);
 
     const safeMinuteStep = clampMinuteStep(minuteStep);
     const optionTextClass = unstyled ? "" : "flex-1";
@@ -315,7 +316,8 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       handleOptionSelect: hookHandleOptionSelect,
       handleKeyDown: hookHandleKeyDown,
       handleBlur,
-    } = useTimePicker({
+      discardTyped,
+    } = useTimePickerState({
       value,
       format,
       minuteStep: safeMinuteStep,
@@ -466,6 +468,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     }, [lockScroll, isOpen]);
 
     const handleInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+      const resets = resetsRef.current;
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           // If the blur was caused by clicking the trigger (chevron, etc.),
@@ -477,7 +480,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
           const active = document.activeElement;
           if (containerRef.current?.contains(active)) return;
           if (dropdownContentRef.current?.contains(active)) return;
-          if (!refuseOutOfRange()) handleBlur();
+          if (resetsRef.current === resets && !refuseOutOfRange()) handleBlur();
           handleClose();
           onBlur?.(event);
         });
@@ -632,7 +635,10 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
             required={required}
             disabled={disabled}
             onReset={() => {
-              if (resetValue()) setRangeError(false);
+              if (!resetValue()) return;
+              resetsRef.current += 1;
+              discardTyped();
+              setRangeError(false);
             }}
             focusTarget={inputRef}
           />

@@ -701,6 +701,8 @@ tables say.
 
 ### Fixed
 
+- A form's Reset button no longer leaves a picker holding the old value: clicking Reset blurred the field, and the blur committed its typed text after the reset. Affected: TimePicker; no other field commits typed text on blur.
+- In Firefox, a second blocked submit focuses the invalid field again; only the first one did. Affected: Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, DatePicker, TimePicker, Switch and OtpInput, the fields that submit through a hidden input.
 - Checkbox's box and Switch's track keep their size beside a long, wrapping label; both shrank (Checkbox 20 → 18 px, Switch 36 → 16 px).
 - **`defaultOpen` no longer moves focus or scrolls the page on mount.** A popup open at mount
   (`defaultOpen`, or `open` already true) now leaves focus where it was, as a native `<select>`
