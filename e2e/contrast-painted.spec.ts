@@ -295,6 +295,30 @@ const MEASURE_NONTEXT = `(() => {
     }
   }
 
+  // a calendar day's state marks. The fill rule above exempts an element with
+  // text, which suits a chip that names itself, but a day's number says
+  // nothing about whether it is selected, in a range or today: the mark is the
+  // only thing that does, so each cue is held to 3:1 against what it sits on.
+  for (const root of roots) {
+    for (const el of root.querySelectorAll("[role=gridcell]:is([data-selected],[data-today],[data-range])")) {
+      if (hidden(el)) continue;
+      const cs = getComputedStyle(el);
+      const behind = el.parentElement ? backgroundOf(el.parentElement) : null;
+      if (!behind) continue;
+      const own = parse(cs.backgroundColor);
+      const ground = own && own[3] > 0 ? over(own, behind) : behind;
+      const mark = (what, colour, against, detail) => {
+        const value = ratio(colour, against);
+        out.push({ kind: "mark", key: selectorFor(el) + " " + what, ratio: Math.round(value * 100) / 100, exact: value, detail });
+      };
+      if (own && own[3] > 0) mark("fill", ground, behind, cs.backgroundColor + " over rgb(" + behind.map(Math.round).join(", ") + ")");
+      const deco = parse(cs.textDecorationColor);
+      if (cs.textDecorationLine.includes("underline") && deco) mark("underline", over(deco, ground), ground, cs.textDecorationColor + " on the cell");
+      const text = parse(cs.color);
+      if (el.hasAttribute("data-range") && text) mark("text", over(text, ground), ground, cs.color + " on the cell");
+    }
+  }
+
   // the focus indicator, one focusable element at a time
   const focusable = [];
   for (const root of roots) {
@@ -383,6 +407,7 @@ test.describe("painted contrast", () => {
     const unindicated: string[] = [];
     let indicators = 0;
     let fills = 0;
+    let marks = 0;
 
     for (const path of paths) {
       const [, , component, fixture] = path.split("/");
@@ -459,6 +484,7 @@ test.describe("painted contrast", () => {
             continue;
           }
           if (m.kind === "fill") fills += 1;
+          else if (m.kind === "mark") marks += 1;
           else indicators += 1;
           if (m.ratio !== null && underFloor(m, AA_NON_TEXT)) {
             nonTextFindings.push({
@@ -499,7 +525,7 @@ test.describe("painted contrast", () => {
       `CONTRAST_NONTEXT_UNINDICATED ${JSON.stringify([...new Set(unindicated)].slice(0, 40))}`,
     );
     console.log(
-      `CONTRAST_NONTEXT indicators=${indicators} fills=${fills} ` +
+      `CONTRAST_NONTEXT indicators=${indicators} fills=${fills} marks=${marks} ` +
         `findings=${nonTextFindings.length} no-indicator=${unindicated.length} floor=${AA_NON_TEXT}`,
     );
     for (const f of findings) {

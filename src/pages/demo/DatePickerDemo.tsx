@@ -665,13 +665,13 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
       {/* ─── Today Button & Indicator ─────────────────────────────────── */}
       <Section
         title="Today Button & Indicator"
-        description="showTodayIndicator, on by default, marks today's cell with data-today and paints nothing itself: style it through classes.item with a data-[today]: variant. Today's cell carries aria-current=&quot;date&quot; either way. showTodayButton, off by default, adds a footer button that jumps to today."
+        description="showTodayIndicator, on by default, underlines today's date; the underline stays when today is also selected or in a range. Restyle it through classes.item with a data-[today]: variant. showTodayButton, off by default, adds a footer button that jumps to today."
         isDarkMode={dark}
       >
         <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Default — today marked with data-today, no footer
+              Default — today underlined, no footer
             </p>
             <DemoWrapper
               isDarkMode={dark}

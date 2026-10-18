@@ -1530,3 +1530,193 @@ test("a field or selection control's resting boundary clears 3:1 on every librar
   expect(unmeasured, "a recipe that no longer reaches its control measures nothing").toEqual([]);
   expect(under, "a field or selection control's resting boundary under 3:1 against a library surface (WCAG 1.4.11)").toEqual([]);
 });
+
+/**
+ * Every documented state paints.
+ *
+ * `every reported state is a visible state` above compares two values of one
+ * attribute inside a fixture, so it covers the states that have values
+ * (`data-state="checked"` against `"unchecked"`) and leaves out every bare
+ * presence attribute. That was the hole: 6dd1925 deleted DatePicker's
+ * `daySelected`, `dayRangeStart`, `dayRangeMiddle`, `dayRangeEnd`,
+ * `dayOutside` and `dayToday` keys with their styling, the day cell reported
+ * the same states as `data-selected`, `data-range`, `data-outside` and
+ * `data-today`, and nothing painted them — a selected day, a range and the
+ * adjacent month all looked like any other day from 2026-09-03 until L28.
+ *
+ * So the question is asked of the docs instead of the migration table: every
+ * `data-*` attribute a component's `.ai.md` lists as a state, on every element
+ * that carries it in any fixture, is removed and put back, and the element or
+ * something inside it has to render differently without it — background,
+ * border, colour, outline, opacity, text decoration, shadow or weight. Where a
+ * parent mirrors the attribute of a child, the child is the one measured. A
+ * documented attribute that no fixture renders is listed, not passed.
+ *
+ * Every other unpainted attribute is excused below by name, in one of five
+ * groups; an excuse that stops excusing anything fails.
+ */
+const STATE_PAINT_EXEMPT: Record<string, string> = {};
+const exempt = (components: string[], attribute: string, reason: string) => {
+  for (const c of components) STATE_PAINT_EXEMPT[`${c} ${attribute}`] = reason;
+};
+
+const HOOK = "a hook a consumer selects on, not a state: it names or positions the element and nothing in the library paints from it";
+for (const [attribute, components] of [
+  ["data-align", ["Stepper"]], ["data-breadcrumb-dropdown-id", ["Breadcrumb"]], ["data-code", ["CountryFlag"]],
+  ["data-direction", ["Pagination"]], ["data-dropdown-id", ["Dropdown"]], ["data-group", ["OtpInput"]], ["data-index", ["OtpInput"]],
+  ["data-marker-type", ["DatePicker"]], ["data-modal-content", ["Modal"]], ["data-next-status", ["Stepper"]],
+  ["data-position", ["Breadcrumb", "Dropdown", "MultiSelectSearchableDropdown", "SearchableDropdown"]], ["data-slot", ["Input", "TextArea"]],
+  ["data-toast-id", ["Toast"]], ["data-value", ["Accordion"]], ["data-selection-mode", ["Accordion"]],
+] as const) exempt([...components], attribute, HOOK);
+
+const ECHO = "reports a prop whose paint the component resolves from the prop itself, so removing the attribute changes nothing: the attribute echoes the configuration, it does not cause it";
+for (const [attribute, components] of [
+  ["data-orientation", ["Accordion", "Button", "Stepper", "TabPanel"]], ["data-shape", ["Avatar", "Checkbox"]],
+  ["data-size", ["Button", "Checkbox", "Input", "TextArea"]], ["data-full-width", ["Button"]], ["data-variant", ["Stepper", "Toast"]],
+] as const) exempt([...components], attribute, ECHO);
+exempt(["Checkbox", "Loader", "Modal", "Stepper", "Switch", "TabPanel"], "data-reduce-motion", "governs motion, not paint; `reduced-motion.contract` holds it");
+
+exempt(["Checkbox", "Switch"], "data-checked", "the presence-only companion of `data-state`, which is the attribute that paints and is compared by value");
+exempt(["Checkbox"], "data-indeterminate", "the presence-only companion of `data-state=\"indeterminate\"`, which paints");
+for (const a of ["data-range-start", "data-range-end", "data-in-range"])
+  exempt(["DatePicker"], a, "a boolean companion of `data-range`, which paints (accent fill at the ends, accent text in the middle) and is the documented attribute to style");
+
+exempt(["Button", "Checkbox", "Input", "OtpInput", "TextArea"], "data-disabled", "painted from the native `disabled` and classes resolved from the prop; `disabled shows itself` above asserts the affordance absolutely");
+exempt(["Checkbox", "Input", "Switch", "TextArea"], "data-error", "painted by classes resolved from `error`; `success paints where error does` above holds the error paint");
+
+const SHOWN = "measured as shown in L28 by a same-fixture comparison, but not by a paint the attribute itself causes:";
+exempt(["Dropdown"], "data-selected", `${SHOWN} the selected option renders its check indicator, a child`);
+exempt(["DatePicker"], "data-marked", `${SHOWN} the marked day renders its marker dot, a child`);
+exempt(["DatePicker"], "data-highlighted", "the roving keyboard position; it is drawn by the focus ring whenever focus is in the grid, which CONTRAST_NONTEXT measures");
+exempt(["Table"], "data-expanded", `${SHOWN} the expand control changes its icon and its label, not its paint`);
+exempt(["OtpInput"], "data-filled", `${SHOWN} a filled cell shows its digit`);
+exempt(["Avatar"], "data-has-image", `${SHOWN} the avatar renders the image instead of its initials`);
+exempt(["Pagination"], "data-state", `${SHOWN} the current page paints the accent tint and accent text, against a plain page`);
+exempt(["Stepper"], "data-status", `${SHOWN} the active step's indicator paints the accent fill`);
+exempt(["Stepper"], "data-invalid", `${SHOWN} an invalid step's indicator paints differently from a valid one`);
+
+const NEXT = "NOT VERIFIED in L28; listed for the next slice: no default paint was found for it on the element that carries it";
+for (const [attribute, components] of [
+  ["data-open", ["DatePicker", "Dropdown", "MultiSelectDropdown", "SearchableDropdown"]], ["data-state", ["Dropdown"]],
+  ["data-loading", ["Button", "DatePicker", "InternationalPhoneInput", "OtpInput"]], ["data-placeholder", ["Dropdown", "SearchableDropdown"]],
+  ["data-readonly", ["InternationalPhoneInput"]], ["data-truncated", ["Breadcrumb"]], ["data-dropdown-open", ["Breadcrumb"]], ["data-clickable", ["Stepper"]],
+] as const) exempt([...components], attribute, NEXT);
+
+/** Every documented state when the gate was written (L28 step 0). */
+const STATE_PAINT_FLOOR = 161;
+
+const documentedStates = () => {
+  const out: { dir: string; attribute: string }[] = [];
+  for (const dir of readdirSync(resolve(process.cwd(), "src/components"))) {
+    let files: string[] = [];
+    try { files = readdirSync(resolve(process.cwd(), "src/components", dir)).filter((f) => f.endsWith(".ai.md")); } catch { continue; }
+    const seen = new Set<string>();
+    for (const f of files) {
+      for (const line of readFileSync(resolve(process.cwd(), "src/components", dir, f), "utf8").split("\n")) {
+        const m = /^- `(data-[a-z-]+)/.exec(line);
+        if (m && !seen.has(m[1])) { seen.add(m[1]); out.push({ dir, attribute: m[1] }); }
+      }
+    }
+  }
+  return out;
+};
+
+test("every documented state paints", async ({ page }) => {
+  test.setTimeout(900_000);
+  const states = documentedStates();
+  await gotoFixtureIndex(page);
+  const paths = await page.locator("[data-fixture-index] li a").evaluateAll((els) =>
+    els.map((e) => new URL((e as HTMLAnchorElement).href).pathname),
+  );
+  type Seen = { path: string; sig: string; others: string; value: string | null; paint: string; toggled: boolean };
+  const seen = new Map<string, Seen[]>();
+  const dirs = [...new Set(states.map((s) => s.dir))];
+  for (const dir of dirs) {
+    const attributes = states.filter((s) => s.dir === dir).map((s) => s.attribute);
+    for (const path of paths.filter((p) => p.split("/")[2].split(".")[0] === dir)) {
+      await page.goto(path, { waitUntil: "domcontentloaded" });
+      await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+      const found = await page.evaluate((attrs) => {
+        const freeze = document.createElement("style");
+        freeze.textContent = "*,*::before,*::after{transition:none!important;animation:none!important}";
+        document.head.append(freeze);
+        const paint = (el: Element) => {
+          const c = getComputedStyle(el);
+          const a = getComputedStyle(el, "::after");
+          return [c.backgroundColor, c.borderTopColor, c.borderTopWidth, c.color, c.outlineStyle, c.outlineColor, c.opacity,
+            c.textDecorationLine, c.textDecorationColor, c.boxShadow, c.fontWeight, c.transform, c.translate, a.content, a.backgroundColor].join("~");
+        };
+        // What kind of element it is, so a carrier is compared with its peers and nothing else.
+        const subtree = (el: Element) => [el, ...el.querySelectorAll("*")].map(paint).join("|");
+        const sig = (el: Element) => `${el.tagName.toLowerCase()}|${el.getAttribute("role") ?? ""}|${el.getAttribute("data-slot") ?? ""}`;
+        // Every other documented state the element is in, and focus, so it is
+        // compared only with a peer that differs by the one attribute.
+        const others = (el: Element, attribute: string) =>
+          [...attrs.filter((a) => a !== attribute && el.hasAttribute(a)).map((a) => `${a}=${el.getAttribute(a)}`), el === document.activeElement ? ":focus" : ""].join(" ");
+        const out: Record<string, { sig: string; others: string; value: string | null; paint: string; toggled: boolean }[]> = {};
+        for (const attribute of attrs) {
+          const carriers = [...document.body.querySelectorAll(`[${attribute}]`)].filter((el) => !el.querySelector(`[${attribute}]`));
+          const sigs = new Set(carriers.map(sig));
+          const rows = carriers.map((el) => {
+            const value = el.getAttribute(attribute)!;
+            const before = subtree(el);
+            el.removeAttribute(attribute);
+            const toggled = subtree(el) !== before;
+            el.setAttribute(attribute, value);
+            return { sig: sig(el), others: others(el, attribute), value, paint: paint(el), toggled };
+          });
+          const peers = [...document.body.querySelectorAll("*")]
+            .filter((el) => !el.hasAttribute(attribute) && sigs.has(sig(el)))
+            .map((el) => ({ sig: sig(el), others: others(el, attribute), value: null, paint: paint(el), toggled: false }));
+          out[attribute] = [...rows, ...peers];
+        }
+        freeze.remove();
+        return out;
+      }, attributes);
+      for (const [attribute, rows] of Object.entries(found)) {
+        const key = `${dir} ${attribute}`;
+        seen.set(key, [...(seen.get(key) ?? []), ...rows.map((r) => ({ ...r, path }))]);
+      }
+    }
+  }
+  /**
+   * Painted when the element renders differently without the state, all else
+   * equal: removing the attribute changes it or something inside it (a state on
+   * a root is often drawn on a child); or a peer of the same kind, in
+   * the same other states and focus, that lacks the attribute paints
+   * differently — in the same fixture where there is one, since another
+   * fixture can differ for reasons of its own; or, for an attribute that always
+   * carries a value, two values on otherwise-equal elements paint differently.
+   * A selected day that is also the focused one is not compared with a
+   * resting day: the focus ring would answer for it.
+   */
+  const painted = (rows: Seen[]) => {
+    const carriers = rows.filter((r) => r.value !== null);
+    if (carriers.some((r) => r.toggled)) return true;
+    for (const c of carriers) {
+      const peers = rows.filter((r) => r.value === null && r.sig === c.sig && r.others === c.others);
+      const local = peers.filter((r) => r.path === c.path);
+      if ((local.length ? local : peers).some((r) => r.paint !== c.paint)) return true;
+    }
+    const groups = new Map<string, Map<string, string>>();
+    for (const c of carriers) {
+      const g = `${c.sig}#${c.others}`;
+      if (!groups.has(g)) groups.set(g, new Map());
+      groups.get(g)!.set(c.value!, c.paint);
+    }
+    return [...groups.values()].some((v) => v.size > 1 && new Set(v.values()).size > 1);
+  };
+  const keys = states.map((s) => `${s.dir} ${s.attribute}`);
+  const unrendered = keys.filter((k) => !seen.get(k)?.some((r) => r.value !== null));
+  const unpainted = keys.filter((k) => !unrendered.includes(k) && !painted(seen.get(k)!) && !STATE_PAINT_EXEMPT[k]);
+  const stale = Object.keys(STATE_PAINT_EXEMPT).filter((k) => !keys.includes(k) || unrendered.includes(k) || painted(seen.get(k)!));
+  const example = (k: string) => seen.get(k)!.find((r) => r.value !== null)!.path;
+  console.log(`STATE_PAINT states ${keys.length} (floor ${STATE_PAINT_FLOOR}), unpainted ${unpainted.length}, exempt ${Object.keys(STATE_PAINT_EXEMPT).length}, unrendered ${unrendered.length}`);
+  for (const k of unpainted) console.log(`  STATE_PAINT_UNPAINTED ${k} — e.g. ${example(k)}`);
+  for (const k of unrendered) console.log(`  STATE_PAINT_UNRENDERED ${k}`);
+  for (const k of stale) console.log(`  STATE_PAINT_STALE_EXEMPTION ${k}`);
+  expect(keys.length).toBeGreaterThanOrEqual(STATE_PAINT_FLOOR);
+  expect(unpainted, "a documented state renders exactly like the same element at rest").toEqual([]);
+  expect(stale, "an exemption that excuses nothing").toEqual([]);
+});

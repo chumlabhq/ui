@@ -704,6 +704,7 @@ tables say.
 
 ### Fixed
 
+- DatePicker's showTodayIndicator (on by default) now marks today's date with a 2px underline in the cell's text colour; it only set data-today, which nothing styled. The other day states paint again too: a selected day and a range's start and end take the accent fill, the days between take accent text, and days of the adjacent month take tertiary text. All of them stopped painting in 6dd19258 (2026-09-03), which deleted the per-state `classes` keys and their styles without moving the styles onto the day cell's state attributes.
 - The dark theme's `--cl-bg-hover` is a 10% light overlay, `rgba(237, 239, 244, 0.1)`; it was `#0a0d12`,
   which on the dark surfaces left a hovered or highlighted item looking unhovered.
 - A form's Reset button no longer leaves a picker holding the old value: clicking Reset blurred the field, and the blur committed its typed text after the reset. Affected: TimePicker; no other field commits typed text on blur.

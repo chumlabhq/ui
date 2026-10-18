@@ -1324,6 +1324,23 @@ const LIBRARY_TOTAL_HISTORY = [
       "breach moved. No comments added to src/components or src/utils. " +
       "Measured against a build of 7a8e667d.",
   },
+  {
+    kb: 159.69,
+    commit: "(uncommitted)",
+    date: "2026-10-18",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.07 KB on the record (163,454 -> 163,518 B gzipped, +64 B " +
+      "on a build of 50c00bec), 83 files held. L28: every documented DatePicker " +
+      "day state paints. Own chunk DatePicker +65 B, its entry -2 B: the day " +
+      "cell's default `item` gains a variant group per state that 6dd19258 " +
+      "had left unstyled — today's underline +24 B, the selected fill and its " +
+      "hover +19 B, the range middle's accent text +10 B, the adjacent month's " +
+      "tertiary text +8 B, each measured by removing it from the built chunk. " +
+      "No other file moved. DatePicker's declared breach moved with it " +
+      "(below). No comments added to src/components or src/utils. Measured " +
+      "against a build of 50c00bec.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1454,7 +1471,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.42,
+      kb: 12.49,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1495,7 +1512,15 @@ const DECLARED_BREACHES = new Map([
         "12,721 B gzipped, +83 B): defaultOpen moved focus into the calendar, " +
         "and its focus return scrolled the page 2,791 px on every close with the " +
         "trigger off screen. A calendar open at mount takes no focus and claims " +
-        "aria-modal only once focus moves in; the return takes preventScroll.",
+        "aria-modal only once focus moves in; the return takes preventScroll.\n\n" +
+        "12.42 -> 12.49 on 2026-10-18, L28 day states (exclusive 12,726 -> " +
+        "12,792 B gzipped, +66 B): a selected day, a range and the adjacent " +
+        "month painted nothing since 6dd19258 deleted their classes keys, and " +
+        "showTodayIndicator, on by default, painted nothing at all. The day " +
+        "cell's default `item` gains one variant group per state, measured by " +
+        "removing each from the built chunk: today's underline +24 B, the " +
+        "selected fill with its hover +19 B, the range middle's accent text " +
+        "+10 B, the adjacent month's tertiary text +8 B.",
     },
   ],
   [

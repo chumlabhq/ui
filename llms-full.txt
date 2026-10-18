@@ -2825,13 +2825,14 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-valid` -- when success state is active
 
 #### Day cells
-- `data-selected` -- selected day
-- `data-today` -- today's date
+- `data-selected` -- selected day (accent fill; a range's start and end too)
+- `data-today` -- today's date (underlined by default)
 - `data-disabled` -- disabled day
-- `data-outside` -- day outside current month
-- `data-range-start` -- first day of range
-- `data-range-end` -- last day of range
-- `data-in-range` -- day within selected range
+- `data-outside` -- day outside current month (tertiary text)
+- `data-range` -- `"start"`, `"middle"` or `"end"` of a selected range; the middle paints accent text
+- `data-range-start` -- first day of range (companion of `data-range="start"`)
+- `data-range-end` -- last day of range (companion of `data-range="end"`)
+- `data-in-range` -- day within selected range (companion of `data-range`)
 - `data-highlighted` -- keyboard-focused day
 - `data-marked` -- day with a marker
 - `data-marker-type` -- marker type string (e.g. `"meeting"`, `"deadline"`)
@@ -2865,7 +2866,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `locale` | object | — | date-fns Locale object for internationalization. |
 | `numberOfMonths` | number | `1` | Number of months to display simultaneously. |
 | `dateFormat` | string | `"MMM d, yyyy"` | Date format string (date-fns format). |
-| `showTodayIndicator` | boolean | `true` | Marks today's cell with `data-today` for your own styling (a `data-[today]:` variant in `classes.item`); the default styles paint nothing for it. Today's cell carries `aria-current="date"` either way. |
+| `showTodayIndicator` | boolean | `true` | Underlines today's date (2px, in the cell's text colour) and sets `data-today` on its cell, so the mark stays visible when today is also selected, in a range, focused or disabled. Restyle it with a `data-[today]:` variant in `classes.item`. Today's cell carries `aria-current="date"` either way. |
 | `showTodayButton` | boolean | `false` | Shows a 'Today' button in the calendar footer. |
 | `todayAction` | boolean | `false` | Whether clicking 'Today' selects today's date. |
 | `showWeekNumbers` | boolean | `false` | Shows week numbers in the calendar. |
@@ -2943,26 +2944,19 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 ```
 
 ```tsx
-// `item` carries the base AND 9 state variants. Overriding it
-// replaces all of them, so write them together:
+// `item` is the day cell. Its defaults paint each state with a variant:
+//   data-[selected]       accent fill, on-accent text (a range's ends are selected too)
+//   data-[range=middle]   accent text
+//   data-[outside]        tertiary text (the adjacent month)
+//   data-[today]          a 2px underline in the cell's text colour
+//   data-[disabled]       50% opacity
+//   :focus                the focus ring
+// Your classes compose with these, so restyle one state with its own variant:
 <DatePicker
   classes={{
-    item:
-      "rounded-cl-md px-2 py-1 " +           // base
-      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
-      "data-[highlighted]:bg-cl-bg-hover " +
-      "data-[marked]:underline " +
-      "data-[outside]:opacity-40 " +
-      "data-[range=end]:rounded-r-full " +
-      "data-[range=middle]:rounded-none " +
-      "data-[range=start]:rounded-l-full " +
-      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent " +
-      "data-[today]:font-semibold ",
+    item: "data-[today]:decoration-cl-accent data-[selected]:bg-emerald-600",
   }}
 />
-
-// Passing only `item: "data-[disabled]:…"` drops the base and the other
-// 8 states.
 ```
 
 #### Slot overview

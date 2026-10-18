@@ -4917,7 +4917,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "true",
-        "description": "Marks today's cell with `data-today` for your own styling (a `data-[today]:` variant in `classes.item`); the default styles paint nothing for it. Today's cell carries `aria-current=\"date\"` either way."
+        "description": "Underlines today's date (2px, in the cell's text colour) and sets `data-today` on its cell, so the mark stays visible when today is also selected, in a range, focused or disabled. Restyle it with a `data-[today]:` variant in `classes.item`. Today's cell carries `aria-current=\"date\"` either way."
       },
       {
         "name": "showTodayButton",
