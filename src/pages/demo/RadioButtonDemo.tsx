@@ -18,6 +18,8 @@ import {
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
 import { useTheme } from "./ThemeContext.js";
+import { Switch } from "../../components/Switch/index.js";
+import { Checkbox } from "../../components/Checkbox/index.js";
 
 const CheckCircleIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -704,6 +706,27 @@ const RadioButtonDemo = () => {
               <RadioButton value="next" label="Hold them and send everything together on the next working day" />
               <RadioButton value="split" label="Send what is ready now and the rest separately, which can cost more" />
             </RadioGroup>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Settings form ────────────────────────────────────────────────── */}
+      <Section
+        title="Settings form"
+        description="A RadioGroup, a Switch and a Checkbox in one form, submitted by its Button. The readout is the FormData the browser built: the switch submits its value while on and an empty entry while off, and the checkbox submits only while checked."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div data-demo-recipe="settings-form" className="w-full">
+            <FormDemo onEmpty="Nothing here is required: every setting has a default.">
+              <RadioGroup name="theme" label="Theme" defaultValue="system">
+                <RadioButton value="light" label="Light" />
+                <RadioButton value="dark" label="Dark" />
+                <RadioButton value="system" label="Match the system" />
+              </RadioGroup>
+              <Switch name="digest" value="weekly" label="Weekly email digest" defaultChecked />
+              <Checkbox name="beta" label="Try features before they ship" />
+            </FormDemo>
           </div>
         </DemoWrapper>
       </Section>

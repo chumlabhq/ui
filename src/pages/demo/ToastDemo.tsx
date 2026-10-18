@@ -19,6 +19,7 @@ import {
 import { Button } from "../../components/Button/index.js";
 import { useTheme } from "./ThemeContext.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { Input } from "../../components/Input/index.js";
 
 const getClasses = () => ({
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -1110,6 +1111,30 @@ const ToastDemoContent = ({
           >
             Show a long toast
           </Button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── A toast after submit ─────────────────────────────────────────── */}
+      <Section
+        title="A toast after submit"
+        description="A form whose submit shows a Toast with the value it sent. The toast reads FormData, as a server would, rather than the field's state."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <form
+            data-demo-recipe="toast-after-submit"
+            className="w-full sm:max-w-sm space-y-4"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const email = String(new FormData(event.currentTarget).get("email") ?? "");
+              toast.success(`Subscribed ${email}`, { description: "The first issue arrives on Monday." });
+            }}
+          >
+            <Input name="email" type="email" label="Email" required placeholder="you@example.com" />
+            <Button type="submit" className="bg-cl-text text-cl-bg hover:opacity-90">
+              Subscribe
+            </Button>
+          </form>
         </DemoWrapper>
       </Section>
 

@@ -18,6 +18,8 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { Table } from "../../components/Table/index.js";
+import { Button } from "../../components/Button/index.js";
 
 const HomeIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -181,6 +183,7 @@ const getClasses = () => ({
 
 const BreadcrumbDemo = () => {
   const { isDarkMode: dark } = useTheme();
+  const [folderPath, setFolderPath] = useState<string[]>(["Home"]);
   const c = getClasses();
   const [clickedItem, setClickedItem] = useState<string | null>(null);
   // Its own state: `onDropdownOpenChange` wrote into `clickedItem`, so opening
@@ -761,6 +764,63 @@ const BreadcrumbDemo = () => {
             {dropdownState}
           </p>
         )}
+      </Section>
+
+      {/* ─── Over a folder's contents ──────────────────────────────────────── */}
+      <Section
+        title="Over a folder's contents"
+        description="A Breadcrumb above a Table of what the current folder holds. Opening a folder in the table adds a crumb; choosing a crumb goes back up, and the table follows."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div data-demo-recipe="breadcrumb-folders" className="w-full space-y-4">
+            <Breadcrumb
+              items={folderPath.map((name, index) => ({
+                id: folderPath.slice(0, index + 1).join("/"),
+                label: name,
+                onClick: index < folderPath.length - 1 ? () => setFolderPath(folderPath.slice(0, index + 1)) : undefined,
+              }))}
+            />
+            <Table
+              caption={`Contents of ${folderPath.join(" / ")}`}
+              getRowId={(entry) => entry.name}
+              data={
+                (
+                  {
+                    Home: [
+                      { name: "Projects", kind: "Folder" },
+                      { name: "notes.txt", kind: "Text file" },
+                    ],
+                    "Home/Projects": [
+                      { name: "Chumlab", kind: "Folder" },
+                      { name: "roadmap.md", kind: "Markdown file" },
+                    ],
+                    "Home/Projects/Chumlab": [{ name: "README.md", kind: "Markdown file" }],
+                  } as Record<string, Array<{ name: string; kind: string }>>
+                )[folderPath.join("/")] ?? []
+              }
+              columns={[
+                {
+                  id: "name",
+                  accessorKey: "name",
+                  header: "Name",
+                  cell: ({ row }) =>
+                    row.original.kind === "Folder" ? (
+                      <Button
+                        className="px-0 py-0 text-cl-accent underline underline-offset-2"
+                        onClick={() => setFolderPath([...folderPath, row.original.name])}
+                      >
+                        {row.original.name}
+                      </Button>
+                    ) : (
+                      row.original.name
+                    ),
+                },
+                { id: "kind", accessorKey: "kind", header: "Kind" },
+              ]}
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
       {/* ─── Reference — generated from the schema and the .ai.md ──────── */}

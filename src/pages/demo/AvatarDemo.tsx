@@ -20,6 +20,8 @@ import {
   CopyPasteBlock,
   SetupNote,
 } from "./components/index.js";
+import { Table } from "../../components/Table/index.js";
+import { Dropdown } from "../../components/Dropdown/index.js";
 
 /**
  * Four tones for the rows that demonstrate the badge, cycled by position.
@@ -1344,6 +1346,56 @@ const AvatarDemo = () => {
           <div className="text-center">
             <AvatarShimmer reduceMotion={true} />
             <p className={`text-xs mt-2 ${c.label}`}>shimmer (no pulse)</p>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Avatars in rows ──────────────────────────────────────────────── */}
+      <Section
+        title="Avatars in rows"
+        description="Avatar inside a Table cell, beside each person's name, and inside each Dropdown option, where the picked person's initials show in the list. With no image, an Avatar draws the initials of its name."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div data-demo-recipe="avatars-in-rows" className="w-full space-y-6">
+            <Table
+              caption="The team"
+              getRowId={(person) => person.id}
+              data={[
+                { id: "ada", name: "Ada Lovelace", role: "Engineer" },
+                { id: "grace", name: "Grace Hopper", role: "Admiral" },
+                { id: "alan", name: "Alan Turing", role: "Researcher" },
+              ]}
+              columns={[
+                {
+                  id: "name",
+                  accessorKey: "name",
+                  header: "Name",
+                  cell: ({ row }) => (
+                    <span className="flex items-center gap-2">
+                      <Avatar name={row.original.name} size="sm" />
+                      {row.original.name}
+                    </span>
+                  ),
+                },
+                { id: "role", accessorKey: "role", header: "Role" },
+              ]}
+            />
+            <div className="w-full sm:max-w-xs">
+              <Dropdown
+                label="Assign to"
+                options={["Ada Lovelace", "Grace Hopper", "Alan Turing"].map((name) => ({
+                  value: name,
+                  label: name,
+                  content: (
+                    <span className="flex items-center gap-2">
+                      <Avatar name={name} size="xs" />
+                      {name}
+                    </span>
+                  ),
+                }))}
+              />
+            </div>
           </div>
         </DemoWrapper>
       </Section>

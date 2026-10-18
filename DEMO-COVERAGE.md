@@ -12,14 +12,14 @@ recorded there because they belong next to the code that implements them.
 | --- | --- |
 | Components audited | 59 |
 | Library-authored props across the public surface | 1252 |
-| With no demo | 269 (21%) |
+| With no demo | 267 (21%) |
 | With no fixture | 706 (56%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 53 |
 | Tier-A left undemonstrated with a recorded reason | 20 |
 | **Tier-A gaps (a whole mode, no demo, no reason)** | **0** |
-| **Real: no demo, and a demo gap** | **114** |
+| **Real: no demo, and a demo gap** | **112** |
 
 `No demo` counts a prop on the component that declares it. A mode shared by 30
 components is one idea, so the three tier-A rows split it: demonstrated once,
@@ -49,7 +49,7 @@ when it rises, and when it falls without the record being lowered in the same ch
 | passthrough | 76 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
 | canonical | 53 | demonstrated once for the library; see below |
 | left | 20 | left undemonstrated with a reason, by name; see below |
-| **real** | **114** | everything else |
+| **real** | **112** | everything else |
 
 ## Tier-A gaps
 
@@ -134,9 +134,9 @@ listed here with no demo anywhere fails the generator.
 | Slider | 36 | 273 | 5 | 0 | 19 | 0 | `unstyled` | — |
 | Slot | 1 | 279 | 1 | 0 | 1 | 0 | — | — |
 | Stepper | 32 | 2 | 7 | 1 | 19 | 0 | `reduceMotion`, `unstyled` | `indicatorSize` |
-| Switch | 28 | 277 | 6 | 3 | 11 | 0 | `reduceMotion` | `value`, `loader`, `loaderSize` |
+| Switch | 28 | 277 | 5 | 2 | 11 | 0 | `reduceMotion` | `loader`, `loaderSize` |
 | TabPanel | 26 | 2 | 6 | 0 | 16 | 0 | `reduceMotion`, `unstyled` | — |
-| Table | 103 | 0 | 15 | 7 | 67 | 0 | `unstyled` | `showHeader`, `pinnableColumns`, `onCursorPositionChange`, `onHeaderHoverChange`, `caption`, `minHeight`, `onGroupByChange` |
+| Table | 103 | 0 | 14 | 6 | 67 | 0 | `unstyled` | `showHeader`, `pinnableColumns`, `onCursorPositionChange`, `onHeaderHoverChange`, `minHeight`, `onGroupByChange` |
 | TextArea | 25 | 293 | 1 | 0 | 6 | 0 | `unstyled` | — |
 | TextAreaLabel | 2 | 280 | 0 | 0 | 2 | 0 | — | — |
 | TimePicker | 45 | 276 | 1 | 0 | 24 | 0 | `portalContainer` | — |

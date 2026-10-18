@@ -19,6 +19,7 @@ import {
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { Modal } from "../../components/Modal/index.js";
 
 const getClasses = () => ({
   otp: {
@@ -38,6 +39,8 @@ const getClasses = () => ({
 
 const OtpInputDemo = () => {
   const { isDarkMode: dark } = useTheme();
+  const [codeDialogOpen, setCodeDialogOpen] = useState(false);
+  const [verifiedCode, setVerifiedCode] = useState<string | null>(null);
   const c = getClasses();
   const otpRef = useRef<HTMLInputElement>(null);
 
@@ -598,6 +601,45 @@ const OtpInputDemo = () => {
           <FormDemo onEmpty="Submit with no digits: the browser blocks the submit and focuses the first digit. A partly filled code counts as filled.">
             <OtpInput name="code" label="Code" required />
           </FormDemo>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── A code in a dialog ───────────────────────────────────────────── */}
+      <Section
+        title="A code in a dialog"
+        description="An OtpInput inside a Modal. Entering the last digit completes the code: onComplete closes the dialog and the page shows the result."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div data-demo-recipe="code-in-dialog" className="w-full space-y-4">
+            <Button
+              className="border border-cl-border bg-cl-bg-elevated text-cl-text"
+              onClick={() => {
+                setVerifiedCode(null);
+                setCodeDialogOpen(true);
+              }}
+            >
+              Verify your phone
+            </Button>
+            <Modal
+              open={codeDialogOpen}
+              onOpenChange={setCodeDialogOpen}
+              title="Enter the code"
+              description="We sent a six-digit code by text message."
+            >
+              <OtpInput
+                label="Verification code"
+                length={6}
+                onComplete={(code) => {
+                  setVerifiedCode(code);
+                  setCodeDialogOpen(false);
+                }}
+              />
+            </Modal>
+            <p aria-live="polite" data-demo-otp-result="" className="text-sm text-cl-text">
+              {verifiedCode ? `Verified with code ${verifiedCode}.` : "Not verified yet."}
+            </p>
+          </div>
         </DemoWrapper>
       </Section>
 

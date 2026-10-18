@@ -700,6 +700,7 @@ tables say.
 
 ### Fixed
 
+- Checkbox's box and Switch's track keep their size beside a long, wrapping label; both shrank (Checkbox 20 → 18 px, Switch 36 → 16 px).
 - **`defaultOpen` no longer moves focus or scrolls the page on mount.** A popup open at mount
   (`defaultOpen`, or `open` already true) now leaves focus where it was, as a native `<select>`
   or `<dialog open>` does; focus moves into it once the reader opens it. SearchableDropdown and

@@ -7,6 +7,7 @@ import {
   type DateMarker,
   } from "../../components/DatePicker/index.js";
 import { Button } from "../../components/Button/index.js";
+import { TimePicker } from "../../components/TimePicker/index.js";
 import { useTheme } from "./ThemeContext.js";
 import {
   DocsHero,
@@ -63,6 +64,8 @@ const getClasses = () => ({
 
 const DatePickerDemo = () => {
   const { isDarkMode: dark } = useTheme();
+  const [appointmentDay, setAppointmentDay] = useState<Date | null>(null);
+  const [appointmentTime, setAppointmentTime] = useState<string | null>(null);
   const c = getClasses();
 
   const [singleDate, setSingleDate] = useState<Date | null>(null);
@@ -1749,6 +1752,31 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               label="The first day you can start working at the new office"
               description="Pick a weekday at least two weeks from today, so the equipment can be ordered."
             />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Date and time together ─────────────────────────────────────── */}
+      <Section
+        title="Date and time together"
+        description="A DatePicker and a TimePicker setting one appointment. Each holds its half; the readout below joins them once both are set."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div data-demo-recipe="date-and-time" className="w-full space-y-4">
+            <div className="flex w-full flex-col gap-4 sm:flex-row">
+              <div className="w-full sm:max-w-xs">
+                <DatePicker label="Day" value={appointmentDay} onValueChange={(day) => setAppointmentDay(day)} />
+              </div>
+              <div className="w-full sm:max-w-xs">
+                <TimePicker label="Time" value={appointmentTime} onValueChange={(time) => setAppointmentTime(time)} />
+              </div>
+            </div>
+            <p aria-live="polite" data-demo-appointment="" className="text-sm text-cl-text">
+              {appointmentDay && appointmentTime
+                ? `Appointment: ${appointmentDay.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })} at ${appointmentTime}`
+                : "Pick a day and a time."}
+            </p>
           </div>
         </DemoWrapper>
       </Section>

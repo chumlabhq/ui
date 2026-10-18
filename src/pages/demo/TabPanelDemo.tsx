@@ -18,6 +18,7 @@ import {
   SetupNote,
 } from "./components/index.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
+import { Input } from "../../components/Input/index.js";
 
 const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -274,6 +275,8 @@ const getClasses = () => ({
 
 const TabPanelDemo = () => {
   const { isDarkMode: dark } = useTheme();
+  const [profileName, setProfileName] = useState("");
+  const [profileEmail, setProfileEmail] = useState("");
   const c = getClasses();
 
   // Each demo section has its own independent state
@@ -1245,6 +1248,35 @@ const TabPanelDemo = () => {
             >
               {(tab) => <p className="pt-4 text-sm text-cl-text-secondary">{tab.label}</p>}
             </TabPanel>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Tabs holding forms ───────────────────────────────────────────── */}
+      <Section
+        title="Tabs holding forms"
+        description="A TabPanel whose panels hold fields. A panel unmounts when its tab is left, so the values are kept above the tabs: switch away and back, and what was typed is still there."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div data-demo-recipe="tabs-forms" className="w-full sm:max-w-md space-y-4">
+            <TabPanel
+              tabs={[
+                { id: "profile", label: "Profile" },
+                { id: "contact", label: "Contact" },
+              ]}
+            >
+              {(tab) =>
+                tab.id === "profile" ? (
+                  <Input label="Display name" value={profileName} onValueChange={setProfileName} />
+                ) : (
+                  <Input label="Email" type="email" value={profileEmail} onValueChange={setProfileEmail} />
+                )
+              }
+            </TabPanel>
+            <p data-demo-tabs-readout="" className="text-sm text-cl-text-secondary">
+              {`Name: ${profileName || "—"} · Email: ${profileEmail || "—"}`}
+            </p>
           </div>
         </DemoWrapper>
       </Section>

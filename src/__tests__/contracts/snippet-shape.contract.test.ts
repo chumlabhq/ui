@@ -153,8 +153,14 @@ describe("snippet shape contract", () => {
      * Drawer, Modal, MultiSelectDropdown, Pagination and Tooltip and Starts open on
      * CascadingDropdown, Dropdown, SearchableDropdown and TimePicker (10, C), and Long
      * labels on 12 pages (12, D).
+     *
+     * 2026-10-18, D12e: 827 -> 835. 8 composition recipes with code: Date and time
+     * together (DatePicker), A wizard with fields (Stepper), Settings form
+     * (RadioButton), Tabs holding forms (TabPanel), A toast after submit (Toast),
+     * Avatars in rows (Avatar), A code in a dialog (OtpInput) and Over a folder's
+     * contents (Breadcrumb).
      */
-    const RECORDED = 827;
+    const RECORDED = 835;
     const count = every.length;
     console.log(
       `SNIPPET_COUNT snippets=${count} recorded=${RECORDED} ` +
