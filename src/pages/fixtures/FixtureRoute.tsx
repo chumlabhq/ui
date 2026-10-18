@@ -131,10 +131,34 @@ function classesFromQuery(search: string): Record<string, string> | null {
   }
 }
 
+/**
+ * `?spy=onValueChange,onOpenChange` wraps each named callback so a call is
+ * recorded on `window.__fixtureCalls` before it reaches the fixture's own.
+ *
+ * `disabled-acts.spec` clicks and keys every control of a disabled component
+ * and needs to know whether anything was reported as well as whether anything
+ * changed on the page: a controlled consumer sees only the callback. Dev-only.
+ */
+function spiesFromQuery(search: string, own: Record<string, unknown>): Record<string, unknown> {
+  const names = new URLSearchParams(search).get("spy")?.split(",").filter(Boolean) ?? [];
+  const w = window as unknown as { __fixtureCalls?: string[] };
+  w.__fixtureCalls ??= [];
+  return Object.fromEntries(
+    names.map((name) => [
+      name,
+      (...args: unknown[]) => {
+        w.__fixtureCalls!.push(name);
+        return typeof own[name] === "function" ? (own[name] as (...a: unknown[]) => unknown)(...args) : undefined;
+      },
+    ]),
+  );
+}
+
 export default function FixtureRoute() {
   const { component: slug = "", fixture: fixtureName = "" } = useParams();
   const component = fromSlug(slug);
-  const probeClasses = classesFromQuery(useLocation().search);
+  const search = useLocation().search;
+  const probeClasses = classesFromQuery(search);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [actStatus, setActStatus] = useState("none");
@@ -255,6 +279,7 @@ export default function FixtureRoute() {
     <Component
       {...props}
       {...fixture.props}
+      {...spiesFromQuery(search, { ...props, ...(fixture.props as Record<string, unknown>) })}
       {...(probeClasses
         ? {
             classes: {

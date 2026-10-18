@@ -168,11 +168,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     );
 
     const handleClear = useCallback(() => {
-      if (onClear) {
-        onClear();
-        return;
-      }
-
       const textarea = internalRef.current;
       if (!textarea) return;
 
@@ -200,6 +195,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         value: textarea,
       });
       onChange?.(event as unknown as ChangeEvent<HTMLTextAreaElement>);
+      onClear?.();
     }, [onClear, onChange, setCurrentValue]);
 
     return (

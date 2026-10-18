@@ -61,7 +61,7 @@ const SubmenuItem = memo(function SubmenuItem({
     <div
       id={`${parentValue}-submenu-option-${index}`}
       role="menuitemcheckbox"
-      tabIndex={isFocused ? 0 : -1}
+      tabIndex={option.disabled ? undefined : isFocused ? 0 : -1}
       aria-checked={isSelected}
       aria-disabled={option.disabled}
       className={combinedClassName || undefined}
@@ -69,7 +69,7 @@ const SubmenuItem = memo(function SubmenuItem({
       data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       onClick={onSelect}
-      onMouseEnter={() => onHover(index)}
+      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
     >
       {selectionMode === "multi" && (
         <span
@@ -140,7 +140,7 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
       ref={ref}
       id={`${dropdownId}-option-${index}`}
       role={hasSubmenu ? "menuitem" : "menuitemradio"}
-      tabIndex={isTabStop ? 0 : -1}
+      tabIndex={option.disabled ? undefined : isTabStop ? 0 : -1}
       aria-haspopup={hasSubmenu ? "menu" : undefined}
       aria-expanded={hasSubmenu ? isSubmenuOpen : undefined}
       aria-controls={hasSubmenu && isSubmenuOpen ? submenuId : undefined}
@@ -509,6 +509,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       isMenuSearching,
       isSubmenuSearching,
       getFilteredSubmenuOptions,
+      clearValue,
       resetValue,
     } = useCascadingDropdown({
       options,
@@ -657,11 +658,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       [handleKeyDown, onKeyDownProp],
     );
 
-    const handleClear = useCallback(() => {
-      if (onValueChange) {
-        onValueChange({}, []);
-      }
-    }, [onValueChange]);
+    const handleClear = clearValue;
 
     const triggerRefCallback = useCallback(
       (node: HTMLElement | null) => {

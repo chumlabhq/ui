@@ -12,6 +12,7 @@ const CircleIcon = () => (
 
 const fixtures: Fixtures<typeof TabPanel> = [
   { name: "default", props: { tabs: TABS }, children: (tab) => `${tab.label} panel` },
+  { name: "disabled", props: { tabs: TABS, disabled: true }, children: (tab) => `${tab.label} panel` },
   { name: "vertical", props: { tabs: TABS, orientation: "vertical" } },
   { name: "second-active", props: { tabs: TABS, defaultValue: "two" } },
   { name: "with-tooltips", props: { tabs: TABS.map((t) => ({ ...t, tooltip: "Tip" })), showTooltips: true } },

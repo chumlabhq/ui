@@ -47,7 +47,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       onClick={() => onToggle(option)}
-      onMouseEnter={() => onHover(index)}
+      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
     >
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
         {isSelected &&

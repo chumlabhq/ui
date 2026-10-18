@@ -128,7 +128,7 @@ const OptionItem = memo(function OptionItem({
       data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       onClick={() => onToggle(option)}
-      onMouseEnter={() => onHover(index)}
+      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
     >
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
         {isSelected && (checkboxIcon || <CheckIcon className={classes.itemIndicator || undefined} />)}
@@ -335,6 +335,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       handleClose,
       handleOptionToggle,
       handleRemoveOption,
+      clearValue,
       handleKeyDown,
       resetValue,
     } = useMultiSelectDropdown({
@@ -469,11 +470,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       [setTriggerNode, ref],
     );
 
-    const handleClear = useCallback(() => {
-      if (onValueChange) {
-        onValueChange([], []);
-      }
-    }, [onValueChange]);
+    const handleClear = clearValue;
 
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {

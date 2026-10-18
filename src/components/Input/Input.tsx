@@ -159,11 +159,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     );
 
     const handleClear = useCallback(() => {
-      if (onClear) {
-        onClear();
-        return;
-      }
-
       const input = internalRef.current;
       if (!input) return;
 
@@ -192,6 +187,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         value: input,
       });
       onChange?.(event as unknown as ChangeEvent<HTMLInputElement>);
+      onClear?.();
     }, [onClear, onChange, setCurrentValue]);
 
     return (

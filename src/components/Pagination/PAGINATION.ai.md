@@ -79,7 +79,7 @@ full set, so there is no hydration mismatch; the step-down runs after mount.
 
 ## Data Attributes (for CSS selectors and testing)
 
-- `data-disabled` — on prev/next buttons when at boundary
+- `data-disabled` — on prev/next buttons at a boundary, and on every button when `disabled`
 - `data-active` — on the active page button
 - `data-selected` — on the selected row option in dropdown
 - `data-highlighted` — on keyboard-focused dropdown option
@@ -308,7 +308,7 @@ const [rows, setRows] = useState(10);
 - `<nav aria-label="Pagination">` landmark (configurable via `paginationAriaLabel`)
 - `aria-current="page"` on active page button
 - Page buttons have configurable `aria-label` via `pageAriaLabel`
-- Prev/next buttons properly disabled at boundaries
+- Prev/next buttons properly disabled at boundaries, and with every other control when `disabled`: none of them takes focus or acts
 - Ellipsis elements marked `aria-hidden="true"`
 - Rows dropdown: `role="listbox"` with `aria-controls`, `aria-expanded`, `aria-activedescendant`
 - Keyboard: Tab between controls, Enter/Space to select, Arrow Up/Down in dropdown, Home/End for first/last, Escape to close

@@ -174,11 +174,11 @@ describe("ResizablePanel", () => {
       expect(document.getElementById(panelId!)).toBe(sep.parentElement);
     });
 
-    it("disabled separator has aria-disabled and tabIndex=-1", () => {
+    it("disabled separator has aria-disabled and no tabindex, so a click cannot focus it either", () => {
       renderPanel({ disabled: true });
       const sep = screen.getByRole("separator");
       expect(sep).toHaveAttribute("aria-disabled", "true");
-      expect(sep).toHaveAttribute("tabindex", "-1");
+      expect(sep).not.toHaveAttribute("tabindex");
     });
 
     it("enabled separator has tabIndex=0", () => {

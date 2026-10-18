@@ -1921,7 +1921,7 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 **Menu items** (top level and submenu):
 - `data-highlighted` — the keyboard position
 - `data-selected` — a selected option; a selected single-select option shows the selected icon (`showSelectedIcon`)
-- `data-disabled` — a disabled option
+- `data-disabled` — a disabled option; it takes no focus or highlight, a click or a key does not select it, and a disabled parent does not open its submenu
 - `data-has-submenu` — on a top-level item that opens a submenu
 
 **Multi-select checkbox** (inside a `menuitemcheckbox`): `data-state="checked" | "unchecked"`, and `data-checked` while checked
@@ -5631,7 +5631,7 @@ full set, so there is no hydration mismatch; the step-down runs after mount.
 
 ### Data Attributes (for CSS selectors and testing)
 
-- `data-disabled` — on prev/next buttons when at boundary
+- `data-disabled` — on prev/next buttons at a boundary, and on every button when `disabled`
 - `data-active` — on the active page button
 - `data-selected` — on the selected row option in dropdown
 - `data-highlighted` — on keyboard-focused dropdown option
@@ -6563,7 +6563,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 - **Submitted value.** With `name`, it submits one entry with the number, or `{name}[0]` and `{name}[1]` for a range; with no value set it submits `min`.
 - **Reset.** A form reset — a `type="reset"` button or `form.reset()` — restores an uncontrolled slider to `defaultValue` (or `min`), and the submitted value with it. Like a native input it fires no change callback: `onValueChange` is not called. A controlled Slider is left alone: it keeps the `value` you pass and calls nothing, as a controlled React `<input>` does. Reset your own state in the form's `onReset` if you want the field cleared.
 - **Required.** A Slider always holds a value, so `required` never blocks a submit. When validation stops a form elsewhere, focus goes to the first thumb. The field shows an error state only when you pass `error` and `errorMessage`.
-- **Disabled.** A disabled Slider submits nothing, as a disabled native control doesn't.
+- **Disabled.** A disabled Slider submits nothing, as a disabled native control doesn't. Its thumbs take no focus, by Tab or by click, and neither the pointer nor the keys move them.
 
 ### Keyboard Interactions
 

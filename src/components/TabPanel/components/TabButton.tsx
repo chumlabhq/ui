@@ -71,6 +71,7 @@ const TabButton = memo(function TabButton({
       role="tab"
       aria-selected={isActive}
       aria-controls={`${ctx.tabListId}-panel-${tab.id}`}
+      disabled={isDisabled}
       aria-disabled={isDisabled || undefined}
       aria-label={!showLabel ? tab.label : undefined}
       tabIndex={isTabbable ? 0 : -1}

@@ -190,7 +190,11 @@ test.describe("ResizablePanel Component", () => {
       const separator = disabledSection.getByRole("separator");
 
       await expect(separator).toHaveAttribute("aria-disabled", "true");
-      await expect(separator).toHaveAttribute("tabindex", "-1");
+      // No tabindex at all since S4: -1 kept it out of the Tab order but still
+      // let a click focus it.
+      await expect(separator).not.toHaveAttribute("tabindex");
+      await separator.click({ force: true });
+      await expect(separator).not.toBeFocused();
     });
 
     test("disabled panel handle does not respond to keyboard", async ({ page }) => {

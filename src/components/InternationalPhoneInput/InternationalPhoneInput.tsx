@@ -523,13 +523,10 @@ const InternationalPhoneInput = forwardRef<
     );
 
     const handleClear = useCallback(() => {
-      if (onClear) {
-        onClear();
-        return;
-      }
       setPhoneInput("");
       setHasValidationError(false);
       emitChange("", selectedCountry);
+      onClear?.();
     }, [onClear, setPhoneInput, emitChange, selectedCountry]);
 
     const displayError = error || hasValidationError;

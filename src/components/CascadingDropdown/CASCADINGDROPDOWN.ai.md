@@ -92,7 +92,7 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 **Menu items** (top level and submenu):
 - `data-highlighted` — the keyboard position
 - `data-selected` — a selected option; a selected single-select option shows the selected icon (`showSelectedIcon`)
-- `data-disabled` — a disabled option
+- `data-disabled` — a disabled option; it takes no focus or highlight, a click or a key does not select it, and a disabled parent does not open its submenu
 - `data-has-submenu` — on a top-level item that opens a submenu
 
 **Multi-select checkbox** (inside a `menuitemcheckbox`): `data-state="checked" | "unchecked"`, and `data-checked` while checked

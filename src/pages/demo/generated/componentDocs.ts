@@ -11545,7 +11545,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "`<nav aria-label=\"Pagination\">` landmark (configurable via `paginationAriaLabel`)",
       "`aria-current=\"page\"` on active page button",
       "Page buttons have configurable `aria-label` via `pageAriaLabel`",
-      "Prev/next buttons properly disabled at boundaries",
+      "Prev/next buttons properly disabled at boundaries, and with every other control when `disabled`: none of them takes focus or acts",
       "Ellipsis elements marked `aria-hidden=\"true\"`",
       "Rows dropdown: `role=\"listbox\"` with `aria-controls`, `aria-expanded`, `aria-activedescendant`",
       "Keyboard: Tab between controls, Enter/Space to select, Arrow Up/Down in dropdown, Home/End for first/last, Escape to close",
@@ -16551,6 +16551,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     "accessibility": [
       "`role=\"tablist\"` with `aria-label`, `aria-orientation`",
       "`role=\"tab\"` with `aria-selected`, `aria-controls`, `aria-disabled`",
+      "A disabled tab, and every tab of a disabled TabPanel, is a disabled button: the arrow keys pass over it, and neither Tab nor a click focuses it",
       "`role=\"tabpanel\"` with `aria-labelledby`",
       "Roving tabindex (one tabbable tab at a time)",
       "Arrow keys navigate tabs, Home/End jump",

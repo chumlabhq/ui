@@ -1370,6 +1370,34 @@ const LIBRARY_TOTAL_HISTORY = [
       "comments added to src/components or src/utils. Measured against a " +
       "build of 5271abba.",
   },
+  {
+    kb: 160.21,
+    commit: "(uncommitted)",
+    date: "2026-10-19",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.10 KB on the record (163,948 -> 164,051 B gzipped, +103 B " +
+      "on a build of 1aee7467), 83 files held. S4: a clear empties its own " +
+      "field, and disabled reaches every control. Per chunk and fix, the two " +
+      "chunks carrying both split by a build with the disabled half reverted. " +
+      "Clear: CascadingDropdown +23, MultiSelectDropdown +19 and " +
+      "MultiSelectSearchableDropdown +12 (Clear all writes the hook's own " +
+      "state through a clearValue, as a selection does, instead of only " +
+      "reporting []); Input -9, TextArea -11, InternationalPhoneInput -7 " +
+      "(onClear no longer replaces the clear: the early return goes, and the " +
+      "clear calls it after emptying the field); Table -16 (the search reports " +
+      "through TanStack's one handler, so typing and Clear search report once, " +
+      "not twice). Disabled: CascadingDropdown +16 (a disabled parent opens no " +
+      "submenu, and a disabled item takes no hover highlight and no focus on a " +
+      "click); MultiSelectDropdown +4, SearchableDropdown +3 and " +
+      "MultiSelectSearchableDropdown +3 (a disabled option takes no hover " +
+      "highlight, as Dropdown's already took none); Pagination +1 (previous and " +
+      "next take `disabled` with the rest); TabPanel +2 (a disabled tab is a " +
+      "disabled button); Slider +1 and ResizablePanel -1 (a disabled thumb or " +
+      "handle carries no tabindex, so a click cannot focus it). Entries -2 to " +
+      "+1 B. No declared breach moved. No comments added to src/components or " +
+      "src/utils. Measured against a build of 1aee7467.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;

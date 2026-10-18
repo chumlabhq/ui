@@ -131,10 +131,12 @@ describe("Slider", () => {
       expect(screen.getByRole("slider")).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("sets tabIndex to -1 when disabled", () => {
+    // No tabindex at all, not -1: -1 leaves the thumb out of the Tab order but
+    // still focusable by a click, which focused a disabled control.
+    it("takes no focus when disabled, by Tab or by click", () => {
       render(<Slider disabled />);
 
-      expect(screen.getByRole("slider")).toHaveAttribute("tabindex", "-1");
+      expect(screen.getByRole("slider")).not.toHaveAttribute("tabindex");
     });
 
     it("does not change value via keyboard when disabled", () => {
@@ -373,12 +375,12 @@ describe("Slider", () => {
       expect(sliders[1]).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("sets tabIndex to -1 on both thumbs when disabled", () => {
+    it("takes no focus on either thumb when disabled", () => {
       render(<Slider defaultValue={[20, 80]} disabled />);
 
       const sliders = screen.getAllByRole("slider");
-      expect(sliders[0]).toHaveAttribute("tabindex", "-1");
-      expect(sliders[1]).toHaveAttribute("tabindex", "-1");
+      expect(sliders[0]).not.toHaveAttribute("tabindex");
+      expect(sliders[1]).not.toHaveAttribute("tabindex");
     });
 
     it("does not change range values via keyboard when disabled", () => {

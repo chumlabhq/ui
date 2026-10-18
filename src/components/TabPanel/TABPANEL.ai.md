@@ -245,6 +245,7 @@ const tabs = [
 
 - `role="tablist"` with `aria-label`, `aria-orientation`
 - `role="tab"` with `aria-selected`, `aria-controls`, `aria-disabled`
+- A disabled tab, and every tab of a disabled TabPanel, is a disabled button: the arrow keys pass over it, and neither Tab nor a click focuses it
 - `role="tabpanel"` with `aria-labelledby`
 - Roving tabindex (one tabbable tab at a time)
 - Arrow keys navigate tabs, Home/End jump

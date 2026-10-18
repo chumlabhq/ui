@@ -704,6 +704,18 @@ tables say.
 
 ### Fixed
 
+- CascadingDropdown's clear empties an uncontrolled value as well as reporting `{}`; it reported and left the selection in place. A disabled option opens no submenu, takes no hover highlight and takes no focus on a click.
+- MultiSelectDropdown's Clear all empties an uncontrolled selection as well as reporting `[]`; it reported and left every chip and submitted value in place. A disabled option takes no hover highlight.
+- MultiSelectSearchableDropdown's Clear all empties an uncontrolled selection as well as reporting `[]`, and a disabled option takes no hover highlight.
+- Input's clear button empties the field and calls `onValueChange("")` when `onClear` is passed; `onClear` replaced the clear, so the value stayed. `onClear` is called after it.
+- TextArea's clear button empties the field and calls `onValueChange("")` when `onClear` is passed, as Input's now does.
+- InternationalPhoneInput's clear button empties the number and reports it when `onClear` is passed, as Input's now does.
+- Table reports a search change once: typing and Clear search called `onGlobalFilterChange` twice.
+- A disabled Pagination disables Previous and Next with every other button; they stayed in the tab order and Enter or Space changed the page.
+- SearchableDropdown gives a disabled option no hover highlight, as Dropdown already did.
+- A disabled Slider's thumbs take no focus on a click; they were out of the tab order but still focusable by pointer.
+- A disabled ResizablePanel's handle takes no focus on a click, for the same reason.
+- A disabled TabPanel, and a disabled tab, can no longer be focused by Tab or by a click; the tabs are disabled buttons.
 - DatePicker's active preset takes the accent fill; it set `data-active`, which nothing styled.
 - A loading DatePicker disables its trigger and shows a spinner in place of the calendar icon, with `aria-busy`; it looked idle and opened on click.
 - A loading InternationalPhoneInput disables its number input, dims the field and shows a spinner, with `aria-busy`; its loading styles sat on a wrapper that never carried the attribute.

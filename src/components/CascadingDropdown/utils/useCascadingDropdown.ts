@@ -218,6 +218,8 @@ export const useCascadingDropdown = ({
     [setInternalValue, onValueChange]
   );
 
+  const clearValue = useCallback(() => updateValue({}, []), [updateValue]);
+
   const loadChildrenForOption = useCallback(
     async (option: CascadingOption) => {
       if (!loadChildren) return;
@@ -259,6 +261,7 @@ export const useCascadingDropdown = ({
   /** Opens a parent's submenu, fetching its children if they are not in yet. */
   const openSubmenuFor = useCallback(
     (option: CascadingOption, enter?: boolean) => {
+      if (option.disabled) return;
       setActiveSubmenu(option.value);
       setSubmenuFocusedIndex(enter ? Math.max(0, (loadedChildren[option.value] || option.children || []).findIndex((child) => !child.disabled)) : -1);
       setSubmenuSearchQuery("");
@@ -273,6 +276,7 @@ export const useCascadingDropdown = ({
 
   const handleMenuItemHover = useCallback(
     (option: CascadingOption, index: number) => {
+      if (option.disabled) return;
       setFocusedIndex(index);
       clearSubmenuTimeout();
 
@@ -554,6 +558,7 @@ export const useCascadingDropdown = ({
       isMenuSearching,
       isSubmenuSearching,
       getFilteredSubmenuOptions,
+      clearValue,
       resetValue,
     }),
     [
@@ -583,6 +588,7 @@ export const useCascadingDropdown = ({
       isMenuSearching,
       isSubmenuSearching,
       getFilteredSubmenuOptions,
+      clearValue,
       resetValue,
     ]
   );

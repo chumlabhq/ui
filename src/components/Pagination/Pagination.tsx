@@ -482,10 +482,10 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         <button
           type="button"
           onClick={handlePrevPage}
-          disabled={isFirstPage}
+          disabled={disabled || isFirstPage}
           className={cn(mergedClasses.navTrigger)}
           aria-label={prevAriaLabel}
-          data-disabled={isFirstPage || undefined}
+          data-disabled={disabled || isFirstPage || undefined}
         >
           {renderIcon(prevIcon, ChevronLeftIcon, mergedClasses.navIcon, "w-5 h-5")}
         </button>
@@ -532,10 +532,10 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         <button
           type="button"
           onClick={handleNextPage}
-          disabled={isLastPage}
+          disabled={disabled || isLastPage}
           className={cn(mergedClasses.navTrigger)}
           aria-label={nextAriaLabel}
-          data-disabled={isLastPage || undefined}
+          data-disabled={disabled || isLastPage || undefined}
         >
           {renderIcon(nextIcon, ChevronRightIcon, mergedClasses.navIcon, "w-5 h-5")}
         </button>

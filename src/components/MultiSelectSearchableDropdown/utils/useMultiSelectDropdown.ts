@@ -171,6 +171,11 @@ export function useMultiSelectDropdown({
     [currentValues, allOptions, onValueChange, setCurrentValues]
   );
 
+  const clearValue = useCallback(() => {
+    setCurrentValues([]);
+    onValueChange?.([], []);
+  }, [onValueChange, setCurrentValues]);
+
   const handleRemoveOption = useCallback(
     (optionValue: string) => {
       const newValues = currentValues.filter((v) => v !== optionValue);
@@ -244,6 +249,7 @@ export function useMultiSelectDropdown({
     handleClose,
     handleOptionToggle,
     handleRemoveOption,
+    clearValue,
     handleKeyDown,
     resetValue,
   };

@@ -249,6 +249,7 @@ const MultiSelectDropdown = forwardRef<
       handleClose,
       handleOptionToggle,
       handleRemoveOption,
+      clearValue,
       handleKeyDown,
       resetValue,
     } = useMultiSelectDropdown({
@@ -366,11 +367,7 @@ const MultiSelectDropdown = forwardRef<
       [setTriggerNode, ref],
     );
 
-    const handleClear = useCallback(() => {
-      if (onValueChange) {
-        onValueChange([], []);
-      }
-    }, [onValueChange]);
+    const handleClear = clearValue;
 
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {

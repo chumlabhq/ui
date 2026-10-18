@@ -14,6 +14,7 @@ const fixtures: Fixtures<typeof Stepper> = [
   { name: "with-error", props: { steps: STEPS.map((s, i) => (i === 1 ? { ...s, status: "error" } : s)), value: 1 } },
   { name: "clickable", props: { steps: STEPS, defaultValue: 1 }, note: "Uncontrolled: e2e clicks it, and a controlled `value` with no handler would swallow the change. There is no `clickable` prop — completed and active steps are interactive by default." },
   { name: "disabled", props: { steps: STEPS.map((s) => ({ ...s, disabled: true })), value: 0 } },
+  { name: "disabled-root", props: { steps: STEPS, defaultValue: 1, disabled: true }, note: "The whole stepper disabled, over steps that are clickable when it is not." },
   { name: "with-tooltips", props: { steps: STEPS.map((s) => ({ ...s, tooltip: "Tip" })), value: 1, showTooltips: true } },
   { name: "last-complete", props: { steps: STEPS, value: 2 } },
   {

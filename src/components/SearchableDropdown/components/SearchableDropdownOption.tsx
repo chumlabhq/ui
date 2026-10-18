@@ -45,7 +45,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
       onClick={() => {
         if (!option.disabled) onSelect(option);
       }}
-      onMouseEnter={() => onHover(index)}
+      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
     >
       <span className="flex-1 truncate">
         {option.content || option.label}

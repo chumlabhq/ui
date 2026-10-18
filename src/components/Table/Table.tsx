@@ -1150,12 +1150,9 @@ function TableInner<TData>(
 
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setInternalGlobalFilter(value);
-      onGlobalFilterChange?.(value);
-      table.setGlobalFilter(value);
+      table.setGlobalFilter(e.target.value);
     },
-    [onGlobalFilterChange, table],
+    [table],
   );
 
 
@@ -1967,8 +1964,6 @@ function TableInner<TData>(
                 <button
                   type="button"
                   onClick={() => {
-                    setInternalGlobalFilter("");
-                    onGlobalFilterChange?.("");
                     table.setGlobalFilter("");
                     onSearchClear?.();
                   }}
@@ -2167,8 +2162,6 @@ function TableInner<TData>(
                   <button
                     type="button"
                     onClick={() => {
-                      setInternalGlobalFilter("");
-                      onGlobalFilterChange?.("");
                       table.setGlobalFilter("");
                       onSearchClear?.();
                     }}

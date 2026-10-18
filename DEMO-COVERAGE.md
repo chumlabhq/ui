@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 59 |
 | Library-authored props across the public surface | 1252 |
 | With no demo | 267 (21%) |
-| With no fixture | 693 (55%) |
+| With no fixture | 692 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 53 |
@@ -135,7 +135,7 @@ listed here with no demo anywhere fails the generator.
 | Slot | 1 | 279 | 1 | 0 | 1 | 0 | — | — |
 | Stepper | 32 | 2 | 7 | 1 | 19 | 0 | `reduceMotion`, `unstyled` | `indicatorSize` |
 | Switch | 28 | 277 | 5 | 2 | 11 | 0 | `reduceMotion` | `loader`, `loaderSize` |
-| TabPanel | 26 | 2 | 6 | 0 | 16 | 0 | `reduceMotion`, `unstyled` | — |
+| TabPanel | 26 | 2 | 6 | 0 | 15 | 0 | `reduceMotion`, `unstyled` | — |
 | Table | 103 | 0 | 14 | 6 | 65 | 0 | `unstyled` | `showHeader`, `pinnableColumns`, `onCursorPositionChange`, `onHeaderHoverChange`, `minHeight`, `onGroupByChange` |
 | TextArea | 25 | 293 | 1 | 0 | 6 | 0 | `unstyled` | — |
 | TextAreaLabel | 2 | 280 | 0 | 0 | 2 | 0 | — | — |

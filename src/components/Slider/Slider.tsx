@@ -151,7 +151,7 @@ function Thumb({
     <div
       ref={thumbRef}
       role="slider"
-      tabIndex={disabled ? -1 : 0}
+      tabIndex={disabled ? undefined : 0}
       aria-valuenow={value}
       aria-valuemin={min}
       aria-valuemax={max}
