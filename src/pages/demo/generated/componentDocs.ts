@@ -1134,7 +1134,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "Avatar",
           "slot": "loading",
-          "element": "AvatarShimmer",
+          "element": "div",
           "description": "The skeleton's own bag — `AvatarShimmer` is a component, not a part."
         },
         {
@@ -4159,7 +4159,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "CountryFlag",
           "slot": "loading",
-          "element": "CountryFlagShimmer",
+          "element": "span",
           "description": "The skeleton's own bag — `CountryFlagShimmer` is a component, not a part."
         },
         {
@@ -6999,7 +6999,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "Input",
           "slot": "label",
-          "element": "FieldLabel",
+          "element": "label",
           "description": "Label element"
         },
         {
@@ -7428,7 +7428,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "InternationalPhoneInput",
           "slot": "countrySelect",
-          "element": "SearchableDropdown",
+          "element": "div, svg, input, button, span, label",
           "description": "The country picker is a `SearchableDropdown`, so this takes that component's own classes object rather than a class string."
         },
         {
@@ -7440,7 +7440,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "InternationalPhoneInput",
           "slot": "itemIcon",
-          "element": "CountryFlag",
+          "element": "span",
           "description": "The flag inside one row of the country list."
         },
         {
@@ -7458,7 +7458,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "InternationalPhoneInput",
           "slot": "flag",
-          "element": "CountryFlag",
+          "element": "span",
           "description": "The flag shown in the control itself, for the selected country."
         },
         {
@@ -11192,7 +11192,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "Pagination",
           "slot": "navIcon",
-          "element": "DefaultIcon",
+          "element": "svg",
           "description": "The chevron inside a prev or next button."
         },
         {
@@ -16603,7 +16603,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "TextArea",
           "slot": "label",
-          "element": "FieldLabel",
+          "element": "label",
           "description": "Label element"
         },
         {
@@ -17081,7 +17081,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "TimePicker",
           "slot": "content",
-          "element": "MenuSurface",
+          "element": "div",
           "description": "Dropdown panel (listbox)."
         },
         {
@@ -18503,7 +18503,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "Tooltip",
           "slot": "trigger",
-          "element": "span, TooltipAsChildTrigger",
+          "element": "span, Slot",
           "description": "Trigger wrapper element"
         },
         {

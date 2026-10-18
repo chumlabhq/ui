@@ -306,10 +306,14 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
  * the built-in search — and the controls inside cells.
  */
 test.describe("Table grid keys", () => {
-  test("Home, End, Ctrl+Home and Ctrl+End move the cell; nothing else moves", async ({ page }) => {
+  /**
+   * One test per fixture, each with its own budget. They were rows of one test
+   * that walked nine pages: 17-19 s alone in each engine at 04e8fd4a, and
+   * past the 30 s budget under a loaded run.
+   */
+  const rowsFor = (page: Page) => {
     const rows: Array<{ name: string; ok: boolean; detail: string }> = [];
     const row = (name: string, ok: boolean, detail = "") => rows.push({ name, ok, detail });
-
     // Where focus is, as [row, column] of the body grid; null off the grid.
     const at = () =>
       page.evaluate(() => {
@@ -318,6 +322,17 @@ test.describe("Table grid keys", () => {
         const tr = td.closest("tr")!;
         return [[...tr.parentElement!.children].indexOf(tr), [...tr.children].indexOf(td)] as [number, number];
       });
+    const finish = (what: string) => {
+      const failing = rows.filter((r) => !r.ok);
+      console.log(`TABLE_GRID_KEYS ${what} rows=${rows.length} failing=${failing.length}`);
+      for (const r of failing) console.log(`  FAILING ${r.name}: ${r.detail}`);
+      expect(failing.map((r) => `${r.name}: ${r.detail}`)).toEqual([]);
+    };
+    return { row, at, finish };
+  };
+
+  test("keyboard-grid: Home, End, Ctrl+Home and Ctrl+End move the cell; the arrows move one cell", async ({ page }) => {
+    const { row, at, finish } = rowsFor(page);
     const cell = (r: number, c: number) => page.locator(`[data-fixture] tbody tr:nth-child(${r + 1}) td:nth-child(${c + 1})`);
 
     // ── the four keys, keyboard-grid: 5 rows × 4 columns ──
@@ -351,18 +366,25 @@ test.describe("Table grid keys", () => {
     console.log(`TABLE_ARROWS ${arrows.join(" ")}`);
     const expectArrows = ["ArrowLeft@2,2->[2,1]", "ArrowRight@2,2->[2,3]", "ArrowUp@2,2->[1,2]", "ArrowDown@2,2->[3,2]", "ArrowLeft@0,0->[0,0]", "ArrowUp@0,0->[0,0]", "ArrowRight@4,3->[4,3]", "ArrowDown@4,3->[4,3]"];
     row("arrows move one cell and stop at the edges", arrows.join(" ") === expectArrows.join(" "), arrows.join(" "));
+    finish("keyboard-grid");
+  });
 
-    // ── header controls: activation, and the keys left alone (their tab order is its own test, below) ──
-    for (const fixture of ["sortable", "filterable", "pinned-column"]) {
+  // ── header controls: activation, and the keys left alone (their tab order is its own test, below) ──
+  for (const fixture of ["sortable", "filterable", "pinned-column"]) {
+    test(`${fixture}: a header control takes Enter and Space, and leaves Home and End alone`, async ({ page }) => {
+      const { row, at, finish } = rowsFor(page);
       await gotoFixture(page, "Table", fixture);
       const control = page.locator("[data-fixture] thead button").first();
       if (!(await control.count())) {
         row(`${fixture}: has a header control to test`, false, "none found");
-        continue;
+        return finish(`header-${fixture}`);
       }
       await control.focus();
       const scroll0 = await page.evaluate(() => window.scrollY);
       for (const key of ["Home", "End", "Control+Home", "Control+End"]) await page.keyboard.press(key);
+      // Read after two frames: WebKit scrolls a frame after the key, so a read
+      // straight after the keys could pass before the scroll it checks for.
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
       const still = await control.evaluate((el) => el === document.activeElement);
       const scroll1 = await page.evaluate(() => window.scrollY);
       row(`${fixture}: Home/End on a header control leave focus and scroll alone`, still && scroll0 === scroll1 && (await at()) === null, `focus kept ${still}, scrollY ${scroll0}->${scroll1}`);
@@ -375,7 +397,7 @@ test.describe("Table grid keys", () => {
         });
       // pinned-column's pins are fixed (onPinnedColumnsChange is a no-op), so Enter has
       // nothing to change there; pin activation is checked on the demo below.
-      if (fixture === "pinned-column") continue;
+      if (fixture === "pinned-column") return finish(`header-${fixture}`);
       for (const key of ["Enter", "Space"]) {
         await control.focus();
         const before = await state();
@@ -386,8 +408,12 @@ test.describe("Table grid keys", () => {
         await page.keyboard.press("Escape");
         await page.waitForTimeout(100);
       }
-    }
+      finish(`header-${fixture}`);
+    });
+  }
 
+  test("editable: the cell editor keeps the caret keys", async ({ page }) => {
+    const { row, finish } = rowsFor(page);
     // ── text fields keep the caret keys: Home and End, or what the platform uses instead ──
     await gotoFixture(page, "Table", "editable");
     const caretKeyNames = await caretKeys(page);
@@ -403,8 +429,13 @@ test.describe("Table grid keys", () => {
     const end = await caret();
     row(`cell editor: ${caretKeyNames.start} and ${caretKeyNames.end} move the caret, the editor stays open`, home[0] === 0 && home[2] === true && end[0] === end[1] && end[2] === true, `${caretKeyNames.start} ${JSON.stringify(home)} ${caretKeyNames.end} ${JSON.stringify(end)}`);
     await page.keyboard.press("Escape");
+    finish("editable");
+  });
 
+  test("with-search: the built-in search keeps the caret keys", async ({ page }) => {
+    const { row, finish } = rowsFor(page);
     await gotoFixture(page, "Table", "with-search");
+    const caretKeyNames = await caretKeys(page);
     const search = page.locator("[data-fixture] input").first();
     await search.fill("abc");
     await caretToStart(page);
@@ -412,7 +443,11 @@ test.describe("Table grid keys", () => {
     await caretToEnd(page);
     const sEnd = await search.evaluate((el: HTMLInputElement) => [el.selectionStart, el === document.activeElement]);
     row(`built-in search: ${caretKeyNames.start} and ${caretKeyNames.end} move the caret`, sHome[0] === 0 && sHome[1] === true && sEnd[0] === 3 && sEnd[1] === true, `${caretKeyNames.start} ${JSON.stringify(sHome)} ${caretKeyNames.end} ${JSON.stringify(sEnd)}`);
+    finish("with-search");
+  });
 
+  test("/table: the controls inside cells keep their keys", async ({ page }) => {
+    const { row, finish } = rowsFor(page);
     // ── the controls inside cells, on the demo's live sections ──
     await page.goto("/table", { waitUntil: "networkidle" });
     const section = (title: string) => page.locator("section", { has: page.getByRole("heading", { name: title, exact: true }) }).first();
@@ -452,7 +487,11 @@ test.describe("Table grid keys", () => {
     await page.keyboard.press("Space");
     const cus1 = await custom.getAttribute("aria-checked") ?? String(await custom.isChecked());
     row("custom checkbox: Space toggles it", cus1 !== cus0, `${cus0} -> ${cus1}`);
+    finish("demo-table");
+  });
 
+  test("pinned: one grid, one tab stop, and the keys cross the parts", async ({ page }) => {
+    const { row, finish } = rowsFor(page);
     // ── pinned columns: one grid, one tab stop, keys cross the parts ──
     // Pinned columns render as tables of their own beside the scrolling one.
     // The body is still one grid: one tab stop, and the keys move across the
@@ -482,11 +521,7 @@ test.describe("Table grid keys", () => {
     row("pinned: Home reaches the pinned first cell", pinnedEnd === "Engineer" && pinnedHome === "Ada", `End ${pinnedEnd}, then Home ${pinnedHome}`);
     const highlighted = await page.locator("[data-fixture] tbody td[data-highlighted]").count();
     row("pinned: one cell is highlighted, not one per part", highlighted === 1, `${highlighted} highlighted`);
-
-    const failing = rows.filter((r) => !r.ok);
-    console.log(`TABLE_GRID_KEYS rows=${rows.length} failing=${failing.length}`);
-    for (const r of failing) console.log(`  FAILING ${r.name}: ${r.detail}`);
-    expect(failing.map((r) => `${r.name}: ${r.detail}`)).toEqual([]);
+    finish("pinned");
   });
 
   /**

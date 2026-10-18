@@ -233,7 +233,12 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       // still held one, which is a difference in animation scheduling rather
       // than in the limit. Retrying until the count settles asserts the limit
       // itself and means the same thing on every engine.
+      //
+      // Only once the last toast is up: the demo fires its ten 100 ms apart,
+      // so a count of five was met at the fifth, before the limit had anything
+      // to remove.
       const toasts = page.locator(TOAST_SELECTOR);
+      await expect(toasts.filter({ hasText: "Toast #10" })).toHaveCount(1, { timeout: 5000 });
       await expect(toasts).toHaveCount(5, { timeout: 5000 });
     });
   });

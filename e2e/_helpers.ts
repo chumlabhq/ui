@@ -87,14 +87,18 @@ export function skipWithoutTabTraversal(
  * keyboard model, and failed in the other two engines on a component that was
  * behaving exactly as the platform does.
  *
- * Decided by trying the keys in a probe field, once per page, rather than by
- * browser name: on Linux and Windows, Home and End are the answer in every
- * engine, and a name check would get that wrong.
+ * Decided by trying the keys in a probe field rather than by browser name: on
+ * Linux and Windows, Home and End are the answer in every engine, and a name
+ * check would get that wrong. The answer is the engine's and the platform's,
+ * not the page's, so it is probed once per engine in each worker and reused
+ * by every test that worker runs; it was probed once per page, which is once
+ * per test.
  */
-const caretKeysByPage = new WeakMap<Page, { start: string; end: string }>();
+const caretKeysByEngine = new Map<string, { start: string; end: string }>();
 
 export async function caretKeys(page: Page): Promise<{ start: string; end: string }> {
-  const known = caretKeysByPage.get(page);
+  const engine = page.context().browser()?.browserType().name() ?? "unknown";
+  const known = caretKeysByEngine.get(engine);
   if (known) return known;
   const tryKeys = async (keys: string[], edge: "start" | "end") => {
     for (const key of keys) {
@@ -126,7 +130,7 @@ export async function caretKeys(page: Page): Promise<{ start: string; end: strin
     start: await tryKeys(["Home", "Meta+ArrowLeft", "Control+a"], "start"),
     end: await tryKeys(["End", "Meta+ArrowRight", "Control+e"], "end"),
   };
-  caretKeysByPage.set(page, keys);
+  caretKeysByEngine.set(engine, keys);
   return keys;
 }
 

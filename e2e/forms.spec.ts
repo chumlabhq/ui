@@ -231,7 +231,7 @@ test.describe("Form fields in a native form", () => {
       expect(changed, "the field painted no change").not.toBe(before);
       await page.locator(`${FORM} button[type=reset]`).click();
       await expect.poll(() => shown(page)).toBe(before);
-      expect(await formData(page)).toEqual(documented);
+      await expect.poll(() => formData(page)).toEqual(documented);
       rows.push(`${field.name} reset: "${changed}" -> "${before}" ${JSON.stringify(documented)}`);
     });
 
@@ -240,7 +240,12 @@ test.describe("Form fields in a native form", () => {
       const documented = JSON.parse(await attr(page, "data-documented")) as string[];
       const before = await shown(page);
       await page.locator(`${FORM} button[type=reset]`).click();
-      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+      // Nothing changing is only evidence once the reset has happened: wait for
+      // the form's reset event, then for a task queued behind the library's own
+      // reset handler (a setTimeout the event queued) and the frames React
+      // commits in. Two frames alone could pass before a late reset.
+      await expect(page.locator(FORM)).toHaveAttribute("data-resets", "1");
+      await page.evaluate(() => new Promise((r) => setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(r)))));
       expect(await shown(page)).toBe(before);
       await expect(page.locator(FORM)).toHaveAttribute("data-changes", "0");
       expect(await formData(page)).toEqual(documented);

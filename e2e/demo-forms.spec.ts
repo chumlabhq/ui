@@ -185,10 +185,23 @@ test("every form field's In a form section blocks, submits and resets as documen
     const submit = form.getByRole("button", { name: "Submit", exact: true });
     const reset = form.getByRole("button", { name: "Reset", exact: true });
     const entries = async () => ((await readout.textContent()) ?? "").split("\n");
+    // The browser's own word that it refused a submit: an `invalid` event per
+    // invalid control, in every engine, on every refusal.
+    await form.evaluate((f) => {
+      const g = f as HTMLFormElement & { invalids?: number };
+      g.invalids = 0;
+      f.addEventListener("invalid", () => (g.invalids = (g.invalids ?? 0) + 1), true);
+    });
+    const invalids = () => form.evaluate((f) => (f as HTMLFormElement & { invalids?: number }).invalids ?? 0);
+    // Waits for this submit's payload, not for a line count: "Nothing
+    // submitted yet." is one line, so a one-entry count was met before the
+    // submit had rendered anything.
     const matches = async (patterns: RegExp[]) => {
-      await expect.poll(entries, { message: `${p.route}: readout` }).toHaveLength(patterns.length);
-      const got = await entries();
-      return patterns.every((re, i) => re.test(got[i]));
+      const shown = (got: string[]) => got.length === patterns.length && patterns.every((re, i) => re.test(got[i]));
+      return expect
+        .poll(async () => shown(await entries()), { message: `${p.route}: readout` })
+        .toBe(true)
+        .then(() => true, () => false);
     };
     counts.pages += 1;
 
@@ -196,8 +209,10 @@ test("every form field's In a form section blocks, submits and resets as documen
     await submit.click();
     let blocked = false;
     if (p.focus) {
-      await expect(readout, `${p.route}: an empty required submit went through`).toHaveText(NOTHING);
+      // Focus on the field is the browser's answer to the blocked submit; the
+      // readout still saying nothing is only worth reading once it has come.
       await expect(form.locator(p.focus).first(), `${p.route}: focus is not on the field's control`).toBeFocused();
+      await expect(readout, `${p.route}: an empty required submit went through`).toHaveText(NOTHING);
       blocked = true;
       counts.blocked += 1;
     } else {
@@ -215,9 +230,16 @@ test("every form field's In a form section blocks, submits and resets as documen
     await reset.click();
     await expect(readout, `${p.route}: Reset left the readout`).toHaveText(NOTHING);
     await p.defaultShown(form);
+    const refused = await invalids();
     await submit.click();
+    // Wait for the refusal itself, not for focus: Firefox moves focus to a
+    // field that submits through a hidden input on the first refused submit
+    // only, and leaves it on Submit after that (measured in G7).
     const again = p.focus
-      ? await readout.textContent().then((t) => t === NOTHING)
+      ? await expect
+          .poll(invalids, { message: `${p.route}: the submit after Reset was not refused` })
+          .toBeGreaterThan(refused)
+          .then(async () => (await readout.textContent()) === NOTHING, () => false)
       : await matches(p.submitsUntouched!);
     expect.soft(again, `${p.route}: after Reset the field did not submit its default`).toBe(true);
     if (again) counts.reset += 1;

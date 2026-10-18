@@ -136,7 +136,36 @@ function declarationOf(sf, name) {
     if (!file) return null;
     const target = parse(file);
     const node = (exported !== name ? localNamed(target, exported) : local(target)) ?? (isDefault ? target.statements.find((x) => ts.isExportAssignment(x) || (ts.isFunctionDeclaration(x) && x.modifiers?.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword))) : null);
-    return node ? { sf: target, node } : null;
+    if (node) return { sf: target, node };
+    // A barrel that re-exports it (`export { CountryFlag } from "./CountryFlag.js"`):
+    // the declaration is in the module the re-export names.
+    return named ? reExported(target, exported) : null;
+  }
+  return null;
+}
+
+/** A name a module re-exports from a relative module, followed to its declaration. */
+function reExported(sf, name) {
+  for (const st of sf.statements) {
+    if (!ts.isExportDeclaration(st) || !st.moduleSpecifier || !ts.isStringLiteral(st.moduleSpecifier) || !st.moduleSpecifier.text.startsWith(".")) continue;
+    const spec = st.exportClause && ts.isNamedExports(st.exportClause) ? st.exportClause.elements.find((e) => e.name.text === name) : null;
+    if (!spec) continue;
+    const base = resolvePath(dirname(sf.fileName), st.moduleSpecifier.text.replace(/\.js$/, ""));
+    const file = [".tsx", ".ts", "/index.tsx", "/index.ts"].map((x) => base + x).find((f) => existsSync(f));
+    if (!file) return null;
+    const target = parse(file);
+    let inner = spec.propertyName?.text ?? name;
+    // `export { default as SearchableDropdown }`: the module's `export default SearchableDropdown;`.
+    if (inner === "default") {
+      const def = target.statements.find((x) => ts.isExportAssignment(x));
+      if (def && ts.isIdentifier(def.expression)) inner = def.expression.text;
+      else {
+        const fn = target.statements.find((x) => ts.isFunctionDeclaration(x) && x.modifiers?.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword));
+        return fn ? { sf: target, node: fn } : null;
+      }
+    }
+    const node = localNamed(target, inner);
+    return node ? { sf: target, node } : reExported(target, inner);
   }
   return null;
 }
@@ -150,18 +179,56 @@ export function elementsFor(sf, key, startProp = null, inRange = () => true, dep
    * element there. `FieldWrapper` says where Input applies `label`; `label`
    * says what it styles.
    */
-  const descend = (tagName, attrName, slotKey) => {
+  const descend = (tagName, attrName, slotKey, nested) => {
     if (depth <= 0 || !ts.isIdentifier(tagName) || !/^[A-Z]/.test(tagName.text) || tagName.text === "Slot") return null;
-    const decl = declarationOf(sf, tagName.text);
-    if (!decl) return null;
-    const inside = (n) => n.pos >= decl.node.pos && n.end <= decl.node.end;
-    const out = /classes$/i.test(attrName) || RECEIVER.test(attrName)
-      ? elementsFor(decl.sf, slotKey, null, inside, depth - 1)
-      : elementsFor(decl.sf, slotKey, null, inside, depth - 1, attrName);
+    const out = new Set();
+    for (const decl of componentsNamed(tagName)) {
+      const inside = (n) => n.pos >= decl.node.pos && n.end <= decl.node.end;
+      const classesAttr = /classes$/i.test(attrName) || RECEIVER.test(attrName);
+      const els = classesAttr
+        ? elementsFor(decl.sf, slotKey, null, inside, depth - 1)
+        : elementsFor(decl.sf, slotKey, null, inside, depth - 1, attrName);
+      // A slot that is a map of its own, handed whole to the child's `classes`
+      // (`classes={mergedClasses.loading}` on a shimmer): it styles every part
+      // the child's map does, read across the child's file, since a child can
+      // apply some of its slots in a part of its own (SearchableDropdown's
+      // search field is in SearchableDropdownContent).
+      if (!els.size && nested && classesAttr) {
+        const file = () => true;
+        for (const k of slotKeysIn(decl.sf, file)) for (const e of elementsFor(decl.sf, k, null, file, depth - 1)) els.add(e);
+      }
+      for (const e of els) out.add(e);
+    }
     return out.size ? out : null;
   };
-  const record = (tagName, attrName = null, slotKey = key) => {
-    const inner = attrName ? descend(tagName, attrName, slotKey) : null;
+  /**
+   * The declarations a JSX tag can be: the component it names, or, for a
+   * component handed in as a parameter (`renderIcon(icon, ChevronLeftIcon, …)`
+   * renders `<DefaultIcon>`), each component its callers pass in that position.
+   */
+  const componentsNamed = (tagName) => {
+    const decl = declarationOf(sf, tagName.text);
+    if (decl) return [decl];
+    let fn = tagName.parent;
+    while (fn && !(ts.isFunctionLike(fn) && fn.parameters?.some((p) => ts.isIdentifier(p.name) && p.name.text === tagName.text))) fn = fn.parent;
+    if (!fn) return [];
+    const index = fn.parameters.findIndex((p) => ts.isIdentifier(p.name) && p.name.text === tagName.text);
+    const fnName = fn.name && ts.isIdentifier(fn.name) ? fn.name.text : ts.isVariableDeclaration(fn.parent) && ts.isIdentifier(fn.parent.name) ? fn.parent.name.text : null;
+    if (!fnName) return [];
+    const out = [];
+    const v = (n) => {
+      if (ts.isCallExpression(n) && ts.isIdentifier(n.expression) && n.expression.text === fnName) {
+        const arg = n.arguments[index];
+        const found = arg && ts.isIdentifier(arg) ? declarationOf(sf, arg.text) : null;
+        if (found && !out.some((d) => d.node === found.node)) out.push(found);
+      }
+      ts.forEachChild(n, v);
+    };
+    v(sf);
+    return out;
+  };
+  const record = (tagName, attrName = null, slotKey = key, nested = false) => {
+    const inner = attrName ? descend(tagName, attrName, slotKey, nested) : null;
     if (inner) for (const t of inner) found.add(t);
     else for (const t of tagNames(sf, tagName)) found.add(t);
   };
@@ -198,9 +265,18 @@ export function elementsFor(sf, key, startProp = null, inRange = () => true, dep
   };
   const climb = (start, hops, seen) => {
     let child = start;
+    // The prop an object literal carries the class as, on its way to a spread.
+    let viaProp = null;
     for (let n = start.parent; n; child = n, n = n.parent) {
-      if (ts.isJsxAttribute(n)) { record(n.parent.parent.tagName, n.name.getText(sf)); return; }
-      if (ts.isJsxSpreadAttribute(n)) { record(n.parent.parent.tagName); return; }
+      if (ts.isJsxAttribute(n)) {
+        const nested = ts.isJsxExpression(child) && child.expression === start;
+        record(n.parent.parent.tagName, n.name.getText(sf), key, nested);
+        return;
+      }
+      if (ts.isJsxSpreadAttribute(n)) { record(n.parent.parent.tagName, viaProp); return; }
+      // `cloneElement(child, { className })` puts the class on the consumer's
+      // own element, which is what `Slot` names under `asChild`.
+      if (ts.isCallExpression(n) && /(^|\.)cloneElement$/.test(n.expression.getText(sf)) && n.arguments[1] === child && viaProp === "className") { found.add("Slot"); return; }
       // A hook's dependency list reads the slot to watch it, not to apply it.
       if (ts.isArrayLiteralExpression(n) && ts.isCallExpression(n.parent) && n.parent.arguments.indexOf(n) > 0 && /^(React\.)?use[A-Z]\w*$/.test(n.parent.expression.getText(sf))) return;
       if (ts.isCallExpression(n) && ts.isIdentifier(n.expression) && n.arguments.includes(child) && hops > 0) {
@@ -255,6 +331,7 @@ export function elementsFor(sf, key, startProp = null, inRange = () => true, dep
           return;
         }
         // No variable: the object goes on — spread onto an element, or returned.
+        viaProp = prop;
         continue;
       }
       // Returned from a local function: follow its calls.
@@ -292,7 +369,31 @@ export function elementsFor(sf, key, startProp = null, inRange = () => true, dep
     ts.forEachChild(n, visit);
   };
   visit(sf);
+  // A prop that is never named but gathered in `...rest` lands where the rest
+  // is spread: FieldLabel's `className` is on its `<label {...rest}>`.
+  if (startIdent && !found.size) {
+    const rests = new Set();
+    const r = (n) => { if (inRange(n) && ts.isBindingElement(n) && n.dotDotDotToken && ts.isIdentifier(n.name)) rests.add(n.name.text); ts.forEachChild(n, r); };
+    r(sf);
+    const s = (n) => { if (inRange(n) && ts.isJsxSpreadAttribute(n) && ts.isIdentifier(n.expression) && rests.has(n.expression.text)) record(n.parent.parent.tagName); ts.forEachChild(n, s); };
+    if (rests.size) s(sf);
+  }
   return found;
+}
+
+/** The slot keys a component reads off its own classes map, within a range. */
+function slotKeysIn(sf, inRange) {
+  const locals = localReceivers(sf);
+  const keys = new Set();
+  const v = (n) => {
+    if (inRange(n) && ts.isPropertyAccessExpression(n)) {
+      const t = n.expression.getText(sf).replace(/\?$/, "");
+      if (RECEIVER.test(t) || locals.has(t)) keys.add(n.name.text);
+    }
+    ts.forEachChild(n, v);
+  };
+  v(sf);
+  return keys;
 }
 
 /**
