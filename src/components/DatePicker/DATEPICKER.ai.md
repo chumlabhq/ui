@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<DatePicker />` for single date selection (default). Use `mode="range"` for date ranges and `mode="multiple"` for selecting several individual dates. Works out-of-the-box with built-in styles and sensible defaults.
+Use `<DatePicker />` for single date selection (default). Use `selectionMode="range"` for date ranges and `selectionMode="multiple"` for selecting several individual dates. Works out-of-the-box with built-in styles and sensible defaults.
 
 ---
 
@@ -112,7 +112,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `locale` | object | — | date-fns Locale object for internationalization. |
 | `numberOfMonths` | number | `1` | Number of months to display simultaneously. |
 | `dateFormat` | string | `"MMM d, yyyy"` | Date format string (date-fns format). |
-| `showTodayIndicator` | boolean | `true` | Highlights today's date in the calendar. |
+| `showTodayIndicator` | boolean | `true` | Marks today's cell with `data-today` for your own styling (a `data-[today]:` variant in `classes.item`); the default styles paint nothing for it. Today's cell carries `aria-current="date"` either way. |
 | `showTodayButton` | boolean | `false` | Shows a 'Today' button in the calendar footer. |
 | `todayAction` | boolean | `false` | Whether clicking 'Today' selects today's date. |
 | `showWeekNumbers` | boolean | `false` | Shows week numbers in the calendar. |
@@ -173,17 +173,17 @@ These props have dependencies -- using them wrong causes silent bugs:
 The component has three styling modes:
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_DATEPICKER_CLASSES` -- fully styled with dark mode support.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your values **replace** the default for that slot. Unspecified slots keep their defaults. This is NOT additive.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots start as empty strings. You must provide everything via `classes`.
 
 ```tsx
-// This REPLACES the default trigger classes entirely:
+// Adds to the trigger's default classes; a conflicting utility replaces its default:
 <DatePicker classes={{ trigger: "my-custom-trigger" }} />
 
 // The other slots (content, item, etc.) still use their defaults.
@@ -432,7 +432,7 @@ const ref = useRef<HTMLButtonElement>(null);
 | Calendar flips position unexpectedly | Auto-flip behavior | Set `forceDropdownSide={true}` |
 | Markers not visible | `showMarkerIndicator` is `false` | Set `showMarkerIndicator={true}` (it defaults to `true`) |
 | Clear button missing | `clearable={false}` or no value | Ensure `clearable` is `true` and a value is selected |
-| Styles wrong after overriding one slot | `classes` replaces, not merges | Include all needed classes in your override string |
+| Styles wrong after overriding one slot | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Full control needed | Size/variant defaults still apply | Use `unstyled` for full control |
 
 ---
@@ -446,8 +446,8 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Feature | Search for | What you'll find |
 |---------|-----------|------------------|
 | Minimal example | `title="Basic Usage"` | Single date, zero config |
-| Range selection | `title="Date Range Selection"` | `mode="range"` pattern |
-| Multiple dates | `title="Multiple Date Selection"` | `mode="multiple"` pattern |
+| Range selection | `title="Date Range Selection"` | `selectionMode="range"` pattern |
+| Multiple dates | `title="Multiple Date Selection"` | `selectionMode="multiple"` pattern |
 | Presets | `title="Date Presets"` | Built-in range presets |
 | Markers and tooltips | `title="Date Markers"` | `markers`, `showMarkerIndicator`, `showMarkerTooltip` |
 | Disabled dates | `title="Disabled Dates"` | `disabledDates` options |

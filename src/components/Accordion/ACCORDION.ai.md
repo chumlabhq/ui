@@ -61,9 +61,9 @@ These props have dependencies — using them wrong causes silent bugs:
 
 | Prop | Constraint |
 |------|-----------|
-| `collapsible` | Only works with `type="single"`. Ignored on `type="multiple"`. |
-| `maxExpanded` | Only works with `type="multiple"`. Ignored on `type="single"`. |
-| `defaultExpandAll` | Only works with `type="multiple"` AND uncontrolled mode. |
+| `collapsible` | Only works with `selectionMode="single"`. Ignored on `selectionMode="multiple"`. |
+| `maxExpanded` | Only works with `selectionMode="multiple"`. Ignored on `selectionMode="single"`. |
+| `defaultExpandAll` | Only works with `selectionMode="multiple"` AND uncontrolled mode. |
 | `storageKey` | Only works in uncontrolled mode (no `value` prop). |
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both are needed together. |
@@ -224,21 +224,21 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 The component has three styling modes:
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_ACCORDION_CLASSES` — fully styled with dark mode support.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your values **replace** the default for that slot. Unspecified slots keep their defaults. This is NOT additive — if you pass `trigger: "my-class"`, the entire default trigger class string is replaced, not appended.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots start as empty strings. You must provide everything via `classes`.
 
 ```tsx
-// This REPLACES the default trigger classes entirely:
-<Accordion classes={{ trigger: "my-custom-trigger" }} />
+// Adds to the trigger's default classes; a utility here that conflicts
+// with a default (another padding, another background) replaces it:
+<Accordion classes={{ trigger: "my-custom-trigger px-6" }} />
 
-// The other slots (item, body, icon, etc.) still use their defaults.
-// To ADD to defaults, you must include the default classes yourself.
+// The other slots (item, body, icon, etc.) keep their defaults.
 ```
 
 ### Slot → element
@@ -521,7 +521,7 @@ and `prefers-reduced-motion` each switch it off.
 | `Tab` | Moves focus to the next trigger in the tab order. |
 | `ArrowDown`, `ArrowUp` | Moves focus between triggers. `orientation="horizontal"` uses `ArrowRight`/`ArrowLeft` instead. Disabled items are skipped, and `loop` wraps past the ends. |
 | `Home`, `End` | Moves focus to the first or last trigger. |
-| `Enter`, `Space` | Toggles the focused item. In `type="single"` without `collapsible`, the open item cannot be closed this way. |
+| `Enter`, `Space` | Toggles the focused item. In `selectionMode="single"` without `collapsible`, the open item cannot be closed this way. |
 
 ---
 
@@ -542,13 +542,13 @@ and `prefers-reduced-motion` each switch it off.
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Can't close the last open item | `collapsible` not set | Add `collapsible` to `type="single"` |
-| `defaultExpandAll` does nothing | Wrong mode | Only works with `type="multiple"` + uncontrolled |
+| Can't close the last open item | `collapsible` not set | Add `collapsible` to `selectionMode="single"` |
+| `defaultExpandAll` does nothing | Wrong `selectionMode`, or controlled | Only works with `selectionMode="multiple"` + uncontrolled |
 | `storageKey` not persisting | Controlled mode | Remove `value`/`onValueChange`, use `defaultValue` |
 | No animation | OS or prop setting | Check `reduceMotion` — set to `false` to force |
 | Icon not rotating | `iconAnimation="none"` or reduced motion | Set `iconAnimation="rotate"` |
-| `maxExpanded` ignored | Wrong type | Only works with `type="multiple"` |
-| Styles look wrong after overriding one slot | `classes` replaces, not merges | Include all needed classes in your override string |
+| `maxExpanded` ignored | Wrong `selectionMode` | Only works with `selectionMode="multiple"` |
+| Styles look wrong after overriding one slot | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | `size` padding still applies with custom `classes` | Size/variant classes stack | Use `unstyled` for full control |
 
 ---
@@ -559,19 +559,18 @@ and `prefers-reduced-motion` each switch it off.
 // ❌ DON'T: Combine value + defaultValue
 <Accordion selectionMode="single" value={val} defaultValue="item-1" />
 
-// ❌ DON'T: Use collapsible with type="multiple" (it's ignored)
+// ❌ DON'T: Use collapsible with selectionMode="multiple" (it's ignored)
 <Accordion selectionMode="multiple" collapsible />
 
 // ❌ DON'T: Use storageKey with controlled mode (value prop)
 <Accordion selectionMode="single" value={val} storageKey="my-key" />
 
-// ❌ DON'T: Override one class slot and expect others to remain
-// classes replaces the entire slot, it does NOT merge with defaults
-<Accordion classes={{ trigger: "my-trigger" }} />
-// ✅ DO: Include all needed classes in the override
+// ❌ DON'T: Copy the default classes into an override; they are already there
 <Accordion classes={{ trigger: "flex w-full items-center px-4 py-4 my-trigger" }} />
+// ✅ DO: Pass only what you change; it composes with the defaults
+<Accordion classes={{ trigger: "my-trigger" }} />
 
-// ❌ DON'T: Use maxExpanded with type="single"
+// ❌ DON'T: Use maxExpanded with selectionMode="single"
 <Accordion selectionMode="single" maxExpanded={3} />
 
 // ❌ DON'T: Forget onValueChange with controlled value
@@ -585,13 +584,13 @@ and `prefers-reduced-motion` each switch it off.
 ## AI Instructions
 
 - **Always set `selectionMode`** — it's required. Use `"single"` for FAQ/settings, `"multiple"` for checklists/filters.
-- **Always add `collapsible`** to `type="single"` unless you intentionally want one item always open.
+- **Always add `collapsible`** to `selectionMode="single"` unless you intentionally want one item always open.
 - **Use `defaultValue` for uncontrolled**, `value` + `onValueChange` for controlled. Never mix.
-- **Don't partially override `classes`** — each slot replaces the default entirely. If you override `trigger`, include layout classes too.
+- **Pass only what you change in `classes`** — a slot's classes compose with its defaults, and a conflicting utility of yours wins, so there is no need to repeat the layout classes.
 - **Use `unstyled` for full custom styling** rather than fighting defaults.
 - **Provide meaningful `value` strings** on AccordionItem — they're used for storage, controlled state, and callbacks.
 - **Set `headingLevel`** appropriately for your page's heading hierarchy (default is `h3`).
-- **Safe defaults:** `type="single" collapsible defaultValue="first-item"` works for most use cases.
+- **Safe defaults:** `selectionMode="single" collapsible defaultValue="first-item"` works for most use cases.
 
 ---
 

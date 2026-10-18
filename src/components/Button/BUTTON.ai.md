@@ -60,7 +60,7 @@ export default function Actions() {
 | `iconAnimation` | Only animates when `as` is not "span" (needs `group` class which is auto-added). |
 | `animateOnHover` | `true` = animate on hover only. `false` = continuous animation (always running). |
 | `animateIcon` | Controls which icon(s) animate: `"leading"`, `"trailing"`, or `"both"`. |
-| `className` vs `classes.root` | Both are applied via `cn()`. `className` comes last (highest CSS priority). `classes.root` replaces the default root. Don't use both for the same concern. |
+| `className` vs `classes.root` | Both are applied via `cn()`. `className` comes last (highest CSS priority). `classes.root` composes with the root's defaults. Don't use both for the same concern. |
 
 ---
 
@@ -199,7 +199,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Focus ring color | `className` | Add `focus-visible:ring-indigo-500` etc. |
 | Icon spacing | `classes={{ content: "gap-4" }}` | Default gap is `gap-2`. |
 | Icon size/color | Style the icon element itself | Icons are your ReactNode — you control them. |
-| Loader appearance | `loading` prop or `classes={{ loader: "..." }}` | Custom loader replaces default spinner. |
+| Loader appearance | `loading` prop, a `loader` element, or `classes={{ loader: "..." }}` | A `loader` element replaces the default spinner; `classes.loader` adds classes to it. |
 | Disabled opacity | `className` | Default is `disabled:opacity-50`. Override with `disabled:opacity-30` etc. |
 
 ### Dark mode

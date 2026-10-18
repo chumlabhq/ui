@@ -30,18 +30,20 @@ import { Modal } from "@chumlab/ui/modal";
 ## API Conventions (apply to EVERY component)
 
 ### State: value + onValueChange
-Every controlled component uses `value` and `onValueChange`.
-There are no `onChange`, `onSelect`, `onCheckedChange`, `onPageChange`, `onTabChange`, or `onStepChange` props.
+Every controlled value uses `value` and `onValueChange`.
+There are no `onSelect`, `onPageChange`, `onTabChange`, or `onStepChange` props.
 
-- Checkbox: `checked` + `onValueChange` (boolean)
-- Switch: `checked` + `onValueChange` (boolean)
+- Checkbox: `checked` + `onCheckedChange` (boolean)
+- Switch: `checked` + `onCheckedChange` (boolean)
+- Input and TextArea: `value` + `onValueChange` (string); their native `onChange` still fires, for when you need the DOM event
 - Everything else: `value` + `onValueChange`
 
 Uncontrolled: use `defaultValue` (or `defaultChecked` for Checkbox/Switch). Never combine with `value`.
 
 ### Open state: open + onOpenChange
 Modal, Drawer, Dropdown, DatePicker, TimePicker — all use `open` + `onOpenChange`.
-There is no `onClose`, `onDismiss`, `onToggle`, or `setOpen` prop.
+They have no `onClose`, `onDismiss`, `onToggle`, or `setOpen` prop. (A Toast is not opened
+by you: its `onDismiss(id)` reports that it closed.)
 
 ### Validation: error + errorMessage (two separate props)
 `error` is always a boolean. The message is a separate `errorMessage` prop.
@@ -52,10 +54,12 @@ Never pass a string to `error` — it is not `error="message"`.
 - `className` goes on the root element
 - `className` on the root is merged LAST and WINS on conflict, including against the
   library's own `cl-*` utilities. Never emit `!important`.
-- `classes` is an object for per-slot overrides: `classes={{ trigger: "...", content: "..." }}`
+- `classes` adds classes per slot: `classes={{ trigger: "...", content: "..." }}`. They compose
+  with the slot's defaults; where one of yours conflicts with a default utility, yours wins.
 - `--cl-*` tokens are the theme-level layer: override in `:root` and every component follows.
 - `unstyled` strips all default classes
-- Components have NO built-in colors — you provide them via className/classes
+- Default colours come from the `--cl-*` tokens in styles.css (light and dark); change them there,
+  or per element with className/classes
 
 ### Naming patterns
 | Concept | Prop name | NOT these |
@@ -63,11 +67,11 @@ Never pass a string to `error` — it is not `error="message"`.
 | Current value | `value` | `selected`, `activeStep`, `currentPage`, `activeTab`, `activeItem` |
 | Value callback | `onValueChange` | `onChange`, `onSelect`, `onPageChange`, `onTabChange` |
 | Open state | `open` | `isOpen`, `visible`, `show` |
-| Open callback | `onOpenChange` | `onClose`, `onDismiss`, `onToggle` |
+| Open callback | `onOpenChange` | `onClose`, `onToggle` |
 | Error flag | `error` (boolean) | `error="message"`, `isError`, `hasError` |
 | Error text | `errorMessage` | `error="message"`, `helperText`, `errorText` |
-| Position | `side` (Tooltip) | `placement`, `position` |
-| Direction | `direction` (Drawer) | `side`, `placement`, `anchor` |
+| Position | `side` (Tooltip, popups) | `placement`, `position` |
+| Edge | `side` (Drawer: `left`, `right`, `top`, `bottom`) | `placement`, `anchor` |
 | Character count | `showCount` | `showCharCount`, `showCounter` |
 | OTP grouping | `groupPattern` | `grouping`, `groups`, `chunks` |
 | Country code | `code` (CountryFlag) | `countryCode`, `country`, `iso` |
@@ -90,8 +94,8 @@ Never pass a string to `error` — it is not `error="message"`.
 ### Common mistakes (AVOID)
 - ✗ `error="message"` — `error` is boolean. Use `error errorMessage="message"`.
 - ✗ Mixing `value` + `defaultValue` — pick one. Same for `open` + `defaultOpen`.
-- ✗ `onChange` / `onSelect` / `onPageChange` / `onTabChange` / `onStepChange` / `onCheckedChange` — always `onValueChange`. Open state always `onOpenChange`.
-- ✗ Tooltip `placement` — use `side`. Drawer `side` — use `direction`.
+- ✗ `onSelect` / `onPageChange` / `onTabChange` / `onStepChange` — the value callback is `onValueChange`. For Checkbox and Switch it is `onCheckedChange`. Open state always `onOpenChange`.
+- ✗ Tooltip or Drawer `placement` — use `side`.
 - ✗ Slider `range` prop — pass `value={[min, max]}`.
 - ✗ CascadingDropdown value as string — it's a map keyed by parent value (use `"root"` for no-children selections).
 - ✗ Stepper `activeStep`/`currentStep` — use `value` (zero-based index).

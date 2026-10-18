@@ -193,7 +193,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 ### How class merging works
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_MODAL_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
 
 ### Slot → visual mapping
@@ -369,7 +369,7 @@ const emailRef = useRef<HTMLInputElement>(null);
 | Can't close on outside click | `closeOnOverlayClick={false}` | Remove it (default `true`) or add explicit close buttons |
 | Nested modal renders behind parent | Missing `nestingLevel` | Increment `nestingLevel` for each nested modal |
 | No animation | `reduceMotion={true}` | Use `reduceMotion="auto"` (the default) |
-| Styles look wrong after overriding one class | `classes` replaces per slot, not merges | Provide full class string for each slot you override |
+| Styles look wrong after overriding one class | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Modal content overflows viewport | `minWidth` too large for mobile | Avoid fixed `minWidth` or use responsive values |
 | Body still scrolls when open | `lockScroll={false}` | Set `lockScroll={true}` (default) |
 | Focus doesn't go to expected element | `initialFocus` ref not attached | Ensure ref is attached to a focusable element in the modal |

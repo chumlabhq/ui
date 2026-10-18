@@ -4,7 +4,7 @@
 
 # @chumlab/ui — Full Component Reference
 
-> Production-grade React component library. TypeScript, Tailwind CSS v4, WCAG 2.1 AA.
+> Production-grade React component library. TypeScript; styles precompiled from Tailwind CSS v4 (your project needs no Tailwind); targets WCAG 2.2 AA.
 > This file is optimized for AI coding tools. For human docs, visit https://chumlab.com
 
 Package: @chumlab/ui | React 18+/19 | MIT License
@@ -35,11 +35,11 @@ name: Button → /button, MultiSelectDropdown → /multi-select-dropdown,
 InternationalPhoneInput → /international-phone-input.
 
 ## Shared patterns
-- Controlled: value + onValueChange. Uncontrolled: defaultValue. Never combine both.
+- Controlled: value + onValueChange (Checkbox and Switch: checked + onCheckedChange). Uncontrolled: defaultValue (defaultChecked). Never combine both.
 - Every component accepts className on its root, and every component forwards a ref
   to its underlying DOM node.
-- Dark mode: Tailwind dark: variants. Add .dark class to <html>.
-- All components are WCAG 2.1 AA, keyboard navigable, screen reader compatible.
+- Dark is the default theme. Light: `class="light"` or `data-theme="light"` on <html>; the tokens and the components' `dark:` styles follow the same switch.
+- The target is WCAG 2.2 AA; ACCESSIBILITY.md records each criterion's status and the test that holds it. Every component is keyboard operable.
 
 ## Customization — three layers, in order of reach
 1. `className` on the root. It is merged LAST, so it WINS on conflict — including
@@ -47,12 +47,14 @@ InternationalPhoneInput → /international-phone-input.
    genuinely replaces the component's `rounded-cl-md`; you do not need `!important`
    and you should never emit it.
 2. `classes` — a typed per-slot map for parts the root cannot reach:
-   `classes={{ trigger: "...", content: "..." }}`. Use it when className is not
-   enough. `unstyled` strips the defaults entirely.
+   `classes={{ trigger: "...", content: "..." }}`. Your classes compose with the
+   slot's defaults, and where one conflicts with a default utility, yours wins.
+   Use it when className is not enough. `unstyled` strips the defaults entirely.
 3. `--cl-*` design tokens — theme-level, propagates through every component.
    Override in `:root` and every component follows:
    `:root { --cl-accent: #7c3aed; --cl-radius-md: 0px; }`
-   Tokens come in light/dark pairs and flip on `:root[data-theme="light"]`.
+   Tokens come in light/dark pairs; dark is the default, and light applies on
+   `:root.light` or `:root[data-theme="light"]`.
 
 Prefer the lowest layer that works. Reach for tokens when the change should apply
 everywhere, className when it is one instance.
@@ -68,7 +70,7 @@ them — prefer the `cl-*` tokens and the component's own props.
 - ✗ `error="Required field"` — `error` is a boolean. Use `error errorMessage="Required field"` (two props). Same for `success` + `successMessage`.
 - ✗ Passing both `value` and `defaultValue` — pick one (controlled OR uncontrolled), never both.
 - ✗ `onChange`, `onSelect`, `onTabChange`, `onPageChange`, `onStepChange` — the value callback is always `onValueChange`. A `checked` prop (Checkbox, Switch) pairs with `onCheckedChange`; open state with `onOpenChange`.
-- ✗ `placement="top"` on Tooltip — use `side="top"`. Drawer uses `direction`, not `side`/`placement`.
+- ✗ `placement="top"` on Tooltip — use `side="top"`. Drawer takes `side` too (`left`, `right`, `top`, `bottom`), not `placement`.
 - ✗ CascadingDropdown value as a plain string — value is `Record<parentValue, string | string[]>`. Use key `"root"` for top-level (no-children) selections.
 - ✗ Stepper `activeStep` / `currentStep` — those don't exist. Use `value` (current index, zero-based).
 - ✗ `range` prop on Slider — pass `value={[min, max]}` (tuple) to enable range mode automatically.

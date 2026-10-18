@@ -275,12 +275,12 @@ overriding `classes.root` with a plain background will find these underneath.
 ### How class merging works
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_AVATAR_CLASSES` — minimal layout styles.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your value **replaces** the default for that slot. Other slots keep defaults.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots are empty. You provide everything.
 
@@ -478,7 +478,7 @@ Only an avatar with `onClick` is focusable; a plain one is an image and takes no
 | Surplus count wrong | `total` not set when paginating | Set `total={serverTotal}` on AvatarGroup if only rendering a subset |
 | Image flickers on re-render | `src` prop changing identity | Memoize the URL or use a stable string |
 | Badge hidden but space taken | `invisible={true}` preserves layout | Use conditional rendering (`{show && <AvatarBadge />}`) to fully remove |
-| Custom classes not applying | Passed `classes.root` but avatar still looks default | `classes` replaces per-slot, not additive. Include all needed classes. |
+| Custom classes not applying | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Group children not inheriting size | Children override group context | Remove explicit `size` from child Avatars to inherit from group |
 
 ---

@@ -57,7 +57,7 @@ const StylingDemo = () => {
           code={`<Modal
   classes={{
     overlay: "bg-black/85 backdrop-blur-sm",
-    panel: "rounded-2xl border-emerald-500/30",
+    content: "rounded-2xl border-emerald-500/30",
     title: "font-serif italic",
   }}
 >
@@ -126,7 +126,7 @@ const StylingDemo = () => {
   classes={{
     trigger: "my-trigger-styles",
     content: "my-menu-styles",
-    option: "my-option-styles",
+    item: "my-item-styles",
   }}
 />`}
         />

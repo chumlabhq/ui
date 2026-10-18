@@ -49,6 +49,23 @@ export default function Example() {
 | `shadow` | Preset (`"none"` to `"2xl"`) or custom CSS shadow string |
 | `asChild` | Merges trigger props onto the child element instead of wrapping |
 
+### A tooltip on an interactive element: `asChild`
+
+When the trigger is a button, a link or any focusable component, including this library's own
+`Button`, make that element the only child and set `asChild`. The tooltip's handlers and its
+`aria-describedby` go onto it, so it keeps its single tab stop and a screen reader reads the
+tooltip when it takes focus.
+
+```tsx
+<Tooltip content="Delete the file" asChild>
+  <Button aria-label="Delete">…</Button>
+</Tooltip>
+```
+
+Without `asChild`, a focusable direct child is detected and given the description, but a
+focusable element nested inside another one is not: the wrapper takes the description, and the
+control that receives focus announces nothing.
+
 ---
 
 ## All Props
@@ -154,6 +171,7 @@ Defaults include `dark:` variants. Content uses `bg-white dark:bg-gray-800`, `te
 | Tooltip flickers | Delay too short | Increase `delayDuration` |
 | Arrow wrong color | Custom bg without arrow match | Set `arrowColor` to match `content` bg |
 | Tooltip on non-interactive element | Wraps a `div` | Use `asChild` or ensure child is focusable |
+| Focusing a nested button announces no tooltip | The focusable element is not the Tooltip's direct child | Make it the child and set `asChild` |
 
 ---
 

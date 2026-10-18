@@ -63,7 +63,7 @@ export default function Example() {
 | `stickyHeader` | Requires `maxHeight` to be meaningful. |
 | `infiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
 | `showSearch` | Enables built-in search bar. |
-| `classes` | Per-slot class overrides. **Replaces** per slot, not additive. |
+| `classes` | Per-slot classes. They compose with each slot's defaults; a conflicting utility of yours wins. |
 
 ---
 
@@ -201,7 +201,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 ### How class merging works
 
 1. **Default** — uses `DEFAULT_TABLE_CLASSES`
-2. **Partial override** — **replaces** per slot, not additive
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 3. **Unstyled** — all slots empty, you build from scratch
 
 ### Key slots
@@ -296,7 +296,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
+| Styles wrong after overriding one class | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Table overflows on mobile | Many columns | Default `scrollRegion` has `overflow-x-auto` |
 | Sorting not working | `sortable` not set | Add `sortable` prop |
 | Server-side sort not triggering | Missing `manualSorting` | Set `manualSorting={true}` |

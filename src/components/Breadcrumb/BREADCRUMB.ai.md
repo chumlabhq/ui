@@ -152,12 +152,12 @@ internally from `item` and `link`; override those two.
 ### How class merging works
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_BREADCRUMB_CLASSES` with dark mode support.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your value **replaces** the default for that slot. Other slots keep defaults.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots empty. You provide everything.
 
@@ -356,7 +356,7 @@ const items: BreadcrumbItem[] = [
 | Icons missing in dropdown items | Icons are included — check if CSS hides them | Icons from collapsed items render in the dropdown by default. |
 | Per-item onClick not firing | Item is disabled | Disabled items prevent all click handlers. |
 | `classes.link` not applying | Item has no `href` | `link` slot only applies to items with `href`. Use `item` for non-link items. |
-| Styles wrong after overriding one slot | `classes` replaces per-slot, not additive | Include all needed classes in your override string. |
+| Styles wrong after overriding one slot | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 
 ---
 

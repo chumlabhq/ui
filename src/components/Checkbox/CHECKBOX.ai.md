@@ -49,7 +49,7 @@ This renders correctly with no additional props, classes, or setup.
 |------|-----------|
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
-| `classes.control` with `data-[state=checked]:` / `data-[state=unchecked]:` | REPLACE per slot. Provide full styling — not additive. |
+| `classes.control` with `data-[state=checked]:` / `data-[state=unchecked]:` | Composes with the control's defaults. A plain utility (`bg-green-500`) wins in every state; a `data-[state=checked]:` one restyles that state only. |
 
 ---
 
@@ -135,12 +135,12 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 ### How class merging works
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CHECKBOX_CLASSES` with dark mode
-2. **Partial override** (`classes={{ checked: "..." }}`) — REPLACES that slot, others keep defaults
+2. **Partial override** (`classes={{ checked: "..." }}`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
@@ -321,7 +321,7 @@ A native `<input type="checkbox">`, so the browser owns this — `Enter` deliber
 | Checkbox doesn't toggle | Using `checked` without `onCheckedChange` | Add `onCheckedChange` handler or use `defaultChecked` |
 | Indeterminate not showing | `indeterminate` not set | Pass `indeterminate={true}` — it's visual only |
 | Custom icon wrong size | Icon doesn't match checkbox size | Use the `itemIndicator` class slot or size your icon to match |
-| Classes don't merge | Expected additive | Classes REPLACE per slot. Provide complete styling. |
+| Classes don't merge | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Checkbox invisible in dark mode | Overrode `unchecked` without dark variant | Add `dark:` classes to your override |
 | Click doesn't work | Label not wrapping input | Ensure you're not breaking the component structure with `asChild` |
 | Error message not announced | Missing aria connection | Built-in — uses `aria-describedby` + `role="alert"` |

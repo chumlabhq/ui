@@ -1080,7 +1080,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Enter`, `Space`",
-          "description": "Toggles the focused item. In `type=\"single\"` without `collapsible`, the open item cannot be closed this way."
+          "description": "Toggles the focused item. In `selectionMode=\"single\"` without `collapsible`, the open item cannot be closed this way."
         }
       ]
     },
@@ -4917,7 +4917,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "true",
-        "description": "Highlights today's date in the calendar."
+        "description": "Marks today's cell with `data-today` for your own styling (a `data-[today]:` variant in `classes.item`); the default styles paint nothing for it. Today's cell carries `aria-current=\"date\"` either way."
       },
       {
         "name": "showTodayButton",

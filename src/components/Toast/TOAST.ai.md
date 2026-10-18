@@ -110,7 +110,7 @@ toast.success("title", options?);
 toast.warning("title", options?);
 toast.error("title", options?);
 toast.info("title", options?);
-toast.toast({ type, title, ...options }); // generic
+toast.toast({ variant, message, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();
 ```

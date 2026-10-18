@@ -302,7 +302,7 @@ const TooltipDemo = () => {
       {/* ─── asChild Mode ─────────────────────────────────────────────── */}
       <Section
         title="asChild Mode"
-        description="Use asChild to clone tooltip handlers onto the child element instead of wrapping it in a span. This avoids double tab-stops for interactive elements."
+        description="The way to put a tooltip on an interactive element: make the button, link or focusable component the only child and set asChild. The handlers and the description go onto that element, so it keeps one tab stop and a screen reader reads the tooltip when it takes focus. Without asChild, a focusable element nested inside another one does not get the description."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">

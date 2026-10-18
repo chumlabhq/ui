@@ -173,12 +173,12 @@ DOM nesting: `root > control > trigger + portal(menu > menuItem* + submenu > sub
 ### How class merging works
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CASCADINGDROPDOWN_CLASSES` with full dark mode
-2. **Partial override** (`classes={{ trigger: "..." }}`) — REPLACES that slot only, others keep defaults
+2. **Partial override** (`classes={{ trigger: "..." }}`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
@@ -426,7 +426,7 @@ const ref = useRef<HTMLButtonElement>(null);
 | Search not calling API | `showMenuSearch` is true but no `searchMenu` | Without `searchMenu`, search is client-side filtering only |
 | Stale search results | Race condition with fast typing | Built-in version tracking prevents stale results; increase `searchDebounce` if needed |
 | Submenu search styling same as menu | `subSearchControl` not set | Set `subSearchControl`, `subSearchInput`, `subSearchIcon` for independent styles |
-| Classes override doesn't work | Expected additive behavior | Classes REPLACE per slot, not merge. Provide full styling for overridden slots |
+| Classes override doesn't work | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Value shape wrong | Using string instead of object | Value must be `{ parentValue: "childValue" }` or `{ parentValue: ["a","b"] }` |
 
 ---

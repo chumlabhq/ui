@@ -1082,3 +1082,154 @@ describe("API names: A2a's to A2e's old names and values are gone", () => {
     expect(rows.filter((r) => !r.ok).map((r) => `${r.c}.${r.p}(${r.first})`)).toEqual([]);
   });
 });
+
+/**
+ * The docs a consumer reads name no old API.
+ *
+ * The scan above reads prose in llms-full.txt and llms.txt, but attributes a
+ * `component` or `narrow` name only through a JSX attribute or the component's
+ * own section, so a sentence such as "Checkbox and Switch report through
+ * onValueChange" passed; and README, ACCESSIBILITY, VERSIONING, the llms
+ * preamble and the site's public/llms.txt were outside it.
+ *
+ * Population: what `npm pack` ships (README, ACCESSIBILITY, VERSIONING,
+ * CHANGELOG, llms.txt, llms-full.txt), the sources they are built from (every
+ * `.ai.md`, ai/llms-full-preamble.md), the site's public/llms.txt, its FAQ
+ * (faqData.ts) and the seven guide pages guide-claims reads. CHANGELOG names old
+ * APIs on purpose in its rename tables and Removed sections, so those lines
+ * are skipped and the rest is read.
+ *
+ * A `word` name is a hit anywhere. A `component` or `narrow` name is a hit
+ * where it reads as code (in backticks, as an attribute or a key with a value,
+ * or as shorthand opening an object) and that sentence or the one before it,
+ * the heading it sits under, or the `.ai.md` it is in names one of its
+ * components: "the value callback is always `onValueChange`. A `checked` prop
+ * (Checkbox, Switch) pairs with `onCheckedChange`" names Checkbox only after. A slot reads the same way, and an old value is a hit as
+ * `prop="old"` or `prop: "old"` where one of its components is named.
+ */
+const ROOT_DIR = ".";
+const GUIDE_PAGES = ["Accessibility", "AiLlm", "Animation", "GettingStarted", "Introduction", "Styling", "Theming"].map(
+  (g) => `src/pages/demo/${g}Demo.tsx`,
+);
+const AI_MD = (() => {
+  const out: string[] = [];
+  const walk = (dir: string) => {
+    for (const f of readdirSync(join(ROOT_DIR, dir))) {
+      const p = `${dir}/${f}`;
+      if (statSync(join(ROOT_DIR, p)).isDirectory()) walk(p);
+      else if (f.endsWith(".ai.md")) out.push(p);
+    }
+  };
+  walk("src/components");
+  return out.sort();
+})();
+const SHIPPED_DOCS = [
+  "README.md", "ACCESSIBILITY.md", "VERSIONING.md", "CHANGELOG.md", "llms.txt", "llms-full.txt",
+  "ai/llms-full-preamble.md", "public/llms.txt", "src/pages/faqData.ts", ...GUIDE_PAGES, ...AI_MD,
+];
+/** Step 0 of DT1: the docs above when the scan was added. */
+const DOC_FLOOR = 47;
+
+/** Doc lines that use a tombstoned name for something it still is, each with its reason. */
+const DOC_EXCEPTIONS: { old: string; file: string; line: RegExp; reason: string }[] = [
+  ...["src/components/Accordion/ACCORDION.ai.md", "llms-full.txt"].map((file) => ({
+    old: "onExpandedChange",
+    file,
+    line: /^\| `onExpandedChange` \| `\(\(isExpanded: boolean\) => void\)/,
+    reason: "AccordionItem's own onExpandedChange, in its props table; Accordion's became onValueChange",
+  })),
+];
+const docExcused = new Map(DOC_EXCEPTIONS.map((e) => [e, 0]));
+
+const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** The name as code: in backticks, or as an attribute or a key with a value, or shorthand in an object. */
+const asCode = (old: string) =>
+  new RegExp(
+    `\`${esc(old)}\`|(?<![\\w-])${esc(old)}\\s*=\\s*["'{]|(?<![\\w-])${esc(old)}\\??\\s*:\\s*["'\`{[(]|\\{\\s*${esc(old)}\\s*[,}]`,
+  );
+const named = (text: string, components: string[]) => components.some((c) => new RegExp(`(?<![\\w-])${esc(c)}(?![\\w])`).test(text));
+
+/** Lines of CHANGELOG.md that record old names on purpose: rename tables and Removed sections. */
+function changelogRecordLines(lines: string[]): Set<number> {
+  const skip = new Set<number>();
+  let section = "";
+  let apiNames = false;
+  lines.forEach((line, i) => {
+    if (/^#{2,3} /.test(line)) { section = line; apiNames = false; }
+    if (/^#### API names/.test(line)) apiNames = true;
+    if (/^### Removed/.test(section) || (apiNames && /^\s*\|/.test(line))) skip.add(i);
+  });
+  return skip;
+}
+
+function docHits(file: string, text: string): string[] {
+  const lines = text.split("\n");
+  const skip = file === "CHANGELOG.md" ? changelogRecordLines(lines) : new Set<number>();
+  const owner = file.endsWith(".ai.md") ? file.split("/")[2] : null;
+  const headings: string[] = [];
+  const hits: string[] = [];
+  lines.forEach((line, i) => {
+    const h = /^(#{1,6})\s+(.*)/.exec(line);
+    if (h) headings.splice(h[1].length - 1, headings.length, h[2]);
+    if (skip.has(i)) return;
+    const sentences = line.split(/(?<=[.!?])\s+(?=[A-Z`*])/);
+    const outer = [...headings, owner ?? ""].join(" ");
+    const about = (pattern: RegExp, components: string[]) =>
+      sentences.some((s, k) => pattern.test(s) && named(`${sentences[k - 1] ?? ""} ${s} ${outer}`, components));
+    const at = `${file}:${i + 1}`;
+    const excused = (old: string) => {
+      const e = DOC_EXCEPTIONS.find((x) => x.old === old && x.file === file && x.line.test(line));
+      if (e) docExcused.set(e, docExcused.get(e)! + 1);
+      return !!e || EXCEPTIONS.some((x) => x.old === old && x.file === file && x.line.test(line));
+    };
+    for (const t of TOMBSTONES) {
+      if (excused(t.old)) continue;
+      const hit = t.scope === "word" ? new RegExp(`(?<![\\w-])${esc(t.old)}(?![\\w-])`).test(line) : about(asCode(t.old), t.components);
+      if (hit) hits.push(`${at} ${t.old} (${t.components.join(", ")}) → ${t.now}`);
+    }
+    for (const t of SLOT_TOMBSTONES) {
+      const hit = t.scope === "word" ? new RegExp(`(?<![\\w-])${esc(t.old)}(?![\\w-])`).test(line) : about(asCode(t.old), t.components);
+      if (hit) hits.push(`${at} classes.${t.old} (${t.components.join(", ")}) → ${t.now}`);
+    }
+    for (const v of [...VALUE_TOMBSTONES, ...ITEM_VALUE_TOMBSTONES.map((x) => ({ component: x.component, prop: x.key, old: x.old }))])
+      for (const old of v.old) {
+        const lit = new RegExp(`(?<![\\w-])${esc(v.prop)}\\s*(?:=\\{?\\s*|:\\s*)["'\`]${esc(old)}["'\`]`);
+        if (about(lit, [v.component])) hits.push(`${at} ${v.component}.${v.prop}="${old}"`);
+      }
+  });
+  return hits;
+}
+
+describe("shipped docs: no doc a consumer reads names an old API", () => {
+  it("catches a planted old name in each scope", () => {
+    const planted = [
+      "Checkbox reports through `onValueChange`.",
+      "Use `enableColumnFilters` on the table.",
+      '<AccordionTrigger iconPosition="left">',
+      "Style the thumb with `classes.labelGroup`.",
+      "## Drawer\n\nSet `direction` to choose the edge.",
+    ];
+    expect(planted.map((p) => docHits("README.md", p).length)).toEqual([1, 1, 1, 1, 1]);
+    expect(docHits("README.md", "Accordion reports through `onValueChange`.")).toEqual([]);
+    expect(docHits("README.md", "The value callback is `onValueChange`. Checkbox pairs `checked` with `onCheckedChange`.")).toEqual([]);
+    expect(docHits("README.md", "DatePicker: Selection mode: single date or a range.")).toEqual([]);
+    expect(docHits("README.md", "Compose `Accordion` > `AccordionItem`. Set `type=\"single\"` for one.")).toHaveLength(1);
+  });
+
+  it("the site serves the llms.txt the package ships", () => {
+    expect(readFileSync(join(ROOT_DIR, "public/llms.txt"), "utf8"), "public/llms.txt drifted from llms.txt").toBe(
+      readFileSync(join(ROOT_DIR, "llms.txt"), "utf8"),
+    );
+  });
+
+  it(`reads at least the ${DOC_FLOOR} docs step 0 listed, and none names an old API`, () => {
+    const missing = SHIPPED_DOCS.filter((f) => !existsSync(join(ROOT_DIR, f)));
+    const hits = SHIPPED_DOCS.filter((f) => !missing.includes(f)).flatMap((f) => docHits(f, readFileSync(join(ROOT_DIR, f), "utf8")));
+    console.log(`DOC_TOMBSTONES docs ${SHIPPED_DOCS.length - missing.length} (floor ${DOC_FLOOR}), hits ${hits.length}`);
+    for (const h of hits) console.log(`  DOC_TOMBSTONE ${h}`);
+    expect(missing).toEqual([]);
+    expect(SHIPPED_DOCS.length).toBeGreaterThanOrEqual(DOC_FLOOR);
+    expect(hits).toEqual([]);
+    expect([...docExcused].filter(([, n]) => n === 0).map(([e]) => `${e.file}: ${e.reason}`), "a doc exception that excuses nothing").toEqual([]);
+  });
+});

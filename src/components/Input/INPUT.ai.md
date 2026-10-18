@@ -128,12 +128,12 @@ A restyle that drops the box, such as an underline, must also replace the focus 
 ### How class merging works
 
 1. **Default** — uses `DEFAULT_INPUT_CLASSES` with dark mode, focus ring, rounded corners
-2. **Partial override** — REPLACES per slot
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** — all slots empty
 
@@ -238,7 +238,7 @@ A native `<input>`: the browser owns text entry, selection and the clear afforda
 | No focus ring | Overrode `control` without focus classes | Include `focus-within:ring-2` in your override |
 | Character count not showing | Missing `maxLength` | Set both `showCount` and `maxLength` |
 | Icon not clickable | Missing click handler | Pass `onStartIconClick` or `onEndIconClick` |
-| Classes don't merge | Expected additive | Classes REPLACE per slot |
+| Classes don't merge | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Dark mode wrong | Overrode without dark variants | Add `dark:` classes to your override |
 
 ---

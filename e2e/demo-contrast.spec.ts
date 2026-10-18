@@ -211,7 +211,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 968 -> 980 (HEAD 968 -> now 980): C Uncontrolled (6), D Long labels (6).
   // D12e, 2026-10-18, 980 -> 1044 (HEAD 1036 -> now 1044): Date and time together (8); the 56 before it were already on the page at HEAD: L24's Uncontrolled calendar open on load and L25's defaultValue row in the API Reference.
-  "date-picker": 1044,
+  // DT1, 2026-10-18, 1044 -> 1048: the API Reference's `showTodayIndicator` description now names `data-today`, `data-[today]:`, `classes.item` and `aria-current="date"`, four inline code spans (4).
+  "date-picker": 1048,
   // D12b, 2026-10-17, 418 -> 431 (HEAD 425 -> now 431): the new At phone width and Long sheet (3 each): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 431 -> 435 (HEAD 431 -> now 435): C Uncontrolled (4).

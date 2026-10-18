@@ -58,19 +58,19 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Getting Started",
     question: "What is Chumlab UI?",
     answer:
-      "Chumlab UI is an open-source, production-grade React component library with accessible, themeable primitives built on TypeScript and Tailwind CSS v4. It ships 30+ components — Button, Input, DatePicker, Modal, Table, and more — each keyboard-navigable, WCAG 2.1 AA compliant, and fully overridable via a classes prop or unstyled mode.",
+      "Chumlab UI is an open-source, production-grade React component library with accessible, themeable primitives built on TypeScript and Tailwind CSS v4. It ships 30 components — Button, Input, DatePicker, Modal, Table, and more — each keyboard-operable, built to a WCAG 2.2 AA target, and styled through className, a per-slot classes prop, design tokens or unstyled mode.",
   },
   {
     category: "Getting Started",
     question: "How do I install Chumlab UI?",
     answer:
-      "Install with your package manager of choice: `npm install @chumlab/ui`, `pnpm add @chumlab/ui`, `yarn add @chumlab/ui`, or `bun add @chumlab/ui`. Chumlab UI requires React 18+ and Tailwind CSS v4 as peer dependencies. Import components directly: `import { Button, Input } from '@chumlab/ui'`.",
+      "Install with your package manager of choice: `npm install @chumlab/ui`, `pnpm add @chumlab/ui`, `yarn add @chumlab/ui`, or `bun add @chumlab/ui`. Chumlab UI requires React 18 or 19. Import the stylesheet once (`import '@chumlab/ui/styles.css'`), then import each component from its own subpath: `import { Button } from '@chumlab/ui/button'`.",
   },
   {
     category: "Getting Started",
     question: "What are the peer dependencies?",
     answer:
-      "React 18 or later, React DOM 18 or later, and Tailwind CSS v4. Peer dependencies are declared so your project controls exact versions. Chumlab UI pulls in zero other runtime dependencies — no CSS-in-JS library, no icon bundle, no animation framework.",
+      "React and React DOM, 18 or 19. Two more are optional peers, needed only by the component that uses them: `@tanstack/react-table` for Table and `date-fns` for DatePicker. The runtime dependencies are `clsx`, `tailwind-merge` and `libphonenumber-js` (for InternationalPhoneInput); there is no CSS-in-JS library, icon bundle or animation framework.",
   },
   {
     category: "Getting Started",
@@ -82,26 +82,26 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Getting Started",
     question: "Does Chumlab UI work with Vite, CRA, Remix, and Astro?",
     answer:
-      "Yes. Chumlab UI is framework-agnostic and works with any React setup: Vite, Create React App, Remix, Astro, Gatsby, and RedwoodJS. The only hard requirements are React 18+ and Tailwind CSS v4 configured in your build pipeline.",
+      "Yes. Chumlab UI is framework-agnostic and works with any React setup: Vite, Create React App, Remix, Astro, Gatsby, and RedwoodJS. The only hard requirement is React 18 or 19; Tailwind is optional, because the stylesheet ships precompiled.",
   },
   {
     category: "Getting Started",
     question: "What Tailwind CSS version is required?",
     answer:
-      "Tailwind CSS v4. Earlier versions (v3.x and below) are not supported because Chumlab UI relies on CSS-native theming via `@theme`, the new `@custom-variant` directive, and the modern engine's performance. Upgrade Tailwind to v4 before installing.",
+      "None. `@chumlab/ui/styles.css` is precompiled, so a project without Tailwind works. If your project already runs Tailwind v4, you can import `@chumlab/ui/tokens.css` instead and let your build generate the utilities; Tailwind v3 is not supported for that route.",
   },
   {
     category: "Getting Started",
     question: "How do I set up Tailwind CSS v4 for Chumlab UI?",
     answer:
-      'Install Tailwind CSS v4 and its Vite or PostCSS plugin, then add `@import "tailwindcss"` to your main CSS file. Extend the Tailwind content globs to include Chumlab UI\'s distribution so its utility classes are emitted: `content: ["./node_modules/@chumlab/ui/**/*.{js,mjs}"]`.',
+      'Only if you want Tailwind to generate the library\'s utilities instead of importing the precompiled stylesheet. In your main CSS file: `@import "tailwindcss"; @import "@chumlab/ui/tokens.css"; @source "../node_modules/@chumlab/ui/dist";` — and import styles.css or tokens.css, never both.',
   },
 
   {
     category: "Components",
     question: "How many components does Chumlab UI include?",
     answer:
-      "Chumlab UI ships 30+ components covering forms, selection, navigation, overlays, data display, and layout: Accordion, Avatar, Breadcrumb, Button, CascadingDropdown, Checkbox, CountryFlag, DatePicker, Drawer, Dropdown, Input, InternationalPhoneInput, Loader, Modal, MultiSelectDropdown, MultiSelectSearchableDropdown, OTPInput, Pagination, RadioButton, ResizablePanel, SearchableDropdown, Slider, Stepper, Switch, TabPanel, Table, TextArea, TimePicker, Toast, and Tooltip.",
+      "Chumlab UI ships 30 components covering forms, selection, navigation, overlays, data display, and layout: Accordion, Avatar, Breadcrumb, Button, CascadingDropdown, Checkbox, CountryFlag, DatePicker, Drawer, Dropdown, Input, InternationalPhoneInput, Loader, Modal, MultiSelectDropdown, MultiSelectSearchableDropdown, OtpInput, Pagination, RadioButton, ResizablePanel, SearchableDropdown, Slider, Stepper, Switch, TabPanel, Table, TextArea, TimePicker, Toast, and Tooltip.",
   },
   {
     category: "Components",
@@ -126,7 +126,7 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Components",
     question: "How do I use the Accordion component?",
     answer:
-      'Compose `Accordion` > `AccordionItem` > `AccordionTrigger` + `AccordionContent`. Set `type="single"` for one-at-a-time expansion or `type="multiple"` to allow many open at once. Pass `collapsible` to let a single-type accordion close its active panel. Variants (`bordered`, `ghost`, `filled`) and size props control appearance.',
+      'Compose `Accordion` > `AccordionItem` > `AccordionTrigger` + `AccordionContent`. Set `selectionMode="single"` for one-at-a-time expansion or `selectionMode="multiple"` to allow many open at once. Pass `collapsible` to let a single-type accordion close its active panel. Variants (`bordered`, `ghost`, `filled`) and size props control appearance.',
   },
   {
     category: "Components",
@@ -151,13 +151,13 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Theming",
     question: "How do I customise component styles?",
     answer:
-      "Every component accepts a `classes` prop — an object mapping internal slots (root, trigger, content, icon, and so on) to your own Tailwind class strings. For global changes, override design tokens via Tailwind CSS v4's `@theme` directive. For zero defaults, pass `unstyled` and build from scratch.",
+      "Every component accepts `className` on its root and a `classes` prop — an object mapping its slots (root, trigger, content, icon, and so on) to class strings, which compose with the slot's defaults. For global changes, override the `--cl-*` design tokens in `:root`. For zero defaults, pass `unstyled` and build from scratch.",
   },
   {
     category: "Theming",
     question: "What is the classes prop?",
     answer:
-      'The `classes` prop is an object that targets every internal element of a compound component by name. For example `<Accordion classes={{ root: "...", trigger: "...", content: "..." }} />` lets you override any slot with surgical precision — no specificity wars, no `!important`, no pseudo-element workarounds.',
+      'The `classes` prop is an object that targets every internal element of a compound component by name. For example `<Accordion classes={{ root: "...", trigger: "...", content: "..." }} />` adds classes to any slot. They compose with the slot\'s defaults, and where one of yours conflicts with a default utility, yours wins — no specificity wars and no `!important`.',
   },
   {
     category: "Theming",
@@ -169,19 +169,19 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Theming",
     question: "Can I use my own design tokens?",
     answer:
-      "Yes. Chumlab UI references CSS custom properties for colours, spacing, radii, and typography. Define those properties in Tailwind CSS v4's `@theme` directive and every component picks them up — change a token once and the entire library updates.",
+      "Yes. Components paint from `--cl-*` CSS custom properties for colours, radii and shadows. Override them in `:root` (for example `:root { --cl-accent: #7c3aed; }`) and every component picks them up — change a token once and the entire library updates.",
   },
   {
     category: "Theming",
     question: "How do I enable dark mode?",
     answer:
-      "Add the `dark` class to `<html>` (either at runtime or based on `prefers-color-scheme`) and every component switches automatically. Chumlab UI uses class-based dark mode via `@custom-variant dark (&:where(.dark, .dark *))` so you can toggle per-subtree or per-app.",
+      "Dark is the default. To switch to light, set `class='light'` or `data-theme='light'` on `<html>`; `class='dark'` and `data-theme='dark'` are accepted too. The design tokens and the components' own `dark:` styles follow the same switch, with no provider.",
   },
   {
     category: "Theming",
     question: "How do I override the primary brand colour globally?",
     answer:
-      "Override the `--color-primary-*` CSS variables inside your `@theme` block. The scale follows Tailwind's 50 / 100 / 200 / ... / 950 steps. Override any subset you need and components adopt the change at runtime without a rebuild.",
+      "Override `--cl-accent` (and, if you need them, `--cl-accent-hover`, `--cl-accent-bg` and `--cl-on-accent`) in `:root`. Each token has a light and a dark value; components adopt the change at runtime without a rebuild.",
   },
   {
     category: "Theming",
@@ -237,7 +237,7 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Accessibility",
     question: "What WCAG level does Chumlab UI target?",
     answer:
-      "Chumlab UI targets WCAG 2.1 Level AA across colour contrast, focus indicators, keyboard operability, and semantic structure. Components also meet the AAA target for focus-order where it is practical to do so.",
+      "WCAG 2.2 Level AA. ACCESSIBILITY.md, shipped in the package, lists every Level A and AA criterion with its status and the test that holds it; a criterion is only claimed when a test fails if it regresses.",
   },
   {
     category: "Accessibility",
@@ -249,7 +249,7 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Accessibility",
     question: "Does it support screen readers?",
     answer:
-      "Yes. Components expose correct ARIA roles and states (`aria-expanded`, `aria-selected`, `aria-current`, and so on) and use live regions for status announcements. Tested with VoiceOver on macOS/iOS, NVDA and JAWS on Windows, and TalkBack on Android.",
+      "Yes. Components expose correct ARIA roles and states (`aria-expanded`, `aria-selected`, `aria-current`, and so on) and use live regions for status announcements. The roles and states are gated by automated tests (axe and the library's own contracts); no manual screen-reader pass has been done yet.",
   },
   {
     category: "Accessibility",
@@ -261,26 +261,26 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Accessibility",
     question: "Does Chumlab UI support RTL languages?",
     answer:
-      'Yes. Components use logical CSS properties (`inline-start`, `inline-end`, `margin-inline`) so layouts mirror automatically when you set `dir="rtl"` on the document. Arabic, Hebrew, Persian, and Urdu are part of the test matrix.',
+      'Not in 0.1.0. Components render under `dir="rtl"` and nothing is lost off-screen, but several layouts and keyboard directions do not mirror yet; right-to-left support is planned for 1.1.',
   },
   {
     category: "Accessibility",
     question: "Does it handle focus trapping in modals and drawers?",
     answer:
-      "Yes. Modal and Drawer trap Tab focus inside the overlay while open, restore focus to the element that opened them on close, and lock background scroll. The initial focus target can be overridden via `initialFocusRef`.",
+      "Yes. Modal and Drawer trap Tab focus inside the overlay while open, restore focus to the element that opened them on close, and lock background scroll. The initial focus target can be overridden via `initialFocus`.",
   },
 
   {
     category: "Technical",
     question: "Is Chumlab UI tree-shakeable?",
     answer:
-      "Yes. The package is fully ESM with `sideEffects: false`, side-effect-free imports, and per-component subpath exports (e.g. `@chumlab/ui/button`). Modern bundlers strip every component you don't import.",
+      "Yes. The package declares only its CSS as side-effectful (`sideEffects: ['*.css']`) and has per-component subpath exports (e.g. `@chumlab/ui/button`). Modern bundlers drop every component you don't import.",
   },
   {
     category: "Technical",
     question: "Does it use runtime CSS-in-JS?",
     answer:
-      "No. Chumlab UI uses Tailwind CSS utility classes resolved entirely at build time. There is no runtime style injection, no emotion or styled-components dependency, and no measurable style overhead at runtime.",
+      "No. Styles ship as a precompiled stylesheet of utility classes. There is no runtime style injection and no emotion or styled-components dependency.",
   },
   {
     category: "Technical",
@@ -360,13 +360,13 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Migration",
     question: "How does Chumlab UI compare to Material UI (MUI)?",
     answer:
-      "Material UI ships Material-specific look-and-feel with emotion-based CSS-in-JS at runtime. Chumlab UI is design-system-agnostic, build-time only (Tailwind CSS v4), and much smaller per-component. Pick Chumlab UI when you want design freedom and runtime performance; pick MUI when you explicitly want Material Design.",
+      "Material UI ships Material-specific look-and-feel with emotion-based CSS-in-JS at runtime. Chumlab UI is design-system-agnostic, styles from a precompiled stylesheet and design tokens, and is small per component. Pick Chumlab UI when you want design freedom and runtime performance; pick MUI when you explicitly want Material Design.",
   },
   {
     category: "Migration",
     question: "How does Chumlab UI compare to Chakra UI?",
     answer:
-      "Chakra UI uses emotion plus a theme object at runtime. Chumlab UI is Tailwind-first with zero runtime cost, smaller bundles, and native dark-mode via CSS variables. The APIs are similar; migration is typically a rename plus a prop-shape adjustment.",
+      "Chakra UI uses emotion plus a theme object at runtime. Chumlab UI styles with utility classes and CSS-variable design tokens, with no runtime styling layer, and switches dark and light through those tokens. The APIs are similar; migration is typically a rename plus a prop-shape adjustment.",
   },
   {
     category: "Migration",

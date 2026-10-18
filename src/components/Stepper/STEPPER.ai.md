@@ -164,12 +164,12 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 ### How class merging works
 
 1. **Default** — uses `DEFAULT_STEPPER_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you build from scratch
 
@@ -322,7 +322,7 @@ const steps = [
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Steps not clickable | Default only allows completed+active | Use `isStepClickable={() => true}` for all |
-| Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
+| Styles wrong after overriding one class | Your class composes with the slot's defaults; only a utility in the same group replaces a default | Pass the utility that conflicts (a plain one overrides every state too), or use `unstyled` to start from nothing |
 | Labels not showing | `showLabels` defaults to `true` but `variant="dot"` may hide them | Set `showLabels={true}` explicitly |
 | Descriptions not showing | `showDescriptions` defaults to `false` | Set `showDescriptions={true}` |
 | Connectors missing | `showConnectors` set to `false` | Set `showConnectors={true}` (default) |

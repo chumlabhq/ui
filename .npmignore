@@ -28,4 +28,3 @@ __tests__/
 *.log
 .env*
 CONTRIBUTING.md
-CHANGELOG.md

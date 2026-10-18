@@ -665,13 +665,13 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
       {/* ─── Today Button & Indicator ─────────────────────────────────── */}
       <Section
         title="Today Button & Indicator"
-        description="showTodayIndicator adds a ring on today's date. showTodayButton adds a footer button. Both are independent and off by default."
+        description="showTodayIndicator, on by default, marks today's cell with data-today and paints nothing itself: style it through classes.item with a data-[today]: variant. Today's cell carries aria-current=&quot;date&quot; either way. showTodayButton, off by default, adds a footer button that jumps to today."
         isDarkMode={dark}
       >
         <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Default — no indicator, no footer
+              Default — today marked with data-today, no footer
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -688,7 +688,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Today indicator only (ring on today, no footer)
+              showTodayIndicator set explicitly — the same as the default
             </p>
             <DemoWrapper
               isDarkMode={dark}
@@ -706,7 +706,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Today button only (footer, no ring)
+              showTodayButton — adds the footer
             </p>
             <DemoWrapper
               isDarkMode={dark}

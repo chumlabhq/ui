@@ -1,6 +1,6 @@
 # @chumlab/ui — Full Component Reference
 
-> Production-grade React component library. TypeScript, Tailwind CSS v4, WCAG 2.1 AA.
+> Production-grade React component library. TypeScript; styles precompiled from Tailwind CSS v4 (your project needs no Tailwind); targets WCAG 2.2 AA.
 > This file is optimized for AI coding tools. For human docs, visit https://chumlab.com
 
 Package: @chumlab/ui | React 18+/19 | MIT License
@@ -31,11 +31,11 @@ name: Button → /button, MultiSelectDropdown → /multi-select-dropdown,
 InternationalPhoneInput → /international-phone-input.
 
 ## Shared patterns
-- Controlled: value + onValueChange. Uncontrolled: defaultValue. Never combine both.
+- Controlled: value + onValueChange (Checkbox and Switch: checked + onCheckedChange). Uncontrolled: defaultValue (defaultChecked). Never combine both.
 - Every component accepts className on its root, and every component forwards a ref
   to its underlying DOM node.
-- Dark mode: Tailwind dark: variants. Add .dark class to <html>.
-- All components are WCAG 2.1 AA, keyboard navigable, screen reader compatible.
+- Dark is the default theme. Light: `class="light"` or `data-theme="light"` on <html>; the tokens and the components' `dark:` styles follow the same switch.
+- The target is WCAG 2.2 AA; ACCESSIBILITY.md records each criterion's status and the test that holds it. Every component is keyboard operable.
 
 ## Customization — three layers, in order of reach
 1. `className` on the root. It is merged LAST, so it WINS on conflict — including
@@ -43,12 +43,14 @@ InternationalPhoneInput → /international-phone-input.
    genuinely replaces the component's `rounded-cl-md`; you do not need `!important`
    and you should never emit it.
 2. `classes` — a typed per-slot map for parts the root cannot reach:
-   `classes={{ trigger: "...", content: "..." }}`. Use it when className is not
-   enough. `unstyled` strips the defaults entirely.
+   `classes={{ trigger: "...", content: "..." }}`. Your classes compose with the
+   slot's defaults, and where one conflicts with a default utility, yours wins.
+   Use it when className is not enough. `unstyled` strips the defaults entirely.
 3. `--cl-*` design tokens — theme-level, propagates through every component.
    Override in `:root` and every component follows:
    `:root { --cl-accent: #7c3aed; --cl-radius-md: 0px; }`
-   Tokens come in light/dark pairs and flip on `:root[data-theme="light"]`.
+   Tokens come in light/dark pairs; dark is the default, and light applies on
+   `:root.light` or `:root[data-theme="light"]`.
 
 Prefer the lowest layer that works. Reach for tokens when the change should apply
 everywhere, className when it is one instance.
@@ -64,7 +66,7 @@ them — prefer the `cl-*` tokens and the component's own props.
 - ✗ `error="Required field"` — `error` is a boolean. Use `error errorMessage="Required field"` (two props). Same for `success` + `successMessage`.
 - ✗ Passing both `value` and `defaultValue` — pick one (controlled OR uncontrolled), never both.
 - ✗ `onChange`, `onSelect`, `onTabChange`, `onPageChange`, `onStepChange` — the value callback is always `onValueChange`. A `checked` prop (Checkbox, Switch) pairs with `onCheckedChange`; open state with `onOpenChange`.
-- ✗ `placement="top"` on Tooltip — use `side="top"`. Drawer uses `direction`, not `side`/`placement`.
+- ✗ `placement="top"` on Tooltip — use `side="top"`. Drawer takes `side` too (`left`, `right`, `top`, `bottom`), not `placement`.
 - ✗ CascadingDropdown value as a plain string — value is `Record<parentValue, string | string[]>`. Use key `"root"` for top-level (no-children) selections.
 - ✗ Stepper `activeStep` / `currentStep` — those don't exist. Use `value` (current index, zero-based).
 - ✗ `range` prop on Slider — pass `value={[min, max]}` (tuple) to enable range mode automatically.
@@ -144,9 +146,9 @@ These props have dependencies — using them wrong causes silent bugs:
 
 | Prop | Constraint |
 |------|-----------|
-| `collapsible` | Only works with `type="single"`. Ignored on `type="multiple"`. |
-| `maxExpanded` | Only works with `type="multiple"`. Ignored on `type="single"`. |
-| `defaultExpandAll` | Only works with `type="multiple"` AND uncontrolled mode. |
+| `collapsible` | Only works with `selectionMode="single"`. Ignored on `selectionMode="multiple"`. |
+| `maxExpanded` | Only works with `selectionMode="multiple"`. Ignored on `selectionMode="single"`. |
+| `defaultExpandAll` | Only works with `selectionMode="multiple"` AND uncontrolled mode. |
 | `storageKey` | Only works in uncontrolled mode (no `value` prop). |
 | `value` + `defaultValue` | Never combine. Use one or the other. |
 | `value` requires `onValueChange` | Controlled mode — both are needed together. |
@@ -307,21 +309,21 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 The component has three styling modes:
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_ACCORDION_CLASSES` — fully styled with dark mode support.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your values **replace** the default for that slot. Unspecified slots keep their defaults. This is NOT additive — if you pass `trigger: "my-class"`, the entire default trigger class string is replaced, not appended.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots start as empty strings. You must provide everything via `classes`.
 
 ```tsx
-// This REPLACES the default trigger classes entirely:
-<Accordion classes={{ trigger: "my-custom-trigger" }} />
+// Adds to the trigger's default classes; a utility here that conflicts
+// with a default (another padding, another background) replaces it:
+<Accordion classes={{ trigger: "my-custom-trigger px-6" }} />
 
-// The other slots (item, body, icon, etc.) still use their defaults.
-// To ADD to defaults, you must include the default classes yourself.
+// The other slots (item, body, icon, etc.) keep their defaults.
 ```
 
 #### Slot → element
@@ -604,7 +606,7 @@ and `prefers-reduced-motion` each switch it off.
 | `Tab` | Moves focus to the next trigger in the tab order. |
 | `ArrowDown`, `ArrowUp` | Moves focus between triggers. `orientation="horizontal"` uses `ArrowRight`/`ArrowLeft` instead. Disabled items are skipped, and `loop` wraps past the ends. |
 | `Home`, `End` | Moves focus to the first or last trigger. |
-| `Enter`, `Space` | Toggles the focused item. In `type="single"` without `collapsible`, the open item cannot be closed this way. |
+| `Enter`, `Space` | Toggles the focused item. In `selectionMode="single"` without `collapsible`, the open item cannot be closed this way. |
 
 ---
 
@@ -614,19 +616,18 @@ and `prefers-reduced-motion` each switch it off.
 // ❌ DON'T: Combine value + defaultValue
 <Accordion selectionMode="single" value={val} defaultValue="item-1" />
 
-// ❌ DON'T: Use collapsible with type="multiple" (it's ignored)
+// ❌ DON'T: Use collapsible with selectionMode="multiple" (it's ignored)
 <Accordion selectionMode="multiple" collapsible />
 
 // ❌ DON'T: Use storageKey with controlled mode (value prop)
 <Accordion selectionMode="single" value={val} storageKey="my-key" />
 
-// ❌ DON'T: Override one class slot and expect others to remain
-// classes replaces the entire slot, it does NOT merge with defaults
-<Accordion classes={{ trigger: "my-trigger" }} />
-// ✅ DO: Include all needed classes in the override
+// ❌ DON'T: Copy the default classes into an override; they are already there
 <Accordion classes={{ trigger: "flex w-full items-center px-4 py-4 my-trigger" }} />
+// ✅ DO: Pass only what you change; it composes with the defaults
+<Accordion classes={{ trigger: "my-trigger" }} />
 
-// ❌ DON'T: Use maxExpanded with type="single"
+// ❌ DON'T: Use maxExpanded with selectionMode="single"
 <Accordion selectionMode="single" maxExpanded={3} />
 
 // ❌ DON'T: Forget onValueChange with controlled value
@@ -640,13 +641,13 @@ and `prefers-reduced-motion` each switch it off.
 ### AI Instructions
 
 - **Always set `selectionMode`** — it's required. Use `"single"` for FAQ/settings, `"multiple"` for checklists/filters.
-- **Always add `collapsible`** to `type="single"` unless you intentionally want one item always open.
+- **Always add `collapsible`** to `selectionMode="single"` unless you intentionally want one item always open.
 - **Use `defaultValue` for uncontrolled**, `value` + `onValueChange` for controlled. Never mix.
-- **Don't partially override `classes`** — each slot replaces the default entirely. If you override `trigger`, include layout classes too.
+- **Pass only what you change in `classes`** — a slot's classes compose with its defaults, and a conflicting utility of yours wins, so there is no need to repeat the layout classes.
 - **Use `unstyled` for full custom styling** rather than fighting defaults.
 - **Provide meaningful `value` strings** on AccordionItem — they're used for storage, controlled state, and callbacks.
 - **Set `headingLevel`** appropriately for your page's heading hierarchy (default is `h3`).
-- **Safe defaults:** `type="single" collapsible defaultValue="first-item"` works for most use cases.
+- **Safe defaults:** `selectionMode="single" collapsible defaultValue="first-item"` works for most use cases.
 
 ---
 
@@ -920,12 +921,12 @@ overriding `classes.root` with a plain background will find these underneath.
 #### How class merging works
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_AVATAR_CLASSES` — minimal layout styles.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your value **replaces** the default for that slot. Other slots keep defaults.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots are empty. You provide everything.
 
@@ -1278,12 +1279,12 @@ internally from `item` and `link`; override those two.
 #### How class merging works
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_BREADCRUMB_CLASSES` with dark mode support.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your value **replaces** the default for that slot. Other slots keep defaults.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots empty. You provide everything.
 
@@ -1514,7 +1515,7 @@ export default function Actions() {
 | `iconAnimation` | Only animates when `as` is not "span" (needs `group` class which is auto-added). |
 | `animateOnHover` | `true` = animate on hover only. `false` = continuous animation (always running). |
 | `animateIcon` | Controls which icon(s) animate: `"leading"`, `"trailing"`, or `"both"`. |
-| `className` vs `classes.root` | Both are applied via `cn()`. `className` comes last (highest CSS priority). `classes.root` replaces the default root. Don't use both for the same concern. |
+| `className` vs `classes.root` | Both are applied via `cn()`. `className` comes last (highest CSS priority). `classes.root` composes with the root's defaults. Don't use both for the same concern. |
 
 ---
 
@@ -1652,7 +1653,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Focus ring color | `className` | Add `focus-visible:ring-indigo-500` etc. |
 | Icon spacing | `classes={{ content: "gap-4" }}` | Default gap is `gap-2`. |
 | Icon size/color | Style the icon element itself | Icons are your ReactNode — you control them. |
-| Loader appearance | `loading` prop or `classes={{ loader: "..." }}` | Custom loader replaces default spinner. |
+| Loader appearance | `loading` prop, a `loader` element, or `classes={{ loader: "..." }}` | A `loader` element replaces the default spinner; `classes.loader` adds classes to it. |
 | Disabled opacity | `className` | Default is `disabled:opacity-50`. Override with `disabled:opacity-30` etc. |
 
 #### Dark mode
@@ -1998,12 +1999,12 @@ DOM nesting: `root > control > trigger + portal(menu > menuItem* + submenu > sub
 #### How class merging works
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CASCADINGDROPDOWN_CLASSES` with full dark mode
-2. **Partial override** (`classes={{ trigger: "..." }}`) — REPLACES that slot only, others keep defaults
+2. **Partial override** (`classes={{ trigger: "..." }}`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
@@ -2273,7 +2274,7 @@ This renders correctly with no additional props, classes, or setup.
 |------|-----------|
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
-| `classes.control` with `data-[state=checked]:` / `data-[state=unchecked]:` | REPLACE per slot. Provide full styling — not additive. |
+| `classes.control` with `data-[state=checked]:` / `data-[state=unchecked]:` | Composes with the control's defaults. A plain utility (`bg-green-500`) wins in every state; a `data-[state=checked]:` one restyles that state only. |
 
 ---
 
@@ -2358,12 +2359,12 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 #### How class merging works
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CHECKBOX_CLASSES` with dark mode
-2. **Partial override** (`classes={{ checked: "..." }}`) — REPLACES that slot, others keep defaults
+2. **Partial override** (`classes={{ checked: "..." }}`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
@@ -2699,12 +2700,12 @@ flag, where the stack margin lives) and `count` (the `+N` disc closing the row).
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_COUNTRYFLAG_CLASSES` (layout + overflow)
-2. **Partial override** — REPLACES per slot
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** — all slots empty
 
@@ -2864,7 +2865,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `locale` | object | — | date-fns Locale object for internationalization. |
 | `numberOfMonths` | number | `1` | Number of months to display simultaneously. |
 | `dateFormat` | string | `"MMM d, yyyy"` | Date format string (date-fns format). |
-| `showTodayIndicator` | boolean | `true` | Highlights today's date in the calendar. |
+| `showTodayIndicator` | boolean | `true` | Marks today's cell with `data-today` for your own styling (a `data-[today]:` variant in `classes.item`); the default styles paint nothing for it. Today's cell carries `aria-current="date"` either way. |
 | `showTodayButton` | boolean | `false` | Shows a 'Today' button in the calendar footer. |
 | `todayAction` | boolean | `false` | Whether clicking 'Today' selects today's date. |
 | `showWeekNumbers` | boolean | `false` | Shows week numbers in the calendar. |
@@ -2925,17 +2926,17 @@ These props have dependencies -- using them wrong causes silent bugs:
 The component has three styling modes:
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_DATEPICKER_CLASSES` -- fully styled with dark mode support.
-2. **Partial override** (`unstyled=false`, partial `classes`): Your values **replace** the default for that slot. Unspecified slots keep their defaults. This is NOT additive.
+2. **Partial override** (`unstyled=false`, partial `classes`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled=true`): All slots start as empty strings. You must provide everything via `classes`.
 
 ```tsx
-// This REPLACES the default trigger classes entirely:
+// Adds to the trigger's default classes; a conflicting utility replaces its default:
 <DatePicker classes={{ trigger: "my-custom-trigger" }} />
 
 // The other slots (content, item, etc.) still use their defaults.
@@ -3418,12 +3419,12 @@ export default function Example() {
 #### How class merging works
 
 1. **Default** (no `classes`, no `unstyled`) — uses built-in Tailwind classes with dark mode support
-2. **Partial override** (`classes={{ trigger: "..." }}`) — **replaces** that slot entirely, not additive
+2. **Partial override** (`classes={{ trigger: "..." }}`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
 
@@ -3734,12 +3735,12 @@ A restyle that drops the box, such as an underline, must also replace the focus 
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_INPUT_CLASSES` with dark mode, focus ring, rounded corners
-2. **Partial override** — REPLACES per slot
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** — all slots empty
 
@@ -3997,12 +3998,12 @@ console.log(inputRef.current?.value);
 #### How class merging works
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
 
@@ -4545,7 +4546,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 #### How class merging works
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_MODAL_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
 
 #### Slot → visual mapping
@@ -4845,12 +4846,12 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 #### How class merging works
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_MULTISELECTDROPDOWN_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
@@ -5138,12 +5139,12 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES`
-2. **Partial override** — **replaces** per slot, not additive
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** — all slots empty, you build from scratch
 
@@ -5628,12 +5629,12 @@ paginationRef.current?.focus();
 #### How class merging works
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_PAGINATION_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
@@ -6132,12 +6133,12 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_SEARCHABLEDROPDOWN_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you build from scratch
 
@@ -6374,10 +6375,10 @@ export default function Example() {
 
 ### Class overrides
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 ```tsx
 // `thumb` carries the base AND 2 state variants. Overriding it
@@ -6582,12 +6583,12 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_STEPPER_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you build from scratch
 
@@ -6812,10 +6813,10 @@ If you want the track itself to react, the attribute is the hook:
 | `message` | The error or hint line under the row. |
 | `loading` | The spinner shown on the thumb while a change is in flight. |
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 ```tsx
 // `control` carries the base AND 3 state variants. Overriding it
@@ -6967,7 +6968,7 @@ export default function Example() {
 | `stickyHeader` | Requires `maxHeight` to be meaningful. |
 | `infiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
 | `showSearch` | Enables built-in search bar. |
-| `classes` | Per-slot class overrides. **Replaces** per slot, not additive. |
+| `classes` | Per-slot classes. They compose with each slot's defaults; a conflicting utility of yours wins. |
 
 ---
 
@@ -7105,7 +7106,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_TABLE_CLASSES`
-2. **Partial override** — **replaces** per slot, not additive
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 3. **Unstyled** — all slots empty, you build from scratch
 
 #### Key slots
@@ -7317,12 +7318,12 @@ There is no `tabList`, `tab`, `tabActive`, `tabInactive`, `tabFocus`,
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_TABPANEL_CLASSES`
-2. **Partial override** — **replaces** per slot, not additive
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** — all slots empty, you build from scratch
 
@@ -7560,12 +7561,12 @@ A restyle that drops the box, such as an underline, must also replace the focus 
 #### How class merging works
 
 1. **Default** — uses `DEFAULT_TEXTAREA_CLASSES` with dark mode, focus ring
-2. **Partial override** — REPLACES per slot
+2. **Partial override** — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** — all slots empty
 
@@ -7771,12 +7772,12 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 #### How class merging works
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_TIMEPICKER_CLASSES`
-2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+2. **Partial override** (`classes` without `unstyled`) — your classes compose with that slot's defaults; slots you don't name keep theirs.
 
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
+**A plain utility of yours wins over every default in its group on that slot, states included.**
+`classes={{ control: "bg-green-500" }}` paints green in every state, where a default
+`data-[state=checked]:` background would otherwise keep winning. To restyle one state only,
+pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in other groups stay.
 
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
@@ -8012,7 +8013,7 @@ toast.success("title", options?);
 toast.warning("title", options?);
 toast.error("title", options?);
 toast.info("title", options?);
-toast.toast({ type, title, ...options }); // generic
+toast.toast({ variant, message, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();
 ```
@@ -8180,6 +8181,23 @@ export default function Example() {
 | `open` + `onOpenChange` | Controlled mode |
 | `shadow` | Preset (`"none"` to `"2xl"`) or custom CSS shadow string |
 | `asChild` | Merges trigger props onto the child element instead of wrapping |
+
+#### A tooltip on an interactive element: `asChild`
+
+When the trigger is a button, a link or any focusable component, including this library's own
+`Button`, make that element the only child and set `asChild`. The tooltip's handlers and its
+`aria-describedby` go onto it, so it keeps its single tab stop and a screen reader reads the
+tooltip when it takes focus.
+
+```tsx
+<Tooltip content="Delete the file" asChild>
+  <Button aria-label="Delete">…</Button>
+</Tooltip>
+```
+
+Without `asChild`, a focusable direct child is detected and given the description, but a
+focusable element nested inside another one is not: the wrapper takes the description, and the
+control that receives focus announces nothing.
 
 ---
 

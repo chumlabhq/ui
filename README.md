@@ -85,7 +85,7 @@ own CSS.
 [`ACCESSIBILITY.md`](ACCESSIBILITY.md) records every Level A and AA criterion with a status,
 a justification and the test that holds it. A criterion is only marked as supported when a
 test fails if the behaviour regresses, so the document names several criteria the package
-does not yet claim — including three it is known to fail. Read it rather than this table if
+does not yet claim — including the ones it is known to fail. Read it rather than this table if
 conformance matters to you.
 
 ---
@@ -223,8 +223,7 @@ import { Table } from "@chumlab/ui/table";
   classes={{
     trigger: "border-2 border-indigo-500 rounded-xl",
     content: "shadow-2xl",
-    option: "px-4 py-3",
-    optionSelected: "bg-indigo-100 font-bold",
+    item: "px-4 py-3 data-[selected]:bg-indigo-100 data-[selected]:font-bold",
   }}
 />
 ```
@@ -235,7 +234,7 @@ Every component takes an `unstyled` prop that drops its default classes while
 keeping the behaviour, ARIA wiring, and keyboard handling:
 
 ```tsx
-<Dropdown options={options} unstyled classes={{ trigger: "my-trigger", option: "my-option" }} />
+<Dropdown options={options} unstyled classes={{ trigger: "my-trigger", item: "my-item" }} />
 ```
 
 Every component also ships a ready-made empty class map, exported from its own
@@ -272,7 +271,8 @@ rather than replace them.
 ## Controlled & Uncontrolled
 
 Every component that owns state supports both. Omit the value prop and the component keeps
-its own; pass it with `onValueChange` and you own it.
+its own; pass it with its change callback (`onValueChange`, or `checked` with
+`onCheckedChange` on Checkbox and Switch) and you own it.
 
 ```tsx
 // Uncontrolled — component manages state
@@ -310,7 +310,7 @@ No theme provider, no configuration, no extra imports.
 
 [`ACCESSIBILITY.md`](ACCESSIBILITY.md) is the document to read: it records every WCAG 2.2
 Level A and AA criterion with a status, a justification, and the test that holds it —
-including the ones this package does not claim, and the three it is known to fail.
+including the ones this package does not claim, and the ones it is known to fail.
 
 The behaviours below are the ones with a contract test behind them, named so you can check:
 
@@ -336,7 +336,7 @@ right in both, and a Slider fills from the left in both. Spacing, text alignment
 direction are written physically (`pl-*`, `text-left`, a chevron that points right), so they
 do not mirror either.
 
-It is measured rather than assumed: `e2e/rtl.spec.ts` renders fourteen `dir="rtl"` fixtures
+It is measured rather than assumed: `e2e/rtl.spec.ts` renders the `dir="rtl"` fixtures
 and carries the measurement for each surface in its skip reason. RTL is a 1.1 feature, and
 `ACCESSIBILITY.md` records the order the work has to be done in.
 
@@ -398,10 +398,10 @@ recorded screenshots.
 ```bash
 git clone https://github.com/chumlabhq/ui.git && cd ui && npm install
 npm run dev            # Dev server at localhost:5173
-npm run test:run       # Unit and contract tests (Vitest, 4,409)
-npm run test:e2e       # E2E, Chromium only (Playwright, 419)
+npm run test:run       # Unit and contract tests (Vitest)
+npm run test:e2e       # E2E, Chromium only (Playwright)
 npm run test:e2e:all   # The five-engine matrix
-npm run verify:consumers  # Installs the packed tarball into nine framework apps
+npm run verify:consumers  # Installs the packed tarball into each framework app in scripts/consumers
 npm run build:lib      # Build library
 ```
 

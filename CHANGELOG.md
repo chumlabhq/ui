@@ -15,6 +15,8 @@ branch or a local link, these are the changes that will reach you.
 
 ### Added
 
+- `--cl-on-warning`, the colour for text and icons on a warning fill: `#050608` in dark,
+  `#0f1218` in light, dark in both themes because the warning fill is light in both.
 - `useControllableState` (`@chumlab/ui`) returns a third element, `reset()`, which puts an
   uncontrolled value back to its default, does nothing when controlled, and returns whether it
   applied. The exported field hooks return `resetValue` with the same behaviour:
@@ -243,7 +245,8 @@ tables say.
 - **`Toast` has one dismiss callback, `onDismiss(id)`.** `onRemove(id)` and `onDismiss()`
   were two names for closing a toast.
 - **`Table`'s `onPinnedColumnsChange` receives the whole new `pinnedColumns` array**, with the
-  column added or removed; `onPinColumn(columnId)` left the consumer to rebuild it.
+  column added or removed; the callback it replaces passed only the column id and left the
+  consumer to rebuild it (see the Table rename table below).
 - **The loaders' `speed` (seconds) is `animationDuration` (milliseconds).** Defaults convert
   exactly: `CircularLoader` 750, `LinearLoader` 1500, `DotLoader` 1400, `PulseLoader` 1500.
   The CSS custom property is `--loader-duration`, not `--loader-speed`.
@@ -701,6 +704,8 @@ tables say.
 
 ### Fixed
 
+- The dark theme's `--cl-bg-hover` is a 10% light overlay, `rgba(237, 239, 244, 0.1)`; it was `#0a0d12`,
+  which on the dark surfaces left a hovered or highlighted item looking unhovered.
 - A form's Reset button no longer leaves a picker holding the old value: clicking Reset blurred the field, and the blur committed its typed text after the reset. Affected: TimePicker; no other field commits typed text on blur.
 - In Firefox, a second blocked submit focuses the invalid field again; only the first one did. Affected: Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, DatePicker, TimePicker, Switch and OtpInput, the fields that submit through a hidden input.
 - Checkbox's box and Switch's track keep their size beside a long, wrapping label; both shrank (Checkbox 20 → 18 px, Switch 36 → 16 px).
@@ -847,7 +852,7 @@ tables say.
   - `ResizablePanel` put `id` and `aria-*` on the panel, not the separator a keyboard user
     focuses.
   - `OtpInput` put `aria-*` on its root `<div>`, beside the `role="group"` that assistive tech
-    announces. They go on the group now, and `aria-label` wins over `groupAriaLabel`.
+    announces. They go on the group now, and `aria-label` names the group.
   - `Input` and `TextArea` overwrote a consumer's `aria-describedby` with their own ids
     whenever they had any. The two are joined now.
   - The five dropdowns dropped `aria-labelledby` and `aria-describedby` entirely.
@@ -932,6 +937,15 @@ tables say.
 - Focus reaches the surface on open, on every open rather than the first.
 
 ### Fixed (documentation)
+
+- **The shipped docs describe the code as it stands.** README, ACCESSIBILITY, llms.txt,
+  llms-full.txt, the site's llms.txt and FAQ, and the `.ai.md` files no longer name renamed
+  props, slots or values (Checkbox and Switch's `onCheckedChange`, Drawer's `side`, Accordion's
+  and DatePicker's `selectionMode`, Toast's `variant`, Tooltip's `hoverableContent`), no longer
+  say `classes` replaces a slot (it composes; a conflicting utility of yours wins), and no
+  longer claim WCAG 2.1, a Tailwind requirement or RTL support. Hand-written test, fixture and
+  failure counts are gone from README and ACCESSIBILITY, which gains a section on what each
+  newer gate proves. Tooltip documents `asChild` for an interactive trigger.
 
 - **Drawer `swipeThreshold` is a fraction of the panel, not pixels.** The docs said "minimum swipe
   distance in pixels"; the default `0.4` closes the drawer once a swipe covers 40% of the panel's

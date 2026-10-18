@@ -129,7 +129,7 @@
     },
     "showTodayIndicator": {
       "type": "boolean",
-      "description": "Highlights today's date in the calendar.",
+      "description": "Marks today's cell with `data-today` for your own styling (a `data-[today]:` variant in `classes.item`); the default styles paint nothing for it. Today's cell carries `aria-current=\"date\"` either way.",
       "default": true
     },
     "showTodayButton": {

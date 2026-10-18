@@ -62,7 +62,7 @@ const IntroductionDemo = () => {
           {[
             {
               title: "Accessibility built in",
-              body: "WCAG 2.1 AA across every primitive. Keyboard navigation, focus management, ARIA, and reduced motion are not bolt-ons.",
+              body: "Built to a WCAG 2.2 AA target, with every criterion's status in ACCESSIBILITY.md. Keyboard navigation, focus management, ARIA, and reduced motion are not bolt-ons.",
             },
             {
               title: "Themeable to the bone",
